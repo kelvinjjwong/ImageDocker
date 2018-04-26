@@ -81,7 +81,6 @@ final class ImageData: NSObject {
     var locationBD09: Coord?
     var originalLocation: Coord?
     
-    var validImage = false  // does URL point to a valid image file?
     lazy var image: NSImage = self.loadImagePreview()
     
     /// The string representation of the location of an image for copy and paste.
@@ -93,7 +92,10 @@ final class ImageData: NSObject {
             return ""
         }
     }
-    var isVideo:Bool = true
+    
+    var isPhoto:Bool = false
+    var isVideo:Bool = false
+    var hasCoordinate:Bool = false
     
     // MARK: Init
     
@@ -103,18 +105,28 @@ final class ImageData: NSObject {
     /// Extract geo location metadata and build a preview image for
     /// the given URL.  If the URL isn't recognized as an image mark this
     /// instance as not being valid.
-    init(url: URL, metaInfoStore:MetaInfoStoreDelegate, video:Bool = false) {
-        // create a symlink for the URL in our sandbox
-        self.metaInfoStore = metaInfoStore
-        self.isVideo = video
+    init(url: URL, metaInfoStore:MetaInfoStoreDelegate) {
         self.url = url
+        self.metaInfoStore = metaInfoStore
         super.init()
+        
         metaInfoStore.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Filename", value: url.lastPathComponent))
         metaInfoStore.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Full path", value: url.path.replacingOccurrences(of: url.lastPathComponent, with: "")))
         
-        validImage = loadImageMetaData()
-        originalLocation = location
-        
+        if url.lastPathComponent.split(separator: Character(".")).count > 1 {
+            let fileExt:String = (url.lastPathComponent.split(separator: Character(".")).last?.lowercased())!
+            if fileExt == "jpg" || fileExt == "jpeg" {
+                isPhoto = true
+            }
+            if fileExt == "mov" || fileExt == "mp4" || fileExt == "mpeg" {
+                isVideo = true
+            }
+            
+            if isPhoto {
+                loadImageMetaData()
+            }
+            originalLocation = location
+        }
         
     }
     
@@ -219,18 +231,18 @@ final class ImageData: NSObject {
     ///
     /// If image propertied can not be accessed or if needed properties
     /// do not exist the file is assumed to be a non-image file
-    private func loadImageMetaData() -> Bool {
-        if self.isVideo == true { return false }
+    private func loadImageMetaData() {
+        if self.isVideo == true { return }
         
         guard let imgRef = CGImageSourceCreateWithURL(url as CFURL, nil) else {
             print("Failed CGImageSourceCreateWithURL \(url)")
-            return false
+            return
         }
         
         // grab the image properties and extract height and width
         // if there are no image properties there is nothing to do.
         guard let imgProps = CGImageSourceCopyPropertiesAtIndex(imgRef, 0, nil) as NSDictionary? else {
-            return false
+            return
         }
         
         if let pxWidth = imgProps[pixelWidth] as? Int,
@@ -302,7 +314,7 @@ final class ImageData: NSObject {
             // is "V" ignore the GPS data.
             if let status = gpsData[GPSStatus] as? String {
                 if status == "V" {
-                    return true
+                    return
                 }
             }
             
@@ -326,7 +338,6 @@ final class ImageData: NSObject {
                               longitude: lonRef == "E" ? lon : -lon)
             }
         }
-        return true
     }
     
     func setCoordinate(latitude:Double, longitude:Double){
@@ -338,6 +349,7 @@ final class ImageData: NSObject {
         metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "BD09", title: "Latitude", value: String(format: "%3.6f", self.latitudeBaidu).paddingLeft(12)))
         metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "BD09", title: "Longitude", value: String(format: "%3.6f", self.longitudeBaidu).paddingLeft(12)))
         
+        hasCoordinate = true
     }
     
     public func loadExif(){
@@ -385,53 +397,7 @@ final class ImageData: NSObject {
     }
     
     public func getBaiduLocation() {
-        
-        let urlString:String = BaiduLocation.urlForAddress(lat: latitudeBaidu, lon: longitudeBaidu)
-        guard let requestUrl = URL(string:urlString) else { return }
-        let request = URLRequest(url:requestUrl)
-        let task = URLSession.shared.dataTask(with: request) {
-            (data, response, error) in
-            if error == nil,let usableData = data {
-                // let jsonString:String = String(data: data!, encoding: String.Encoding.utf8)!
-                
-                let json = try? JSON(data: usableData)
-                let status:String = json!["status"].description
-                let message:String = json!["message"].description
-                if status != "0" {
-                    DispatchQueue.main.async {
-                        self.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Status", value: status))
-                        self.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Message", value: message))
-                        self.metaInfoStore.updateMetaInfoView()
-                    }
-                }else{
-                    
-                    let address:String = json!["result"]["formatted_address"].description
-                    let businessCircle:String = json!["result"]["business"].description
-                    let country:String = json!["result"]["addressComponent"]["country"].description
-                    let province:String = json!["result"]["addressComponent"]["province"].description
-                    let city:String = json!["result"]["addressComponent"]["city"].description
-                    let district:String = json!["result"]["addressComponent"]["district"].description
-                    let street:String = json!["result"]["addressComponent"]["street"].description
-                    let description:String = json!["result"]["sematic_description"].description
-                    
-                    if address != "" {
-                        DispatchQueue.main.async {
-                            self.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Country", value: country))
-                            self.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Province", value: province))
-                            self.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "City", value: city))
-                            self.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "District", value: district))
-                            self.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Street", value: street))
-                            self.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "BusinessCircle", value: businessCircle))
-                            self.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Address", value: address))
-                            self.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Description", value: description))
-                            self.metaInfoStore.updateMetaInfoView()
-                        }
-                    }
-                }
-                
-            }
-        }
-        task.resume()
+        BaiduLocation.queryForAddress(lat: self.latitudeBaidu, lon: self.longitudeBaidu, metaInfoStore: self.metaInfoStore)
     }
 }
 

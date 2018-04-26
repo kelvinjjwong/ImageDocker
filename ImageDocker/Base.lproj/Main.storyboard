@@ -436,6 +436,7 @@
                     <connections>
                         <outlet property="avPlayer" destination="WMi-QV-cmi" id="SlC-Qu-gmn"/>
                         <outlet property="imgPhoto" destination="9Na-U8-3R2" id="b6k-Ma-bp4"/>
+                        <outlet property="mapZoomSlider" destination="eId-m8-eKf" id="zoE-94-C0F"/>
                         <outlet property="metaInfoTableView" destination="ECf-s9-RCm" id="GLo-W4-I6C"/>
                         <outlet property="playerContainer" destination="73d-nT-eRs" id="WGK-6c-bD3"/>
                         <outlet property="webLocation" destination="A1f-6H-jB4" id="wMq-w7-Ou5"/>

@@ -17,6 +17,9 @@ extension ViewController: NSTableViewDelegate {
     func tableView(_ tableView: NSTableView,
                    viewFor tableColumn: NSTableColumn?,
                    row: Int) -> NSView? {
+        if row > (self.metaInfo.count - 1) {
+            return nil
+        }
         let info:MetaInfo = self.metaInfo[row]
         var value = ""
         //var tip: String? = nil

@@ -30,6 +30,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var webLocation: WKWebView!
     @IBOutlet weak var metaInfoTableView: NSTableView!
     @IBOutlet weak var playerContainer: NSView!
+    @IBOutlet weak var mapZoomSlider: NSSlider!
     
     var stackedImageViewController : StackedImageViewController!
     var stackedVideoViewController : StackedVideoViewController!
@@ -100,13 +101,12 @@ class ViewController: NSViewController {
     }
     
     private func loadImage(_ url:URL){
-        if url.lastPathComponent.split(separator: Character(".")).count < 2 {return}
-        let fileExt:String = (url.lastPathComponent.split(separator: Character(".")).last?.lowercased())!
-        guard fileExt == "jpg" || fileExt == "jpeg" || fileExt == "mov" || fileExt == "mp4" || fileExt == "mpeg" else {return}
         
         // init meta data
         self.metaInfo = [MetaInfo]()
         self.img = ImageData(url: url, metaInfoStore: self)
+        
+        guard img.isPhoto || img.isVideo else {return}
         
         for sView in self.playerContainer.subviews {
             sView.removeFromSuperview()
@@ -116,7 +116,7 @@ class ViewController: NSViewController {
             stackedVideoViewController.videoDisplayer.player?.pause()
         }
         
-        if fileExt == "jpg" || fileExt == "jpeg" {
+        if img.isPhoto {
             
             // switch to image view
             stackedImageViewController.view.frame = self.playerContainer.bounds
@@ -143,13 +143,10 @@ class ViewController: NSViewController {
     }
     
     private func loadBaiduMap() {
-        let width:Int = Int(min(CGFloat(512), webLocation.frame.size.width))
-        let height:Int = Int(min(CGFloat(512), webLocation.frame.size.height))
-        let requestBaiduUrl = BaiduLocation.urlForMap(width: width, height: height, zoom: zoomSize, lat: img.latitudeBaidu, lon: img.longitudeBaidu)
-        guard let requestUrl = URL(string: requestBaiduUrl) else {return}
-        let req = URLRequest(url: requestUrl)
-        webLocation.load(req)
-        
+        webLocation.load(URLRequest(url: URL(string: "about:blank")!))
+        if img.hasCoordinate {
+            BaiduLocation.queryForMap(lat: img.latitudeBaidu, lon: img.longitudeBaidu, view: webLocation, zoom: zoomSize)
+        }
     }
     
 }
