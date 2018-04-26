@@ -18,6 +18,8 @@
 		8E0AFA5B208BDEA100CE8B68 /* ImageDockerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0AFA5A208BDEA100CE8B68 /* ImageDockerUITests.swift */; };
 		8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E174B6D208F851100FFE7C7 /* ExifTool.swift */; };
 		8E721B95208CAAFF00E304EA /* ImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E721B94208CAAFF00E304EA /* ImageData.swift */; };
+		8E7F71002091F14300410C45 /* BaiduLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F70FF2091F14200410C45 /* BaiduLocation.swift */; };
+		8E7F71022092053400410C45 /* MetaInfoHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F71012092053400410C45 /* MetaInfoHandler.swift */; };
 		8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */; };
 		8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */; };
 		8EA1A063208DFD92000C3B97 /* MetaInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A062208DFD92000C3B97 /* MetaInfo.swift */; };
@@ -67,6 +69,8 @@
 		8E0AFA5C208BDEA100CE8B68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8E174B6D208F851100FFE7C7 /* ExifTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExifTool.swift; sourceTree = "<group>"; };
 		8E721B94208CAAFF00E304EA /* ImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageData.swift; sourceTree = "<group>"; };
+		8E7F70FF2091F14200410C45 /* BaiduLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaiduLocation.swift; sourceTree = "<group>"; };
+		8E7F71012092053400410C45 /* MetaInfoHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfoHandler.swift; sourceTree = "<group>"; };
 		8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateConverter.swift; sourceTree = "<group>"; };
 		8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaTableViewController.swift; sourceTree = "<group>"; };
 		8EA1A062208DFD92000C3B97 /* MetaInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfo.swift; sourceTree = "<group>"; };
@@ -143,6 +147,7 @@
 		8E0AFA3B208BDEA000CE8B68 /* ImageDocker */ = {
 			isa = PBXGroup;
 			children = (
+				8E7F7103209212DD00410C45 /* LBS */,
 				8EBA69312090DD0300221131 /* Domain */,
 				8EBA69302090DCC800221131 /* Utilities */,
 				8EBA692F2090DC7B00221131 /* DropPlaces */,
@@ -172,6 +177,14 @@
 				8E0AFA5C208BDEA100CE8B68 /* Info.plist */,
 			);
 			path = ImageDockerUITests;
+			sourceTree = "<group>";
+		};
+		8E7F7103209212DD00410C45 /* LBS */ = {
+			isa = PBXGroup;
+			children = (
+				8E7F70FF2091F14200410C45 /* BaiduLocation.swift */,
+			);
+			name = LBS;
 			sourceTree = "<group>";
 		};
 		8EBA69262090C37B00221131 /* Supporting Files */ = {
@@ -212,6 +225,7 @@
 			children = (
 				8E721B94208CAAFF00E304EA /* ImageData.swift */,
 				8EA1A062208DFD92000C3B97 /* MetaInfo.swift */,
+				8E7F71012092053400410C45 /* MetaInfoHandler.swift */,
 			);
 			name = Domain;
 			sourceTree = "<group>";
@@ -400,8 +414,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */,
+				8E7F71022092053400410C45 /* MetaInfoHandler.swift in Sources */,
 				8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */,
 				8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */,
+				8E7F71002091F14300410C45 /* BaiduLocation.swift in Sources */,
 				8E015123208F7D34009C2549 /* StackedVideoViewController.swift in Sources */,
 				8E721B95208CAAFF00E304EA /* ImageData.swift in Sources */,
 				8EEB88842090B44B00CDEC81 /* ImageDropView.swift in Sources */,

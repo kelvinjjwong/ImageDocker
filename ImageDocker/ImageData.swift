@@ -10,6 +10,7 @@ import Foundation
 import Cocoa
 import AppKit
 import CoreLocation
+import SwiftyJSON
 
 // A shorter name for a type I'll often use
 typealias Coord = CLLocationCoordinate2D
@@ -56,6 +57,8 @@ final class ImageData: NSObject {
     // MARK: instance variables
     
     let url: URL                // URL of the image
+    let metaInfoStore:MetaInfoStoreDelegate
+    
     var name: String? {
         return url.lastPathComponent
     }
@@ -90,8 +93,6 @@ final class ImageData: NSObject {
             return ""
         }
     }
-    
-    var metaInfo:[MetaInfo] = [MetaInfo]()
     var isVideo:Bool = true
     
     // MARK: Init
@@ -102,13 +103,14 @@ final class ImageData: NSObject {
     /// Extract geo location metadata and build a preview image for
     /// the given URL.  If the URL isn't recognized as an image mark this
     /// instance as not being valid.
-    init(url: URL, video:Bool = false) {
+    init(url: URL, metaInfoStore:MetaInfoStoreDelegate, video:Bool = false) {
         // create a symlink for the URL in our sandbox
+        self.metaInfoStore = metaInfoStore
         self.isVideo = video
         self.url = url
         super.init()
-        self.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Filename", value: url.lastPathComponent))
-        self.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Full path", value: url.path.replacingOccurrences(of: url.lastPathComponent, with: "")))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Filename", value: url.lastPathComponent))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Full path", value: url.path.replacingOccurrences(of: url.lastPathComponent, with: "")))
         
         validImage = loadImageMetaData()
         originalLocation = location
@@ -233,63 +235,63 @@ final class ImageData: NSObject {
         
         if let pxWidth = imgProps[pixelWidth] as? Int,
             let pxHeight = imgProps[pixelHeight] as? Int{
-            self.setMetaInfo(MetaInfo(category: "System", subCategory: "", title: "Size", value: "\(pxWidth) x \(pxHeight)"))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "System", subCategory: "", title: "Size", value: "\(pxWidth) x \(pxHeight)"))
         }
         
         if let tiffData = imgProps[TIFFDictionary] as? [String: AnyObject] {
             if let cameraMake = tiffData[CameraMake] as? String {
-                self.setMetaInfo(MetaInfo(category: "Camera", subCategory: "", title: "Manufacture", value: cameraMake))
+                metaInfoStore.setMetaInfo(MetaInfo(category: "Camera", subCategory: "", title: "Manufacture", value: cameraMake))
             }
             if let cameraModel = tiffData[CameraModel] as? String {
-                self.setMetaInfo(MetaInfo(category: "Camera", subCategory: "", title: "Model", value: cameraModel))
+                metaInfoStore.setMetaInfo(MetaInfo(category: "Camera", subCategory: "", title: "Model", value: cameraModel))
             }
         }
         
         // extract image date/time created
         if let exifData = imgProps[exifDictionary] as? [String: AnyObject] {
             if let cameraSerialNo = exifData[CameraSerialNumber] as? String {
-                self.setMetaInfo(MetaInfo(category: "Camera", subCategory: "", title: "Serial Number", value: cameraSerialNo))
+                metaInfoStore.setMetaInfo(MetaInfo(category: "Camera", subCategory: "", title: "Serial Number", value: cameraSerialNo))
             }
             if let lensMake = exifData[LensMake] as? String {
-                self.setMetaInfo(MetaInfo(category: "Lens", subCategory: "", title: "Manufacture", value: lensMake))
+                metaInfoStore.setMetaInfo(MetaInfo(category: "Lens", subCategory: "", title: "Manufacture", value: lensMake))
             }
             if let lensModel = exifData[LensModel] as? String {
-                self.setMetaInfo(MetaInfo(category: "Lens", subCategory: "", title: "Model", value: lensModel))
+                metaInfoStore.setMetaInfo(MetaInfo(category: "Lens", subCategory: "", title: "Model", value: lensModel))
             }
             if let lensSerialNo = exifData[LensSerialNumber] as? String {
-                self.setMetaInfo(MetaInfo(category: "Lens", subCategory: "", title: "Serial Number", value: lensSerialNo))
+                metaInfoStore.setMetaInfo(MetaInfo(category: "Lens", subCategory: "", title: "Serial Number", value: lensSerialNo))
             }
         }
         
         if let tiffData = imgProps[TIFFDictionary] as? [String: AnyObject],
             let software = tiffData[Software] as? String {
-            self.setMetaInfo(MetaInfo(category: "Software", subCategory: "", title: "Name", value: software))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Software", subCategory: "", title: "Name", value: software))
         }
         
         if let exifData = imgProps[exifDictionary] as? [String: AnyObject],
             let dto = exifData[exifDateTimeOriginal] as? String {
             date = dto
-            self.setMetaInfo(MetaInfo(category: "DateTime", subCategory: "", title: "DateTimeOriginal", value: date))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", subCategory: "", title: "DateTimeOriginal", value: date))
         }
         
         if let tiffData = imgProps[TIFFDictionary] as? [String: AnyObject] {
             if let softwareDateTime = tiffData[SoftwareDateTime] as? String {
-                self.setMetaInfo(MetaInfo(category: "DateTime", subCategory: "", title: "Software Modified", value: softwareDateTime))
+                metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", subCategory: "", title: "Software Modified", value: softwareDateTime))
             }
         }
         
         if let gpsData = imgProps[GPSDictionary] as? [String: AnyObject],
             let gpsDateUTC = gpsData[GPSDateUTC] as? String,
             let gpsTimeUTC = gpsData[GPSTimestampUTC] as? String{
-            self.setMetaInfo(MetaInfo(category: "DateTime", subCategory: "", title: "GPS Date", value: "\(gpsDateUTC) \(gpsTimeUTC) UTC"))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", subCategory: "", title: "GPS Date", value: "\(gpsDateUTC) \(gpsTimeUTC) UTC"))
         }
         
         if let colorModel = imgProps[ColorModel] as? String {
-            self.setMetaInfo(MetaInfo(category: "ColorSpace", subCategory: "", title: "Model", value: colorModel))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "ColorSpace", subCategory: "", title: "Model", value: colorModel))
         }
         
         if let colorModelProfile = imgProps[ColorModelProfile] as? String {
-            self.setMetaInfo(MetaInfo(category: "ColorSpace", subCategory: "", title: "Profile", value: colorModelProfile))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "ColorSpace", subCategory: "", title: "Profile", value: colorModelProfile))
         }
         
         // extract image existing gps info
@@ -306,15 +308,15 @@ final class ImageData: NSObject {
             
             if let altitude = gpsData[GPSAltitude] as? String,
                 let altitudeRef = gpsData[GPSAltitudeRef] as? String {
-                self.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "", title: "Altitude", value: "\(altitude) \(altitudeRef)"))
+                metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "", title: "Altitude", value: "\(altitude) \(altitudeRef)"))
             }
             
             if let gpsSpeed = gpsData[GPSSpeed] as? String {
-                self.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "", title: "Speed", value: gpsSpeed))
+                metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "", title: "Speed", value: gpsSpeed))
             }
             
             if let gpsArea = gpsData[GPSArea] as? String {
-                self.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "", title: "Area", value: gpsArea))
+                metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "", title: "Area", value: gpsArea))
             }
             if let lat = gpsData[GPSLatitude] as? Double,
                 let latRef = gpsData[GPSLatitudeRef] as? String,
@@ -331,29 +333,106 @@ final class ImageData: NSObject {
         location = Coord(latitude: latitude, longitude: longitude)
         locationBD09 = location?.fromWGS84toBD09()
         
-        self.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "WGS84", title: "Latitude", value: String(format: "%3.6f", self.latitude).paddingLeft(12)))
-        self.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "WGS84", title: "Longitude", value: String(format: "%3.6f", self.longitude).paddingLeft(12)))
-        self.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "BD09", title: "Latitude", value: String(format: "%3.6f", self.latitudeBaidu).paddingLeft(12)))
-        self.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "BD09", title: "Longitude", value: String(format: "%3.6f", self.longitudeBaidu).paddingLeft(12)))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "WGS84", title: "Latitude", value: String(format: "%3.6f", self.latitude).paddingLeft(12)))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "WGS84", title: "Longitude", value: String(format: "%3.6f", self.longitude).paddingLeft(12)))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "BD09", title: "Latitude", value: String(format: "%3.6f", self.latitudeBaidu).paddingLeft(12)))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "BD09", title: "Longitude", value: String(format: "%3.6f", self.longitudeBaidu).paddingLeft(12)))
         
     }
     
-    func setMetaInfo(_ info:MetaInfo){
-        var exists:Int = 0
-        for exist:MetaInfo in self.metaInfo {
-            if exist.category == info.category && exist.subCategory == info.subCategory && exist.title == info.title {
-                exist.value = info.value
-                exists = 1
-            }
+    public func loadExif(){
+        let jsonStr:String = ExifTool.helper.getFormattedExif(url: url)
+        print(jsonStr)
+        let json:JSON = JSON(parseJSON: jsonStr)
+        if json != JSON(NSNull()) {
+            metaInfoStore.setMetaInfo(MetaInfo(category: "System", title: "Size", value: json[0]["Composite"]["ImageSize"].description), ifNotExists: true)
+            
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Camera", title: "ISO", value: json[0]["EXIF"]["ISO"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Camera", title: "ExposureTime", value: json[0]["EXIF"]["ExposureTime"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Camera", title: "Aperture", value: json[0]["EXIF"]["ApertureValue"].description))
+            
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Format", value: json[0]["QuickTime"]["MajorBrand"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "CreateDate", value: json[0]["QuickTime"]["CreateDate"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "ModifyDate", value: json[0]["QuickTime"]["ModifyDate"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "TrackCreateDate", value: json[0]["QuickTime"]["TrackCreateDate"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "TrackModifyDate", value: json[0]["QuickTime"]["TrackModifyDate"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Frame Rate", value: json[0]["QuickTime"]["VideoFrameRate"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Image Width", value: json[0]["QuickTime"]["ImageWidth"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Image Height", value: json[0]["QuickTime"]["ImageHeight"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Duration", value: json[0]["QuickTime"]["Duration"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Size", value: json[0]["QuickTime"]["MovieDataSize"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Avg Bitrate", value: json[0]["Composite"]["AvgBitrate"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Rotation", value: json[0]["Composite"]["Rotation"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Audio", title: "Channels", value: json[0]["QuickTime"]["AudioChannels"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Audio", title: "BitsPerSample", value: json[0]["QuickTime"]["AudioBitsPerSample"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Audio", title: "SampleRate", value: json[0]["QuickTime"]["AudioSampleRate"].description))
         }
-        if exists == 0 {
-            self.metaInfo.append(info)
+        
+        let jsonStr2:String = ExifTool.helper.getUnformattedExif(url: url)
+        print(jsonStr2)
+        let json2:JSON = JSON(parseJSON: jsonStr2)
+        
+        if json2 != JSON(NSNull()) {
+            
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "WGS84", title: "Latitude", value: json2[0]["Composite"]["GPSLatitude"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "WGS84", title: "Longitude", value: json2[0]["Composite"]["GPSLongitude"].description))
+            
+            if let lat:Double = json2[0]["Composite"]["GPSLatitude"].double,
+                let lon:Double = json2[0]["Composite"]["GPSLongitude"].double {
+                setCoordinate(latitude: lat, longitude: lon)
+            }
         }
     }
     
-    
-    
-    
+    public func getBaiduLocation() {
+        
+        let urlString:String = BaiduLocation.urlForAddress(lat: latitudeBaidu, lon: longitudeBaidu)
+        guard let requestUrl = URL(string:urlString) else { return }
+        let request = URLRequest(url:requestUrl)
+        let task = URLSession.shared.dataTask(with: request) {
+            (data, response, error) in
+            if error == nil,let usableData = data {
+                // let jsonString:String = String(data: data!, encoding: String.Encoding.utf8)!
+                
+                let json = try? JSON(data: usableData)
+                let status:String = json!["status"].description
+                let message:String = json!["message"].description
+                if status != "0" {
+                    DispatchQueue.main.async {
+                        self.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Status", value: status))
+                        self.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Message", value: message))
+                        self.metaInfoStore.updateMetaInfoView()
+                    }
+                }else{
+                    
+                    let address:String = json!["result"]["formatted_address"].description
+                    let businessCircle:String = json!["result"]["business"].description
+                    let country:String = json!["result"]["addressComponent"]["country"].description
+                    let province:String = json!["result"]["addressComponent"]["province"].description
+                    let city:String = json!["result"]["addressComponent"]["city"].description
+                    let district:String = json!["result"]["addressComponent"]["district"].description
+                    let street:String = json!["result"]["addressComponent"]["street"].description
+                    let description:String = json!["result"]["sematic_description"].description
+                    
+                    if address != "" {
+                        DispatchQueue.main.async {
+                            self.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Country", value: country))
+                            self.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Province", value: province))
+                            self.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "City", value: city))
+                            self.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "District", value: district))
+                            self.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Street", value: street))
+                            self.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "BusinessCircle", value: businessCircle))
+                            self.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Address", value: address))
+                            self.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Description", value: description))
+                            self.metaInfoStore.updateMetaInfoView()
+                        }
+                    }
+                }
+                
+            }
+        }
+        task.resume()
+    }
 }
 
 

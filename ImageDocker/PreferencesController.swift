@@ -45,6 +45,19 @@ final class PreferencesController: NSViewController {
 
     }
     
+    class func healthCheck() {
+        
+        if baiduAK() == "" || baiduSK() == "" {
+            
+            let alert = NSAlert()
+            alert.addButton(withTitle: NSLocalizedString("CLOSE", comment: "Close"))
+            alert.messageText = NSLocalizedString("Please setup API keys", comment: "Please setup API keys")
+            alert.informativeText = NSLocalizedString("Please specify Baidu AK and SK in Preferences menu/dialog.", comment: "Please specify Baidu AK and SK in Preferences menu/dialog.")
+            alert.runModal()
+            return
+        }
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
