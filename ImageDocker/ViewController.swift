@@ -13,6 +13,7 @@ import SwiftyJSON
 import WebKit
 import AVFoundation
 import AVKit
+import PXSourceList
 
 class ViewController: NSViewController {
     
@@ -20,17 +21,27 @@ class ViewController: NSViewController {
     var img:ImageData!
     
     var zoomSize:Int = 16
+    var zoomSizeForPossibleAddress:Int = 16
     var previousTick:Int = 3
+    var previousTickForPossibleAddress:Int = 3
     
     var lastSelectedMetaInfoRow: Int?
+    
+    // MARK: PXSourceList
+    var modelObjects:NSMutableArray?
+    var sourceListItems:NSMutableArray?
 
     
     // MARK: Properties
     
+    @IBOutlet weak var btnCloneLocationToFinder: NSButton!
     @IBOutlet weak var webLocation: WKWebView!
     @IBOutlet weak var metaInfoTableView: NSTableView!
     @IBOutlet weak var playerContainer: NSView!
     @IBOutlet weak var mapZoomSlider: NSSlider!
+    @IBOutlet weak var addressSearcher: NSSearchField!
+    @IBOutlet weak var webPossibleLocation: WKWebView!
+    @IBOutlet weak var sourceList: PXSourceList!
     
     var stackedImageViewController : StackedImageViewController!
     var stackedVideoViewController : StackedVideoViewController!
@@ -39,6 +50,14 @@ class ViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        btnCloneLocationToFinder.title = "▼ Copy"
+        
+        webLocation.setValue(false, forKey: "drawsBackground")
+        webPossibleLocation.setValue(false, forKey: "drawsBackground")
+        
+        webLocation.load(URLRequest(url: URL(string: "about:blank")!))
+        webPossibleLocation.load(URLRequest(url: URL(string: "about:blank")!))
         
         // Do any additional setup after loading the view.
         stackedImageViewController = storyboard?.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "imageView")) as! StackedImageViewController
@@ -55,6 +74,8 @@ class ViewController: NSViewController {
         
         PreferencesController.healthCheck()
         
+        self.setUpSourceListDataModel()
+        self.sourceList.reloadData()
     }
     
     // MARK: Actions
@@ -149,6 +170,18 @@ class ViewController: NSViewController {
         }
     }
     
+    @IBAction func onButtonFindClick(_ sender: NSButton) {
+        let address:String = addressSearcher.stringValue
+        if address == "" {return}
+        BaiduLocation.queryForCoordinate(address: address, locationDelegate: self)
+    }
+    @IBAction func onAddressSearcherAction(_ sender: Any) {
+        let address:String = addressSearcher.stringValue
+        if address == "" {return}
+        BaiduLocation.queryForCoordinate(address: address, locationDelegate: self)
+    }
+    
+    
 }
 
 extension ViewController: DropPlaceDelegate {
@@ -181,6 +214,21 @@ extension ViewController: MetaInfoStoreDelegate {
     
     func updateMetaInfoView() {
         self.metaInfoTableView.reloadData()
+    }
+}
+
+extension ViewController: LocationDelegate {
+    
+    func handleLocation(address: String, latitude: Double, longitude: Double) {
+        BaiduLocation.queryForMap(lat: latitude, lon: longitude, view: webPossibleLocation, zoom: zoomSizeForPossibleAddress)
+    }
+    
+    func handleMessage(status: Int, message: String) {
+        let alert = NSAlert()
+        alert.addButton(withTitle: NSLocalizedString("CLOSE", comment: "Close"))
+        alert.messageText = NSLocalizedString("Location Service", comment: "")
+        alert.informativeText = NSLocalizedString(message, comment: "")
+        alert.runModal()
     }
 }
 

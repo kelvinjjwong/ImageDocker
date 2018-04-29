@@ -39,8 +39,41 @@ final class BaiduLocation {
     }
     
     public static func urlForCoordinate(address:String) -> String{
-        let queryStr:String = "/geocoder/v2/?address=\(address)&output=json&ak=\(ak())"
-        return "\(baseurl)\(queryStr)&sn=\(sn(queryStr))"
+        let encodedAddress:String = address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let queryStr:String = "/geocoder/v2/?address=\(encodedAddress)&output=json&ak=\(ak())"
+        let queryStrForSn:String = "/geocoder/v2/?address=\(address)&output=json&ak=\(ak())"
+        return "\(baseurl)\(queryStr)&sn=\(sn(queryStrForSn))"
+    }
+    
+    public static func queryForCoordinate(address:String, locationDelegate: LocationDelegate){
+        let urlString:String = BaiduLocation.urlForCoordinate(address: address)
+        print(urlString)
+        let requestUrl:URL = URL(string:urlString)!
+        let request = URLRequest(url:requestUrl)
+        let task = URLSession.shared.dataTask(with: request) {
+            (data, response, error) in
+            if error == nil, let usableData = data {
+                let dataStr:String = String(data: usableData, encoding: String.Encoding.utf8)!
+                print(dataStr)
+                let json:JSON = JSON(parseJSON: dataStr)
+                if json != JSON(NSNull()) {
+                    let status:Int = json["status"].intValue
+                    if status == 0 {
+                        let latitudeBaidu:Double = json["result"]["location"]["lat"].doubleValue
+                        let longitudeBaidu:Double = json["result"]["location"]["lng"].doubleValue
+                        
+                        DispatchQueue.main.async {
+                            locationDelegate.handleLocation(address: address, latitude: latitudeBaidu, longitude: longitudeBaidu)
+                        }
+                        
+                    } else {
+                        let message:String = json["message"].stringValue
+                        print(message)
+                    }
+                }
+            }
+        }
+        task.resume()
     }
     
     public static func queryForAddress(lat latitudeBaidu:Double, lon longitudeBaidu:Double, metaInfoStore:MetaInfoStoreDelegate){

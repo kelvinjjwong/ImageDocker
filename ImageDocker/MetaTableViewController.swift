@@ -38,6 +38,7 @@ extension ViewController: NSTableViewDelegate {
             }
             let colView = tableView.makeView(withIdentifier: id, owner: nil) as! NSTableCellView
             colView.textField?.stringValue = value;
+            colView.textField?.lineBreakMode = NSParagraphStyle.LineBreakMode.byWordWrapping
             if row == tableView.selectedRow {
                 lastSelectedMetaInfoRow = row
                 colView.textField?.textColor = NSColor.yellow

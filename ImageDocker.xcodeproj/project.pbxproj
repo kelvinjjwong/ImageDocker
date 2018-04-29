@@ -17,6 +17,12 @@
 		8E0AFA50208BDEA100CE8B68 /* ImageDockerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0AFA4F208BDEA100CE8B68 /* ImageDockerTests.swift */; };
 		8E0AFA5B208BDEA100CE8B68 /* ImageDockerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0AFA5A208BDEA100CE8B68 /* ImageDockerUITests.swift */; };
 		8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E174B6D208F851100FFE7C7 /* ExifTool.swift */; };
+		8E4B7C1920929EFA00DDD9E0 /* LocationInfoHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4B7C1820929EFA00DDD9E0 /* LocationInfoHandler.swift */; };
+		8E4B7C1C2093D15700DDD9E0 /* BaseNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4B7C1B2093D15700DDD9E0 /* BaseNode.swift */; };
+		8E4B7C1E209416CC00DDD9E0 /* OutlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4B7C1D209416CC00DDD9E0 /* OutlineViewController.swift */; };
+		8E4B7C202094224B00DDD9E0 /* ChildNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4B7C1F2094224B00DDD9E0 /* ChildNode.swift */; };
+		8E4B7C222094489E00DDD9E0 /* PrimaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4B7C212094489E00DDD9E0 /* PrimaryViewController.swift */; };
+		8E4B7C2420944C1100DDD9E0 /* FolderSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4B7C2320944C1100DDD9E0 /* FolderSplitViewController.swift */; };
 		8E721B95208CAAFF00E304EA /* ImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E721B94208CAAFF00E304EA /* ImageData.swift */; };
 		8E7F71002091F14300410C45 /* BaiduLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F70FF2091F14200410C45 /* BaiduLocation.swift */; };
 		8E7F71022092053400410C45 /* MetaInfoHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F71012092053400410C45 /* MetaInfoHandler.swift */; };
@@ -29,6 +35,11 @@
 		8EBA692C2090DB0300221131 /* DropPlaceCommons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA692B2090DB0300221131 /* DropPlaceCommons.swift */; };
 		8EBA692E2090DB4B00221131 /* VideoDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA692D2090DB4B00221131 /* VideoDropView.swift */; };
 		8EEB88842090B44B00CDEC81 /* ImageDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEB88832090B44B00CDEC81 /* ImageDropView.swift */; };
+		8EF32D122094CB2000511538 /* SourceListIcons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8EF32D112094CB2000511538 /* SourceListIcons.xcassets */; };
+		8EF32D142095355400511538 /* LCSourceListTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF32D132095355400511538 /* LCSourceListTableCellView.swift */; };
+		8EFE763C2094AF6B00B7CFCA /* TreeListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFE763B2094AF6B00B7CFCA /* TreeListController.swift */; };
+		8EFE76412094B98D00B7CFCA /* PhotoCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFE76402094B98D00B7CFCA /* PhotoCollection.swift */; };
+		912F0ED0D9261254EE71E67E /* Pods_ImageDocker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B479F2387DA097A86444200D /* Pods_ImageDocker.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +79,12 @@
 		8E0AFA5A208BDEA100CE8B68 /* ImageDockerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDockerUITests.swift; sourceTree = "<group>"; };
 		8E0AFA5C208BDEA100CE8B68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8E174B6D208F851100FFE7C7 /* ExifTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExifTool.swift; sourceTree = "<group>"; };
+		8E4B7C1820929EFA00DDD9E0 /* LocationInfoHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInfoHandler.swift; sourceTree = "<group>"; };
+		8E4B7C1B2093D15700DDD9E0 /* BaseNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNode.swift; sourceTree = "<group>"; };
+		8E4B7C1D209416CC00DDD9E0 /* OutlineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineViewController.swift; sourceTree = "<group>"; };
+		8E4B7C1F2094224B00DDD9E0 /* ChildNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildNode.swift; sourceTree = "<group>"; };
+		8E4B7C212094489E00DDD9E0 /* PrimaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryViewController.swift; sourceTree = "<group>"; };
+		8E4B7C2320944C1100DDD9E0 /* FolderSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderSplitViewController.swift; sourceTree = "<group>"; };
 		8E721B94208CAAFF00E304EA /* ImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageData.swift; sourceTree = "<group>"; };
 		8E7F70FF2091F14200410C45 /* BaiduLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaiduLocation.swift; sourceTree = "<group>"; };
 		8E7F71012092053400410C45 /* MetaInfoHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfoHandler.swift; sourceTree = "<group>"; };
@@ -80,6 +97,11 @@
 		8EBA692B2090DB0300221131 /* DropPlaceCommons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropPlaceCommons.swift; sourceTree = "<group>"; };
 		8EBA692D2090DB4B00221131 /* VideoDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDropView.swift; sourceTree = "<group>"; };
 		8EEB88832090B44B00CDEC81 /* ImageDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDropView.swift; sourceTree = "<group>"; };
+		8EF32D112094CB2000511538 /* SourceListIcons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = SourceListIcons.xcassets; sourceTree = "<group>"; };
+		8EF32D132095355400511538 /* LCSourceListTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCSourceListTableCellView.swift; sourceTree = "<group>"; };
+		8EFE763B2094AF6B00B7CFCA /* TreeListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeListController.swift; sourceTree = "<group>"; };
+		8EFE763D2094B12200B7CFCA /* ImageDocker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ImageDocker-Bridging-Header.h"; sourceTree = "<group>"; };
+		8EFE76402094B98D00B7CFCA /* PhotoCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollection.swift; sourceTree = "<group>"; };
 		B479F2387DA097A86444200D /* Pods_ImageDocker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImageDocker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7145076C66463FEEE891BB9 /* Pods-ImageDocker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ImageDocker/Pods-ImageDocker.debug.xcconfig"; sourceTree = "<group>"; };
 		E1C548BE0FF4031E723C91D3 /* Pods-ImageDocker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.release.xcconfig"; path = "Pods/Target Support Files/Pods-ImageDocker/Pods-ImageDocker.release.xcconfig"; sourceTree = "<group>"; };
@@ -91,6 +113,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				211CCB1CC9D5DDCDB077A2DC /* Pods_ImageDocker.framework in Frameworks */,
+				912F0ED0D9261254EE71E67E /* Pods_ImageDocker.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,6 +170,7 @@
 		8E0AFA3B208BDEA000CE8B68 /* ImageDocker */ = {
 			isa = PBXGroup;
 			children = (
+				8E4B7C1A2093D14500DDD9E0 /* Tree */,
 				8E7F7103209212DD00410C45 /* LBS */,
 				8EBA69312090DD0300221131 /* Domain */,
 				8EBA69302090DCC800221131 /* Utilities */,
@@ -157,6 +181,9 @@
 				8E0AFA42208BDEA100CE8B68 /* Main.storyboard */,
 				8EA643F4208D6E5100C7D695 /* PreferencesController.swift */,
 				8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */,
+				8EFE763B2094AF6B00B7CFCA /* TreeListController.swift */,
+				8EFE76402094B98D00B7CFCA /* PhotoCollection.swift */,
+				8EF32D132095355400511538 /* LCSourceListTableCellView.swift */,
 			);
 			path = ImageDocker;
 			sourceTree = "<group>";
@@ -179,10 +206,23 @@
 			path = ImageDockerUITests;
 			sourceTree = "<group>";
 		};
+		8E4B7C1A2093D14500DDD9E0 /* Tree */ = {
+			isa = PBXGroup;
+			children = (
+				8E4B7C1B2093D15700DDD9E0 /* BaseNode.swift */,
+				8E4B7C1F2094224B00DDD9E0 /* ChildNode.swift */,
+				8E4B7C1D209416CC00DDD9E0 /* OutlineViewController.swift */,
+				8E4B7C212094489E00DDD9E0 /* PrimaryViewController.swift */,
+				8E4B7C2320944C1100DDD9E0 /* FolderSplitViewController.swift */,
+			);
+			name = Tree;
+			sourceTree = "<group>";
+		};
 		8E7F7103209212DD00410C45 /* LBS */ = {
 			isa = PBXGroup;
 			children = (
 				8E7F70FF2091F14200410C45 /* BaiduLocation.swift */,
+				8E4B7C1820929EFA00DDD9E0 /* LocationInfoHandler.swift */,
 			);
 			name = LBS;
 			sourceTree = "<group>";
@@ -190,6 +230,8 @@
 		8EBA69262090C37B00221131 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8EF32D112094CB2000511538 /* SourceListIcons.xcassets */,
+				8EFE763D2094B12200B7CFCA /* ImageDocker-Bridging-Header.h */,
 				8E0AFA40208BDEA100CE8B68 /* Assets.xcassets */,
 				8E0AFA46208BDEA100CE8B68 /* ImageDocker.entitlements */,
 				8E0AFA45208BDEA100CE8B68 /* Info.plist */,
@@ -309,6 +351,7 @@
 				TargetAttributes = {
 					8E0AFA38208BDEA000CE8B68 = {
 						CreatedOnToolsVersion = 9.3;
+						LastSwiftMigration = 0930;
 					};
 					8E0AFA4A208BDEA100CE8B68 = {
 						CreatedOnToolsVersion = 9.3;
@@ -346,6 +389,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8EBA69252090C2AA00221131 /* ExifTool in Resources */,
+				8EF32D122094CB2000511538 /* SourceListIcons.xcassets in Resources */,
 				8E0AFA41208BDEA100CE8B68 /* Assets.xcassets in Resources */,
 				8E0AFA44208BDEA100CE8B68 /* Main.storyboard in Resources */,
 			);
@@ -376,11 +420,13 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-ImageDocker/Pods-ImageDocker-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/PXSourceList/PXSourceList.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PXSourceList.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -415,19 +461,28 @@
 			files = (
 				8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */,
 				8E7F71022092053400410C45 /* MetaInfoHandler.swift in Sources */,
+				8E4B7C1C2093D15700DDD9E0 /* BaseNode.swift in Sources */,
+				8EF32D142095355400511538 /* LCSourceListTableCellView.swift in Sources */,
 				8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */,
+				8E4B7C202094224B00DDD9E0 /* ChildNode.swift in Sources */,
 				8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */,
+				8E4B7C1E209416CC00DDD9E0 /* OutlineViewController.swift in Sources */,
+				8E4B7C222094489E00DDD9E0 /* PrimaryViewController.swift in Sources */,
 				8E7F71002091F14300410C45 /* BaiduLocation.swift in Sources */,
 				8E015123208F7D34009C2549 /* StackedVideoViewController.swift in Sources */,
 				8E721B95208CAAFF00E304EA /* ImageData.swift in Sources */,
 				8EEB88842090B44B00CDEC81 /* ImageDropView.swift in Sources */,
 				8EA1A063208DFD92000C3B97 /* MetaInfo.swift in Sources */,
+				8E4B7C2420944C1100DDD9E0 /* FolderSplitViewController.swift in Sources */,
 				8E0AFA3F208BDEA000CE8B68 /* ViewController.swift in Sources */,
 				8EBA692C2090DB0300221131 /* DropPlaceCommons.swift in Sources */,
 				8EBA692E2090DB4B00221131 /* VideoDropView.swift in Sources */,
+				8EFE763C2094AF6B00B7CFCA /* TreeListController.swift in Sources */,
 				8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */,
+				8E4B7C1920929EFA00DDD9E0 /* LocationInfoHandler.swift in Sources */,
 				8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */,
 				8E0AFA3D208BDEA000CE8B68 /* AppDelegate.swift in Sources */,
+				8EFE76412094B98D00B7CFCA /* PhotoCollection.swift in Sources */,
 				8EBA692A2090C87D00221131 /* Helper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -593,6 +648,7 @@
 			baseConfigurationReference = D7145076C66463FEEE891BB9 /* Pods-ImageDocker.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ImageDocker/ImageDocker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -604,6 +660,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.nonamecat.ImageDocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "ImageDocker/ImageDocker-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -613,6 +671,7 @@
 			baseConfigurationReference = E1C548BE0FF4031E723C91D3 /* Pods-ImageDocker.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ImageDocker/ImageDocker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -624,6 +683,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.nonamecat.ImageDocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "ImageDocker/ImageDocker-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
