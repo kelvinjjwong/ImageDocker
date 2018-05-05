@@ -28,6 +28,7 @@ class PhotoCollection: NSObject {
     var identifier = ""
     var photos = [Any]()
     var type: PhotoCollectionType?
+    var imageFolder:ImageFolder? = nil
     
     override init(){
         super.init()

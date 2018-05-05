@@ -9,10 +9,39 @@
 import Cocoa
 import PXSourceList
 
+let photosIcon:NSImage = NSImage(imageLiteralResourceName: "photos")
+let eventsIcon:NSImage = NSImage(imageLiteralResourceName: "events")
+let peopleIcon:NSImage = NSImage(imageLiteralResourceName: "people")
+let placesIcon:NSImage = NSImage(imageLiteralResourceName: "places")
+let albumIcon:NSImage = NSImage(imageLiteralResourceName: "album")
+
 extension ViewController {
     
+    func setUpSourceListDataModel() {
+        placesIcon.isTemplate = true
+        peopleIcon.isTemplate = true
+        eventsIcon.isTemplate = true
+        photosIcon.isTemplate = true
+        albumIcon.isTemplate = true
+        
+        self.sourceListItems = NSMutableArray(array:[])
+        self.modelObjects = NSMutableArray(array:[])
+        
+        let library = self.addSourceListSection(title: "LIBRARY")
+            
+        let startingPath:String = "/MacStorage/photo.huawei.honor8.wjj"
+    
+        self.imageFolders = ImageFolderScanner.default.scanImageFolder(path: startingPath)
+        
+        if imageFolders.count > 0 {
+            for imageFolder:ImageFolder in imageFolders {
+                self.addSourceListEntry(imageFolder: imageFolder, icon: photosIcon, root: library)
+            }
+        }
+    }
+    
     func addNumberOfPhotoObjects(_ numberOfObjects:UInt, toCollection collection:PhotoCollection) {
-        var photos:NSMutableArray = NSMutableArray()
+        let photos:NSMutableArray = NSMutableArray()
         for _ in 0...numberOfObjects {
             photos.add(Photo())
         }
@@ -23,61 +52,33 @@ extension ViewController {
         return self.sourceListItems![0] as! PXSourceListItem
     }
     
-    func albumItem() -> PXSourceListItem {
-        return self.sourceListItems![1] as! PXSourceListItem
+    func addSourceListSection(title:String) -> PXSourceListItem {
+        let item:PXSourceListItem = PXSourceListItem(title: title, identifier: "")
+        self.sourceListItems?.add(item)
+        self.sourceListIdentifiers[title] = item
+        return item
     }
     
-    func setUpSourceListDataModel() {
-        self.sourceListItems = NSMutableArray(array:[])
+    func addSourceListEntry(imageFolder:ImageFolder, icon:NSImage, root:PXSourceListItem) {
+        var _parent:PXSourceListItem
+        if imageFolder.parent == nil {
+            _parent = root
+        }else{
+            _parent = self.sourceListIdentifiers[(imageFolder.parent?.url.path)!]!
+        }
         
-        let photoCollection:PhotoCollection = PhotoCollection(title: "Photos", identifier: "photos", type: PhotoCollectionType.library)
-        self.addNumberOfPhotoObjects(264, toCollection: photoCollection)
+        let collection:PhotoCollection = PhotoCollection(title: imageFolder.getPathExcludeParent(),
+                                                         identifier: imageFolder.url.path,
+                                                         type: imageFolder.children.count == 0 ? .userCreated : .library)
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: icon)
+        self.modelObjects?.add(collection)
+        _parent.addChildItem(item)
+        self.addNumberOfPhotoObjects(UInt(imageFolder.countOfImages), toCollection: collection)
         
-        let landscapePhotoCollection:PhotoCollection = PhotoCollection(title: "Landscape", identifier: "landscape", type: PhotoCollectionType.userCreated)
-        self.addNumberOfPhotoObjects(102, toCollection: landscapePhotoCollection)
+        self.sourceListIdentifiers[imageFolder.url.path] = item
         
-        let portraitPhotoCollection:PhotoCollection = PhotoCollection(title: "Portrait", identifier: "portrait", type: PhotoCollectionType.userCreated)
-        self.addNumberOfPhotoObjects(102, toCollection: portraitPhotoCollection)
-        
-        let eventsCollection:PhotoCollection = PhotoCollection(title: "Events", identifier: "events", type: PhotoCollectionType.library)
-        self.addNumberOfPhotoObjects(101, toCollection: eventsCollection)
-        
-        let snapshotCollection:PhotoCollection = PhotoCollection(title: "Holidays", identifier: "holidays", type: PhotoCollectionType.userCreated)
-        self.addNumberOfPhotoObjects(201, toCollection: snapshotCollection)
-        
-        
-        self.modelObjects = NSMutableArray(array:[photoCollection, landscapePhotoCollection, portraitPhotoCollection, eventsCollection, snapshotCollection])
-        
-        let photosImage:NSImage = NSImage(imageLiteralResourceName: "photos")
-        photosImage.isTemplate = true
-        let eventsImage:NSImage = NSImage(imageLiteralResourceName: "events")
-        eventsImage.isTemplate = true
-        let peopleImage:NSImage = NSImage(imageLiteralResourceName: "people")
-        peopleImage.isTemplate = true
-        let placesImage:NSImage = NSImage(imageLiteralResourceName: "places")
-        placesImage.isTemplate = true
-        let albumImage:NSImage = NSImage(imageLiteralResourceName: "album")
-        albumImage.isTemplate = true
-        
-        let portraitCollectionItem:PXSourceListItem = PXSourceListItem(representedObject: portraitPhotoCollection, icon: albumImage)
-        
-        let landscapeCollectionItem:PXSourceListItem = PXSourceListItem(representedObject: landscapePhotoCollection, icon: albumImage)
-        
-        let photoCollectionItem:PXSourceListItem = PXSourceListItem(representedObject: photoCollection, icon: photosImage)
-        
-        let eventsCollectionItem:PXSourceListItem = PXSourceListItem(representedObject: eventsCollection, icon: eventsImage)
-        
-        photoCollectionItem.children = [portraitCollectionItem, landscapeCollectionItem]
-        
-        let libraryItem:PXSourceListItem = PXSourceListItem(title: "LIBRARY", identifier: "")
-        libraryItem.children = [photoCollectionItem, eventsCollectionItem]
-        
-        let albumsItem:PXSourceListItem = PXSourceListItem(title: "ALBUMS", identifier: "")
-        let snapshotCollectionItem:PXSourceListItem = PXSourceListItem(representedObject: snapshotCollection, icon: albumImage)
-        albumsItem.addChildItem(snapshotCollectionItem)
-        albumsItem.children = [snapshotCollectionItem]
-        
-        self.sourceListItems = NSMutableArray(array:[libraryItem, albumsItem])
+        collection.imageFolder = imageFolder
+        imageFolder.photoCollection = collection
         
     }
 }
@@ -91,11 +92,10 @@ extension ViewController : PXSourceListDelegate {
     
     func sourceList(_ aSourceList:PXSourceList!, viewForItem item: Any!) -> NSView {
         var cellView: LCSourceListTableCellView? = nil
-        print("----------")
         if let sourceListItem: PXSourceListItem = item as? PXSourceListItem {
             
             if aSourceList.level(forItem: item) == 0 {
-                var sectionCellView:PXSourceListTableCellView = (aSourceList.makeView(withIdentifier: NSUserInterfaceItemIdentifier("HeaderCell"), owner: nil) as! PXSourceListTableCellView)
+                let sectionCellView:PXSourceListTableCellView = (aSourceList.makeView(withIdentifier: NSUserInterfaceItemIdentifier("HeaderCell"), owner: nil) as! PXSourceListTableCellView)
                 sectionCellView.textField?.stringValue = sourceListItem.title
                 return sectionCellView
             } else {
@@ -115,20 +115,20 @@ extension ViewController : PXSourceListDelegate {
                 
                 let sourceTitle:String? = sourceListItem.title
                 let collectionTitle:String? = collection.title
-                if sourceTitle != nil && sourceListItem.title != "" {
+                if sourceTitle != nil && sourceTitle != "" {
                     cellView?.textField?.stringValue = sourceListItem.title
                 } else {
-                    if collectionTitle != nil && collection.title != "" {
+                    if collectionTitle != nil && collectionTitle != "" {
                         cellView?.textField?.stringValue = collection.title
                     }
                 }
                 if sourceTitle == nil && collectionTitle != nil {
-                    cellView?.textField?.stringValue = collection.title
+                    cellView?.textField?.stringValue = collectionTitle!
                 }
                 cellView?.badge?.stringValue = " \(collection.photos.count) "
                 cellView?.badge?.isHidden = (collection.photos.count == 0)
                 
-                
+            
             }
             return cellView!
         }else {
@@ -137,28 +137,19 @@ extension ViewController : PXSourceListDelegate {
     }
     
     func sourceListSelectionDidChange(_ notification: Notification!) {
-        var removeButtonEnabled:Bool = false
-        var newLabel:String = ""
+        //var removeButtonEnabled:Bool = false
         if let selectedItem:PXSourceListItem = self.sourceList.item(atRow: self.sourceList.selectedRow) as? PXSourceListItem {
-            if self.albumItem().hasChildren() {
-                if let children:NSMutableArray = NSMutableArray(array:self.albumItem().children) {
-                    if children.contains(selectedItem) {
-                        removeButtonEnabled = true
-                    }
-                }
+            if self.libraryItem().hasChildren() {
+                //if let children:NSMutableArray = NSMutableArray(array:self.libraryItem().children) {
+                    //if children.contains(selectedItem) {
+                        //removeButtonEnabled = true
+                    //}
+                //}
             }
             
             if let collection:PhotoCollection = selectedItem.representedObject as? PhotoCollection {
-                if collection.identifier != nil && collection.identifier != "" {
-                    newLabel = "\(collection.identifier) collection selected."
-                }else{
-                    newLabel = "User-created collection selected."
-                }
+                print("\(collection.identifier) collection selected.")
             }
-            print(newLabel)
-            // set content label
-            // enable btnRemove
-            
         }
     }
     
@@ -173,7 +164,8 @@ extension ViewController : PXSourceListDataSource {
                 return UInt(self.sourceListItems!.count)
             }
         } else{
-            return UInt(2)
+            // when just init sections
+            return UInt(1)
         }
     }
     

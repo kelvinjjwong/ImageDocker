@@ -16,6 +16,7 @@
 		8E0AFA44208BDEA100CE8B68 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E0AFA42208BDEA100CE8B68 /* Main.storyboard */; };
 		8E0AFA50208BDEA100CE8B68 /* ImageDockerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0AFA4F208BDEA100CE8B68 /* ImageDockerTests.swift */; };
 		8E0AFA5B208BDEA100CE8B68 /* ImageDockerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0AFA5A208BDEA100CE8B68 /* ImageDockerUITests.swift */; };
+		8E0EAE9A209D2623008C377F /* ImageFolderScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0EAE99209D2623008C377F /* ImageFolderScanner.swift */; };
 		8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E174B6D208F851100FFE7C7 /* ExifTool.swift */; };
 		8E4B7C1920929EFA00DDD9E0 /* LocationInfoHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4B7C1820929EFA00DDD9E0 /* LocationInfoHandler.swift */; };
 		8E4B7C1C2093D15700DDD9E0 /* BaseNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4B7C1B2093D15700DDD9E0 /* BaseNode.swift */; };
@@ -37,6 +38,7 @@
 		8EEB88842090B44B00CDEC81 /* ImageDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEB88832090B44B00CDEC81 /* ImageDropView.swift */; };
 		8EF32D122094CB2000511538 /* SourceListIcons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8EF32D112094CB2000511538 /* SourceListIcons.xcassets */; };
 		8EF32D142095355400511538 /* LCSourceListTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF32D132095355400511538 /* LCSourceListTableCellView.swift */; };
+		8EF500CD209A804100C9805F /* ImageFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF500CC209A804100C9805F /* ImageFolder.swift */; };
 		8EFE763C2094AF6B00B7CFCA /* TreeListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFE763B2094AF6B00B7CFCA /* TreeListController.swift */; };
 		8EFE76412094B98D00B7CFCA /* PhotoCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFE76402094B98D00B7CFCA /* PhotoCollection.swift */; };
 		912F0ED0D9261254EE71E67E /* Pods_ImageDocker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B479F2387DA097A86444200D /* Pods_ImageDocker.framework */; };
@@ -78,6 +80,7 @@
 		8E0AFA56208BDEA100CE8B68 /* ImageDockerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageDockerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E0AFA5A208BDEA100CE8B68 /* ImageDockerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDockerUITests.swift; sourceTree = "<group>"; };
 		8E0AFA5C208BDEA100CE8B68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8E0EAE99209D2623008C377F /* ImageFolderScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFolderScanner.swift; sourceTree = "<group>"; };
 		8E174B6D208F851100FFE7C7 /* ExifTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExifTool.swift; sourceTree = "<group>"; };
 		8E4B7C1820929EFA00DDD9E0 /* LocationInfoHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInfoHandler.swift; sourceTree = "<group>"; };
 		8E4B7C1B2093D15700DDD9E0 /* BaseNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNode.swift; sourceTree = "<group>"; };
@@ -99,6 +102,7 @@
 		8EEB88832090B44B00CDEC81 /* ImageDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDropView.swift; sourceTree = "<group>"; };
 		8EF32D112094CB2000511538 /* SourceListIcons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = SourceListIcons.xcassets; sourceTree = "<group>"; };
 		8EF32D132095355400511538 /* LCSourceListTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCSourceListTableCellView.swift; sourceTree = "<group>"; };
+		8EF500CC209A804100C9805F /* ImageFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFolder.swift; sourceTree = "<group>"; };
 		8EFE763B2094AF6B00B7CFCA /* TreeListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeListController.swift; sourceTree = "<group>"; };
 		8EFE763D2094B12200B7CFCA /* ImageDocker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ImageDocker-Bridging-Header.h"; sourceTree = "<group>"; };
 		8EFE76402094B98D00B7CFCA /* PhotoCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollection.swift; sourceTree = "<group>"; };
@@ -184,6 +188,8 @@
 				8EFE763B2094AF6B00B7CFCA /* TreeListController.swift */,
 				8EFE76402094B98D00B7CFCA /* PhotoCollection.swift */,
 				8EF32D132095355400511538 /* LCSourceListTableCellView.swift */,
+				8EF500CC209A804100C9805F /* ImageFolder.swift */,
+				8E0EAE99209D2623008C377F /* ImageFolderScanner.swift */,
 			);
 			path = ImageDocker;
 			sourceTree = "<group>";
@@ -465,6 +471,7 @@
 				8EF32D142095355400511538 /* LCSourceListTableCellView.swift in Sources */,
 				8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */,
 				8E4B7C202094224B00DDD9E0 /* ChildNode.swift in Sources */,
+				8E0EAE9A209D2623008C377F /* ImageFolderScanner.swift in Sources */,
 				8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */,
 				8E4B7C1E209416CC00DDD9E0 /* OutlineViewController.swift in Sources */,
 				8E4B7C222094489E00DDD9E0 /* PrimaryViewController.swift in Sources */,
@@ -478,6 +485,7 @@
 				8EBA692C2090DB0300221131 /* DropPlaceCommons.swift in Sources */,
 				8EBA692E2090DB4B00221131 /* VideoDropView.swift in Sources */,
 				8EFE763C2094AF6B00B7CFCA /* TreeListController.swift in Sources */,
+				8EF500CD209A804100C9805F /* ImageFolder.swift in Sources */,
 				8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */,
 				8E4B7C1920929EFA00DDD9E0 /* LocationInfoHandler.swift in Sources */,
 				8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */,
@@ -654,10 +662,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = ZU637G36U2;
 				INFOPLIST_FILE = ImageDocker/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.nonamecat.ImageDocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ImageDocker/ImageDocker-Bridging-Header.h";
@@ -677,10 +682,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = ZU637G36U2;
 				INFOPLIST_FILE = ImageDocker/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.nonamecat.ImageDocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ImageDocker/ImageDocker-Bridging-Header.h";
@@ -697,11 +699,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = ZU637G36U2;
 				INFOPLIST_FILE = ImageDockerTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.nonamecat.ImageDockerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -718,11 +716,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = ZU637G36U2;
 				INFOPLIST_FILE = ImageDockerTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.nonamecat.ImageDockerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -738,11 +732,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = ZU637G36U2;
 				INFOPLIST_FILE = ImageDockerUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.nonamecat.ImageDockerUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -758,11 +748,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = ZU637G36U2;
 				INFOPLIST_FILE = ImageDockerUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.nonamecat.ImageDockerUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;

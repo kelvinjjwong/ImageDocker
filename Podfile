@@ -10,5 +10,4 @@ target 'ImageDocker' do
   pod 'CryptoSwift'
   pod 'SwiftyJSON'
   pod 'PXSourceList', '~> 2.0'
-
 end

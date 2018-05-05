@@ -30,6 +30,8 @@ class ViewController: NSViewController {
     // MARK: PXSourceList
     var modelObjects:NSMutableArray?
     var sourceListItems:NSMutableArray?
+    var sourceListIdentifiers:[String : PXSourceListItem] = [String : PXSourceListItem] ()
+    var imageFolders:[ImageFolder] = [ImageFolder]()
 
     
     // MARK: Properties
