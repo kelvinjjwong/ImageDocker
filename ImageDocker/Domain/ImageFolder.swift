@@ -16,14 +16,32 @@ class ImageFolder : NSObject {
     var sumOfImages:Int = 0
     var parent:ImageFolder? = nil
     var photoCollection:PhotoCollection? = nil
+    var containerFolder:ContainerFolder? = nil
     
     init(_ url:URL) {
         self.url = url
     }
     
-    init(_ url:URL, countOfImages:Int){
+    init(_ url:URL, countOfImages:Int, updateModelStore:Bool = true){
         self.url = url
         self.countOfImages = countOfImages
+        
+        let path:String = url.path
+        let name:String = url.lastPathComponent
+        
+        if updateModelStore {
+            self.containerFolder = ModelStore.getOrCreateContainer(name: name, path: path)
+            self.containerFolder?.imageCount = Int32(countOfImages)
+        }
+    }
+    
+    func setParent(_ parent:ImageFolder) {
+        self.parent = parent
+        if containerFolder != nil && containerFolder?.parentFolder == "" {
+            containerFolder?.parentFolder = parent.url.path
+        }
+        
+        parent.addChild(self)
     }
     
     func addChild(_ folder:ImageFolder) {
@@ -31,7 +49,11 @@ class ImageFolder : NSObject {
     }
     
     func totalCountOfImages() -> Int {
-        return self.countOfImages + sumUpImagesFromChildren(self)
+        let count:Int = self.countOfImages + sumUpImagesFromChildren(self)
+        if containerFolder != nil {
+            containerFolder?.imageCount = Int32(count)
+        }
+        return count
     }
     
     fileprivate func sumUpImagesFromChildren(_ startsAt:ImageFolder) -> Int {

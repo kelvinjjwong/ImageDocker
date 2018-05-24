@@ -17,7 +17,12 @@ let albumIcon:NSImage = NSImage(imageLiteralResourceName: "album")
 
 extension ViewController {
     
-    func setUpSourceListDataModel() {
+    func getLibrarySectionOfTree() -> PXSourceListItem {
+        
+        return self.librarySectionOfTree!
+    }
+    
+    func initSourceListDataModel() {
         placesIcon.isTemplate = true
         peopleIcon.isTemplate = true
         eventsIcon.isTemplate = true
@@ -27,22 +32,38 @@ extension ViewController {
         self.sourceListItems = NSMutableArray(array:[])
         self.modelObjects = NSMutableArray(array:[])
         
-        let library = self.addSourceListSection(title: "LIBRARY")
-            
-        let startingPath:String = "/MacStorage/photo.huawei.honor8.wjj"
+        if self.librarySectionOfTree == nil {
+            self.librarySectionOfTree = self.addSourceListSection(title: "LIBRARY")
+        }
+    }
     
-        self.imageFolders = ImageFolderScanner.default.scanImageFolder(path: startingPath)
+    func loadDemoPathToTree() {
+        self.loadPathToTree("/MacStorage/photo.huawei.honor8.wjj")
+    }
+    
+    func loadPathToTree(_ startingPath:String){
+        let imageFolders = ImageFolderTreeScanner.default.scanImageFolder(path: startingPath)
         
         if imageFolders.count > 0 {
             for imageFolder:ImageFolder in imageFolders {
-                self.addSourceListEntry(imageFolder: imageFolder, icon: photosIcon, root: library)
+                self.addSourceListEntry(imageFolder: imageFolder, icon: photosIcon, root: self.getLibrarySectionOfTree())
+            }
+        }
+    }
+    
+    func loadPathToTreeFromDatabase() {
+        let imageFolders = ImageFolderTreeScanner.default.scanImageFolderFromDatabase()
+        
+        if imageFolders.count > 0 {
+            for imageFolder:ImageFolder in imageFolders {
+                self.addSourceListEntry(imageFolder: imageFolder, icon: photosIcon, root: self.getLibrarySectionOfTree())
             }
         }
     }
     
     func addNumberOfPhotoObjects(_ numberOfObjects:UInt, toCollection collection:PhotoCollection) {
         let photos:NSMutableArray = NSMutableArray()
-        for _ in 0...numberOfObjects {
+        for _ in 1...numberOfObjects {
             photos.add(Photo())
         }
         collection.photos = photos as! [Any]
@@ -148,7 +169,8 @@ extension ViewController : PXSourceListDelegate {
             }
             
             if let collection:PhotoCollection = selectedItem.representedObject as? PhotoCollection {
-                print("\(collection.identifier) collection selected.")
+                //print("\(collection.identifier) collection selected.")
+                self.selectImageFolder(collection.imageFolder!)
             }
         }
     }

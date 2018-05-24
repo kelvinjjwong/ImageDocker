@@ -55,6 +55,15 @@ extension ViewController: NSTableViewDelegate {
         }
         return nil
     }
+    
+    func tableView(_ tableView: NSTableView, didAdd rowView: NSTableRowView, forRow row: Int) {
+        
+        //guard let tableView = tableView as? CustomTableView else { return }
+        
+        rowView.backgroundColor = row % 2 == 1
+            ? NSColor.gray
+            : NSColor.darkGray
+    }
 }
 
 // MARK: TableView data source functions
@@ -69,9 +78,38 @@ extension ViewController: NSTableViewDataSource {
     // table sorting by column contents
     func tableView(_ tableView: NSTableView,
                    sortDescriptorsDidChange oldDescriptors: [NSSortDescriptor]) {
-        let sorted = NSMutableArray(array: self.metaInfo)
-        sorted.sort(using: tableView.sortDescriptors)
-        self.metaInfo = sorted as! [MetaInfo]
-        tableView.reloadData()
+        
+    }
+    
+    func sortMetaInfoArray() {
+        let originalArray = self.metaInfo
+        
+        var arrays = [String : [MetaInfo]]()
+        
+        for meta:MetaInfo in originalArray {
+            if var arr:[MetaInfo] = arrays[meta.category]{
+                arr.append(meta)
+                arrays.updateValue(arr, forKey: meta.category)
+            }else{
+                var arr:[MetaInfo] = [MetaInfo]()
+                arr.append(meta)
+                arrays.updateValue(arr, forKey: meta.category)
+            }
+        }
+        
+        var sortedArray = [MetaInfo]()
+        
+        for key in ImageData.metaCategorySequence {
+            print(key)
+            if let arr:[MetaInfo] = arrays[key] {
+                print("\(key) \(arr.count)")
+                sortedArray.append(contentsOf: arr)
+            }
+        }
+        
+        self.metaInfo = sortedArray
+        
     }
 }
+
+

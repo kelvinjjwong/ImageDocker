@@ -12,4 +12,5 @@ protocol MetaInfoStoreDelegate {
     func setMetaInfo(_ info:MetaInfo)
     func setMetaInfo(_ info:MetaInfo, ifNotExists: Bool)
     func updateMetaInfoView()
+    func getMeta(category:String, subCategory:String, title:String) -> String?
 }

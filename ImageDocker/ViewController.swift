@@ -31,8 +31,12 @@ class ViewController: NSViewController {
     var modelObjects:NSMutableArray?
     var sourceListItems:NSMutableArray?
     var sourceListIdentifiers:[String : PXSourceListItem] = [String : PXSourceListItem] ()
-    var imageFolders:[ImageFolder] = [ImageFolder]()
+    //var imageFolders:[ImageFolder] = [ImageFolder]()
+    
+    var librarySectionOfTree : PXSourceListItem?
 
+    var selectedImageFolder:ImageFolder?
+    var selectedImageFile:String = ""
     
     // MARK: Properties
     
@@ -45,6 +49,11 @@ class ViewController: NSViewController {
     @IBOutlet weak var webPossibleLocation: WKWebView!
     @IBOutlet weak var sourceList: PXSourceList!
     
+    @IBOutlet weak var collectionView: NSCollectionView!
+    @IBOutlet weak var progressIndicator: NSProgressIndicator!
+    
+    let imagesLoader = CollectionViewItemsLoader()
+    
     var stackedImageViewController : StackedImageViewController!
     var stackedVideoViewController : StackedVideoViewController!
     
@@ -53,6 +62,21 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.layer?.backgroundColor = NSColor.darkGray.cgColor
+        
+        self.configurePreview()
+        
+        PreferencesController.healthCheck()
+        
+        self.initSourceListDataModel()
+        self.loadPathToTreeFromDatabase()
+        self.sourceList.backgroundColor = NSColor.darkGray
+        self.sourceList.reloadData()
+        
+        configureCollectionView()
+    }
+    
+    func configurePreview(){
         btnCloneLocationToFinder.title = "▼ Copy"
         
         webLocation.setValue(false, forKey: "drawsBackground")
@@ -60,6 +84,8 @@ class ViewController: NSViewController {
         
         webLocation.load(URLRequest(url: URL(string: "about:blank")!))
         webPossibleLocation.load(URLRequest(url: URL(string: "about:blank")!))
+        
+        self.playerContainer.layer?.borderColor = NSColor.darkGray.cgColor
         
         // Do any additional setup after loading the view.
         stackedImageViewController = storyboard?.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "imageView")) as! StackedImageViewController
@@ -74,10 +100,6 @@ class ViewController: NSViewController {
         stackedImageViewController.view.frame = self.playerContainer.bounds
         self.playerContainer.addSubview(stackedImageViewController.view)
         
-        PreferencesController.healthCheck()
-        
-        self.setUpSourceListDataModel()
-        self.sourceList.reloadData()
     }
     
     // MARK: Actions
@@ -102,18 +124,6 @@ class ViewController: NSViewController {
         
         self.loadBaiduMap()
         previousTick = tick
-    }
-    
-    @IBAction func onButtonOpenClick(_ sender: NSButton) {
-        
-        let panel = NSOpenPanel()
-        panel.allowedFileTypes = ["jpg", "jpeg", "mov", "mp4", "mpg"] //CGImageSourceCopyTypeIdentifiers() as? [String]
-        panel.allowsMultipleSelection = true
-        panel.canChooseFiles = true
-        panel.canChooseDirectories = true
-        if panel.runModal().rawValue == NSApplication.ModalResponse.OK.rawValue {
-            processImageUrls(urls: panel.urls)
-        }
     }
     
     // shared among different open-channels
@@ -160,6 +170,7 @@ class ViewController: NSViewController {
             
         }
         img.loadExif()
+        self.sortMetaInfoArray()
         self.metaInfoTableView.reloadData()
         img.getBaiduLocation()
         self.loadBaiduMap()
@@ -183,54 +194,89 @@ class ViewController: NSViewController {
         BaiduLocation.queryForCoordinate(address: address, locationDelegate: self)
     }
     
-    
-}
-
-extension ViewController: DropPlaceDelegate {
-    func dropURLs(_ urls: [URL]) {
-        processImageUrls(urls: urls)
-    }
-}
-
-extension ViewController: MetaInfoStoreDelegate {
-    
-    func setMetaInfo(_ info:MetaInfo){
-        setMetaInfo(info, ifNotExists: false)
+    func loadDataForNewFolderWithUrl(folderURL: NSURL) {
+        imagesLoader.load(from: folderURL)
+        collectionView.reloadData()
     }
     
-    func setMetaInfo(_ info:MetaInfo, ifNotExists: Bool){
-        if info.value == nil || info.value == "" || info.value == "null" {return}
-        var exists:Int = 0
-        for exist:MetaInfo in self.metaInfo {
-            if exist.category == info.category && exist.subCategory == info.subCategory && exist.title == info.title {
-                if ifNotExists == false {
-                    exist.value = info.value
+    private func configureCollectionView() {
+        let flowLayout = NSCollectionViewFlowLayout()
+        flowLayout.itemSize = NSSize(width: 160.0, height: 140.0)
+        flowLayout.sectionInset = NSEdgeInsets(top: 10.0, left: 20, bottom: 10.0, right: 20.0)
+        flowLayout.minimumInteritemSpacing = 20.0
+        flowLayout.minimumLineSpacing = 20.0
+        collectionView.collectionViewLayout = flowLayout
+        view.wantsLayer = true
+        collectionView.backgroundColors = [NSColor.darkGray]
+        collectionView.layer?.backgroundColor = NSColor.darkGray.cgColor
+        collectionView.layer?.borderColor = NSColor.darkGray.cgColor
+        
+        imagesLoader.singleSectionMode = false
+        imagesLoader.setupItems(urls: nil)
+        collectionView.reloadData()
+    }
+    
+    @IBAction func showHideSections(sender: AnyObject) {
+        let show = (sender as! NSButton).state
+        imagesLoader.singleSectionMode = (show == NSControl.StateValue.off)
+        imagesLoader.setupItems(urls: nil)
+        collectionView.reloadData()
+    }
+    
+    func selectImageFile(_ filename:String){
+        self.selectedImageFile = filename
+        print("selected image file: \(filename)")
+        let url:URL = (self.selectedImageFolder?.url.appendingPathComponent(filename, isDirectory: false))!
+        DispatchQueue.main.async {
+            self.loadImage(url)
+        }
+    }
+    
+    func selectImageFolder(_ imageFolder:ImageFolder){
+        self.selectedImageFolder = imageFolder
+        print("selected image folder: \(imageFolder.url.path)")
+        
+        DispatchQueue.main.async {
+            self.imagesLoader.load(from: imageFolder.url as NSURL)
+            self.collectionView.reloadData()
+        }
+    }
+    
+    @IBAction func onAddButtonClicked(_ sender: Any) {
+        let window = NSApplication.shared.windows.first
+        
+        let openPanel = NSOpenPanel()
+        openPanel.canChooseDirectories  = true
+        openPanel.canChooseFiles        = false
+        openPanel.showsHiddenFiles      = false
+        
+        openPanel.beginSheetModal(for: window!) { (response) -> Void in
+            guard response == NSApplication.ModalResponse.OK else {return}
+            if let path = openPanel.url?.path {
+                //viewController.loadDataForNewFolderWithUrl(folderURL: URL as NSURL)
+                print("want to open directory \(path)")
+                DispatchQueue.main.async {
+                    self.loadPathToTree(path)
+                    self.sourceList.reloadData()
                 }
-                exists = 1
             }
         }
-        if exists == 0 {
-            self.metaInfo.append(info)
-        }
     }
     
-    func updateMetaInfoView() {
-        self.metaInfoTableView.reloadData()
+    @IBAction func onDelButtonClicked(_ sender: Any) {
+        print("clicked delete button")
     }
+    
+    @IBAction func onRefreshButtonClicked(_ sender: Any) {
+        print("clicked refresh button")
+    }
+    
+    @IBAction func onRefreshCollectionButtonClicked(_ sender: Any) {
+    }
+    
+    @IBAction func onPlacesCheckBoxClicked(_ sender: NSButton) {
+    }
+    
 }
 
-extension ViewController: LocationDelegate {
-    
-    func handleLocation(address: String, latitude: Double, longitude: Double) {
-        BaiduLocation.queryForMap(lat: latitude, lon: longitude, view: webPossibleLocation, zoom: zoomSizeForPossibleAddress)
-    }
-    
-    func handleMessage(status: Int, message: String) {
-        let alert = NSAlert()
-        alert.addButton(withTitle: NSLocalizedString("CLOSE", comment: "Close"))
-        alert.messageText = NSLocalizedString("Location Service", comment: "")
-        alert.informativeText = NSLocalizedString(message, comment: "")
-        alert.runModal()
-    }
-}
 

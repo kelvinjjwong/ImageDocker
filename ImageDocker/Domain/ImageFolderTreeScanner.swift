@@ -8,9 +8,9 @@
 
 import Foundation
 
-class ImageFolderScanner {
+class ImageFolderTreeScanner {
     
-    static let `default` = ImageFolderScanner()
+    static let `default` = ImageFolderTreeScanner()
     
     func walkthruDirectory(at folder:URL, resourceKeys: [URLResourceKey] = []) -> FileManager.DirectoryEnumerator{
         let enumerator = FileManager.default.enumerator(at: folder,
@@ -44,6 +44,20 @@ class ImageFolderScanner {
         return count
     }
     
+    func scanImageFolderFromDatabase() -> [ImageFolder] {
+        var imageFolders:[ImageFolder] = [ImageFolder]()
+        
+        let containers = ModelStore.getAllContainers()
+        for container in containers {
+            let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path!), countOfImages: Int(container.imageCount), updateModelStore: false)
+            if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) {
+                imageFolder.setParent(parent)
+            }
+            imageFolders.append(imageFolder)
+        }
+        return imageFolders
+    }
+    
     func scanImageFolder(path: String) -> [ImageFolder] {
         let url:URL = URL(string: path)!
         return scanImageFolder(startingURL: url)
@@ -66,8 +80,7 @@ class ImageFolderScanner {
                     if countOfImage > 0 {
                         let imageFolder:ImageFolder = ImageFolder(folderURL, countOfImages: countOfImage)
                         if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) {
-                            imageFolder.parent = parent
-                            parent.addChild(imageFolder)
+                            imageFolder.setParent(parent)
                         }
                         imageFolders.append(imageFolder)
                     }
@@ -76,6 +89,7 @@ class ImageFolderScanner {
                 print(error)
             }
         }
+        ModelStore.save()
         return imageFolders
     }
 }

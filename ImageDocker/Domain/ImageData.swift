@@ -52,7 +52,7 @@ let SoftwareDateTime = kCGImagePropertyTIFFDateTime as String
 let ColorModel = kCGImagePropertyColorModel as String
 let ColorModelProfile = kCGImagePropertyProfileName as String
 
-final class ImageData: NSObject {
+final class ImageData {
 
     // MARK: instance variables
     
@@ -97,6 +97,10 @@ final class ImageData: NSObject {
     var isVideo:Bool = false
     var hasCoordinate:Bool = false
     
+    var isStandalone:Bool = false
+    var isLoadedExif:Bool = false
+    var isRecognizedDateTimeFromFilename:Bool = false
+    
     // MARK: Init
     
     /// instantiate an instance of the class
@@ -105,13 +109,19 @@ final class ImageData: NSObject {
     /// Extract geo location metadata and build a preview image for
     /// the given URL.  If the URL isn't recognized as an image mark this
     /// instance as not being valid.
-    init(url: URL, metaInfoStore:MetaInfoStoreDelegate) {
+    
+    init(url: URL, metaInfoStore:MetaInfoStoreDelegate? = nil) {
         self.url = url
-        self.metaInfoStore = metaInfoStore
-        super.init()
         
-        metaInfoStore.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Filename", value: url.lastPathComponent))
-        metaInfoStore.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Full path", value: url.path.replacingOccurrences(of: url.lastPathComponent, with: "")))
+        if metaInfoStore == nil {
+            self.metaInfoStore = StandaloneMetaInfoStore()
+            isStandalone = true
+        }else{
+            self.metaInfoStore = metaInfoStore!
+        }
+        
+        self.metaInfoStore.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Filename", value: url.lastPathComponent))
+        self.metaInfoStore.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Full path", value: url.path.replacingOccurrences(of: url.lastPathComponent, with: "")))
         
         if url.lastPathComponent.split(separator: Character(".")).count > 1 {
             let fileExt:String = (url.lastPathComponent.split(separator: Character(".")).last?.lowercased())!
@@ -128,11 +138,105 @@ final class ImageData: NSObject {
             originalLocation = location
         }
         
+        // huawei pictures
+        self.recognizeDateTimeFromFilename("IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})_([0-9]{3})\\.([A-Za-z0-9]{3}+)")
+        self.recognizeDateTimeFromFilename("IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})-([0-9]{2})\\.([A-Za-z0-9]{3}+)")
+        self.recognizeDateTimeFromFilename("IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})\\.([A-Za-z0-9]{3}+)")
+        
+        // file copied
+        self.recognizeDateTimeFromFilename("IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})_[0-9]\\.([A-Za-z0-9]{3}+)")
+        
+        // file compressed by wechat
+        self.recognizeDateTimeFromFilename("IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})_comps\\.([A-Za-z0-9]{3}+)")
+        // file compressed by wechat
+        self.recognizeDateTimeFromFilename("IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})_[A-Za-z0-9]{32}_comps\\.([A-Za-z0-9]{3}+)")
+        
+        self.recognizeDateTimeFromFilename("IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})_BURST[0-9]{3}\\.([A-Za-z0-9]{3}+)")
+        self.recognizeDateTimeFromFilename("IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})_BURST[0-9]{3}_COVER\\.([A-Za-z0-9]{3}+)")
+        self.recognizeDateTimeFromFilename("IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})_[0-9]{3}_COVER\\.([A-Za-z0-9]{3}+)")
+        
+        // screenshots
+        self.recognizeDateTimeFromFilename("Screenshot_([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})([0-9]{2})\\.([A-Za-z0-9]{3}+)")
+        self.recognizeDateTimeFromFilename("Screenshot_([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})([0-9]{2})-([0-9]{2})\\.([A-Za-z0-9]{3}+)")
+        self.recognizeDateTimeFromFilename("Screenshot_([0-9]{4})-([0-9]{2})-([0-9]{2})-([0-9]{2})-([0-9]{2})-([0-9]{2})-([0-9]{2})\\.([A-Za-z0-9]{3}+)")
+        self.recognizeDateTimeFromFilename("pt([0-9]{4})_([0-9]{2})_([0-9]{2})_([0-9]{2})_([0-9]{2})_([0-9]{2})_([0-9]{2})\\.([A-Za-z0-9]{3}+)")
+        
+        // from another camera models
+        self.recognizeDateTimeFromFilename("YP([0-9]{4})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})_[0-9]+\\.([A-Za-z0-9]{3}+)")
+        self.recognizeDateTimeFromFilename("YP([0-9]{4})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})_[0-9]+_[0-9]+\\.([A-Za-z0-9]{3}+)")
+        
+        // qqzone video
+        self.recognizeDateTimeFromFilename("QQ空间视频_([0-9]{4})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})\\.([A-Za-z0-9]{3}+)")
+        
+        // huawei video
+        self.recognizeDateTimeFromFilename("VID_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})\\.([A-Za-z0-9]{3}+)")
+        
+        // huawei honor6 video
+        self.recognizeUnixTimeFromFilename("([0-9]{13})\\.([A-Za-z0-9]{3}+)")
+        
+        // file exported by wechat
+        self.recognizeUnixTimeFromFilename("mmexport([0-9]{13})\\.([A-Za-z0-9]{3}+)")
+        self.recognizeUnixTime2FromFilename("mmexport([0-9]{13})_([0-9]+)_[0-9]+\\.([A-Za-z0-9]{3}+)")
+        
+        // file compressed by wechat
+        self.recognizeUnixTimeFromFilename("mmexport([0-9]{13})_comps\\.([A-Za-z0-9]{3}+)")
+        
+        // file copied
+        self.recognizeUnixTimeFromFilename("mmexport([0-9]{13})\\([0-9]+\\)\\.([A-Za-z0-9]{3}+)")
+    }
+    
+    private func recognizeDateTimeFromFilename(_ pattern:String){
+        guard !isRecognizedDateTimeFromFilename else {return}
+        let parts:[String] = url.lastPathComponent.matches(for: pattern)
+//        print("pattern: \(pattern)")
+//        print("matched: \(parts.count)")
+        if parts.count > 0 {
+//            for part in parts {
+//                print("part: \(part)")
+//            }
+            let dateTime:String = "\(parts[1]):\(parts[2]):\(parts[3]) \(parts[4]):\(parts[5]):\(parts[6])"
+            self.metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", title: "From Filename", value: dateTime))
+            isRecognizedDateTimeFromFilename = true
+        }
+    }
+    
+    private func recognizeUnixTimeFromFilename(_ pattern:String){
+        guard !isRecognizedDateTimeFromFilename else {return}
+        let parts:[String] = url.lastPathComponent.matches(for: pattern)
+        if parts.count > 0 {
+            let timestamp:String = "\(parts[1])"
+            let dateTime = self.convertUnixTimestampToDateString(timestamp)
+            self.metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", title: "From Filename", value: dateTime))
+            isRecognizedDateTimeFromFilename = true
+        }
+    }
+    
+    private func recognizeUnixTime2FromFilename(_ pattern:String){
+        guard !isRecognizedDateTimeFromFilename else {return}
+        let parts:[String] = url.lastPathComponent.matches(for: pattern)
+        if parts.count > 0 {
+            let timestamp:String = "\(parts[1]).\(parts[2])"
+            let dateTime = self.convertUnixTimestampToDateString(timestamp)
+            self.metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", title: "From Filename", value: dateTime))
+            isRecognizedDateTimeFromFilename = true
+        }
+    }
+    
+    private func convertUnixTimestampToDateString(_ timestamp:String, dateFormat:String = "yyyy:MM:dd HH:mm:ss") -> String {
+        let date = NSDate(timeIntervalSince1970: Double(timestamp)!/1000 + 8*60*60) // GMT+8
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = dateFormat
+        let dateTime = dateFormatter.string(from: date as Date)
+        return dateTime
     }
     
     /// remove the symbolic link created in the sandboxed document directory
     /// during instance initialization
     deinit {
+    }
+    
+    func getMeta(category:String, subCategory:String = "", title:String) -> String? {
+        return self.metaInfoStore.getMeta(category: category, subCategory: subCategory, title: title)
     }
     
     // MARK: set/revert latitude and longitude for an image
@@ -341,18 +445,21 @@ final class ImageData: NSObject {
     }
     
     func setCoordinate(latitude:Double, longitude:Double){
+        guard latitude > 0 && longitude > 0 else {return}
         location = Coord(latitude: latitude, longitude: longitude)
         locationBD09 = location?.fromWGS84toBD09()
         
-        metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "WGS84", title: "Latitude", value: String(format: "%3.6f", self.latitude).paddingLeft(12)))
-        metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "WGS84", title: "Longitude", value: String(format: "%3.6f", self.longitude).paddingLeft(12)))
-        metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "BD09", title: "Latitude", value: String(format: "%3.6f", self.latitudeBaidu).paddingLeft(12)))
-        metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "BD09", title: "Longitude", value: String(format: "%3.6f", self.longitudeBaidu).paddingLeft(12)))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Latitude (WGS84)", value: String(format: "%3.6f", self.latitude).paddingLeft(12)))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Longitude (WGS84)", value: String(format: "%3.6f", self.longitude).paddingLeft(12)))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Latitude (BD09)", value: String(format: "%3.6f", self.latitudeBaidu).paddingLeft(12)))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Longitude (BD09)", value: String(format: "%3.6f", self.longitudeBaidu).paddingLeft(12)))
         
         hasCoordinate = true
     }
     
     public func loadExif(){
+        guard !(isStandalone && isLoadedExif) else {return}
+        
         let jsonStr:String = ExifTool.helper.getFormattedExif(url: url)
         print(jsonStr)
         let json:JSON = JSON(parseJSON: jsonStr)
@@ -362,6 +469,9 @@ final class ImageData: NSObject {
             metaInfoStore.setMetaInfo(MetaInfo(category: "Camera", title: "ISO", value: json[0]["EXIF"]["ISO"].description))
             metaInfoStore.setMetaInfo(MetaInfo(category: "Camera", title: "ExposureTime", value: json[0]["EXIF"]["ExposureTime"].description))
             metaInfoStore.setMetaInfo(MetaInfo(category: "Camera", title: "Aperture", value: json[0]["EXIF"]["ApertureValue"].description))
+            
+            
+            metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", title: "FileModifyDate", value: json[0]["File"]["CreateDate"].description))
             
             metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Format", value: json[0]["QuickTime"]["MajorBrand"].description))
             metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "CreateDate", value: json[0]["QuickTime"]["CreateDate"].description))
@@ -381,24 +491,33 @@ final class ImageData: NSObject {
         }
         
         let jsonStr2:String = ExifTool.helper.getUnformattedExif(url: url)
-        print(jsonStr2)
+        //print(jsonStr2)
         let json2:JSON = JSON(parseJSON: jsonStr2)
         
         if json2 != JSON(NSNull()) {
             
-            metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "WGS84", title: "Latitude", value: json2[0]["Composite"]["GPSLatitude"].description))
-            metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "WGS84", title: "Longitude", value: json2[0]["Composite"]["GPSLongitude"].description))
+            let latitude:String = json2[0]["Composite"]["GPSLatitude"].description
+            let longitude:String = json2[0]["Composite"]["GPSLongitude"].description
             
-            if let lat:Double = json2[0]["Composite"]["GPSLatitude"].double,
-                let lon:Double = json2[0]["Composite"]["GPSLongitude"].double {
-                setCoordinate(latitude: lat, longitude: lon)
+            if latitude != "0" || longitude != "0" {
+            
+                metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Latitude (WGS84)", value: latitude))
+                metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Longitude (WGS84)", value: longitude))
+                
+                if let lat:Double = json2[0]["Composite"]["GPSLatitude"].double,
+                    let lon:Double = json2[0]["Composite"]["GPSLongitude"].double {
+                    setCoordinate(latitude: lat, longitude: lon)
+                }
             }
         }
+        isLoadedExif = true
     }
     
     public func getBaiduLocation() {
         BaiduLocation.queryForAddress(lat: self.latitudeBaidu, lon: self.longitudeBaidu, metaInfoStore: self.metaInfoStore)
     }
+    
+    static let metaCategorySequence:[String] = ["Location", "DateTime", "Camera", "Lens", "EXIF", "Video", "Audio", "Coordinate", "Software", "System"]
 }
 
 
@@ -424,5 +543,43 @@ extension ImageData {
         return locationBD09?.longitude ?? 0
     }
     
+}
+
+class StandaloneMetaInfoStore: MetaInfoStoreDelegate {
+    
+    var metaInfo:[MetaInfo] = [MetaInfo]()
+    
+    func setMetaInfo(_ info:MetaInfo){
+        setMetaInfo(info, ifNotExists: false)
+    }
+    
+    func setMetaInfo(_ info:MetaInfo, ifNotExists: Bool){
+        if info.value == nil || info.value == "" || info.value == "null" {return}
+        var exists:Int = 0
+        for exist:MetaInfo in self.metaInfo {
+            if exist.category == info.category && exist.subCategory == info.subCategory && exist.title == info.title {
+                if ifNotExists == false {
+                    exist.value = info.value
+                }
+                exists = 1
+            }
+        }
+        if exists == 0 {
+            self.metaInfo.append(info)
+        }
+    }
+    
+    func updateMetaInfoView() {
+        // do nothing
+    }
+    
+    func getMeta(category:String, subCategory:String = "", title:String) -> String? {
+        for meta in metaInfo {
+            if meta.category == category && meta.subCategory == subCategory && meta.title == title {
+                return meta.value
+            }
+        }
+        return nil
+    }
 }
 
