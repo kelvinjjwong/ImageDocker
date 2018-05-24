@@ -490,16 +490,25 @@
                                                                     <action selector="onPlacesCheckBoxClicked:" target="XfG-lQ-9wD" id="HHe-jb-jnq"/>
                                                                 </connections>
                                                             </button>
+                                                            <progressIndicator wantsLayer="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="Sab-MP-Qfo">
+                                                                <rect key="frame" x="5" y="6" width="150" height="20"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="18" id="N29-ek-guG"/>
+                                                                    <constraint firstAttribute="width" constant="150" id="lXt-MZ-I4h"/>
+                                                                </constraints>
+                                                            </progressIndicator>
                                                         </subviews>
                                                         <constraints>
                                                             <constraint firstItem="Qnu-5r-3Pb" firstAttribute="top" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="11" id="3eu-OV-l4Z"/>
                                                             <constraint firstAttribute="trailing" secondItem="DpT-Dg-Oeb" secondAttribute="trailing" constant="10" id="6m5-zg-rFt"/>
+                                                            <constraint firstAttribute="bottom" secondItem="Sab-MP-Qfo" secondAttribute="bottom" constant="7" id="9Y8-f8-enM"/>
                                                             <constraint firstItem="KZW-eM-F1C" firstAttribute="top" secondItem="m9M-hY-L99" secondAttribute="top" id="CiJ-4L-Rq1"/>
                                                             <constraint firstAttribute="bottom" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="35" id="FQQ-0m-lCs"/>
                                                             <constraint firstAttribute="trailing" secondItem="KZW-eM-F1C" secondAttribute="trailing" id="Hj4-Gx-NJd"/>
                                                             <constraint firstItem="KZW-eM-F1C" firstAttribute="leading" secondItem="m9M-hY-L99" secondAttribute="leading" id="TrQ-Wm-NbH"/>
                                                             <constraint firstItem="DpT-Dg-Oeb" firstAttribute="top" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="8" id="jCr-mg-vua"/>
                                                             <constraint firstItem="DpT-Dg-Oeb" firstAttribute="leading" secondItem="Qnu-5r-3Pb" secondAttribute="trailing" constant="20" id="nBL-6Q-dns"/>
+                                                            <constraint firstItem="Sab-MP-Qfo" firstAttribute="leading" secondItem="m9M-hY-L99" secondAttribute="leading" constant="5" id="qrl-2P-kRJ"/>
                                                         </constraints>
                                                     </customView>
                                                 </subviews>
@@ -540,7 +549,7 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" id="ECf-s9-RCm" customClass="DarkTableView" customModule="ImageDocker" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="580" height="168"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="1287" height="168"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <size key="intercellSpacing" width="3" height="2"/>
                                                             <color key="backgroundColor" name="controlShadowColor" catalog="System" colorSpace="catalog"/>
@@ -657,7 +666,7 @@
                                                                         </tableCellView>
                                                                     </prototypeCellViews>
                                                                 </tableColumn>
-                                                                <tableColumn identifier="value" editable="NO" width="293" minWidth="10" maxWidth="3.4028234663852886e+38" id="nM9-dY-xft" userLabel="value">
+                                                                <tableColumn identifier="value" editable="NO" width="1000" minWidth="10" maxWidth="3.4028234663852886e+38" id="nM9-dY-xft" userLabel="value">
                                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Value">
                                                                         <font key="font" metaFont="smallSystem"/>
                                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -671,11 +680,11 @@
                                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                     <prototypeCellViews>
                                                                         <tableCellView id="3Vd-Qd-W6g">
-                                                                            <rect key="frame" x="285" y="1" width="293" height="17"/>
+                                                                            <rect key="frame" x="285" y="1" width="1000" height="17"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <subviews>
                                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="K7j-hE-pcb">
-                                                                                    <rect key="frame" x="0.0" y="0.0" width="293" height="17"/>
+                                                                                    <rect key="frame" x="0.0" y="0.0" width="1000" height="17"/>
                                                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Table View Cell" id="diQ-QC-bhw">
                                                                                         <font key="font" metaFont="system"/>
                                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -707,8 +716,8 @@
                                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="630" id="4RY-gk-tXi"/>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="iFO-RX-zhl"/>
                                                 </constraints>
-                                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="FDe-a6-p7R">
-                                                    <rect key="frame" x="0.0" y="614" width="580" height="16"/>
+                                                <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="FDe-a6-p7R">
+                                                    <rect key="frame" x="0.0" y="152" width="580" height="16"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </scroller>
                                                 <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="69W-Gl-fR8">
@@ -933,7 +942,6 @@
                             <constraint firstItem="X01-1a-Mbk" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="6" id="HRe-Nh-4Jd"/>
                             <constraint firstItem="giR-in-kR4" firstAttribute="leading" secondItem="X01-1a-Mbk" secondAttribute="trailing" constant="8" id="NhE-wn-mW3"/>
                             <constraint firstItem="giR-in-kR4" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="6" id="Sew-8p-zbw"/>
-                            <constraint firstItem="X01-1a-Mbk" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="dxF-6F-MvX"/>
                             <constraint firstAttribute="trailing" secondItem="giR-in-kR4" secondAttribute="trailing" constant="5" id="nOQ-T3-Onc"/>
                             <constraint firstItem="X01-1a-Mbk" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="6" id="nR9-9S-AoE"/>
                             <constraint firstAttribute="bottom" secondItem="X01-1a-Mbk" secondAttribute="bottom" id="oJA-tz-nbc"/>
@@ -943,7 +951,9 @@
                         <outlet property="addressSearcher" destination="N2C-6D-h6d" id="DmE-DC-14i"/>
                         <outlet property="avPlayer" destination="WMi-QV-cmi" id="SlC-Qu-gmn"/>
                         <outlet property="btnCloneLocationToFinder" destination="vj9-Vb-qDW" id="VEW-xg-goT"/>
+                        <outlet property="collectionProgressIndicator" destination="Sab-MP-Qfo" id="tTT-fa-2Dw"/>
                         <outlet property="collectionView" destination="9AE-Hz-zmu" id="ItR-cT-i85"/>
+                        <outlet property="considerPlacesCheckBox" destination="Qnu-5r-3Pb" id="YDg-Jh-tVk"/>
                         <outlet property="imgPhoto" destination="9Na-U8-3R2" id="b6k-Ma-bp4"/>
                         <outlet property="mapZoomSlider" destination="eId-m8-eKf" id="zoE-94-C0F"/>
                         <outlet property="metaInfoTableView" destination="ECf-s9-RCm" id="GLo-W4-I6C"/>

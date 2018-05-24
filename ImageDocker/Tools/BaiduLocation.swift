@@ -47,7 +47,7 @@ final class BaiduLocation {
     
     public static func queryForCoordinate(address:String, locationDelegate: LocationDelegate){
         let urlString:String = BaiduLocation.urlForCoordinate(address: address)
-        print(urlString)
+        //print(urlString)
         let requestUrl:URL = URL(string:urlString)!
         let request = URLRequest(url:requestUrl)
         let task = URLSession.shared.dataTask(with: request) {
@@ -76,7 +76,7 @@ final class BaiduLocation {
         task.resume()
     }
     
-    public static func queryForAddress(lat latitudeBaidu:Double, lon longitudeBaidu:Double, metaInfoStore:MetaInfoStoreDelegate){
+    public static func queryForAddress(lat latitudeBaidu:Double, lon longitudeBaidu:Double, metaInfoStore:MetaInfoStoreDelegate, consumer:MetaInfoConsumeDelegate? = nil){
         let urlString:String = BaiduLocation.urlForAddress(lat: latitudeBaidu, lon: longitudeBaidu)
         guard let requestUrl = URL(string:urlString) else { return }
         let request = URLRequest(url:requestUrl)
@@ -93,6 +93,9 @@ final class BaiduLocation {
                         metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Status", value: status))
                         metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Message", value: message))
                         metaInfoStore.updateMetaInfoView()
+                        if consumer != nil {
+                            consumer?.consume(metaInfoStore.getInfos())
+                        }
                     }
                 }else{
                     
@@ -115,7 +118,17 @@ final class BaiduLocation {
                             metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "BusinessCircle", value: businessCircle))
                             metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Address", value: address))
                             metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Description", value: description))
+                            if description.contains("内") {
+                                let suggestPlace = (description.components(separatedBy: "内").first)!
+                                metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Suggest Place", value: suggestPlace))
+                            }else{
+                                metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Suggest Place", value: address))
+                            }
+                            
                             metaInfoStore.updateMetaInfoView()
+                            if consumer != nil {
+                                consumer?.consume(metaInfoStore.getInfos())
+                            }
                         }
                     }
                 }

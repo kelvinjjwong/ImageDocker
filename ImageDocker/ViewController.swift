@@ -51,6 +51,9 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var collectionView: NSCollectionView!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
+    @IBOutlet weak var collectionProgressIndicator: NSProgressIndicator!
+    
+    @IBOutlet weak var considerPlacesCheckBox: NSButton!
     
     let imagesLoader = CollectionViewItemsLoader()
     
@@ -61,6 +64,8 @@ class ViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        collectionProgressIndicator.isDisplayedWhenStopped = false
         
         view.layer?.backgroundColor = NSColor.darkGray.cgColor
         
@@ -238,7 +243,8 @@ class ViewController: NSViewController {
         
         DispatchQueue.main.async {
             self.imagesLoader.load(from: imageFolder.url as NSURL)
-            self.collectionView.reloadData()
+            self.refreshCollectionView()
+            //self.collectionView.reloadData()
         }
     }
     
@@ -272,11 +278,124 @@ class ViewController: NSViewController {
     }
     
     @IBAction func onRefreshCollectionButtonClicked(_ sender: Any) {
+        self.refreshImagesLocation()
     }
     
     @IBAction func onPlacesCheckBoxClicked(_ sender: NSButton) {
+        refreshCollectionView()
+    }
+    
+    private func refreshCollectionView() {
+        var needRefreshLocation = false
+        for item in imagesLoader.getItems() {
+            if item.place == "" {
+                needRefreshLocation = true
+            }
+        }
+        if needRefreshLocation {
+            refreshImagesLocation()
+        }else{
+            imagesLoader.reorganizeItems(considerPlaces: (self.considerPlacesCheckBox.state == NSButton.StateValue.on))
+        }
+    }
+    
+    private func refreshImagesLocation() {
+        if imagesLoader.getItems().count > 0 {
+            let accumulator:Accumulator = Accumulator(target: imagesLoader.getItems().count, indicator: self.collectionProgressIndicator)
+            for item in imagesLoader.getItems() {
+                item.loadLocation(consumer: MetaConsumer(item, accumulator: accumulator, onComplete: self) as MetaInfoConsumeDelegate)
+            }
+        }
     }
     
 }
+
+protocol PlacesCompletionEvent {
+    func onPlacesCompleted()
+}
+
+extension ViewController : PlacesCompletionEvent {
+    
+    func onPlacesCompleted() {
+        imagesLoader.reorganizeItems(considerPlaces: (self.considerPlacesCheckBox.state == NSButton.StateValue.on))
+        self.collectionView.reloadData()
+    }
+}
+
+class MetaConsumer : MetaInfoConsumeDelegate {
+    
+    var imageFile:ImageFile?
+    let accumulator:Accumulator?
+    let onCompleteHandler:PlacesCompletionEvent?
+    
+    init(_ imageFile:ImageFile, accumulator:Accumulator? = nil, onComplete:PlacesCompletionEvent? = nil){
+        self.imageFile = imageFile
+        self.accumulator = accumulator
+        self.onCompleteHandler = onComplete
+    }
+    
+    func consume(_ infos:[MetaInfo]){
+        imageFile?.recognizePlace()
+        print("place: \(imageFile?.place ?? "")")
+        
+        if accumulator != nil && (accumulator?.add())! {
+            if self.onCompleteHandler != nil {
+                onCompleteHandler?.onPlacesCompleted()
+            }
+        }
+    }
+    
+}
+
+// reference accumulator
+class Accumulator : NSObject {
+    
+    let _target:Int
+    private var count:Int = 0
+    private let indicator:NSProgressIndicator?
+    
+    init(target:Int, indicator:NSProgressIndicator? = nil){
+        count = 0
+        self._target = target
+        self.indicator = indicator
+        if indicator != nil {
+            indicator?.minValue = 0
+            indicator?.maxValue = Double(target)
+            indicator?.doubleValue = 0
+            indicator?.isHidden = false
+            //indicator?.isIndeterminate = true
+        }
+    }
+    
+    func add() -> Bool{
+        self.count += 1
+        let completed:Bool = (count == _target)
+        if indicator != nil {
+            indicator?.increment(by: 1)
+            if completed {
+                indicator?.isHidden = true
+            }
+        }
+        return completed
+    }
+    
+    func working() -> Bool {
+        return count < _target
+    }
+    
+    func current() -> Int {
+        return count
+    }
+    
+    func target() -> Int {
+        return _target
+    }
+    
+    func reset() {
+        count = 0
+    }
+}
+
+
 
 

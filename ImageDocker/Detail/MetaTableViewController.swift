@@ -100,9 +100,7 @@ extension ViewController: NSTableViewDataSource {
         var sortedArray = [MetaInfo]()
         
         for key in ImageData.metaCategorySequence {
-            print(key)
             if let arr:[MetaInfo] = arrays[key] {
-                print("\(key) \(arr.count)")
                 sortedArray.append(contentsOf: arr)
             }
         }

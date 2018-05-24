@@ -17,6 +17,10 @@ extension ViewController: DropPlaceDelegate {
 
 extension ViewController: MetaInfoStoreDelegate {
     
+    func getInfos() -> [MetaInfo] {
+        return self.metaInfo
+    }
+    
     func setMetaInfo(_ info:MetaInfo){
         setMetaInfo(info, ifNotExists: false)
     }

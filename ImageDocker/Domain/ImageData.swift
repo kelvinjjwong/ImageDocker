@@ -188,12 +188,7 @@ final class ImageData {
     private func recognizeDateTimeFromFilename(_ pattern:String){
         guard !isRecognizedDateTimeFromFilename else {return}
         let parts:[String] = url.lastPathComponent.matches(for: pattern)
-//        print("pattern: \(pattern)")
-//        print("matched: \(parts.count)")
         if parts.count > 0 {
-//            for part in parts {
-//                print("part: \(part)")
-//            }
             let dateTime:String = "\(parts[1]):\(parts[2]):\(parts[3]) \(parts[4]):\(parts[5]):\(parts[6])"
             self.metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", title: "From Filename", value: dateTime))
             isRecognizedDateTimeFromFilename = true
@@ -491,7 +486,6 @@ final class ImageData {
         }
         
         let jsonStr2:String = ExifTool.helper.getUnformattedExif(url: url)
-        //print(jsonStr2)
         let json2:JSON = JSON(parseJSON: jsonStr2)
         
         if json2 != JSON(NSNull()) {
@@ -513,8 +507,14 @@ final class ImageData {
         isLoadedExif = true
     }
     
-    public func getBaiduLocation() {
-        BaiduLocation.queryForAddress(lat: self.latitudeBaidu, lon: self.longitudeBaidu, metaInfoStore: self.metaInfoStore)
+    public func getBaiduLocation(consumer:MetaInfoConsumeDelegate? = nil) {
+        if self.latitudeBaidu == 0 || self.longitudeBaidu == 0 {
+            if consumer != nil {
+                consumer?.consume(self.metaInfoStore.getInfos())
+            }
+        }else {
+            BaiduLocation.queryForAddress(lat: self.latitudeBaidu, lon: self.longitudeBaidu, metaInfoStore: self.metaInfoStore, consumer: consumer)
+        }
     }
     
     static let metaCategorySequence:[String] = ["Location", "DateTime", "Camera", "Lens", "EXIF", "Video", "Audio", "Coordinate", "Software", "System"]
@@ -575,6 +575,22 @@ class StandaloneMetaInfoStore: MetaInfoStoreDelegate {
     
     func getMeta(category:String, subCategory:String = "", title:String) -> String? {
         for meta in metaInfo {
+            if meta.category == category && meta.subCategory == subCategory && meta.title == title {
+                return meta.value
+            }
+        }
+        return nil
+    }
+    
+    func getInfos() -> [MetaInfo] {
+        return self.metaInfo
+    }
+}
+
+class MetaInfoReader {
+    
+    public static func getMeta(info:[MetaInfo], category:String, subCategory:String = "", title:String) -> String? {
+        for meta in info {
             if meta.category == category && meta.subCategory == subCategory && meta.title == title {
                 return meta.value
             }

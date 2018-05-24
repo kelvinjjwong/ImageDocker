@@ -14,6 +14,7 @@ class ImageFile {
     private(set) var thumbnail: NSImage?
     private(set) var fileName: String
     private(set) var url: NSURL
+    private(set) var place:String = ""
     private var photoFile:PhotoFile?
     private var imageData:ImageData?
 
@@ -30,6 +31,32 @@ class ImageFile {
         
         
 
+    }
+    
+    func loadLocation(consumer:MetaInfoConsumeDelegate) {
+        if imageData == nil {
+            self.imageData = ImageData(url: url as URL)
+        }
+        self.imageData?.getBaiduLocation(consumer: consumer)
+    }
+    
+    func recognizePlace() {
+        var place:String? = self.imageData?.getMeta(category: "Location", subCategory: "Assigned", title: "Place")
+        if place != nil {
+            self.place = place!
+            return
+        }
+        place = self.imageData?.getMeta(category: "Location", subCategory: "Baidu", title: "Suggest Place")
+        if place != nil {
+            self.place = place!
+            return
+        }
+        place = self.imageData?.getMeta(category: "Location", subCategory: "Baidu", title: "Address")
+        if place != nil {
+            self.place = place!
+            return
+        }
+        self.place = ""
     }
     
     func photoTakenDate() -> Date? {
@@ -74,7 +101,6 @@ class ImageFile {
         let filename:String = url.lastPathComponent!
         let path:String = url.path!
         let parentPath:String = (url.deletingLastPathComponent?.path)!
-        print("filename: \(filename) , path: \(path) , parent: \(parentPath)")
         self.photoFile = ModelStore.getOrCreatePhoto(filename: filename, path: path, parentPath: parentPath)
         if self.photoFile?.photoTakenDate == nil {
             self.imageData = ImageData(url: url as URL)
@@ -114,14 +140,7 @@ class ImageFile {
                 self.photoFile?.photoTakenMonth = Int32(component.month!)
                 self.photoFile?.photoTakenDay = Int32(component.day!)
                 self.photoFile?.photoTakenHour = Int32(component.hour!)
-                
-                print("photo taken date is \(String(describing: dateTime))")
-            }else{
-                
-                print("photo taken date is nil")
             }
-                
-            
         }
     }
     

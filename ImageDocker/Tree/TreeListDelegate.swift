@@ -169,7 +169,6 @@ extension ViewController : PXSourceListDelegate {
             }
             
             if let collection:PhotoCollection = selectedItem.representedObject as? PhotoCollection {
-                //print("\(collection.identifier) collection selected.")
                 self.selectImageFolder(collection.imageFolder!)
             }
         }

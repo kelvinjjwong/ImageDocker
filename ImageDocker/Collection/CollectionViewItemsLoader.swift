@@ -22,8 +22,10 @@ class CollectionViewSection {
 class CollectionViewItemsLoader: NSObject {
   
     private var items = [ImageFile]()
-    var numberOfSections = 1       // Read by ViewController
-    var singleSectionMode = false  // Read/Write by ViewController
+    var numberOfSections = 1
+    var singleSectionMode = false
+    var considerPlaces = true
+    
     
     private var sections = [CollectionViewSection]()
 
@@ -39,31 +41,39 @@ class CollectionViewItemsLoader: NSObject {
             items.removeAll()
         }
         
+        guard urls != nil && (urls?.count)! > 0 else {return}
+
+        if let urls = urls {
+            transformToDomainItems(urls: urls)
+        }
+        
+        reorganizeItems()
+
+    }
+    
+    func reorganizeItems(considerPlaces:Bool = false) {
+        print("reorg with places \(considerPlaces)")
+        self.considerPlaces = considerPlaces
+        
         if sections.count > 0 {
             sections.removeAll()
         }
         
         numberOfSections = 1
         
-        guard urls != nil && (urls?.count)! > 0 else {return}
-
-        if let urls = urls {
-            transformToDomainItems(urls: urls)
-        }
-
         if singleSectionMode {
             collectDomainItemToSingleSection()
         } else {
             collectDomainItemToMultipleSection()
         }
-
     }
   
     private func collectDomainItemToSingleSection() {
+        let section:CollectionViewSection = self.getSection(title: "All")
         for item in items {
-            let section:CollectionViewSection = self.getSection(title: "All")
             section.items.append(item)
         }
+        sortItems(in: section)
         
         self.numberOfSections = 1
     }
@@ -82,14 +92,19 @@ class CollectionViewItemsLoader: NSObject {
     private func collectDomainItemToMultipleSection(_ dateFormat:String = "yyyy-MM-dd") {
         for item in items {
             var title:String = item.photoTakenDateString(dateFormat, forceUpdate: true)
+            
             if title == "" {
                 title = "Others"
+            }
+            
+            if self.considerPlaces && item.place != "" {
+                title = title + " @ " + item.place
             }
             let section:CollectionViewSection = self.getSection(title: title)
             section.items.append(item)
         }
         
-        if sections.count > 0 && dateFormat == "yyyy-MM-dd" && isOnlyOneSection() {
+        if sections.count > 0 && dateFormat == "yyyy-MM-dd" && isOnlyOneDateSection() {
             sections.removeAll()
             collectDomainItemToMultipleSection("yyyy-MM-dd HH:00")
         }else {
@@ -153,18 +168,34 @@ class CollectionViewItemsLoader: NSObject {
         section.items = sortedItems
     }
     
-    private func isOnlyOneSection() -> Bool {
+    private func isOnlyOneDateSection() -> Bool {
         if sections.count == 1 {
             return true
         }
-        if sections.count == 2 {
-            for section in sections {
-                if section.title == "Others" {
-                    return true
+        var previousTitle = ""
+        for section in sections {
+            if section.title != "Others" {
+                if !section.title.contains(" ") {
+                    if previousTitle == "" {
+                        previousTitle = section.title
+                    }else{
+                        if previousTitle != section.title {
+                            return false;
+                        }
+                    }
+                }else{
+                    let date = section.title.components(separatedBy: " ").first
+                    if previousTitle == "" {
+                        previousTitle = date!
+                    }else{
+                        if previousTitle != date {
+                            return false;
+                        }
+                    }
                 }
             }
         }
-        return false
+        return true
     }
   
     private func transformToDomainItems(urls: [NSURL]) {
@@ -226,6 +257,10 @@ class CollectionViewItemsLoader: NSObject {
     func titleOfSection(_ section: Int) -> String {
         guard sections.count > section else {return ""}
         return sections[section].title
+    }
+    
+    func getItems() -> [ImageFile] {
+        return self.items
     }
   
 }
