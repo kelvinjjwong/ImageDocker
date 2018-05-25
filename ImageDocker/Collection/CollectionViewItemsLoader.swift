@@ -61,7 +61,7 @@ class CollectionViewItemsLoader: NSObject {
     }
     
     func reorganizeItems(considerPlaces:Bool = false) {
-        print("reorg")
+        //print("reorg")
         self.considerPlaces = considerPlaces
         
         if sections.count > 0 {

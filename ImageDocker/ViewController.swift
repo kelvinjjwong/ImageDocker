@@ -61,6 +61,9 @@ class ViewController: NSViewController {
     var stackedImageViewController : StackedImageViewController!
     var stackedVideoViewController : StackedVideoViewController!
     
+    
+    var collectionLoadingIndicator:Accumulator?
+    
     // MARK: init
     
     override func viewDidLoad() {
@@ -287,160 +290,11 @@ class ViewController: NSViewController {
         refreshCollectionView()
     }
     
-    private func refreshCollectionView() {
-        var needRefreshLocation = false
-        for item in imagesLoader.getItems() {
-            if item.place == "" {
-                needRefreshLocation = true
-            }
-        }
-        if needRefreshLocation {
-            refreshImagesLocation()
-        }else{
-            DispatchQueue.main.async{
-                self.imagesLoader.reorganizeItems(considerPlaces: (self.considerPlacesCheckBox.state == NSButton.StateValue.on))
-            }
-        }
-    }
     
-    private func refreshImagesLocation() {
-        if imagesLoader.getItems().count > 0 {
-            let accumulator:Accumulator = Accumulator(target: imagesLoader.getItems().count, indicator: self.collectionProgressIndicator, lblMessage:self.indicatorMessage)
-            for item in imagesLoader.getItems() {
-                item.loadLocation(consumer: MetaConsumer(item, accumulator: accumulator, onComplete: self) as MetaInfoConsumeDelegate)
-            }
-        }
-    }
     
-    var collectionLoadingIndicator:Accumulator?
     
 }
 
-protocol PlacesCompletionEvent {
-    func onPlacesCompleted()
-}
-
-extension ViewController : PlacesCompletionEvent {
-    
-    func onPlacesCompleted() {
-        DispatchQueue.main.async{
-            self.imagesLoader.reorganizeItems(considerPlaces: (self.considerPlacesCheckBox.state == NSButton.StateValue.on))
-            self.collectionView.reloadData()
-        }
-    }
-}
-
-class MetaConsumer : MetaInfoConsumeDelegate {
-    
-    var imageFile:ImageFile?
-    let accumulator:Accumulator?
-    let onCompleteHandler:PlacesCompletionEvent?
-    
-    init(_ imageFile:ImageFile, accumulator:Accumulator? = nil, onComplete:PlacesCompletionEvent? = nil){
-        self.imageFile = imageFile
-        self.accumulator = accumulator
-        self.onCompleteHandler = onComplete
-    }
-    
-    func consume(_ infos:[MetaInfo]){
-        imageFile?.recognizePlace()
-        
-        if accumulator != nil && (accumulator?.add("Organizing images ..."))! {
-            if self.onCompleteHandler != nil {
-                onCompleteHandler?.onPlacesCompleted()
-            }
-        }
-    }
-    
-}
-
-// reference accumulator
-class Accumulator : NSObject {
-    
-    var _target:Int
-    private var count:Int = 0
-    private let indicator:NSProgressIndicator?
-    private let lblMessage:NSTextField?
-    
-    init(target:Int, indicator:NSProgressIndicator? = nil, suspended:Bool = false, lblMessage:NSTextField? = nil){
-        count = 0
-        self._target = target
-        self.indicator = indicator
-        self.lblMessage = lblMessage
-        if indicator != nil {
-            DispatchQueue.main.sync {
-                indicator?.minValue = 0
-                indicator?.maxValue = Double(target)
-                indicator?.doubleValue = 0
-                indicator?.isHidden = suspended
-            }
-        }
-        if lblMessage != nil {
-            DispatchQueue.main.sync {
-                lblMessage?.stringValue = ""
-            }
-        }
-    }
-    
-    func add(_ message:String = "") -> Bool{
-        self.count += 1
-        let completed:Bool = (count == _target)
-        if indicator != nil {
-                if self.count == 1 { // start counting
-                    DispatchQueue.main.async {
-                        if self.indicator != nil {
-                            self.indicator?.isHidden = false
-                        }
-                        if self.lblMessage != nil {
-                            self.lblMessage?.stringValue = message
-                        }
-                    }
-                }
-                DispatchQueue.main.async {
-                    self.indicator?.increment(by: 1)
-                }
-            
-                if completed {
-                    DispatchQueue.main.async {
-                        if self.indicator != nil {
-                            self.indicator?.doubleValue = 0
-                            self.indicator?.isHidden = true
-                        }
-                        if self.lblMessage != nil {
-                            self.lblMessage?.stringValue = ""
-                        }
-                    }
-                }
-        }
-        return completed
-    }
-    
-    func working() -> Bool {
-        return count < _target
-    }
-    
-    func current() -> Int {
-        return count
-    }
-    
-    func target() -> Int {
-        return _target
-    }
-    
-    func setTarget(_ value:Int){
-        self._target = value
-        if indicator != nil {
-            DispatchQueue.main.sync {
-                indicator?.maxValue = Double(value)
-            }
-            
-        }
-    }
-    
-    func reset() {
-        count = 0
-    }
-}
 
 
 

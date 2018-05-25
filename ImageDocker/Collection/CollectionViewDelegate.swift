@@ -9,6 +9,7 @@
 import Cocoa
 
 extension ViewController {
+    
     func highlightItems(selected: Bool, atIndexPaths: Set<IndexPath>) {
         for indexPath in atIndexPaths {
             guard let item = collectionView.item(at: indexPath) else {continue}
@@ -16,6 +17,31 @@ extension ViewController {
             viewItem.setHighlight(selected: selected)
             if selected {
                 self.selectImageFile((viewItem.imageFile?.fileName)!)
+            }
+        }
+    }
+    
+    func refreshCollectionView() {
+        var needRefreshLocation = false
+        for item in imagesLoader.getItems() {
+            if item.place == "" {
+                needRefreshLocation = true
+            }
+        }
+        if needRefreshLocation {
+            refreshImagesLocation()
+        }else{
+            DispatchQueue.main.async{
+                self.imagesLoader.reorganizeItems(considerPlaces: (self.considerPlacesCheckBox.state == NSButton.StateValue.on))
+            }
+        }
+    }
+    
+    func refreshImagesLocation() {
+        if imagesLoader.getItems().count > 0 {
+            let accumulator:Accumulator = Accumulator(target: imagesLoader.getItems().count, indicator: self.collectionProgressIndicator, lblMessage:self.indicatorMessage)
+            for item in imagesLoader.getItems() {
+                item.loadLocation(consumer: MetaConsumer(item, accumulator: accumulator, onComplete: self) as MetaInfoConsumeDelegate)
             }
         }
     }
@@ -79,3 +105,43 @@ extension ViewController : NSCollectionViewDelegate {
     }
   
 }
+
+
+protocol PlacesCompletionEvent {
+    func onPlacesCompleted()
+}
+
+extension ViewController : PlacesCompletionEvent {
+    
+    func onPlacesCompleted() {
+        DispatchQueue.main.async{
+            self.imagesLoader.reorganizeItems(considerPlaces: (self.considerPlacesCheckBox.state == NSButton.StateValue.on))
+            self.collectionView.reloadData()
+        }
+    }
+}
+
+class MetaConsumer : MetaInfoConsumeDelegate {
+    
+    var imageFile:ImageFile?
+    let accumulator:Accumulator?
+    let onCompleteHandler:PlacesCompletionEvent?
+    
+    init(_ imageFile:ImageFile, accumulator:Accumulator? = nil, onComplete:PlacesCompletionEvent? = nil){
+        self.imageFile = imageFile
+        self.accumulator = accumulator
+        self.onCompleteHandler = onComplete
+    }
+    
+    func consume(_ infos:[MetaInfo]){
+        imageFile?.recognizePlace()
+        
+        if accumulator != nil && (accumulator?.add("Organizing images ..."))! {
+            if self.onCompleteHandler != nil {
+                onCompleteHandler?.onPlacesCompleted()
+            }
+        }
+    }
+    
+}
+

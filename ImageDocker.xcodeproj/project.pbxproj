@@ -28,6 +28,7 @@
 		8E721B95208CAAFF00E304EA /* ImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E721B94208CAAFF00E304EA /* ImageData.swift */; };
 		8E7F71002091F14300410C45 /* BaiduLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F70FF2091F14200410C45 /* BaiduLocation.swift */; };
 		8E7F71022092053400410C45 /* MetaInfoHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F71012092053400410C45 /* MetaInfoHandler.swift */; };
+		8E85B7CF20B8786C005A9845 /* Accumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7CE20B8786C005A9845 /* Accumulator.swift */; };
 		8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */; };
 		8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */; };
 		8EA1A063208DFD92000C3B97 /* MetaInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A062208DFD92000C3B97 /* MetaInfo.swift */; };
@@ -104,6 +105,7 @@
 		8E721B94208CAAFF00E304EA /* ImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageData.swift; sourceTree = "<group>"; };
 		8E7F70FF2091F14200410C45 /* BaiduLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaiduLocation.swift; sourceTree = "<group>"; };
 		8E7F71012092053400410C45 /* MetaInfoHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfoHandler.swift; sourceTree = "<group>"; };
+		8E85B7CE20B8786C005A9845 /* Accumulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accumulator.swift; sourceTree = "<group>"; };
 		8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateConverter.swift; sourceTree = "<group>"; };
 		8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaTableViewController.swift; sourceTree = "<group>"; };
 		8EA1A062208DFD92000C3B97 /* MetaInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfo.swift; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 				8EBA69292090C87D00221131 /* Helper.swift */,
 				8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */,
 				8E174B6D208F851100FFE7C7 /* ExifTool.swift */,
+				8E85B7CE20B8786C005A9845 /* Accumulator.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -518,6 +521,7 @@
 				8E4B7C202094224B00DDD9E0 /* ChildNode.swift in Sources */,
 				8E0EAE9A209D2623008C377F /* ImageFolderTreeScanner.swift in Sources */,
 				8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */,
+				8E85B7CF20B8786C005A9845 /* Accumulator.swift in Sources */,
 				8E4B7C1E209416CC00DDD9E0 /* OutlineViewController.swift in Sources */,
 				8EB986B020B225230075B081 /* DetailViewDelegate.swift in Sources */,
 				8E4B7C222094489E00DDD9E0 /* PrimaryViewController.swift in Sources */,
