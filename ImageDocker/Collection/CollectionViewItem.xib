@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9060"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="CollectionViewItem" customModule="SlidesMagic" customModuleProvider="target">
+        <customObject id="-2" userLabel="File's Owner" customClass="CollectionViewItem" customModule="ImageDocker" customModuleProvider="target">
             <connections>
                 <outlet property="imageView" destination="FSe-ep-RM0" id="fCL-h0-ClX"/>
                 <outlet property="textField" destination="HhR-2S-1Qc" id="qmv-BS-MjW"/>
@@ -20,13 +20,11 @@
             <subviews>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FSe-ep-RM0">
                     <rect key="frame" x="0.0" y="30" width="480" height="242"/>
-                    <animations/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="3vS-2J-sw2"/>
                 </imageView>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HhR-2S-1Qc">
                     <rect key="frame" x="-2" y="0.0" width="484" height="30"/>
-                    <animations/>
-                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="kKj-Vf-rng">
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" title="Loading..." id="kKj-Vf-rng">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -43,8 +41,7 @@
                 <constraint firstItem="FSe-ep-RM0" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="sjp-Lb-bll"/>
                 <constraint firstItem="HhR-2S-1Qc" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="y4F-IE-8V6"/>
             </constraints>
-            <animations/>
         </customView>
-        <collectionViewItem id="c2X-bD-ueb" customClass="CollectionViewItem" customModule="SlidesMagic" customModuleProvider="target"/>
+        <collectionViewItem id="c2X-bD-ueb" customClass="CollectionViewItem" customModule="ImageDocker" customModuleProvider="target"/>
     </objects>
 </document>

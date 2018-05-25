@@ -38,7 +38,9 @@ extension ViewController : NSCollectionViewDataSource {
         guard let collectionViewItem = item as? CollectionViewItem else {return item}
 
         let imageFile = imagesLoader.item(for: indexPath as NSIndexPath)
-        collectionViewItem.imageFile = imageFile
+        DispatchQueue.main.async {
+            collectionViewItem.imageFile = imageFile
+        }
 
         let isItemSelected = collectionView.selectionIndexPaths.contains(indexPath)
         collectionViewItem.setHighlight(selected: isItemSelected)

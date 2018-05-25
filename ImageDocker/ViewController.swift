@@ -54,6 +54,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var collectionProgressIndicator: NSProgressIndicator!
     
     @IBOutlet weak var considerPlacesCheckBox: NSButton!
+    @IBOutlet weak var indicatorMessage: NSTextField!
     
     let imagesLoader = CollectionViewItemsLoader()
     
@@ -241,10 +242,13 @@ class ViewController: NSViewController {
         self.selectedImageFolder = imageFolder
         print("selected image folder: \(imageFolder.url.path)")
         
-        DispatchQueue.main.async {
-            self.imagesLoader.load(from: imageFolder.url as NSURL)
+        self.imagesLoader.setupItems(urls: nil)
+        collectionView.reloadData()
+        
+        DispatchQueue.global().async {
+            self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage)
+            self.imagesLoader.load(from: imageFolder.url as NSURL, indicator:self.collectionLoadingIndicator)
             self.refreshCollectionView()
-            //self.collectionView.reloadData()
         }
     }
     
@@ -259,8 +263,6 @@ class ViewController: NSViewController {
         openPanel.beginSheetModal(for: window!) { (response) -> Void in
             guard response == NSApplication.ModalResponse.OK else {return}
             if let path = openPanel.url?.path {
-                //viewController.loadDataForNewFolderWithUrl(folderURL: URL as NSURL)
-                print("want to open directory \(path)")
                 DispatchQueue.main.async {
                     self.loadPathToTree(path)
                     self.sourceList.reloadData()
@@ -295,18 +297,22 @@ class ViewController: NSViewController {
         if needRefreshLocation {
             refreshImagesLocation()
         }else{
-            imagesLoader.reorganizeItems(considerPlaces: (self.considerPlacesCheckBox.state == NSButton.StateValue.on))
+            DispatchQueue.main.async{
+                self.imagesLoader.reorganizeItems(considerPlaces: (self.considerPlacesCheckBox.state == NSButton.StateValue.on))
+            }
         }
     }
     
     private func refreshImagesLocation() {
         if imagesLoader.getItems().count > 0 {
-            let accumulator:Accumulator = Accumulator(target: imagesLoader.getItems().count, indicator: self.collectionProgressIndicator)
+            let accumulator:Accumulator = Accumulator(target: imagesLoader.getItems().count, indicator: self.collectionProgressIndicator, lblMessage:self.indicatorMessage)
             for item in imagesLoader.getItems() {
                 item.loadLocation(consumer: MetaConsumer(item, accumulator: accumulator, onComplete: self) as MetaInfoConsumeDelegate)
             }
         }
     }
+    
+    var collectionLoadingIndicator:Accumulator?
     
 }
 
@@ -317,8 +323,10 @@ protocol PlacesCompletionEvent {
 extension ViewController : PlacesCompletionEvent {
     
     func onPlacesCompleted() {
-        imagesLoader.reorganizeItems(considerPlaces: (self.considerPlacesCheckBox.state == NSButton.StateValue.on))
-        self.collectionView.reloadData()
+        DispatchQueue.main.async{
+            self.imagesLoader.reorganizeItems(considerPlaces: (self.considerPlacesCheckBox.state == NSButton.StateValue.on))
+            self.collectionView.reloadData()
+        }
     }
 }
 
@@ -336,9 +344,8 @@ class MetaConsumer : MetaInfoConsumeDelegate {
     
     func consume(_ infos:[MetaInfo]){
         imageFile?.recognizePlace()
-        print("place: \(imageFile?.place ?? "")")
         
-        if accumulator != nil && (accumulator?.add())! {
+        if accumulator != nil && (accumulator?.add("Organizing images ..."))! {
             if self.onCompleteHandler != nil {
                 onCompleteHandler?.onPlacesCompleted()
             }
@@ -350,31 +357,60 @@ class MetaConsumer : MetaInfoConsumeDelegate {
 // reference accumulator
 class Accumulator : NSObject {
     
-    let _target:Int
+    var _target:Int
     private var count:Int = 0
     private let indicator:NSProgressIndicator?
+    private let lblMessage:NSTextField?
     
-    init(target:Int, indicator:NSProgressIndicator? = nil){
+    init(target:Int, indicator:NSProgressIndicator? = nil, suspended:Bool = false, lblMessage:NSTextField? = nil){
         count = 0
         self._target = target
         self.indicator = indicator
+        self.lblMessage = lblMessage
         if indicator != nil {
-            indicator?.minValue = 0
-            indicator?.maxValue = Double(target)
-            indicator?.doubleValue = 0
-            indicator?.isHidden = false
-            //indicator?.isIndeterminate = true
+            DispatchQueue.main.sync {
+                indicator?.minValue = 0
+                indicator?.maxValue = Double(target)
+                indicator?.doubleValue = 0
+                indicator?.isHidden = suspended
+            }
+        }
+        if lblMessage != nil {
+            DispatchQueue.main.sync {
+                lblMessage?.stringValue = ""
+            }
         }
     }
     
-    func add() -> Bool{
+    func add(_ message:String = "") -> Bool{
         self.count += 1
         let completed:Bool = (count == _target)
         if indicator != nil {
-            indicator?.increment(by: 1)
-            if completed {
-                indicator?.isHidden = true
-            }
+                if self.count == 1 { // start counting
+                    DispatchQueue.main.async {
+                        if self.indicator != nil {
+                            self.indicator?.isHidden = false
+                        }
+                        if self.lblMessage != nil {
+                            self.lblMessage?.stringValue = message
+                        }
+                    }
+                }
+                DispatchQueue.main.async {
+                    self.indicator?.increment(by: 1)
+                }
+            
+                if completed {
+                    DispatchQueue.main.async {
+                        if self.indicator != nil {
+                            self.indicator?.doubleValue = 0
+                            self.indicator?.isHidden = true
+                        }
+                        if self.lblMessage != nil {
+                            self.lblMessage?.stringValue = ""
+                        }
+                    }
+                }
         }
         return completed
     }
@@ -389,6 +425,16 @@ class Accumulator : NSObject {
     
     func target() -> Int {
         return _target
+    }
+    
+    func setTarget(_ value:Int){
+        self._target = value
+        if indicator != nil {
+            DispatchQueue.main.sync {
+                indicator?.maxValue = Double(value)
+            }
+            
+        }
     }
     
     func reset() {

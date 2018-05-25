@@ -79,7 +79,7 @@ class ModelStore {
         let exist = try! moc.fetch(fetch).first
         
         if exist != nil {
-            print("exist photo: \(path)")
+            //print("exist photo: \(path)")
             return exist!
         }else{
         
@@ -88,7 +88,7 @@ class ModelStore {
             file.path = path
             file.containerPath = parentPath
             
-            print("create new file: \(path)")
+            //print("create new file: \(path)")
             
             return file
         }

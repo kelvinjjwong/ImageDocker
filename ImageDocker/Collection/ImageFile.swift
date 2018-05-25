@@ -11,14 +11,17 @@ import AVFoundation
 
 class ImageFile {
   
-    private(set) var thumbnail: NSImage?
+    //private(set) var thumbnail: NSImage?
     private(set) var fileName: String
     private(set) var url: NSURL
     private(set) var place:String = ""
     private var photoFile:PhotoFile?
     private var imageData:ImageData?
+    
+    private var indicator:Accumulator?
 
-    init (url: NSURL) {
+    init (url: NSURL, indicator:Accumulator? = nil) {
+        self.indicator = indicator
         self.url = url
         if let name = url.lastPathComponent {
             fileName = name
@@ -27,11 +30,13 @@ class ImageFile {
         }
         
         self.saveToModelStore()
-        self.setThumbnail(url as URL)
+        //self.setThumbnail(url as URL)
         
         
 
     }
+    
+    lazy var thumbnail:NSImage? = self.setThumbnail(self.url as URL)
     
     func loadLocation(consumer:MetaInfoConsumeDelegate) {
         if imageData == nil {
@@ -101,7 +106,17 @@ class ImageFile {
         let filename:String = url.lastPathComponent!
         let path:String = url.path!
         let parentPath:String = (url.deletingLastPathComponent?.path)!
+        
+        if self.indicator != nil {
+            DispatchQueue.main.async {
+                let _ = self.indicator?.add("Searching images ...")
+            }
+            
+            
+        }
+        
         self.photoFile = ModelStore.getOrCreatePhoto(filename: filename, path: path, parentPath: parentPath)
+        
         if self.photoFile?.photoTakenDate == nil {
             self.imageData = ImageData(url: url as URL)
             
@@ -144,19 +159,24 @@ class ImageFile {
         }
     }
     
-    private func setThumbnail(_ url:URL) {
+    private func setThumbnail(_ url:URL) -> NSImage? {
         do {
             let properties = try url.resourceValues(forKeys: [.typeIdentifierKey])
-            guard let fileType = properties.typeIdentifier else { return }
+            guard let fileType = properties.typeIdentifier else { return nil }
             if UTTypeConformsTo(fileType as CFString, kUTTypeImage) {
-                self.thumbnail = self.getThumbnailImageFromPhoto(url)
+                //DispatchQueue.global().async {
+                    return self.getThumbnailImageFromPhoto(url)
+                //}
             }else if UTTypeConformsTo(fileType as CFString, kUTTypeMovie) {
-                self.thumbnail = self.getThumbnailImageFromVideo(url)
+                //DispatchQueue.global().async {
+                    return self.getThumbnailImageFromVideo(url)
+                //}
             }
         }
         catch {
             print("Unexpected error occured: \(error).")
         }
+        return nil
     }
     
     private func getThumbnailImageFromVideo(_ url:URL) -> NSImage? {

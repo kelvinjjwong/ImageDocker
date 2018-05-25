@@ -456,7 +456,7 @@ final class ImageData {
         guard !(isStandalone && isLoadedExif) else {return}
         
         let jsonStr:String = ExifTool.helper.getFormattedExif(url: url)
-        print(jsonStr)
+        //print(jsonStr)
         let json:JSON = JSON(parseJSON: jsonStr)
         if json != JSON(NSNull()) {
             metaInfoStore.setMetaInfo(MetaInfo(category: "System", title: "Size", value: json[0]["Composite"]["ImageSize"].description), ifNotExists: true)

@@ -497,15 +497,29 @@
                                                                     <constraint firstAttribute="width" constant="150" id="lXt-MZ-I4h"/>
                                                                 </constraints>
                                                             </progressIndicator>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kAZ-Sm-Ax7">
+                                                                <rect key="frame" x="163" y="7" width="154" height="17"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="17" id="cbB-lt-2rd"/>
+                                                                    <constraint firstAttribute="width" constant="150" id="itr-jB-jIC"/>
+                                                                </constraints>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="F6B-H1-H9y">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" red="0.9607755829015544" green="0.9607755829015544" blue="0.9607755829015544" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
                                                         </subviews>
                                                         <constraints>
                                                             <constraint firstItem="Qnu-5r-3Pb" firstAttribute="top" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="11" id="3eu-OV-l4Z"/>
+                                                            <constraint firstItem="kAZ-Sm-Ax7" firstAttribute="leading" secondItem="Sab-MP-Qfo" secondAttribute="trailing" constant="10" id="57f-Wg-Auh"/>
                                                             <constraint firstAttribute="trailing" secondItem="DpT-Dg-Oeb" secondAttribute="trailing" constant="10" id="6m5-zg-rFt"/>
                                                             <constraint firstAttribute="bottom" secondItem="Sab-MP-Qfo" secondAttribute="bottom" constant="7" id="9Y8-f8-enM"/>
                                                             <constraint firstItem="KZW-eM-F1C" firstAttribute="top" secondItem="m9M-hY-L99" secondAttribute="top" id="CiJ-4L-Rq1"/>
                                                             <constraint firstAttribute="bottom" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="35" id="FQQ-0m-lCs"/>
                                                             <constraint firstAttribute="trailing" secondItem="KZW-eM-F1C" secondAttribute="trailing" id="Hj4-Gx-NJd"/>
                                                             <constraint firstItem="KZW-eM-F1C" firstAttribute="leading" secondItem="m9M-hY-L99" secondAttribute="leading" id="TrQ-Wm-NbH"/>
+                                                            <constraint firstAttribute="bottom" secondItem="kAZ-Sm-Ax7" secondAttribute="bottom" constant="7" id="Ybw-3Z-dGC"/>
                                                             <constraint firstItem="DpT-Dg-Oeb" firstAttribute="top" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="8" id="jCr-mg-vua"/>
                                                             <constraint firstItem="DpT-Dg-Oeb" firstAttribute="leading" secondItem="Qnu-5r-3Pb" secondAttribute="trailing" constant="20" id="nBL-6Q-dns"/>
                                                             <constraint firstItem="Sab-MP-Qfo" firstAttribute="leading" secondItem="m9M-hY-L99" secondAttribute="leading" constant="5" id="qrl-2P-kRJ"/>
@@ -955,6 +969,7 @@
                         <outlet property="collectionView" destination="9AE-Hz-zmu" id="ItR-cT-i85"/>
                         <outlet property="considerPlacesCheckBox" destination="Qnu-5r-3Pb" id="YDg-Jh-tVk"/>
                         <outlet property="imgPhoto" destination="9Na-U8-3R2" id="b6k-Ma-bp4"/>
+                        <outlet property="indicatorMessage" destination="kAZ-Sm-Ax7" id="QkM-9I-20Z"/>
                         <outlet property="mapZoomSlider" destination="eId-m8-eKf" id="zoE-94-C0F"/>
                         <outlet property="metaInfoTableView" destination="ECf-s9-RCm" id="GLo-W4-I6C"/>
                         <outlet property="playerContainer" destination="73d-nT-eRs" id="WGK-6c-bD3"/>
@@ -966,7 +981,7 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-266" y="1245.5"/>
+            <point key="canvasLocation" x="-266" y="1245"/>
         </scene>
         <!--Preferences Controller-->
         <scene sceneID="Tjd-6k-SUb">

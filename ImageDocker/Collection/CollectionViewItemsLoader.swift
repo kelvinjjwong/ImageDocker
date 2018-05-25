@@ -25,34 +25,43 @@ class CollectionViewItemsLoader: NSObject {
     var numberOfSections = 1
     var singleSectionMode = false
     var considerPlaces = true
-    
+    var indicator:Accumulator?
     
     private var sections = [CollectionViewSection]()
 
     
-    func load(from folderURL: NSURL) {
+    func load(from folderURL: NSURL, indicator:Accumulator? = nil) {
+        self.indicator = indicator
         let urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
         setupItems(urls: urls)
     }
 
-    func setupItems(urls: [NSURL]?) {
+    func setupItems(urls: [NSURL]?, cleanViewBeforeLoading:Bool = true) {
         
         if items.count > 0 {
             items.removeAll()
         }
         
+        if cleanViewBeforeLoading {
+            numberOfSections = 1
+            sections = [CollectionViewSection]()
+        }
+            
         guard urls != nil && (urls?.count)! > 0 else {return}
+        
+        if indicator != nil {
+            indicator?.setTarget((urls?.count)!)
+        }
 
         if let urls = urls {
-            transformToDomainItems(urls: urls)
+            self.transformToDomainItems(urls: urls)
         }
-        
-        reorganizeItems()
+        //self.reorganizeItems(considerPlaces: true)
 
     }
     
     func reorganizeItems(considerPlaces:Bool = false) {
-        print("reorg with places \(considerPlaces)")
+        print("reorg")
         self.considerPlaces = considerPlaces
         
         if sections.count > 0 {
@@ -203,7 +212,7 @@ class CollectionViewItemsLoader: NSObject {
             items.removeAll()
         }
         for url in urls {
-            let imageFile = ImageFile(url: url)
+            let imageFile = ImageFile(url: url, indicator: self.indicator)
             items.append(imageFile)
         }
         ModelStore.save()

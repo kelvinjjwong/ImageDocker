@@ -15,7 +15,9 @@ class CollectionViewItem: NSCollectionViewItem {
     didSet {
       guard isViewLoaded else { return }
       if let imageFile = imageFile {
-        imageView?.image = imageFile.thumbnail
+        DispatchQueue.main.async {
+            self.imageView?.image = imageFile.thumbnail
+        }
         textField?.stringValue = imageFile.fileName
       } else {
         imageView?.image = nil
