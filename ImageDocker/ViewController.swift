@@ -17,6 +17,7 @@ import PXSourceList
 
 class ViewController: NSViewController {
     
+    // MARK: Preview section
     var metaInfo:[MetaInfo] = [MetaInfo]()
     var img:ImageData!
     
@@ -27,41 +28,42 @@ class ViewController: NSViewController {
     
     var lastSelectedMetaInfoRow: Int?
     
+    var stackedImageViewController : StackedImageViewController!
+    var stackedVideoViewController : StackedVideoViewController!
+    
+    @IBOutlet weak var webLocation: WKWebView!
+    @IBOutlet weak var metaInfoTableView: NSTableView!
+    @IBOutlet weak var playerContainer: NSView!
+    @IBOutlet weak var mapZoomSlider: NSSlider!
+    @IBOutlet weak var addressSearcher: NSSearchField!
+    
+    // MARK: Editor
+    
+    @IBOutlet weak var btnCloneLocationToFinder: NSButton!
+    @IBOutlet weak var webPossibleLocation: WKWebView!
+    
     // MARK: PXSourceList
     var modelObjects:NSMutableArray?
     var sourceListItems:NSMutableArray?
     var sourceListIdentifiers:[String : PXSourceListItem] = [String : PXSourceListItem] ()
-    //var imageFolders:[ImageFolder] = [ImageFolder]()
     
     var librarySectionOfTree : PXSourceListItem?
 
     var selectedImageFolder:ImageFolder?
     var selectedImageFile:String = ""
     
-    // MARK: Properties
-    
-    @IBOutlet weak var btnCloneLocationToFinder: NSButton!
-    @IBOutlet weak var webLocation: WKWebView!
-    @IBOutlet weak var metaInfoTableView: NSTableView!
-    @IBOutlet weak var playerContainer: NSView!
-    @IBOutlet weak var mapZoomSlider: NSSlider!
-    @IBOutlet weak var addressSearcher: NSSearchField!
-    @IBOutlet weak var webPossibleLocation: WKWebView!
     @IBOutlet weak var sourceList: PXSourceList!
+    @IBOutlet weak var progressIndicator: NSProgressIndicator!
+    
+    // MARK: Collection View for browsing
     
     @IBOutlet weak var collectionView: NSCollectionView!
-    @IBOutlet weak var progressIndicator: NSProgressIndicator!
     @IBOutlet weak var collectionProgressIndicator: NSProgressIndicator!
     
     @IBOutlet weak var considerPlacesCheckBox: NSButton!
     @IBOutlet weak var indicatorMessage: NSTextField!
     
     let imagesLoader = CollectionViewItemsLoader()
-    
-    var stackedImageViewController : StackedImageViewController!
-    var stackedVideoViewController : StackedVideoViewController!
-    
-    
     var collectionLoadingIndicator:Accumulator?
     
     // MARK: init

@@ -62,6 +62,7 @@ extension ViewController : NSCollectionViewDataSource {
     func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
         let item = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "CollectionViewItem"), for: indexPath)
         guard let collectionViewItem = item as? CollectionViewItem else {return item}
+        collectionViewItem.setCheckBoxDelegate(self)
 
         let imageFile = imagesLoader.item(for: indexPath as NSIndexPath)
         DispatchQueue.main.async {
@@ -119,6 +120,23 @@ extension ViewController : PlacesCompletionEvent {
             self.collectionView.reloadData()
         }
     }
+}
+
+protocol CollectionViewItemCheckDelegate {
+    func onCollectionViewItemCheck(_ item:CollectionViewItem)
+    func onCollectionViewItemUncheck(_ item:CollectionViewItem)
+}
+
+extension ViewController : CollectionViewItemCheckDelegate {
+    func onCollectionViewItemCheck(_ item: CollectionViewItem) {
+        print("checked: \(item.imageFile?.url.lastPathComponent ?? "")")
+    }
+    
+    func onCollectionViewItemUncheck(_ item: CollectionViewItem) {
+        print("unchecked: \(item.imageFile?.url.lastPathComponent ?? "")")
+    }
+    
+    
 }
 
 class MetaConsumer : MetaInfoConsumeDelegate {

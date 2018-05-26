@@ -11,7 +11,15 @@ import Cocoa
 
 class CollectionViewItem: NSCollectionViewItem {
   
-  var imageFile: ImageFile? {
+    @IBOutlet weak var checkBox: NSButton!
+    
+    private var checkBoxDelegate:CollectionViewItemCheckDelegate?
+    
+    func setCheckBoxDelegate(_ delegate:CollectionViewItemCheckDelegate){
+        self.checkBoxDelegate = delegate
+    }
+    
+    var imageFile: ImageFile? {
     didSet {
       guard isViewLoaded else { return }
       if let imageFile = imageFile {
@@ -19,9 +27,12 @@ class CollectionViewItem: NSCollectionViewItem {
             self.imageView?.image = imageFile.thumbnail
         }
         textField?.stringValue = imageFile.fileName
+        checkBox.state = NSButton.StateValue.off
+        
       } else {
         imageView?.image = nil
         textField?.stringValue = ""
+        checkBox.state = NSButton.StateValue.off
       }
     }
   }
@@ -36,6 +47,48 @@ class CollectionViewItem: NSCollectionViewItem {
   
   func setHighlight(selected: Bool) {
     view.layer?.borderWidth = selected ? 5.0 : 0.0
+    if selected {
+        if !self.isChecked() {
+            self.check()
+        }else {
+            self.uncheck()
+        }
+    }
+    
   }
-  
+    
+    func check(){
+        checkBox.state = NSButton.StateValue.on
+        if checkBoxDelegate != nil {
+            checkBoxDelegate?.onCollectionViewItemCheck(self)
+        }
+    }
+    
+    func uncheck(){
+        checkBox.state = NSButton.StateValue.off
+        if checkBoxDelegate != nil {
+            checkBoxDelegate?.onCollectionViewItemUncheck(self)
+        }
+    }
+    
+    func isChecked() -> Bool {
+        if checkBox.state == NSButton.StateValue.on {
+            return true
+        }else {
+            return false
+        }
+    }
+    
+    @IBAction func onCheckBoxClicked(_ sender: NSButton) {
+        if isChecked() {
+            if checkBoxDelegate != nil {
+                checkBoxDelegate?.onCollectionViewItemCheck(self)
+            }
+        }else{
+            if checkBoxDelegate != nil {
+                checkBoxDelegate?.onCollectionViewItemUncheck(self)
+            }
+        }
+    }
+    
 }

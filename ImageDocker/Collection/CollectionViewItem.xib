@@ -7,6 +7,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CollectionViewItem" customModule="ImageDocker" customModuleProvider="target">
             <connections>
+                <outlet property="checkBox" destination="Onb-PG-8r4" id="bHB-Jv-sUi"/>
                 <outlet property="imageView" destination="FSe-ep-RM0" id="fCL-h0-ClX"/>
                 <outlet property="textField" destination="HhR-2S-1Qc" id="qmv-BS-MjW"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
@@ -30,15 +31,27 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Onb-PG-8r4">
+                    <rect key="frame" x="460" y="250" width="22" height="18"/>
+                    <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="4ve-NN-mFG">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="onCheckBoxClicked:" target="-2" id="u6A-qM-mub"/>
+                    </connections>
+                </button>
             </subviews>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="FSe-ep-RM0" secondAttribute="bottom" constant="30" id="9eo-nP-YBU"/>
                 <constraint firstItem="FSe-ep-RM0" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="Cac-fe-lhi"/>
                 <constraint firstAttribute="trailing" secondItem="FSe-ep-RM0" secondAttribute="trailing" id="E7f-E0-rXP"/>
+                <constraint firstAttribute="trailing" secondItem="Onb-PG-8r4" secondAttribute="trailing" id="GEN-fF-l14"/>
                 <constraint firstAttribute="bottom" secondItem="HhR-2S-1Qc" secondAttribute="bottom" id="H4P-Fi-SRE"/>
                 <constraint firstItem="HhR-2S-1Qc" firstAttribute="top" secondItem="FSe-ep-RM0" secondAttribute="bottom" id="eRF-wd-W2O"/>
                 <constraint firstAttribute="trailing" secondItem="HhR-2S-1Qc" secondAttribute="trailing" id="eus-uP-aKn"/>
                 <constraint firstItem="FSe-ep-RM0" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="sjp-Lb-bll"/>
+                <constraint firstItem="Onb-PG-8r4" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="6" id="xIx-GV-Lmc"/>
                 <constraint firstItem="HhR-2S-1Qc" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="y4F-IE-8V6"/>
             </constraints>
         </customView>

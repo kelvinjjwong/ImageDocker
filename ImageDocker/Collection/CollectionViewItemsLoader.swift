@@ -43,7 +43,7 @@ class CollectionViewItemsLoader: NSObject {
         }
         
         if cleanViewBeforeLoading {
-            numberOfSections = 1
+            numberOfSections = 0
             sections = [CollectionViewSection]()
         }
             
