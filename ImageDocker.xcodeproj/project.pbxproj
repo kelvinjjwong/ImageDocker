@@ -29,6 +29,7 @@
 		8E7F71002091F14300410C45 /* BaiduLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F70FF2091F14200410C45 /* BaiduLocation.swift */; };
 		8E7F71022092053400410C45 /* MetaInfoHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F71012092053400410C45 /* MetaInfoHandler.swift */; };
 		8E85B7CF20B8786C005A9845 /* Accumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7CE20B8786C005A9845 /* Accumulator.swift */; };
+		8E85B7D220B91ED1005A9845 /* SelectionCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7D120B91ED1005A9845 /* SelectionCollectionViewController.swift */; };
 		8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */; };
 		8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */; };
 		8EA1A063208DFD92000C3B97 /* MetaInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A062208DFD92000C3B97 /* MetaInfo.swift */; };
@@ -106,6 +107,7 @@
 		8E7F70FF2091F14200410C45 /* BaiduLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaiduLocation.swift; sourceTree = "<group>"; };
 		8E7F71012092053400410C45 /* MetaInfoHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfoHandler.swift; sourceTree = "<group>"; };
 		8E85B7CE20B8786C005A9845 /* Accumulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accumulator.swift; sourceTree = "<group>"; };
+		8E85B7D120B91ED1005A9845 /* SelectionCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionCollectionViewController.swift; sourceTree = "<group>"; };
 		8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateConverter.swift; sourceTree = "<group>"; };
 		8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaTableViewController.swift; sourceTree = "<group>"; };
 		8EA1A062208DFD92000C3B97 /* MetaInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfo.swift; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 		8E0AFA3B208BDEA000CE8B68 /* ImageDocker */ = {
 			isa = PBXGroup;
 			children = (
+				8E85B7D020B91E9E005A9845 /* Selection */,
 				8EB986AE20B223BF0075B081 /* Domain */,
 				8EB986AA20B21D3E0075B081 /* Tree */,
 				8EB986A820B21AEC0075B081 /* Collection */,
@@ -229,6 +232,14 @@
 				8E0AFA5C208BDEA100CE8B68 /* Info.plist */,
 			);
 			path = ImageDockerUITests;
+			sourceTree = "<group>";
+		};
+		8E85B7D020B91E9E005A9845 /* Selection */ = {
+			isa = PBXGroup;
+			children = (
+				8E85B7D120B91ED1005A9845 /* SelectionCollectionViewController.swift */,
+			);
+			path = Selection;
 			sourceTree = "<group>";
 		};
 		8EB986A820B21AEC0075B081 /* Collection */ = {
@@ -514,6 +525,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */,
+				8E85B7D220B91ED1005A9845 /* SelectionCollectionViewController.swift in Sources */,
 				8E7F71022092053400410C45 /* MetaInfoHandler.swift in Sources */,
 				8E4B7C1C2093D15700DDD9E0 /* BaseNode.swift in Sources */,
 				8EF32D142095355400511538 /* LCSourceListTableCellView.swift in Sources */,

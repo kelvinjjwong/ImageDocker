@@ -17,28 +17,27 @@ import PXSourceList
 
 class ViewController: NSViewController {
     
-    // MARK: Preview section
-    var metaInfo:[MetaInfo] = [MetaInfo]()
+    // MARK: Image preview
     var img:ImageData!
-    
-    var zoomSize:Int = 16
-    var zoomSizeForPossibleAddress:Int = 16
-    var previousTick:Int = 3
-    var previousTickForPossibleAddress:Int = 3
-    
-    var lastSelectedMetaInfoRow: Int?
-    
+    @IBOutlet weak var playerContainer: NSView!
     var stackedImageViewController : StackedImageViewController!
     var stackedVideoViewController : StackedVideoViewController!
     
-    @IBOutlet weak var webLocation: WKWebView!
+    // MARK: MetaInfo table view
+    var metaInfo:[MetaInfo] = [MetaInfo]()
+    var lastSelectedMetaInfoRow: Int?
     @IBOutlet weak var metaInfoTableView: NSTableView!
-    @IBOutlet weak var playerContainer: NSView!
+    
+    // MARK: Image Map
+    var zoomSize:Int = 16
+    var previousTick:Int = 3
+    @IBOutlet weak var webLocation: WKWebView!
     @IBOutlet weak var mapZoomSlider: NSSlider!
+    
+    // MARK: Editor - Map
+    var zoomSizeForPossibleAddress:Int = 16
+    var previousTickForPossibleAddress:Int = 3
     @IBOutlet weak var addressSearcher: NSSearchField!
-    
-    // MARK: Editor
-    
     @IBOutlet weak var btnCloneLocationToFinder: NSButton!
     @IBOutlet weak var webPossibleLocation: WKWebView!
     
@@ -66,6 +65,17 @@ class ViewController: NSViewController {
     let imagesLoader = CollectionViewItemsLoader()
     var collectionLoadingIndicator:Accumulator?
     
+    // MARK: Collection View for selection
+    var selectionViewController : SelectionCollectionViewController!
+    
+    @IBOutlet weak var selectionCollectionView: NSCollectionView!
+    
+    @IBOutlet weak var selectionCheckAllBox: NSButton!
+    
+    
+    
+    
+    
     // MARK: init
     
     override func viewDidLoad() {
@@ -76,6 +86,7 @@ class ViewController: NSViewController {
         view.layer?.backgroundColor = NSColor.darkGray.cgColor
         
         self.configurePreview()
+        self.configureSelectionView()
         
         PreferencesController.healthCheck()
         
@@ -110,6 +121,39 @@ class ViewController: NSViewController {
         
         stackedImageViewController.view.frame = self.playerContainer.bounds
         self.playerContainer.addSubview(stackedImageViewController.view)
+        
+    }
+    
+    func configureSelectionView(){
+        
+        // init controller
+        selectionViewController = storyboard?.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "selectionView")) as! SelectionCollectionViewController
+        self.addChildViewController(selectionViewController)
+        
+        // outlet
+        self.selectionCollectionView.dataSource = selectionViewController
+        self.selectionCollectionView.delegate = selectionViewController
+        
+        // flow layout
+        let flowLayout = NSCollectionViewFlowLayout()
+        flowLayout.itemSize = NSSize(width: 160.0, height: 140.0)
+        flowLayout.sectionInset = NSEdgeInsets(top: 10.0, left: 20, bottom: 10.0, right: 20.0)
+        flowLayout.minimumInteritemSpacing = 20.0
+        flowLayout.minimumLineSpacing = 20.0
+        selectionCollectionView.collectionViewLayout = flowLayout
+
+        // view layout
+        selectionCollectionView.wantsLayer = true
+        selectionCollectionView.backgroundColors = [NSColor.darkGray]
+        selectionCollectionView.layer?.backgroundColor = NSColor.darkGray.cgColor
+        selectionCollectionView.layer?.borderColor = NSColor.darkGray.cgColor
+        
+        // data model
+        selectionViewController.collectionView = self.selectionCollectionView
+        selectionViewController.imagesLoader.singleSectionMode = true
+        selectionViewController.imagesLoader.setupItems(urls: nil)
+        
+        selectionCollectionView.reloadData()
         
     }
     
@@ -293,7 +337,12 @@ class ViewController: NSViewController {
     }
     
     
+    @IBAction func onSelectionRemoveButtonClicked(_ sender: Any) {
+    }
     
+
+    @IBAction func onSelectionCheckAllClicked(_ sender: NSButton) {
+    }
     
 }
 

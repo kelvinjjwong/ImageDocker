@@ -271,5 +271,20 @@ class CollectionViewItemsLoader: NSObject {
     func getItems() -> [ImageFile] {
         return self.items
     }
+    
+    func addItem(_ imageFile:ImageFile){
+        let i = items.index(where: { $0.url == imageFile.url })
+        if i == nil {
+            items.append(imageFile)
+            print("added image \(imageFile.url.path)")
+        }
+    }
+    
+    func removeItem(_ imageFile:ImageFile){
+        if let i = items.index(where: { $0.url == imageFile.url }) {
+            items.remove(at: i)
+            print("removed image \(imageFile.url.path)")
+        }
+    }
   
 }
