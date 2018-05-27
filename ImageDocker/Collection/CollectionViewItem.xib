@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="checkBox" destination="Onb-PG-8r4" id="bHB-Jv-sUi"/>
                 <outlet property="imageView" destination="FSe-ep-RM0" id="fCL-h0-ClX"/>
+                <outlet property="lblPlace" destination="9qX-pa-ugK" id="k8B-pG-7sE"/>
                 <outlet property="textField" destination="HhR-2S-1Qc" id="qmv-BS-MjW"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
@@ -23,14 +24,6 @@
                     <rect key="frame" x="0.0" y="30" width="480" height="242"/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="3vS-2J-sw2"/>
                 </imageView>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HhR-2S-1Qc">
-                    <rect key="frame" x="-2" y="0.0" width="484" height="30"/>
-                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" title="Loading..." id="kKj-Vf-rng">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Onb-PG-8r4">
                     <rect key="frame" x="460" y="250" width="22" height="18"/>
                     <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="4ve-NN-mFG">
@@ -41,15 +34,39 @@
                         <action selector="onCheckBoxClicked:" target="-2" id="u6A-qM-mub"/>
                     </connections>
                 </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9qX-pa-ugK">
+                    <rect key="frame" x="-2" y="0.0" width="484" height="15"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="15" id="PTF-RK-Eoj"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" id="Gtj-XD-JUg">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HhR-2S-1Qc">
+                    <rect key="frame" x="-2" y="15" width="484" height="15"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="15" id="I4k-G6-XJA"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" title="Loading..." id="kKj-Vf-rng">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
             </subviews>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="FSe-ep-RM0" secondAttribute="bottom" constant="30" id="9eo-nP-YBU"/>
+                <constraint firstAttribute="bottom" secondItem="9qX-pa-ugK" secondAttribute="bottom" id="2MH-Yx-k6X"/>
+                <constraint firstItem="9qX-pa-ugK" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="2z6-mz-65p"/>
                 <constraint firstItem="FSe-ep-RM0" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="Cac-fe-lhi"/>
                 <constraint firstAttribute="trailing" secondItem="FSe-ep-RM0" secondAttribute="trailing" id="E7f-E0-rXP"/>
                 <constraint firstAttribute="trailing" secondItem="Onb-PG-8r4" secondAttribute="trailing" id="GEN-fF-l14"/>
-                <constraint firstAttribute="bottom" secondItem="HhR-2S-1Qc" secondAttribute="bottom" id="H4P-Fi-SRE"/>
+                <constraint firstItem="9qX-pa-ugK" firstAttribute="top" secondItem="HhR-2S-1Qc" secondAttribute="bottom" id="Xx6-IA-axd"/>
                 <constraint firstItem="HhR-2S-1Qc" firstAttribute="top" secondItem="FSe-ep-RM0" secondAttribute="bottom" id="eRF-wd-W2O"/>
                 <constraint firstAttribute="trailing" secondItem="HhR-2S-1Qc" secondAttribute="trailing" id="eus-uP-aKn"/>
+                <constraint firstAttribute="trailing" secondItem="9qX-pa-ugK" secondAttribute="trailing" id="o9W-j5-xVp"/>
                 <constraint firstItem="FSe-ep-RM0" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="sjp-Lb-bll"/>
                 <constraint firstItem="Onb-PG-8r4" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="6" id="xIx-GV-Lmc"/>
                 <constraint firstItem="HhR-2S-1Qc" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="y4F-IE-8V6"/>

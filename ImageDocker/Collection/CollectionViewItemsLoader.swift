@@ -78,7 +78,7 @@ class CollectionViewItemsLoader: NSObject {
     }
   
     private func collectDomainItemToSingleSection() {
-        let section:CollectionViewSection = self.getSection(title: "All")
+        let section:CollectionViewSection = self.getSection(title: "All")!
         section.items.removeAll()
         
         for item in items {
@@ -88,15 +88,19 @@ class CollectionViewItemsLoader: NSObject {
         self.numberOfSections = 1
     }
     
-    private func getSection(title: String) -> CollectionViewSection {
+    func getSection(title: String, createIfNotExist:Bool = true) -> CollectionViewSection? {
         for section in self.sections {
             if section.title == title {
                 return section
             }
         }
-        let section:CollectionViewSection = CollectionViewSection(title)
-        self.sections.append(section)
-        return section
+        if createIfNotExist {
+            let section:CollectionViewSection = CollectionViewSection(title)
+            self.sections.append(section)
+            return section
+        }else{
+            return nil
+        }
     }
     
     private func collectDomainItemToMultipleSection(_ dateFormat:String = "yyyy-MM-dd") {
@@ -110,7 +114,7 @@ class CollectionViewItemsLoader: NSObject {
             if self.considerPlaces && item.place != "" {
                 title = title + " @ " + item.place
             }
-            let section:CollectionViewSection = self.getSection(title: title)
+            let section:CollectionViewSection = self.getSection(title: title)!
             section.items.append(item)
         }
         
@@ -280,14 +284,12 @@ class CollectionViewItemsLoader: NSObject {
         let i = items.index(where: { $0.url == imageFile.url })
         if i == nil {
             items.append(imageFile)
-            print("added image \(imageFile.url.path)")
         }
     }
     
     func removeItem(_ imageFile:ImageFile){
         if let i = items.index(where: { $0.url == imageFile.url }) {
             items.remove(at: i)
-            print("removed image \(imageFile.url.path)")
         }
     }
   

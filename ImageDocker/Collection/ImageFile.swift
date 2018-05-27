@@ -19,6 +19,7 @@ class ImageFile {
     private var imageData:ImageData?
     
     private var indicator:Accumulator?
+    var collectionViewItem:CollectionViewItem?
 
     init (url: NSURL, indicator:Accumulator? = nil) {
         self.indicator = indicator
@@ -66,6 +67,16 @@ class ImageFile {
     
     func photoTakenDate() -> Date? {
         return self.photoFile?.photoTakenDate
+    }
+    
+    func dateString(_ date:Date?, format:String = "yyyy-MM-dd") -> String {
+        if date == nil {
+            return ""
+        }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        let result = dateFormatter.string(from: date!)
+        return result
     }
     
     // singleton

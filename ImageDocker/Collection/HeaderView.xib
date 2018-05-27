@@ -26,21 +26,34 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1QJ-Ea-2Gk">
-                    <rect key="frame" x="394" y="11" width="88" height="17"/>
+                    <rect key="frame" x="374" y="11" width="88" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Images Count" id="2yG-4M-g15">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3Rw-6E-Hos">
+                    <rect key="frame" x="465" y="9" width="22" height="18"/>
+                    <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" inset="2" id="dR1-oq-Z0u">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="onCheckBoxClicked:" target="c22-O7-iKe" id="rUF-hZ-4mq"/>
+                    </connections>
+                </button>
             </subviews>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="1QJ-Ea-2Gk" secondAttribute="trailing" constant="20" symbolic="YES" id="6q4-9S-ji3"/>
+                <constraint firstAttribute="trailing" secondItem="1QJ-Ea-2Gk" secondAttribute="trailing" constant="40" id="6q4-9S-ji3"/>
                 <constraint firstItem="1QJ-Ea-2Gk" firstAttribute="baseline" secondItem="1zW-zn-ALA" secondAttribute="firstBaseline" id="7hy-6q-8nc"/>
                 <constraint firstItem="1zW-zn-ALA" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="BPN-Kt-HNh"/>
+                <constraint firstAttribute="bottom" secondItem="3Rw-6E-Hos" secondAttribute="bottom" constant="11" id="bov-8a-OKU"/>
+                <constraint firstAttribute="trailing" secondItem="3Rw-6E-Hos" secondAttribute="trailing" constant="15" id="jxM-WY-C70"/>
                 <constraint firstItem="1zW-zn-ALA" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="20" symbolic="YES" id="kBz-58-NDL"/>
             </constraints>
             <connections>
+                <outlet property="checkBox" destination="3Rw-6E-Hos" id="hzk-TK-K3b"/>
                 <outlet property="imageCount" destination="1QJ-Ea-2Gk" id="SOc-UE-R2s"/>
                 <outlet property="sectionTitle" destination="1zW-zn-ALA" id="eTW-ZU-uN6"/>
             </connections>

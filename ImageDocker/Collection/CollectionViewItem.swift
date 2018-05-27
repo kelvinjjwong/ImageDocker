@@ -12,8 +12,11 @@ import Cocoa
 class CollectionViewItem: NSCollectionViewItem {
   
     @IBOutlet weak var checkBox: NSButton!
+    @IBOutlet weak var lblPlace: NSTextField!
     
     private var checkBoxDelegate:CollectionViewItemCheckDelegate?
+    
+    var sectionIndex:Int?
     
     func setCheckBoxDelegate(_ delegate:CollectionViewItemCheckDelegate){
         self.checkBoxDelegate = delegate
@@ -26,12 +29,19 @@ class CollectionViewItem: NSCollectionViewItem {
         DispatchQueue.main.async {
             self.imageView?.image = imageFile.thumbnail
         }
-        textField?.stringValue = imageFile.fileName
+        if imageFile.photoTakenDate() != nil {
+            textField?.stringValue = imageFile.dateString(imageFile.photoTakenDate(), format: "HH:mm:ss")
+        }else {
+            textField?.stringValue = imageFile.fileName
+        }
+        lblPlace.stringValue = imageFile.place
+        
         checkBox.state = NSButton.StateValue.off
         
       } else {
         imageView?.image = nil
         textField?.stringValue = ""
+        lblPlace.stringValue = ""
         checkBox.state = NSButton.StateValue.off
       }
     }
