@@ -135,54 +135,56 @@ protocol CollectionViewItemCheckDelegate {
 extension ViewController : CollectionViewItemCheckDelegate {
     
     func checkSectionIfAllItemsChecked(_ item: CollectionViewItem) {
-        let indexPath = collectionView.indexPath(for: item)!
-        let section = collectionView.supplementaryView(forElementKind: NSCollectionView.SupplementaryElementKind.sectionHeader, at: IndexPath(item: 0, section: indexPath.section))
-        
-        if section != nil {
+        if let indexPath = collectionView.indexPath(for: item) {
+            let section = collectionView.supplementaryView(forElementKind: NSCollectionView.SupplementaryElementKind.sectionHeader, at: IndexPath(item: 0, section: indexPath.section))
             
-            let section = section as! HeaderView
-        
-            var shouldCheckSection:Bool = true
-            let sec = imagesLoader.getSection(title: section.sectionTitle.stringValue, createIfNotExist: false)
-            if sec != nil {
+            if section != nil {
                 
-                for item in (sec?.items)! {
-                    if !(item.collectionViewItem?.isChecked())! {
-                        shouldCheckSection = false
-                        break
+                let section = section as! HeaderView
+            
+                var shouldCheckSection:Bool = true
+                let sec = imagesLoader.getSection(title: section.sectionTitle.stringValue, createIfNotExist: false)
+                if sec != nil {
+                    
+                    for item in (sec?.items)! {
+                        if !(item.collectionViewItem?.isChecked())! {
+                            shouldCheckSection = false
+                            break
+                        }
                     }
                 }
-            }
-            
-            if shouldCheckSection {
-                section.check(true)
+                
+                if shouldCheckSection {
+                    section.check(true)
+                }
             }
         }
     }
     
     func uncheckSectionIfAllItemsUnchecked(_ item: CollectionViewItem) {
-        let indexPath = collectionView.indexPath(for: item)!
-        let section = collectionView.supplementaryView(forElementKind: NSCollectionView.SupplementaryElementKind.sectionHeader, at: IndexPath(item: 0, section: indexPath.section))
-        
-        if section != nil {
+        if let indexPath = collectionView.indexPath(for: item) {
+            let section = collectionView.supplementaryView(forElementKind: NSCollectionView.SupplementaryElementKind.sectionHeader, at: IndexPath(item: 0, section: indexPath.section))
             
-            let section = section as! HeaderView
-            
-            print("section title: \(section.sectionTitle.stringValue)")
-            var shouldUncheckSection:Bool = true
-            let sec = imagesLoader.getSection(title: section.sectionTitle.stringValue, createIfNotExist: false)
-            if sec != nil {
+            if section != nil {
                 
-                for item in (sec?.items)! {
-                    if (item.collectionViewItem?.isChecked())! {
-                        shouldUncheckSection = false
-                        break
+                let section = section as! HeaderView
+                
+                print("section title: \(section.sectionTitle.stringValue)")
+                var shouldUncheckSection:Bool = true
+                let sec = imagesLoader.getSection(title: section.sectionTitle.stringValue, createIfNotExist: false)
+                if sec != nil {
+                    
+                    for item in (sec?.items)! {
+                        if (item.collectionViewItem?.isChecked())! {
+                            shouldUncheckSection = false
+                            break
+                        }
                     }
                 }
-            }
-            
-            if shouldUncheckSection {
-                section.uncheck(true)
+                
+                if shouldUncheckSection {
+                    section.uncheck(true)
+                }
             }
         }
     }

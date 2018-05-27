@@ -23,7 +23,7 @@ class Accumulator : NSObject {
         self.indicator = indicator
         self.lblMessage = lblMessage
         if indicator != nil {
-            DispatchQueue.main.sync {
+            DispatchQueue.main.async {
                 indicator?.minValue = 0
                 indicator?.maxValue = Double(target)
                 indicator?.doubleValue = 0
@@ -31,7 +31,7 @@ class Accumulator : NSObject {
             }
         }
         if lblMessage != nil {
-            DispatchQueue.main.sync {
+            DispatchQueue.main.async {
                 lblMessage?.stringValue = ""
             }
         }

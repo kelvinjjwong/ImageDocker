@@ -19,27 +19,6 @@ class SelectionCollectionViewController : NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("selection init")
-        /*
-        let flowLayout = NSCollectionViewFlowLayout()
-        flowLayout.itemSize = NSSize(width: 160.0, height: 140.0)
-        flowLayout.sectionInset = NSEdgeInsets(top: 10.0, left: 20, bottom: 10.0, right: 20.0)
-        flowLayout.minimumInteritemSpacing = 20.0
-        flowLayout.minimumLineSpacing = 20.0
-        collectionView.collectionViewLayout = flowLayout
-        view.wantsLayer = true
-        collectionView.backgroundColors = [NSColor.darkGray]
-        collectionView.layer?.backgroundColor = NSColor.darkGray.cgColor
-        collectionView.layer?.borderColor = NSColor.darkGray.cgColor
-        
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        
-        imagesLoader.singleSectionMode = true
-        imagesLoader.setupItems(urls: nil)
-        collectionView.reloadData()
- */
     }
 
 }
@@ -59,7 +38,7 @@ extension SelectionCollectionViewController : NSCollectionViewDataSource {
     func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
         let item = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "CollectionViewItem"), for: indexPath)
         guard let collectionViewItem = item as? CollectionViewItem else {return item}
-        //collectionViewItem.setCheckBoxDelegate(self)
+        collectionViewItem.displayDateFormat = "yyyy-MM-dd  HH:mm:ss"
         
         let imageFile = imagesLoader.item(for: indexPath as NSIndexPath)
         DispatchQueue.main.async {

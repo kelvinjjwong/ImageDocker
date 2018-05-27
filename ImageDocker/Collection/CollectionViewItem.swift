@@ -22,6 +22,8 @@ class CollectionViewItem: NSCollectionViewItem {
         self.checkBoxDelegate = delegate
     }
     
+    var displayDateFormat:String = "HH:mm:ss"
+    
     var imageFile: ImageFile? {
     didSet {
       guard isViewLoaded else { return }
@@ -30,7 +32,7 @@ class CollectionViewItem: NSCollectionViewItem {
             self.imageView?.image = imageFile.thumbnail
         }
         if imageFile.photoTakenDate() != nil {
-            textField?.stringValue = imageFile.dateString(imageFile.photoTakenDate(), format: "HH:mm:ss")
+            textField?.stringValue = imageFile.dateString(imageFile.photoTakenDate(), format: displayDateFormat)
         }else {
             textField?.stringValue = imageFile.fileName
         }
