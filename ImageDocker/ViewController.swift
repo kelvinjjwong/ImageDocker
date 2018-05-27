@@ -17,6 +17,7 @@ import PXSourceList
 
 class ViewController: NSViewController {
     
+    
     // MARK: Image preview
     var img:ImageData!
     @IBOutlet weak var playerContainer: NSView!
@@ -122,6 +123,23 @@ class ViewController: NSViewController {
         stackedImageViewController.view.frame = self.playerContainer.bounds
         self.playerContainer.addSubview(stackedImageViewController.view)
         
+    }
+    
+    private func configureCollectionView() {
+        let flowLayout = NSCollectionViewFlowLayout()
+        flowLayout.itemSize = NSSize(width: 160.0, height: 140.0)
+        flowLayout.sectionInset = NSEdgeInsets(top: 10.0, left: 20, bottom: 10.0, right: 20.0)
+        flowLayout.minimumInteritemSpacing = 20.0
+        flowLayout.minimumLineSpacing = 20.0
+        collectionView.collectionViewLayout = flowLayout
+        view.wantsLayer = true
+        collectionView.backgroundColors = [NSColor.darkGray]
+        collectionView.layer?.backgroundColor = NSColor.darkGray.cgColor
+        collectionView.layer?.borderColor = NSColor.darkGray.cgColor
+        
+        imagesLoader.singleSectionMode = false
+        imagesLoader.setupItems(urls: nil)
+        collectionView.reloadData()
     }
     
     func configureSelectionView(){
@@ -254,23 +272,6 @@ class ViewController: NSViewController {
         collectionView.reloadData()
     }
     
-    private func configureCollectionView() {
-        let flowLayout = NSCollectionViewFlowLayout()
-        flowLayout.itemSize = NSSize(width: 160.0, height: 140.0)
-        flowLayout.sectionInset = NSEdgeInsets(top: 10.0, left: 20, bottom: 10.0, right: 20.0)
-        flowLayout.minimumInteritemSpacing = 20.0
-        flowLayout.minimumLineSpacing = 20.0
-        collectionView.collectionViewLayout = flowLayout
-        view.wantsLayer = true
-        collectionView.backgroundColors = [NSColor.darkGray]
-        collectionView.layer?.backgroundColor = NSColor.darkGray.cgColor
-        collectionView.layer?.borderColor = NSColor.darkGray.cgColor
-        
-        imagesLoader.singleSectionMode = false
-        imagesLoader.setupItems(urls: nil)
-        collectionView.reloadData()
-    }
-    
     @IBAction func showHideSections(sender: AnyObject) {
         let show = (sender as! NSButton).state
         imagesLoader.singleSectionMode = (show == NSControl.StateValue.off)
@@ -280,7 +281,7 @@ class ViewController: NSViewController {
     
     func selectImageFile(_ filename:String){
         self.selectedImageFile = filename
-        print("selected image file: \(filename)")
+        //print("selected image file: \(filename)")
         let url:URL = (self.selectedImageFolder?.url.appendingPathComponent(filename, isDirectory: false))!
         DispatchQueue.main.async {
             self.loadImage(url)
@@ -289,7 +290,7 @@ class ViewController: NSViewController {
     
     func selectImageFolder(_ imageFolder:ImageFolder){
         self.selectedImageFolder = imageFolder
-        print("selected image folder: \(imageFolder.url.path)")
+        //print("selected image folder: \(imageFolder.url.path)")
         
         self.imagesLoader.setupItems(urls: nil)
         collectionView.reloadData()
@@ -338,10 +339,44 @@ class ViewController: NSViewController {
     
     
     @IBAction func onSelectionRemoveButtonClicked(_ sender: Any) {
+        // collect which to be removed from selection
+        var images:[ImageFile] = [ImageFile]()
+        for item in self.selectionCollectionView.visibleItems() {
+            let item = item as! CollectionViewItem
+            if item.isChecked() {
+                images.append(item.imageFile!)
+            }
+        }
+        // remove from selection
+        for image in images {
+            self.selectionViewController.imagesLoader.removeItem(image)
+        }
+        self.selectionViewController.imagesLoader.reorganizeItems()
+        self.selectionCollectionView.reloadData()
+        
+        // uncheck in browser if exists there (if user changed to another folder, it won't be there)
+        for item in self.collectionView.visibleItems() {
+            let item = item as! CollectionViewItem
+            let i = images.index(where: { $0.url == item.imageFile?.url })
+            if i != nil {
+                item.uncheck()
+            }
+        }
     }
     
 
     @IBAction func onSelectionCheckAllClicked(_ sender: NSButton) {
+        if self.selectionCheckAllBox.state == NSButton.StateValue.on {
+            for item in self.selectionCollectionView.visibleItems() {
+                let item = item as! CollectionViewItem
+                item.check()
+            }
+        }else {
+            for item in self.selectionCollectionView.visibleItems() {
+                let item = item as! CollectionViewItem
+                item.uncheck()
+            }
+        }
     }
     
 }

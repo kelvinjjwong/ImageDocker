@@ -79,11 +79,12 @@ class CollectionViewItemsLoader: NSObject {
   
     private func collectDomainItemToSingleSection() {
         let section:CollectionViewSection = self.getSection(title: "All")
+        section.items.removeAll()
+        
         for item in items {
             section.items.append(item)
         }
         sortItems(in: section)
-        
         self.numberOfSections = 1
     }
     
@@ -157,9 +158,12 @@ class CollectionViewItemsLoader: NSObject {
         for item in section.items {
             var date = item.photoTakenTime()
             if date == "" {
-                date = item.fileName
+                date = item.url.path!
             }
-            dates.append(date)
+            let i = dates.index(where: { $0 == date })
+            if i == nil {
+                dates.append(date)
+            }
         }
         
         let sortedDates = dates.sorted()
@@ -168,7 +172,7 @@ class CollectionViewItemsLoader: NSObject {
         
         for date in sortedDates {
             for item in section.items {
-                if item.photoTakenTime() == date || item.fileName == date {
+                if item.photoTakenTime() == date || item.url.path == date {
                     sortedItems.append(item)
                 }
             }

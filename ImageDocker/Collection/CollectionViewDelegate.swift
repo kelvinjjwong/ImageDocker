@@ -129,7 +129,7 @@ protocol CollectionViewItemCheckDelegate {
 
 extension ViewController : CollectionViewItemCheckDelegate {
     func onCollectionViewItemCheck(_ item: CollectionViewItem) {
-        print("checked: \(item.imageFile?.url.lastPathComponent ?? "")")
+        //print("checked: \(item.imageFile?.url.lastPathComponent ?? "")")
         self.selectionViewController.imagesLoader.addItem(item.imageFile!)
         self.selectionViewController.imagesLoader.reorganizeItems()
         //self.selectionViewController.collectionView.reloadData()
@@ -137,7 +137,7 @@ extension ViewController : CollectionViewItemCheckDelegate {
     }
     
     func onCollectionViewItemUncheck(_ item: CollectionViewItem) {
-        print("unchecked: \(item.imageFile?.url.lastPathComponent ?? "")")
+        //print("unchecked: \(item.imageFile?.url.lastPathComponent ?? "")")
         self.selectionViewController.imagesLoader.removeItem(item.imageFile!)
         self.selectionViewController.imagesLoader.reorganizeItems()
         //self.selectionViewController.collectionView.reloadData()

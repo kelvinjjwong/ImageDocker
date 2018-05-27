@@ -30,6 +30,7 @@
 		8E7F71022092053400410C45 /* MetaInfoHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F71012092053400410C45 /* MetaInfoHandler.swift */; };
 		8E85B7CF20B8786C005A9845 /* Accumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7CE20B8786C005A9845 /* Accumulator.swift */; };
 		8E85B7D220B91ED1005A9845 /* SelectionCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7D120B91ED1005A9845 /* SelectionCollectionViewController.swift */; };
+		8E85B7D420BA2AD7005A9845 /* DarkSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7D320BA2AD7005A9845 /* DarkSplitView.swift */; };
 		8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */; };
 		8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */; };
 		8EA1A063208DFD92000C3B97 /* MetaInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A062208DFD92000C3B97 /* MetaInfo.swift */; };
@@ -108,6 +109,7 @@
 		8E7F71012092053400410C45 /* MetaInfoHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfoHandler.swift; sourceTree = "<group>"; };
 		8E85B7CE20B8786C005A9845 /* Accumulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accumulator.swift; sourceTree = "<group>"; };
 		8E85B7D120B91ED1005A9845 /* SelectionCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionCollectionViewController.swift; sourceTree = "<group>"; };
+		8E85B7D320BA2AD7005A9845 /* DarkSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkSplitView.swift; sourceTree = "<group>"; };
 		8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateConverter.swift; sourceTree = "<group>"; };
 		8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaTableViewController.swift; sourceTree = "<group>"; };
 		8EA1A062208DFD92000C3B97 /* MetaInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfo.swift; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 			isa = PBXGroup;
 			children = (
 				8E85B7D120B91ED1005A9845 /* SelectionCollectionViewController.swift */,
+				8E85B7D320BA2AD7005A9845 /* DarkSplitView.swift */,
 			);
 			path = Selection;
 			sourceTree = "<group>";
@@ -550,6 +553,7 @@
 				8EBA692E2090DB4B00221131 /* VideoDropView.swift in Sources */,
 				8EFE763C2094AF6B00B7CFCA /* TreeListDelegate.swift in Sources */,
 				8EB986BF20B30C920075B081 /* HeaderView.swift in Sources */,
+				8E85B7D420BA2AD7005A9845 /* DarkSplitView.swift in Sources */,
 				8EF500CD209A804100C9805F /* ImageFolder.swift in Sources */,
 				8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */,
 				8EB986C120B317E70075B081 /* ModelStore.swift in Sources */,
