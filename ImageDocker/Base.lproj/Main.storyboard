@@ -618,7 +618,7 @@
                                             </button>
                                             <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fBu-cK-CdX">
                                                 <rect key="frame" x="528" y="-2" width="117" height="32"/>
-                                                <buttonCell key="cell" type="push" title="⏏︎ Add Event" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vBF-8j-nIb">
+                                                <buttonCell key="cell" type="push" title="★ Add Event" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vBF-8j-nIb">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
@@ -896,18 +896,15 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <subviews>
                                             <containerView translatesAutoresizingMaskIntoConstraints="NO" id="73d-nT-eRs">
-                                                <rect key="frame" x="0.0" y="468" width="256" height="258"/>
+                                                <rect key="frame" x="0.0" y="468" width="575" height="258"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="256" id="IfA-hM-X0U"/>
                                                     <constraint firstAttribute="height" constant="258" id="KNt-dF-u8D"/>
                                                 </constraints>
                                             </containerView>
                                             <wkWebView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A1f-6H-jB4">
-                                                <rect key="frame" x="276" y="468" width="274" height="258"/>
+                                                <rect key="frame" x="0.0" y="263" width="550" height="200"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="258" id="Rus-Bj-vUl"/>
-                                                    <constraint firstAttribute="width" constant="274" id="fKe-rP-00I"/>
-                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="258" id="hNz-Aq-N72"/>
+                                                    <constraint firstAttribute="height" constant="200" id="Rus-Bj-vUl"/>
                                                 </constraints>
                                                 <wkWebViewConfiguration key="configuration">
                                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -915,9 +912,9 @@
                                                 </wkWebViewConfiguration>
                                             </wkWebView>
                                             <slider horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eId-m8-eKf">
-                                                <rect key="frame" x="556" y="465" width="24" height="263"/>
+                                                <rect key="frame" x="556" y="257" width="24" height="205"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="258" id="NeB-R9-6uy"/>
+                                                    <constraint firstAttribute="height" constant="200" id="NeB-R9-6uy"/>
                                                     <constraint firstAttribute="width" constant="22" id="u9i-v3-wDS"/>
                                                 </constraints>
                                                 <sliderCell key="cell" state="on" alignment="left" minValue="1" maxValue="4" doubleValue="3" tickMarkPosition="right" numberOfTickMarks="4" allowsTickMarkValuesOnly="YES" sliderType="linear" id="VXr-OS-FRK">
@@ -927,19 +924,16 @@
                                                 </sliderCell>
                                             </slider>
                                             <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vj9-Vb-qDW">
-                                                <rect key="frame" x="487" y="430" width="89" height="32"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="77" id="D4c-oy-YJB"/>
-                                                </constraints>
-                                                <buttonCell key="cell" type="push" title="Clone" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0SC-Zm-uaG">
+                                                <rect key="frame" x="432" y="225" width="142" height="32"/>
+                                                <buttonCell key="cell" type="push" title="▼ Copy Location" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0SC-Zm-uaG">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                             </button>
-                                            <searchField wantsLayer="YES" verticalHuggingPriority="750" ambiguous="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N2C-6D-h6d">
-                                                <rect key="frame" x="270" y="437" width="159" height="21"/>
+                                            <searchField wantsLayer="YES" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N2C-6D-h6d">
+                                                <rect key="frame" x="0.0" y="231" width="430" height="22"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="159" id="lP0-Zk-BTZ"/>
+                                                    <constraint firstAttribute="width" constant="430" id="lP0-Zk-BTZ"/>
                                                 </constraints>
                                                 <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="OzU-YG-b7o">
                                                     <font key="font" metaFont="system"/>
@@ -950,41 +944,87 @@
                                                     <action selector="onAddressSearcherAction:" target="XfG-lQ-9wD" id="Djd-Jd-hbg"/>
                                                 </connections>
                                             </searchField>
-                                            <wkWebView wantsLayer="YES" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JL6-YH-lBk">
-                                                <rect key="frame" x="305" y="171" width="245" height="258"/>
+                                            <wkWebView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JL6-YH-lBk">
+                                                <rect key="frame" x="0.0" y="36" width="550" height="185"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="258" id="dSu-nQ-xVE"/>
-                                                    <constraint firstAttribute="width" constant="245" id="i9a-To-7fw"/>
+                                                    <constraint firstAttribute="height" constant="185" id="dSu-nQ-xVE"/>
                                                 </constraints>
                                                 <wkWebViewConfiguration key="configuration">
                                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
                                                     <wkPreferences key="preferences" javaScriptCanOpenWindowsAutomatically="NO"/>
                                                 </wkWebViewConfiguration>
                                             </wkWebView>
-                                            <slider horizontalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uni-ou-AR9">
-                                                <rect key="frame" x="556" y="168" width="24" height="263"/>
+                                            <slider horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Uni-ou-AR9">
+                                                <rect key="frame" x="556" y="32" width="24" height="190"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="22" id="aUx-D9-TIt"/>
-                                                    <constraint firstAttribute="height" constant="258" id="qmM-zn-n41"/>
+                                                    <constraint firstAttribute="height" constant="185" id="qmM-zn-n41"/>
                                                 </constraints>
                                                 <sliderCell key="cell" alignment="left" minValue="1" maxValue="4" doubleValue="3" tickMarkPosition="right" numberOfTickMarks="4" allowsTickMarkValuesOnly="YES" sliderType="linear" id="tkl-gK-X0b"/>
                                             </slider>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yTk-hm-vhq">
+                                                <rect key="frame" x="-6" y="-2" width="159" height="32"/>
+                                                <buttonCell key="cell" type="push" title="◀︎ Replace Location" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xTW-OO-1PS">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
+                                            <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="exh-M3-IJe">
+                                                <rect key="frame" x="157" y="1" width="243" height="26"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="240" id="MZq-ZL-lRy"/>
+                                                </constraints>
+                                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="6Zv-6L-mqr">
+                                                    <font key="font" metaFont="system"/>
+                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    <objectValues>
+                                                        <string>Item 1</string>
+                                                        <string>Item 2</string>
+                                                        <string>Item 3</string>
+                                                    </objectValues>
+                                                </comboBoxCell>
+                                            </comboBox>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zhW-Uc-Z9f">
+                                                <rect key="frame" x="401" y="-2" width="87" height="32"/>
+                                                <buttonCell key="cell" type="push" title="▲ Copy" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rJ3-mn-O6A">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cF6-tu-IsK">
+                                                <rect key="frame" x="486" y="-2" width="86" height="32"/>
+                                                <buttonCell key="cell" type="push" title="★ Mark" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4CZ-uL-G4W">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="A1f-6H-jB4" firstAttribute="top" secondItem="QFU-sv-H0M" secondAttribute="top" constant="5" id="3Gt-VR-DJd"/>
-                                            <constraint firstItem="Uni-ou-AR9" firstAttribute="top" secondItem="vj9-Vb-qDW" secondAttribute="bottom" constant="8" id="GDd-gH-1sU"/>
-                                            <constraint firstItem="JL6-YH-lBk" firstAttribute="top" secondItem="N2C-6D-h6d" secondAttribute="bottom" constant="8" id="L4X-3m-U8A"/>
+                                            <constraint firstAttribute="bottom" secondItem="cF6-tu-IsK" secondAttribute="bottom" constant="5" id="5CC-6P-fKa"/>
+                                            <constraint firstItem="vj9-Vb-qDW" firstAttribute="leading" secondItem="N2C-6D-h6d" secondAttribute="trailing" constant="8" id="AR8-mh-gML"/>
+                                            <constraint firstItem="A1f-6H-jB4" firstAttribute="top" secondItem="73d-nT-eRs" secondAttribute="bottom" constant="5" id="AUb-hx-ZIy"/>
+                                            <constraint firstItem="cF6-tu-IsK" firstAttribute="leading" secondItem="zhW-Uc-Z9f" secondAttribute="trailing" constant="10" id="IS2-Pa-NdC"/>
+                                            <constraint firstItem="zhW-Uc-Z9f" firstAttribute="leading" secondItem="exh-M3-IJe" secondAttribute="trailing" constant="10" id="JVa-hj-uXe"/>
+                                            <constraint firstAttribute="bottom" secondItem="zhW-Uc-Z9f" secondAttribute="bottom" constant="5" id="Koc-BI-7w7"/>
+                                            <constraint firstItem="eId-m8-eKf" firstAttribute="top" secondItem="73d-nT-eRs" secondAttribute="bottom" constant="8" id="NZc-7c-7kp"/>
                                             <constraint firstItem="eId-m8-eKf" firstAttribute="leading" secondItem="A1f-6H-jB4" secondAttribute="trailing" constant="8" id="Nur-Fw-4Pq"/>
+                                            <constraint firstItem="JL6-YH-lBk" firstAttribute="leading" secondItem="QFU-sv-H0M" secondAttribute="leading" id="Pre-Ep-P1Z"/>
                                             <constraint firstAttribute="trailing" secondItem="eId-m8-eKf" secondAttribute="trailing" id="URw-1g-Ccf"/>
-                                            <constraint firstItem="eId-m8-eKf" firstAttribute="top" secondItem="QFU-sv-H0M" secondAttribute="top" constant="5" id="WNA-jk-nNw"/>
-                                            <constraint firstAttribute="trailing" secondItem="vj9-Vb-qDW" secondAttribute="trailing" constant="10" id="YS0-WH-kkH"/>
                                             <constraint firstItem="Uni-ou-AR9" firstAttribute="leading" secondItem="JL6-YH-lBk" secondAttribute="trailing" constant="8" id="ZtF-X7-5q5"/>
-                                            <constraint firstItem="JL6-YH-lBk" firstAttribute="top" secondItem="vj9-Vb-qDW" secondAttribute="bottom" constant="8" id="ave-Rp-pIi"/>
+                                            <constraint firstItem="A1f-6H-jB4" firstAttribute="leading" secondItem="QFU-sv-H0M" secondAttribute="leading" id="b0V-ac-hVn"/>
+                                            <constraint firstItem="exh-M3-IJe" firstAttribute="leading" secondItem="yTk-hm-vhq" secondAttribute="trailing" constant="10" id="gM0-4n-hJU"/>
                                             <constraint firstItem="73d-nT-eRs" firstAttribute="leading" secondItem="QFU-sv-H0M" secondAttribute="leading" id="ghI-79-Y7K"/>
+                                            <constraint firstAttribute="bottom" secondItem="exh-M3-IJe" secondAttribute="bottom" constant="5" id="gmZ-Un-WN9"/>
+                                            <constraint firstItem="JL6-YH-lBk" firstAttribute="top" secondItem="N2C-6D-h6d" secondAttribute="bottom" constant="10" id="gvv-f2-Aoi"/>
                                             <constraint firstAttribute="trailing" secondItem="Uni-ou-AR9" secondAttribute="trailing" id="hi6-eZ-m2d"/>
+                                            <constraint firstAttribute="bottom" secondItem="yTk-hm-vhq" secondAttribute="bottom" constant="5" id="kve-cr-s6t"/>
                                             <constraint firstItem="73d-nT-eRs" firstAttribute="top" secondItem="QFU-sv-H0M" secondAttribute="top" constant="5" id="nca-ze-U4L"/>
+                                            <constraint firstItem="N2C-6D-h6d" firstAttribute="leading" secondItem="QFU-sv-H0M" secondAttribute="leading" id="oRh-Er-qJs"/>
+                                            <constraint firstAttribute="trailing" secondItem="73d-nT-eRs" secondAttribute="trailing" constant="5" id="peR-jS-KZ8"/>
                                             <constraint firstItem="N2C-6D-h6d" firstAttribute="top" secondItem="A1f-6H-jB4" secondAttribute="bottom" constant="10" id="sKT-u3-737"/>
-                                            <constraint firstItem="vj9-Vb-qDW" firstAttribute="top" secondItem="A1f-6H-jB4" secondAttribute="bottom" constant="10" id="tw2-Qr-6NI"/>
+                                            <constraint firstItem="yTk-hm-vhq" firstAttribute="leading" secondItem="QFU-sv-H0M" secondAttribute="leading" id="t5x-TU-93o"/>
+                                            <constraint firstAttribute="bottom" secondItem="Uni-ou-AR9" secondAttribute="bottom" constant="35" id="vNx-z7-d6K"/>
                                         </constraints>
                                     </customView>
                                 </subviews>
