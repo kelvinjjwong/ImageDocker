@@ -543,14 +543,14 @@
                                         <rect key="frame" x="0.0" y="700" width="1301" height="220"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
-                                            <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ivI-8f-yJa">
-                                                <rect key="frame" x="0.0" y="32" width="1296" height="187"/>
+                                            <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ivI-8f-yJa">
+                                                <rect key="frame" x="0.0" y="37" width="1296" height="182"/>
                                                 <clipView key="contentView" drawsBackground="NO" id="ueq-7S-QM2">
-                                                    <rect key="frame" x="0.0" y="0.0" width="1296" height="187"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="1296" height="182"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <collectionView selectable="YES" allowsMultipleSelection="YES" id="ZyN-Zd-qQf">
-                                                            <rect key="frame" x="0.0" y="0.0" width="1296" height="158"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="1296" height="182"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                                             <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="mUq-KW-nzo">
                                                                 <size key="itemSize" width="50" height="50"/>
@@ -561,7 +561,7 @@
                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                 </clipView>
                                                 <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="FGF-1P-bhc">
-                                                    <rect key="frame" x="1" y="144" width="233" height="15"/>
+                                                    <rect key="frame" x="-100" y="-100" width="233" height="15"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </scroller>
                                                 <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="uLo-DB-TJ3">
@@ -593,16 +593,97 @@
                                                     <action selector="onSelectionCheckAllClicked:" target="XfG-lQ-9wD" id="MVj-gD-BlS"/>
                                                 </connections>
                                             </button>
+                                            <comboBox verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UJe-CL-XGt">
+                                                <rect key="frame" x="0.0" y="1" width="400" height="26"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="400" id="KDF-ql-pIb"/>
+                                                </constraints>
+                                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="8CH-Aa-93G">
+                                                    <font key="font" metaFont="system"/>
+                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    <objectValues>
+                                                        <string>Item 1</string>
+                                                        <string>Item 2</string>
+                                                        <string>Item 3</string>
+                                                    </objectValues>
+                                                </comboBoxCell>
+                                            </comboBox>
+                                            <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xCg-De-lnA">
+                                                <rect key="frame" x="397" y="-2" width="133" height="32"/>
+                                                <buttonCell key="cell" type="push" title="▲ Assign Event" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gC1-GR-U1c">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
+                                            <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fBu-cK-CdX">
+                                                <rect key="frame" x="528" y="-2" width="117" height="32"/>
+                                                <buttonCell key="cell" type="push" title="⏏︎ Add Event" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vBF-8j-nIb">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
+                                            <datePicker verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Le0-oR-2MN">
+                                                <rect key="frame" x="649" y="5" width="96" height="27"/>
+                                                <datePickerCell key="cell" borderStyle="bezel" alignment="left" id="KyK-DM-vOW">
+                                                    <font key="font" metaFont="system"/>
+                                                    <date key="date" timeIntervalSinceReferenceDate="-595929600">
+                                                        <!--1982-02-12 16:00:00 +0000-->
+                                                    </date>
+                                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                </datePickerCell>
+                                            </datePicker>
+                                            <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mqi-a1-a53">
+                                                <rect key="frame" x="746" y="-2" width="136" height="32"/>
+                                                <buttonCell key="cell" type="push" title="▲ Replace Date" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qha-6H-tXU">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
+                                            <datePicker verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rh8-30-RiW">
+                                                <rect key="frame" x="886" y="5" width="106" height="27"/>
+                                                <datePickerCell key="cell" borderStyle="bezel" alignment="left" id="LsB-M0-4bh">
+                                                    <font key="font" metaFont="system"/>
+                                                    <date key="date" timeIntervalSinceReferenceDate="-595929600">
+                                                        <!--1982-02-12 16:00:00 +0000-->
+                                                    </date>
+                                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <datePickerElements key="datePickerElements" hour="YES" minute="YES" second="YES"/>
+                                                </datePickerCell>
+                                            </datePicker>
+                                            <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NSs-D7-RwW">
+                                                <rect key="frame" x="993" y="-2" width="137" height="32"/>
+                                                <buttonCell key="cell" type="push" title="▲ Replace Time" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Nil-V8-QVe">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="CaM-Tw-R04" secondAttribute="bottom" constant="8" id="02d-3o-exU"/>
-                                            <constraint firstItem="lT1-yY-BTR" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="5" id="2tz-Zg-NOq"/>
-                                            <constraint firstItem="CaM-Tw-R04" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="10" id="5Aj-qn-fRL"/>
+                                            <constraint firstItem="Le0-oR-2MN" firstAttribute="leading" secondItem="fBu-cK-CdX" secondAttribute="trailing" constant="10" id="0UH-qw-6PI"/>
+                                            <constraint firstItem="Mqi-a1-a53" firstAttribute="leading" secondItem="Le0-oR-2MN" secondAttribute="trailing" constant="10" id="2EN-yy-gkY"/>
+                                            <constraint firstItem="lT1-yY-BTR" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="10" id="2tz-Zg-NOq"/>
+                                            <constraint firstItem="UJe-CL-XGt" firstAttribute="leading" secondItem="FmM-ai-OgV" secondAttribute="leading" id="Cqv-Zq-xvY"/>
+                                            <constraint firstItem="NSs-D7-RwW" firstAttribute="leading" secondItem="rh8-30-RiW" secondAttribute="trailing" constant="10" id="Htf-Vh-Qtu"/>
+                                            <constraint firstAttribute="bottom" secondItem="rh8-30-RiW" secondAttribute="bottom" constant="5" id="K0r-7a-Wbb"/>
+                                            <constraint firstItem="UJe-CL-XGt" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="12" id="MJH-wn-1xa"/>
+                                            <constraint firstItem="fBu-cK-CdX" firstAttribute="leading" secondItem="xCg-De-lnA" secondAttribute="trailing" constant="10" id="OCI-WN-oWT"/>
                                             <constraint firstAttribute="trailing" secondItem="lT1-yY-BTR" secondAttribute="trailing" constant="10" id="S6o-z5-6Pb"/>
+                                            <constraint firstAttribute="bottom" secondItem="Le0-oR-2MN" secondAttribute="bottom" constant="5" id="T8F-Lj-pYh"/>
+                                            <constraint firstAttribute="bottom" secondItem="NSs-D7-RwW" secondAttribute="bottom" constant="5" id="TpF-dC-mLt"/>
                                             <constraint firstAttribute="trailing" secondItem="ivI-8f-yJa" secondAttribute="trailing" constant="5" id="ZbI-YX-bmA"/>
+                                            <constraint firstItem="rh8-30-RiW" firstAttribute="leading" secondItem="Mqi-a1-a53" secondAttribute="trailing" constant="10" id="btX-a1-5ot"/>
+                                            <constraint firstAttribute="bottom" secondItem="UJe-CL-XGt" secondAttribute="bottom" constant="5" id="eSB-57-UNb"/>
                                             <constraint firstItem="ivI-8f-yJa" firstAttribute="leading" secondItem="FmM-ai-OgV" secondAttribute="leading" id="fxO-6d-EeK"/>
+                                            <constraint firstAttribute="bottom" secondItem="xCg-De-lnA" secondAttribute="bottom" constant="5" id="gVF-0d-2u7"/>
                                             <constraint firstItem="ivI-8f-yJa" firstAttribute="top" secondItem="FmM-ai-OgV" secondAttribute="top" id="il6-Uh-iBq"/>
+                                            <constraint firstAttribute="bottom" secondItem="fBu-cK-CdX" secondAttribute="bottom" constant="5" id="mwL-U0-6UT"/>
                                             <constraint firstItem="lT1-yY-BTR" firstAttribute="leading" secondItem="CaM-Tw-R04" secondAttribute="trailing" constant="15" id="oYH-Uj-xIT"/>
+                                            <constraint firstAttribute="bottom" secondItem="Mqi-a1-a53" secondAttribute="bottom" constant="5" id="tpw-4x-B3a"/>
+                                            <constraint firstItem="xCg-De-lnA" firstAttribute="leading" secondItem="UJe-CL-XGt" secondAttribute="trailing" constant="8" id="vTQ-UU-Aeo"/>
                                             <constraint firstAttribute="bottom" secondItem="lT1-yY-BTR" secondAttribute="bottom" constant="5" id="ywS-e6-idT"/>
                                         </constraints>
                                     </customView>
@@ -845,7 +926,7 @@
                                                     </connections>
                                                 </sliderCell>
                                             </slider>
-                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vj9-Vb-qDW">
+                                            <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vj9-Vb-qDW">
                                                 <rect key="frame" x="487" y="430" width="89" height="32"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="77" id="D4c-oy-YJB"/>
@@ -855,17 +936,7 @@
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                             </button>
-                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TiS-go-yFC">
-                                                <rect key="frame" x="428" y="430" width="66" height="32"/>
-                                                <buttonCell key="cell" type="push" title="Find" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oho-ZP-EXD">
-                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="system"/>
-                                                </buttonCell>
-                                                <connections>
-                                                    <action selector="onButtonFindClick:" target="XfG-lQ-9wD" id="gLf-fZ-hg8"/>
-                                                </connections>
-                                            </button>
-                                            <searchField wantsLayer="YES" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N2C-6D-h6d">
+                                            <searchField wantsLayer="YES" verticalHuggingPriority="750" ambiguous="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N2C-6D-h6d">
                                                 <rect key="frame" x="270" y="437" width="159" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="159" id="lP0-Zk-BTZ"/>
@@ -879,7 +950,7 @@
                                                     <action selector="onAddressSearcherAction:" target="XfG-lQ-9wD" id="Djd-Jd-hbg"/>
                                                 </connections>
                                             </searchField>
-                                            <wkWebView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JL6-YH-lBk">
+                                            <wkWebView wantsLayer="YES" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JL6-YH-lBk">
                                                 <rect key="frame" x="305" y="171" width="245" height="258"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="258" id="dSu-nQ-xVE"/>
@@ -890,7 +961,7 @@
                                                     <wkPreferences key="preferences" javaScriptCanOpenWindowsAutomatically="NO"/>
                                                 </wkWebViewConfiguration>
                                             </wkWebView>
-                                            <slider horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Uni-ou-AR9">
+                                            <slider horizontalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uni-ou-AR9">
                                                 <rect key="frame" x="556" y="168" width="24" height="263"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="22" id="aUx-D9-TIt"/>
@@ -898,110 +969,22 @@
                                                 </constraints>
                                                 <sliderCell key="cell" alignment="left" minValue="1" maxValue="4" doubleValue="3" tickMarkPosition="right" numberOfTickMarks="4" allowsTickMarkValuesOnly="YES" sliderType="linear" id="tkl-gK-X0b"/>
                                             </slider>
-                                            <datePicker verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="t7i-WF-F6q">
-                                                <rect key="frame" x="0.0" y="267" width="277" height="148"/>
-                                                <datePickerCell key="cell" borderStyle="bezel" alignment="left" datePickerStyle="clockAndCalendar" id="PMG-qa-kXn">
-                                                    <font key="font" metaFont="system"/>
-                                                    <date key="date" timeIntervalSinceReferenceDate="-568080000">
-                                                        <!--1983-01-01 00:00:00 +0000-->
-                                                    </date>
-                                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                    <datePickerElements key="datePickerElements" year="YES" month="YES" day="YES" hour="YES" minute="YES" second="YES"/>
-                                                </datePickerCell>
-                                            </datePicker>
-                                            <datePicker verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rh8-30-RiW">
-                                                <rect key="frame" x="164" y="228" width="106" height="27"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="103" id="i5s-3B-idc"/>
-                                                </constraints>
-                                                <datePickerCell key="cell" borderStyle="bezel" alignment="left" id="LsB-M0-4bh">
-                                                    <font key="font" metaFont="system"/>
-                                                    <date key="date" timeIntervalSinceReferenceDate="-595929600">
-                                                        <!--1982-02-12 16:00:00 +0000-->
-                                                    </date>
-                                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                    <datePickerElements key="datePickerElements" hour="YES" minute="YES" second="YES"/>
-                                                </datePickerCell>
-                                            </datePicker>
-                                            <datePicker verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Le0-oR-2MN">
-                                                <rect key="frame" x="20" y="228" width="107" height="27"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="104" id="w8G-Tz-7Sk"/>
-                                                </constraints>
-                                                <datePickerCell key="cell" borderStyle="bezel" alignment="left" id="KyK-DM-vOW">
-                                                    <font key="font" metaFont="system"/>
-                                                    <date key="date" timeIntervalSinceReferenceDate="-595929600">
-                                                        <!--1982-02-12 16:00:00 +0000-->
-                                                    </date>
-                                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                </datePickerCell>
-                                            </datePicker>
-                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="p16-ta-gNJ">
-                                                <rect key="frame" x="0.0" y="429" width="35" height="32"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="30" id="Db6-RM-O1B"/>
-                                                    <constraint firstAttribute="width" constant="35" id="N1b-5g-D8f"/>
-                                                </constraints>
-                                                <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSTouchBarFolderMoveToTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gUN-II-0si">
-                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="system"/>
-                                                </buttonCell>
-                                            </button>
-                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Qs2-uM-btw">
-                                                <rect key="frame" x="43" y="429" width="35" height="32"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="30" id="Kcg-Ng-hUj"/>
-                                                    <constraint firstAttribute="width" constant="35" id="qPu-Qg-HI1"/>
-                                                </constraints>
-                                                <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSTouchBarQuickLookTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="FMy-fy-qUd">
-                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="system"/>
-                                                </buttonCell>
-                                            </button>
-                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oJ2-7W-Gln">
-                                                <rect key="frame" x="142" y="430" width="119" height="32"/>
-                                                <buttonCell key="cell" type="push" title="▼ Copy Date" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Zdi-Ka-sLw">
-                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="system"/>
-                                                </buttonCell>
-                                            </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="A1f-6H-jB4" firstAttribute="top" secondItem="QFU-sv-H0M" secondAttribute="top" constant="5" id="3Gt-VR-DJd"/>
-                                            <constraint firstItem="t7i-WF-F6q" firstAttribute="leading" secondItem="QFU-sv-H0M" secondAttribute="leading" id="3H7-a7-wSJ"/>
-                                            <constraint firstItem="TiS-go-yFC" firstAttribute="leading" secondItem="N2C-6D-h6d" secondAttribute="trailing" constant="5" id="5RN-OI-OhM"/>
-                                            <constraint firstItem="Le0-oR-2MN" firstAttribute="leading" secondItem="QFU-sv-H0M" secondAttribute="leading" constant="20" id="8vt-cM-ERA"/>
-                                            <constraint firstItem="rh8-30-RiW" firstAttribute="leading" secondItem="Le0-oR-2MN" secondAttribute="trailing" constant="40" id="91c-A6-OqY"/>
-                                            <constraint firstItem="rh8-30-RiW" firstAttribute="top" secondItem="t7i-WF-F6q" secondAttribute="bottom" constant="16" id="E7c-Ln-cBv"/>
                                             <constraint firstItem="Uni-ou-AR9" firstAttribute="top" secondItem="vj9-Vb-qDW" secondAttribute="bottom" constant="8" id="GDd-gH-1sU"/>
-                                            <constraint firstItem="t7i-WF-F6q" firstAttribute="top" secondItem="p16-ta-gNJ" secondAttribute="bottom" constant="15" id="JJx-21-iwb"/>
-                                            <constraint firstItem="oJ2-7W-Gln" firstAttribute="leading" secondItem="Qs2-uM-btw" secondAttribute="trailing" constant="70" id="JQh-iN-opr"/>
-                                            <constraint firstItem="Qs2-uM-btw" firstAttribute="leading" secondItem="p16-ta-gNJ" secondAttribute="trailing" constant="8" id="L3b-ro-Tk2"/>
                                             <constraint firstItem="JL6-YH-lBk" firstAttribute="top" secondItem="N2C-6D-h6d" secondAttribute="bottom" constant="8" id="L4X-3m-U8A"/>
-                                            <constraint firstItem="oJ2-7W-Gln" firstAttribute="top" secondItem="73d-nT-eRs" secondAttribute="bottom" constant="10" id="MgM-LN-xaC"/>
-                                            <constraint firstItem="Le0-oR-2MN" firstAttribute="top" secondItem="t7i-WF-F6q" secondAttribute="bottom" constant="16" id="Mh3-Db-ePt"/>
                                             <constraint firstItem="eId-m8-eKf" firstAttribute="leading" secondItem="A1f-6H-jB4" secondAttribute="trailing" constant="8" id="Nur-Fw-4Pq"/>
-                                            <constraint firstItem="p16-ta-gNJ" firstAttribute="leading" secondItem="QFU-sv-H0M" secondAttribute="leading" id="Qhi-lZ-N8N"/>
-                                            <constraint firstItem="vj9-Vb-qDW" firstAttribute="leading" secondItem="TiS-go-yFC" secondAttribute="trailing" constant="5" id="Taz-cq-vYE"/>
                                             <constraint firstAttribute="trailing" secondItem="eId-m8-eKf" secondAttribute="trailing" id="URw-1g-Ccf"/>
                                             <constraint firstItem="eId-m8-eKf" firstAttribute="top" secondItem="QFU-sv-H0M" secondAttribute="top" constant="5" id="WNA-jk-nNw"/>
                                             <constraint firstAttribute="trailing" secondItem="vj9-Vb-qDW" secondAttribute="trailing" constant="10" id="YS0-WH-kkH"/>
                                             <constraint firstItem="Uni-ou-AR9" firstAttribute="leading" secondItem="JL6-YH-lBk" secondAttribute="trailing" constant="8" id="ZtF-X7-5q5"/>
                                             <constraint firstItem="JL6-YH-lBk" firstAttribute="top" secondItem="vj9-Vb-qDW" secondAttribute="bottom" constant="8" id="ave-Rp-pIi"/>
-                                            <constraint firstItem="JL6-YH-lBk" firstAttribute="top" secondItem="TiS-go-yFC" secondAttribute="bottom" constant="8" id="caw-19-ZOw"/>
-                                            <constraint firstItem="Qs2-uM-btw" firstAttribute="top" secondItem="73d-nT-eRs" secondAttribute="bottom" constant="8" id="fiG-gH-Cc3"/>
                                             <constraint firstItem="73d-nT-eRs" firstAttribute="leading" secondItem="QFU-sv-H0M" secondAttribute="leading" id="ghI-79-Y7K"/>
                                             <constraint firstAttribute="trailing" secondItem="Uni-ou-AR9" secondAttribute="trailing" id="hi6-eZ-m2d"/>
                                             <constraint firstItem="73d-nT-eRs" firstAttribute="top" secondItem="QFU-sv-H0M" secondAttribute="top" constant="5" id="nca-ze-U4L"/>
-                                            <constraint firstItem="t7i-WF-F6q" firstAttribute="leading" secondItem="QFU-sv-H0M" secondAttribute="leading" id="qcL-QI-htd"/>
                                             <constraint firstItem="N2C-6D-h6d" firstAttribute="top" secondItem="A1f-6H-jB4" secondAttribute="bottom" constant="10" id="sKT-u3-737"/>
                                             <constraint firstItem="vj9-Vb-qDW" firstAttribute="top" secondItem="A1f-6H-jB4" secondAttribute="bottom" constant="10" id="tw2-Qr-6NI"/>
-                                            <constraint firstItem="TiS-go-yFC" firstAttribute="leading" secondItem="N2C-6D-h6d" secondAttribute="trailing" constant="5" id="vZi-3J-SPx"/>
-                                            <constraint firstItem="p16-ta-gNJ" firstAttribute="top" secondItem="73d-nT-eRs" secondAttribute="bottom" constant="8" id="yDC-of-RsC"/>
-                                            <constraint firstItem="TiS-go-yFC" firstAttribute="top" secondItem="A1f-6H-jB4" secondAttribute="bottom" constant="10" id="zOf-7g-hID"/>
                                         </constraints>
                                     </customView>
                                 </subviews>
@@ -1183,7 +1166,5 @@
         <image name="NSAddTemplate" width="11" height="11"/>
         <image name="NSRefreshTemplate" width="11" height="15"/>
         <image name="NSRemoveTemplate" width="11" height="11"/>
-        <image name="NSTouchBarFolderMoveToTemplate" width="22" height="30"/>
-        <image name="NSTouchBarQuickLookTemplate" width="22" height="30"/>
     </resources>
 </document>

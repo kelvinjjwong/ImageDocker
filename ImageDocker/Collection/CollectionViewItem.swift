@@ -69,17 +69,17 @@ class CollectionViewItem: NSCollectionViewItem {
     
   }
     
-    func check(){
+    func check(checkBySection:Bool = false){
         checkBox.state = NSButton.StateValue.on
         if checkBoxDelegate != nil {
-            checkBoxDelegate?.onCollectionViewItemCheck(self)
+            checkBoxDelegate?.onCollectionViewItemCheck(self, checkBySection: checkBySection)
         }
     }
     
-    func uncheck(){
+    func uncheck(checkBySection:Bool = false){
         checkBox.state = NSButton.StateValue.off
         if checkBoxDelegate != nil {
-            checkBoxDelegate?.onCollectionViewItemUncheck(self)
+            checkBoxDelegate?.onCollectionViewItemUncheck(self, checkBySection: checkBySection)
         }
     }
     
@@ -94,12 +94,17 @@ class CollectionViewItem: NSCollectionViewItem {
     @IBAction func onCheckBoxClicked(_ sender: NSButton) {
         if isChecked() {
             if checkBoxDelegate != nil {
-                checkBoxDelegate?.onCollectionViewItemCheck(self)
+                checkBoxDelegate?.onCollectionViewItemCheck(self, checkBySection: false)
             }
         }else{
             if checkBoxDelegate != nil {
-                checkBoxDelegate?.onCollectionViewItemUncheck(self)
+                checkBoxDelegate?.onCollectionViewItemUncheck(self, checkBySection: false)
             }
+        }
+    }
+    @IBAction func onOpenFinderClicked(_ sender: Any) {
+        if self.imageFile != nil && self.imageFile?.url != nil {
+            NSWorkspace.shared.activateFileViewerSelecting([imageFile?.url as! URL])
         }
     }
     

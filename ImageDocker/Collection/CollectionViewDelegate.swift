@@ -128,8 +128,8 @@ extension ViewController : PlacesCompletionEvent {
 }
 
 protocol CollectionViewItemCheckDelegate {
-    func onCollectionViewItemCheck(_ item:CollectionViewItem)
-    func onCollectionViewItemUncheck(_ item:CollectionViewItem)
+    func onCollectionViewItemCheck(_ item:CollectionViewItem, checkBySection:Bool)
+    func onCollectionViewItemUncheck(_ item:CollectionViewItem, checkBySection:Bool)
 }
 
 extension ViewController : CollectionViewItemCheckDelegate {
@@ -155,7 +155,7 @@ extension ViewController : CollectionViewItemCheckDelegate {
                 }
                 
                 if shouldCheckSection {
-                    section.check(true)
+                    section.check(ignoreDelegate: true)
                 }
             }
         }
@@ -183,31 +183,39 @@ extension ViewController : CollectionViewItemCheckDelegate {
                 }
                 
                 if shouldUncheckSection {
-                    section.uncheck(true)
+                    section.uncheck(ignoreDelegate: true)
                 }
             }
         }
     }
     
-    func onCollectionViewItemCheck(_ item: CollectionViewItem) {
+    func onCollectionViewItemCheck(_ item: CollectionViewItem, checkBySection:Bool) {
         //print("checked: \(item.imageFile?.url.lastPathComponent ?? "")")
-        self.selectionViewController.imagesLoader.addItem(item.imageFile!)
-        self.selectionViewController.imagesLoader.reorganizeItems()
-        //self.selectionViewController.collectionView.reloadData()
-        self.selectionCollectionView.reloadData()
-        
-        checkSectionIfAllItemsChecked(item)
+        if let imageFile = item.imageFile {
+            self.selectionViewController.imagesLoader.addItem(imageFile)
+            self.selectionViewController.imagesLoader.reorganizeItems()
+            //self.selectionViewController.collectionView.reloadData()
+            self.selectionCollectionView.reloadData()
+            
+            if !checkBySection {
+                checkSectionIfAllItemsChecked(item)
+            }
+        }
         
     }
     
-    func onCollectionViewItemUncheck(_ item: CollectionViewItem) {
+    func onCollectionViewItemUncheck(_ item: CollectionViewItem, checkBySection:Bool) {
         //print("unchecked: \(item.imageFile?.url.lastPathComponent ?? "")")
-        self.selectionViewController.imagesLoader.removeItem(item.imageFile!)
-        self.selectionViewController.imagesLoader.reorganizeItems()
-        //self.selectionViewController.collectionView.reloadData()
-        self.selectionCollectionView.reloadData()
-        
-        uncheckSectionIfAllItemsUnchecked(item)
+        if let imageFile = item.imageFile {
+            self.selectionViewController.imagesLoader.removeItem(imageFile)
+            self.selectionViewController.imagesLoader.reorganizeItems()
+            //self.selectionViewController.collectionView.reloadData()
+            self.selectionCollectionView.reloadData()
+            
+            if !checkBySection {
+                uncheckSectionIfAllItemsUnchecked(item)
+            }
+        }
     }
     
     
@@ -223,7 +231,7 @@ extension ViewController : CollectionViewHeaderCheckDelegate {
         let section = self.imagesLoader.getSection(title: header.sectionTitle.stringValue, createIfNotExist: false)
         if section != nil {
             for item in (section?.items)! {
-                item.collectionViewItem?.check()
+                item.collectionViewItem?.check(checkBySection: true)
             }
         }
     }
@@ -232,7 +240,7 @@ extension ViewController : CollectionViewHeaderCheckDelegate {
         let section = self.imagesLoader.getSection(title: header.sectionTitle.stringValue, createIfNotExist: false)
         if section != nil {
             for item in (section?.items)! {
-                item.collectionViewItem?.uncheck()
+                item.collectionViewItem?.uncheck(checkBySection: true)
             }
         }
         

@@ -45,6 +45,20 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CUx-5Z-7pI">
+                    <rect key="frame" x="0.0" y="5" width="20" height="18"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="18" id="iSy-dm-Tvq"/>
+                        <constraint firstAttribute="width" constant="20" id="jew-ve-Kcl"/>
+                    </constraints>
+                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSFolder" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="j4x-dw-mTi">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="onOpenFinderClicked:" target="-2" id="nyq-fD-ssU"/>
+                    </connections>
+                </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HhR-2S-1Qc">
                     <rect key="frame" x="-2" y="23" width="484" height="15"/>
                     <constraints>
@@ -65,13 +79,18 @@
                 <constraint firstAttribute="trailing" secondItem="Onb-PG-8r4" secondAttribute="trailing" id="GEN-fF-l14"/>
                 <constraint firstAttribute="bottom" secondItem="Onb-PG-8r4" secondAttribute="bottom" constant="5" id="GkW-Ug-dZE"/>
                 <constraint firstItem="9qX-pa-ugK" firstAttribute="top" secondItem="HhR-2S-1Qc" secondAttribute="bottom" id="Xx6-IA-axd"/>
+                <constraint firstAttribute="bottom" secondItem="CUx-5Z-7pI" secondAttribute="bottom" constant="5" id="dvG-JS-5zk"/>
                 <constraint firstItem="HhR-2S-1Qc" firstAttribute="top" secondItem="FSe-ep-RM0" secondAttribute="bottom" id="eRF-wd-W2O"/>
                 <constraint firstAttribute="trailing" secondItem="HhR-2S-1Qc" secondAttribute="trailing" id="eus-uP-aKn"/>
                 <constraint firstAttribute="trailing" secondItem="9qX-pa-ugK" secondAttribute="trailing" constant="20" id="o9W-j5-xVp"/>
+                <constraint firstItem="CUx-5Z-7pI" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="qBa-Xq-hNr"/>
                 <constraint firstItem="FSe-ep-RM0" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="sjp-Lb-bll"/>
                 <constraint firstItem="HhR-2S-1Qc" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="y4F-IE-8V6"/>
             </constraints>
         </customView>
         <collectionViewItem id="c2X-bD-ueb" customClass="CollectionViewItem" customModule="ImageDocker" customModuleProvider="target"/>
     </objects>
+    <resources>
+        <image name="NSFolder" width="32" height="32"/>
+    </resources>
 </document>

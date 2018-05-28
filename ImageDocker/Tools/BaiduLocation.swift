@@ -122,7 +122,7 @@ final class BaiduLocation {
                                 let suggestPlace = (description.components(separatedBy: "内").first)!
                                 metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Suggest Place", value: suggestPlace))
                             }else{
-                                metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Suggest Place", value: address))
+                                metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Suggest Place", value: businessCircle))
                             }
                             
                             metaInfoStore.updateMetaInfoView()

@@ -100,7 +100,6 @@ class ViewController: NSViewController {
     }
     
     func configurePreview(){
-        btnCloneLocationToFinder.title = "▼ Copy"
         
         webLocation.setValue(false, forKey: "drawsBackground")
         webPossibleLocation.setValue(false, forKey: "drawsBackground")
@@ -256,11 +255,6 @@ class ViewController: NSViewController {
         }
     }
     
-    @IBAction func onButtonFindClick(_ sender: NSButton) {
-        let address:String = addressSearcher.stringValue
-        if address == "" {return}
-        BaiduLocation.queryForCoordinate(address: address, locationDelegate: self)
-    }
     @IBAction func onAddressSearcherAction(_ sender: Any) {
         let address:String = addressSearcher.stringValue
         if address == "" {return}
@@ -362,6 +356,7 @@ class ViewController: NSViewController {
                 item.uncheck()
             }
         }
+        self.selectionCheckAllBox.state = NSButton.StateValue.off
     }
     
 
@@ -378,7 +373,6 @@ class ViewController: NSViewController {
             }
         }
     }
-    
 }
 
 

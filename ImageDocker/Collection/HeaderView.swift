@@ -30,14 +30,14 @@ class HeaderView: NSView, NSCollectionViewElement {
     
     
     
-    func check(_ ignoreDelegate:Bool = false){
+    func check(ignoreDelegate:Bool = false){
         checkBox.state = NSButton.StateValue.on
         if checkBoxDelegate != nil && !ignoreDelegate {
             checkBoxDelegate?.onCollectionViewHeaderCheck(self)
         }
     }
     
-    func uncheck(_ ignoreDelegate:Bool = false){
+    func uncheck(ignoreDelegate:Bool = false){
         checkBox.state = NSButton.StateValue.off
         if checkBoxDelegate != nil && !ignoreDelegate {
             checkBoxDelegate?.onCollectionViewHeaderUncheck(self)
