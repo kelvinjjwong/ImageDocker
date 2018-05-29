@@ -41,6 +41,9 @@ class ViewController: NSViewController {
     @IBOutlet weak var addressSearcher: NSSearchField!
     @IBOutlet weak var btnCloneLocationToFinder: NSButton!
     @IBOutlet weak var webPossibleLocation: WKWebView!
+    @IBOutlet weak var possibleLocationTableView: DarkTableView!
+    
+    
     
     var possibleLatitude:Double?
     var possibleLongitude:Double?
