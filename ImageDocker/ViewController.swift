@@ -42,6 +42,12 @@ class ViewController: NSViewController {
     @IBOutlet weak var btnCloneLocationToFinder: NSButton!
     @IBOutlet weak var webPossibleLocation: WKWebView!
     
+    var possibleLatitude:Double?
+    var possibleLongitude:Double?
+    var possibleBusinessCircle:String = ""
+    var possibleAddress:String = ""
+    var possibleAddressDescription:String = ""
+    
     // MARK: PXSourceList
     var modelObjects:NSMutableArray?
     var sourceListItems:NSMutableArray?

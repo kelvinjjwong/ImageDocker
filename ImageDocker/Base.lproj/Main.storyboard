@@ -923,7 +923,7 @@
                                                     </connections>
                                                 </sliderCell>
                                             </slider>
-                                            <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vj9-Vb-qDW">
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vj9-Vb-qDW">
                                                 <rect key="frame" x="432" y="225" width="142" height="32"/>
                                                 <buttonCell key="cell" type="push" title="▼ Copy Location" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0SC-Zm-uaG">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1001,30 +1001,31 @@
                                             </button>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="cF6-tu-IsK" secondAttribute="bottom" constant="5" id="5CC-6P-fKa"/>
                                             <constraint firstItem="vj9-Vb-qDW" firstAttribute="leading" secondItem="N2C-6D-h6d" secondAttribute="trailing" constant="8" id="AR8-mh-gML"/>
                                             <constraint firstItem="A1f-6H-jB4" firstAttribute="top" secondItem="73d-nT-eRs" secondAttribute="bottom" constant="5" id="AUb-hx-ZIy"/>
+                                            <constraint firstItem="zhW-Uc-Z9f" firstAttribute="top" secondItem="JL6-YH-lBk" secondAttribute="bottom" constant="10" id="CZj-Wb-mlv"/>
                                             <constraint firstItem="cF6-tu-IsK" firstAttribute="leading" secondItem="zhW-Uc-Z9f" secondAttribute="trailing" constant="10" id="IS2-Pa-NdC"/>
                                             <constraint firstItem="zhW-Uc-Z9f" firstAttribute="leading" secondItem="exh-M3-IJe" secondAttribute="trailing" constant="10" id="JVa-hj-uXe"/>
-                                            <constraint firstAttribute="bottom" secondItem="zhW-Uc-Z9f" secondAttribute="bottom" constant="5" id="Koc-BI-7w7"/>
+                                            <constraint firstItem="exh-M3-IJe" firstAttribute="top" secondItem="JL6-YH-lBk" secondAttribute="bottom" constant="11" id="JYH-CD-mtZ"/>
                                             <constraint firstItem="eId-m8-eKf" firstAttribute="top" secondItem="73d-nT-eRs" secondAttribute="bottom" constant="8" id="NZc-7c-7kp"/>
                                             <constraint firstItem="eId-m8-eKf" firstAttribute="leading" secondItem="A1f-6H-jB4" secondAttribute="trailing" constant="8" id="Nur-Fw-4Pq"/>
                                             <constraint firstItem="JL6-YH-lBk" firstAttribute="leading" secondItem="QFU-sv-H0M" secondAttribute="leading" id="Pre-Ep-P1Z"/>
                                             <constraint firstAttribute="trailing" secondItem="eId-m8-eKf" secondAttribute="trailing" id="URw-1g-Ccf"/>
                                             <constraint firstItem="Uni-ou-AR9" firstAttribute="leading" secondItem="JL6-YH-lBk" secondAttribute="trailing" constant="8" id="ZtF-X7-5q5"/>
                                             <constraint firstItem="A1f-6H-jB4" firstAttribute="leading" secondItem="QFU-sv-H0M" secondAttribute="leading" id="b0V-ac-hVn"/>
+                                            <constraint firstItem="vj9-Vb-qDW" firstAttribute="top" secondItem="eId-m8-eKf" secondAttribute="bottom" constant="7" id="cB6-Fd-VYM"/>
+                                            <constraint firstItem="yTk-hm-vhq" firstAttribute="top" secondItem="JL6-YH-lBk" secondAttribute="bottom" constant="10" id="gBy-OP-39v"/>
                                             <constraint firstItem="exh-M3-IJe" firstAttribute="leading" secondItem="yTk-hm-vhq" secondAttribute="trailing" constant="10" id="gM0-4n-hJU"/>
                                             <constraint firstItem="73d-nT-eRs" firstAttribute="leading" secondItem="QFU-sv-H0M" secondAttribute="leading" id="ghI-79-Y7K"/>
-                                            <constraint firstAttribute="bottom" secondItem="exh-M3-IJe" secondAttribute="bottom" constant="5" id="gmZ-Un-WN9"/>
                                             <constraint firstItem="JL6-YH-lBk" firstAttribute="top" secondItem="N2C-6D-h6d" secondAttribute="bottom" constant="10" id="gvv-f2-Aoi"/>
                                             <constraint firstAttribute="trailing" secondItem="Uni-ou-AR9" secondAttribute="trailing" id="hi6-eZ-m2d"/>
-                                            <constraint firstAttribute="bottom" secondItem="yTk-hm-vhq" secondAttribute="bottom" constant="5" id="kve-cr-s6t"/>
+                                            <constraint firstItem="Uni-ou-AR9" firstAttribute="top" secondItem="vj9-Vb-qDW" secondAttribute="bottom" constant="12" id="jQF-ex-siJ"/>
                                             <constraint firstItem="73d-nT-eRs" firstAttribute="top" secondItem="QFU-sv-H0M" secondAttribute="top" constant="5" id="nca-ze-U4L"/>
                                             <constraint firstItem="N2C-6D-h6d" firstAttribute="leading" secondItem="QFU-sv-H0M" secondAttribute="leading" id="oRh-Er-qJs"/>
                                             <constraint firstAttribute="trailing" secondItem="73d-nT-eRs" secondAttribute="trailing" constant="5" id="peR-jS-KZ8"/>
                                             <constraint firstItem="N2C-6D-h6d" firstAttribute="top" secondItem="A1f-6H-jB4" secondAttribute="bottom" constant="10" id="sKT-u3-737"/>
                                             <constraint firstItem="yTk-hm-vhq" firstAttribute="leading" secondItem="QFU-sv-H0M" secondAttribute="leading" id="t5x-TU-93o"/>
-                                            <constraint firstAttribute="bottom" secondItem="Uni-ou-AR9" secondAttribute="bottom" constant="35" id="vNx-z7-d6K"/>
+                                            <constraint firstItem="cF6-tu-IsK" firstAttribute="top" secondItem="Uni-ou-AR9" secondAttribute="bottom" constant="9" id="vVo-hY-7SC"/>
                                         </constraints>
                                     </customView>
                                 </subviews>
