@@ -31,6 +31,8 @@
 		8E85B7CF20B8786C005A9845 /* Accumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7CE20B8786C005A9845 /* Accumulator.swift */; };
 		8E85B7D220B91ED1005A9845 /* SelectionCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7D120B91ED1005A9845 /* SelectionCollectionViewController.swift */; };
 		8E85B7D420BA2AD7005A9845 /* DarkSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7D320BA2AD7005A9845 /* DarkSplitView.swift */; };
+		8E85B7D620BD9FD9005A9845 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7D520BD9FD9005A9845 /* Location.swift */; };
+		8E85B7DA20BE2515005A9845 /* LocationTextDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7D920BE2515005A9845 /* LocationTextDelegate.swift */; };
 		8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */; };
 		8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */; };
 		8EA1A063208DFD92000C3B97 /* MetaInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A062208DFD92000C3B97 /* MetaInfo.swift */; };
@@ -110,6 +112,8 @@
 		8E85B7CE20B8786C005A9845 /* Accumulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accumulator.swift; sourceTree = "<group>"; };
 		8E85B7D120B91ED1005A9845 /* SelectionCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionCollectionViewController.swift; sourceTree = "<group>"; };
 		8E85B7D320BA2AD7005A9845 /* DarkSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkSplitView.swift; sourceTree = "<group>"; };
+		8E85B7D520BD9FD9005A9845 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		8E85B7D920BE2515005A9845 /* LocationTextDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTextDelegate.swift; sourceTree = "<group>"; };
 		8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateConverter.swift; sourceTree = "<group>"; };
 		8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaTableViewController.swift; sourceTree = "<group>"; };
 		8EA1A062208DFD92000C3B97 /* MetaInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfo.swift; sourceTree = "<group>"; };
@@ -309,6 +313,7 @@
 				8E7F71012092053400410C45 /* MetaInfoHandler.swift */,
 				8E2CF37420AED6BA00A93375 /* Model.xcdatamodeld */,
 				8EB986C020B317E70075B081 /* ModelStore.swift */,
+				8E85B7D520BD9FD9005A9845 /* Location.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -320,6 +325,7 @@
 				8EB986AF20B225230075B081 /* DetailViewDelegate.swift */,
 				8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */,
 				8EB986C520B6EBC40075B081 /* DarkTableView.swift */,
+				8E85B7D920BE2515005A9845 /* LocationTextDelegate.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -529,6 +535,8 @@
 			files = (
 				8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */,
 				8E85B7D220B91ED1005A9845 /* SelectionCollectionViewController.swift in Sources */,
+				8E85B7DA20BE2515005A9845 /* LocationTextDelegate.swift in Sources */,
+				8E85B7D620BD9FD9005A9845 /* Location.swift in Sources */,
 				8E7F71022092053400410C45 /* MetaInfoHandler.swift in Sources */,
 				8E4B7C1C2093D15700DDD9E0 /* BaseNode.swift in Sources */,
 				8EF32D142095355400511538 /* LCSourceListTableCellView.swift in Sources */,

@@ -39,17 +39,12 @@ class ViewController: NSViewController {
     var zoomSizeForPossibleAddress:Int = 16
     var previousTickForPossibleAddress:Int = 3
     @IBOutlet weak var addressSearcher: NSSearchField!
-    @IBOutlet weak var btnCloneLocationToFinder: NSButton!
+
     @IBOutlet weak var webPossibleLocation: WKWebView!
-    @IBOutlet weak var possibleLocationTableView: DarkTableView!
+    var possibleLocation:Location = Location()
     
-    
-    
-    var possibleLatitude:Double?
-    var possibleLongitude:Double?
-    var possibleBusinessCircle:String = ""
-    var possibleAddress:String = ""
-    var possibleAddressDescription:String = ""
+    @IBOutlet weak var possibleLocationText: NSTextField!
+    var locationTextDelegate:LocationTextDelegate?
     
     // MARK: PXSourceList
     var modelObjects:NSMutableArray?
@@ -130,6 +125,10 @@ class ViewController: NSViewController {
         
         stackedImageViewController.view.frame = self.playerContainer.bounds
         self.playerContainer.addSubview(stackedImageViewController.view)
+        
+        possibleLocationText.textColor = NSColor.white
+        locationTextDelegate = LocationTextDelegate()
+        locationTextDelegate?.textField = self.possibleLocationText
         
     }
     
@@ -382,6 +381,33 @@ class ViewController: NSViewController {
             }
         }
     }
+    
+    @IBAction func onCopyLocationFromListClicked(_ sender: Any) {
+    }
+    
+    @IBAction func onCopyLocationFromMapClicked(_ sender: Any) {
+    }
+    
+    @IBAction func onReplaceLocationClicked(_ sender: Any) {
+    }
+    
+    @IBAction func onReplaceDateClicked(_ sender: Any) {
+    }
+    
+    @IBAction func onReplaceTimeClicked(_ sender: Any) {
+    }
+    
+    @IBAction func onAddEventButtonClicked(_ sender: Any) {
+    }
+    
+    @IBAction func onAssignEventButtonClicked(_ sender: Any) {
+    }
+    
+    @IBAction func onMarkLocationButtonClicked(_ sender: Any) {
+    }
+    
+    
+    
 }
 
 
