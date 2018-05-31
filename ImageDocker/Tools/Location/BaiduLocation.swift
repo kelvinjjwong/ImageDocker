@@ -63,7 +63,16 @@ final class BaiduLocation {
                         let longitudeBaidu:Double = json["result"]["location"]["lng"].doubleValue
                         
                         DispatchQueue.main.async {
-                            locationDelegate.handleLocation(address: address, latitude: latitudeBaidu, longitude: longitudeBaidu)
+                            
+                            let coordBD = Coord(latitude: latitudeBaidu, longitude: longitudeBaidu)
+                            let coord = coordBD.fromBD09toWGS84()
+                            let location:Location = Location()
+                            location.address = address
+                            location.latitudeBD = latitudeBaidu
+                            location.longitudeBD = longitudeBaidu
+                            location.latitude = coord.latitude
+                            location.longitude = coord.longitude
+                            locationDelegate.handleLocation(location: location)
                         }
                         
                     } else {

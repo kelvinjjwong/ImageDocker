@@ -52,6 +52,49 @@ let SoftwareDateTime = kCGImagePropertyTIFFDateTime as String
 let ColorModel = kCGImagePropertyColorModel as String
 let ColorModelProfile = kCGImagePropertyProfileName as String
 
+
+
+class CameraModelRecognizer {
+    
+    static let models:[String : [String : String]] = [
+        "HUAWEI" : [
+            "H60" : "Honor 6",
+            "FRD" : "Honor 8",
+            "KNT" : "Honor V8",
+            "STF" : "Honor 9",
+            "DUK" : "Honor V9",
+            "COL" : "Honor 10",
+            "BKL" : "Honor V10",
+            "EVA" : "Perfect 9",
+            "VIE" : "Perfect 9 Plus",
+            "VTR" : "Perfect 10",
+            "VKY" : "Perfect 10 Plus",
+            "EML" : "Perfect 20",
+            "CLT" : "Perfect 20 Plus",
+            "MHA" : "Mate 9",
+            "LON" : "Mate 9 Pro",
+            "ALP" : "Mate 10",
+            "BLA" : "Mate 10 Pro",
+            "WAS" : "Nova Young"
+        ]
+    ]
+    
+    static func recognize(maker:String, model:String) -> String{
+        guard maker != "" && model != "" else {return model}
+        for m in models.keys {
+            if maker == m {
+                for mm in models[m]! {
+                    if model.starts(with: mm.key) {
+                        return mm.value + " (" + model + ")"
+                    }
+                }
+                break
+            }
+        }
+        return model
+    }
+}
+
 final class ImageData {
 
     // MARK: instance variables
@@ -123,18 +166,13 @@ final class ImageData {
         self.metaInfoStore.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Filename", value: url.lastPathComponent))
         self.metaInfoStore.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Full path", value: url.path.replacingOccurrences(of: url.lastPathComponent, with: "")))
         
-        if url.lastPathComponent.split(separator: Character(".")).count > 1 {
-            let fileExt:String = (url.lastPathComponent.split(separator: Character(".")).last?.lowercased())!
-            if fileExt == "jpg" || fileExt == "jpeg" {
-                isPhoto = true
-            }
-            if fileExt == "mov" || fileExt == "mp4" || fileExt == "mpeg" {
-                isVideo = true
-            }
-            
-            if isPhoto {
-                loadImageMetaData()
-            }
+        self.isPhoto = url.isPhoto()
+        self.isVideo = url.isVideo()
+        if isPhoto {
+            loadImageMetaData()
+        }
+        
+        if isPhoto || isVideo {
             originalLocation = location
         }
         
@@ -350,12 +388,17 @@ final class ImageData {
         }
         
         if let tiffData = imgProps[TIFFDictionary] as? [String: AnyObject] {
-            if let cameraMake = tiffData[CameraMake] as? String {
+            let cameraMake = tiffData[CameraMake] as? String ?? ""
+            if cameraMake != "" {
                 metaInfoStore.setMetaInfo(MetaInfo(category: "Camera", subCategory: "", title: "Manufacture", value: cameraMake))
             }
-            if let cameraModel = tiffData[CameraModel] as? String {
-                metaInfoStore.setMetaInfo(MetaInfo(category: "Camera", subCategory: "", title: "Model", value: cameraModel))
+            let cameraModel = tiffData[CameraModel] as? String ?? ""
+            if cameraModel != "" {
+                let model = CameraModelRecognizer.recognize(maker: cameraMake, model: cameraModel)
+                metaInfoStore.setMetaInfo(MetaInfo(category: "Camera", subCategory: "", title: "Model", value: model))
             }
+            
+            
         }
         
         // extract image date/time created
@@ -469,10 +512,10 @@ final class ImageData {
             metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", title: "FileModifyDate", value: json[0]["File"]["CreateDate"].description))
             
             metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Format", value: json[0]["QuickTime"]["MajorBrand"].description))
-            metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "CreateDate", value: json[0]["QuickTime"]["CreateDate"].description))
-            metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "ModifyDate", value: json[0]["QuickTime"]["ModifyDate"].description))
-            metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "TrackCreateDate", value: json[0]["QuickTime"]["TrackCreateDate"].description))
-            metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "TrackModifyDate", value: json[0]["QuickTime"]["TrackModifyDate"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", title: "VideoCreateDate", value: json[0]["QuickTime"]["CreateDate"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", title: "VideoModifyDate", value: json[0]["QuickTime"]["ModifyDate"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", title: "TrackCreateDate", value: json[0]["QuickTime"]["TrackCreateDate"].description))
+            metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", title: "TrackModifyDate", value: json[0]["QuickTime"]["TrackModifyDate"].description))
             metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Frame Rate", value: json[0]["QuickTime"]["VideoFrameRate"].description))
             metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Image Width", value: json[0]["QuickTime"]["ImageWidth"].description))
             metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Image Height", value: json[0]["QuickTime"]["ImageHeight"].description))
@@ -545,57 +588,32 @@ extension ImageData {
     
 }
 
-class StandaloneMetaInfoStore: MetaInfoStoreDelegate {
+extension URL {
     
-    var metaInfo:[MetaInfo] = [MetaInfo]()
-    
-    func setMetaInfo(_ info:MetaInfo){
-        setMetaInfo(info, ifNotExists: false)
-    }
-    
-    func setMetaInfo(_ info:MetaInfo, ifNotExists: Bool){
-        if info.value == nil || info.value == "" || info.value == "null" {return}
-        var exists:Int = 0
-        for exist:MetaInfo in self.metaInfo {
-            if exist.category == info.category && exist.subCategory == info.subCategory && exist.title == info.title {
-                if ifNotExists == false {
-                    exist.value = info.value
-                }
-                exists = 1
+    func isPhoto() -> Bool{
+        
+        if lastPathComponent.split(separator: Character(".")).count > 1 {
+            let fileExt:String = (lastPathComponent.split(separator: Character(".")).last?.lowercased())!
+            if fileExt == "jpg" || fileExt == "jpeg" {
+                return true
             }
         }
-        if exists == 0 {
-            self.metaInfo.append(info)
-        }
+        return false
+        
     }
     
-    func updateMetaInfoView() {
-        // do nothing
-    }
-    
-    func getMeta(category:String, subCategory:String = "", title:String) -> String? {
-        for meta in metaInfo {
-            if meta.category == category && meta.subCategory == subCategory && meta.title == title {
-                return meta.value
+    func isVideo() -> Bool{
+        
+        if lastPathComponent.split(separator: Character(".")).count > 1 {
+            let fileExt:String = (lastPathComponent.split(separator: Character(".")).last?.lowercased())!
+            if fileExt == "mov" || fileExt == "mp4" || fileExt == "mpeg" {
+                return true
             }
         }
-        return nil
-    }
-    
-    func getInfos() -> [MetaInfo] {
-        return self.metaInfo
+        return false
+        
     }
 }
 
-class MetaInfoReader {
-    
-    public static func getMeta(info:[MetaInfo], category:String, subCategory:String = "", title:String) -> String? {
-        for meta in info {
-            if meta.category == category && meta.subCategory == subCategory && meta.title == title {
-                return meta.value
-            }
-        }
-        return nil
-    }
-}
+
 

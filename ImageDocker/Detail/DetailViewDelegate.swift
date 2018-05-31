@@ -54,9 +54,11 @@ extension ViewController: MetaInfoStoreDelegate {
 
 extension ViewController: LocationDelegate {
     
-    func handleLocation(address: String, latitude: Double, longitude: Double) {
-        BaiduLocation.queryForAddress(lat: latitude, lon: longitude, metaInfoStore: self.locationTextDelegate!)
-        BaiduLocation.queryForMap(lat: latitude, lon: longitude, view: webPossibleLocation, zoom: zoomSizeForPossibleAddress)
+    func handleLocation(location:Location){
+        self.possibleLocation = location
+        
+        BaiduLocation.queryForAddress(lat: location.latitudeBD!, lon: location.longitudeBD!, metaInfoStore: self.locationTextDelegate!)
+        BaiduLocation.queryForMap(lat: location.latitudeBD!, lon: location.longitudeBD!, view: webPossibleLocation, zoom: zoomSizeForPossibleAddress)
     }
     
     func handleMessage(status: Int, message: String) {

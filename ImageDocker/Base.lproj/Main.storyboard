@@ -629,8 +629,8 @@
                                                     <action selector="onAddEventButtonClicked:" target="XfG-lQ-9wD" id="cNI-oZ-ExQ"/>
                                                 </connections>
                                             </button>
-                                            <datePicker verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Le0-oR-2MN">
-                                                <rect key="frame" x="649" y="5" width="96" height="27"/>
+                                            <datePicker verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Le0-oR-2MN">
+                                                <rect key="frame" x="654" y="5" width="181" height="27"/>
                                                 <datePickerCell key="cell" borderStyle="bezel" alignment="left" id="KyK-DM-vOW">
                                                     <font key="font" metaFont="system"/>
                                                     <date key="date" timeIntervalSinceReferenceDate="-595929600">
@@ -638,11 +638,12 @@
                                                     </date>
                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <datePickerElements key="datePickerElements" year="YES" month="YES" day="YES" hour="YES" minute="YES" second="YES"/>
                                                 </datePickerCell>
                                             </datePicker>
-                                            <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mqi-a1-a53">
-                                                <rect key="frame" x="746" y="-2" width="136" height="32"/>
-                                                <buttonCell key="cell" type="push" title="▲ Replace Date" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qha-6H-tXU">
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mqi-a1-a53">
+                                                <rect key="frame" x="831" y="-2" width="182" height="32"/>
+                                                <buttonCell key="cell" type="push" title="▲ Replace Date &amp; Time" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qha-6H-tXU">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
@@ -650,52 +651,35 @@
                                                     <action selector="onReplaceDateClicked:" target="XfG-lQ-9wD" id="CgR-Dp-OMh"/>
                                                 </connections>
                                             </button>
-                                            <datePicker verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rh8-30-RiW">
-                                                <rect key="frame" x="886" y="5" width="106" height="27"/>
-                                                <datePickerCell key="cell" borderStyle="bezel" alignment="left" id="LsB-M0-4bh">
-                                                    <font key="font" metaFont="system"/>
-                                                    <date key="date" timeIntervalSinceReferenceDate="-595929600">
-                                                        <!--1982-02-12 16:00:00 +0000-->
-                                                    </date>
-                                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                    <datePickerElements key="datePickerElements" hour="YES" minute="YES" second="YES"/>
-                                                </datePickerCell>
-                                            </datePicker>
-                                            <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NSs-D7-RwW">
-                                                <rect key="frame" x="993" y="-2" width="137" height="32"/>
-                                                <buttonCell key="cell" type="push" title="▲ Replace Time" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Nil-V8-QVe">
-                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="system"/>
-                                                </buttonCell>
-                                                <connections>
-                                                    <action selector="onReplaceTimeClicked:" target="XfG-lQ-9wD" id="mBR-mo-ieb"/>
-                                                </connections>
-                                            </button>
+                                            <progressIndicator wantsLayer="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="9ri-yc-r9m">
+                                                <rect key="frame" x="1015" y="6" width="125" height="20"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="125" id="VDq-rI-red"/>
+                                                    <constraint firstAttribute="height" constant="18" id="i48-xy-Jza"/>
+                                                </constraints>
+                                            </progressIndicator>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="CaM-Tw-R04" secondAttribute="bottom" constant="8" id="02d-3o-exU"/>
                                             <constraint firstItem="Le0-oR-2MN" firstAttribute="leading" secondItem="fBu-cK-CdX" secondAttribute="trailing" constant="10" id="0UH-qw-6PI"/>
-                                            <constraint firstItem="Mqi-a1-a53" firstAttribute="leading" secondItem="Le0-oR-2MN" secondAttribute="trailing" constant="10" id="2EN-yy-gkY"/>
                                             <constraint firstItem="lT1-yY-BTR" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="10" id="2tz-Zg-NOq"/>
+                                            <constraint firstAttribute="bottom" secondItem="9ri-yc-r9m" secondAttribute="bottom" constant="7" id="55B-YO-IJ4"/>
                                             <constraint firstItem="UJe-CL-XGt" firstAttribute="leading" secondItem="FmM-ai-OgV" secondAttribute="leading" id="Cqv-Zq-xvY"/>
-                                            <constraint firstItem="NSs-D7-RwW" firstAttribute="leading" secondItem="rh8-30-RiW" secondAttribute="trailing" constant="10" id="Htf-Vh-Qtu"/>
-                                            <constraint firstAttribute="bottom" secondItem="rh8-30-RiW" secondAttribute="bottom" constant="5" id="K0r-7a-Wbb"/>
                                             <constraint firstItem="UJe-CL-XGt" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="12" id="MJH-wn-1xa"/>
                                             <constraint firstItem="fBu-cK-CdX" firstAttribute="leading" secondItem="xCg-De-lnA" secondAttribute="trailing" constant="10" id="OCI-WN-oWT"/>
+                                            <constraint firstAttribute="bottom" secondItem="Mqi-a1-a53" secondAttribute="bottom" constant="5" id="Pne-OV-vb1"/>
                                             <constraint firstAttribute="trailing" secondItem="lT1-yY-BTR" secondAttribute="trailing" constant="10" id="S6o-z5-6Pb"/>
                                             <constraint firstAttribute="bottom" secondItem="Le0-oR-2MN" secondAttribute="bottom" constant="5" id="T8F-Lj-pYh"/>
-                                            <constraint firstAttribute="bottom" secondItem="NSs-D7-RwW" secondAttribute="bottom" constant="5" id="TpF-dC-mLt"/>
                                             <constraint firstAttribute="trailing" secondItem="ivI-8f-yJa" secondAttribute="trailing" constant="5" id="ZbI-YX-bmA"/>
-                                            <constraint firstItem="rh8-30-RiW" firstAttribute="leading" secondItem="Mqi-a1-a53" secondAttribute="trailing" constant="10" id="btX-a1-5ot"/>
                                             <constraint firstAttribute="bottom" secondItem="UJe-CL-XGt" secondAttribute="bottom" constant="5" id="eSB-57-UNb"/>
                                             <constraint firstItem="ivI-8f-yJa" firstAttribute="leading" secondItem="FmM-ai-OgV" secondAttribute="leading" id="fxO-6d-EeK"/>
                                             <constraint firstAttribute="bottom" secondItem="xCg-De-lnA" secondAttribute="bottom" constant="5" id="gVF-0d-2u7"/>
                                             <constraint firstItem="ivI-8f-yJa" firstAttribute="top" secondItem="FmM-ai-OgV" secondAttribute="top" id="il6-Uh-iBq"/>
                                             <constraint firstAttribute="bottom" secondItem="fBu-cK-CdX" secondAttribute="bottom" constant="5" id="mwL-U0-6UT"/>
                                             <constraint firstItem="lT1-yY-BTR" firstAttribute="leading" secondItem="CaM-Tw-R04" secondAttribute="trailing" constant="15" id="oYH-Uj-xIT"/>
-                                            <constraint firstAttribute="bottom" secondItem="Mqi-a1-a53" secondAttribute="bottom" constant="5" id="tpw-4x-B3a"/>
+                                            <constraint firstItem="Mqi-a1-a53" firstAttribute="leading" secondItem="Le0-oR-2MN" secondAttribute="trailing" constant="5" id="pCA-CN-wB7"/>
                                             <constraint firstItem="xCg-De-lnA" firstAttribute="leading" secondItem="UJe-CL-XGt" secondAttribute="trailing" constant="8" id="vTQ-UU-Aeo"/>
+                                            <constraint firstItem="9ri-yc-r9m" firstAttribute="leading" secondItem="Mqi-a1-a53" secondAttribute="trailing" constant="8" id="xyd-wX-bTB"/>
                                             <constraint firstAttribute="bottom" secondItem="lT1-yY-BTR" secondAttribute="bottom" constant="5" id="ywS-e6-idT"/>
                                         </constraints>
                                     </customView>
@@ -719,12 +703,31 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" id="ECf-s9-RCm" customClass="DarkTableView" customModule="ImageDocker" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="1287" height="146"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="1317" height="146"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <size key="intercellSpacing" width="3" height="2"/>
                                                             <color key="backgroundColor" name="controlShadowColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                             <tableColumns>
+                                                                <tableColumn identifier="copy" width="27" minWidth="10" maxWidth="3.4028234663852886e+38" id="7Iw-Kt-WUv" userLabel="copy">
+                                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                                        <font key="font" metaFont="smallSystem"/>
+                                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    </tableHeaderCell>
+                                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="db2-k1-PpD">
+                                                                        <font key="font" metaFont="system"/>
+                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                                                    <prototypeCellViews>
+                                                                        <tableCellView id="pFx-lr-3pN">
+                                                                            <rect key="frame" x="1" y="1" width="27" height="17"/>
+                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                        </tableCellView>
+                                                                    </prototypeCellViews>
+                                                                </tableColumn>
                                                                 <tableColumn identifier="category" editable="NO" width="80" minWidth="40" maxWidth="1000" id="eCu-N5-D1A" userLabel="category">
                                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Category">
                                                                         <font key="font" metaFont="smallSystem"/>
@@ -739,7 +742,7 @@
                                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                     <prototypeCellViews>
                                                                         <tableCellView id="Vcf-uR-nTc">
-                                                                            <rect key="frame" x="1" y="1" width="80" height="17"/>
+                                                                            <rect key="frame" x="31" y="1" width="80" height="17"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <subviews>
                                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="6fn-vF-1UH">
@@ -776,7 +779,7 @@
                                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                     <prototypeCellViews>
                                                                         <tableCellView id="HaR-2s-2W6">
-                                                                            <rect key="frame" x="84" y="1" width="70" height="17"/>
+                                                                            <rect key="frame" x="114" y="1" width="70" height="17"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <subviews>
                                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="463-7u-LT9">
@@ -813,7 +816,7 @@
                                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                     <prototypeCellViews>
                                                                         <tableCellView id="cJE-PX-0CA">
-                                                                            <rect key="frame" x="157" y="1" width="125" height="17"/>
+                                                                            <rect key="frame" x="187" y="1" width="125" height="17"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <subviews>
                                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="9MA-eU-opL">
@@ -850,7 +853,7 @@
                                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                     <prototypeCellViews>
                                                                         <tableCellView id="3Vd-Qd-W6g">
-                                                                            <rect key="frame" x="285" y="1" width="1000" height="17"/>
+                                                                            <rect key="frame" x="315" y="1" width="1000" height="17"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <subviews>
                                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="K7j-hE-pcb">
@@ -1089,9 +1092,11 @@
                     <connections>
                         <outlet property="addressSearcher" destination="N2C-6D-h6d" id="DmE-DC-14i"/>
                         <outlet property="avPlayer" destination="WMi-QV-cmi" id="SlC-Qu-gmn"/>
+                        <outlet property="batchEditIndicator" destination="9ri-yc-r9m" id="tVw-De-9ga"/>
                         <outlet property="collectionProgressIndicator" destination="Sab-MP-Qfo" id="tTT-fa-2Dw"/>
                         <outlet property="collectionView" destination="9AE-Hz-zmu" id="ItR-cT-i85"/>
                         <outlet property="considerPlacesCheckBox" destination="Qnu-5r-3Pb" id="YDg-Jh-tVk"/>
+                        <outlet property="editorDatePicker" destination="Le0-oR-2MN" id="KRh-iv-BnO"/>
                         <outlet property="imgPhoto" destination="9Na-U8-3R2" id="b6k-Ma-bp4"/>
                         <outlet property="indicatorMessage" destination="kAZ-Sm-Ax7" id="QkM-9I-20Z"/>
                         <outlet property="mapZoomSlider" destination="eId-m8-eKf" id="zoE-94-C0F"/>
@@ -1181,14 +1186,19 @@
             <objects>
                 <viewController storyboardIdentifier="videoView" id="0WT-bg-iwN" customClass="StackedVideoViewController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="yO0-yI-whS">
-                        <rect key="frame" x="0.0" y="0.0" width="256" height="256"/>
+                        <rect key="frame" x="0.0" y="0.0" width="307" height="256"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <avPlayerView fixedFrame="YES" controlsStyle="inline" translatesAutoresizingMaskIntoConstraints="NO" id="WMi-QV-cmi" customClass="VideoDropView" customModule="ImageDocker" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="256" height="256"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <avPlayerView controlsStyle="inline" translatesAutoresizingMaskIntoConstraints="NO" id="WMi-QV-cmi" customClass="VideoDropView" customModule="ImageDocker" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="307" height="256"/>
                             </avPlayerView>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="WMi-QV-cmi" firstAttribute="top" secondItem="yO0-yI-whS" secondAttribute="top" id="CfK-iH-b72"/>
+                            <constraint firstItem="WMi-QV-cmi" firstAttribute="leading" secondItem="yO0-yI-whS" secondAttribute="leading" id="EWW-Z8-MuV"/>
+                            <constraint firstAttribute="bottom" secondItem="WMi-QV-cmi" secondAttribute="bottom" id="IDX-P9-vuW"/>
+                            <constraint firstAttribute="trailing" secondItem="WMi-QV-cmi" secondAttribute="trailing" id="d7p-88-dGu"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="videoDisplayer" destination="WMi-QV-cmi" id="3ei-Pp-wfq"/>

@@ -41,7 +41,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var addressSearcher: NSSearchField!
 
     @IBOutlet weak var webPossibleLocation: WKWebView!
-    var possibleLocation:Location = Location()
+    var possibleLocation:Location?
     
     @IBOutlet weak var possibleLocationText: NSTextField!
     var locationTextDelegate:LocationTextDelegate?
@@ -77,7 +77,10 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var selectionCheckAllBox: NSButton!
     
+    // MARK: Editor - DateTime
     
+    @IBOutlet weak var editorDatePicker: NSDatePicker!
+    @IBOutlet weak var batchEditIndicator: NSProgressIndicator!
     
     
     
@@ -101,6 +104,7 @@ class ViewController: NSViewController {
         self.sourceList.reloadData()
         
         configureCollectionView()
+        configureEditors()
     }
     
     func configurePreview(){
@@ -180,6 +184,10 @@ class ViewController: NSViewController {
         
         selectionCollectionView.reloadData()
         
+    }
+    
+    func configureEditors(){
+        editorDatePicker.dateValue = Date()
     }
     
     // MARK: Actions
@@ -382,27 +390,68 @@ class ViewController: NSViewController {
         }
     }
     
+    // from favourites
     @IBAction func onCopyLocationFromListClicked(_ sender: Any) {
     }
     
+    // from selected image
     @IBAction func onCopyLocationFromMapClicked(_ sender: Any) {
+        guard self.img.longitude != 0 && self.img.latitude != 0 else {return}
+        if self.possibleLocation == nil {
+            self.possibleLocation = Location()
+        }
+        self.possibleLocation?.latitude = img.latitude
+        self.possibleLocation?.longitude = img.longitude
+        self.possibleLocation?.latitudeBD = img.latitudeBaidu
+        self.possibleLocation?.longitudeBD = img.longitudeBaidu
+        BaiduLocation.queryForMap(lat: img.latitudeBaidu, lon: img.longitudeBaidu, view: webPossibleLocation, zoom: zoomSizeForPossibleAddress)
+        
     }
     
     @IBAction func onReplaceLocationClicked(_ sender: Any) {
+        guard self.possibleLocation != nil && self.selectionViewController.imagesLoader.getItems().count > 0 else {return}
+        let accumulator:Accumulator = Accumulator(target: self.selectionViewController.imagesLoader.getItems().count, indicator: self.batchEditIndicator, suspended: false, lblMessage: nil)
+        let location:Location = self.possibleLocation!
+        for item in self.selectionViewController.imagesLoader.getItems() {
+            let url:URL = item.url as URL
+            if url.isPhoto() || url.isVideo() {
+                ExifTool.helper.patchGPSCoordinateForImage(latitude: location.latitude!, longitude: location.longitude!, url: url)
+            }
+            let _ = accumulator.add()
+        }
     }
     
     @IBAction func onReplaceDateClicked(_ sender: Any) {
+        guard self.selectionViewController.imagesLoader.getItems().count > 0 else {return}
+        let accumulator:Accumulator = Accumulator(target: self.selectionViewController.imagesLoader.getItems().count, indicator: self.batchEditIndicator, suspended: false, lblMessage: nil)
+        for item:ImageFile in self.selectionViewController.imagesLoader.getItems() {
+            let url:URL = item.url as URL
+            if url.isPhoto() {
+                ExifTool.helper.patchDateForPhoto(date: self.editorDatePicker.dateValue, url: url)
+            }else if url.isVideo() {
+                ExifTool.helper.patchDateForVideo(date: self.editorDatePicker.dateValue, url: url)
+            }
+            let _ = accumulator.add()
+        }
     }
     
-    @IBAction func onReplaceTimeClicked(_ sender: Any) {
-    }
-    
+    // add to favourites
     @IBAction func onAddEventButtonClicked(_ sender: Any) {
     }
     
     @IBAction func onAssignEventButtonClicked(_ sender: Any) {
+        guard self.selectionViewController.imagesLoader.getItems().count > 0 else {return}
+        let accumulator:Accumulator = Accumulator(target: self.selectionViewController.imagesLoader.getItems().count, indicator: self.batchEditIndicator, suspended: false, lblMessage: nil)
+        for item:ImageFile in self.selectionViewController.imagesLoader.getItems() {
+            let url:URL = item.url as URL
+            if url.isPhoto() || url.isVideo(){
+                ExifTool.helper.assignKeyValueForImage(key: "Event", value: "some event", url: url)
+            }
+            let _ = accumulator.add()
+        }
     }
     
+    // add to favourites
     @IBAction func onMarkLocationButtonClicked(_ sender: Any) {
     }
     

@@ -87,8 +87,8 @@ extension CLLocationCoordinate2D {
         return self.convertBD09toGCJ02(self)
     }
     
-    public func fromBD09toWGS84(_ bd09Point:CLLocationCoordinate2D) -> CLLocationCoordinate2D {
-        let gcj02Point:CLLocationCoordinate2D = self.convertBD09toGCJ02(bd09Point)
+    public func fromBD09toWGS84() -> CLLocationCoordinate2D {
+        let gcj02Point:CLLocationCoordinate2D = self.convertBD09toGCJ02(self)
         return self.convertGCJ02toBD09(gcj02Point)
     }
 }

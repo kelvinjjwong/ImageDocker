@@ -13,6 +13,23 @@ import Cocoa
 
 extension ViewController: NSTableViewDelegate {
     
+    @objc func copyDateAction(sender: NSButton) {
+        if sender.toolTip != nil && (sender.toolTip?.starts(with: "Copy "))! {
+            let value = sender.toolTip!
+            let components = value.components(separatedBy: " ")
+            if components.count >= 3{
+                let datetime:String = components[1] + " " + components[2]
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
+                if let date = dateFormatter.date(from: datetime) {
+                    self.editorDatePicker.dateValue = date
+                }
+                
+                
+            }
+        }
+    }
+    
     // return view for requested column.
     func tableView(_ tableView: NSTableView,
                    viewFor tableColumn: NSTableColumn?,
@@ -24,6 +41,7 @@ extension ViewController: NSTableViewDelegate {
         var value = ""
         //var tip: String? = nil
         if let id = tableColumn?.identifier {
+            var isAction:Bool = false
             switch id {
             case NSUserInterfaceItemIdentifier("category"):
                 value = info.category
@@ -33,18 +51,43 @@ extension ViewController: NSTableViewDelegate {
                 value = info.title
             case NSUserInterfaceItemIdentifier("value"):
                 value = info.value
+            case NSUserInterfaceItemIdentifier("copy"):
+                //print("action cell")
+                
+                isAction = true
+                
             default:
                 break
             }
             let colView = tableView.makeView(withIdentifier: id, owner: nil) as! NSTableCellView
-            colView.textField?.stringValue = value;
-            colView.textField?.lineBreakMode = NSParagraphStyle.LineBreakMode.byWordWrapping
-            if row == tableView.selectedRow {
-                lastSelectedMetaInfoRow = row
-                colView.textField?.textColor = NSColor.yellow
-            } else {
-                lastSelectedMetaInfoRow = nil
-                colView.textField?.textColor = nil
+            if isAction {
+                colView.subviews.removeAll()
+                
+                
+                if info.category == "DateTime" {
+                    let button:NSButton = NSButton(frame: NSRect(x: 2, y: 2, width: 12, height: 12))
+                    button.setButtonType(NSButton.ButtonType.momentaryPushIn)
+                    button.isBordered = false
+                    button.bezelStyle = NSButton.BezelStyle.smallSquare
+                    button.image = NSImage(named: .multipleDocuments)
+                    button.action = #selector(ViewController.copyDateAction(sender:))
+                    button.isHidden = false
+                    button.toolTip = "Copy " + info.value
+                    colView.addSubview(button)
+                }
+                
+                
+                
+            }else{
+                colView.textField?.stringValue = value;
+                colView.textField?.lineBreakMode = NSParagraphStyle.LineBreakMode.byWordWrapping
+                if row == tableView.selectedRow {
+                    lastSelectedMetaInfoRow = row
+                    colView.textField?.textColor = NSColor.yellow
+                } else {
+                    lastSelectedMetaInfoRow = nil
+                    colView.textField?.textColor = nil
+                }
             }
          /*
             if let tooltip = tip {

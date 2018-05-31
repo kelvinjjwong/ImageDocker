@@ -222,5 +222,14 @@ class ImageFile {
         }
         return nil
     }
+    
+    func assignDate(date:Date) {
+        let url:URL = self.url as URL
+        if url.isPhoto() {
+            
+        }else if url.isVideo(){
+            
+        }
+    }
   
 }
