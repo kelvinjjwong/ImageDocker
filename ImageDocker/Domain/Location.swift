@@ -8,7 +8,17 @@
 
 import Foundation
 
+protocol LocationConsumer {
+    func consume(location:Location)
+}
+
 class Location : NSObject {
+    
+    var source:String?
+    var responseStatus:String?
+    var responseMessage:String?
+    
+    var info:[MetaInfo] = [MetaInfo]()
     
     fileprivate func setInfo(category:String, value:String){
         let i = info.index(where: {$0.category == category} )
@@ -45,6 +55,7 @@ class Location : NSObject {
     }
     var businessCircle:String = "" {
         didSet {
+            place = businessCircle
             self.setInfo(category: "BusinessCircle", value: businessCircle)
         }
     }
@@ -56,6 +67,13 @@ class Location : NSObject {
     var addressDescription:String = "" {
         didSet {
             self.setInfo(category: "Description", value: addressDescription)
+            
+            if addressDescription.contains("内") {
+                let suggestPlace = (addressDescription.components(separatedBy: "内").first)!
+                place = suggestPlace
+            }else{
+                place = businessCircle
+            }
         }
     }
     var place:String = "" {
@@ -67,6 +85,4 @@ class Location : NSObject {
     var longitude:Double?
     var latitudeBD:Double?
     var longitudeBD:Double?
-    
-    var info:[MetaInfo] = [MetaInfo]()
 }

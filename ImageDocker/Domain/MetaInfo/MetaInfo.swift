@@ -13,9 +13,9 @@ final class MetaInfo: NSObject {
     var category:String!
     var subCategory:String!
     var title:String!
-    var value:String!
+    var value:String?
     
-    init(category:String, subCategory:String = "", title:String, value:String) {
+    init(category:String, subCategory:String = "", title:String, value:String?) {
         self.category = category
         self.subCategory = subCategory
         self.title = title

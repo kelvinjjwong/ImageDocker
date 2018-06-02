@@ -50,7 +50,7 @@ extension ViewController: NSTableViewDelegate {
             case NSUserInterfaceItemIdentifier("title"):
                 value = info.title
             case NSUserInterfaceItemIdentifier("value"):
-                value = info.value
+                value = info.value ?? ""
             case NSUserInterfaceItemIdentifier("copy"):
                 //print("action cell")
                 
@@ -72,7 +72,9 @@ extension ViewController: NSTableViewDelegate {
                     button.image = NSImage(named: .multipleDocuments)
                     button.action = #selector(ViewController.copyDateAction(sender:))
                     button.isHidden = false
-                    button.toolTip = "Copy " + info.value
+                    if info.value != nil {
+                        button.toolTip = "Copy " + info.value!
+                    }
                     colView.addSubview(button)
                 }
                 

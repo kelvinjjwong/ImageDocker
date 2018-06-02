@@ -32,8 +32,23 @@ class CollectionViewItemsLoader: NSObject {
     
     func load(from folderURL: NSURL, indicator:Accumulator? = nil) {
         self.indicator = indicator
-        let urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
+        //let urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
+        print("loading folder from database: \(folderURL.path)")
+        var urls = walkthruDatabaseForFileUrls(startingURL: folderURL)
+        if urls == nil || urls?.count == 0 {
+            print("loading folder from filesystem instead: \(folderURL.path)")
+            urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
+        }
         setupItems(urls: urls)
+    }
+    
+    func getItem(path:String) -> ImageFile?{
+        for item in items {
+            if item.url.path == path {
+                return item
+            }
+        }
+        return nil
     }
 
     func setupItems(urls: [NSURL]?, cleanViewBeforeLoading:Bool = true) {
@@ -82,6 +97,7 @@ class CollectionViewItemsLoader: NSObject {
         section.items.removeAll()
         
         for item in items {
+            print(item.place)
             section.items.append(item)
         }
         sortItems(in: section)
@@ -224,6 +240,14 @@ class CollectionViewItemsLoader: NSObject {
             items.append(imageFile)
         }
         ModelStore.save()
+    }
+    
+    private func walkthruDatabaseForFileUrls(startingURL: NSURL) -> [NSURL]? {
+        var urls: [NSURL] = []
+        for photoFile in ModelStore.getPhotoFiles(parentPath: startingURL.path!) {
+            urls.append(NSURL(fileURLWithPath: photoFile.path!))
+        }
+        return urls
     }
   
     private func walkthruDirectoryForFileUrls(startingURL: NSURL) -> [NSURL]? {

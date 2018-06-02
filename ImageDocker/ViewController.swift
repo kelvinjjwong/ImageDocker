@@ -221,14 +221,7 @@ class ViewController: NSViewController {
         loadImage(urls[0])
     }
     
-    private func loadImage(_ url:URL){
-        
-        // init meta data
-        self.metaInfo = [MetaInfo]()
-        self.img = ImageData(url: url, metaInfoStore: self)
-        
-        guard img.isPhoto || img.isVideo else {return}
-        
+    private func previewImage(image:ImageData) {
         for sView in self.playerContainer.subviews {
             sView.removeFromSuperview()
         }
@@ -244,7 +237,7 @@ class ViewController: NSViewController {
             self.playerContainer.addSubview(stackedImageViewController.view)
             
             // show image
-            stackedImageViewController.imageDisplayer.image = img.image
+            stackedImageViewController.imageDisplayer.image = image.image
             
         } else {
             
@@ -253,11 +246,24 @@ class ViewController: NSViewController {
             self.playerContainer.addSubview(stackedVideoViewController.view)
             
             // show video
-            stackedVideoViewController.videoDisplayer.player = AVPlayer(url: url)
+            stackedVideoViewController.videoDisplayer.player = AVPlayer(url: image.url)
             stackedVideoViewController.videoDisplayer.player?.play()
             
         }
-        img.loadExif()
+    }
+    
+    private func loadImage(_ url:URL){
+        
+        // init meta data
+        self.metaInfo = [MetaInfo]()
+        self.img = ImageData(url: url, metaInfoStore: self)
+        
+        guard img.isPhoto || img.isVideo else {return}
+        self.previewImage(image: img)
+        
+        //img.loadMetaInfoFromExif()
+        img.loadMetaInfoFromDatabase()
+        img.loadMetaInfoFromExif()
         self.sortMetaInfoArray()
         self.metaInfoTableView.reloadData()
         img.getBaiduLocation()
@@ -396,7 +402,7 @@ class ViewController: NSViewController {
     
     // from selected image
     @IBAction func onCopyLocationFromMapClicked(_ sender: Any) {
-        guard self.img.longitude != 0 && self.img.latitude != 0 else {return}
+        guard self.img != nil && self.img.longitude != 0 && self.img.latitude != 0 else {return}
         if self.possibleLocation == nil {
             self.possibleLocation = Location()
         }
@@ -404,6 +410,23 @@ class ViewController: NSViewController {
         self.possibleLocation?.longitude = img.longitude
         self.possibleLocation?.latitudeBD = img.latitudeBaidu
         self.possibleLocation?.longitudeBD = img.longitudeBaidu
+        
+        self.possibleLocation?.country = self.getMeta(category: "Location", subCategory: "Baidu", title: "Country") ?? ""
+        self.possibleLocation?.province = self.getMeta(category: "Location", subCategory: "Baidu", title: "Province") ?? ""
+        self.possibleLocation?.city = self.getMeta(category: "Location", subCategory: "Baidu", title: "City") ?? ""
+        self.possibleLocation?.district = self.getMeta(category: "Location", subCategory: "Baidu", title: "District") ?? ""
+        self.possibleLocation?.businessCircle = self.getMeta(category: "Location", subCategory: "Baidu", title: "BusinessCircle") ?? ""
+        self.possibleLocation?.street = self.getMeta(category: "Location", subCategory: "Baidu", title: "Street") ?? ""
+        self.possibleLocation?.address = self.getMeta(category: "Location", subCategory: "Baidu", title: "Address") ?? ""
+        self.possibleLocation?.addressDescription = self.getMeta(category: "Location", subCategory: "Baidu", title: "Description") ?? ""
+        
+        print("possible location address: \(possibleLocation?.address ?? "")")
+        print("possible location place: \(possibleLocation?.place ?? "")")
+        
+        
+        self.addressSearcher.stringValue = ""
+        
+        BaiduLocation.queryForAddress(lat: img.latitudeBaidu, lon: img.longitudeBaidu, metaInfoStore: self.locationTextDelegate!)
         BaiduLocation.queryForMap(lat: img.latitudeBaidu, lon: img.longitudeBaidu, view: webPossibleLocation, zoom: zoomSizeForPossibleAddress)
         
     }
@@ -416,9 +439,24 @@ class ViewController: NSViewController {
             let url:URL = item.url as URL
             if url.isPhoto() || url.isVideo() {
                 ExifTool.helper.patchGPSCoordinateForImage(latitude: location.latitude!, longitude: location.longitude!, url: url)
+                item.assignLocation(location: location)
+                
+                
+                let imageInSelection:ImageFile? = self.imagesLoader.getItem(path: url.path)
+                if imageInSelection != nil {
+                    imageInSelection!.assignLocation(location: location)
+                }
+                
+                print("place after assign location: \(item.place)")
+                item.saveToModelStore(notifyIndicator: false)
             }
             let _ = accumulator.add()
         }
+        self.selectionViewController.imagesLoader.reorganizeItems()
+        self.selectionCollectionView.reloadData()
+        self.imagesLoader.reorganizeItems(considerPlaces: (self.considerPlacesCheckBox.state == NSButton.StateValue.on))
+        self.collectionView.reloadData()
+        
     }
     
     @IBAction func onReplaceDateClicked(_ sender: Any) {
@@ -431,8 +469,13 @@ class ViewController: NSViewController {
             }else if url.isVideo() {
                 ExifTool.helper.patchDateForVideo(date: self.editorDatePicker.dateValue, url: url)
             }
+            item.assignDate(date: self.editorDatePicker.dateValue)
+            item.saveToModelStore(notifyIndicator: false)
+            
             let _ = accumulator.add()
         }
+        self.selectionViewController.imagesLoader.reorganizeItems()
+        self.selectionCollectionView.reloadData()
     }
     
     // add to favourites

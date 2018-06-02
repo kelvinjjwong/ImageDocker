@@ -169,7 +169,7 @@ final class ImageData {
         self.isPhoto = url.isPhoto()
         self.isVideo = url.isVideo()
         if isPhoto {
-            loadImageMetaData()
+            loadMetaInfoFromOSX()
         }
         
         if isPhoto || isVideo {
@@ -361,6 +361,19 @@ final class ImageData {
         return image
     }
     
+    func setCoordinate(latitude:Double, longitude:Double){
+        guard latitude > 0 && longitude > 0 else {return}
+        location = Coord(latitude: latitude, longitude: longitude)
+        locationBD09 = location?.fromWGS84toBD09()
+        
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Latitude (WGS84)", value: String(format: "%3.6f", self.latitude).paddingLeft(12)))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Longitude (WGS84)", value: String(format: "%3.6f", self.longitude).paddingLeft(12)))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Latitude (BD09)", value: String(format: "%3.6f", self.latitudeBaidu).paddingLeft(12)))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Longitude (BD09)", value: String(format: "%3.6f", self.longitudeBaidu).paddingLeft(12)))
+        
+        hasCoordinate = true
+    }
+    
     // MARK: extract image metadata
     
     /// obtain image metadata
@@ -368,7 +381,7 @@ final class ImageData {
     ///
     /// If image propertied can not be accessed or if needed properties
     /// do not exist the file is assumed to be a non-image file
-    private func loadImageMetaData() {
+    private func loadMetaInfoFromOSX() {
         if self.isVideo == true { return }
         
         guard let imgRef = CGImageSourceCreateWithURL(url as CFURL, nil) else {
@@ -482,20 +495,110 @@ final class ImageData {
         }
     }
     
-    func setCoordinate(latitude:Double, longitude:Double){
-        guard latitude > 0 && longitude > 0 else {return}
-        location = Coord(latitude: latitude, longitude: longitude)
-        locationBD09 = location?.fromWGS84toBD09()
+    public func loadMetaInfoFromDatabase() {
+        let filename:String = url.lastPathComponent
+        let path:String = url.path
+        let parentPath:String = (url.deletingLastPathComponent().path)
         
-        metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Latitude (WGS84)", value: String(format: "%3.6f", self.latitude).paddingLeft(12)))
-        metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Longitude (WGS84)", value: String(format: "%3.6f", self.longitude).paddingLeft(12)))
-        metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Latitude (BD09)", value: String(format: "%3.6f", self.latitudeBaidu).paddingLeft(12)))
-        metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Longitude (BD09)", value: String(format: "%3.6f", self.longitudeBaidu).paddingLeft(12)))
+        let photoFile = ModelStore.getOrCreatePhoto(filename: filename, path: path, parentPath: parentPath)
         
-        hasCoordinate = true
+        let df = DateFormatter()
+        df.dateFormat = "yyyy:MM:dd HH:mm:ss"
+        
+        metaInfoStore.setMetaInfo(MetaInfo(category: "System", subCategory: "", title: "Size", value: "\(photoFile.imageWidth) x \(photoFile.imageHeight)"))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Camera", subCategory: "", title: "Manufacture", value: photoFile.cameraMaker))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Camera", subCategory: "", title: "Model", value: photoFile.cameraModel))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Software", subCategory: "", title: "Name", value: photoFile.softwareName))
+        if photoFile.exifDateTimeOriginal != nil {
+            metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", subCategory: "", title: "DateTimeOriginal", value: df.string(from: photoFile.exifDateTimeOriginal!)))
+        }
+        if photoFile.softwareModifiedTime != nil {
+            metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", subCategory: "", title: "Software Modified", value: df.string(from: photoFile.softwareModifiedTime!)))
+        }
+        metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", subCategory: "", title: "GPS Date", value: photoFile.gpsDate))
+        
+        if photoFile.latitude != nil {
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Latitude (WGS84)", value: String(format: "%3.6f", photoFile.latitude!).paddingLeft(12)))
+        }
+        
+        if photoFile.longitude != nil {
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Longitude (WGS84)", value: String(format: "%3.6f", photoFile.longitude!).paddingLeft(12)))
+        }
+        
+        if photoFile.latitudeBD != nil {
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Latitude (BD09)", value: String(format: "%3.6f", photoFile.latitudeBD!).paddingLeft(12)))
+        }
+        
+        if photoFile.longitudeBD != nil {
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Longitude (BD09)", value: String(format: "%3.6f", photoFile.longitudeBD!).paddingLeft(12)))
+        }
+        
+        if photoFile.assignLatitude != nil {
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Assigned", title: "Latitude (WGS84)", value: String(format: "%3.6f", photoFile.assignLatitude!).paddingLeft(12)))
+        }
+        
+        if photoFile.assignLongitude != nil {
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Assigned", title: "Longitude (WGS84)", value: String(format: "%3.6f", photoFile.assignLongitude!).paddingLeft(12)))
+        }
+        
+        if photoFile.assignLatitudeBD != nil {
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Assigned", title: "Latitude (BD09)", value: String(format: "%3.6f", photoFile.assignLatitudeBD!).paddingLeft(12)))
+        }
+        
+        if photoFile.assignLongitudeBD != nil {
+            metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Assigned", title: "Longitude (BD09)", value: String(format: "%3.6f", photoFile.assignLongitudeBD!).paddingLeft(12)))
+        }
+        
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Camera", title: "ISO", value: photoFile.iso))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Camera", title: "ExposureTime", value: photoFile.exposureTime))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Camera", title: "Aperture", value: photoFile.aperture))
+        
+        if photoFile.exifModifyDate != nil {
+            metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", title: "FileModifyDate", value: df.string(from: photoFile.exifModifyDate!)))
+        }
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Format", value: photoFile.videoFormat))
+        
+        if photoFile.videoCreateDate != nil {
+            metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", title: "VideoCreateDate", value: df.string(from: photoFile.videoCreateDate!)))
+        }
+        if photoFile.videoModifyDate != nil {
+            metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", title: "VideoModifyDate", value: df.string(from: photoFile.videoModifyDate!)))
+        }
+        if photoFile.trackCreateDate != nil {
+            metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", title: "TrackCreateDate", value: df.string(from: photoFile.trackCreateDate!)))
+        }
+        if photoFile.trackModifyDate != nil {
+            metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", title: "TrackModifyDate", value: df.string(from: photoFile.trackModifyDate!)))
+        }
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Frame Rate", value: photoFile.videoFrameRate.description))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Image Width", value: photoFile.imageWidth.description))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Image Height", value: photoFile.imageHeight.description))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Duration", value: photoFile.videoDuration))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Size", value: photoFile.fileSize))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Avg Bitrate", value: photoFile.videoBitRate))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Video", title: "Rotation", value: photoFile.rotation.description))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Audio", title: "Channels", value: photoFile.audioChannels.description))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Audio", title: "BitsPerSample", value: photoFile.videoBitRate))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Audio", title: "SampleRate", value: photoFile.audioRate.description))
+        
+        
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Country", value: photoFile.country))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Province", value: photoFile.province))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "City", value: photoFile.city))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "District", value: photoFile.district))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Street", value: photoFile.street))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "BusinessCircle", value: photoFile.businessCircle))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Address", value: photoFile.address))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Description", value: photoFile.addressDescription))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Suggest Place", value: photoFile.suggestPlace))
+        
+        
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "Address", value: photoFile.assignAddress))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "Description", value: photoFile.assignAddressDescription))
+        metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "Place", value: photoFile.assignPlace))
     }
     
-    public func loadExif(){
+    public func loadMetaInfoFromExif() {
         guard !(isStandalone && isLoadedExif) else {return}
         
         let jsonStr:String = ExifTool.helper.getFormattedExif(url: url)

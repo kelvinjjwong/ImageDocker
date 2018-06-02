@@ -30,7 +30,9 @@ class ImageFile {
             fileName = ""
         }
         
-        self.saveToModelStore()
+        self.saveToModelStore(notifyIndicator: true)
+        let photoTakenDate:String? = self.choosePhotoTakenDateFromMetaInfo()
+        self.storePhotoTakenDate(dateTime: photoTakenDate)
         //self.setThumbnail(url as URL)
         
         
@@ -113,12 +115,67 @@ class ImageFile {
         }
     }
     
-    private func saveToModelStore(){
+    private func choosePhotoTakenDateFromMetaInfo() -> String? {
+        self.imageData = ImageData(url: url as URL)
+        
+        
+        var dateTime:String? = self.imageData?.getMeta(category: "DateTime", subCategory: "", title: "Assigned")
+        
+        if dateTime == nil {
+            dateTime = self.imageData?.getMeta(category: "DateTime", subCategory: "", title: "DateTimeOriginal")
+        }
+        if dateTime == nil {
+            dateTime = self.imageData?.getMeta(category: "DateTime", subCategory: "", title: "From Filename")
+        }
+        if dateTime == nil {
+            dateTime = self.imageData?.getMeta(category: "DateTime", subCategory: "", title: "Software Modified")
+        }
+        if dateTime == nil {
+            self.imageData?.loadMetaInfoFromExif()
+        }
+        
+        if dateTime == nil {
+            dateTime = self.imageData?.getMeta(category: "Video", subCategory: "", title: "CreateDate")
+            if dateTime == "0000:00:00 00:00:00" {
+                dateTime = nil
+            }
+        }
+        if dateTime == nil {
+            dateTime = self.imageData?.getMeta(category: "Video", subCategory: "", title: "TrackCreateDate")
+            if dateTime == "0000:00:00 00:00:00" {
+                dateTime = nil
+            }
+        }
+        return dateTime
+    }
+    
+    private func storePhotoTakenDate(dateTime:String?) {
+        if dateTime != nil {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
+            let photoTakenDate = dateFormatter.date(from: dateTime!)
+            storePhotoTakenDate(dateTime: photoTakenDate!)
+        }
+    }
+    
+    private func storePhotoTakenDate(dateTime photoTakenDate:Date){
+        
+        self.photoFile?.photoTakenDate = photoTakenDate
+        
+        let calendar = NSCalendar.current
+        let component = calendar.dateComponents([.year, .month, .day, .hour], from: photoTakenDate)
+        self.photoFile?.photoTakenYear = Int32(component.year!)
+        self.photoFile?.photoTakenMonth = Int32(component.month!)
+        self.photoFile?.photoTakenDay = Int32(component.day!)
+        self.photoFile?.photoTakenHour = Int32(component.hour!)
+    }
+    
+    func saveToModelStore(notifyIndicator:Bool = true){
         let filename:String = url.lastPathComponent!
         let path:String = url.path!
         let parentPath:String = (url.deletingLastPathComponent?.path)!
         
-        if self.indicator != nil {
+        if notifyIndicator && self.indicator != nil {
             DispatchQueue.main.async {
                 let _ = self.indicator?.add("Searching images ...")
             }
@@ -128,46 +185,7 @@ class ImageFile {
         
         self.photoFile = ModelStore.getOrCreatePhoto(filename: filename, path: path, parentPath: parentPath)
         
-        if self.photoFile?.photoTakenDate == nil {
-            self.imageData = ImageData(url: url as URL)
-            
-            var dateTime:String? = self.imageData?.getMeta(category: "DateTime", subCategory: "", title: "DateTimeOriginal")
-            if dateTime == nil {
-                dateTime = self.imageData?.getMeta(category: "DateTime", subCategory: "", title: "From Filename")
-            }
-            if dateTime == nil {
-                dateTime = self.imageData?.getMeta(category: "DateTime", subCategory: "", title: "Software Modified")
-            }
-            if dateTime == nil {
-                self.imageData?.loadExif()
-            }
-            
-            if dateTime == nil {
-                dateTime = self.imageData?.getMeta(category: "Video", subCategory: "", title: "CreateDate")
-                if dateTime == "0000:00:00 00:00:00" {
-                    dateTime = nil
-                }
-            }
-            if dateTime == nil {
-                dateTime = self.imageData?.getMeta(category: "Video", subCategory: "", title: "TrackCreateDate")
-                if dateTime == "0000:00:00 00:00:00" {
-                    dateTime = nil
-                }
-            }
-            if dateTime != nil {
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
-                let photoTakenDate = dateFormatter.date(from: dateTime!)
-                self.photoFile?.photoTakenDate = photoTakenDate
-                
-                let calendar = NSCalendar.current
-                let component = calendar.dateComponents([.year, .month, .day, .hour], from: photoTakenDate!)
-                self.photoFile?.photoTakenYear = Int32(component.year!)
-                self.photoFile?.photoTakenMonth = Int32(component.month!)
-                self.photoFile?.photoTakenDay = Int32(component.day!)
-                self.photoFile?.photoTakenHour = Int32(component.hour!)
-            }
-        }
+        
     }
     
     private func setThumbnail(_ url:URL) -> NSImage? {
@@ -224,12 +242,43 @@ class ImageFile {
     }
     
     func assignDate(date:Date) {
-        let url:URL = self.url as URL
-        if url.isPhoto() {
-            
-        }else if url.isVideo(){
-            
+        let df = DateFormatter()
+        df.dateFormat = "yyyy:MM:dd HH:mm:ss"
+        let dateString:String = df.string(from: date)
+        if imageData != nil {
+            imageData?.metaInfoStore.setMetaInfo(MetaInfo(category: "DateTime", subCategory: "", title: "Assigned", value: dateString))
         }
+        if photoFile != nil {
+            photoFile?.assignDateTime = date
+        }
+    }
+    
+    func assignLocation(location:Location){
+        print("location address is \(location.address)")
+        print("location addressDesc is \(location.addressDescription)")
+        print("location place is \(location.place)")
+        if imageData != nil {
+            print("image data not nil")
+            imageData?.metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Assigned", title: "Latitude (WGS84)", value: (location.latitude?.description)!))
+            imageData?.metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Assigned", title: "Longitude (WGS84)", value: (location.longitude?.description)!))
+            imageData?.metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Assigned", title: "Latitude (BD09)", value: (location.latitudeBD?.description)!))
+            imageData?.metaInfoStore.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Assigned", title: "Longitude (BD09)", value: (location.longitudeBD?.description)!))
+            imageData?.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "Address", value: location.address))
+            imageData?.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "Description", value: location.addressDescription))
+            imageData?.metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "Place", value: location.place))
+        }
+        
+        if photoFile != nil {
+            print("photo file not nil")
+            photoFile?.assignLatitude = location.latitude?.description
+            photoFile?.assignLongitude = location.longitude?.description
+            photoFile?.assignLatitudeBD = location.latitudeBD?.description
+            photoFile?.assignLongitudeBD = location.longitudeBD?.description
+            photoFile?.assignAddress = location.address
+            photoFile?.assignAddressDescription = location.addressDescription
+            photoFile?.assignPlace = location.place
+        }
+        self.recognizePlace()
     }
   
 }

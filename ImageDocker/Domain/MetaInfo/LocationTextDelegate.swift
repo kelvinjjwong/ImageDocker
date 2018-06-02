@@ -17,11 +17,11 @@ class LocationTextDelegate : MetaInfoStoreDelegate {
         self.infoDelegate = StandaloneMetaInfoStore()
     }
     
-    func setMetaInfo(_ info: MetaInfo) {
+    func setMetaInfo(_ info: MetaInfo?) {
         infoDelegate.setMetaInfo(info)
     }
     
-    func setMetaInfo(_ info: MetaInfo, ifNotExists: Bool) {
+    func setMetaInfo(_ info: MetaInfo?, ifNotExists: Bool) {
         infoDelegate.setMetaInfo(info, ifNotExists: ifNotExists)
     }
     

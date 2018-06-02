@@ -12,11 +12,14 @@ class StandaloneMetaInfoStore: MetaInfoStoreDelegate {
     
     var metaInfo:[MetaInfo] = [MetaInfo]()
     
-    func setMetaInfo(_ info:MetaInfo){
+    func setMetaInfo(_ info:MetaInfo?){
+        guard info != nil && info?.value != nil else {return}
         setMetaInfo(info, ifNotExists: false)
     }
     
-    func setMetaInfo(_ info:MetaInfo, ifNotExists: Bool){
+    func setMetaInfo(_ info:MetaInfo?, ifNotExists: Bool){
+        guard info != nil && info?.value != nil else {return}
+        let info = info!
         if info.value == nil || info.value == "" || info.value == "null" {return}
         var exists:Int = 0
         for exist:MetaInfo in self.metaInfo {

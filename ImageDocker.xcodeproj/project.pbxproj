@@ -259,7 +259,6 @@
 				8EB986B820B30C920075B081 /* HeaderView.swift */,
 				8EB986B420B30C910075B081 /* HeaderView.xib */,
 				8EB986B620B30C910075B081 /* CollectionViewItemsLoader.swift */,
-				8EB986B320B30C910075B081 /* ImageFile.swift */,
 			);
 			path = Collection;
 			sourceTree = "<group>";
@@ -310,6 +309,7 @@
 				8E0EAE99209D2623008C377F /* ImageFolderTreeScanner.swift */,
 				8EF500CC209A804100C9805F /* ImageFolder.swift */,
 				8E721B94208CAAFF00E304EA /* ImageData.swift */,
+				8EB986B320B30C910075B081 /* ImageFile.swift */,
 				8E2CF37420AED6BA00A93375 /* Model.xcdatamodeld */,
 				8EB986C020B317E70075B081 /* ModelStore.swift */,
 				8E85B7D520BD9FD9005A9845 /* Location.swift */,

@@ -21,11 +21,12 @@ extension ViewController: MetaInfoStoreDelegate {
         return self.metaInfo
     }
     
-    func setMetaInfo(_ info:MetaInfo){
+    func setMetaInfo(_ info:MetaInfo?){
         setMetaInfo(info, ifNotExists: false)
     }
     
-    func setMetaInfo(_ info:MetaInfo, ifNotExists: Bool){
+    func setMetaInfo(_ info:MetaInfo?, ifNotExists: Bool){
+        let info = info!
         if info.value == nil || info.value == "" || info.value == "null" {return}
         var exists:Int = 0
         for exist:MetaInfo in self.metaInfo {
@@ -47,7 +48,11 @@ extension ViewController: MetaInfoStoreDelegate {
     }
     
     func getMeta(category:String, subCategory:String, title:String) -> String? {
-        // TODO
+        for meta in metaInfo {
+            if meta.category == category && meta.subCategory == subCategory && meta.title == title {
+                return meta.value
+            }
+        }
         return nil
     }
 }

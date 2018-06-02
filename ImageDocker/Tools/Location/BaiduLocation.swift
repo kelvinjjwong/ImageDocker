@@ -94,13 +94,24 @@ final class BaiduLocation {
             if error == nil,let usableData = data {
                 // let jsonString:String = String(data: data!, encoding: String.Encoding.utf8)!
                 
+                let location:Location = Location()
+                location.source = "Baidu"
+                
+                location.latitudeBD = latitudeBaidu
+                location.longitudeBD = longitudeBaidu
+                
+                let coordBD = Coord(latitude: latitudeBaidu, longitude: longitudeBaidu)
+                let coord = coordBD.fromBD09toWGS84()
+                location.latitude = coord.latitude
+                location.longitude = coord.longitude
+                
                 let json = try? JSON(data: usableData)
-                let status:String = json!["status"].description
-                let message:String = json!["message"].description
-                if status != "0" {
+                location.responseStatus = json!["status"].description
+                location.responseMessage = json!["message"].description
+                if location.responseStatus != "0" {
                     DispatchQueue.main.async {
-                        metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Status", value: status))
-                        metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Message", value: message))
+                        metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Status", value: location.responseStatus))
+                        metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Message", value: location.responseMessage))
                         metaInfoStore.updateMetaInfoView()
                         if consumer != nil {
                             consumer?.consume(metaInfoStore.getInfos())
@@ -108,31 +119,27 @@ final class BaiduLocation {
                     }
                 }else{
                     
-                    let address:String = json!["result"]["formatted_address"].description
-                    let businessCircle:String = json!["result"]["business"].description
-                    let country:String = json!["result"]["addressComponent"]["country"].description
-                    let province:String = json!["result"]["addressComponent"]["province"].description
-                    let city:String = json!["result"]["addressComponent"]["city"].description
-                    let district:String = json!["result"]["addressComponent"]["district"].description
-                    let street:String = json!["result"]["addressComponent"]["street"].description
-                    let description:String = json!["result"]["sematic_description"].description
+                    location.address = json!["result"]["formatted_address"].description
+                    location.businessCircle = json!["result"]["business"].description
+                    location.country = json!["result"]["addressComponent"]["country"].description
+                    location.province = json!["result"]["addressComponent"]["province"].description
+                    location.city = json!["result"]["addressComponent"]["city"].description
+                    location.district = json!["result"]["addressComponent"]["district"].description
+                    location.street = json!["result"]["addressComponent"]["street"].description
+                    location.addressDescription = json!["result"]["sematic_description"].description
                     
-                    if address != "" {
+                    if location.address != "" {
                         DispatchQueue.main.async {
-                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Country", value: country))
-                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Province", value: province))
-                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "City", value: city))
-                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "District", value: district))
-                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Street", value: street))
-                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "BusinessCircle", value: businessCircle))
-                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Address", value: address))
-                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Description", value: description))
-                            if description.contains("内") {
-                                let suggestPlace = (description.components(separatedBy: "内").first)!
-                                metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Suggest Place", value: suggestPlace))
-                            }else{
-                                metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Suggest Place", value: businessCircle))
-                            }
+                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Country", value: location.country))
+                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Province", value: location.province))
+                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "City", value: location.city))
+                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "District", value: location.district))
+                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Street", value: location.street))
+                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "BusinessCircle", value: location.businessCircle))
+                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Address", value: location.address))
+                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Description", value: location.addressDescription))
+                            
+                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Suggest Place", value: location.place))
                             
                             metaInfoStore.updateMetaInfoView()
                             if consumer != nil {
