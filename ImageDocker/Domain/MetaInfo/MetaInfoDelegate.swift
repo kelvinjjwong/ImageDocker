@@ -11,11 +11,16 @@ import Cocoa
 protocol MetaInfoStoreDelegate {
     func setMetaInfo(_ info:MetaInfo?)
     func setMetaInfo(_ info:MetaInfo?, ifNotExists: Bool)
-    func updateMetaInfoView()
     func getMeta(category:String, subCategory:String, title:String) -> String?
     func getInfos() -> [MetaInfo]
+    func sort(by categorySequence:[String])
+}
+
+protocol MetaInfoViewDelegate {
+    func updateMetaInfoView()
 }
 
 protocol MetaInfoConsumeDelegate {
     func consume(_ infos:[MetaInfo])
 }
+

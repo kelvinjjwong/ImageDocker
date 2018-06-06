@@ -12,7 +12,7 @@ import CoreData
 class ModelStore {
     
     static func save() {
-        print("saving model store")
+        //print("saving model store")
         let moc = AppDelegate.current.managedObjectContext
         moc.commitEditing()
         if moc.hasChanges {
@@ -46,6 +46,22 @@ class ModelStore {
         return try! moc.fetch(req)
     }
     
+    static func getContainers(rootPath:String, in moc : NSManagedObjectContext? = nil) -> [ContainerFolder] {
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        let req = NSFetchRequest<ContainerFolder>(entityName: "ContainerFolder")
+        req.predicate = NSPredicate(format: "path beginswith[c] %@", rootPath)
+        return try! moc.fetch(req)
+    }
+    
+    static func getPhotoFiles(rootPath:String, in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
+        req.predicate = NSPredicate(format: "path beginswith[c] %@", rootPath)
+        return try! moc.fetch(req)
+    }
+    
     static func getOrCreateContainer(name:String, path:String, parentPath:String = "", in moc : NSManagedObjectContext? = nil) -> ContainerFolder {
         let moc = moc ?? AppDelegate.current.managedObjectContext
         
@@ -55,7 +71,7 @@ class ModelStore {
         let exist = try! moc.fetch(req).first
         
         if exist != nil {
-            print("exist container: \(path)")
+            //print("exist container: \(path)")
             return exist!
         }else{
         
@@ -64,7 +80,7 @@ class ModelStore {
             container.path = path
             container.parentFolder = parentPath
             
-            print("create new container: \(path)")
+            //print("create new container: \(path)")
             
             return container
         }

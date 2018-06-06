@@ -20,6 +20,12 @@ class ImageFolder : NSObject {
     
     init(_ url:URL) {
         self.url = url
+        
+        let path:String = url.path
+        let name:String = url.lastPathComponent
+        //print("LOAD FOLDER 1 \(name) \(path)")
+        self.containerFolder = ModelStore.getOrCreateContainer(name: name, path: path)
+        self.containerFolder?.imageCount = Int32(countOfImages)
     }
     
     init(_ url:URL, countOfImages:Int, updateModelStore:Bool = true){
@@ -28,11 +34,11 @@ class ImageFolder : NSObject {
         
         let path:String = url.path
         let name:String = url.lastPathComponent
+        //print("LOAD FOLDER 2 \(name) \(path)")
         
-        if updateModelStore {
-            self.containerFolder = ModelStore.getOrCreateContainer(name: name, path: path)
-            self.containerFolder?.imageCount = Int32(countOfImages)
-        }
+        self.containerFolder = ModelStore.getOrCreateContainer(name: name, path: path)
+        self.containerFolder?.imageCount = Int32(countOfImages)
+        
     }
     
     func setParent(_ parent:ImageFolder) {

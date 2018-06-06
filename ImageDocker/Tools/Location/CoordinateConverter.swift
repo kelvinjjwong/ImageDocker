@@ -91,4 +91,12 @@ extension CLLocationCoordinate2D {
         let gcj02Point:CLLocationCoordinate2D = self.convertBD09toGCJ02(self)
         return self.convertGCJ02toBD09(gcj02Point)
     }
+    
+    public var isZero:Bool {
+        return latitude == 0 && longitude == 0
+    }
+    
+    public var isNotZero:Bool {
+        return !isZero
+    }
 }

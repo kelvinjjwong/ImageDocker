@@ -59,6 +59,7 @@ class CollectionViewItem: NSCollectionViewItem {
   
   func setHighlight(selected: Bool) {
     view.layer?.borderWidth = selected ? 5.0 : 0.0
+    /*
     if selected {
         if !self.isChecked() {
             self.check()
@@ -66,6 +67,7 @@ class CollectionViewItem: NSCollectionViewItem {
             self.uncheck()
         }
     }
+ */
     
   }
     

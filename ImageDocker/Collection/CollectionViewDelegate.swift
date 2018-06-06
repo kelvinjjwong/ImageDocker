@@ -22,17 +22,21 @@ extension ViewController {
     }
     
     func refreshCollectionView() {
+        //print("REFRESH COLLECTION VIEW")
         var needRefreshLocation = false
         for item in imagesLoader.getItems() {
-            if item.place == "" {
+            if item.location.place == "" && item.location.coordinate != nil && (item.location.coordinate?.isNotZero)! {
                 needRefreshLocation = true
             }
         }
         if needRefreshLocation {
+            //print("REFRESH LOCATIONS")
             refreshImagesLocation()
         }else{
+            //print("REORG ITEMS")
             DispatchQueue.main.async{
                 self.imagesLoader.reorganizeItems(considerPlaces: (self.considerPlacesCheckBox.state == NSButton.StateValue.on))
+                self.collectionView.reloadData()
             }
         }
     }
@@ -41,7 +45,7 @@ extension ViewController {
         if imagesLoader.getItems().count > 0 {
             let accumulator:Accumulator = Accumulator(target: imagesLoader.getItems().count, indicator: self.collectionProgressIndicator, lblMessage:self.indicatorMessage)
             for item in imagesLoader.getItems() {
-                item.loadLocation(consumer: MetaConsumer(item, accumulator: accumulator, onComplete: self) as MetaInfoConsumeDelegate)
+                item.loadLocation(locationConsumer: MetaConsumer(item, accumulator: accumulator, onComplete: self))
             }
         }
     }
@@ -248,9 +252,10 @@ extension ViewController : CollectionViewHeaderCheckDelegate {
     
 }
 
-class MetaConsumer : MetaInfoConsumeDelegate {
+class MetaConsumer : LocationConsumer {
     
-    var imageFile:ImageFile?
+    
+    var imageFile:ImageFile
     let accumulator:Accumulator?
     let onCompleteHandler:PlacesCompletionEvent?
     
@@ -258,16 +263,43 @@ class MetaConsumer : MetaInfoConsumeDelegate {
         self.imageFile = imageFile
         self.accumulator = accumulator
         self.onCompleteHandler = onComplete
+        print("META CONSUMER INIT")
     }
     
-    func consume(_ infos:[MetaInfo]){
-        imageFile?.recognizePlace()
-        
+    private func checkComplete(){
         if accumulator != nil && (accumulator?.add("Organizing images ..."))! {
             if self.onCompleteHandler != nil {
+                //print("ON COMPLETE")
                 onCompleteHandler?.onPlacesCompleted()
             }
+        }else{
+            //print("ACCUMULATOR IS NULL")
         }
+    }
+    
+    func consume(location:Location){
+        print("CONSUME LOCATION")
+        imageFile.metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Country", value: location.country))
+        imageFile.metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Province", value: location.province))
+        imageFile.metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "City", value: location.city))
+        imageFile.metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "District", value: location.district))
+        imageFile.metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Street", value: location.street))
+        imageFile.metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "BusinessCircle", value: location.businessCircle))
+        imageFile.metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Address", value: location.address))
+        imageFile.metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Description", value: location.addressDescription))
+        
+        imageFile.metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Suggest Place", value: location.place))
+        
+        imageFile.recognizePlace()
+        print("total \(accumulator?._target) , current \(accumulator?.current())")
+        //print("======")
+        
+        
+        checkComplete()
+    }
+    
+    func alert(status: Int, message: String, popup: Bool) {
+        print("\(status) : \(message)")
     }
     
 }

@@ -19,13 +19,13 @@ class ViewController: NSViewController {
     
     
     // MARK: Image preview
-    var img:ImageData!
+    var img:ImageFile!
     @IBOutlet weak var playerContainer: NSView!
     var stackedImageViewController : StackedImageViewController!
     var stackedVideoViewController : StackedVideoViewController!
     
     // MARK: MetaInfo table view
-    var metaInfo:[MetaInfo] = [MetaInfo]()
+    //var metaInfo:[MetaInfo] = [MetaInfo]()
     var lastSelectedMetaInfoRow: Int?
     @IBOutlet weak var metaInfoTableView: NSTableView!
     
@@ -149,7 +149,7 @@ class ViewController: NSViewController {
         collectionView.layer?.borderColor = NSColor.darkGray.cgColor
         
         imagesLoader.singleSectionMode = false
-        imagesLoader.setupItems(urls: nil)
+        imagesLoader.clean()
         collectionView.reloadData()
     }
     
@@ -180,7 +180,7 @@ class ViewController: NSViewController {
         // data model
         selectionViewController.collectionView = self.selectionCollectionView
         selectionViewController.imagesLoader.singleSectionMode = true
-        selectionViewController.imagesLoader.setupItems(urls: nil)
+        selectionViewController.imagesLoader.clean()
         
         selectionCollectionView.reloadData()
         
@@ -221,7 +221,7 @@ class ViewController: NSViewController {
         loadImage(urls[0])
     }
     
-    private func previewImage(image:ImageData) {
+    private func previewImage(image:ImageFile) {
         for sView in self.playerContainer.subviews {
             sView.removeFromSuperview()
         }
@@ -255,8 +255,8 @@ class ViewController: NSViewController {
     private func loadImage(_ url:URL){
         
         // init meta data
-        self.metaInfo = [MetaInfo]()
-        self.img = ImageData(url: url, metaInfoStore: self)
+        //self.metaInfo = [MetaInfo]()
+        self.img = ImageFile(url: url)
         
         guard img.isPhoto || img.isVideo else {return}
         self.previewImage(image: img)
@@ -264,35 +264,23 @@ class ViewController: NSViewController {
         //img.loadMetaInfoFromExif()
         img.loadMetaInfoFromDatabase()
         img.loadMetaInfoFromExif()
-        self.sortMetaInfoArray()
+        img.metaInfoHolder.sort(by: MetaCategorySequence)
         self.metaInfoTableView.reloadData()
-        img.getBaiduLocation()
+        img.loadLocation()
         self.loadBaiduMap()
     }
     
     private func loadBaiduMap() {
         webLocation.load(URLRequest(url: URL(string: "about:blank")!))
-        if img.hasCoordinate {
-            BaiduLocation.queryForMap(lat: img.latitudeBaidu, lon: img.longitudeBaidu, view: webLocation, zoom: zoomSize)
+        if img.hasCoordinate && img.location.coordinateBD != nil && img.location.coordinateBD!.isNotZero {
+            BaiduLocation.queryForMap(lat: img.location.coordinateBD!.latitude, lon: img.location.coordinateBD!.longitude, view: webLocation, zoom: zoomSize)
         }
     }
     
     @IBAction func onAddressSearcherAction(_ sender: Any) {
         let address:String = addressSearcher.stringValue
         if address == "" {return}
-        BaiduLocation.queryForCoordinate(address: address, locationDelegate: self)
-    }
-    
-    func loadDataForNewFolderWithUrl(folderURL: NSURL) {
-        imagesLoader.load(from: folderURL)
-        collectionView.reloadData()
-    }
-    
-    @IBAction func showHideSections(sender: AnyObject) {
-        let show = (sender as! NSButton).state
-        imagesLoader.singleSectionMode = (show == NSControl.StateValue.off)
-        imagesLoader.setupItems(urls: nil)
-        collectionView.reloadData()
+        BaiduLocation.queryForCoordinate(address: address, coordinateConsumer: self)
     }
     
     func selectImageFile(_ filename:String){
@@ -308,12 +296,12 @@ class ViewController: NSViewController {
         self.selectedImageFolder = imageFolder
         //print("selected image folder: \(imageFolder.url.path)")
         
-        self.imagesLoader.setupItems(urls: nil)
+        self.imagesLoader.clean()
         collectionView.reloadData()
         
         DispatchQueue.global().async {
             self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage)
-            self.imagesLoader.load(from: imageFolder.url as NSURL, indicator:self.collectionLoadingIndicator)
+            self.imagesLoader.load(from: imageFolder.url, indicator:self.collectionLoadingIndicator)
             self.refreshCollectionView()
         }
     }
@@ -339,6 +327,34 @@ class ViewController: NSViewController {
     
     @IBAction func onDelButtonClicked(_ sender: Any) {
         print("clicked delete button")
+        if self.selectedImageFolder != nil {
+            if(self.selectedImageFolder?.containerFolder?.parentFolder == ""){
+                if self.dialogOKCancel(question: "Remove all photos relate to this folder ?", text: "Confirm") {
+                    let rootPath:String = (selectedImageFolder?.containerFolder?.path)!
+                    for photoFile:PhotoFile in ModelStore.getPhotoFiles(rootPath: rootPath) {
+                        AppDelegate.current.managedObjectContext.delete(photoFile)
+                    }
+                    for containerFolder:ContainerFolder in ModelStore.getContainers(rootPath: rootPath){
+                        AppDelegate.current.managedObjectContext.delete(containerFolder)
+                    }
+                    ModelStore.save()
+                    //self.initSourceListDataModel()
+                    let selectedItem:PXSourceListItem = self.sourceList.item(atRow: self.sourceList.selectedRow) as! PXSourceListItem
+                    let parentItem:PXSourceListItem = self.libraryItem()
+                    
+                    self.sourceList.removeItems(at: NSIndexSet(index: parentItem.children.index(where: {$0 as! PXSourceListItem === selectedItem})! ) as IndexSet,
+                                                inParent: parentItem,
+                                                withAnimation: NSTableView.AnimationOptions.slideUp)
+                    //self.loadPathToTreeFromDatabase()
+                    //self.sourceList.reloadData()
+                    self.sourceListItems?.remove(selectedItem.representedObject)
+                    parentItem.removeChildItem(selectedItem)
+                    
+                    imagesLoader.clean()
+                    collectionView.reloadData()
+                }
+            }
+        }
     }
     
     @IBAction func onRefreshButtonClicked(_ sender: Any) {
@@ -402,32 +418,29 @@ class ViewController: NSViewController {
     
     // from selected image
     @IBAction func onCopyLocationFromMapClicked(_ sender: Any) {
-        guard self.img != nil && self.img.longitude != 0 && self.img.latitude != 0 else {return}
+        guard self.img != nil && self.img.location.coordinateBD != nil && self.img.location.coordinateBD!.isNotZero else {return}
         if self.possibleLocation == nil {
             self.possibleLocation = Location()
         }
-        self.possibleLocation?.latitude = img.latitude
-        self.possibleLocation?.longitude = img.longitude
-        self.possibleLocation?.latitudeBD = img.latitudeBaidu
-        self.possibleLocation?.longitudeBD = img.longitudeBaidu
+        self.possibleLocation?.coordinate = img.location.coordinate
         
-        self.possibleLocation?.country = self.getMeta(category: "Location", subCategory: "Baidu", title: "Country") ?? ""
-        self.possibleLocation?.province = self.getMeta(category: "Location", subCategory: "Baidu", title: "Province") ?? ""
-        self.possibleLocation?.city = self.getMeta(category: "Location", subCategory: "Baidu", title: "City") ?? ""
-        self.possibleLocation?.district = self.getMeta(category: "Location", subCategory: "Baidu", title: "District") ?? ""
-        self.possibleLocation?.businessCircle = self.getMeta(category: "Location", subCategory: "Baidu", title: "BusinessCircle") ?? ""
-        self.possibleLocation?.street = self.getMeta(category: "Location", subCategory: "Baidu", title: "Street") ?? ""
-        self.possibleLocation?.address = self.getMeta(category: "Location", subCategory: "Baidu", title: "Address") ?? ""
-        self.possibleLocation?.addressDescription = self.getMeta(category: "Location", subCategory: "Baidu", title: "Description") ?? ""
+        self.possibleLocation?.country = self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "Country") ?? ""
+        self.possibleLocation?.province = self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "Province") ?? ""
+        self.possibleLocation?.city = self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "City") ?? ""
+        self.possibleLocation?.district = self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "District") ?? ""
+        self.possibleLocation?.businessCircle = self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "BusinessCircle") ?? ""
+        self.possibleLocation?.street = self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "Street") ?? ""
+        self.possibleLocation?.address = self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "Address") ?? ""
+        self.possibleLocation?.addressDescription = self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "Description") ?? ""
         
-        print("possible location address: \(possibleLocation?.address ?? "")")
-        print("possible location place: \(possibleLocation?.place ?? "")")
+        //print("possible location address: \(possibleLocation?.address ?? "")")
+        //print("possible location place: \(possibleLocation?.place ?? "")")
         
         
         self.addressSearcher.stringValue = ""
         
-        BaiduLocation.queryForAddress(lat: img.latitudeBaidu, lon: img.longitudeBaidu, metaInfoStore: self.locationTextDelegate!)
-        BaiduLocation.queryForMap(lat: img.latitudeBaidu, lon: img.longitudeBaidu, view: webPossibleLocation, zoom: zoomSizeForPossibleAddress)
+        BaiduLocation.queryForAddress(lat: img.location.coordinateBD!.latitude, lon: img.location.coordinateBD!.longitude, locationConsumer: self, textConsumer: self.locationTextDelegate!)
+        BaiduLocation.queryForMap(lat: img.location.coordinateBD!.latitude, lon: img.location.coordinateBD!.longitude, view: webPossibleLocation, zoom: zoomSizeForPossibleAddress)
         
     }
     
@@ -447,8 +460,8 @@ class ViewController: NSViewController {
                     imageInSelection!.assignLocation(location: location)
                 }
                 
-                print("place after assign location: \(item.place)")
-                item.saveToModelStore(notifyIndicator: false)
+                //print("place after assign location: \(item.place)")
+                item.save()
             }
             let _ = accumulator.add()
         }
@@ -470,7 +483,7 @@ class ViewController: NSViewController {
                 ExifTool.helper.patchDateForVideo(date: self.editorDatePicker.dateValue, url: url)
             }
             item.assignDate(date: self.editorDatePicker.dateValue)
-            item.saveToModelStore(notifyIndicator: false)
+            item.save()
             
             let _ = accumulator.add()
         }
@@ -498,7 +511,15 @@ class ViewController: NSViewController {
     @IBAction func onMarkLocationButtonClicked(_ sender: Any) {
     }
     
-    
+    private func dialogOKCancel(question: String, text: String) -> Bool {
+        let alert = NSAlert()
+        alert.messageText = question
+        alert.informativeText = text
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "OK")
+        alert.addButton(withTitle: "Cancel")
+        return alert.runModal() == .alertFirstButtonReturn
+    }
     
 }
 

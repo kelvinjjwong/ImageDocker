@@ -25,12 +25,18 @@
         <attribute name="aperture" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="assignAddress" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="assignAddressDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="assignBusinessCircle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="assignCity" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="assignCountry" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="assignDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="assignDistrict" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="assignLatitude" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="assignLatitudeBD" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="assignLongitude" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="assignLongitudeBD" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="assignPlace" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="assignProvince" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="assignStreet" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="audioBits" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="audioChannels" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="audioRate" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -70,6 +76,8 @@
         <attribute name="suggestPlace" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="trackCreateDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="trackModifyDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="updateExifDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="updateLocationDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="videoBitRate" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="videoCreateDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="videoDuration" optional="YES" attributeType="String" syncable="YES"/>
@@ -94,7 +102,7 @@
     <elements>
         <element name="ContainerFolder" positionX="-632" positionY="-129" width="128" height="105"/>
         <element name="PhotoEvent" positionX="-173" positionY="-163" width="128" height="195"/>
-        <element name="PhotoFile" positionX="-441" positionY="-180" width="128" height="900"/>
+        <element name="PhotoFile" positionX="-441" positionY="-180" width="128" height="1020"/>
         <element name="PhotoPlace" positionX="-423" positionY="-27" width="128" height="225"/>
     </elements>
 </model>

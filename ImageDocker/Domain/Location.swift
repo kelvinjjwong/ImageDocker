@@ -7,16 +7,32 @@
 //
 
 import Foundation
+import CoreLocation
 
-protocol LocationConsumer {
-    func consume(location:Location)
-}
+
+// A shorter name for a type I'll often use
+typealias Coord = CLLocationCoordinate2D
 
 class Location : NSObject {
     
     var source:String?
     var responseStatus:String?
     var responseMessage:String?
+    
+    var coordinate:Coord? {
+        didSet {
+            if coordinateBD == nil {
+                coordinateBD = coordinate?.fromWGS84toBD09()
+            }
+        }
+    }
+    var coordinateBD:Coord? {
+        didSet {
+            if coordinate == nil {
+                coordinate = coordinateBD?.fromBD09toWGS84()
+            }
+        }
+    }
     
     var info:[MetaInfo] = [MetaInfo]()
     
@@ -81,8 +97,20 @@ class Location : NSObject {
             self.setInfo(category: "Suggest Place", value: place)
         }
     }
-    var latitude:Double?
-    var longitude:Double?
-    var latitudeBD:Double?
-    var longitudeBD:Double?
+    var latitude:Double? {
+        guard coordinate != nil else {return nil}
+        return coordinate?.latitude
+    }
+    var longitude:Double? {
+        guard coordinate != nil else {return nil}
+        return coordinate?.longitude
+    }
+    var latitudeBD:Double? {
+        guard coordinateBD != nil else {return nil}
+        return coordinateBD?.latitude
+    }
+    var longitudeBD:Double? {
+        guard coordinateBD != nil else {return nil}
+        return coordinateBD?.longitude
+    }
 }

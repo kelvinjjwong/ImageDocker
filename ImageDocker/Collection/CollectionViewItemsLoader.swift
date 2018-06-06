@@ -30,13 +30,13 @@ class CollectionViewItemsLoader: NSObject {
     private var sections = [CollectionViewSection]()
 
     
-    func load(from folderURL: NSURL, indicator:Accumulator? = nil) {
+    func load(from folderURL: URL, indicator:Accumulator? = nil) {
         self.indicator = indicator
         //let urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
-        print("loading folder from database: \(folderURL.path)")
+        //print("loading folder from database: \(folderURL.path)")
         var urls = walkthruDatabaseForFileUrls(startingURL: folderURL)
         if urls == nil || urls?.count == 0 {
-            print("loading folder from filesystem instead: \(folderURL.path)")
+            //print("loading folder from filesystem instead: \(folderURL.path)")
             urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
         }
         setupItems(urls: urls)
@@ -50,8 +50,12 @@ class CollectionViewItemsLoader: NSObject {
         }
         return nil
     }
+    
+    func clean() {
+        setupItems(urls: nil)
+    }
 
-    func setupItems(urls: [NSURL]?, cleanViewBeforeLoading:Bool = true) {
+    func setupItems(urls: [URL]?, cleanViewBeforeLoading:Bool = true) {
         
         if items.count > 0 {
             items.removeAll()
@@ -178,7 +182,7 @@ class CollectionViewItemsLoader: NSObject {
         for item in section.items {
             var date = item.photoTakenTime()
             if date == "" {
-                date = item.url.path!
+                date = item.url.path
             }
             let i = dates.index(where: { $0 == date })
             if i == nil {
@@ -231,7 +235,7 @@ class CollectionViewItemsLoader: NSObject {
         return true
     }
   
-    private func transformToDomainItems(urls: [NSURL]) {
+    private func transformToDomainItems(urls: [URL]) {
         if items.count > 0 {   // When not initial folder folder
             items.removeAll()
         }
@@ -240,17 +244,18 @@ class CollectionViewItemsLoader: NSObject {
             items.append(imageFile)
         }
         ModelStore.save()
+        //print("TRANSFORMED TO ITEMS \(urls.count)")
     }
     
-    private func walkthruDatabaseForFileUrls(startingURL: NSURL) -> [NSURL]? {
-        var urls: [NSURL] = []
-        for photoFile in ModelStore.getPhotoFiles(parentPath: startingURL.path!) {
-            urls.append(NSURL(fileURLWithPath: photoFile.path!))
+    private func walkthruDatabaseForFileUrls(startingURL: URL) -> [URL]? {
+        var urls: [URL] = []
+        for photoFile in ModelStore.getPhotoFiles(parentPath: startingURL.path) {
+            urls.append(URL(fileURLWithPath: photoFile.path!))
         }
         return urls
     }
   
-    private func walkthruDirectoryForFileUrls(startingURL: NSURL) -> [NSURL]? {
+    private func walkthruDirectoryForFileUrls(startingURL: URL) -> [URL]? {
 
         let options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles,
                                                                 .skipsSubdirectoryDescendants,
@@ -267,7 +272,7 @@ class CollectionViewItemsLoader: NSObject {
                                                                }
                                                               ) else { return nil }
 
-        var urls: [NSURL] = []
+        var urls: [URL] = []
         for case let url as NSURL in directoryEnumerator {
             do {
                 let resourceValues = try url.resourceValues(forKeys: resourceValueKeys)
@@ -275,7 +280,7 @@ class CollectionViewItemsLoader: NSObject {
                 guard isRegularFileResourceValue.boolValue else { continue }
                 guard let fileType = resourceValues[URLResourceKey.typeIdentifierKey] as? String else { continue }
                 guard (UTTypeConformsTo(fileType as CFString, kUTTypeImage) || UTTypeConformsTo(fileType as CFString, kUTTypeMovie)) else { continue }
-                urls.append(url)
+                urls.append(url as URL)
             }
             catch {
                 print("Unexpected error occured: \(error).")

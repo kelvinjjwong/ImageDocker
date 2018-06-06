@@ -34,10 +34,10 @@ extension ViewController: NSTableViewDelegate {
     func tableView(_ tableView: NSTableView,
                    viewFor tableColumn: NSTableColumn?,
                    row: Int) -> NSView? {
-        if row > (self.metaInfo.count - 1) {
+        if row > (self.img.metaInfoHolder.getInfos().count - 1) {
             return nil
         }
-        let info:MetaInfo = self.metaInfo[row]
+        let info:MetaInfo = self.img.metaInfoHolder.getInfos()[row]
         var value = ""
         //var tip: String? = nil
         if let id = tableColumn?.identifier {
@@ -117,40 +117,15 @@ extension ViewController: NSTableViewDataSource {
     
     /// table size is one row per image in the images array
     func numberOfRows(in tableView: NSTableView) -> Int {
-        return self.metaInfo.count
+        if img == nil {
+            return 0
+        }
+        return self.img.metaInfoHolder.getInfos().count
     }
     
     // table sorting by column contents
     func tableView(_ tableView: NSTableView,
                    sortDescriptorsDidChange oldDescriptors: [NSSortDescriptor]) {
-        
-    }
-    
-    func sortMetaInfoArray() {
-        let originalArray = self.metaInfo
-        
-        var arrays = [String : [MetaInfo]]()
-        
-        for meta:MetaInfo in originalArray {
-            if var arr:[MetaInfo] = arrays[meta.category]{
-                arr.append(meta)
-                arrays.updateValue(arr, forKey: meta.category)
-            }else{
-                var arr:[MetaInfo] = [MetaInfo]()
-                arr.append(meta)
-                arrays.updateValue(arr, forKey: meta.category)
-            }
-        }
-        
-        var sortedArray = [MetaInfo]()
-        
-        for key in ImageData.metaCategorySequence {
-            if let arr:[MetaInfo] = arrays[key] {
-                sortedArray.append(contentsOf: arr)
-            }
-        }
-        
-        self.metaInfo = sortedArray
         
     }
 }

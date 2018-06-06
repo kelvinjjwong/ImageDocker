@@ -45,7 +45,7 @@ final class BaiduLocation {
         return "\(baseurl)\(queryStr)&sn=\(sn(queryStrForSn))"
     }
     
-    public static func queryForCoordinate(address:String, locationDelegate: LocationDelegate){
+    public static func queryForCoordinate(address:String, coordinateConsumer: CoordinateConsumer){
         let urlString:String = BaiduLocation.urlForCoordinate(address: address)
         //print(urlString)
         let requestUrl:URL = URL(string:urlString)!
@@ -54,7 +54,7 @@ final class BaiduLocation {
             (data, response, error) in
             if error == nil, let usableData = data {
                 let dataStr:String = String(data: usableData, encoding: String.Encoding.utf8)!
-                print(dataStr)
+                //print(dataStr)
                 let json:JSON = JSON(parseJSON: dataStr)
                 if json != JSON(NSNull()) {
                     let status:Int = json["status"].intValue
@@ -66,18 +66,20 @@ final class BaiduLocation {
                             
                             let coordBD = Coord(latitude: latitudeBaidu, longitude: longitudeBaidu)
                             let coord = coordBD.fromBD09toWGS84()
+                            /*
                             let location:Location = Location()
                             location.address = address
-                            location.latitudeBD = latitudeBaidu
-                            location.longitudeBD = longitudeBaidu
-                            location.latitude = coord.latitude
-                            location.longitude = coord.longitude
-                            locationDelegate.handleLocation(location: location)
+                            location.coordinate = coord
+                            location.coordinateBD = coordBD
+                            locationDelegate.consume(location: location)
+ */
+                            coordinateConsumer.consume(coordinate: coord)
                         }
                         
                     } else {
                         let message:String = json["message"].stringValue
                         print(message)
+                        coordinateConsumer.alert(status: status, message: message)
                     }
                 }
             }
@@ -85,9 +87,13 @@ final class BaiduLocation {
         task.resume()
     }
     
-    public static func queryForAddress(lat latitudeBaidu:Double, lon longitudeBaidu:Double, metaInfoStore:MetaInfoStoreDelegate, consumer:MetaInfoConsumeDelegate? = nil){
+    public static func queryForAddress(lat latitudeBaidu:Double, lon longitudeBaidu:Double, locationConsumer:LocationConsumer, textConsumer:LocationConsumer? = nil){
         let urlString:String = BaiduLocation.urlForAddress(lat: latitudeBaidu, lon: longitudeBaidu)
-        guard let requestUrl = URL(string:urlString) else { return }
+        guard let requestUrl = URL(string:urlString) else {
+            print("ERROR: URL IS NULL")
+            return
+            
+        }
         let request = URLRequest(url:requestUrl)
         let task = URLSession.shared.dataTask(with: request) {
             (data, response, error) in
@@ -97,24 +103,15 @@ final class BaiduLocation {
                 let location:Location = Location()
                 location.source = "Baidu"
                 
-                location.latitudeBD = latitudeBaidu
-                location.longitudeBD = longitudeBaidu
-                
-                let coordBD = Coord(latitude: latitudeBaidu, longitude: longitudeBaidu)
-                let coord = coordBD.fromBD09toWGS84()
-                location.latitude = coord.latitude
-                location.longitude = coord.longitude
+                location.coordinateBD = Coord(latitude: latitudeBaidu, longitude: longitudeBaidu)
                 
                 let json = try? JSON(data: usableData)
                 location.responseStatus = json!["status"].description
-                location.responseMessage = json!["message"].description
                 if location.responseStatus != "0" {
                     DispatchQueue.main.async {
-                        metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Status", value: location.responseStatus))
-                        metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Message", value: location.responseMessage))
-                        metaInfoStore.updateMetaInfoView()
-                        if consumer != nil {
-                            consumer?.consume(metaInfoStore.getInfos())
+                        locationConsumer.alert(status: json!["status"].int!, message: json!["message"].description, popup: false)
+                        if textConsumer != nil {
+                            textConsumer?.alert(status: json!["status"].int!, message: json!["message"].description, popup: false)
                         }
                     }
                 }else{
@@ -128,27 +125,36 @@ final class BaiduLocation {
                     location.street = json!["result"]["addressComponent"]["street"].description
                     location.addressDescription = json!["result"]["sematic_description"].description
                     
-                    if location.address != "" {
+                    //print("Baidu address: \(location.address)")
+                    
+                    //if location.address != "" {
                         DispatchQueue.main.async {
-                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Country", value: location.country))
-                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Province", value: location.province))
-                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "City", value: location.city))
-                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "District", value: location.district))
-                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Street", value: location.street))
-                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "BusinessCircle", value: location.businessCircle))
-                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Address", value: location.address))
-                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Description", value: location.addressDescription))
+                            /*
+                            metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Country", value: location.country))
+                            metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Province", value: location.province))
+                            metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "City", value: location.city))
+                            metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "District", value: location.district))
+                            metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Street", value: location.street))
+                            metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "BusinessCircle", value: location.businessCircle))
+                            metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Address", value: location.address))
+                            metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Description", value: location.addressDescription))
                             
-                            metaInfoStore.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Suggest Place", value: location.place))
-                            
-                            metaInfoStore.updateMetaInfoView()
-                            if consumer != nil {
-                                consumer?.consume(metaInfoStore.getInfos())
+                            metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Suggest Place", value: location.place))
+                            */
+                            locationConsumer.consume(location: location)
+                            //metaInfoHolder.updateMetaInfoView()
+                            if textConsumer != nil {
+                                textConsumer?.consume(location: location)
                             }
                         }
-                    }
+                    //}
                 }
                 
+            }else{
+                locationConsumer.alert(status: -1, message: "Unexpected ERROR!", popup: false)
+                if textConsumer != nil {
+                    textConsumer?.alert(status: -1, message: "Unexpected ERROR!", popup: false)
+                }
             }
         }
         task.resume()

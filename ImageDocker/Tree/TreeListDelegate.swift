@@ -124,7 +124,7 @@ extension ViewController : PXSourceListDelegate {
             }
             if let t:String = sourceListItem.title {
                 cellView?.textField?.stringValue = t
-                print(t)
+                //print(t)
             }
             
             cellView?.imageView?.image = sourceListItem.icon
