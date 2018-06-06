@@ -21,6 +21,7 @@ class Location : NSObject {
     
     var coordinate:Coord? {
         didSet {
+            //print("SET ORI COORD TO \(coordinate?.latitude) \(coordinate?.longitude)")
             if coordinateBD == nil {
                 coordinateBD = coordinate?.fromWGS84toBD09()
             }
@@ -31,6 +32,7 @@ class Location : NSObject {
             if coordinate == nil {
                 coordinate = coordinateBD?.fromBD09toWGS84()
             }
+            //print("SET BD COORD TO \(coordinateBD?.latitude) \(coordinateBD?.longitude)")
         }
     }
     
@@ -83,11 +85,15 @@ class Location : NSObject {
     var addressDescription:String = "" {
         didSet {
             self.setInfo(category: "Description", value: addressDescription)
-            
-            if addressDescription.contains("内") {
-                let suggestPlace = (addressDescription.components(separatedBy: "内").first)!
-                place = suggestPlace
-            }else{
+            for desc:String in addressDescription.components(separatedBy: ",").reversed(){
+                
+                if desc.contains("内") {
+                    let suggestPlace = (desc.components(separatedBy: "内").first)!
+                    place = suggestPlace
+                    break
+                }
+            }
+            if place == "" {
                 place = businessCircle
             }
         }

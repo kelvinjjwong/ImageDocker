@@ -16,7 +16,8 @@ extension ViewController {
             let viewItem = item as! CollectionViewItem
             viewItem.setHighlight(selected: selected)
             if selected {
-                self.selectImageFile((viewItem.imageFile?.fileName)!)
+                print("SELECTED IMAGE COORD IS ZERO ? \(viewItem.imageFile?.location.coordinate?.isZero) - \(viewItem.imageFile?.fileName)")
+                self.selectImageFile(viewItem.imageFile!)
             }
         }
     }

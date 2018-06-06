@@ -270,10 +270,20 @@ class ViewController: NSViewController {
         self.loadBaiduMap()
     }
     
+    private func loadImage(imageFile:ImageFile){
+        self.img = imageFile
+        self.previewImage(image: img)
+        img.metaInfoHolder.sort(by: MetaCategorySequence)
+        self.metaInfoTableView.reloadData()
+        self.loadBaiduMap()
+    }
+    
     private func loadBaiduMap() {
         webLocation.load(URLRequest(url: URL(string: "about:blank")!))
-        if img.hasCoordinate && img.location.coordinateBD != nil && img.location.coordinateBD!.isNotZero {
-            BaiduLocation.queryForMap(lat: img.location.coordinateBD!.latitude, lon: img.location.coordinateBD!.longitude, view: webLocation, zoom: zoomSize)
+        if img.location.coordinateBD != nil && img.location.coordinateBD!.isNotZero {
+            BaiduLocation.queryForMap(coordinateBD: img.location.coordinateBD!, view: webLocation, zoom: zoomSize)
+        }else{
+            print("img has no coord")
         }
     }
     
@@ -283,12 +293,12 @@ class ViewController: NSViewController {
         BaiduLocation.queryForCoordinate(address: address, coordinateConsumer: self)
     }
     
-    func selectImageFile(_ filename:String){
-        self.selectedImageFile = filename
+    func selectImageFile(_ imageFile:ImageFile){
+        self.selectedImageFile = imageFile.fileName
         //print("selected image file: \(filename)")
-        let url:URL = (self.selectedImageFolder?.url.appendingPathComponent(filename, isDirectory: false))!
+        //let url:URL = (self.selectedImageFolder?.url.appendingPathComponent(imageFile.fileName, isDirectory: false))!
         DispatchQueue.main.async {
-            self.loadImage(url)
+            self.loadImage(imageFile: imageFile)
         }
     }
     
@@ -439,8 +449,8 @@ class ViewController: NSViewController {
         
         self.addressSearcher.stringValue = ""
         
-        BaiduLocation.queryForAddress(lat: img.location.coordinateBD!.latitude, lon: img.location.coordinateBD!.longitude, locationConsumer: self, textConsumer: self.locationTextDelegate!)
-        BaiduLocation.queryForMap(lat: img.location.coordinateBD!.latitude, lon: img.location.coordinateBD!.longitude, view: webPossibleLocation, zoom: zoomSizeForPossibleAddress)
+        BaiduLocation.queryForAddress(coordinateBD: img.location.coordinateBD!, locationConsumer: self, textConsumer: self.locationTextDelegate!)
+        BaiduLocation.queryForMap(coordinateBD: img.location.coordinateBD!, view: webPossibleLocation, zoom: zoomSizeForPossibleAddress)
         
     }
     

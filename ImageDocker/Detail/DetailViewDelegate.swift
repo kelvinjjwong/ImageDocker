@@ -20,18 +20,22 @@ extension ViewController: CoordinateConsumer {
     
     func consume(coordinate:Coord){
         //self.possibleLocation = location
-        let coordBD:Coord = coordinate.fromWGS84toBD09()
-        
-        BaiduLocation.queryForAddress(lat: coordBD.latitude, lon: coordBD.longitude, locationConsumer: self.locationTextDelegate!)
-        BaiduLocation.queryForMap(lat: coordBD.latitude, lon: coordBD.longitude, view: webPossibleLocation, zoom: zoomSizeForPossibleAddress)
+        //let coordBD:Coord = coordinate.fromWGS84toBD09()
+        // no need to transform
+        self.possibleLocation = Location()
+        BaiduLocation.queryForAddress(coordinateBD: coordinate, locationConsumer: self.locationTextDelegate!, modifyLocation: self.possibleLocation)
+        BaiduLocation.queryForMap(coordinateBD: coordinate, view: webPossibleLocation, zoom: zoomSizeForPossibleAddress)
     }
     
     func alert(status: Int, message: String) {
+        /*
         let alert = NSAlert()
         alert.addButton(withTitle: NSLocalizedString("CLOSE", comment: "Close"))
         alert.messageText = NSLocalizedString("Location Service", comment: "")
         alert.informativeText = NSLocalizedString(message, comment: "")
         alert.runModal()
+ */
+        print("\(status) : \(message)")
     }
 }
 

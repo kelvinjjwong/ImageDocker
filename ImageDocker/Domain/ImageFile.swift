@@ -64,7 +64,7 @@ class ImageFile {
     
     var isPhoto:Bool = false
     var isVideo:Bool = false
-    var hasCoordinate:Bool = false
+    //var hasCoordinate:Bool = false
     
     var isStandalone:Bool = false
     var isLoadedExif:Bool = false
@@ -200,8 +200,8 @@ class ImageFile {
             if location.coordinateBD != nil && location.coordinateBD!.isNotZero {
                 //print("------")
                 //print("\(self.fileName) calling baidu location")
-                print("LOAD LOCATION 2 FROM Baidu WebService - \(fileName)")
-                BaiduLocation.queryForAddress(lat: self.location.coordinateBD!.latitude, lon: self.location.coordinateBD!.longitude, locationConsumer: self, textConsumer: textConsumer)
+                print("LOAD LOCATION 2 FROM Baidu WebService - \(fileName) - \(self.location.coordinateBD?.latitude) \(self.location.coordinateBD?.longitude)")
+                BaiduLocation.queryForAddress(coordinateBD: self.location.coordinateBD!, locationConsumer: locationConsumer ?? self, textConsumer: textConsumer)
             }else{
                 print("LOAD LOCATION 3 FROM ImageFile.location - \(fileName)")
                 if locationConsumer != nil {
@@ -577,14 +577,17 @@ class ImageFile {
         
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Latitude (WGS84)", value: String(format: "%3.6f", self.location.coordinate!.latitude).paddingLeft(12)))
         self.photoFile?.latitude = self.location.coordinate!.latitude.description
+        
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Longitude (WGS84)", value: String(format: "%3.6f", self.location.coordinate!.longitude).paddingLeft(12)))
         self.photoFile?.longitude = self.location.coordinate!.longitude.description
-        metaInfoHolder.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Latitude (BD09)", value: String(format: "%3.6f", self.location.coordinateBD!.latitude).paddingLeft(12)))
-        self.photoFile?.latitude = self.location.coordinateBD!.latitude.description
-        metaInfoHolder.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Longitude (BD09)", value: String(format: "%3.6f", self.location.coordinateBD!.longitude).paddingLeft(12)))
-        self.photoFile?.longitude = self.location.coordinateBD!.longitude.description
         
-        hasCoordinate = true
+        metaInfoHolder.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Latitude (BD09)", value: String(format: "%3.6f", self.location.coordinateBD!.latitude).paddingLeft(12)))
+        self.photoFile?.latitudeBD = self.location.coordinateBD!.latitude.description
+        
+        metaInfoHolder.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Longitude (BD09)", value: String(format: "%3.6f", self.location.coordinateBD!.longitude).paddingLeft(12)))
+        self.photoFile?.longitudeBD = self.location.coordinateBD!.longitude.description
+        
+        //hasCoordinate = true
     }
     
     // MARK: extract image metadata
@@ -850,6 +853,10 @@ class ImageFile {
         location.addressDescription = photoFile.assignAddressDescription ?? photoFile.addressDescription ?? ""
         location.place = photoFile.assignPlace ?? photoFile.suggestPlace ?? photoFile.businessCircle ?? ""
         
+        if photoFile.latitude != nil && photoFile.longitude != nil {
+            location.coordinate = Coord(latitude: Double(photoFile.latitude ?? "0") ?? 0, longitude: Double(photoFile.longitude ?? "0") ?? 0)
+        }
+        //print("COORD IS ZERO ? \(location.coordinate?.isZero) - \(fileName)")
         //print("LOCATION LOADED")
     }
     

@@ -48,13 +48,14 @@ final class BaiduLocation {
     public static func queryForCoordinate(address:String, coordinateConsumer: CoordinateConsumer){
         let urlString:String = BaiduLocation.urlForCoordinate(address: address)
         //print(urlString)
+        print(urlString)
         let requestUrl:URL = URL(string:urlString)!
         let request = URLRequest(url:requestUrl)
         let task = URLSession.shared.dataTask(with: request) {
             (data, response, error) in
             if error == nil, let usableData = data {
                 let dataStr:String = String(data: usableData, encoding: String.Encoding.utf8)!
-                //print(dataStr)
+                print(dataStr)
                 let json:JSON = JSON(parseJSON: dataStr)
                 if json != JSON(NSNull()) {
                     let status:Int = json["status"].intValue
@@ -65,15 +66,9 @@ final class BaiduLocation {
                         DispatchQueue.main.async {
                             
                             let coordBD = Coord(latitude: latitudeBaidu, longitude: longitudeBaidu)
-                            let coord = coordBD.fromBD09toWGS84()
-                            /*
-                            let location:Location = Location()
-                            location.address = address
-                            location.coordinate = coord
-                            location.coordinateBD = coordBD
-                            locationDelegate.consume(location: location)
- */
-                            coordinateConsumer.consume(coordinate: coord)
+                            
+                            // no need to transform
+                            coordinateConsumer.consume(coordinate: coordBD)
                         }
                         
                     } else {
@@ -87,8 +82,8 @@ final class BaiduLocation {
         task.resume()
     }
     
-    public static func queryForAddress(lat latitudeBaidu:Double, lon longitudeBaidu:Double, locationConsumer:LocationConsumer, textConsumer:LocationConsumer? = nil){
-        let urlString:String = BaiduLocation.urlForAddress(lat: latitudeBaidu, lon: longitudeBaidu)
+    public static func queryForAddress(coordinateBD:Coord, locationConsumer:LocationConsumer, textConsumer:LocationConsumer? = nil, modifyLocation:Location? = nil){
+        let urlString:String = BaiduLocation.urlForAddress(lat: coordinateBD.latitude, lon: coordinateBD.longitude)
         guard let requestUrl = URL(string:urlString) else {
             print("ERROR: URL IS NULL")
             return
@@ -100,10 +95,10 @@ final class BaiduLocation {
             if error == nil,let usableData = data {
                 // let jsonString:String = String(data: data!, encoding: String.Encoding.utf8)!
                 
-                let location:Location = Location()
+                let location:Location = modifyLocation ?? Location()
                 location.source = "Baidu"
                 
-                location.coordinateBD = Coord(latitude: latitudeBaidu, longitude: longitudeBaidu)
+                location.coordinateBD = Coord(latitude: coordinateBD.latitude, longitude: coordinateBD.longitude)
                 
                 let json = try? JSON(data: usableData)
                 location.responseStatus = json!["status"].description
@@ -141,6 +136,7 @@ final class BaiduLocation {
                             
                             metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Suggest Place", value: location.place))
                             */
+                            //print("GOING TO CONSUME LOCATION")
                             locationConsumer.consume(location: location)
                             //metaInfoHolder.updateMetaInfoView()
                             if textConsumer != nil {
@@ -160,12 +156,14 @@ final class BaiduLocation {
         task.resume()
     }
     
-    public static func queryForMap(lat latitudeBaidu:Double, lon longitudeBaidu:Double, view:WKWebView, zoom: Int){
+    public static func queryForMap(coordinateBD: Coord, view:WKWebView, zoom: Int){
+        print("START REQUEST MAP")
         let width:Int = Int(min(CGFloat(512), view.frame.size.width))
         let height:Int = Int(min(CGFloat(512), view.frame.size.height))
-        let requestBaiduUrl = urlForMap(width: width, height: height, zoom: zoom, lat: latitudeBaidu, lon: longitudeBaidu)
+        let requestBaiduUrl = urlForMap(width: width, height: height, zoom: zoom, lat: coordinateBD.latitude, lon: coordinateBD.longitude)
         guard let requestUrl = URL(string: requestBaiduUrl) else {return}
         let req = URLRequest(url: requestUrl)
+        print(requestBaiduUrl)
         view.load(req)
     }
 }
