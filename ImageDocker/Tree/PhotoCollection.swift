@@ -13,6 +13,13 @@ enum PhotoCollectionType : Int {
     case userCreated
 }
 
+enum PhotoCollectionSource : Int {
+    case library
+    case moment
+    case place
+    case event
+}
+
 class Photo {
     
 }
@@ -26,18 +33,27 @@ class Photo {
 class PhotoCollection: NSObject {
     var title = ""
     var identifier = ""
+    var photoCount:Int = 0
     var photos = [Any]()
     var type: PhotoCollectionType?
     var imageFolder:ImageFolder? = nil
+    var source : PhotoCollectionSource?
+    var year:Int = 0
+    var month:Int = 0
+    var day:Int = 0
+    var place:String = ""
+    var event:String = ""
+    
     
     override init(){
         super.init()
     }
     
-    convenience init(title: String, identifier: String, type: PhotoCollectionType) {
+    convenience init(title: String, identifier: String, type: PhotoCollectionType, source: PhotoCollectionSource) {
         self.init()
         self.title = title
         self.identifier = identifier
         self.type = type
+        self.source = source
     }
 }

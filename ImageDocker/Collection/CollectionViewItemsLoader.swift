@@ -42,6 +42,17 @@ class CollectionViewItemsLoader: NSObject {
         setupItems(urls: urls)
     }
     
+    func load(year:Int, month:Int, day:Int, place:String?, indicator:Accumulator? = nil) {
+        self.indicator = indicator
+        
+        var urls: [URL] = []
+        for photoFile in ModelStore.getPhotoFiles(year: year, month: month, day: day, place: place) {
+            urls.append(URL(fileURLWithPath: photoFile.path!))
+        }
+        setupItems(urls: urls)
+        
+    }
+    
     func getItem(path:String) -> ImageFile?{
         for item in items {
             if item.url.path == path {

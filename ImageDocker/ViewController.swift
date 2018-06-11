@@ -46,12 +46,19 @@ class ViewController: NSViewController {
     @IBOutlet weak var possibleLocationText: NSTextField!
     var locationTextDelegate:LocationTextDelegate?
     
-    // MARK: PXSourceList
-    var modelObjects:NSMutableArray?
+    // MARK: Tree
+    //var modelObjects:NSMutableArray?
     var sourceListItems:NSMutableArray?
-    var sourceListIdentifiers:[String : PXSourceListItem] = [String : PXSourceListItem] ()
+    var identifiersOfLibraryTree:[String : PXSourceListItem] = [String : PXSourceListItem] ()
+    var parentsOfMomentsTree : [String : PXSourceListItem] = [String : PXSourceListItem] ()
+    var momentToCollection : [String : PhotoCollection] = [String : PhotoCollection] ()
+    var momentToCollectionGroupByPlace : [String : PhotoCollection] = [String : PhotoCollection] ()
+    var parentsOfMomentsTreeGroupByPlace : [String : PXSourceListItem] = [String : PXSourceListItem] ()
     
     var librarySectionOfTree : PXSourceListItem?
+    var momentSectionOfTree : PXSourceListItem?
+    var placeSectionOfTree : PXSourceListItem?
+    var eventSectionOfTree : PXSourceListItem?
 
     var selectedImageFolder:ImageFolder?
     var selectedImageFile:String = ""
@@ -98,13 +105,18 @@ class ViewController: NSViewController {
         
         PreferencesController.healthCheck()
         
-        self.initSourceListDataModel()
-        self.loadPathToTreeFromDatabase()
-        self.sourceList.backgroundColor = NSColor.darkGray
-        self.sourceList.reloadData()
-        
+        configureTree()
         configureCollectionView()
         configureEditors()
+    }
+    
+    func configureTree(){
+        self.initTreeDataModel()
+        self.loadPathToTreeFromDatabase()
+        self.loadMomentsToTreeFromDatabase(groupByPlace: false)
+        self.loadMomentsToTreeFromDatabase(groupByPlace: true)
+        self.sourceList.backgroundColor = NSColor.darkGray
+        self.sourceList.reloadData()
     }
     
     func configurePreview(){
@@ -316,6 +328,17 @@ class ViewController: NSViewController {
         }
     }
     
+    func selectMoment(_ collection:PhotoCollection, groupByPlace:Bool = false){
+        self.imagesLoader.clean()
+        collectionView.reloadData()
+        
+        DispatchQueue.global().async {
+            self.collectionLoadingIndicator = Accumulator(target: collection.photoCount, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage)
+            self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, place: groupByPlace ? collection.place : nil, indicator:self.collectionLoadingIndicator)
+            self.refreshCollectionView()
+        }
+    }
+    
     @IBAction func onAddButtonClicked(_ sender: Any) {
         let window = NSApplication.shared.windows.first
         
@@ -339,7 +362,7 @@ class ViewController: NSViewController {
         print("clicked delete button")
         if self.selectedImageFolder != nil {
             if(self.selectedImageFolder?.containerFolder?.parentFolder == ""){
-                if self.dialogOKCancel(question: "Remove all photos relate to this folder ?", text: "Confirm") {
+                if self.dialogOKCancel(question: "Remove all photos relate to this folder ?", text: selectedImageFolder!.url.path) {
                     let rootPath:String = (selectedImageFolder?.containerFolder?.path)!
                     for photoFile:PhotoFile in ModelStore.getPhotoFiles(rootPath: rootPath) {
                         AppDelegate.current.managedObjectContext.delete(photoFile)

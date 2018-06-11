@@ -17,12 +17,7 @@ let albumIcon:NSImage = NSImage(imageLiteralResourceName: "album")
 
 extension ViewController {
     
-    func getLibrarySectionOfTree() -> PXSourceListItem {
-        
-        return self.librarySectionOfTree!
-    }
-    
-    func initSourceListDataModel() {
+    func initTreeDataModel() {
         placesIcon.isTemplate = true
         peopleIcon.isTemplate = true
         eventsIcon.isTemplate = true
@@ -30,10 +25,60 @@ extension ViewController {
         albumIcon.isTemplate = true
         
         self.sourceListItems = NSMutableArray(array:[])
-        self.modelObjects = NSMutableArray(array:[])
+        //self.modelObjects = NSMutableArray(array:[])
         
         if self.librarySectionOfTree == nil {
-            self.librarySectionOfTree = self.addSourceListSection(title: "LIBRARY")
+            self.librarySectionOfTree = self.addTreeSection(title: "LIBRARY")
+        }
+        
+        if self.momentSectionOfTree == nil {
+            self.momentSectionOfTree = self.addTreeSection(title: "MOMENTS")
+        }
+        
+        if self.placeSectionOfTree == nil {
+            self.placeSectionOfTree = self.addTreeSection(title: "PLACES")
+        }
+        
+        if self.eventSectionOfTree == nil {
+            self.eventSectionOfTree = self.addTreeSection(title: "EVENTS")
+        }
+ 
+    }
+    
+    func loadMomentsToTreeFromDatabase(groupByPlace:Bool = false){
+        let dates:[[String : AnyObject]]? = ModelStore.getAllDates(groupByPlace: groupByPlace)
+        if dates != nil {
+            let moments:[Moment] = Moments().read(dates!, groupByPlace: groupByPlace)
+            if groupByPlace {
+                for place in moments {
+                    //print("PLACE \(place.place)")
+                    self.addMomentPlaceTreeEntry(place: place)
+                    for year in place.children {
+                        //print("     YEAR \(year.year)")
+                        self.addMomentYearTreeEntry(year: year, groupByPlace: true)
+                        for month in year.children {
+                            //print("         MONTH \(month.month)")
+                            self.addMomentMonthTreeEntry(month: month, groupByPlace: true)
+                            for day in month.children {
+                                //print("              DAY \(day.day)")
+                                self.addMomentDayTreeEntry(day: day, groupByPlace: true)
+                            }
+                        }
+                    }
+                }
+            }else{
+                for year in moments {
+                    self.addMomentYearTreeEntry(year: year, groupByPlace: false)
+                    for month in year.children {
+                        self.addMomentMonthTreeEntry(month: month, groupByPlace: false)
+                        for day in month.children {
+                            self.addMomentDayTreeEntry(day: day, groupByPlace: false)
+                        }
+                    }
+                }
+            }
+        }else{
+            print("no dates")
         }
     }
     
@@ -46,7 +91,7 @@ extension ViewController {
         
         if imageFolders.count > 0 {
             for imageFolder:ImageFolder in imageFolders {
-                self.addSourceListEntry(imageFolder: imageFolder, icon: photosIcon, root: self.getLibrarySectionOfTree())
+                self.addLibraryTreeEntry(imageFolder: imageFolder)
             }
         }
     }
@@ -56,52 +101,179 @@ extension ViewController {
         
         if imageFolders.count > 0 {
             for imageFolder:ImageFolder in imageFolders {
-                self.addSourceListEntry(imageFolder: imageFolder, icon: photosIcon, root: self.getLibrarySectionOfTree())
+                self.addLibraryTreeEntry(imageFolder: imageFolder)
             }
         }
-    }
-    
-    func addNumberOfPhotoObjects(_ numberOfObjects:UInt, toCollection collection:PhotoCollection) {
-        let photos:NSMutableArray = NSMutableArray()
-        for _ in 1...numberOfObjects {
-            photos.add(Photo())
-        }
-        collection.photos = photos as! [Any]
     }
     
     func libraryItem() -> PXSourceListItem {
         return self.sourceListItems![0] as! PXSourceListItem
     }
     
-    func addSourceListSection(title:String) -> PXSourceListItem {
+    func momentItem() -> PXSourceListItem {
+        return self.sourceListItems![1] as! PXSourceListItem
+    }
+    
+    func placeItem() -> PXSourceListItem {
+        return self.sourceListItems![2] as! PXSourceListItem
+    }
+    
+    func eventItem() -> PXSourceListItem {
+        return self.sourceListItems![3] as! PXSourceListItem
+    }
+    
+    func addTreeSection(title:String) -> PXSourceListItem {
         let item:PXSourceListItem = PXSourceListItem(title: title, identifier: "")
         self.sourceListItems?.add(item)
-        self.sourceListIdentifiers[title] = item
+        self.identifiersOfLibraryTree[title] = item
         return item
     }
     
-    func addSourceListEntry(imageFolder:ImageFolder, icon:NSImage, root:PXSourceListItem) {
+    func addLibraryTreeEntry(imageFolder:ImageFolder) {
         var _parent:PXSourceListItem
         if imageFolder.parent == nil {
-            _parent = root
+            _parent = self.librarySectionOfTree!
         }else{
-            _parent = self.sourceListIdentifiers[(imageFolder.parent?.url.path)!]!
+            _parent = self.identifiersOfLibraryTree[(imageFolder.parent?.url.path)!]!
         }
         
         let collection:PhotoCollection = PhotoCollection(title: imageFolder.getPathExcludeParent(),
                                                          identifier: imageFolder.url.path,
-                                                         type: imageFolder.children.count == 0 ? .userCreated : .library)
-        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: icon)
-        self.modelObjects?.add(collection)
+                                                         type: imageFolder.children.count == 0 ? .userCreated : .library,
+                                                         source: .library)
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: photosIcon)
+        //self.modelObjects?.add(collection)
         _parent.addChildItem(item)
-        self.addNumberOfPhotoObjects(UInt(imageFolder.countOfImages), toCollection: collection)
+        collection.photoCount = imageFolder.countOfImages
         
-        self.sourceListIdentifiers[imageFolder.url.path] = item
+        self.identifiersOfLibraryTree[imageFolder.url.path] = item
         
         collection.imageFolder = imageFolder
         imageFolder.photoCollection = collection
         
     }
+    
+    func addMomentPlaceTreeEntry(place:Moment){
+        let collection:PhotoCollection = PhotoCollection(title: place.represent,
+                                                         identifier: place.represent,
+                                                         type: place.photoCount == 0 ? .userCreated : .library,
+                                                         source: .place)
+        collection.photoCount = place.photoCount
+        collection.place = place.place
+        
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: photosIcon)
+        
+        // add tree relationship
+        self.placeItem().addChildItem(item)
+        
+        // avoid collection object to be purged from memory
+        self.momentToCollectionGroupByPlace["\(place.id)"] = collection
+        
+        // for children to find parent
+        self.parentsOfMomentsTreeGroupByPlace["\(place.place)"] = item
+    }
+    
+    func addMomentYearTreeEntry(year:Moment, groupByPlace:Bool = false){
+        let collection:PhotoCollection = PhotoCollection(title: year.represent,
+                                                         identifier: year.represent,
+                                                         type: year.photoCount == 0 ? .userCreated : .library,
+                                                         source: groupByPlace ? .place : .moment)
+        collection.photoCount = year.photoCount
+        collection.year = year.year
+        
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: photosIcon)
+        
+        if groupByPlace {
+            collection.place = year.place
+            
+            // add tree relationship
+            self.parentsOfMomentsTreeGroupByPlace["\(year.place)"]?.addChildItem(item)
+            
+            // avoid collection object to be purged from memory
+            self.momentToCollectionGroupByPlace["\(year.id)"] = collection
+            
+            // for children to find parent
+            self.parentsOfMomentsTreeGroupByPlace["\(year.place)-\(year.year)"] = item
+            
+        }else{
+            // add tree relationship
+            self.momentItem().addChildItem(item)
+            
+            // avoid collection object to be purged from memory
+            self.momentToCollection["\(year.id)"] = collection
+            
+            // for children to find parent
+            self.parentsOfMomentsTree["\(year.year)"] = item
+        }
+    }
+    
+    func addMomentMonthTreeEntry(month:Moment, groupByPlace:Bool = false){
+        let collection:PhotoCollection = PhotoCollection(title: month.represent,
+                                                         identifier: month.represent,
+                                                         type: month.photoCount == 0 ? .userCreated : .library,
+                                                         source: groupByPlace ? .place : .moment)
+        collection.photoCount = month.photoCount
+        collection.year = month.year
+        collection.month = month.month
+        
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: photosIcon)
+        
+        if groupByPlace  {
+            collection.place = month.place
+            //print(self.parentsOfMomentsTreeGroupByPlace["\(month.place)-\(month.year)"])
+            // add tree relationship
+            self.parentsOfMomentsTreeGroupByPlace["\(month.place)-\(month.year)"]?.addChildItem(item)
+            
+            // avoid collection object to be purged from memory
+            self.momentToCollectionGroupByPlace["\(month.id)"] = collection
+            
+            // for children to find parent
+            self.parentsOfMomentsTreeGroupByPlace["\(month.place)-\(month.year)-\(month.month)"] = item
+            //print(self.parentsOfMomentsTreeGroupByPlace["\(month.place)-\(month.year)-\(month.month)"])
+            
+        }else {
+            // add tree relationship
+            self.parentsOfMomentsTree["\(month.year)"]?.addChildItem(item)
+            
+            // avoid collection object to be purged from memory
+            self.momentToCollection["\(month.id)"] = collection
+            
+            // for children to find parent
+            self.parentsOfMomentsTree["\(month.year)-\(month.month)"] = item
+        }
+    }
+    
+    func addMomentDayTreeEntry(day:Moment, groupByPlace:Bool = false){
+        let collection:PhotoCollection = PhotoCollection(title: day.represent,
+                                                         identifier: day.represent,
+                                                         type: day.photoCount == 0 ? .userCreated : .library,
+                                                         source: groupByPlace ? .place : .moment)
+        collection.photoCount = day.photoCount
+        collection.year = day.year
+        collection.month = day.month
+        collection.day = day.day
+
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: photosIcon)
+        
+        if groupByPlace  {
+            collection.place = day.place
+            //print(self.parentsOfMomentsTreeGroupByPlace["\(day.place)-\(day.year)-\(day.month)"])
+            // add tree relationship
+            self.parentsOfMomentsTreeGroupByPlace["\(day.place)-\(day.year)-\(day.month)"]?.addChildItem(item)
+            
+            // avoid collection object to be purged from memory
+            self.momentToCollectionGroupByPlace["\(day.id)"] = collection
+            
+        }else {
+        
+            // add tree relationship
+            self.parentsOfMomentsTree["\(day.year)-\(day.month)"]?.addChildItem(item)
+            
+            // avoid collection object to be purged from memory
+            self.momentToCollection["\(day.id)"] = collection
+        }
+    }
+    
 }
 
 
@@ -129,10 +301,20 @@ extension ViewController : PXSourceListDelegate {
             
             cellView?.imageView?.image = sourceListItem.icon
             
+            //print(sourceListItem.representedObject)
+            
             if sourceListItem.representedObject == nil {
                 // section, do nothing
+                //print("COLLECTION IS NULL \(sourceListItem.title ?? "")")
+                
+                //if self.momentToCollection[sourceListItem.title] != nil {
+                //    let _ = self.momentToCollection[sourceListItem.title]!
+                    //print("found collection: \(collection.title) \(collection.photoCount)")
+                //}
             }else{
                 let collection: PhotoCollection = sourceListItem.representedObject as! PhotoCollection
+                
+                //print("COLLECTION: \(collection.title) , count: \(collection.photoCount)")
                 
                 let sourceTitle:String? = sourceListItem.title
                 let collectionTitle:String? = collection.title
@@ -146,8 +328,8 @@ extension ViewController : PXSourceListDelegate {
                 if sourceTitle == nil && collectionTitle != nil {
                     cellView?.textField?.stringValue = collectionTitle!
                 }
-                cellView?.badge?.stringValue = " \(collection.photos.count) "
-                cellView?.badge?.isHidden = (collection.photos.count == 0)
+                cellView?.badge?.stringValue = " \(collection.photoCount) "
+                cellView?.badge?.isHidden = (collection.photoCount == 0)
                 
             
             }
@@ -169,7 +351,15 @@ extension ViewController : PXSourceListDelegate {
             }
             
             if let collection:PhotoCollection = selectedItem.representedObject as? PhotoCollection {
-                self.selectImageFolder(collection.imageFolder!)
+                if collection.source! == .library {
+                    self.selectImageFolder(collection.imageFolder!)
+                }else if collection.source! == .moment {
+                    print("selected moment \(collection.title)")
+                    self.selectMoment(collection, groupByPlace: false)
+                }else if collection.source! == .place {
+                    print("selected place moment \(collection.title)")
+                    self.selectMoment(collection, groupByPlace: true)
+                }
             }
         }
     }
@@ -186,12 +376,13 @@ extension ViewController : PXSourceListDataSource {
             }
         } else{
             // when just init sections
-            return UInt(1)
+            return UInt(4)
         }
     }
     
     func sourceList(_ aSourceList: PXSourceList!, child index: UInt, ofItem item: Any!) -> Any! {
         if let node = item as? PXSourceListItem {
+            //print("getting child of item \(node.title) \(index)/\(node.children.count)")
             return node.children[Int(index)]
         }else{
             return self.sourceListItems![Int(index)]

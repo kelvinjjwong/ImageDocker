@@ -23,7 +23,13 @@ class ImageFile {
     //private(set) var thumbnail: NSImage?
     private(set) var fileName: String
     private(set) var url: URL
-    private(set) var place:String = ""
+    private(set) var place:String = "" {
+        didSet {
+            if photoFile != nil {
+                photoFile!.place = place
+            }
+        }
+    }
     private var photoFile:PhotoFile?
     
     private var indicator:Accumulator?
@@ -227,7 +233,7 @@ class ImageFile {
             self.place = place!
             return
         }
-        place = self.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "Address")
+        place = self.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "BusinessCircle")
         if place != nil {
             self.place = place!
             return

@@ -68,6 +68,7 @@
         <attribute name="photoTakenHour" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="photoTakenMonth" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="photoTakenYear" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="place" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="province" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="rotation" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="softwareModifiedTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
@@ -102,7 +103,7 @@
     <elements>
         <element name="ContainerFolder" positionX="-632" positionY="-129" width="128" height="105"/>
         <element name="PhotoEvent" positionX="-173" positionY="-163" width="128" height="195"/>
-        <element name="PhotoFile" positionX="-441" positionY="-180" width="128" height="1020"/>
+        <element name="PhotoFile" positionX="-441" positionY="-180" width="128" height="1035"/>
         <element name="PhotoPlace" positionX="-423" positionY="-27" width="128" height="225"/>
     </elements>
 </model>
