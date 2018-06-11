@@ -147,6 +147,14 @@ class ModelStore {
         return try! moc.fetch(req)
     }
     
+    static func getPhotoFiles(after date:Date, in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
+        req.predicate = NSPredicate(format: "updateLocationDate >= %@", date as NSDate)
+        return try! moc.fetch(req)
+    }
+    
     static func getOrCreateContainer(name:String, path:String, parentPath:String = "", in moc : NSManagedObjectContext? = nil) -> ContainerFolder {
         let moc = moc ?? AppDelegate.current.managedObjectContext
         

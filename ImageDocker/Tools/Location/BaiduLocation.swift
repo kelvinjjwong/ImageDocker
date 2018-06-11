@@ -111,6 +111,8 @@ final class BaiduLocation {
                     }
                 }else{
                     
+                    print("RECEIVED BAIDU LOCATION at \(Date())")
+                    
                     location.address = json!["result"]["formatted_address"].description
                     location.businessCircle = json!["result"]["business"].description
                     location.country = json!["result"]["addressComponent"]["country"].description

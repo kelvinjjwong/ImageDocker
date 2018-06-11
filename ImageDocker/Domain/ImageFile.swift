@@ -340,6 +340,7 @@ class ImageFile {
         self.photoFile?.photoTakenMonth = Int32(component.month!)
         self.photoFile?.photoTakenDay = Int32(component.day!)
         self.photoFile?.photoTakenHour = Int32(component.hour!)
+        self.photoFile?.updatePhotoTakenDate = Date()
     }
     
     private func notifyAccumulator(notifyIndicator:Bool = true){
@@ -413,6 +414,10 @@ class ImageFile {
         if photoFile != nil {
             photoFile?.assignDateTime = date
         }
+        
+        let photoTakenDate:String? = self.choosePhotoTakenDateFromMetaInfo()
+        self.storePhotoTakenDate(dateTime: photoTakenDate)
+        
     }
     
     func assignLocation(location:Location){
@@ -436,6 +441,8 @@ class ImageFile {
             photoFile?.assignAddress = location.address
             photoFile?.assignAddressDescription = location.addressDescription
             photoFile?.assignPlace = location.place
+            
+            photoFile?.updateLocationDate = Date()
         }
         self.recognizePlace()
     }
@@ -1023,6 +1030,8 @@ extension ImageFile : LocationConsumer {
         
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Suggest Place", value: location.place))
         photoFile?.suggestPlace = location.place
+        
+        self.recognizePlace()
         
         photoFile?.updateLocationDate = Date()
         

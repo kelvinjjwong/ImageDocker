@@ -75,7 +75,9 @@ class ImageFolder : NSObject {
     }
     
     func isParentOf(_ url:URL) -> Bool {
-        return url.path.starts(with: self.url.path)
+        let theOtherPath = "\(url.path)/"
+        let myPath = "\(self.url.path)/"
+        return theOtherPath.starts(with: myPath)
     }
     
     func isSiblingOf(_ other:URL) -> Bool {

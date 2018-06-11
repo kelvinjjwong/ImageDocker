@@ -17,6 +17,11 @@ import PXSourceList
 
 class ViewController: NSViewController {
     
+    // MARK: Timer
+    var scanLocationChangeTimer:Timer!
+    var lastCheckLocationChange:Date?
+    var scanPhotoTakenDateChangeTimer:Timer!
+    var lastCheckPhotoTakenDateChange:Date?
     
     // MARK: Image preview
     var img:ImageFile!
@@ -97,6 +102,7 @@ class ViewController: NSViewController {
         super.viewDidLoad()
         
         collectionProgressIndicator.isDisplayedWhenStopped = false
+        batchEditIndicator.isDisplayedWhenStopped = false
         
         view.layer?.backgroundColor = NSColor.darkGray.cgColor
         
@@ -108,6 +114,26 @@ class ViewController: NSViewController {
         configureTree()
         configureCollectionView()
         configureEditors()
+        
+        self.scanLocationChangeTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block:{_ in
+            if self.lastCheckLocationChange != nil {
+                let photoFiles:[PhotoFile] = ModelStore.getPhotoFiles(after: self.lastCheckLocationChange!)
+                if photoFiles.count > 0 {
+                    self.refreshLocationTree()
+                    self.lastCheckLocationChange = Date()
+                }
+            }
+        })
+        
+        self.scanPhotoTakenDateChangeTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block:{_ in
+            if self.lastCheckPhotoTakenDateChange != nil {
+                let photoFiles:[PhotoFile] = ModelStore.getPhotoFiles(after: self.lastCheckPhotoTakenDateChange!)
+                if photoFiles.count > 0 {
+                    self.refreshMomentTree()
+                    self.lastCheckPhotoTakenDateChange = Date()
+                }
+            }
+        })
     }
     
     func configureTree(){
@@ -385,6 +411,9 @@ class ViewController: NSViewController {
                     
                     imagesLoader.clean()
                     collectionView.reloadData()
+                    
+                    self.refreshMomentTree()
+                    self.refreshLocationTree()
                 }
             }
         }
@@ -392,6 +421,9 @@ class ViewController: NSViewController {
     
     @IBAction func onRefreshButtonClicked(_ sender: Any) {
         print("clicked refresh button")
+        
+        self.refreshMomentTree()
+        self.refreshLocationTree()
     }
     
     @IBAction func onRefreshCollectionButtonClicked(_ sender: Any) {

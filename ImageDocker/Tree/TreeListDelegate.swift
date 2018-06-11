@@ -66,6 +66,9 @@ extension ViewController {
                         }
                     }
                 }
+                
+                self.lastCheckLocationChange = Date()
+                
             }else{
                 for year in moments {
                     self.addMomentYearTreeEntry(year: year, groupByPlace: false)
@@ -76,6 +79,7 @@ extension ViewController {
                         }
                     }
                 }
+                self.lastCheckPhotoTakenDateChange = Date()
             }
         }else{
             print("no dates")
@@ -93,7 +97,48 @@ extension ViewController {
             for imageFolder:ImageFolder in imageFolders {
                 self.addLibraryTreeEntry(imageFolder: imageFolder)
             }
+            
+            // scan photo files
+            //let startingFolder:ImageFolder = imageFolders[0]
+            DispatchQueue.global().async {
+                for folder in imageFolders {
+                    self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage)
+                    self.imagesLoader.load(from: folder.url, indicator:self.collectionLoadingIndicator)
+                    //self.refreshCollectionView()
+                }
+                
+            }
         }
+    }
+    
+    func refreshMomentTree() {
+        print("REFRESHING MOMENT TREE at \(Date())")
+        let count = self.momentItem().children.count
+        // remove items in moments
+        for _ in (count > 1 ? 1 : count)...(count > 1 ? count : 1) {
+            //let index:Int = i - 1
+            self.sourceList.removeItems(at: NSIndexSet(index: 0) as IndexSet,
+                                        inParent: self.momentItem(),
+                                        withAnimation: NSTableView.AnimationOptions.slideUp)
+        }
+        self.momentItem().children.removeAll()
+        self.loadMomentsToTreeFromDatabase(groupByPlace: false)
+        self.sourceList.reloadData()
+    }
+    
+    func refreshLocationTree() {
+        print("REFRESHING LOCATION TREE at \(Date())")
+        let count = self.placeItem().children.count
+        // remove item in places
+        for _ in (count > 1 ? 1 : count)...(count > 1 ? count : 1) {
+            //let index:Int = i - 1
+            self.sourceList.removeItems(at: NSIndexSet(index: 0) as IndexSet,
+                                        inParent: self.placeItem(),
+                                        withAnimation: NSTableView.AnimationOptions.slideUp)
+        }
+        self.placeItem().children.removeAll()
+        self.loadMomentsToTreeFromDatabase(groupByPlace: true)
+        self.sourceList.reloadData()
     }
     
     func loadPathToTreeFromDatabase() {
