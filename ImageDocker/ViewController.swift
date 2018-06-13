@@ -490,10 +490,6 @@ class ViewController: NSViewController {
         }
     }
     
-    // from favourites
-    @IBAction func onCopyLocationFromListClicked(_ sender: Any) {
-    }
-    
     // from selected image
     @IBAction func onCopyLocationFromMapClicked(_ sender: Any) {
         guard self.img != nil && self.img.location.coordinateBD != nil && self.img.location.coordinateBD!.isNotZero else {return}
@@ -579,14 +575,19 @@ class ViewController: NSViewController {
     
     @IBAction func onAssignEventButtonClicked(_ sender: Any) {
         guard self.selectionViewController.imagesLoader.getItems().count > 0 else {return}
+        guard self.comboEventList.indexOfSelectedItem >= 0 else {return}
+        let event:PhotoEvent = self.eventListController.events[self.comboEventList.indexOfSelectedItem]
         let accumulator:Accumulator = Accumulator(target: self.selectionViewController.imagesLoader.getItems().count, indicator: self.batchEditIndicator, suspended: false, lblMessage: nil)
         for item:ImageFile in self.selectionViewController.imagesLoader.getItems() {
             let url:URL = item.url as URL
             if url.isPhoto() || url.isVideo(){
-                ExifTool.helper.assignKeyValueForImage(key: "Event", value: "some event", url: url)
+                print("assigning event: \(event.name)")
+                item.assignEvent(event: event)
+                //ExifTool.helper.assignKeyValueForImage(key: "Event", value: "some event", url: url)
             }
             let _ = accumulator.add()
         }
+        ModelStore.save()
     }
     
     // add to favourites

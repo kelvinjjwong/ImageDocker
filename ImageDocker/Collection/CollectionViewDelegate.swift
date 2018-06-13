@@ -16,7 +16,7 @@ extension ViewController {
             let viewItem = item as! CollectionViewItem
             viewItem.setHighlight(selected: selected)
             if selected {
-                print("SELECTED IMAGE COORD IS ZERO ? \(viewItem.imageFile?.location.coordinate?.isZero) - \(viewItem.imageFile?.fileName)")
+                //print("SELECTED IMAGE COORD IS ZERO ? \(viewItem.imageFile?.location.coordinate?.isZero) - \(viewItem.imageFile?.fileName)")
                 self.selectImageFile(viewItem.imageFile!)
             }
         }
@@ -174,7 +174,7 @@ extension ViewController : CollectionViewItemCheckDelegate {
                 
                 let section = section as! HeaderView
                 
-                print("section title: \(section.sectionTitle.stringValue)")
+                //print("section title: \(section.sectionTitle.stringValue)")
                 var shouldUncheckSection:Bool = true
                 let sec = imagesLoader.getSection(title: section.sectionTitle.stringValue, createIfNotExist: false)
                 if sec != nil {
@@ -264,7 +264,7 @@ class MetaConsumer : LocationConsumer {
         self.imageFile = imageFile
         self.accumulator = accumulator
         self.onCompleteHandler = onComplete
-        print("META CONSUMER INIT")
+        //print("META CONSUMER INIT")
     }
     
     private func checkComplete(){
@@ -279,7 +279,7 @@ class MetaConsumer : LocationConsumer {
     }
     
     func consume(location:Location){
-        print("CONSUME LOCATION")
+        //print("CONSUME LOCATION")
         imageFile.metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Country", value: location.country))
         imageFile.metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Province", value: location.province))
         imageFile.metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "City", value: location.city))
@@ -292,7 +292,7 @@ class MetaConsumer : LocationConsumer {
         imageFile.metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Suggest Place", value: location.place))
         
         imageFile.recognizePlace()
-        print("total \(accumulator?._target) , current \(accumulator?.current())")
+        //print("total \(accumulator?._target) , current \(accumulator?.current())")
         //print("======")
         
         

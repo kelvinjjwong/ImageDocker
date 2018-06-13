@@ -142,6 +142,10 @@ class CollectionViewItemsLoader: NSObject {
                 title = "Others"
             }
             
+            if item.event != "" {
+                title = title + " " + item.event
+            }
+            
             if self.considerPlaces && item.place != "" {
                 title = title + " @ " + item.place
             }

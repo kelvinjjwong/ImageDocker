@@ -112,7 +112,7 @@ extension ViewController {
     }
     
     func refreshMomentTree() {
-        print("REFRESHING MOMENT TREE at \(Date())")
+        //print("REFRESHING MOMENT TREE at \(Date())")
         let count = self.momentItem().children.count
         // remove items in moments
         for _ in (count > 1 ? 1 : count)...(count > 1 ? count : 1) {
@@ -127,7 +127,7 @@ extension ViewController {
     }
     
     func refreshLocationTree() {
-        print("REFRESHING LOCATION TREE at \(Date())")
+        //print("REFRESHING LOCATION TREE at \(Date())")
         let count = self.placeItem().children.count
         // remove item in places
         for _ in (count > 1 ? 1 : count)...(count > 1 ? count : 1) {
@@ -399,10 +399,10 @@ extension ViewController : PXSourceListDelegate {
                 if collection.source! == .library {
                     self.selectImageFolder(collection.imageFolder!)
                 }else if collection.source! == .moment {
-                    print("selected moment \(collection.title)")
+                    //print("selected moment \(collection.title)")
                     self.selectMoment(collection, groupByPlace: false)
                 }else if collection.source! == .place {
-                    print("selected place moment \(collection.title)")
+                    //print("selected place moment \(collection.title)")
                     self.selectMoment(collection, groupByPlace: true)
                 }
             }

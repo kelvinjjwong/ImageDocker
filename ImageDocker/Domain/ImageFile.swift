@@ -68,6 +68,10 @@ class ImageFile {
         return url.path
     }
     
+    var event:String {
+        return photoFile?.event ?? ""
+    }
+    
     var isPhoto:Bool = false
     var isVideo:Bool = false
     //var hasCoordinate:Bool = false
@@ -206,10 +210,10 @@ class ImageFile {
             if location.coordinateBD != nil && location.coordinateBD!.isNotZero {
                 //print("------")
                 //print("\(self.fileName) calling baidu location")
-                print("LOAD LOCATION 2 FROM Baidu WebService - \(fileName) - \(self.location.coordinateBD?.latitude) \(self.location.coordinateBD?.longitude)")
+                //print("LOAD LOCATION 2 FROM Baidu WebService - \(fileName) - \(self.location.coordinateBD?.latitude) \(self.location.coordinateBD?.longitude)")
                 BaiduLocation.queryForAddress(coordinateBD: self.location.coordinateBD!, locationConsumer: locationConsumer ?? self, textConsumer: textConsumer)
             }else{
-                print("LOAD LOCATION 3 FROM ImageFile.location - \(fileName)")
+                //print("LOAD LOCATION 3 FROM ImageFile.location - \(fileName)")
                 if locationConsumer != nil {
                     //print("\(self.fileName) getting location from meta by location consumer")
                     locationConsumer?.consume(location: self.location)
@@ -418,6 +422,30 @@ class ImageFile {
         let photoTakenDate:String? = self.choosePhotoTakenDateFromMetaInfo()
         self.storePhotoTakenDate(dateTime: photoTakenDate)
         
+    }
+    
+    func assignEvent(event:PhotoEvent){
+        if photoFile != nil {
+            photoFile?.event = event.name ?? ""
+            metaInfoHolder.setMetaInfo(MetaInfo(category: "Event", subCategory: "", title: "Assigned", value: event.name ?? ""))
+            
+            if event.startDate == nil {
+                event.startDate = photoFile?.photoTakenDate
+            }else {
+                if event.startDate! > (photoFile?.photoTakenDate)! {
+                    event.startDate = photoFile?.photoTakenDate
+                }
+            }
+            
+            if event.endDate == nil {
+                event.endDate = photoFile?.photoTakenDate
+            }else {
+                if event.endDate! < (photoFile?.photoTakenDate)! {
+                    event.endDate = photoFile?.photoTakenDate
+                }
+            }
+            
+        }
     }
     
     func assignLocation(location:Location){
@@ -743,6 +771,7 @@ class ImageFile {
         let parentPath:String = (url.deletingLastPathComponent().path)
         
         let photoFile = ModelStore.getOrCreatePhoto(filename: filename, path: path, parentPath: parentPath)
+        //print("loaded PhotoFile for \(filename)")
         
         
         if photoFile.imageWidth != 0 && photoFile.imageHeight != 0 {

@@ -48,14 +48,14 @@ final class BaiduLocation {
     public static func queryForCoordinate(address:String, coordinateConsumer: CoordinateConsumer){
         let urlString:String = BaiduLocation.urlForCoordinate(address: address)
         //print(urlString)
-        print(urlString)
+        //print(urlString)
         let requestUrl:URL = URL(string:urlString)!
         let request = URLRequest(url:requestUrl)
         let task = URLSession.shared.dataTask(with: request) {
             (data, response, error) in
             if error == nil, let usableData = data {
                 let dataStr:String = String(data: usableData, encoding: String.Encoding.utf8)!
-                print(dataStr)
+                //print(dataStr)
                 let json:JSON = JSON(parseJSON: dataStr)
                 if json != JSON(NSNull()) {
                     let status:Int = json["status"].intValue
@@ -73,7 +73,7 @@ final class BaiduLocation {
                         
                     } else {
                         let message:String = json["message"].stringValue
-                        print(message)
+                        //print(message)
                         coordinateConsumer.alert(status: status, message: message)
                     }
                 }
@@ -111,7 +111,7 @@ final class BaiduLocation {
                     }
                 }else{
                     
-                    print("RECEIVED BAIDU LOCATION at \(Date())")
+                    //print("RECEIVED BAIDU LOCATION at \(Date())")
                     
                     location.address = json!["result"]["formatted_address"].description
                     location.businessCircle = json!["result"]["business"].description
@@ -159,13 +159,13 @@ final class BaiduLocation {
     }
     
     public static func queryForMap(coordinateBD: Coord, view:WKWebView, zoom: Int){
-        print("START REQUEST MAP")
+        //print("START REQUEST MAP")
         let width:Int = Int(min(CGFloat(512), view.frame.size.width))
         let height:Int = Int(min(CGFloat(512), view.frame.size.height))
         let requestBaiduUrl = urlForMap(width: width, height: height, zoom: zoom, lat: coordinateBD.latitude, lon: coordinateBD.longitude)
         guard let requestUrl = URL(string: requestBaiduUrl) else {return}
         let req = URLRequest(url: requestUrl)
-        print(requestBaiduUrl)
+        //print(requestBaiduUrl)
         view.load(req)
     }
 }

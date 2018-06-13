@@ -237,10 +237,10 @@ class ModelStore {
                 conditions.append(condition)
             }
             let format:String = conditions.joined(separator: " || ")
-            print(format)
-            for key in keys {
-                print(key)
-            }
+            //print(format)
+            //for key in keys {
+            //    print(key)
+            //}
             req.predicate = NSPredicate(format: format, argumentArray: keys)
         }
         req.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
@@ -256,10 +256,10 @@ class ModelStore {
         let exist = try! moc.fetch(fetch).first
         
         if exist != nil {
-            print("exist place")
+            //print("exist place")
             return exist!
         }else{
-            print("create place")
+            //print("create place")
             let place = NSEntityDescription.insertNewObject(forEntityName: "PhotoPlace", into: moc) as! PhotoPlace
             place.name = name
             place.latitude = location.coordinate?.latitude.description ?? ""
@@ -366,10 +366,10 @@ class ModelStore {
         let exist = try! moc.fetch(fetch).first
 
         if exist != nil {
-            print("exist event")
+            //print("exist event")
             return exist!
         }else{
-            print("create event")
+            //print("create event")
             let event = NSEntityDescription.insertNewObject(forEntityName: "PhotoEvent", into: moc) as! PhotoEvent
             event.name = name
             
