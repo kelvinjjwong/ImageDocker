@@ -213,7 +213,7 @@ class ModelStore {
             let keys:[String] = names.components(separatedBy: " ")
             var conditions:[String] = []
             for _ in keys {
-                let condition:String = "name like[c] *%@*"
+                let condition:String = "name CONTAINS[cd] %@"
                 conditions.append(condition)
             }
             let format:String = conditions.joined(separator: " || ")
@@ -233,10 +233,14 @@ class ModelStore {
             let keys:[String] = names.components(separatedBy: " ")
             var conditions:[String] = []
             for _ in keys {
-                let condition:String = "name like[c] *%@*"
+                let condition:String = "name CONTAINS[cd] %@"
                 conditions.append(condition)
             }
             let format:String = conditions.joined(separator: " || ")
+            print(format)
+            for key in keys {
+                print(key)
+            }
             req.predicate = NSPredicate(format: format, argumentArray: keys)
         }
         req.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
@@ -276,6 +280,34 @@ class ModelStore {
     }
     
     
+    
+    static func getPlace(name:String, in moc : NSManagedObjectContext? = nil) -> PhotoPlace? {
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        let fetch = NSFetchRequest<PhotoPlace>(entityName: "PhotoPlace")
+        fetch.predicate = NSPredicate(format: "name == %@", name)
+        fetch.fetchLimit = 1
+        let exist = try! moc.fetch(fetch).first
+        
+        if exist != nil {
+            return exist!
+        }else{
+            return nil
+        }
+    }
+    
+    static func renamePlace(oldName:String, newName:String, in moc : NSManagedObjectContext? = nil){
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        let fetch = NSFetchRequest<PhotoPlace>(entityName: "PhotoPlace")
+        fetch.predicate = NSPredicate(format: "name == %@", oldName)
+        fetch.fetchLimit = 1
+        let place = try! moc.fetch(fetch).first
+        
+        if place != nil {
+            place?.name = newName
+        }
+    }
     
     static func updatePlace(name:String, location:Location, in moc : NSManagedObjectContext? = nil){
         let moc = moc ?? AppDelegate.current.managedObjectContext

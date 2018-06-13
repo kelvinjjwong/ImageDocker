@@ -11,7 +11,7 @@ import WebKit
 
 protocol PlaceListRefreshDelegate {
     func refreshPlaceList()
-    func selectPlace(name:String)
+    func selectPlace(name:String, location:Location)
 }
 
 class PlaceListViewController: NSViewController {
@@ -35,10 +35,15 @@ class PlaceListViewController: NSViewController {
     //  self.view = NSView()
     //}
     
+    var selectedPlaceName:String?
+    
     var lastSelectedRow:Int? {
         didSet {
             if lastSelectedRow != nil && places.count > 0 && lastSelectedRow! < places.count {
                 let place = places[lastSelectedRow!]
+                
+                selectedPlaceName = place.name ?? ""
+                
                 placeName.stringValue = place.name ?? ""
                 country.stringValue = place.country ?? ""
                 province.stringValue = place.province ?? ""
@@ -54,8 +59,12 @@ class PlaceListViewController: NSViewController {
                 
                 lblCoordinate.stringValue = "(\(coordinateBD?.latitude ?? 0), \(coordinateBD?.longitude ?? 0))"
                 
+                collectLocationFromForm()
+                
+                BaiduLocation.queryForMap(coordinateBD: coordinateBD!, view: mapWebView, zoom: 16)
+                
                 if self.refreshDelegate != nil {
-                    self.refreshDelegate?.selectPlace(name: place.name ?? "")
+                    self.refreshDelegate?.selectPlace(name: place.name ?? "", location: location!)
                 }
             }
         }
@@ -89,8 +98,12 @@ class PlaceListViewController: NSViewController {
     
     @IBAction func onPlaceSearcherAction(_ sender: Any) {
         let keyword:String = placeSearcher.stringValue
-        if keyword == "" {return}
-        self.places = ModelStore.getPlaces(byName: keyword)
+        if keyword == "" {
+            self.places = ModelStore.getPlaces()
+        }else{
+            self.places = ModelStore.getPlaces(byName: keyword)
+        }
+        placeTable.reloadData()
     }
     
     @IBAction func onLocationSearcherAction(_ sender: Any) {
@@ -131,6 +144,23 @@ class PlaceListViewController: NSViewController {
             refreshDelegate?.refreshPlaceList()
         }
     }
+    
+    @IBAction func onButtonRenameClicked(_ sender: Any) {
+        let name:String = placeName.stringValue
+        guard name != "" && selectedPlaceName != nil && selectedPlaceName != "" else {return}
+        
+        ModelStore.renamePlace(oldName: selectedPlaceName!, newName: name)
+        ModelStore.save()
+        
+        self.places = ModelStore.getPlaces()
+        placeTable.reloadData()
+        
+        if self.refreshDelegate != nil {
+            refreshDelegate?.refreshPlaceList()
+        }
+        
+    }
+    
     
     @IBAction func onButtonUpdateClicked(_ sender: Any) {
         let name:String = placeName.stringValue

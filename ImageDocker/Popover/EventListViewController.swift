@@ -61,8 +61,12 @@ class EventListViewController: NSViewController {
     
     @IBAction func onEventSearcherAction(_ sender: Any) {
         let keyword:String = eventSearcher.stringValue
-        if keyword == "" {return}
-        self.events = ModelStore.getEvents(byName: keyword)
+        if keyword == "" {
+            self.events = ModelStore.getEvents()
+        }else{
+            self.events = ModelStore.getEvents(byName: keyword)
+        }
+        eventTable.reloadData()
     }
     
     @IBAction func onButtonCreateClicked(_ sender: Any) {

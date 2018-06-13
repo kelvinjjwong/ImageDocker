@@ -721,6 +721,8 @@ extension ViewController : PlaceListRefreshDelegate{
     func setupPlaceList() {
         if self.placeListController == nil {
             self.placeListController = PlaceListComboController()
+            self.placeListController.combobox = self.comboPlaceList
+            self.placeListController.refreshDelegate = self
             self.comboPlaceList.dataSource = self.placeListController
             self.comboPlaceList.delegate = self.placeListController
         }
@@ -732,14 +734,23 @@ extension ViewController : PlaceListRefreshDelegate{
         self.comboPlaceList.reloadData()
     }
     
-    func selectPlace(name: String) {
+    func selectPlace(name: String, location:Location) {
+        self.placeListController.working = true
         self.comboPlaceList.stringValue = name
+        self.possibleLocation = location
+        self.possibleLocationText.stringValue = name
+        BaiduLocation.queryForMap(coordinateBD: location.coordinateBD!, view: webPossibleLocation, zoom: zoomSizeForPossibleAddress)
+        self.placeListController.working = false
+        
     }
 }
 
 class PlaceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxDataSource, NSComboBoxDelegate {
     
     var places:[PhotoPlace] = []
+    var refreshDelegate:PlaceListRefreshDelegate?
+    var combobox:NSComboBox?
+    var working:Bool = false
     
     func loadPlaces() {
         self.places = ModelStore.getPlaces()
@@ -762,6 +773,30 @@ class PlaceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
             }
         }
         return ""
+    }
+    
+    func comboBoxSelectionDidChange(_ notification: Notification) {
+        if combobox == nil || working {return}
+        let name = places[combobox!.indexOfSelectedItem].name!
+        let place:PhotoPlace? = ModelStore.getPlace(name: name)
+        if place != nil {
+            let location = Location()
+            location.country = place?.country ?? ""
+            location.province = place?.province ?? ""
+            location.city = place?.city ?? ""
+            location.district = place?.district ?? ""
+            location.street = place?.street ?? ""
+            location.businessCircle = place?.businessCircle ?? ""
+            location.address = place?.address ?? ""
+            location.addressDescription = place?.addressDescription ?? ""
+            location.place = place?.name ?? ""
+            location.coordinate = Coord(latitude: Double(place?.latitude ?? "0")!, longitude: Double(place?.longitude ?? "0")!)
+            location.coordinateBD = Coord(latitude: Double(place?.latitudeBD ?? "0")!, longitude: Double(place?.longitudeBD ?? "0")!)
+            
+            if refreshDelegate != nil {
+                refreshDelegate?.selectPlace(name: name, location: location)
+            }
+        }
     }
     
     func numberOfItems(in comboBox: NSComboBox) -> Int {
