@@ -202,4 +202,171 @@ class ModelStore {
             return file
         }
     }
+    
+    
+    
+    static func getEvents(byName names:String? = nil, in moc : NSManagedObjectContext? = nil) -> [PhotoEvent] {
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        let req = NSFetchRequest<PhotoEvent>(entityName: "PhotoEvent")
+        if let names = names {
+            let keys:[String] = names.components(separatedBy: " ")
+            var conditions:[String] = []
+            for _ in keys {
+                let condition:String = "name like[c] *%@*"
+                conditions.append(condition)
+            }
+            let format:String = conditions.joined(separator: " || ")
+            req.predicate = NSPredicate(format: format, argumentArray: keys)
+        }
+        req.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        return try! moc.fetch(req)
+    }
+    
+    
+    
+    static func getPlaces(byName names:String? = nil, in moc : NSManagedObjectContext? = nil) -> [PhotoPlace] {
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        let req = NSFetchRequest<PhotoPlace>(entityName: "PhotoPlace")
+        if let names = names {
+            let keys:[String] = names.components(separatedBy: " ")
+            var conditions:[String] = []
+            for _ in keys {
+                let condition:String = "name like[c] *%@*"
+                conditions.append(condition)
+            }
+            let format:String = conditions.joined(separator: " || ")
+            req.predicate = NSPredicate(format: format, argumentArray: keys)
+        }
+        req.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        return try! moc.fetch(req)
+    }
+    
+    static func getOrCreatePlace(name:String, location:Location, in moc : NSManagedObjectContext? = nil) -> PhotoPlace{
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        let fetch = NSFetchRequest<PhotoPlace>(entityName: "PhotoPlace")
+        fetch.predicate = NSPredicate(format: "name == %@", name)
+        fetch.fetchLimit = 1
+        let exist = try! moc.fetch(fetch).first
+        
+        if exist != nil {
+            print("exist place")
+            return exist!
+        }else{
+            print("create place")
+            let place = NSEntityDescription.insertNewObject(forEntityName: "PhotoPlace", into: moc) as! PhotoPlace
+            place.name = name
+            place.latitude = location.coordinate?.latitude.description ?? ""
+            place.longitude = location.coordinate?.longitude.description ?? ""
+            place.latitudeBD = location.coordinateBD?.latitude.description ?? ""
+            place.longitudeBD = location.coordinateBD?.longitude.description ?? ""
+            place.country = location.country
+            place.province = location.province
+            place.city = location.city
+            place.businessCircle = location.businessCircle
+            place.district = location.district
+            place.street = location.street
+            place.address = location.address
+            place.addressDescription = location.addressDescription
+            
+            return place
+        }
+    }
+    
+    
+    
+    static func updatePlace(name:String, location:Location, in moc : NSManagedObjectContext? = nil){
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        let fetch = NSFetchRequest<PhotoPlace>(entityName: "PhotoPlace")
+        fetch.predicate = NSPredicate(format: "name == %@", name)
+        fetch.fetchLimit = 1
+        let place = try! moc.fetch(fetch).first
+        
+        if place != nil {
+            place!.latitude = location.coordinate?.latitude.description ?? ""
+            place!.longitude = location.coordinate?.longitude.description ?? ""
+            place!.latitudeBD = location.coordinateBD?.latitude.description ?? ""
+            place!.longitudeBD = location.coordinateBD?.longitude.description ?? ""
+            place!.country = location.country
+            place!.province = location.province
+            place!.city = location.city
+            place!.businessCircle = location.businessCircle
+            place!.district = location.district
+            place!.street = location.street
+            place!.address = location.address
+            place!.addressDescription = location.addressDescription
+        }
+    }
+    
+    static func deletePlace(name:String, in moc : NSManagedObjectContext? = nil){
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        let fetch = NSFetchRequest<PhotoPlace>(entityName: "PhotoPlace")
+        fetch.predicate = NSPredicate(format: "name == %@", name)
+        fetch.fetchLimit = 1
+        let exist = try! moc.fetch(fetch).first
+        
+        if exist != nil {
+            /*
+            let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
+            req.predicate = NSPredicate(format: "event == %@", name)
+            let photos = try! moc.fetch(req)
+            
+            if photos.count > 0 {
+                for photo in photos {
+                    photo.event = ""
+                }
+            }
+            */
+            moc.delete(exist!)
+        }
+    }
+    
+    static func getOrCreateEvent(name:String, in moc : NSManagedObjectContext? = nil) -> PhotoEvent{
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        let fetch = NSFetchRequest<PhotoEvent>(entityName: "PhotoEvent")
+        fetch.predicate = NSPredicate(format: "name == %@", name)
+        fetch.fetchLimit = 1
+        let exist = try! moc.fetch(fetch).first
+
+        if exist != nil {
+            print("exist event")
+            return exist!
+        }else{
+            print("create event")
+            let event = NSEntityDescription.insertNewObject(forEntityName: "PhotoEvent", into: moc) as! PhotoEvent
+            event.name = name
+            
+            return event
+        }
+    }
+    
+    static func deleteEvent(name:String, in moc : NSManagedObjectContext? = nil){
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        let fetch = NSFetchRequest<PhotoEvent>(entityName: "PhotoEvent")
+        fetch.predicate = NSPredicate(format: "name == %@", name)
+        fetch.fetchLimit = 1
+        let exist = try! moc.fetch(fetch).first
+        
+        if exist != nil {
+        
+            let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
+            req.predicate = NSPredicate(format: "event == %@", name)
+            let photos = try! moc.fetch(req)
+            
+            if photos.count > 0 {
+                for photo in photos {
+                    photo.event = ""
+                }
+            }
+        
+            moc.delete(exist!)
+        }
+    }
+    
 }

@@ -94,7 +94,18 @@ class ViewController: NSViewController {
     @IBOutlet weak var editorDatePicker: NSDatePicker!
     @IBOutlet weak var batchEditIndicator: NSProgressIndicator!
     
+    // MARK: Popover
     
+    var eventPopover:NSPopover?
+    var eventViewController:EventListViewController!
+    
+    var placePopover:NSPopover?
+    var placeViewController:PlaceListViewController!
+    
+    @IBOutlet weak var comboEventList: NSComboBox!
+    @IBOutlet weak var comboPlaceList: NSComboBox!
+    var eventListController:EventListComboController!
+    var placeListController:PlaceListComboController!
     
     // MARK: init
     
@@ -114,6 +125,8 @@ class ViewController: NSViewController {
         configureTree()
         configureCollectionView()
         configureEditors()
+        setupEventList()
+        setupPlaceList()
         
         self.scanLocationChangeTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block:{_ in
             if self.lastCheckLocationChange != nil {
@@ -557,7 +570,11 @@ class ViewController: NSViewController {
     }
     
     // add to favourites
-    @IBAction func onAddEventButtonClicked(_ sender: Any) {
+    @IBAction func onAddEventButtonClicked(_ sender: NSButton) {
+        self.createEventPopover()
+        
+        let cellRect = sender.bounds
+        self.eventPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
     }
     
     @IBAction func onAssignEventButtonClicked(_ sender: Any) {
@@ -573,7 +590,11 @@ class ViewController: NSViewController {
     }
     
     // add to favourites
-    @IBAction func onMarkLocationButtonClicked(_ sender: Any) {
+    @IBAction func onMarkLocationButtonClicked(_ sender: NSButton) {
+        self.createPlacePopover()
+        
+        let cellRect = sender.bounds
+        self.placePopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
     }
     
     private func dialogOKCancel(question: String, text: String) -> Bool {
@@ -586,6 +607,182 @@ class ViewController: NSViewController {
         return alert.runModal() == .alertFirstButtonReturn
     }
     
+    func createEventPopover(){
+        var myPopover = self.eventPopover
+        if(myPopover == nil){
+            myPopover = NSPopover()
+            
+            let frame = CGRect(origin: .zero, size: CGSize(width: 600, height: 400))
+            self.eventViewController = EventListViewController()
+            self.eventViewController.view.frame = frame
+            self.eventViewController.refreshDelegate = self
+            
+            myPopover!.contentViewController = self.eventViewController
+            myPopover!.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
+            //myPopover!.animates = true
+            myPopover!.delegate = self
+            myPopover!.behavior = NSPopover.Behavior.transient
+        }
+        self.eventPopover = myPopover
+    }
+    
+    func createPlacePopover(){
+        var myPopover = self.placePopover
+        if(myPopover == nil){
+            myPopover = NSPopover()
+            
+            let frame = CGRect(origin: .zero, size: CGSize(width: 852, height: 440))
+            self.placeViewController = PlaceListViewController()
+            self.placeViewController.view.frame = frame
+            self.placeViewController.refreshDelegate = self
+            
+            myPopover!.contentViewController = self.placeViewController
+            myPopover!.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
+            //myPopover!.animates = true
+            myPopover!.delegate = self
+            myPopover!.behavior = NSPopover.Behavior.transient
+        }
+        self.placePopover = myPopover
+    }
+    
+}
+
+extension ViewController : EventListRefreshDelegate{
+    
+    func setupEventList() {
+        if self.eventListController == nil {
+            self.eventListController = EventListComboController()
+            self.comboEventList.dataSource = self.eventListController
+            self.comboEventList.delegate = self.eventListController
+        }
+        self.refreshEventList()
+    }
+    
+    func refreshEventList() {
+        self.eventListController.loadEvents()
+        self.comboEventList.reloadData()
+    }
+    
+    func selectEvent(name: String) {
+        self.comboEventList.stringValue = name
+    }
+}
+
+class EventListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxDataSource, NSComboBoxDelegate {
+    
+    var events:[PhotoEvent] = []
+    
+    func loadEvents() {
+        self.events = ModelStore.getEvents()
+    }
+    
+    func comboBox(_ comboBox: NSComboBox, completedString string: String) -> String? {
+        
+        //print("SubString = \(string)")
+        
+        for event in events {
+            let state = event.name!
+            // substring must have less characters then stings to search
+            if string.count < state.count{
+                // only use first part of the strings in the list with length of the search string
+                let statePartialStr = state.lowercased()[state.lowercased().startIndex..<state.lowercased().index(state.lowercased().startIndex, offsetBy: string.count)]
+                if statePartialStr.range(of: string.lowercased()) != nil {
+                    //print("SubString Match = \(state)")
+                    return state
+                }
+            }
+        }
+        return ""
+    }
+    
+    func numberOfItems(in comboBox: NSComboBox) -> Int {
+        return(events.count)
+    }
+    
+    func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
+        return(events[index].name as AnyObject)
+    }
+    
+    func comboBox(_ comboBox: NSComboBox, indexOfItemWithStringValue string: String) -> Int {
+        var i = 0
+        for event in events {
+            let str = event.name!
+            if str == string{
+                return i
+            }
+            i += 1
+        }
+        return -1
+    }
+}
+
+extension ViewController : PlaceListRefreshDelegate{
+    
+    func setupPlaceList() {
+        if self.placeListController == nil {
+            self.placeListController = PlaceListComboController()
+            self.comboPlaceList.dataSource = self.placeListController
+            self.comboPlaceList.delegate = self.placeListController
+        }
+        self.refreshPlaceList()
+    }
+    
+    func refreshPlaceList() {
+        self.placeListController.loadPlaces()
+        self.comboPlaceList.reloadData()
+    }
+    
+    func selectPlace(name: String) {
+        self.comboPlaceList.stringValue = name
+    }
+}
+
+class PlaceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxDataSource, NSComboBoxDelegate {
+    
+    var places:[PhotoPlace] = []
+    
+    func loadPlaces() {
+        self.places = ModelStore.getPlaces()
+    }
+    
+    func comboBox(_ comboBox: NSComboBox, completedString string: String) -> String? {
+        
+        //print("SubString = \(string)")
+        
+        for place in places {
+            let state = place.name!
+            // substring must have less characters then stings to search
+            if string.count < state.count{
+                // only use first part of the strings in the list with length of the search string
+                let statePartialStr = state.lowercased()[state.lowercased().startIndex..<state.lowercased().index(state.lowercased().startIndex, offsetBy: string.count)]
+                if statePartialStr.range(of: string.lowercased()) != nil {
+                    //print("SubString Match = \(state)")
+                    return state
+                }
+            }
+        }
+        return ""
+    }
+    
+    func numberOfItems(in comboBox: NSComboBox) -> Int {
+        return(places.count)
+    }
+    
+    func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
+        return(places[index].name as AnyObject)
+    }
+    
+    func comboBox(_ comboBox: NSComboBox, indexOfItemWithStringValue string: String) -> Int {
+        var i = 0
+        for place in places {
+            let str = place.name!
+            if str == string{
+                return i
+            }
+            i += 1
+        }
+        return -1
+    }
 }
 
 
