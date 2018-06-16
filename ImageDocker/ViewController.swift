@@ -51,6 +51,11 @@ class ViewController: NSViewController {
     @IBOutlet weak var possibleLocationText: NSTextField!
     var locationTextDelegate:LocationTextDelegate?
     
+    @IBOutlet weak var btnCopyLocation: NSButton!
+    @IBOutlet weak var btnReplaceLocation: NSButton!
+    @IBOutlet weak var btnManagePlaces: NSButton!
+    
+    
     // MARK: Tree
     //var modelObjects:NSMutableArray?
     var sourceListItems:NSMutableArray?
@@ -70,6 +75,11 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var sourceList: PXSourceList!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
+    @IBOutlet weak var btnAddRepository: NSButton!
+    @IBOutlet weak var btnRemoveRepository: NSButton!
+    @IBOutlet weak var btnRefreshRepository: NSButton!
+    
+    
     
     // MARK: Collection View for browsing
     
@@ -78,6 +88,8 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var considerPlacesCheckBox: NSButton!
     @IBOutlet weak var indicatorMessage: NSTextField!
+    @IBOutlet weak var btnRefreshCollectionView: NSButton!
+    
     
     let imagesLoader = CollectionViewItemsLoader()
     var collectionLoadingIndicator:Accumulator?
@@ -89,10 +101,16 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var selectionCheckAllBox: NSButton!
     
+    @IBOutlet weak var btnAssignEvent: NSButton!
+    @IBOutlet weak var btnManageEvents: NSButton!
+    @IBOutlet weak var btnRemoveSelection: NSButton!
+    
+    
     // MARK: Editor - DateTime
     
     @IBOutlet weak var editorDatePicker: NSDatePicker!
     @IBOutlet weak var batchEditIndicator: NSProgressIndicator!
+    @IBOutlet weak var btnReplaceDateTime: NSButton!
     
     // MARK: Popover
     
@@ -112,10 +130,12 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //self.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        
         collectionProgressIndicator.isDisplayedWhenStopped = false
         batchEditIndicator.isDisplayedWhenStopped = false
         
-        view.layer?.backgroundColor = NSColor.darkGray.cgColor
+        configureDarkMode()
         
         self.configurePreview()
         self.configureSelectionView()
@@ -147,6 +167,38 @@ class ViewController: NSViewController {
                 }
             }
         })
+    }
+    
+    func configureDarkMode() {
+        
+        view.layer?.backgroundColor = NSColor.darkGray.cgColor
+        self.btnAssignEvent.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.btnCopyLocation.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.btnManageEvents.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.btnManagePlaces.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.btnAddRepository.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.btnRemoveSelection.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.btnReplaceDateTime.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.btnReplaceLocation.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.btnRemoveRepository.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.btnRefreshRepository.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.btnRefreshCollectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        
+        self.comboEventList.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.comboEventList.backgroundColor = NSColor.darkGray
+        self.comboPlaceList.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.comboPlaceList.backgroundColor = NSColor.darkGray
+        self.addressSearcher.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.addressSearcher.backgroundColor = NSColor.darkGray
+        self.addressSearcher.drawsBackground = true
+        
+        self.selectionCheckAllBox.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.considerPlacesCheckBox.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        
+        self.editorDatePicker.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.editorDatePicker.backgroundColor = NSColor.darkGray
+        self.editorDatePicker.isBordered = false
+        
     }
     
     func configureTree(){

@@ -1069,6 +1069,17 @@
                         <outlet property="addressSearcher" destination="N2C-6D-h6d" id="DmE-DC-14i"/>
                         <outlet property="avPlayer" destination="WMi-QV-cmi" id="SlC-Qu-gmn"/>
                         <outlet property="batchEditIndicator" destination="9ri-yc-r9m" id="tVw-De-9ga"/>
+                        <outlet property="btnAddRepository" destination="ceG-A8-dKi" id="XfV-f3-HhO"/>
+                        <outlet property="btnAssignEvent" destination="xCg-De-lnA" id="Jab-Ym-d9U"/>
+                        <outlet property="btnCopyLocation" destination="vj9-Vb-qDW" id="Hxx-t9-L6I"/>
+                        <outlet property="btnManageEvents" destination="fBu-cK-CdX" id="iHI-iO-KSb"/>
+                        <outlet property="btnManagePlaces" destination="cF6-tu-IsK" id="mFM-9f-mVe"/>
+                        <outlet property="btnRefreshCollectionView" destination="DpT-Dg-Oeb" id="ze3-El-bMX"/>
+                        <outlet property="btnRefreshRepository" destination="Ew1-wa-ZwC" id="T3N-xh-xVF"/>
+                        <outlet property="btnRemoveRepository" destination="at5-dg-epR" id="QZg-Oi-TLk"/>
+                        <outlet property="btnRemoveSelection" destination="lT1-yY-BTR" id="e6C-Ic-N4o"/>
+                        <outlet property="btnReplaceDateTime" destination="Mqi-a1-a53" id="a2A-yp-vA7"/>
+                        <outlet property="btnReplaceLocation" destination="yTk-hm-vhq" id="GpK-vI-DwS"/>
                         <outlet property="collectionProgressIndicator" destination="Sab-MP-Qfo" id="tTT-fa-2Dw"/>
                         <outlet property="collectionView" destination="9AE-Hz-zmu" id="ItR-cT-i85"/>
                         <outlet property="comboEventList" destination="UJe-CL-XGt" id="1DN-SK-dFe"/>

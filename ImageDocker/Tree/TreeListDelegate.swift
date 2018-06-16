@@ -334,6 +334,7 @@ extension ViewController : PXSourceListDelegate {
             
             if aSourceList.level(forItem: item) == 0 {
                 let sectionCellView:PXSourceListTableCellView = (aSourceList.makeView(withIdentifier: NSUserInterfaceItemIdentifier("HeaderCell"), owner: nil) as! PXSourceListTableCellView)
+                sectionCellView.textField?.textColor = NSColor.white
                 sectionCellView.textField?.stringValue = sourceListItem.title
                 return sectionCellView
             } else {
@@ -430,7 +431,7 @@ extension ViewController : PXSourceListDataSource {
             //print("getting child of item \(node.title) \(index)/\(node.children.count)")
             return node.children[Int(index)]
         }else{
-            return self.sourceListItems![Int(index)]
+            return self.sourceListItems?[Int(index)] ?? PXSourceListItem()
         }
     }
     

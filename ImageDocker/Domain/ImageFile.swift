@@ -570,9 +570,17 @@ class ImageFile {
         var image = NSImage(size: NSMakeRect(0, 0, 0, 0).size)
         if self.isVideo == true { return image }
         
-        guard let imgRef = CGImageSourceCreateWithURL(url as CFURL, nil) else {
+        var imgSrc:CGImageSource? = CGImageSourceCreateWithURL(url as CFURL, nil)
+        if imgSrc == nil {
+            if let img = NSImage(byReferencingFile: url.path) {
+                imgSrc = CGImageSourceCreateWithData(img.tiffRepresentation! as CFData , nil)
+            }
+        }
+        if imgSrc == nil {
             return image
         }
+        let imgRef = imgSrc!
+        
         // Create a "preview" of the image. If the image is larger than
         // 512x512 constrain the preview to that size.  512x512 is an
         // arbitrary limit.   Preview generation is used to work around a
