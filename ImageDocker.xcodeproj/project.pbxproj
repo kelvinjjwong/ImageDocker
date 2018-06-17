@@ -30,6 +30,7 @@
 		8E98B8F020D0EE3300771280 /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E98B8EE20D0EE3300771280 /* PlaceListViewController.swift */; };
 		8E98B8F120D0EE3300771280 /* PlaceListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E98B8EF20D0EE3300771280 /* PlaceListViewController.xib */; };
 		8E98B8F320D5C90600771280 /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E98B8F220D5C90600771280 /* WindowController.swift */; };
+		8E98B8F720D6044900771280 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E98B8F620D6044900771280 /* Event.swift */; };
 		8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */; };
 		8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */; };
 		8EA1A063208DFD92000C3B97 /* MetaInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A062208DFD92000C3B97 /* MetaInfo.swift */; };
@@ -112,6 +113,7 @@
 		8E98B8EE20D0EE3300771280 /* PlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
 		8E98B8EF20D0EE3300771280 /* PlaceListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaceListViewController.xib; sourceTree = "<group>"; };
 		8E98B8F220D5C90600771280 /* WindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowController.swift; sourceTree = "<group>"; };
+		8E98B8F620D6044900771280 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateConverter.swift; sourceTree = "<group>"; };
 		8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaTableViewController.swift; sourceTree = "<group>"; };
 		8EA1A062208DFD92000C3B97 /* MetaInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfo.swift; sourceTree = "<group>"; };
@@ -312,6 +314,7 @@
 				8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */,
 				8E85B7D920BE2515005A9845 /* LocationTextDelegate.swift */,
 				8EFAF1FE20CAE422007A7783 /* Moment.swift */,
+				8E98B8F620D6044900771280 /* Event.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -599,6 +602,7 @@
 				8EF500CD209A804100C9805F /* ImageFolder.swift in Sources */,
 				8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */,
 				8EB986C120B317E70075B081 /* ModelStore.swift in Sources */,
+				8E98B8F720D6044900771280 /* Event.swift in Sources */,
 				8EE1AB3D20D05E49001C75B0 /* EventListViewController.swift in Sources */,
 				8EB986B920B30C920075B081 /* CollectionViewItem.swift in Sources */,
 				8EB986BC20B30C920075B081 /* CollectionViewDelegate.swift in Sources */,

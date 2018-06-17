@@ -22,6 +22,8 @@ class ViewController: NSViewController {
     var lastCheckLocationChange:Date?
     var scanPhotoTakenDateChangeTimer:Timer!
     var lastCheckPhotoTakenDateChange:Date?
+    var scanEventChangeTimer:Timer!
+    var lastCheckEventChange:Date?
     
     // MARK: Image preview
     var img:ImageFile!
@@ -64,6 +66,9 @@ class ViewController: NSViewController {
     var momentToCollection : [String : PhotoCollection] = [String : PhotoCollection] ()
     var momentToCollectionGroupByPlace : [String : PhotoCollection] = [String : PhotoCollection] ()
     var parentsOfMomentsTreeGroupByPlace : [String : PXSourceListItem] = [String : PXSourceListItem] ()
+    
+    var parentsOfEventsTree : [String : PXSourceListItem] = [String : PXSourceListItem] ()
+    var eventToCollection : [String : PhotoCollection] = [String : PhotoCollection] ()
     
     var librarySectionOfTree : PXSourceListItem?
     var momentSectionOfTree : PXSourceListItem?
@@ -167,6 +172,16 @@ class ViewController: NSViewController {
                 }
             }
         })
+        
+        self.scanEventChangeTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block:{_ in
+            if self.lastCheckEventChange != nil {
+                let photoFiles:[PhotoFile] = ModelStore.getPhotoFiles(after: self.lastCheckEventChange!)
+                if photoFiles.count > 0 {
+                    self.refreshEventTree()
+                    self.lastCheckEventChange = Date()
+                }
+            }
+        })
     }
     
     func configureDarkMode() {
@@ -206,6 +221,7 @@ class ViewController: NSViewController {
         self.loadPathToTreeFromDatabase()
         self.loadMomentsToTreeFromDatabase(groupByPlace: false)
         self.loadMomentsToTreeFromDatabase(groupByPlace: true)
+        self.loadEventsToTreeFromDatabase()
         self.sourceList.backgroundColor = NSColor.darkGray
         self.sourceList.reloadData()
     }
@@ -426,6 +442,17 @@ class ViewController: NSViewController {
         DispatchQueue.global().async {
             self.collectionLoadingIndicator = Accumulator(target: collection.photoCount, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage)
             self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, place: groupByPlace ? collection.place : nil, indicator:self.collectionLoadingIndicator)
+            self.refreshCollectionView()
+        }
+    }
+    
+    func selectEvent(_ collection:PhotoCollection) {
+        self.imagesLoader.clean()
+        collectionView.reloadData()
+        
+        DispatchQueue.global().async {
+            self.collectionLoadingIndicator = Accumulator(target: collection.photoCount, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage)
+            self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, event: collection.event, place: collection.place, indicator:self.collectionLoadingIndicator)
             self.refreshCollectionView()
         }
     }

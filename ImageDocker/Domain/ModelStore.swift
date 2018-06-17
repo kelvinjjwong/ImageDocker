@@ -81,6 +81,57 @@ class ModelStore {
         
     }
     
+    
+    
+    static func getAllEvents(in moc : NSManagedObjectContext? = nil) -> [[String:AnyObject]]? {
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        var expressionDescriptions = [AnyObject]()
+        expressionDescriptions.append("event" as AnyObject)
+        expressionDescriptions.append("photoTakenYear" as AnyObject)
+        expressionDescriptions.append("photoTakenMonth" as AnyObject)
+        expressionDescriptions.append("photoTakenDay" as AnyObject)
+        expressionDescriptions.append("place" as AnyObject)
+        
+        let keypathExp = NSExpression(forKeyPath: "path") // can be any column
+        let expression = NSExpression(forFunction: "count:", arguments: [keypathExp])
+        
+        let expressionDescription = NSExpressionDescription()
+        expressionDescription.name = "photoCount"
+        expressionDescription.expression = expression
+        expressionDescription.expressionResultType = .integer64AttributeType
+        expressionDescriptions.append(expressionDescription)
+        
+        
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "PhotoFile")
+        request.returnsObjectsAsFaults = false
+        request.propertiesToGroupBy = ["event","photoTakenDay", "photoTakenMonth", "photoTakenYear", "place"]
+        request.resultType = .dictionaryResultType
+        request.sortDescriptors = [
+            NSSortDescriptor(key: "event", ascending: false),
+            NSSortDescriptor(key: "photoTakenYear", ascending: false),
+            NSSortDescriptor(key: "photoTakenMonth", ascending: false),
+            NSSortDescriptor(key: "photoTakenDay", ascending: false),
+            NSSortDescriptor(key: "place", ascending: true)
+        ]
+        request.propertiesToFetch = expressionDescriptions
+        
+        
+        var results:[[String:AnyObject]]?
+        
+        // Perform the fetch. This is using Swfit 2, so we need a do/try/catch
+        do {
+            results = try moc.fetch(request) as? [[String:AnyObject]]
+            //print(results)
+        } catch _ {
+            // If it fails, ensure the array is nil
+            results = nil
+        }
+        
+        return results
+        
+    }
+    
     static func getAllContainers(in moc : NSManagedObjectContext? = nil) -> [ContainerFolder] {
         let moc = moc ?? AppDelegate.current.managedObjectContext
         
@@ -125,6 +176,24 @@ class ModelStore {
                 req.predicate = NSPredicate(format: "place == %@ && photoTakenYear == %@ && photoTakenMonth == %@ && photoTakenDay == %@", place!, NSNumber(value: year), NSNumber(value: month), NSNumber(value: day))
             }
             
+        }
+        req.sortDescriptors = [NSSortDescriptor(key: "photoTakenDate", ascending: true),
+                               NSSortDescriptor(key: "filename", ascending: true)]
+        return try! moc.fetch(req)
+    }
+    
+    
+    
+    static func getPhotoFiles(year:Int, month:Int, day:Int, event:String, place:String, in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
+        if year == 0 {
+            req.predicate = NSPredicate(format: "event == %@", event)
+        } else if day == 0 {
+            req.predicate = NSPredicate(format: "event == %@ && photoTakenYear == %@ && photoTakenMonth == %@", event, NSNumber(value: year), NSNumber(value: month))
+        } else {
+            req.predicate = NSPredicate(format: "event == %@ && photoTakenYear == %@ && photoTakenMonth == %@ && photoTakenDay == %@ && place == %@", event, NSNumber(value: year), NSNumber(value: month), NSNumber(value: day), place)
         }
         req.sortDescriptors = [NSSortDescriptor(key: "photoTakenDate", ascending: true),
                                NSSortDescriptor(key: "filename", ascending: true)]
