@@ -185,7 +185,7 @@ class ViewController: NSViewController {
             }
         })
         
-        self.exportPhotosTimers = Timer.scheduledTimer(withTimeInterval: 120, repeats: true, block:{_ in
+        self.exportPhotosTimers = Timer.scheduledTimer(withTimeInterval: 30, repeats: true, block:{_ in
             DispatchQueue.global().async {
                 ExportManager.export()
             }

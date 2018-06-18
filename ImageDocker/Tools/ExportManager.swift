@@ -28,7 +28,7 @@ class ExportManager {
         if string != "" && string.starts(with: "MD5 (") {
             let comp:[String] = string.components(separatedBy: " = ")
             if comp.count == 2 {
-                return comp[1]
+                return comp[1].trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
             }
         }
         return ""
@@ -256,7 +256,7 @@ class ExportManager {
                     if !url.isDirectory! {
                     
                         if filepaths.index(where: { $0 == file.path }) == nil {
-                            print("detecetd useless file \(file.path), delete")
+                            print("found useless file \(file.path), delete")
                             do {
                                 try fm.removeItem(atPath: file.path)
                             }catch {
