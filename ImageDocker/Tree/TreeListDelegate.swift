@@ -243,7 +243,7 @@ extension ViewController {
         collection.photoCount = place.photoCount
         collection.place = place.place
         
-        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: photosIcon)
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: placesIcon)
         
         // add tree relationship
         self.placeItem().addChildItem(item)

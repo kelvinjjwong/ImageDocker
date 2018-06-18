@@ -94,7 +94,7 @@ class Events {
             let photoCount = data["photoCount"] as! Int
             let place = data["place"] as? String ?? ""
             
-            print("Got \(event)-\(year)-\(month)-\(day)-\(place)")
+            //print("Got \(event)-\(year)-\(month)-\(day)-\(place)")
             var eventEntry:Event
             var monthEntry:Event
             

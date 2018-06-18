@@ -24,6 +24,8 @@ class ViewController: NSViewController {
     var lastCheckPhotoTakenDateChange:Date?
     var scanEventChangeTimer:Timer!
     var lastCheckEventChange:Date?
+    var exportPhotosTimers:Timer!
+    var lastExportPhotos:Date?
     
     // MARK: Image preview
     var img:ImageFile!
@@ -182,6 +184,15 @@ class ViewController: NSViewController {
                 }
             }
         })
+        
+        self.exportPhotosTimers = Timer.scheduledTimer(withTimeInterval: 120, repeats: true, block:{_ in
+            DispatchQueue.global().async {
+                ExportManager.export()
+            }
+        })
+        
+        
+        
     }
     
     func configureDarkMode() {

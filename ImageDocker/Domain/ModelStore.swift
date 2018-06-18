@@ -141,6 +141,15 @@ class ModelStore {
         
     }
     
+    static func getAllPhotoFiles(in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
+        req.sortDescriptors = [NSSortDescriptor(key: "photoTakenDate", ascending: true),
+                               NSSortDescriptor(key: "filename", ascending: true)]
+        return try! moc.fetch(req)
+    }
+    
     static func getPhotoFiles(parentPath:String, in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
         let moc = moc ?? AppDelegate.current.managedObjectContext
         

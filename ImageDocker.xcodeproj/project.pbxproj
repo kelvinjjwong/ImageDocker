@@ -31,6 +31,7 @@
 		8E98B8F120D0EE3300771280 /* PlaceListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E98B8EF20D0EE3300771280 /* PlaceListViewController.xib */; };
 		8E98B8F320D5C90600771280 /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E98B8F220D5C90600771280 /* WindowController.swift */; };
 		8E98B8F720D6044900771280 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E98B8F620D6044900771280 /* Event.swift */; };
+		8E98B8F920D7950E00771280 /* ExportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E98B8F820D7950E00771280 /* ExportManager.swift */; };
 		8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */; };
 		8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */; };
 		8EA1A063208DFD92000C3B97 /* MetaInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A062208DFD92000C3B97 /* MetaInfo.swift */; };
@@ -114,6 +115,7 @@
 		8E98B8EF20D0EE3300771280 /* PlaceListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaceListViewController.xib; sourceTree = "<group>"; };
 		8E98B8F220D5C90600771280 /* WindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowController.swift; sourceTree = "<group>"; };
 		8E98B8F620D6044900771280 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		8E98B8F820D7950E00771280 /* ExportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportManager.swift; sourceTree = "<group>"; };
 		8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateConverter.swift; sourceTree = "<group>"; };
 		8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaTableViewController.swift; sourceTree = "<group>"; };
 		8EA1A062208DFD92000C3B97 /* MetaInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfo.swift; sourceTree = "<group>"; };
@@ -285,6 +287,7 @@
 				8EBA69292090C87D00221131 /* Helper.swift */,
 				8E174B6D208F851100FFE7C7 /* ExifTool.swift */,
 				8E85B7CE20B8786C005A9845 /* Accumulator.swift */,
+				8E98B8F820D7950E00771280 /* ExportManager.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -578,6 +581,7 @@
 				8E85B7DA20BE2515005A9845 /* LocationTextDelegate.swift in Sources */,
 				8E85B7D620BD9FD9005A9845 /* Location.swift in Sources */,
 				8E7F71022092053400410C45 /* MetaInfoDelegate.swift in Sources */,
+				8E98B8F920D7950E00771280 /* ExportManager.swift in Sources */,
 				8EF32D142095355400511538 /* LCSourceListTableCellView.swift in Sources */,
 				8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */,
 				8E0EAE9A209D2623008C377F /* ImageFolderTreeScanner.swift in Sources */,
