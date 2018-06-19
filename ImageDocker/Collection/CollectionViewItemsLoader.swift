@@ -46,7 +46,9 @@ class CollectionViewItemsLoader: NSObject {
         self.indicator = indicator
         
         var urls: [URL] = []
-        for photoFile in ModelStore.getPhotoFiles(year: year, month: month, day: day, place: place) {
+        let photoFiles = ModelStore.getPhotoFiles(year: year, month: month, day: day, place: place)
+        print("GOT PHOTOS for year:\(year) month:\(month) day:\(day) place:\(place) count \(photoFiles.count)")
+        for photoFile in photoFiles {
             urls.append(URL(fileURLWithPath: photoFile.path!))
         }
         setupItems(urls: urls)
@@ -57,7 +59,9 @@ class CollectionViewItemsLoader: NSObject {
         self.indicator = indicator
         
         var urls: [URL] = []
-        for photoFile in ModelStore.getPhotoFiles(year: year, month: month, day: day, event: event, place:place) {
+        let photoFiles = ModelStore.getPhotoFiles(year: year, month: month, day: day, event: event, place:place)
+        print("GOT PHOTOS for year:\(year) month:\(month) day:\(day) event:\(event) place:\(place) count \(photoFiles.count)")
+        for photoFile in photoFiles {
             urls.append(URL(fileURLWithPath: photoFile.path!))
         }
         setupItems(urls: urls)
@@ -265,8 +269,18 @@ class CollectionViewItemsLoader: NSObject {
         if items.count > 0 {   // When not initial folder folder
             items.removeAll()
         }
+        
+        let duplicates:Duplicates = ModelStore.getDuplicatePhotos()
+        
         for url in urls {
             let imageFile = ImageFile(url: url, indicator: self.indicator)
+            
+            if duplicates.paths.index(where: {$0 == url.path}) != nil {
+                imageFile.hasDuplicates = true
+            }else {
+                imageFile.hasDuplicates = false
+            }
+            
             items.append(imageFile)
         }
         ModelStore.save()

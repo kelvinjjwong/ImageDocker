@@ -584,8 +584,8 @@
                                                 </connections>
                                             </button>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CaM-Tw-R04">
-                                                <rect key="frame" x="1176" y="6" width="80" height="18"/>
-                                                <buttonCell key="cell" type="check" title="Check All" bezelStyle="regularSquare" imagePosition="left" inset="2" id="7Ie-6Y-gWp">
+                                                <rect key="frame" x="1210" y="6" width="46" height="18"/>
+                                                <buttonCell key="cell" type="check" title="ALL" bezelStyle="regularSquare" imagePosition="left" inset="2" id="7Ie-6Y-gWp">
                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
@@ -594,9 +594,9 @@
                                                 </connections>
                                             </button>
                                             <comboBox verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UJe-CL-XGt">
-                                                <rect key="frame" x="0.0" y="1" width="400" height="26"/>
+                                                <rect key="frame" x="0.0" y="1" width="270" height="26"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="400" id="KDF-ql-pIb"/>
+                                                    <constraint firstAttribute="width" constant="270" id="KDF-ql-pIb"/>
                                                 </constraints>
                                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="10" id="8CH-Aa-93G">
                                                     <font key="font" metaFont="system"/>
@@ -625,7 +625,7 @@
                                                 </connections>
                                             </button>
                                             <datePicker verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Le0-oR-2MN">
-                                                <rect key="frame" x="633" y="5" width="181" height="27"/>
+                                                <rect key="frame" x="503" y="5" width="181" height="27"/>
                                                 <datePickerCell key="cell" borderStyle="bezel" alignment="left" id="KyK-DM-vOW">
                                                     <font key="font" metaFont="system"/>
                                                     <date key="date" timeIntervalSinceReferenceDate="-595929600">
@@ -637,7 +637,7 @@
                                                 </datePickerCell>
                                             </datePicker>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mqi-a1-a53">
-                                                <rect key="frame" x="810" y="-2" width="182" height="32"/>
+                                                <rect key="frame" x="680" y="-2" width="182" height="32"/>
                                                 <buttonCell key="cell" type="push" title="▲ Replace Date &amp; Time" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qha-6H-tXU">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
@@ -647,12 +647,38 @@
                                                 </connections>
                                             </button>
                                             <progressIndicator wantsLayer="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="9ri-yc-r9m">
-                                                <rect key="frame" x="994" y="6" width="125" height="20"/>
+                                                <rect key="frame" x="864" y="6" width="125" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="125" id="VDq-rI-red"/>
                                                     <constraint firstAttribute="height" constant="18" id="i48-xy-Jza"/>
                                                 </constraints>
                                             </progressIndicator>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QJ8-hF-79J">
+                                                <rect key="frame" x="1125" y="-3" width="83" height="32"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="71" id="3Tg-uA-tl9"/>
+                                                </constraints>
+                                                <buttonCell key="cell" type="push" title="▲ Hide" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="p5x-Do-Wlz">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="onButtonHideClicked:" target="XfG-lQ-9wD" id="iub-WC-1oV"/>
+                                                </connections>
+                                            </button>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="W0U-Cw-aB7">
+                                                <rect key="frame" x="1038" y="-3" width="89" height="32"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="77" id="NDV-JZ-bNb"/>
+                                                </constraints>
+                                                <buttonCell key="cell" type="push" title="▲ Show" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WWs-cd-IhV">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="onButtonShowClicked:" target="XfG-lQ-9wD" id="hH8-BS-u3i"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="CaM-Tw-R04" secondAttribute="bottom" constant="8" id="02d-3o-exU"/>
@@ -660,12 +686,15 @@
                                             <constraint firstItem="lT1-yY-BTR" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="10" id="2tz-Zg-NOq"/>
                                             <constraint firstAttribute="bottom" secondItem="9ri-yc-r9m" secondAttribute="bottom" constant="7" id="55B-YO-IJ4"/>
                                             <constraint firstItem="UJe-CL-XGt" firstAttribute="leading" secondItem="FmM-ai-OgV" secondAttribute="leading" id="Cqv-Zq-xvY"/>
+                                            <constraint firstItem="QJ8-hF-79J" firstAttribute="leading" secondItem="W0U-Cw-aB7" secondAttribute="trailing" constant="10" id="HqI-Zn-chd"/>
+                                            <constraint firstItem="CaM-Tw-R04" firstAttribute="leading" secondItem="QJ8-hF-79J" secondAttribute="trailing" constant="10" id="Kg0-Sh-Inl"/>
                                             <constraint firstItem="UJe-CL-XGt" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="12" id="MJH-wn-1xa"/>
                                             <constraint firstItem="fBu-cK-CdX" firstAttribute="leading" secondItem="xCg-De-lnA" secondAttribute="trailing" constant="10" id="OCI-WN-oWT"/>
                                             <constraint firstAttribute="bottom" secondItem="Mqi-a1-a53" secondAttribute="bottom" constant="5" id="Pne-OV-vb1"/>
                                             <constraint firstAttribute="trailing" secondItem="lT1-yY-BTR" secondAttribute="trailing" constant="10" id="S6o-z5-6Pb"/>
                                             <constraint firstAttribute="bottom" secondItem="Le0-oR-2MN" secondAttribute="bottom" constant="5" id="T8F-Lj-pYh"/>
                                             <constraint firstAttribute="trailing" secondItem="ivI-8f-yJa" secondAttribute="trailing" constant="5" id="ZbI-YX-bmA"/>
+                                            <constraint firstAttribute="bottom" secondItem="W0U-Cw-aB7" secondAttribute="bottom" constant="4" id="bxK-ob-x74"/>
                                             <constraint firstAttribute="bottom" secondItem="UJe-CL-XGt" secondAttribute="bottom" constant="5" id="eSB-57-UNb"/>
                                             <constraint firstItem="ivI-8f-yJa" firstAttribute="leading" secondItem="FmM-ai-OgV" secondAttribute="leading" id="fxO-6d-EeK"/>
                                             <constraint firstAttribute="bottom" secondItem="xCg-De-lnA" secondAttribute="bottom" constant="5" id="gVF-0d-2u7"/>
@@ -673,6 +702,7 @@
                                             <constraint firstAttribute="bottom" secondItem="fBu-cK-CdX" secondAttribute="bottom" constant="5" id="mwL-U0-6UT"/>
                                             <constraint firstItem="lT1-yY-BTR" firstAttribute="leading" secondItem="CaM-Tw-R04" secondAttribute="trailing" constant="15" id="oYH-Uj-xIT"/>
                                             <constraint firstItem="Mqi-a1-a53" firstAttribute="leading" secondItem="Le0-oR-2MN" secondAttribute="trailing" constant="5" id="pCA-CN-wB7"/>
+                                            <constraint firstAttribute="bottom" secondItem="QJ8-hF-79J" secondAttribute="bottom" constant="4" id="pXB-Yj-7IB"/>
                                             <constraint firstItem="xCg-De-lnA" firstAttribute="leading" secondItem="UJe-CL-XGt" secondAttribute="trailing" constant="8" id="vTQ-UU-Aeo"/>
                                             <constraint firstItem="9ri-yc-r9m" firstAttribute="leading" secondItem="Mqi-a1-a53" secondAttribute="trailing" constant="8" id="xyd-wX-bTB"/>
                                             <constraint firstAttribute="bottom" secondItem="lT1-yY-BTR" secondAttribute="bottom" constant="5" id="ywS-e6-idT"/>
@@ -979,6 +1009,9 @@
                                             </button>
                                             <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="exh-M3-IJe">
                                                 <rect key="frame" x="157" y="1" width="323" height="26"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="320" id="rNv-dC-OzP"/>
+                                                </constraints>
                                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="10" id="6Zv-6L-mqr">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -1072,6 +1105,7 @@
                         <outlet property="btnAddRepository" destination="ceG-A8-dKi" id="XfV-f3-HhO"/>
                         <outlet property="btnAssignEvent" destination="xCg-De-lnA" id="Jab-Ym-d9U"/>
                         <outlet property="btnCopyLocation" destination="vj9-Vb-qDW" id="Hxx-t9-L6I"/>
+                        <outlet property="btnHide" destination="QJ8-hF-79J" id="41M-3L-1WH"/>
                         <outlet property="btnManageEvents" destination="fBu-cK-CdX" id="iHI-iO-KSb"/>
                         <outlet property="btnManagePlaces" destination="cF6-tu-IsK" id="mFM-9f-mVe"/>
                         <outlet property="btnRefreshCollectionView" destination="DpT-Dg-Oeb" id="ze3-El-bMX"/>
@@ -1080,6 +1114,7 @@
                         <outlet property="btnRemoveSelection" destination="lT1-yY-BTR" id="e6C-Ic-N4o"/>
                         <outlet property="btnReplaceDateTime" destination="Mqi-a1-a53" id="a2A-yp-vA7"/>
                         <outlet property="btnReplaceLocation" destination="yTk-hm-vhq" id="GpK-vI-DwS"/>
+                        <outlet property="btnShow" destination="W0U-Cw-aB7" id="rYg-OY-AwZ"/>
                         <outlet property="collectionProgressIndicator" destination="Sab-MP-Qfo" id="tTT-fa-2Dw"/>
                         <outlet property="collectionView" destination="9AE-Hz-zmu" id="ItR-cT-i85"/>
                         <outlet property="comboEventList" destination="UJe-CL-XGt" id="1DN-SK-dFe"/>

@@ -111,6 +111,8 @@ class ViewController: NSViewController {
     @IBOutlet weak var btnAssignEvent: NSButton!
     @IBOutlet weak var btnManageEvents: NSButton!
     @IBOutlet weak var btnRemoveSelection: NSButton!
+    @IBOutlet weak var btnShow: NSButton!
+    @IBOutlet weak var btnHide: NSButton!
     
     
     // MARK: Editor - DateTime
@@ -225,6 +227,9 @@ class ViewController: NSViewController {
         self.editorDatePicker.backgroundColor = NSColor.darkGray
         self.editorDatePicker.isBordered = false
         
+        self.btnShow.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.btnHide.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        
     }
     
     func configureTree(){
@@ -318,6 +323,8 @@ class ViewController: NSViewController {
     
     func configureEditors(){
         editorDatePicker.dateValue = Date()
+        comboEventList.isEditable = false
+        comboPlaceList.isEditable = false
     }
     
     // MARK: Actions
@@ -452,6 +459,7 @@ class ViewController: NSViewController {
         
         DispatchQueue.global().async {
             self.collectionLoadingIndicator = Accumulator(target: collection.photoCount, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage)
+            print("GETTING COLLECTION \(collection.year) \(collection.month) \(collection.day) \(collection.place ?? "")")
             self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, place: groupByPlace ? collection.place : nil, indicator:self.collectionLoadingIndicator)
             self.refreshCollectionView()
         }
@@ -735,6 +743,35 @@ class ViewController: NSViewController {
         }
         self.placePopover = myPopover
     }
+    
+    @IBAction func onButtonHideClicked(_ sender: Any) {
+        guard self.selectionViewController.imagesLoader.getItems().count > 0 else {return}
+        let accumulator:Accumulator = Accumulator(target: self.selectionViewController.imagesLoader.getItems().count, indicator: self.batchEditIndicator, suspended: false, lblMessage: nil)
+        for item:ImageFile in self.selectionViewController.imagesLoader.getItems() {
+            item.hide()
+            let _ = accumulator.add()
+        }
+        ModelStore.save()
+        self.selectionViewController.imagesLoader.reorganizeItems()
+        self.selectionCollectionView.reloadData()
+        self.imagesLoader.reorganizeItems()
+        self.collectionView.reloadData()
+    }
+    
+    @IBAction func onButtonShowClicked(_ sender: Any) {
+        guard self.selectionViewController.imagesLoader.getItems().count > 0 else {return}
+        let accumulator:Accumulator = Accumulator(target: self.selectionViewController.imagesLoader.getItems().count, indicator: self.batchEditIndicator, suspended: false, lblMessage: nil)
+        for item:ImageFile in self.selectionViewController.imagesLoader.getItems() {
+            item.show()
+            let _ = accumulator.add()
+        }
+        ModelStore.save()
+        self.selectionViewController.imagesLoader.reorganizeItems()
+        self.selectionCollectionView.reloadData()
+        self.imagesLoader.reorganizeItems()
+        self.collectionView.reloadData()
+    }
+    
     
 }
 

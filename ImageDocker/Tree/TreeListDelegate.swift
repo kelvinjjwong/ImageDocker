@@ -50,7 +50,7 @@ extension ViewController {
         if dates != nil {
             let events:[Event] = Events().read(dates!)
             for event in events {
-                if event.event == nil || event.event == ""{
+                if event.event == ""{
                     continue
                 }
                 self.addEventTreeEntry(event: event)
@@ -71,18 +71,42 @@ extension ViewController {
         let dates:[[String : AnyObject]]? = ModelStore.getAllDates(groupByPlace: groupByPlace)
         if dates != nil {
             let moments:[Moment] = Moments().read(dates!, groupByPlace: groupByPlace)
+            
+            let duplicates:Duplicates = ModelStore.getDuplicatePhotos()
+            
             if groupByPlace {
                 for place in moments {
+                    if place.place == "" {
+                        continue
+                    }
                     //print("PLACE \(place.place)")
                     self.addMomentPlaceTreeEntry(place: place)
                     for year in place.children {
                         //print("     YEAR \(year.year)")
+                        var duplicateInYear:Bool = false
+                        if duplicates.duplicates.index(where: {$0.year == year.year}) != nil {
+                            duplicateInYear = true
+                        }
+                        year.hasDuplicates = duplicateInYear
+                        
                         self.addMomentYearTreeEntry(year: year, groupByPlace: true)
                         for month in year.children {
                             //print("         MONTH \(month.month)")
+                            var duplicateInMonth:Bool = false
+                            if duplicates.duplicates.index(where: {$0.year == month.year && $0.month == month.month}) != nil {
+                                duplicateInMonth = true
+                            }
+                            month.hasDuplicates = duplicateInMonth
+                            
                             self.addMomentMonthTreeEntry(month: month, groupByPlace: true)
                             for day in month.children {
                                 //print("              DAY \(day.day)")
+                                var duplicateInDay:Bool = false
+                                if duplicates.duplicates.index(where: {$0.year == day.year && $0.month == day.month && $0.day == day.day}) != nil {
+                                    duplicateInDay = true
+                                }
+                                day.hasDuplicates = duplicateInDay
+                                
                                 self.addMomentDayTreeEntry(day: day, groupByPlace: true)
                             }
                         }
@@ -93,10 +117,31 @@ extension ViewController {
                 
             }else{
                 for year in moments {
+                    
+                    var duplicateInYear:Bool = false
+                    if duplicates.duplicates.index(where: {$0.year == year.year}) != nil {
+                        duplicateInYear = true
+                    }
+                    year.hasDuplicates = duplicateInYear
+                    
                     self.addMomentYearTreeEntry(year: year, groupByPlace: false)
                     for month in year.children {
+                        
+                        var duplicateInMonth:Bool = false
+                        if duplicates.duplicates.index(where: {$0.year == month.year && $0.month == month.month}) != nil {
+                            duplicateInMonth = true
+                        }
+                        month.hasDuplicates = duplicateInMonth
+                        
                         self.addMomentMonthTreeEntry(month: month, groupByPlace: false)
                         for day in month.children {
+                            
+                            var duplicateInDay:Bool = false
+                            if duplicates.duplicates.index(where: {$0.year == day.year && $0.month == day.month && $0.day == day.day}) != nil {
+                                duplicateInDay = true
+                            }
+                            day.hasDuplicates = duplicateInDay
+                            
                             self.addMomentDayTreeEntry(day: day, groupByPlace: false)
                         }
                     }
@@ -120,11 +165,15 @@ extension ViewController {
                 self.addLibraryTreeEntry(imageFolder: imageFolder)
             }
             
+            ExportManager.disable()
             // scan photo files
             //let startingFolder:ImageFolder = imageFolders[0]
             DispatchQueue.global().async {
                 for folder in imageFolders {
-                    self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage)
+                    self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage,
+                        onCompleted: {
+                            ExportManager.enable()
+                    })
                     self.imagesLoader.load(from: folder.url, indicator:self.collectionLoadingIndicator)
                     //self.refreshCollectionView()
                 }
@@ -256,6 +305,9 @@ extension ViewController {
     }
     
     func addMomentYearTreeEntry(year:Moment, groupByPlace:Bool = false){
+        if !groupByPlace {
+            //print("YEAR \(year.represent) \(year.year) , count \(year.photoCount)")
+        }
         let collection:PhotoCollection = PhotoCollection(title: year.represent,
                                                          identifier: year.represent,
                                                          type: year.photoCount == 0 ? .userCreated : .library,
@@ -290,6 +342,9 @@ extension ViewController {
     }
     
     func addMomentMonthTreeEntry(month:Moment, groupByPlace:Bool = false){
+        if !groupByPlace {
+            //print("MONTH \(month.represent) \(month.year) , count \(month.photoCount)")
+        }
         let collection:PhotoCollection = PhotoCollection(title: month.represent,
                                                          identifier: month.represent,
                                                          type: month.photoCount == 0 ? .userCreated : .library,

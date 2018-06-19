@@ -9,6 +9,24 @@
 import Foundation
 import CoreData
 
+class Duplicate {
+    
+    var year:Int = 0
+    var month:Int = 0
+    var day:Int = 0
+    var date:Date = Date()
+    var place:String = ""
+    var event:String = ""
+    
+}
+
+class Duplicates {
+    
+    var duplicates:[Duplicate] = []
+    var categories:[String] = []
+    var paths:[String] = []
+}
+
 class ModelStore {
     
     static func save() {
@@ -25,6 +43,87 @@ class ModelStore {
             }
         }
         
+    }
+    
+    static func getDuplicatePhotos(in moc : NSManagedObjectContext? = nil) -> Duplicates {
+        let duplicates:Duplicates = Duplicates()
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        var expressionDescriptions = [AnyObject]()
+        expressionDescriptions.append("photoTakenYear" as AnyObject)
+        expressionDescriptions.append("photoTakenMonth" as AnyObject)
+        expressionDescriptions.append("photoTakenDay" as AnyObject)
+        expressionDescriptions.append("photoTakenDate" as AnyObject)
+        expressionDescriptions.append("place" as AnyObject)
+        expressionDescriptions.append("event" as AnyObject)
+        
+        let keypathExp = NSExpression(forKeyPath: "path") // can be any column
+        let expression = NSExpression(forFunction: "count:", arguments: [keypathExp])
+        
+        let expressionDescription = NSExpressionDescription()
+        expressionDescription.name = "photoCount"
+        expressionDescription.expression = expression
+        expressionDescription.expressionResultType = .integer64AttributeType
+        expressionDescriptions.append(expressionDescription)
+        
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "PhotoFile")
+        request.returnsObjectsAsFaults = false
+        request.propertiesToGroupBy = ["photoTakenDate", "event", "place", "photoTakenDay", "photoTakenMonth", "photoTakenYear"]
+        request.resultType = .dictionaryResultType
+        request.propertiesToFetch = expressionDescriptions
+        
+        var results:[[String:AnyObject]]?
+        
+        // Perform the fetch. This is using Swfit 2, so we need a do/try/catch
+        do {
+            results = try moc.fetch(request) as? [[String:AnyObject]]
+            //print(results)
+        } catch _ {
+            // If it fails, ensure the array is nil
+            results = nil
+        }
+        
+        if results != nil {
+            for row in results! {
+                let count:Int = row["photoCount"] as! Int
+                if count == 1 {
+                    continue
+                }
+                if row["photoTakenDate"] == nil {
+                    continue
+                }
+                let dup:Duplicate = Duplicate()
+                dup.year = row["photoTakenYear"] as! Int
+                dup.month = row["photoTakenMonth"] as! Int
+                dup.day = row["photoTakenDay"] as! Int
+                dup.date = row["photoTakenDate"] as! Date
+                dup.place = row["place"] as! String? ?? ""
+                dup.event = row["event"] as! String? ?? ""
+                duplicates.duplicates.append(dup)
+                
+                let monthString = dup.month < 10 ? "0\(dup.month)" : "\(dup.month)"
+                let dayString = dup.day < 10 ? "0\(dup.day)" : "\(dup.day)"
+                let category:String = "\(dup.year)年\(monthString)月\(dayString)日"
+                
+                if duplicates.categories.index(where: {$0 == category}) == nil {
+                    duplicates.categories.append(category)
+                }
+            }
+        }
+        
+        for dup in duplicates.duplicates {
+            if dup.year == 0 {
+                continue
+            }
+            let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
+            req.predicate = NSPredicate(format: "photoTakenDate == %@ && place == %@", dup.date as NSDate, dup.place)
+            let photos = try! moc.fetch(req)
+            for photo in photos {
+                duplicates.paths.append(photo.path ?? "")
+            }
+        }
+        
+        return duplicates
     }
     
     static func getAllDates(groupByPlace:Bool = false, in moc : NSManagedObjectContext? = nil) -> [[String:AnyObject]]? {
@@ -141,10 +240,13 @@ class ModelStore {
         
     }
     
-    static func getAllPhotoFiles(in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
+    static func getAllPhotoFiles(includeHidden:Bool = true, in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
         let moc = moc ?? AppDelegate.current.managedObjectContext
         
         let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
+        if !includeHidden {
+            req.predicate = NSPredicate(format: "hidden == nil || hidden == false")
+        }
         req.sortDescriptors = [NSSortDescriptor(key: "photoTakenDate", ascending: true),
                                NSSortDescriptor(key: "filename", ascending: true)]
         return try! moc.fetch(req)
@@ -165,24 +267,32 @@ class ModelStore {
         
         let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
         if place == nil {
-            if year == 0 {
-                // no condition
-            } else if month == 0 {
-                req.predicate = NSPredicate(format: "photoTakenYear == %@", NSNumber(value: year))
-            } else if day == 0 {
-                req.predicate = NSPredicate(format: "photoTakenYear == %@ && photoTakenMonth == %@", NSNumber(value: year), NSNumber(value: month))
-            } else {
-                req.predicate = NSPredicate(format: "photoTakenYear == %@ && photoTakenMonth == %@ && photoTakenDay == %@", NSNumber(value: year), NSNumber(value: month), NSNumber(value: day))
+            if year == 0 && month == 0 && day == 0 {
+                req.predicate = NSPredicate(format: "photoTakenYear == 0 && photoTakenMonth == 0 && photoTakenDay == 0")
+            }else{
+                if year == 0 {
+                    // no condition
+                } else if month == 0 {
+                    req.predicate = NSPredicate(format: "photoTakenYear == %@", NSNumber(value: year))
+                } else if day == 0 {
+                    req.predicate = NSPredicate(format: "photoTakenYear == %@ && photoTakenMonth == %@", NSNumber(value: year), NSNumber(value: month))
+                } else {
+                    req.predicate = NSPredicate(format: "photoTakenYear == %@ && photoTakenMonth == %@ && photoTakenDay == %@", NSNumber(value: year), NSNumber(value: month), NSNumber(value: day))
+                }
             }
         } else {
-            if year == 0 {
-                req.predicate = NSPredicate(format: "place == %@", place!)
-            } else if month == 0 {
-                req.predicate = NSPredicate(format: "place == %@ && photoTakenYear == %@", place!, NSNumber(value: year))
-            } else if day == 0 {
-                req.predicate = NSPredicate(format: "place == %@ && photoTakenYear == %@ && photoTakenMonth == %@", place!, NSNumber(value: year), NSNumber(value: month))
-            } else {
-                req.predicate = NSPredicate(format: "place == %@ && photoTakenYear == %@ && photoTakenMonth == %@ && photoTakenDay == %@", place!, NSNumber(value: year), NSNumber(value: month), NSNumber(value: day))
+            if year == 0 && month == 0 && day == 0 {
+                req.predicate = NSPredicate(format: "photoTakenYear == 0 && photoTakenMonth == 0 && photoTakenDay == 0 && place == %@", place!)
+            }else{
+                if year == 0 {
+                    req.predicate = NSPredicate(format: "place == %@", place!)
+                } else if month == 0 {
+                    req.predicate = NSPredicate(format: "place == %@ && photoTakenYear == %@", place!, NSNumber(value: year))
+                } else if day == 0 {
+                    req.predicate = NSPredicate(format: "place == %@ && photoTakenYear == %@ && photoTakenMonth == %@", place!, NSNumber(value: year), NSNumber(value: month))
+                } else {
+                    req.predicate = NSPredicate(format: "place == %@ && photoTakenYear == %@ && photoTakenMonth == %@ && photoTakenDay == %@", place!, NSNumber(value: year), NSNumber(value: month), NSNumber(value: day))
+                }
             }
             
         }

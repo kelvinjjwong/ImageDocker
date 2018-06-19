@@ -54,6 +54,8 @@ class ImageFile {
         return 0
     }
     
+    var hasDuplicates:Bool = false
+    
     // image location
     //var coordinate: Coord?
     //var coordinateBD: Coord?
@@ -70,6 +72,28 @@ class ImageFile {
     
     var event:String {
         return photoFile?.event ?? ""
+    }
+    
+    var isHidden:Bool {
+        if photoFile == nil {
+            return false
+        }
+        if photoFile?.hidden == nil {
+            return false
+        }
+        return photoFile?.hidden == true
+    }
+    
+    func hide() {
+        if photoFile != nil {
+            photoFile?.hidden = true
+        }
+    }
+    
+    func show() {
+        if photoFile != nil {
+            photoFile?.hidden = false
+        }
     }
     
     var isPhoto:Bool = false

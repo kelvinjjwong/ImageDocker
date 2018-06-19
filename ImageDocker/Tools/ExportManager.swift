@@ -11,6 +11,15 @@ import Foundation
 class ExportManager {
     
     static var working:Bool = false
+    static var suppressed:Bool = false
+    
+    @objc static func enable() {
+        suppressed = false
+    }
+    
+    @objc static func disable() {
+        suppressed = true
+    }
     
     static func md5(pathOfFile:String) -> String {
         let pipe = Pipe()
@@ -35,12 +44,18 @@ class ExportManager {
     }
     
     static func export() {
+        if suppressed {
+            print("ExportManager is suppressed.")
+            return
+        }
         if working {
             print("ExportManager: Another instance is working, I'll take a rest.")
             return
         }
         //print("exporting")
         working = true
+        print("  ")
+        print("!! ExportManager start working at \(Date())")
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM月dd日HH点mm分ss"
         
@@ -57,8 +72,11 @@ class ExportManager {
                     return
                 }
             }
-            let photos:[PhotoFile] = ModelStore.getAllPhotoFiles()
+            let photos:[PhotoFile] = ModelStore.getAllPhotoFiles(includeHidden: false)
             for photo in photos {
+                if photo.photoTakenYear == 0 {
+                    continue
+                }
                 var pathComponents:[String] = []
                 pathComponents.append(PreferencesController.exportDirectory())
                 pathComponents.append("\(photo.photoTakenYear)年")
@@ -117,15 +135,13 @@ class ExportManager {
                 // detect duplicates
                 if originalExportPath == fullpath {
                     if fm.fileExists(atPath: fullpath) {
-                        print("!! exists destination \(fullpath)")
                         let md5Exists = md5(pathOfFile: fullpath)
                         let md5PhotoFile = md5(pathOfFile: photo.path!)
                         if md5Exists == md5PhotoFile {
                             filepaths.append(originalExportPath)
-                            print(">> same md5 (\(md5Exists)), ignore")
                             continue
                         }else{
-                            print(">> different md5, delete")
+                            print("!! exists destination \(fullpath) , different md5, delete")
                             do {
                                 try fm.removeItem(atPath: originalExportPath)
                             }catch {
@@ -164,63 +180,21 @@ class ExportManager {
                     fullpath = "\(path)/\(filename)"
                 }
                 
-                if fm.fileExists(atPath: fullpath) {
-                    print("!! exists destination \(fullpath) , add 01 as suffix")
-                    filenameComponents.removeLast()
-                    filenameComponents.removeLast()
-                    filenameComponents.append(" 01")
-                    filenameComponents.append(".")
-                    filenameComponents.append(fileExt)
-                    filename = filenameComponents.joined()
-                    fullpath = "\(path)/\(filename)"
-                }
-                
-                if fm.fileExists(atPath: fullpath) {
-                    print("!! exists destination \(fullpath) , add 02 as suffix")
-                    filenameComponents.removeLast()
-                    filenameComponents.removeLast()
-                    filenameComponents.removeLast()
-                    filenameComponents.append(" 02")
-                    filenameComponents.append(".")
-                    filenameComponents.append(fileExt)
-                    filename = filenameComponents.joined()
-                    fullpath = "\(path)/\(filename)"
-                }
-                
-                if fm.fileExists(atPath: fullpath) {
-                    print("!! exists destination \(fullpath) , add 03 as suffix")
-                    filenameComponents.removeLast()
-                    filenameComponents.removeLast()
-                    filenameComponents.removeLast()
-                    filenameComponents.append(" 03")
-                    filenameComponents.append(".")
-                    filenameComponents.append(fileExt)
-                    filename = filenameComponents.joined()
-                    fullpath = "\(path)/\(filename)"
-                }
-                
-                if fm.fileExists(atPath: fullpath) {
-                    print("!! exists destination \(fullpath) , add 04 as suffix")
-                    filenameComponents.removeLast()
-                    filenameComponents.removeLast()
-                    filenameComponents.removeLast()
-                    filenameComponents.append(" 04")
-                    filenameComponents.append(".")
-                    filenameComponents.append(fileExt)
-                    filename = filenameComponents.joined()
-                    fullpath = "\(path)/\(filename)"
-                }
-                
-                if fm.fileExists(atPath: fullpath) {
-                    print("!! exists destination \(fullpath) , add 05 as suffix")
-                    filenameComponents.removeLast()
-                    filenameComponents.removeLast()
-                    filenameComponents.removeLast()
-                    filenameComponents.append(" 05")
-                    filenameComponents.append(".")
-                    filenameComponents.append(fileExt)
-                    filename = filenameComponents.joined()
-                    fullpath = "\(path)/\(filename)"
+                for i in 1...99 {
+                    let suffix = i < 10 ? "0\(i)" : "\(i)"
+                    
+                    if fm.fileExists(atPath: fullpath) {
+                        print("!! exists destination \(fullpath) , add \(suffix) as suffix")
+                        filenameComponents.removeLast()
+                        filenameComponents.removeLast()
+                        filenameComponents.append(" \(suffix)")
+                        filenameComponents.append(".")
+                        filenameComponents.append(fileExt)
+                        filename = filenameComponents.joined()
+                        fullpath = "\(path)/\(filename)"
+                    }else{
+                        break
+                    }
                 }
                 
                 do {
@@ -284,6 +258,7 @@ class ExportManager {
             if emptyFolders.count > 0 {
                 print("  ")
                 for emptyFolder in emptyFolders {
+                    print("deleting empty folder \(emptyFolder)")
                     do {
                         try fm.removeItem(atPath: emptyFolder)
                     }catch{

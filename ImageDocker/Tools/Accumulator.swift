@@ -16,12 +16,39 @@ class Accumulator : NSObject {
     private var count:Int = 0
     private let indicator:NSProgressIndicator?
     private let lblMessage:NSTextField?
+    private var hasOnCompleted:Bool = false
+    private var onCompleted:() -> Void
     
     init(target:Int, indicator:NSProgressIndicator? = nil, suspended:Bool = false, lblMessage:NSTextField? = nil){
         count = 0
         self._target = target
         self.indicator = indicator
         self.lblMessage = lblMessage
+        self.onCompleted = {
+            // nothing
+        }
+        if indicator != nil {
+            DispatchQueue.main.async {
+                indicator?.minValue = 0
+                indicator?.maxValue = Double(target)
+                indicator?.doubleValue = 0
+                indicator?.isHidden = suspended
+            }
+        }
+        if lblMessage != nil {
+            DispatchQueue.main.async {
+                lblMessage?.stringValue = ""
+            }
+        }
+    }
+    
+    init(target:Int, indicator:NSProgressIndicator? = nil, suspended:Bool = false, lblMessage:NSTextField? = nil, onCompleted: @escaping () -> Void){
+        count = 0
+        self._target = target
+        self.indicator = indicator
+        self.lblMessage = lblMessage
+        self.hasOnCompleted = true
+        self.onCompleted = onCompleted
         if indicator != nil {
             DispatchQueue.main.async {
                 indicator?.minValue = 0
@@ -64,6 +91,10 @@ class Accumulator : NSObject {
                     if self.lblMessage != nil {
                         self.lblMessage?.stringValue = ""
                     }
+                    if self.hasOnCompleted {
+                        let _ = self.onCompleted
+                    }
+                    
                 }
             }
         }

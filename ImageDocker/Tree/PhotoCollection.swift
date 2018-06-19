@@ -44,6 +44,8 @@ class PhotoCollection: NSObject {
     var place:String = ""
     var event:String = ""
     
+    var hasDuplicates:Bool = false
+    
     
     override init(){
         super.init()
