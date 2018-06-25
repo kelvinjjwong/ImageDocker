@@ -92,4 +92,161 @@ class ImageFolderTreeScanner {
         ModelStore.save()
         return imageFolders
     }
+    
+    static func scanPhotosToLoadExif(indicator:Accumulator? = nil)  {
+        let photos = ModelStore.getPhotoFilesWithoutExif()
+        if photos.count > 0 {
+            print("\(Date()) UPDATING EXIF: \(photos.count)")
+            if indicator != nil {
+                indicator?.setTarget(photos.count)
+            }
+            for photo in photos {
+                let url = URL(fileURLWithPath: photo.path!)
+                let _ = ImageFile(url: url, indicator: indicator)
+            }
+            //ModelStore.save()
+            print("\(Date()) UPDATING EXIF: SAVE DONE")
+        }else {
+            if indicator != nil {
+                indicator?.forceComplete()
+            }
+        }
+    }
+    
+    static func createRepository(path:String) {
+        let _ = ImageFolder(URL(fileURLWithPath: path))
+        ModelStore.save()
+    }
+    
+    static func scanRepositories(indicator:Accumulator? = nil)  {
+        
+        let repositories = ModelStore.getRepositories()
+        
+        var urls: [URL] = []
+        for repo in repositories {
+            print("\(Date()) CHECKING REPO \(repo.path ?? "")")
+            let startingURL = URL(fileURLWithPath: repo.path!)
+            
+            let options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles]
+            let fileManager = FileManager.default
+            let resourceValueKeys = [URLResourceKey.isRegularFileKey, URLResourceKey.typeIdentifierKey, URLResourceKey.isDirectoryKey]
+            
+            guard let directoryEnumerator = fileManager.enumerator(at: startingURL as URL,
+                                                                   includingPropertiesForKeys: resourceValueKeys,
+                                                                   options: options,
+                                                                   errorHandler: { url, error in
+                                                                    print("`directoryEnumerator` error: \(error).")
+                                                                    return true
+                                                                    }
+            ) else { return }
+            
+            for case let url as NSURL in directoryEnumerator {
+                do {
+                    let resourceValues = try url.resourceValues(forKeys: resourceValueKeys)
+                    guard let isRegularFileResourceValue = resourceValues[URLResourceKey.isRegularFileKey] as? NSNumber else { continue }
+                    guard isRegularFileResourceValue.boolValue else { continue }
+                    guard let fileType = resourceValues[URLResourceKey.typeIdentifierKey] as? String else { continue }
+                    guard (UTTypeConformsTo(fileType as CFString, kUTTypeImage) || UTTypeConformsTo(fileType as CFString, kUTTypeMovie)) else { continue }
+                    urls.append(url as URL)
+                }
+                catch {
+                    print("Unexpected error occured: \(error).")
+                }
+            }
+        }
+        
+        
+        let exists = ModelStore.getAllPhotoFiles()
+        var urlsToAdd:[URL] = []
+        for url in urls {
+            //print("CHECKING URL FROM FILE REPO: \(url.path)")
+            // physical url not in database, to be added to database
+            if exists.index(where: {$0.path == url.path} ) == nil {
+                urlsToAdd.append(url)
+                //print("TO BE ADDED FROM FILE REPO: \(url.path)")
+            }
+        }
+        
+        var photosToRemoved:[PhotoFile] = []
+        for exist in exists {
+            // persisted url not in file system, to be removed from database
+            if urls.index(where: {$0.path == exist.path} ) == nil {
+                photosToRemoved.append(exist)
+                //print("TO BE REMOVED FROM DB: \(exist.path ?? "")")
+            }
+        }
+        
+        let total = urlsToAdd.count + photosToRemoved.count
+        
+        if total == 0 {
+            if indicator != nil {
+                indicator?.forceComplete()
+            }
+            return
+        }
+        
+        if indicator != nil {
+            indicator?.setTarget(total)
+        }
+        
+        if urlsToAdd.count > 0 {
+            print("\(Date()) URLS TO ADD FROM FILESYS: \(urlsToAdd.count)")
+            indicator?.dataChanged()
+            for url in urlsToAdd {
+                //print("CREATING PHOTO \(url.path)")
+                let _ = ImageFile(url: url, indicator: indicator, quickCreate: true)
+                
+                ModelStore.save()
+            }
+            print("\(Date()) URLS TO ADD FROM FILESYS: SAVE DONE")
+        }
+        
+        if photosToRemoved.count > 0 {
+            print("\(Date()) PHOTOS TO REMOVED FROM DB: \(photosToRemoved.count)")
+            indicator?.dataChanged()
+            for photo in photosToRemoved {
+                AppDelegate.current.managedObjectContext.delete(photo)
+                
+                if indicator != nil {
+                    let _ = indicator?.add()
+                }
+            }
+            
+            //DispatchQueue.main.async {
+                ModelStore.save()
+            //}
+            print("\(Date()) PHOTOS TO REMOVED FROM DB: SAVE DONE")
+        }
+    }
+    
+    static func updateContainers() {
+        var imageFolders:[ImageFolder] = []
+        let exists = ModelStore.getAllContainers()
+        if exists.count > 0 {
+            for exist in exists{
+                let imageFolder = ImageFolder(URL(fileURLWithPath: exist.path!), countOfImages: Int(exist.imageCount) )
+                imageFolders.append(imageFolder)
+            }
+        }
+        let containers:[[String:AnyObject]]? = ModelStore.getAllContainerPaths()
+        if containers != nil && containers!.count > 0 {
+            for cont in containers! {
+                let path:String = cont["containerPath"] as! String
+                let photoCount:Int = cont["photoCount"] as! Int
+                
+                let url:URL = URL(fileURLWithPath: path)
+                let imageFolder = ImageFolder(url, countOfImages: photoCount)
+                imageFolders.append(imageFolder)
+            }
+            
+            for folder in imageFolders {
+                let photos = ModelStore.getPhotoFiles(rootPath: "\(folder.url.path)/")
+                let count = Int32(photos.count)
+                if folder.containerFolder != nil && folder.containerFolder?.imageCount != count {
+                    folder.containerFolder?.imageCount = count
+                }
+            }
+            ModelStore.save()
+        }
+    }
 }

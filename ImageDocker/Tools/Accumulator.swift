@@ -14,10 +14,14 @@ class Accumulator : NSObject {
     
     var _target:Int
     private var count:Int = 0
+    private var presetAddingMessage:String?
+    private var presetCompleteMessage:String?
     private let indicator:NSProgressIndicator?
     private let lblMessage:NSTextField?
     private var hasOnCompleted:Bool = false
     private var onCompleted:() -> Void
+    private var onDataChanged:(() -> Void)?
+    private var isDataChanged:Bool = false
     
     init(target:Int, indicator:NSProgressIndicator? = nil, suspended:Bool = false, lblMessage:NSTextField? = nil){
         count = 0
@@ -42,13 +46,16 @@ class Accumulator : NSObject {
         }
     }
     
-    init(target:Int, indicator:NSProgressIndicator? = nil, suspended:Bool = false, lblMessage:NSTextField? = nil, onCompleted: @escaping () -> Void){
+    init(target:Int, indicator:NSProgressIndicator? = nil, suspended:Bool = false, lblMessage:NSTextField? = nil, presetAddingMessage:String? = nil, presetCompleteMessage:String? = nil, onCompleted: @escaping () -> Void, onDataChanged: (() -> Void)? = nil){
         count = 0
         self._target = target
         self.indicator = indicator
         self.lblMessage = lblMessage
         self.hasOnCompleted = true
         self.onCompleted = onCompleted
+        self.presetAddingMessage = presetAddingMessage
+        self.presetCompleteMessage = presetCompleteMessage
+        self.onDataChanged = onDataChanged
         if indicator != nil {
             DispatchQueue.main.async {
                 indicator?.minValue = 0
@@ -73,32 +80,52 @@ class Accumulator : NSObject {
                     if self.indicator != nil {
                         self.indicator?.isHidden = false
                     }
-                    if self.lblMessage != nil {
-                        self.lblMessage?.stringValue = message
-                    }
                 }
             }
+            
             DispatchQueue.main.async {
+                
+                if self.lblMessage != nil {
+                    if self.presetAddingMessage != nil {
+                        self.lblMessage?.stringValue = "\(self.presetAddingMessage!) ( \(self.count) / \(self._target) )"
+                    }else {
+                        self.lblMessage?.stringValue = "\(message) ( \(self.count) / \(self._target) )"
+                    }
+                }
+                
                 self.indicator?.increment(by: 1)
             }
             
             if completed {
-                DispatchQueue.main.async {
-                    if self.indicator != nil {
-                        self.indicator?.doubleValue = 0
-                        self.indicator?.isHidden = true
-                    }
-                    if self.lblMessage != nil {
-                        self.lblMessage?.stringValue = ""
-                    }
-                    if self.hasOnCompleted {
-                        let _ = self.onCompleted
-                    }
-                    
-                }
+                self.forceComplete()
             }
         }
         return completed
+    }
+    
+    func forceComplete() {
+        DispatchQueue.main.async {
+            if self.indicator != nil {
+                self.indicator?.doubleValue = 0
+                self.indicator?.isHidden = true
+            }
+            if self.lblMessage != nil {
+                if self.presetCompleteMessage != nil {
+                    self.lblMessage?.stringValue = self.presetCompleteMessage!
+                }else{
+                    self.lblMessage?.stringValue = ""
+                }
+            }
+            if self.hasOnCompleted {
+                print("\(Date()) ACCUMULATOR INVOKING ON COMPLETED CLOSURE")
+                self.onCompleted()
+            }
+            
+            if self.isDataChanged && self.onDataChanged != nil {
+                self.onDataChanged!()
+            }
+            
+        }
     }
     
     func working() -> Bool {
@@ -116,8 +143,8 @@ class Accumulator : NSObject {
     func setTarget(_ value:Int){
         self._target = value
         if indicator != nil {
-            DispatchQueue.main.sync {
-                indicator?.maxValue = Double(value)
+            DispatchQueue.main.async {
+                self.indicator?.maxValue = Double(value)
             }
             
         }
@@ -125,5 +152,9 @@ class Accumulator : NSObject {
     
     func reset() {
         count = 0
+    }
+    
+    func dataChanged() {
+        self.isDataChanged = true
     }
 }

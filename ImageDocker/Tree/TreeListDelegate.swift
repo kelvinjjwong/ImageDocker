@@ -172,6 +172,7 @@ extension ViewController {
                 for folder in imageFolders {
                     self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage,
                         onCompleted: {
+                            self.creatingRepository = false
                             ExportManager.enable()
                     })
                     self.imagesLoader.load(from: folder.url, indicator:self.collectionLoadingIndicator)
@@ -180,6 +181,21 @@ extension ViewController {
                 
             }
         }
+    }
+    
+    func refreshLibraryTree() {
+        //print("REFRESHING MOMENT TREE at \(Date())")
+        let count = self.libraryItem().children.count
+        // remove items in moments
+        for _ in (count > 1 ? 1 : count)...(count > 1 ? count : 1) {
+            //let index:Int = i - 1
+            self.sourceList.removeItems(at: NSIndexSet(index: 0) as IndexSet,
+                                        inParent: self.libraryItem(),
+                                        withAnimation: NSTableView.AnimationOptions.slideUp)
+        }
+        self.libraryItem().children.removeAll()
+        self.loadPathToTreeFromDatabase()
+        self.sourceList.reloadData()
     }
     
     func refreshEventTree() {

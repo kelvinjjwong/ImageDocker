@@ -37,8 +37,7 @@ class ModelStore {
             do {
                 try moc.save()
             } catch {
-                let nserror = error as NSError
-                print(nserror)
+                print(error)
                 //NSApplication.shared.presentError(nserror)
             }
         }
@@ -124,6 +123,49 @@ class ModelStore {
         }
         
         return duplicates
+    }
+    
+    
+    
+    static func getAllContainerPaths(in moc : NSManagedObjectContext? = nil) -> [[String:AnyObject]]? {
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        var expressionDescriptions = [AnyObject]()
+        expressionDescriptions.append("containerPath" as AnyObject)
+        
+        let keypathExp = NSExpression(forKeyPath: "path") // can be any column
+        let expression = NSExpression(forFunction: "count:", arguments: [keypathExp])
+        
+        let expressionDescription = NSExpressionDescription()
+        expressionDescription.name = "photoCount"
+        expressionDescription.expression = expression
+        expressionDescription.expressionResultType = .integer64AttributeType
+        expressionDescriptions.append(expressionDescription)
+        
+        
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "PhotoFile")
+        request.returnsObjectsAsFaults = false
+        request.propertiesToGroupBy = ["containerPath"]
+        request.resultType = .dictionaryResultType
+        request.sortDescriptors = [
+            NSSortDescriptor(key: "containerPath", ascending: true)
+        ]
+        request.propertiesToFetch = expressionDescriptions
+        
+        
+        var results:[[String:AnyObject]]?
+        
+        // Perform the fetch. This is using Swfit 2, so we need a do/try/catch
+        do {
+            results = try moc.fetch(request) as? [[String:AnyObject]]
+            //print(results)
+        } catch _ {
+            // If it fails, ensure the array is nil
+            results = nil
+        }
+        
+        return results
+        
     }
     
     static func getAllDates(groupByPlace:Bool = false, in moc : NSManagedObjectContext? = nil) -> [[String:AnyObject]]? {
@@ -238,6 +280,39 @@ class ModelStore {
         req.sortDescriptors = [NSSortDescriptor(key: "path", ascending: true)]
         return try! moc.fetch(req)
         
+    }
+    
+    static func getRepositories(in moc : NSManagedObjectContext? = nil) -> [ContainerFolder] {
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        let req = NSFetchRequest<ContainerFolder>(entityName: "ContainerFolder")
+        req.predicate = NSPredicate(format: "parentFolder == '' ")
+        req.sortDescriptors = [NSSortDescriptor(key: "path", ascending: true)]
+        return try! moc.fetch(req)
+        
+    }
+    
+    static func getPhotoFilesWithoutExif(limit:Int? = nil, in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
+        req.predicate = NSPredicate(format: "updateExifDate == nil")
+        req.sortDescriptors = [NSSortDescriptor(key: "photoTakenDate", ascending: true),
+                               NSSortDescriptor(key: "filename", ascending: true)]
+        if limit != nil {
+            req.fetchLimit = limit!
+        }
+        return try! moc.fetch(req)
+    }
+    
+    static func getPhotoFilesWithoutLocation(in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
+        req.predicate = NSPredicate(format: "updateLocationDate == nil")
+        req.sortDescriptors = [NSSortDescriptor(key: "photoTakenDate", ascending: true),
+                               NSSortDescriptor(key: "filename", ascending: true)]
+        return try! moc.fetch(req)
     }
     
     static func getAllPhotoFiles(includeHidden:Bool = true, in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
@@ -373,7 +448,12 @@ class ModelStore {
         let fetch = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
         fetch.predicate = NSPredicate(format: "path == %@", path)
         fetch.fetchLimit = 1
-        let exist = try! moc.fetch(fetch).first
+        var exist:PhotoFile? = nil
+        do {
+            try exist = moc.fetch(fetch).first
+        }catch{
+            print(error)
+        }
         
         if exist != nil {
             //print("exist photo: \(path)")

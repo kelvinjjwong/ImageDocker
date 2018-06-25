@@ -104,7 +104,7 @@ class ImageFile {
     var isLoadedExif:Bool = false
     var isRecognizedDateTimeFromFilename:Bool = false
 
-    init (url: URL, indicator:Accumulator? = nil, metaInfoStore:MetaInfoStoreDelegate? = nil) {
+    init (url: URL, indicator:Accumulator? = nil, metaInfoStore:MetaInfoStoreDelegate? = nil, quickCreate:Bool = false) {
         exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"
         
         self.indicator = indicator
@@ -121,21 +121,23 @@ class ImageFile {
         self.metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Filename", value: url.lastPathComponent))
         self.metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Full path", value: url.path.replacingOccurrences(of: url.lastPathComponent, with: "")))
         
-        loadMetaInfoFromDatabase()
-        
-        if self.photoFile?.updateExifDate == nil {
-            loadMetaInfoFromOSX()
-            loadMetaInfoFromExif()
-        }
-        //print("loaded image coordinate: \(self.latitudeBaidu) \(self.longitudeBaidu)")
-        if self.photoFile?.updateLocationDate == nil {
-            if self.location.coordinate != nil && self.location.coordinate!.isNotZero {
-                //BaiduLocation.queryForAddress(lat: self.latitudeBaidu, lon: self.longitudeBaidu, locationConsumer: self)
-                loadLocation(locationConsumer: self)
+        if !quickCreate {
+            loadMetaInfoFromDatabase()
+            
+            if self.photoFile?.updateExifDate == nil {
+                loadMetaInfoFromOSX()
+                loadMetaInfoFromExif()
             }
-        }
-        if isPhoto || isVideo {
-            originalCoordinate = location.coordinate
+            //print("loaded image coordinate: \(self.latitudeBaidu) \(self.longitudeBaidu)")
+            if self.photoFile?.updateLocationDate == nil {
+                if self.location.coordinate != nil && self.location.coordinate!.isNotZero {
+                    //BaiduLocation.queryForAddress(lat: self.latitudeBaidu, lon: self.longitudeBaidu, locationConsumer: self)
+                    loadLocation(locationConsumer: self)
+                }
+            }
+            if isPhoto || isVideo {
+                originalCoordinate = location.coordinate
+            }
         }
         
         // huawei pictures
@@ -145,6 +147,7 @@ class ImageFile {
         
         // file copied
         self.recognizeDateTimeFromFilename("IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})_[0-9]\\.([A-Za-z0-9]{3}+)")
+        self.recognizeDateTimeFromFilename("IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})-[0-9]\\.([A-Za-z0-9]{3}+)")
         
         // file compressed by wechat
         self.recognizeDateTimeFromFilename("IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})_comps\\.([A-Za-z0-9]{3}+)")
@@ -189,9 +192,11 @@ class ImageFile {
         self.storePhotoTakenDate(dateTime: photoTakenDate)
         //self.setThumbnail(url as URL)
         
-        self.recognizePlace()
-        
-        save()
+        if !quickCreate {
+            self.recognizePlace()
+            
+            save()
+        }
         self.notifyAccumulator(notifyIndicator: true)
 
     }
@@ -251,19 +256,65 @@ class ImageFile {
     }
     
     func recognizePlace() {
+        var prefix:String = ""
+        
+        var country = ""
+        var city = ""
+        var district = ""
+        if country == "" {
+            country = self.metaInfoHolder.getMeta(category: "Location", subCategory: "Assign", title: "Country") ?? ""
+        }
+        if city == "" {
+            city = self.metaInfoHolder.getMeta(category: "Location", subCategory: "Assign", title: "City") ?? ""
+        }
+        if district == "" {
+            district = self.metaInfoHolder.getMeta(category: "Location", subCategory: "Assign", title: "District") ?? ""
+        }
+        if country == "" {
+            country = self.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "Country") ?? ""
+        }
+        if city == "" {
+            city = self.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "City") ?? ""
+        }
+        if district == "" {
+            district = self.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "District") ?? ""
+        }
+        if country == "中国" {
+            if city != "" && city.reversed().starts(with: "市") {
+                city = city.replacingOccurrences(of: "市", with: "")
+            }
+            prefix = "\(city)"
+            
+            if city == "佛山" && district == "顺德区" {
+                prefix = "顺德"
+            }
+        }
+        
         var place:String? = self.metaInfoHolder.getMeta(category: "Location", subCategory: "Assigned", title: "Place")
         if place != nil {
-            self.place = place!
+            if prefix != "" && (place?.starts(with: prefix))! {
+                self.place = place!
+            }else{
+                self.place = "\(prefix)\(place!)"
+            }
             return
         }
         place = self.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "Suggest Place")
         if place != nil {
-            self.place = place!
+            if prefix != "" && (place?.starts(with: prefix))! {
+                self.place = place!
+            }else{
+                self.place = "\(prefix)\(place!)"
+            }
             return
         }
         place = self.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "BusinessCircle")
         if place != nil {
-            self.place = place!
+            if prefix != "" && (place?.starts(with: prefix))! {
+                self.place = place!
+            }else{
+                self.place = "\(prefix)\(place!)"
+            }
             return
         }
         self.place = ""
@@ -350,11 +401,13 @@ class ImageFile {
     }
     
     private func storePhotoTakenDate(dateTime:String?) {
-        if dateTime != nil {
+        if let dt = dateTime {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
-            let photoTakenDate = dateFormatter.date(from: dateTime!)
-            storePhotoTakenDate(dateTime: photoTakenDate!)
+            let photoTakenDate = dateFormatter.date(from: dt)
+            if let ptd = photoTakenDate {
+                storePhotoTakenDate(dateTime: ptd)
+            }
         }
     }
     
@@ -364,11 +417,13 @@ class ImageFile {
         
         let calendar = NSCalendar.current
         let component = calendar.dateComponents([.year, .month, .day, .hour], from: photoTakenDate)
-        self.photoFile?.photoTakenYear = Int32(component.year!)
-        self.photoFile?.photoTakenMonth = Int32(component.month!)
-        self.photoFile?.photoTakenDay = Int32(component.day!)
-        self.photoFile?.photoTakenHour = Int32(component.hour!)
-        self.photoFile?.updatePhotoTakenDate = Date()
+        if self.photoFile != nil && component.year != nil && component.month != nil && component.day != nil && component.hour != nil {
+            self.photoFile?.photoTakenYear = Int32(component.year!)
+            self.photoFile?.photoTakenMonth = Int32(component.month!)
+            self.photoFile?.photoTakenDay = Int32(component.day!)
+            self.photoFile?.photoTakenHour = Int32(component.hour!)
+            self.photoFile?.updatePhotoTakenDate = Date()
+        }
     }
     
     private func notifyAccumulator(notifyIndicator:Bool = true){
@@ -648,18 +703,25 @@ class ImageFile {
         //print("SET COORD 1: \(latitude) \(longitude) - \(fileName)")
         location.coordinate = Coord(latitude: latitude, longitude: longitude)
         
-        metaInfoHolder.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Latitude (WGS84)", value: String(format: "%3.6f", self.location.coordinate!.latitude).paddingLeft(12)))
-        self.photoFile?.latitude = self.location.coordinate!.latitude.description
-        
-        metaInfoHolder.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Longitude (WGS84)", value: String(format: "%3.6f", self.location.coordinate!.longitude).paddingLeft(12)))
-        self.photoFile?.longitude = self.location.coordinate!.longitude.description
-        
-        metaInfoHolder.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Latitude (BD09)", value: String(format: "%3.6f", self.location.coordinateBD!.latitude).paddingLeft(12)))
-        self.photoFile?.latitudeBD = self.location.coordinateBD!.latitude.description
-        
-        metaInfoHolder.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Longitude (BD09)", value: String(format: "%3.6f", self.location.coordinateBD!.longitude).paddingLeft(12)))
-        self.photoFile?.longitudeBD = self.location.coordinateBD!.longitude.description
-        
+        if self.photoFile != nil {
+            if self.location.coordinate != nil && self.location.coordinate?.latitude != nil && self.location.coordinate?.longitude != nil {
+                self.photoFile?.latitude = "\(self.location.coordinate?.latitude ?? 0)"
+                self.photoFile?.longitude = "\(self.location.coordinate?.longitude ?? 0)"
+                
+                metaInfoHolder.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Latitude (WGS84)", value: String(format: "%3.6f", self.location.coordinate!.latitude).paddingLeft(12)))
+                
+                metaInfoHolder.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Longitude (WGS84)", value: String(format: "%3.6f", self.location.coordinate!.longitude).paddingLeft(12)))
+            }
+            if self.location.coordinateBD != nil && self.location.coordinateBD?.latitude != nil && self.location.coordinateBD?.longitude != nil {
+                self.photoFile?.latitudeBD = "\(self.location.coordinateBD?.latitude ?? 0)"
+                self.photoFile?.longitudeBD = "\(self.location.coordinateBD?.longitude ?? 0)"
+                
+                metaInfoHolder.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Latitude (BD09)", value: String(format: "%3.6f", self.location.coordinateBD!.latitude).paddingLeft(12)))
+                
+                metaInfoHolder.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Original", title: "Longitude (BD09)", value: String(format: "%3.6f", self.location.coordinateBD!.longitude).paddingLeft(12)))
+            }
+        }
+
         //hasCoordinate = true
     }
     
@@ -688,8 +750,10 @@ class ImageFile {
             let pxHeight = imgProps[pixelHeight] as? Int{
             
             if pxWidth != 0 && pxHeight != 0 {
-                self.photoFile?.imageWidth = Int32(pxWidth)
-                self.photoFile?.imageHeight = Int32(pxHeight)
+                if self.photoFile != nil {
+                    self.photoFile?.imageWidth = Int32(pxWidth)
+                    self.photoFile?.imageHeight = Int32(pxHeight)
+                }
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "", title: "Size", value: "\(pxWidth) x \(pxHeight)"))
             }
         }
@@ -697,12 +761,16 @@ class ImageFile {
         if let tiffData = imgProps[TIFFDictionary] as? [String: AnyObject] {
             let cameraMake = tiffData[CameraMake] as? String ?? ""
             if cameraMake != "" {
-                self.photoFile?.cameraMaker = cameraMake
+                if self.photoFile != nil {
+                    self.photoFile?.cameraMaker = cameraMake
+                }
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "Camera", subCategory: "", title: "Manufacture", value: cameraMake))
             }
             let cameraModel = tiffData[CameraModel] as? String ?? ""
             if cameraModel != "" {
-                self.photoFile?.cameraModel = cameraModel
+                if self.photoFile != nil {
+                    self.photoFile?.cameraModel = cameraModel
+                }
                 let model = CameraModelRecognizer.recognize(maker: cameraMake, model: cameraModel)
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "Camera", subCategory: "", title: "Model", value: model))
             }
@@ -728,29 +796,37 @@ class ImageFile {
         
         if let tiffData = imgProps[TIFFDictionary] as? [String: AnyObject],
             let software = tiffData[Software] as? String {
-            self.photoFile?.softwareName = software
+            if self.photoFile != nil {
+                self.photoFile?.softwareName = software
+            }
             metaInfoHolder.setMetaInfo(MetaInfo(category: "Software", subCategory: "", title: "Name", value: software))
         }
         
         if let exifData = imgProps[exifDictionary] as? [String: AnyObject],
             let dto = exifData[exifDateTimeOriginal] as? String {
             date = dto
-            self.photoFile?.exifDateTimeOriginal = exifDateFormat.date(from: date)
+            if self.photoFile != nil {
+                self.photoFile?.exifDateTimeOriginal = exifDateFormat.date(from: date)
+            }
             metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", subCategory: "", title: "DateTimeOriginal", value: date))
         }
         
         if let tiffData = imgProps[TIFFDictionary] as? [String: AnyObject] {
             if let softwareDateTime = tiffData[SoftwareDateTime] as? String {
+                if self.photoFile != nil {
+                    self.photoFile?.softwareModifiedTime = exifDateFormat.date(from: softwareDateTime)
+                }
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", subCategory: "", title: "Software Modified", value: softwareDateTime))
-                self.photoFile?.softwareModifiedTime = exifDateFormat.date(from: softwareDateTime)
             }
         }
         
         if let gpsData = imgProps[GPSDictionary] as? [String: AnyObject],
             let gpsDateUTC = gpsData[GPSDateUTC] as? String,
             let gpsTimeUTC = gpsData[GPSTimestampUTC] as? String{
+            if self.photoFile != nil {
+                self.photoFile?.gpsDate = "\(gpsDateUTC) \(gpsTimeUTC) UTC"
+            }
             metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", subCategory: "", title: "GPS Date", value: "\(gpsDateUTC) \(gpsTimeUTC) UTC"))
-            self.photoFile?.gpsDate = "\(gpsDateUTC) \(gpsTimeUTC) UTC"
         }
         
         if let colorModel = imgProps[ColorModel] as? String {
@@ -1064,33 +1140,36 @@ extension ImageFile : LocationConsumer {
         self.location.addressDescription = location.addressDescription
         self.location.place = location.place
         
+        if photoFile != nil {
+            
+            photoFile?.country = location.country
+            photoFile?.province = location.province
+            photoFile?.city = location.city
+            photoFile?.district = location.district
+            photoFile?.street = location.street
+            photoFile?.businessCircle = location.businessCircle
+            photoFile?.address = location.address
+            photoFile?.addressDescription = location.addressDescription
+            photoFile?.suggestPlace = location.place
+        }
         
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Country", value: location.country))
-        photoFile?.country = location.country
         
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Province", value: location.province))
-        photoFile?.province = location.province
         
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "City", value: location.city))
-        photoFile?.city = location.city
         
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "District", value: location.district))
-        photoFile?.district = location.district
         
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Street", value: location.street))
-        photoFile?.street = location.street
         
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "BusinessCircle", value: location.businessCircle))
-        photoFile?.businessCircle = location.businessCircle
         
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Address", value: location.address))
-        photoFile?.address = location.address
         
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Description", value: location.addressDescription))
-        photoFile?.addressDescription = location.addressDescription
         
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Suggest Place", value: location.place))
-        photoFile?.suggestPlace = location.place
         
         self.recognizePlace()
         

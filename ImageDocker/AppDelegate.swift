@@ -97,7 +97,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if shouldFail || (failError != nil) {
             // Report any error we got.
             if let error = failError {
-                NSApplication.shared.presentError(error)
+                //NSApplication.shared.presentError(error)
                 fatalError("Unresolved error: \(error), \(error.userInfo)")
             }
             fatalError("Unsresolved error: \(failureReason)")
@@ -111,7 +111,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let coordinator = self.persistentStoreCoordinator
         var managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = coordinator
-        managedObjectContext.undoManager = UndoManager()
+        //managedObjectContext.undoManager = UndoManager()
         
         return managedObjectContext
     }()
@@ -131,24 +131,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             do {
                 try managedObjectContext.save()
             } catch {
-                let nserror = error as NSError
-                NSApplication.shared.presentError(nserror)
+                //let nserror = error as NSError
+                //NSApplication.shared.presentError(nserror)
+                print(error)
             }
         }
     }
     
     @IBAction func undo(_ sender: AnyObject?) {
-        managedObjectContext.undoManager?.undo()
+        //managedObjectContext.undoManager?.undo()
     }
     
     @IBAction func redo(_ sender: AnyObject?) {
-        managedObjectContext.undoManager?.redo()
+        //managedObjectContext.undoManager?.redo()
     }
     
-    func windowWillReturnUndoManager(window: NSWindow) -> UndoManager? {
+    //func windowWillReturnUndoManager(window: NSWindow) -> UndoManager? {
         // Returns the NSUndoManager for the application. In this case, the manager returned is that of the managed object context for the application.
-        return managedObjectContext.undoManager
-    }
+        //return managedObjectContext.undoManager
+    //}
 
 
 }

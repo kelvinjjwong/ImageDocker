@@ -26,6 +26,9 @@ class ViewController: NSViewController {
     var lastCheckEventChange:Date?
     var exportPhotosTimers:Timer!
     var lastExportPhotos:Date?
+    var scanRepositoriesTimer:Timer!
+    var lastScanRepositories:Date?
+    var scanPhotosToLoadExifTimer:Timer!
     
     // MARK: Image preview
     var img:ImageFile!
@@ -81,7 +84,10 @@ class ViewController: NSViewController {
     var selectedImageFile:String = ""
     
     @IBOutlet weak var sourceList: PXSourceList!
-    @IBOutlet weak var progressIndicator: NSProgressIndicator!
+    
+    var treeLoadingIndicator:Accumulator?
+    //@IBOutlet weak var progressIndicator: NSProgressIndicator!
+    
     @IBOutlet weak var btnAddRepository: NSButton!
     @IBOutlet weak var btnRemoveRepository: NSButton!
     @IBOutlet weak var btnRefreshRepository: NSButton!
@@ -134,6 +140,9 @@ class ViewController: NSViewController {
     var eventListController:EventListComboController!
     var placeListController:PlaceListComboController!
     
+    var scaningRepositories:Bool = false
+    var creatingRepository:Bool = false
+    
     // MARK: init
     
     override func viewDidLoad() {
@@ -141,6 +150,7 @@ class ViewController: NSViewController {
         
         //self.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
+        //progressIndicator.isDisplayedWhenStopped = false
         collectionProgressIndicator.isDisplayedWhenStopped = false
         batchEditIndicator.isDisplayedWhenStopped = false
         
@@ -157,7 +167,11 @@ class ViewController: NSViewController {
         setupEventList()
         setupPlaceList()
         
+        updateLibraryTree()
+        
         self.scanLocationChangeTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block:{_ in
+            guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository else {return}
+            print("\(Date()) SCANING LOCATION CHANGE")
             if self.lastCheckLocationChange != nil {
                 let photoFiles:[PhotoFile] = ModelStore.getPhotoFiles(after: self.lastCheckLocationChange!)
                 if photoFiles.count > 0 {
@@ -168,6 +182,8 @@ class ViewController: NSViewController {
         })
         
         self.scanPhotoTakenDateChangeTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block:{_ in
+            guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository else {return}
+            print("\(Date()) SCANING DATE CHANGE")
             if self.lastCheckPhotoTakenDateChange != nil {
                 let photoFiles:[PhotoFile] = ModelStore.getPhotoFiles(after: self.lastCheckPhotoTakenDateChange!)
                 if photoFiles.count > 0 {
@@ -178,6 +194,8 @@ class ViewController: NSViewController {
         })
         
         self.scanEventChangeTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block:{_ in
+            guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository else {return}
+            print("\(Date()) SCANING EVENT CHANGE")
             if self.lastCheckEventChange != nil {
                 let photoFiles:[PhotoFile] = ModelStore.getPhotoFiles(after: self.lastCheckEventChange!)
                 if photoFiles.count > 0 {
@@ -188,13 +206,68 @@ class ViewController: NSViewController {
         })
         
         self.exportPhotosTimers = Timer.scheduledTimer(withTimeInterval: 30, repeats: true, block:{_ in
+            guard !ExportManager.suppressed && !ExportManager.working && !self.scaningRepositories && !self.creatingRepository else {return}
+            print("\(Date()) EXPORTING")
             DispatchQueue.global().async {
                 ExportManager.export()
             }
         })
         
+        self.scanRepositoriesTimer = Timer.scheduledTimer(withTimeInterval: 15, repeats: true, block:{_ in
+            print("\(Date()) TRY TO SCAN REPOS")
+            guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository else {return}
+            print("\(Date()) SCANING REPOS")
+            DispatchQueue.global().async {
+                ExportManager.disable()
+                self.creatingRepository = true
+                self.treeLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true,
+                                                        lblMessage: self.indicatorMessage,
+                                                        presetAddingMessage: "Importing images ...",
+                                                        onCompleted: {
+                                                            print("COMPLETE SCAN REPO")
+                                                            ExportManager.enable()
+                                                            self.creatingRepository = false
+                                                        },
+                                                        onDataChanged: {
+                                                            self.updateLibraryTree()
+                                                        }
+                )
+                ImageFolderTreeScanner.scanRepositories(indicator: self.treeLoadingIndicator)
+            }
+        })
+        
+        self.scanPhotosToLoadExifTimer = Timer.scheduledTimer(withTimeInterval: 25, repeats: true, block:{_ in
+            print("\(Date()) TRY TO SCAN PHOTO TO LOAD EXIF")
+            guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository else {return}
+            print("\(Date()) SCANING PHOTOS TO LOAD EXIF")
+            DispatchQueue.global().async {
+                ExportManager.disable()
+                self.scaningRepositories = true
+                self.treeLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true,
+                                                        lblMessage: self.indicatorMessage,
+                                                        presetAddingMessage: "Extracting EXIF ...",
+                                                        onCompleted: {
+                                                            print("COMPLETE SCAN PHOTOS TO LOAD EXIF")
+                                                            ExportManager.enable()
+                                                            self.scaningRepositories = false
+                                                        }
+                )
+                ImageFolderTreeScanner.scanPhotosToLoadExif(indicator: self.treeLoadingIndicator)
+            }
+        })
         
         
+    }
+    
+    func updateLibraryTree() {
+        self.creatingRepository = true
+        print("\(Date()) UPDATING CONTAINERS")
+        ImageFolderTreeScanner.updateContainers()
+        print("\(Date()) UPDATING CONTAINERS: DONE")
+        print("\(Date()) UPDATING LIBRARY TREE")
+        self.refreshLibraryTree()
+        print("\(Date()) UPDATING LIBRARY TREE: DONE")
+        self.creatingRepository = false
     }
     
     func configureDarkMode() {
@@ -440,14 +513,19 @@ class ViewController: NSViewController {
     }
     
     func selectImageFolder(_ imageFolder:ImageFolder){
+        guard !self.scaningRepositories && !self.creatingRepository else {return}
         self.selectedImageFolder = imageFolder
         //print("selected image folder: \(imageFolder.url.path)")
+        self.scaningRepositories = true
         
         self.imagesLoader.clean()
         collectionView.reloadData()
         
         DispatchQueue.global().async {
-            self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage)
+            self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {
+                    self.scaningRepositories = false
+                }
+            )
             self.imagesLoader.load(from: imageFolder.url, indicator:self.collectionLoadingIndicator)
             self.refreshCollectionView()
         }
@@ -487,10 +565,13 @@ class ViewController: NSViewController {
         openPanel.beginSheetModal(for: window!) { (response) -> Void in
             guard response == NSApplication.ModalResponse.OK else {return}
             if let path = openPanel.url?.path {
-                DispatchQueue.main.async {
-                    self.loadPathToTree(path)
-                    self.sourceList.reloadData()
-                }
+                //self.creatingRepository = true
+                //DispatchQueue.main.async {
+                    //self.loadPathToTree(path)
+                ImageFolderTreeScanner.createRepository(path: path)
+                self.updateLibraryTree()
+                    //self.sourceList.reloadData()
+                //}
             }
         }
     }

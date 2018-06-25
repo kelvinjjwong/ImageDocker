@@ -47,7 +47,7 @@ class CollectionViewItemsLoader: NSObject {
         
         var urls: [URL] = []
         let photoFiles = ModelStore.getPhotoFiles(year: year, month: month, day: day, place: place)
-        print("GOT PHOTOS for year:\(year) month:\(month) day:\(day) place:\(place) count \(photoFiles.count)")
+        //print("GOT PHOTOS for year:\(year) month:\(month) day:\(day) place:\(place) count \(photoFiles.count)")
         for photoFile in photoFiles {
             urls.append(URL(fileURLWithPath: photoFile.path!))
         }
@@ -60,7 +60,7 @@ class CollectionViewItemsLoader: NSObject {
         
         var urls: [URL] = []
         let photoFiles = ModelStore.getPhotoFiles(year: year, month: month, day: day, event: event, place:place)
-        print("GOT PHOTOS for year:\(year) month:\(month) day:\(day) event:\(event) place:\(place) count \(photoFiles.count)")
+        //print("GOT PHOTOS for year:\(year) month:\(month) day:\(day) event:\(event) place:\(place) count \(photoFiles.count)")
         for photoFile in photoFiles {
             urls.append(URL(fileURLWithPath: photoFile.path!))
         }

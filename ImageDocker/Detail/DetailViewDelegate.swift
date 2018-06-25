@@ -59,15 +59,15 @@ extension ViewController: LocationConsumer {
     }
     
     func alert(status: Int, message: String, popup:Bool = false) {
-        if popup {
-            let alert = NSAlert()
-            alert.addButton(withTitle: NSLocalizedString("CLOSE", comment: "Close"))
-            alert.messageText = NSLocalizedString("Location Service", comment: "")
-            alert.informativeText = NSLocalizedString(message, comment: "")
-            alert.runModal()
-        }else{
+        //if popup {
+        //    let alert = NSAlert()
+        //    alert.addButton(withTitle: NSLocalizedString("CLOSE", comment: "Close"))
+        //    alert.messageText = NSLocalizedString("Location Service", comment: "")
+        //    alert.informativeText = NSLocalizedString(message, comment: "")
+        //    alert.runModal()
+        //}else{
             print("LOCATION ALERT: \(status) : \(message)")
-        }
+        //}
     }
     
     

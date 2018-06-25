@@ -18,17 +18,7 @@ class ImageFolder : NSObject {
     var photoCollection:PhotoCollection? = nil
     var containerFolder:ContainerFolder? = nil
     
-    init(_ url:URL) {
-        self.url = url
-        
-        let path:String = url.path
-        let name:String = url.lastPathComponent
-        //print("LOAD FOLDER 1 \(name) \(path)")
-        self.containerFolder = ModelStore.getOrCreateContainer(name: name, path: path)
-        self.containerFolder?.imageCount = Int32(countOfImages)
-    }
-    
-    init(_ url:URL, countOfImages:Int, updateModelStore:Bool = true){
+    init(_ url:URL, countOfImages:Int = 0, updateModelStore:Bool = true){
         self.url = url
         self.countOfImages = countOfImages
         
@@ -37,7 +27,9 @@ class ImageFolder : NSObject {
         //print("LOAD FOLDER 2 \(name) \(path)")
         
         self.containerFolder = ModelStore.getOrCreateContainer(name: name, path: path)
-        self.containerFolder?.imageCount = Int32(countOfImages)
+        if self.containerFolder?.imageCount == nil {
+            self.containerFolder?.imageCount = Int32(countOfImages)
+        }
         
     }
     
