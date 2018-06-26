@@ -51,6 +51,7 @@
         <attribute name="exifDateTimeOriginal" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="exifModifyDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="exportAsFilename" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="exportTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="exportToPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="exposureTime" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="filename" optional="YES" attributeType="String" syncable="YES"/>
@@ -82,6 +83,8 @@
         <attribute name="suggestPlace" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="trackCreateDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="trackModifyDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="updateDateTimeDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="updateEventDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="updateExifDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="updateLocationDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="updatePhotoTakenDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
@@ -110,7 +113,7 @@
     <elements>
         <element name="ContainerFolder" positionX="-632" positionY="-129" width="128" height="105"/>
         <element name="PhotoEvent" positionX="-173" positionY="-163" width="128" height="180"/>
-        <element name="PhotoFile" positionX="-441" positionY="-180" width="128" height="1140"/>
+        <element name="PhotoFile" positionX="-441" positionY="-180" width="128" height="1185"/>
         <element name="PhotoPlace" positionX="-423" positionY="-27" width="128" height="240"/>
     </elements>
 </model>

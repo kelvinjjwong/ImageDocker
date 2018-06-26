@@ -92,14 +92,15 @@ class ViewController: NSViewController {
     @IBOutlet weak var btnRemoveRepository: NSButton!
     @IBOutlet weak var btnRefreshRepository: NSButton!
     
+    @IBOutlet weak var lblExportMessage: NSTextField!
     
+    @IBOutlet weak var chbExport: NSButton!
     
     // MARK: Collection View for browsing
     
     @IBOutlet weak var collectionView: NSCollectionView!
     @IBOutlet weak var collectionProgressIndicator: NSProgressIndicator!
     
-    @IBOutlet weak var considerPlacesCheckBox: NSButton!
     @IBOutlet weak var indicatorMessage: NSTextField!
     @IBOutlet weak var btnRefreshCollectionView: NSButton!
     
@@ -169,6 +170,11 @@ class ViewController: NSViewController {
         
         updateLibraryTree()
         
+        self.chbExport.state = NSButton.StateValue.off
+        ExportManager.messageBox = self.lblExportMessage
+        ExportManager.disable()
+        self.lastExportPhotos = Date()
+        
         self.scanLocationChangeTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block:{_ in
             guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository else {return}
             print("\(Date()) SCANING LOCATION CHANGE")
@@ -205,11 +211,12 @@ class ViewController: NSViewController {
             }
         })
         
-        self.exportPhotosTimers = Timer.scheduledTimer(withTimeInterval: 30, repeats: true, block:{_ in
-            guard !ExportManager.suppressed && !ExportManager.working && !self.scaningRepositories && !self.creatingRepository else {return}
+        self.exportPhotosTimers = Timer.scheduledTimer(withTimeInterval: 60, repeats: true, block:{_ in
+            guard !ExportManager.suppressed && !ExportManager.working else {return}
             print("\(Date()) EXPORTING")
             DispatchQueue.global().async {
-                ExportManager.export()
+                ExportManager.export(after: self.lastExportPhotos!)
+                self.lastExportPhotos = Date()
             }
         })
         
@@ -294,7 +301,8 @@ class ViewController: NSViewController {
         self.addressSearcher.drawsBackground = true
         
         self.selectionCheckAllBox.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.considerPlacesCheckBox.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.chbExport.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.lblExportMessage.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
         self.editorDatePicker.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.editorDatePicker.backgroundColor = NSColor.darkGray
@@ -532,11 +540,16 @@ class ViewController: NSViewController {
     }
     
     func selectMoment(_ collection:PhotoCollection, groupByPlace:Bool = false){
+        guard !self.scaningRepositories && !self.creatingRepository else {return}
+        self.scaningRepositories = true
+        
         self.imagesLoader.clean()
         collectionView.reloadData()
         
         DispatchQueue.global().async {
-            self.collectionLoadingIndicator = Accumulator(target: collection.photoCount, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage)
+            self.collectionLoadingIndicator = Accumulator(target: collection.photoCount, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {
+                    self.scaningRepositories = false
+                })
             print("GETTING COLLECTION \(collection.year) \(collection.month) \(collection.day) \(collection.place ?? "")")
             self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, place: groupByPlace ? collection.place : nil, indicator:self.collectionLoadingIndicator)
             self.refreshCollectionView()
@@ -544,11 +557,16 @@ class ViewController: NSViewController {
     }
     
     func selectEvent(_ collection:PhotoCollection) {
+        guard !self.scaningRepositories && !self.creatingRepository else {return}
+        self.scaningRepositories = true
+        
         self.imagesLoader.clean()
         collectionView.reloadData()
         
         DispatchQueue.global().async {
-            self.collectionLoadingIndicator = Accumulator(target: collection.photoCount, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage)
+            self.collectionLoadingIndicator = Accumulator(target: collection.photoCount, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {
+                    self.scaningRepositories = false
+                })
             self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, event: collection.event, place: collection.place, indicator:self.collectionLoadingIndicator)
             self.refreshCollectionView()
         }
@@ -614,16 +632,25 @@ class ViewController: NSViewController {
     @IBAction func onRefreshButtonClicked(_ sender: Any) {
         print("clicked refresh button")
         
+        self.refreshLibraryTree()
         self.refreshMomentTree()
         self.refreshLocationTree()
+        self.refreshEventTree()
     }
     
     @IBAction func onRefreshCollectionButtonClicked(_ sender: Any) {
-        self.refreshImagesLocation()
+        self.refreshCollectionView()
     }
     
-    @IBAction func onPlacesCheckBoxClicked(_ sender: NSButton) {
-        refreshCollectionView()
+    
+    @IBAction func onCheckExportClicked(_ sender: NSButton) {
+        if self.chbExport.state == NSButton.StateValue.on {
+            print("enabled export")
+            ExportManager.enable()
+        }else {
+            print("disabled export")
+            ExportManager.disable()
+        }
     }
     
     
@@ -720,7 +747,7 @@ class ViewController: NSViewController {
         }
         self.selectionViewController.imagesLoader.reorganizeItems()
         self.selectionCollectionView.reloadData()
-        self.imagesLoader.reorganizeItems(considerPlaces: (self.considerPlacesCheckBox.state == NSButton.StateValue.on))
+        self.imagesLoader.reorganizeItems(considerPlaces: true)
         self.collectionView.reloadData()
         
     }

@@ -6,19 +6,31 @@
 //  Copyright © 2018年 nonamecat. All rights reserved.
 //
 
-import Foundation
+import Cocoa
 
 class ExportManager {
     
     static var working:Bool = false
     static var suppressed:Bool = false
+    static var messageBox:NSTextField? = nil
     
     @objc static func enable() {
         suppressed = false
+        
+        if messageBox != nil {
+            DispatchQueue.main.async {
+                messageBox?.stringValue = ""
+            }
+        }
     }
     
     @objc static func disable() {
         suppressed = true
+        if messageBox != nil {
+            DispatchQueue.main.async {
+                messageBox?.stringValue = ""
+            }
+        }
     }
     
     static func md5(pathOfFile:String) -> String {
@@ -43,7 +55,7 @@ class ExportManager {
         return ""
     }
     
-    static func export() {
+    static func export(after date:Date) {
         if suppressed {
             print("ExportManager is suppressed.")
             return
@@ -72,8 +84,19 @@ class ExportManager {
                     return
                 }
             }
-            let photos:[PhotoFile] = ModelStore.getAllPhotoFiles(includeHidden: false)
+            var dataChanged:Bool = false
+            let photos:[PhotoFile] = ModelStore.getAllPhotoFilesForExporting(after: date)
+            
+            let total = photos.count
+            var i:Int = 0
             for photo in photos {
+                i += 1
+                if messageBox != nil {
+                    DispatchQueue.main.async {
+                        messageBox?.stringValue = "EXPORT Checking ... ( \(i) / \(total) )"
+                    }
+                }
+                
                 if photo.photoTakenYear == 0 {
                     continue
                 }
@@ -124,7 +147,10 @@ class ExportManager {
                 filenameComponents.append(".")
                 filenameComponents.append(fileExt)
                 
+                // export as this name
                 var filename:String = filenameComponents.joined()
+                
+                // export to this path
                 var fullpath:String = "\(path)/\(filename)"
                 
                 var originalExportPath = "\(photo.exportToPath ?? "")/\(photo.exportAsFilename ?? "")"
@@ -133,14 +159,21 @@ class ExportManager {
                 }
                 
                 // detect duplicates
-                if originalExportPath == fullpath {
+                if originalExportPath == fullpath { // export to the same path as previous
                     if fm.fileExists(atPath: fullpath) {
                         let md5Exists = md5(pathOfFile: fullpath)
                         let md5PhotoFile = md5(pathOfFile: photo.path!)
                         if md5Exists == md5PhotoFile {
+                            // same file, abort
                             filepaths.append(originalExportPath)
+                            
+                            if photo.exportTime == nil {
+                                photo.exportTime = Date()
+                                dataChanged = true
+                            }
                             continue
                         }else{
+                            // different file, delete the one in export path
                             print("!! exists destination \(fullpath) , different md5, delete")
                             do {
                                 try fm.removeItem(atPath: originalExportPath)
@@ -150,8 +183,8 @@ class ExportManager {
                             }
                         }
                     }
-                }else if originalExportPath != "" && originalExportPath != fullpath {
-                    if fm.fileExists(atPath: originalExportPath) {
+                }else if originalExportPath != "" && originalExportPath != fullpath { // export to a different path from previous
+                    if fm.fileExists(atPath: originalExportPath) { // delete the one in previous path
                         do {
                             try fm.removeItem(atPath: originalExportPath)
                         }catch {
@@ -161,7 +194,20 @@ class ExportManager {
                     }
                 }
                 
-                
+                // other photo occupied the filename, same md5, abort
+                if fm.fileExists(atPath: fullpath) {
+                    let md5Exists = md5(pathOfFile: fullpath)
+                    let md5PhotoFile = md5(pathOfFile: photo.path!)
+                    if md5Exists == md5PhotoFile {
+                        
+                        if photo.exportTime == nil {
+                            photo.exportTime = Date()
+                            dataChanged = true
+                        }
+                        continue
+                    }
+                }
+                // other photo occupied the filename, different md5, change filename
                 if fm.fileExists(atPath: fullpath) {
                     print("!! exists destination \(fullpath) , add camera as suffix")
                     filenameComponents.removeLast()
@@ -179,7 +225,7 @@ class ExportManager {
                     filename = filenameComponents.joined()
                     fullpath = "\(path)/\(filename)"
                 }
-                
+                // other photo occupied the filename, different md5, change filename
                 for i in 1...99 {
                     let suffix = i < 10 ? "0\(i)" : "\(i)"
                     
@@ -197,6 +243,12 @@ class ExportManager {
                     }
                 }
                 
+                
+                if messageBox != nil {
+                    DispatchQueue.main.async {
+                        messageBox?.stringValue = "EXPORT Copying ... ( \(i) / \(total) )"
+                    }
+                }
                 do {
                     try fm.copyItem(atPath: photo.path!, toPath: "\(path)/\(filename)")
                 }catch {
@@ -205,15 +257,30 @@ class ExportManager {
                     continue
                 }
                 
-                photo.exportToPath = path
-                photo.exportAsFilename = filename
+                if photo.exportToPath == nil || path != photo.exportToPath {
+                    photo.exportToPath = path
+                    photo.exportTime = Date()
+                    dataChanged = true
+                }
+                if photo.exportAsFilename == nil || filename != photo.exportAsFilename {
+                    photo.exportAsFilename = filename
+                    photo.exportTime = Date()
+                    dataChanged = true
+                }
+                
+                if photo.exportTime == nil {
+                    photo.exportTime = Date()
+                    dataChanged = true
+                }
                 
                 filepaths.append(fullpath)
             }
             
-            DispatchQueue.main.async {
-                ModelStore.save()
-                //print("export done")
+            if dataChanged {
+                DispatchQueue.main.async {
+                    ModelStore.save()
+                    //print("export done")
+                }
             }
             
             let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: PreferencesController.exportDirectory()),

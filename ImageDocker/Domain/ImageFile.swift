@@ -496,6 +496,7 @@ class ImageFile {
         metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", subCategory: "", title: "Assigned", value: dateString))
         if photoFile != nil {
             photoFile?.assignDateTime = date
+            photoFile?.updateDateTimeDate = Date()
         }
         
         let photoTakenDate:String? = self.choosePhotoTakenDateFromMetaInfo()
@@ -523,6 +524,7 @@ class ImageFile {
                     event.endDate = photoFile?.photoTakenDate
                 }
             }
+            photoFile?.updateEventDate = Date()
             
         }
     }

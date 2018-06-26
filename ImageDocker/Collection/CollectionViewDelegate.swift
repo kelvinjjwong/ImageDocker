@@ -36,7 +36,7 @@ extension ViewController {
         }else{
             //print("REORG ITEMS")
             DispatchQueue.main.async{
-                self.imagesLoader.reorganizeItems(considerPlaces: (self.considerPlacesCheckBox.state == NSButton.StateValue.on))
+                self.imagesLoader.reorganizeItems(considerPlaces: true)
                 self.collectionView.reloadData()
             }
         }
@@ -127,7 +127,7 @@ extension ViewController : PlacesCompletionEvent {
     
     func onPlacesCompleted() {
         DispatchQueue.main.async{
-            self.imagesLoader.reorganizeItems(considerPlaces: (self.considerPlacesCheckBox.state == NSButton.StateValue.on))
+            self.imagesLoader.reorganizeItems(considerPlaces: true)
             self.collectionView.reloadData()
         }
     }
