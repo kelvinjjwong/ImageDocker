@@ -95,6 +95,8 @@ class ViewController: NSViewController {
     @IBOutlet weak var lblExportMessage: NSTextField!
     
     @IBOutlet weak var chbExport: NSButton!
+    @IBOutlet weak var chbScan: NSButton!
+    
     
     // MARK: Collection View for browsing
     
@@ -143,6 +145,8 @@ class ViewController: NSViewController {
     
     var scaningRepositories:Bool = false
     var creatingRepository:Bool = false
+    var suppressedExport:Bool = false
+    var suppressedScan:Bool = false
     
     // MARK: init
     
@@ -170,9 +174,13 @@ class ViewController: NSViewController {
         
         updateLibraryTree()
         
+        self.chbScan.state = NSButton.StateValue.on
+        self.suppressedScan = false
+        
         self.chbExport.state = NSButton.StateValue.off
         ExportManager.messageBox = self.lblExportMessage
-        ExportManager.disable()
+        ExportManager.suppressed = true
+        self.suppressedExport = true
         self.lastExportPhotos = Date()
         
         self.scanLocationChangeTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block:{_ in
@@ -212,8 +220,8 @@ class ViewController: NSViewController {
         })
         
         self.exportPhotosTimers = Timer.scheduledTimer(withTimeInterval: 60, repeats: true, block:{_ in
-            print("\(Date()) TRYING TO EXPORT \(ExportManager.suppressed) \(ExportManager.working)")
-            guard !ExportManager.suppressed && !ExportManager.working else {return}
+            print("\(Date()) TRYING TO EXPORT \(self.suppressedExport) \(ExportManager.suppressed) \(ExportManager.working)")
+            guard !self.suppressedExport && !ExportManager.suppressed && !ExportManager.working else {return}
             print("\(Date()) EXPORTING")
             DispatchQueue.global().async {
                 ExportManager.export(after: self.lastExportPhotos!)
@@ -225,46 +233,37 @@ class ViewController: NSViewController {
             print("\(Date()) TRY TO SCAN REPOS")
             guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository else {return}
             print("\(Date()) SCANING REPOS")
-            DispatchQueue.global().async {
-                ExportManager.disable()
-                self.creatingRepository = true
-                self.treeLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true,
-                                                        lblMessage: self.indicatorMessage,
-                                                        presetAddingMessage: "Importing images ...",
-                                                        onCompleted: {
-                                                            print("COMPLETE SCAN REPO")
-                                                            ExportManager.enable()
-                                                            self.creatingRepository = false
-                                                        },
-                                                        onDataChanged: {
-                                                            self.updateLibraryTree()
-                                                        }
-                )
-                ImageFolderTreeScanner.scanRepositories(indicator: self.treeLoadingIndicator)
-            }
+            self.startScanRepositories()
         })
         
         self.scanPhotosToLoadExifTimer = Timer.scheduledTimer(withTimeInterval: 25, repeats: true, block:{_ in
             print("\(Date()) TRY TO SCAN PHOTO TO LOAD EXIF")
-            guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository else {return}
+            guard !self.suppressedScan && !ExportManager.working && !self.scaningRepositories && !self.creatingRepository else {return}
             print("\(Date()) SCANING PHOTOS TO LOAD EXIF")
-            DispatchQueue.global().async {
-                ExportManager.disable()
-                self.scaningRepositories = true
-                self.treeLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true,
-                                                        lblMessage: self.indicatorMessage,
-                                                        presetAddingMessage: "Extracting EXIF ...",
-                                                        onCompleted: {
-                                                            print("COMPLETE SCAN PHOTOS TO LOAD EXIF")
-                                                            ExportManager.enable()
-                                                            self.scaningRepositories = false
-                                                        }
-                )
-                ImageFolderTreeScanner.scanPhotosToLoadExif(indicator: self.treeLoadingIndicator)
-            }
+            self.startScanRepositoriesToLoadExif()
         })
         
         
+    }
+    
+    fileprivate func startScanRepositories(){
+        DispatchQueue.global().async {
+            ExportManager.disable()
+            self.creatingRepository = true
+            self.treeLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true,
+                                                    lblMessage: self.indicatorMessage,
+                                                    presetAddingMessage: "Importing images ...",
+                                                    onCompleted: {
+                                                        print("COMPLETE SCAN REPO")
+                                                        ExportManager.enable()
+                                                        self.creatingRepository = false
+            },
+                                                    onDataChanged: {
+                                                        self.updateLibraryTree()
+            }
+            )
+            ImageFolderTreeScanner.scanRepositories(indicator: self.treeLoadingIndicator)
+        }
     }
     
     func updateLibraryTree() {
@@ -303,6 +302,7 @@ class ViewController: NSViewController {
         
         self.selectionCheckAllBox.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.chbExport.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.chbScan.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.lblExportMessage.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
         self.editorDatePicker.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -643,14 +643,62 @@ class ViewController: NSViewController {
         self.refreshCollectionView()
     }
     
+    fileprivate func startScanRepositoriesToLoadExif(){
+        if !ExportManager.working && !self.scaningRepositories && !self.creatingRepository {
+            DispatchQueue.global().async {
+                
+                ExportManager.suppressed = true
+                self.scaningRepositories = true
+                
+                self.treeLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true,
+                                                        lblMessage: self.indicatorMessage,
+                                                        presetAddingMessage: "Extracting EXIF ...",
+                                                        onCompleted: {
+                                                            print("COMPLETE SCAN PHOTOS TO LOAD EXIF")
+                                                            
+                                                            ExportManager.suppressed = false
+                                                            self.scaningRepositories = false
+                }
+                )
+                ImageFolderTreeScanner.scanPhotosToLoadExif(indicator: self.treeLoadingIndicator)
+            }
+        }
+    }
+    
+    
+    @IBAction func onCheckScanClicked(_ sender: NSButton) {
+        if self.chbScan.state == NSButton.StateValue.on {
+            print("enabled scan")
+            self.suppressedScan = false
+            ImageFolderTreeScanner.suppressedScan = false
+            
+            // start scaning immediatetly
+            self.startScanRepositories()
+        }else {
+            print("disabled scan")
+            self.suppressedScan = true
+            ImageFolderTreeScanner.suppressedScan = true
+        }
+    }
+    
     
     @IBAction func onCheckExportClicked(_ sender: NSButton) {
         if self.chbExport.state == NSButton.StateValue.on {
             print("enabled export")
+            self.suppressedExport = false
             ExportManager.suppressed = false
+            
+            // start exporting immediatetly
+            if !ExportManager.working {
+                DispatchQueue.global().async {
+                    ExportManager.export(after: self.lastExportPhotos!)
+                    self.lastExportPhotos = Date()
+                }
+            }
             //ExportManager.enable()
         }else {
             print("disabled export")
+            self.suppressedExport = true
             ExportManager.suppressed = true
             //ExportManager.disable()
         }

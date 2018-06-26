@@ -90,7 +90,24 @@ class ExportManager {
             let totalMarked = allMarkedExported.count
             var k:Int = 0
             var recovered:Bool = false
+            
+            print("\(Date()) EXPORT: CHECKING IF MARKED EXPORTED ARE REALLY EXPORTED")
             for photo in allMarkedExported {
+                
+                // if suppressed from outside, stop immediately
+                if suppressed {
+                    
+                    if recovered {
+                        ModelStore.save()
+                    }
+                    
+                    ExportManager.working = false
+                    DispatchQueue.main.async {
+                        messageBox?.stringValue = ""
+                    }
+                    return
+                }
+                
                 k += 1
                 if messageBox != nil {
                     DispatchQueue.main.async {
@@ -110,13 +127,35 @@ class ExportManager {
                 ModelStore.save()
             }
             
+            print("\(Date()) EXPORT: CHECKING IF MARKED EXPORTED ARE REALLY EXPORTED: DONE")
+            
             // check updates and which not exported
+            
+            print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
             var dataChanged:Bool = false
             let photos:[PhotoFile] = ModelStore.getAllPhotoFilesForExporting(after: date)
             
             let total = photos.count
             var i:Int = 0
             for photo in photos {
+                
+                // if suppressed from outside, stop immediately
+                if suppressed {
+                    
+                    if dataChanged {
+                        DispatchQueue.main.async {
+                            ModelStore.save()
+                            //print("export done")
+                        }
+                    }
+                    
+                    ExportManager.working = false
+                    DispatchQueue.main.async {
+                        messageBox?.stringValue = ""
+                    }
+                    return
+                }
+                
                 i += 1
                 if messageBox != nil {
                     DispatchQueue.main.async {
@@ -310,8 +349,21 @@ class ExportManager {
                 }
             }
             
+            print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED: DONE")
+            
+            
+            // if suppressed from outside, stop immediately
+            if suppressed {
+                ExportManager.working = false
+                DispatchQueue.main.async {
+                    messageBox?.stringValue = ""
+                }
+                return
+            }
+            
             // house keep
             
+            print("\(Date()) EXPORT: HOUSE KEEP")
             var filepaths:[String] = []
             let allphotos = ModelStore.getAllPhotoFiles()
             for photo in allphotos {
@@ -331,6 +383,16 @@ class ExportManager {
             var emptyFolders:[String] = []
             for case let file as URL in enumerator {
                 do {
+                    
+                    // if suppressed from outside, stop immediately
+                    if suppressed {
+                        ExportManager.working = false
+                        DispatchQueue.main.async {
+                            messageBox?.stringValue = ""
+                        }
+                        return
+                    }
+                    
                     let url = try file.resourceValues(forKeys: [.isDirectoryKey, .isReadableKey])
                     if !url.isDirectory! {
                     
@@ -363,6 +425,16 @@ class ExportManager {
             if emptyFolders.count > 0 {
                 print("  ")
                 for emptyFolder in emptyFolders {
+                    
+                    // if suppressed from outside, stop immediately
+                    if suppressed {
+                        ExportManager.working = false
+                        DispatchQueue.main.async {
+                            messageBox?.stringValue = ""
+                        }
+                        return
+                    }
+                    
                     print("deleting empty folder \(emptyFolder)")
                     do {
                         try fm.removeItem(atPath: emptyFolder)
@@ -373,6 +445,8 @@ class ExportManager {
                 }
                 print("  ")
             }
+            
+            print("\(Date()) EXPORT: HOUSE KEEP: DONE")
             
             ExportManager.working = false
         }

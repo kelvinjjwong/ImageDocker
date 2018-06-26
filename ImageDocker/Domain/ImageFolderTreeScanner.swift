@@ -11,6 +11,7 @@ import Foundation
 class ImageFolderTreeScanner {
     
     static let `default` = ImageFolderTreeScanner()
+    static var suppressedScan:Bool = false
     
     func walkthruDirectory(at folder:URL, resourceKeys: [URLResourceKey] = []) -> FileManager.DirectoryEnumerator{
         let enumerator = FileManager.default.enumerator(at: folder,
@@ -94,6 +95,13 @@ class ImageFolderTreeScanner {
     }
     
     static func scanPhotosToLoadExif(indicator:Accumulator? = nil)  {
+        if suppressedScan {
+            if indicator != nil {
+                indicator?.forceComplete()
+            }
+            return
+        }
+        
         let photos = ModelStore.getPhotoFilesWithoutExif()
         if photos.count > 0 {
             print("\(Date()) UPDATING EXIF: \(photos.count)")
@@ -101,6 +109,14 @@ class ImageFolderTreeScanner {
                 indicator?.setTarget(photos.count)
             }
             for photo in photos {
+                
+                if suppressedScan {
+                    if indicator != nil {
+                        indicator?.forceComplete()
+                    }
+                    return
+                }
+                
                 let url = URL(fileURLWithPath: photo.path!)
                 let _ = ImageFile(url: url, indicator: indicator)
             }
@@ -120,10 +136,25 @@ class ImageFolderTreeScanner {
     
     static func scanRepositories(indicator:Accumulator? = nil)  {
         
+        if suppressedScan {
+            if indicator != nil {
+                indicator?.forceComplete()
+            }
+            return
+        }
+        
         let repositories = ModelStore.getRepositories()
         
         var urls: [URL] = []
         for repo in repositories {
+            
+            if suppressedScan {
+                if indicator != nil {
+                    indicator?.forceComplete()
+                }
+                return
+            }
+            
             print("\(Date()) CHECKING REPO \(repo.path ?? "")")
             let startingURL = URL(fileURLWithPath: repo.path!)
             
@@ -131,6 +162,7 @@ class ImageFolderTreeScanner {
             let fileManager = FileManager.default
             let resourceValueKeys = [URLResourceKey.isRegularFileKey, URLResourceKey.typeIdentifierKey, URLResourceKey.isDirectoryKey]
             
+            print("\(Date()) CHECK REPO: ENUMERATING FILESYS")
             guard let directoryEnumerator = fileManager.enumerator(at: startingURL as URL,
                                                                    includingPropertiesForKeys: resourceValueKeys,
                                                                    options: options,
@@ -153,12 +185,21 @@ class ImageFolderTreeScanner {
                     print("Unexpected error occured: \(error).")
                 }
             }
+            print("\(Date()) CHECK REPO: ENUMERATING FILESYS: DONE")
         }
         
-        
+        print("\(Date()) CHECK REPO: CHECK TO BE ADDED")
         let exists = ModelStore.getAllPhotoFiles()
         var urlsToAdd:[URL] = []
         for url in urls {
+            
+            if suppressedScan {
+                if indicator != nil {
+                    indicator?.forceComplete()
+                }
+                return
+            }
+            
             //print("CHECKING URL FROM FILE REPO: \(url.path)")
             // physical url not in database, to be added to database
             if exists.index(where: {$0.path == url.path} ) == nil {
@@ -166,15 +207,26 @@ class ImageFolderTreeScanner {
                 //print("TO BE ADDED FROM FILE REPO: \(url.path)")
             }
         }
+        print("\(Date()) CHECK REPO: CHECK TO BE ADDED: DONE")
         
+        print("\(Date()) CHECK REPO: CHECK TO BE REMOVED")
         var photosToRemoved:[PhotoFile] = []
         for exist in exists {
+            
+            if suppressedScan {
+                if indicator != nil {
+                    indicator?.forceComplete()
+                }
+                return
+            }
+            
             // persisted url not in file system, to be removed from database
             if urls.index(where: {$0.path == exist.path} ) == nil {
                 photosToRemoved.append(exist)
                 //print("TO BE REMOVED FROM DB: \(exist.path ?? "")")
             }
         }
+        print("\(Date()) CHECK REPO: CHECK TO BE REMOVED: DONE")
         
         let total = urlsToAdd.count + photosToRemoved.count
         
@@ -189,10 +241,20 @@ class ImageFolderTreeScanner {
             indicator?.setTarget(total)
         }
         
+        print("\(Date()) CHECK REPO: EXECUTE ADD OR REMOVE")
+        
         if urlsToAdd.count > 0 {
             print("\(Date()) URLS TO ADD FROM FILESYS: \(urlsToAdd.count)")
             indicator?.dataChanged()
             for url in urlsToAdd {
+                
+                if suppressedScan {
+                    if indicator != nil {
+                        indicator?.forceComplete()
+                    }
+                    return
+                }
+                
                 //print("CREATING PHOTO \(url.path)")
                 let _ = ImageFile(url: url, indicator: indicator, quickCreate: true)
                 
@@ -205,6 +267,14 @@ class ImageFolderTreeScanner {
             print("\(Date()) PHOTOS TO REMOVED FROM DB: \(photosToRemoved.count)")
             indicator?.dataChanged()
             for photo in photosToRemoved {
+                
+                if suppressedScan {
+                    if indicator != nil {
+                        indicator?.forceComplete()
+                    }
+                    return
+                }
+                
                 AppDelegate.current.managedObjectContext.delete(photo)
                 
                 if indicator != nil {
@@ -217,6 +287,7 @@ class ImageFolderTreeScanner {
             //}
             print("\(Date()) PHOTOS TO REMOVED FROM DB: SAVE DONE")
         }
+        print("\(Date()) CHECK REPO: EXECUTE ADD OR REMOVE: DONE")
     }
     
     static func updateContainers() {
