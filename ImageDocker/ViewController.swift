@@ -174,8 +174,8 @@ class ViewController: NSViewController {
         
         updateLibraryTree()
         
-        self.chbScan.state = NSButton.StateValue.on
-        self.suppressedScan = false
+        self.chbScan.state = NSButton.StateValue.off
+        self.suppressedScan = true
         
         self.chbExport.state = NSButton.StateValue.off
         ExportManager.messageBox = self.lblExportMessage
@@ -219,7 +219,7 @@ class ViewController: NSViewController {
             }
         })
         
-        self.exportPhotosTimers = Timer.scheduledTimer(withTimeInterval: 60, repeats: true, block:{_ in
+        self.exportPhotosTimers = Timer.scheduledTimer(withTimeInterval: 600, repeats: true, block:{_ in
             print("\(Date()) TRYING TO EXPORT \(self.suppressedExport) \(ExportManager.suppressed) \(ExportManager.working)")
             guard !self.suppressedExport && !ExportManager.suppressed && !ExportManager.working else {return}
             print("\(Date()) EXPORTING")
@@ -229,7 +229,7 @@ class ViewController: NSViewController {
             }
         })
         
-        self.scanRepositoriesTimer = Timer.scheduledTimer(withTimeInterval: 15, repeats: true, block:{_ in
+        self.scanRepositoriesTimer = Timer.scheduledTimer(withTimeInterval: 180, repeats: true, block:{_ in
             print("\(Date()) TRY TO SCAN REPOS")
             guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository else {return}
             print("\(Date()) SCANING REPOS")
