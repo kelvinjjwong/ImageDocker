@@ -71,7 +71,7 @@ class ExportManager {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM月dd日HH点mm分ss"
         
-        var filepaths:[String] = []
+        //var filepaths:[String] = []
         
         if PreferencesController.exportDirectory() != "" {
             let fm:FileManager = FileManager.default
@@ -84,6 +84,33 @@ class ExportManager {
                     return
                 }
             }
+            
+            // check exported
+            let allMarkedExported = ModelStore.getAllPhotoFilesMarkedExported()
+            let totalMarked = allMarkedExported.count
+            var k:Int = 0
+            var recovered:Bool = false
+            for photo in allMarkedExported {
+                k += 1
+                if messageBox != nil {
+                    DispatchQueue.main.async {
+                        messageBox?.stringValue = "EXPORT Checking ... ( \(k) / \(totalMarked) )"
+                    }
+                }
+                
+                if photo.exportToPath != nil && photo.exportAsFilename != nil {
+                    let fullpath:String = "\(photo.exportToPath ?? "")/\(photo.exportAsFilename ?? "")"
+                    if !fm.fileExists(atPath: fullpath){
+                        photo.exportTime = nil
+                        recovered = true
+                    }
+                }
+            }
+            if recovered {
+                ModelStore.save()
+            }
+            
+            // check updates and which not exported
             var dataChanged:Bool = false
             let photos:[PhotoFile] = ModelStore.getAllPhotoFilesForExporting(after: date)
             
@@ -165,7 +192,7 @@ class ExportManager {
                         let md5PhotoFile = md5(pathOfFile: photo.path!)
                         if md5Exists == md5PhotoFile {
                             // same file, abort
-                            filepaths.append(originalExportPath)
+                            //filepaths.append(originalExportPath)
                             
                             if photo.exportTime == nil {
                                 photo.exportTime = Date()
@@ -273,13 +300,24 @@ class ExportManager {
                     dataChanged = true
                 }
                 
-                filepaths.append(fullpath)
+                //filepaths.append(fullpath)
             }
             
             if dataChanged {
                 DispatchQueue.main.async {
                     ModelStore.save()
                     //print("export done")
+                }
+            }
+            
+            // house keep
+            
+            var filepaths:[String] = []
+            let allphotos = ModelStore.getAllPhotoFiles()
+            for photo in allphotos {
+                if photo.exportToPath != nil && photo.exportAsFilename != nil {
+                    let path = "\(photo.exportToPath ?? "")/\(photo.exportAsFilename ?? "")"
+                    filepaths.append(path)
                 }
             }
             

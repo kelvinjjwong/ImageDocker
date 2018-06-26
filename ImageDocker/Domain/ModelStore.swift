@@ -337,6 +337,16 @@ class ModelStore {
         return try! moc.fetch(req)
     }
     
+    static func getAllPhotoFilesMarkedExported(in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
+        req.predicate = NSPredicate(format: "(hidden == nil || hidden == false) && exportTime != nil")
+        req.sortDescriptors = [NSSortDescriptor(key: "photoTakenDate", ascending: true),
+                               NSSortDescriptor(key: "filename", ascending: true)]
+        return try! moc.fetch(req)
+    }
+    
     static func getPhotoFiles(parentPath:String, in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
         let moc = moc ?? AppDelegate.current.managedObjectContext
         

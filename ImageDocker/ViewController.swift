@@ -212,6 +212,7 @@ class ViewController: NSViewController {
         })
         
         self.exportPhotosTimers = Timer.scheduledTimer(withTimeInterval: 60, repeats: true, block:{_ in
+            print("\(Date()) TRYING TO EXPORT \(ExportManager.suppressed) \(ExportManager.working)")
             guard !ExportManager.suppressed && !ExportManager.working else {return}
             print("\(Date()) EXPORTING")
             DispatchQueue.global().async {
@@ -646,10 +647,12 @@ class ViewController: NSViewController {
     @IBAction func onCheckExportClicked(_ sender: NSButton) {
         if self.chbExport.state == NSButton.StateValue.on {
             print("enabled export")
-            ExportManager.enable()
+            ExportManager.suppressed = false
+            //ExportManager.enable()
         }else {
             print("disabled export")
-            ExportManager.disable()
+            ExportManager.suppressed = true
+            //ExportManager.disable()
         }
     }
     
