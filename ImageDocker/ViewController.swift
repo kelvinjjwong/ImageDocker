@@ -83,6 +83,7 @@ class ViewController: NSViewController {
     var selectedImageFolder:ImageFolder?
     var selectedImageFile:String = ""
     
+    @IBOutlet weak var btnScanState: NSButton!
     @IBOutlet weak var sourceList: PXSourceList!
     
     var treeLoadingIndicator:Accumulator?
@@ -176,6 +177,8 @@ class ViewController: NSViewController {
         
         self.chbScan.state = NSButton.StateValue.off
         self.suppressedScan = true
+        self.btnScanState.image = NSImage(named: NSImage.Name.statusNone)
+        self.btnScanState.isHidden = true
         
         self.chbExport.state = NSButton.StateValue.off
         ExportManager.messageBox = self.lblExportMessage
@@ -250,6 +253,9 @@ class ViewController: NSViewController {
         DispatchQueue.global().async {
             ExportManager.disable()
             self.creatingRepository = true
+            DispatchQueue.main.async {
+                self.btnScanState.image = NSImage(named: NSImage.Name.statusAvailable)
+            }
             self.treeLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true,
                                                     lblMessage: self.indicatorMessage,
                                                     presetAddingMessage: "Importing images ...",
@@ -257,6 +263,9 @@ class ViewController: NSViewController {
                                                         print("COMPLETE SCAN REPO")
                                                         ExportManager.enable()
                                                         self.creatingRepository = false
+                                                        DispatchQueue.main.async {
+                                                            self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
+                                                        }
             },
                                                     onDataChanged: {
                                                         self.updateLibraryTree()
@@ -522,7 +531,7 @@ class ViewController: NSViewController {
     }
     
     func selectImageFolder(_ imageFolder:ImageFolder){
-        guard !self.scaningRepositories && !self.creatingRepository else {return}
+        //guard !self.scaningRepositories && !self.creatingRepository else {return}
         self.selectedImageFolder = imageFolder
         //print("selected image folder: \(imageFolder.url.path)")
         self.scaningRepositories = true
@@ -541,7 +550,7 @@ class ViewController: NSViewController {
     }
     
     func selectMoment(_ collection:PhotoCollection, groupByPlace:Bool = false){
-        guard !self.scaningRepositories && !self.creatingRepository else {return}
+        //guard !self.scaningRepositories && !self.creatingRepository else {return}
         self.scaningRepositories = true
         
         self.imagesLoader.clean()
@@ -558,7 +567,7 @@ class ViewController: NSViewController {
     }
     
     func selectEvent(_ collection:PhotoCollection) {
-        guard !self.scaningRepositories && !self.creatingRepository else {return}
+        //guard !self.scaningRepositories && !self.creatingRepository else {return}
         self.scaningRepositories = true
         
         self.imagesLoader.clean()
@@ -672,12 +681,18 @@ class ViewController: NSViewController {
             self.suppressedScan = false
             ImageFolderTreeScanner.suppressedScan = false
             
+            self.btnScanState.isHidden = false
+            self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
+            
             // start scaning immediatetly
             self.startScanRepositories()
         }else {
             print("disabled scan")
             self.suppressedScan = true
             ImageFolderTreeScanner.suppressedScan = true
+            
+            self.btnScanState.image = NSImage(named: NSImage.Name.statusNone)
+            self.btnScanState.isHidden = true
         }
     }
     
@@ -735,14 +750,14 @@ class ViewController: NSViewController {
 
     @IBAction func onSelectionCheckAllClicked(_ sender: NSButton) {
         if self.selectionCheckAllBox.state == NSButton.StateValue.on {
-            for item in self.selectionCollectionView.visibleItems() {
-                let item = item as! CollectionViewItem
-                item.check()
+            for i in 0...self.selectionViewController.imagesLoader.getItems().count-1 {
+                let itemView = self.selectionCollectionView.item(at: i) as! CollectionViewItem
+                itemView.check()
             }
         }else {
-            for item in self.selectionCollectionView.visibleItems() {
-                let item = item as! CollectionViewItem
-                item.uncheck()
+            for i in 0...self.selectionViewController.imagesLoader.getItems().count-1 {
+                let itemView = self.selectionCollectionView.item(at: i) as! CollectionViewItem
+                itemView.uncheck()
             }
         }
     }

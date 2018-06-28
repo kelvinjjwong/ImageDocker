@@ -407,17 +407,28 @@
                                                                 </connections>
                                                             </button>
                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pmP-SX-vWx">
-                                                                <rect key="frame" x="7" y="9" width="142" height="18"/>
+                                                                <rect key="frame" x="7" y="9" width="147" height="18"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="14" id="yn0-jZ-LJ0"/>
                                                                 </constraints>
-                                                                <buttonCell key="cell" type="check" title="Scan in background" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="GbH-SV-08X">
+                                                                <buttonCell key="cell" type="check" title="Import &amp; Housekeep" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="GbH-SV-08X">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
                                                                 <connections>
                                                                     <action selector="onCheckScanClicked:" target="XfG-lQ-9wD" id="AcC-7e-SV6"/>
                                                                 </connections>
+                                                            </button>
+                                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XhD-V8-W0f">
+                                                                <rect key="frame" x="160" y="8" width="13" height="19"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="19" id="FLi-Fl-dOB"/>
+                                                                    <constraint firstAttribute="width" constant="13" id="kfO-qj-UCf"/>
+                                                                </constraints>
+                                                                <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSStatusNone" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="Oqe-Rc-O13">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
                                                             </button>
                                                         </subviews>
                                                         <constraints>
@@ -429,11 +440,13 @@
                                                             <constraint firstItem="Ew1-wa-ZwC" firstAttribute="top" secondItem="du2-Hq-a9E" secondAttribute="bottom" constant="8" id="ISO-2M-gJV"/>
                                                             <constraint firstAttribute="bottom" secondItem="pmP-SX-vWx" secondAttribute="bottom" constant="11" id="M5G-gb-Xle"/>
                                                             <constraint firstItem="Ew1-wa-ZwC" firstAttribute="leading" secondItem="at5-dg-epR" secondAttribute="trailing" constant="5" id="RfZ-L1-8pi"/>
+                                                            <constraint firstAttribute="bottom" secondItem="XhD-V8-W0f" secondAttribute="bottom" constant="8" id="WOf-cV-F4L"/>
                                                             <constraint firstItem="pmP-SX-vWx" firstAttribute="leading" secondItem="CKk-CL-9gu" secondAttribute="leading" constant="9" id="Y1c-7D-rln"/>
                                                             <constraint firstAttribute="bottom" secondItem="du2-Hq-a9E" secondAttribute="bottom" constant="35" id="ZmH-ET-eFq"/>
                                                             <constraint firstItem="at5-dg-epR" firstAttribute="top" secondItem="du2-Hq-a9E" secondAttribute="bottom" constant="8" id="dhK-nV-n00"/>
                                                             <constraint firstItem="at5-dg-epR" firstAttribute="leading" secondItem="ceG-A8-dKi" secondAttribute="trailing" constant="5" id="oVw-v0-CWY"/>
                                                             <constraint firstAttribute="trailing" secondItem="Ew1-wa-ZwC" secondAttribute="trailing" constant="10" id="oag-Ku-ieg"/>
+                                                            <constraint firstItem="XhD-V8-W0f" firstAttribute="leading" secondItem="pmP-SX-vWx" secondAttribute="trailing" constant="8" id="zHB-pP-Zsf"/>
                                                         </constraints>
                                                     </customView>
                                                     <customView misplaced="YES" id="m9M-hY-L99">
@@ -1134,6 +1147,7 @@
                         <outlet property="btnRemoveSelection" destination="lT1-yY-BTR" id="e6C-Ic-N4o"/>
                         <outlet property="btnReplaceDateTime" destination="Mqi-a1-a53" id="a2A-yp-vA7"/>
                         <outlet property="btnReplaceLocation" destination="yTk-hm-vhq" id="GpK-vI-DwS"/>
+                        <outlet property="btnScanState" destination="XhD-V8-W0f" id="62F-lW-Dyb"/>
                         <outlet property="btnShow" destination="W0U-Cw-aB7" id="rYg-OY-AwZ"/>
                         <outlet property="chbExport" destination="Qnu-5r-3Pb" id="shB-wc-ZF2"/>
                         <outlet property="chbScan" destination="pmP-SX-vWx" id="d0K-gZ-IpG"/>
@@ -1330,5 +1344,6 @@
         <image name="NSAddTemplate" width="11" height="11"/>
         <image name="NSRefreshTemplate" width="11" height="15"/>
         <image name="NSRemoveTemplate" width="11" height="11"/>
+        <image name="NSStatusNone" width="16" height="16"/>
     </resources>
 </document>

@@ -84,6 +84,7 @@ extension ViewController : NSCollectionViewDataSource {
   
     func collectionView(_ collectionView: NSCollectionView, viewForSupplementaryElementOfKind kind: NSCollectionView.SupplementaryElementKind, at indexPath: IndexPath) -> NSView {
         let view = collectionView.makeSupplementaryView(ofKind: NSCollectionView.SupplementaryElementKind.sectionHeader, withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "HeaderView"), for: indexPath as IndexPath) as! HeaderView
+        view.uncheck(ignoreDelegate: true)
         view.setCheckBoxDelegate(self)
         view.sectionIndex = indexPath.section
         
@@ -162,6 +163,8 @@ extension ViewController : CollectionViewItemCheckDelegate {
                 
                 if shouldCheckSection {
                     section.check(ignoreDelegate: true)
+                }else{
+                    section.uncheck(ignoreDelegate: true)
                 }
             }
         }

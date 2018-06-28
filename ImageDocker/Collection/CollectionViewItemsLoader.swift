@@ -26,6 +26,7 @@ class CollectionViewItemsLoader: NSObject {
     var singleSectionMode = false
     var considerPlaces = true
     var indicator:Accumulator?
+    var showHidden:Bool = false
     
     private var sections = [CollectionViewSection]()
 
@@ -150,6 +151,11 @@ class CollectionViewItemsLoader: NSObject {
     }
     
     private func collectDomainItemToMultipleSection(_ dateFormat:String = "yyyy-MM-dd") {
+        for section in sections {
+            section.items.removeAll()
+        }
+        sections.removeAll()
+        
         for item in items {
             var title:String = item.photoTakenDateString(dateFormat, forceUpdate: true)
             
@@ -281,9 +287,12 @@ class CollectionViewItemsLoader: NSObject {
                 imageFile.hasDuplicates = false
             }
             
+            // prefetch thumbnail to improve performance of collection view
+            let _ = imageFile.thumbnail
+            
             items.append(imageFile)
         }
-        ModelStore.save()
+        //ModelStore.save()
         //print("TRANSFORMED TO ITEMS \(urls.count)")
     }
     
