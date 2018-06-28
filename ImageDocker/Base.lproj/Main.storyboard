@@ -767,17 +767,17 @@
                                 <rect key="frame" x="1315" y="0.0" width="580" height="920"/>
                                 <subviews>
                                     <customView misplaced="YES" id="8jQ-dy-j2P">
-                                        <rect key="frame" x="0.0" y="0.0" width="580" height="148"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="580" height="278"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
                                             <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fHj-eQ-neO">
-                                                <rect key="frame" x="0.0" y="0.0" width="580" height="146"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="580" height="274"/>
                                                 <clipView key="contentView" id="eei-jG-19T">
-                                                    <rect key="frame" x="0.0" y="0.0" width="580" height="146"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="580" height="274"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" id="ECf-s9-RCm" customClass="DarkTableView" customModule="ImageDocker" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="1317" height="146"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="1317" height="274"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <size key="intercellSpacing" width="3" height="2"/>
                                                             <color key="backgroundColor" name="controlShadowColor" catalog="System" colorSpace="catalog"/>
@@ -960,11 +960,11 @@
                                                     <color key="backgroundColor" name="controlShadowColor" catalog="System" colorSpace="catalog"/>
                                                 </clipView>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="630" id="4RY-gk-tXi"/>
+                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="485" id="4RY-gk-tXi"/>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="iFO-RX-zhl"/>
                                                 </constraints>
                                                 <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="FDe-a6-p7R">
-                                                    <rect key="frame" x="0.0" y="130" width="580" height="16"/>
+                                                    <rect key="frame" x="0.0" y="258" width="580" height="16"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </scroller>
                                                 <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="69W-Gl-fR8">
@@ -981,17 +981,17 @@
                                         </constraints>
                                     </customView>
                                     <customView misplaced="YES" id="QFU-sv-H0M">
-                                        <rect key="frame" x="0.0" y="157" width="580" height="763"/>
+                                        <rect key="frame" x="0.0" y="287" width="580" height="633"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <subviews>
                                             <containerView translatesAutoresizingMaskIntoConstraints="NO" id="73d-nT-eRs">
-                                                <rect key="frame" x="0.0" y="490" width="575" height="258"/>
+                                                <rect key="frame" x="0.0" y="212" width="575" height="408"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="258" id="KNt-dF-u8D"/>
+                                                    <constraint firstAttribute="height" constant="408" id="KNt-dF-u8D"/>
                                                 </constraints>
                                             </containerView>
                                             <wkWebView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A1f-6H-jB4">
-                                                <rect key="frame" x="0.0" y="285" width="550" height="200"/>
+                                                <rect key="frame" x="0.0" y="7" width="550" height="200"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="200" id="Rus-Bj-vUl"/>
                                                 </constraints>
@@ -1001,7 +1001,7 @@
                                                 </wkWebViewConfiguration>
                                             </wkWebView>
                                             <slider horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eId-m8-eKf">
-                                                <rect key="frame" x="556" y="279" width="24" height="205"/>
+                                                <rect key="frame" x="556" y="1" width="24" height="205"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="200" id="NeB-R9-6uy"/>
                                                     <constraint firstAttribute="width" constant="22" id="u9i-v3-wDS"/>
@@ -1013,7 +1013,7 @@
                                                 </sliderCell>
                                             </slider>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vj9-Vb-qDW">
-                                                <rect key="frame" x="432" y="247" width="142" height="32"/>
+                                                <rect key="frame" x="432" y="-31" width="142" height="32"/>
                                                 <buttonCell key="cell" type="push" title="▼ Copy Location" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0SC-Zm-uaG">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
@@ -1023,7 +1023,7 @@
                                                 </connections>
                                             </button>
                                             <searchField wantsLayer="YES" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N2C-6D-h6d">
-                                                <rect key="frame" x="0.0" y="253" width="430" height="22"/>
+                                                <rect key="frame" x="0.0" y="-25" width="430" height="22"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="430" id="lP0-Zk-BTZ"/>
                                                 </constraints>
@@ -1037,7 +1037,7 @@
                                                 </connections>
                                             </searchField>
                                             <wkWebView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JL6-YH-lBk">
-                                                <rect key="frame" x="0.0" y="36" width="550" height="190"/>
+                                                <rect key="frame" x="0.0" y="-242" width="550" height="190"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="190" id="dSu-nQ-xVE"/>
                                                 </constraints>
@@ -1047,7 +1047,7 @@
                                                 </wkWebViewConfiguration>
                                             </wkWebView>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yTk-hm-vhq">
-                                                <rect key="frame" x="-6" y="-2" width="159" height="32"/>
+                                                <rect key="frame" x="-6" y="-280" width="159" height="32"/>
                                                 <buttonCell key="cell" type="push" title="◀︎ Replace Location" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xTW-OO-1PS">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
@@ -1057,7 +1057,7 @@
                                                 </connections>
                                             </button>
                                             <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="exh-M3-IJe">
-                                                <rect key="frame" x="157" y="1" width="323" height="26"/>
+                                                <rect key="frame" x="157" y="-277" width="323" height="26"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="320" id="rNv-dC-OzP"/>
                                                 </constraints>
@@ -1068,7 +1068,7 @@
                                                 </comboBoxCell>
                                             </comboBox>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cF6-tu-IsK">
-                                                <rect key="frame" x="481" y="-2" width="95" height="32"/>
+                                                <rect key="frame" x="481" y="-280" width="95" height="32"/>
                                                 <buttonCell key="cell" type="push" title="★ Places" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4CZ-uL-G4W">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
@@ -1078,7 +1078,7 @@
                                                 </connections>
                                             </button>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eVa-Lt-Qdt">
-                                                <rect key="frame" x="0.0" y="228" width="577" height="20"/>
+                                                <rect key="frame" x="0.0" y="-50" width="577" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="ONi-GH-c7g"/>
                                                 </constraints>
@@ -1089,7 +1089,7 @@
                                                 </textFieldCell>
                                             </textField>
                                             <slider horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Uni-ou-AR9">
-                                                <rect key="frame" x="556" y="33" width="24" height="195"/>
+                                                <rect key="frame" x="556" y="-245" width="24" height="195"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="22" id="aUx-D9-TIt"/>
                                                     <constraint firstAttribute="height" constant="190" id="qmM-zn-n41"/>
