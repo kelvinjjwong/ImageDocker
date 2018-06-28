@@ -347,46 +347,56 @@ class ModelStore {
         return try! moc.fetch(req)
     }
     
-    static func getPhotoFiles(parentPath:String, in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
+    static func getPhotoFiles(parentPath:String, includeHidden:Bool = true,  in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
         let moc = moc ?? AppDelegate.current.managedObjectContext
         
         let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
-        req.predicate = NSPredicate(format: "containerPath == %@", parentPath)
+        
+        var otherPredicate:String = ""
+        if !includeHidden {
+            otherPredicate = " && (hidden == nil || hidden == false)"
+        }
+        req.predicate = NSPredicate(format: "containerPath == %@ \(otherPredicate)", parentPath)
         req.sortDescriptors = [NSSortDescriptor(key: "photoTakenDate", ascending: true),
                                NSSortDescriptor(key: "filename", ascending: true)]
         return try! moc.fetch(req)
     }
     
-    static func getPhotoFiles(year:Int, month:Int, day:Int, place:String?, in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
+    static func getPhotoFiles(year:Int, month:Int, day:Int, place:String?, includeHidden:Bool = true, in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
         let moc = moc ?? AppDelegate.current.managedObjectContext
         
         let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
+        
+        var otherPredicate:String = ""
+        if !includeHidden {
+            otherPredicate = " && (hidden == nil || hidden == false)"
+        }
         if place == nil {
             if year == 0 && month == 0 && day == 0 {
-                req.predicate = NSPredicate(format: "photoTakenYear == 0 && photoTakenMonth == 0 && photoTakenDay == 0")
+                req.predicate = NSPredicate(format: "photoTakenYear == 0 && photoTakenMonth == 0 && photoTakenDay == 0 \(otherPredicate)")
             }else{
                 if year == 0 {
                     // no condition
                 } else if month == 0 {
-                    req.predicate = NSPredicate(format: "photoTakenYear == %@", NSNumber(value: year))
+                    req.predicate = NSPredicate(format: "photoTakenYear == %@ \(otherPredicate)", NSNumber(value: year))
                 } else if day == 0 {
-                    req.predicate = NSPredicate(format: "photoTakenYear == %@ && photoTakenMonth == %@", NSNumber(value: year), NSNumber(value: month))
+                    req.predicate = NSPredicate(format: "photoTakenYear == %@ && photoTakenMonth == %@ \(otherPredicate)", NSNumber(value: year), NSNumber(value: month))
                 } else {
-                    req.predicate = NSPredicate(format: "photoTakenYear == %@ && photoTakenMonth == %@ && photoTakenDay == %@", NSNumber(value: year), NSNumber(value: month), NSNumber(value: day))
+                    req.predicate = NSPredicate(format: "photoTakenYear == %@ && photoTakenMonth == %@ && photoTakenDay == %@ \(otherPredicate)", NSNumber(value: year), NSNumber(value: month), NSNumber(value: day))
                 }
             }
         } else {
             if year == 0 && month == 0 && day == 0 {
-                req.predicate = NSPredicate(format: "photoTakenYear == 0 && photoTakenMonth == 0 && photoTakenDay == 0 && place == %@", place!)
+                req.predicate = NSPredicate(format: "photoTakenYear == 0 && photoTakenMonth == 0 && photoTakenDay == 0 && place == %@ \(otherPredicate)", place!)
             }else{
                 if year == 0 {
-                    req.predicate = NSPredicate(format: "place == %@", place!)
+                    req.predicate = NSPredicate(format: "place == %@ \(otherPredicate)", place!)
                 } else if month == 0 {
-                    req.predicate = NSPredicate(format: "place == %@ && photoTakenYear == %@", place!, NSNumber(value: year))
+                    req.predicate = NSPredicate(format: "place == %@ && photoTakenYear == %@ \(otherPredicate)", place!, NSNumber(value: year))
                 } else if day == 0 {
-                    req.predicate = NSPredicate(format: "place == %@ && photoTakenYear == %@ && photoTakenMonth == %@", place!, NSNumber(value: year), NSNumber(value: month))
+                    req.predicate = NSPredicate(format: "place == %@ && photoTakenYear == %@ && photoTakenMonth == %@ \(otherPredicate)", place!, NSNumber(value: year), NSNumber(value: month))
                 } else {
-                    req.predicate = NSPredicate(format: "place == %@ && photoTakenYear == %@ && photoTakenMonth == %@ && photoTakenDay == %@", place!, NSNumber(value: year), NSNumber(value: month), NSNumber(value: day))
+                    req.predicate = NSPredicate(format: "place == %@ && photoTakenYear == %@ && photoTakenMonth == %@ && photoTakenDay == %@ \(otherPredicate)", place!, NSNumber(value: year), NSNumber(value: month), NSNumber(value: day))
                 }
             }
             
@@ -398,16 +408,21 @@ class ModelStore {
     
     
     
-    static func getPhotoFiles(year:Int, month:Int, day:Int, event:String, place:String, in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
+    static func getPhotoFiles(year:Int, month:Int, day:Int, event:String, place:String, includeHidden:Bool = true, in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
         let moc = moc ?? AppDelegate.current.managedObjectContext
         
         let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
+        
+        var otherPredicate:String = ""
+        if !includeHidden {
+            otherPredicate = " && (hidden == nil || hidden == false)"
+        }
         if year == 0 {
-            req.predicate = NSPredicate(format: "event == %@", event)
+            req.predicate = NSPredicate(format: "event == %@ \(otherPredicate)", event)
         } else if day == 0 {
-            req.predicate = NSPredicate(format: "event == %@ && photoTakenYear == %@ && photoTakenMonth == %@", event, NSNumber(value: year), NSNumber(value: month))
+            req.predicate = NSPredicate(format: "event == %@ && photoTakenYear == %@ && photoTakenMonth == %@ \(otherPredicate)", event, NSNumber(value: year), NSNumber(value: month))
         } else {
-            req.predicate = NSPredicate(format: "event == %@ && photoTakenYear == %@ && photoTakenMonth == %@ && photoTakenDay == %@ && place == %@", event, NSNumber(value: year), NSNumber(value: month), NSNumber(value: day), place)
+            req.predicate = NSPredicate(format: "event == %@ && photoTakenYear == %@ && photoTakenMonth == %@ && photoTakenDay == %@ && place == %@ \(otherPredicate)", event, NSNumber(value: year), NSNumber(value: month), NSNumber(value: day), place)
         }
         req.sortDescriptors = [NSSortDescriptor(key: "photoTakenDate", ascending: true),
                                NSSortDescriptor(key: "filename", ascending: true)]

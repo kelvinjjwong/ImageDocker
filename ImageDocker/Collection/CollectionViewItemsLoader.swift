@@ -19,6 +19,23 @@ class CollectionViewSection {
     }
 }
 
+enum CollectionViewLoadSource : Int {
+    case repository
+    case moment
+    case event
+}
+
+struct CollectionViewLastRequest {
+    var loadSource:CollectionViewLoadSource? = nil
+    var indicator:Accumulator? = nil
+    var folderURL:URL? = nil
+    var year:Int? = nil
+    var month:Int? = nil
+    var day:Int? = nil
+    var event:String? = nil
+    var place:String? = nil
+}
+
 class CollectionViewItemsLoader: NSObject {
   
     private var items = [ImageFile]()
@@ -28,14 +45,21 @@ class CollectionViewItemsLoader: NSObject {
     var indicator:Accumulator?
     var showHidden:Bool = false
     
+    
     private var sections = [CollectionViewSection]()
+    
+    var lastRequest:CollectionViewLastRequest = CollectionViewLastRequest()
 
     
     func load(from folderURL: URL, indicator:Accumulator? = nil) {
+        lastRequest.loadSource = .repository
+        lastRequest.folderURL = folderURL
+        lastRequest.indicator = indicator
+        
         self.indicator = indicator
         //let urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
         //print("loading folder from database: \(folderURL.path)")
-        var urls = walkthruDatabaseForFileUrls(startingURL: folderURL)
+        var urls = walkthruDatabaseForFileUrls(startingURL: folderURL, includeHidden: showHidden)
         if urls == nil || urls?.count == 0 {
             //print("loading folder from filesystem instead: \(folderURL.path)")
             urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
@@ -44,10 +68,17 @@ class CollectionViewItemsLoader: NSObject {
     }
     
     func load(year:Int, month:Int, day:Int, place:String?, indicator:Accumulator? = nil) {
+        lastRequest.loadSource = .moment
+        lastRequest.year = year
+        lastRequest.month = month
+        lastRequest.day = day
+        lastRequest.place = place
+        lastRequest.indicator = indicator
+        
         self.indicator = indicator
         
         var urls: [URL] = []
-        let photoFiles = ModelStore.getPhotoFiles(year: year, month: month, day: day, place: place)
+        let photoFiles = ModelStore.getPhotoFiles(year: year, month: month, day: day, place: place, includeHidden: showHidden)
         //print("GOT PHOTOS for year:\(year) month:\(month) day:\(day) place:\(place) count \(photoFiles.count)")
         for photoFile in photoFiles {
             urls.append(URL(fileURLWithPath: photoFile.path!))
@@ -57,16 +88,35 @@ class CollectionViewItemsLoader: NSObject {
     }
     
     func load(year:Int, month:Int, day:Int, event:String, place:String, indicator:Accumulator? = nil) {
+        lastRequest.loadSource = .event
+        lastRequest.year = year
+        lastRequest.month = month
+        lastRequest.day = day
+        lastRequest.place = place
+        lastRequest.event = event
+        lastRequest.indicator = indicator
+        
         self.indicator = indicator
         
         var urls: [URL] = []
-        let photoFiles = ModelStore.getPhotoFiles(year: year, month: month, day: day, event: event, place:place)
+        let photoFiles = ModelStore.getPhotoFiles(year: year, month: month, day: day, event: event, place:place, includeHidden: showHidden)
         //print("GOT PHOTOS for year:\(year) month:\(month) day:\(day) event:\(event) place:\(place) count \(photoFiles.count)")
         for photoFile in photoFiles {
             urls.append(URL(fileURLWithPath: photoFile.path!))
         }
         setupItems(urls: urls)
         
+    }
+    
+    func reload() {
+        guard lastRequest.loadSource != nil else {return}
+        if lastRequest.loadSource == .repository {
+            self.load(from: lastRequest.folderURL!, indicator: lastRequest.indicator)
+        }else if lastRequest.loadSource == .moment {
+            self.load(year: lastRequest.year!, month: lastRequest.month!, day: lastRequest.day!, place: lastRequest.place, indicator: lastRequest.indicator)
+        }else if lastRequest.loadSource == .event {
+            self.load(year: lastRequest.year!, month: lastRequest.month!, day: lastRequest.day!, event: lastRequest.event!, place: lastRequest.place!, indicator: lastRequest.indicator)
+        }
     }
     
     func getItem(path:String) -> ImageFile?{
@@ -296,9 +346,9 @@ class CollectionViewItemsLoader: NSObject {
         //print("TRANSFORMED TO ITEMS \(urls.count)")
     }
     
-    private func walkthruDatabaseForFileUrls(startingURL: URL) -> [URL]? {
+    private func walkthruDatabaseForFileUrls(startingURL: URL, includeHidden:Bool = true) -> [URL]? {
         var urls: [URL] = []
-        for photoFile in ModelStore.getPhotoFiles(parentPath: startingURL.path) {
+        for photoFile in ModelStore.getPhotoFiles(parentPath: startingURL.path, includeHidden: includeHidden) {
             urls.append(URL(fileURLWithPath: photoFile.path!))
         }
         return urls

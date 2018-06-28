@@ -107,6 +107,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var indicatorMessage: NSTextField!
     @IBOutlet weak var btnRefreshCollectionView: NSButton!
     
+    @IBOutlet weak var chbShowHidden: NSButton!
     
     let imagesLoader = CollectionViewItemsLoader()
     var collectionLoadingIndicator:Accumulator?
@@ -161,6 +162,8 @@ class ViewController: NSViewController {
         batchEditIndicator.isDisplayedWhenStopped = false
         
         configureDarkMode()
+        
+        self.chbShowHidden.state = NSButton.StateValue.off
         
         self.configurePreview()
         self.configureSelectionView()
@@ -312,6 +315,7 @@ class ViewController: NSViewController {
         self.selectionCheckAllBox.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.chbExport.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.chbScan.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.chbShowHidden.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.lblExportMessage.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
         self.editorDatePicker.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -375,6 +379,7 @@ class ViewController: NSViewController {
         collectionView.layer?.borderColor = NSColor.darkGray.cgColor
         
         imagesLoader.singleSectionMode = false
+        imagesLoader.showHidden = false
         imagesLoader.clean()
         collectionView.reloadData()
     }
@@ -649,6 +654,7 @@ class ViewController: NSViewController {
     }
     
     @IBAction func onRefreshCollectionButtonClicked(_ sender: Any) {
+        self.imagesLoader.reload()
         self.refreshCollectionView()
     }
     
@@ -672,6 +678,17 @@ class ViewController: NSViewController {
                 ImageFolderTreeScanner.scanPhotosToLoadExif(indicator: self.treeLoadingIndicator)
             }
         }
+    }
+    
+    
+    @IBAction func onCheckShowHiddenClicked(_ sender: NSButton) {
+        if self.chbShowHidden.state == NSButton.StateValue.on {
+            self.imagesLoader.showHidden = true
+        }else{
+            self.imagesLoader.showHidden = false
+        }
+        self.imagesLoader.reload()
+        self.refreshCollectionView()
     }
     
     
