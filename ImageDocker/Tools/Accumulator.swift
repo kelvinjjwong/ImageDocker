@@ -157,4 +157,12 @@ class Accumulator : NSObject {
     func dataChanged() {
         self.isDataChanged = true
     }
+    
+    func display(message:String){
+        if self.lblMessage != nil {
+            DispatchQueue.main.async {
+                self.lblMessage?.stringValue = message
+            }
+        }
+    }
 }

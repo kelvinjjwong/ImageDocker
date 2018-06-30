@@ -273,6 +273,18 @@ class ModelStore {
         
     }
     
+    static func deletePhoto(atPath path:String, in moc : NSManagedObjectContext? = nil){
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
+        req.predicate = NSPredicate(format: "path == %@", path)
+        req.fetchLimit = 1
+        let photo = try! moc.fetch(req)
+        if photo.count > 0 {
+            moc.delete(photo[0])
+        }
+    }
+    
     static func getAllContainers(in moc : NSManagedObjectContext? = nil) -> [ContainerFolder] {
         let moc = moc ?? AppDelegate.current.managedObjectContext
         
@@ -296,7 +308,7 @@ class ModelStore {
         let moc = moc ?? AppDelegate.current.managedObjectContext
         
         let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
-        req.predicate = NSPredicate(format: "updateExifDate == nil")
+        req.predicate = NSPredicate(format: "updateExifDate == nil || photoTakenYear == 0")
         req.sortDescriptors = [NSSortDescriptor(key: "photoTakenDate", ascending: true),
                                NSSortDescriptor(key: "filename", ascending: true)]
         if limit != nil {

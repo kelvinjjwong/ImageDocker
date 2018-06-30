@@ -242,7 +242,7 @@ class ViewController: NSViewController {
             self.startScanRepositories()
         })
         
-        self.scanPhotosToLoadExifTimer = Timer.scheduledTimer(withTimeInterval: 25, repeats: true, block:{_ in
+        self.scanPhotosToLoadExifTimer = Timer.scheduledTimer(withTimeInterval: 15, repeats: true, block:{_ in
             print("\(Date()) TRY TO SCAN PHOTO TO LOAD EXIF")
             guard !self.suppressedScan && !ExportManager.working && !self.scaningRepositories && !self.creatingRepository else {return}
             print("\(Date()) SCANING PHOTOS TO LOAD EXIF")
@@ -274,7 +274,10 @@ class ViewController: NSViewController {
                                                         self.updateLibraryTree()
             }
             )
-            ImageFolderTreeScanner.scanRepositories(indicator: self.treeLoadingIndicator)
+            autoreleasepool(invoking: { () -> Void in
+                ImageFolderTreeScanner.scanRepositories(indicator: self.treeLoadingIndicator)
+            })
+            
         }
     }
     
@@ -665,6 +668,10 @@ class ViewController: NSViewController {
                 ExportManager.suppressed = true
                 self.scaningRepositories = true
                 
+                print("EXTRACTING EXIF")
+                DispatchQueue.main.async {
+                    self.btnScanState.image = NSImage(named: NSImage.Name.statusAvailable)
+                }
                 self.treeLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true,
                                                         lblMessage: self.indicatorMessage,
                                                         presetAddingMessage: "Extracting EXIF ...",
@@ -673,6 +680,10 @@ class ViewController: NSViewController {
                                                             
                                                             ExportManager.suppressed = false
                                                             self.scaningRepositories = false
+                                                            DispatchQueue.main.async {
+                                                                self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
+                                                                self.indicatorMessage.stringValue = ""
+                                                            }
                 }
                 )
                 ImageFolderTreeScanner.scanPhotosToLoadExif(indicator: self.treeLoadingIndicator)

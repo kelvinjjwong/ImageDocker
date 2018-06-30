@@ -145,7 +145,7 @@ class ImageFolderTreeScanner {
         
         let repositories = ModelStore.getRepositories()
         
-        var urls: [URL] = []
+        var filesysUrls:Set<String> = Set<String>()
         for repo in repositories {
             
             if suppressedScan {
@@ -179,7 +179,8 @@ class ImageFolderTreeScanner {
                     guard isRegularFileResourceValue.boolValue else { continue }
                     guard let fileType = resourceValues[URLResourceKey.typeIdentifierKey] as? String else { continue }
                     guard (UTTypeConformsTo(fileType as CFString, kUTTypeImage) || UTTypeConformsTo(fileType as CFString, kUTTypeMovie)) else { continue }
-                    urls.append(url as URL)
+                    let url = url as URL
+                    filesysUrls.insert(url.path)
                 }
                 catch {
                     print("Unexpected error occured: \(error).")
@@ -188,47 +189,28 @@ class ImageFolderTreeScanner {
             print("\(Date()) CHECK REPO: ENUMERATING FILESYS: DONE")
         }
         
-        print("\(Date()) CHECK REPO: CHECK TO BE ADDED")
+        print("\(Date()) CHECK REPO: CHECK TO BE ADDED AND REMOVED")
+        if indicator != nil {
+            indicator?.display(message: "Checking differences .....")
+        }
         let exists = ModelStore.getAllPhotoFiles()
-        var urlsToAdd:[URL] = []
-        for url in urls {
-            
-            if suppressedScan {
-                if indicator != nil {
-                    indicator?.forceComplete()
-                }
-                return
-            }
-            
-            //print("CHECKING URL FROM FILE REPO: \(url.path)")
-            // physical url not in database, to be added to database
-            if exists.index(where: {$0.path == url.path} ) == nil {
-                urlsToAdd.append(url)
-                //print("TO BE ADDED FROM FILE REPO: \(url.path)")
-            }
-        }
-        print("\(Date()) CHECK REPO: CHECK TO BE ADDED: DONE")
-        
-        print("\(Date()) CHECK REPO: CHECK TO BE REMOVED")
-        var photosToRemoved:[PhotoFile] = []
+        var dbUrls:Set<String> = Set<String>()
         for exist in exists {
-            
-            if suppressedScan {
-                if indicator != nil {
-                    indicator?.forceComplete()
-                }
-                return
-            }
-            
-            // persisted url not in file system, to be removed from database
-            if urls.index(where: {$0.path == exist.path} ) == nil {
-                photosToRemoved.append(exist)
-                //print("TO BE REMOVED FROM DB: \(exist.path ?? "")")
+            if let path = exist.path {
+                dbUrls.insert(path)
             }
         }
-        print("\(Date()) CHECK REPO: CHECK TO BE REMOVED: DONE")
         
-        let total = urlsToAdd.count + photosToRemoved.count
+        let urlsToAdd:[String] = filesysUrls.subtracting(dbUrls).sorted()
+        let urlsToRemoved:Set<String> = dbUrls.subtracting(filesysUrls)
+        
+        if indicator != nil {
+            indicator?.display(message: "")
+        }
+        
+        print("\(Date()) CHECK REPO: CHECK TO BE ADDED AND REMOVED : DONE")
+        
+        let total = urlsToAdd.count + urlsToRemoved.count
         
         if total == 0 {
             if indicator != nil {
@@ -256,17 +238,17 @@ class ImageFolderTreeScanner {
                 }
                 
                 //print("CREATING PHOTO \(url.path)")
-                let _ = ImageFile(url: url, indicator: indicator, quickCreate: true)
+                let _ = ImageFile(url: URL(fileURLWithPath: url), indicator: indicator, quickCreate: true)
                 
                 ModelStore.save()
             }
             print("\(Date()) URLS TO ADD FROM FILESYS: SAVE DONE")
         }
         
-        if photosToRemoved.count > 0 {
-            print("\(Date()) PHOTOS TO REMOVED FROM DB: \(photosToRemoved.count)")
+        if urlsToRemoved.count > 0 {
+            print("\(Date()) PHOTOS TO REMOVED FROM DB: \(urlsToRemoved.count)")
             indicator?.dataChanged()
-            for photo in photosToRemoved {
+            for url in urlsToRemoved {
                 
                 if suppressedScan {
                     if indicator != nil {
@@ -275,7 +257,7 @@ class ImageFolderTreeScanner {
                     return
                 }
                 
-                AppDelegate.current.managedObjectContext.delete(photo)
+                ModelStore.deletePhoto(atPath: url)
                 
                 if indicator != nil {
                     let _ = indicator?.add()

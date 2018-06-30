@@ -128,13 +128,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             NSLog("\(NSStringFromClass(type(of: self))) unable to commit editing before saving")
         }
         if managedObjectContext.hasChanges {
-            do {
-                try managedObjectContext.save()
-            } catch {
-                //let nserror = error as NSError
-                //NSApplication.shared.presentError(nserror)
-                print(error)
+            DispatchQueue.main.async {
+                do {
+                    try self.managedObjectContext.save()
+                } catch {
+                    //let nserror = error as NSError
+                    //NSApplication.shared.presentError(nserror)
+                    print(error)
+                }
             }
+            
         }
     }
     

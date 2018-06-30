@@ -124,15 +124,21 @@ class ImageFile {
         if !quickCreate {
             loadMetaInfoFromDatabase()
             
-            if self.photoFile?.updateExifDate == nil {
-                loadMetaInfoFromOSX()
-                loadMetaInfoFromExif()
+            if self.photoFile?.updateExifDate == nil || self.photoFile?.photoTakenYear == 0 {
+                
+                autoreleasepool { () -> Void in
+                    self.loadMetaInfoFromOSX()
+                    self.loadMetaInfoFromExif()
+                }
+                
             }
             //print("loaded image coordinate: \(self.latitudeBaidu) \(self.longitudeBaidu)")
             if self.photoFile?.updateLocationDate == nil {
                 if self.location.coordinate != nil && self.location.coordinate!.isNotZero {
                     //BaiduLocation.queryForAddress(lat: self.latitudeBaidu, lon: self.longitudeBaidu, locationConsumer: self)
-                    loadLocation(locationConsumer: self)
+                    autoreleasepool { () -> Void in
+                        loadLocation(locationConsumer: self)
+                    }
                 }
             }
             if isPhoto || isVideo {
@@ -382,21 +388,32 @@ class ImageFile {
             dateTime = self.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "Software Modified")
         }
         if dateTime == nil {
-            self.loadMetaInfoFromExif()
+            dateTime = self.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "ExifModifyDate")
+        }
+        if dateTime == nil {
+            dateTime = self.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "ExifCreateDate")
+        }
+        if self.isVideo {
+            if dateTime == nil {
+                dateTime = self.metaInfoHolder.getMeta(category: "Video", subCategory: "", title: "CreateDate")
+                if dateTime == "0000:00:00 00:00:00" {
+                    dateTime = nil
+                }
+            }
+            if dateTime == nil {
+                dateTime = self.metaInfoHolder.getMeta(category: "Video", subCategory: "", title: "TrackCreateDate")
+                if dateTime == "0000:00:00 00:00:00" {
+                    dateTime = nil
+                }
+            }
+        }
+        if dateTime == nil {
+            dateTime = self.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "FileModifyDate")
         }
         
-        if dateTime == nil {
-            dateTime = self.metaInfoHolder.getMeta(category: "Video", subCategory: "", title: "CreateDate")
-            if dateTime == "0000:00:00 00:00:00" {
-                dateTime = nil
-            }
-        }
-        if dateTime == nil {
-            dateTime = self.metaInfoHolder.getMeta(category: "Video", subCategory: "", title: "TrackCreateDate")
-            if dateTime == "0000:00:00 00:00:00" {
-                dateTime = nil
-            }
-        }
+        //if dateTime == nil {
+          //  self.loadMetaInfoFromExif()
+        //}
         return dateTime
     }
     
@@ -1021,11 +1038,22 @@ class ImageFile {
         if json != JSON(NSNull()) {
             metaInfoHolder.setMetaInfo(MetaInfo(category: "System", title: "Size", value: json[0]["Composite"]["ImageSize"].description), ifNotExists: true)
             
-            metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "FileCreateDate", value: json[0]["File"]["CreateDate"].description))
-            photoFile?.exifCreateDate = exifDateFormat.date(from: json[0]["File"]["CreateDate"].description)
+            metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "ExifCreateDate", value: json[0]["File"]["CreateDate"].description))
+            photoFile?.exifCreateDate = exifDateFormat.date(from: json[0]["EXIF"]["CreateDate"].description)
             
-            metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "FileModifyDate", value: json[0]["File"]["ModifyDate"].description))
-            photoFile?.exifModifyDate = exifDateFormat.date(from: json[0]["File"]["ModifyDate"].description)
+            metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "ExifModifyDate", value: json[0]["File"]["ModifyDate"].description))
+            photoFile?.exifModifyDate = exifDateFormat.date(from: json[0]["EXIF"]["ModifyDate"].description)
+            
+            if photoFile?.exifModifyDate == nil {
+                metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "FileModifyDate", value: json[0]["File"]["ModifyDate"].description))
+                photoFile?.exifModifyDate = exifDateFormat.date(from: json[0]["File"]["FileModifyDate"].description)
+            }
+            
+            let dateTimeOriginal = json[0]["EXIF"]["DateTimeOriginal"].stringValue
+            photoFile?.exifDateTimeOriginal = exifDateFormat.date(from: dateTimeOriginal)
+            if photoFile?.exifDateTimeOriginal != nil {
+                metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", subCategory: "", title: "DateTimeOriginal", value: exifDateFormat.string(from: (photoFile?.exifDateTimeOriginal)!)))
+            }
             
             if isPhoto {
                 if json[0]["EXIF"]["ISO"] != JSON.null {
