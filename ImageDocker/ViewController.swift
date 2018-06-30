@@ -657,8 +657,10 @@ class ViewController: NSViewController {
     }
     
     @IBAction func onRefreshCollectionButtonClicked(_ sender: Any) {
-        self.imagesLoader.reload()
-        self.refreshCollectionView()
+        DispatchQueue.global().async {
+            self.imagesLoader.reload()
+            self.refreshCollectionView()
+        }
     }
     
     fileprivate func startScanRepositoriesToLoadExif(){
@@ -698,8 +700,10 @@ class ViewController: NSViewController {
         }else{
             self.imagesLoader.showHidden = false
         }
-        self.imagesLoader.reload()
-        self.refreshCollectionView()
+        DispatchQueue.global().async {
+            self.imagesLoader.reload()
+            self.refreshCollectionView()
+        }
     }
     
     
@@ -824,7 +828,8 @@ class ViewController: NSViewController {
         let location:Location = self.possibleLocation!
         for item in self.selectionViewController.imagesLoader.getItems() {
             let url:URL = item.url as URL
-            if url.isPhoto() || url.isVideo() {
+            let imageType = url.imageType()
+            if imageType == .photo || imageType == .video {
                 ExifTool.helper.patchGPSCoordinateForImage(latitude: location.latitude!, longitude: location.longitude!, url: url)
                 item.assignLocation(location: location)
                 
@@ -851,9 +856,11 @@ class ViewController: NSViewController {
         let accumulator:Accumulator = Accumulator(target: self.selectionViewController.imagesLoader.getItems().count, indicator: self.batchEditIndicator, suspended: false, lblMessage: nil)
         for item:ImageFile in self.selectionViewController.imagesLoader.getItems() {
             let url:URL = item.url as URL
-            if url.isPhoto() {
+            
+            let imageType = url.imageType()
+            if imageType == .photo {
                 ExifTool.helper.patchDateForPhoto(date: self.editorDatePicker.dateValue, url: url)
-            }else if url.isVideo() {
+            }else if imageType == .video {
                 ExifTool.helper.patchDateForVideo(date: self.editorDatePicker.dateValue, url: url)
             }
             item.assignDate(date: self.editorDatePicker.dateValue)
@@ -880,7 +887,8 @@ class ViewController: NSViewController {
         let accumulator:Accumulator = Accumulator(target: self.selectionViewController.imagesLoader.getItems().count, indicator: self.batchEditIndicator, suspended: false, lblMessage: nil)
         for item:ImageFile in self.selectionViewController.imagesLoader.getItems() {
             let url:URL = item.url as URL
-            if url.isPhoto() || url.isVideo(){
+            let imageType = url.imageType()
+            if imageType == .photo || imageType == .video {
                 print("assigning event: \(event.name)")
                 item.assignEvent(event: event)
                 //ExifTool.helper.assignKeyValueForImage(key: "Event", value: "some event", url: url)

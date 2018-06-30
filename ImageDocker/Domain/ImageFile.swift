@@ -18,6 +18,7 @@ let MetaCategorySequence:[String] = ["Location", "DateTime", "Camera", "Lens", "
 class ImageFile {
     
     let exifDateFormat = DateFormatter()
+    let exifDateFormatWithTimezone = DateFormatter()
     
   
     //private(set) var thumbnail: NSImage?
@@ -25,8 +26,8 @@ class ImageFile {
     private(set) var url: URL
     private(set) var place:String = "" {
         didSet {
-            if photoFile != nil {
-                photoFile!.place = place
+            if photoFile != nil && place != "" {
+                photoFile?.place = place
             }
         }
     }
@@ -103,16 +104,88 @@ class ImageFile {
     var isStandalone:Bool = false
     var isLoadedExif:Bool = false
     var isRecognizedDateTimeFromFilename:Bool = false
+    
+    init (photoFile:PhotoFile, indicator:Accumulator? = nil, metaInfoStore:MetaInfoStoreDelegate? = nil) {
+        exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"
+        exifDateFormatWithTimezone.dateFormat = "yyyy:MM:dd HH:mm:ssxxx"
+        
+        self.indicator = indicator
+        self.url = URL(fileURLWithPath: photoFile.path ?? "")
+        self.fileName = photoFile.filename ?? ""
+        self.location = Location()
+        
+        let imageType = url.imageType()
+        
+        self.isPhoto = (imageType == .photo)
+        self.isVideo = (imageType == .video)
+        
+        self.metaInfoHolder = metaInfoStore ?? MetaInfoHolder()
+        self.photoFile = photoFile
+        
+        self.metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Filename", value: photoFile.filename ?? ""))
+        self.metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Full path", value: (photoFile.path ?? "").replacingOccurrences(of: (photoFile.filename ?? ""), with: "")))
+        
+        loadMetaInfoFromDatabase(photoFile)
+        
+        var needSave:Bool = false
+        
+        if self.photoFile?.dateTimeFromFilename == nil {
+            self.recognizeDateTimeFromFilename()
+            needSave = true
+        }
+        
+        if self.photoFile?.imageSource == nil {
+            self.recognizeImageSource()
+            needSave = true
+        }
+        
+        if self.photoFile?.updateExifDate == nil || self.photoFile?.photoTakenYear == 0 {
+            
+            if self.photoFile?.filesysCreateDate == nil { // exif not loaded yet
+                autoreleasepool { () -> Void in
+                    self.loadMetaInfoFromOSX()
+                    self.loadMetaInfoFromExif()
+                    
+                    needSave = true
+                }
+            }
+            
+        }
+        //print("loaded image coordinate: \(self.latitudeBaidu) \(self.longitudeBaidu)")
+        if self.photoFile?.updateLocationDate == nil {
+            if self.location.coordinate != nil && self.location.coordinate!.isNotZero {
+                //BaiduLocation.queryForAddress(lat: self.latitudeBaidu, lon: self.longitudeBaidu, locationConsumer: self)
+                autoreleasepool { () -> Void in
+                    loadLocation(locationConsumer: self)
+                }
+            }
+        }
+        if isPhoto || isVideo {
+            originalCoordinate = location.coordinate
+        }
+        
+        self.recognizePlace()
+        
+        if needSave {
+            save()
+        }
+        
+        self.notifyAccumulator(notifyIndicator: true)
+    }
 
     init (url: URL, indicator:Accumulator? = nil, metaInfoStore:MetaInfoStoreDelegate? = nil, quickCreate:Bool = false) {
         exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"
+        exifDateFormatWithTimezone.dateFormat = "yyyy:MM:dd HH:mm:ssxxx"
         
         self.indicator = indicator
         self.url = url
         self.fileName = url.lastPathComponent
         self.location = Location()
-        self.isPhoto = url.isPhoto()
-        self.isVideo = url.isVideo()
+        
+        let imageType = url.imageType()
+        
+        self.isPhoto = (imageType == .photo)
+        self.isVideo = (imageType == .video)
         
         self.metaInfoHolder = metaInfoStore ?? MetaInfoHolder()
         
@@ -122,7 +195,7 @@ class ImageFile {
         self.metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Full path", value: url.path.replacingOccurrences(of: url.lastPathComponent, with: "")))
         
         if !quickCreate {
-            loadMetaInfoFromDatabase()
+            loadMetaInfoFromDatabase(self.photoFile)
             
             if self.photoFile?.updateExifDate == nil || self.photoFile?.photoTakenYear == 0 {
                 
@@ -146,6 +219,24 @@ class ImageFile {
             }
         }
         
+        self.recognizeDateTimeFromFilename()
+        
+        let photoTakenDate:String? = self.choosePhotoTakenDateFromMetaInfo()
+        self.storePhotoTakenDate(dateTime: photoTakenDate)
+        //self.setThumbnail(url as URL)
+        
+        self.recognizeImageSource()
+        
+        if !quickCreate {
+            self.recognizePlace()
+            
+            save()
+        }
+        self.notifyAccumulator(notifyIndicator: true)
+
+    }
+    
+    func recognizeDateTimeFromFilename() {
         // huawei pictures
         self.recognizeDateTimeFromFilename("IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})_([0-9]{3})\\.([A-Za-z0-9]{3}+)")
         self.recognizeDateTimeFromFilename("IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})-([0-9]{2})\\.([A-Za-z0-9]{3}+)")
@@ -163,6 +254,7 @@ class ImageFile {
         self.recognizeDateTimeFromFilename("IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})_BURST[0-9]{3}\\.([A-Za-z0-9]{3}+)")
         self.recognizeDateTimeFromFilename("IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})_BURST[0-9]{3}_COVER\\.([A-Za-z0-9]{3}+)")
         self.recognizeDateTimeFromFilename("IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})_[0-9]{3}_COVER\\.([A-Za-z0-9]{3}+)")
+        self.recognizeDateTimeFromFilename("IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})_[0-9]{3}-[0-9]+\\.([A-Za-z0-9]{3}+)")
         
         // screenshots
         self.recognizeDateTimeFromFilename("Screenshot_([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})([0-9]{2})\\.([A-Za-z0-9]{3}+)")
@@ -185,6 +277,7 @@ class ImageFile {
         
         // file exported by wechat
         self.recognizeUnixTimeFromFilename("mmexport([0-9]{13})\\.([A-Za-z0-9]{3}+)")
+        self.recognizeUnixTimeFromFilename("mmexport([0-9]{13})-[0-9]+\\.([A-Za-z0-9]{3}+)")
         self.recognizeUnixTime2FromFilename("mmexport([0-9]{13})_([0-9]+)_[0-9]+\\.([A-Za-z0-9]{3}+)")
         
         // file compressed by wechat
@@ -192,19 +285,39 @@ class ImageFile {
         
         // file copied
         self.recognizeUnixTimeFromFilename("mmexport([0-9]{13})\\([0-9]+\\)\\.([A-Za-z0-9]{3}+)")
-        
-        
-        let photoTakenDate:String? = self.choosePhotoTakenDateFromMetaInfo()
-        self.storePhotoTakenDate(dateTime: photoTakenDate)
-        //self.setThumbnail(url as URL)
-        
-        if !quickCreate {
-            self.recognizePlace()
-            
-            save()
+    }
+    
+    func recognizeImageSource(){
+        guard photoFile != nil && photoFile?.imageSource == nil else {return}
+        var imageSource:String = ""
+        let filename = url.lastPathComponent
+        if filename.starts(with: "mmexport") {
+            imageSource = "WeChat"
+        }else if filename.starts(with: "QQ空间视频") {
+            imageSource = "QQ"
+        }else if filename.starts(with: "IMG_") {
+            imageSource = "Camera"
+        }else if filename.starts(with: "VID_") {
+            imageSource = "Camera"
+        }else if filename.starts(with: "Screenshot_") {
+            imageSource = "ScreenShot"
         }
-        self.notifyAccumulator(notifyIndicator: true)
-
+        if imageSource == "" {
+            let parts:[String] = filename.matches(for: "[0-9a-zA-Z]{25}_[0-9]+\\.([A-Za-z0-9]{3}+)")
+            if parts.count > 0 {
+                imageSource = "PhoneApp"
+            }
+        }
+        if imageSource == "" {
+            let parts:[String] = filename.matches(for: "[0-9A-Z]{8}-[0-9A-Z]{4}-[0-9A-Z]{4}-[0-9A-Z]{4}-[0-9A-Z]{12}-[0-9A-Z]{3}-[0-9A-Z]{16}_tmp\\.([A-Za-z0-9]{3}+)")
+            if parts.count > 0 {
+                imageSource = "PhoneApp"
+            }
+        }
+        
+        if photoFile != nil && imageSource != "" {
+            photoFile?.imageSource = imageSource
+        }
     }
     
     func save(){
@@ -395,21 +508,21 @@ class ImageFile {
         }
         if self.isVideo {
             if dateTime == nil {
-                dateTime = self.metaInfoHolder.getMeta(category: "Video", subCategory: "", title: "CreateDate")
+                dateTime = self.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "VideoCreateDate")
                 if dateTime == "0000:00:00 00:00:00" {
                     dateTime = nil
                 }
             }
             if dateTime == nil {
-                dateTime = self.metaInfoHolder.getMeta(category: "Video", subCategory: "", title: "TrackCreateDate")
+                dateTime = self.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "TrackCreateDate")
                 if dateTime == "0000:00:00 00:00:00" {
                     dateTime = nil
                 }
             }
         }
-        if dateTime == nil {
-            dateTime = self.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "FileModifyDate")
-        }
+        //if dateTime == nil {
+        //    dateTime = self.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "FileModifyDate")
+        //}
         
         //if dateTime == nil {
           //  self.loadMetaInfoFromExif()
@@ -580,6 +693,9 @@ class ImageFile {
         if parts.count > 0 {
             let dateTime:String = "\(parts[1]):\(parts[2]):\(parts[3]) \(parts[4]):\(parts[5]):\(parts[6])"
             self.metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "From Filename", value: dateTime))
+            if self.photoFile != nil {
+                self.photoFile?.dateTimeFromFilename = dateTime
+            }
             isRecognizedDateTimeFromFilename = true
         }
     }
@@ -591,6 +707,9 @@ class ImageFile {
             let timestamp:String = "\(parts[1])"
             let dateTime = self.convertUnixTimestampToDateString(timestamp)
             self.metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "From Filename", value: dateTime))
+            if self.photoFile != nil {
+                self.photoFile?.dateTimeFromFilename = dateTime
+            }
             isRecognizedDateTimeFromFilename = true
         }
     }
@@ -602,6 +721,9 @@ class ImageFile {
             let timestamp:String = "\(parts[1]).\(parts[2])"
             let dateTime = self.convertUnixTimestampToDateString(timestamp)
             self.metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "From Filename", value: dateTime))
+            if self.photoFile != nil {
+                self.photoFile?.dateTimeFromFilename = dateTime
+            }
             isRecognizedDateTimeFromFilename = true
         }
     }
@@ -892,12 +1014,12 @@ class ImageFile {
         }
     }
     
-    public func loadMetaInfoFromDatabase() {
+    public func loadMetaInfoFromDatabase(_ record:PhotoFile? = nil) {
         let filename:String = url.lastPathComponent
         let path:String = url.path
         let parentPath:String = (url.deletingLastPathComponent().path)
         
-        let photoFile = ModelStore.getOrCreatePhoto(filename: filename, path: path, parentPath: parentPath)
+        let photoFile = record ?? ModelStore.getOrCreatePhoto(filename: filename, path: path, parentPath: parentPath)
         //print("loaded PhotoFile for \(filename)")
         
         
@@ -1038,15 +1160,19 @@ class ImageFile {
         if json != JSON(NSNull()) {
             metaInfoHolder.setMetaInfo(MetaInfo(category: "System", title: "Size", value: json[0]["Composite"]["ImageSize"].description), ifNotExists: true)
             
-            metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "ExifCreateDate", value: json[0]["File"]["CreateDate"].description))
+            metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "ExifCreateDate", value: json[0]["EXIF"]["CreateDate"].description))
             photoFile?.exifCreateDate = exifDateFormat.date(from: json[0]["EXIF"]["CreateDate"].description)
             
-            metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "ExifModifyDate", value: json[0]["File"]["ModifyDate"].description))
+            metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "ExifModifyDate", value: json[0]["EXIF"]["ModifyDate"].description))
             photoFile?.exifModifyDate = exifDateFormat.date(from: json[0]["EXIF"]["ModifyDate"].description)
             
-            if photoFile?.exifModifyDate == nil {
-                metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "FileModifyDate", value: json[0]["File"]["ModifyDate"].description))
-                photoFile?.exifModifyDate = exifDateFormat.date(from: json[0]["File"]["FileModifyDate"].description)
+            if photoFile?.filesysCreateDate == nil {
+                metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "FileModifyDate", value: json[0]["File"]["FileModifyDate"].description))
+                photoFile?.filesysCreateDate = exifDateFormat.date(from: json[0]["File"]["FileModifyDate"].description)
+            }
+            if photoFile?.filesysCreateDate == nil {
+                metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "FileModifyDate", value: json[0]["File"]["FileModifyDate"].description))
+                photoFile?.filesysCreateDate = exifDateFormatWithTimezone.date(from: json[0]["File"]["FileModifyDate"].description)
             }
             
             let dateTimeOriginal = json[0]["EXIF"]["DateTimeOriginal"].stringValue
@@ -1205,6 +1331,8 @@ extension ImageFile : LocationConsumer {
         
         photoFile?.updateLocationDate = Date()
         
+        save()
+        
     }
     
     func alert(status: Int, message: String, popup: Bool) {
@@ -1214,30 +1342,41 @@ extension ImageFile : LocationConsumer {
     
 }
 
+enum ImageType : Int {
+    case photo
+    case video
+    case other
+}
 
 extension URL {
     
-    func isPhoto() -> Bool{
+    func imageType() -> ImageType {
+        var type:ImageType = .other
         
         if lastPathComponent.split(separator: Character(".")).count > 1 {
             let fileExt:String = (lastPathComponent.split(separator: Character(".")).last?.lowercased())!
-            if fileExt == "jpg" || fileExt == "jpeg" {
-                return true
+            if fileExt == "jpg" || fileExt == "jpeg" || fileExt == "png" {
+                type = .photo
+            }else if fileExt == "mov" || fileExt == "mp4" || fileExt == "mpeg" {
+                type = .video
             }
         }
-        return false
         
-    }
-    
-    func isVideo() -> Bool{
-        
-        if lastPathComponent.split(separator: Character(".")).count > 1 {
-            let fileExt:String = (lastPathComponent.split(separator: Character(".")).last?.lowercased())!
-            if fileExt == "mov" || fileExt == "mp4" || fileExt == "mpeg" {
-                return true
+        if type == .other {
+            do {
+                let properties = try self.resourceValues(forKeys: [.typeIdentifierKey])
+                guard let fileType = properties.typeIdentifier else { return type }
+                if UTTypeConformsTo(fileType as CFString, kUTTypeImage) {
+                    type = .photo
+                }else if UTTypeConformsTo(fileType as CFString, kUTTypeMovie) {
+                    type = .video
+                }
+            }
+            catch {
+                print("Unexpected error occured when recognizing image type: \(error).")
             }
         }
-        return false
         
+        return type
     }
 }

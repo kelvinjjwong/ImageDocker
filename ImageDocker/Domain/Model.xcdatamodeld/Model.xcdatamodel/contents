@@ -45,6 +45,7 @@
         <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="containerPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="country" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dateTimeFromFilename" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="district" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="event" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="exifCreateDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
@@ -57,10 +58,12 @@
         <attribute name="filename" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="filenameDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="fileSize" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="filesysCreateDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="gpsDate" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="hidden" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="hideForSourceFilename" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="imageHeight" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="imageSource" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="imageWidth" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="iso" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="latitude" optional="YES" attributeType="String" syncable="YES"/>
@@ -113,7 +116,7 @@
     <elements>
         <element name="ContainerFolder" positionX="-632" positionY="-129" width="128" height="105"/>
         <element name="PhotoEvent" positionX="-173" positionY="-163" width="128" height="180"/>
-        <element name="PhotoFile" positionX="-441" positionY="-180" width="128" height="1185"/>
+        <element name="PhotoFile" positionX="-441" positionY="-180" width="128" height="1230"/>
         <element name="PhotoPlace" positionX="-423" positionY="-27" width="128" height="240"/>
     </elements>
 </model>

@@ -73,7 +73,7 @@ class Accumulator : NSObject {
     
     func add(_ message:String = "") -> Bool{
         self.count += 1
-        let completed:Bool = (count == _target)
+        let completed:Bool = (count >= _target)
         if indicator != nil {
             if self.count == 1 { // start counting
                 DispatchQueue.main.async {
@@ -152,6 +152,11 @@ class Accumulator : NSObject {
     
     func reset() {
         count = 0
+        if indicator != nil {
+            DispatchQueue.main.async {
+                self.indicator?.doubleValue = 0
+            }
+        }
     }
     
     func dataChanged() {

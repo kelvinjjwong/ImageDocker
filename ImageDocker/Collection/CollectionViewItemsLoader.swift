@@ -59,12 +59,14 @@ class CollectionViewItemsLoader: NSObject {
         self.indicator = indicator
         //let urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
         //print("loading folder from database: \(folderURL.path)")
-        var urls = walkthruDatabaseForFileUrls(startingURL: folderURL, includeHidden: showHidden)
-        if urls == nil || urls?.count == 0 {
+        let photoFiles = walkthruDatabaseForPhotoFiles(startingURL: folderURL, includeHidden: showHidden)
+        if photoFiles == nil || photoFiles?.count == 0 {
             //print("loading folder from filesystem instead: \(folderURL.path)")
-            urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
+            let urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
+            setupItems(urls: urls)
+        }else{
+            setupItems(photoFiles: photoFiles)
         }
-        setupItems(urls: urls)
     }
     
     func load(year:Int, month:Int, day:Int, place:String?, indicator:Accumulator? = nil) {
@@ -77,13 +79,13 @@ class CollectionViewItemsLoader: NSObject {
         
         self.indicator = indicator
         
-        var urls: [URL] = []
+        //var urls: [URL] = []
         let photoFiles = ModelStore.getPhotoFiles(year: year, month: month, day: day, place: place, includeHidden: showHidden)
         //print("GOT PHOTOS for year:\(year) month:\(month) day:\(day) place:\(place) count \(photoFiles.count)")
-        for photoFile in photoFiles {
-            urls.append(URL(fileURLWithPath: photoFile.path!))
-        }
-        setupItems(urls: urls)
+        //for photoFile in photoFiles {
+        //    urls.append(URL(fileURLWithPath: photoFile.path!))
+        //}
+        setupItems(photoFiles: photoFiles)
         
     }
     
@@ -98,13 +100,13 @@ class CollectionViewItemsLoader: NSObject {
         
         self.indicator = indicator
         
-        var urls: [URL] = []
+        //var urls: [URL] = []
         let photoFiles = ModelStore.getPhotoFiles(year: year, month: month, day: day, event: event, place:place, includeHidden: showHidden)
         //print("GOT PHOTOS for year:\(year) month:\(month) day:\(day) event:\(event) place:\(place) count \(photoFiles.count)")
-        for photoFile in photoFiles {
-            urls.append(URL(fileURLWithPath: photoFile.path!))
-        }
-        setupItems(urls: urls)
+        //for photoFile in photoFiles {
+        //    urls.append(URL(fileURLWithPath: photoFile.path!))
+        //}
+        setupItems(photoFiles: photoFiles)
         
     }
     
@@ -139,6 +141,11 @@ class CollectionViewItemsLoader: NSObject {
         }
         
         if cleanViewBeforeLoading {
+            for section in sections {
+                section.items.removeAll()
+            }
+            sections.removeAll()
+            
             numberOfSections = 0
             sections = [CollectionViewSection]()
         }
@@ -146,6 +153,7 @@ class CollectionViewItemsLoader: NSObject {
         guard urls != nil && (urls?.count)! > 0 else {return}
         
         if indicator != nil {
+            indicator?.reset()
             indicator?.setTarget((urls?.count)!)
         }
 
@@ -154,6 +162,33 @@ class CollectionViewItemsLoader: NSObject {
         }
         //self.reorganizeItems(considerPlaces: true)
 
+    }
+    
+    func setupItems(photoFiles: [PhotoFile]?, cleanViewBeforeLoading:Bool = true){
+        if items.count > 0 {
+            items.removeAll()
+        }
+        
+        if cleanViewBeforeLoading {
+            for section in sections {
+                section.items.removeAll()
+            }
+            sections.removeAll()
+            
+            numberOfSections = 0
+            sections = [CollectionViewSection]()
+        }
+        
+        guard photoFiles != nil && (photoFiles?.count)! > 0 else {return}
+        
+        if indicator != nil {
+            indicator?.reset()
+            indicator?.setTarget((photoFiles?.count)!)
+        }
+        
+        if let photoFiles = photoFiles {
+            self.transformToDomainItems(photoFiles: photoFiles)
+        }
     }
     
     func reorganizeItems(considerPlaces:Bool = false) {
@@ -346,12 +381,39 @@ class CollectionViewItemsLoader: NSObject {
         //print("TRANSFORMED TO ITEMS \(urls.count)")
     }
     
+    private func transformToDomainItems(photoFiles: [PhotoFile]){
+        if items.count > 0 {   // When not initial folder folder
+            items.removeAll()
+        }
+        
+        let duplicates:Duplicates = ModelStore.getDuplicatePhotos()
+        
+        for photoFile in photoFiles {
+            let imageFile = ImageFile(photoFile: photoFile, indicator: self.indicator)
+            
+            if duplicates.paths.index(where: {$0 == photoFile.path}) != nil {
+                imageFile.hasDuplicates = true
+            }else {
+                imageFile.hasDuplicates = false
+            }
+            
+            // prefetch thumbnail to improve performance of collection view
+            let _ = imageFile.thumbnail
+            
+            items.append(imageFile)
+        }
+    }
+    
     private func walkthruDatabaseForFileUrls(startingURL: URL, includeHidden:Bool = true) -> [URL]? {
         var urls: [URL] = []
         for photoFile in ModelStore.getPhotoFiles(parentPath: startingURL.path, includeHidden: includeHidden) {
             urls.append(URL(fileURLWithPath: photoFile.path!))
         }
         return urls
+    }
+    
+    private func walkthruDatabaseForPhotoFiles(startingURL: URL, includeHidden:Bool = true) -> [PhotoFile]? {
+        return ModelStore.getPhotoFiles(parentPath: startingURL.path, includeHidden: includeHidden)
     }
   
     private func walkthruDirectoryForFileUrls(startingURL: URL) -> [URL]? {
