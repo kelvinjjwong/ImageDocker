@@ -103,6 +103,18 @@ class Accumulator : NSObject {
         return completed
     }
     
+    func forceCancel() {
+        DispatchQueue.main.async {
+            if self.indicator != nil {
+                self.indicator?.doubleValue = 0
+                self.indicator?.isHidden = true
+            }
+            if self.lblMessage != nil {
+                self.lblMessage?.stringValue = ""
+            }
+        }
+    }
+    
     func forceComplete() {
         DispatchQueue.main.async {
             if self.indicator != nil {

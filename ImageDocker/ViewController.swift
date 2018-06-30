@@ -552,8 +552,15 @@ class ViewController: NSViewController {
                     self.scaningRepositories = false
                 }
             )
-            self.imagesLoader.load(from: imageFolder.url, indicator:self.collectionLoadingIndicator)
-            self.refreshCollectionView()
+            if self.imagesLoader.isLoading() {
+                self.imagesLoader.cancel(onCancelled: {
+                    self.imagesLoader.load(from: imageFolder.url, indicator:self.collectionLoadingIndicator)
+                    self.refreshCollectionView()
+                })
+            }else{
+                self.imagesLoader.load(from: imageFolder.url, indicator:self.collectionLoadingIndicator)
+                self.refreshCollectionView()
+            }
         }
     }
     
@@ -568,9 +575,17 @@ class ViewController: NSViewController {
             self.collectionLoadingIndicator = Accumulator(target: collection.photoCount, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {
                     self.scaningRepositories = false
                 })
-            print("GETTING COLLECTION \(collection.year) \(collection.month) \(collection.day) \(collection.place ?? "")")
-            self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, place: groupByPlace ? collection.place : nil, indicator:self.collectionLoadingIndicator)
-            self.refreshCollectionView()
+            //print("GETTING COLLECTION \(collection.year) \(collection.month) \(collection.day) \(collection.place ?? "")")
+            if self.imagesLoader.isLoading() {
+                self.imagesLoader.cancel(onCancelled: {
+                    self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, place: groupByPlace ? collection.place : nil, indicator:self.collectionLoadingIndicator)
+                    self.refreshCollectionView()
+                })
+            }else{
+                self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, place: groupByPlace ? collection.place : nil, indicator:self.collectionLoadingIndicator)
+                self.refreshCollectionView()
+            }
+            
         }
     }
     
@@ -585,8 +600,16 @@ class ViewController: NSViewController {
             self.collectionLoadingIndicator = Accumulator(target: collection.photoCount, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {
                     self.scaningRepositories = false
                 })
-            self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, event: collection.event, place: collection.place, indicator:self.collectionLoadingIndicator)
-            self.refreshCollectionView()
+            if self.imagesLoader.isLoading() {
+                self.imagesLoader.cancel(onCancelled: {
+                    self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, event: collection.event, place: collection.place, indicator:self.collectionLoadingIndicator)
+                    self.refreshCollectionView()
+                })
+            }else{
+                self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, event: collection.event, place: collection.place, indicator:self.collectionLoadingIndicator)
+                self.refreshCollectionView()
+            }
+            
         }
     }
     
@@ -658,8 +681,16 @@ class ViewController: NSViewController {
     
     @IBAction func onRefreshCollectionButtonClicked(_ sender: Any) {
         DispatchQueue.global().async {
-            self.imagesLoader.reload()
-            self.refreshCollectionView()
+            if self.imagesLoader.isLoading() {
+                self.imagesLoader.cancel(onCancelled: {
+                    self.imagesLoader.reload()
+                    self.refreshCollectionView()
+                })
+            }else {
+                self.imagesLoader.reload()
+                self.refreshCollectionView()
+            }
+            
         }
     }
     
@@ -701,8 +732,16 @@ class ViewController: NSViewController {
             self.imagesLoader.showHidden = false
         }
         DispatchQueue.global().async {
-            self.imagesLoader.reload()
-            self.refreshCollectionView()
+            if self.imagesLoader.isLoading(){
+                self.imagesLoader.cancel(onCancelled: {
+                    self.imagesLoader.reload()
+                    self.refreshCollectionView()
+                })
+            }else{
+                self.imagesLoader.reload()
+                self.refreshCollectionView()
+            }
+            
         }
     }
     

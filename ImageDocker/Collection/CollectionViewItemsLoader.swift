@@ -44,14 +44,28 @@ class CollectionViewItemsLoader: NSObject {
     var considerPlaces = true
     var indicator:Accumulator?
     var showHidden:Bool = false
+    private var cancelling:Bool = false
+    private var loading:Bool = false
     
+    private var onCancelCompleted: (() -> Void)? = nil
     
     private var sections = [CollectionViewSection]()
     
     var lastRequest:CollectionViewLastRequest = CollectionViewLastRequest()
+    
+    func cancel(onCancelled: (() -> Void)? = nil ) {
+        self.onCancelCompleted = onCancelled
+        self.cancelling = true
+    }
+    
+    func isLoading() -> Bool {
+        return self.loading
+    }
 
     
     func load(from folderURL: URL, indicator:Accumulator? = nil) {
+        loading = true
+        
         lastRequest.loadSource = .repository
         lastRequest.folderURL = folderURL
         lastRequest.indicator = indicator
@@ -70,6 +84,8 @@ class CollectionViewItemsLoader: NSObject {
     }
     
     func load(year:Int, month:Int, day:Int, place:String?, indicator:Accumulator? = nil) {
+        loading = true
+        
         lastRequest.loadSource = .moment
         lastRequest.year = year
         lastRequest.month = month
@@ -90,6 +106,8 @@ class CollectionViewItemsLoader: NSObject {
     }
     
     func load(year:Int, month:Int, day:Int, event:String, place:String, indicator:Accumulator? = nil) {
+        loading = true
+        
         lastRequest.loadSource = .event
         lastRequest.year = year
         lastRequest.month = month
@@ -162,6 +180,15 @@ class CollectionViewItemsLoader: NSObject {
         }
         //self.reorganizeItems(considerPlaces: true)
 
+        self.loading = false
+        
+        if self.cancelling {
+            self.cancelling = false
+            if self.onCancelCompleted != nil {
+                self.onCancelCompleted!()
+            }
+            return
+        }
     }
     
     func setupItems(photoFiles: [PhotoFile]?, cleanViewBeforeLoading:Bool = true){
@@ -188,6 +215,16 @@ class CollectionViewItemsLoader: NSObject {
         
         if let photoFiles = photoFiles {
             self.transformToDomainItems(photoFiles: photoFiles)
+        }
+        
+        self.loading = false
+        
+        if self.cancelling {
+            self.cancelling = false
+            if self.onCancelCompleted != nil {
+                self.onCancelCompleted!()
+            }
+            return
         }
     }
     
@@ -357,6 +394,11 @@ class CollectionViewItemsLoader: NSObject {
     }
   
     private func transformToDomainItems(urls: [URL]) {
+        
+        if self.cancelling {
+            return
+        }
+        
         if items.count > 0 {   // When not initial folder folder
             items.removeAll()
         }
@@ -364,6 +406,11 @@ class CollectionViewItemsLoader: NSObject {
         let duplicates:Duplicates = ModelStore.getDuplicatePhotos()
         
         for url in urls {
+            
+            if self.cancelling {
+                return
+            }
+            
             let imageFile = ImageFile(url: url, indicator: self.indicator)
             
             if duplicates.paths.index(where: {$0 == url.path}) != nil {
@@ -382,6 +429,11 @@ class CollectionViewItemsLoader: NSObject {
     }
     
     private func transformToDomainItems(photoFiles: [PhotoFile]){
+        
+        if self.cancelling {
+            return
+        }
+        
         if items.count > 0 {   // When not initial folder folder
             items.removeAll()
         }
@@ -389,6 +441,14 @@ class CollectionViewItemsLoader: NSObject {
         let duplicates:Duplicates = ModelStore.getDuplicatePhotos()
         
         for photoFile in photoFiles {
+            
+            if self.cancelling {
+                if self.indicator != nil {
+                    self.indicator?.forceCancel()
+                }
+                return
+            }
+            
             let imageFile = ImageFile(photoFile: photoFile, indicator: self.indicator)
             
             if duplicates.paths.index(where: {$0 == photoFile.path}) != nil {
@@ -405,18 +465,37 @@ class CollectionViewItemsLoader: NSObject {
     }
     
     private func walkthruDatabaseForFileUrls(startingURL: URL, includeHidden:Bool = true) -> [URL]? {
+        
+        if self.cancelling {
+            return nil
+        }
+        
         var urls: [URL] = []
         for photoFile in ModelStore.getPhotoFiles(parentPath: startingURL.path, includeHidden: includeHidden) {
+            
+            if self.cancelling {
+                return nil
+            }
+            
             urls.append(URL(fileURLWithPath: photoFile.path!))
         }
         return urls
     }
     
     private func walkthruDatabaseForPhotoFiles(startingURL: URL, includeHidden:Bool = true) -> [PhotoFile]? {
+        
+        if self.cancelling {
+            return nil
+        }
+        
         return ModelStore.getPhotoFiles(parentPath: startingURL.path, includeHidden: includeHidden)
     }
   
     private func walkthruDirectoryForFileUrls(startingURL: URL) -> [URL]? {
+        
+        if self.cancelling {
+            return nil
+        }
 
         let options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles,
                                                                 .skipsSubdirectoryDescendants,
@@ -435,6 +514,11 @@ class CollectionViewItemsLoader: NSObject {
 
         var urls: [URL] = []
         for case let url as NSURL in directoryEnumerator {
+            
+            if self.cancelling {
+                return nil
+            }
+            
             do {
                 let resourceValues = try url.resourceValues(forKeys: resourceValueKeys)
                 guard let isRegularFileResourceValue = resourceValues[URLResourceKey.isRegularFileKey] as? NSNumber else { continue }
