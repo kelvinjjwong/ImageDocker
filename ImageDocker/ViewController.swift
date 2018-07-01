@@ -69,8 +69,12 @@ class ViewController: NSViewController {
     var identifiersOfLibraryTree:[String : PXSourceListItem] = [String : PXSourceListItem] ()
     var parentsOfMomentsTree : [String : PXSourceListItem] = [String : PXSourceListItem] ()
     var momentToCollection : [String : PhotoCollection] = [String : PhotoCollection] ()
+    var treeIdItemsExpandState : [String : Bool] = [String : Bool] ()
+    var treeLastSelectedIdentifier : String = ""
+    var treeIdItems : [String : PXSourceListItem] = [String : PXSourceListItem] ()
     var momentToCollectionGroupByPlace : [String : PhotoCollection] = [String : PhotoCollection] ()
     var parentsOfMomentsTreeGroupByPlace : [String : PXSourceListItem] = [String : PXSourceListItem] ()
+    var treeRefreshing:Bool = false
     
     var parentsOfEventsTree : [String : PXSourceListItem] = [String : PXSourceListItem] ()
     var eventToCollection : [String : PhotoCollection] = [String : PhotoCollection] ()
@@ -190,36 +194,45 @@ class ViewController: NSViewController {
         self.lastExportPhotos = Date()
         
         self.scanLocationChangeTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block:{_ in
-            guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository else {return}
+            guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing else {return}
             print("\(Date()) SCANING LOCATION CHANGE")
             if self.lastCheckLocationChange != nil {
                 let photoFiles:[PhotoFile] = ModelStore.getPhotoFiles(after: self.lastCheckLocationChange!)
                 if photoFiles.count > 0 {
+                    self.saveTreeItemsExpandState()
                     self.refreshLocationTree()
+                    self.restoreTreeItemsExpandState()
+                    self.restoreTreeSelection()
                     self.lastCheckLocationChange = Date()
                 }
             }
         })
         
         self.scanPhotoTakenDateChangeTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block:{_ in
-            guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository else {return}
+            guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing else {return}
             print("\(Date()) SCANING DATE CHANGE")
             if self.lastCheckPhotoTakenDateChange != nil {
                 let photoFiles:[PhotoFile] = ModelStore.getPhotoFiles(after: self.lastCheckPhotoTakenDateChange!)
                 if photoFiles.count > 0 {
+                    self.saveTreeItemsExpandState()
                     self.refreshMomentTree()
+                    self.restoreTreeItemsExpandState()
+                    self.restoreTreeSelection()
                     self.lastCheckPhotoTakenDateChange = Date()
                 }
             }
         })
         
         self.scanEventChangeTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block:{_ in
-            guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository else {return}
+            guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing else {return}
             print("\(Date()) SCANING EVENT CHANGE")
             if self.lastCheckEventChange != nil {
                 let photoFiles:[PhotoFile] = ModelStore.getPhotoFiles(after: self.lastCheckEventChange!)
                 if photoFiles.count > 0 {
+                    self.saveTreeItemsExpandState()
                     self.refreshEventTree()
+                    self.restoreTreeItemsExpandState()
+                    self.restoreTreeSelection()
                     self.lastCheckEventChange = Date()
                 }
             }
@@ -284,12 +297,24 @@ class ViewController: NSViewController {
     func updateLibraryTree() {
         self.creatingRepository = true
         print("\(Date()) UPDATING CONTAINERS")
-        ImageFolderTreeScanner.updateContainers()
-        print("\(Date()) UPDATING CONTAINERS: DONE")
-        print("\(Date()) UPDATING LIBRARY TREE")
-        self.refreshLibraryTree()
-        print("\(Date()) UPDATING LIBRARY TREE: DONE")
-        self.creatingRepository = false
+        DispatchQueue.global().async {
+            ImageFolderTreeScanner.updateContainers(onCompleted: {
+                
+                print("\(Date()) UPDATING CONTAINERS: DONE")
+                
+                DispatchQueue.main.async {
+                    print("\(Date()) UPDATING LIBRARY TREE")
+                    self.saveTreeItemsExpandState()
+                    self.refreshLibraryTree()
+                    self.restoreTreeItemsExpandState()
+                    self.restoreTreeSelection()
+                    print("\(Date()) UPDATING LIBRARY TREE: DONE")
+                    
+                    self.creatingRepository = false
+                }
+                
+            })
+        }
     }
     
     func configureDarkMode() {
@@ -663,8 +688,11 @@ class ViewController: NSViewController {
                     imagesLoader.clean()
                     collectionView.reloadData()
                     
+                    self.saveTreeItemsExpandState()
                     self.refreshMomentTree()
                     self.refreshLocationTree()
+                    self.restoreTreeItemsExpandState()
+                    self.restoreTreeSelection()
                 }
             }
         }
@@ -673,10 +701,15 @@ class ViewController: NSViewController {
     @IBAction func onRefreshButtonClicked(_ sender: Any) {
         print("clicked refresh button")
         
+        self.saveTreeItemsExpandState()
+        
         self.refreshLibraryTree()
         self.refreshMomentTree()
         self.refreshLocationTree()
         self.refreshEventTree()
+        
+        self.restoreTreeItemsExpandState()
+        self.restoreTreeSelection()
     }
     
     @IBAction func onRefreshCollectionButtonClicked(_ sender: Any) {

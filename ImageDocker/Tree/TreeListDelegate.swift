@@ -189,6 +189,7 @@ extension ViewController {
         // remove items in moments
         for _ in (count > 1 ? 1 : count)...(count > 1 ? count : 1) {
             //let index:Int = i - 1
+            
             self.sourceList.removeItems(at: NSIndexSet(index: 0) as IndexSet,
                                         inParent: self.libraryItem(),
                                         withAnimation: NSTableView.AnimationOptions.slideUp)
@@ -213,7 +214,21 @@ extension ViewController {
         self.sourceList.reloadData()
     }
     
+    func saveTreeItemsExpandState() {
+        
+        // save expandable state of all items, mark by moment.id
+        for idItem in self.treeIdItems {
+            let expanded = self.sourceList.isItemExpanded(idItem.value)
+            self.treeIdItemsExpandState[idItem.key] = expanded
+            //if expanded {
+            //    print("EXPANDED \(idItem.key)")
+            //}
+        }
+    }
+    
     func refreshMomentTree() {
+        
+        
         //print("REFRESHING MOMENT TREE at \(Date())")
         let count = self.momentItem().children.count
         // remove items in moments
@@ -226,6 +241,36 @@ extension ViewController {
         self.momentItem().children.removeAll()
         self.loadMomentsToTreeFromDatabase(groupByPlace: false)
         self.sourceList.reloadData()
+        
+        
+    }
+    
+    func restoreTreeItemsExpandState() {
+        // restore expanded state of expanded items, search by moment.id
+        for parent in self.treeIdItemsExpandState.sorted(by: { $0.key.localizedCaseInsensitiveCompare($1.key) == ComparisonResult.orderedAscending }) {
+            if parent.value {
+                //print("EXPANDING \(parent.key)")
+                let item = self.treeIdItems[parent.key]
+                self.sourceList.expandItem(item)
+            }
+        }
+    }
+    
+    func restoreTreeSelection(){
+        guard self.treeLastSelectedIdentifier != "" && !treeRefreshing else {return}
+        treeRefreshing = true
+        // restore selection
+        for idItem in self.treeIdItems {
+            if idItem.key == self.treeLastSelectedIdentifier {
+                //print("SELECT \(idItem.key)")
+                let row = self.sourceList.row(forItem: idItem.value)
+                self.sourceList.scrollRowToVisible(row)
+                self.sourceList.selectRowIndexes(NSIndexSet(index: row) as IndexSet, byExtendingSelection: false)
+                //self.sourceList.highlightSelection(inClipRect: self.sourceList.rect(ofRow: row))
+                break
+            }
+        }
+        treeRefreshing = false
     }
     
     func refreshLocationTree() {
@@ -298,11 +343,13 @@ extension ViewController {
         collection.imageFolder = imageFolder
         imageFolder.photoCollection = collection
         
+        self.treeIdItems[imageFolder.url.path] = item
+        
     }
     
     func addMomentPlaceTreeEntry(place:Moment){
         let collection:PhotoCollection = PhotoCollection(title: place.represent,
-                                                         identifier: place.represent,
+                                                         identifier: place.id,
                                                          type: place.photoCount == 0 ? .userCreated : .library,
                                                          source: .place)
         collection.photoCount = place.photoCount
@@ -318,6 +365,8 @@ extension ViewController {
         
         // for children to find parent
         self.parentsOfMomentsTreeGroupByPlace["\(place.place)"] = item
+        
+        self.treeIdItems[place.id] = item
     }
     
     func addMomentYearTreeEntry(year:Moment, groupByPlace:Bool = false){
@@ -325,7 +374,7 @@ extension ViewController {
             //print("YEAR \(year.represent) \(year.year) , count \(year.photoCount)")
         }
         let collection:PhotoCollection = PhotoCollection(title: year.represent,
-                                                         identifier: year.represent,
+                                                         identifier: year.id,
                                                          type: year.photoCount == 0 ? .userCreated : .library,
                                                          source: groupByPlace ? .place : .moment)
         collection.photoCount = year.photoCount
@@ -355,6 +404,8 @@ extension ViewController {
             // for children to find parent
             self.parentsOfMomentsTree["\(year.year)"] = item
         }
+        
+        self.treeIdItems[year.id] = item
     }
     
     func addMomentMonthTreeEntry(month:Moment, groupByPlace:Bool = false){
@@ -362,7 +413,7 @@ extension ViewController {
             //print("MONTH \(month.represent) \(month.year) , count \(month.photoCount)")
         }
         let collection:PhotoCollection = PhotoCollection(title: month.represent,
-                                                         identifier: month.represent,
+                                                         identifier: month.id,
                                                          type: month.photoCount == 0 ? .userCreated : .library,
                                                          source: groupByPlace ? .place : .moment)
         collection.photoCount = month.photoCount
@@ -394,11 +445,13 @@ extension ViewController {
             // for children to find parent
             self.parentsOfMomentsTree["\(month.year)-\(month.month)"] = item
         }
+        
+        self.treeIdItems[month.id] = item
     }
     
     func addMomentDayTreeEntry(day:Moment, groupByPlace:Bool = false){
         let collection:PhotoCollection = PhotoCollection(title: day.represent,
-                                                         identifier: day.represent,
+                                                         identifier: day.id,
                                                          type: day.photoCount == 0 ? .userCreated : .library,
                                                          source: groupByPlace ? .place : .moment)
         collection.photoCount = day.photoCount
@@ -425,6 +478,8 @@ extension ViewController {
             // avoid collection object to be purged from memory
             self.momentToCollection["\(day.id)"] = collection
         }
+        
+        self.treeIdItems[day.id] = item
     }
     
     
@@ -446,6 +501,8 @@ extension ViewController {
         
         // for children to find parent
         self.parentsOfEventsTree["\(event.event)"] = item
+        
+        self.treeIdItems[event.id] = item
     }
     
     func addEventMonthTreeEntry(month:Event){
@@ -470,6 +527,8 @@ extension ViewController {
         // for children to find parent
         self.parentsOfEventsTree["\(month.event)-\(month.year)-\(month.month)"] = item
         //print(self.parentsOfMomentsTreeGroupByPlace["\(month.place)-\(month.year)-\(month.month)"])
+        
+        self.treeIdItems[month.id] = item
             
     }
     
@@ -493,6 +552,8 @@ extension ViewController {
         
         // avoid collection object to be purged from memory
         self.eventToCollection["\(day.id)"] = collection
+        
+        self.treeIdItems[day.id] = item
 
     }
     
@@ -563,17 +624,12 @@ extension ViewController : PXSourceListDelegate {
     }
     
     func sourceListSelectionDidChange(_ notification: Notification!) {
+        guard !self.treeRefreshing else {return}
         //var removeButtonEnabled:Bool = false
         if let selectedItem:PXSourceListItem = self.sourceList.item(atRow: self.sourceList.selectedRow) as? PXSourceListItem {
-            if self.libraryItem().hasChildren() {
-                //if let children:NSMutableArray = NSMutableArray(array:self.libraryItem().children) {
-                    //if children.contains(selectedItem) {
-                        //removeButtonEnabled = true
-                    //}
-                //}
-            }
             
             if let collection:PhotoCollection = selectedItem.representedObject as? PhotoCollection {
+                
                 if collection.source! == .library {
                     self.selectImageFolder(collection.imageFolder!)
                 }else if collection.source! == .moment {
@@ -586,6 +642,8 @@ extension ViewController : PXSourceListDelegate {
                     //print("selected place moment \(collection.title)")
                     self.selectEvent(collection)
                 }
+                
+                self.treeLastSelectedIdentifier = collection.identifier
             }
         }
     }

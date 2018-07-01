@@ -272,13 +272,19 @@ class ImageFolderTreeScanner {
         print("\(Date()) CHECK REPO: EXECUTE ADD OR REMOVE: DONE")
     }
     
-    static func updateContainers() {
+    static func updateContainers(onCompleted: (() -> Void)? = nil ) {
         var imageFolders:[ImageFolder] = []
         let exists = ModelStore.getAllContainers()
         if exists.count > 0 {
             for exist in exists{
                 let imageFolder = ImageFolder(URL(fileURLWithPath: exist.path!), countOfImages: Int(exist.imageCount) )
                 imageFolders.append(imageFolder)
+                
+                let photos = ModelStore.getPhotoFiles(rootPath: "\(imageFolder.url.path)/")
+                let count = Int32(photos.count)
+                if imageFolder.containerFolder != nil && imageFolder.containerFolder?.imageCount != count {
+                    imageFolder.containerFolder?.imageCount = count
+                }
             }
         }
         let containers:[[String:AnyObject]]? = ModelStore.getAllContainerPaths()
@@ -290,16 +296,17 @@ class ImageFolderTreeScanner {
                 let url:URL = URL(fileURLWithPath: path)
                 let imageFolder = ImageFolder(url, countOfImages: photoCount)
                 imageFolders.append(imageFolder)
-            }
-            
-            for folder in imageFolders {
-                let photos = ModelStore.getPhotoFiles(rootPath: "\(folder.url.path)/")
+                
+                let photos = ModelStore.getPhotoFiles(rootPath: "\(imageFolder.url.path)/")
                 let count = Int32(photos.count)
-                if folder.containerFolder != nil && folder.containerFolder?.imageCount != count {
-                    folder.containerFolder?.imageCount = count
+                if imageFolder.containerFolder != nil && imageFolder.containerFolder?.imageCount != count {
+                    imageFolder.containerFolder?.imageCount = count
                 }
             }
             ModelStore.save()
+        }
+        if onCompleted != nil {
+            onCompleted!()
         }
     }
 }
