@@ -13,11 +13,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationWillFinishLaunching(_ notification: Notification) {
         DispatchQueue.global().async {
-            self.createDataBackup()
+            self.createDataBackup(suffix:"-on-launch")
         }
     }
     
-    func createDataBackup(){
+    func createDataBackup(suffix:String){
         let dbUrl = self.applicationDocumentsDirectory
         let dbFile = dbUrl.appendingPathComponent("ImageDocker.sqlite")
         let dbFileSHM = dbUrl.appendingPathComponent("ImageDocker.sqlite-shm")
@@ -25,8 +25,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: dbFile.path) {
             let dateFormat = DateFormatter()
-            dateFormat.dateFormat = "yyyyMMdd_HHmm"
-            let backupFolder = "DataBackup-\(dateFormat.string(from: Date()))"
+            dateFormat.dateFormat = "yyyyMMdd_HHmmss"
+            let backupFolder = "DataBackup-\(dateFormat.string(from: Date()))\(suffix)"
             let backupUrl = dbUrl.appendingPathComponent(backupFolder)
             do{
                 try fileManager.createDirectory(at: backupUrl, withIntermediateDirectories: true, attributes: nil)
@@ -53,6 +53,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
+        self.createDataBackup(suffix:"-on-exit")
     }
     
     //MARK: app termination
