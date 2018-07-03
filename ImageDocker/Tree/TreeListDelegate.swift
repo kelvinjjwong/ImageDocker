@@ -14,6 +14,15 @@ let eventsIcon:NSImage = NSImage(imageLiteralResourceName: "events")
 let peopleIcon:NSImage = NSImage(imageLiteralResourceName: "people")
 let placesIcon:NSImage = NSImage(imageLiteralResourceName: "places")
 let albumIcon:NSImage = NSImage(imageLiteralResourceName: "album")
+let folderIcon:NSImage = NSImage(imageLiteralResourceName: "folderOpen")
+let folderAltIcon:NSImage = NSImage(imageLiteralResourceName: "folderOpenAlt")
+let calendarIcon:NSImage = NSImage(imageLiteralResourceName: "calendar")
+let clockIcon:NSImage = NSImage(imageLiteralResourceName: "clock")
+let flagIcon:NSImage = NSImage(imageLiteralResourceName: "flag")
+let anchorIcon:NSImage = NSImage(imageLiteralResourceName: "anchor")
+let phoneIcon:NSImage = NSImage(imageLiteralResourceName: "phone")
+let printIcon:NSImage = NSImage(imageLiteralResourceName: "print")
+let shareIcon:NSImage = NSImage(imageLiteralResourceName: "share")
 
 extension ViewController {
     
@@ -35,12 +44,12 @@ extension ViewController {
             self.momentSectionOfTree = self.addTreeSection(title: "MOMENTS")
         }
         
-        if self.placeSectionOfTree == nil {
-            self.placeSectionOfTree = self.addTreeSection(title: "PLACES")
-        }
-        
         if self.eventSectionOfTree == nil {
             self.eventSectionOfTree = self.addTreeSection(title: "EVENTS")
+        }
+        
+        if self.placeSectionOfTree == nil {
+            self.placeSectionOfTree = self.addTreeSection(title: "PLACES")
         }
  
     }
@@ -171,7 +180,7 @@ extension ViewController {
             DispatchQueue.global().async {
                 for folder in imageFolders {
                     self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage,
-                        onCompleted: {
+                        onCompleted: { data in
                             self.creatingRepository = false
                             ExportManager.enable()
                     })
@@ -306,11 +315,11 @@ extension ViewController {
         return self.sourceListItems![1] as! PXSourceListItem
     }
     
-    func placeItem() -> PXSourceListItem {
+    func eventItem() -> PXSourceListItem {
         return self.sourceListItems![2] as! PXSourceListItem
     }
     
-    func eventItem() -> PXSourceListItem {
+    func placeItem() -> PXSourceListItem {
         return self.sourceListItems![3] as! PXSourceListItem
     }
     

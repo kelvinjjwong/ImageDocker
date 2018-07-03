@@ -34,6 +34,7 @@ class EventListViewController: NSViewController {
         didSet {
             if lastSelectedRow != nil && events.count > 0 && lastSelectedRow! < events.count {
                 eventName.stringValue = events[lastSelectedRow!].name!
+                selectedEventName = events[lastSelectedRow!].name!
                 
                 if self.refreshDelegate != nil {
                     self.refreshDelegate?.selectEvent(name: events[lastSelectedRow!].name!)
@@ -49,6 +50,7 @@ class EventListViewController: NSViewController {
     @IBOutlet weak var eventName: NSTextField!
     
     var events:[PhotoEvent] = []
+    var selectedEventName:String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,6 +102,33 @@ class EventListViewController: NSViewController {
             }
         }
     }
+    
+    @IBAction func onButtonRenameClicked(_ sender: Any) {
+        let name:String = eventName.stringValue
+        guard name != "" && selectedEventName != "" && name != selectedEventName else {return}
+        
+        ModelStore.renameEvent(oldName: selectedEventName, newName: name)
+        ModelStore.save()
+        
+        self.events = ModelStore.getEvents()
+        eventTable.reloadData()
+        
+        if self.refreshDelegate != nil {
+            refreshDelegate?.refreshEventList()
+            self.refreshDelegate?.selectEvent(name: name)
+        }
+    }
+    
+    @IBAction func onButtonReloadClicked(_ sender: Any) {
+        let keyword:String = eventSearcher.stringValue
+        if keyword == "" {
+            self.events = ModelStore.getEvents()
+        }else{
+            self.events = ModelStore.getEvents(byName: keyword)
+        }
+        eventTable.reloadData()
+    }
+    
     
     private func dialogOKCancel(question: String, text: String) -> Bool {
         let alert = NSAlert()

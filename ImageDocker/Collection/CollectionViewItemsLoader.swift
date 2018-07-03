@@ -130,6 +130,9 @@ class CollectionViewItemsLoader: NSObject {
     
     func reload() {
         guard lastRequest.loadSource != nil else {return}
+        if lastRequest.indicator != nil {
+            lastRequest.indicator?.reset()
+        }
         if lastRequest.loadSource == .repository {
             self.load(from: lastRequest.folderURL!, indicator: lastRequest.indicator)
         }else if lastRequest.loadSource == .moment {
@@ -206,7 +209,10 @@ class CollectionViewItemsLoader: NSObject {
             sections = [CollectionViewSection]()
         }
         
-        guard photoFiles != nil && (photoFiles?.count)! > 0 else {return}
+        guard photoFiles != nil && (photoFiles?.count)! > 0 else {
+            self.loading = false
+            return
+        }
         
         if indicator != nil {
             indicator?.reset()

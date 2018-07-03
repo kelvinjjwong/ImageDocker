@@ -139,7 +139,7 @@
                         <rect key="frame" x="1" y="199" width="443" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
-                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="sRy-EN-dCn">
+                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="sRy-EN-dCn">
                         <rect key="frame" x="224" y="17" width="15" height="102"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
@@ -149,7 +149,7 @@
                     </tableHeaderView>
                 </scrollView>
                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EWF-A9-g8m">
-                    <rect key="frame" x="10" y="283" width="293" height="22"/>
+                    <rect key="frame" x="10" y="287" width="271" height="22"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="22" id="CQU-uQ-JUe"/>
                     </constraints>
@@ -160,9 +160,9 @@
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zKu-7z-GJb">
-                    <rect key="frame" x="305" y="276" width="81" height="32"/>
+                    <rect key="frame" x="283" y="281" width="101" height="32"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="69" id="a0f-sb-GU2"/>
+                        <constraint firstAttribute="width" constant="89" id="a0f-sb-GU2"/>
                     </constraints>
                     <buttonCell key="cell" type="push" title="Create" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qNs-YW-rja">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -173,9 +173,9 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d0g-1p-VBp">
-                    <rect key="frame" x="381" y="276" width="80" height="32"/>
+                    <rect key="frame" x="379" y="281" width="82" height="32"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="68" id="ki5-7i-Z7L"/>
+                        <constraint firstAttribute="width" constant="70" id="ki5-7i-Z7L"/>
                     </constraints>
                     <buttonCell key="cell" type="push" title="Delete" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="j36-PC-Mqw">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -196,20 +196,50 @@
                         <action selector="onEventSearcherAction:" target="-2" id="NsF-aQ-XTp"/>
                     </connections>
                 </searchField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="39e-q7-xO1">
+                    <rect key="frame" x="283" y="257" width="101" height="32"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="89" id="3zF-on-G19"/>
+                    </constraints>
+                    <buttonCell key="cell" type="push" title="Rename" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="SkA-IM-mhJ">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <connections>
+                            <action selector="onButtonRenameClicked:" target="-2" id="t4q-OD-Ia7"/>
+                        </connections>
+                    </buttonCell>
+                </button>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5r1-WM-fRn">
+                    <rect key="frame" x="379" y="257" width="82" height="32"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="70" id="3Ws-60-vrz"/>
+                    </constraints>
+                    <buttonCell key="cell" type="push" title="Reload" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="EGw-7c-SqI">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="onButtonReloadClicked:" target="-2" id="0NN-z3-Vif"/>
+                    </connections>
+                </button>
             </subviews>
             <constraints>
+                <constraint firstItem="5r1-WM-fRn" firstAttribute="top" secondItem="d0g-1p-VBp" secondAttribute="bottom" constant="3" id="3PK-tu-nqA"/>
                 <constraint firstItem="EWF-A9-g8m" firstAttribute="leading" secondItem="3jr-fp-dGL" secondAttribute="leading" constant="10" id="55H-85-ZVb"/>
-                <constraint firstItem="sPO-Rb-ij6" firstAttribute="top" secondItem="EWF-A9-g8m" secondAttribute="bottom" constant="27" id="9F1-WH-cEN"/>
+                <constraint firstItem="sPO-Rb-ij6" firstAttribute="top" secondItem="EWF-A9-g8m" secondAttribute="bottom" constant="31" id="9F1-WH-cEN"/>
+                <constraint firstAttribute="trailing" secondItem="5r1-WM-fRn" secondAttribute="trailing" constant="10" id="CSU-Oj-Go2"/>
                 <constraint firstAttribute="trailing" secondItem="d0g-1p-VBp" secondAttribute="trailing" constant="10" id="JbK-af-VCu"/>
                 <constraint firstItem="q6K-kl-viC" firstAttribute="top" secondItem="sPO-Rb-ij6" secondAttribute="bottom" constant="8" id="Ltl-1H-rn2"/>
+                <constraint firstItem="39e-q7-xO1" firstAttribute="top" secondItem="zKu-7z-GJb" secondAttribute="bottom" constant="3" id="Mf6-cL-XX5"/>
                 <constraint firstItem="d0g-1p-VBp" firstAttribute="leading" secondItem="zKu-7z-GJb" secondAttribute="trailing" constant="7" id="Mnl-PV-b38"/>
                 <constraint firstItem="sPO-Rb-ij6" firstAttribute="leading" secondItem="3jr-fp-dGL" secondAttribute="leading" constant="10" id="Pml-V3-fuk"/>
                 <constraint firstAttribute="bottom" secondItem="q6K-kl-viC" secondAttribute="bottom" constant="10" id="RYk-5c-ytt"/>
-                <constraint firstItem="d0g-1p-VBp" firstAttribute="top" secondItem="3jr-fp-dGL" secondAttribute="top" constant="15" id="UCz-1L-fO7"/>
-                <constraint firstItem="zKu-7z-GJb" firstAttribute="top" secondItem="3jr-fp-dGL" secondAttribute="top" constant="15" id="WU7-av-SOh"/>
+                <constraint firstItem="d0g-1p-VBp" firstAttribute="top" secondItem="3jr-fp-dGL" secondAttribute="top" constant="10" id="UCz-1L-fO7"/>
+                <constraint firstItem="zKu-7z-GJb" firstAttribute="top" secondItem="3jr-fp-dGL" secondAttribute="top" constant="10" id="WU7-av-SOh"/>
                 <constraint firstAttribute="trailing" secondItem="q6K-kl-viC" secondAttribute="trailing" constant="10" id="Z1V-4d-AC1"/>
-                <constraint firstItem="EWF-A9-g8m" firstAttribute="top" secondItem="3jr-fp-dGL" secondAttribute="top" constant="14" id="hk8-ac-z3M"/>
+                <constraint firstItem="EWF-A9-g8m" firstAttribute="top" secondItem="3jr-fp-dGL" secondAttribute="top" constant="10" id="hk8-ac-z3M"/>
                 <constraint firstItem="zKu-7z-GJb" firstAttribute="leading" secondItem="EWF-A9-g8m" secondAttribute="trailing" constant="8" id="kJP-Z0-oWT"/>
+                <constraint firstItem="5r1-WM-fRn" firstAttribute="leading" secondItem="39e-q7-xO1" secondAttribute="trailing" constant="7" id="kci-f3-qfP"/>
                 <constraint firstItem="q6K-kl-viC" firstAttribute="leading" secondItem="3jr-fp-dGL" secondAttribute="leading" constant="10" id="sHc-uk-njH"/>
                 <constraint firstAttribute="trailing" secondItem="sPO-Rb-ij6" secondAttribute="trailing" constant="10" id="ygg-Ud-O6h"/>
             </constraints>

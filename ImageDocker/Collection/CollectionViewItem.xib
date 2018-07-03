@@ -51,13 +51,13 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CUx-5Z-7pI">
+                <button toolTip="Open in Finder" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CUx-5Z-7pI">
                     <rect key="frame" x="0.0" y="5" width="20" height="18"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="18" id="iSy-dm-Tvq"/>
                         <constraint firstAttribute="width" constant="20" id="jew-ve-Kcl"/>
                     </constraints>
-                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSFolder" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="j4x-dw-mTi">
+                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="folderOpen" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="j4x-dw-mTi">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -127,7 +127,7 @@
     </objects>
     <resources>
         <image name="NSCaution" width="32" height="32"/>
-        <image name="NSFolder" width="32" height="32"/>
         <image name="NSStopProgressTemplate" width="11" height="11"/>
+        <image name="folderOpen" width="24" height="24"/>
     </resources>
 </document>

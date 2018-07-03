@@ -716,4 +716,39 @@ class ModelStore {
         }
     }
     
+    static func renameEvent(oldName:String, newName:String, in moc : NSManagedObjectContext? = nil){
+        print("RENAME EVENT \(oldName) to \(newName)")
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        let fetchForNewName = NSFetchRequest<PhotoEvent>(entityName: "PhotoEvent")
+        fetchForNewName.predicate = NSPredicate(format: "name == %@", newName)
+        fetchForNewName.fetchLimit = 1
+        let existNewName = try! moc.fetch(fetchForNewName).first
+        let existNew:Bool = existNewName != nil && ((existNewName!.name ?? "") == newName)
+        print(existNew)
+        
+        let fetch = NSFetchRequest<PhotoEvent>(entityName: "PhotoEvent")
+        fetch.predicate = NSPredicate(format: "name == %@", oldName)
+        fetch.fetchLimit = 1
+        let exist = try! moc.fetch(fetch).first
+        if let existOldName = exist {
+            print(existOldName)
+            if !existNew {
+                print("does not exist new name, change old name to new name")
+                existOldName.name = newName
+            }else{
+                print("exist new name, delete old name")
+                moc.delete(existOldName)
+            }
+        }
+        
+        let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
+        req.predicate = NSPredicate(format: "event == %@", oldName)
+        if let photos = try? moc.fetch(req) {
+            for photo in photos {
+                photo.event = newName
+            }
+        }
+    }
+    
 }

@@ -145,7 +145,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     lazy var managedObjectContext: NSManagedObjectContext = {
         // Returns the managed object context for the application (which is already bound to the persistent store coordinator for the application.) This property is optional since there are legitimate error conditions that could cause the creation of the context to fail.
         let coordinator = self.persistentStoreCoordinator
-        var managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        var managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType )
         managedObjectContext.persistentStoreCoordinator = coordinator
         //managedObjectContext.undoManager = UndoManager()
         
@@ -166,6 +166,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if managedObjectContext.hasChanges {
             DispatchQueue.main.async {
                 do {
+                    print("TRYING TO SAVE STORE")
                     try self.managedObjectContext.save()
                 } catch {
                     //let nserror = error as NSError

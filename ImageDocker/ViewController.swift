@@ -265,58 +265,6 @@ class ViewController: NSViewController {
         
     }
     
-    fileprivate func startScanRepositories(){
-        DispatchQueue.global().async {
-            ExportManager.disable()
-            self.creatingRepository = true
-            DispatchQueue.main.async {
-                self.btnScanState.image = NSImage(named: NSImage.Name.statusAvailable)
-            }
-            self.treeLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true,
-                                                    lblMessage: self.indicatorMessage,
-                                                    presetAddingMessage: "Importing images ...",
-                                                    onCompleted: {
-                                                        print("COMPLETE SCAN REPO")
-                                                        ExportManager.enable()
-                                                        self.creatingRepository = false
-                                                        DispatchQueue.main.async {
-                                                            self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
-                                                        }
-            },
-                                                    onDataChanged: {
-                                                        self.updateLibraryTree()
-            }
-            )
-            autoreleasepool(invoking: { () -> Void in
-                ImageFolderTreeScanner.scanRepositories(indicator: self.treeLoadingIndicator)
-            })
-            
-        }
-    }
-    
-    func updateLibraryTree() {
-        self.creatingRepository = true
-        print("\(Date()) UPDATING CONTAINERS")
-        DispatchQueue.global().async {
-            ImageFolderTreeScanner.updateContainers(onCompleted: {
-                
-                print("\(Date()) UPDATING CONTAINERS: DONE")
-                
-                DispatchQueue.main.async {
-                    print("\(Date()) UPDATING LIBRARY TREE")
-                    self.saveTreeItemsExpandState()
-                    self.refreshLibraryTree()
-                    self.restoreTreeItemsExpandState()
-                    self.restoreTreeSelection()
-                    print("\(Date()) UPDATING LIBRARY TREE: DONE")
-                    
-                    self.creatingRepository = false
-                }
-                
-            })
-        }
-    }
-    
     func configureDarkMode() {
         
         view.layer?.backgroundColor = NSColor.darkGray.cgColor
@@ -451,7 +399,7 @@ class ViewController: NSViewController {
         comboPlaceList.isEditable = false
     }
     
-    // MARK: Actions
+    // MARK: Preview Zone
     
     @IBAction func onMapSliderClick(_ sender: NSSliderCell) {
         let tick:Int = sender.integerValue
@@ -548,20 +496,7 @@ class ViewController: NSViewController {
         }
     }
     
-    @IBAction func onAddressSearcherAction(_ sender: Any) {
-        let address:String = addressSearcher.stringValue
-        if address == "" {return}
-        BaiduLocation.queryForCoordinate(address: address, coordinateConsumer: self)
-    }
-    
-    func selectImageFile(_ imageFile:ImageFile){
-        self.selectedImageFile = imageFile.fileName
-        //print("selected image file: \(filename)")
-        //let url:URL = (self.selectedImageFolder?.url.appendingPathComponent(imageFile.fileName, isDirectory: false))!
-        DispatchQueue.main.async {
-            self.loadImage(imageFile: imageFile)
-        }
-    }
+    // MARK: Tree Node Click Actions
     
     func selectImageFolder(_ imageFolder:ImageFolder){
         //guard !self.scaningRepositories && !self.creatingRepository else {return}
@@ -573,8 +508,12 @@ class ViewController: NSViewController {
         collectionView.reloadData()
         
         DispatchQueue.global().async {
-            self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {
+            self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: { data in
                     self.scaningRepositories = false
+//                let total:Int = data["total"] ?? 0
+//                let hidden:Int = data["hidden"] ?? 0
+//                let message:String = "\(total) images, \(hidden) hidden"
+//                self.indicatorMessage.stringValue = message
                 }
             )
             if self.imagesLoader.isLoading() {
@@ -597,8 +536,12 @@ class ViewController: NSViewController {
         collectionView.reloadData()
         
         DispatchQueue.global().async {
-            self.collectionLoadingIndicator = Accumulator(target: collection.photoCount, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {
+            self.collectionLoadingIndicator = Accumulator(target: collection.photoCount, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {data in
                     self.scaningRepositories = false
+//                let total:Int = data["total"] ?? 0
+//                let hidden:Int = data["hidden"] ?? 0
+//                let message:String = "\(total) images, \(hidden) hidden"
+//                self.indicatorMessage.stringValue = message
                 })
             //print("GETTING COLLECTION \(collection.year) \(collection.month) \(collection.day) \(collection.place ?? "")")
             if self.imagesLoader.isLoading() {
@@ -622,8 +565,12 @@ class ViewController: NSViewController {
         collectionView.reloadData()
         
         DispatchQueue.global().async {
-            self.collectionLoadingIndicator = Accumulator(target: collection.photoCount, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {
+            self.collectionLoadingIndicator = Accumulator(target: collection.photoCount, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {data in
                     self.scaningRepositories = false
+//                let total:Int = data["total"] ?? 0
+//                let hidden:Int = data["hidden"] ?? 0
+//                let message:String = "\(total) images, \(hidden) hidden"
+//                self.indicatorMessage.stringValue = message
                 })
             if self.imagesLoader.isLoading() {
                 self.imagesLoader.cancel(onCancelled: {
@@ -635,6 +582,60 @@ class ViewController: NSViewController {
                 self.refreshCollectionView()
             }
             
+        }
+    }
+    
+    // MARK: Tree Node Controls
+    
+    fileprivate func startScanRepositories(){
+        DispatchQueue.global().async {
+            ExportManager.disable()
+            self.creatingRepository = true
+            DispatchQueue.main.async {
+                self.btnScanState.image = NSImage(named: NSImage.Name.statusAvailable)
+            }
+            self.treeLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true,
+                                                    lblMessage: self.indicatorMessage,
+                                                    presetAddingMessage: "Importing images ...",
+                                                    onCompleted: {data in
+                                                        print("COMPLETE SCAN REPO")
+                                                        ExportManager.enable()
+                                                        self.creatingRepository = false
+                                                        DispatchQueue.main.async {
+                                                            self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
+                                                        }
+            },
+                                                    onDataChanged: {
+                                                        self.updateLibraryTree()
+            }
+            )
+            autoreleasepool(invoking: { () -> Void in
+                ImageFolderTreeScanner.scanRepositories(indicator: self.treeLoadingIndicator)
+            })
+            
+        }
+    }
+    
+    func updateLibraryTree() {
+        self.creatingRepository = true
+        print("\(Date()) UPDATING CONTAINERS")
+        DispatchQueue.global().async {
+            ImageFolderTreeScanner.updateContainers(onCompleted: {
+                
+                print("\(Date()) UPDATING CONTAINERS: DONE")
+                
+                DispatchQueue.main.async {
+                    print("\(Date()) UPDATING LIBRARY TREE")
+                    self.saveTreeItemsExpandState()
+                    self.refreshLibraryTree()
+                    self.restoreTreeItemsExpandState()
+                    self.restoreTreeSelection()
+                    print("\(Date()) UPDATING LIBRARY TREE: DONE")
+                    
+                    self.creatingRepository = false
+                }
+                
+            })
         }
     }
     
@@ -698,9 +699,7 @@ class ViewController: NSViewController {
         }
     }
     
-    @IBAction func onRefreshButtonClicked(_ sender: Any) {
-        print("clicked refresh button")
-        
+    func refreshTree() {
         self.saveTreeItemsExpandState()
         
         self.refreshLibraryTree()
@@ -712,70 +711,10 @@ class ViewController: NSViewController {
         self.restoreTreeSelection()
     }
     
-    @IBAction func onRefreshCollectionButtonClicked(_ sender: Any) {
-        DispatchQueue.global().async {
-            if self.imagesLoader.isLoading() {
-                self.imagesLoader.cancel(onCancelled: {
-                    self.imagesLoader.reload()
-                    self.refreshCollectionView()
-                })
-            }else {
-                self.imagesLoader.reload()
-                self.refreshCollectionView()
-            }
-            
-        }
-    }
-    
-    fileprivate func startScanRepositoriesToLoadExif(){
-        if !ExportManager.working && !self.scaningRepositories && !self.creatingRepository {
-            DispatchQueue.global().async {
-                
-                ExportManager.suppressed = true
-                self.scaningRepositories = true
-                
-                print("EXTRACTING EXIF")
-                DispatchQueue.main.async {
-                    self.btnScanState.image = NSImage(named: NSImage.Name.statusAvailable)
-                }
-                self.treeLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true,
-                                                        lblMessage: self.indicatorMessage,
-                                                        presetAddingMessage: "Extracting EXIF ...",
-                                                        onCompleted: {
-                                                            print("COMPLETE SCAN PHOTOS TO LOAD EXIF")
-                                                            
-                                                            ExportManager.suppressed = false
-                                                            self.scaningRepositories = false
-                                                            DispatchQueue.main.async {
-                                                                self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
-                                                                self.indicatorMessage.stringValue = ""
-                                                            }
-                }
-                )
-                ImageFolderTreeScanner.scanPhotosToLoadExif(indicator: self.treeLoadingIndicator)
-            }
-        }
-    }
-    
-    
-    @IBAction func onCheckShowHiddenClicked(_ sender: NSButton) {
-        if self.chbShowHidden.state == NSButton.StateValue.on {
-            self.imagesLoader.showHidden = true
-        }else{
-            self.imagesLoader.showHidden = false
-        }
-        DispatchQueue.global().async {
-            if self.imagesLoader.isLoading(){
-                self.imagesLoader.cancel(onCancelled: {
-                    self.imagesLoader.reload()
-                    self.refreshCollectionView()
-                })
-            }else{
-                self.imagesLoader.reload()
-                self.refreshCollectionView()
-            }
-            
-        }
+    @IBAction func onRefreshButtonClicked(_ sender: Any) {
+        print("clicked refresh button")
+        
+        self.refreshTree()
     }
     
     
@@ -797,6 +736,93 @@ class ViewController: NSViewController {
             
             self.btnScanState.image = NSImage(named: NSImage.Name.statusNone)
             self.btnScanState.isHidden = true
+        }
+    }
+    
+    fileprivate func startScanRepositoriesToLoadExif(){
+        if !ExportManager.working && !self.scaningRepositories && !self.creatingRepository {
+            DispatchQueue.global().async {
+                
+                ExportManager.suppressed = true
+                self.scaningRepositories = true
+                
+                print("EXTRACTING EXIF")
+                DispatchQueue.main.async {
+                    self.btnScanState.image = NSImage(named: NSImage.Name.statusAvailable)
+                }
+                self.treeLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true,
+                                                        lblMessage: self.indicatorMessage,
+                                                        presetAddingMessage: "Extracting EXIF ...",
+                                                        onCompleted: { data in 
+                                                            print("COMPLETE SCAN PHOTOS TO LOAD EXIF")
+                                                            
+                                                            ExportManager.suppressed = false
+                                                            self.scaningRepositories = false
+                                                            DispatchQueue.main.async {
+                                                                self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
+                                                                self.indicatorMessage.stringValue = ""
+                                                            }
+                }
+                )
+                ImageFolderTreeScanner.scanPhotosToLoadExif(indicator: self.treeLoadingIndicator)
+            }
+        }
+    }
+    
+    // MARK: Collection View Controls
+    
+    func selectImageFile(_ imageFile:ImageFile){
+        self.selectedImageFile = imageFile.fileName
+        //print("selected image file: \(filename)")
+        //let url:URL = (self.selectedImageFolder?.url.appendingPathComponent(imageFile.fileName, isDirectory: false))!
+        DispatchQueue.main.async {
+            self.loadImage(imageFile: imageFile)
+        }
+    }
+    
+    func refreshCollection(){
+        DispatchQueue.global().async {
+            if self.imagesLoader.isLoading() {
+                self.imagesLoader.cancel(onCancelled: {
+                    self.imagesLoader.reload()
+                    self.refreshCollectionView()
+                })
+            }else {
+                self.imagesLoader.reload()
+                self.refreshCollectionView()
+            }
+            
+        }
+    }
+    
+    @IBAction func onRefreshCollectionButtonClicked(_ sender: Any) {
+        self.refreshCollection()
+    }
+    
+    
+    @IBAction func onCheckShowHiddenClicked(_ sender: NSButton) {
+        if self.chbShowHidden.state == NSButton.StateValue.on {
+            self.imagesLoader.showHidden = true
+        }else{
+            self.imagesLoader.showHidden = false
+        }
+        
+        self.scaningRepositories = true
+        
+        self.imagesLoader.clean()
+        collectionView.reloadData()
+        
+        DispatchQueue.global().async {
+            if self.imagesLoader.isLoading(){
+                self.imagesLoader.cancel(onCancelled: {
+                    self.imagesLoader.reload()
+                    self.refreshCollectionView()
+                })
+            }else{
+                self.imagesLoader.reload()
+                self.refreshCollectionView()
+            }
+            
         }
     }
     
@@ -822,6 +848,8 @@ class ViewController: NSViewController {
             //ExportManager.disable()
         }
     }
+    
+    // MARK: Selection View Controls
     
     
     @IBAction func onSelectionRemoveButtonClicked(_ sender: Any) {
@@ -855,15 +883,27 @@ class ViewController: NSViewController {
     @IBAction func onSelectionCheckAllClicked(_ sender: NSButton) {
         if self.selectionCheckAllBox.state == NSButton.StateValue.on {
             for i in 0...self.selectionViewController.imagesLoader.getItems().count-1 {
-                let itemView = self.selectionCollectionView.item(at: i) as! CollectionViewItem
-                itemView.check()
+                let itemView = self.selectionCollectionView.item(at: i) as? CollectionViewItem
+                if itemView != nil {
+                    itemView!.check()
+                }
             }
         }else {
             for i in 0...self.selectionViewController.imagesLoader.getItems().count-1 {
-                let itemView = self.selectionCollectionView.item(at: i) as! CollectionViewItem
-                itemView.uncheck()
+                let itemView = self.selectionCollectionView.item(at: i) as? CollectionViewItem
+                if itemView != nil {
+                    itemView!.uncheck()
+                }
             }
         }
+    }
+    
+    // MARK: Selection View - Batch Editor - Location Actions
+    
+    @IBAction func onAddressSearcherAction(_ sender: Any) {
+        let address:String = addressSearcher.stringValue
+        if address == "" {return}
+        BaiduLocation.queryForCoordinate(address: address, coordinateConsumer: self)
     }
     
     // from selected image
@@ -923,6 +963,35 @@ class ViewController: NSViewController {
         
     }
     
+    // add to favourites
+    @IBAction func onMarkLocationButtonClicked(_ sender: NSButton) {
+        self.createPlacePopover()
+        
+        let cellRect = sender.bounds
+        self.placePopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
+    }
+    
+    func createPlacePopover(){
+        var myPopover = self.placePopover
+        if(myPopover == nil){
+            myPopover = NSPopover()
+            
+            let frame = CGRect(origin: .zero, size: CGSize(width: 852, height: 440))
+            self.placeViewController = PlaceListViewController()
+            self.placeViewController.view.frame = frame
+            self.placeViewController.refreshDelegate = self
+            
+            myPopover!.contentViewController = self.placeViewController
+            myPopover!.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
+            //myPopover!.animates = true
+            myPopover!.delegate = self
+            myPopover!.behavior = NSPopover.Behavior.transient
+        }
+        self.placePopover = myPopover
+    }
+    
+    // MARK: Selection View - Batch Editor - DateTime Actions
+    
     @IBAction func onReplaceDateClicked(_ sender: Any) {
         guard self.selectionViewController.imagesLoader.getItems().count > 0 else {return}
         let accumulator:Accumulator = Accumulator(target: self.selectionViewController.imagesLoader.getItems().count, indicator: self.batchEditIndicator, suspended: false, lblMessage: nil)
@@ -944,6 +1013,8 @@ class ViewController: NSViewController {
         self.selectionCollectionView.reloadData()
     }
     
+    // MARK: Selection View - Batch Editor - Event Actions
+    
     // add to favourites
     @IBAction func onAddEventButtonClicked(_ sender: NSButton) {
         self.createEventPopover()
@@ -953,39 +1024,43 @@ class ViewController: NSViewController {
     }
     
     @IBAction func onAssignEventButtonClicked(_ sender: Any) {
+        print("CLICKED ASSIGN EVENT BUTTON")
+        print(self.selectionViewController.imagesLoader.getItems().count)
+        print(self.comboEventList.stringValue)
         guard self.selectionViewController.imagesLoader.getItems().count > 0 else {return}
-        guard self.comboEventList.indexOfSelectedItem >= 0 else {return}
-        let event:PhotoEvent = self.eventListController.events[self.comboEventList.indexOfSelectedItem]
-        let accumulator:Accumulator = Accumulator(target: self.selectionViewController.imagesLoader.getItems().count, indicator: self.batchEditIndicator, suspended: false, lblMessage: nil)
-        for item:ImageFile in self.selectionViewController.imagesLoader.getItems() {
-            let url:URL = item.url as URL
-            let imageType = url.imageType()
-            if imageType == .photo || imageType == .video {
-                print("assigning event: \(event.name)")
-                item.assignEvent(event: event)
-                //ExifTool.helper.assignKeyValueForImage(key: "Event", value: "some event", url: url)
-            }
-            let _ = accumulator.add()
-        }
-        ModelStore.save()
-    }
-    
-    // add to favourites
-    @IBAction func onMarkLocationButtonClicked(_ sender: NSButton) {
-        self.createPlacePopover()
+        guard self.comboEventList.stringValue != "" else {return}
         
-        let cellRect = sender.bounds
-        self.placePopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
-    }
-    
-    private func dialogOKCancel(question: String, text: String) -> Bool {
-        let alert = NSAlert()
-        alert.messageText = question
-        alert.informativeText = text
-        alert.alertStyle = .warning
-        alert.addButton(withTitle: "OK")
-        alert.addButton(withTitle: "Cancel")
-        return alert.runModal() == .alertFirstButtonReturn
+        let accumulator:Accumulator = Accumulator(target: self.selectionViewController.imagesLoader.getItems().count, indicator: self.batchEditIndicator, suspended: false, lblMessage: nil, onCompleted:{ data in
+            //self.refreshCollection()
+            
+            self.imagesLoader.reorganizeItems(considerPlaces: true)
+            self.collectionView.reloadData()
+            
+            self.refreshTree()
+        })
+        accumulator.reset()
+        
+        var event:PhotoEvent? = nil
+        for ev in self.eventListController.events {
+            if ev.name == self.comboEventList.stringValue {
+                event = ev
+                break
+            }
+        }
+        if let event = event {
+            //print("PREPARE TO ASSIGN EVENT \(event.name)")
+            for item:ImageFile in self.selectionViewController.imagesLoader.getItems() {
+                let url:URL = item.url as URL
+                let imageType = url.imageType()
+                if imageType == .photo || imageType == .video {
+                    //print("assigning event: \(event.name)")
+                    item.assignEvent(event: event)
+                    //ExifTool.helper.assignKeyValueForImage(key: "Event", value: "some event", url: url)
+                    item.save()
+                }
+                let _ = accumulator.add()
+            }
+        }
     }
     
     func createEventPopover(){
@@ -1007,24 +1082,7 @@ class ViewController: NSViewController {
         self.eventPopover = myPopover
     }
     
-    func createPlacePopover(){
-        var myPopover = self.placePopover
-        if(myPopover == nil){
-            myPopover = NSPopover()
-            
-            let frame = CGRect(origin: .zero, size: CGSize(width: 852, height: 440))
-            self.placeViewController = PlaceListViewController()
-            self.placeViewController.view.frame = frame
-            self.placeViewController.refreshDelegate = self
-            
-            myPopover!.contentViewController = self.placeViewController
-            myPopover!.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
-            //myPopover!.animates = true
-            myPopover!.delegate = self
-            myPopover!.behavior = NSPopover.Behavior.transient
-        }
-        self.placePopover = myPopover
-    }
+    // MARK: Selection View - Batch Editor - Show/Hide Controls
     
     @IBAction func onButtonHideClicked(_ sender: Any) {
         guard self.selectionViewController.imagesLoader.getItems().count > 0 else {return}
@@ -1052,6 +1110,18 @@ class ViewController: NSViewController {
         self.selectionCollectionView.reloadData()
         self.imagesLoader.reorganizeItems()
         self.collectionView.reloadData()
+    }
+    
+    // MARK: Common Dialog
+    
+    private func dialogOKCancel(question: String, text: String) -> Bool {
+        let alert = NSAlert()
+        alert.messageText = question
+        alert.informativeText = text
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "OK")
+        alert.addButton(withTitle: "Cancel")
+        return alert.runModal() == .alertFirstButtonReturn
     }
     
     
@@ -1148,6 +1218,7 @@ extension ViewController : PlaceListRefreshDelegate{
         self.placeListController.working = true
         self.comboPlaceList.stringValue = name
         self.possibleLocation = location
+        self.possibleLocation?.place = name
         self.possibleLocationText.stringValue = name
         BaiduLocation.queryForMap(coordinateBD: location.coordinateBD!, view: webPossibleLocation, zoom: zoomSizeForPossibleAddress)
         self.placeListController.working = false

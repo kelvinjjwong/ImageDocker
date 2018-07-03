@@ -19,7 +19,7 @@ class Accumulator : NSObject {
     private let indicator:NSProgressIndicator?
     private let lblMessage:NSTextField?
     private var hasOnCompleted:Bool = false
-    private var onCompleted:() -> Void
+    private var onCompleted:(_ data:[String:Int]) -> Void
     private var onDataChanged:(() -> Void)?
     private var isDataChanged:Bool = false
     
@@ -28,7 +28,7 @@ class Accumulator : NSObject {
         self._target = target
         self.indicator = indicator
         self.lblMessage = lblMessage
-        self.onCompleted = {
+        self.onCompleted = { _ in
             // nothing
         }
         if indicator != nil {
@@ -46,7 +46,7 @@ class Accumulator : NSObject {
         }
     }
     
-    init(target:Int, indicator:NSProgressIndicator? = nil, suspended:Bool = false, lblMessage:NSTextField? = nil, presetAddingMessage:String? = nil, presetCompleteMessage:String? = nil, onCompleted: @escaping () -> Void, onDataChanged: (() -> Void)? = nil){
+    init(target:Int, indicator:NSProgressIndicator? = nil, suspended:Bool = false, lblMessage:NSTextField? = nil, presetAddingMessage:String? = nil, presetCompleteMessage:String? = nil, onCompleted: @escaping (_ data:[String:Int]) -> Void, onDataChanged: (() -> Void)? = nil){
         count = 0
         self._target = target
         self.indicator = indicator
@@ -69,6 +69,12 @@ class Accumulator : NSObject {
                 lblMessage?.stringValue = ""
             }
         }
+    }
+    
+    private var data:[String:Int] = [:]
+    
+    func assignData(key:String, value:Int){
+        data[key] = value
     }
     
     func add(_ message:String = "") -> Bool{
@@ -130,7 +136,7 @@ class Accumulator : NSObject {
             }
             if self.hasOnCompleted {
                 print("\(Date()) ACCUMULATOR INVOKING ON COMPLETED CLOSURE")
-                self.onCompleted()
+                self.onCompleted(self.data)
             }
             
             if self.isDataChanged && self.onDataChanged != nil {
