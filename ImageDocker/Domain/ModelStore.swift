@@ -116,9 +116,10 @@ class ModelStore {
             }
             let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
             req.predicate = NSPredicate(format: "photoTakenDate == %@ && place == %@", dup.date as NSDate, dup.place)
-            let photos = try! moc.fetch(req)
-            for photo in photos {
-                duplicates.paths.append(photo.path ?? "")
+            if let photos = try? moc.fetch(req) {
+                for photo in photos {
+                    duplicates.paths.append(photo.path ?? "")
+                }
             }
         }
         
@@ -168,7 +169,115 @@ class ModelStore {
         
     }
     
-    static func getAllDates(groupByPlace:Bool = false, in moc : NSManagedObjectContext? = nil) -> [[String:AnyObject]]? {
+    static func getImageSources() -> [String:Bool]{
+        return listPhotoFileField(field: "imageSource")
+    }
+    
+    static func getCameraModel() -> [String:Bool] {
+        return listPhotoFile2Fields(field1: "cameraMaker", field2: "cameraModel")
+    }
+    
+    static func listPhotoFileField(field:String, in moc : NSManagedObjectContext? = nil) -> [String:Bool] {
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        var expressionDescriptions = [AnyObject]()
+        expressionDescriptions.append(field as AnyObject)
+        
+        let keypathExp = NSExpression(forKeyPath: "path") // can be any column
+        let expression = NSExpression(forFunction: "count:", arguments: [keypathExp])
+        
+        let expressionDescription = NSExpressionDescription()
+        expressionDescription.name = "photoCount"
+        expressionDescription.expression = expression
+        expressionDescription.expressionResultType = .integer64AttributeType
+        expressionDescriptions.append(expressionDescription)
+        
+        
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "PhotoFile")
+        request.returnsObjectsAsFaults = false
+        request.propertiesToGroupBy = [field]
+        request.resultType = .dictionaryResultType
+        request.sortDescriptors = [
+            NSSortDescriptor(key: field, ascending: true)
+        ]
+        request.propertiesToFetch = expressionDescriptions
+        
+        var results:[String:Bool] = [:]
+        var records:[[String:AnyObject]]?
+        
+        // Perform the fetch. This is using Swfit 2, so we need a do/try/catch
+        do {
+            records = try moc.fetch(request) as? [[String:AnyObject]]
+            if records != nil {
+                for record in records! {
+                    if let name = record[field] as? String {
+                        results[name] = false
+                    }
+                }
+            }
+            //print(results)
+        } catch{
+            // If it fails, ensure the array is nil
+            print(error)
+        }
+        
+        return results
+        
+    }
+    
+    static func listPhotoFile2Fields(field1:String, field2:String, in moc : NSManagedObjectContext? = nil) -> [String:Bool] {
+        let moc = moc ?? AppDelegate.current.managedObjectContext
+        
+        var expressionDescriptions = [AnyObject]()
+        expressionDescriptions.append(field1 as AnyObject)
+        expressionDescriptions.append(field2 as AnyObject)
+        
+        let keypathExp = NSExpression(forKeyPath: "path") // can be any column
+        let expression = NSExpression(forFunction: "count:", arguments: [keypathExp])
+        
+        let expressionDescription = NSExpressionDescription()
+        expressionDescription.name = "photoCount"
+        expressionDescription.expression = expression
+        expressionDescription.expressionResultType = .integer64AttributeType
+        expressionDescriptions.append(expressionDescription)
+        
+        
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "PhotoFile")
+        request.returnsObjectsAsFaults = false
+        request.propertiesToGroupBy = [field1, field2]
+        request.resultType = .dictionaryResultType
+        request.sortDescriptors = [
+            NSSortDescriptor(key: field1, ascending: true),
+            NSSortDescriptor(key: field2, ascending: true)
+        ]
+        request.propertiesToFetch = expressionDescriptions
+        
+        var results:[String:Bool] = [:]
+        var records:[[String:AnyObject]]?
+        
+        // Perform the fetch. This is using Swfit 2, so we need a do/try/catch
+        do {
+            records = try moc.fetch(request) as? [[String:AnyObject]]
+            if records != nil {
+                for record in records! {
+                    let name1 = record[field1] as? String ?? ""
+                    let name2 = record[field2] as? String ?? ""
+                    if name1 != "" && name2 != "" {
+                        results["\(name1),\(name2)"] = false
+                    }
+                }
+            }
+            //print(results)
+        } catch{
+            // If it fails, ensure the array is nil
+            print(error)
+        }
+        
+        return results
+        
+    }
+    
+    static func getAllDates(groupByPlace:Bool = false, imageSource:[String]? = nil, cameraModel:[String]? = nil, in moc : NSManagedObjectContext? = nil) -> [[String:AnyObject]]? {
         let moc = moc ?? AppDelegate.current.managedObjectContext
         
         var expressionDescriptions = [AnyObject]()
@@ -204,6 +313,15 @@ class ModelStore {
         if groupByPlace {
             request.sortDescriptors?.insert(NSSortDescriptor(key: "place", ascending: true), at: 0)
         }
+        if imageSource != nil && (imageSource?.count)! > 0 && (cameraModel == nil || cameraModel?.count == 0 ) {
+            request.predicate = NSPredicate(format: "imageSource in %@", imageSource!)
+        }
+        if cameraModel != nil && (cameraModel?.count)! > 0 && (imageSource == nil || imageSource?.count == 0 ) {
+            request.predicate = NSPredicate(format: "cameraModel in %@", cameraModel!)
+        }
+        if cameraModel != nil && (cameraModel?.count)! > 0 && imageSource != nil && (imageSource?.count)! > 0 {
+            request.predicate = NSPredicate(format: "cameraModel in %@ && imageSource in %@", cameraModel!, imageSource!)
+        }
         request.propertiesToFetch = expressionDescriptions
         
         
@@ -224,7 +342,7 @@ class ModelStore {
     
     
     
-    static func getAllEvents(in moc : NSManagedObjectContext? = nil) -> [[String:AnyObject]]? {
+    static func getAllEvents(imageSource:[String]? = nil, cameraModel:[String]? = nil, in moc : NSManagedObjectContext? = nil) -> [[String:AnyObject]]? {
         let moc = moc ?? AppDelegate.current.managedObjectContext
         
         var expressionDescriptions = [AnyObject]()
@@ -255,6 +373,17 @@ class ModelStore {
             NSSortDescriptor(key: "photoTakenDay", ascending: false),
             NSSortDescriptor(key: "place", ascending: true)
         ]
+        
+        if imageSource != nil && (imageSource?.count)! > 0 && (cameraModel == nil || cameraModel?.count == 0 ) {
+            request.predicate = NSPredicate(format: "imageSource in %@", imageSource!)
+        }
+        if cameraModel != nil && (cameraModel?.count)! > 0 && (imageSource == nil || imageSource?.count == 0 ) {
+            request.predicate = NSPredicate(format: "cameraModel in %@", cameraModel!)
+        }
+        if cameraModel != nil && (cameraModel?.count)! > 0 && imageSource != nil && (imageSource?.count)! > 0 {
+            request.predicate = NSPredicate(format: "cameraModel in %@ && imageSource in %@", cameraModel!, imageSource!)
+        }
+        
         request.propertiesToFetch = expressionDescriptions
         
         
@@ -374,7 +503,7 @@ class ModelStore {
         return try! moc.fetch(req)
     }
     
-    static func getPhotoFiles(year:Int, month:Int, day:Int, place:String?, includeHidden:Bool = true, in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
+    static func getPhotoFiles(year:Int, month:Int, day:Int, place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
         let moc = moc ?? AppDelegate.current.managedObjectContext
         
         let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
@@ -383,36 +512,58 @@ class ModelStore {
         if !includeHidden {
             otherPredicate = " && (hidden == nil || hidden == false)"
         }
+        
+        var basePredicate:NSPredicate? = nil
+        
         if place == nil {
             if year == 0 && month == 0 && day == 0 {
-                req.predicate = NSPredicate(format: "photoTakenYear == 0 && photoTakenMonth == 0 && photoTakenDay == 0 \(otherPredicate)")
+                basePredicate = NSPredicate(format: "photoTakenYear == 0 && photoTakenMonth == 0 && photoTakenDay == 0 \(otherPredicate)")
             }else{
                 if year == 0 {
                     // no condition
                 } else if month == 0 {
-                    req.predicate = NSPredicate(format: "photoTakenYear == %@ \(otherPredicate)", NSNumber(value: year))
+                    basePredicate = NSPredicate(format: "photoTakenYear == %@ \(otherPredicate)", NSNumber(value: year))
                 } else if day == 0 {
-                    req.predicate = NSPredicate(format: "photoTakenYear == %@ && photoTakenMonth == %@ \(otherPredicate)", NSNumber(value: year), NSNumber(value: month))
+                    basePredicate = NSPredicate(format: "photoTakenYear == %@ && photoTakenMonth == %@ \(otherPredicate)", NSNumber(value: year), NSNumber(value: month))
                 } else {
-                    req.predicate = NSPredicate(format: "photoTakenYear == %@ && photoTakenMonth == %@ && photoTakenDay == %@ \(otherPredicate)", NSNumber(value: year), NSNumber(value: month), NSNumber(value: day))
+                    basePredicate = NSPredicate(format: "photoTakenYear == %@ && photoTakenMonth == %@ && photoTakenDay == %@ \(otherPredicate)", NSNumber(value: year), NSNumber(value: month), NSNumber(value: day))
                 }
             }
         } else {
             if year == 0 && month == 0 && day == 0 {
-                req.predicate = NSPredicate(format: "photoTakenYear == 0 && photoTakenMonth == 0 && photoTakenDay == 0 && place == %@ \(otherPredicate)", place!)
+                basePredicate = NSPredicate(format: "photoTakenYear == 0 && photoTakenMonth == 0 && photoTakenDay == 0 && place == %@ \(otherPredicate)", place!)
             }else{
                 if year == 0 {
-                    req.predicate = NSPredicate(format: "place == %@ \(otherPredicate)", place!)
+                    basePredicate = NSPredicate(format: "place == %@ \(otherPredicate)", place!)
                 } else if month == 0 {
-                    req.predicate = NSPredicate(format: "place == %@ && photoTakenYear == %@ \(otherPredicate)", place!, NSNumber(value: year))
+                    basePredicate = NSPredicate(format: "place == %@ && photoTakenYear == %@ \(otherPredicate)", place!, NSNumber(value: year))
                 } else if day == 0 {
-                    req.predicate = NSPredicate(format: "place == %@ && photoTakenYear == %@ && photoTakenMonth == %@ \(otherPredicate)", place!, NSNumber(value: year), NSNumber(value: month))
+                    basePredicate = NSPredicate(format: "place == %@ && photoTakenYear == %@ && photoTakenMonth == %@ \(otherPredicate)", place!, NSNumber(value: year), NSNumber(value: month))
                 } else {
-                    req.predicate = NSPredicate(format: "place == %@ && photoTakenYear == %@ && photoTakenMonth == %@ && photoTakenDay == %@ \(otherPredicate)", place!, NSNumber(value: year), NSNumber(value: month), NSNumber(value: day))
+                    basePredicate = NSPredicate(format: "place == %@ && photoTakenYear == %@ && photoTakenMonth == %@ && photoTakenDay == %@ \(otherPredicate)", place!, NSNumber(value: year), NSNumber(value: month), NSNumber(value: day))
                 }
             }
             
         }
+        
+        var filterPredicate:NSPredicate? = nil
+        
+        if imageSource != nil && (imageSource?.count)! > 0 && (cameraModel == nil || cameraModel?.count == 0 ) {
+            filterPredicate = NSPredicate(format: "imageSource in %@", imageSource!)
+        }
+        if cameraModel != nil && (cameraModel?.count)! > 0 && (imageSource == nil || imageSource?.count == 0 ) {
+            filterPredicate = NSPredicate(format: "cameraModel in %@", cameraModel!)
+        }
+        if cameraModel != nil && (cameraModel?.count)! > 0 && imageSource != nil && (imageSource?.count)! > 0 {
+            filterPredicate = NSPredicate(format: "cameraModel in %@ && imageSource in %@", cameraModel!, imageSource!)
+        }
+        
+        if filterPredicate == nil {
+            req.predicate = basePredicate!
+        }else{
+            req.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [basePredicate!, filterPredicate!])
+        }
+        
         req.sortDescriptors = [NSSortDescriptor(key: "photoTakenDate", ascending: true),
                                NSSortDescriptor(key: "filename", ascending: true)]
         return try! moc.fetch(req)
@@ -420,7 +571,7 @@ class ModelStore {
     
     
     
-    static func getPhotoFiles(year:Int, month:Int, day:Int, event:String, place:String, includeHidden:Bool = true, in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
+    static func getPhotoFiles(year:Int, month:Int, day:Int, event:String, place:String, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, in moc : NSManagedObjectContext? = nil) -> [PhotoFile] {
         let moc = moc ?? AppDelegate.current.managedObjectContext
         
         let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
@@ -429,13 +580,35 @@ class ModelStore {
         if !includeHidden {
             otherPredicate = " && (hidden == nil || hidden == false)"
         }
+        
+        var basePredicate:NSPredicate? = nil
+        
         if year == 0 {
-            req.predicate = NSPredicate(format: "event == %@ \(otherPredicate)", event)
+            basePredicate = NSPredicate(format: "event == %@ \(otherPredicate)", event)
         } else if day == 0 {
-            req.predicate = NSPredicate(format: "event == %@ && photoTakenYear == %@ && photoTakenMonth == %@ \(otherPredicate)", event, NSNumber(value: year), NSNumber(value: month))
+            basePredicate = NSPredicate(format: "event == %@ && photoTakenYear == %@ && photoTakenMonth == %@ \(otherPredicate)", event, NSNumber(value: year), NSNumber(value: month))
         } else {
-            req.predicate = NSPredicate(format: "event == %@ && photoTakenYear == %@ && photoTakenMonth == %@ && photoTakenDay == %@ && place == %@ \(otherPredicate)", event, NSNumber(value: year), NSNumber(value: month), NSNumber(value: day), place)
+            basePredicate = NSPredicate(format: "event == %@ && photoTakenYear == %@ && photoTakenMonth == %@ && photoTakenDay == %@ && place == %@ \(otherPredicate)", event, NSNumber(value: year), NSNumber(value: month), NSNumber(value: day), place)
         }
+        
+        var filterPredicate:NSPredicate? = nil
+        
+        if imageSource != nil && (imageSource?.count)! > 0 && (cameraModel == nil || cameraModel?.count == 0 ) {
+            filterPredicate = NSPredicate(format: "imageSource in %@", imageSource!)
+        }
+        if cameraModel != nil && (cameraModel?.count)! > 0 && (imageSource == nil || imageSource?.count == 0 ) {
+            filterPredicate = NSPredicate(format: "cameraModel in %@", cameraModel!)
+        }
+        if cameraModel != nil && (cameraModel?.count)! > 0 && imageSource != nil && (imageSource?.count)! > 0 {
+            filterPredicate = NSPredicate(format: "cameraModel in %@ && imageSource in %@", cameraModel!, imageSource!)
+        }
+        
+        if filterPredicate == nil {
+            req.predicate = basePredicate!
+        }else{
+            req.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [basePredicate!, filterPredicate!])
+        }
+        
         req.sortDescriptors = [NSSortDescriptor(key: "photoTakenDate", ascending: true),
                                NSSortDescriptor(key: "filename", ascending: true)]
         return try! moc.fetch(req)

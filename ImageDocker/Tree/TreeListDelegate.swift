@@ -55,7 +55,7 @@ extension ViewController {
     }
     
     func loadEventsToTreeFromDatabase() {
-        let dates:[[String : AnyObject]]? = ModelStore.getAllEvents()
+        let dates:[[String : AnyObject]]? = ModelStore.getAllEvents(imageSource: filterImageSource, cameraModel: filterCameraModel)
         if dates != nil {
             let events:[Event] = Events().read(dates!)
             for event in events {
@@ -76,8 +76,8 @@ extension ViewController {
         }
     }
     
-    func loadMomentsToTreeFromDatabase(groupByPlace:Bool = false){
-        let dates:[[String : AnyObject]]? = ModelStore.getAllDates(groupByPlace: groupByPlace)
+    func loadMomentsToTreeFromDatabase(groupByPlace:Bool = false, filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil){
+        let dates:[[String : AnyObject]]? = ModelStore.getAllDates(groupByPlace: groupByPlace, imageSource: filterImageSource, cameraModel: filterCameraModel)
         if dates != nil {
             let moments:[Moment] = Moments().read(dates!, groupByPlace: groupByPlace)
             
@@ -248,7 +248,7 @@ extension ViewController {
                                         withAnimation: NSTableView.AnimationOptions.slideUp)
         }
         self.momentItem().children.removeAll()
-        self.loadMomentsToTreeFromDatabase(groupByPlace: false)
+        self.loadMomentsToTreeFromDatabase(groupByPlace: false, filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel)
         self.sourceList.reloadData()
         
         
@@ -293,7 +293,7 @@ extension ViewController {
                                         withAnimation: NSTableView.AnimationOptions.slideUp)
         }
         self.placeItem().children.removeAll()
-        self.loadMomentsToTreeFromDatabase(groupByPlace: true)
+        self.loadMomentsToTreeFromDatabase(groupByPlace: true, filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel)
         self.sourceList.reloadData()
     }
     

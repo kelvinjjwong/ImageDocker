@@ -34,6 +34,8 @@ struct CollectionViewLastRequest {
     var day:Int? = nil
     var event:String? = nil
     var place:String? = nil
+    var imageSource:[String]? = nil
+    var cameraModel:[String]? = nil
 }
 
 class CollectionViewItemsLoader: NSObject {
@@ -83,7 +85,7 @@ class CollectionViewItemsLoader: NSObject {
         }
     }
     
-    func load(year:Int, month:Int, day:Int, place:String?, indicator:Accumulator? = nil) {
+    func load(year:Int, month:Int, day:Int, place:String?, filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil, indicator:Accumulator? = nil) {
         loading = true
         
         lastRequest.loadSource = .moment
@@ -92,11 +94,13 @@ class CollectionViewItemsLoader: NSObject {
         lastRequest.day = day
         lastRequest.place = place
         lastRequest.indicator = indicator
+        lastRequest.imageSource = filterImageSource
+        lastRequest.cameraModel = filterCameraModel
         
         self.indicator = indicator
         
         //var urls: [URL] = []
-        let photoFiles = ModelStore.getPhotoFiles(year: year, month: month, day: day, place: place, includeHidden: showHidden)
+        let photoFiles = ModelStore.getPhotoFiles(year: year, month: month, day: day, place: place, includeHidden: showHidden, imageSource: filterImageSource, cameraModel: filterCameraModel)
         //print("GOT PHOTOS for year:\(year) month:\(month) day:\(day) place:\(place) count \(photoFiles.count)")
         //for photoFile in photoFiles {
         //    urls.append(URL(fileURLWithPath: photoFile.path!))
@@ -105,7 +109,7 @@ class CollectionViewItemsLoader: NSObject {
         
     }
     
-    func load(year:Int, month:Int, day:Int, event:String, place:String, indicator:Accumulator? = nil) {
+    func load(year:Int, month:Int, day:Int, event:String, place:String, filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil, indicator:Accumulator? = nil) {
         loading = true
         
         lastRequest.loadSource = .event
@@ -115,11 +119,13 @@ class CollectionViewItemsLoader: NSObject {
         lastRequest.place = place
         lastRequest.event = event
         lastRequest.indicator = indicator
+        lastRequest.imageSource = filterImageSource
+        lastRequest.cameraModel = filterCameraModel
         
         self.indicator = indicator
         
         //var urls: [URL] = []
-        let photoFiles = ModelStore.getPhotoFiles(year: year, month: month, day: day, event: event, place:place, includeHidden: showHidden)
+        let photoFiles = ModelStore.getPhotoFiles(year: year, month: month, day: day, event: event, place:place, includeHidden: showHidden, imageSource: filterImageSource, cameraModel: filterCameraModel)
         //print("GOT PHOTOS for year:\(year) month:\(month) day:\(day) event:\(event) place:\(place) count \(photoFiles.count)")
         //for photoFile in photoFiles {
         //    urls.append(URL(fileURLWithPath: photoFile.path!))
@@ -136,9 +142,9 @@ class CollectionViewItemsLoader: NSObject {
         if lastRequest.loadSource == .repository {
             self.load(from: lastRequest.folderURL!, indicator: lastRequest.indicator)
         }else if lastRequest.loadSource == .moment {
-            self.load(year: lastRequest.year!, month: lastRequest.month!, day: lastRequest.day!, place: lastRequest.place, indicator: lastRequest.indicator)
+            self.load(year: lastRequest.year!, month: lastRequest.month!, day: lastRequest.day!, place: lastRequest.place, filterImageSource: lastRequest.imageSource, filterCameraModel: lastRequest.cameraModel, indicator: lastRequest.indicator)
         }else if lastRequest.loadSource == .event {
-            self.load(year: lastRequest.year!, month: lastRequest.month!, day: lastRequest.day!, event: lastRequest.event!, place: lastRequest.place!, indicator: lastRequest.indicator)
+            self.load(year: lastRequest.year!, month: lastRequest.month!, day: lastRequest.day!, event: lastRequest.event!, place: lastRequest.place!, filterImageSource: lastRequest.imageSource, filterCameraModel: lastRequest.cameraModel, indicator: lastRequest.indicator)
         }
     }
     

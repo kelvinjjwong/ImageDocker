@@ -27,6 +27,8 @@
 		8E85B7D420BA2AD7005A9845 /* DarkSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7D320BA2AD7005A9845 /* DarkSplitView.swift */; };
 		8E85B7D620BD9FD9005A9845 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7D520BD9FD9005A9845 /* Location.swift */; };
 		8E85B7DA20BE2515005A9845 /* LocationTextDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7D920BE2515005A9845 /* LocationTextDelegate.swift */; };
+		8E95739A20EBEBD7003BD651 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E95739820EBEBD7003BD651 /* FilterViewController.swift */; };
+		8E95739B20EBEBD7003BD651 /* FilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E95739920EBEBD7003BD651 /* FilterViewController.xib */; };
 		8E98B8F020D0EE3300771280 /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E98B8EE20D0EE3300771280 /* PlaceListViewController.swift */; };
 		8E98B8F120D0EE3300771280 /* PlaceListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E98B8EF20D0EE3300771280 /* PlaceListViewController.xib */; };
 		8E98B8F320D5C90600771280 /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E98B8F220D5C90600771280 /* WindowController.swift */; };
@@ -111,6 +113,8 @@
 		8E85B7D320BA2AD7005A9845 /* DarkSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkSplitView.swift; sourceTree = "<group>"; };
 		8E85B7D520BD9FD9005A9845 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		8E85B7D920BE2515005A9845 /* LocationTextDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTextDelegate.swift; sourceTree = "<group>"; };
+		8E95739820EBEBD7003BD651 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
+		8E95739920EBEBD7003BD651 /* FilterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FilterViewController.xib; sourceTree = "<group>"; };
 		8E98B8EE20D0EE3300771280 /* PlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
 		8E98B8EF20D0EE3300771280 /* PlaceListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaceListViewController.xib; sourceTree = "<group>"; };
 		8E98B8F220D5C90600771280 /* WindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowController.swift; sourceTree = "<group>"; };
@@ -352,6 +356,8 @@
 				8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */,
 				8E98B8EE20D0EE3300771280 /* PlaceListViewController.swift */,
 				8E98B8EF20D0EE3300771280 /* PlaceListViewController.xib */,
+				8E95739820EBEBD7003BD651 /* FilterViewController.swift */,
+				8E95739920EBEBD7003BD651 /* FilterViewController.xib */,
 			);
 			path = Popover;
 			sourceTree = "<group>";
@@ -508,6 +514,7 @@
 				8E98B8F120D0EE3300771280 /* PlaceListViewController.xib in Resources */,
 				8EE1AB3E20D05E49001C75B0 /* EventListViewController.xib in Resources */,
 				8E0AFA44208BDEA100CE8B68 /* Main.storyboard in Resources */,
+				8E95739B20EBEBD7003BD651 /* FilterViewController.xib in Resources */,
 				8EB986BE20B30C920075B081 /* CollectionViewItem.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -584,6 +591,7 @@
 				8E98B8F920D7950E00771280 /* ExportManager.swift in Sources */,
 				8EF32D142095355400511538 /* LCSourceListTableCellView.swift in Sources */,
 				8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */,
+				8E95739A20EBEBD7003BD651 /* FilterViewController.swift in Sources */,
 				8E0EAE9A209D2623008C377F /* ImageFolderTreeScanner.swift in Sources */,
 				8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */,
 				8E85B7CF20B8786C005A9845 /* Accumulator.swift in Sources */,

@@ -96,6 +96,8 @@ class ViewController: NSViewController {
     @IBOutlet weak var btnAddRepository: NSButton!
     @IBOutlet weak var btnRemoveRepository: NSButton!
     @IBOutlet weak var btnRefreshRepository: NSButton!
+    @IBOutlet weak var btnFilterRepository: NSButton!
+    
     
     @IBOutlet weak var lblExportMessage: NSTextField!
     
@@ -143,6 +145,9 @@ class ViewController: NSViewController {
     
     var placePopover:NSPopover?
     var placeViewController:PlaceListViewController!
+    
+    var filterPopover:NSPopover?
+    var filterViewController:FilterViewController!
     
     @IBOutlet weak var comboEventList: NSComboBox!
     @IBOutlet weak var comboPlaceList: NSComboBox!
@@ -278,6 +283,7 @@ class ViewController: NSViewController {
         self.btnReplaceLocation.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnRemoveRepository.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnRefreshRepository.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.btnFilterRepository.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnRefreshCollectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
         self.comboEventList.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -546,11 +552,11 @@ class ViewController: NSViewController {
             //print("GETTING COLLECTION \(collection.year) \(collection.month) \(collection.day) \(collection.place ?? "")")
             if self.imagesLoader.isLoading() {
                 self.imagesLoader.cancel(onCancelled: {
-                    self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, place: groupByPlace ? collection.place : nil, indicator:self.collectionLoadingIndicator)
+                    self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, place: groupByPlace ? collection.place : nil, filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel, indicator:self.collectionLoadingIndicator)
                     self.refreshCollectionView()
                 })
             }else{
-                self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, place: groupByPlace ? collection.place : nil, indicator:self.collectionLoadingIndicator)
+                self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, place: groupByPlace ? collection.place : nil, filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel,  indicator:self.collectionLoadingIndicator)
                 self.refreshCollectionView()
             }
             
@@ -574,11 +580,11 @@ class ViewController: NSViewController {
                 })
             if self.imagesLoader.isLoading() {
                 self.imagesLoader.cancel(onCancelled: {
-                    self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, event: collection.event, place: collection.place, indicator:self.collectionLoadingIndicator)
+                    self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, event: collection.event, place: collection.place, filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel, indicator:self.collectionLoadingIndicator)
                     self.refreshCollectionView()
                 })
             }else{
-                self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, event: collection.event, place: collection.place, indicator:self.collectionLoadingIndicator)
+                self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, event: collection.event, place: collection.place, filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel, indicator:self.collectionLoadingIndicator)
                 self.refreshCollectionView()
             }
             
@@ -717,6 +723,38 @@ class ViewController: NSViewController {
         self.refreshTree()
     }
     
+    var filterImageSource:[String] = []
+    var filterCameraModel:[String] = []
+    
+    @IBAction func onFilterButtonClicked(_ sender: NSButton) {
+        self.createFilterPopover()
+        
+        let cellRect = sender.bounds
+        self.filterPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
+    }
+    
+    func createFilterPopover(){
+        var myPopover = self.filterPopover
+        if(myPopover == nil){
+            myPopover = NSPopover()
+            
+            let frame = CGRect(origin: .zero, size: CGSize(width: 500, height: 300))
+            self.filterViewController = FilterViewController(onApply: { (imageSources, cameraModels) in
+                self.filterImageSource = imageSources
+                self.filterCameraModel = cameraModels
+                self.refreshTree()
+            })
+            self.filterViewController.view.frame = frame
+            //self.filterViewController.refreshDelegate = self
+            
+            myPopover!.contentViewController = self.filterViewController
+            myPopover!.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
+            //myPopover!.animates = true
+            myPopover!.delegate = self
+            myPopover!.behavior = NSPopover.Behavior.transient
+        }
+        self.filterPopover = myPopover
+    }
     
     @IBAction func onCheckScanClicked(_ sender: NSButton) {
         if self.chbScan.state == NSButton.StateValue.on {

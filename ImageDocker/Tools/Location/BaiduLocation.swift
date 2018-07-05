@@ -48,14 +48,14 @@ final class BaiduLocation {
     public static func queryForCoordinate(address:String, coordinateConsumer: CoordinateConsumer){
         let urlString:String = BaiduLocation.urlForCoordinate(address: address)
         //print(urlString)
-        //print(urlString)
+        print(urlString)
         let requestUrl:URL = URL(string:urlString)!
         let request = URLRequest(url:requestUrl)
         let task = URLSession.shared.dataTask(with: request) {
             (data, response, error) in
             if error == nil, let usableData = data {
                 let dataStr:String = String(data: usableData, encoding: String.Encoding.utf8)!
-                //print(dataStr)
+                print(dataStr)
                 let json:JSON = JSON(parseJSON: dataStr)
                 if json != JSON(NSNull()) {
                     let status:Int = json["status"].intValue
