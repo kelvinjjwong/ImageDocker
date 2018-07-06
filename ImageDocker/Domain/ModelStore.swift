@@ -47,6 +47,7 @@ class ModelStore {
     static var _duplicates:Duplicates? = nil
     
     static func reloadDuplicatePhotos(in moc : NSManagedObjectContext? = nil) {
+        print("\(Date()) Loading duplicate photos from db")
         let duplicates:Duplicates = Duplicates()
         let moc = moc ?? AppDelegate.current.managedObjectContext
         
@@ -56,7 +57,6 @@ class ModelStore {
         expressionDescriptions.append("photoTakenDay" as AnyObject)
         expressionDescriptions.append("photoTakenDate" as AnyObject)
         expressionDescriptions.append("place" as AnyObject)
-        expressionDescriptions.append("event" as AnyObject)
         
         let keypathExp = NSExpression(forKeyPath: "path") // can be any column
         let expression = NSExpression(forFunction: "count:", arguments: [keypathExp])
@@ -69,7 +69,7 @@ class ModelStore {
         
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "PhotoFile")
         request.returnsObjectsAsFaults = false
-        request.propertiesToGroupBy = ["photoTakenDate", "event", "place", "photoTakenDay", "photoTakenMonth", "photoTakenYear"]
+        request.propertiesToGroupBy = ["photoTakenDate", "place", "photoTakenDay", "photoTakenMonth", "photoTakenYear"]
         request.resultType = .dictionaryResultType
         request.propertiesToFetch = expressionDescriptions
         
@@ -84,6 +84,7 @@ class ModelStore {
             results = nil
         }
         
+        var dupDates:[NSDate] = []
         if results != nil {
             for row in results! {
                 let count:Int = row["photoCount"] as! Int
@@ -99,7 +100,7 @@ class ModelStore {
                 dup.day = row["photoTakenDay"] as! Int
                 dup.date = row["photoTakenDate"] as! Date
                 dup.place = row["place"] as! String? ?? ""
-                dup.event = row["event"] as! String? ?? ""
+                //dup.event = row["event"] as! String? ?? ""
                 duplicates.duplicates.append(dup)
                 
                 let monthString = dup.month < 10 ? "0\(dup.month)" : "\(dup.month)"
@@ -109,9 +110,33 @@ class ModelStore {
                 if duplicates.categories.index(where: {$0 == category}) == nil {
                     duplicates.categories.append(category)
                 }
+                
+                dupDates.append(dup.date as NSDate)
             }
         }
         
+        var firstPhotoInPlaceAndDate:[String:String] = [:]
+        var dupPhotos:Set<String> = []
+        print("\(Date()) Marking duplicate tag to photo files")
+        let req = NSFetchRequest<PhotoFile>(entityName: "PhotoFile")
+        req.predicate = NSPredicate(format: "photoTakenDate in %@", dupDates)
+        if let photosInSameDate = try? moc.fetch(req) {
+            for photo in photosInSameDate {
+                if photo.photoTakenYear == 0 {
+                    continue
+                }
+                let key = "\(photo.place ?? "")_\(photo.photoTakenYear)_\(photo.photoTakenMonth)_\(photo.photoTakenDay)"
+                if let first = firstPhotoInPlaceAndDate[key] {
+                    // duplicates
+                    dupPhotos.insert(first)
+                    dupPhotos.insert(photo.path ?? "")
+                }else{
+                    firstPhotoInPlaceAndDate[key] = photo.path ?? ""
+                }
+            }
+        }
+        duplicates.paths = dupPhotos.sorted()
+        /*
         for dup in duplicates.duplicates {
             if dup.year == 0 {
                 continue
@@ -124,7 +149,11 @@ class ModelStore {
                 }
             }
         }
+ */
+        print("\(Date()) Marking duplicate tag to photo files: DONE")
+        
         _duplicates = duplicates
+        print("\(Date()) Loading duplicate photos from db: DONE")
     }
     
     static func getDuplicatePhotos() -> Duplicates {

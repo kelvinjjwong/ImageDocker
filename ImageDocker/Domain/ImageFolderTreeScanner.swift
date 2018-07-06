@@ -52,10 +52,18 @@ class ImageFolderTreeScanner {
         let containers = ModelStore.getAllContainers()
         
         print("\(Date()) Setting up containers' parent ")
+        var urlFolders:[String:ImageFolder] = [:]
         for container in containers {
             let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path!), countOfImages: Int(container.imageCount), updateModelStore: false)
-            if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) {
-                imageFolder.setParent(parent)
+            urlFolders[container.path!] = imageFolder
+            if let containerParentFolder = container.parentFolder { // maybe faster
+                if let parentFolder = urlFolders[containerParentFolder] {
+                    imageFolder.setParent(parentFolder)
+                }
+            }else {
+                if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
+                    imageFolder.setParent(parent)
+                }
             }
             imageFolders.append(imageFolder)
         }
