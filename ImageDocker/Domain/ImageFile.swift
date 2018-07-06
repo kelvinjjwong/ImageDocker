@@ -309,6 +309,12 @@ class ImageFile {
             }
         }
         if imageSource == "" {
+            let parts:[String] = filename.matches(for: "[0-9a-zA-Z]{32}\\.([A-Za-z0-9]{3}+)")
+            if parts.count > 0 {
+                imageSource = "PhoneApp"
+            }
+        }
+        if imageSource == "" {
             let parts:[String] = filename.matches(for: "[0-9A-Z]{8}-[0-9A-Z]{4}-[0-9A-Z]{4}-[0-9A-Z]{4}-[0-9A-Z]{12}-[0-9A-Z]{3}-[0-9A-Z]{16}_tmp\\.([A-Za-z0-9]{3}+)")
             if parts.count > 0 {
                 imageSource = "PhoneApp"

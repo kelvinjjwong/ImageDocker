@@ -214,8 +214,8 @@
                     </tableHeaderView>
                 </scrollView>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8a1-Fa-FTp">
-                    <rect key="frame" x="144" y="1" width="75" height="32"/>
-                    <buttonCell key="cell" type="push" title="Apply" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="yw2-kH-Kje">
+                    <rect key="frame" x="114" y="1" width="109" height="32"/>
+                    <buttonCell key="cell" type="push" title="Apply Filter" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="yw2-kH-Kje">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -224,7 +224,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3kb-kA-xeD">
-                    <rect key="frame" x="260" y="1" width="91" height="32"/>
+                    <rect key="frame" x="290" y="1" width="91" height="32"/>
                     <buttonCell key="cell" type="push" title="Clear All" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="O5E-d0-jp1">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -239,11 +239,11 @@
                 <constraint firstItem="CzJ-Qg-e6n" firstAttribute="top" secondItem="XCi-lD-elH" secondAttribute="top" constant="10" id="6jF-PM-xsS"/>
                 <constraint firstAttribute="bottom" secondItem="8a1-Fa-FTp" secondAttribute="bottom" constant="8" id="6uH-s0-cFJ"/>
                 <constraint firstItem="CzJ-Qg-e6n" firstAttribute="leading" secondItem="ct3-AO-7tF" secondAttribute="trailing" constant="10" id="9W9-x1-5nA"/>
-                <constraint firstAttribute="trailing" secondItem="3kb-kA-xeD" secondAttribute="trailing" constant="150" id="OoE-Ap-vNT"/>
+                <constraint firstAttribute="trailing" secondItem="3kb-kA-xeD" secondAttribute="trailing" constant="120" id="OoE-Ap-vNT"/>
                 <constraint firstAttribute="bottom" secondItem="ct3-AO-7tF" secondAttribute="bottom" constant="40" id="Quv-dS-RJo"/>
                 <constraint firstItem="ct3-AO-7tF" firstAttribute="leading" secondItem="XCi-lD-elH" secondAttribute="leading" constant="10" id="RQb-gd-OdW"/>
                 <constraint firstItem="ct3-AO-7tF" firstAttribute="top" secondItem="XCi-lD-elH" secondAttribute="top" constant="10" id="WHi-WE-6ef"/>
-                <constraint firstItem="8a1-Fa-FTp" firstAttribute="leading" secondItem="XCi-lD-elH" secondAttribute="leading" constant="150" id="kFk-Ab-N5B"/>
+                <constraint firstItem="8a1-Fa-FTp" firstAttribute="leading" secondItem="XCi-lD-elH" secondAttribute="leading" constant="120" id="kFk-Ab-N5B"/>
                 <constraint firstAttribute="bottom" secondItem="3kb-kA-xeD" secondAttribute="bottom" constant="8" id="rQf-sw-jqM"/>
                 <constraint firstAttribute="bottom" secondItem="CzJ-Qg-e6n" secondAttribute="bottom" constant="40" id="wgh-vK-Xgg"/>
             </constraints>
