@@ -14,10 +14,18 @@ class LocationTextDelegate : LocationConsumer {
     
     var coordinateAPI:LocationAPI = .baidu
     
+    var location:Location = Location()
+    
     init(){
     }
     
     func consume(location: Location) {
+        self.location = location
+        print(location.country)
+        print(location.province)
+        print(location.city)
+        print(location.district)
+        print(location.address)
         if textField != nil {
             if location.address != "" {
                 var desc = ""

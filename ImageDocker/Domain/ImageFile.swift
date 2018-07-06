@@ -673,6 +673,12 @@ class ImageFile {
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Assigned", title: "Longitude (WGS84)", value: (location.longitude?.description)!))
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Assigned", title: "Latitude (BD09)", value: (location.latitudeBD?.description)!))
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Coordinate", subCategory: "Assigned", title: "Longitude (BD09)", value: (location.longitudeBD?.description)!))
+        metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "Country", value: location.country))
+        metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "Province", value: location.province))
+        metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "City", value: location.city))
+        metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "District", value: location.district))
+        metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "BusinessCircle", value: location.businessCircle))
+        metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "Street", value: location.street))
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "Address", value: location.address))
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "Description", value: location.addressDescription))
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "Place", value: location.place))
@@ -683,12 +689,20 @@ class ImageFile {
             photoFile?.assignLongitude = location.longitude?.description
             photoFile?.assignLatitudeBD = location.latitudeBD?.description
             photoFile?.assignLongitudeBD = location.longitudeBD?.description
+            
+            photoFile?.assignCountry = location.country
+            photoFile?.assignProvince = location.province
+            photoFile?.assignCity = location.city
+            photoFile?.assignDistrict = location.district
+            photoFile?.assignStreet = location.street
+            photoFile?.assignBusinessCircle = location.businessCircle
             photoFile?.assignAddress = location.address
             photoFile?.assignAddressDescription = location.addressDescription
             photoFile?.assignPlace = location.place
             
             photoFile?.updateLocationDate = Date()
         }
+        self.location = location
         self.recognizePlace()
     }
     
@@ -1136,23 +1150,31 @@ class ImageFile {
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Description", value: photoFile.addressDescription))
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Suggest Place", value: photoFile.suggestPlace))
         
+        
+        metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "Country", value: photoFile.assignCountry))
+        metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "Province", value: photoFile.assignProvince))
+        metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "City", value: photoFile.assignCity))
+        metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "District", value: photoFile.assignDistrict))
+        metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "Street", value: photoFile.assignStreet))
+        metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "BusinessCircle", value: photoFile.assignBusinessCircle))
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "Address", value: photoFile.assignAddress))
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "Description", value: photoFile.assignAddressDescription))
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Assigned", title: "Place", value: photoFile.assignPlace))
         
-        location.country = photoFile.country ?? ""
-        location.province = photoFile.province ?? ""
-        location.city = photoFile.city ?? ""
-        location.district = photoFile.district ?? ""
-        location.street = photoFile.street ?? ""
-        location.businessCircle = photoFile.businessCircle ?? ""
+        location.country = photoFile.assignCountry ?? photoFile.country ?? ""
+        location.province = photoFile.assignProvince ?? photoFile.province ?? ""
+        location.city = photoFile.assignCity ?? photoFile.city ?? ""
+        location.district = photoFile.assignDistrict ?? photoFile.district ?? ""
+        location.street = photoFile.assignStreet ?? photoFile.street ?? ""
+        location.businessCircle = photoFile.assignBusinessCircle ?? photoFile.businessCircle ?? ""
         location.address = photoFile.assignAddress ?? photoFile.address ?? ""
         location.addressDescription = photoFile.assignAddressDescription ?? photoFile.addressDescription ?? ""
         location.place = photoFile.assignPlace ?? photoFile.suggestPlace ?? photoFile.businessCircle ?? ""
         
-        if photoFile.latitude != nil && photoFile.longitude != nil {
-            location.coordinate = Coord(latitude: Double(photoFile.latitude ?? "0") ?? 0, longitude: Double(photoFile.longitude ?? "0") ?? 0)
-        }
+        let coord = Coord(latitude: Double(photoFile.assignLatitude ?? photoFile.latitude ?? "0") ?? 0, longitude: Double(photoFile.assignLongitude ?? photoFile.longitude ?? "0") ?? 0)
+        let coordBD = Coord(latitude: Double(photoFile.assignLatitudeBD ?? photoFile.latitudeBD ?? "0") ?? 0, longitude: Double(photoFile.assignLongitudeBD ?? photoFile.longitudeBD ?? "0") ?? 0)
+        location.setCoordinateWithoutConvert(coord: coord, coordBD: coordBD)
+
         //print("COORD IS ZERO ? \(location.coordinate?.isZero) - \(fileName)")
         //print("LOCATION LOADED")
     }

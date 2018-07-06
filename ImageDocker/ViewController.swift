@@ -962,22 +962,28 @@ class ViewController: NSViewController {
         }
     }
     
+    private func readImageLocationMeta(title:String) -> String{
+        return self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Assign", title: title) ?? self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: title) ?? self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Google", title: title) ?? ""
+    }
+    
     // from selected image
     @IBAction func onCopyLocationFromMapClicked(_ sender: Any) {
         guard self.img != nil && self.img.location.coordinateBD != nil && self.img.location.coordinateBD!.isNotZero else {return}
         if self.possibleLocation == nil {
             self.possibleLocation = Location()
         }
-        self.possibleLocation?.coordinate = img.location.coordinate
+        if img.location.coordinate != nil && img.location.coordinateBD != nil {
+            self.possibleLocation?.setCoordinateWithoutConvert(coord: img.location.coordinate!, coordBD: img.location.coordinateBD!)
+        }
         
-        self.possibleLocation?.country = self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "Country") ?? ""
-        self.possibleLocation?.province = self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "Province") ?? ""
-        self.possibleLocation?.city = self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "City") ?? ""
-        self.possibleLocation?.district = self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "District") ?? ""
-        self.possibleLocation?.businessCircle = self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "BusinessCircle") ?? ""
-        self.possibleLocation?.street = self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "Street") ?? ""
-        self.possibleLocation?.address = self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "Address") ?? ""
-        self.possibleLocation?.addressDescription = self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: "Description") ?? ""
+        self.possibleLocation?.country = self.readImageLocationMeta(title: "Country")
+        self.possibleLocation?.province = self.readImageLocationMeta(title: "Province")
+        self.possibleLocation?.city = self.readImageLocationMeta(title: "City")
+        self.possibleLocation?.district = self.readImageLocationMeta(title: "District")
+        self.possibleLocation?.businessCircle = self.readImageLocationMeta(title: "BusinessCircle")
+        self.possibleLocation?.street = self.readImageLocationMeta(title: "Street")
+        self.possibleLocation?.address = self.readImageLocationMeta(title: "Address")
+        self.possibleLocation?.addressDescription = self.readImageLocationMeta(title: "Description")
         
         //print("possible location address: \(possibleLocation?.address ?? "")")
         //print("possible location place: \(possibleLocation?.place ?? "")")

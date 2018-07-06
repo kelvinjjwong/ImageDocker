@@ -43,6 +43,14 @@ class Location : NSObject {
         self.convert = false
         self.coordinate = coord
         self.coordinateBD = coord
+        self.convert = true
+    }
+    
+    public func setCoordinateWithoutConvert(coord:Coord, coordBD:Coord){
+        self.convert = false
+        self.coordinate = coord
+        self.coordinateBD = coordBD
+        self.convert = true
     }
     
     var info:[MetaInfo] = [MetaInfo]()
