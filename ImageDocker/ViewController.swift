@@ -17,6 +17,9 @@ import PXSourceList
 
 class ViewController: NSViewController {
     
+    // MARK: Icon
+    let tick:NSImage = NSImage.init(named: NSImage.Name.menuOnStateTemplate)!
+    
     // MARK: Timer
     var scanLocationChangeTimer:Timer!
     var lastCheckLocationChange:Date?
@@ -62,6 +65,9 @@ class ViewController: NSViewController {
     @IBOutlet weak var btnReplaceLocation: NSButton!
     @IBOutlet weak var btnManagePlaces: NSButton!
     
+    @IBOutlet weak var btnChoiceMapService: NSSegmentedControl!
+    
+    var coordinateAPI:LocationAPI = .baidu
     
     // MARK: Tree
     //var modelObjects:NSMutableArray?
@@ -187,6 +193,13 @@ class ViewController: NSViewController {
         
         updateLibraryTree()
         
+        
+        self.btnChoiceMapService.selectSegment(withTag: 1)
+        self.coordinateAPI = .baidu
+        
+        self.btnChoiceMapService.setImage(nil, forSegment: 0)
+        self.btnChoiceMapService.setImage(tick, forSegment: 1)
+        
         self.chbScan.state = NSButton.StateValue.off
         self.suppressedScan = true
         self.btnScanState.image = NSImage(named: NSImage.Name.statusNone)
@@ -293,6 +306,7 @@ class ViewController: NSViewController {
         self.addressSearcher.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.addressSearcher.backgroundColor = NSColor.darkGray
         self.addressSearcher.drawsBackground = true
+        self.btnChoiceMapService.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
         self.selectionCheckAllBox.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.chbExport.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -941,7 +955,11 @@ class ViewController: NSViewController {
     @IBAction func onAddressSearcherAction(_ sender: Any) {
         let address:String = addressSearcher.stringValue
         if address == "" {return}
-        BaiduLocation.queryForCoordinate(address: address, coordinateConsumer: self)
+        if self.coordinateAPI == .baidu {
+            BaiduLocation.queryForCoordinate(address: address, coordinateConsumer: self)
+        }else if self.coordinateAPI == .google {
+            GoogleLocation.queryForCoordinate(address: address, coordinateConsumer: self)
+        }
     }
     
     // from selected image
@@ -1014,7 +1032,7 @@ class ViewController: NSViewController {
         if(myPopover == nil){
             myPopover = NSPopover()
             
-            let frame = CGRect(origin: .zero, size: CGSize(width: 852, height: 440))
+            let frame = CGRect(origin: .zero, size: CGSize(width: 902, height: 440))
             self.placeViewController = PlaceListViewController()
             self.placeViewController.view.frame = frame
             self.placeViewController.refreshDelegate = self
@@ -1027,6 +1045,21 @@ class ViewController: NSViewController {
         }
         self.placePopover = myPopover
     }
+    
+    @IBAction func onButtonChoiceMapServiceClicked(_ sender: NSSegmentedControl) {
+        if sender.selectedSegment == 0 {
+            self.coordinateAPI = .google
+            locationTextDelegate?.coordinateAPI = .google
+            self.btnChoiceMapService.setImage(tick, forSegment: 0)
+            self.btnChoiceMapService.setImage(nil, forSegment: 1)
+        }else{
+            self.coordinateAPI = .baidu
+            locationTextDelegate?.coordinateAPI = .baidu
+            self.btnChoiceMapService.setImage(nil, forSegment: 0)
+            self.btnChoiceMapService.setImage(tick, forSegment: 1)
+        }
+    }
+    
     
     // MARK: Selection View - Batch Editor - DateTime Actions
     

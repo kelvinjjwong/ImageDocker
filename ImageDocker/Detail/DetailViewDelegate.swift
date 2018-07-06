@@ -23,6 +23,7 @@ extension ViewController: CoordinateConsumer {
         //let coordBD:Coord = coordinate.fromWGS84toBD09()
         // no need to transform
         self.possibleLocation = Location()
+        self.possibleLocation?.searchKeyword = self.addressSearcher.stringValue
         BaiduLocation.queryForAddress(coordinateBD: coordinate, locationConsumer: self.locationTextDelegate!, modifyLocation: self.possibleLocation)
         BaiduLocation.queryForMap(coordinateBD: coordinate, view: webPossibleLocation, zoom: zoomSizeForPossibleAddress)
     }

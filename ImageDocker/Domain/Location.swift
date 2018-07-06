@@ -16,24 +16,33 @@ typealias Coord = CLLocationCoordinate2D
 class Location : NSObject {
     
     var source:String?
+    var searchKeyword:String = ""
     var responseStatus:String?
     var responseMessage:String?
+    
+    private var convert:Bool = true
     
     var coordinate:Coord? {
         didSet {
             //print("SET ORI COORD TO \(coordinate?.latitude) \(coordinate?.longitude)")
-            if coordinateBD == nil {
+            if coordinateBD == nil && convert {
                 coordinateBD = coordinate?.fromWGS84toBD09()
             }
         }
     }
     var coordinateBD:Coord? {
         didSet {
-            if coordinate == nil {
+            if coordinate == nil && convert {
                 coordinate = coordinateBD?.fromBD09toWGS84()
             }
             //print("SET BD COORD TO \(coordinateBD?.latitude) \(coordinateBD?.longitude)")
         }
+    }
+    
+    public func setCoordinateWithoutConvert(coord:Coord){
+        self.convert = false
+        self.coordinate = coord
+        self.coordinateBD = coord
     }
     
     var info:[MetaInfo] = [MetaInfo]()

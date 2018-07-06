@@ -89,6 +89,7 @@ final class BaiduLocation {
             return
             
         }
+        print("Request for location detail: \(requestUrl)")
         let request = URLRequest(url:requestUrl)
         let task = URLSession.shared.dataTask(with: request) {
             (data, response, error) in
@@ -104,6 +105,19 @@ final class BaiduLocation {
                 location.responseStatus = json!["status"].description
                 if location.responseStatus != "0" {
                     DispatchQueue.main.async {
+                        
+                        // clear details
+                        location.address = ""
+                        location.businessCircle = ""
+                        location.country = ""
+                        location.province = ""
+                        location.city = ""
+                        location.district = ""
+                        location.street = ""
+                        location.addressDescription = ""
+                        
+                        locationConsumer.consume(location: location)
+                        
                         locationConsumer.alert(status: json!["status"].int!, message: json!["message"].description, popup: false)
                         if textConsumer != nil {
                             textConsumer?.alert(status: json!["status"].int!, message: json!["message"].description, popup: false)
@@ -122,30 +136,12 @@ final class BaiduLocation {
                     location.street = json!["result"]["addressComponent"]["street"].description
                     location.addressDescription = json!["result"]["sematic_description"].description
                     
-                    //print("Baidu address: \(location.address)")
-                    
-                    //if location.address != "" {
-                        DispatchQueue.main.async {
-                            /*
-                            metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Country", value: location.country))
-                            metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Province", value: location.province))
-                            metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "City", value: location.city))
-                            metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "District", value: location.district))
-                            metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Street", value: location.street))
-                            metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "BusinessCircle", value: location.businessCircle))
-                            metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Address", value: location.address))
-                            metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Description", value: location.addressDescription))
-                            
-                            metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Suggest Place", value: location.place))
-                            */
-                            //print("GOING TO CONSUME LOCATION")
-                            locationConsumer.consume(location: location)
-                            //metaInfoHolder.updateMetaInfoView()
-                            if textConsumer != nil {
-                                textConsumer?.consume(location: location)
-                            }
+                    DispatchQueue.main.async {
+                        locationConsumer.consume(location: location)
+                        if textConsumer != nil {
+                            textConsumer?.consume(location: location)
                         }
-                    //}
+                    }
                 }
                 
             }else{

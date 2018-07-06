@@ -12,13 +12,26 @@ class LocationTextDelegate : LocationConsumer {
     
     var textField:NSTextField?
     
+    var coordinateAPI:LocationAPI = .baidu
+    
     init(){
     }
     
     func consume(location: Location) {
         if textField != nil {
             if location.address != "" {
-                textField?.stringValue = "\(location.address) [\(location.addressDescription)]"
+                var desc = ""
+                if location.addressDescription != "" && location.addressDescription != location.address {
+                    desc = " [\(location.addressDescription)]"
+                }
+                textField?.stringValue = "\(location.address)\(desc)"
+            }
+            if location.country == "" && self.coordinateAPI == .google && location.source != "Google" {
+                if location.searchKeyword != "" {
+                    GoogleLocation.queryForAddress(address: location.searchKeyword, locationConsumer: self, modifyLocation: location)
+                }else{
+                    print("== no address detail, no keyword for google searching")
+                }
             }
         }
     }

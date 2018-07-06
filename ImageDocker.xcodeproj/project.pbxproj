@@ -10,6 +10,7 @@
 		211CCB1CC9D5DDCDB077A2DC /* Pods_ImageDocker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82AE2A4F2692BE8252178D24 /* Pods_ImageDocker.framework */; };
 		8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015120208F7D23009C2549 /* StackedImageViewController.swift */; };
 		8E015123208F7D34009C2549 /* StackedVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015122208F7D34009C2549 /* StackedVideoViewController.swift */; };
+		8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E06AAFB20EEFFAD000A40C9 /* GoogleLocation.swift */; };
 		8E0AFA3D208BDEA000CE8B68 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0AFA3C208BDEA000CE8B68 /* AppDelegate.swift */; };
 		8E0AFA3F208BDEA000CE8B68 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0AFA3E208BDEA000CE8B68 /* ViewController.swift */; };
 		8E0AFA41208BDEA100CE8B68 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E0AFA40208BDEA100CE8B68 /* Assets.xcassets */; };
@@ -88,6 +89,7 @@
 		82AE2A4F2692BE8252178D24 /* Pods_ImageDocker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImageDocker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E015120208F7D23009C2549 /* StackedImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedImageViewController.swift; sourceTree = "<group>"; };
 		8E015122208F7D34009C2549 /* StackedVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedVideoViewController.swift; sourceTree = "<group>"; };
+		8E06AAFB20EEFFAD000A40C9 /* GoogleLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLocation.swift; sourceTree = "<group>"; };
 		8E0AFA39208BDEA000CE8B68 /* ImageDocker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageDocker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E0AFA3C208BDEA000CE8B68 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8E0AFA3E208BDEA000CE8B68 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -376,6 +378,7 @@
 			children = (
 				8E7F70FF2091F14200410C45 /* BaiduLocation.swift */,
 				8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */,
+				8E06AAFB20EEFFAD000A40C9 /* GoogleLocation.swift */,
 			);
 			path = Location;
 			sourceTree = "<group>";
@@ -620,6 +623,7 @@
 				8EB986BC20B30C920075B081 /* CollectionViewDelegate.swift in Sources */,
 				8E4B7C1920929EFA00DDD9E0 /* LocationConsumer.swift in Sources */,
 				8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */,
+				8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */,
 				8EB986C620B6EBC40075B081 /* DarkTableView.swift in Sources */,
 				8E0AFA3D208BDEA000CE8B68 /* AppDelegate.swift in Sources */,
 				8EFE76412094B98D00B7CFCA /* PhotoCollection.swift in Sources */,

@@ -9,6 +9,12 @@
 import Cocoa
 import WebKit
 
+enum LocationAPI : Int {
+    case google
+    case baidu
+}
+
+
 protocol PlaceListRefreshDelegate {
     func refreshPlaceList()
     func selectPlace(name:String, location:Location)
@@ -16,11 +22,14 @@ protocol PlaceListRefreshDelegate {
 
 class PlaceListViewController: NSViewController {
     
+    let tick:NSImage = NSImage.init(named: NSImage.Name.menuOnStateTemplate)!
+    
     var refreshDelegate:PlaceListRefreshDelegate?
     
     var coordinate:Coord?
     var coordinateBD:Coord?
     var location:Location?
+    var coordinateAPI:LocationAPI = .baidu
     
     init(){
         super.init(nibName: NSNib.Name(rawValue: "PlaceListViewController"), bundle: nil)
@@ -86,10 +95,19 @@ class PlaceListViewController: NSViewController {
     @IBOutlet weak var mapWebView: WKWebView!
     @IBOutlet weak var addressDescription: NSTextField!
     
+    @IBOutlet weak var choiceService: NSSegmentedControl!
+    
+    
     var places:[PhotoPlace] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.choiceService.selectSegment(withTag: 1)
+        self.coordinateAPI = .baidu
+        
+        self.choiceService.setImage(nil, forSegment: 0)
+        self.choiceService.setImage(tick, forSegment: 1)
+        
         self.places = ModelStore.getPlaces()
         placeTable.delegate = self
         placeTable.dataSource = self
@@ -109,7 +127,11 @@ class PlaceListViewController: NSViewController {
     @IBAction func onLocationSearcherAction(_ sender: Any) {
         let address:String = locationSearcher.stringValue
         if address == "" {return}
-        BaiduLocation.queryForCoordinate(address: address, coordinateConsumer: self)
+        if self.coordinateAPI == .baidu {
+            BaiduLocation.queryForCoordinate(address: address, coordinateConsumer: self)
+        }else if self.coordinateAPI == .google {
+            GoogleLocation.queryForCoordinate(address: address, coordinateConsumer: self)
+        }
     }
     
     fileprivate func collectLocationFromForm() {
@@ -197,6 +219,19 @@ class PlaceListViewController: NSViewController {
         }
     }
     
+    @IBAction func onChoiceServiceClicked(_ sender: NSSegmentedControl) {
+        if sender.selectedSegment == 0 {
+            self.coordinateAPI = .google
+            self.choiceService.setImage(tick, forSegment: 0)
+            self.choiceService.setImage(nil, forSegment: 1)
+        }else{
+            self.coordinateAPI = .baidu
+            self.choiceService.setImage(nil, forSegment: 0)
+            self.choiceService.setImage(tick, forSegment: 1)
+        }
+    }
+    
+    
     private func dialogOKCancel(question: String, text: String) -> Bool {
         let alert = NSAlert()
         alert.messageText = question
@@ -225,6 +260,7 @@ extension PlaceListViewController: CoordinateConsumer {
 
 extension PlaceListViewController: LocationConsumer {
     func consume(location: Location) {
+        //print("CONSUME LOCATION: COUNTRY \(location.country)")
         self.location = location
         
         country.stringValue = location.country
@@ -240,6 +276,15 @@ extension PlaceListViewController: LocationConsumer {
         coordinateBD = location.coordinateBD
         
         lblCoordinate.stringValue = "(\(coordinateBD?.latitude ?? 0), \(coordinateBD?.longitude ?? 0))"
+        
+        if location.country == "" && self.coordinateAPI == .google && location.source != "Google" {
+            // retry fetch location detail by google api
+            
+            let address:String = locationSearcher.stringValue
+            if address == "" {return}
+            
+            GoogleLocation.queryForAddress(address: address, locationConsumer: self, modifyLocation: self.location)
+        }
     }
     
     func alert(status: Int, message: String, popup: Bool) {
