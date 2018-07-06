@@ -100,13 +100,15 @@ class CollectionViewItemsLoader: NSObject {
         self.indicator = indicator
         
         //var urls: [URL] = []
+        print("\(Date()) Loading photo files from db")
         let photoFiles = ModelStore.getPhotoFiles(year: year, month: month, day: day, place: place, includeHidden: showHidden, imageSource: filterImageSource, cameraModel: filterCameraModel)
         //print("GOT PHOTOS for year:\(year) month:\(month) day:\(day) place:\(place) count \(photoFiles.count)")
         //for photoFile in photoFiles {
         //    urls.append(URL(fileURLWithPath: photoFile.path!))
         //}
+        print("\(Date()) Setting up items ")
         setupItems(photoFiles: photoFiles)
-        
+        print("\(Date()) Set up items DONE")
     }
     
     func load(year:Int, month:Int, day:Int, event:String, place:String, filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil, indicator:Accumulator? = nil) {
@@ -226,7 +228,9 @@ class CollectionViewItemsLoader: NSObject {
         }
         
         if let photoFiles = photoFiles {
+            print("\(Date()) Transforming items to domain ")
             self.transformToDomainItems(photoFiles: photoFiles)
+            print("\(Date()) Transforming items to domain: DONE ")
         }
         
         self.loading = false
@@ -414,8 +418,9 @@ class CollectionViewItemsLoader: NSObject {
         if items.count > 0 {   // When not initial folder folder
             items.removeAll()
         }
-        
+        print("\(Date()) Loading duplicate photos from db")
         let duplicates:Duplicates = ModelStore.getDuplicatePhotos()
+        print("\(Date()) Loading duplicate photos from db: DONE")
         
         for url in urls {
             
@@ -425,11 +430,13 @@ class CollectionViewItemsLoader: NSObject {
             
             let imageFile = ImageFile(url: url, indicator: self.indicator)
             
+            print("\(Date()) Checking duplicate for a photo")
             if duplicates.paths.index(where: {$0 == url.path}) != nil {
                 imageFile.hasDuplicates = true
             }else {
                 imageFile.hasDuplicates = false
             }
+            print("\(Date()) Checking duplicate for a photo: DONE")
             
             // prefetch thumbnail to improve performance of collection view
             let _ = imageFile.thumbnail
@@ -450,7 +457,9 @@ class CollectionViewItemsLoader: NSObject {
             items.removeAll()
         }
         
+        print("\(Date()) Loading duplicate photos from db")
         let duplicates:Duplicates = ModelStore.getDuplicatePhotos()
+        print("\(Date()) Loading duplicate photos from db: DONE")
         
         for photoFile in photoFiles {
             

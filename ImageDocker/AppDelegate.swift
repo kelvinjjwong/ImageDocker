@@ -18,6 +18,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func createDataBackup(suffix:String){
+        print("\(Date()) Start to create db backup")
         let dbUrl = self.applicationDocumentsDirectory
         let dbFile = dbUrl.appendingPathComponent("ImageDocker.sqlite")
         let dbFileSHM = dbUrl.appendingPathComponent("ImageDocker.sqlite-shm")
@@ -44,6 +45,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 return
             }
         }
+        print("\(Date()) Finish create db backup")
     }
     
 

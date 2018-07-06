@@ -298,8 +298,10 @@ extension ViewController {
     }
     
     func loadPathToTreeFromDatabase() {
+        print("\(Date()) Loading image folders from db ")
         let imageFolders = ImageFolderTreeScanner.default.scanImageFolderFromDatabase()
         
+        print("\(Date()) Adding image folders as tree entries ")
         if imageFolders.count > 0 {
             for imageFolder:ImageFolder in imageFolders {
                 self.addLibraryTreeEntry(imageFolder: imageFolder)
@@ -633,7 +635,11 @@ extension ViewController : PXSourceListDelegate {
     }
     
     func sourceListSelectionDidChange(_ notification: Notification!) {
-        guard !self.treeRefreshing else {return}
+        guard !self.treeRefreshing else {
+            self.indicatorMessage.stringValue = "Updating tree, please wait for a while"
+            return
+        }
+        self.indicatorMessage.stringValue = "Loading"
         //var removeButtonEnabled:Bool = false
         if let selectedItem:PXSourceListItem = self.sourceList.item(atRow: self.sourceList.selectedRow) as? PXSourceListItem {
             

@@ -169,6 +169,7 @@ class ViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("\(Date()) Loading view")
         
         //self.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
@@ -176,22 +177,31 @@ class ViewController: NSViewController {
         collectionProgressIndicator.isDisplayedWhenStopped = false
         batchEditIndicator.isDisplayedWhenStopped = false
         
+        print("\(Date()) Loading view - configure dark mode")
         configureDarkMode()
         
         self.chbShowHidden.state = NSButton.StateValue.off
         
+        print("\(Date()) Loading view - preview zone")
         self.configurePreview()
+        print("\(Date()) Loading view - selection view")
         self.configureSelectionView()
         
         PreferencesController.healthCheck()
         
+        print("\(Date()) Loading view - configure tree")
         configureTree()
+        print("\(Date()) Loading view - configure collection view")
         configureCollectionView()
+        print("\(Date()) Loading view - configure editors")
         configureEditors()
+        print("\(Date()) Loading view - setup event list")
         setupEventList()
+        print("\(Date()) Loading view - setup place list")
         setupPlaceList()
-        
+        print("\(Date()) Loading view - update library tree")
         updateLibraryTree()
+        print("\(Date()) Loading view - update library tree: DONE")
         
         
         self.btnChoiceMapService.selectSegment(withTag: 1)
@@ -211,7 +221,7 @@ class ViewController: NSViewController {
         self.suppressedExport = true
         self.lastExportPhotos = Date()
         
-        self.scanLocationChangeTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block:{_ in
+        self.scanLocationChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
             guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing else {return}
             print("\(Date()) SCANING LOCATION CHANGE")
             if self.lastCheckLocationChange != nil {
@@ -226,7 +236,7 @@ class ViewController: NSViewController {
             }
         })
         
-        self.scanPhotoTakenDateChangeTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block:{_ in
+        self.scanPhotoTakenDateChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
             guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing else {return}
             print("\(Date()) SCANING DATE CHANGE")
             if self.lastCheckPhotoTakenDateChange != nil {
@@ -241,7 +251,7 @@ class ViewController: NSViewController {
             }
         })
         
-        self.scanEventChangeTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block:{_ in
+        self.scanEventChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
             guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing else {return}
             print("\(Date()) SCANING EVENT CHANGE")
             if self.lastCheckEventChange != nil {
@@ -281,6 +291,7 @@ class ViewController: NSViewController {
         })
         
         
+        print("\(Date()) Loading view: DONE")
     }
     
     func configureDarkMode() {
@@ -325,10 +336,15 @@ class ViewController: NSViewController {
     
     func configureTree(){
         self.initTreeDataModel()
+        print("\(Date()) Loading view - configure tree - loading path to tree from db")
         self.loadPathToTreeFromDatabase()
+        print("\(Date()) Loading view - configure tree - loading moments to tree from db")
         self.loadMomentsToTreeFromDatabase(groupByPlace: false)
+        print("\(Date()) Loading view - configure tree - loading places to tree from db")
         self.loadMomentsToTreeFromDatabase(groupByPlace: true)
+        print("\(Date()) Loading view - configure tree - loading events to tree from db")
         self.loadEventsToTreeFromDatabase()
+        print("\(Date()) Loading view - configure tree - reloading tree view")
         self.sourceList.backgroundColor = NSColor.darkGray
         self.sourceList.reloadData()
     }
@@ -565,6 +581,7 @@ class ViewController: NSViewController {
                 })
             //print("GETTING COLLECTION \(collection.year) \(collection.month) \(collection.day) \(collection.place ?? "")")
             if self.imagesLoader.isLoading() {
+                self.indicatorMessage.stringValue = "Cancelling last request ..."
                 self.imagesLoader.cancel(onCancelled: {
                     self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, place: groupByPlace ? collection.place : nil, filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel, indicator:self.collectionLoadingIndicator)
                     self.refreshCollectionView()
@@ -734,6 +751,7 @@ class ViewController: NSViewController {
     @IBAction func onRefreshButtonClicked(_ sender: Any) {
         print("clicked refresh button")
         
+        ModelStore.reloadDuplicatePhotos()
         self.refreshTree()
     }
     

@@ -44,7 +44,9 @@ class ModelStore {
         
     }
     
-    static func getDuplicatePhotos(in moc : NSManagedObjectContext? = nil) -> Duplicates {
+    static var _duplicates:Duplicates? = nil
+    
+    static func reloadDuplicatePhotos(in moc : NSManagedObjectContext? = nil) {
         let duplicates:Duplicates = Duplicates()
         let moc = moc ?? AppDelegate.current.managedObjectContext
         
@@ -122,8 +124,14 @@ class ModelStore {
                 }
             }
         }
-        
-        return duplicates
+        _duplicates = duplicates
+    }
+    
+    static func getDuplicatePhotos() -> Duplicates {
+        if _duplicates == nil {
+            reloadDuplicatePhotos()
+        }
+        return _duplicates!
     }
     
     

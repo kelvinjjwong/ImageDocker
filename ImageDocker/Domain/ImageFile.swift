@@ -1188,12 +1188,14 @@ class ImageFile {
         if json != JSON(NSNull()) {
             metaInfoHolder.setMetaInfo(MetaInfo(category: "System", title: "Size", value: json[0]["Composite"]["ImageSize"].description), ifNotExists: true)
             
-            metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "ExifCreateDate", value: json[0]["EXIF"]["CreateDate"].description))
-            photoFile?.exifCreateDate = exifDateFormat.date(from: json[0]["EXIF"]["CreateDate"].description)
-            
-            metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "ExifModifyDate", value: json[0]["EXIF"]["ModifyDate"].description))
-            photoFile?.exifModifyDate = exifDateFormat.date(from: json[0]["EXIF"]["ModifyDate"].description)
-            
+            if photoFile?.exifCreateDate == nil {
+                metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "ExifCreateDate", value: json[0]["EXIF"]["CreateDate"].description))
+                photoFile?.exifCreateDate = exifDateFormat.date(from: json[0]["EXIF"]["CreateDate"].description)
+            }
+            if photoFile?.exifModifyDate == nil {
+                metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "ExifModifyDate", value: json[0]["EXIF"]["ModifyDate"].description))
+                photoFile?.exifModifyDate = exifDateFormat.date(from: json[0]["EXIF"]["ModifyDate"].description)
+            }
             if photoFile?.filesysCreateDate == nil {
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "FileModifyDate", value: json[0]["File"]["FileModifyDate"].description))
                 photoFile?.filesysCreateDate = exifDateFormat.date(from: json[0]["File"]["FileModifyDate"].description)

@@ -48,7 +48,10 @@ class ImageFolderTreeScanner {
     func scanImageFolderFromDatabase() -> [ImageFolder] {
         var imageFolders:[ImageFolder] = [ImageFolder]()
         
+        print("\(Date()) Loading containers from db ")
         let containers = ModelStore.getAllContainers()
+        
+        print("\(Date()) Setting up containers' parent ")
         for container in containers {
             let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path!), countOfImages: Int(container.imageCount), updateModelStore: false)
             if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) {
@@ -56,6 +59,7 @@ class ImageFolderTreeScanner {
             }
             imageFolders.append(imageFolder)
         }
+        print("\(Date()) Setting up containers' parent: DONE ")
         return imageFolders
     }
     
@@ -282,10 +286,14 @@ class ImageFolderTreeScanner {
                 
                 let photos = ModelStore.getPhotoFiles(rootPath: "\(imageFolder.url.path)/")
                 let count = Int32(photos.count)
-                if imageFolder.containerFolder != nil && imageFolder.containerFolder?.imageCount != count {
-                    imageFolder.containerFolder?.imageCount = count
+                if let container = imageFolder.containerFolder {
+                    if container.imageCount != count {
+                        print("= changing \(container.imageCount) to \(count)")  // don't delete this comment to avoid crash
+                        container.imageCount = count
+                    }
                 }
             }
+            ModelStore.save()
         }
         let containers:[[String:AnyObject]]? = ModelStore.getAllContainerPaths()
         if containers != nil && containers!.count > 0 {
@@ -296,12 +304,15 @@ class ImageFolderTreeScanner {
                 let url:URL = URL(fileURLWithPath: path)
                 let imageFolder = ImageFolder(url, countOfImages: photoCount)
                 imageFolders.append(imageFolder)
-                
+                /*
                 let photos = ModelStore.getPhotoFiles(rootPath: "\(imageFolder.url.path)/")
                 let count = Int32(photos.count)
-                if imageFolder.containerFolder != nil && imageFolder.containerFolder?.imageCount != count {
-                    imageFolder.containerFolder?.imageCount = count
+                if let container = imageFolder.containerFolder {
+                    if imageFolder.containerFolder?.imageCount != count {
+                        container.imageCount = count
+                    }
                 }
+                */
             }
             ModelStore.save()
         }
