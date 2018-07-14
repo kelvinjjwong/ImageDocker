@@ -51,9 +51,9 @@ class PlaceListViewController: NSViewController {
             if lastSelectedRow != nil && places.count > 0 && lastSelectedRow! < places.count {
                 let place = places[lastSelectedRow!]
                 
-                selectedPlaceName = place.name ?? ""
+                selectedPlaceName = place.name
                 
-                placeName.stringValue = place.name ?? ""
+                placeName.stringValue = place.name
                 country.stringValue = place.country ?? ""
                 province.stringValue = place.province ?? ""
                 city.stringValue = place.city ?? ""
@@ -73,10 +73,30 @@ class PlaceListViewController: NSViewController {
                 BaiduLocation.queryForMap(coordinateBD: coordinateBD!, view: mapWebView, zoom: 16)
                 
                 if self.refreshDelegate != nil {
-                    self.refreshDelegate?.selectPlace(name: place.name ?? "", location: location!)
+                    self.refreshDelegate?.selectPlace(name: place.name, location: location!)
                 }
             }
         }
+    }
+    
+    func setPossibleLocation(place:Location){
+        country.stringValue = place.country
+        province.stringValue = place.province
+        city.stringValue = place.city
+        district.stringValue = place.district
+        businessCircle.stringValue = place.businessCircle
+        street.stringValue = place.street
+        address.stringValue = place.address
+        addressDescription.stringValue = place.addressDescription
+        
+        coordinate = Coord(latitude: Double(place.latitude ?? 0), longitude: Double(place.longitude ?? 0))
+        coordinateBD = Coord(latitude: Double(place.latitudeBD ?? 0), longitude: Double(place.longitudeBD ?? 0))
+        
+        lblCoordinate.stringValue = "(\(coordinateBD?.latitude ?? 0), \(coordinateBD?.longitude ?? 0))"
+        
+        collectLocationFromForm()
+        
+        BaiduLocation.queryForMap(coordinateBD: coordinateBD!, view: mapWebView, zoom: 16)
     }
     
     @IBOutlet weak var placeTable: NSTableView!
@@ -98,7 +118,7 @@ class PlaceListViewController: NSViewController {
     @IBOutlet weak var choiceService: NSSegmentedControl!
     
     
-    var places:[PhotoPlace] = []
+    var places:[ImagePlace] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -108,7 +128,7 @@ class PlaceListViewController: NSViewController {
         self.choiceService.setImage(nil, forSegment: 0)
         self.choiceService.setImage(tick, forSegment: 1)
         
-        self.places = ModelStore.getPlaces()
+        self.places = ModelStore.default.getPlaces()
         placeTable.delegate = self
         placeTable.dataSource = self
         placeTable.reloadData()
@@ -117,9 +137,9 @@ class PlaceListViewController: NSViewController {
     @IBAction func onPlaceSearcherAction(_ sender: Any) {
         let keyword:String = placeSearcher.stringValue
         if keyword == "" {
-            self.places = ModelStore.getPlaces()
+            self.places = ModelStore.default.getPlaces()
         }else{
-            self.places = ModelStore.getPlaces(byName: keyword)
+            self.places = ModelStore.default.getPlaces(byName: keyword)
         }
         placeTable.reloadData()
     }
@@ -156,10 +176,10 @@ class PlaceListViewController: NSViewController {
         if name == "" {return}
         collectLocationFromForm()
         
-        let _ = ModelStore.getOrCreatePlace(name: name, location: location!)
-        ModelStore.save()
+        let _ = ModelStore.default.getOrCreatePlace(name: name, location: location!)
+        //ModelStore.save()
         
-        self.places = ModelStore.getPlaces()
+        self.places = ModelStore.default.getPlaces()
         placeTable.reloadData()
         
         if self.refreshDelegate != nil {
@@ -171,10 +191,10 @@ class PlaceListViewController: NSViewController {
         let name:String = placeName.stringValue
         guard name != "" && selectedPlaceName != nil && selectedPlaceName != "" else {return}
         
-        ModelStore.renamePlace(oldName: selectedPlaceName!, newName: name)
-        ModelStore.save()
+        ModelStore.default.renamePlace(oldName: selectedPlaceName!, newName: name)
+        //ModelStore.save()
         
-        self.places = ModelStore.getPlaces()
+        self.places = ModelStore.default.getPlaces()
         placeTable.reloadData()
         
         if self.refreshDelegate != nil {
@@ -189,10 +209,10 @@ class PlaceListViewController: NSViewController {
         if name == "" {return}
         collectLocationFromForm()
         
-        ModelStore.updatePlace(name: name, location: location!)
-        ModelStore.save()
+        ModelStore.default.updatePlace(name: name, location: location!)
+        //ModelStore.save()
         
-        self.places = ModelStore.getPlaces()
+        self.places = ModelStore.default.getPlaces()
         placeTable.reloadData()
         
         if self.refreshDelegate != nil {
@@ -207,10 +227,10 @@ class PlaceListViewController: NSViewController {
         
         if self.dialogOKCancel(question: "Disconnect photos with this place ?", text: name) {
             
-            ModelStore.deletePlace(name: name)
-            ModelStore.save()
+            ModelStore.default.deletePlace(name: name)
+            //ModelStore.save()
             
-            self.places = ModelStore.getPlaces()
+            self.places = ModelStore.default.getPlaces()
             placeTable.reloadData()
             
             if self.refreshDelegate != nil {
@@ -305,7 +325,7 @@ extension PlaceListViewController: NSTableViewDelegate {
         if row > (self.places.count - 1) {
             return nil
         }
-        let info:PhotoPlace = self.places[row]
+        let info:ImagePlace = self.places[row]
         var value = ""
         //var tip: String? = nil
         if let id = tableColumn?.identifier {
@@ -315,7 +335,7 @@ extension PlaceListViewController: NSTableViewDelegate {
             case NSUserInterfaceItemIdentifier("city"):
                 value = info.city ?? ""
             case NSUserInterfaceItemIdentifier("name"):
-                value = info.name!
+                value = info.name
                 
             default:
                 break

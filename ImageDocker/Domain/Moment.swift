@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import GRDB
 
 class Moment {
     
@@ -100,13 +101,13 @@ class Moments {
     var years:[Moment] = [Moment] ()
     var places:[Moment] = [Moment] ()
     
-    func read(_ datas:[[String : AnyObject]], groupByPlace:Bool = false) -> [Moment]{
+    func read(_ datas:[Row], groupByPlace:Bool = false) -> [Moment]{
         for data in datas {
             let place = data["place"] as? String ?? ""
-            let year = data["photoTakenYear"] as! Int
-            let month = data["photoTakenMonth"] as! Int
-            let day = data["photoTakenDay"] as! Int
-            let photoCount = data["photoCount"] as! Int
+            let year = data["photoTakenYear"] as Int
+            let month = data["photoTakenMonth"] as Int
+            let day = data["photoTakenDay"] as Int
+            let photoCount = data["photoCount"] as Int
             
             //print("Got \(place)-\(year)-\(month)-\(day)")
             var placeEntry:Moment?

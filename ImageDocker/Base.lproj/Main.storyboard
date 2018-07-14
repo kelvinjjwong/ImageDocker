@@ -501,7 +501,7 @@
                                                                 </scroller>
                                                             </scrollView>
                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DpT-Dg-Oeb">
-                                                                <rect key="frame" x="866" y="0.0" width="82" height="31"/>
+                                                                <rect key="frame" x="836" y="0.0" width="82" height="31"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="20" id="Gmp-RZ-apS"/>
                                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="SPU-3L-Anh"/>
@@ -515,7 +515,7 @@
                                                                 </connections>
                                                             </button>
                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Qnu-5r-3Pb">
-                                                                <rect key="frame" x="702" y="8" width="152" height="18"/>
+                                                                <rect key="frame" x="672" y="8" width="152" height="18"/>
                                                                 <buttonCell key="cell" type="check" title="Export in background" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Kb9-lb-FwG">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                     <font key="font" metaFont="system"/>
@@ -544,7 +544,7 @@
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xaZ-EP-rco">
-                                                                <rect key="frame" x="442" y="7" width="254" height="17"/>
+                                                                <rect key="frame" x="412" y="7" width="254" height="17"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="17" id="WDj-aJ-DxI"/>
                                                                     <constraint firstAttribute="width" constant="250" id="qBi-Xh-pQy"/>
@@ -556,9 +556,9 @@
                                                                 </textFieldCell>
                                                             </textField>
                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y2t-Ke-hIj">
-                                                                <rect key="frame" x="950" y="8" width="66" height="18"/>
+                                                                <rect key="frame" x="920" y="8" width="96" height="18"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" constant="62" id="XUL-iw-5h3"/>
+                                                                    <constraint firstAttribute="width" constant="92" id="XUL-iw-5h3"/>
                                                                     <constraint firstAttribute="height" constant="14" id="u2L-R0-5zn"/>
                                                                 </constraints>
                                                                 <buttonCell key="cell" type="check" title="Hidden" bezelStyle="regularSquare" imagePosition="left" inset="2" id="XCt-EB-k6H">

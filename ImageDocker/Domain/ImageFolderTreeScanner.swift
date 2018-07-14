@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import GRDB
 
 class ImageFolderTreeScanner {
     
@@ -45,22 +46,24 @@ class ImageFolderTreeScanner {
         return count
     }
     
-    func scanImageFolderFromDatabase() -> [ImageFolder] {
+    func scanImageFolderFromDatabase(fast:Bool = true) -> [ImageFolder] {
         var imageFolders:[ImageFolder] = [ImageFolder]()
         
         print("\(Date()) Loading containers from db ")
-        let containers = ModelStore.getAllContainers()
+        let containers = ModelStore.default.getAllContainers()
         
         print("\(Date()) Setting up containers' parent ")
         var urlFolders:[String:ImageFolder] = [:]
         for container in containers {
-            let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path!), countOfImages: Int(container.imageCount), updateModelStore: false)
-            urlFolders[container.path!] = imageFolder
-            if let containerParentFolder = container.parentFolder { // maybe faster
+            let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path), countOfImages: Int(container.imageCount), updateModelStore: false)
+            urlFolders[container.path] = imageFolder
+            if fast {
+                let containerParentFolder = container.parentFolder  // maybe faster
                 if let parentFolder = urlFolders[containerParentFolder] {
                     imageFolder.setParent(parentFolder)
                 }
-            }else {
+                
+            }else{
                 if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
                     imageFolder.setParent(parent)
                 }
@@ -114,7 +117,7 @@ class ImageFolderTreeScanner {
             return
         }
         
-        let photos = ModelStore.getPhotoFilesWithoutExif()
+        let photos = ModelStore.default.getPhotoFilesWithoutExif()
         if photos.count > 0 {
             print("\(Date()) UPDATING EXIF: \(photos.count)")
             if indicator != nil {
@@ -129,7 +132,7 @@ class ImageFolderTreeScanner {
                     return
                 }
                 
-                let url = URL(fileURLWithPath: photo.path!)
+                let url = URL(fileURLWithPath: photo.path)
                 let _ = ImageFile(url: url, indicator: indicator)
             }
             //ModelStore.save()
@@ -155,11 +158,10 @@ class ImageFolderTreeScanner {
             return
         }
         
-        let repositories = ModelStore.getRepositories()
-        
+        let repositories = ModelStore.default.getRepositories()
+        print("REPO COUNT = \(repositories.count)")
         var filesysUrls:Set<String> = Set<String>()
         for repo in repositories {
-            
             if suppressedScan {
                 if indicator != nil {
                     indicator?.forceComplete()
@@ -168,7 +170,7 @@ class ImageFolderTreeScanner {
             }
             
             print("\(Date()) CHECKING REPO \(repo.path ?? "")")
-            let startingURL = URL(fileURLWithPath: repo.path!)
+            let startingURL = URL(fileURLWithPath: repo.path)
             
             let options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles]
             let fileManager = FileManager.default
@@ -205,13 +207,16 @@ class ImageFolderTreeScanner {
         if indicator != nil {
             indicator?.display(message: "Checking differences .....")
         }
-        let exists = ModelStore.getAllPhotoFiles()
+        let exists = ModelStore.default.getAllPhotoFiles()
+        print("EXISTING DB PHOTO COUNT = \(exists.count)")
+        print("EXISTING SYS PHOTO COUNT = \(filesysUrls.count)")
         var dbUrls:Set<String> = Set<String>()
         for exist in exists {
-            if let path = exist.path {
-                dbUrls.insert(path)
-            }
+            let path = exist.path
+            dbUrls.insert(path)
+            
         }
+        print("EXISTING DB PHOTO COUNT2 = \(dbUrls.count)")
         
         let urlsToAdd:[String] = filesysUrls.subtracting(dbUrls).sorted()
         let urlsToRemoved:Set<String> = dbUrls.subtracting(filesysUrls)
@@ -250,9 +255,9 @@ class ImageFolderTreeScanner {
                 }
                 
                 //print("CREATING PHOTO \(url.path)")
-                let _ = ImageFile(url: URL(fileURLWithPath: url), indicator: indicator, quickCreate: true)
+                let image = ImageFile(url: URL(fileURLWithPath: url), indicator: indicator, quickCreate: true)
                 
-                ModelStore.save()
+                image.save()
             }
             print("\(Date()) URLS TO ADD FROM FILESYS: SAVE DONE")
         }
@@ -269,7 +274,7 @@ class ImageFolderTreeScanner {
                     return
                 }
                 
-                ModelStore.deletePhoto(atPath: url)
+                ModelStore.default.deletePhoto(atPath: url)
                 
                 if indicator != nil {
                     let _ = indicator?.add()
@@ -286,28 +291,28 @@ class ImageFolderTreeScanner {
     
     static func updateContainers(onCompleted: (() -> Void)? = nil ) {
         var imageFolders:[ImageFolder] = []
-        let exists = ModelStore.getAllContainers()
+        let exists = ModelStore.default.getAllContainers()
         if exists.count > 0 {
             for exist in exists{
-                let imageFolder = ImageFolder(URL(fileURLWithPath: exist.path!), countOfImages: Int(exist.imageCount) )
+                let imageFolder = ImageFolder(URL(fileURLWithPath: exist.path), countOfImages: Int(exist.imageCount) )
                 imageFolders.append(imageFolder)
                 
-                let photos = ModelStore.getPhotoFiles(rootPath: "\(imageFolder.url.path)/")
-                let count = Int32(photos.count)
-                if let container = imageFolder.containerFolder {
+                let count = ModelStore.default.countPhotoFiles(rootPath: "\(imageFolder.url.path)/")
+                if var container = imageFolder.containerFolder {
                     if container.imageCount != count {
                         print("= changing \(container.imageCount) to \(count)")  // don't delete this comment to avoid crash
                         container.imageCount = count
+                        ModelStore.default.saveImageContainer(container: container)
                     }
                 }
             }
-            ModelStore.save()
+            //ModelStore.save()
         }
-        let containers:[[String:AnyObject]]? = ModelStore.getAllContainerPaths()
-        if containers != nil && containers!.count > 0 {
-            for cont in containers! {
+        let containers:[Row] = ModelStore.default.getAllContainerPaths()
+        if containers.count > 0 {
+            for cont in containers {
                 let path:String = cont["containerPath"] as! String
-                let photoCount:Int = cont["photoCount"] as! Int
+                let photoCount:Int = cont["photoCount"] as Int
                 
                 let url:URL = URL(fileURLWithPath: path)
                 let imageFolder = ImageFolder(url, countOfImages: photoCount)

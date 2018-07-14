@@ -138,7 +138,7 @@ class CollectionViewItem: NSCollectionViewItem {
                 self.btnLook.image = NSImage(named: NSImage.Name.stopProgressTemplate)
                 self.btnLook.toolTip = "Hidden"
             }
-            ModelStore.save()
+            //ModelStore.save()
         }
     }
     

@@ -86,21 +86,15 @@ class ExportManager {
             }
             
             // check exported
-            let allMarkedExported = ModelStore.getAllPhotoFilesMarkedExported()
+            let allMarkedExported = ModelStore.default.getAllPhotoFilesMarkedExported()
             let totalMarked = allMarkedExported.count
             var k:Int = 0
-            var recovered:Bool = false
             
             print("\(Date()) EXPORT: CHECKING IF MARKED EXPORTED ARE REALLY EXPORTED")
             for photo in allMarkedExported {
                 
                 // if suppressed from outside, stop immediately
                 if suppressed {
-                    
-                    if recovered {
-                        ModelStore.save()
-                    }
-                    
                     ExportManager.working = false
                     DispatchQueue.main.async {
                         messageBox?.stringValue = ""
@@ -118,13 +112,11 @@ class ExportManager {
                 if photo.exportToPath != nil && photo.exportAsFilename != nil {
                     let fullpath:String = "\(photo.exportToPath ?? "")/\(photo.exportAsFilename ?? "")"
                     if !fm.fileExists(atPath: fullpath){
-                        photo.exportTime = nil
-                        recovered = true
+                        ModelStore.default.cleanImageExportTime(path: photo.path)
+                        //photo.exportTime = nil
+                        //recovered = true
                     }
                 }
-            }
-            if recovered {
-                ModelStore.save()
             }
             
             print("\(Date()) EXPORT: CHECKING IF MARKED EXPORTED ARE REALLY EXPORTED: DONE")
@@ -132,8 +124,7 @@ class ExportManager {
             // check updates and which not exported
             
             print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
-            var dataChanged:Bool = false
-            let photos:[PhotoFile] = ModelStore.getAllPhotoFilesForExporting(after: date)
+            let photos:[Image] = ModelStore.default.getAllPhotoFilesForExporting(after: date)
             
             let total = photos.count
             var i:Int = 0
@@ -141,13 +132,6 @@ class ExportManager {
                 
                 // if suppressed from outside, stop immediately
                 if suppressed {
-                    
-                    if dataChanged {
-                        DispatchQueue.main.async {
-                            ModelStore.save()
-                            //print("export done")
-                        }
-                    }
                     
                     ExportManager.working = false
                     DispatchQueue.main.async {
@@ -168,9 +152,9 @@ class ExportManager {
                 }
                 var pathComponents:[String] = []
                 pathComponents.append(PreferencesController.exportDirectory())
-                pathComponents.append("\(photo.photoTakenYear)年")
+                pathComponents.append("\(photo.photoTakenYear ?? 0)年")
                 //let year:String = "\(photo.photoTakenYear)"
-                let month:String = photo.photoTakenMonth < 10 ? "0\(photo.photoTakenMonth)" : "\(photo.photoTakenMonth)"
+                let month:String = photo.photoTakenMonth! < 10 ? "0\(photo.photoTakenMonth ?? 0)" : "\(photo.photoTakenMonth ?? 0)"
                 //let day:String = photo.photoTakenDay < 10 ? "0\(photo.photoTakenDay)" : "\(photo.photoTakenDay)"
                 let event:String = photo.event == nil || photo.event == "" ? "" : " \(photo.event ?? "")"
                 pathComponents.append("\(month)月\(event)")
@@ -197,19 +181,19 @@ class ExportManager {
                     }
                 }
                 
-                if (photo.filename?.starts(with: "mmexport"))! {
+                if (photo.filename.starts(with: "mmexport")) {
                     filenameComponents.append(" (来自微信)")
                 }
                 
-                if (photo.filename?.starts(with: "QQ空间视频_"))! {
+                if (photo.filename.starts(with: "QQ空间视频_")) {
                     filenameComponents.append(" (来自QQ)")
                 }
                 
-                if (photo.filename?.starts(with: "Screenshot_"))! {
+                if (photo.filename.starts(with: "Screenshot_")) {
                     filenameComponents.append(" (手机截屏)")
                 }
                 
-                let fileExt:String = (photo.filename!.split(separator: Character(".")).last?.lowercased())!
+                let fileExt:String = (photo.filename.split(separator: Character(".")).last?.lowercased())!
                 filenameComponents.append(".")
                 filenameComponents.append(fileExt)
                 
@@ -228,14 +212,15 @@ class ExportManager {
                 if originalExportPath == fullpath { // export to the same path as previous
                     if fm.fileExists(atPath: fullpath) {
                         let md5Exists = md5(pathOfFile: fullpath)
-                        let md5PhotoFile = md5(pathOfFile: photo.path!)
+                        let md5PhotoFile = md5(pathOfFile: photo.path)
                         if md5Exists == md5PhotoFile {
                             // same file, abort
                             //filepaths.append(originalExportPath)
                             
                             if photo.exportTime == nil {
-                                photo.exportTime = Date()
-                                dataChanged = true
+                                ModelStore.default.storeImageExportedTime(path: photo.path, date: Date())
+                                //photo.exportTime = Date()
+                                //dataChanged = true
                             }
                             continue
                         }else{
@@ -263,12 +248,13 @@ class ExportManager {
                 // other photo occupied the filename, same md5, abort
                 if fm.fileExists(atPath: fullpath) {
                     let md5Exists = md5(pathOfFile: fullpath)
-                    let md5PhotoFile = md5(pathOfFile: photo.path!)
+                    let md5PhotoFile = md5(pathOfFile: photo.path)
                     if md5Exists == md5PhotoFile {
                         
                         if photo.exportTime == nil {
-                            photo.exportTime = Date()
-                            dataChanged = true
+                            ModelStore.default.storeImageExportedTime(path: photo.path, date: Date())
+                            //photo.exportTime = Date()
+                            //dataChanged = true
                         }
                         continue
                     }
@@ -316,37 +302,33 @@ class ExportManager {
                     }
                 }
                 do {
-                    try fm.copyItem(atPath: photo.path!, toPath: "\(path)/\(filename)")
+                    try fm.copyItem(atPath: photo.path, toPath: "\(path)/\(filename)")
                 }catch {
-                    print("Cannot copy from: \(photo.path!) to: \(path)/\(filename) ")
+                    print("Cannot copy from: \(photo.path) to: \(path)/\(filename) ")
                     print(error)
                     continue
                 }
                 
                 if photo.exportToPath == nil || path != photo.exportToPath {
-                    photo.exportToPath = path
-                    photo.exportTime = Date()
-                    dataChanged = true
+                    ModelStore.default.storeImageExportedTime(path: photo.path, date: Date(), exportToPath: path)
+                    //photo.exportToPath = path
+                    //photo.exportTime = Date()
+                    //dataChanged = true
                 }
                 if photo.exportAsFilename == nil || filename != photo.exportAsFilename {
-                    photo.exportAsFilename = filename
-                    photo.exportTime = Date()
-                    dataChanged = true
+                    ModelStore.default.storeImageExportedTime(path: photo.path, date: Date(), exportedFilename: path)
+                    //photo.exportAsFilename = filename
+                    //photo.exportTime = Date()
+                    //dataChanged = true
                 }
                 
                 if photo.exportTime == nil {
-                    photo.exportTime = Date()
-                    dataChanged = true
+                    ModelStore.default.storeImageExportedTime(path: photo.path, date: Date())
+                    //photo.exportTime = Date()
+                    //dataChanged = true
                 }
                 
                 //filepaths.append(fullpath)
-            }
-            
-            if dataChanged {
-                DispatchQueue.main.async {
-                    ModelStore.save()
-                    //print("export done")
-                }
             }
             
             print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED: DONE")
@@ -365,7 +347,7 @@ class ExportManager {
             
             print("\(Date()) EXPORT: HOUSE KEEP")
             var filepaths:[String] = []
-            let allphotos = ModelStore.getAllPhotoFiles()
+            let allphotos = ModelStore.default.getAllPhotoFiles()
             for photo in allphotos {
                 if photo.exportToPath != nil && photo.exportAsFilename != nil {
                     let path = "\(photo.exportToPath ?? "")/\(photo.exportAsFilename ?? "")"

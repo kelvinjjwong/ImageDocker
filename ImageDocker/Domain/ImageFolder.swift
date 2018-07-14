@@ -16,7 +16,7 @@ class ImageFolder : NSObject {
     var sumOfImages:Int = 0
     var parent:ImageFolder? = nil
     var photoCollection:PhotoCollection? = nil
-    var containerFolder:ContainerFolder? = nil
+    var containerFolder:ImageContainer? = nil
     
     init(_ url:URL, countOfImages:Int = 0, updateModelStore:Bool = true){
         self.url = url
@@ -26,9 +26,9 @@ class ImageFolder : NSObject {
         let name:String = url.lastPathComponent
         //print("LOAD FOLDER 2 \(name) \(path)")
         
-        self.containerFolder = ModelStore.getOrCreateContainer(name: name, path: path)
+        self.containerFolder = ModelStore.default.getOrCreateContainer(name: name, path: path)
         if self.containerFolder?.imageCount == nil {
-            self.containerFolder?.imageCount = Int32(countOfImages)
+            self.containerFolder?.imageCount = countOfImages
         }
         
     }
@@ -49,7 +49,7 @@ class ImageFolder : NSObject {
     func totalCountOfImages() -> Int {
         let count:Int = self.countOfImages + sumUpImagesFromChildren(self)
         if containerFolder != nil {
-            containerFolder?.imageCount = Int32(count)
+            containerFolder?.imageCount = count
         }
         return count
     }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import GRDB
 
 class Event {
     
@@ -85,13 +86,19 @@ class Event {
 class Events {
     var events:[Event] = [Event] ()
     
-    func read(_ datas:[[String : AnyObject]]) -> [Event]{
+    func read(_ datas:[Row]) -> [Event]{
+        print(datas.count)
         for data in datas {
             let event = data["event"] as? String ?? ""
-            let year = data["photoTakenYear"] as! Int
-            let month = data["photoTakenMonth"] as! Int
-            let day = data["photoTakenDay"] as! Int
-            let photoCount = data["photoCount"] as! Int
+            //print(event)
+            let year = data["photoTakenYear"] as Int
+            //print("year")
+            let month = data["photoTakenMonth"] as Int
+            //print("month")
+            let day = data["photoTakenDay"] as Int
+            //print("day")
+            let photoCount = data["photoCount"] as Int
+            //print("count")
             let place = data["place"] as? String ?? ""
             
             //print("Got \(event)-\(year)-\(month)-\(day)-\(place)")

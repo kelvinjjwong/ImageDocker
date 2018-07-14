@@ -8,6 +8,7 @@
 
 import Cocoa
 import PXSourceList
+import GRDB
 
 let photosIcon:NSImage = NSImage(imageLiteralResourceName: "photos")
 let eventsIcon:NSImage = NSImage(imageLiteralResourceName: "events")
@@ -55,9 +56,9 @@ extension ViewController {
     }
     
     func loadEventsToTreeFromDatabase() {
-        let dates:[[String : AnyObject]]? = ModelStore.getAllEvents(imageSource: filterImageSource, cameraModel: filterCameraModel)
-        if dates != nil {
-            let events:[Event] = Events().read(dates!)
+        let dates:[Row] = ModelStore.default.getAllEvents(imageSource: filterImageSource, cameraModel: filterCameraModel)
+        if dates.count > 0 {
+            let events:[Event] = Events().read(dates)
             for event in events {
                 if event.event == ""{
                     continue
@@ -77,11 +78,11 @@ extension ViewController {
     }
     
     func loadMomentsToTreeFromDatabase(groupByPlace:Bool = false, filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil){
-        let dates:[[String : AnyObject]]? = ModelStore.getAllDates(groupByPlace: groupByPlace, imageSource: filterImageSource, cameraModel: filterCameraModel)
-        if dates != nil {
-            let moments:[Moment] = Moments().read(dates!, groupByPlace: groupByPlace)
+        let dates:[Row] = ModelStore.default.getAllDates(groupByPlace: groupByPlace, imageSource: filterImageSource, cameraModel: filterCameraModel)
+        if dates.count > 0 {
+            let moments:[Moment] = Moments().read(dates, groupByPlace: groupByPlace)
             
-            let duplicates:Duplicates = ModelStore.getDuplicatePhotos()
+            let duplicates:Duplicates = ModelStore.default.getDuplicatePhotos()
             
             if groupByPlace {
                 for place in moments {
@@ -192,7 +193,7 @@ extension ViewController {
         }
     }
     
-    func refreshLibraryTree() {
+    func refreshLibraryTree(fast:Bool = true) {
         //print("REFRESHING MOMENT TREE at \(Date())")
         let count = self.libraryItem().children.count
         // remove items in moments
@@ -204,7 +205,7 @@ extension ViewController {
                                         withAnimation: NSTableView.AnimationOptions.slideUp)
         }
         self.libraryItem().children.removeAll()
-        self.loadPathToTreeFromDatabase()
+        self.loadPathToTreeFromDatabase(fast: fast)
         self.sourceList.reloadData()
     }
     
@@ -297,9 +298,9 @@ extension ViewController {
         self.sourceList.reloadData()
     }
     
-    func loadPathToTreeFromDatabase() {
+    func loadPathToTreeFromDatabase(fast:Bool = true) {
         print("\(Date()) Loading image folders from db ")
-        let imageFolders = ImageFolderTreeScanner.default.scanImageFolderFromDatabase()
+        let imageFolders = ImageFolderTreeScanner.default.scanImageFolderFromDatabase(fast: fast)
         
         print("\(Date()) Adding image folders as tree entries ")
         if imageFolders.count > 0 {

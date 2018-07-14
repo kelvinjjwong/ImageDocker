@@ -170,6 +170,7 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("\(Date()) Loading view")
+        ModelStore.default.checkData()
         
         //self.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
@@ -179,6 +180,13 @@ class ViewController: NSViewController {
         
         print("\(Date()) Loading view - configure dark mode")
         configureDarkMode()
+        
+        self.imagesLoader.hiddenCountHandler = { hiddenCount in
+            DispatchQueue.main.async {
+                self.chbShowHidden.title = "Hidden (\(hiddenCount))"
+                print("hidden: \(hiddenCount)")
+            }
+        }
         
         self.chbShowHidden.state = NSButton.StateValue.off
         
@@ -225,7 +233,7 @@ class ViewController: NSViewController {
             guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing else {return}
             print("\(Date()) SCANING LOCATION CHANGE")
             if self.lastCheckLocationChange != nil {
-                let photoFiles:[PhotoFile] = ModelStore.getPhotoFiles(after: self.lastCheckLocationChange!)
+                let photoFiles:[Image] = ModelStore.default.getPhotoFiles(after: self.lastCheckLocationChange!)
                 if photoFiles.count > 0 {
                     self.saveTreeItemsExpandState()
                     self.refreshLocationTree()
@@ -240,7 +248,7 @@ class ViewController: NSViewController {
             guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing else {return}
             print("\(Date()) SCANING DATE CHANGE")
             if self.lastCheckPhotoTakenDateChange != nil {
-                let photoFiles:[PhotoFile] = ModelStore.getPhotoFiles(after: self.lastCheckPhotoTakenDateChange!)
+                let photoFiles:[Image] = ModelStore.default.getPhotoFiles(after: self.lastCheckPhotoTakenDateChange!)
                 if photoFiles.count > 0 {
                     self.saveTreeItemsExpandState()
                     self.refreshMomentTree()
@@ -255,7 +263,7 @@ class ViewController: NSViewController {
             guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing else {return}
             print("\(Date()) SCANING EVENT CHANGE")
             if self.lastCheckEventChange != nil {
-                let photoFiles:[PhotoFile] = ModelStore.getPhotoFiles(after: self.lastCheckEventChange!)
+                let photoFiles:[Image] = ModelStore.default.getPhotoFiles(after: self.lastCheckEventChange!)
                 if photoFiles.count > 0 {
                     self.saveTreeItemsExpandState()
                     self.refreshEventTree()
@@ -581,7 +589,9 @@ class ViewController: NSViewController {
                 })
             //print("GETTING COLLECTION \(collection.year) \(collection.month) \(collection.day) \(collection.place ?? "")")
             if self.imagesLoader.isLoading() {
-                self.indicatorMessage.stringValue = "Cancelling last request ..."
+                DispatchQueue.main.async {
+                    self.indicatorMessage.stringValue = "Cancelling last request ..."
+                }
                 self.imagesLoader.cancel(onCancelled: {
                     self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, place: groupByPlace ? collection.place : nil, filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel, indicator:self.collectionLoadingIndicator)
                     self.refreshCollectionView()
@@ -704,13 +714,7 @@ class ViewController: NSViewController {
             if(self.selectedImageFolder?.containerFolder?.parentFolder == ""){
                 if self.dialogOKCancel(question: "Remove all photos relate to this folder ?", text: selectedImageFolder!.url.path) {
                     let rootPath:String = (selectedImageFolder?.containerFolder?.path)!
-                    for photoFile:PhotoFile in ModelStore.getPhotoFiles(rootPath: rootPath) {
-                        AppDelegate.current.managedObjectContext.delete(photoFile)
-                    }
-                    for containerFolder:ContainerFolder in ModelStore.getContainers(rootPath: rootPath){
-                        AppDelegate.current.managedObjectContext.delete(containerFolder)
-                    }
-                    ModelStore.save()
+                    ModelStore.default.deleteContainer(path: rootPath)
                     //self.initSourceListDataModel()
                     let selectedItem:PXSourceListItem = self.sourceList.item(atRow: self.sourceList.selectedRow) as! PXSourceListItem
                     let parentItem:PXSourceListItem = self.libraryItem()
@@ -736,10 +740,10 @@ class ViewController: NSViewController {
         }
     }
     
-    func refreshTree() {
+    func refreshTree(fast:Bool = true) {
         self.saveTreeItemsExpandState()
         
-        self.refreshLibraryTree()
+        self.refreshLibraryTree(fast: fast)
         self.refreshMomentTree()
         self.refreshLocationTree()
         self.refreshEventTree()
@@ -751,8 +755,8 @@ class ViewController: NSViewController {
     @IBAction func onRefreshButtonClicked(_ sender: Any) {
         print("clicked refresh button")
         
-        ModelStore.reloadDuplicatePhotos()
-        self.refreshTree()
+        ModelStore.default.reloadDuplicatePhotos()
+        self.refreshTree(fast: false)
     }
     
     var filterImageSource:[String] = []
@@ -1046,6 +1050,9 @@ class ViewController: NSViewController {
     // add to favourites
     @IBAction func onMarkLocationButtonClicked(_ sender: NSButton) {
         self.createPlacePopover()
+        if self.possibleLocation != nil {
+            self.placeViewController.setPossibleLocation(place: self.possibleLocation!)
+        }
         
         let cellRect = sender.bounds
         self.placePopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
@@ -1135,7 +1142,7 @@ class ViewController: NSViewController {
         })
         accumulator.reset()
         
-        var event:PhotoEvent? = nil
+        var event:ImageEvent? = nil
         for ev in self.eventListController.events {
             if ev.name == self.comboEventList.stringValue {
                 event = ev
@@ -1186,7 +1193,7 @@ class ViewController: NSViewController {
             item.hide()
             let _ = accumulator.add()
         }
-        ModelStore.save()
+        //ModelStore.save()
         self.selectionViewController.imagesLoader.reorganizeItems()
         self.selectionCollectionView.reloadData()
         self.imagesLoader.reorganizeItems()
@@ -1200,7 +1207,7 @@ class ViewController: NSViewController {
             item.show()
             let _ = accumulator.add()
         }
-        ModelStore.save()
+        //ModelStore.save()
         self.selectionViewController.imagesLoader.reorganizeItems()
         self.selectionCollectionView.reloadData()
         self.imagesLoader.reorganizeItems()
@@ -1245,10 +1252,10 @@ extension ViewController : EventListRefreshDelegate{
 
 class EventListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxDataSource, NSComboBoxDelegate {
     
-    var events:[PhotoEvent] = []
+    var events:[ImageEvent] = []
     
     func loadEvents() {
-        self.events = ModelStore.getEvents()
+        self.events = ModelStore.default.getEvents()
     }
     
     func comboBox(_ comboBox: NSComboBox, completedString string: String) -> String? {
@@ -1256,7 +1263,7 @@ class EventListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
         //print("SubString = \(string)")
         
         for event in events {
-            let state = event.name!
+            let state = event.name
             // substring must have less characters then stings to search
             if string.count < state.count{
                 // only use first part of the strings in the list with length of the search string
@@ -1281,7 +1288,7 @@ class EventListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
     func comboBox(_ comboBox: NSComboBox, indexOfItemWithStringValue string: String) -> Int {
         var i = 0
         for event in events {
-            let str = event.name!
+            let str = event.name
             if str == string{
                 return i
             }
@@ -1323,13 +1330,13 @@ extension ViewController : PlaceListRefreshDelegate{
 
 class PlaceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxDataSource, NSComboBoxDelegate {
     
-    var places:[PhotoPlace] = []
+    var places:[ImagePlace] = []
     var refreshDelegate:PlaceListRefreshDelegate?
     var combobox:NSComboBox?
     var working:Bool = false
     
     func loadPlaces() {
-        self.places = ModelStore.getPlaces()
+        self.places = ModelStore.default.getPlaces()
     }
     
     func comboBox(_ comboBox: NSComboBox, completedString string: String) -> String? {
@@ -1337,7 +1344,7 @@ class PlaceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
         //print("SubString = \(string)")
         
         for place in places {
-            let state = place.name!
+            let state = place.name
             // substring must have less characters then stings to search
             if string.count < state.count{
                 // only use first part of the strings in the list with length of the search string
@@ -1353,8 +1360,8 @@ class PlaceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
     
     func comboBoxSelectionDidChange(_ notification: Notification) {
         if combobox == nil || working {return}
-        let name = places[combobox!.indexOfSelectedItem].name!
-        let place:PhotoPlace? = ModelStore.getPlace(name: name)
+        let name = places[combobox!.indexOfSelectedItem].name
+        let place:ImagePlace? = ModelStore.default.getPlace(name: name)
         if place != nil {
             let location = Location()
             location.country = place?.country ?? ""
@@ -1386,7 +1393,7 @@ class PlaceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
     func comboBox(_ comboBox: NSComboBox, indexOfItemWithStringValue string: String) -> Int {
         var i = 0
         for place in places {
-            let str = place.name!
+            let str = place.name
             if str == string{
                 return i
             }

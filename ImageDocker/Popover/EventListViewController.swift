@@ -33,11 +33,11 @@ class EventListViewController: NSViewController {
     var lastSelectedRow:Int? {
         didSet {
             if lastSelectedRow != nil && events.count > 0 && lastSelectedRow! < events.count {
-                eventName.stringValue = events[lastSelectedRow!].name!
-                selectedEventName = events[lastSelectedRow!].name!
+                eventName.stringValue = events[lastSelectedRow!].name
+                selectedEventName = events[lastSelectedRow!].name
                 
                 if self.refreshDelegate != nil {
-                    self.refreshDelegate?.selectEvent(name: events[lastSelectedRow!].name!)
+                    self.refreshDelegate?.selectEvent(name: events[lastSelectedRow!].name)
                 }
             }
         }
@@ -49,13 +49,13 @@ class EventListViewController: NSViewController {
     @IBOutlet weak var eventSearcher: NSSearchField!
     @IBOutlet weak var eventName: NSTextField!
     
-    var events:[PhotoEvent] = []
+    var events:[ImageEvent] = []
     var selectedEventName:String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        self.events = ModelStore.getEvents()
+        self.events = ModelStore.default.getEvents()
         eventTable.delegate = self
         eventTable.dataSource = self
         eventTable.reloadData()
@@ -64,9 +64,9 @@ class EventListViewController: NSViewController {
     @IBAction func onEventSearcherAction(_ sender: Any) {
         let keyword:String = eventSearcher.stringValue
         if keyword == "" {
-            self.events = ModelStore.getEvents()
+            self.events = ModelStore.default.getEvents()
         }else{
-            self.events = ModelStore.getEvents(byName: keyword)
+            self.events = ModelStore.default.getEvents(byName: keyword)
         }
         eventTable.reloadData()
     }
@@ -74,10 +74,10 @@ class EventListViewController: NSViewController {
     @IBAction func onButtonCreateClicked(_ sender: Any) {
         let name:String = eventName.stringValue
         if name == "" {return}
-        let _ = ModelStore.getOrCreateEvent(name: name)
-        ModelStore.save()
+        let _ = ModelStore.default.getOrCreateEvent(name: name)
+        //ModelStore.save()
         
-        self.events = ModelStore.getEvents()
+        self.events = ModelStore.default.getEvents()
         eventTable.reloadData()
         
         if self.refreshDelegate != nil {
@@ -91,10 +91,10 @@ class EventListViewController: NSViewController {
         
         if self.dialogOKCancel(question: "Disconnect photos with this event ?", text: name) {
             
-            ModelStore.deleteEvent(name: name)
-            ModelStore.save()
+            ModelStore.default.deleteEvent(name: name)
+            //ModelStore.save()
             
-            self.events = ModelStore.getEvents()
+            self.events = ModelStore.default.getEvents()
             eventTable.reloadData()
             
             if self.refreshDelegate != nil {
@@ -107,10 +107,10 @@ class EventListViewController: NSViewController {
         let name:String = eventName.stringValue
         guard name != "" && selectedEventName != "" && name != selectedEventName else {return}
         
-        ModelStore.renameEvent(oldName: selectedEventName, newName: name)
-        ModelStore.save()
+        ModelStore.default.renameEvent(oldName: selectedEventName, newName: name)
+        //ModelStore.save()
         
-        self.events = ModelStore.getEvents()
+        self.events = ModelStore.default.getEvents()
         eventTable.reloadData()
         
         if self.refreshDelegate != nil {
@@ -122,9 +122,9 @@ class EventListViewController: NSViewController {
     @IBAction func onButtonReloadClicked(_ sender: Any) {
         let keyword:String = eventSearcher.stringValue
         if keyword == "" {
-            self.events = ModelStore.getEvents()
+            self.events = ModelStore.default.getEvents()
         }else{
-            self.events = ModelStore.getEvents(byName: keyword)
+            self.events = ModelStore.default.getEvents(byName: keyword)
         }
         eventTable.reloadData()
     }
@@ -153,7 +153,7 @@ extension EventListViewController: NSTableViewDelegate {
         if row > (self.events.count - 1) {
             return nil
         }
-        let info:PhotoEvent = self.events[row]
+        let info:ImageEvent = self.events[row]
         var value = ""
         //var tip: String? = nil
         if let id = tableColumn?.identifier {
@@ -171,7 +171,7 @@ extension EventListViewController: NSTableViewDelegate {
                     value = dateFormatter.string(from: info.endDate!)
                 }
             case NSUserInterfaceItemIdentifier("eventName"):
-                value = info.name!
+                value = info.name
                 
             default:
                 break

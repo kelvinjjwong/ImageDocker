@@ -31,7 +31,7 @@ class ImageFile {
             }
         }
     }
-    private var photoFile:PhotoFile?
+    private var photoFile:Image?
     
     private var indicator:Accumulator?
     var collectionViewItem:CollectionViewItem?
@@ -88,12 +88,14 @@ class ImageFile {
     func hide() {
         if photoFile != nil {
             photoFile?.hidden = true
+            ModelStore.default.saveImage(image: photoFile!)
         }
     }
     
     func show() {
         if photoFile != nil {
             photoFile?.hidden = false
+            ModelStore.default.saveImage(image: photoFile!)
         }
     }
     
@@ -105,7 +107,7 @@ class ImageFile {
     var isLoadedExif:Bool = false
     var isRecognizedDateTimeFromFilename:Bool = false
     
-    init (photoFile:PhotoFile, indicator:Accumulator? = nil, metaInfoStore:MetaInfoStoreDelegate? = nil) {
+    init (photoFile:Image, indicator:Accumulator? = nil, metaInfoStore:MetaInfoStoreDelegate? = nil) {
         exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"
         exifDateFormatWithTimezone.dateFormat = "yyyy:MM:dd HH:mm:ssxxx"
         
@@ -172,6 +174,12 @@ class ImageFile {
         
         self.notifyAccumulator(notifyIndicator: true)
     }
+    
+    func save(){
+        if self.photoFile != nil {
+            ModelStore.default.saveImage(image: self.photoFile!)
+        }
+    }
 
     init (url: URL, indicator:Accumulator? = nil, metaInfoStore:MetaInfoStoreDelegate? = nil, quickCreate:Bool = false) {
         exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"
@@ -189,7 +197,7 @@ class ImageFile {
         
         self.metaInfoHolder = metaInfoStore ?? MetaInfoHolder()
         
-        self.photoFile = ModelStore.getOrCreatePhoto(filename: fileName, path: url.path, parentPath: url.deletingLastPathComponent().path)
+        self.photoFile = ModelStore.default.getOrCreatePhoto(filename: fileName, path: url.path, parentPath: url.deletingLastPathComponent().path)
         
         self.metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Filename", value: url.lastPathComponent))
         self.metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Full path", value: url.path.replacingOccurrences(of: url.lastPathComponent, with: "")))
@@ -299,6 +307,8 @@ class ImageFile {
             imageSource = "Camera"
         }else if filename.starts(with: "VID_") {
             imageSource = "Camera"
+        }else if filename.starts(with: "DSC") {
+            imageSource = "Camera"
         }else if filename.starts(with: "Screenshot_") {
             imageSource = "ScreenShot"
         }
@@ -324,10 +334,6 @@ class ImageFile {
         if photoFile != nil && imageSource != "" {
             photoFile?.imageSource = imageSource
         }
-    }
-    
-    func save(){
-        AppDelegate.current.saveModelStore()
     }
     
     lazy var thumbnail:NSImage? = self.setThumbnail(self.url as URL)
@@ -554,10 +560,10 @@ class ImageFile {
         let calendar = NSCalendar.current
         let component = calendar.dateComponents([.year, .month, .day, .hour], from: photoTakenDate)
         if self.photoFile != nil && component.year != nil && component.month != nil && component.day != nil && component.hour != nil {
-            self.photoFile?.photoTakenYear = Int32(component.year!)
-            self.photoFile?.photoTakenMonth = Int32(component.month!)
-            self.photoFile?.photoTakenDay = Int32(component.day!)
-            self.photoFile?.photoTakenHour = Int32(component.hour!)
+            self.photoFile?.photoTakenYear = component.year!
+            self.photoFile?.photoTakenMonth = component.month!
+            self.photoFile?.photoTakenDay = component.day!
+            self.photoFile?.photoTakenHour = component.hour!
             self.photoFile?.updatePhotoTakenDate = Date()
         }
     }
@@ -640,9 +646,10 @@ class ImageFile {
         
     }
     
-    func assignEvent(event:PhotoEvent){
+    func assignEvent(event:ImageEvent){
+        var event = event
         if photoFile != nil {
-            photoFile?.event = event.name ?? ""
+            photoFile?.event = event.name
             metaInfoHolder.setMetaInfo(MetaInfo(category: "Event", subCategory: "", title: "Assigned", value: event.name ?? ""))
             
             if event.startDate == nil {
@@ -661,6 +668,7 @@ class ImageFile {
                 }
             }
             photoFile?.updateEventDate = Date()
+            
             
         }
     }
@@ -912,8 +920,8 @@ class ImageFile {
             
             if pxWidth != 0 && pxHeight != 0 {
                 if self.photoFile != nil {
-                    self.photoFile?.imageWidth = Int32(pxWidth)
-                    self.photoFile?.imageHeight = Int32(pxHeight)
+                    self.photoFile?.imageWidth = pxWidth
+                    self.photoFile?.imageHeight = pxHeight
                 }
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "", title: "Size", value: "\(pxWidth) x \(pxHeight)"))
             }
@@ -1034,17 +1042,17 @@ class ImageFile {
         }
     }
     
-    public func loadMetaInfoFromDatabase(_ record:PhotoFile? = nil) {
+    public func loadMetaInfoFromDatabase(_ record:Image? = nil) {
         let filename:String = url.lastPathComponent
         let path:String = url.path
         let parentPath:String = (url.deletingLastPathComponent().path)
         
-        let photoFile = record ?? ModelStore.getOrCreatePhoto(filename: filename, path: path, parentPath: parentPath)
+        let photoFile = record ?? ModelStore.default.getOrCreatePhoto(filename: filename, path: path, parentPath: parentPath)
         //print("loaded PhotoFile for \(filename)")
         
         
         if photoFile.imageWidth != 0 && photoFile.imageHeight != 0 {
-            metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "", title: "Size", value: "\(photoFile.imageWidth) x \(photoFile.imageHeight)"))
+            metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "", title: "Size", value: "\(photoFile.imageWidth ?? 0) x \(photoFile.imageHeight ?? 0)"))
         }
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Camera", subCategory: "", title: "Manufacture", value: photoFile.cameraMaker))
         
@@ -1128,16 +1136,16 @@ class ImageFile {
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "TrackModifyDate", value: exifDateFormat.string(from: photoFile.trackModifyDate!)))
             }
         
-            metaInfoHolder.setMetaInfo(MetaInfo(category: "Video", title: "Frame Rate", value: photoFile.videoFrameRate.description))
-            metaInfoHolder.setMetaInfo(MetaInfo(category: "Video", title: "Image Width", value: photoFile.imageWidth.description))
-            metaInfoHolder.setMetaInfo(MetaInfo(category: "Video", title: "Image Height", value: photoFile.imageHeight.description))
+            metaInfoHolder.setMetaInfo(MetaInfo(category: "Video", title: "Frame Rate", value: photoFile.videoFrameRate?.description))
+            metaInfoHolder.setMetaInfo(MetaInfo(category: "Video", title: "Image Width", value: photoFile.imageWidth?.description))
+            metaInfoHolder.setMetaInfo(MetaInfo(category: "Video", title: "Image Height", value: photoFile.imageHeight?.description))
             metaInfoHolder.setMetaInfo(MetaInfo(category: "Video", title: "Duration", value: photoFile.videoDuration))
             metaInfoHolder.setMetaInfo(MetaInfo(category: "Video", title: "Size", value: photoFile.fileSize))
             metaInfoHolder.setMetaInfo(MetaInfo(category: "Video", title: "Avg Bitrate", value: photoFile.videoBitRate))
-            metaInfoHolder.setMetaInfo(MetaInfo(category: "Video", title: "Rotation", value: photoFile.rotation.description))
-            metaInfoHolder.setMetaInfo(MetaInfo(category: "Audio", title: "Channels", value: photoFile.audioChannels.description))
+            metaInfoHolder.setMetaInfo(MetaInfo(category: "Video", title: "Rotation", value: photoFile.rotation?.description))
+            metaInfoHolder.setMetaInfo(MetaInfo(category: "Audio", title: "Channels", value: photoFile.audioChannels?.description))
             metaInfoHolder.setMetaInfo(MetaInfo(category: "Audio", title: "BitsPerSample", value: photoFile.videoBitRate))
-            metaInfoHolder.setMetaInfo(MetaInfo(category: "Audio", title: "SampleRate", value: photoFile.audioRate.description))
+            metaInfoHolder.setMetaInfo(MetaInfo(category: "Audio", title: "SampleRate", value: photoFile.audioRate?.description))
         }
         
         metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Country", value: photoFile.country))
@@ -1257,10 +1265,10 @@ class ImageFile {
                 photoFile?.videoFrameRate = json[0]["QuickTime"]["VideoFrameRate"].doubleValue
                 
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "Video", title: "Image Width", value: json[0]["QuickTime"]["ImageWidth"].description))
-                photoFile?.imageWidth = json[0]["QuickTime"]["ImageWidth"].int32 ?? 0
+                photoFile?.imageWidth = json[0]["QuickTime"]["ImageWidth"].int ?? 0
                 
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "Video", title: "Image Height", value: json[0]["QuickTime"]["ImageHeight"].description))
-                photoFile?.imageHeight = json[0]["QuickTime"]["ImageHeight"].int32 ?? 0
+                photoFile?.imageHeight = json[0]["QuickTime"]["ImageHeight"].int ?? 0
                 
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "Video", title: "Duration", value: json[0]["QuickTime"]["Duration"].description))
                 photoFile?.videoDuration = json[0]["QuickTime"]["Duration"].description
@@ -1272,16 +1280,16 @@ class ImageFile {
                 photoFile?.videoBitRate = json[0]["Composite"]["AvgBitrate"].description
                 
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "Video", title: "Rotation", value: json[0]["Composite"]["Rotation"].description))
-                photoFile?.rotation = json[0]["Composite"]["Rotation"].int32 ?? 0
+                photoFile?.rotation = json[0]["Composite"]["Rotation"].int ?? 0
                 
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "Audio", title: "Channels", value: json[0]["QuickTime"]["AudioChannels"].description))
-                photoFile?.audioChannels = json[0]["QuickTime"]["AudioChannels"].int32 ?? 0
+                photoFile?.audioChannels = json[0]["QuickTime"]["AudioChannels"].int ?? 0
                 
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "Audio", title: "BitsPerSample", value: json[0]["QuickTime"]["AudioBitsPerSample"].description))
-                photoFile?.audioBits = json[0]["QuickTime"]["AudioBitsPerSample"].int32 ?? 0
+                photoFile?.audioBits = json[0]["QuickTime"]["AudioBitsPerSample"].int ?? 0
                 
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "Audio", title: "SampleRate", value: json[0]["QuickTime"]["AudioSampleRate"].description))
-                photoFile?.audioRate = json[0]["QuickTime"]["AudioSampleRate"].int32 ?? 0
+                photoFile?.audioRate = json[0]["QuickTime"]["AudioSampleRate"].int ?? 0
             }
             photoFile?.updateExifDate = Date()
         }

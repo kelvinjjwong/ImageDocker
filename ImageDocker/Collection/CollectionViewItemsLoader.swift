@@ -46,6 +46,7 @@ class CollectionViewItemsLoader: NSObject {
     var considerPlaces = true
     var indicator:Accumulator?
     var showHidden:Bool = false
+    var hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil
     private var cancelling:Bool = false
     private var loading:Bool = false
     
@@ -101,7 +102,7 @@ class CollectionViewItemsLoader: NSObject {
         
         //var urls: [URL] = []
         print("\(Date()) Loading photo files from db")
-        let photoFiles = ModelStore.getPhotoFiles(year: year, month: month, day: day, place: place, includeHidden: showHidden, imageSource: filterImageSource, cameraModel: filterCameraModel)
+        let photoFiles = ModelStore.default.getPhotoFiles(year: year, month: month, day: day, place: place, includeHidden: showHidden, imageSource: filterImageSource, cameraModel: filterCameraModel, hiddenCountHandler: self.hiddenCountHandler)
         //print("GOT PHOTOS for year:\(year) month:\(month) day:\(day) place:\(place) count \(photoFiles.count)")
         //for photoFile in photoFiles {
         //    urls.append(URL(fileURLWithPath: photoFile.path!))
@@ -127,7 +128,7 @@ class CollectionViewItemsLoader: NSObject {
         self.indicator = indicator
         
         //var urls: [URL] = []
-        let photoFiles = ModelStore.getPhotoFiles(year: year, month: month, day: day, event: event, place:place, includeHidden: showHidden, imageSource: filterImageSource, cameraModel: filterCameraModel)
+        let photoFiles = ModelStore.default.getPhotoFiles(year: year, month: month, day: day, event: event, place:place, includeHidden: showHidden, imageSource: filterImageSource, cameraModel: filterCameraModel, hiddenCountHandler: self.hiddenCountHandler)
         //print("GOT PHOTOS for year:\(year) month:\(month) day:\(day) event:\(event) place:\(place) count \(photoFiles.count)")
         //for photoFile in photoFiles {
         //    urls.append(URL(fileURLWithPath: photoFile.path!))
@@ -202,7 +203,7 @@ class CollectionViewItemsLoader: NSObject {
         }
     }
     
-    func setupItems(photoFiles: [PhotoFile]?, cleanViewBeforeLoading:Bool = true){
+    func setupItems(photoFiles: [Image]?, cleanViewBeforeLoading:Bool = true){
         if items.count > 0 {
             items.removeAll()
         }
@@ -419,7 +420,7 @@ class CollectionViewItemsLoader: NSObject {
             items.removeAll()
         }
         print("\(Date()) Loading duplicate photos from db")
-        let duplicates:Duplicates = ModelStore.getDuplicatePhotos()
+        let duplicates:Duplicates = ModelStore.default.getDuplicatePhotos()
         print("\(Date()) Loading duplicate photos from db: DONE")
         
         for url in urls {
@@ -447,7 +448,7 @@ class CollectionViewItemsLoader: NSObject {
         //print("TRANSFORMED TO ITEMS \(urls.count)")
     }
     
-    private func transformToDomainItems(photoFiles: [PhotoFile]){
+    private func transformToDomainItems(photoFiles: [Image]){
         
         if self.cancelling {
             return
@@ -458,7 +459,7 @@ class CollectionViewItemsLoader: NSObject {
         }
         
         print("\(Date()) Loading duplicate photos from db")
-        let duplicates:Duplicates = ModelStore.getDuplicatePhotos()
+        let duplicates:Duplicates = ModelStore.default.getDuplicatePhotos()
         print("\(Date()) Loading duplicate photos from db: DONE")
         
         for photoFile in photoFiles {
@@ -492,24 +493,24 @@ class CollectionViewItemsLoader: NSObject {
         }
         
         var urls: [URL] = []
-        for photoFile in ModelStore.getPhotoFiles(parentPath: startingURL.path, includeHidden: includeHidden) {
+        for photoFile in ModelStore.default.getPhotoFiles(parentPath: startingURL.path, includeHidden: includeHidden) {
             
             if self.cancelling {
                 return nil
             }
             
-            urls.append(URL(fileURLWithPath: photoFile.path!))
+            urls.append(URL(fileURLWithPath: photoFile.path))
         }
         return urls
     }
     
-    private func walkthruDatabaseForPhotoFiles(startingURL: URL, includeHidden:Bool = true) -> [PhotoFile]? {
+    private func walkthruDatabaseForPhotoFiles(startingURL: URL, includeHidden:Bool = true) -> [Image]? {
         
         if self.cancelling {
             return nil
         }
         
-        return ModelStore.getPhotoFiles(parentPath: startingURL.path, includeHidden: includeHidden)
+        return ModelStore.default.getPhotoFiles(parentPath: startingURL.path, includeHidden: includeHidden)
     }
   
     private func walkthruDirectoryForFileUrls(startingURL: URL) -> [URL]? {
