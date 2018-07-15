@@ -112,8 +112,8 @@ class ImageFile {
         exifDateFormatWithTimezone.dateFormat = "yyyy:MM:dd HH:mm:ssxxx"
         
         self.indicator = indicator
-        self.url = URL(fileURLWithPath: photoFile.path ?? "")
-        self.fileName = photoFile.filename ?? ""
+        self.url = URL(fileURLWithPath: photoFile.path)
+        self.fileName = photoFile.filename
         self.location = Location()
         
         let imageType = url.imageType()
@@ -124,8 +124,8 @@ class ImageFile {
         self.metaInfoHolder = metaInfoStore ?? MetaInfoHolder()
         self.photoFile = photoFile
         
-        self.metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Filename", value: photoFile.filename ?? ""))
-        self.metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Full path", value: (photoFile.path ?? "").replacingOccurrences(of: (photoFile.filename ?? ""), with: "")))
+        self.metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Filename", value: photoFile.filename))
+        self.metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Full path", value: (photoFile.path).replacingOccurrences(of: (photoFile.filename), with: "")))
         
         loadMetaInfoFromDatabase(photoFile)
         
@@ -650,7 +650,7 @@ class ImageFile {
         var event = event
         if photoFile != nil {
             photoFile?.event = event.name
-            metaInfoHolder.setMetaInfo(MetaInfo(category: "Event", subCategory: "", title: "Assigned", value: event.name ?? ""))
+            metaInfoHolder.setMetaInfo(MetaInfo(category: "Event", subCategory: "", title: "Assigned", value: event.name))
             
             if event.startDate == nil {
                 event.startDate = photoFile?.photoTakenDate

@@ -169,7 +169,7 @@ class ImageFolderTreeScanner {
                 return
             }
             
-            print("\(Date()) CHECKING REPO \(repo.path ?? "")")
+            print("\(Date()) CHECKING REPO \(repo.path)")
             let startingURL = URL(fileURLWithPath: repo.path)
             
             let options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles]

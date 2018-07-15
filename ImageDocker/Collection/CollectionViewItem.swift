@@ -122,8 +122,8 @@ class CollectionViewItem: NSCollectionViewItem {
         }
     }
     @IBAction func onOpenFinderClicked(_ sender: Any) {
-        if self.imageFile != nil && self.imageFile?.url != nil {
-            NSWorkspace.shared.activateFileViewerSelecting([imageFile?.url as! URL])
+        if let url = self.imageFile?.url {
+            NSWorkspace.shared.activateFileViewerSelecting([url])
         }
     }
     
