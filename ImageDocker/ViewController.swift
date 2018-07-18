@@ -509,7 +509,7 @@ class ViewController: NSViewController {
         
         // init meta data
         //self.metaInfo = [MetaInfo]()
-        self.img = ImageFile(url: url)
+        self.img = ImageFile(url: url, sharedDB:ModelStore.sharedDBPool() )
         
         guard img.isPhoto || img.isVideo else {return}
         self.previewImage(image: img)

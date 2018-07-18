@@ -24,6 +24,31 @@ class ModelStore {
         print("DUMMY SAVE: DO NOTHING")
     }
     
+    private static var _sharedDBQueue:DatabaseWriter?
+    private static var _sharedDBPool:DatabaseWriter?
+    
+    static func sharedDBQueue() -> DatabaseWriter{
+        if _sharedDBQueue == nil {
+            do {
+                _sharedDBQueue = try DatabaseQueue(path: ModelStore.default.dbfile)
+            }catch{
+                print(error)
+            }
+        }
+        return _sharedDBQueue!
+    }
+    
+    static func sharedDBPool() -> DatabaseWriter{
+        if _sharedDBPool == nil {
+            do {
+                _sharedDBPool = try DatabasePool(path: ModelStore.default.dbfile)
+            }catch{
+                print(error)
+            }
+        }
+        return _sharedDBPool!
+    }
+    
     // MARK: COMMONS
     
     fileprivate func inArray(field:String, array:[Any]?, where whereStmt:inout String, args sqlArgs:inout [Any]){
@@ -242,15 +267,16 @@ class ModelStore {
         return result
     }
     
-    func getOrCreateContainer(name:String, path:String, parentPath:String = "") -> ImageContainer {
+    func getOrCreateContainer(name:String, path:String, parentPath:String = "", sharedDB:DatabaseWriter? = nil) -> ImageContainer {
         var container:ImageContainer?
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = try sharedDB ?? DatabaseQueue(path: dbfile)
             try db.read { db in
                 container = try ImageContainer.fetchOne(db, key: path)
             }
             if container == nil {
-                try db.write { db in
+                let queue = try sharedDB ?? DatabaseQueue(path: dbfile)
+                try queue.write { db in
                     container = ImageContainer(name: name, parentFolder: parentPath, path: path, imageCount: 0)
                     try container?.save(db)
                 }
@@ -290,18 +316,20 @@ class ModelStore {
     
     // MARK: IMAGES
     
-    func getOrCreatePhoto(filename:String, path:String, parentPath:String) -> Image{
+    func getOrCreatePhoto(filename:String, path:String, parentPath:String, sharedDB:DatabaseWriter? = nil) -> Image{
         var image:Image?
         do {
-            let db = try DatabaseQueue(path: dbfile)
+            let db = try sharedDB ?? DatabasePool(path: dbfile)
             try db.read { db in
                 image = try Image.fetchOne(db, key: path)
             }
             if image == nil {
-                try db.write { db in
+                let queue = try sharedDB ?? DatabaseQueue(path: dbfile)
+                try queue.write { db in
                     image = Image.new(filename: filename, path: path, parentFolder: parentPath)
                     try image?.save(db)
                 }
+                
             }
         }catch{
             print(error)
@@ -309,13 +337,13 @@ class ModelStore {
         return image!
     }
     
-    func saveImage(image: Image){
+    func saveImage(image: Image, sharedDB:DatabaseWriter? = nil){
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = try sharedDB ?? DatabasePool(path: dbfile)
             let _ = try db.write { db in
                 var image = image
                 try image.save(db)
-                print("saved image")
+                //print("saved image")
             }
         }catch{
             print(error)
@@ -333,15 +361,15 @@ class ModelStore {
         }
     }
     
-    func getAllPhotoFiles(includeHidden:Bool = true) -> [Image] {
+    func getAllPhotoFiles(includeHidden:Bool = true, sharedDB:DatabaseWriter? = nil) -> [Image] {
         var result:[Image] = []
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = try sharedDB ?? DatabasePool(path: dbfile)
             try db.read { db in
                 if includeHidden {
                     result = try Image.order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
                 }else{
-                    result = try Image.filter("hidden = 0").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+                    result = try Image.filter(sql: "hidden = 0").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
                 }
             }
         }catch{
@@ -401,7 +429,8 @@ class ModelStore {
         do {
             let db = try DatabasePool(path: dbfile)
             try db.read { db in
-                result = try Image.filter("updateExifDate is null OR photoTakenYear = 0").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+                result = try Image.filter(sql: "hidden != 1 AND (updateExifDate is null OR photoTakenYear = 0 OR (latitude <> '0.0' AND latitudeBD = '0.0') OR (latitudeBD <> '0.0' AND COUNTRY = ''))").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+                // TODO: OR updateLocationDate is null
             }
         }catch{
             print(error)
@@ -414,7 +443,7 @@ class ModelStore {
         do {
             let db = try DatabasePool(path: dbfile)
             try db.read { db in
-                result = try Image.filter("updateLocationDate is null").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+                result = try Image.filter(sql: "hidden != 1 AND updateLocationDate is null").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
             }
         }catch{
             print(error)
@@ -440,7 +469,7 @@ class ModelStore {
         do {
             let db = try DatabasePool(path: dbfile)
             try db.read { db in
-                result = try Image.filter(sql: "(hidden is null || hidden = 0) AND (updateDateTimeDate > ? OR updateExifDate > ? OR updateLocationDate > ? OR updateEventDate > ? OR exporTime is null)", arguments:StatementArguments([date, date, date, date])).order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+                result = try Image.filter(sql: "hidden != 1 AND (updateDateTimeDate > ? OR updateExifDate > ? OR updateLocationDate > ? OR updateEventDate > ? OR exporTime is null)", arguments:StatementArguments([date, date, date, date])).order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
             }
         }catch{
             print(error)
@@ -453,7 +482,7 @@ class ModelStore {
         do {
             let db = try DatabasePool(path: dbfile)
             try db.read { db in
-                result = try Image.filter("(hidden is null || hidden = 0) AND exporTime is not null)").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+                result = try Image.filter("hidden != 1 AND exporTime is not null)").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
             }
         }catch{
             print(error)

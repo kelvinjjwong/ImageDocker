@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import GRDB
 
 class ImageFolder : NSObject {
     
@@ -18,7 +19,7 @@ class ImageFolder : NSObject {
     var photoCollection:PhotoCollection? = nil
     var containerFolder:ImageContainer? = nil
     
-    init(_ url:URL, countOfImages:Int = 0, updateModelStore:Bool = true){
+    init(_ url:URL, countOfImages:Int = 0, updateModelStore:Bool = true, sharedDB:DatabaseWriter? = nil){
         self.url = url
         self.countOfImages = countOfImages
         
@@ -26,7 +27,7 @@ class ImageFolder : NSObject {
         let name:String = url.lastPathComponent
         //print("LOAD FOLDER 2 \(name) \(path)")
         
-        self.containerFolder = ModelStore.default.getOrCreateContainer(name: name, path: path)
+        self.containerFolder = ModelStore.default.getOrCreateContainer(name: name, path: path, sharedDB: sharedDB)
         if self.containerFolder?.imageCount == nil {
             self.containerFolder?.imageCount = countOfImages
         }

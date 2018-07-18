@@ -55,12 +55,17 @@ class ImageFolderTreeScanner {
         print("\(Date()) Setting up containers' parent ")
         var urlFolders:[String:ImageFolder] = [:]
         for container in containers {
-            let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path), countOfImages: Int(container.imageCount), updateModelStore: false)
+            let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path), countOfImages: Int(container.imageCount), updateModelStore: false, sharedDB: ModelStore.sharedDBPool())
             urlFolders[container.path] = imageFolder
-            if fast {
-                let containerParentFolder = container.parentFolder  // maybe faster
-                if let parentFolder = urlFolders[containerParentFolder] {
-                    imageFolder.setParent(parentFolder)
+            if fast { // fast
+                if container.parentFolder != "" {
+                    if let parentFolder = urlFolders[container.parentFolder] {
+                        imageFolder.setParent(parentFolder)
+                    }
+                }else{
+                    if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
+                        imageFolder.setParent(parent)
+                    }
                 }
                 
             }else{
@@ -118,6 +123,7 @@ class ImageFolderTreeScanner {
         }
         
         let photos = ModelStore.default.getPhotoFilesWithoutExif()
+        print("PHOTOS WITHOUT EXIF: \(photos.count)")
         if photos.count > 0 {
             print("\(Date()) UPDATING EXIF: \(photos.count)")
             if indicator != nil {
@@ -131,9 +137,7 @@ class ImageFolderTreeScanner {
                     }
                     return
                 }
-                
-                let url = URL(fileURLWithPath: photo.path)
-                let _ = ImageFile(url: url, indicator: indicator)
+                let _ = ImageFile(photoFile: photo, indicator: indicator, sharedDB: ModelStore.sharedDBPool())
             }
             //ModelStore.save()
             print("\(Date()) UPDATING EXIF: SAVE DONE")
@@ -207,7 +211,7 @@ class ImageFolderTreeScanner {
         if indicator != nil {
             indicator?.display(message: "Checking differences .....")
         }
-        let exists = ModelStore.default.getAllPhotoFiles()
+        let exists = ModelStore.default.getAllPhotoFiles(sharedDB: ModelStore.sharedDBPool())
         print("EXISTING DB PHOTO COUNT = \(exists.count)")
         print("EXISTING SYS PHOTO COUNT = \(filesysUrls.count)")
         var dbUrls:Set<String> = Set<String>()
@@ -255,7 +259,7 @@ class ImageFolderTreeScanner {
                 }
                 
                 //print("CREATING PHOTO \(url.path)")
-                let image = ImageFile(url: URL(fileURLWithPath: url), indicator: indicator, quickCreate: true)
+                let image = ImageFile(url: URL(fileURLWithPath: url), indicator: indicator, quickCreate: true, sharedDB: ModelStore.sharedDBPool())
                 
                 image.save()
             }
@@ -294,7 +298,7 @@ class ImageFolderTreeScanner {
         let exists = ModelStore.default.getAllContainers()
         if exists.count > 0 {
             for exist in exists{
-                let imageFolder = ImageFolder(URL(fileURLWithPath: exist.path), countOfImages: Int(exist.imageCount) )
+                let imageFolder = ImageFolder(URL(fileURLWithPath: exist.path), countOfImages: Int(exist.imageCount), sharedDB: ModelStore.sharedDBPool())
                 imageFolders.append(imageFolder)
                 
                 let count = ModelStore.default.countPhotoFiles(rootPath: "\(imageFolder.url.path)/")
@@ -315,7 +319,7 @@ class ImageFolderTreeScanner {
                 let photoCount:Int = cont["photoCount"] as Int
                 
                 let url:URL = URL(fileURLWithPath: path)
-                let imageFolder = ImageFolder(url, countOfImages: photoCount)
+                let imageFolder = ImageFolder(url, countOfImages: photoCount, sharedDB: ModelStore.sharedDBPool())
                 imageFolders.append(imageFolder)
                 /*
                 let photos = ModelStore.getPhotoFiles(rootPath: "\(imageFolder.url.path)/")

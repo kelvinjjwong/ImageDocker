@@ -12,6 +12,7 @@ import AppKit
 import CoreLocation
 import SwiftyJSON
 import AVFoundation
+import GRDB
 
 let MetaCategorySequence:[String] = ["Location", "DateTime", "Camera", "Lens", "EXIF", "Video", "Audio", "Coordinate", "Software", "System"]
 
@@ -107,7 +108,13 @@ class ImageFile {
     var isLoadedExif:Bool = false
     var isRecognizedDateTimeFromFilename:Bool = false
     
-    init (photoFile:Image, indicator:Accumulator? = nil, metaInfoStore:MetaInfoStoreDelegate? = nil) {
+    func save(){
+        if self.photoFile != nil {
+            ModelStore.default.saveImage(image: self.photoFile!)
+        }
+    }
+    
+    init (photoFile:Image, indicator:Accumulator? = nil, metaInfoStore:MetaInfoStoreDelegate? = nil, sharedDB:DatabaseWriter? = nil) {
         exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"
         exifDateFormatWithTimezone.dateFormat = "yyyy:MM:dd HH:mm:ssxxx"
         
@@ -127,7 +134,7 @@ class ImageFile {
         self.metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Filename", value: photoFile.filename))
         self.metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Full path", value: (photoFile.path).replacingOccurrences(of: (photoFile.filename), with: "")))
         
-        loadMetaInfoFromDatabase(photoFile)
+        loadMetaInfoFromDatabase(photoFile, sharedDB: sharedDB)
         
         var needSave:Bool = false
         
@@ -143,6 +150,7 @@ class ImageFile {
         
         if self.photoFile?.updateExifDate == nil || self.photoFile?.photoTakenYear == 0 {
             
+            // TODO:
             if self.photoFile?.filesysCreateDate == nil { // exif not loaded yet
                 autoreleasepool { () -> Void in
                     self.loadMetaInfoFromOSX()
@@ -150,16 +158,43 @@ class ImageFile {
                     
                     needSave = true
                 }
+            }else if let datetime = self.photoFile?.filesysCreateDate {
+                self.storePhotoTakenDate(dateTime: datetime)
+                needSave = true
             }
             
         }
         //print("loaded image coordinate: \(self.latitudeBaidu) \(self.longitudeBaidu)")
+        var needLoadLocation:Bool = false
+        
+        // force update location
+        if self.photoFile != nil && self.photoFile!.latitudeBD != "0.0" && self.photoFile!.country == "" {
+            needLoadLocation = true
+        }
+        
+        //print("coordBD zero? \(self.location.coordinateBD?.isZero) country empty? \(self.location.country == "")")
+        if self.location.coordinateBD != nil && self.location.coordinateBD!.isNotZero && self.location.country == "" {
+            //print("NEED LOAD LOCATION")
+            needLoadLocation = true
+        }
         if self.photoFile?.updateLocationDate == nil {
             if self.location.coordinate != nil && self.location.coordinate!.isNotZero {
                 //BaiduLocation.queryForAddress(lat: self.latitudeBaidu, lon: self.longitudeBaidu, locationConsumer: self)
-                autoreleasepool { () -> Void in
-                    loadLocation(locationConsumer: self)
-                }
+                //print("COORD NOT ZERO")
+                needLoadLocation = true
+            }
+        }else {
+            // if latitude not zero, but location is empty, update location
+            if self.location.coordinate != nil && self.location.coordinate!.isNotZero && self.location.country == "" {
+                print("COORD NOT ZERO BUT LOCATION IS EMPTY: \(self.url.path)")
+                needLoadLocation = true
+            }
+        }
+        if needLoadLocation {
+            needSave = true
+            autoreleasepool { () -> Void in
+                //print("LOADING LOCATION")
+                loadLocation(locationConsumer: self)
             }
         }
         if isPhoto || isVideo {
@@ -174,14 +209,8 @@ class ImageFile {
         
         self.notifyAccumulator(notifyIndicator: true)
     }
-    
-    func save(){
-        if self.photoFile != nil {
-            ModelStore.default.saveImage(image: self.photoFile!)
-        }
-    }
 
-    init (url: URL, indicator:Accumulator? = nil, metaInfoStore:MetaInfoStoreDelegate? = nil, quickCreate:Bool = false) {
+    init (url: URL, indicator:Accumulator? = nil, metaInfoStore:MetaInfoStoreDelegate? = nil, quickCreate:Bool = false, sharedDB:DatabaseWriter? = nil) {
         exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"
         exifDateFormatWithTimezone.dateFormat = "yyyy:MM:dd HH:mm:ssxxx"
         
@@ -197,12 +226,13 @@ class ImageFile {
         
         self.metaInfoHolder = metaInfoStore ?? MetaInfoHolder()
         
-        self.photoFile = ModelStore.default.getOrCreatePhoto(filename: fileName, path: url.path, parentPath: url.deletingLastPathComponent().path)
+        self.photoFile = ModelStore.default.getOrCreatePhoto(filename: fileName, path: url.path, parentPath: url.deletingLastPathComponent().path, sharedDB:sharedDB)
         
         self.metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Filename", value: url.lastPathComponent))
         self.metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Full path", value: url.path.replacingOccurrences(of: url.lastPathComponent, with: "")))
         
         if !quickCreate {
+            print("LOAD META FROM DB BY IMAGE URL")
             loadMetaInfoFromDatabase(self.photoFile)
             
             if self.photoFile?.updateExifDate == nil || self.photoFile?.photoTakenYear == 0 {
@@ -370,10 +400,10 @@ class ImageFile {
             if location.coordinateBD != nil && location.coordinateBD!.isNotZero {
                 //print("------")
                 //print("\(self.fileName) calling baidu location")
-                //print("LOAD LOCATION 2 FROM Baidu WebService - \(fileName) - \(self.location.coordinateBD?.latitude) \(self.location.coordinateBD?.longitude)")
+                print("LOAD LOCATION 2 FROM Baidu WebService - \(fileName) - \(self.location.coordinateBD?.latitude) \(self.location.coordinateBD?.longitude)")
                 BaiduLocation.queryForAddress(coordinateBD: self.location.coordinateBD!, locationConsumer: locationConsumer ?? self, textConsumer: textConsumer)
             }else{
-                //print("LOAD LOCATION 3 FROM ImageFile.location - \(fileName)")
+                print("LOAD LOCATION 3 FROM ImageFile.location - \(fileName)")
                 if locationConsumer != nil {
                     //print("\(self.fileName) getting location from meta by location consumer")
                     locationConsumer?.consume(location: self.location)
@@ -1042,12 +1072,12 @@ class ImageFile {
         }
     }
     
-    public func loadMetaInfoFromDatabase(_ record:Image? = nil) {
+    public func loadMetaInfoFromDatabase(_ record:Image? = nil, sharedDB:DatabaseWriter? = nil) {
         let filename:String = url.lastPathComponent
         let path:String = url.path
         let parentPath:String = (url.deletingLastPathComponent().path)
         
-        let photoFile = record ?? ModelStore.default.getOrCreatePhoto(filename: filename, path: path, parentPath: parentPath)
+        var photoFile = record ?? ModelStore.default.getOrCreatePhoto(filename: filename, path: path, parentPath: parentPath, sharedDB: sharedDB)
         //print("loaded PhotoFile for \(filename)")
         
         
@@ -1179,9 +1209,38 @@ class ImageFile {
         location.addressDescription = photoFile.assignAddressDescription ?? photoFile.addressDescription ?? ""
         location.place = photoFile.assignPlace ?? photoFile.suggestPlace ?? photoFile.businessCircle ?? ""
         
+        var needSave:Bool = false
+        
+        var savedCoord = Coord(latitude: Double(photoFile.latitude ?? "0") ?? 0, longitude: Double(photoFile.longitude ?? "0") ?? 0)
+        var savedCoordBD = Coord(latitude: Double(photoFile.latitudeBD ?? "0") ?? 0, longitude: Double(photoFile.longitudeBD ?? "0") ?? 0)
+        
+        // SYNC COORD
+        if savedCoord.isNotZero && savedCoordBD.isZero {
+            savedCoordBD = savedCoord.fromWGS84toBD09()
+            
+            photoFile.latitudeBD = savedCoordBD.latitude.description
+            photoFile.longitudeBD = savedCoordBD.longitude.description
+            
+            needSave = true
+        } else if savedCoordBD.isNotZero && savedCoord.isZero {
+            savedCoord = savedCoordBD.fromBD09toWGS84()
+            
+            photoFile.latitude = savedCoord.latitude.description
+            photoFile.longitude = savedCoord.longitude.description
+            
+            needSave = true
+        }
+        
         let coord = Coord(latitude: Double(photoFile.assignLatitude ?? photoFile.latitude ?? "0") ?? 0, longitude: Double(photoFile.assignLongitude ?? photoFile.longitude ?? "0") ?? 0)
         let coordBD = Coord(latitude: Double(photoFile.assignLatitudeBD ?? photoFile.latitudeBD ?? "0") ?? 0, longitude: Double(photoFile.assignLongitudeBD ?? photoFile.longitudeBD ?? "0") ?? 0)
+        
         location.setCoordinateWithoutConvert(coord: coord, coordBD: coordBD)
+        
+        self.photoFile = photoFile
+        if needSave {
+            print("UPDATE COORD TO NON ZERO")
+            ModelStore.default.saveImage(image: photoFile, sharedDB: sharedDB)
+        }
 
         //print("COORD IS ZERO ? \(location.coordinate?.isZero) - \(fileName)")
         //print("LOCATION LOADED")
@@ -1320,6 +1379,7 @@ class ImageFile {
     
 }
 
+// MARK: LOCATION CONSUMER
 extension ImageFile : LocationConsumer {
     func consume(location: Location) {
         
@@ -1369,6 +1429,7 @@ extension ImageFile : LocationConsumer {
         
         photoFile?.updateLocationDate = Date()
         
+        print("UPDATE LOCATION for image \(url.path)")
         save()
         
     }
