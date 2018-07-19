@@ -526,6 +526,7 @@ class ViewController: NSViewController {
     private func loadImage(imageFile:ImageFile){
         self.img = imageFile
         self.previewImage(image: img)
+        self.img.transformDomainToMetaInfo()
         img.metaInfoHolder.sort(by: MetaCategorySequence)
         self.metaInfoTableView.reloadData()
         self.loadBaiduMap()

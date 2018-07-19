@@ -19,8 +19,6 @@ extension ViewController: DropPlaceDelegate {
 extension ViewController: CoordinateConsumer {
     
     func consume(coordinate:Coord){
-        //self.possibleLocation = location
-        //let coordBD:Coord = coordinate.fromWGS84toBD09()
         // no need to transform
         self.possibleLocation = Location()
         self.possibleLocation?.searchKeyword = self.addressSearcher.stringValue
@@ -62,15 +60,7 @@ extension ViewController: LocationConsumer {
     }
     
     func alert(status: Int, message: String, popup:Bool = false) {
-        //if popup {
-        //    let alert = NSAlert()
-        //    alert.addButton(withTitle: NSLocalizedString("CLOSE", comment: "Close"))
-        //    alert.messageText = NSLocalizedString("Location Service", comment: "")
-        //    alert.informativeText = NSLocalizedString(message, comment: "")
-        //    alert.runModal()
-        //}else{
-            print("LOCATION ALERT: \(status) : \(message)")
-        //}
+        print("LOCATION ALERT: \(status) : \(message)")
     }
     
     
