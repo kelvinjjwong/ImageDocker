@@ -20,6 +20,7 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var txtBaiduSK: NSTextField!
     @IBOutlet weak var txtExportPath: NSTextField!
     @IBOutlet weak var txtGoogleAPIKey: NSTextField!
+    @IBOutlet weak var tabs: NSTabView!
     
     
     // MARK: Actions
@@ -101,7 +102,7 @@ final class PreferencesController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Preference"
+        self.title = "Setting"
         // Do any additional setup after loading the view.
         txtBaiduAK.stringValue = PreferencesController.baiduAK()
         txtBaiduSK.stringValue = PreferencesController.baiduSK()
