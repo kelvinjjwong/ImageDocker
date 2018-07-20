@@ -91,13 +91,13 @@ class Events {
         for data in datas {
             let event = data["event"] as? String ?? ""
             //print(event)
-            let year = data["photoTakenYear"] as Int
+            let year = data["photoTakenYear"] as Int? ?? 0
             //print("year")
-            let month = data["photoTakenMonth"] as Int
+            let month = data["photoTakenMonth"] as Int? ?? 0
             //print("month")
-            let day = data["photoTakenDay"] as Int
+            let day = data["photoTakenDay"] as Int? ?? 0
             //print("day")
-            let photoCount = data["photoCount"] as Int
+            let photoCount = data["photoCount"] as Int? ?? 0
             //print("count")
             let place = data["place"] as? String ?? ""
             

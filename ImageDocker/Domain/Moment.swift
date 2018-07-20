@@ -104,10 +104,10 @@ class Moments {
     func read(_ datas:[Row], groupByPlace:Bool = false) -> [Moment]{
         for data in datas {
             let place = data["place"] as? String ?? ""
-            let year = data["photoTakenYear"] as Int
-            let month = data["photoTakenMonth"] as Int
-            let day = data["photoTakenDay"] as Int
-            let photoCount = data["photoCount"] as Int
+            let year = data["photoTakenYear"] as Int? ?? 0
+            let month = data["photoTakenMonth"] as Int? ?? 0
+            let day = data["photoTakenDay"] as Int? ?? 0
+            let photoCount = data["photoCount"] as Int? ?? 0
             
             //print("Got \(place)-\(year)-\(month)-\(day)")
             var placeEntry:Moment?

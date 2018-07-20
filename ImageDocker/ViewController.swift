@@ -286,7 +286,7 @@ class ViewController: NSViewController {
         
         self.scanRepositoriesTimer = Timer.scheduledTimer(withTimeInterval: 180, repeats: true, block:{_ in
             print("\(Date()) TRY TO SCAN REPOS")
-            guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository else {return}
+            guard !self.suppressedScan && !ExportManager.working && !self.scaningRepositories && !self.creatingRepository else {return}
             print("\(Date()) SCANING REPOS")
             self.startScanRepositories()
         })
@@ -341,6 +341,11 @@ class ViewController: NSViewController {
         self.btnHide.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
         self.sourceList.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.metaInfoTableView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.collectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.selectionCollectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        
+        self.playerContainer.appearance = NSAppearance(named: NSAppearance.Name.vibrantLight)
         
     }
     

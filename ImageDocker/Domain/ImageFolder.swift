@@ -88,7 +88,14 @@ class ImageFolder : NSObject {
     }
     
     func getPathExcludeParent() -> String {
-        if parent == nil {return url.path}
+        if parent == nil {
+            if url.lastPathComponent != "repository" {
+                return "\(url.lastPathComponent) [\(url.path)]"
+            }else{
+                return "\(url.pathComponents.reversed()[1]) [\(url.path)]"
+            }
+            
+        }
         return String(url.path.dropFirst(parent!.url.path.count + 1))
     }
 }
