@@ -303,7 +303,7 @@ class ViewController: NSViewController {
     }
     
     func configureDarkMode() {
-        
+        view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         view.layer?.backgroundColor = NSColor.darkGray.cgColor
         self.btnAssignEvent.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnCopyLocation.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -339,6 +339,8 @@ class ViewController: NSViewController {
         
         self.btnShow.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnHide.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        
+        self.sourceList.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
     }
     
@@ -526,7 +528,7 @@ class ViewController: NSViewController {
     private func loadImage(imageFile:ImageFile){
         self.img = imageFile
         self.previewImage(image: img)
-        self.img.transformDomainToMetaInfo()
+        //self.img.transformDomainToMetaInfo()
         img.metaInfoHolder.sort(by: MetaCategorySequence)
         self.metaInfoTableView.reloadData()
         self.loadBaiduMap()

@@ -208,7 +208,7 @@ class ImageFile {
             save()
         }
         
-        //self.transformDomainToMetaInfo()
+        self.transformDomainToMetaInfo()
         
         self.notifyAccumulator(notifyIndicator: true)
     }
@@ -271,7 +271,7 @@ class ImageFile {
             save()
         }
         
-        //self.transformDomainToMetaInfo()
+        self.transformDomainToMetaInfo()
         
         self.notifyAccumulator(notifyIndicator: true)
 
@@ -703,7 +703,7 @@ class ImageFile {
         let photoTakenDate:String? = self.choosePhotoTakenDateFromMetaInfo()
         self.storePhotoTakenDate(dateTime: photoTakenDate)
         
-        //self.transformDomainToMetaInfo()
+        self.transformDomainToMetaInfo()
     }
     
     func assignEvent(event:ImageEvent){
@@ -728,7 +728,7 @@ class ImageFile {
             }
             photoFile?.updateEventDate = Date()
         }
-        //self.transformDomainToMetaInfo()
+        self.transformDomainToMetaInfo()
     }
     
     func assignLocation(location:Location){
@@ -758,7 +758,7 @@ class ImageFile {
         self.location = location
         self.recognizePlace()
         
-        //self.transformDomainToMetaInfo()
+        self.transformDomainToMetaInfo()
     }
     
     // MARK: LOAD META INFO

@@ -247,7 +247,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="269" height="750"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
-                                                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="26" horizontalPageScroll="10" verticalLineScroll="26" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="du2-Hq-a9E">
+                                                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="26" horizontalPageScroll="10" verticalLineScroll="26" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="du2-Hq-a9E">
                                                                 <rect key="frame" x="0.0" y="35" width="266" height="646"/>
                                                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="7hE-Af-Cfs">
                                                                     <rect key="frame" x="0.0" y="0.0" width="266" height="646"/>
@@ -356,11 +356,11 @@
                                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="NXB-xX-Uvg"/>
                                                                 </constraints>
                                                                 <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="l9m-p9-QJN">
-                                                                    <rect key="frame" x="0.0" y="-16" width="200" height="16"/>
+                                                                    <rect key="frame" x="-100" y="-100" width="200" height="16"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                                 <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="ZSj-d5-gms">
-                                                                    <rect key="frame" x="-15" y="1" width="16" height="0.0"/>
+                                                                    <rect key="frame" x="251" y="0.0" width="15" height="646"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                             </scrollView>
@@ -628,7 +628,7 @@
                                                     <rect key="frame" x="-100" y="-100" width="233" height="15"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </scroller>
-                                                <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="uLo-DB-TJ3">
+                                                <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="uLo-DB-TJ3">
                                                     <rect key="frame" x="234" y="1" width="15" height="143"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </scroller>
@@ -785,7 +785,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="580" height="279"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
-                                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fHj-eQ-neO">
+                                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fHj-eQ-neO">
                                                 <rect key="frame" x="0.0" y="0.0" width="580" height="275"/>
                                                 <clipView key="contentView" id="eei-jG-19T">
                                                     <rect key="frame" x="0.0" y="0.0" width="580" height="275"/>
@@ -978,12 +978,12 @@
                                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="485" id="4RY-gk-tXi"/>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="iFO-RX-zhl"/>
                                                 </constraints>
-                                                <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="FDe-a6-p7R">
-                                                    <rect key="frame" x="0.0" y="259" width="580" height="16"/>
+                                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="FDe-a6-p7R">
+                                                    <rect key="frame" x="-100" y="-100" width="580" height="15"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </scroller>
                                                 <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="69W-Gl-fR8">
-                                                    <rect key="frame" x="224" y="17" width="15" height="102"/>
+                                                    <rect key="frame" x="-100" y="-100" width="15" height="102"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </scroller>
                                             </scrollView>
