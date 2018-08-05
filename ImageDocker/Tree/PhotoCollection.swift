@@ -18,6 +18,7 @@ enum PhotoCollectionSource : Int {
     case moment
     case place
     case event
+    case device
 }
 
 class Photo {

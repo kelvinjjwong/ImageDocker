@@ -85,6 +85,9 @@ class ViewController: NSViewController {
     var parentsOfEventsTree : [String : PXSourceListItem] = [String : PXSourceListItem] ()
     var eventToCollection : [String : PhotoCollection] = [String : PhotoCollection] ()
     
+    var deviceToCollection : [String : PhotoCollection] = [String : PhotoCollection] ()
+    
+    var deviceSectionOfTree : PXSourceListItem?
     var librarySectionOfTree : PXSourceListItem?
     var momentSectionOfTree : PXSourceListItem?
     var placeSectionOfTree : PXSourceListItem?

@@ -27,15 +27,22 @@ let shareIcon:NSImage = NSImage(imageLiteralResourceName: "share")
 
 extension ViewController {
     
+    // MARK: INIT
+    
     func initTreeDataModel() {
         placesIcon.isTemplate = true
         peopleIcon.isTemplate = true
         eventsIcon.isTemplate = true
         photosIcon.isTemplate = true
         albumIcon.isTemplate = true
+        phoneIcon.isTemplate = true
         
         self.sourceListItems = NSMutableArray(array:[])
         //self.modelObjects = NSMutableArray(array:[])
+        
+        if self.deviceSectionOfTree == nil {
+            self.deviceSectionOfTree = self.addTreeSection(title: "DEVICES")
+        }
         
         if self.librarySectionOfTree == nil {
             self.librarySectionOfTree = self.addTreeSection(title: "LIBRARY")
@@ -52,6 +59,9 @@ extension ViewController {
         if self.placeSectionOfTree == nil {
             self.placeSectionOfTree = self.addTreeSection(title: "PLACES")
         }
+        
+        self.addDeviceTypeTreeEntry(type: "Android")
+        self.addDeviceTypeTreeEntry(type: "iPhone")
  
     }
     
@@ -310,20 +320,26 @@ extension ViewController {
         }
     }
     
-    func libraryItem() -> PXSourceListItem {
+    // MARK: SECTIONS
+    
+    func deviceItem() -> PXSourceListItem {
         return self.sourceListItems![0] as! PXSourceListItem
     }
     
-    func momentItem() -> PXSourceListItem {
+    func libraryItem() -> PXSourceListItem {
         return self.sourceListItems![1] as! PXSourceListItem
     }
     
-    func eventItem() -> PXSourceListItem {
+    func momentItem() -> PXSourceListItem {
         return self.sourceListItems![2] as! PXSourceListItem
     }
     
-    func placeItem() -> PXSourceListItem {
+    func eventItem() -> PXSourceListItem {
         return self.sourceListItems![3] as! PXSourceListItem
+    }
+    
+    func placeItem() -> PXSourceListItem {
+        return self.sourceListItems![4] as! PXSourceListItem
     }
     
     func addTreeSection(title:String) -> PXSourceListItem {
@@ -332,6 +348,8 @@ extension ViewController {
         self.identifiersOfLibraryTree[title] = item
         return item
     }
+    
+    // MARK: LIBRARY
     
     func addLibraryTreeEntry(imageFolder:ImageFolder) {
         var _parent:PXSourceListItem
@@ -358,6 +376,8 @@ extension ViewController {
         self.treeIdItems[imageFolder.url.path] = item
         
     }
+    
+    // MARK: MOMENT
     
     func addMomentPlaceTreeEntry(place:Moment){
         let collection:PhotoCollection = PhotoCollection(title: place.represent,
@@ -494,6 +514,7 @@ extension ViewController {
         self.treeIdItems[day.id] = item
     }
     
+    // MARK: EVENT
     
     func addEventTreeEntry(event:Event){
         let collection:PhotoCollection = PhotoCollection(title: event.represent,
@@ -569,8 +590,51 @@ extension ViewController {
 
     }
     
+    // MARK: DEVICE
+    
+    func addDeviceTypeTreeEntry(type:String){
+        let collection:PhotoCollection = PhotoCollection(title: type ,
+                                                         identifier: "device_type_\(type)",
+                                                         type: .library,
+                                                         source: .device )
+        collection.photoCount = 0
+        
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: phoneIcon)
+        
+        self.deviceItem().addChildItem(item)
+        
+        // avoid collection object to be purged from memory
+        self.deviceToCollection["device_type_\(type)"] = collection
+        
+        self.treeIdItems["device_type_\(type)"] = item
+        
+    }
+    
+    func addDeviceTreeEntry(device:PhoneDevice){
+        let collection:PhotoCollection = PhotoCollection(title: device.represent() ,
+                                                         identifier: device.deviceId,
+                                                         type: .library,
+                                                         source: .device )
+        collection.photoCount = 0
+        
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: phoneIcon)
+        
+        if device.type == .Android {
+            self.treeIdItems["device_type_Android"]?.addChildItem(item)
+        }else if device.type == .iPhone {
+            self.treeIdItems["device_type_iPhone"]?.addChildItem(item)
+        }
+        
+        // avoid collection object to be purged from memory
+        self.deviceToCollection["\(device.deviceId)"] = collection
+        
+        self.treeIdItems[device.deviceId] = item
+        
+    }
+    
 }
 
+// MARK: VIEW and ACTION
 
 extension ViewController : PXSourceListDelegate {
     
@@ -665,6 +729,8 @@ extension ViewController : PXSourceListDelegate {
     
 }
 
+// MARK: DATA SOURCE
+
 extension ViewController : PXSourceListDataSource {
     func sourceList(_ sourceList: PXSourceList!, numberOfChildrenOfItem item: Any!) -> UInt {
         if item != nil {
@@ -675,7 +741,7 @@ extension ViewController : PXSourceListDataSource {
             }
         } else{
             // when just init sections
-            return UInt(4)
+            return UInt(5)
         }
     }
     
