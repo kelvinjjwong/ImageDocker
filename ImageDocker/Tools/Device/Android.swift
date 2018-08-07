@@ -38,11 +38,13 @@ struct Android {
         command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        print(string)
         if string.range(of: "* failed to start daemon") != nil || string.range(of: "error: cannot connect to daemon") != nil {
             return []
         }
         let lines = string.components(separatedBy: "\n")
         for line in lines {
+            print(line)
             if line.range(of: "device usb") != nil {
                 print(line)
                 let parts = line.components(separatedBy: " ")
@@ -97,10 +99,15 @@ struct Android {
                 if parts.count == 2 {
                     meid = parts[1].replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "").uppercased()
                 }
-            }else if line.starts(with: "[net.hostname]:") {
+            }else if line.starts(with: "[ro.config.marketing_name]:") && name == "" {
                 let parts = line.components(separatedBy: " ")
                 if parts.count == 2 {
-                    name = parts[1].replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "").replacingOccurrences(of: "_", with: "")
+                    name = parts[1].replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "").replacingOccurrences(of: "_", with: " ")
+                }
+            }else if line.starts(with: "[net.hostname]:") && name == "" {
+                let parts = line.components(separatedBy: " ")
+                if parts.count == 2 {
+                    name = parts[1].replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "").replacingOccurrences(of: "_", with: " ")
                 }
             }else if line.starts(with: "[ro.product.brand]:") && name == "" {
                 let parts = line.components(separatedBy: " ")
@@ -114,10 +121,51 @@ struct Android {
             device.iccid = iccid
             device.meid = meid
             device.name = name
+            print("Android connected: \(manufacture) \(model) - \(name)")
             return device
         }else{
             return nil
         }
+    }
+    
+    func memory(device:PhoneDevice) -> PhoneDevice {
+        let pipe = Pipe()
+        
+        let command = Process()
+        command.standardOutput = pipe
+        command.standardError = FileHandle.nullDevice
+        command.launchPath = adb.path
+        command.arguments = ["-s", device.deviceId, "shell", "df -h /storage/emulated"]
+        command.launch()
+        command.waitUntilExit()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        if string.starts(with: "error: device") || string.range(of: "not found") != nil {
+            return device
+        }
+        var dev = device
+        let lines = string.components(separatedBy: "\n")
+        for line in lines {
+            if line.starts(with: "/") {
+                let parts = line.components(separatedBy: " ")
+                if parts.count > 2 {
+                    var i=0
+                    for part in parts {
+                        if part != "" {
+                            i += 1
+                            if i == 2 {
+                                dev.totalSize = part
+                            }else if i == 4 {
+                                dev.availSize = part
+                            }else if i == 5 {
+                                dev.usedPercent = part
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return dev
     }
     
     func files(device id: String, in path: String) -> [PhoneFile] {

@@ -25,6 +25,10 @@
 		8E4C38CD2117B5340089502C /* Phone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38CC2117B5340089502C /* Phone.swift */; };
 		8E4C38CF2117B54D0089502C /* Android.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38CE2117B54D0089502C /* Android.swift */; };
 		8E4C38D12117B56A0089502C /* IPHONE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D02117B56A0089502C /* IPHONE.swift */; };
+		8E4C38D3211828B00089502C /* EventsTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D2211828B00089502C /* EventsTreeController.swift */; };
+		8E4C38D5211828FF0089502C /* MomentsTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D4211828FF0089502C /* MomentsTreeController.swift */; };
+		8E4C38D72118291F0089502C /* LibraryTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D62118291F0089502C /* LibraryTreeController.swift */; };
+		8E4C38D9211829410089502C /* DeviceTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D8211829410089502C /* DeviceTreeController.swift */; };
 		8E7F71002091F14300410C45 /* BaiduLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F70FF2091F14200410C45 /* BaiduLocation.swift */; };
 		8E7F71022092053400410C45 /* MetaInfoDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F71012092053400410C45 /* MetaInfoDelegate.swift */; };
 		8E85B7CF20B8786C005A9845 /* Accumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7CE20B8786C005A9845 /* Accumulator.swift */; };
@@ -71,7 +75,7 @@
 		8EF500CD209A804100C9805F /* ImageFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF500CC209A804100C9805F /* ImageFolder.swift */; };
 		8EFAF1FB20BFFC8A007A7783 /* MetaInfoHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFAF1FA20BFFC8A007A7783 /* MetaInfoHolder.swift */; };
 		8EFAF1FF20CAE422007A7783 /* Moment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFAF1FE20CAE422007A7783 /* Moment.swift */; };
-		8EFE763C2094AF6B00B7CFCA /* TreeListDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFE763B2094AF6B00B7CFCA /* TreeListDelegate.swift */; };
+		8EFE763C2094AF6B00B7CFCA /* TreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFE763B2094AF6B00B7CFCA /* TreeController.swift */; };
 		8EFE76412094B98D00B7CFCA /* PhotoCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFE76402094B98D00B7CFCA /* PhotoCollection.swift */; };
 		912F0ED0D9261254EE71E67E /* Pods_ImageDocker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B479F2387DA097A86444200D /* Pods_ImageDocker.framework */; };
 /* End PBXBuildFile section */
@@ -122,6 +126,10 @@
 		8E4C38CC2117B5340089502C /* Phone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phone.swift; sourceTree = "<group>"; };
 		8E4C38CE2117B54D0089502C /* Android.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Android.swift; sourceTree = "<group>"; };
 		8E4C38D02117B56A0089502C /* IPHONE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPHONE.swift; sourceTree = "<group>"; };
+		8E4C38D2211828B00089502C /* EventsTreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsTreeController.swift; sourceTree = "<group>"; };
+		8E4C38D4211828FF0089502C /* MomentsTreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsTreeController.swift; sourceTree = "<group>"; };
+		8E4C38D62118291F0089502C /* LibraryTreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTreeController.swift; sourceTree = "<group>"; };
+		8E4C38D8211829410089502C /* DeviceTreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTreeController.swift; sourceTree = "<group>"; };
 		8E7F70FF2091F14200410C45 /* BaiduLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaiduLocation.swift; sourceTree = "<group>"; };
 		8E7F71012092053400410C45 /* MetaInfoDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfoDelegate.swift; sourceTree = "<group>"; };
 		8E85B7CE20B8786C005A9845 /* Accumulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accumulator.swift; sourceTree = "<group>"; };
@@ -168,7 +176,7 @@
 		8EF500CC209A804100C9805F /* ImageFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFolder.swift; sourceTree = "<group>"; };
 		8EFAF1FA20BFFC8A007A7783 /* MetaInfoHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfoHolder.swift; sourceTree = "<group>"; };
 		8EFAF1FE20CAE422007A7783 /* Moment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moment.swift; sourceTree = "<group>"; };
-		8EFE763B2094AF6B00B7CFCA /* TreeListDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeListDelegate.swift; sourceTree = "<group>"; };
+		8EFE763B2094AF6B00B7CFCA /* TreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeController.swift; sourceTree = "<group>"; };
 		8EFE763D2094B12200B7CFCA /* ImageDocker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ImageDocker-Bridging-Header.h"; sourceTree = "<group>"; };
 		8EFE76402094B98D00B7CFCA /* PhotoCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollection.swift; sourceTree = "<group>"; };
 		B479F2387DA097A86444200D /* Pods_ImageDocker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImageDocker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -309,8 +317,12 @@
 			isa = PBXGroup;
 			children = (
 				8EF32D132095355400511538 /* LCSourceListTableCellView.swift */,
-				8EFE763B2094AF6B00B7CFCA /* TreeListDelegate.swift */,
+				8EFE763B2094AF6B00B7CFCA /* TreeController.swift */,
 				8EFE76402094B98D00B7CFCA /* PhotoCollection.swift */,
+				8E4C38D2211828B00089502C /* EventsTreeController.swift */,
+				8E4C38D4211828FF0089502C /* MomentsTreeController.swift */,
+				8E4C38D62118291F0089502C /* LibraryTreeController.swift */,
+				8E4C38D8211829410089502C /* DeviceTreeController.swift */,
 			);
 			path = Tree;
 			sourceTree = "<group>";
@@ -638,6 +650,7 @@
 				8E95739A20EBEBD7003BD651 /* FilterViewController.swift in Sources */,
 				8E0EAE9A209D2623008C377F /* ImageFolderTreeScanner.swift in Sources */,
 				8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */,
+				8E4C38D9211829410089502C /* DeviceTreeController.swift in Sources */,
 				8E85B7CF20B8786C005A9845 /* Accumulator.swift in Sources */,
 				8EB986B020B225230075B081 /* DetailViewDelegate.swift in Sources */,
 				8E7F71002091F14300410C45 /* BaiduLocation.swift in Sources */,
@@ -656,7 +669,7 @@
 				8E98B8F320D5C90600771280 /* WindowController.swift in Sources */,
 				8EBA692E2090DB4B00221131 /* VideoDropView.swift in Sources */,
 				8E4C38CD2117B5340089502C /* Phone.swift in Sources */,
-				8EFE763C2094AF6B00B7CFCA /* TreeListDelegate.swift in Sources */,
+				8EFE763C2094AF6B00B7CFCA /* TreeController.swift in Sources */,
 				8EB986BF20B30C920075B081 /* HeaderView.swift in Sources */,
 				8E85B7D420BA2AD7005A9845 /* DarkSplitView.swift in Sources */,
 				8EF500CD209A804100C9805F /* ImageFolder.swift in Sources */,
@@ -666,17 +679,20 @@
 				8E98B8F720D6044900771280 /* Event.swift in Sources */,
 				8E4C38D12117B56A0089502C /* IPHONE.swift in Sources */,
 				8EB321D520FA433500D8C71D /* ImagePlace.swift in Sources */,
+				8E4C38D72118291F0089502C /* LibraryTreeController.swift in Sources */,
 				8EE1AB3D20D05E49001C75B0 /* EventListViewController.swift in Sources */,
 				8EB986B920B30C920075B081 /* CollectionViewItem.swift in Sources */,
 				8EB986BC20B30C920075B081 /* CollectionViewDelegate.swift in Sources */,
 				8E4B7C1920929EFA00DDD9E0 /* LocationConsumer.swift in Sources */,
 				8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */,
+				8E4C38D3211828B00089502C /* EventsTreeController.swift in Sources */,
 				8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */,
 				8EB986C620B6EBC40075B081 /* DarkTableView.swift in Sources */,
 				8E4C38CF2117B54D0089502C /* Android.swift in Sources */,
 				8E0AFA3D208BDEA000CE8B68 /* AppDelegate.swift in Sources */,
 				8EFE76412094B98D00B7CFCA /* PhotoCollection.swift in Sources */,
 				8EBA692A2090C87D00221131 /* Helper.swift in Sources */,
+				8E4C38D5211828FF0089502C /* MomentsTreeController.swift in Sources */,
 				8E2CF37620AED6BA00A93375 /* Model.xcdatamodeld in Sources */,
 				8EFAF1FB20BFFC8A007A7783 /* MetaInfoHolder.swift in Sources */,
 				8EB321D720FA433500D8C71D /* Image.swift in Sources */,

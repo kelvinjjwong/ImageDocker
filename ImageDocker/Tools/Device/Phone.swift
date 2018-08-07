@@ -39,6 +39,9 @@ struct PhoneDevice {
     var name:String = ""
     var iccid:String = ""
     var meid:String = ""
+    var totalSize:String = ""
+    var availSize:String = ""
+    var usedPercent:String = ""
     
     init(type:MobileType, deviceId:String, manufacture:String, model:String) {
         self.type = type
@@ -48,9 +51,18 @@ struct PhoneDevice {
     }
     
     func represent() -> String {
-        if name != "" {return name}
+        var summary = ""
+        if totalSize != "" {
+            summary = "\(availSize) / \(totalSize), used \(usedPercent)"
+        }else {
+            summary = deviceId
+        }
+        if name != "" {
+            return "\(manufacture) \(name) [\(summary)]"
+            
+        }
         if model != "" && manufacture != "" {
-            return "\(manufacture) \(model) [\(deviceId)]"
+            return "\(manufacture) \(model) [\(summary)]"
         }
         if deviceId != "" {
             if type == .Android {
