@@ -19,7 +19,7 @@ extension ViewController {
     
     func loadPlacesToTreeFromDatabase(filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil){
         let dates:[Row] = ModelStore.default.getAllPlacesAndDates(imageSource: filterImageSource, cameraModel: filterCameraModel)
-        print("!!! \(dates.count)")
+        //print("!!! \(dates.count)")
         if dates.count > 0 {
             let places:[Moment] = Moments().readPlaces(dates)
             
@@ -28,7 +28,7 @@ extension ViewController {
             for gov in places {
                 self.addPlacesTreeGovEntry(place: gov)
                 
-                print("GOV \(gov.gov)")
+                //print("GOV \(gov.gov)")
                 for place in gov.children {
                     if place.place == "" {
                         continue
@@ -104,6 +104,7 @@ extension ViewController {
                                                          source: .place)
         collection.photoCount = place.photoCount
         collection.gov = place.gov
+        collection.isDateEntry = false
         
         let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: placesIcon)
         
@@ -126,6 +127,11 @@ extension ViewController {
                                                          source: .place)
         collection.photoCount = place.photoCount
         collection.place = place.place
+        collection.countryData = place.countryData
+        collection.provinceData = place.provinceData
+        collection.cityData = place.cityData
+        collection.placeData = place.placeData
+        collection.isDateEntry = false
         
         let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: placesIcon)
         
@@ -148,6 +154,10 @@ extension ViewController {
                                                          source: .place)
         collection.photoCount = year.photoCount
         collection.year = year.year
+        collection.countryData = year.countryData
+        collection.provinceData = year.provinceData
+        collection.cityData = year.cityData
+        collection.placeData = year.placeData
         
         let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: photosIcon)
         
@@ -173,6 +183,10 @@ extension ViewController {
         collection.photoCount = month.photoCount
         collection.year = month.year
         collection.month = month.month
+        collection.countryData = month.countryData
+        collection.provinceData = month.provinceData
+        collection.cityData = month.cityData
+        collection.placeData = month.placeData
         
         let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: photosIcon)
         
@@ -200,6 +214,10 @@ extension ViewController {
         collection.year = day.year
         collection.month = day.month
         collection.day = day.day
+        collection.countryData = day.countryData
+        collection.provinceData = day.provinceData
+        collection.cityData = day.cityData
+        collection.placeData = day.placeData
         
         let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: photosIcon)
         
@@ -218,6 +236,9 @@ extension ViewController {
     // MARK: CLICK ACTION
     
     func selectPlacesTreeEntry(_ collection:PhotoCollection){
+        if collection.placeData == "" && collection.countryData == "" && collection.provinceData == "" && collection.cityData == "" {
+            return
+        }
         //guard !self.scaningRepositories && !self.creatingRepository else {return}
         self.scaningRepositories = true
         
@@ -238,11 +259,33 @@ extension ViewController {
                     self.indicatorMessage.stringValue = "Cancelling last request ..."
                 }
                 self.imagesLoader.cancel(onCancelled: {
-                    self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, place: collection.place, filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel, indicator:self.collectionLoadingIndicator)
+                    self.imagesLoader.load(
+                        year: collection.year,
+                        month: collection.month,
+                        day: collection.day,
+                        ignoreDate: !collection.isDateEntry,
+                        country: collection.countryData,
+                        province: collection.provinceData,
+                        city: collection.cityData,
+                        place: collection.placeData,
+                        filterImageSource: self.filterImageSource,
+                        filterCameraModel: self.filterCameraModel,
+                        indicator:self.collectionLoadingIndicator)
                     self.refreshCollectionView()
                 })
             }else{
-                self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, place: collection.place, filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel,  indicator:self.collectionLoadingIndicator)
+                self.imagesLoader.load(
+                    year: collection.year,
+                    month: collection.month,
+                    day: collection.day,
+                    ignoreDate: !collection.isDateEntry,
+                    country: collection.countryData,
+                    province: collection.provinceData,
+                    city: collection.cityData,
+                    place: collection.placeData,
+                    filterImageSource: self.filterImageSource,
+                    filterCameraModel: self.filterCameraModel,
+                    indicator:self.collectionLoadingIndicator)
                 self.refreshCollectionView()
             }
             

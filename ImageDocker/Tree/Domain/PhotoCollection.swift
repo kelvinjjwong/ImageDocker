@@ -45,8 +45,13 @@ class PhotoCollection: NSObject {
     var place:String = ""
     var event:String = ""
     var gov:String = ""
+    var placeData:String = ""
+    var countryData:String = ""
+    var provinceData:String = ""
+    var cityData:String = ""
     
     var hasDuplicates:Bool = false
+    var isDateEntry:Bool = true
     
     
     override init(){

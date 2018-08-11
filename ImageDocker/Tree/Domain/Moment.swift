@@ -23,6 +23,11 @@ class Moment {
     
     var hasDuplicates:Bool = false
     
+    var countryData:String = ""
+    var provinceData:String = ""
+    var cityData:String = ""
+    var placeData:String = ""
+    
     init(gov:String) {
         self.gov = gov
         self.place = ""
@@ -226,6 +231,8 @@ class Moments {
                     place = country
                 }
             }
+            gov = gov.replacingOccurrences(of: "特别行政区", with: "")
+            place = place.replacingOccurrences(of: "特别行政区", with: "")
             
             //print("Got \(place)-\(year)-\(month)-\(day)")
             var govEntry:Moment
@@ -250,6 +257,10 @@ class Moments {
                 placeEntry = govEntry.children.first(where: {$0.place == place})!
             }
             placeEntry.photoCount += photoCount
+            placeEntry.countryData = data["country"] as? String ?? ""
+            placeEntry.provinceData = data["province"] as? String ?? ""
+            placeEntry.cityData = data["city"] as? String ?? ""
+            placeEntry.placeData = data["place"] as? String ?? ""
             
             if placeEntry.children.index(where: {$0.year == year}) == nil {
                 yearEntry = Moment(year: year, place: place, gov: gov)
@@ -259,6 +270,10 @@ class Moments {
                 yearEntry = placeEntry.children.first(where: {$0.year == year})!
             }
             yearEntry.photoCount += photoCount
+            yearEntry.countryData = data["country"] as? String ?? ""
+            yearEntry.provinceData = data["province"] as? String ?? ""
+            yearEntry.cityData = data["city"] as? String ?? ""
+            yearEntry.placeData = data["place"] as? String ?? ""
             
             if yearEntry.children.index(where: {$0.month == month}) == nil {
                 monthEntry = Moment(month: month, ofYear: year, place: place, gov: gov)
@@ -268,13 +283,21 @@ class Moments {
                 monthEntry = yearEntry.children.first(where: {$0.month == month})!
             }
             monthEntry.photoCount += photoCount
+            monthEntry.countryData = data["country"] as? String ?? ""
+            monthEntry.provinceData = data["province"] as? String ?? ""
+            monthEntry.cityData = data["city"] as? String ?? ""
+            monthEntry.placeData = data["place"] as? String ?? ""
             
             let dayEntry:Moment = Moment(day: day, ofMonth: month, ofYear: year, place: place, gov: gov)
-            dayEntry.photoCount = photoCount
             dayEntry.groupByPlace = true
             
             monthEntry.children.append(dayEntry)
             
+            dayEntry.photoCount = photoCount
+            dayEntry.countryData = data["country"] as? String ?? ""
+            dayEntry.provinceData = data["province"] as? String ?? ""
+            dayEntry.cityData = data["city"] as? String ?? ""
+            dayEntry.placeData = data["place"] as? String ?? ""
             
         }
         return places

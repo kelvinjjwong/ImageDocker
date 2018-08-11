@@ -325,9 +325,9 @@
 		8EB986AA20B21D3E0075B081 /* Tree */ = {
 			isa = PBXGroup;
 			children = (
-				8EF32D132095355400511538 /* LCSourceListTableCellView.swift */,
+				8EFA7D01211F93C000419777 /* Domain */,
+				8EFA7D00211F93B400419777 /* View */,
 				8EFE763B2094AF6B00B7CFCA /* TreeController.swift */,
-				8EFE76402094B98D00B7CFCA /* PhotoCollection.swift */,
 				8E4C38D2211828B00089502C /* EventsTreeController.swift */,
 				8E4C38D4211828FF0089502C /* MomentsTreeController.swift */,
 				8E4C38D62118291F0089502C /* LibraryTreeController.swift */,
@@ -380,7 +380,6 @@
 				8E85B7D520BD9FD9005A9845 /* Location.swift */,
 				8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */,
 				8E85B7D920BE2515005A9845 /* LocationTextDelegate.swift */,
-				8EFAF1FE20CAE422007A7783 /* Moment.swift */,
 				8E98B8F620D6044900771280 /* Event.swift */,
 				8EB321CC20FA42AB00D8C71D /* Duplicate.swift */,
 				8EFA7CFA211D713700419777 /* ImageDevice.swift */,
@@ -432,6 +431,23 @@
 				8EFA7CF8211A36F700419777 /* DeviceCopyViewController.swift */,
 			);
 			path = Device;
+			sourceTree = "<group>";
+		};
+		8EFA7D00211F93B400419777 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8EF32D132095355400511538 /* LCSourceListTableCellView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		8EFA7D01211F93C000419777 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				8EFAF1FE20CAE422007A7783 /* Moment.swift */,
+				8EFE76402094B98D00B7CFCA /* PhotoCollection.swift */,
+			);
+			path = Domain;
 			sourceTree = "<group>";
 		};
 		8EFAF1F720BFFA6E007A7783 /* UI */ = {

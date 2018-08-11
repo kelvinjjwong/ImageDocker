@@ -44,10 +44,6 @@ extension ViewController {
             self.deviceSectionOfTree = self.addTreeSection(title: "DEVICES")
         }
         
-        if self.librarySectionOfTree == nil {
-            self.librarySectionOfTree = self.addTreeSection(title: "LIBRARY")
-        }
-        
         if self.momentSectionOfTree == nil {
             self.momentSectionOfTree = self.addTreeSection(title: "MOMENTS")
         }
@@ -62,6 +58,10 @@ extension ViewController {
         
         self.addDeviceTypeTreeEntry(type: "Android")
         self.addDeviceTypeTreeEntry(type: "iPhone")
+        
+        if self.librarySectionOfTree == nil {
+            self.librarySectionOfTree = self.addTreeSection(title: "LIBRARY")
+        }
  
     }
     
@@ -71,19 +71,19 @@ extension ViewController {
         return self.sourceListItems![0] as! PXSourceListItem
     }
     
-    func libraryItem() -> PXSourceListItem {
+    func momentItem() -> PXSourceListItem {
         return self.sourceListItems![1] as! PXSourceListItem
     }
     
-    func momentItem() -> PXSourceListItem {
+    func eventItem() -> PXSourceListItem {
         return self.sourceListItems![2] as! PXSourceListItem
     }
     
-    func eventItem() -> PXSourceListItem {
+    func placeItem() -> PXSourceListItem {
         return self.sourceListItems![3] as! PXSourceListItem
     }
     
-    func placeItem() -> PXSourceListItem {
+    func libraryItem() -> PXSourceListItem {
         return self.sourceListItems![4] as! PXSourceListItem
     }
     

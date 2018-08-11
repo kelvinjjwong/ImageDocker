@@ -36,6 +36,9 @@ struct CollectionViewLastRequest {
     var place:String? = nil
     var imageSource:[String]? = nil
     var cameraModel:[String]? = nil
+    var country = ""
+    var province = ""
+    var city = ""
 }
 
 class CollectionViewItemsLoader: NSObject {
@@ -86,13 +89,16 @@ class CollectionViewItemsLoader: NSObject {
         }
     }
     
-    func load(year:Int, month:Int, day:Int, place:String?, filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil, indicator:Accumulator? = nil) {
+    func load(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil, indicator:Accumulator? = nil) {
         loading = true
         
         lastRequest.loadSource = .moment
         lastRequest.year = year
         lastRequest.month = month
         lastRequest.day = day
+        lastRequest.country = country
+        lastRequest.province = province
+        lastRequest.city = city
         lastRequest.place = place
         lastRequest.indicator = indicator
         lastRequest.imageSource = filterImageSource
@@ -102,7 +108,7 @@ class CollectionViewItemsLoader: NSObject {
         
         //var urls: [URL] = []
         print("\(Date()) Loading photo files from db")
-        let photoFiles = ModelStore.default.getPhotoFiles(year: year, month: month, day: day, place: place, includeHidden: showHidden, imageSource: filterImageSource, cameraModel: filterCameraModel, hiddenCountHandler: self.hiddenCountHandler)
+        let photoFiles = ModelStore.default.getPhotoFiles(year: year, month: month, day: day, ignoreDate: ignoreDate, country: country, province: province, city: city, place: place, includeHidden: showHidden, imageSource: filterImageSource, cameraModel: filterCameraModel, hiddenCountHandler: self.hiddenCountHandler)
         //print("GOT PHOTOS for year:\(year) month:\(month) day:\(day) place:\(place) count \(photoFiles.count)")
         //for photoFile in photoFiles {
         //    urls.append(URL(fileURLWithPath: photoFile.path!))
@@ -112,13 +118,16 @@ class CollectionViewItemsLoader: NSObject {
         print("\(Date()) Set up items DONE")
     }
     
-    func load(year:Int, month:Int, day:Int, event:String, place:String, filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil, indicator:Accumulator? = nil) {
+    func load(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String, filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil, indicator:Accumulator? = nil) {
         loading = true
         
         lastRequest.loadSource = .event
         lastRequest.year = year
         lastRequest.month = month
         lastRequest.day = day
+        lastRequest.country = country
+        lastRequest.province = province
+        lastRequest.city = city
         lastRequest.place = place
         lastRequest.event = event
         lastRequest.indicator = indicator
@@ -128,7 +137,7 @@ class CollectionViewItemsLoader: NSObject {
         self.indicator = indicator
         
         //var urls: [URL] = []
-        let photoFiles = ModelStore.default.getPhotoFiles(year: year, month: month, day: day, event: event, place:place, includeHidden: showHidden, imageSource: filterImageSource, cameraModel: filterCameraModel, hiddenCountHandler: self.hiddenCountHandler)
+        let photoFiles = ModelStore.default.getPhotoFiles(year: year, month: month, day: day, event: event, country: country, province: province, city: city, place:place, includeHidden: showHidden, imageSource: filterImageSource, cameraModel: filterCameraModel, hiddenCountHandler: self.hiddenCountHandler)
         //print("GOT PHOTOS for year:\(year) month:\(month) day:\(day) event:\(event) place:\(place) count \(photoFiles.count)")
         //for photoFile in photoFiles {
         //    urls.append(URL(fileURLWithPath: photoFile.path!))

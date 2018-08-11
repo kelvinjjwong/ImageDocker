@@ -596,22 +596,28 @@ class ModelStore {
     
     // MARK: IMAGES - COLLECTION
     
-    func getPhotoFiles(year:Int, month:Int, day:Int, place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil ) -> [Image] {
+    func getPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil ) -> [Image] {
         
         var hiddenWhere = ""
         if !includeHidden {
             hiddenWhere = "AND hidden=0"
         }
         var placeWhere = ""
-        if place != nil {
-            placeWhere = "AND place = '\(place ?? "")'"
+        if ((place == nil || place == "") && country != "" && province != "" && city != "" ){
+            placeWhere = "AND ( (country = '\(country)' AND province = '\(province)' AND city = '\(city)') OR (assignCountry = '\(country)' AND assignProvince = '\(province)' AND assignCity = '\(city)') )"
+        }else if place != nil {
+            placeWhere = "AND (place = '\(place ?? "")') OR (assignPlace = '\(place ?? "")') "
         }
         
         
         var stmtWithoutHiddenWhere = ""
         
         if year == 0 && month == 0 && day == 0 {
-            stmtWithoutHiddenWhere = "photoTakenYear = 0 and photoTakenMonth = 0 and photoTakenDay = 0 \(placeWhere)"
+            if ignoreDate {
+                stmtWithoutHiddenWhere = "1=1 \(placeWhere)"
+            }else{
+                stmtWithoutHiddenWhere = "( (photoTakenYear = 0 and photoTakenMonth = 0 and photoTakenDay = 0) OR (photoTakenYear is null and photoTakenMonth is null and photoTakenDay is null) ) \(placeWhere)"
+            }
         }else{
             if year == 0 {
                 // no condition
@@ -632,6 +638,8 @@ class ModelStore {
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
         let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=1"
         
+        print(stmt)
+        
         var result:[Image] = []
         var hiddenCount:Int = 0
         do {
@@ -651,7 +659,7 @@ class ModelStore {
     
     
     
-    func getPhotoFiles(year:Int, month:Int, day:Int, event:String, place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil ) -> [Image] {
+    func getPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil ) -> [Image] {
         var hiddenWhere = ""
         if !includeHidden {
             hiddenWhere = "AND hidden=0"
@@ -673,6 +681,8 @@ class ModelStore {
         
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
         let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=1"
+        
+        print(stmt)
         
         var result:[Image] = []
         var hiddenCount:Int = 0
