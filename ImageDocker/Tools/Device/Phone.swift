@@ -79,7 +79,7 @@ struct PhoneDevice {
             summary = deviceId
         }
         if name != "" {
-            return "\(manufacture) \(name) [\(summary)]"
+            return "\(manufacture) \(model) (\(name)) [\(summary)]"
             
         }
         if model != "" && manufacture != "" {

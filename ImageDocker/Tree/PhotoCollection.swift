@@ -44,6 +44,7 @@ class PhotoCollection: NSObject {
     var day:Int = 0
     var place:String = ""
     var event:String = ""
+    var gov:String = ""
     
     var hasDuplicates:Bool = false
     

@@ -75,14 +75,13 @@ struct Android {
             return nil
         }
         var device:PhoneDevice
-        var name:String = ""
         var manufacture:String = ""
         var model:String = ""
         var iccid:String = ""
         var meid:String = ""
         let lines = string.components(separatedBy: "\n")
         for line in lines {
-            if line.starts(with: "[ro.product.model]:") {
+            if line.starts(with: "[ro.product.model]:") && model == "" {
                 let parts = line.components(separatedBy: " ")
                 if parts.count == 2 {
                     model = parts[1].replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "")
@@ -102,20 +101,20 @@ struct Android {
                 if parts.count == 2 {
                     meid = parts[1].replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "").uppercased()
                 }
-            }else if line.starts(with: "[ro.config.marketing_name]:") && name == "" {
+            }else if line.starts(with: "[ro.config.marketing_name]:") && model == "" {
                 let parts = line.components(separatedBy: " ")
                 if parts.count == 2 {
-                    name = parts[1].replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "").replacingOccurrences(of: "_", with: " ")
+                    model = parts[1].replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "").replacingOccurrences(of: "_", with: " ")
                 }
-            }else if line.starts(with: "[net.hostname]:") && name == "" {
+            }else if line.starts(with: "[net.hostname]:") && model == "" {
                 let parts = line.components(separatedBy: " ")
                 if parts.count == 2 {
-                    name = parts[1].replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "").replacingOccurrences(of: "_", with: " ")
+                    model = parts[1].replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "").replacingOccurrences(of: "_", with: " ")
                 }
-            }else if line.starts(with: "[ro.product.brand]:") && name == "" {
+            }else if line.starts(with: "[ro.product.brand]:") && model == "" {
                 let parts = line.components(separatedBy: " ")
                 if parts.count == 2 {
-                    name = parts[1].replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "").uppercased()
+                    model = parts[1].replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "").uppercased()
                 }
             }
         }
@@ -123,8 +122,7 @@ struct Android {
             device = PhoneDevice(type: .Android, deviceId: id, manufacture: manufacture, model: model)
             device.iccid = iccid
             device.meid = meid
-            device.name = name
-            print("Android connected: \(manufacture) \(model) - \(name)")
+            print("Android connected: \(manufacture) \(model)")
             return device
         }else{
             return nil

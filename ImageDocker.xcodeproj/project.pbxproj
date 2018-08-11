@@ -76,6 +76,7 @@
 		8EFA7CF9211A36F700419777 /* DeviceCopyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA7CF8211A36F700419777 /* DeviceCopyViewController.swift */; };
 		8EFA7CFB211D713700419777 /* ImageDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA7CFA211D713700419777 /* ImageDevice.swift */; };
 		8EFA7CFD211D72B300419777 /* ImageDeviceFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA7CFC211D72B300419777 /* ImageDeviceFile.swift */; };
+		8EFA7CFF211F012A00419777 /* PlacesTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA7CFE211F012A00419777 /* PlacesTreeController.swift */; };
 		8EFAF1FB20BFFC8A007A7783 /* MetaInfoHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFAF1FA20BFFC8A007A7783 /* MetaInfoHolder.swift */; };
 		8EFAF1FF20CAE422007A7783 /* Moment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFAF1FE20CAE422007A7783 /* Moment.swift */; };
 		8EFE763C2094AF6B00B7CFCA /* TreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFE763B2094AF6B00B7CFCA /* TreeController.swift */; };
@@ -180,6 +181,7 @@
 		8EFA7CF8211A36F700419777 /* DeviceCopyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCopyViewController.swift; sourceTree = "<group>"; };
 		8EFA7CFA211D713700419777 /* ImageDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDevice.swift; sourceTree = "<group>"; };
 		8EFA7CFC211D72B300419777 /* ImageDeviceFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDeviceFile.swift; sourceTree = "<group>"; };
+		8EFA7CFE211F012A00419777 /* PlacesTreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesTreeController.swift; sourceTree = "<group>"; };
 		8EFAF1FA20BFFC8A007A7783 /* MetaInfoHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfoHolder.swift; sourceTree = "<group>"; };
 		8EFAF1FE20CAE422007A7783 /* Moment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moment.swift; sourceTree = "<group>"; };
 		8EFE763B2094AF6B00B7CFCA /* TreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeController.swift; sourceTree = "<group>"; };
@@ -330,6 +332,7 @@
 				8E4C38D4211828FF0089502C /* MomentsTreeController.swift */,
 				8E4C38D62118291F0089502C /* LibraryTreeController.swift */,
 				8E4C38D8211829410089502C /* DeviceTreeController.swift */,
+				8EFA7CFE211F012A00419777 /* PlacesTreeController.swift */,
 			);
 			path = Tree;
 			sourceTree = "<group>";
@@ -706,6 +709,7 @@
 				8E4B7C1920929EFA00DDD9E0 /* LocationConsumer.swift in Sources */,
 				8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */,
 				8E4C38D3211828B00089502C /* EventsTreeController.swift in Sources */,
+				8EFA7CFF211F012A00419777 /* PlacesTreeController.swift in Sources */,
 				8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */,
 				8EB986C620B6EBC40075B081 /* DarkTableView.swift in Sources */,
 				8E4C38CF2117B54D0089502C /* Android.swift in Sources */,

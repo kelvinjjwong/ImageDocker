@@ -85,9 +85,6 @@ extension ViewController {
                     }
                     let vc = window.contentViewController as! DeviceCopyViewController
                     vc.viewInit(device: device)
-                    //let application = NSApplication.shared
-                    //application.o
-                    //application.stopModal()
                 }
             }
         }
@@ -101,7 +98,12 @@ extension ViewController {
             if devices.count > 0 {
                 for deviceId in devices {
                     if let device:PhoneDevice = Android.bridge.device(id: deviceId) {
-                        let dev:PhoneDevice = Android.bridge.memory(device: device)
+                        let imageDevice = ModelStore.default.getOrCreateDevice(device: device)
+                        
+                        var dev:PhoneDevice = Android.bridge.memory(device: device)
+                        if imageDevice.name != "" {
+                            dev.name = imageDevice.name ?? ""
+                        }
                         self.deviceIdToDevice[deviceId] = dev
                         self.addDeviceTreeEntry(device: dev)
                     }
@@ -116,7 +118,7 @@ extension ViewController {
         }
     }
     
-    func cleanCachedDeviceIds(type:MobileType){
+    fileprivate func cleanCachedDeviceIds(type:MobileType){
         for deviceId in deviceIdToDevice.keys {
             if let device = deviceIdToDevice[deviceId], device.type == type {
                 

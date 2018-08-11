@@ -77,7 +77,7 @@ extension ViewController {
     
     // MARK: ADD NODES
     
-    func addLibraryTreeEntry(imageFolder:ImageFolder) {
+    fileprivate func addLibraryTreeEntry(imageFolder:ImageFolder) {
         var _parent:PXSourceListItem
         if imageFolder.parent == nil {
             _parent = self.librarySectionOfTree!

@@ -217,10 +217,10 @@ extension ViewController : PXSourceListDelegate {
                     self.selectImageFolder(collection.imageFolder!)
                 }else if collection.source! == .moment {
                     //print("selected moment \(collection.title)")
-                    self.selectMoment(collection, groupByPlace: false)
+                    self.selectMomentsTreeEntry(collection)
                 }else if collection.source! == .place {
                     //print("selected place moment \(collection.title)")
-                    self.selectMoment(collection, groupByPlace: true)
+                    self.selectPlacesTreeEntry(collection)
                 }else if collection.source! == .event {
                     //print("selected place moment \(collection.title)")
                     self.selectEvent(collection)

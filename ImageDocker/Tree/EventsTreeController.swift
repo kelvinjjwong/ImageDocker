@@ -56,7 +56,7 @@ extension ViewController {
     
     // MARK: ADD NODES
     
-    func addEventTreeEntry(event:Event){
+    fileprivate func addEventTreeEntry(event:Event){
         let collection:PhotoCollection = PhotoCollection(title: event.represent,
                                                          identifier: event.represent,
                                                          type: event.photoCount == 0 ? .userCreated : .library,
@@ -78,7 +78,7 @@ extension ViewController {
         self.treeIdItems[event.id] = item
     }
     
-    func addEventMonthTreeEntry(month:Event){
+    fileprivate func addEventMonthTreeEntry(month:Event){
         let collection:PhotoCollection = PhotoCollection(title: month.represent,
                                                          identifier: month.represent,
                                                          type: month.photoCount == 0 ? .userCreated : .library,
@@ -105,7 +105,7 @@ extension ViewController {
         
     }
     
-    func addEventDayTreeEntry(day:Event){
+    fileprivate func addEventDayTreeEntry(day:Event){
         let collection:PhotoCollection = PhotoCollection(title: day.represent,
                                                          identifier: day.represent,
                                                          type: day.photoCount == 0 ? .userCreated : .library,
