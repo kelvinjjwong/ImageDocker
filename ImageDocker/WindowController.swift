@@ -15,4 +15,5 @@ class WindowController : NSWindowController {
         
         //self.window?.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
     }
+    
 }

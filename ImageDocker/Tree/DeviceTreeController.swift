@@ -73,6 +73,23 @@ extension ViewController {
         print("selected device: \(collection.identifier)")
         if collection.identifier.starts(with: "device_type_") {
             self.selectDeviceType(collection)
+        }else {
+            if let device = self.deviceIdToDevice[collection.identifier] {
+                if let window = self.deviceCopyWindowController.window {
+                    if self.deviceCopyWindowController.isWindowLoaded {
+                        window.makeKeyAndOrderFront(self)
+                        print("order to front")
+                    }else{
+                        self.deviceCopyWindowController.showWindow(self)
+                        print("show window")
+                    }
+                    let vc = window.contentViewController as! DeviceCopyViewController
+                    vc.viewInit(device: device)
+                    //let application = NSApplication.shared
+                    //application.o
+                    //application.stopModal()
+                }
+            }
         }
     }
     
@@ -80,18 +97,41 @@ extension ViewController {
         if collection.identifier == "device_type_Android" {
             let devices:[String] = Android.bridge.devices()
             print("android device count: \(devices.count)")
+            self.cleanCachedDeviceIds(type: .Android)
             if devices.count > 0 {
                 for deviceId in devices {
                     if let device:PhoneDevice = Android.bridge.device(id: deviceId) {
                         let dev:PhoneDevice = Android.bridge.memory(device: device)
+                        self.deviceIdToDevice[deviceId] = dev
                         self.addDeviceTreeEntry(device: dev)
                     }
                 }
-                self.sourceList.reloadData()
+            }
+            self.sourceList.reloadData()
+            if devices.count > 0 {
                 let item = self.treeIdItems["device_type_Android"]
                 self.sourceList.expandItem(item)
             }
             
+        }
+    }
+    
+    func cleanCachedDeviceIds(type:MobileType){
+        for deviceId in deviceIdToDevice.keys {
+            if let device = deviceIdToDevice[deviceId], device.type == type {
+                
+                if let exist = self.treeIdItems[deviceId] {
+                    if type == .Android {
+                        self.treeIdItems["device_type_Android"]?.removeChildItem(exist)
+                    }else if type == .iPhone {
+                        self.treeIdItems["device_type_iPhone"]?.removeChildItem(exist)
+                    }
+                }
+                
+                self.treeIdItems.removeValue(forKey: deviceId)
+                self.deviceToCollection.removeValue(forKey: deviceId)
+                self.deviceIdToDevice.removeValue(forKey: deviceId)
+            }
         }
     }
     

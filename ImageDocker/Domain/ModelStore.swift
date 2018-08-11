@@ -930,6 +930,83 @@ class ModelStore {
         
     }
     
+    // MARK: DEVICES
+    
+    func getOrCreateDevice(device:PhoneDevice) -> ImageDevice{
+        var dev:ImageDevice?
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                dev = try ImageDevice.fetchOne(db, key: device.deviceId)
+            }
+            if dev == nil {
+                try db.write { db in
+                    dev = ImageDevice.new(
+                        deviceId: device.deviceId,
+                        type: device.type == .Android ? "Android" : "iPhone",
+                        manufacture: device.manufacture,
+                        model: device.name
+                    )
+                    try dev?.save(db)
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return dev!
+    }
+    
+    func saveDevice(device:ImageDevice){
+        var dev = device
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try dev.save(db)
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func getOrCreateDeviceFile(deviceId:String, file:PhoneFile) -> ImageDeviceFile{
+        var deviceFile:ImageDeviceFile?
+        do {
+            let key = "\(deviceId):\(file.path)"
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                deviceFile = try ImageDeviceFile.fetchOne(db, key: key)
+            }
+            if deviceFile == nil {
+                try db.write { db in
+                    deviceFile = ImageDeviceFile.new(
+                        fileId: key,
+                        deviceId: deviceId,
+                        path: file.path,
+                        filename: file.filename,
+                        fileDateTime: file.fileDateTime,
+                        fileSize: file.fileSize
+                    )
+                    try deviceFile?.save(db)
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return deviceFile!
+    }
+    
+    func saveDeviceFile(file:ImageDeviceFile){
+        var f = file
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try f.save(db)
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
     // MARK: SCHEMA VERSION MIGRATION
     
     fileprivate func versionCheck(){
@@ -1051,6 +1128,30 @@ class ModelStore {
                 t.column("videoBitRate", .text)
                 t.column("videoDuration", .text)
                 t.column("videoFormat", .text)
+            })
+        }
+        
+        migrator.registerMigration("v2") { db in
+            try db.create(table: "ImageDevice", body: { t in
+                t.column("deviceId", .text).primaryKey().unique().notNull()
+                t.column("type", .text)
+                t.column("manufacture", .text)
+                t.column("model", .text)
+                t.column("name", .text)
+                t.column("storagePath", .text)
+            })
+            
+            try db.create(table: "ImageDeviceFile", body: { t in
+                t.column("fileId", .text).primaryKey().unique().notNull() // deviceId:/path/filename.jpg
+                t.column("deviceId", .text)
+                t.column("filename", .text)
+                t.column("path", .text)
+                t.column("fileDateTime", .text)
+                t.column("fileSize", .text)
+                t.column("fileMD5", .text)
+                t.column("importDate", .text)
+                t.column("importToPath", .text)
+                t.column("importAsFilename", .text)
             })
         }
         

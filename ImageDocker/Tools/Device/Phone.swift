@@ -11,8 +11,29 @@ import Foundation
 struct PhoneFile {
     
     var filename:String = ""
-    var md5:String = ""
     var path:String = ""
+    var fileMD5:String = "" {
+        didSet {
+            matched = ( fileMD5 == storedMD5 && fileDateTime == storedDateTime && fileSize == storedSize )
+        }
+    }
+    var fileDateTime:String = ""
+    var fileSize:String = ""
+    var storedMD5:String = ""
+    var storedDateTime:String = ""
+    var storedSize:String = ""
+    var importDate:String = ""
+    var importToPath:String = ""
+    var importAsFilename:String = "" {
+        didSet {
+            stored = (importAsFilename != "")
+            matched = ( fileMD5 == storedMD5 && fileDateTime == storedDateTime && fileSize == storedSize )
+        }
+    }
+    
+    var matched:Bool = false
+    var stored:Bool = false
+    var deviceFile:ImageDeviceFile?
     
     init(filename:String, path:String){
         self.filename = filename
@@ -22,7 +43,7 @@ struct PhoneFile {
     init(filename:String, path:String, md5:String){
         self.filename = filename
         self.path = path
-        self.md5 = md5
+        self.fileMD5 = md5
     }
 }
 

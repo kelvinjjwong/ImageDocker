@@ -34,8 +34,11 @@ struct Android {
         command.standardError = FileHandle.nullDevice
         command.launchPath = adb.path
         command.arguments = ["devices", "-l"]
-        command.launch()
-        command.waitUntilExit()
+        do {
+            try command.run()
+        }catch{
+            print(error)
+        }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         print(string)
@@ -169,6 +172,7 @@ struct Android {
     }
     
     func files(device id: String, in path: String) -> [PhoneFile] {
+        print("getting files from \(id) \(path)")
         var result:[PhoneFile] = []
         let pipe = Pipe()
         
@@ -176,26 +180,66 @@ struct Android {
         command.standardOutput = pipe
         command.standardError = pipe
         command.launchPath = adb.path
-        command.arguments = ["-s", id, "shell", "cd \(path); ls -f *.jpg *.jpeg *.mov *.mpg *.mpeg *.mp4"]
-        command.launch()
-        command.waitUntilExit()
+        command.arguments = ["-s", id, "shell", "cd \(path); ls -got *.jpg *.jpeg *.mov *.mpg *.mpeg *.mp4;exit 0"]
+        //command.launch()
+        //print(command.isRunning)
+        do {
+            try command.run()
+        }catch{
+            print(error)
+        }
+        //command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        //print(string)
+        if string == "error: device '\(id)' not found" {
+            return []
+        }
         let lines = string.components(separatedBy: "\n")
+        print("got \(lines.count) lines from \(id) \(path)")
         for line in lines {
             let parts = line.components(separatedBy: " ")
             
             let name = parts[parts.count - 1]
-            if name == "directory" || name == "" {
+            if name == "directory" || name == "killing..." || name == "successfully" || name == "" {
                 continue
             }
+            let size = parts[parts.count - 4]
+            let date = parts[parts.count - 3]
+            let time = parts[parts.count - 2]
             let url:URL = URL(fileURLWithPath: path).appendingPathComponent(name)
             let filepath = url.path
             let filename = url.lastPathComponent
-            let file = PhoneFile(filename: filename, path: filepath)
+            var file = PhoneFile(filename: filename, path: filepath)
+            file.fileSize = size
+            file.fileDateTime = "\(date) \(time)"
+            //print("processed file \(name)")
             result.append(file)
         }
+        print("got \(result.count) files from \(id) \(path)")
+        //print("done files")
         return result
+    }
+    
+    func md5(device id: String, fileWithPath:String) -> String{
+        let pipe = Pipe()
+        
+        let command = Process()
+        command.standardOutput = pipe
+        command.standardError = FileHandle.nullDevice
+        command.launchPath = adb.path
+        command.arguments = ["-s", id, "shell", "md5sum \(fileWithPath)"]
+        command.launch()
+        command.waitUntilExit()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        if string != "" {
+            let parts = string.components(separatedBy: " ")
+            if parts.count > 1 {
+                return parts[0]
+            }
+        }
+        return ""
     }
     
     func md5(device id: String, path:String, filename:String) -> String{
@@ -210,7 +254,13 @@ struct Android {
         command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
-        return string
+        if string != "" {
+            let parts = string.components(separatedBy: " ")
+            if parts.count > 1 {
+                return parts[0]
+            }
+        }
+        return ""
     }
     
     func pull(device id: String, in folderPath:String, to targetPath:String) -> String{
@@ -221,8 +271,11 @@ struct Android {
         command.standardError = FileHandle.nullDevice
         command.launchPath = adb.path
         command.arguments = ["-s", id, "pull", folderPath, targetPath]
-        command.launch()
-        command.waitUntilExit()
+        do {
+            try command.run()
+        }catch{
+            print(error)
+        }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         let lines = string.components(separatedBy: "\n")
@@ -230,6 +283,7 @@ struct Android {
     }
     
     func pull(device id: String, from filePath:String, to targetPath:String) -> Bool{
+        print("pulling from \(filePath) to \(targetPath)")
         let pipe = Pipe()
         
         let command = Process()
@@ -237,8 +291,11 @@ struct Android {
         command.standardError = FileHandle.nullDevice
         command.launchPath = adb.path
         command.arguments = ["-s", id, "pull", filePath, targetPath]
-        command.launch()
-        command.waitUntilExit()
+        do {
+            try command.run()
+        }catch{
+            print(error)
+        }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         let lines = string.components(separatedBy: "\n")
@@ -254,8 +311,11 @@ struct Android {
         command.standardError = FileHandle.nullDevice
         command.launchPath = adb.path
         command.arguments = ["-s", id, "push", filePath, remoteFolder]
-        command.launch()
-        command.waitUntilExit()
+        do {
+            try command.run()
+        }catch{
+            print(error)
+        }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         let lines = string.components(separatedBy: "\n")

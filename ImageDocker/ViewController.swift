@@ -86,6 +86,7 @@ class ViewController: NSViewController {
     var eventToCollection : [String : PhotoCollection] = [String : PhotoCollection] ()
     
     var deviceToCollection : [String : PhotoCollection] = [String : PhotoCollection] ()
+    var deviceIdToDevice : [String : PhoneDevice] = [String : PhoneDevice] ()
     
     var deviceSectionOfTree : PXSourceListItem?
     var librarySectionOfTree : PXSourceListItem?
@@ -163,12 +164,22 @@ class ViewController: NSViewController {
     var eventListController:EventListComboController!
     var placeListController:PlaceListComboController!
     
+    // MARK: Device Copy Dialog
+    
+    var deviceCopyWindowController:NSWindowController!
+    
+    // MARK: Concurrency Indicators
+    
     var scaningRepositories:Bool = false
     var creatingRepository:Bool = false
     var suppressedExport:Bool = false
     var suppressedScan:Bool = false
     
     // MARK: init
+    
+    override func viewDidAppear() {
+        self.view.window?.delegate = self
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -213,6 +224,8 @@ class ViewController: NSViewController {
         print("\(Date()) Loading view - update library tree")
         updateLibraryTree()
         print("\(Date()) Loading view - update library tree: DONE")
+        
+        self.deviceCopyWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "DeviceCopyWindowController")) as! NSWindowController
         
         
         self.btnChoiceMapService.selectSegment(withTag: 1)
@@ -300,7 +313,6 @@ class ViewController: NSViewController {
             print("\(Date()) SCANING PHOTOS TO LOAD EXIF")
             self.startScanRepositoriesToLoadExif()
         })
-        
         
         print("\(Date()) Loading view: DONE")
     }
@@ -1320,7 +1332,19 @@ class PlaceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
         }
         return -1
     }
+    
+    
 }
+
+// MARK: WINDOW CONTROLLER
+extension ViewController : NSWindowDelegate {
+    
+    
+    func windowWillClose(_ notification: Notification) {
+        NSApplication.shared.terminate(self)
+    }
+}
+
 
 
 
