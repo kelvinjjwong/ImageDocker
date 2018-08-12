@@ -790,18 +790,20 @@ class ModelStore {
     }
     
     func renamePlace(oldName:String, newName:String){
+        print("trying to rename place from \(oldName) to \(newName)")
         do {
             let db = try DatabaseQueue(path: dbfile)
             try db.write { db in
-                if let _ = try ImagePlace.fetchOne(db, key: newName){
-                    try ImagePlace.deleteOne(db, key: oldName)
+                if let _ = try ImagePlace.fetchOne(db, key: newName){ // already exists new name, just delete old one
+                    //
                 }else {
-                    if var place = try ImagePlace.fetchOne(db, key: oldName) {
+                    if var place = try ImagePlace.fetchOne(db, key: oldName) { // does not exist new name, create new name, and delete old one
                         place.name = newName
                         try place.save(db)
                     }
                 }
-                try db.execute("UPDATE Image SET AssignPlace=? WHERE AssignPlace=?", arguments: StatementArguments([oldName, newName]))
+                try db.execute("UPDATE Image SET assignPlace=? WHERE assignPlace=?", arguments: StatementArguments([newName, oldName]))
+                try ImagePlace.deleteOne(db, key: oldName)  // delete old one at last
             }
         }catch{
             print(error)

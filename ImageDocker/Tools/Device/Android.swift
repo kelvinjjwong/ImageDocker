@@ -178,7 +178,7 @@ struct Android {
         command.standardOutput = pipe
         command.standardError = pipe
         command.launchPath = adb.path
-        command.arguments = ["-s", id, "shell", "cd \(path); ls -got *.jpg *.jpeg *.mov *.mpg *.mpeg *.mp4;exit 0"]
+        command.arguments = ["-s", id, "shell", "cd \(path); ls -gotR"]
         //command.launch()
         //print(command.isRunning)
         do {
@@ -193,27 +193,9 @@ struct Android {
         if string == "error: device '\(id)' not found" {
             return []
         }
-        let lines = string.components(separatedBy: "\n")
-        print("got \(lines.count) lines from \(id) \(path)")
-        for line in lines {
-            let parts = line.components(separatedBy: " ")
-            
-            let name = parts[parts.count - 1]
-            if name == "directory" || name == "killing..." || name == "successfully" || name == "" {
-                continue
-            }
-            let size = parts[parts.count - 4]
-            let date = parts[parts.count - 3]
-            let time = parts[parts.count - 2]
-            let url:URL = URL(fileURLWithPath: path).appendingPathComponent(name)
-            let filepath = url.path
-            let filename = url.lastPathComponent
-            var file = PhoneFile(filename: filename, path: filepath)
-            file.fileSize = size
-            file.fileDateTime = "\(date) \(time)"
-            //print("processed file \(name)")
-            result.append(file)
-        }
+        result = DeviceShell.getFilenames(from: string, basePath: path,
+                                            excludeFilenames: ["directory", "killing...", "successfully"],
+                                            allowedExt: ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg"])
         print("got \(result.count) files from \(id) \(path)")
         //print("done files")
         return result

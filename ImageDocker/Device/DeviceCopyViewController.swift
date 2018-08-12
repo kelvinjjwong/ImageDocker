@@ -8,12 +8,22 @@
 
 import Cocoa
 
+enum DeviceCopyDestinationType:Int {
+    case onDevice
+    case localDirectory
+}
+
 struct DeviceCopyDestination {
     var sourcePath:String
     var toSubFolder:String
+    var type:DeviceCopyDestinationType
     
     static func new(_ pair:(String, String)) -> DeviceCopyDestination {
-        return DeviceCopyDestination(sourcePath: pair.0, toSubFolder: pair.1)
+        return DeviceCopyDestination(sourcePath: pair.0, toSubFolder: pair.1, type:.onDevice)
+    }
+    
+    static func local(_ pair:(String, String)) -> DeviceCopyDestination {
+        return DeviceCopyDestination(sourcePath: pair.0, toSubFolder: pair.1, type:.localDirectory)
     }
 }
 
@@ -47,6 +57,7 @@ class DeviceCopyViewController: NSViewController {
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
     @IBOutlet weak var lblProgressMessage: NSTextField!
     @IBOutlet weak var btnLoad: NSButton!
+    @IBOutlet weak var btnLoadFromLocal: NSButton!
     
     
     // MARK: TABLE DELEGATES
@@ -63,6 +74,7 @@ class DeviceCopyViewController: NSViewController {
         btnSave.isEnabled = false
         btnCopy.isEnabled = false
         txtStorePath.isEditable = false
+        tblSourcePath.isEnabled = false
         
         sourcePathTableDelegate.sourcePathSelectionDelegate = self
         self.tblSourcePath.delegate = sourcePathTableDelegate
@@ -169,8 +181,9 @@ class DeviceCopyViewController: NSViewController {
                 let _ = self.accumulator?.add("")
             }
         }
-        if self.deviceFiles_filtered[path]!.count > 0 {
-            DispatchQueue.main.async {
+        // Enable "Copy Files" button if any path includes new file(s)
+        DispatchQueue.main.async {
+            if self.deviceFiles_filtered[path]!.count > 0 {
                 self.btnCopy.isEnabled = true
             }
         }
@@ -231,10 +244,15 @@ class DeviceCopyViewController: NSViewController {
                     self.tblSourcePath.isEnabled = true
                     self.cbShowCopied.isEnabled = true
                     self.btnLoad.isEnabled = true
+                    self.tblSourcePath.isEnabled = true
                 }
             }
         }
     }
+    
+    @IBAction func onLoadFromLocalClicked(_ sender: NSButton) {
+    }
+    
     
     fileprivate var accumulator:Accumulator?
     
@@ -314,6 +332,7 @@ protocol DeviceSourcePathSelectionDelegate {
     func selectDeviceSourcePath(path:String)
 }
 
+// MARK: CLICK ACTION
 extension DeviceCopyViewController : DeviceSourcePathSelectionDelegate {
     
     func selectDeviceSourcePath(path: String) {
@@ -413,9 +432,15 @@ extension DeviceFileTableDelegate : NSTableViewDelegate {
         if row > (self.files.count - 1) {
             return nil
         }
+        
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.groupingSize = 3
+        
         let info:PhoneFile = self.files[row]
         var value = ""
         var column = ""
+        var numberCell = false
         //var tip: String? = nil
         if let id = tableColumn?.identifier {
             switch id {
@@ -424,13 +449,15 @@ extension DeviceFileTableDelegate : NSTableViewDelegate {
             case NSUserInterfaceItemIdentifier("fileMD5"):
                 value = info.fileMD5
             case NSUserInterfaceItemIdentifier("fileSize"):
-                value = info.fileSize
+                value = info.fileSize != "" ? numberFormatter.string(from: info.fileSize.numberValue ?? -1 ) ?? info.fileSize : ""
+                numberCell = true
             case NSUserInterfaceItemIdentifier("fileDateTime"):
                 value = info.fileDateTime
             case NSUserInterfaceItemIdentifier("previousMD5"):
                 value = info.storedMD5
             case NSUserInterfaceItemIdentifier("previousSize"):
-                value = info.storedSize
+                value = info.storedSize != "" ? numberFormatter.string(from: info.storedSize.numberValue ?? -1 ) ?? info.storedSize : ""
+                numberCell = true
             case NSUserInterfaceItemIdentifier("previousDateTime"):
                 value = info.storedDateTime
             case NSUserInterfaceItemIdentifier("copyState"):
@@ -443,6 +470,9 @@ extension DeviceFileTableDelegate : NSTableViewDelegate {
             let colView = tableView.makeView(withIdentifier: id, owner: nil) as! NSTableCellView
             colView.textField?.stringValue = value;
             colView.textField?.lineBreakMode = NSParagraphStyle.LineBreakMode.byWordWrapping
+            if numberCell {
+                colView.textField?.alignment = .right
+            }
             if row == tableView.selectedRow {
                 lastSelectedRow = row
             } else {

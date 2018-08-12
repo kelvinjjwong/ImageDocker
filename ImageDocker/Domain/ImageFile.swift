@@ -1203,8 +1203,10 @@ class ImageFile {
         if let photoFile = self.photoFile {
             country = photoFile.assignCountry ?? photoFile.country ?? ""
             city = photoFile.assignCity ?? photoFile.city ?? ""
+            city = city.replacingOccurrences(of: "特别行政区", with: "")
             district = photoFile.assignDistrict ?? photoFile.district ?? ""
             place = photoFile.assignPlace ?? photoFile.suggestPlace ?? photoFile.businessCircle ?? ""
+            place = place.replacingOccurrences(of: "特别行政区", with: "")
         }
         if country == "中国" {
             if city != "" && city.reversed().starts(with: "市") {

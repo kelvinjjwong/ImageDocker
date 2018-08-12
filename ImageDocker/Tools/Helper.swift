@@ -20,6 +20,12 @@ extension String {
         return str
     }
     
+    var numberValue: NSNumber? {
+        if let value = Int(self) {
+            return NSNumber(value: value)
+        }
+        return nil
+    }
     
     
     func matches(for regex: String!) -> [String] {
