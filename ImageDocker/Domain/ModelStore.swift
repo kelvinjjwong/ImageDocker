@@ -17,6 +17,7 @@ class ModelStore {
     static let `default` = ModelStore()
     
     init(){
+        self.checkDatabase()
         self.versionCheck()
     }
     
@@ -45,6 +46,7 @@ class ModelStore {
             }catch{
                 print(error)
             }
+            
         }
         return _sharedDBPool!
     }
@@ -985,7 +987,7 @@ class ModelStore {
                         deviceId: device.deviceId,
                         type: device.type == .Android ? "Android" : "iPhone",
                         manufacture: device.manufacture,
-                        model: device.name
+                        model: device.model
                     )
                     try dev?.save(db)
                 }
@@ -1205,18 +1207,47 @@ class ModelStore {
     
     // MARK: DATA MIGRATION FROM CORE DATA
     
+    func checkDatabase() {
+        let dbpath = URL(fileURLWithPath: dbfile).deletingLastPathComponent().path
+        if !FileManager.default.fileExists(atPath: dbpath) {
+            do {
+                try FileManager.default.createDirectory(atPath: dbpath, withIntermediateDirectories: true, attributes: nil)
+            }catch{
+                print("Unable to create directory for database file")
+                print(error)
+            }
+        }
+    }
+    
     func checkData(){
+        
         do {
             let dbQueue = try DatabaseQueue(path: dbfile)
-            var containerCount:Int = 0
-            var eventCount:Int = 0
-            var placeCount:Int = 0
-            var imageCount:Int = 0
+            var containerCount:Int = -1
+            var eventCount:Int = -1
+            var placeCount:Int = -1
+            var imageCount:Int = -1
+            var cdContainer:Bool = false
+            var cdEvent:Bool = false
+            var cdPlace:Bool = false
+            var cdImage:Bool = false
             try dbQueue.read { db in
-                containerCount = try ImageContainer.fetchCount(db)
-                eventCount = try ImageEvent.fetchCount(db)
-                placeCount = try ImagePlace.fetchCount(db)
-                imageCount = try Image.fetchCount(db)
+                cdContainer = try db.tableExists("ZCONTAINERFOLDER")
+                cdEvent = try db.tableExists("ZPHOTOEVENT")
+                cdPlace = try db.tableExists("ZPHOTOPLACE")
+                cdImage = try db.tableExists("ZPHOTOFILE")
+                if cdContainer {
+                    containerCount = try ImageContainer.fetchCount(db)
+                }
+                if cdEvent {
+                    eventCount = try ImageEvent.fetchCount(db)
+                }
+                if cdPlace {
+                    placeCount = try ImagePlace.fetchCount(db)
+                }
+                if cdImage {
+                    imageCount = try Image.fetchCount(db)
+                }
             }
             
             if containerCount == 0 {
