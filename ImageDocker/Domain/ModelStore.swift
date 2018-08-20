@@ -1012,6 +1012,20 @@ class ModelStore {
         }
     }
     
+    func getImportedFile(deviceId:String, file:PhoneFile) -> ImageDeviceFile? {
+        var deviceFile:ImageDeviceFile?
+        do {
+            let key = "\(deviceId):\(file.path)"
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                deviceFile = try ImageDeviceFile.fetchOne(db, key: key)
+            }
+        }catch{
+            print(error)
+        }
+        return deviceFile
+    }
+    
     func getOrCreateDeviceFile(deviceId:String, file:PhoneFile) -> ImageDeviceFile{
         var deviceFile:ImageDeviceFile?
         do {

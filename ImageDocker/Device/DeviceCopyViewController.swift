@@ -39,7 +39,7 @@ class DeviceCopyViewController: NSViewController {
     
     var paths:[DeviceCopyDestination] = []
     
-    var selectedPath:String = ""
+    var selectedPath:DeviceCopyDestination? = nil
     
     // MARK: CONTROLS
     
@@ -60,6 +60,11 @@ class DeviceCopyViewController: NSViewController {
     @IBOutlet weak var btnLoadFromLocal: NSButton!
     
     
+    // MARK: POPOVER
+    var addLocalDirectoryPopover:NSPopover?
+    var addLocalDirectoryViewController:AddLocalDirectoryViewController!
+    var addOnDeviceDirectoryPopover:NSPopover?
+    
     // MARK: TABLE DELEGATES
     
     let sourcePathTableDelegate:DeviceSourcePathTableDelegate = DeviceSourcePathTableDelegate()
@@ -74,7 +79,7 @@ class DeviceCopyViewController: NSViewController {
         btnSave.isEnabled = false
         btnCopy.isEnabled = false
         txtStorePath.isEditable = false
-        tblSourcePath.isEnabled = false
+        tblSourcePath.isEnabled = true
         
         sourcePathTableDelegate.sourcePathSelectionDelegate = self
         self.tblSourcePath.delegate = sourcePathTableDelegate
@@ -85,7 +90,7 @@ class DeviceCopyViewController: NSViewController {
     
     func viewInit(device:PhoneDevice){
         if device.manufacture != self.device.manufacture && device.deviceId != self.device.deviceId && device.model != self.device.model {
-            
+            print("DEVICE INIT")
             self.device = device
             
             let imageDevice = ModelStore.default.getOrCreateDevice(device: device)
@@ -101,6 +106,8 @@ class DeviceCopyViewController: NSViewController {
                 txtStorePath.stringValue = imageDevice.storagePath ?? ""
                 btnSave.isEnabled = true
             }
+            
+            self.addOnDeviceDirectoryPopover = nil
             
             if device.type == .Android {
                 self.paths = [
@@ -133,26 +140,103 @@ class DeviceCopyViewController: NSViewController {
         }
     }
     
-    func getFileFullList(from path:String) -> [PhoneFile]{
-        if self.deviceFiles_fulllist[path]!.count == 0 {
-            self.loadFromPath(path: path)
+    // MARK: GET FILE LIST
+    
+    func getFileFullList(from path:DeviceCopyDestination, reloadFileList:Bool = false) -> [PhoneFile]{
+        print("GET FULL LIST FROM \(path)")
+        if self.deviceFiles_fulllist[path.sourcePath] == nil {
+            print("nil, return empty")
+            return []
         }
-        return self.deviceFiles_fulllist[path]!
+        if self.deviceFiles_fulllist[path.sourcePath] != nil && self.deviceFiles_fulllist[path.sourcePath]!.count == 0 {
+            print("not nil but zero count, load from path")
+            self.loadFromPath(path: path, reloadFileList:reloadFileList)
+        }
+        return self.deviceFiles_fulllist[path.sourcePath]!
     }
     
-    func getFileFilteredList(from path:String) -> [PhoneFile]{
-        if self.deviceFiles_fulllist[path]!.count == 0 {
-            self.loadFromPath(path: path)
+    func getFileFilteredList(from path:DeviceCopyDestination, reloadFileList:Bool = false) -> [PhoneFile]{
+        if self.deviceFiles_fulllist[path.sourcePath] == nil {
+            return []
         }
-        return self.deviceFiles_filtered[path]!
+        if self.deviceFiles_fulllist[path.sourcePath] != nil && self.deviceFiles_fulllist[path.sourcePath]!.count == 0 {
+            self.loadFromPath(path: path, reloadFileList:reloadFileList)
+        }
+        return self.deviceFiles_filtered[path.sourcePath]!
     }
     
-    func loadFromPath(path:String) {
+    // MARK: LOAD FROM PATH
+    
+    fileprivate func loadFromLocalPath(path:String, pretendPath:String, reloadFileList:Bool = false) {
+        print("LOAD FROM LOCAL \(path) - \(pretendPath)")
         DispatchQueue.main.async {
             self.deviceFiles_filtered[path] = []
             self.deviceFiles_fulllist[path] = []
         }
-        let files = Android.bridge.files(device: self.device.deviceId, in: path)
+        let files = LocalDirectory.bridge.files(in: path)
+        if files.count > 0 {
+            let total = files.count
+            DispatchQueue.main.async {
+                self.accumulator = Accumulator(target: total, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblProgressMessage)
+            }
+            for file in files {
+                var f = file
+                // SAVE BEFORE PRETEND
+                f.onDevicePath = file.path
+                // PRETEND
+                let filepath:URL = URL(fileURLWithPath: file.onDevicePath).appendingPathComponent(file.folder)
+                let url:URL = URL(fileURLWithPath: pretendPath).appendingPathComponent(file.folder).appendingPathComponent(file.filename)
+                f.path = url.path
+                let importedFile:ImageDeviceFile? = ModelStore.default.getImportedFile(deviceId: self.device.deviceId, file: f)
+                if let deviceFile = importedFile {
+                    print("IMPORTED \(f.filename)")
+                    f.storedMD5 = deviceFile.fileMD5 ?? ""
+                    f.storedSize = deviceFile.fileSize ?? ""
+                    f.storedDateTime = deviceFile.fileDateTime ?? ""
+                    f.importDate = deviceFile.importDate ?? ""
+                    f.importToPath = deviceFile.importToPath ?? ""
+                    f.importAsFilename = deviceFile.importAsFilename ?? ""
+                    
+                    f.deviceFile = deviceFile
+                }else{
+                    print("NOT IMPORTED \(f.filename)")
+                    let key = "\(self.device.deviceId):\(f.path)"
+                    let datetime = LocalDirectory.bridge.datetime(of: f.filename, in: filepath.path)
+                    var deviceFile = ImageDeviceFile.new(fileId: key,
+                                                         deviceId: self.device.deviceId,
+                                                         path: filepath.path,
+                                                         filename: f.filename,
+                                                         fileDateTime: datetime,
+                                                         fileSize: f.fileSize)
+                    f.deviceFile = deviceFile
+                }
+                DispatchQueue.main.async {
+                    self.deviceFiles_fulllist[path]!.append(f)
+                    if !(f.stored && f.matched) {
+                        self.deviceFiles_filtered[path]!.append(f)
+                    }
+                    let _ = self.accumulator?.add("")
+                }
+            }
+            // Enable "Copy Files" button if any path includes new file(s)
+            DispatchQueue.main.async {
+                if self.deviceFiles_filtered[path]!.count > 0 {
+                    self.btnCopy.isEnabled = true
+                }
+                if reloadFileList {
+                    self.tblFiles.reloadData()
+                }
+            }
+        }
+    }
+    
+    fileprivate func loadFromOnDevicePath(path:String, reloadFileList:Bool = false){
+        
+        DispatchQueue.main.async {
+            self.deviceFiles_filtered[path] = []
+            self.deviceFiles_fulllist[path] = []
+        }
+        let files:[PhoneFile] = Android.bridge.files(device: self.device.deviceId, in: path)
         let total = files.count
         DispatchQueue.main.async {
             self.accumulator = Accumulator(target: total, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblProgressMessage)
@@ -186,15 +270,30 @@ class DeviceCopyViewController: NSViewController {
             if self.deviceFiles_filtered[path]!.count > 0 {
                 self.btnCopy.isEnabled = true
             }
+            if reloadFileList {
+                print("RELOAD")
+                self.tblFiles.reloadData()
+            }
+        }
+    }
+    
+    func loadFromPath(path: DeviceCopyDestination, reloadFileList:Bool = false) {
+        if path.type == .onDevice {
+            loadFromOnDevicePath(path: path.sourcePath, reloadFileList: reloadFileList)
+        }else if path.type == .localDirectory {
+            loadFromLocalPath(path: path.sourcePath, pretendPath: path.toSubFolder, reloadFileList:reloadFileList)
         }
     }
     
     func refreshFileList(){
-        self.fileTableDelegate.files = cbShowCopied.state == .on ? self.getFileFullList(from: selectedPath) : self.getFileFilteredList(from: selectedPath)
-        self.tblFiles.reloadData()
+        if selectedPath != nil {
+            self.fileTableDelegate.files = cbShowCopied.state == .on ? self.getFileFullList(from: selectedPath!, reloadFileList: true) : self.getFileFilteredList(from: selectedPath!, reloadFileList: true)
+            
+            self.tblFiles.reloadData()
+        }
     }
     
-    // MARK: ACTIONS
+    // MARK: TOOL BUTTON - OPEN PANEL
     
     @IBAction func onBrowseStorePathClicked(_ sender: NSButton) {
         let openPanel = NSOpenPanel()
@@ -216,6 +315,8 @@ class DeviceCopyViewController: NSViewController {
         }
     }
     
+    // MARK: TOOL BUTTON - OK
+    
     @IBAction func onSaveClicked(_ sender: NSButton) {
         let name = txtName.stringValue
         let storagePath = txtStorePath.stringValue
@@ -226,21 +327,29 @@ class DeviceCopyViewController: NSViewController {
         ModelStore.default.saveDevice(device: imageDevice)
     }
     
-    @IBAction func onLoadClicked(_ sender: NSButton) {
+    // MARK: TOOL BUTTONS - FILE LIST
+    
+    fileprivate func reloadFileList() {
         if paths.count > 0 {
             btnAddSourcePath.isEnabled = false
             btnRemoveSourcePath.isEnabled = false
+            btnLoadFromLocal.isEnabled = false
             tblSourcePath.isEnabled = false
             cbShowCopied.isEnabled = false
             btnLoad.isEnabled = false
             DispatchQueue.global().async {
                 for path in self.paths {
-                    self.loadFromPath(path: path.sourcePath)
+                    self.loadFromPath(path: path)
                 }
                 DispatchQueue.main.async {
-                    self.selectDeviceSourcePath(path: self.paths[0].sourcePath)
+                    if self.selectedPath == nil {
+                        self.selectDeviceSourcePath(path: self.paths[0])
+                    }else{
+                        self.selectDeviceSourcePath(path: self.selectedPath!)
+                    }
                     self.btnAddSourcePath.isEnabled = true
                     self.btnRemoveSourcePath.isEnabled = true
+                    self.btnLoadFromLocal.isEnabled = false
                     self.tblSourcePath.isEnabled = true
                     self.cbShowCopied.isEnabled = true
                     self.btnLoad.isEnabled = true
@@ -250,7 +359,8 @@ class DeviceCopyViewController: NSViewController {
         }
     }
     
-    @IBAction func onLoadFromLocalClicked(_ sender: NSButton) {
+    @IBAction func onLoadClicked(_ sender: NSButton) {
+        self.reloadFileList()
     }
     
     
@@ -259,8 +369,10 @@ class DeviceCopyViewController: NSViewController {
     @IBAction func onCopyClicked(_ sender: NSButton) {
         var total = 0
         for path in self.paths {
+            print("TO BE COPIED: \(path.sourcePath) - \(self.deviceFiles_filtered[path.sourcePath]!.count)")
             total += self.deviceFiles_filtered[path.sourcePath]!.count
         }
+        print("TO BE COPIED: \(total)")
         guard total > 0 else {return}
         self.accumulator = Accumulator(target: total, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblProgressMessage)
         
@@ -276,7 +388,14 @@ class DeviceCopyViewController: NSViewController {
             let now = Date()
             let date = self.dateFormatter.string(from: now)
             for path in self.paths {
-                var destinationPath = URL(fileURLWithPath: destination).appendingPathComponent(path.toSubFolder).path
+                var subFolder = path.toSubFolder
+                if path.type == .localDirectory {
+                    // PRETEND AS ON DEVICE PATH
+                    if let onDevicePath = self.paths.first(where: {$0.sourcePath == path.toSubFolder && $0.type == .onDevice}) {
+                        subFolder = onDevicePath.toSubFolder
+                    }
+                }
+                var destinationPath = URL(fileURLWithPath: destination).appendingPathComponent(subFolder).path
                 if !FileManager.default.fileExists(atPath: destinationPath) {
                     do {
                         try FileManager.default.createDirectory(atPath: destinationPath, withIntermediateDirectories: true, attributes: nil)
@@ -286,18 +405,45 @@ class DeviceCopyViewController: NSViewController {
                     }
                 }
                 for file in self.deviceFiles_filtered[path.sourcePath]! {
-                    if Android.bridge.pull(device: self.device.deviceId, from: file.path, to: destinationPath) {
-                        print("Copied \(file.path)")
-                        if file.deviceFile != nil {
-                            var deviceFile = file.deviceFile!
+                    if path.type == .onDevice {
+                        if Android.bridge.pull(device: self.device.deviceId, from: file.path, to: destinationPath) {
+                            print("Copied \(file.path)")
+                            if file.deviceFile != nil {
+                                var deviceFile = file.deviceFile!
+                                deviceFile.importToPath = destinationPath
+                                deviceFile.importAsFilename = file.filename
+                                deviceFile.importDate = date
+                                ModelStore.default.saveDeviceFile(file: deviceFile)
+                                print("Updated \(file.path)")
+                            }
+                        }else{
+                            print("Failed to copy \(file.path)")
+                        }
+                    } else if path.type == .localDirectory {
+                        print("COPYING LOCAL \(file.onDevicePath)")
+                        
+                        var needSaveFile:Bool = false
+                        let destinationFile = URL(fileURLWithPath: destinationPath).appendingPathComponent(file.filename).path
+                        if FileManager.default.fileExists(atPath: destinationFile) {
+                            // exist file, avoid copy
+                            needSaveFile = true
+                        }else{ // not exist, copy file
+                            do{
+                                try FileManager.default.copyItem(atPath: file.onDevicePath, toPath: destinationFile)
+                                
+                                needSaveFile = true
+                            }catch{
+                                print(error)
+                            }
+                        }
+                        if needSaveFile {
+                            var deviceFile:ImageDeviceFile = file.deviceFile!
                             deviceFile.importToPath = destinationPath
                             deviceFile.importAsFilename = file.filename
                             deviceFile.importDate = date
                             ModelStore.default.saveDeviceFile(file: deviceFile)
                             print("Updated \(file.path)")
                         }
-                    }else{
-                        print("Failed to copy \(file.path)")
                     }
                     DispatchQueue.main.async {
                         let _ = self.accumulator?.add("")
@@ -305,13 +451,14 @@ class DeviceCopyViewController: NSViewController {
                 }
             }
             DispatchQueue.main.async {
-                self.refreshFileList()
-                self.btnCopy.isEnabled = true
-                self.btnLoad.isEnabled = true
-                self.btnBrowseStorePath.isEnabled = true
-                self.cbShowCopied.isEnabled = true
-                self.btnAddSourcePath.isEnabled = true
-                self.btnRemoveSourcePath.isEnabled = true
+                //self.refreshFileList()
+//                self.btnCopy.isEnabled = true
+//                self.btnLoad.isEnabled = true
+//                self.btnBrowseStorePath.isEnabled = true
+//                self.cbShowCopied.isEnabled = true
+//                self.btnAddSourcePath.isEnabled = true
+//                self.btnRemoveSourcePath.isEnabled = true
+                self.reloadFileList()
             }
         }
     }
@@ -320,23 +467,135 @@ class DeviceCopyViewController: NSViewController {
         self.refreshFileList()
     }
     
+    // MARK: TOOL BUTTONS - SOURCE PATH
+    
+    @IBAction func onLoadFromLocalClicked(_ sender: NSButton) {
+        self.createLocalDirectoryPopover()
+        
+        let cellRect = sender.bounds
+        self.addLocalDirectoryPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
+    }
+    
     @IBAction func onAddSourcePathClicked(_ sender: NSButton) {
+        self.createOnDeviceDirectoryPopover()
+        
+        let cellRect = sender.bounds
+        self.addOnDeviceDirectoryPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
     }
     
     @IBAction func onRemoveSourcePathClicked(_ sender: NSButton) {
+        if sourcePathTableDelegate.lastSelectedRow != nil && sourcePathTableDelegate.lastSelectedRow! < sourcePathTableDelegate.paths.count {
+            paths.remove(at: sourcePathTableDelegate.lastSelectedRow!)
+            sourcePathTableDelegate.paths.remove(at: sourcePathTableDelegate.lastSelectedRow!)
+            sourcePathTableDelegate.lastSelectedRow = nil
+            if selectedPath != nil {
+                if self.deviceFiles_fulllist[selectedPath!.sourcePath] != nil {
+                    self.deviceFiles_fulllist[selectedPath!.sourcePath]?.removeAll()
+                    self.deviceFiles_fulllist[selectedPath!.sourcePath] = nil
+                }
+                if self.deviceFiles_filtered[selectedPath!.sourcePath] != nil {
+                    self.deviceFiles_filtered[selectedPath!.sourcePath]?.removeAll()
+                    self.deviceFiles_filtered[selectedPath!.sourcePath] = nil
+                }
+            }
+            selectedPath = nil
+            tblSourcePath.reloadData()
+        }
+    }
+    
+    // MARK: POPOVER - ON DEVICE DIRECTORY
+    
+    fileprivate func createOnDeviceDirectoryPopover(){
+        var myPopover = self.addOnDeviceDirectoryPopover
+        if(myPopover == nil){
+            myPopover = NSPopover()
+            
+            let frame = CGRect(origin: .zero, size: CGSize(width: 750, height: 390))
+            
+            let directoryViewDelegate = AndroidDirectoryViewDelegate(deviceId: self.device.deviceId)
+            self.addLocalDirectoryViewController = AddLocalDirectoryViewController(directoryViewDelegate: directoryViewDelegate,
+                                                                                   deviceType: self.device.type,
+                                                                                   destinationType: .onDevice,
+                                                                                   onApply: { (directory, toSubFolder) in
+                print("\(directory) \(toSubFolder)")
+                let dest = DeviceCopyDestination.new((directory, toSubFolder))
+                if !self.sourcePathTableDelegate.paths.contains(where: {$0.sourcePath == dest.sourcePath && $0.type == .onDevice }) {
+                    self.paths.append(dest)
+                    self.sourcePathTableDelegate.paths.append(dest)
+                    
+                    self.deviceFiles_filtered[dest.sourcePath] = []
+                    self.deviceFiles_fulllist[dest.sourcePath] = []
+                    
+                    self.tblSourcePath.reloadData()
+                }
+                self.addOnDeviceDirectoryPopover?.close()
+            })
+            //self.addLocalDirectoryViewController.viewInit()
+            self.addLocalDirectoryViewController.view.frame = frame
+            
+            myPopover!.contentViewController = self.addLocalDirectoryViewController
+            //myPopover!.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
+            //myPopover!.animates = true
+            //myPopover!.delegate = self
+            myPopover!.behavior = NSPopover.Behavior.transient
+        }
+        self.addOnDeviceDirectoryPopover = myPopover
+    }
+    
+    // MARK: POPOVER - LOCAL DIRECTORY
+    
+    fileprivate func createLocalDirectoryPopover(){
+        var myPopover = self.addLocalDirectoryPopover
+        if(myPopover == nil){
+            myPopover = NSPopover()
+            
+            let frame = CGRect(origin: .zero, size: CGSize(width: 750, height: 390))
+            
+            let directoryViewDelegate = LocalDirectoryViewDelegate()
+            self.addLocalDirectoryViewController = AddLocalDirectoryViewController(directoryViewDelegate: directoryViewDelegate,
+                                                                                   deviceType: self.device.type,
+                                                                                   destinationType: .localDirectory,
+                                                                                   onApply: { (directory, toSubFolder) in
+                print("\(directory) \(toSubFolder)")
+                let dest = DeviceCopyDestination.local((directory, toSubFolder))
+                if !self.sourcePathTableDelegate.paths.contains(where: {$0.sourcePath == dest.sourcePath && $0.type == .localDirectory }) {
+                    self.paths.append(dest)
+                    self.sourcePathTableDelegate.paths.append(dest)
+                    
+                    self.deviceFiles_filtered[dest.sourcePath] = []
+                    self.deviceFiles_fulllist[dest.sourcePath] = []
+                    
+                    self.tblSourcePath.reloadData()
+                }
+                
+                self.addLocalDirectoryPopover?.close()
+            })
+            //self.addLocalDirectoryViewController.viewInit()
+            self.addLocalDirectoryViewController.view.frame = frame
+            
+            myPopover!.contentViewController = self.addLocalDirectoryViewController
+            //myPopover!.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
+            //myPopover!.animates = true
+            //myPopover!.delegate = self
+            myPopover!.behavior = NSPopover.Behavior.transient
+        }
+        self.addLocalDirectoryPopover = myPopover
     }
     
 }
 
+// MARK: SOURCE PATH TABLE
+
 protocol DeviceSourcePathSelectionDelegate {
-    func selectDeviceSourcePath(path:String)
+    func selectDeviceSourcePath(path:DeviceCopyDestination)
 }
 
-// MARK: CLICK ACTION
+// MARK: SOURCE PATH - CLICK ACTION
 extension DeviceCopyViewController : DeviceSourcePathSelectionDelegate {
     
-    func selectDeviceSourcePath(path: String) {
+    func selectDeviceSourcePath(path: DeviceCopyDestination) {
         selectedPath = path
+        print("SELECTED \(path.sourcePath) - \(path.toSubFolder) - \(path.type)")
         self.refreshFileList()
     }
 }
@@ -350,7 +609,12 @@ class DeviceSourcePathTableDelegate : NSObject {
             if lastSelectedRow != nil && paths.count > 0 && lastSelectedRow! < paths.count {
                 
                 if self.sourcePathSelectionDelegate != nil {
-                    self.sourcePathSelectionDelegate?.selectDeviceSourcePath(path: paths[lastSelectedRow!].sourcePath)
+                    let dest = paths[lastSelectedRow!]
+                    if dest.type == .localDirectory {
+                        self.sourcePathSelectionDelegate?.selectDeviceSourcePath(path: paths[lastSelectedRow!])
+                    }else if dest.type == .onDevice {
+                        self.sourcePathSelectionDelegate?.selectDeviceSourcePath(path: paths[lastSelectedRow!])
+                    }
                 }
             }
         }
@@ -419,6 +683,8 @@ extension DeviceSourcePathTableDelegate : NSTableViewDataSource {
     }
 }
 
+// MARK: FILE LIST TABLE
+
 class DeviceFileTableDelegate : NSObject {
     var files:[PhoneFile] = []
     var lastSelectedRow:Int?
@@ -446,6 +712,8 @@ extension DeviceFileTableDelegate : NSTableViewDelegate {
             switch id {
             case NSUserInterfaceItemIdentifier("filename"):
                 value = info.filename
+            case NSUserInterfaceItemIdentifier("subFolder"):
+                value = info.folder
             case NSUserInterfaceItemIdentifier("fileMD5"):
                 value = info.fileMD5
             case NSUserInterfaceItemIdentifier("fileSize"):

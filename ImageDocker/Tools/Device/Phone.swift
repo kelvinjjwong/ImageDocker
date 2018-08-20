@@ -12,6 +12,7 @@ struct PhoneFile {
     
     var filename:String = ""
     var path:String = ""
+    var onDevicePath:String = ""
     var fileMD5:String = "" {
         didSet {
             matched = ( fileMD5 == storedMD5 && fileDateTime == storedDateTime && fileSize == storedSize )
@@ -27,13 +28,20 @@ struct PhoneFile {
     var importAsFilename:String = "" {
         didSet {
             stored = (importAsFilename != "")
-            matched = ( fileMD5 == storedMD5 && fileDateTime == storedDateTime && fileSize == storedSize )
+            
+            if fileDateTime == "" { // from mac os
+                matched = ( fileSize == storedSize )
+                stored = matched
+            } else { // from android device
+                matched = ( fileMD5 == storedMD5 && fileDateTime == storedDateTime && fileSize == storedSize )
+            }
         }
     }
     
     var matched:Bool = false
     var stored:Bool = false
     var deviceFile:ImageDeviceFile?
+    var folder:String = ""
     
     init(filename:String, path:String){
         self.filename = filename

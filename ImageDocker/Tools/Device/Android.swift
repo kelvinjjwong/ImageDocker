@@ -302,4 +302,58 @@ struct Android {
         return lines.count > 1 ? lines[lines.count - 2] : ""
     }
     
+    
+    
+    
+    
+    
+    func folders(device id: String, in path: String) -> [String] {
+        print("getting folders from \(path)")
+        var result:[String] = []
+        let pipe = Pipe()
+        
+        let command = Process()
+        command.standardOutput = pipe
+        command.standardError = pipe
+        command.launchPath = adb.path
+        command.arguments = ["-s", id, "shell", "cd \(path); find . -type d -maxdepth 1"]
+        do {
+            try command.run()
+        }catch{
+            print(error)
+        }
+        //command.waitUntilExit()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        result = DeviceShell.getFolderNames(from: string)
+        print("got \(result.count) folders from \(path)")
+        return result
+    }
+    
+    
+    func filenames(device id: String, in path: String) -> [String] {
+        print("getting folders from \(path)")
+        var result:[String] = []
+        let pipe = Pipe()
+        
+        let command = Process()
+        command.standardOutput = pipe
+        command.standardError = pipe
+        command.launchPath = adb.path
+        command.arguments = ["-s", id, "shell", "cd \(path); ls -l"]
+        do {
+            try command.run()
+        }catch{
+            print(error)
+        }
+        //command.waitUntilExit()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        result = DeviceShell.getFilenames(from: string,
+                                          excludeFilenames: ["directory", ".", ".."],
+                                          allowedExt: ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg"])
+        print("got \(result.count) files from \(path)")
+        return result
+    }
+    
 }
