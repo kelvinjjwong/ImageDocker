@@ -115,6 +115,27 @@ extension ViewController {
                 self.sourceList.expandItem(item)
             }
             
+        }else if collection.identifier == "device_type_iPhone" {
+            let devices:[String] = IPHONE.bridge.devices()
+            print("iphone device count: \(devices.count)")
+            self.cleanCachedDeviceIds(type: .iPhone)
+            if devices.count > 0 {
+                if let device:PhoneDevice = IPHONE.bridge.device() {
+                    let imageDevice = ModelStore.default.getOrCreateDevice(device: device)
+                    
+                    var dev = device
+                    if imageDevice.name != "" {
+                        dev.name = imageDevice.name ?? ""
+                    }
+                    self.deviceIdToDevice[device.deviceId] = dev
+                    self.addDeviceTreeEntry(device: dev)
+                }
+            }
+            self.sourceList.reloadData()
+            if devices.count > 0 {
+                let item = self.treeIdItems["device_type_iPhone"]
+                self.sourceList.expandItem(item)
+            }
         }
     }
     

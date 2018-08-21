@@ -1385,7 +1385,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nwo-kc-8ks">
-                                <rect key="frame" x="108" y="563" width="674" height="17"/>
+                                <rect key="frame" x="108" y="563" width="576" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="0s6-mv-ZmX">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1926,9 +1926,33 @@
                                     <action selector="onLoadFromLocalClicked:" target="1x0-sz-Ku7" id="wDz-ut-dyZ"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Q27-4O-hsj">
+                                <rect key="frame" x="395" y="463" width="133" height="32"/>
+                                <buttonCell key="cell" type="push" title="Delete Records" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="lyK-uB-1pq">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onDeleteRecordsClicked:" target="1x0-sz-Ku7" id="BSt-mM-GTx"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lnX-IP-vR3">
+                                <rect key="frame" x="686" y="556" width="100" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="88" id="0pk-uT-TqR"/>
+                                </constraints>
+                                <buttonCell key="cell" type="push" title="Mount" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8vY-5N-hcW">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onMountClicked:" target="1x0-sz-Ku7" id="mV2-A7-Gfx"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="tLd-tc-hQi" firstAttribute="leading" secondItem="4uk-oE-BFl" secondAttribute="leading" constant="20" id="2Nx-eZ-l0F"/>
+                            <constraint firstItem="lnX-IP-vR3" firstAttribute="top" secondItem="4uk-oE-BFl" secondAttribute="top" constant="16" id="474-oZ-hhK"/>
                             <constraint firstItem="qKz-sp-I2a" firstAttribute="top" secondItem="cWP-lf-bVb" secondAttribute="bottom" constant="10" id="4qZ-3V-SXW"/>
                             <constraint firstItem="tLd-tc-hQi" firstAttribute="top" secondItem="eO3-Ny-hJE" secondAttribute="bottom" constant="15" id="6LU-bW-jGs"/>
                             <constraint firstItem="pIP-4P-a84" firstAttribute="top" secondItem="rah-YJ-7iO" secondAttribute="bottom" constant="10" id="7qC-ak-NUM"/>
@@ -1937,6 +1961,7 @@
                             <constraint firstItem="eO3-Ny-hJE" firstAttribute="top" secondItem="RSo-Uw-GHN" secondAttribute="bottom" constant="12" id="9dS-b2-WhW"/>
                             <constraint firstItem="eO3-Ny-hJE" firstAttribute="leading" secondItem="4uk-oE-BFl" secondAttribute="leading" constant="20" id="AaI-kx-VLH"/>
                             <constraint firstItem="pIP-4P-a84" firstAttribute="leading" secondItem="a0W-Pw-OUd" secondAttribute="trailing" constant="10" id="Auu-Y1-KrU"/>
+                            <constraint firstItem="lnX-IP-vR3" firstAttribute="leading" secondItem="nwo-kc-8ks" secondAttribute="trailing" constant="10" id="EZ0-OG-QCu"/>
                             <constraint firstItem="kpF-cK-mPN" firstAttribute="top" secondItem="tLd-tc-hQi" secondAttribute="bottom" constant="35" id="GVL-2h-hKO"/>
                             <constraint firstItem="ks4-iP-5pB" firstAttribute="top" secondItem="LWw-Mb-b2t" secondAttribute="bottom" constant="6" id="HEv-13-L0m"/>
                             <constraint firstAttribute="trailing" secondItem="qKz-sp-I2a" secondAttribute="trailing" constant="20" id="HMK-qx-EdZ"/>
@@ -1945,21 +1970,22 @@
                             <constraint firstAttribute="trailing" secondItem="t0Z-gb-Xxp" secondAttribute="trailing" constant="20" id="Oyw-Tr-57v"/>
                             <constraint firstItem="cj1-vF-4DN" firstAttribute="leading" secondItem="4uk-oE-BFl" secondAttribute="leading" constant="20" id="Ph0-vM-G9b"/>
                             <constraint firstItem="t0Z-gb-Xxp" firstAttribute="leading" secondItem="LWw-Mb-b2t" secondAttribute="trailing" constant="7" id="Qmo-Xq-ADK"/>
+                            <constraint firstAttribute="trailing" secondItem="lnX-IP-vR3" secondAttribute="trailing" constant="20" id="R1p-GI-xmo"/>
                             <constraint firstAttribute="bottom" secondItem="cj1-vF-4DN" secondAttribute="bottom" constant="20" id="RRz-GF-LYt"/>
                             <constraint firstItem="CM0-sw-gvb" firstAttribute="leading" secondItem="eO3-Ny-hJE" secondAttribute="trailing" constant="10" id="RnP-GE-WqC"/>
-                            <constraint firstItem="rah-YJ-7iO" firstAttribute="top" secondItem="nwo-kc-8ks" secondAttribute="bottom" constant="10" id="SJU-Hp-H2E"/>
                             <constraint firstItem="a0W-Pw-OUd" firstAttribute="leading" secondItem="tLd-tc-hQi" secondAttribute="trailing" constant="10" id="TYA-aW-bVR"/>
                             <constraint firstItem="kpF-cK-mPN" firstAttribute="leading" secondItem="4uk-oE-BFl" secondAttribute="leading" constant="20" id="Uwx-D7-efg"/>
                             <constraint firstItem="Zd5-zA-K9J" firstAttribute="top" secondItem="a0W-Pw-OUd" secondAttribute="bottom" constant="32" id="VHF-nG-erD"/>
                             <constraint firstAttribute="bottom" secondItem="qKz-sp-I2a" secondAttribute="bottom" constant="20" id="WMs-2N-i9b"/>
                             <constraint firstItem="cj1-vF-4DN" firstAttribute="top" secondItem="kpF-cK-mPN" secondAttribute="bottom" constant="10" id="YTs-k4-qfU"/>
+                            <constraint firstItem="rah-YJ-7iO" firstAttribute="top" secondItem="lnX-IP-vR3" secondAttribute="bottom" constant="10" id="Yh0-7S-QhJ"/>
                             <constraint firstItem="LWw-Mb-b2t" firstAttribute="top" secondItem="a0W-Pw-OUd" secondAttribute="bottom" constant="8" id="Yt1-Xq-Pn6"/>
                             <constraint firstItem="qKz-sp-I2a" firstAttribute="top" secondItem="ks4-iP-5pB" secondAttribute="bottom" constant="10" id="ZAd-LP-ES9"/>
+                            <constraint firstItem="LWw-Mb-b2t" firstAttribute="leading" secondItem="Q27-4O-hsj" secondAttribute="trailing" constant="50" id="Zlc-bz-lXg"/>
                             <constraint firstAttribute="trailing" secondItem="rah-YJ-7iO" secondAttribute="trailing" constant="20" id="bBK-O5-6Il"/>
                             <constraint firstItem="nwo-kc-8ks" firstAttribute="top" secondItem="4uk-oE-BFl" secondAttribute="top" constant="20" id="dtH-vr-x1b"/>
                             <constraint firstAttribute="trailing" secondItem="cWP-lf-bVb" secondAttribute="trailing" constant="20" id="gtF-QF-miu"/>
                             <constraint firstItem="gx3-Bs-RH4" firstAttribute="leading" secondItem="Zd5-zA-K9J" secondAttribute="trailing" constant="10" id="iT6-Pu-B76"/>
-                            <constraint firstAttribute="trailing" secondItem="nwo-kc-8ks" secondAttribute="trailing" constant="20" id="it1-Ne-rMT"/>
                             <constraint firstItem="a0W-Pw-OUd" firstAttribute="top" secondItem="CM0-sw-gvb" secondAttribute="bottom" constant="10" id="kra-Qa-f2P"/>
                             <constraint firstItem="rah-YJ-7iO" firstAttribute="leading" secondItem="CM0-sw-gvb" secondAttribute="trailing" constant="10" id="oPr-Kj-SZe"/>
                             <constraint firstItem="nwo-kc-8ks" firstAttribute="leading" secondItem="RSo-Uw-GHN" secondAttribute="trailing" constant="10" id="ot5-IW-O2f"/>
@@ -1971,14 +1997,17 @@
                             <constraint firstItem="CM0-sw-gvb" firstAttribute="top" secondItem="nwo-kc-8ks" secondAttribute="bottom" constant="10" id="vbO-iW-yxU"/>
                             <constraint firstItem="t0Z-gb-Xxp" firstAttribute="top" secondItem="pIP-4P-a84" secondAttribute="bottom" constant="10" id="xvC-DA-WWe"/>
                             <constraint firstItem="qKz-sp-I2a" firstAttribute="leading" secondItem="cj1-vF-4DN" secondAttribute="trailing" constant="20" id="yPK-6R-F0n"/>
+                            <constraint firstItem="Q27-4O-hsj" firstAttribute="top" secondItem="a0W-Pw-OUd" secondAttribute="bottom" constant="8" id="z1V-ko-gOO"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="btnAddSourcePath" destination="kpF-cK-mPN" id="8nd-CQ-aDO"/>
                         <outlet property="btnBrowseStorePath" destination="rah-YJ-7iO" id="xgs-NT-W9b"/>
                         <outlet property="btnCopy" destination="t0Z-gb-Xxp" id="ple-ln-3pc"/>
+                        <outlet property="btnDeleteRecords" destination="Q27-4O-hsj" id="ef1-Z1-7eY"/>
                         <outlet property="btnLoad" destination="LWw-Mb-b2t" id="qMC-C5-4Xv"/>
                         <outlet property="btnLoadFromLocal" destination="gx3-Bs-RH4" id="Hev-X1-AJS"/>
+                        <outlet property="btnMount" destination="lnX-IP-vR3" id="Yx4-9q-EDV"/>
                         <outlet property="btnRemoveSourcePath" destination="Zd5-zA-K9J" id="gPO-3q-gfL"/>
                         <outlet property="btnSave" destination="pIP-4P-a84" id="tuZ-C6-slU"/>
                         <outlet property="cbShowCopied" destination="I7q-oS-uhG" id="iPw-lX-44D"/>

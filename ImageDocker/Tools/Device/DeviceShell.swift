@@ -48,7 +48,7 @@ struct DeviceShell {
             
             let filenameParts = filename.components(separatedBy: ".")
             let ext = filenameParts[filenameParts.count - 1].lowercased()
-            guard allowedExt.index(where: {$0 == ext}) != nil else {continue}
+            guard allowedExt.index(where: {$0 == ext}) != nil && columns.count > 5 else {continue}
             
             let size = deviceOS == .android ? columns[columns.count - 4] : columns[2]
             let date = deviceOS == .android ? columns[columns.count - 3] : ""
@@ -59,7 +59,6 @@ struct DeviceShell {
             file.fileSize = size
             file.fileDateTime = deviceOS == .android ? "\(date) \(time)" : ""
             file.folder = subFolder
-            //print("processed file \(name)")
             result.append(file)
         }
         return result

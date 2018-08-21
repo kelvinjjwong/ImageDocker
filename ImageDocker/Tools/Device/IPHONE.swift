@@ -18,17 +18,15 @@ struct IPHONE {
     fileprivate var ideviceinfo: URL
     fileprivate var ifuse: URL
     fileprivate var df: URL
+    fileprivate var umount: URL
     
     // Verify access to the embedded version of ExifTool
     init() {
-        if let mobileUrl = Bundle.main.url(forResource: "Mobile", withExtension: nil) {
-            ideviceid = mobileUrl.appendingPathComponent("ideviceid")
-            ideviceinfo = mobileUrl.appendingPathComponent("ideviceinfo")
-            ifuse = mobileUrl.appendingPathComponent("ifuse")
-            df = mobileUrl.appendingPathComponent("df")
-        } else {
-            fatalError("The Application Bundle is corrupt.")
-        }
+        ideviceid = URL(fileURLWithPath: "/usr/local/bin/idevice_id")
+        ideviceinfo = URL(fileURLWithPath: "/usr/local/bin/ideviceinfo")
+        ifuse = URL(fileURLWithPath: "/usr/local/bin/ifuse")
+        df = URL(fileURLWithPath: "/bin/df")
+        umount = URL(fileURLWithPath: "/sbin/umount")
     }
     
     func devices() -> [String]{
@@ -54,22 +52,50 @@ struct IPHONE {
     }
     
     func mount(path:String) -> Bool{
+        print("START TO MOUNT")
         let pipe = Pipe()
         
         let command = Process()
         command.standardOutput = pipe
-        command.standardError = FileHandle.nullDevice
+        command.standardError = pipe
         command.launchPath = ifuse.path
         command.arguments = [path]
-        command.launch()
-        command.waitUntilExit()
+        do {
+            try command.run()
+        }catch{
+            print(error)
+        }
+        print("RUN MOUNT")
+//        command.launch()
+//        command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        print(string)
         if string.range(of: "No device found") != nil || string.range(of: "Input/output error") != nil {
             return false
         }else{
             return true
         }
+    }
+    
+    func unmount(path:String){
+        let pipe = Pipe()
+        
+        let command = Process()
+        command.standardOutput = pipe
+        command.standardError = FileHandle.nullDevice
+        command.launchPath = umount.path
+        command.arguments = [path]
+        do {
+            try command.run()
+        }catch{
+            print(error)
+        }
+//        command.launch()
+//        command.waitUntilExit()
+        let _ = pipe.fileHandleForReading.readDataToEndOfFile()
+        //let _ = String(data: data, encoding: String.Encoding.utf8)!
+
     }
     
     func mounted(path:String) -> Bool {
@@ -81,16 +107,25 @@ struct IPHONE {
         command.standardError = FileHandle.nullDevice
         command.launchPath = df.path
         command.arguments = ["-H", path]
-        command.launch()
-        command.waitUntilExit()
+        do {
+            try command.run()
+        }catch{
+            print(error)
+        }
+//        command.launch()
+//        command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        print(string)
         let lines = string.components(separatedBy: "\n")
+        print("lines = \(lines.count)")
         for line in lines {
-            if line.range(of: path) != nil && line.starts(with: "ifuse@osxfuse") {
+            if line.starts(with: "ifuse@osxfuse") && line.range(of: path) != nil {
+                print("mounted")
                 return true
             }
         }
+        print("no mount record")
         return false
     }
     
@@ -219,19 +254,35 @@ struct IPHONE {
         }
     }
     
-    func pull(mountPoint:String, from remoteFile:String, to targetPath:String) -> Bool{
-        guard mounted(path: mountPoint) else {return false}
+    func pull(mountPoint:String, sourcePath:String, from remoteFile:String, to targetPath:String) -> Bool{
+        //guard mounted(path: mountPoint) else {return false}
         let remoteUrl:URL = URL(fileURLWithPath: mountPoint).appendingPathComponent(remoteFile)
         let localUrl:URL = URL(fileURLWithPath: targetPath)
         
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: remoteUrl.path) && fileManager.fileExists(atPath: localUrl.path) {
-            do{
-                print("\(Date()) Pulling from \(remoteUrl.path) to \(localUrl.path)")
-                try fileManager.copyItem(at: remoteUrl, to: localUrl)
-                return true
-            }catch{
-                print(error)
+            let targetFilename = remoteFile.replacingOccurrences(of: sourcePath, with: "", options: .literal, range: remoteFile.range(of: sourcePath))
+            let targetFile = localUrl.appendingPathComponent(targetFilename)
+            let targetPath = targetFile.deletingLastPathComponent()
+            if !fileManager.fileExists(atPath: targetPath.path) {
+                do {
+                    try fileManager.createDirectory(at: targetPath, withIntermediateDirectories: true, attributes: nil)
+                }catch{
+                    print("Unable to create target path: \(targetPath.path)")
+                    print(error)
+                }
+            }
+            if !fileManager.fileExists(atPath: targetFile.path) {
+                do{
+                    print("\(Date()) Pulling from \(remoteUrl.path) to \(targetFile.path)")
+                    try fileManager.copyItem(at: remoteUrl, to: targetFile)
+                    return true
+                }catch{
+                    print(error)
+                    return false
+                }
+            }else{
+                print("TARGET FILE EXISTS: \(targetFile.path)")
                 return false
             }
         }else{
@@ -241,7 +292,7 @@ struct IPHONE {
     }
     
     func push(mountPoint:String, from filePath:String, to remoteFolder:String) -> Bool{
-        guard mounted(path: mountPoint) else {return false}
+        //guard mounted(path: mountPoint) else {return false}
         let remoteUrl:URL = URL(fileURLWithPath: mountPoint).appendingPathComponent(remoteFolder)
         let localUrl:URL = URL(fileURLWithPath: filePath)
         
@@ -259,5 +310,121 @@ struct IPHONE {
             print("\(Date()) URL not exists: \(remoteUrl.path) OR \(localUrl.path)")
             return false
         }
+    }
+    
+    
+    func datetime(of filename: String, in path:String, mountPoint:String) -> String {
+        let workpath = URL(fileURLWithPath: mountPoint).appendingPathComponent(path).path
+        let pipe = Pipe()
+        
+        let command = Process()
+        command.standardOutput = pipe
+        command.standardError = pipe
+        command.currentDirectoryPath = workpath
+        command.launchPath = "/usr/bin/stat"
+        command.arguments = ["-l","-t","'%F %T'", filename]
+        do {
+            try command.run()
+        }catch{
+            print(error)
+        }
+        //command.waitUntilExit()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        if string != "" {
+            let columns = string.components(separatedBy: " ")
+            if columns.count > 7 {
+                let date = columns[5]
+                let time = columns[6]
+                let datetime = "\(date) \(time)"
+                return datetime
+            }
+        }
+        return ""
+    }
+    
+    func files(mountPoint:String, in path: String) -> [PhoneFile] {
+        let workpath = URL(fileURLWithPath: mountPoint).appendingPathComponent(path).path
+        print("getting files from \(workpath)")
+        var result:[PhoneFile] = []
+        let pipe = Pipe()
+        
+        let command = Process()
+        command.standardOutput = pipe
+        command.standardError = pipe
+        command.currentDirectoryPath = workpath
+        command.launchPath = "/bin/ls"
+        command.arguments = ["-goR"]
+        do {
+            try command.run()
+        }catch{
+            print(error)
+        }
+        //command.waitUntilExit()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        print(string)
+        result = DeviceShell.getFilenames(from: string, basePath: path,
+                                          excludeFilenames: ["directory", ".", ".."],
+                                          allowedExt: ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg"],
+                                          deviceOS: .mac)
+        print("got \(result.count) files from \(workpath)")
+        return result
+    }
+    
+    
+    
+    func folders(mountPoint:String, in path: String) -> [String] {
+        let workpath = URL(fileURLWithPath: mountPoint).appendingPathComponent(path).path
+        print("getting folders from \(workpath)")
+        var result:[String] = []
+        let pipe = Pipe()
+        
+        let command = Process()
+        command.standardOutput = pipe
+        command.standardError = pipe
+        command.currentDirectoryPath = workpath
+        command.launchPath = "/usr/bin/find"
+        command.arguments = [".", "-type", "d","-maxdepth", "1"]
+        do {
+            try command.run()
+        }catch{
+            print(error)
+        }
+        //command.waitUntilExit()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        //print(string)
+        result = DeviceShell.getFolderNames(from: string)
+        print("got \(result.count) folders from \(workpath)")
+        return result
+    }
+    
+    
+    func filenames(mountPoint:String, in path: String) -> [String] {
+        let workpath = URL(fileURLWithPath: mountPoint).appendingPathComponent(path).path
+        print("getting folders from \(workpath)")
+        var result:[String] = []
+        let pipe = Pipe()
+        
+        let command = Process()
+        command.standardOutput = pipe
+        command.standardError = pipe
+        command.currentDirectoryPath = workpath
+        command.launchPath = "/bin/ls"
+        command.arguments = ["-l"]
+        do {
+            try command.run()
+        }catch{
+            print(error)
+        }
+        //command.waitUntilExit()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        result = DeviceShell.getFilenames(from: string,
+                                          excludeFilenames: ["directory", ".", ".."],
+                                          allowedExt: ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg"])
+        print("got \(result.count) files from \(workpath)")
+        return result
     }
 }

@@ -1065,6 +1065,17 @@ class ModelStore {
         }
     }
     
+    func deleteDeviceFiles(deviceId:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try db.execute("delete from ImageDeviceFile where deviceId = ?", arguments: [deviceId])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
     // MARK: SCHEMA VERSION MIGRATION
     
     fileprivate func versionCheck(){

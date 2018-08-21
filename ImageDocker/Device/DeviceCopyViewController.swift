@@ -31,6 +31,8 @@ class DeviceCopyViewController: NSViewController {
     
     let dateFormatter = DateFormatter()
     
+    let mountpoint = "/MacStorage/mount/iPhone/"
+    
     // MARK: ENVIRONMENT
     var device:PhoneDevice = PhoneDevice(type: .Android, deviceId: "", manufacture: "", model: "")
     
@@ -58,6 +60,9 @@ class DeviceCopyViewController: NSViewController {
     @IBOutlet weak var lblProgressMessage: NSTextField!
     @IBOutlet weak var btnLoad: NSButton!
     @IBOutlet weak var btnLoadFromLocal: NSButton!
+    @IBOutlet weak var btnMount: NSButton!
+    @IBOutlet weak var btnDeleteRecords: NSButton!
+    
     
     
     // MARK: POPOVER
@@ -93,6 +98,14 @@ class DeviceCopyViewController: NSViewController {
             print("DEVICE INIT")
             self.device = device
             
+            if device.type == .iPhone {
+                self.btnMount.isHidden = false
+                self.btnMount.isEnabled = true
+            }else{
+                self.btnMount.isHidden = true
+                self.btnMount.isEnabled = false
+            }
+            
             let imageDevice = ModelStore.default.getOrCreateDevice(device: device)
             
             self.lblModel.stringValue = "\(imageDevice.manufacture ?? "") \(imageDevice.model ?? "")"
@@ -123,6 +136,22 @@ class DeviceCopyViewController: NSViewController {
                 self.tblSourcePath.reloadData()
                 
                 
+            }else if device.type == .iPhone {
+                if IPHONE.bridge.mounted(path: self.mountpoint) {
+                    self.btnMount.title = "Unmount"
+                    self.paths = [
+                        DeviceCopyDestination.new(("/DCIM/", "Camera"))
+                    ]
+                    self.emptyFileLists(paths: paths)
+                    self.sourcePathTableDelegate.paths = paths
+                    self.tblSourcePath.reloadData()
+                }else{
+                    self.btnMount.title = "Mount"
+                    self.emptyFileLists(paths: paths)
+                    self.paths = []
+                    self.sourcePathTableDelegate.paths = paths
+                    self.tblSourcePath.reloadData()
+                }
             }
         }
     }
@@ -202,7 +231,7 @@ class DeviceCopyViewController: NSViewController {
                     print("NOT IMPORTED \(f.filename)")
                     let key = "\(self.device.deviceId):\(f.path)"
                     let datetime = LocalDirectory.bridge.datetime(of: f.filename, in: filepath.path)
-                    var deviceFile = ImageDeviceFile.new(fileId: key,
+                    let deviceFile = ImageDeviceFile.new(fileId: key,
                                                          deviceId: self.device.deviceId,
                                                          path: filepath.path,
                                                          filename: f.filename,
@@ -236,7 +265,12 @@ class DeviceCopyViewController: NSViewController {
             self.deviceFiles_filtered[path] = []
             self.deviceFiles_fulllist[path] = []
         }
-        let files:[PhoneFile] = Android.bridge.files(device: self.device.deviceId, in: path)
+        var files:[PhoneFile] = []
+        if self.device.type == .Android {
+            files = Android.bridge.files(device: self.device.deviceId, in: path)
+        }else{
+            files = IPHONE.bridge.files(mountPoint: self.mountpoint, in: path)
+        }
         let total = files.count
         DispatchQueue.main.async {
             self.accumulator = Accumulator(target: total, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblProgressMessage)
@@ -244,12 +278,15 @@ class DeviceCopyViewController: NSViewController {
         for file in files {
             let deviceFile = ModelStore.default.getOrCreateDeviceFile(deviceId: self.device.deviceId, file: file)
             var f = file
-            f.storedMD5 = deviceFile.fileMD5 ?? ""
-            f.storedSize = deviceFile.fileSize ?? ""
-            f.storedDateTime = deviceFile.fileDateTime ?? ""
+            if deviceFile.importAsFilename != "" {
+                f.storedMD5 = deviceFile.fileMD5 ?? ""
+                f.storedSize = deviceFile.fileSize ?? ""
+                f.storedDateTime = deviceFile.fileDateTime ?? ""
+            }
+            
             f.importDate = deviceFile.importDate ?? ""
             f.importToPath = deviceFile.importToPath ?? ""
-            f.importAsFilename = deviceFile.importAsFilename ?? ""
+            f.importAsFilename = deviceFile.importAsFilename ?? "" // trigger compare
             
             f.deviceFile = deviceFile
             
@@ -315,6 +352,46 @@ class DeviceCopyViewController: NSViewController {
         }
     }
     
+    @IBAction func onMountClicked(_ sender: NSButton) {
+        print(self.device)
+        if self.device.type == .iPhone {
+            print(self.btnMount.title)
+            if self.btnMount.title == "Mount" {
+                print("INVOKE MOUNT")
+                IPHONE.bridge.unmount(path: mountpoint)
+                if IPHONE.bridge.mount(path: mountpoint) {
+                    print("JUST MOUNTED")
+                    self.btnMount.title = "Unmount"
+                    
+                    self.paths = [
+                        DeviceCopyDestination.new(("/DCIM/", "Camera"))
+                    ]
+                    self.emptyFileLists(paths: paths)
+                    self.sourcePathTableDelegate.paths = paths
+                    self.tblSourcePath.reloadData()
+                    
+                }else{
+                    print("UNABLE TO MOUNT IPHONE")
+                }
+            }else {
+                print("INVOKE UNMOUNT")
+                // Unmount
+                IPHONE.bridge.unmount(path: mountpoint)
+                self.btnMount.title = "Mount"
+                
+                self.emptyFileLists(paths: paths)
+                self.paths = []
+                self.sourcePathTableDelegate.paths = paths
+                self.tblSourcePath.reloadData()
+            }
+        }else{
+            print("NOT IPHONE")
+            self.btnMount.isHidden = true
+            self.btnMount.isEnabled = false
+        }
+    }
+    
+    
     // MARK: TOOL BUTTON - OK
     
     @IBAction func onSaveClicked(_ sender: NSButton) {
@@ -329,6 +406,11 @@ class DeviceCopyViewController: NSViewController {
     
     // MARK: TOOL BUTTONS - FILE LIST
     
+    @IBAction func onDeleteRecordsClicked(_ sender: NSButton) {
+        ModelStore.default.deleteDeviceFiles(deviceId: self.device.deviceId)
+    }
+    
+    
     fileprivate func reloadFileList() {
         if paths.count > 0 {
             btnAddSourcePath.isEnabled = false
@@ -337,6 +419,10 @@ class DeviceCopyViewController: NSViewController {
             tblSourcePath.isEnabled = false
             cbShowCopied.isEnabled = false
             btnLoad.isEnabled = false
+            btnDeleteRecords.isEnabled = false
+            if self.device.type == .iPhone {
+                self.btnMount.isEnabled = false
+            }
             DispatchQueue.global().async {
                 for path in self.paths {
                     self.loadFromPath(path: path)
@@ -349,11 +435,15 @@ class DeviceCopyViewController: NSViewController {
                     }
                     self.btnAddSourcePath.isEnabled = true
                     self.btnRemoveSourcePath.isEnabled = true
-                    self.btnLoadFromLocal.isEnabled = false
+                    self.btnLoadFromLocal.isEnabled = true
                     self.tblSourcePath.isEnabled = true
                     self.cbShowCopied.isEnabled = true
                     self.btnLoad.isEnabled = true
                     self.tblSourcePath.isEnabled = true
+                    self.btnDeleteRecords.isEnabled = true
+                    if self.device.type == .iPhone {
+                        self.btnMount.isEnabled = true
+                    }
                 }
             }
         }
@@ -380,9 +470,15 @@ class DeviceCopyViewController: NSViewController {
         btnCopy.isEnabled = false
         btnLoad.isEnabled = false
         btnBrowseStorePath.isEnabled = false
+        btnDeleteRecords.isEnabled = false
         cbShowCopied.isEnabled = false
         btnAddSourcePath.isEnabled = false
         btnRemoveSourcePath.isEnabled = false
+        btnLoadFromLocal.isEnabled = false
+        
+        if self.device.type == .iPhone {
+            self.btnMount.isEnabled = false
+        }
         
         DispatchQueue.global().async {
             let now = Date()
@@ -406,18 +502,34 @@ class DeviceCopyViewController: NSViewController {
                 }
                 for file in self.deviceFiles_filtered[path.sourcePath]! {
                     if path.type == .onDevice {
-                        if Android.bridge.pull(device: self.device.deviceId, from: file.path, to: destinationPath) {
-                            print("Copied \(file.path)")
-                            if file.deviceFile != nil {
-                                var deviceFile = file.deviceFile!
-                                deviceFile.importToPath = destinationPath
-                                deviceFile.importAsFilename = file.filename
-                                deviceFile.importDate = date
-                                ModelStore.default.saveDeviceFile(file: deviceFile)
-                                print("Updated \(file.path)")
+                        if self.device.type == .Android {
+                            if Android.bridge.pull(device: self.device.deviceId, from: file.path, to: destinationPath) {
+                                print("Copied \(file.path)")
+                                if file.deviceFile != nil {
+                                    var deviceFile = file.deviceFile!
+                                    deviceFile.importToPath = destinationPath
+                                    deviceFile.importAsFilename = file.filename
+                                    deviceFile.importDate = date
+                                    ModelStore.default.saveDeviceFile(file: deviceFile)
+                                    print("Updated \(file.path)")
+                                }
+                            }else{
+                                print("Failed to copy \(file.path)")
                             }
-                        }else{
-                            print("Failed to copy \(file.path)")
+                        }else if self.device.type == .iPhone {
+                            if IPHONE.bridge.pull(mountPoint: self.mountpoint, sourcePath:path.sourcePath, from: file.path, to: destinationPath) {
+                                print("Copied \(file.path)")
+                                if file.deviceFile != nil {
+                                    var deviceFile = file.deviceFile!
+                                    deviceFile.importToPath = destinationPath
+                                    deviceFile.importAsFilename = file.filename
+                                    deviceFile.importDate = date
+                                    ModelStore.default.saveDeviceFile(file: deviceFile)
+                                    print("Updated \(file.path)")
+                                }
+                            }else{
+                                print("Failed to copy \(file.path)")
+                            }
                         }
                     } else if path.type == .localDirectory {
                         print("COPYING LOCAL \(file.onDevicePath)")

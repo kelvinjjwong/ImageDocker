@@ -31,7 +31,7 @@ struct PhoneFile {
             
             if fileDateTime == "" { // from mac os
                 matched = ( fileSize == storedSize )
-                stored = matched
+                //stored = matched
             } else { // from android device
                 matched = ( fileMD5 == storedMD5 && fileDateTime == storedDateTime && fileSize == storedSize )
             }
