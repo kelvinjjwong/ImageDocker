@@ -471,7 +471,7 @@ class ModelStore {
         do {
             let db = try DatabasePool(path: dbfile)
             try db.read { db in
-                result = try Image.filter(sql: "hidden != 1 AND (updateDateTimeDate > ? OR updateExifDate > ? OR updateLocationDate > ? OR updateEventDate > ? OR exporTime is null)", arguments:StatementArguments([date, date, date, date])).order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+                result = try Image.filter(sql: "hidden != 1 AND (updateDateTimeDate > ? OR updateExifDate > ? OR updateLocationDate > ? OR updateEventDate > ? OR exportTime is null)", arguments:StatementArguments([date, date, date, date])).order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
             }
         }catch{
             print(error)
@@ -484,7 +484,7 @@ class ModelStore {
         do {
             let db = try DatabasePool(path: dbfile)
             try db.read { db in
-                result = try Image.filter("hidden != 1 AND exporTime is not null)").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+                result = try Image.filter("hidden != 1 AND exportTime is not null)").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
             }
         }catch{
             print(error)
@@ -529,7 +529,7 @@ class ModelStore {
         do {
             let db = try DatabasePool(path: dbfile)
             try db.write { db in
-                try db.execute("UPDATE Image set exportTime = ?, WHERE path=?", arguments: StatementArguments([date, path]))
+                try db.execute("UPDATE Image set exportTime = ? WHERE path=?", arguments: StatementArguments([date, path]))
             }
         }catch{
             print(error)

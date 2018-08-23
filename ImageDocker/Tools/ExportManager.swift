@@ -316,7 +316,7 @@ class ExportManager {
                     //dataChanged = true
                 }
                 if photo.exportAsFilename == nil || filename != photo.exportAsFilename {
-                    ModelStore.default.storeImageExportedTime(path: photo.path, date: Date(), exportedFilename: path)
+                    ModelStore.default.storeImageExportedTime(path: photo.path, date: Date(), exportedFilename: filename)
                     //photo.exportAsFilename = filename
                     //photo.exportTime = Date()
                     //dataChanged = true
@@ -363,6 +363,7 @@ class ExportManager {
             })!
             
             var emptyFolders:[String] = []
+            var uselessFiles:[String] = []
             for case let file as URL in enumerator {
                 do {
                     
@@ -379,13 +380,8 @@ class ExportManager {
                     if !url.isDirectory! {
                     
                         if filepaths.index(where: { $0 == file.path }) == nil {
-                            print("found useless file \(file.path), delete")
-                            do {
-                                try fm.removeItem(atPath: file.path)
-                            }catch {
-                                print("Cannot delete useless file \(file.path)")
-                                print(error)
-                            }
+                            print("found useless file \(file.path), mark to delete")
+                            uselessFiles.append(file.path)
                         }
                     }else {
                         emptyFolders.append("\(file.path)/")
@@ -395,8 +391,40 @@ class ExportManager {
                     print(error)
                 }
             }
+            if uselessFiles.count > 0 {
+                for uselessFile in uselessFiles {
+                    
+                    // if suppressed from outside, stop immediately
+                    if suppressed {
+                        ExportManager.working = false
+                        DispatchQueue.main.async {
+                            messageBox?.stringValue = ""
+                        }
+                        return
+                    }
+                    
+                    print("deleting useless file \(uselessFile)")
+                    
+                    do {
+                        try fm.removeItem(atPath: uselessFile)
+                    }catch {
+                        print("Cannot delete useless file \(uselessFile)")
+                        print(error)
+                    }
+                }
+            }
             for filepath in filepaths {
                 for folder in emptyFolders {
+                    
+                    // if suppressed from outside, stop immediately
+                    if suppressed {
+                        ExportManager.working = false
+                        DispatchQueue.main.async {
+                            messageBox?.stringValue = ""
+                        }
+                        return
+                    }
+                    
                     if filepath.starts(with: folder) {
                         let i = emptyFolders.index(of: folder)!
                         emptyFolders.remove(at: i)
