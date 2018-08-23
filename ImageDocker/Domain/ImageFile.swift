@@ -149,19 +149,39 @@ class ImageFile {
             needSave = true
         }
         
-        if self.photoFile?.updateExifDate == nil || self.photoFile?.photoTakenYear == 0 {
+        if self.photoFile?.updateExifDate == nil || self.photoFile?.photoTakenYear == 0 || self.photoFile?.photoTakenYear == nil || self.photoFile?.photoTakenDate == nil {
             
             // TODO:
-            if self.photoFile?.filesysCreateDate == nil { // exif not loaded yet
-                autoreleasepool { () -> Void in
-                    self.loadMetaInfoFromOSX()
-                    self.loadMetaInfoFromExif()
-                    
-                    needSave = true
-                }
-            }else if let datetime = self.photoFile?.filesysCreateDate {
+            if let datetime = self.photoFile?.exifDateTimeOriginal {
                 self.storePhotoTakenDate(dateTime: datetime)
                 needSave = true
+            }else if let datetime = self.photoFile?.exifCreateDate {
+                self.storePhotoTakenDate(dateTime: datetime)
+                needSave = true
+            }else if let datetime = self.photoFile?.exifModifyDate {
+                self.storePhotoTakenDate(dateTime: datetime)
+                needSave = true
+            }else if let datetime = self.photoFile?.exifModifyDate {
+                self.storePhotoTakenDate(dateTime: datetime)
+                needSave = true
+            }else if let datetime = self.photoFile?.videoCreateDate {
+                self.storePhotoTakenDate(dateTime: datetime)
+                needSave = true
+            }else if let datetime = self.photoFile?.trackCreateDate {
+                self.storePhotoTakenDate(dateTime: datetime)
+                needSave = true
+            }else{
+                if self.photoFile?.filesysCreateDate == nil { // exif not loaded yet
+                    autoreleasepool { () -> Void in
+                        self.loadMetaInfoFromOSX()
+                        self.loadMetaInfoFromExif()
+                        
+                        needSave = true
+                    }
+                }else if let datetime = self.photoFile?.filesysCreateDate {
+                    self.storePhotoTakenDate(dateTime: datetime)
+                    needSave = true
+                }
             }
             
         }
