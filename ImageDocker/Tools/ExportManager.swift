@@ -46,6 +46,7 @@ class ExportManager {
         
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        print(string)
         if string != "" && string.starts(with: "MD5 (") {
             let comp:[String] = string.components(separatedBy: " = ")
             if comp.count == 2 {
@@ -168,17 +169,28 @@ class ExportManager {
                     continue
                 }
                 
+                var eventAndPlace = ""
+                var photoDateFormatted = ""
                 var filenameComponents:[String] = []
                 if photo.photoTakenDate != nil {
-                    filenameComponents.append(dateFormatter.string(from: photo.photoTakenDate!))
+                    photoDateFormatted = dateFormatter.string(from: photo.photoTakenDate!)
+                    filenameComponents.append(photoDateFormatted)
                     if photo.event != nil && photo.event != "" {
+                        eventAndPlace = "\(photo.event!)"
                         filenameComponents.append(" ")
                         filenameComponents.append(photo.event!)
                     }
                     if photo.place != nil && photo.place != "" {
+                        eventAndPlace = "\(eventAndPlace) 在 \(photo.place!)"
                         filenameComponents.append(" 在")
                         filenameComponents.append(photo.place!)
                     }
+                }
+                var imageDescription = ""
+                if eventAndPlace != "" {
+                    imageDescription = "\(eventAndPlace), \(photoDateFormatted)"
+                }else{
+                    imageDescription = photoDateFormatted
                 }
                 
                 if (photo.filename.starts(with: "mmexport")) {
@@ -207,6 +219,8 @@ class ExportManager {
                 if originalExportPath == "/" {
                     originalExportPath = ""
                 }
+                
+                ExifTool.helper.patchImageDescription(description: imageDescription, url: URL(fileURLWithPath: photo.path))
                 
                 // detect duplicates
                 if originalExportPath == fullpath { // export to the same path as previous
@@ -331,6 +345,12 @@ class ExportManager {
                 //filepaths.append(fullpath)
             }
             
+            if messageBox != nil {
+                DispatchQueue.main.async {
+                    messageBox?.stringValue = ""
+                }
+            }
+            
             print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED: DONE")
             
             
@@ -346,24 +366,17 @@ class ExportManager {
             // house keep
             
             print("\(Date()) EXPORT: HOUSE KEEP")
-            var filepaths:[String] = []
-            let allphotos = ModelStore.default.getAllPhotoFiles()
-            for photo in allphotos {
-                if photo.exportToPath != nil && photo.exportAsFilename != nil {
-                    let path = "\(photo.exportToPath ?? "")/\(photo.exportAsFilename ?? "")"
-                    filepaths.append(path)
-                }
-            }
+            let allExportedFilenames:Set<String> = ModelStore.default.getAllExportedPhotoFilenames()
             
             let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: PreferencesController.exportDirectory()),
-                                                            includingPropertiesForKeys: [.isDirectoryKey, .isReadableKey ],
+                                                            includingPropertiesForKeys: [.isDirectoryKey, .isReadableKey, .isWritableKey ],
                                                             options: [.skipsHiddenFiles], errorHandler: { (url, error) -> Bool in
                                                                 print("directoryEnumerator error at \(url): ", error)
                                                                 return true
             })!
             
-            var emptyFolders:[String] = []
-            var uselessFiles:[String] = []
+            var allExportedDirectories:Set<String> = []
+            var uselessFiles:Set<String> = []
             for case let file as URL in enumerator {
                 do {
                     
@@ -376,22 +389,27 @@ class ExportManager {
                         return
                     }
                     
-                    let url = try file.resourceValues(forKeys: [.isDirectoryKey, .isReadableKey])
-                    if !url.isDirectory! {
-                    
-                        if filepaths.index(where: { $0 == file.path }) == nil {
-                            print("found useless file \(file.path), mark to delete")
-                            uselessFiles.append(file.path)
+                    let url = try file.resourceValues(forKeys: [.isDirectoryKey, .isReadableKey, .isWritableKey])
+                    if url.isWritable! {
+                        if !url.isDirectory! {
+                            if !allExportedFilenames.contains(file.path) {
+                                print("found useless file \(file.path), mark to delete")
+                                uselessFiles.insert(file.path)
+                            }
+                        }else {
+                            allExportedDirectories.insert("\(file.path)/")
                         }
-                    }else {
-                        emptyFolders.append("\(file.path)/")
                     }
                 }catch{
                     print("Error reading url properties for \(file.path)")
                     print(error)
                 }
             }
+            
+            // delete useless files
             if uselessFiles.count > 0 {
+                let total = uselessFiles.count
+                var i = 0
                 for uselessFile in uselessFiles {
                     
                     // if suppressed from outside, stop immediately
@@ -401,6 +419,13 @@ class ExportManager {
                             messageBox?.stringValue = ""
                         }
                         return
+                    }
+                    i += 1
+                    
+                    if messageBox != nil {
+                        DispatchQueue.main.async {
+                            messageBox?.stringValue = "Useless file ... ( \(i) / \(total) )"
+                        }
                     }
                     
                     print("deleting useless file \(uselessFile)")
@@ -413,8 +438,9 @@ class ExportManager {
                     }
                 }
             }
-            for filepath in filepaths {
-                for folder in emptyFolders {
+            // recognize empty folders
+            for exportedFilePath in allExportedFilenames {
+                for folder in allExportedDirectories {
                     
                     // if suppressed from outside, stop immediately
                     if suppressed {
@@ -425,16 +451,18 @@ class ExportManager {
                         return
                     }
                     
-                    if filepath.starts(with: folder) {
-                        let i = emptyFolders.index(of: folder)!
-                        emptyFolders.remove(at: i)
+                    if exportedFilePath.starts(with: folder) {
+                        allExportedDirectories.remove(folder)
                         continue
                     }
                 }
             }
-            if emptyFolders.count > 0 {
+            // delete empty folders
+            if allExportedDirectories.count > 0 {
                 print("  ")
-                for emptyFolder in emptyFolders {
+                let total = allExportedDirectories.count
+                var i = 0
+                for emptyFolder in allExportedDirectories {
                     
                     // if suppressed from outside, stop immediately
                     if suppressed {
@@ -443,6 +471,14 @@ class ExportManager {
                             messageBox?.stringValue = ""
                         }
                         return
+                    }
+                    
+                    i += 1
+                    
+                    if messageBox != nil {
+                        DispatchQueue.main.async {
+                            messageBox?.stringValue = "Empty folder ... ( \(i) / \(total) )"
+                        }
                     }
                     
                     print("deleting empty folder \(emptyFolder)")
@@ -454,6 +490,12 @@ class ExportManager {
                     }
                 }
                 print("  ")
+            }
+            
+            if messageBox != nil {
+                DispatchQueue.main.async {
+                    messageBox?.stringValue = ""
+                }
             }
             
             print("\(Date()) EXPORT: HOUSE KEEP: DONE")

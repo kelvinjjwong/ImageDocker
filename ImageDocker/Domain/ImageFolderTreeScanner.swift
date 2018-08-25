@@ -211,15 +211,15 @@ class ImageFolderTreeScanner {
         if indicator != nil {
             indicator?.display(message: "Checking differences .....")
         }
-        let exists = ModelStore.default.getAllPhotoFiles(sharedDB: ModelStore.sharedDBPool())
-        print("EXISTING DB PHOTO COUNT = \(exists.count)")
+        let dbUrls = ModelStore.default.getAllPhotoPaths(sharedDB: ModelStore.sharedDBPool())
+        print("EXISTING DB PHOTO COUNT = \(dbUrls.count)")
         print("EXISTING SYS PHOTO COUNT = \(filesysUrls.count)")
-        var dbUrls:Set<String> = Set<String>()
-        for exist in exists {
-            let path = exist.path
-            dbUrls.insert(path)
-            
-        }
+//        var dbUrls:Set<String> = Set<String>()
+//        for exist in exists {
+//            let path = exist.path
+//            dbUrls.insert(path)
+//
+//        }
         print("EXISTING DB PHOTO COUNT2 = \(dbUrls.count)")
         
         let urlsToAdd:[String] = filesysUrls.subtracting(dbUrls).sorted()

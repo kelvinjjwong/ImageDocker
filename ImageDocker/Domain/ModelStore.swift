@@ -363,15 +363,46 @@ class ModelStore {
         }
     }
     
-    func getAllPhotoFiles(includeHidden:Bool = true, sharedDB:DatabaseWriter? = nil) -> [Image] {
-        var result:[Image] = []
+    func getAllPhotoPaths(includeHidden:Bool = true, sharedDB:DatabaseWriter? = nil) -> Set<String> {
+        var result:Set<String> = []
         do {
             let db = try sharedDB ?? DatabasePool(path: dbfile)
             try db.read { db in
                 if includeHidden {
-                    result = try Image.order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+                    let cursor = try Image.order([Column("photoTakenDate").asc, Column("filename").asc]).fetchCursor(db)
+                    while let photo = try cursor.next() {
+                        result.insert(photo.path)
+                    }
                 }else{
-                    result = try Image.filter(sql: "hidden = 0").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+                    let cursor = try Image.filter(sql: "hidden = 0").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchCursor(db)
+                    while let photo = try cursor.next() {
+                        result.insert(photo.path)
+                    }
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func getAllExportedPhotoFilenames(includeHidden:Bool = true, sharedDB:DatabaseWriter? = nil) -> Set<String> {
+        var result:Set<String> = []
+        do {
+            let db = try sharedDB ?? DatabasePool(path: dbfile)
+            try db.read { db in
+                if includeHidden {
+                    let cursor = try Image.filter(sql: "exportToPath is not null and exportAsFilename is not null and exportToPath <> '' and exportAsFilename <> ''").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchCursor(db)
+                    while let photo = try cursor.next() {
+                        let path = "\(photo.exportToPath ?? "")/\(photo.exportAsFilename ?? "")"
+                        result.insert(path)
+                    }
+                }else{
+                    let cursor = try Image.filter(sql: "hidden = 0 and exportToPath is not null and exportAsFilename is not null and exportToPath <> '' and exportAsFilename <> ''").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchCursor(db)
+                    while let photo = try cursor.next() {
+                        let path = "\(photo.exportToPath ?? "")/\(photo.exportAsFilename ?? "")"
+                        result.insert(path)
+                    }
                 }
             }
         }catch{

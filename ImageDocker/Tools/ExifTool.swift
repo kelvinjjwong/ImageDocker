@@ -205,6 +205,27 @@ struct ExifTool {
         print(string)
     }
     
+    func patchImageDescription(description:String, url:URL) {
+        print("Changing ImageDescription for: \(url.path)")
+        
+        let pipe = Pipe()
+        
+        let exiftool = Process()
+        exiftool.standardOutput = pipe
+        exiftool.standardError = pipe
+        exiftool.launchPath = mainUrl.path
+        exiftool.arguments = []
+        exiftool.arguments?.append("-overwrite_original")
+        exiftool.arguments?.append("-ImageDescription=\"" + description + "\"")
+        exiftool.arguments?.append(url.path)
+        exiftool.launch()
+        exiftool.waitUntilExit()
+        
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        print(string)
+    }
+    
     func assignKeyValueForImage(key:String, value:String, url:URL){
         print("Assigning \(key) -> \(value) for: \(url.path)")
         let pipe = Pipe()
