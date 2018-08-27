@@ -149,25 +149,31 @@ class ImageFile {
             needSave = true
         }
         
+        let now = Date()
+        
         if self.photoFile?.updateExifDate == nil || self.photoFile?.photoTakenYear == 0 || self.photoFile?.photoTakenYear == nil || self.photoFile?.photoTakenDate == nil {
             
             // TODO:
-            if let datetime = self.photoFile?.exifDateTimeOriginal {
+            if let datetime = self.photoFile?.assignDateTime, datetime < now {
                 self.storePhotoTakenDate(dateTime: datetime)
                 needSave = true
-            }else if let datetime = self.photoFile?.exifCreateDate {
+                
+            }else if let datetime = self.photoFile?.exifDateTimeOriginal, datetime < now {
                 self.storePhotoTakenDate(dateTime: datetime)
                 needSave = true
-            }else if let datetime = self.photoFile?.exifModifyDate {
+            }else if let datetime = self.photoFile?.exifCreateDate, datetime < now {
                 self.storePhotoTakenDate(dateTime: datetime)
                 needSave = true
-            }else if let datetime = self.photoFile?.exifModifyDate {
+            }else if let datetime = self.photoFile?.exifModifyDate, datetime < now {
                 self.storePhotoTakenDate(dateTime: datetime)
                 needSave = true
-            }else if let datetime = self.photoFile?.videoCreateDate {
+            }else if let datetime = self.photoFile?.exifModifyDate, datetime < now {
                 self.storePhotoTakenDate(dateTime: datetime)
                 needSave = true
-            }else if let datetime = self.photoFile?.trackCreateDate {
+            }else if let datetime = self.photoFile?.videoCreateDate, datetime < now {
+                self.storePhotoTakenDate(dateTime: datetime)
+                needSave = true
+            }else if let datetime = self.photoFile?.trackCreateDate, datetime < now {
                 self.storePhotoTakenDate(dateTime: datetime)
                 needSave = true
             }else{
@@ -178,7 +184,7 @@ class ImageFile {
                         
                         needSave = true
                     }
-                }else if let datetime = self.photoFile?.filesysCreateDate {
+                }else if let datetime = self.photoFile?.filesysCreateDate, datetime < now {
                     self.storePhotoTakenDate(dateTime: datetime)
                     needSave = true
                 }
@@ -369,8 +375,10 @@ class ImageFile {
         
         var imgSrc:CGImageSource? = CGImageSourceCreateWithURL(url as CFURL, nil)
         if imgSrc == nil {
-            if let img = NSImage(byReferencingFile: url.path) {
-                imgSrc = CGImageSourceCreateWithData(img.tiffRepresentation! as CFData , nil)
+            if FileManager.default.fileExists(atPath: url.path) {
+                if let img = NSImage(byReferencingFile: url.path) {
+                    imgSrc = CGImageSourceCreateWithData(img.tiffRepresentation! as CFData , nil)
+                }
             }
         }
         if imgSrc == nil {
@@ -501,6 +509,7 @@ class ImageFile {
         self.recognizeDateTimeFromFilename("pt([0-9]{4})_([0-9]{2})_([0-9]{2})_([0-9]{2})_([0-9]{2})_([0-9]{2})_([0-9]{2})\\.([A-Za-z0-9]{3}+)")
         
         // from another camera models
+        self.recognizeDateTimeFromFilename("YP([0-9]{4})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})\\.([A-Za-z0-9]{3}+)")
         self.recognizeDateTimeFromFilename("YP([0-9]{4})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})_[0-9]+\\.([A-Za-z0-9]{3}+)")
         self.recognizeDateTimeFromFilename("YP([0-9]{4})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})_[0-9]+_[0-9]+\\.([A-Za-z0-9]{3}+)")
         
@@ -510,8 +519,7 @@ class ImageFile {
         // huawei video
         self.recognizeDateTimeFromFilename("VID_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})\\.([A-Za-z0-9]{3}+)")
         
-        // huawei honor6 video
-        self.recognizeUnixTimeFromFilename("([0-9]{13})\\.([A-Za-z0-9]{3}+)")
+        
         
         // file exported by wechat
         self.recognizeUnixTimeFromFilename("mmexport([0-9]{13})\\.([A-Za-z0-9]{3}+)")
@@ -523,6 +531,19 @@ class ImageFile {
         
         // file copied
         self.recognizeUnixTimeFromFilename("mmexport([0-9]{13})\\([0-9]+\\)\\.([A-Za-z0-9]{3}+)")
+        
+        
+        if url.lastPathComponent.starts(with: "photo.163.com") {
+            return
+        }
+        
+        self.recognizeYearMonthDayFromPath("([0-9]{4})\\-([0-9]{2})\\-([0-9]{2})")
+        self.recognizeYearMonthDayFromPath("([0-9]{4})年([0-9]{2})月([0-9]{2})")
+        self.recognizeYearMonthFromPath("([0-9]{4})\\-([0-9]{2})")
+        self.recognizeYearMonthFromPath("([0-9]{4})年([0-9]{2})")
+        
+        // huawei honor6 video
+        self.recognizeUnixTimeFromFilename("([0-9]{13})\\.([A-Za-z0-9]{3}+)")
     }
     
     
@@ -564,6 +585,30 @@ class ImageFile {
         }
     }
     
+    private func recognizeYearMonthFromPath(_ pattern:String){
+        guard !isRecognizedDateTimeFromFilename else {return}
+        let parts:[String] = url.path.matches(for: pattern)
+        if parts.count > 0 {
+            let dateString:String = "\(parts[1]):\(parts[2]):01 00:00:00"
+            if self.photoFile != nil {
+                self.photoFile?.dateTimeFromFilename = dateString
+            }
+            isRecognizedDateTimeFromFilename = true
+        }
+    }
+    
+    private func recognizeYearMonthDayFromPath(_ pattern:String){
+        guard !isRecognizedDateTimeFromFilename else {return}
+        let parts:[String] = url.path.matches(for: pattern)
+        if parts.count > 0 {
+            let dateString:String = "\(parts[1]):\(parts[2]):\(parts[3]) 00:00:00"
+            if self.photoFile != nil {
+                self.photoFile?.dateTimeFromFilename = dateString
+            }
+            isRecognizedDateTimeFromFilename = true
+        }
+    }
+    
     private func convertUnixTimestampToDateString(_ timestamp:String, dateFormat:String = "yyyy:MM:dd HH:mm:ss") -> String {
         let date = NSDate(timeIntervalSince1970: Double(timestamp)!/1000 + 8*60*60) // GMT+8
         let dateFormatter = DateFormatter()
@@ -576,17 +621,19 @@ class ImageFile {
     // MARK: CHOOSE PHOTO TAKEN DATE
     
     private func choosePhotoTakenDateFromMetaInfo() -> String? {
+        let now:Date = Date()
         var dt:Date? = nil
         if let photoFile = self.photoFile {
-            dt = photoFile.assignDateTime ?? photoFile.exifDateTimeOriginal
-            if dt == nil && photoFile.dateTimeFromFilename != nil {
+            dt = photoFile.assignDateTime ?? photoFile.exifDateTimeOriginal ?? photoFile.exifCreateDate
+            
+            if (dt == nil || dt! > now) && photoFile.dateTimeFromFilename != nil {
                 let dtFilename = exifDateFormat.date(from: photoFile.dateTimeFromFilename!)
                 dt = dtFilename
             }
-            if dt == nil {
+            if (dt == nil || dt! > now) {
                 dt = photoFile.softwareModifiedTime ?? photoFile.exifModifyDate ?? photoFile.exifCreateDate
             }
-            if dt == nil && self.isVideo {
+            if (dt == nil || dt! > now) && self.isVideo {
                 dt = photoFile.videoCreateDate ?? photoFile.videoModifyDate
             }
         }
@@ -1117,21 +1164,23 @@ class ImageFile {
         if json != JSON(NSNull()) {
             //metaInfoHolder.setMetaInfo(MetaInfo(category: "System", title: "Size", value: json[0]["Composite"]["ImageSize"].description), ifNotExists: true)
             
-            if photoFile?.exifCreateDate == nil {
-                photoFile?.exifCreateDate = exifDateFormat.date(from: json[0]["EXIF"]["CreateDate"].description)
-            }
-            if photoFile?.exifModifyDate == nil {
-                photoFile?.exifModifyDate = exifDateFormat.date(from: json[0]["EXIF"]["ModifyDate"].description)
-            }
-            if photoFile?.filesysCreateDate == nil {
-                photoFile?.filesysCreateDate = exifDateFormat.date(from: json[0]["File"]["FileModifyDate"].description)
-            }
-            if photoFile?.filesysCreateDate == nil {
-                photoFile?.filesysCreateDate = exifDateFormatWithTimezone.date(from: json[0]["File"]["FileModifyDate"].description)
-            }
             
-            let dateTimeOriginal = json[0]["EXIF"]["DateTimeOriginal"].stringValue
+            let dateTimeOriginal = json[0]["EXIF"]["DateTimeOriginal"].description
             photoFile?.exifDateTimeOriginal = exifDateFormat.date(from: dateTimeOriginal)
+            
+            //if photoFile?.exifCreateDate == nil {
+                photoFile?.exifCreateDate = exifDateFormat.date(from: json[0]["EXIF"]["CreateDate"].description)
+            //}
+            //if photoFile?.exifModifyDate == nil {
+                photoFile?.exifModifyDate = exifDateFormat.date(from: json[0]["EXIF"]["ModifyDate"].description)
+            //}
+            //if photoFile?.filesysCreateDate == nil {
+                photoFile?.filesysCreateDate = exifDateFormat.date(from: json[0]["File"]["FileModifyDate"].description)
+            //}
+            //if photoFile?.filesysCreateDate == nil {
+                photoFile?.filesysCreateDate = exifDateFormatWithTimezone.date(from: json[0]["File"]["FileModifyDate"].description)
+            //}
+            
             
             if isPhoto {
                 if json[0]["EXIF"]["ISO"] != JSON.null {

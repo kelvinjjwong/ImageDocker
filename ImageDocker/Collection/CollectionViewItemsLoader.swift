@@ -362,16 +362,13 @@ class CollectionViewItemsLoader: NSObject {
     }
     
     private func sortItems(in section:CollectionViewSection) {
-        var dates = [String]()
+        var dates:Set<String> = []
         for item in section.items {
             var date = item.photoTakenTime()
             if date == "" {
                 date = item.url.path
             }
-            let i = dates.index(where: { $0 == date })
-            if i == nil {
-                dates.append(date)
-            }
+            dates.insert(date)
         }
         
         let sortedDates = dates.sorted()
@@ -441,7 +438,7 @@ class CollectionViewItemsLoader: NSObject {
             let imageFile = ImageFile(url: url, indicator: self.indicator, sharedDB:ModelStore.sharedDBPool())
             
             print("\(Date()) Checking duplicate for a photo")
-            if duplicates.paths.index(where: {$0 == url.path}) != nil {
+            if duplicates.paths.contains(url.path) {
                 imageFile.hasDuplicates = true
             }else {
                 imageFile.hasDuplicates = false
@@ -482,7 +479,7 @@ class CollectionViewItemsLoader: NSObject {
             
             let imageFile = ImageFile(photoFile: photoFile, indicator: self.indicator, sharedDB:ModelStore.sharedDBPool())
             
-            if duplicates.paths.index(where: {$0 == photoFile.path}) != nil {
+            if duplicates.paths.contains(photoFile.path) {
                 imageFile.hasDuplicates = true
             }else {
                 imageFile.hasDuplicates = false
@@ -586,6 +583,7 @@ class CollectionViewItemsLoader: NSObject {
     }
     
     func addItem(_ imageFile:ImageFile){
+        // TODO: change to SET<String> for performance
         let i = items.index(where: { $0.url == imageFile.url })
         if i == nil {
             items.append(imageFile)
@@ -593,6 +591,7 @@ class CollectionViewItemsLoader: NSObject {
     }
     
     func removeItem(_ imageFile:ImageFile){
+        // TODO: change to SET<String> for performance
         if let i = items.index(where: { $0.url == imageFile.url }) {
             items.remove(at: i)
         }

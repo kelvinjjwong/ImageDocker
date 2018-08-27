@@ -87,9 +87,17 @@ class ExportManager {
             }
             
             // check exported
+            
+            if messageBox != nil {
+                DispatchQueue.main.async {
+                    messageBox?.stringValue = "EXPORT Validating ..."
+                }
+            }
+            
             let allMarkedExported = ModelStore.default.getAllPhotoFilesMarkedExported()
             let totalMarked = allMarkedExported.count
             var k:Int = 0
+            
             
             print("\(Date()) EXPORT: CHECKING IF MARKED EXPORTED ARE REALLY EXPORTED")
             for photo in allMarkedExported {
@@ -106,7 +114,7 @@ class ExportManager {
                 k += 1
                 if messageBox != nil {
                     DispatchQueue.main.async {
-                        messageBox?.stringValue = "EXPORT Checking ... ( \(k) / \(totalMarked) )"
+                        messageBox?.stringValue = "EXPORT Validating ... ( \(k) / \(totalMarked) )"
                     }
                 }
                 
@@ -123,10 +131,16 @@ class ExportManager {
             print("\(Date()) EXPORT: CHECKING IF MARKED EXPORTED ARE REALLY EXPORTED: DONE")
             
             // check updates and which not exported
+            if messageBox != nil {
+                DispatchQueue.main.async {
+                    messageBox?.stringValue = "EXPORT Searching ..."
+                }
+            }
             
             print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
             let photos:[Image] = ModelStore.default.getAllPhotoFilesForExporting(after: date)
             
+            let allowedExt:Set<String> = ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg"]
             let total = photos.count
             var i:Int = 0
             for photo in photos {
@@ -144,13 +158,25 @@ class ExportManager {
                 i += 1
                 if messageBox != nil {
                     DispatchQueue.main.async {
-                        messageBox?.stringValue = "EXPORT Checking ... ( \(i) / \(total) )"
+                        messageBox?.stringValue = "EXPORT Processing ... ( \(i) / \(total) )"
                     }
                 }
                 
                 if photo.photoTakenYear == 0 {
                     continue
                 }
+                
+                let pathUrl = URL(fileURLWithPath: photo.path)
+                let pathExt = pathUrl.pathExtension.lowercased()
+                
+                if !allowedExt.contains(pathExt){
+                    continue
+                }
+                
+                if !FileManager.default.fileExists(atPath: photo.path) {
+                    continue
+                }
+                
                 var pathComponents:[String] = []
                 pathComponents.append(PreferencesController.exportDirectory())
                 pathComponents.append("\(photo.photoTakenYear ?? 0)年")
@@ -297,8 +323,11 @@ class ExportManager {
                     
                     if fm.fileExists(atPath: fullpath) {
                         print("!! exists destination \(fullpath) , add \(suffix) as suffix")
-                        filenameComponents.removeLast()
-                        filenameComponents.removeLast()
+                        filenameComponents.removeLast() // fileExt
+                        filenameComponents.removeLast() // .
+                        if i > 1 {
+                            filenameComponents.removeLast() // suffix
+                        }
                         filenameComponents.append(" \(suffix)")
                         filenameComponents.append(".")
                         filenameComponents.append(fileExt)

@@ -38,7 +38,7 @@ extension ViewController {
                     for year in place.children {
                         //print("          YEAR \(year.year)")
                         var duplicateInYear:Bool = false
-                        if duplicates.duplicates.index(where: {$0.year == year.year}) != nil {
+                        if duplicates.years.contains(year.year) {
                             duplicateInYear = true
                         }
                         year.hasDuplicates = duplicateInYear
@@ -47,7 +47,7 @@ extension ViewController {
                         for month in year.children {
                             //print("              MONTH \(month.month)")
                             var duplicateInMonth:Bool = false
-                            if duplicates.duplicates.index(where: {$0.year == month.year && $0.month == month.month}) != nil {
+                            if duplicates.yearMonths.contains(month.year * 1000 + month.month) {
                                 duplicateInMonth = true
                             }
                             month.hasDuplicates = duplicateInMonth
@@ -56,7 +56,7 @@ extension ViewController {
                             for day in month.children {
                                 //print("                   DAY \(day.day)")
                                 var duplicateInDay:Bool = false
-                                if duplicates.duplicates.index(where: {$0.year == day.year && $0.month == day.month && $0.day == day.day}) != nil {
+                                if duplicates.yearMonthDays.contains(day.year * 100000 + day.month * 100 + day.day) {
                                     duplicateInDay = true
                                 }
                                 day.hasDuplicates = duplicateInDay

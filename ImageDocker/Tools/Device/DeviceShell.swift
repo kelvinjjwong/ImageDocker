@@ -15,7 +15,7 @@ enum DeviceOS:Int {
 
 struct DeviceShell {
     
-    static func getFilenames(from string:String, basePath:String, excludeFilenames:[String], allowedExt:[String], deviceOS:DeviceOS = .android) -> [PhoneFile] {
+    static func getFilenames(from string:String, basePath:String, excludeFilenames:Set<String>, allowedExt:Set<String>, deviceOS:DeviceOS = .android) -> [PhoneFile] {
         var result:[PhoneFile] = []
         let lines = string.components(separatedBy: "\n")
         var subFolder = ""
@@ -41,14 +41,13 @@ struct DeviceShell {
             
             let filename = columns[columns.count - 1]
             
-            
-            if filename == "" || excludeFilenames.index(where: {$0 == filename}) != nil {
+            if filename == "" || excludeFilenames.contains(filename) {
                 continue
             }
             
             let filenameParts = filename.components(separatedBy: ".")
             let ext = filenameParts[filenameParts.count - 1].lowercased()
-            guard allowedExt.index(where: {$0 == ext}) != nil && columns.count > 5 else {continue}
+            guard allowedExt.contains(ext) && columns.count > 5 else {continue}
             
             let size = deviceOS == .android ? columns[columns.count - 4] : columns[2]
             let date = deviceOS == .android ? columns[columns.count - 3] : ""
@@ -105,7 +104,7 @@ struct DeviceShell {
     }
     
     
-    static func getFilenames(from string:String, excludeFilenames:[String], allowedExt:[String]) -> [String] {
+    static func getFilenames(from string:String, excludeFilenames:Set<String>, allowedExt:Set<String>) -> [String] {
         var result:[String] = []
         let lines = string.components(separatedBy: "\n")
         for line in lines {
@@ -122,14 +121,13 @@ struct DeviceShell {
             
             let filename = columns[columns.count - 1]
             
-            
-            if filename == "" || excludeFilenames.index(where: {$0 == filename}) != nil  {
+            if filename == "" || excludeFilenames.contains(filename)  {
                 continue
             }
             
             let filenameParts = filename.components(separatedBy: ".")
             let ext = filenameParts[filenameParts.count - 1].lowercased()
-            guard allowedExt.index(where: {$0 == ext}) != nil else {continue}
+            guard allowedExt.contains(ext) else {continue}
             
             result.append(filename)
         }

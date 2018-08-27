@@ -198,6 +198,7 @@ class DeviceCopyViewController: NSViewController {
     
     fileprivate func loadFromLocalPath(path:String, pretendPath:String, reloadFileList:Bool = false) {
         print("LOAD FROM LOCAL \(path) - \(pretendPath)")
+        
         DispatchQueue.main.async {
             self.deviceFiles_filtered[path] = []
             self.deviceFiles_fulllist[path] = []
@@ -267,7 +268,11 @@ class DeviceCopyViewController: NSViewController {
         }
         var files:[PhoneFile] = []
         if self.device.type == .Android {
-            files = Android.bridge.files(device: self.device.deviceId, in: path)
+            if Android.bridge.exists(device: self.device.deviceId, path: path) {
+                files = Android.bridge.files(device: self.device.deviceId, in: path)
+            }else{
+                print("NOT EXISTS PATH ON DEVICE \(path)")
+            }
         }else{
             files = IPHONE.bridge.files(mountPoint: self.mountpoint, in: path)
         }
@@ -291,6 +296,7 @@ class DeviceCopyViewController: NSViewController {
             f.deviceFile = deviceFile
             
             if (f.stored && !f.matched){
+                print("Getting MD5 of \(f.path)")
                 f.fileMD5 = Android.bridge.md5(device: self.device.deviceId, fileWithPath: f.path)
             }
             
@@ -428,21 +434,20 @@ class DeviceCopyViewController: NSViewController {
                     self.loadFromPath(path: path)
                 }
                 DispatchQueue.main.async {
-                    if self.selectedPath == nil {
-                        self.selectDeviceSourcePath(path: self.paths[0])
-                    }else{
-                        self.selectDeviceSourcePath(path: self.selectedPath!)
-                    }
                     self.btnAddSourcePath.isEnabled = true
                     self.btnRemoveSourcePath.isEnabled = true
                     self.btnLoadFromLocal.isEnabled = true
                     self.tblSourcePath.isEnabled = true
                     self.cbShowCopied.isEnabled = true
                     self.btnLoad.isEnabled = true
-                    self.tblSourcePath.isEnabled = true
                     self.btnDeleteRecords.isEnabled = true
                     if self.device.type == .iPhone {
                         self.btnMount.isEnabled = true
+                    }
+                    if self.selectedPath == nil {
+                        self.selectDeviceSourcePath(path: self.paths[0])
+                    }else{
+                        self.selectDeviceSourcePath(path: self.selectedPath!)
                     }
                 }
             }

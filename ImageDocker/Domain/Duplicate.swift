@@ -21,7 +21,10 @@ class Duplicate {
 
 class Duplicates {
     
-    var duplicates:[Duplicate] = []
-    var categories:[String] = []
-    var paths:[String] = []
+    //var duplicates:[Duplicate] = []
+    var categories:Set<String> = []
+    var paths:Set<String> = []
+    var years:Set<Int> = []
+    var yearMonths:Set<Int> = []
+    var yearMonthDays:Set<Int> = []
 }

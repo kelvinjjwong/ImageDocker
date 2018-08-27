@@ -140,6 +140,10 @@ class ViewController: NSViewController {
     @IBOutlet weak var btnRemoveSelection: NSButton!
     @IBOutlet weak var btnShow: NSButton!
     @IBOutlet weak var btnHide: NSButton!
+    @IBOutlet weak var btnRemoveAllSelection: NSButton!
+    @IBOutlet weak var btnShare: NSButton!
+    @IBOutlet weak var btnCopyToDevice: NSButton!
+    
     
     
     // MARK: Editor - DateTime
@@ -650,6 +654,7 @@ class ViewController: NSViewController {
                     let selectedItem:PXSourceListItem = self.sourceList.item(atRow: self.sourceList.selectedRow) as! PXSourceListItem
                     let parentItem:PXSourceListItem = self.libraryItem()
                     
+                    // TODO: change to SET<String> for performance
                     self.sourceList.removeItems(at: NSIndexSet(index: parentItem.children.index(where: {$0 as! PXSourceListItem === selectedItem})! ) as IndexSet,
                                                 inParent: parentItem,
                                                 withAnimation: NSTableView.AnimationOptions.slideUp)
@@ -856,6 +861,34 @@ class ViewController: NSViewController {
     
     // MARK: Selection View Controls
     
+    @IBAction func onShareClicked(_ sender: Any) {
+    }
+    
+    
+    @IBAction func onCopyToDeviceClicked(_ sender: Any) {
+    }
+    
+    
+    @IBAction func onSelectionRemoveAllClicked(_ sender: Any) {
+        // remove from selection
+        var images:Set<String> = []
+        for image in self.selectionViewController.imagesLoader.getItems() {
+            images.insert(image.url.path)
+        }
+        self.selectionViewController.imagesLoader.clean()
+        self.selectionCollectionView.reloadData()
+        
+        
+        // uncheck in browser if exists there (if user changed to another folder, it won't be there)
+        for item in self.collectionView.visibleItems() {
+            let item = item as! CollectionViewItem
+            if images.contains((item.imageFile?.url.path)!) {
+                item.uncheck()
+            }
+        }
+        self.selectionCheckAllBox.state = NSButton.StateValue.off
+    }
+    
     
     @IBAction func onSelectionRemoveButtonClicked(_ sender: Any) {
         // collect which to be removed from selection
@@ -876,6 +909,7 @@ class ViewController: NSViewController {
         // uncheck in browser if exists there (if user changed to another folder, it won't be there)
         for item in self.collectionView.visibleItems() {
             let item = item as! CollectionViewItem
+            // TODO: change to SET<String> for performance
             let i = images.index(where: { $0.url == item.imageFile?.url })
             if i != nil {
                 item.uncheck()
@@ -886,6 +920,11 @@ class ViewController: NSViewController {
     
 
     @IBAction func onSelectionCheckAllClicked(_ sender: NSButton) {
+        
+        if self.selectionViewController.imagesLoader.getItems().count == 0 {
+            self.selectionCheckAllBox.state = NSButton.StateValue.off
+            return
+        }
         if self.selectionCheckAllBox.state == NSButton.StateValue.on {
             for i in 0...self.selectionViewController.imagesLoader.getItems().count-1 {
                 let itemView = self.selectionCollectionView.item(at: i) as? CollectionViewItem

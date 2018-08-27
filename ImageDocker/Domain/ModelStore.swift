@@ -90,38 +90,50 @@ class ModelStore {
         print("\(Date()) Loading duplicate photos from db")
         
         let duplicates:Duplicates = Duplicates()
-        var dupDates:[Date] = []
+        var dupDates:Set<Date> = []
         do {
-            let db = try DatabaseQueue(path: dbfile)
+            let db = ModelStore.sharedDBPool()
+            // try DatabaseQueue(path: dbfile)
             try db.read { db in
-                let rows = try Row.fetchAll(db, "SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,count(path) as photoCount FROM Image GROUP BY photoTakenDate, place, photoTakenDay, photoTakenMonth, photoTakenYear")
+                let cursor = try Row.fetchCursor(db,
+"""
+SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCount FROM
+(
+    SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,count(path) as photoCount FROM
+    (
+        SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,path FROM IMAGE
+        WHERE photoTakenDate LIKE '%.000'
+        UNION
+        SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate || '.000' ,place,path FROM IMAGE
+        WHERE photoTakenDate IS NOT NULL AND photoTakenDate NOT LIKE '%.000'
+    )
+    GROUP BY photoTakenDate, place, photoTakenDay, photoTakenMonth, photoTakenYear
+) WHERE photoCount > 1 ORDER BY photoTakenDate
+"""
+                )
                 
-                for row in rows {
-                    let count:Int = Int(exactly: row["photoCount"] as Int64)!
-                    if count == 1 {
-                        continue
-                    }
-                    if row["photoTakenDate"] == nil {
-                        continue
-                    }
-                    let dup:Duplicate = Duplicate()
-                    dup.year = row["photoTakenYear"] as Int
-                    dup.month = row["photoTakenMonth"]  as Int
-                    dup.day = row["photoTakenDay"]  as Int
-                    dup.date = row["photoTakenDate"] as Date
-                    dup.place = row["place"] as! String? ?? ""
+                while let row = try cursor.next() {
+                    
+                    //let dup:Duplicate = Duplicate()
+                    let year = row["photoTakenYear"] as Int
+                    let month = row["photoTakenMonth"]  as Int
+                    let day = row["photoTakenDay"]  as Int
+                    let date = row["photoTakenDate"] as Date
+                    //let place = row["place"] as! String? ?? ""
                     //dup.event = row["event"] as! String? ?? ""
-                    duplicates.duplicates.append(dup)
+                    //duplicates.duplicates.append(dup)
                     
-                    let monthString = dup.month < 10 ? "0\(dup.month)" : "\(dup.month)"
-                    let dayString = dup.day < 10 ? "0\(dup.day)" : "\(dup.day)"
-                    let category:String = "\(dup.year)年\(monthString)月\(dayString)日"
+                    let monthString = month < 10 ? "0\(month)" : "\(month)"
+                    let dayString = day < 10 ? "0\(day)" : "\(day)"
+                    let category:String = "\(year)年\(monthString)月\(dayString)日"
                     
-                    if duplicates.categories.index(where: {$0 == category}) == nil {
-                        duplicates.categories.append(category)
-                    }
+                    duplicates.categories.insert(category)
                     
-                    dupDates.append(dup.date)
+                    duplicates.years.insert(year)
+                    duplicates.yearMonths.insert(year * 1000 + month)
+                    duplicates.yearMonthDays.insert(year * 100000 + month * 100 + day)
+                    
+                    dupDates.insert(date)
                 }
             }
         }catch{
@@ -129,23 +141,19 @@ class ModelStore {
         }
         
         var firstPhotoInPlaceAndDate:[String:String] = [:]
-        var dupPhotos:Set<String> = []
         print("\(Date()) Marking duplicate tag to photo files")
         do {
             let db = try DatabaseQueue(path: dbfile)
             try db.read { db in
                 let marks = repeatElement("?", count: dupDates.count).joined(separator: ",")
-                let photosInSameDate = try Row.fetchAll(db, "SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place FROM Image WHERE photoTakenDate in (\(marks))", arguments:StatementArguments(dupDates))
+                let photosInSameDate = try Row.fetchCursor(db, "SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place FROM Image WHERE photoTakenYear <> 0 AND photoTakenYear IS NOT NULL AND photoTakenDate in (\(marks))", arguments:StatementArguments(dupDates))
                 
-                for photo in photosInSameDate {
-                    if photo["photoTakenYear"] == 0 {
-                        continue
-                    }
+                while let photo = try photosInSameDate.next() {
                     let key = "\(photo["place"] ?? "")_\(photo["photoTakenYear"] ?? "0")_\(photo["photoTakenMonth"] ?? "0")_\(photo["photoTakenDay"] ?? "0")"
                     if let first = firstPhotoInPlaceAndDate[key] {
                         // duplicates
-                        dupPhotos.insert(first)
-                        dupPhotos.insert(photo["path"] ?? "")
+                        duplicates.paths.insert(first)
+                        duplicates.paths.insert(photo["path"] ?? "")
                     }else{
                         firstPhotoInPlaceAndDate[key] = photo["path"] ?? ""
                     }
@@ -154,7 +162,6 @@ class ModelStore {
         }catch{
             print(error)
         }
-        duplicates.paths = dupPhotos.sorted()
         print("\(Date()) Marking duplicate tag to photo files: DONE")
         
         _duplicates = duplicates

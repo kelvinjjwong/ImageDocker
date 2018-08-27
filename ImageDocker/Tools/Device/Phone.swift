@@ -87,11 +87,13 @@ struct PhoneDevice {
             summary = deviceId
         }
         if name != "" {
-            return "\(manufacture) \(model) (\(name)) [\(summary)]"
+            let recognizedModel = CameraModelRecognizer.recognize(maker: manufacture, model: model)
+            return "\(manufacture) \(recognizedModel) (\(name)) [\(summary)]"
             
         }
         if model != "" && manufacture != "" {
-            return "\(manufacture) \(model) [\(summary)]"
+            let recognizedModel = CameraModelRecognizer.recognize(maker: manufacture, model: model)
+            return "\(manufacture) \(recognizedModel) [\(summary)]"
         }
         if deviceId != "" {
             if type == .Android {

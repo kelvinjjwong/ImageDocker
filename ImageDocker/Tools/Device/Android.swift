@@ -81,12 +81,7 @@ struct Android {
         var meid:String = ""
         let lines = string.components(separatedBy: "\n")
         for line in lines {
-            if line.starts(with: "[ro.product.model]:") && model == "" {
-                let parts = line.components(separatedBy: " ")
-                if parts.count == 2 {
-                    model = parts[1].replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "")
-                }
-            }else if line.starts(with: "[ro.product.manufacturer]:") {
+            if line.starts(with: "[ro.product.manufacturer]:") {
                 let parts = line.components(separatedBy: " ")
                 if parts.count == 2 {
                     manufacture = parts[1].replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "")
@@ -106,17 +101,13 @@ struct Android {
                 if parts.count == 2 {
                     model = parts[1].replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "").replacingOccurrences(of: "_", with: " ")
                 }
-            }else if line.starts(with: "[net.hostname]:") && model == "" {
+            }else if line.starts(with: "[ro.product.model]:") && model == "" {
                 let parts = line.components(separatedBy: " ")
                 if parts.count == 2 {
-                    model = parts[1].replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "").replacingOccurrences(of: "_", with: " ")
-                }
-            }else if line.starts(with: "[ro.product.brand]:") && model == "" {
-                let parts = line.components(separatedBy: " ")
-                if parts.count == 2 {
-                    model = parts[1].replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "").uppercased()
+                    model = parts[1].replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "")
                 }
             }
+                
         }
         if model != "" && manufacture != "" {
             device = PhoneDevice(type: .Android, deviceId: id, manufacture: manufacture, model: model)
@@ -167,6 +158,32 @@ struct Android {
             }
         }
         return dev
+    }
+    
+    func exists(device id: String, path: String) -> Bool {
+        print("checking if exists \(id) \(path)")
+        let pipe = Pipe()
+        
+        let command = Process()
+        command.standardOutput = pipe
+        command.standardError = pipe
+        command.launchPath = adb.path
+        command.arguments = ["-s", id, "shell", "cd \(path)"]
+        //command.launch()
+        //print(command.isRunning)
+        do {
+            try command.run()
+        }catch{
+            print(error)
+        }
+        //command.waitUntilExit()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        //print(string)
+        if string.range(of: "No such file or directory") != nil {
+            return false
+        }
+        return true
     }
     
     func files(device id: String, in path: String) -> [PhoneFile] {

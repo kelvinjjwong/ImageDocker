@@ -139,6 +139,7 @@ class Moments {
             var monthEntry:Moment
             
             if year == 0 && month == 0 && day == 0 {
+                // TODO: change to SET<String> for performance
                 if years.index(where: {$0.place == "未能识别日期"}) == nil {
                     yearEntry = Moment(place: "未能识别日期")
                     years.append(yearEntry)
@@ -153,6 +154,7 @@ class Moments {
                 yearEntry.children.append(dayEntry)
             }else {
             
+                // TODO: change to SET<String> for performance
                 if years.index(where: {$0.year == year}) == nil {
                     yearEntry = Moment(year: year)
                     years.append(yearEntry)
@@ -161,6 +163,7 @@ class Moments {
                 }
                 yearEntry.photoCount += photoCount
                 
+                // TODO: change to SET<String> for performance
                 if yearEntry.children.index(where: {$0.month == month}) == nil {
                     monthEntry = Moment(month: month, ofYear: year, place: place)
                     yearEntry.children.append(monthEntry)
@@ -240,6 +243,7 @@ class Moments {
             var yearEntry:Moment
             var monthEntry:Moment
             
+            // TODO: change to SET<String> for performance
             if places.index(where: {$0.gov == gov}) == nil {
                 govEntry = Moment(gov: gov)
                 govEntry.groupByPlace = true
@@ -249,6 +253,7 @@ class Moments {
             }
             govEntry.photoCount += photoCount
             
+            // TODO: change to SET<String> for performance
             if govEntry.children.index(where: {$0.place == place}) == nil {
                 placeEntry = Moment(place: place, gov: gov)
                 placeEntry.groupByPlace = true
@@ -262,6 +267,7 @@ class Moments {
             placeEntry.cityData = data["city"] as? String ?? ""
             placeEntry.placeData = data["place"] as? String ?? ""
             
+            // TODO: change to SET<String> for performance
             if placeEntry.children.index(where: {$0.year == year}) == nil {
                 yearEntry = Moment(year: year, place: place, gov: gov)
                 yearEntry.groupByPlace = true
@@ -275,6 +281,7 @@ class Moments {
             yearEntry.cityData = data["city"] as? String ?? ""
             yearEntry.placeData = data["place"] as? String ?? ""
             
+            // TODO: change to SET<String> for performance
             if yearEntry.children.index(where: {$0.month == month}) == nil {
                 monthEntry = Moment(month: month, ofYear: year, place: place, gov: gov)
                 monthEntry.groupByPlace = true

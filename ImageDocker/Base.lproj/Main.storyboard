@@ -481,13 +481,13 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
                                             <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ivI-8f-yJa">
-                                                <rect key="frame" x="0.0" y="37" width="1296" height="182"/>
+                                                <rect key="frame" x="0.0" y="36" width="1296" height="183"/>
                                                 <clipView key="contentView" drawsBackground="NO" id="ueq-7S-QM2">
-                                                    <rect key="frame" x="0.0" y="0.0" width="1296" height="182"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="1296" height="183"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <collectionView selectable="YES" allowsMultipleSelection="YES" id="ZyN-Zd-qQf">
-                                                            <rect key="frame" x="0.0" y="0.0" width="1296" height="182"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="1296" height="183"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                                             <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="mUq-KW-nzo">
                                                                 <size key="itemSize" width="50" height="50"/>
@@ -506,13 +506,12 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </scroller>
                                             </scrollView>
-                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lT1-yY-BTR">
-                                                <rect key="frame" x="1269" y="4" width="22" height="24"/>
+                                            <button toolTip="Remove CHECKED from selection area" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lT1-yY-BTR">
+                                                <rect key="frame" x="1215" y="-2" width="42" height="32"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="22" id="84l-WK-ZOc"/>
-                                                    <constraint firstAttribute="height" constant="22" id="GIb-w0-lNF"/>
+                                                    <constraint firstAttribute="width" constant="30" id="yHS-NN-82a"/>
                                                 </constraints>
-                                                <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Eem-HU-NXE">
+                                                <buttonCell key="cell" type="push" bezelStyle="rounded" image="broom" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Eem-HU-NXE">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
@@ -521,7 +520,7 @@
                                                 </connections>
                                             </button>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CaM-Tw-R04">
-                                                <rect key="frame" x="1210" y="6" width="46" height="18"/>
+                                                <rect key="frame" x="1167" y="6" width="46" height="18"/>
                                                 <buttonCell key="cell" type="check" title="ALL" bezelStyle="regularSquare" imagePosition="left" inset="2" id="7Ie-6Y-gWp">
                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                     <font key="font" metaFont="system"/>
@@ -586,16 +585,15 @@
                                             <progressIndicator wantsLayer="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="9ri-yc-r9m">
                                                 <rect key="frame" x="864" y="6" width="125" height="20"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="125" id="VDq-rI-red"/>
                                                     <constraint firstAttribute="height" constant="18" id="i48-xy-Jza"/>
                                                 </constraints>
                                             </progressIndicator>
-                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QJ8-hF-79J">
-                                                <rect key="frame" x="1125" y="-3" width="83" height="32"/>
+                                            <button toolTip="Set ALL as Invisible" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QJ8-hF-79J">
+                                                <rect key="frame" x="1123" y="-3" width="42" height="32"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="71" id="3Tg-uA-tl9"/>
+                                                    <constraint firstAttribute="width" constant="30" id="u4W-yV-Yae"/>
                                                 </constraints>
-                                                <buttonCell key="cell" type="push" title="▲ Hide" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="p5x-Do-Wlz">
+                                                <buttonCell key="cell" type="push" bezelStyle="rounded" image="hide" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="p5x-Do-Wlz">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
@@ -603,12 +601,12 @@
                                                     <action selector="onButtonHideClicked:" target="XfG-lQ-9wD" id="iub-WC-1oV"/>
                                                 </connections>
                                             </button>
-                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="W0U-Cw-aB7">
-                                                <rect key="frame" x="1038" y="-3" width="89" height="32"/>
+                                            <button toolTip="Set ALL as Visible" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="W0U-Cw-aB7">
+                                                <rect key="frame" x="1083" y="-3" width="42" height="32"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="77" id="NDV-JZ-bNb"/>
+                                                    <constraint firstAttribute="width" constant="30" id="S9O-aq-b4I"/>
                                                 </constraints>
-                                                <buttonCell key="cell" type="push" title="▲ Show" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WWs-cd-IhV">
+                                                <buttonCell key="cell" type="push" bezelStyle="rounded" image="view" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WWs-cd-IhV">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
@@ -616,31 +614,80 @@
                                                     <action selector="onButtonShowClicked:" target="XfG-lQ-9wD" id="hH8-BS-u3i"/>
                                                 </connections>
                                             </button>
+                                            <button toolTip="Remove ALL from selection area" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Tuu-5h-g9B">
+                                                <rect key="frame" x="1255" y="-2" width="42" height="32"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="30" id="3dl-B7-E4k"/>
+                                                </constraints>
+                                                <buttonCell key="cell" type="push" bezelStyle="rounded" image="trash" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eSj-Gi-AQc">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="onSelectionRemoveAllClicked:" target="XfG-lQ-9wD" id="FYq-00-wBj"/>
+                                                </connections>
+                                            </button>
+                                            <button toolTip="Copy to device" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Zj8-N8-ari">
+                                                <rect key="frame" x="1043" y="-2" width="42" height="32"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="30" id="S4O-Kz-xYb"/>
+                                                </constraints>
+                                                <buttonCell key="cell" type="push" bezelStyle="rounded" image="phone" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zdV-TB-RDD">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="onCopyToDeviceClicked:" target="XfG-lQ-9wD" id="6zB-U3-zBM"/>
+                                                </connections>
+                                            </button>
+                                            <button toolTip="Share" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0by-PK-DjP">
+                                                <rect key="frame" x="1003" y="-2" width="42" height="32"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="30" id="lry-uc-KQi"/>
+                                                </constraints>
+                                                <buttonCell key="cell" type="push" bezelStyle="rounded" image="forward" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fPX-Tq-xS0">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="onShareClicked:" target="XfG-lQ-9wD" id="zKS-pQ-cjU"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="CaM-Tw-R04" secondAttribute="bottom" constant="8" id="02d-3o-exU"/>
                                             <constraint firstItem="Le0-oR-2MN" firstAttribute="leading" secondItem="fBu-cK-CdX" secondAttribute="trailing" constant="10" id="0UH-qw-6PI"/>
+                                            <constraint firstItem="Tuu-5h-g9B" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="10" id="2kq-N2-YsN"/>
                                             <constraint firstItem="lT1-yY-BTR" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="10" id="2tz-Zg-NOq"/>
                                             <constraint firstAttribute="bottom" secondItem="9ri-yc-r9m" secondAttribute="bottom" constant="7" id="55B-YO-IJ4"/>
+                                            <constraint firstAttribute="bottom" secondItem="Zj8-N8-ari" secondAttribute="bottom" constant="5" id="5Gv-4r-JL0"/>
+                                            <constraint firstItem="Zj8-N8-ari" firstAttribute="leading" secondItem="0by-PK-DjP" secondAttribute="trailing" constant="10" id="6oZ-nN-D4x"/>
+                                            <constraint firstItem="0by-PK-DjP" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="10" id="7gI-ts-GlS"/>
                                             <constraint firstItem="UJe-CL-XGt" firstAttribute="leading" secondItem="FmM-ai-OgV" secondAttribute="leading" id="Cqv-Zq-xvY"/>
+                                            <constraint firstAttribute="trailing" secondItem="Tuu-5h-g9B" secondAttribute="trailing" constant="10" id="Eld-NY-ewW"/>
                                             <constraint firstItem="QJ8-hF-79J" firstAttribute="leading" secondItem="W0U-Cw-aB7" secondAttribute="trailing" constant="10" id="HqI-Zn-chd"/>
+                                            <constraint firstAttribute="bottom" secondItem="0by-PK-DjP" secondAttribute="bottom" constant="5" id="IZR-uX-B0h"/>
                                             <constraint firstItem="CaM-Tw-R04" firstAttribute="leading" secondItem="QJ8-hF-79J" secondAttribute="trailing" constant="10" id="Kg0-Sh-Inl"/>
                                             <constraint firstItem="UJe-CL-XGt" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="12" id="MJH-wn-1xa"/>
                                             <constraint firstItem="fBu-cK-CdX" firstAttribute="leading" secondItem="xCg-De-lnA" secondAttribute="trailing" constant="10" id="OCI-WN-oWT"/>
                                             <constraint firstAttribute="bottom" secondItem="Mqi-a1-a53" secondAttribute="bottom" constant="5" id="Pne-OV-vb1"/>
-                                            <constraint firstAttribute="trailing" secondItem="lT1-yY-BTR" secondAttribute="trailing" constant="10" id="S6o-z5-6Pb"/>
                                             <constraint firstAttribute="bottom" secondItem="Le0-oR-2MN" secondAttribute="bottom" constant="5" id="T8F-Lj-pYh"/>
+                                            <constraint firstItem="Zj8-N8-ari" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="10" id="Xif-oD-Xtu"/>
                                             <constraint firstAttribute="trailing" secondItem="ivI-8f-yJa" secondAttribute="trailing" constant="5" id="ZbI-YX-bmA"/>
                                             <constraint firstAttribute="bottom" secondItem="W0U-Cw-aB7" secondAttribute="bottom" constant="4" id="bxK-ob-x74"/>
                                             <constraint firstAttribute="bottom" secondItem="UJe-CL-XGt" secondAttribute="bottom" constant="5" id="eSB-57-UNb"/>
+                                            <constraint firstItem="0by-PK-DjP" firstAttribute="leading" secondItem="9ri-yc-r9m" secondAttribute="trailing" constant="20" id="fuq-lj-udL"/>
                                             <constraint firstItem="ivI-8f-yJa" firstAttribute="leading" secondItem="FmM-ai-OgV" secondAttribute="leading" id="fxO-6d-EeK"/>
                                             <constraint firstAttribute="bottom" secondItem="xCg-De-lnA" secondAttribute="bottom" constant="5" id="gVF-0d-2u7"/>
+                                            <constraint firstAttribute="bottom" secondItem="Tuu-5h-g9B" secondAttribute="bottom" constant="5" id="hZ5-05-9jE"/>
                                             <constraint firstItem="ivI-8f-yJa" firstAttribute="top" secondItem="FmM-ai-OgV" secondAttribute="top" id="il6-Uh-iBq"/>
                                             <constraint firstAttribute="bottom" secondItem="fBu-cK-CdX" secondAttribute="bottom" constant="5" id="mwL-U0-6UT"/>
-                                            <constraint firstItem="lT1-yY-BTR" firstAttribute="leading" secondItem="CaM-Tw-R04" secondAttribute="trailing" constant="15" id="oYH-Uj-xIT"/>
+                                            <constraint firstItem="lT1-yY-BTR" firstAttribute="leading" secondItem="CaM-Tw-R04" secondAttribute="trailing" constant="10" id="oYH-Uj-xIT"/>
+                                            <constraint firstItem="Tuu-5h-g9B" firstAttribute="leading" secondItem="lT1-yY-BTR" secondAttribute="trailing" constant="10" id="ouy-3a-QQA"/>
                                             <constraint firstItem="Mqi-a1-a53" firstAttribute="leading" secondItem="Le0-oR-2MN" secondAttribute="trailing" constant="5" id="pCA-CN-wB7"/>
                                             <constraint firstAttribute="bottom" secondItem="QJ8-hF-79J" secondAttribute="bottom" constant="4" id="pXB-Yj-7IB"/>
                                             <constraint firstItem="xCg-De-lnA" firstAttribute="leading" secondItem="UJe-CL-XGt" secondAttribute="trailing" constant="8" id="vTQ-UU-Aeo"/>
+                                            <constraint firstItem="W0U-Cw-aB7" firstAttribute="leading" secondItem="Zj8-N8-ari" secondAttribute="trailing" constant="10" id="wvO-qL-4Mc"/>
                                             <constraint firstItem="9ri-yc-r9m" firstAttribute="leading" secondItem="Mqi-a1-a53" secondAttribute="trailing" constant="8" id="xyd-wX-bTB"/>
                                             <constraint firstAttribute="bottom" secondItem="lT1-yY-BTR" secondAttribute="bottom" constant="5" id="ywS-e6-idT"/>
                                         </constraints>
@@ -1059,17 +1106,20 @@
                         <outlet property="btnAssignEvent" destination="xCg-De-lnA" id="Jab-Ym-d9U"/>
                         <outlet property="btnChoiceMapService" destination="bhg-cd-YhI" id="kx1-3W-tkc"/>
                         <outlet property="btnCopyLocation" destination="vj9-Vb-qDW" id="Hxx-t9-L6I"/>
+                        <outlet property="btnCopyToDevice" destination="Zj8-N8-ari" id="0b1-3U-nKo"/>
                         <outlet property="btnFilterRepository" destination="0Z2-AE-WbE" id="LVn-Ev-D3R"/>
                         <outlet property="btnHide" destination="QJ8-hF-79J" id="41M-3L-1WH"/>
                         <outlet property="btnManageEvents" destination="fBu-cK-CdX" id="iHI-iO-KSb"/>
                         <outlet property="btnManagePlaces" destination="cF6-tu-IsK" id="mFM-9f-mVe"/>
                         <outlet property="btnRefreshCollectionView" destination="DpT-Dg-Oeb" id="ze3-El-bMX"/>
                         <outlet property="btnRefreshRepository" destination="Ew1-wa-ZwC" id="T3N-xh-xVF"/>
+                        <outlet property="btnRemoveAllSelection" destination="Tuu-5h-g9B" id="WUI-hC-Chg"/>
                         <outlet property="btnRemoveRepository" destination="at5-dg-epR" id="QZg-Oi-TLk"/>
                         <outlet property="btnRemoveSelection" destination="lT1-yY-BTR" id="e6C-Ic-N4o"/>
                         <outlet property="btnReplaceDateTime" destination="Mqi-a1-a53" id="a2A-yp-vA7"/>
                         <outlet property="btnReplaceLocation" destination="yTk-hm-vhq" id="GpK-vI-DwS"/>
                         <outlet property="btnScanState" destination="XhD-V8-W0f" id="62F-lW-Dyb"/>
+                        <outlet property="btnShare" destination="0by-PK-DjP" id="b9S-z4-3RB"/>
                         <outlet property="btnShow" destination="W0U-Cw-aB7" id="rYg-OY-AwZ"/>
                         <outlet property="chbExport" destination="Qnu-5r-3Pb" id="shB-wc-ZF2"/>
                         <outlet property="chbScan" destination="pmP-SX-vWx" id="d0K-gZ-IpG"/>
@@ -2045,5 +2095,11 @@
         <image name="NSRemoveTemplate" width="11" height="11"/>
         <image name="NSSmartBadgeTemplate" width="14" height="14"/>
         <image name="NSStatusNone" width="16" height="16"/>
+        <image name="broom" width="16" height="16"/>
+        <image name="forward" width="17" height="16"/>
+        <image name="hide" width="17" height="15"/>
+        <image name="phone" width="12" height="16"/>
+        <image name="trash" width="16" height="16"/>
+        <image name="view" width="16" height="16"/>
     </resources>
 </document>
