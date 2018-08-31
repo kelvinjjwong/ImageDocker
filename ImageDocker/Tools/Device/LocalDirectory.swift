@@ -14,21 +14,23 @@ struct LocalDirectory {
     
     func datetime(of filename: String, in path:String) -> String {
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = pipe
-        command.currentDirectoryPath = path
-        command.launchPath = "/usr/bin/stat"
-        command.arguments = ["-l","-t","'%F %T'", filename]
-        do {
-            try command.run()
-        }catch{
-            print(error)
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = pipe
+            command.currentDirectoryPath = path
+            command.launchPath = "/usr/bin/stat"
+            command.arguments = ["-l","-t","'%F %T'", filename]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
         }
         //command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         if string != "" {
             let columns = string.components(separatedBy: " ")
             if columns.count > 7 {
@@ -45,21 +47,23 @@ struct LocalDirectory {
         print("getting files from \(path)")
         var result:[PhoneFile] = []
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = pipe
-        command.currentDirectoryPath = path
-        command.launchPath = "/bin/ls"
-        command.arguments = ["-goR"]
-        do {
-            try command.run()
-        }catch{
-            print(error)
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = pipe
+            command.currentDirectoryPath = path
+            command.launchPath = "/bin/ls"
+            command.arguments = ["-goR"]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
         }
         //command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         print(string)
         result = DeviceShell.getFilenames(from: string, basePath: path,
                                           excludeFilenames: ["directory", ".", ".."],
@@ -75,21 +79,23 @@ struct LocalDirectory {
         print("getting folders from \(path)")
         var result:[String] = []
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = pipe
-        command.currentDirectoryPath = path
-        command.launchPath = "/usr/bin/find"
-        command.arguments = [".", "-type", "d","-maxdepth", "1"]
-        do {
-            try command.run()
-        }catch{
-            print(error)
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = pipe
+            command.currentDirectoryPath = path
+            command.launchPath = "/usr/bin/find"
+            command.arguments = [".", "-type", "d","-maxdepth", "1"]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
         }
         //command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         //print(string)
         result = DeviceShell.getFolderNames(from: string)
         print("got \(result.count) folders from \(path)")
@@ -101,21 +107,23 @@ struct LocalDirectory {
         print("getting folders from \(path)")
         var result:[String] = []
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = pipe
-        command.currentDirectoryPath = path
-        command.launchPath = "/bin/ls"
-        command.arguments = ["-l"]
-        do {
-            try command.run()
-        }catch{
-            print(error)
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = pipe
+            command.currentDirectoryPath = path
+            command.launchPath = "/bin/ls"
+            command.arguments = ["-l"]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
         }
         //command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         result = DeviceShell.getFilenames(from: string,
                                           excludeFilenames: ["directory", ".", ".."],
                                           allowedExt: ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg"])

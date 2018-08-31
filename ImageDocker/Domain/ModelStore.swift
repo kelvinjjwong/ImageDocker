@@ -504,12 +504,30 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
-    func getAllPhotoFilesForExporting(after date:Date) -> [Image] {
+    func countAllPhotoFilesForExporting(after date:Date) -> Int {
+        var result = 0
+        do {
+            let db = try DatabasePool(path: dbfile)
+            try db.read { db in
+                result = try Image.filter(sql: "hidden != 1 AND photoTakenYear <> 0 AND photoTakenYear IS NOT NULL AND (updateDateTimeDate > ? OR updateExifDate > ? OR updateLocationDate > ? OR updateEventDate > ? OR exportTime is null)", arguments:StatementArguments([date, date, date, date])).fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func getAllPhotoFilesForExporting(after date:Date, limit:Int? = nil) -> [Image] {
         var result:[Image] = []
         do {
             let db = try DatabasePool(path: dbfile)
             try db.read { db in
-                result = try Image.filter(sql: "hidden != 1 AND (updateDateTimeDate > ? OR updateExifDate > ? OR updateLocationDate > ? OR updateEventDate > ? OR exportTime is null)", arguments:StatementArguments([date, date, date, date])).order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+                var query = Image.filter(sql: "hidden != 1 AND photoTakenYear <> 0 AND photoTakenYear IS NOT NULL AND (updateDateTimeDate > ? OR updateExifDate > ? OR updateLocationDate > ? OR updateEventDate > ? OR exportTime is null)", arguments:StatementArguments([date, date, date, date]))
+                    .order([Column("photoTakenDate").asc, Column("filename").asc])
+                if let lim = limit {
+                    query = query.limit(lim)
+                }
+                result = try query.fetchAll(db)
             }
         }catch{
             print(error)

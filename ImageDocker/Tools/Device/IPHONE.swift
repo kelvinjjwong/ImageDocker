@@ -32,16 +32,18 @@ struct IPHONE {
     func devices() -> [String]{
         var result:[String] = []
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = FileHandle.nullDevice
-        command.launchPath = ideviceid.path
-        command.arguments = ["-l"]
-        command.launch()
-        command.waitUntilExit()
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = FileHandle.nullDevice
+            command.launchPath = ideviceid.path
+            command.arguments = ["-l"]
+            command.launch()
+            command.waitUntilExit()
+        }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         let lines = string.components(separatedBy: "\n")
         for line in lines {
             if line != "" {
@@ -54,22 +56,24 @@ struct IPHONE {
     func mount(path:String) -> Bool{
         print("START TO MOUNT")
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = pipe
-        command.launchPath = ifuse.path
-        command.arguments = [path]
-        do {
-            try command.run()
-        }catch{
-            print(error)
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = pipe
+            command.launchPath = ifuse.path
+            command.arguments = [path]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
         }
         print("RUN MOUNT")
 //        command.launch()
 //        command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         print(string)
         if string.range(of: "No device found") != nil || string.range(of: "Input/output error") != nil {
             return false
@@ -80,20 +84,22 @@ struct IPHONE {
     
     func unmount(path:String){
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = FileHandle.nullDevice
-        command.launchPath = umount.path
-        command.arguments = [path]
-        do {
-            try command.run()
-        }catch{
-            print(error)
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = FileHandle.nullDevice
+            command.launchPath = umount.path
+            command.arguments = [path]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
         }
 //        command.launch()
 //        command.waitUntilExit()
         let _ = pipe.fileHandleForReading.readDataToEndOfFile()
+        pipe.fileHandleForReading.closeFile()
         //let _ = String(data: data, encoding: String.Encoding.utf8)!
 
     }
@@ -101,21 +107,23 @@ struct IPHONE {
     func mounted(path:String) -> Bool {
         guard devices().count > 0 else {return false}
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = FileHandle.nullDevice
-        command.launchPath = df.path
-        command.arguments = ["-H", path]
-        do {
-            try command.run()
-        }catch{
-            print(error)
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = FileHandle.nullDevice
+            command.launchPath = df.path
+            command.arguments = ["-H", path]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
         }
 //        command.launch()
 //        command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         print(string)
         let lines = string.components(separatedBy: "\n")
         print("lines = \(lines.count)")
@@ -131,16 +139,18 @@ struct IPHONE {
     
     func device() -> PhoneDevice? {
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = FileHandle.nullDevice
-        command.launchPath = ideviceinfo.path
-        command.arguments = []
-        command.launch()
-        command.waitUntilExit()
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = FileHandle.nullDevice
+            command.launchPath = ideviceinfo.path
+            command.arguments = []
+            command.launch()
+            command.waitUntilExit()
+        }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         if string.starts(with: "No device found") || string.range(of: "Input/output error") != nil {
             return nil
         }
@@ -231,17 +241,19 @@ struct IPHONE {
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: remoteUrl.path) {
             let pipe = Pipe()
+            autoreleasepool { () -> Void in
             let cmd = Process()
-            cmd.standardOutput = pipe
-            cmd.standardError = pipe
-            cmd.launchPath = "/sbin/md5"
-            cmd.arguments = []
-            cmd.arguments?.append(remoteUrl.path)
-            cmd.launch()
-            cmd.waitUntilExit()
-            
+                cmd.standardOutput = pipe
+                cmd.standardError = pipe
+                cmd.launchPath = "/sbin/md5"
+                cmd.arguments = []
+                cmd.arguments?.append(remoteUrl.path)
+                cmd.launch()
+                cmd.waitUntilExit()
+            }
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
             let string:String = String(data: data, encoding: String.Encoding.utf8)!
+            pipe.fileHandleForReading.closeFile()
             if string != "" && string.starts(with: "MD5 (") {
                 let comp:[String] = string.components(separatedBy: " = ")
                 if comp.count == 2 {
@@ -316,21 +328,23 @@ struct IPHONE {
     func datetime(of filename: String, in path:String, mountPoint:String) -> String {
         let workpath = URL(fileURLWithPath: mountPoint).appendingPathComponent(path).path
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = pipe
-        command.currentDirectoryPath = workpath
-        command.launchPath = "/usr/bin/stat"
-        command.arguments = ["-l","-t","'%F %T'", filename]
-        do {
-            try command.run()
-        }catch{
-            print(error)
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = pipe
+            command.currentDirectoryPath = workpath
+            command.launchPath = "/usr/bin/stat"
+            command.arguments = ["-l","-t","'%F %T'", filename]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
         }
         //command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         if string != "" {
             let columns = string.components(separatedBy: " ")
             if columns.count > 7 {
@@ -348,21 +362,23 @@ struct IPHONE {
         print("getting files from \(workpath)")
         var result:[PhoneFile] = []
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = pipe
-        command.currentDirectoryPath = workpath
-        command.launchPath = "/bin/ls"
-        command.arguments = ["-goR"]
-        do {
-            try command.run()
-        }catch{
-            print(error)
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = pipe
+            command.currentDirectoryPath = workpath
+            command.launchPath = "/bin/ls"
+            command.arguments = ["-goR"]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
         }
         //command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         print(string)
         result = DeviceShell.getFilenames(from: string, basePath: path,
                                           excludeFilenames: ["directory", ".", ".."],
@@ -379,21 +395,23 @@ struct IPHONE {
         print("getting folders from \(workpath)")
         var result:[String] = []
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = pipe
-        command.currentDirectoryPath = workpath
-        command.launchPath = "/usr/bin/find"
-        command.arguments = [".", "-type", "d","-maxdepth", "1"]
-        do {
-            try command.run()
-        }catch{
-            print(error)
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = pipe
+            command.currentDirectoryPath = workpath
+            command.launchPath = "/usr/bin/find"
+            command.arguments = [".", "-type", "d","-maxdepth", "1"]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
         }
         //command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         //print(string)
         result = DeviceShell.getFolderNames(from: string)
         print("got \(result.count) folders from \(workpath)")
@@ -406,21 +424,23 @@ struct IPHONE {
         print("getting folders from \(workpath)")
         var result:[String] = []
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = pipe
-        command.currentDirectoryPath = workpath
-        command.launchPath = "/bin/ls"
-        command.arguments = ["-l"]
-        do {
-            try command.run()
-        }catch{
-            print(error)
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = pipe
+            command.currentDirectoryPath = workpath
+            command.launchPath = "/bin/ls"
+            command.arguments = ["-l"]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
         }
         //command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         result = DeviceShell.getFilenames(from: string,
                                           excludeFilenames: ["directory", ".", ".."],
                                           allowedExt: ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg"])

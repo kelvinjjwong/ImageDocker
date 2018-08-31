@@ -28,19 +28,21 @@ struct Android {
     func devices() -> [String]{
         var result:[String] = []
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = FileHandle.nullDevice
-        command.launchPath = adb.path
-        command.arguments = ["devices", "-l"]
-        do {
-            try command.run()
-        }catch{
-            print(error)
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = FileHandle.nullDevice
+            command.launchPath = adb.path
+            command.arguments = ["devices", "-l"]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
         }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         print(string)
         if string.range(of: "* failed to start daemon") != nil || string.range(of: "error: cannot connect to daemon") != nil {
             return []
@@ -61,16 +63,18 @@ struct Android {
     
     func device(id:String) -> PhoneDevice? {
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = FileHandle.nullDevice
-        command.launchPath = adb.path
-        command.arguments = ["-s", id, "shell", "getprop"]
-        command.launch()
-        command.waitUntilExit()
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = FileHandle.nullDevice
+            command.launchPath = adb.path
+            command.arguments = ["-s", id, "shell", "getprop"]
+            command.launch()
+            command.waitUntilExit()
+        }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         if string.starts(with: "error: device") || string.range(of: "not found") != nil {
             return nil
         }
@@ -122,16 +126,18 @@ struct Android {
     
     func memory(device:PhoneDevice) -> PhoneDevice {
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = FileHandle.nullDevice
-        command.launchPath = adb.path
-        command.arguments = ["-s", device.deviceId, "shell", "df -h /storage/emulated"]
-        command.launch()
-        command.waitUntilExit()
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = FileHandle.nullDevice
+            command.launchPath = adb.path
+            command.arguments = ["-s", device.deviceId, "shell", "df -h /storage/emulated"]
+            command.launch()
+            command.waitUntilExit()
+        }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         if string.starts(with: "error: device") || string.range(of: "not found") != nil {
             return device
         }
@@ -163,22 +169,24 @@ struct Android {
     func exists(device id: String, path: String) -> Bool {
         print("checking if exists \(id) \(path)")
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = pipe
-        command.launchPath = adb.path
-        command.arguments = ["-s", id, "shell", "cd \(path)"]
-        //command.launch()
-        //print(command.isRunning)
-        do {
-            try command.run()
-        }catch{
-            print(error)
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = pipe
+            command.launchPath = adb.path
+            command.arguments = ["-s", id, "shell", "cd \(path)"]
+            //command.launch()
+            //print(command.isRunning)
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
         }
         //command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         //print(string)
         if string.range(of: "No such file or directory") != nil {
             return false
@@ -190,22 +198,24 @@ struct Android {
         print("getting files from \(id) \(path)")
         var result:[PhoneFile] = []
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = pipe
-        command.launchPath = adb.path
-        command.arguments = ["-s", id, "shell", "cd \(path); ls -gotR"]
-        //command.launch()
-        //print(command.isRunning)
-        do {
-            try command.run()
-        }catch{
-            print(error)
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = pipe
+            command.launchPath = adb.path
+            command.arguments = ["-s", id, "shell", "cd \(path); ls -gotR"]
+            //command.launch()
+            //print(command.isRunning)
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
         }
         //command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         //print(string)
         if string == "error: device '\(id)' not found" {
             return []
@@ -220,16 +230,18 @@ struct Android {
     
     func md5(device id: String, fileWithPath:String) -> String{
         let pipe = Pipe()
-        
+        autoreleasepool { () -> Void in
         let command = Process()
-        command.standardOutput = pipe
-        command.standardError = FileHandle.nullDevice
-        command.launchPath = adb.path
-        command.arguments = ["-s", id, "shell", "md5sum \(fileWithPath)"]
-        command.launch()
-        command.waitUntilExit()
+            command.standardOutput = pipe
+            command.standardError = FileHandle.nullDevice
+            command.launchPath = adb.path
+            command.arguments = ["-s", id, "shell", "md5sum \(fileWithPath)"]
+            command.launch()
+            command.waitUntilExit()
+        }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         if string != "" {
             let parts = string.components(separatedBy: " ")
             if parts.count > 1 {
@@ -241,16 +253,18 @@ struct Android {
     
     func md5(device id: String, path:String, filename:String) -> String{
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = FileHandle.nullDevice
-        command.launchPath = adb.path
-        command.arguments = ["-s", id, "shell", "cd \(path); md5sum \(filename)"]
-        command.launch()
-        command.waitUntilExit()
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = FileHandle.nullDevice
+            command.launchPath = adb.path
+            command.arguments = ["-s", id, "shell", "cd \(path); md5sum \(filename)"]
+            command.launch()
+            command.waitUntilExit()
+        }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         if string != "" {
             let parts = string.components(separatedBy: " ")
             if parts.count > 1 {
@@ -262,19 +276,21 @@ struct Android {
     
     func pull(device id: String, in folderPath:String, to targetPath:String) -> String{
         let pipe = Pipe()
-        
+        autoreleasepool { () -> Void in
         let command = Process()
-        command.standardOutput = pipe
-        command.standardError = FileHandle.nullDevice
-        command.launchPath = adb.path
-        command.arguments = ["-s", id, "pull", folderPath, targetPath]
-        do {
-            try command.run()
-        }catch{
-            print(error)
+            command.standardOutput = pipe
+            command.standardError = FileHandle.nullDevice
+            command.launchPath = adb.path
+            command.arguments = ["-s", id, "pull", folderPath, targetPath]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
         }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         let lines = string.components(separatedBy: "\n")
         return lines.count > 1 ? lines[lines.count - 2] : ""
     }
@@ -282,19 +298,21 @@ struct Android {
     func pull(device id: String, from filePath:String, to targetPath:String) -> Bool{
         print("pulling from \(filePath) to \(targetPath)")
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = FileHandle.nullDevice
-        command.launchPath = adb.path
-        command.arguments = ["-s", id, "pull", filePath, targetPath]
-        do {
-            try command.run()
-        }catch{
-            print(error)
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = FileHandle.nullDevice
+            command.launchPath = adb.path
+            command.arguments = ["-s", id, "pull", filePath, targetPath]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
         }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         let lines = string.components(separatedBy: "\n")
         let result = lines.count > 1 ? lines[lines.count - 2] : ""
         return result.range(of: "\(filePath): 1 file pulled.") != nil
@@ -302,19 +320,21 @@ struct Android {
     
     func push(device id: String, from filePath:String, to remoteFolder:String) -> String{
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = FileHandle.nullDevice
-        command.launchPath = adb.path
-        command.arguments = ["-s", id, "push", filePath, remoteFolder]
-        do {
-            try command.run()
-        }catch{
-            print(error)
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = FileHandle.nullDevice
+            command.launchPath = adb.path
+            command.arguments = ["-s", id, "push", filePath, remoteFolder]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
         }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         let lines = string.components(separatedBy: "\n")
         return lines.count > 1 ? lines[lines.count - 2] : ""
     }
@@ -328,20 +348,22 @@ struct Android {
         print("getting folders from \(path)")
         var result:[String] = []
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = pipe
-        command.launchPath = adb.path
-        command.arguments = ["-s", id, "shell", "cd \(path); find . -type d -maxdepth 1"]
-        do {
-            try command.run()
-        }catch{
-            print(error)
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = pipe
+            command.launchPath = adb.path
+            command.arguments = ["-s", id, "shell", "cd \(path); find . -type d -maxdepth 1"]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
         }
         //command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         result = DeviceShell.getFolderNames(from: string)
         print("got \(result.count) folders from \(path)")
         return result
@@ -352,20 +374,22 @@ struct Android {
         print("getting folders from \(path)")
         var result:[String] = []
         let pipe = Pipe()
-        
-        let command = Process()
-        command.standardOutput = pipe
-        command.standardError = pipe
-        command.launchPath = adb.path
-        command.arguments = ["-s", id, "shell", "cd \(path); ls -l"]
-        do {
-            try command.run()
-        }catch{
-            print(error)
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = pipe
+            command.launchPath = adb.path
+            command.arguments = ["-s", id, "shell", "cd \(path); ls -l"]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
         }
         //command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
         result = DeviceShell.getFilenames(from: string,
                                           excludeFilenames: ["directory", ".", ".."],
                                           allowedExt: ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg"])
