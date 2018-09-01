@@ -436,7 +436,7 @@ class ExportManager {
             // house keep
             
             print("\(Date()) EXPORT: HOUSE KEEP")
-            let allExportedFilenames:Set<String> = ModelStore.default.getAllExportedPhotoFilenames()
+            let allExportedFilenames:Set<String> = ModelStore.default.getAllExportedPhotoFilenames(includeHidden: false)
             
             let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: PreferencesController.exportDirectory()),
                                                             includingPropertiesForKeys: [.isDirectoryKey, .isReadableKey, .isWritableKey ],
