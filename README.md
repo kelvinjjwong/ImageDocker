@@ -1,6 +1,8 @@
 # ImageDocker
 
-A desktop application running on macOS to help organize pictures and videos between cameras/mobile devices and Plex Media Server.
+A desktop application help organize pictures and videos between cameras/mobile devices and Plex Media Server.
+
+![Platform](https://img.shields.io/badge/platforms-macOS%2010.13+-333333.svg)
 
 ## Major objectives
 
