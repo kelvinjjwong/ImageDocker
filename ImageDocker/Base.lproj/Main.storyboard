@@ -81,7 +81,6 @@
                 <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
                     <window key="window" title="Image Docker" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-                        <windowPositionMask key="initialPositionMask" leftStrut="YES"/>
                         <rect key="contentRect" x="10" y="10" width="1900" height="920"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
                         <value key="minSize" type="size" width="1900" height="900"/>
@@ -530,7 +529,7 @@
                                                 </connections>
                                             </button>
                                             <comboBox verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UJe-CL-XGt">
-                                                <rect key="frame" x="0.0" y="1" width="270" height="26"/>
+                                                <rect key="frame" x="0.0" y="1" width="270" height="25"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="270" id="KDF-ql-pIb"/>
                                                 </constraints>
@@ -1136,9 +1135,11 @@
                         <outlet property="metaInfoTableView" destination="ECf-s9-RCm" id="GLo-W4-I6C"/>
                         <outlet property="playerContainer" destination="73d-nT-eRs" id="WGK-6c-bD3"/>
                         <outlet property="possibleLocationText" destination="eVa-Lt-Qdt" id="5Jc-qh-QKJ"/>
+                        <outlet property="scrollviewMetaInfoTable" destination="fHj-eQ-neO" id="fXw-wh-FNt"/>
                         <outlet property="selectionCheckAllBox" destination="CaM-Tw-R04" id="CBY-PY-bPh"/>
                         <outlet property="selectionCollectionView" destination="ZyN-Zd-qQf" id="1QS-Hl-r3z"/>
                         <outlet property="sourceList" destination="gHI-hX-hSc" id="8ew-IO-5cp"/>
+                        <outlet property="splitviewPreview" destination="giR-in-kR4" id="kmu-km-TA6"/>
                         <outlet property="webLocation" destination="A1f-6H-jB4" id="wMq-w7-Ou5"/>
                         <outlet property="webPossibleLocation" destination="JL6-YH-lBk" id="NEr-J7-0aQ"/>
                     </connections>

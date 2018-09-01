@@ -33,6 +33,10 @@ class ViewController: NSViewController {
     var lastScanRepositories:Date?
     var scanPhotosToLoadExifTimer:Timer!
     
+    @IBOutlet weak var splitviewPreview: DarkSplitView!
+    @IBOutlet weak var scrollviewMetaInfoTable: NSScrollView!
+    
+    
     // MARK: Image preview
     var img:ImageFile!
     @IBOutlet weak var playerContainer: NSView!
@@ -181,8 +185,37 @@ class ViewController: NSViewController {
     
     // MARK: init
     
+    var windowInitial:Bool = false
+    
+    func resize() {
+        guard !windowInitial else {return}
+        let dockerHeight = 80
+        let menubarHeight = 20
+        
+        let screenWidth = NSScreen.main?.frame.width
+        let screenHeight = NSScreen.main?.frame.height
+        
+        let windowOriginPoint = CGPoint(x: 0, y: dockerHeight)
+        let newWidth = screenWidth!
+        let newHeight = screenHeight! - CGFloat(dockerHeight + menubarHeight)
+        let windowSize = NSMakeSize(newWidth, newHeight)
+        let windowMinSize = NSMakeSize(CGFloat(800), CGFloat(600))
+        
+        var windowFrame = self.view.window?.frame
+        windowFrame?.size = windowSize
+        windowFrame?.origin = windowOriginPoint
+        self.view.window?.maxSize = windowSize
+        self.view.window?.minSize = windowMinSize
+        self.view.window?.setFrame(windowFrame!, display: true)
+        
+        self.splitviewPreview.setPosition(newHeight - CGFloat(670), ofDividerAt: 0)
+        
+        windowInitial = true
+    }
+    
     override func viewDidAppear() {
         self.view.window?.delegate = self
+        self.resize()
     }
     
     override func viewDidLoad() {
