@@ -32,4 +32,4 @@ A desktop application running on macOS to help organize pictures and videos betw
 
 ## License
 
-The MIT License
+[The MIT License](LICENSE)
