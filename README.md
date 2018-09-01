@@ -44,7 +44,7 @@ v0.9.3
 
 ## Declaration
 
-- Any pre-release versions of this software is applied to author only.
+- Any pre-release versions of this software is applied to author/developer only.
 - Please backup source images in advance, before using any versions of this software.
 
 ## License
