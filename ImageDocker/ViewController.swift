@@ -199,12 +199,13 @@ class ViewController: NSViewController {
         let newWidth = screenWidth!
         let newHeight = screenHeight! - CGFloat(dockerHeight + menubarHeight)
         let windowSize = NSMakeSize(newWidth, newHeight)
-        let windowMinSize = NSMakeSize(CGFloat(800), CGFloat(600))
+        let windowMinSize = NSMakeSize(CGFloat(600), CGFloat(500))
+        let windowMaxSize = NSMakeSize(screenWidth!, screenHeight! - CGFloat(5))
         
         var windowFrame = self.view.window?.frame
         windowFrame?.size = windowSize
         windowFrame?.origin = windowOriginPoint
-        self.view.window?.maxSize = windowSize
+        self.view.window?.maxSize = windowMaxSize
         self.view.window?.minSize = windowMinSize
         self.view.window?.setFrame(windowFrame!, display: true)
         
