@@ -2,7 +2,7 @@
 
 A desktop application help organize pictures and videos between cameras/mobile devices and Plex Media Server.
 
-![Platform](https://img.shields.io/badge/platforms-macOS%2010.13+-333333.svg)
+![Platform](https://img.shields.io/badge/platforms-macOS%2010.13+-ff7711.svg)
 
 ## Major objectives
 
@@ -28,7 +28,7 @@ v0.9.3
 
 - [GRDB](https://github.com/groue/GRDB.swift): to manage data in a SQLite database ([The MIT License](https://github.com/groue/GRDB.swift/blob/master/LICENSE))
 - [ExifTool](https://www.sno.phy.queensu.ca/~phil/exiftool/): to load EXIF info from images ([Perl License](https://www.sno.phy.queensu.ca/~phil/exiftool/#license))
-- Baidu Map API: to recognize geolocation inside China, and to display maps
+- [Baidu Map API](http://lbsyun.baidu.com): to recognize geolocation inside China, and to display maps ([License](http://lbsyun.baidu.com/index.php?title=open/law))
 - [Google Map API](https://developers.google.com/maps/documentation/): to recognize geolocation outside China ([License](https://developers.google.com/terms/site-policies))
 - [Android Debug Bridge](https://developer.android.com/studio/command-line/adb): to detect and access Android devices ([License](https://developer.android.com/license))
 - [libimobiledevice](https://github.com/libimobiledevice/libimobiledevice): to detect and pair iOS devices ([LGPL License](https://github.com/libimobiledevice/libimobiledevice/blob/master/COPYING))
@@ -42,10 +42,11 @@ v0.9.3
 - Personal AP key of Baidu Map API is required for displaying maps and recognizing geolocations inside China
 - Personal AP key of Google Map API is required for recognizing geolocations outside China
 
-## Declaration
+## PLEASE NOTE
 
+- This software supports screen resolution not less than 1920 x 1080 .
 - Any pre-release versions of this software is applied to author/developer only.
-- Please backup source images in advance, before using any versions of this software.
+- Please backup source pictures and videos before using any versions of this software.
 
 ## License
 
