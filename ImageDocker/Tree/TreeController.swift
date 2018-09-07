@@ -150,52 +150,70 @@ extension ViewController : PXSourceListDelegate {
         var cellView: LCSourceListTableCellView? = nil
         if let sourceListItem: PXSourceListItem = item as? PXSourceListItem {
             
+            // SECTION
             if aSourceList.level(forItem: item) == 0 {
                 let sectionCellView:PXSourceListTableCellView = (aSourceList.makeView(withIdentifier: NSUserInterfaceItemIdentifier("HeaderCell"), owner: nil) as! PXSourceListTableCellView)
-                sectionCellView.textField?.textColor = NSColor.white
-                sectionCellView.textField?.stringValue = sourceListItem.title
+                
+                if let textField = sectionCellView.textField {
+                    textField.textColor = NSColor.white
+                    textField.stringValue = sourceListItem.title ?? ""
+                }
                 return sectionCellView
-            } else {
-                cellView = (aSourceList.makeView(withIdentifier: NSUserInterfaceItemIdentifier("DataCell"), owner: nil) as! LCSourceListTableCellView)
-            }
-            if let t:String = sourceListItem.title {
-                cellView?.textField?.stringValue = t
-                //print(t)
             }
             
-            cellView?.imageView?.image = sourceListItem.icon
+            // ITEM
+            cellView = (aSourceList.makeView(withIdentifier: NSUserInterfaceItemIdentifier("DataCell"), owner: nil) as! LCSourceListTableCellView)
             
-            //print(sourceListItem.representedObject)
-            
-            if sourceListItem.representedObject == nil {
-                // section, do nothing
-                //print("COLLECTION IS NULL \(sourceListItem.title ?? "")")
-                
-                //if self.momentToCollection[sourceListItem.title] != nil {
-                //    let _ = self.momentToCollection[sourceListItem.title]!
-                    //print("found collection: \(collection.title) \(collection.photoCount)")
-                //}
-            }else{
-                let collection: PhotoCollection = sourceListItem.representedObject as! PhotoCollection
-                
-                //print("COLLECTION: \(collection.title) , count: \(collection.photoCount)")
-                
-                let sourceTitle:String? = sourceListItem.title
-                let collectionTitle:String? = collection.title
-                if sourceTitle != nil && sourceTitle != "" {
-                    cellView?.textField?.stringValue = sourceListItem.title
-                } else {
-                    if collectionTitle != nil && collectionTitle != "" {
-                        cellView?.textField?.stringValue = collection.title
+            if let cv = cellView {
+                if let t:String = sourceListItem.title {
+                    if let textField = cv.textField {
+                        textField.stringValue = t
                     }
+                    //print(t)
                 }
-                if sourceTitle == nil && collectionTitle != nil {
-                    cellView?.textField?.stringValue = collectionTitle!
-                }
-                cellView?.badge?.stringValue = " \(collection.photoCount) "
-                cellView?.badge?.isHidden = (collection.photoCount == 0)
                 
-            
+                if let imageView = cv.imageView {
+                    imageView.image = sourceListItem.icon
+                }
+                
+                //print(sourceListItem.representedObject)
+                
+                if sourceListItem.representedObject == nil {
+                    // section, do nothing
+                    //print("COLLECTION IS NULL \(sourceListItem.title ?? "")")
+                    
+                    //if self.momentToCollection[sourceListItem.title] != nil {
+                    //    let _ = self.momentToCollection[sourceListItem.title]!
+                        //print("found collection: \(collection.title) \(collection.photoCount)")
+                    //}
+                }else{
+                    let collection: PhotoCollection = sourceListItem.representedObject as! PhotoCollection
+                    
+                    //print("COLLECTION: \(collection.title) , count: \(collection.photoCount)")
+                    
+                    let sourceTitle:String? = sourceListItem.title
+                    let collectionTitle:String? = collection.title
+                    
+                    if let textField = cv.textField {
+                    
+                        if sourceTitle != nil && sourceTitle != "" {
+                            textField.stringValue = sourceListItem.title
+                        } else {
+                            if collectionTitle != nil && collectionTitle != "" {
+                                textField.stringValue = collection.title
+                            }
+                        }
+                        if sourceTitle == nil && collectionTitle != nil {
+                            textField.stringValue = collectionTitle!
+                        }
+                    }
+                    if let badge = cv.badge {
+                        badge.stringValue = " \(collection.photoCount) "
+                        badge.isHidden = (collection.photoCount == 0)
+                    }
+                
+                }
+                return cv
             }
             return cellView!
         }else {

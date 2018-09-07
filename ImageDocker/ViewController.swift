@@ -97,6 +97,9 @@ class ViewController: NSViewController {
     var momentSectionOfTree : PXSourceListItem?
     var placeSectionOfTree : PXSourceListItem?
     var eventSectionOfTree : PXSourceListItem?
+    
+    @IBOutlet weak var treeIndicator: NSLevelIndicator!
+    
 
     var selectedImageFolder:ImageFolder?
     var selectedImageFile:String = ""
@@ -404,18 +407,43 @@ class ViewController: NSViewController {
     }
     
     func configureTree(){
-        self.initTreeDataModel()
-        print("\(Date()) Loading view - configure tree - loading path to tree from db")
-        self.loadPathToTreeFromDatabase()
-        print("\(Date()) Loading view - configure tree - loading moments to tree from db")
-        self.loadMomentsToTreeFromDatabase()
-        print("\(Date()) Loading view - configure tree - loading places to tree from db")
-        self.loadPlacesToTreeFromDatabase()
-        print("\(Date()) Loading view - configure tree - loading events to tree from db")
-        self.loadEventsToTreeFromDatabase()
-        print("\(Date()) Loading view - configure tree - reloading tree view")
         self.sourceList.backgroundColor = NSColor.darkGray
-        self.sourceList.reloadData()
+        self.treeIndicator.isEnabled = true
+        self.treeIndicator.isHidden = false
+        DispatchQueue.global().async {
+            
+            self.initTreeDataModel()
+            DispatchQueue.main.async {
+                self.treeIndicator.doubleValue = 1.0
+            }
+            print("\(Date()) Loading view - configure tree - loading path to tree from db")
+            self.loadPathToTreeFromDatabase()
+            DispatchQueue.main.async {
+                self.treeIndicator.doubleValue = 2.0
+            }
+            print("\(Date()) Loading view - configure tree - loading moments to tree from db")
+            self.loadMomentsToTreeFromDatabase()
+            DispatchQueue.main.async {
+                self.treeIndicator.doubleValue = 3.0
+            }
+            print("\(Date()) Loading view - configure tree - loading places to tree from db")
+            self.loadPlacesToTreeFromDatabase()
+            DispatchQueue.main.async {
+                self.treeIndicator.doubleValue = 4.0
+            }
+            print("\(Date()) Loading view - configure tree - loading events to tree from db")
+            self.loadEventsToTreeFromDatabase()
+            DispatchQueue.main.async {
+                self.treeIndicator.doubleValue = 5.0
+            }
+            
+            print("\(Date()) Loading view - configure tree - reloading tree view")
+            DispatchQueue.main.async {
+                self.sourceList.reloadData()
+                self.treeIndicator.isEnabled = false
+                self.treeIndicator.isHidden = true
+            }
+        }
     }
     
     func configurePreview(){
@@ -701,26 +729,76 @@ class ViewController: NSViewController {
                     imagesLoader.clean()
                     collectionView.reloadData()
                     
-                    self.saveTreeItemsExpandState()
-                    self.refreshMomentTree()
-                    self.refreshLocationTree()
-                    self.restoreTreeItemsExpandState()
-                    self.restoreTreeSelection()
+                    
+                    self.treeIndicator.doubleValue = 0.0
+                    self.treeIndicator.isHidden = false
+                    self.treeIndicator.isEnabled = true
+                    
+                    DispatchQueue.global().async {
+                        self.saveTreeItemsExpandState()
+                        DispatchQueue.main.async {
+                            self.treeIndicator.doubleValue = 1.0
+                        }
+                        self.refreshMomentTree()
+                        DispatchQueue.main.async {
+                            self.treeIndicator.doubleValue = 2.0
+                        }
+                        self.refreshLocationTree()
+                        DispatchQueue.main.async {
+                            self.treeIndicator.doubleValue = 3.0
+                        }
+                        
+                        DispatchQueue.main.async {
+                            self.restoreTreeItemsExpandState()
+                            self.treeIndicator.doubleValue = 4.0
+                            self.restoreTreeSelection()
+                            self.treeIndicator.doubleValue = 5.0
+                            
+                            self.treeIndicator.isHidden = true
+                            self.treeIndicator.isEnabled = false
+                        }
+                    }
                 }
             }
         }
     }
     
     func refreshTree(fast:Bool = true) {
-        self.saveTreeItemsExpandState()
-        
-        self.refreshLibraryTree(fast: fast)
-        self.refreshMomentTree()
-        self.refreshLocationTree()
-        self.refreshEventTree()
-        
-        self.restoreTreeItemsExpandState()
-        self.restoreTreeSelection()
+        self.treeIndicator.doubleValue = 0.0
+        self.treeIndicator.isHidden = false
+        self.treeIndicator.isEnabled = true
+        DispatchQueue.global().async {
+            
+            self.saveTreeItemsExpandState()
+            DispatchQueue.main.async {
+                self.treeIndicator.doubleValue = 1.0
+            }
+            
+            self.refreshLibraryTree(fast: fast)
+            DispatchQueue.main.async {
+                self.treeIndicator.doubleValue = 2.0
+            }
+            self.refreshMomentTree()
+            DispatchQueue.main.async {
+                self.treeIndicator.doubleValue = 3.0
+            }
+            self.refreshLocationTree()
+            DispatchQueue.main.async {
+                self.treeIndicator.doubleValue = 4.0
+            }
+            self.refreshEventTree()
+            DispatchQueue.main.async {
+                self.treeIndicator.doubleValue = 5.0
+            }
+            
+            DispatchQueue.main.async {
+                self.restoreTreeItemsExpandState()
+                self.restoreTreeSelection()
+                
+                self.treeIndicator.isHidden = true
+                self.treeIndicator.isEnabled = false
+            }
+        }
     }
     
     @IBAction func onRefreshButtonClicked(_ sender: Any) {

@@ -316,13 +316,22 @@
                                                                     <action selector="onFilterButtonClicked:" target="XfG-lQ-9wD" id="URS-ow-1te"/>
                                                                 </connections>
                                                             </button>
+                                                            <levelIndicator verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vYn-Q1-Bht">
+                                                                <rect key="frame" x="87" y="9" width="61" height="16"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="60" id="CD4-Rm-KGw"/>
+                                                                </constraints>
+                                                                <levelIndicatorCell key="cell" alignment="left" maxValue="5" warningValue="1" id="eER-ta-b5t"/>
+                                                            </levelIndicator>
                                                         </subviews>
                                                         <constraints>
                                                             <constraint firstItem="ceG-A8-dKi" firstAttribute="top" secondItem="du2-Hq-a9E" secondAttribute="bottom" constant="8" id="1EQ-kC-8Kj"/>
                                                             <constraint firstItem="du2-Hq-a9E" firstAttribute="top" secondItem="CKk-CL-9gu" secondAttribute="top" id="1ah-Dr-dWS"/>
                                                             <constraint firstItem="du2-Hq-a9E" firstAttribute="leading" secondItem="CKk-CL-9gu" secondAttribute="leading" id="7XE-rq-8KS"/>
+                                                            <constraint firstItem="vYn-Q1-Bht" firstAttribute="leading" secondItem="XhD-V8-W0f" secondAttribute="trailing" constant="8" id="9DX-pa-gsV"/>
                                                             <constraint firstAttribute="trailing" secondItem="du2-Hq-a9E" secondAttribute="trailing" id="C4s-Go-U0E"/>
                                                             <constraint firstItem="0Z2-AE-WbE" firstAttribute="top" secondItem="du2-Hq-a9E" secondAttribute="bottom" constant="8" id="CTH-Qi-3E1"/>
+                                                            <constraint firstItem="vYn-Q1-Bht" firstAttribute="top" secondItem="du2-Hq-a9E" secondAttribute="bottom" constant="10" id="ETR-8y-Lku"/>
                                                             <constraint firstItem="ceG-A8-dKi" firstAttribute="leading" secondItem="0Z2-AE-WbE" secondAttribute="trailing" constant="8" id="Hwx-Xn-9du"/>
                                                             <constraint firstItem="Ew1-wa-ZwC" firstAttribute="top" secondItem="du2-Hq-a9E" secondAttribute="bottom" constant="8" id="ISO-2M-gJV"/>
                                                             <constraint firstAttribute="bottom" secondItem="pmP-SX-vWx" secondAttribute="bottom" constant="11" id="M5G-gb-Xle"/>
@@ -1162,6 +1171,7 @@
                         <outlet property="selectionCollectionView" destination="ZyN-Zd-qQf" id="1QS-Hl-r3z"/>
                         <outlet property="sourceList" destination="gHI-hX-hSc" id="8ew-IO-5cp"/>
                         <outlet property="splitviewPreview" destination="giR-in-kR4" id="kmu-km-TA6"/>
+                        <outlet property="treeIndicator" destination="vYn-Q1-Bht" id="Bkx-Sh-euL"/>
                         <outlet property="webLocation" destination="A1f-6H-jB4" id="wMq-w7-Ou5"/>
                         <outlet property="webPossibleLocation" destination="JL6-YH-lBk" id="NEr-J7-0aQ"/>
                     </connections>

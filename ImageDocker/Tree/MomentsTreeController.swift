@@ -68,13 +68,22 @@ extension ViewController {
         // remove items in moments
         for _ in (count > 1 ? 1 : count)...(count > 1 ? count : 1) {
             //let index:Int = i - 1
-            self.sourceList.removeItems(at: NSIndexSet(index: 0) as IndexSet,
-                                        inParent: self.momentItem(),
-                                        withAnimation: NSTableView.AnimationOptions.slideUp)
+            
+            DispatchQueue.main.async {
+                self.sourceList.removeItems(at: NSIndexSet(index: 0) as IndexSet,
+                                            inParent: self.momentItem(),
+                                            withAnimation: NSTableView.AnimationOptions.slideUp)
+            }
         }
-        self.momentItem().children.removeAll()
+        
+        DispatchQueue.main.async {
+            self.momentItem().children.removeAll()
+        }
         self.loadMomentsToTreeFromDatabase(filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel)
-        self.sourceList.reloadData()
+        
+        DispatchQueue.main.async {
+            self.sourceList.reloadData()
+        }
         
     }
     

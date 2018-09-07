@@ -65,14 +65,21 @@ extension ViewController {
         // remove items in moments
         for _ in (count > 1 ? 1 : count)...(count > 1 ? count : 1) {
             //let index:Int = i - 1
-            
-            self.sourceList.removeItems(at: NSIndexSet(index: 0) as IndexSet,
-                                        inParent: self.libraryItem(),
-                                        withAnimation: NSTableView.AnimationOptions.slideUp)
+            DispatchQueue.main.async {
+                self.sourceList.removeItems(at: NSIndexSet(index: 0) as IndexSet,
+                                            inParent: self.libraryItem(),
+                                            withAnimation: NSTableView.AnimationOptions.slideUp)
+            }
         }
-        self.libraryItem().children.removeAll()
+        
+        DispatchQueue.main.async {
+            self.libraryItem().children.removeAll()
+        }
         self.loadPathToTreeFromDatabase(fast: fast)
-        self.sourceList.reloadData()
+        
+        DispatchQueue.main.async {
+            self.sourceList.reloadData()
+        }
     }
     
     // MARK: ADD NODES
