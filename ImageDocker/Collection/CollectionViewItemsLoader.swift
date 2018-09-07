@@ -361,6 +361,26 @@ class CollectionViewItemsLoader: NSObject {
         self.sections = sortedSections
     }
     
+    func checkAll() {
+        for section in sections {
+            for item in section.items {
+                if let viewItem = item.collectionViewItem {
+                    viewItem.check()
+                }
+            }
+        }
+    }
+    
+    func uncheckAll() {
+        for section in sections {
+            for item in section.items {
+                if let viewItem = item.collectionViewItem {
+                    viewItem.uncheck()
+                }
+            }
+        }
+    }
+    
     private func sortItems(in section:CollectionViewSection) {
         var dates:Set<String> = []
         for item in section.items {

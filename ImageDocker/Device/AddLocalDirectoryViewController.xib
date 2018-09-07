@@ -93,7 +93,7 @@ DQ
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xmh-5Q-CVk">
                     <rect key="frame" x="10" y="67" width="150" height="320"/>
                     <clipView key="contentView" id="LM1-Rg-ldN">
-                        <rect key="frame" x="1" y="23" width="148" height="296"/>
+                        <rect key="frame" x="1" y="0.0" width="148" height="319"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="z93-7M-324" viewBased="YES" id="574-rJ-2cG">
@@ -147,7 +147,7 @@ DQ
                         <rect key="frame" x="1" y="303" width="148" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
-                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="0VT-1w-W83">
+                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="0VT-1w-W83">
                         <rect key="frame" x="224" y="17" width="15" height="102"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
@@ -159,7 +159,7 @@ DQ
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lhb-ec-plZ">
                     <rect key="frame" x="168" y="67" width="229" height="320"/>
                     <clipView key="contentView" id="dhU-Ft-mAG">
-                        <rect key="frame" x="1" y="23" width="227" height="296"/>
+                        <rect key="frame" x="1" y="0.0" width="227" height="319"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="meP-mF-v3H" viewBased="YES" id="VWA-Fz-8zf">
@@ -222,7 +222,7 @@ DQ
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H6d-S3-D8u">
                     <rect key="frame" x="405" y="67" width="385" height="320"/>
                     <clipView key="contentView" id="nQC-bm-ZMh">
-                        <rect key="frame" x="1" y="23" width="383" height="296"/>
+                        <rect key="frame" x="1" y="0.0" width="383" height="319"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="0KQ-JT-VNH" viewBased="YES" id="WyE-8J-Vj5">
@@ -309,7 +309,7 @@ DQ
                         <rect key="frame" x="1" y="303" width="383" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
-                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="1q5-F1-Xkd">
+                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="1q5-F1-Xkd">
                         <rect key="frame" x="224" y="17" width="15" height="102"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
@@ -324,6 +324,9 @@ DQ
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="onParentClicked:" target="-2" id="Gzq-eo-NNh"/>
+                    </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aKr-Xr-7en">
                     <rect key="frame" x="746" y="389" width="50" height="32"/>
@@ -331,6 +334,9 @@ DQ
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="onHomeClicked:" target="-2" id="mc5-Lb-BRv"/>
+                    </connections>
                 </button>
             </subviews>
             <constraints>

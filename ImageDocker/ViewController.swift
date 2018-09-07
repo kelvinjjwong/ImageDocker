@@ -117,6 +117,7 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var chbExport: NSButton!
     @IBOutlet weak var chbScan: NSButton!
+    @IBOutlet weak var chbSelectAll: NSButton!
     
     
     // MARK: Collection View for browsing
@@ -844,6 +845,15 @@ class ViewController: NSViewController {
     }
     
     
+    @IBAction func onCheckSelectAllClicked(_ sender: NSButton) {
+        if self.chbSelectAll.state == .on {
+            self.imagesLoader.checkAll()
+        }else{
+            self.imagesLoader.uncheckAll()
+        }
+    }
+    
+    
     @IBAction func onCheckShowHiddenClicked(_ sender: NSButton) {
         if self.chbShowHidden.state == NSButton.StateValue.on {
             self.imagesLoader.showHidden = true
@@ -921,6 +931,7 @@ class ViewController: NSViewController {
             }
         }
         self.selectionCheckAllBox.state = NSButton.StateValue.off
+        self.chbSelectAll.state = NSButton.StateValue.off
     }
     
     
