@@ -54,6 +54,7 @@ class ImageFolderTreeScanner {
         
         print("\(Date()) Setting up containers' parent ")
         var urlFolders:[String:ImageFolder] = [:]
+        var foldersNeedSave:Set<ImageFolder> = []
         for container in containers {
             let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path), countOfImages: Int(container.imageCount), updateModelStore: false, sharedDB: ModelStore.sharedDBPool())
             urlFolders[container.path] = imageFolder
@@ -65,17 +66,30 @@ class ImageFolderTreeScanner {
                 }else{
                     if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
                         imageFolder.setParent(parent)
+                        foldersNeedSave.insert(imageFolder)
                     }
                 }
                 
             }else{
                 if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
                     imageFolder.setParent(parent)
+                    foldersNeedSave.insert(imageFolder)
                 }
             }
             imageFolders.append(imageFolder)
         }
         print("\(Date()) Setting up containers' parent: DONE ")
+        
+        if foldersNeedSave.count > 0 {
+            print("\(Date()) Saving containers' parent")
+            for imageFolder in foldersNeedSave {
+                if let imageContainer = imageFolder.containerFolder {
+                    ModelStore.default.saveImageContainer(container: imageContainer)
+                }
+            }
+            print("\(Date()) Saving containers' parent: DONE ")
+        }
+        
         return imageFolders
     }
     

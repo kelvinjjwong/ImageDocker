@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "tick.png",
+      "filename" : "tick_16px.png",
       "scale" : "1x"
     },
     {

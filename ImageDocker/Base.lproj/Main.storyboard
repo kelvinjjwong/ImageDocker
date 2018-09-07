@@ -308,7 +308,7 @@
                                                                     <constraint firstAttribute="width" constant="20" id="Db7-8N-G9C"/>
                                                                     <constraint firstAttribute="height" constant="20" id="gF6-EU-FXw"/>
                                                                 </constraints>
-                                                                <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSSmartBadgeTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vQj-dl-ihQ">
+                                                                <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="search" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vQj-dl-ihQ">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
@@ -574,8 +574,8 @@
                                                 </datePickerCell>
                                             </datePicker>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mqi-a1-a53">
-                                                <rect key="frame" x="680" y="-2" width="182" height="32"/>
-                                                <buttonCell key="cell" type="push" title="▲ Replace Date &amp; Time" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qha-6H-tXU">
+                                                <rect key="frame" x="680" y="-2" width="104" height="32"/>
+                                                <buttonCell key="cell" type="push" title="▲ Replace" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qha-6H-tXU">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
@@ -584,8 +584,9 @@
                                                 </connections>
                                             </button>
                                             <progressIndicator wantsLayer="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="9ri-yc-r9m">
-                                                <rect key="frame" x="864" y="6" width="125" height="20"/>
+                                                <rect key="frame" x="869" y="6" width="120" height="20"/>
                                                 <constraints>
+                                                    <constraint firstAttribute="width" constant="120" id="Xpt-Ff-Zm4"/>
                                                     <constraint firstAttribute="height" constant="18" id="i48-xy-Jza"/>
                                                 </constraints>
                                             </progressIndicator>
@@ -664,6 +665,13 @@
                                                     <action selector="onAssignEventButtonClicked:" target="XfG-lQ-9wD" id="6De-vX-jxC"/>
                                                 </connections>
                                             </button>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qYv-ia-zVJ">
+                                                <rect key="frame" x="782" y="-2" width="52" height="32"/>
+                                                <buttonCell key="cell" type="push" bezelStyle="rounded" image="clock" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="r9M-rt-OtB">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="CaM-Tw-R04" secondAttribute="bottom" constant="8" id="02d-3o-exU"/>
@@ -683,6 +691,8 @@
                                             <constraint firstItem="fBu-cK-CdX" firstAttribute="leading" secondItem="xCg-De-lnA" secondAttribute="trailing" constant="10" id="OCI-WN-oWT"/>
                                             <constraint firstAttribute="bottom" secondItem="Mqi-a1-a53" secondAttribute="bottom" constant="5" id="Pne-OV-vb1"/>
                                             <constraint firstAttribute="bottom" secondItem="Le0-oR-2MN" secondAttribute="bottom" constant="5" id="T8F-Lj-pYh"/>
+                                            <constraint firstItem="qYv-ia-zVJ" firstAttribute="leading" secondItem="Mqi-a1-a53" secondAttribute="trailing" constant="10" id="UHA-Zl-5gH"/>
+                                            <constraint firstItem="qYv-ia-zVJ" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="10" id="Vwg-5N-pIu"/>
                                             <constraint firstItem="Zj8-N8-ari" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="10" id="Xif-oD-Xtu"/>
                                             <constraint firstAttribute="trailing" secondItem="ivI-8f-yJa" secondAttribute="trailing" constant="5" id="ZbI-YX-bmA"/>
                                             <constraint firstAttribute="bottom" secondItem="W0U-Cw-aB7" secondAttribute="bottom" constant="4" id="bxK-ob-x74"/>
@@ -699,7 +709,6 @@
                                             <constraint firstAttribute="bottom" secondItem="QJ8-hF-79J" secondAttribute="bottom" constant="4" id="pXB-Yj-7IB"/>
                                             <constraint firstItem="xCg-De-lnA" firstAttribute="leading" secondItem="UJe-CL-XGt" secondAttribute="trailing" constant="8" id="vTQ-UU-Aeo"/>
                                             <constraint firstItem="W0U-Cw-aB7" firstAttribute="leading" secondItem="Zj8-N8-ari" secondAttribute="trailing" constant="10" id="wvO-qL-4Mc"/>
-                                            <constraint firstItem="9ri-yc-r9m" firstAttribute="leading" secondItem="Mqi-a1-a53" secondAttribute="trailing" constant="8" id="xyd-wX-bTB"/>
                                             <constraint firstAttribute="bottom" secondItem="lT1-yY-BTR" secondAttribute="bottom" constant="5" id="ywS-e6-idT"/>
                                         </constraints>
                                     </customView>
@@ -2107,12 +2116,13 @@
         <image name="NSAddTemplate" width="11" height="11"/>
         <image name="NSRefreshTemplate" width="11" height="15"/>
         <image name="NSRemoveTemplate" width="11" height="11"/>
-        <image name="NSSmartBadgeTemplate" width="14" height="14"/>
         <image name="NSStatusNone" width="16" height="16"/>
         <image name="broom" width="16" height="16"/>
+        <image name="clock" width="16" height="16"/>
         <image name="forward" width="17" height="16"/>
         <image name="hide" width="17" height="15"/>
         <image name="phone" width="12" height="16"/>
+        <image name="search" width="16" height="16"/>
         <image name="trash" width="16" height="16"/>
         <image name="view" width="16" height="16"/>
     </resources>
