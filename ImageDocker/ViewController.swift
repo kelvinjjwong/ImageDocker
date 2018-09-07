@@ -406,8 +406,12 @@ class ViewController: NSViewController {
         
     }
     
+    // init trees
     func configureTree(){
         self.sourceList.backgroundColor = NSColor.darkGray
+        
+        self.hideToolbarOfTree()
+        self.hideToolbarOfCollectionView()
         self.treeIndicator.isEnabled = true
         self.treeIndicator.isHidden = false
         DispatchQueue.global().async {
@@ -442,8 +446,41 @@ class ViewController: NSViewController {
                 self.sourceList.reloadData()
                 self.treeIndicator.isEnabled = false
                 self.treeIndicator.isHidden = true
+                
+                self.showToolbarOfTree()
+                self.showToolbarOfCollectionView()
             }
         }
+    }
+    
+    fileprivate func hideToolbarOfTree() {
+        self.chbScan.isHidden = true
+        self.btnAddRepository.isHidden = true
+        self.btnRemoveRepository.isHidden = true
+        self.btnRefreshRepository.isHidden = true
+        self.btnFilterRepository.isHidden = true
+    }
+    
+    fileprivate func hideToolbarOfCollectionView() {
+        self.chbExport.isHidden = true
+        self.btnRefreshCollectionView.isHidden = true
+        self.chbSelectAll.isHidden = true
+        self.chbShowHidden.isHidden = true
+    }
+    
+    fileprivate func showToolbarOfTree() {
+        self.chbScan.isHidden = false
+        self.btnAddRepository.isHidden = false
+        self.btnRemoveRepository.isHidden = false
+        self.btnRefreshRepository.isHidden = false
+        self.btnFilterRepository.isHidden = false
+    }
+    
+    fileprivate func showToolbarOfCollectionView() {
+        self.chbExport.isHidden = false
+        self.btnRefreshCollectionView.isHidden = false
+        self.chbSelectAll.isHidden = false
+        self.chbShowHidden.isHidden = false
     }
     
     func configurePreview(){
@@ -730,6 +767,8 @@ class ViewController: NSViewController {
                     collectionView.reloadData()
                     
                     
+                    self.hideToolbarOfTree()
+                    self.hideToolbarOfCollectionView()
                     self.treeIndicator.doubleValue = 0.0
                     self.treeIndicator.isHidden = false
                     self.treeIndicator.isEnabled = true
@@ -756,6 +795,9 @@ class ViewController: NSViewController {
                             
                             self.treeIndicator.isHidden = true
                             self.treeIndicator.isEnabled = false
+                            
+                            self.showToolbarOfTree()
+                            self.showToolbarOfCollectionView()
                         }
                     }
                 }
@@ -764,9 +806,15 @@ class ViewController: NSViewController {
     }
     
     func refreshTree(fast:Bool = true) {
-        self.treeIndicator.doubleValue = 0.0
-        self.treeIndicator.isHidden = false
-        self.treeIndicator.isEnabled = true
+        
+        DispatchQueue.main.async {
+            self.hideToolbarOfTree()
+            self.hideToolbarOfCollectionView()
+            
+            self.treeIndicator.doubleValue = 0.0
+            self.treeIndicator.isHidden = false
+            self.treeIndicator.isEnabled = true
+        }
         DispatchQueue.global().async {
             
             self.saveTreeItemsExpandState()
@@ -797,6 +845,9 @@ class ViewController: NSViewController {
                 
                 self.treeIndicator.isHidden = true
                 self.treeIndicator.isEnabled = false
+                
+                self.showToolbarOfTree()
+                self.showToolbarOfCollectionView()
             }
         }
     }
@@ -804,8 +855,16 @@ class ViewController: NSViewController {
     @IBAction func onRefreshButtonClicked(_ sender: Any) {
         print("clicked refresh button")
         
-        ModelStore.default.reloadDuplicatePhotos()
-        self.refreshTree(fast: false)
+        self.hideToolbarOfTree()
+        self.hideToolbarOfCollectionView()
+        
+        self.treeIndicator.doubleValue = 0.0
+        self.treeIndicator.isHidden = false
+        self.treeIndicator.isEnabled = true
+        DispatchQueue.global().async {
+            ModelStore.default.reloadDuplicatePhotos()
+            self.refreshTree(fast: false)
+        }
     }
     
     var filterImageSource:[String] = []

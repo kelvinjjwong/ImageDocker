@@ -100,8 +100,10 @@ extension ViewController {
         
         // save expandable state of all items, mark by moment.id
         for idItem in self.treeIdItems {
-            let expanded = self.sourceList.isItemExpanded(idItem.value)
-            self.treeIdItemsExpandState[idItem.key] = expanded
+            DispatchQueue.main.async {
+                let expanded = self.sourceList.isItemExpanded(idItem.value)
+                self.treeIdItemsExpandState[idItem.key] = expanded
+            }
             //if expanded {
             //    print("EXPANDED \(idItem.key)")
             //}

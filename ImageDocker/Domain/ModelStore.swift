@@ -143,7 +143,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         var firstPhotoInPlaceAndDate:[String:String] = [:]
         print("\(Date()) Marking duplicate tag to photo files")
         do {
-            let db = try DatabaseQueue(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 let marks = repeatElement("?", count: dupDates.count).joined(separator: ",")
                 let photosInSameDate = try Row.fetchCursor(db, "SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place FROM Image WHERE photoTakenYear <> 0 AND photoTakenYear IS NOT NULL AND photoTakenDate in (\(marks))", arguments:StatementArguments(dupDates))
@@ -180,7 +180,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func getAllContainerPaths() -> [Row] {
         var rows:[Row] = []
         do {
-            let db = try DatabaseQueue(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 rows = try Row.fetchAll(db, "SELECT containerPath, count(path) as photoCount FROM Image GROUP BY containerPath")
             }
@@ -197,7 +197,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func getImageSources() -> [String:Bool]{
         var results:[String:Bool] = [:]
         do {
-            let db = try DatabaseQueue(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, "SELECT DISTINCT imageSource FROM Image")
                 for row in rows {
@@ -217,7 +217,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func getCameraModel() -> [String:Bool] {
         var results:[String:Bool] = [:]
         do {
-            let db = try DatabaseQueue(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, "SELECT DISTINCT cameraMaker,cameraModel FROM Image")
                 for row in rows {
@@ -241,7 +241,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         var containers:[ImageContainer] = []
         
         do {
-            let dbPool = try DatabasePool(path: dbfile)
+            let dbPool = ModelStore.sharedDBPool()
             try dbPool.read { db in
                 containers = try ImageContainer.order(Column("path").asc).fetchAll(db)
             }
@@ -253,7 +253,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     func deleteContainer(path: String) {
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try db.execute("DELETE FROM ImageContainer WHERE path LIKE '\(path)/%'")
                 try db.execute("DELETE FROM Image WHERE path LIKE '\(path)/%'")
@@ -266,7 +266,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func getContainers(rootPath:String) -> [ImageContainer] {
         var result:[ImageContainer] = []
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 result = try ImageContainer.filter(Column("path").like("\(rootPath)%")).fetchAll(db)
             }
@@ -299,7 +299,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func getRepositories() -> [ImageContainer] {
         var result:[ImageContainer] = []
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 result = try ImageContainer.filter(sql: "parentFolder=''").order(Column("path").asc).fetchAll(db)
                 print(result.count)
@@ -314,7 +314,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func saveImageContainer(container:ImageContainer){
         var container = container
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try container.save(db)
             }
@@ -361,7 +361,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     func deletePhoto(atPath path:String){
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
                 try Image.deleteOne(db, key: path)
             }
@@ -426,7 +426,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         
         var result:[Image] = []
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(sql: "containerPath = ? \(otherPredicate)", arguments: StatementArguments([parentPath])).order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
             }
@@ -439,7 +439,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func getPhotoFiles(rootPath:String) -> [Image] {
         var result:[Image] = []
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(Column("path").like("\(rootPath)%")).fetchAll(db)
             }
@@ -452,7 +452,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func countPhotoFiles(rootPath:String) -> Int {
         var result:Int = 0
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(Column("path").like("\(rootPath)%")).fetchCount(db)
             }
@@ -467,7 +467,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func getPhotoFilesWithoutExif(limit:Int? = nil) -> [Image] {
         var result:[Image] = []
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(sql: "hidden != 1 AND (updateExifDate is null OR photoTakenYear is null OR photoTakenYear = 0 OR (latitude <> '0.0' AND latitudeBD = '0.0') OR (latitudeBD <> '0.0' AND COUNTRY = ''))").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
                 // TODO: OR updateLocationDate is null
@@ -481,7 +481,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func getPhotoFilesWithoutLocation() -> [Image] {
         var result:[Image] = []
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(sql: "hidden != 1 AND updateLocationDate is null").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
             }
@@ -494,7 +494,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func getPhotoFiles(after date:Date) -> [Image] {
         var result:[Image] = []
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(sql: "updateLocationDate >= ?", arguments: StatementArguments([date])).fetchAll(db)
             }
@@ -507,7 +507,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func countAllPhotoFilesForExporting(after date:Date) -> Int {
         var result = 0
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(sql: "hidden != 1 AND photoTakenYear <> 0 AND photoTakenYear IS NOT NULL AND (updateDateTimeDate > ? OR updateExifDate > ? OR updateLocationDate > ? OR updateEventDate > ? OR exportTime is null)", arguments:StatementArguments([date, date, date, date])).fetchCount(db)
             }
@@ -520,7 +520,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func getAllPhotoFilesForExporting(after date:Date, limit:Int? = nil) -> [Image] {
         var result:[Image] = []
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 var query = Image.filter(sql: "hidden != 1 AND photoTakenYear <> 0 AND photoTakenYear IS NOT NULL AND (updateDateTimeDate > ? OR updateExifDate > ? OR updateLocationDate > ? OR updateEventDate > ? OR exportTime is null)", arguments:StatementArguments([date, date, date, date]))
                     .order([Column("photoTakenDate").asc, Column("filename").asc])
@@ -538,7 +538,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func getAllPhotoFilesMarkedExported() -> [Image] {
         var result:[Image] = []
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 result = try Image.filter("hidden != 1 AND exportTime is not null)").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
             }
@@ -550,7 +550,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     func cleanImageExportTime(path:String) {
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try db.execute("UPDATE Image set exportTime = null WHERE path='\(path)'")
             }
@@ -561,7 +561,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     func storeImageExportedTime(path:String, date:Date, exportedFilename:String){
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try db.execute("UPDATE Image set exportTime = ?, exportAsFilename = ? WHERE path=?", arguments: StatementArguments([date, exportedFilename, path]))
             }
@@ -572,7 +572,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     func storeImageExportedTime(path:String, date:Date, exportToPath:String){
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try db.execute("UPDATE Image set exportTime = ?, exportToPath = ? WHERE path=?", arguments: StatementArguments([date, exportToPath, path]))
             }
@@ -583,7 +583,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     func storeImageExportedTime(path:String, date:Date){
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try db.execute("UPDATE Image set exportTime = ? WHERE path=?", arguments: StatementArguments([date, path]))
             }
@@ -609,7 +609,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         print(sql)
         var result:[Row] = []
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 result = try Row.fetchAll(db, sql, arguments:StatementArguments(sqlArgs))
             }
@@ -641,7 +641,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         print(sql)
         var result:[Row] = []
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 result = try Row.fetchAll(db, sql, arguments:StatementArguments(sqlArgs))
             }
@@ -701,7 +701,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         var result:[Image] = []
         var hiddenCount:Int = 0
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 hiddenCount = try Image.filter(sql: stmtHidden, arguments:StatementArguments(sqlArgs)).fetchCount(db)
                 result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs)).order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
@@ -745,7 +745,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         var result:[Image] = []
         var hiddenCount:Int = 0
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 hiddenCount = try Image.filter(sql: stmtHidden, arguments:StatementArguments(sqlArgs)).fetchCount(db)
                 result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs)).order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
@@ -766,7 +766,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         var places:[ImagePlace] = []
         
         do {
-            let dbPool = try DatabasePool(path: dbfile)
+            let dbPool = ModelStore.sharedDBPool()
             try dbPool.read { db in
                 places = try ImagePlace.fetchAll(db)
             }
@@ -784,7 +784,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             stmt = self.likeArray(field: "name", array: keys)
         }
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 if stmt != "" {
                     result = try ImagePlace.filter(stmt).order(Column("name").asc).fetchAll(db)
@@ -801,7 +801,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func getOrCreatePlace(name:String, location:Location) -> ImagePlace{
         var place:ImagePlace?
         do {
-            let db = try DatabaseQueue(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 place = try ImagePlace.fetchOne(db, key: name)
             }
@@ -835,7 +835,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func getPlace(name:String) -> ImagePlace? {
         var place:ImagePlace?
         do {
-            let db = try DatabaseQueue(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 place = try ImagePlace.fetchOne(db, key: name)
             }
@@ -848,7 +848,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func renamePlace(oldName:String, newName:String){
         print("trying to rename place from \(oldName) to \(newName)")
         do {
-            let db = try DatabaseQueue(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.write { db in
                 if let _ = try ImagePlace.fetchOne(db, key: newName){ // already exists new name, just delete old one
                     //
@@ -868,7 +868,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     func updatePlace(name:String, location:Location){
         do {
-            let db = try DatabaseQueue(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.write { db in
                 if var place = try ImagePlace.fetchOne(db, key: name) {
                     place.country = location.country
@@ -908,7 +908,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     func deletePlace(name:String){
         do {
-            let db = try DatabaseQueue(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.write { db in
                 let _ = try ImagePlace.deleteOne(db, key: name)
             }
@@ -923,7 +923,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         var events:[ImageEvent] = []
         
         do {
-            let dbPool = try DatabasePool(path: dbfile)
+            let dbPool = ModelStore.sharedDBPool()
             try dbPool.read { db in
                 events = try ImageEvent.order([Column("country").asc, Column("province").asc, Column("city").asc, Column("name").asc]).fetchAll(db)
             }
@@ -941,7 +941,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             stmt = self.likeArray(field: "name", array: keys)
         }
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 if stmt != "" {
                     result = try ImageEvent.filter(stmt).order(Column("name").asc).fetchAll(db)
@@ -958,7 +958,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func getOrCreateEvent(name:String) -> ImageEvent{
         var event:ImageEvent?
         do {
-            let db = try DatabaseQueue(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 event = try ImageEvent.fetchOne(db, key: name)
             }
@@ -976,7 +976,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     func deleteEvent(name:String){
         do {
-            let db = try DatabaseQueue(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try ImageEvent.deleteOne(db, key: name)
                 try db.execute("UPDATE Image SET event='' WHERE event=?", arguments: StatementArguments([name]))
@@ -989,7 +989,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func renameEvent(oldName:String, newName:String){
         print("RENAME EVENT \(oldName) to \(newName)")
         do {
-            let db = try DatabaseQueue(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.write { db in
                 if let _ = try ImageEvent.fetchOne(db, key: newName){
                     try ImageEvent.deleteOne(db, key: oldName)
@@ -1019,7 +1019,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         print(sql)
         var result:[Row] = []
         do {
-            let db = try DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 result = try Row.fetchAll(db, sql, arguments:StatementArguments(sqlArgs))
             }
