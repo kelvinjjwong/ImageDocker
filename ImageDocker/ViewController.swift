@@ -1262,6 +1262,8 @@ class ViewController: NSViewController {
         
         
         self.addressSearcher.stringValue = ""
+        self.comboPlaceList.stringValue = ""
+        self.comboPlaceList.deselectItem(at: self.comboPlaceList.indexOfSelectedItem)
         
         BaiduLocation.queryForAddress(coordinateBD: img.location.coordinateBD!, locationConsumer: self, textConsumer: self.locationTextDelegate!)
         BaiduLocation.queryForMap(coordinateBD: img.location.coordinateBD!, view: webPossibleLocation, zoom: zoomSizeForPossibleAddress)
@@ -1614,6 +1616,7 @@ class PlaceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
     
     func comboBoxSelectionDidChange(_ notification: Notification) {
         if combobox == nil || working {return}
+        if combobox!.indexOfSelectedItem < 0 || combobox!.indexOfSelectedItem >= places.count {return}
         let name = places[combobox!.indexOfSelectedItem].name
         let place:ImagePlace? = ModelStore.default.getPlace(name: name)
         if place != nil {
