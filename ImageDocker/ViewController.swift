@@ -152,15 +152,20 @@ class ViewController: NSViewController {
     @IBOutlet weak var btnShare: NSButton!
     @IBOutlet weak var btnCopyToDevice: NSButton!
     
+    // MARK: SELECTION BATCH EDITOR TOOLBAR - SWITCHER
+    
+    @IBOutlet weak var btnBatchEditorToolbarSwitcher: NSButton!
     
     
-    // MARK: Editor - DateTime
+    // MARK: SELECTION BATCH EDITOR - DateTime
     
     @IBOutlet weak var editorDatePicker: NSDatePicker!
     @IBOutlet weak var batchEditIndicator: NSProgressIndicator!
     @IBOutlet weak var btnReplaceDateTime: NSButton!
+    @IBOutlet weak var btnDatePicker: NSButton!
     
-    // MARK: Popover
+    
+    // MARK: SELECTION BATCH EDITOR - EVENT & PLACE
     
     var eventPopover:NSPopover?
     var eventViewController:EventListViewController!
@@ -190,6 +195,7 @@ class ViewController: NSViewController {
     // MARK: init
     
     var windowInitial:Bool = false
+    var smallScreen:Bool = false
     
     func resize() {
         guard !windowInitial else {return}
@@ -214,6 +220,20 @@ class ViewController: NSViewController {
         self.view.window?.setFrame(windowFrame!, display: true)
         
         self.splitviewPreview.setPosition(newHeight - CGFloat(670), ofDividerAt: 0)
+        
+        if Float(screenWidth!) < 1500 {
+            smallScreen = true
+            self.hideSelectionBatchEditors()
+            self.btnBatchEditorToolbarSwitcher.image = NSImage(named: .goRightTemplate)
+            self.btnBatchEditorToolbarSwitcher.toolTip = "Show event/datetime selectors"
+            
+            self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(258)))
+            self.playerContainer.display()
+        }else {
+            smallScreen = false
+            self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(408)))
+            self.playerContainer.display()
+        }
         
         windowInitial = true
     }
@@ -384,6 +404,7 @@ class ViewController: NSViewController {
         self.addressSearcher.drawsBackground = true
         self.btnChoiceMapService.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
+        self.btnBatchEditorToolbarSwitcher.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.selectionCheckAllBox.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.chbExport.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.chbScan.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -1050,7 +1071,67 @@ class ViewController: NSViewController {
         }
     }
     
-    // MARK: Selection View Controls
+    fileprivate func hideSelectionToolbar() {
+        self.btnShare.isHidden = true
+        self.btnCopyToDevice.isHidden = true
+        self.btnShow.isHidden = true
+        self.btnHide.isHidden = true
+        self.selectionCheckAllBox.isHidden = true
+        self.btnRemoveSelection.isHidden = true
+        self.btnRemoveAllSelection.isHidden = true
+    }
+    
+    fileprivate func showSelectionToolbar() {
+        self.btnShare.isHidden = false
+        self.btnCopyToDevice.isHidden = false
+        self.btnShow.isHidden = false
+        self.btnHide.isHidden = false
+        self.selectionCheckAllBox.isHidden = false
+        self.btnRemoveSelection.isHidden = false
+        self.btnRemoveAllSelection.isHidden = false
+        
+    }
+    
+    fileprivate func hideSelectionBatchEditors() {
+        self.comboEventList.isHidden = true
+        self.btnAssignEvent.isHidden = true
+        self.btnManageEvents.isHidden = true
+        self.editorDatePicker.isHidden = true
+        self.btnReplaceDateTime.isHidden = true
+        self.btnDatePicker.isHidden = true
+    }
+    
+    fileprivate func showSelectionBatchEditors() {
+        self.comboEventList.isHidden = false
+        self.btnAssignEvent.isHidden = false
+        self.btnManageEvents.isHidden = false
+        self.editorDatePicker.isHidden = false
+        self.btnReplaceDateTime.isHidden = false
+        self.btnDatePicker.isHidden = false
+    }
+    
+    // MARK: SELECTION BATCH EDITOR TOOLBAR - SWITCHER
+    
+    @IBAction func onBatchEditorToolbarSwitcherClicked(_ sender: NSButton) {
+        if self.btnBatchEditorToolbarSwitcher.image == NSImage(named: NSImage.Name.goLeftTemplate) {
+            self.hideSelectionBatchEditors()
+            if smallScreen {
+                self.showSelectionToolbar()
+            }
+            self.btnBatchEditorToolbarSwitcher.image = NSImage(named: NSImage.Name.goRightTemplate)
+            self.btnBatchEditorToolbarSwitcher.toolTip = "Show event/datetime selectors"
+        } else {
+            self.showSelectionBatchEditors()
+            if smallScreen {
+                self.hideSelectionToolbar()
+            }
+            self.btnBatchEditorToolbarSwitcher.image = NSImage(named: NSImage.Name.goLeftTemplate)
+            self.btnBatchEditorToolbarSwitcher.toolTip = "Hide event/datetime selectors"
+        }
+    }
+    
+    
+    // MARK: SELECTION TOOLBAR
     
     @IBAction func onShareClicked(_ sender: Any) {
     }
@@ -1276,6 +1357,10 @@ class ViewController: NSViewController {
         self.selectionViewController.imagesLoader.reorganizeItems()
         self.selectionCollectionView.reloadData()
     }
+    
+    @IBAction func onButtonDatePickerClicked(_ sender: NSButton) {
+    }
+    
     
     // MARK: Selection View - Batch Editor - Event Actions
     
