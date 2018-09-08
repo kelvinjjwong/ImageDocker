@@ -15,10 +15,6 @@ extension ViewController {
     
     // MARK: DATA SOURCE
     
-    func loadDemoPathToTree() {
-        self.loadPathToTree("/MacStorage/photo.huawei.honor8.wjj")
-    }
-    
     func loadPathToTree(_ startingPath:String){
         let imageFolders = ImageFolderTreeScanner.default.scanImageFolder(path: startingPath)
         

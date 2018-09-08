@@ -52,11 +52,13 @@ class LocalDirectoryViewDelegate : DirectoryViewDelegate {
     }
     
     func shortcuts() -> [DirectoryViewShortcut] {
-        return [
-            DirectoryViewShortcut(title: "Home", path: home()),
-            DirectoryViewShortcut(title: "MacStorage", path: "/MacStorage/"),
-            DirectoryViewShortcut(title: "Volumes", path: "/Volumes/")
-        ]
+        var paths:[DirectoryViewShortcut] = []
+        paths.append(DirectoryViewShortcut(title: "Home", path: home()))
+        if FileManager.default.fileExists(atPath: "/MacStorage/") {
+            paths.append(DirectoryViewShortcut(title: "MacStorage", path: "/MacStorage/"))
+        }
+        paths.append(DirectoryViewShortcut(title: "Volumes", path: "/Volumes/"))
+        return paths
     }
     
     

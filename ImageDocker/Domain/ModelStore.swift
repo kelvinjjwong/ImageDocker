@@ -12,7 +12,7 @@ import GRDB
 
 class ModelStore {
     
-    fileprivate let dbfile = "/Users/kelvinwong/Documents/ImageDocker/ImageDocker.sqlite"
+    fileprivate let dbfile = PreferencesController.databasePath(filename: "ImageDocker.sqlite")
     
     static let `default` = ModelStore()
     

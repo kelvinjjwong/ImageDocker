@@ -1017,8 +1017,18 @@ class ViewController: NSViewController {
         }
     }
     
+    // MARK: COLLECTION VIEW - EXPORT
     
     @IBAction func onCheckExportClicked(_ sender: NSButton) {
+        if PreferencesController.exportDirectory() == "" {
+            self.chbExport.state = .off
+            let alert = NSAlert()
+            alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK"))
+            alert.messageText = NSLocalizedString("Please setup destination path for exporting images", comment: "Please setup destination path for exporting images")
+            alert.informativeText = NSLocalizedString("Please specify destination path for exporting images in Menu / Preferences / Path Tab.", comment: "Please specify destination path for exporting images in Menu / Preferences / Path Tab.")
+            alert.runModal()
+            return
+        }
         if self.chbExport.state == NSButton.StateValue.on {
             print("enabled export")
             self.suppressedExport = false

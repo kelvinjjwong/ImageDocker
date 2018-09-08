@@ -116,6 +116,16 @@ extension ViewController {
             }
             
         }else if collection.identifier == "device_type_iPhone" {
+            
+            if PreferencesController.iosDeviceMountPoint() == "" {
+                let alert = NSAlert()
+                alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK"))
+                alert.messageText = NSLocalizedString("Please setup mount point for iOS devices", comment: "Please setup mount point for iOS devices")
+                alert.informativeText = NSLocalizedString("Please specify mount point for iOS devices in Menu / Preferences / iPhone Tab.", comment: "Please specify mount point for iOS devices in Menu / Preferences / iPhone Tab.")
+                alert.runModal()
+                return
+            }
+            
             let devices:[String] = IPHONE.bridge.devices()
             print("iphone device count: \(devices.count)")
             self.cleanCachedDeviceIds(type: .iPhone)

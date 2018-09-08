@@ -31,7 +31,7 @@ class DeviceCopyViewController: NSViewController {
     
     let dateFormatter = DateFormatter()
     
-    let mountpoint = "/MacStorage/mount/iPhone/"
+    let mountpoint = PreferencesController.iosDeviceMountPoint()
     
     // MARK: ENVIRONMENT
     var device:PhoneDevice = PhoneDevice(type: .Android, deviceId: "", manufacture: "", model: "")

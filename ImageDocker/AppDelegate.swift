@@ -19,7 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func createDataBackup(suffix:String){
         print("\(Date()) Start to create db backup")
-        let dbUrl = self.applicationDocumentsDirectory
+        let dbUrl = URL(fileURLWithPath: PreferencesController.databasePath())
         let dbFile = dbUrl.appendingPathComponent("ImageDocker.sqlite")
         let dbFileSHM = dbUrl.appendingPathComponent("ImageDocker.sqlite-shm")
         let dbFileWAL = dbUrl.appendingPathComponent("ImageDocker.sqlite-wal")
@@ -72,7 +72,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "com.apple.toolsQA.CocoaApp_CD" in the user's Application Support directory.
         let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let appSupportURL = urls[urls.count - 1]
-        return appSupportURL.appendingPathComponent("ImageDocker")
+        let url = appSupportURL.appendingPathComponent("ImageDocker")
+        var isDir : ObjCBool = false
+        
+        let _  = FileManager.default.fileExists(atPath: url.path, isDirectory: &isDir)
+        
+        if !isDir.boolValue {
+            do {
+                try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+            }catch{
+                print("Unable to create application directory")
+                print(error)
+            }
+        }
+        
+        return url
     }()
 
 }

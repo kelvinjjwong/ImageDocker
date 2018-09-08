@@ -341,8 +341,24 @@ struct Android {
     
     
     
-    
-    
+    func mkdir(device id: String, path:String){
+        let pipe = Pipe()
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = FileHandle.nullDevice
+            command.launchPath = adb.path
+            command.arguments = ["-s", id, "shell", "mkdir -p \(path)"]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
+        }
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let _ = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
+    }
     
     func folders(device id: String, in path: String) -> [String] {
         print("getting folders from \(path)")

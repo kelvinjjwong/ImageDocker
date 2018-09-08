@@ -14,6 +14,8 @@ final class PreferencesController: NSViewController {
     fileprivate static let baiduSKKey = "BaiduSKKey"
     fileprivate static let googleAKKey = "GoogleAPIKey"
     fileprivate static let exportPathKey = "ExportPath"
+    fileprivate static let databasePathKey = "DatabasePathKey"
+    fileprivate static let iosMountPointKey = "IOSMountPointKey"
     
     // MARK: Properties
     @IBOutlet weak var txtBaiduAK: NSTextField!
@@ -21,6 +23,9 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var txtExportPath: NSTextField!
     @IBOutlet weak var txtGoogleAPIKey: NSTextField!
     @IBOutlet weak var tabs: NSTabView!
+    @IBOutlet weak var txtDatabasePath: NSTextField!
+    @IBOutlet weak var txtIOSMountPoint: NSTextField!
+    
     
     
     // MARK: Actions
@@ -48,6 +53,40 @@ final class PreferencesController: NSViewController {
         }
     }
     
+    @IBAction func onBrowseDatabasePathClicked(_ sender: Any) {
+        let openPanel = NSOpenPanel()
+        openPanel.canChooseDirectories  = true
+        openPanel.canChooseFiles        = false
+        openPanel.showsHiddenFiles      = false
+        openPanel.canCreateDirectories  = true
+        
+        openPanel.beginSheetModal(for: self.view.window!) { (response) -> Void in
+            guard response == NSApplication.ModalResponse.OK else {return}
+            if let path = openPanel.url?.path {
+                DispatchQueue.main.async {
+                    self.txtDatabasePath.stringValue = path
+                }
+            }
+        }
+    }
+    
+    @IBAction func onBrowseIOSMountPointClicked(_ sender: Any) {
+        let openPanel = NSOpenPanel()
+        openPanel.canChooseDirectories  = true
+        openPanel.canChooseFiles        = false
+        openPanel.showsHiddenFiles      = false
+        openPanel.canCreateDirectories  = true
+        
+        openPanel.beginSheetModal(for: self.view.window!) { (response) -> Void in
+            guard response == NSApplication.ModalResponse.OK else {return}
+            if let path = openPanel.url?.path {
+                DispatchQueue.main.async {
+                    self.txtIOSMountPoint.stringValue = path
+                }
+            }
+        }
+    }
+    
     
     class func baiduAK() -> String {
         let defaults = UserDefaults.standard
@@ -70,7 +109,64 @@ final class PreferencesController: NSViewController {
     class func exportDirectory() -> String {
         let defaults = UserDefaults.standard
         guard let txt = defaults.string(forKey: exportPathKey) else {return ""}
-        return txt
+        var isDir : ObjCBool = false
+        if FileManager.default.fileExists(atPath: txt, isDirectory: &isDir) {
+            if isDir.boolValue {
+                return txt
+            }else{
+                return ""
+            }
+        }else{
+            return ""
+        }
+    }
+    
+    class func databasePath() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: databasePathKey) else {
+            return AppDelegate.current.applicationDocumentsDirectory.path
+        }
+        var isDir : ObjCBool = false
+        if FileManager.default.fileExists(atPath: txt, isDirectory: &isDir) {
+            if isDir.boolValue {
+                return txt
+            }else{
+                return AppDelegate.current.applicationDocumentsDirectory.path
+            }
+        }else{
+            return AppDelegate.current.applicationDocumentsDirectory.path
+        }
+    }
+    
+    class func databasePath(filename: String) -> String {
+        let url = URL(fileURLWithPath: databasePath()).appendingPathComponent(filename)
+        return url.path
+    }
+    
+    class func iosDeviceMountPoint() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: iosMountPointKey) else {
+            var isDir : ObjCBool = false
+            if FileManager.default.fileExists(atPath: "/MacStorage/mount/iPhone/", isDirectory: &isDir) {
+                if isDir.boolValue {
+                    return "/MacStorage/mount/iPhone/"
+                }else{
+                    return ""
+                }
+            }else{
+                return ""
+            }
+        }
+        var isDir : ObjCBool = false
+        if FileManager.default.fileExists(atPath: txt, isDirectory: &isDir) {
+            if isDir.boolValue {
+                return txt
+            }else{
+                return ""
+            }
+        }else{
+            return ""
+        }
     }
     
     func savePreferences() {
@@ -83,6 +179,10 @@ final class PreferencesController: NSViewController {
                      forKey: PreferencesController.exportPathKey)
         defaults.set(txtGoogleAPIKey.stringValue,
                      forKey: PreferencesController.googleAKKey)
+        defaults.set(txtDatabasePath.stringValue,
+                     forKey: PreferencesController.databasePathKey)
+        defaults.set(txtIOSMountPoint.stringValue,
+                     forKey: PreferencesController.iosMountPointKey)
 
     }
     
@@ -108,6 +208,8 @@ final class PreferencesController: NSViewController {
         txtBaiduSK.stringValue = PreferencesController.baiduSK()
         txtGoogleAPIKey.stringValue = PreferencesController.googleAPIKey()
         txtExportPath.stringValue = PreferencesController.exportDirectory()
+        txtDatabasePath.stringValue = PreferencesController.databasePath()
+        txtIOSMountPoint.stringValue = PreferencesController.iosDeviceMountPoint()
     }
     
     override var representedObject: Any? {
