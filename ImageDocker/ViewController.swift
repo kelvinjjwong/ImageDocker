@@ -219,7 +219,7 @@ class ViewController: NSViewController {
         self.view.window?.minSize = windowMinSize
         self.view.window?.setFrame(windowFrame!, display: true)
         
-        self.splitviewPreview.setPosition(newHeight - CGFloat(670), ofDividerAt: 0)
+        self.splitviewPreview.setPosition(newHeight - CGFloat(520), ofDividerAt: 0)
         
         if Float(screenWidth!) < 1500 {
             smallScreen = true
@@ -229,6 +229,8 @@ class ViewController: NSViewController {
             
             self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(258)))
             self.playerContainer.display()
+            
+            self.splitviewPreview.setPosition(newHeight - CGFloat(520), ofDividerAt: 0)
         }else {
             smallScreen = false
             self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(408)))

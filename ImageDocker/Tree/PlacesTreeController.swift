@@ -84,18 +84,21 @@ extension ViewController {
         //print("REFRESHING LOCATION TREE at \(Date())")
         let count = self.placeItem().children.count
         // remove item in places
-        for _ in (count > 1 ? 1 : count)...(count > 1 ? count : 1) {
-            //let index:Int = i - 1
+        
+        if count > 0 {
+            for _ in (count > 1 ? 1 : count)...(count > 1 ? count : 1) {
+                //let index:Int = i - 1
+                
+                DispatchQueue.main.async {
+                    self.sourceList.removeItems(at: NSIndexSet(index: 0) as IndexSet,
+                                                inParent: self.placeItem(),
+                                                withAnimation: NSTableView.AnimationOptions.slideUp)
+                }
+            }
             
             DispatchQueue.main.async {
-                self.sourceList.removeItems(at: NSIndexSet(index: 0) as IndexSet,
-                                            inParent: self.placeItem(),
-                                            withAnimation: NSTableView.AnimationOptions.slideUp)
+                self.placeItem().children.removeAll()
             }
-        }
-        
-        DispatchQueue.main.async {
-            self.placeItem().children.removeAll()
         }
         self.loadPlacesToTreeFromDatabase(filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel)
         

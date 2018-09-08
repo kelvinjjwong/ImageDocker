@@ -43,18 +43,21 @@ extension ViewController {
         //print("REFRESHING MOMENT TREE at \(Date())")
         let count = self.eventItem().children.count
         // remove items in moments
-        for _ in (count > 1 ? 1 : count)...(count > 1 ? count : 1) {
-            //let index:Int = i - 1
+        
+        if count > 0 {
+            for _ in (count > 1 ? 1 : count)...(count > 1 ? count : 1) {
+                //let index:Int = i - 1
+                
+                DispatchQueue.main.async {
+                    self.sourceList.removeItems(at: NSIndexSet(index: 0) as IndexSet,
+                                                inParent: self.eventItem(),
+                                                withAnimation: NSTableView.AnimationOptions.slideUp)
+                }
+            }
             
             DispatchQueue.main.async {
-                self.sourceList.removeItems(at: NSIndexSet(index: 0) as IndexSet,
-                                            inParent: self.eventItem(),
-                                            withAnimation: NSTableView.AnimationOptions.slideUp)
+                self.eventItem().children.removeAll()
             }
-        }
-        
-        DispatchQueue.main.async {
-            self.eventItem().children.removeAll()
         }
         self.loadEventsToTreeFromDatabase()
         
