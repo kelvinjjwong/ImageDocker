@@ -219,22 +219,27 @@ class ViewController: NSViewController {
         self.view.window?.minSize = windowMinSize
         self.view.window?.setFrame(windowFrame!, display: true)
         
-        self.splitviewPreview.setPosition(newHeight - CGFloat(520), ofDividerAt: 0)
-        
         if Float(screenWidth!) < 1500 {
             smallScreen = true
             self.hideSelectionBatchEditors()
             self.btnBatchEditorToolbarSwitcher.image = NSImage(named: .goRightTemplate)
             self.btnBatchEditorToolbarSwitcher.toolTip = "Show event/datetime selectors"
             
+            let constraintPlayerHeight = NSLayoutConstraint(item: self.playerContainer, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 258)
+            self.playerContainer.addConstraint(constraintPlayerHeight)
             self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(258)))
             self.playerContainer.display()
             
             self.splitviewPreview.setPosition(newHeight - CGFloat(520), ofDividerAt: 0)
         }else {
+            print("BIG SCREEN")
             smallScreen = false
+            let constraintPlayerHeight = NSLayoutConstraint(item: self.playerContainer, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 408)
+            self.playerContainer.addConstraint(constraintPlayerHeight)
             self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(408)))
             self.playerContainer.display()
+            
+            self.splitviewPreview.setPosition(newHeight - CGFloat(670), ofDividerAt: 0)
         }
         
         windowInitial = true
