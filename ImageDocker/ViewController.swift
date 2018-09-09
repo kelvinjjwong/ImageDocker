@@ -136,7 +136,7 @@ class ViewController: NSViewController {
     let imagesLoader = CollectionViewItemsLoader()
     var collectionLoadingIndicator:Accumulator?
     
-    // MARK: Collection View for selection
+    // MARK: SELECTION VIEW
     var selectionViewController : SelectionCollectionViewController!
     
     @IBOutlet weak var selectionCollectionView: NSCollectionView!
@@ -1144,7 +1144,52 @@ class ViewController: NSViewController {
     }
     
     
-    @IBAction func onCopyToDeviceClicked(_ sender: Any) {
+    @IBAction func onCopyToDeviceClicked(_ sender: NSButton) {
+        let images = self.selectionViewController.imagesLoader.getItems()
+        let devices = Android.bridge.devices()
+        if images.count == 0 {
+            let alert = NSAlert()
+            alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK"))
+            alert.messageText = NSLocalizedString("NO IMAGES SELECTED", comment: "NO IMAGES SELECTED")
+            alert.informativeText = NSLocalizedString("Please select one or more images first", comment: "Please select one or more images first")
+            alert.runModal()
+            return
+        }
+        if devices.count == 0 {
+            let alert = NSAlert()
+            alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK"))
+            alert.messageText = NSLocalizedString("NO DEVICE FOUND", comment: "NO DEVICE FOUND")
+            alert.informativeText = NSLocalizedString("Please connect your Android device with USB Debug Mode enabled", comment: "Please connect your Android device with USB Debug Mode enabled")
+            alert.runModal()
+            return
+        }
+        self.createCopyToDevicePopover(images: images)
+        let cellRect = sender.bounds
+        self.copyToDevicePopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
+    }
+    
+    fileprivate var copyToDevicePopover:NSPopover? = nil
+    fileprivate var deviceFolderViewController:DeviceFolderViewController!
+    
+    fileprivate func createCopyToDevicePopover(images:[ImageFile]){
+        var myPopover = self.copyToDevicePopover
+        if(myPopover == nil){
+            myPopover = NSPopover()
+            
+            let frame = CGRect(origin: .zero, size: CGSize(width: 800, height: 550))
+            self.deviceFolderViewController = DeviceFolderViewController(images: images)
+            self.deviceFolderViewController.view.frame = frame
+            
+            myPopover!.contentViewController = self.deviceFolderViewController
+            myPopover!.appearance = NSAppearance(named: NSAppearance.Name.aqua)!
+            //myPopover!.animates = true
+            myPopover!.delegate = self
+            myPopover!.behavior = NSPopover.Behavior.transient
+        }else{
+            self.deviceFolderViewController.images = images
+            self.deviceFolderViewController.refreshDeviceList()
+        }
+        self.copyToDevicePopover = myPopover
     }
     
     

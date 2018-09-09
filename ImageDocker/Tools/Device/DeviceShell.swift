@@ -72,9 +72,9 @@ struct DeviceShell {
             let indexStartOfText = line.index(line.startIndex, offsetBy: 2)
             let filename = String(line[indexStartOfText...])
             
-            result.append(filename)
+            result.append(filename.trimmingCharacters(in: .whitespacesAndNewlines))
         }
-        return result
+        return result.sorted()
     }
     
     static func getFilenames(from string:String) -> [String] {
@@ -100,7 +100,7 @@ struct DeviceShell {
             }
             result.append(filename)
         }
-        return result
+        return result.sorted()
     }
     
     
@@ -131,6 +131,6 @@ struct DeviceShell {
             
             result.append(filename)
         }
-        return result
+        return result.sorted()
     }
 }
