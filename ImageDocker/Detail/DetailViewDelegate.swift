@@ -27,13 +27,6 @@ extension ViewController: CoordinateConsumer {
     }
     
     func alert(status: Int, message: String) {
-        /*
-        let alert = NSAlert()
-        alert.addButton(withTitle: NSLocalizedString("CLOSE", comment: "Close"))
-        alert.messageText = NSLocalizedString("Location Service", comment: "")
-        alert.informativeText = NSLocalizedString(message, comment: "")
-        alert.runModal()
- */
         print("\(status) : \(message)")
     }
 }

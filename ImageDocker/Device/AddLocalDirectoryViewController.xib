@@ -93,11 +93,11 @@ DQ
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xmh-5Q-CVk">
                     <rect key="frame" x="10" y="67" width="150" height="320"/>
                     <clipView key="contentView" id="LM1-Rg-ldN">
-                        <rect key="frame" x="1" y="0.0" width="148" height="304"/>
+                        <rect key="frame" x="1" y="0.0" width="148" height="319"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="z93-7M-324" viewBased="YES" id="574-rJ-2cG">
-                                <rect key="frame" x="0.0" y="0.0" width="153" height="281"/>
+                                <rect key="frame" x="0.0" y="0.0" width="153" height="296"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -105,7 +105,7 @@ DQ
                                 <tableColumns>
                                     <tableColumn identifier="shortcut" width="150" minWidth="40" maxWidth="1000" id="pVU-Ib-6ep">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Shortcut">
-                                            <font key="font" metaFont="cellTitle"/>
+                                            <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                         </tableHeaderCell>
@@ -144,7 +144,7 @@ DQ
                         <constraint firstAttribute="width" constant="150" id="539-Br-qi7"/>
                     </constraints>
                     <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="Ifj-de-CFG">
-                        <rect key="frame" x="1" y="304" width="148" height="15"/>
+                        <rect key="frame" x="1" y="303" width="148" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="0VT-1w-W83">
@@ -171,7 +171,7 @@ DQ
                                 <tableColumns>
                                     <tableColumn identifier="folder" width="220" minWidth="40" maxWidth="1000" id="7S0-7h-T7z">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Folder">
-                                            <font key="font" metaFont="cellTitle"/>
+                                            <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                         </tableHeaderCell>
@@ -222,11 +222,11 @@ DQ
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H6d-S3-D8u">
                     <rect key="frame" x="405" y="67" width="385" height="320"/>
                     <clipView key="contentView" id="nQC-bm-ZMh">
-                        <rect key="frame" x="1" y="0.0" width="383" height="304"/>
+                        <rect key="frame" x="1" y="0.0" width="383" height="319"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="0KQ-JT-VNH" viewBased="YES" id="WyE-8J-Vj5">
-                                <rect key="frame" x="0.0" y="0.0" width="386" height="281"/>
+                                <rect key="frame" x="0.0" y="0.0" width="386" height="296"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -234,7 +234,7 @@ DQ
                                 <tableColumns>
                                     <tableColumn identifier="filename" width="260" minWidth="40" maxWidth="1000" id="eVw-AL-ACQ">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Containing Filename">
-                                            <font key="font" metaFont="cellTitle"/>
+                                            <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                         </tableHeaderCell>
@@ -267,7 +267,7 @@ DQ
                                     </tableColumn>
                                     <tableColumn identifier="datetime" width="120" minWidth="40" maxWidth="1000" id="jJg-ze-5lw">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Date">
-                                            <font key="font" metaFont="cellTitle"/>
+                                            <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                         </tableHeaderCell>
@@ -306,7 +306,7 @@ DQ
                         <constraint firstAttribute="width" constant="385" id="Khn-Tn-zwr"/>
                     </constraints>
                     <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="Ple-KO-vCp">
-                        <rect key="frame" x="1" y="304" width="383" height="15"/>
+                        <rect key="frame" x="1" y="303" width="383" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="1q5-F1-Xkd">

@@ -90,6 +90,14 @@ struct Image : Codable {
     var videoFormat:String?
     var videoFrameRate:Double?
     var videoModifyDate:Date?
+    var shortDescription:String?
+    var longDescription:String?
+    var originalMD5:String?
+    var exportedMD5:String?
+    var exportedLongDescription:String?
+    var exportState:String?
+    var exportFailMessage:String?
+    
     
     static func new(filename: String, path: String, parentFolder: String) -> Image {
         return Image(
@@ -172,7 +180,15 @@ struct Image : Codable {
             videoDuration: nil,
             videoFormat: nil,
             videoFrameRate: nil,
-            videoModifyDate: nil)
+            videoModifyDate: nil,
+            shortDescription: nil,
+            longDescription: nil,
+            originalMD5: nil,
+            exportedMD5: nil,
+            exportedLongDescription: nil,
+            exportState: nil,
+            exportFailMessage: nil
+        )
     }
     
 }

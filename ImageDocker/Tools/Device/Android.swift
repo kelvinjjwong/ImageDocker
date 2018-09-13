@@ -166,6 +166,34 @@ struct Android {
         return dev
     }
     
+    func existsFile(device id: String, path: String) -> Bool {
+        print("checking if exists \(id) \(path)")
+        let pipe = Pipe()
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = pipe
+            command.launchPath = adb.path
+            command.arguments = ["-s", id, "shell", "ls '\(path)'"]
+            //command.launch()
+            //print(command.isRunning)
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
+        }
+        //command.waitUntilExit()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
+        print(string)
+        if string.starts(with: "ls: \(path): No such file or directory") {
+            return false
+        }
+        return true
+    }
+    
     func exists(device id: String, path: String) -> Bool {
         print("checking if exists \(id) \(path)")
         let pipe = Pipe()
@@ -174,7 +202,7 @@ struct Android {
             command.standardOutput = pipe
             command.standardError = pipe
             command.launchPath = adb.path
-            command.arguments = ["-s", id, "shell", "cd \(path)"]
+            command.arguments = ["-s", id, "shell", "cd '\(path)'"]
             //command.launch()
             //print(command.isRunning)
             do {
@@ -203,7 +231,7 @@ struct Android {
             command.standardOutput = pipe
             command.standardError = pipe
             command.launchPath = adb.path
-            command.arguments = ["-s", id, "shell", "cd \(path); ls -gotR"]
+            command.arguments = ["-s", id, "shell", "cd '\(path)'; ls -gotR"]
             //command.launch()
             //print(command.isRunning)
             do {
@@ -222,7 +250,8 @@ struct Android {
         }
         result = DeviceShell.getFilenames(from: string, basePath: path,
                                             excludeFilenames: ["directory", "killing...", "successfully"],
-                                            allowedExt: ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg"])
+                                            allowedExt: ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg"],
+                                            deviceOS: .android)
         print("got \(result.count) files from \(id) \(path)")
         //print("done files")
         return result
@@ -233,15 +262,16 @@ struct Android {
         autoreleasepool { () -> Void in
         let command = Process()
             command.standardOutput = pipe
-            command.standardError = FileHandle.nullDevice
+            command.standardError = pipe
             command.launchPath = adb.path
-            command.arguments = ["-s", id, "shell", "md5sum \(fileWithPath)"]
+            command.arguments = ["-s", id, "shell", "md5sum '\(fileWithPath)'"]
             command.launch()
             command.waitUntilExit()
         }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         pipe.fileHandleForReading.closeFile()
+        print(string)
         if string != "" {
             let parts = string.components(separatedBy: " ")
             if parts.count > 1 {
@@ -256,15 +286,16 @@ struct Android {
         autoreleasepool { () -> Void in
             let command = Process()
             command.standardOutput = pipe
-            command.standardError = FileHandle.nullDevice
+            command.standardError = pipe
             command.launchPath = adb.path
-            command.arguments = ["-s", id, "shell", "cd \(path); md5sum \(filename)"]
+            command.arguments = ["-s", id, "shell", "cd '\(path)'; md5sum '\(filename)'"]
             command.launch()
             command.waitUntilExit()
         }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         pipe.fileHandleForReading.closeFile()
+        print(string)
         if string != "" {
             let parts = string.components(separatedBy: " ")
             if parts.count > 1 {
@@ -279,7 +310,7 @@ struct Android {
         autoreleasepool { () -> Void in
         let command = Process()
             command.standardOutput = pipe
-            command.standardError = FileHandle.nullDevice
+            command.standardError = pipe
             command.launchPath = adb.path
             command.arguments = ["-s", id, "pull", folderPath, targetPath]
             do {
@@ -301,7 +332,7 @@ struct Android {
         autoreleasepool { () -> Void in
             let command = Process()
             command.standardOutput = pipe
-            command.standardError = FileHandle.nullDevice
+            command.standardError = pipe
             command.launchPath = adb.path
             command.arguments = ["-s", id, "pull", filePath, targetPath]
             do {
@@ -323,7 +354,7 @@ struct Android {
         autoreleasepool { () -> Void in
             let command = Process()
             command.standardOutput = pipe
-            command.standardError = FileHandle.nullDevice
+            command.standardError = pipe
             command.launchPath = adb.path
             command.arguments = ["-s", id, "push", filePath, remoteFolder]
             do {
@@ -335,6 +366,7 @@ struct Android {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         pipe.fileHandleForReading.closeFile()
+        print(string)
         let lines = string.components(separatedBy: "\n")
         return lines.count > 1 ? lines[lines.count - 2] : ""
     }
@@ -348,7 +380,7 @@ struct Android {
             command.standardOutput = pipe
             command.standardError = FileHandle.nullDevice
             command.launchPath = adb.path
-            command.arguments = ["-s", id, "shell", "mkdir -p \(path)"]
+            command.arguments = ["-s", id, "shell", "mkdir -p '\(path)'"]
             do {
                 try command.run()
             }catch{
@@ -369,7 +401,7 @@ struct Android {
             command.standardOutput = pipe
             command.standardError = pipe
             command.launchPath = adb.path
-            command.arguments = ["-s", id, "shell", "cd \(path); find . -type d -maxdepth 1"]
+            command.arguments = ["-s", id, "shell", "cd '\(path)'; find . -type d -maxdepth 1"]
             do {
                 try command.run()
             }catch{
@@ -395,7 +427,7 @@ struct Android {
             command.standardOutput = pipe
             command.standardError = pipe
             command.launchPath = adb.path
-            command.arguments = ["-s", id, "shell", "cd \(path); ls -l"]
+            command.arguments = ["-s", id, "shell", "cd '\(path)'; ls -go"]
             do {
                 try command.run()
             }catch{
@@ -408,9 +440,29 @@ struct Android {
         pipe.fileHandleForReading.closeFile()
         result = DeviceShell.getFilenames(from: string,
                                           excludeFilenames: ["directory", ".", ".."],
-                                          allowedExt: ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg"])
+                                          allowedExt: ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg"],
+                                          deviceOS: .android)
         print("got \(result.count) files from \(path)")
         return result
     }
     
+    func deleteFile(device id: String, path:String) -> Bool{
+        let pipe = Pipe()
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = FileHandle.nullDevice
+            command.launchPath = adb.path
+            command.arguments = ["-s", id, "shell", "rm '\(path)'"]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
+        }
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
+        return (string == "")
+    }
 }

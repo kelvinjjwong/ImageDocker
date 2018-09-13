@@ -89,7 +89,7 @@ class EventListViewController: NSViewController {
         let name:String = eventName.stringValue
         if name == "" {return}
         
-        if self.dialogOKCancel(question: "Disconnect photos with this event ?", text: name) {
+        if Alert.dialogOKCancel(question: "Disconnect photos with this event ?", text: name) {
             
             ModelStore.default.deleteEvent(name: name)
             //ModelStore.save()
@@ -127,17 +127,6 @@ class EventListViewController: NSViewController {
             self.events = ModelStore.default.getEvents(byName: keyword)
         }
         eventTable.reloadData()
-    }
-    
-    
-    private func dialogOKCancel(question: String, text: String) -> Bool {
-        let alert = NSAlert()
-        alert.messageText = question
-        alert.informativeText = text
-        alert.alertStyle = .warning
-        alert.addButton(withTitle: "Delete")
-        alert.addButton(withTitle: "Cancel")
-        return alert.runModal() == .alertFirstButtonReturn
     }
     
 }

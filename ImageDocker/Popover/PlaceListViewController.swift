@@ -225,7 +225,7 @@ class PlaceListViewController: NSViewController {
         let name:String = placeName.stringValue
         if name == "" {return}
         
-        if self.dialogOKCancel(question: "Disconnect photos with this place ?", text: name) {
+        if Alert.dialogOKCancel(question: "Disconnect photos with this place ?", text: name) {
             
             ModelStore.default.deletePlace(name: name)
             //ModelStore.save()
@@ -249,17 +249,6 @@ class PlaceListViewController: NSViewController {
             self.choiceService.setImage(nil, forSegment: 0)
             self.choiceService.setImage(tick, forSegment: 1)
         }
-    }
-    
-    
-    private func dialogOKCancel(question: String, text: String) -> Bool {
-        let alert = NSAlert()
-        alert.messageText = question
-        alert.informativeText = text
-        alert.alertStyle = .warning
-        alert.addButton(withTitle: "Delete")
-        alert.addButton(withTitle: "Cancel")
-        return alert.runModal() == .alertFirstButtonReturn
     }
     
 }

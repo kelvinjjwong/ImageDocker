@@ -113,7 +113,7 @@ struct LocalDirectory {
             command.standardError = pipe
             command.currentDirectoryPath = path
             command.launchPath = "/bin/ls"
-            command.arguments = ["-l"]
+            command.arguments = ["-go"]
             do {
                 try command.run()
             }catch{
@@ -126,7 +126,8 @@ struct LocalDirectory {
         pipe.fileHandleForReading.closeFile()
         result = DeviceShell.getFilenames(from: string,
                                           excludeFilenames: ["directory", ".", ".."],
-                                          allowedExt: ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg"])
+                                          allowedExt: ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg"],
+                                          deviceOS: .mac)
         print("got \(result.count) files from \(path)")
         return result
     }

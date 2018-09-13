@@ -775,7 +775,7 @@ class ViewController: NSViewController {
         print("clicked delete button")
         if self.selectedImageFolder != nil {
             if(self.selectedImageFolder?.containerFolder?.parentFolder == ""){
-                if self.dialogOKCancel(question: "Remove all photos relate to this folder ?", text: selectedImageFolder!.url.path) {
+                if Alert.dialogOKCancel(question: "Remove all photos relate to this folder ?", text: selectedImageFolder!.url.path) {
                     let rootPath:String = (selectedImageFolder?.containerFolder?.path)!
                     ModelStore.default.deleteContainer(path: rootPath)
                     //self.initSourceListDataModel()
@@ -1050,11 +1050,7 @@ class ViewController: NSViewController {
     @IBAction func onCheckExportClicked(_ sender: NSButton) {
         if PreferencesController.exportDirectory() == "" {
             self.chbExport.state = .off
-            let alert = NSAlert()
-            alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK"))
-            alert.messageText = NSLocalizedString("Please setup destination path for exporting images", comment: "Please setup destination path for exporting images")
-            alert.informativeText = NSLocalizedString("Please specify destination path for exporting images in Menu / Preferences / Path Tab.", comment: "Please specify destination path for exporting images in Menu / Preferences / Path Tab.")
-            alert.runModal()
+            Alert.invalidExportPath()
             return
         }
         if self.chbExport.state == NSButton.StateValue.on {
@@ -1148,19 +1144,11 @@ class ViewController: NSViewController {
         let images = self.selectionViewController.imagesLoader.getItems()
         let devices = Android.bridge.devices()
         if images.count == 0 {
-            let alert = NSAlert()
-            alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK"))
-            alert.messageText = NSLocalizedString("NO IMAGES SELECTED", comment: "NO IMAGES SELECTED")
-            alert.informativeText = NSLocalizedString("Please select one or more images first", comment: "Please select one or more images first")
-            alert.runModal()
+            Alert.noImageSelected()
             return
         }
         if devices.count == 0 {
-            let alert = NSAlert()
-            alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK"))
-            alert.messageText = NSLocalizedString("NO DEVICE FOUND", comment: "NO DEVICE FOUND")
-            alert.informativeText = NSLocalizedString("Please connect your Android device with USB Debug Mode enabled", comment: "Please connect your Android device with USB Debug Mode enabled")
-            alert.runModal()
+            Alert.noAndroidDeviceFound()
             return
         }
         self.createCopyToDevicePopover(images: images)
@@ -1186,8 +1174,7 @@ class ViewController: NSViewController {
             myPopover!.delegate = self
             myPopover!.behavior = NSPopover.Behavior.transient
         }else{
-            self.deviceFolderViewController.images = images
-            self.deviceFolderViewController.refreshDeviceList()
+            self.deviceFolderViewController.reinit(images)
         }
         self.copyToDevicePopover = myPopover
     }
@@ -1513,18 +1500,6 @@ class ViewController: NSViewController {
         self.selectionCollectionView.reloadData()
         self.imagesLoader.reorganizeItems()
         self.collectionView.reloadData()
-    }
-    
-    // MARK: Common Dialog
-    
-    private func dialogOKCancel(question: String, text: String) -> Bool {
-        let alert = NSAlert()
-        alert.messageText = question
-        alert.informativeText = text
-        alert.alertStyle = .warning
-        alert.addButton(withTitle: "OK")
-        alert.addButton(withTitle: "Cancel")
-        return alert.runModal() == .alertFirstButtonReturn
     }
     
     

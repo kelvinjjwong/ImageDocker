@@ -30,6 +30,8 @@
 		8E4C38D5211828FF0089502C /* MomentsTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D4211828FF0089502C /* MomentsTreeController.swift */; };
 		8E4C38D72118291F0089502C /* LibraryTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D62118291F0089502C /* LibraryTreeController.swift */; };
 		8E4C38D9211829410089502C /* DeviceTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D8211829410089502C /* DeviceTreeController.swift */; };
+		8E7B98DF2147E7880019ED87 /* FileSystemHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7B98DE2147E7880019ED87 /* FileSystemHandler.swift */; };
+		8E7B98E1214882080019ED87 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7B98E0214882080019ED87 /* Alert.swift */; };
 		8E7F71002091F14300410C45 /* BaiduLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F70FF2091F14200410C45 /* BaiduLocation.swift */; };
 		8E7F71022092053400410C45 /* MetaInfoDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F71012092053400410C45 /* MetaInfoDelegate.swift */; };
 		8E85B7CF20B8786C005A9845 /* Accumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7CE20B8786C005A9845 /* Accumulator.swift */; };
@@ -142,6 +144,8 @@
 		8E4C38D4211828FF0089502C /* MomentsTreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsTreeController.swift; sourceTree = "<group>"; };
 		8E4C38D62118291F0089502C /* LibraryTreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTreeController.swift; sourceTree = "<group>"; };
 		8E4C38D8211829410089502C /* DeviceTreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTreeController.swift; sourceTree = "<group>"; };
+		8E7B98DE2147E7880019ED87 /* FileSystemHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemHandler.swift; sourceTree = "<group>"; };
+		8E7B98E0214882080019ED87 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		8E7F70FF2091F14200410C45 /* BaiduLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaiduLocation.swift; sourceTree = "<group>"; };
 		8E7F71012092053400410C45 /* MetaInfoDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfoDelegate.swift; sourceTree = "<group>"; };
 		8E85B7CE20B8786C005A9845 /* Accumulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accumulator.swift; sourceTree = "<group>"; };
@@ -313,6 +317,7 @@
 				8E4C38D02117B56A0089502C /* IPHONE.swift */,
 				8E31C37E2120A22600002546 /* DeviceShell.swift */,
 				8EC82EA32121C10A00FC0899 /* LocalDirectory.swift */,
+				8E7B98DE2147E7880019ED87 /* FileSystemHandler.swift */,
 			);
 			path = Device;
 			sourceTree = "<group>";
@@ -363,6 +368,7 @@
 				8E174B6D208F851100FFE7C7 /* ExifTool.swift */,
 				8E85B7CE20B8786C005A9845 /* Accumulator.swift */,
 				8E98B8F820D7950E00771280 /* ExportManager.swift */,
+				8E7B98E0214882080019ED87 /* Alert.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -740,6 +746,7 @@
 				8EF500CD209A804100C9805F /* ImageFolder.swift in Sources */,
 				8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */,
 				8EB986C120B317E70075B081 /* ModelStoreCoreData.swift in Sources */,
+				8E7B98DF2147E7880019ED87 /* FileSystemHandler.swift in Sources */,
 				8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */,
 				8E98B8F720D6044900771280 /* Event.swift in Sources */,
 				8E4C38D12117B56A0089502C /* IPHONE.swift in Sources */,
@@ -751,6 +758,7 @@
 				8EB986B920B30C920075B081 /* CollectionViewItem.swift in Sources */,
 				8EB986BC20B30C920075B081 /* CollectionViewDelegate.swift in Sources */,
 				8E4B7C1920929EFA00DDD9E0 /* LocationConsumer.swift in Sources */,
+				8E7B98E1214882080019ED87 /* Alert.swift in Sources */,
 				8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */,
 				8E4C38D3211828B00089502C /* EventsTreeController.swift in Sources */,
 				8EFA7CFF211F012A00419777 /* PlacesTreeController.swift in Sources */,

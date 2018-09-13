@@ -27,12 +27,12 @@ class ImageFile {
     private(set) var url: URL
     private(set) var place:String = "" {
         didSet {
-            if photoFile != nil && place != "" {
-                photoFile?.place = place
+            if imageData != nil && place != "" {
+                imageData?.place = place
             }
         }
     }
-    private var photoFile:Image?
+    var imageData:Image?
     
     private var indicator:Accumulator?
     var collectionViewItem:CollectionViewItem?
@@ -73,30 +73,30 @@ class ImageFile {
     }
     
     var event:String {
-        return photoFile?.event ?? ""
+        return imageData?.event ?? ""
     }
     
     var isHidden:Bool {
-        if photoFile == nil {
+        if imageData == nil {
             return false
         }
-        if photoFile?.hidden == nil {
+        if imageData?.hidden == nil {
             return false
         }
-        return photoFile?.hidden == true
+        return imageData?.hidden == true
     }
     
     func hide() {
-        if photoFile != nil {
-            photoFile?.hidden = true
-            ModelStore.default.saveImage(image: photoFile!)
+        if imageData != nil {
+            imageData?.hidden = true
+            ModelStore.default.saveImage(image: imageData!)
         }
     }
     
     func show() {
-        if photoFile != nil {
-            photoFile?.hidden = false
-            ModelStore.default.saveImage(image: photoFile!)
+        if imageData != nil {
+            imageData?.hidden = false
+            ModelStore.default.saveImage(image: imageData!)
         }
     }
     
@@ -111,8 +111,8 @@ class ImageFile {
     // MARK: SAVE IMAGE
     
     func save(){
-        if self.photoFile != nil {
-            ModelStore.default.saveImage(image: self.photoFile!)
+        if self.imageData != nil {
+            ModelStore.default.saveImage(image: self.imageData!)
         }
     }
     
@@ -133,58 +133,58 @@ class ImageFile {
         self.isVideo = (imageType == .video)
         
         self.metaInfoHolder = metaInfoStore ?? MetaInfoHolder()
-        self.photoFile = photoFile
+        self.imageData = photoFile
         
         loadMetaInfoFromDatabase(photoFile, sharedDB: sharedDB)
         
         var needSave:Bool = false
         
-        if self.photoFile?.dateTimeFromFilename == nil {
+        if self.imageData?.dateTimeFromFilename == nil {
             self.recognizeDateTimeFromFilename()
             needSave = true
         }
         
-        if self.photoFile?.imageSource == nil {
+        if self.imageData?.imageSource == nil {
             self.recognizeImageSource()
             needSave = true
         }
         
         let now = Date()
         
-        if self.photoFile?.updateExifDate == nil || self.photoFile?.photoTakenYear == 0 || self.photoFile?.photoTakenYear == nil || self.photoFile?.photoTakenDate == nil {
+        if self.imageData?.updateExifDate == nil || self.imageData?.photoTakenYear == 0 || self.imageData?.photoTakenYear == nil || self.imageData?.photoTakenDate == nil {
             
             // TODO:
-            if let datetime = self.photoFile?.assignDateTime, datetime < now {
+            if let datetime = self.imageData?.assignDateTime, datetime < now {
                 self.storePhotoTakenDate(dateTime: datetime)
                 needSave = true
                 
-            }else if let datetime = self.photoFile?.exifDateTimeOriginal, datetime < now {
+            }else if let datetime = self.imageData?.exifDateTimeOriginal, datetime < now {
                 self.storePhotoTakenDate(dateTime: datetime)
                 needSave = true
-            }else if let datetime = self.photoFile?.exifCreateDate, datetime < now {
+            }else if let datetime = self.imageData?.exifCreateDate, datetime < now {
                 self.storePhotoTakenDate(dateTime: datetime)
                 needSave = true
-            }else if let datetime = self.photoFile?.exifModifyDate, datetime < now {
+            }else if let datetime = self.imageData?.exifModifyDate, datetime < now {
                 self.storePhotoTakenDate(dateTime: datetime)
                 needSave = true
-            }else if let datetime = self.photoFile?.exifModifyDate, datetime < now {
+            }else if let datetime = self.imageData?.exifModifyDate, datetime < now {
                 self.storePhotoTakenDate(dateTime: datetime)
                 needSave = true
-            }else if let datetime = self.photoFile?.videoCreateDate, datetime < now {
+            }else if let datetime = self.imageData?.videoCreateDate, datetime < now {
                 self.storePhotoTakenDate(dateTime: datetime)
                 needSave = true
-            }else if let datetime = self.photoFile?.trackCreateDate, datetime < now {
+            }else if let datetime = self.imageData?.trackCreateDate, datetime < now {
                 self.storePhotoTakenDate(dateTime: datetime)
                 needSave = true
             }else{
-                if self.photoFile?.filesysCreateDate == nil { // exif not loaded yet
+                if self.imageData?.filesysCreateDate == nil { // exif not loaded yet
                     autoreleasepool { () -> Void in
                         self.loadMetaInfoFromOSX()
                         self.loadMetaInfoFromExif()
                         
                         needSave = true
                     }
-                }else if let datetime = self.photoFile?.filesysCreateDate, datetime < now {
+                }else if let datetime = self.imageData?.filesysCreateDate, datetime < now {
                     self.storePhotoTakenDate(dateTime: datetime)
                     needSave = true
                 }
@@ -195,7 +195,7 @@ class ImageFile {
         var needLoadLocation:Bool = false
         
         // force update location
-        if self.photoFile != nil && self.photoFile!.latitudeBD != "0.0" && self.photoFile!.country == "" {
+        if self.imageData != nil && self.imageData!.latitudeBD != "0.0" && self.imageData!.country == "" {
             needLoadLocation = true
         }
         
@@ -204,7 +204,7 @@ class ImageFile {
             //print("NEED LOAD LOCATION")
             needLoadLocation = true
         }
-        if self.photoFile?.updateLocationDate == nil {
+        if self.imageData?.updateLocationDate == nil {
             if self.location.coordinate != nil && self.location.coordinate!.isNotZero {
                 //BaiduLocation.queryForAddress(lat: self.latitudeBaidu, lon: self.longitudeBaidu, locationConsumer: self)
                 //print("COORD NOT ZERO")
@@ -255,13 +255,13 @@ class ImageFile {
         
         self.metaInfoHolder = metaInfoStore ?? MetaInfoHolder()
         
-        self.photoFile = ModelStore.default.getOrCreatePhoto(filename: fileName, path: url.path, parentPath: url.deletingLastPathComponent().path, sharedDB:sharedDB)
+        self.imageData = ModelStore.default.getOrCreatePhoto(filename: fileName, path: url.path, parentPath: url.deletingLastPathComponent().path, sharedDB:sharedDB)
         
         if !quickCreate {
             print("LOAD META FROM DB BY IMAGE URL")
-            loadMetaInfoFromDatabase(self.photoFile)
+            loadMetaInfoFromDatabase(self.imageData)
             
-            if self.photoFile?.updateExifDate == nil || self.photoFile?.photoTakenYear == 0 {
+            if self.imageData?.updateExifDate == nil || self.imageData?.photoTakenYear == 0 {
                 
                 autoreleasepool { () -> Void in
                     self.loadMetaInfoFromOSX()
@@ -270,7 +270,7 @@ class ImageFile {
                 
             }
             //print("loaded image coordinate: \(self.latitudeBaidu) \(self.longitudeBaidu)")
-            if self.photoFile?.updateLocationDate == nil {
+            if self.imageData?.updateLocationDate == nil {
                 if self.location.coordinate != nil && self.location.coordinate!.isNotZero {
                     //BaiduLocation.queryForAddress(lat: self.latitudeBaidu, lon: self.longitudeBaidu, locationConsumer: self)
                     autoreleasepool { () -> Void in
@@ -440,7 +440,7 @@ class ImageFile {
     // MARK: RECOGNIZE IMAGE SOURCE
     
     func recognizeImageSource(){
-        guard photoFile != nil && photoFile?.imageSource == nil else {return}
+        guard imageData != nil && imageData?.imageSource == nil else {return}
         var imageSource:String = ""
         let filename = url.lastPathComponent
         if filename.starts(with: "mmexport") {
@@ -475,8 +475,8 @@ class ImageFile {
             }
         }
         
-        if photoFile != nil && imageSource != "" {
-            photoFile?.imageSource = imageSource
+        if imageData != nil && imageSource != "" {
+            imageData?.imageSource = imageSource
         }
     }
     
@@ -552,8 +552,8 @@ class ImageFile {
         let parts:[String] = url.lastPathComponent.matches(for: pattern)
         if parts.count > 0 {
             let dateTime:String = "\(parts[1]):\(parts[2]):\(parts[3]) \(parts[4]):\(parts[5]):\(parts[6])"
-            if self.photoFile != nil {
-                self.photoFile?.dateTimeFromFilename = dateTime
+            if self.imageData != nil {
+                self.imageData?.dateTimeFromFilename = dateTime
             }
             isRecognizedDateTimeFromFilename = true
         }
@@ -565,8 +565,8 @@ class ImageFile {
         if parts.count > 0 {
             let timestamp:String = "\(parts[1])"
             let dateTime = self.convertUnixTimestampToDateString(timestamp)
-            if self.photoFile != nil {
-                self.photoFile?.dateTimeFromFilename = dateTime
+            if self.imageData != nil {
+                self.imageData?.dateTimeFromFilename = dateTime
             }
             isRecognizedDateTimeFromFilename = true
         }
@@ -578,8 +578,8 @@ class ImageFile {
         if parts.count > 0 {
             let timestamp:String = "\(parts[1]).\(parts[2])"
             let dateTime = self.convertUnixTimestampToDateString(timestamp)
-            if self.photoFile != nil {
-                self.photoFile?.dateTimeFromFilename = dateTime
+            if self.imageData != nil {
+                self.imageData?.dateTimeFromFilename = dateTime
             }
             isRecognizedDateTimeFromFilename = true
         }
@@ -590,8 +590,8 @@ class ImageFile {
         let parts:[String] = url.path.matches(for: pattern)
         if parts.count > 0 {
             let dateString:String = "\(parts[1]):\(parts[2]):01 00:00:00"
-            if self.photoFile != nil {
-                self.photoFile?.dateTimeFromFilename = dateString
+            if self.imageData != nil {
+                self.imageData?.dateTimeFromFilename = dateString
             }
             isRecognizedDateTimeFromFilename = true
         }
@@ -602,8 +602,8 @@ class ImageFile {
         let parts:[String] = url.path.matches(for: pattern)
         if parts.count > 0 {
             let dateString:String = "\(parts[1]):\(parts[2]):\(parts[3]) 00:00:00"
-            if self.photoFile != nil {
-                self.photoFile?.dateTimeFromFilename = dateString
+            if self.imageData != nil {
+                self.imageData?.dateTimeFromFilename = dateString
             }
             isRecognizedDateTimeFromFilename = true
         }
@@ -623,7 +623,7 @@ class ImageFile {
     private func choosePhotoTakenDateFromMetaInfo() -> String? {
         let now:Date = Date()
         var dt:Date? = nil
-        if let photoFile = self.photoFile {
+        if let photoFile = self.imageData {
             dt = photoFile.assignDateTime ?? photoFile.exifDateTimeOriginal ?? photoFile.exifCreateDate
             
             if (dt == nil || dt! > now) && photoFile.dateTimeFromFilename != nil {
@@ -698,21 +698,21 @@ class ImageFile {
     
     private func storePhotoTakenDate(dateTime photoTakenDate:Date){
         
-        self.photoFile?.photoTakenDate = photoTakenDate
+        self.imageData?.photoTakenDate = photoTakenDate
         
         let calendar = NSCalendar.current
         let component = calendar.dateComponents([.year, .month, .day, .hour], from: photoTakenDate)
-        if self.photoFile != nil && component.year != nil && component.month != nil && component.day != nil && component.hour != nil {
-            self.photoFile?.photoTakenYear = component.year!
-            self.photoFile?.photoTakenMonth = component.month!
-            self.photoFile?.photoTakenDay = component.day!
-            self.photoFile?.photoTakenHour = component.hour!
-            self.photoFile?.updatePhotoTakenDate = Date()
+        if self.imageData != nil && component.year != nil && component.month != nil && component.day != nil && component.hour != nil {
+            self.imageData?.photoTakenYear = component.year!
+            self.imageData?.photoTakenMonth = component.month!
+            self.imageData?.photoTakenDay = component.day!
+            self.imageData?.photoTakenHour = component.hour!
+            self.imageData?.updatePhotoTakenDate = Date()
         }
     }
     
     func photoTakenDate() -> Date? {
-        return self.photoFile?.photoTakenDate
+        return self.imageData?.photoTakenDate
     }
     
     func dateString(_ date:Date?, format:String = "yyyy-MM-dd") -> String {
@@ -730,7 +730,7 @@ class ImageFile {
     
     func photoTakenDateString(_ format:String = "yyyy-MM-dd", forceUpdate:Bool = false) -> String {
         guard _photoTakenDateString == "" || forceUpdate else {return self._photoTakenDateString}
-        if let dateTime = self.photoFile?.photoTakenDate {
+        if let dateTime = self.imageData?.photoTakenDate {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = format
             let photoTakenDate = dateFormatter.string(from: dateTime)
@@ -747,7 +747,7 @@ class ImageFile {
     
     func photoTakenTime(forceUpdate:Bool = false) -> String {
         guard _photoTakenTimeString == "" || forceUpdate else {return self._photoTakenTimeString}
-        if let dateTime = self.photoFile?.photoTakenDate {
+        if let dateTime = self.imageData?.photoTakenDate {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
             let photoTakenDate = dateFormatter.string(from: dateTime)
@@ -762,9 +762,9 @@ class ImageFile {
     // MARK: ASSIGN
     
     func assignDate(date:Date) {
-        if photoFile != nil {
-            photoFile?.assignDateTime = date
-            photoFile?.updateDateTimeDate = Date()
+        if imageData != nil {
+            imageData?.assignDateTime = date
+            imageData?.updateDateTimeDate = Date()
         }
         
         let photoTakenDate:String? = self.choosePhotoTakenDateFromMetaInfo()
@@ -775,25 +775,25 @@ class ImageFile {
     
     func assignEvent(event:ImageEvent){
         var event = event
-        if photoFile != nil {
-            photoFile?.event = event.name
+        if imageData != nil {
+            imageData?.event = event.name
             
             if event.startDate == nil {
-                event.startDate = photoFile?.photoTakenDate
+                event.startDate = imageData?.photoTakenDate
             }else {
-                if event.startDate! > (photoFile?.photoTakenDate)! {
-                    event.startDate = photoFile?.photoTakenDate
+                if event.startDate! > (imageData?.photoTakenDate)! {
+                    event.startDate = imageData?.photoTakenDate
                 }
             }
             
             if event.endDate == nil {
-                event.endDate = photoFile?.photoTakenDate
+                event.endDate = imageData?.photoTakenDate
             }else {
-                if event.endDate! < (photoFile?.photoTakenDate)! {
-                    event.endDate = photoFile?.photoTakenDate
+                if event.endDate! < (imageData?.photoTakenDate)! {
+                    event.endDate = imageData?.photoTakenDate
                 }
             }
-            photoFile?.updateEventDate = Date()
+            imageData?.updateEventDate = Date()
         }
         self.transformDomainToMetaInfo()
     }
@@ -803,24 +803,24 @@ class ImageFile {
         //print("location addressDesc is \(location.addressDescription)")
         //print("location place is \(location.place)")
         
-        if photoFile != nil {
+        if imageData != nil {
             //print("photo file not nil")
-            photoFile?.assignLatitude = location.latitude?.description
-            photoFile?.assignLongitude = location.longitude?.description
-            photoFile?.assignLatitudeBD = location.latitudeBD?.description
-            photoFile?.assignLongitudeBD = location.longitudeBD?.description
+            imageData?.assignLatitude = location.latitude?.description
+            imageData?.assignLongitude = location.longitude?.description
+            imageData?.assignLatitudeBD = location.latitudeBD?.description
+            imageData?.assignLongitudeBD = location.longitudeBD?.description
             
-            photoFile?.assignCountry = location.country
-            photoFile?.assignProvince = location.province
-            photoFile?.assignCity = location.city
-            photoFile?.assignDistrict = location.district
-            photoFile?.assignStreet = location.street
-            photoFile?.assignBusinessCircle = location.businessCircle
-            photoFile?.assignAddress = location.address
-            photoFile?.assignAddressDescription = location.addressDescription
-            photoFile?.assignPlace = location.place
+            imageData?.assignCountry = location.country
+            imageData?.assignProvince = location.province
+            imageData?.assignCity = location.city
+            imageData?.assignDistrict = location.district
+            imageData?.assignStreet = location.street
+            imageData?.assignBusinessCircle = location.businessCircle
+            imageData?.assignAddress = location.address
+            imageData?.assignAddressDescription = location.addressDescription
+            imageData?.assignPlace = location.place
             
-            photoFile?.updateLocationDate = Date()
+            imageData?.updateLocationDate = Date()
         }
         self.location = location
         self.recognizePlace()
@@ -831,7 +831,7 @@ class ImageFile {
     // MARK: LOAD META INFO
     
     func transformDomainToMetaInfo() {
-        if let photoFile = self.photoFile {
+        if let photoFile = self.imageData {
             if photoFile.imageWidth != 0 && photoFile.imageHeight != 0 {
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Filename", value: url.lastPathComponent))
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Full path", value: url.path.replacingOccurrences(of: url.lastPathComponent, with: "")))
@@ -985,9 +985,9 @@ class ImageFile {
             let pxHeight = imgProps[pixelHeight] as? Int{
             
             if pxWidth != 0 && pxHeight != 0 {
-                if self.photoFile != nil {
-                    self.photoFile?.imageWidth = pxWidth
-                    self.photoFile?.imageHeight = pxHeight
+                if self.imageData != nil {
+                    self.imageData?.imageWidth = pxWidth
+                    self.imageData?.imageHeight = pxHeight
                 }
             }
         }
@@ -995,14 +995,14 @@ class ImageFile {
         if let tiffData = imgProps[TIFFDictionary] as? [String: AnyObject] {
             let cameraMake = tiffData[CameraMake] as? String ?? ""
             if cameraMake != "" {
-                if self.photoFile != nil {
-                    self.photoFile?.cameraMaker = cameraMake
+                if self.imageData != nil {
+                    self.imageData?.cameraMaker = cameraMake
                 }
             }
             let cameraModel = tiffData[CameraModel] as? String ?? ""
             if cameraModel != "" {
-                if self.photoFile != nil {
-                    self.photoFile?.cameraModel = cameraModel
+                if self.imageData != nil {
+                    self.imageData?.cameraModel = cameraModel
                 }
             }
             
@@ -1027,23 +1027,23 @@ class ImageFile {
         
         if let tiffData = imgProps[TIFFDictionary] as? [String: AnyObject],
             let software = tiffData[Software] as? String {
-            if self.photoFile != nil {
-                self.photoFile?.softwareName = software
+            if self.imageData != nil {
+                self.imageData?.softwareName = software
             }
         }
         
         if let exifData = imgProps[exifDictionary] as? [String: AnyObject],
             let dto = exifData[exifDateTimeOriginal] as? String {
             date = dto
-            if self.photoFile != nil {
-                self.photoFile?.exifDateTimeOriginal = exifDateFormat.date(from: date)
+            if self.imageData != nil {
+                self.imageData?.exifDateTimeOriginal = exifDateFormat.date(from: date)
             }
         }
         
         if let tiffData = imgProps[TIFFDictionary] as? [String: AnyObject] {
             if let softwareDateTime = tiffData[SoftwareDateTime] as? String {
-                if self.photoFile != nil {
-                    self.photoFile?.softwareModifiedTime = exifDateFormat.date(from: softwareDateTime)
+                if self.imageData != nil {
+                    self.imageData?.softwareModifiedTime = exifDateFormat.date(from: softwareDateTime)
                 }
             }
         }
@@ -1051,8 +1051,8 @@ class ImageFile {
         if let gpsData = imgProps[GPSDictionary] as? [String: AnyObject],
             let gpsDateUTC = gpsData[GPSDateUTC] as? String,
             let gpsTimeUTC = gpsData[GPSTimestampUTC] as? String{
-            if self.photoFile != nil {
-                self.photoFile?.gpsDate = "\(gpsDateUTC) \(gpsTimeUTC) UTC"
+            if self.imageData != nil {
+                self.imageData?.gpsDate = "\(gpsDateUTC) \(gpsTimeUTC) UTC"
             }
         }
 //
@@ -1145,7 +1145,7 @@ class ImageFile {
         
         location.setCoordinateWithoutConvert(coord: coord, coordBD: coordBD)
         
-        self.photoFile = photoFile
+        self.imageData = photoFile
         if needSave {
             print("UPDATE COORD TO NON ZERO")
             ModelStore.default.saveImage(image: photoFile, sharedDB: sharedDB)
@@ -1166,77 +1166,77 @@ class ImageFile {
             
             
             let dateTimeOriginal = json[0]["EXIF"]["DateTimeOriginal"].description
-            photoFile?.exifDateTimeOriginal = exifDateFormat.date(from: dateTimeOriginal)
+            imageData?.exifDateTimeOriginal = exifDateFormat.date(from: dateTimeOriginal)
             
             //if photoFile?.exifCreateDate == nil {
-                photoFile?.exifCreateDate = exifDateFormat.date(from: json[0]["EXIF"]["CreateDate"].description)
+                imageData?.exifCreateDate = exifDateFormat.date(from: json[0]["EXIF"]["CreateDate"].description)
             //}
             //if photoFile?.exifModifyDate == nil {
-                photoFile?.exifModifyDate = exifDateFormat.date(from: json[0]["EXIF"]["ModifyDate"].description)
+                imageData?.exifModifyDate = exifDateFormat.date(from: json[0]["EXIF"]["ModifyDate"].description)
             //}
             //if photoFile?.filesysCreateDate == nil {
-                photoFile?.filesysCreateDate = exifDateFormat.date(from: json[0]["File"]["FileModifyDate"].description)
+                imageData?.filesysCreateDate = exifDateFormat.date(from: json[0]["File"]["FileModifyDate"].description)
             //}
             //if photoFile?.filesysCreateDate == nil {
-                photoFile?.filesysCreateDate = exifDateFormatWithTimezone.date(from: json[0]["File"]["FileModifyDate"].description)
+                imageData?.filesysCreateDate = exifDateFormatWithTimezone.date(from: json[0]["File"]["FileModifyDate"].description)
             //}
             
             
             if isPhoto {
                 if json[0]["EXIF"]["ISO"] != JSON.null {
-                    photoFile?.iso = json[0]["EXIF"]["ISO"].description
+                    imageData?.iso = json[0]["EXIF"]["ISO"].description
                 }
                 
                 if json[0]["EXIF"]["ExposureTime"] != JSON.null {
-                    photoFile?.exposureTime = json[0]["EXIF"]["ExposureTime"].description
+                    imageData?.exposureTime = json[0]["EXIF"]["ExposureTime"].description
                 }
                 
                 if json[0]["EXIF"]["ApertureValue"] != JSON.null {
-                    photoFile?.aperture = json[0]["EXIF"]["ApertureValue"].description
+                    imageData?.aperture = json[0]["EXIF"]["ApertureValue"].description
                 }
             }
             
             if isVideo {
                 
-                photoFile?.videoFormat = json[0]["QuickTime"]["MajorBrand"].description
+                imageData?.videoFormat = json[0]["QuickTime"]["MajorBrand"].description
                 
                 if json[0]["QuickTime"]["CreateDate"] != "0000:00:00 00:00:00" {
-                    photoFile?.videoCreateDate = exifDateFormat.date(from: json[0]["QuickTime"]["CreateDate"].description)
+                    imageData?.videoCreateDate = exifDateFormat.date(from: json[0]["QuickTime"]["CreateDate"].description)
                 }
                 
                 if json[0]["QuickTime"]["ModifyDate"] != "0000:00:00 00:00:00" {
-                    photoFile?.videoModifyDate = exifDateFormat.date(from: json[0]["QuickTime"]["ModifyDate"].description)
+                    imageData?.videoModifyDate = exifDateFormat.date(from: json[0]["QuickTime"]["ModifyDate"].description)
                 }
                 
                 if json[0]["QuickTime"]["TrackCreateDate"] != "0000:00:00 00:00:00" {
-                    photoFile?.trackCreateDate = exifDateFormat.date(from: json[0]["QuickTime"]["TrackCreateDate"].description)
+                    imageData?.trackCreateDate = exifDateFormat.date(from: json[0]["QuickTime"]["TrackCreateDate"].description)
                 }
                 
                 if json[0]["QuickTime"]["TrackModifyDate"] != "0000:00:00 00:00:00" {
-                    photoFile?.trackModifyDate = exifDateFormat.date(from: json[0]["QuickTime"]["TrackModifyDate"].description)
+                    imageData?.trackModifyDate = exifDateFormat.date(from: json[0]["QuickTime"]["TrackModifyDate"].description)
                 }
                 
-                photoFile?.videoFrameRate = json[0]["QuickTime"]["VideoFrameRate"].doubleValue
+                imageData?.videoFrameRate = json[0]["QuickTime"]["VideoFrameRate"].doubleValue
                 
-                photoFile?.imageWidth = json[0]["QuickTime"]["ImageWidth"].int ?? 0
+                imageData?.imageWidth = json[0]["QuickTime"]["ImageWidth"].int ?? 0
                 
-                photoFile?.imageHeight = json[0]["QuickTime"]["ImageHeight"].int ?? 0
+                imageData?.imageHeight = json[0]["QuickTime"]["ImageHeight"].int ?? 0
                 
-                photoFile?.videoDuration = json[0]["QuickTime"]["Duration"].description
+                imageData?.videoDuration = json[0]["QuickTime"]["Duration"].description
                 
-                photoFile?.fileSize = json[0]["QuickTime"]["MovieDataSize"].description
+                imageData?.fileSize = json[0]["QuickTime"]["MovieDataSize"].description
                 
-                photoFile?.videoBitRate = json[0]["Composite"]["AvgBitrate"].description
+                imageData?.videoBitRate = json[0]["Composite"]["AvgBitrate"].description
                 
-                photoFile?.rotation = json[0]["Composite"]["Rotation"].int ?? 0
+                imageData?.rotation = json[0]["Composite"]["Rotation"].int ?? 0
                 
-                photoFile?.audioChannels = json[0]["QuickTime"]["AudioChannels"].int ?? 0
+                imageData?.audioChannels = json[0]["QuickTime"]["AudioChannels"].int ?? 0
                 
-                photoFile?.audioBits = json[0]["QuickTime"]["AudioBitsPerSample"].int ?? 0
+                imageData?.audioBits = json[0]["QuickTime"]["AudioBitsPerSample"].int ?? 0
                 
-                photoFile?.audioRate = json[0]["QuickTime"]["AudioSampleRate"].int ?? 0
+                imageData?.audioRate = json[0]["QuickTime"]["AudioSampleRate"].int ?? 0
             }
-            photoFile?.updateExifDate = Date()
+            imageData?.updateExifDate = Date()
         }
         
         let jsonStr2:String = ExifTool.helper.getUnformattedExif(url: url)
@@ -1269,7 +1269,7 @@ class ImageFile {
         var city = ""
         var district = ""
         var place = ""
-        if let photoFile = self.photoFile {
+        if let photoFile = self.imageData {
             country = photoFile.assignCountry ?? photoFile.country ?? ""
             city = photoFile.assignCity ?? photoFile.city ?? ""
             city = city.replacingOccurrences(of: "特别行政区", with: "")
@@ -1306,14 +1306,14 @@ class ImageFile {
         //print("SET COORD 1: \(latitude) \(longitude) - \(fileName)")
         location.coordinate = Coord(latitude: latitude, longitude: longitude)
         
-        if self.photoFile != nil {
+        if self.imageData != nil {
             if self.location.coordinate != nil && self.location.coordinate?.latitude != nil && self.location.coordinate?.longitude != nil {
-                self.photoFile?.latitude = "\(self.location.coordinate?.latitude ?? 0)"
-                self.photoFile?.longitude = "\(self.location.coordinate?.longitude ?? 0)"
+                self.imageData?.latitude = "\(self.location.coordinate?.latitude ?? 0)"
+                self.imageData?.longitude = "\(self.location.coordinate?.longitude ?? 0)"
             }
             if self.location.coordinateBD != nil && self.location.coordinateBD?.latitude != nil && self.location.coordinateBD?.longitude != nil {
-                self.photoFile?.latitudeBD = "\(self.location.coordinateBD?.latitude ?? 0)"
-                self.photoFile?.longitudeBD = "\(self.location.coordinateBD?.longitude ?? 0)"
+                self.imageData?.latitudeBD = "\(self.location.coordinateBD?.latitude ?? 0)"
+                self.imageData?.longitudeBD = "\(self.location.coordinateBD?.longitude ?? 0)"
             }
         }
         
@@ -1370,22 +1370,22 @@ extension ImageFile : LocationConsumer {
         self.location.addressDescription = location.addressDescription
         self.location.place = location.place
         
-        if photoFile != nil {
+        if imageData != nil {
             
-            photoFile?.country = location.country
-            photoFile?.province = location.province
-            photoFile?.city = location.city
-            photoFile?.district = location.district
-            photoFile?.street = location.street
-            photoFile?.businessCircle = location.businessCircle
-            photoFile?.address = location.address
-            photoFile?.addressDescription = location.addressDescription
-            photoFile?.suggestPlace = location.place
+            imageData?.country = location.country
+            imageData?.province = location.province
+            imageData?.city = location.city
+            imageData?.district = location.district
+            imageData?.street = location.street
+            imageData?.businessCircle = location.businessCircle
+            imageData?.address = location.address
+            imageData?.addressDescription = location.addressDescription
+            imageData?.suggestPlace = location.place
         }
         
         self.recognizePlace()
         
-        photoFile?.updateLocationDate = Date()
+        imageData?.updateLocationDate = Date()
         
         print("UPDATE LOCATION for image \(url.path)")
         save()

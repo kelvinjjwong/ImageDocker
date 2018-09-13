@@ -12,8 +12,8 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
     
     // MARK: PROPERTIES
     
-    var images:[ImageFile]
-    var currentPath:URL
+    private var images:[ImageFile]
+    private var currentPath:URL
     
     // MARK: CONTROLS
     
@@ -33,16 +33,17 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
     
     // MARK: TABLE DELEGATES
     
-    let tblShortcutDelegate = DirectoryShortcutTableDelegate()
-    let tblFoldersDelegate = DirectoryFolderTableDelegate()
-    let tblFilesDelegate = DirectoryFilesTableDelegate()
+    private let tblShortcutDelegate = DirectoryShortcutTableDelegate()
+    private let tblFoldersDelegate = DirectoryFolderTableDelegate()
+    private let tblFilesDelegate = DirectoryFilesTableDelegate()
     
-    var deviceListController:DeviceListComboController!
+    private var deviceListController:DeviceListComboController!
     
-    var directoryViewDelegate:DirectoryViewDelegate
+    private var directoryViewDelegate:DirectoryViewDelegate
     
     // MARK: INIT
-    
+    // 1st time:   init -> viewDidLoad -> setupDeviceList -> refreshDeviceList -> viewInit
+    //>2nd time: reinit -> refreshDeviceList -> viewInit
     
     init(images: [ImageFile]){
         self.images = images
@@ -60,7 +61,8 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
         self.currentPath = URL(fileURLWithPath: "/")
         super.init(coder: coder)
     }
-
+    
+    // Executes only once
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -76,19 +78,25 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
         self.setupDeviceList()
     }
     
-    func viewInit(){
-        let i = self.comboDeviceList.indexOfSelectedItem
-        if i >= 0 && i < self.deviceListController.deviceItems.count {
-            let device = self.deviceListController.deviceItems[i]
-            
-            self.directoryViewDelegate = AndroidDirectoryViewDelegate(deviceId: device.deviceId)
-            viewInit(path: directoryViewDelegate.home(), shortcuts: directoryViewDelegate.shortcuts())
+    // Executes on pop up every time
+    private func viewInit(){
+        if self.deviceListController.deviceItems.count > 0 {
+            let i = self.comboDeviceList.indexOfSelectedItem
+            if i >= 0 && i < self.deviceListController.deviceItems.count {
+                let device = self.deviceListController.deviceItems[i]
+                
+                self.directoryViewDelegate = AndroidDirectoryViewDelegate(deviceId: device.deviceId)
+                viewInit(path: "/sdcard/Pictures/", shortcuts: directoryViewDelegate.shortcuts())
+            }else{
+                viewInit(path: "", shortcuts: [])
+            }
         }else{
             viewInit(path: "", shortcuts: [])
         }
     }
     
-    func viewInit(path:String, shortcuts:[DirectoryViewShortcut]){
+    // Executes on pop up every time
+    private func viewInit(path:String, shortcuts:[DirectoryViewShortcut]){
         
         tblShortcutDelegate.shortcuts = shortcuts
         tblShortcut.reloadData()
@@ -102,7 +110,16 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
         goto(path: path)
     }
     
-    func setupDeviceList() {
+    
+    // Executes on pop up every time
+    func reinit(_ images:[ImageFile]){
+        self.images = images
+        self.lblProgressMessage.stringValue = "\(images.count) images to be copied"
+        self.refreshDeviceList()
+    }
+    
+    // Executes only once
+    private func setupDeviceList() {
         if self.deviceListController == nil {
             self.deviceListController = DeviceListComboController()
             self.deviceListController.combobox = self.comboDeviceList
@@ -110,9 +127,9 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
             self.comboDeviceList.delegate = self.deviceListController
         }
         self.refreshDeviceList()
-        self.viewInit()
     }
     
+    // Executes on pop up every time
     func refreshDeviceList() {
         self.lblProgressMessage.stringValue = ""
         self.deviceListController.loadAndroidDevices()
@@ -130,6 +147,8 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
             
             self.comboDeviceList.selectItem(at: 0)
             
+            self.lblProgressMessage.stringValue = "\(self.images.count) IMAGES TO BE COPIED"
+            
         }else{
             self.lblProgressMessage.stringValue = "NO DEVICES FOUND, PLEASE REFRESH TO RETRY"
             // disable tables and buttons
@@ -142,6 +161,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
             self.txtDirectory.isEnabled = false
             self.btnOK.isEnabled = false
         }
+        self.viewInit()
     }
     
     // MARK: ACTION
@@ -163,7 +183,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
         self.gotoHome()
     }
     
-    func goto(path:String){
+    internal func goto(path:String){
         if path != "" {
             currentPath = URL(fileURLWithPath: path)
             goto(url: currentPath)
@@ -179,7 +199,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
         }
     }
     
-    func goto(url:URL){
+    private func goto(url:URL){
         
         let path = url.path
         
@@ -213,7 +233,11 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
         return self.currentPath
     }
     
-    func gotoParent() {
+    private func refreshFolderView() {
+        self.goto(url: self.currentPath)
+    }
+    
+    private func gotoParent() {
         print("current: \(currentPath.path)")
         let parent = currentPath.deletingLastPathComponent()
         self.currentPath = parent
@@ -221,12 +245,32 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
         goto(url: parent)
     }
     
-    func gotoHome() {
+    private func gotoHome() {
         self.currentPath = URL(fileURLWithPath: self.directoryViewDelegate.home())
         goto(path: self.directoryViewDelegate.home())
     }
     
-    var accumulator:Accumulator? = nil
+    private func getOrCreateFolderOnDevice(basePath: URL, photo: Image, fm: FileSystemHandler) -> String {
+        var album = ""
+        var event = photo.event ?? "家人照片"
+        if event == "" {
+            event = "家人照片"
+        }
+        if let year = photo.photoTakenYear {
+            album = "\(event) \(year)年"
+        }else{
+            album = event
+        }
+        album = album.replacingOccurrences(of: " ", with: ".")
+        let url = basePath.appendingPathComponent(album)
+        if fm.createDirectory(atPath: url.path) {
+            return url.path
+        }else{
+            return basePath.path
+        }
+    }
+    
+    private var accumulator:Accumulator? = nil
     
     @IBAction func onOKClicked(_ sender: NSButton) {
         guard txtDirectory.stringValue != "" else {return}
@@ -242,23 +286,67 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
             self.btnGoto.isEnabled = false
             self.comboDeviceList.isEnabled = false
             
-            self.accumulator = Accumulator(target: self.images.count, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblProgressMessage, onCompleted: {data in
-                    self.btnOK.isEnabled = true
-                    self.btnHome.isEnabled = true
-                    self.btnParent.isEnabled = true
-                    self.btnGoto.isEnabled = true
-                    self.comboDeviceList.isEnabled = true
-                })
+            
+            var copiedCount = 0
+            var existsCount = 0
+            
+            self.accumulator = Accumulator(target: self.images.count, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblProgressMessage,
+                                           onCompleted: {data in
+                                            
+                                            self.btnOK.isEnabled = true
+                                            self.btnHome.isEnabled = true
+                                            self.btnParent.isEnabled = true
+                                            self.btnGoto.isEnabled = true
+                                            self.comboDeviceList.isEnabled = true
+                    
+                                            self.lblProgressMessage.stringValue = "\(self.images.count) IMAGES TO BE COPIED, \(copiedCount) COPIED, \(existsCount) ALREADY THERE"
+                                            
+            })
+            
+            
+            let destinationPath:URL = URL(fileURLWithPath: self.txtDirectory.stringValue)
             
             DispatchQueue.global().async {
+                
+                let targetFileSystemHandler = AndroidFileManager(deviceId: device.deviceId)
+                let sourceFileSystemHandler = ComputerFileManager()
+                let filenameDateFormatter = DateFormatter()
+                filenameDateFormatter.dateFormat = "yyyy年MM月dd日HH点mm分ss秒"
+                
                 for image in self.images {
-                    let destinationPath:URL = URL(fileURLWithPath: self.txtDirectory.stringValue)
-                        .appendingPathComponent(image.event)
-                    let _ = Android.bridge.push(device: device.deviceId, from: image.url.path, to: destinationPath.path)
-                    
+                    if let imageData = image.imageData {
+                        
+                        let path = self.getOrCreateFolderOnDevice(basePath: destinationPath, photo: imageData, fm: targetFileSystemHandler)
+                        let fileState = ExportManager.getOrCreateFilename(photo: imageData,
+                                                            toPath: path,
+                                                            dateFormat: filenameDateFormatter,
+                                                            targetFileManager: targetFileSystemHandler,
+                                                            sourceFileManager: sourceFileSystemHandler,
+                                                            ignoreDiffPathChecking: true)
+                        if fileState.existAtPath == .notExistAtPath {
+                            
+                            // TODO: patch image description
+                            
+                            let filename = fileState.filename
+                            let url = URL(fileURLWithPath: path).appendingPathComponent(filename)
+                            
+                            print("PUSHING FROM \(image.url.path) TO \(device.deviceId):\(url.path)")
+                            let _ = Android.bridge.push(device: device.deviceId, from: image.url.path, to: url.path)
+                            if Android.bridge.existsFile(device: device.deviceId, path: url.path) {
+                                copiedCount += 1
+                            }
+                        }else if fileState.existAtPath == .existAtPathWithSameMD5 {
+                            existsCount += 1
+                        }
+                        
+                    }
                     DispatchQueue.main.async {
                         let _ = self.accumulator?.add("")
                     }
+                }
+                
+                DispatchQueue.main.async {
+                    self.refreshFolderView()
                 }
                 
             }
@@ -283,8 +371,10 @@ class DeviceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBox
                     let imageDevice = ModelStore.default.getOrCreateDevice(device: device)
                     
                     var dev:PhoneDevice = Android.bridge.memory(device: device)
-                    if imageDevice.name != "" {
+                    if imageDevice.name != "" && imageDevice.name != imageDevice.deviceId {
                         dev.name = imageDevice.name ?? ""
+                    }else{
+                        dev.name = ""
                     }
                     if dev.name == "" {
                         dev.name = "\(imageDevice.manufacture ?? dev.manufacture) \(imageDevice.model ?? dev.model)"

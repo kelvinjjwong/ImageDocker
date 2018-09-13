@@ -15,6 +15,20 @@ enum DeviceOS:Int {
 
 struct DeviceShell {
     
+    static func getFilenameFromLs(from columns:[String], at columnIndex:Int) -> String{
+        let columnSize = columnIndex + 1
+        var filename = ""
+        if columns.count >= columnSize {
+            var parts:[String] = []
+            for i in columnIndex..<columns.count {
+                //print("\(i): \(columns[i])")
+                parts.append(columns[i])
+            }
+            filename = parts.joined(separator: " ")
+        }
+        return filename
+    }
+    
     static func getFilenames(from string:String, basePath:String, excludeFilenames:Set<String>, allowedExt:Set<String>, deviceOS:DeviceOS = .android) -> [PhoneFile] {
         var result:[PhoneFile] = []
         let lines = string.components(separatedBy: "\n")
@@ -38,8 +52,8 @@ struct DeviceShell {
                 }
                 columns.append(col)
             }
-            
-            let filename = columns[columns.count - 1]
+            //print(line)
+            let filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)
             
             if filename == "" || excludeFilenames.contains(filename) {
                 continue
@@ -49,9 +63,9 @@ struct DeviceShell {
             let ext = filenameParts[filenameParts.count - 1].lowercased()
             guard allowedExt.contains(ext) && columns.count > 5 else {continue}
             
-            let size = deviceOS == .android ? columns[columns.count - 4] : columns[2]
-            let date = deviceOS == .android ? columns[columns.count - 3] : ""
-            let time = deviceOS == .android ? columns[columns.count - 2] : ""
+            let size = deviceOS == .android ? columns[2] : columns[2]
+            let date = deviceOS == .android ? columns[3] : ""
+            let time = deviceOS == .android ? columns[4] : ""
             let url:URL = URL(fileURLWithPath: basePath).appendingPathComponent(subFolder).appendingPathComponent(filename)
             let filepath = url.path
             var file = PhoneFile(filename: filename, path: filepath)
@@ -77,7 +91,7 @@ struct DeviceShell {
         return result.sorted()
     }
     
-    static func getFilenames(from string:String) -> [String] {
+    static func getFilenames(from string:String, excludeFilenames:Set<String>, allowedExt:Set<String>, deviceOS:DeviceOS = .mac) -> [String] {
         var result:[String] = []
         let lines = string.components(separatedBy: "\n")
         for line in lines {
@@ -91,35 +105,10 @@ struct DeviceShell {
                 }
                 columns.append(col)
             }
+            //print(line)
+            //print(deviceOS)
             
-            let filename = columns[columns.count - 1]
-            
-            
-            if filename == "" {
-                continue
-            }
-            result.append(filename)
-        }
-        return result.sorted()
-    }
-    
-    
-    static func getFilenames(from string:String, excludeFilenames:Set<String>, allowedExt:Set<String>) -> [String] {
-        var result:[String] = []
-        let lines = string.components(separatedBy: "\n")
-        for line in lines {
-            if line == "" {continue}
-            
-            var columns:[String] = []
-            let cols = line.components(separatedBy: " ")
-            for col in cols {
-                if col == "" || col == " " {
-                    continue
-                }
-                columns.append(col)
-            }
-            
-            let filename = columns[columns.count - 1]
+            let filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)
             
             if filename == "" || excludeFilenames.contains(filename)  {
                 continue

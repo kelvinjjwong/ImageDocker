@@ -430,7 +430,7 @@ struct IPHONE {
             command.standardError = pipe
             command.currentDirectoryPath = workpath
             command.launchPath = "/bin/ls"
-            command.arguments = ["-l"]
+            command.arguments = ["-go"]
             do {
                 try command.run()
             }catch{
@@ -443,7 +443,8 @@ struct IPHONE {
         pipe.fileHandleForReading.closeFile()
         result = DeviceShell.getFilenames(from: string,
                                           excludeFilenames: ["directory", ".", ".."],
-                                          allowedExt: ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg"])
+                                          allowedExt: ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg"],
+                                          deviceOS: .mac)
         print("got \(result.count) files from \(workpath)")
         return result
     }

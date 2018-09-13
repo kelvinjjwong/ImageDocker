@@ -400,6 +400,9 @@ extension DirectoryFilesTableDelegate : NSTableViewDelegate {
             case NSUserInterfaceItemIdentifier("filename"):
                 value = info
                 
+//            case NSUserInterfaceItemIdentifier("datetime"):
+//                value = info
+                
             default:
                 break
             }

@@ -264,5 +264,34 @@ struct ExifTool {
         pipe.fileHandleForReading.closeFile()
         print(string)
     }
+    
+    func getImageDescription(url:URL) -> String {
+        let pipe = Pipe()
+        autoreleasepool { () -> Void in
+            let exiftool = Process()
+            exiftool.standardOutput = pipe
+            exiftool.standardError = pipe
+            exiftool.launchPath = mainUrl.path
+            exiftool.arguments = []
+            exiftool.arguments?.append("-ImageDescription")
+            exiftool.arguments?.append(url.path)
+            exiftool.launch()
+            exiftool.waitUntilExit()
+        }
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
+        if string == "" || !string.hasPrefix("Image Description               : "){
+            return ""
+        }
+        var result = string.replacingOccurrences(of: "Image Description               : ", with: "")
+        
+        if result.hasPrefix("\"") && result.hasSuffix("\"") && result != "\"" {
+            let prefixIndex = result.index(result.startIndex, offsetBy: 1)
+            let suffixIndex = result.index(result.endIndex, offsetBy: -1)
+            result = String(result[prefixIndex..<suffixIndex])
+        }
+        return result
+    }
 
 }

@@ -124,7 +124,7 @@ class ImageFolderTreeScanner {
                 print(error)
             }
         }
-        ModelStore.save()
+        //ModelStore.save()
         return imageFolders
     }
     
@@ -164,7 +164,7 @@ class ImageFolderTreeScanner {
     
     static func createRepository(path:String) {
         let _ = ImageFolder(URL(fileURLWithPath: path))
-        ModelStore.save()
+        //ModelStore.save()
     }
     
     static func scanRepositories(indicator:Accumulator? = nil)  {
@@ -300,7 +300,7 @@ class ImageFolderTreeScanner {
             }
             
             //DispatchQueue.main.async {
-                ModelStore.save()
+                //ModelStore.save()
             //}
             print("\(Date()) PHOTOS TO REMOVED FROM DB: SAVE DONE")
         }
@@ -345,7 +345,7 @@ class ImageFolderTreeScanner {
                 }
                 */
             }
-            ModelStore.save()
+            //ModelStore.save()
         }
         if onCompleted != nil {
             onCompleted!()

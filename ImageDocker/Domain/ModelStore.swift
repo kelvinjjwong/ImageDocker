@@ -21,9 +21,7 @@ class ModelStore {
         self.versionCheck()
     }
     
-    static func save(){
-        print("DUMMY SAVE: DO NOTHING")
-    }
+    // MARK: SHARED DATABASE INSTANCE
     
     private static var _sharedDBQueue:DatabaseWriter?
     private static var _sharedDBPool:DatabaseWriter?
@@ -504,6 +502,8 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
+    // MARK: IMAGES - EXPORT
+    
     func countAllPhotoFilesForExporting(after date:Date) -> Int {
         var result = 0
         do {
@@ -559,22 +559,44 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
     }
     
-    func storeImageExportedTime(path:String, date:Date, exportedFilename:String){
+    func storeImageOriginalMD5(path:String, md5:String){
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
-                try db.execute("UPDATE Image set exportTime = ?, exportAsFilename = ? WHERE path=?", arguments: StatementArguments([date, exportedFilename, path]))
+                try db.execute("UPDATE Image set originalMD5 = ? WHERE path=?", arguments: StatementArguments([md5, path]))
             }
         }catch{
             print(error)
         }
     }
     
-    func storeImageExportedTime(path:String, date:Date, exportToPath:String){
+    func storeImageExportedMD5(path:String, md5:String){
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
-                try db.execute("UPDATE Image set exportTime = ?, exportToPath = ? WHERE path=?", arguments: StatementArguments([date, exportToPath, path]))
+                try db.execute("UPDATE Image set exportedMD5 = ? WHERE path=?", arguments: StatementArguments([md5, path]))
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func storeImageDescription(path:String, shortDescription:String, longDescription:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try db.execute("UPDATE Image set shortDescription = ?, longDescription = ? WHERE path=?", arguments: StatementArguments([shortDescription, longDescription, path]))
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func storeImageExportSuccess(path:String, date:Date, exportToPath:String, exportedFilename:String, exportedMD5:String, exportedLongDescription:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try db.execute("UPDATE Image set exportTime = ?, exportToPath = ?, exportAsFilename = ?, exportedMD5 = ?, exportedLongDescription = ?, exportState = 'OK', exportFailMessage = '' WHERE path=?", arguments: StatementArguments([date, exportToPath, exportedFilename, exportedMD5, exportedLongDescription, path]))
             }
         }catch{
             print(error)
@@ -586,6 +608,17 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try db.execute("UPDATE Image set exportTime = ? WHERE path=?", arguments: StatementArguments([date, path]))
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func storeImageExportFail(path:String, date:Date, message:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try db.execute("UPDATE Image set exportTime = ?, exportState = 'FAIL', exportFailMessage = ? WHERE path=?", arguments: StatementArguments([date, message, path]))
             }
         }catch{
             print(error)
@@ -1277,6 +1310,22 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 t.column("importDate", .text)
                 t.column("importToPath", .text)
                 t.column("importAsFilename", .text)
+            })
+        }
+        
+        migrator.registerMigration("v3") { db in
+            try db.alter(table: "Image", body: { t in
+                t.add(column: "shortDescription", .text)
+                t.add(column: "longDescription", .text)
+                t.add(column: "originalMD5", .text)
+                t.add(column: "exportedMD5", .text)
+                t.add(column: "exportedLongDescription", .text)
+                t.add(column: "exportState", .text)
+                t.add(column: "exportFailMessage", .text)
+            })
+            
+            try db.alter(table: "ImageDevice", body: { t in
+                t.add(column: "marketName", .text)
             })
         }
         

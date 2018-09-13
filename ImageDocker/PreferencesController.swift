@@ -14,6 +14,7 @@ final class PreferencesController: NSViewController {
     fileprivate static let baiduSKKey = "BaiduSKKey"
     fileprivate static let googleAKKey = "GoogleAPIKey"
     fileprivate static let exportPathKey = "ExportPath"
+    fileprivate static let exportToAndroidPathKey = "ExportToAndroidPath"
     fileprivate static let databasePathKey = "DatabasePathKey"
     fileprivate static let iosMountPointKey = "IOSMountPointKey"
     
@@ -25,6 +26,7 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var tabs: NSTabView!
     @IBOutlet weak var txtDatabasePath: NSTextField!
     @IBOutlet weak var txtIOSMountPoint: NSTextField!
+    @IBOutlet weak var txtExportToAndroidPath: NSTextField!
     
     
     
@@ -189,12 +191,7 @@ final class PreferencesController: NSViewController {
     class func healthCheck() {
         
         if baiduAK() == "" || baiduSK() == "" {
-            
-            let alert = NSAlert()
-            alert.addButton(withTitle: NSLocalizedString("CLOSE", comment: "Close"))
-            alert.messageText = NSLocalizedString("Please setup API keys", comment: "Please setup API keys")
-            alert.informativeText = NSLocalizedString("Please specify Baidu AK and SK in Preferences menu/dialog.", comment: "Please specify Baidu AK and SK in Preferences menu/dialog.")
-            alert.runModal()
+            Alert.invalidBaiduMapAK()
             return
         }
     }
