@@ -32,7 +32,7 @@ class AndroidDirectoryViewDelegate : DirectoryViewDelegate {
         return [
             DirectoryViewShortcut(title: "Home", path: home()),
             DirectoryViewShortcut(title: "Camera", path: "/sdcard/DCIM/Camera/"),
-            DirectoryViewShortcut(title: "Camera", path: "/sdcard/Pictures/")
+            DirectoryViewShortcut(title: "Pictures", path: "/sdcard/Pictures/")
         ]
     }
     

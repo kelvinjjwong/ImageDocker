@@ -108,6 +108,12 @@ final class PreferencesController: NSViewController {
         return txt
     }
     
+    class func exportToAndroidDirectory() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: exportToAndroidPathKey) else {return ""}
+        return txt
+    }
+    
     class func exportDirectory() -> String {
         let defaults = UserDefaults.standard
         guard let txt = defaults.string(forKey: exportPathKey) else {return ""}
@@ -179,6 +185,8 @@ final class PreferencesController: NSViewController {
                      forKey: PreferencesController.baiduSKKey)
         defaults.set(txtExportPath.stringValue,
                      forKey: PreferencesController.exportPathKey)
+        defaults.set(txtExportToAndroidPath.stringValue,
+                     forKey: PreferencesController.exportToAndroidPathKey)
         defaults.set(txtGoogleAPIKey.stringValue,
                      forKey: PreferencesController.googleAKKey)
         defaults.set(txtDatabasePath.stringValue,
@@ -207,6 +215,7 @@ final class PreferencesController: NSViewController {
         txtExportPath.stringValue = PreferencesController.exportDirectory()
         txtDatabasePath.stringValue = PreferencesController.databasePath()
         txtIOSMountPoint.stringValue = PreferencesController.iosDeviceMountPoint()
+        txtExportToAndroidPath.stringValue = PreferencesController.exportToAndroidDirectory()
     }
     
     override var representedObject: Any? {

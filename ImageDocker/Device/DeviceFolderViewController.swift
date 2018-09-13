@@ -12,6 +12,9 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
     
     // MARK: PROPERTIES
     
+    private let defaultBasePath = "/sdcard/Pictures/"
+    private let spaceAlternative = "."
+    
     private var images:[ImageFile]
     private var currentPath:URL
     
@@ -86,7 +89,30 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
                 let device = self.deviceListController.deviceItems[i]
                 
                 self.directoryViewDelegate = AndroidDirectoryViewDelegate(deviceId: device.deviceId)
-                viewInit(path: "/sdcard/Pictures/", shortcuts: directoryViewDelegate.shortcuts())
+                
+                var referDefaultBasePath = false
+                var basePath = PreferencesController.exportToAndroidDirectory().trimmingCharacters(in: .whitespacesAndNewlines)
+                
+                if basePath == "" {
+                    referDefaultBasePath = true
+                }else{
+                    if !Android.bridge.exists(device: device.deviceId, path: basePath) {
+                        Android.bridge.mkdir(device: device.deviceId, path: basePath)
+                        if !Android.bridge.exists(device: device.deviceId, path: basePath) {
+                            referDefaultBasePath = true
+                        }
+                    }
+                }
+                
+                if referDefaultBasePath {
+                    if Android.bridge.exists(device: device.deviceId, path: defaultBasePath){
+                        basePath = defaultBasePath
+                    }else{
+                        basePath = "/sdcard/"
+                    }
+                }
+                
+                viewInit(path: basePath, shortcuts: directoryViewDelegate.shortcuts())
             }else{
                 viewInit(path: "", shortcuts: [])
             }
@@ -261,7 +287,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
         }else{
             album = event
         }
-        album = album.replacingOccurrences(of: " ", with: ".")
+        album = album.replacingOccurrences(of: " ", with: spaceAlternative)
         let url = basePath.appendingPathComponent(album)
         if fm.createDirectory(atPath: url.path) {
             return url.path
