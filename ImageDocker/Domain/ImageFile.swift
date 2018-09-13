@@ -363,6 +363,14 @@ class ImageFile {
         return nil
     }
     
+    func loadNSImage() -> NSImage? {
+        if FileManager.default.fileExists(atPath: url.path) {
+            return NSImage(byReferencingFile: url.path)
+        }else{
+            return nil
+        }
+    }
+    
     /// Load an image thumbnail
     /// - Returns: NSImage of the thumbnail
     ///

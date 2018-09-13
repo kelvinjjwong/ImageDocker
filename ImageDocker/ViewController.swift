@@ -252,6 +252,9 @@ class ViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.btnShare.sendAction(on: .leftMouseDown)
+        
         print("\(Date()) Loading view")
         ModelStore.default.checkData()
         
@@ -1136,7 +1139,25 @@ class ViewController: NSViewController {
     
     // MARK: SELECTION TOOLBAR
     
-    @IBAction func onShareClicked(_ sender: Any) {
+    @IBAction func onShareClicked(_ sender: NSButton) {
+        let images = self.selectionViewController.imagesLoader.getItems()
+        if images.count == 0 {
+            Alert.noImageSelected()
+            return
+        }
+        var nsImages:[NSImage] = []
+        for image in images {
+            if let nsImage = image.loadNSImage() {
+                nsImages.append(nsImage)
+            }
+        }
+        if nsImages.count == 0 {
+            Alert.noImageSelected()
+            return
+        }
+        let sharingPicker = NSSharingServicePicker.init(items: nsImages)
+        sharingPicker.show(relativeTo: sender.bounds, of: sender, preferredEdge: .minY)
+        
     }
     
     
