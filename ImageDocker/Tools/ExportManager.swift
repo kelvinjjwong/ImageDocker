@@ -339,16 +339,16 @@ class ExportManager {
                 
                 if messageBox != nil {
                     DispatchQueue.main.async {
-                        messageBox?.stringValue = "Useless file ... ( \(i) / \(total) )"
+                        messageBox?.stringValue = "Invalid exported file ... ( \(i) / \(total) )"
                     }
                 }
                 
-                print("deleting useless file \(uselessFile)")
+                print("deleting invalid exported file \(uselessFile)")
                 
                 do {
                     try fm.removeItem(atPath: uselessFile)
                 }catch {
-                    print("Cannot delete useless file \(uselessFile)")
+                    print("Cannot delete invalid exported file \(uselessFile)")
                     print(error)
                 }
             }
@@ -392,15 +392,15 @@ class ExportManager {
                 
                 if messageBox != nil {
                     DispatchQueue.main.async {
-                        messageBox?.stringValue = "Empty folder ... ( \(i) / \(total) )"
+                        messageBox?.stringValue = "Invalid exported folder ... ( \(i) / \(total) )"
                     }
                 }
                 
-                print("deleting empty folder \(emptyFolder)")
+                print("deleting empty exported folder \(emptyFolder)")
                 do {
                     try fm.removeItem(atPath: emptyFolder)
                 }catch{
-                    print("  Cannot delete empty folder \(emptyFolder)")
+                    print("  Cannot delete empty exported folder \(emptyFolder)")
                     print(error)
                 }
             }

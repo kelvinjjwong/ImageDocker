@@ -357,14 +357,25 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
     }
     
-    func deletePhoto(atPath path:String){
-        do {
-            let db = ModelStore.sharedDBPool()
-            let _ = try db.write { db in
-                try Image.deleteOne(db, key: path)
+    func deletePhoto(atPath path:String, updateFlag:Bool = true){
+        if updateFlag {
+            do {
+                let db = ModelStore.sharedDBPool()
+                let _ = try db.write { db in
+                    try db.execute("update Image set delFlag = ?", arguments: [true])
+                }
+            }catch{
+                print(error)
             }
-        }catch{
-            print(error)
+        }else{
+            do {
+                let db = ModelStore.sharedDBPool()
+                let _ = try db.write { db in
+                    try Image.deleteOne(db, key: path)
+                }
+            }catch{
+                print(error)
+            }
         }
     }
     
@@ -1326,6 +1337,12 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             
             try db.alter(table: "ImageDevice", body: { t in
                 t.add(column: "marketName", .text)
+            })
+        }
+        
+        migrator.registerMigration("v4") { db in
+            try db.alter(table: "Image", body: { t in
+                t.add(column: "delFlag", .boolean)
             })
         }
         

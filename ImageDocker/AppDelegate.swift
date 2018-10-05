@@ -14,6 +14,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillFinishLaunching(_ notification: Notification) {
         DispatchQueue.global().async {
             self.createDataBackup(suffix:"-on-launch")
+            IPHONE.bridge.unmountFuse()
         }
     }
     
@@ -56,6 +57,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
         self.createDataBackup(suffix:"-on-exit")
+        IPHONE.bridge.unmountFuse()
     }
     
     //MARK: app termination

@@ -21,6 +21,11 @@
 		8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E174B6D208F851100FFE7C7 /* ExifTool.swift */; };
 		8E2CF37620AED6BA00A93375 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8E2CF37420AED6BA00A93375 /* Model.xcdatamodeld */; };
 		8E31C37F2120A22600002546 /* DeviceShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E31C37E2120A22600002546 /* DeviceShell.swift */; };
+		8E3EC3B4214DB1B8004B6125 /* LunarSolarConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3EC3B1214DB1B7004B6125 /* LunarSolarConverter.swift */; };
+		8E3EC3B5214DB1B8004B6125 /* LunarCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3EC3B2214DB1B7004B6125 /* LunarCalendarView.swift */; };
+		8E3EC3B6214DB1B8004B6125 /* LunarCalendarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E3EC3B3214DB1B7004B6125 /* LunarCalendarView.xib */; };
+		8E3EC3BD214DE623004B6125 /* DateTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3EC3BB214DE623004B6125 /* DateTimeViewController.swift */; };
+		8E3EC3BE214DE623004B6125 /* DateTimeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E3EC3BC214DE623004B6125 /* DateTimeViewController.xib */; };
 		8E4B7C1920929EFA00DDD9E0 /* LocationConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */; };
 		8E4C38CA211776300089502C /* Mobile in Resources */ = {isa = PBXBuildFile; fileRef = 8E4C38C92117762F0089502C /* Mobile */; };
 		8E4C38CD2117B5340089502C /* Phone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38CC2117B5340089502C /* Phone.swift */; };
@@ -135,6 +140,11 @@
 		8E2CF36F20AED2FE00A93375 /* CollectionView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CollectionView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E2CF37520AED6BA00A93375 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		8E31C37E2120A22600002546 /* DeviceShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceShell.swift; sourceTree = "<group>"; };
+		8E3EC3B1214DB1B7004B6125 /* LunarSolarConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LunarSolarConverter.swift; sourceTree = "<group>"; };
+		8E3EC3B2214DB1B7004B6125 /* LunarCalendarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LunarCalendarView.swift; sourceTree = "<group>"; };
+		8E3EC3B3214DB1B7004B6125 /* LunarCalendarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LunarCalendarView.xib; sourceTree = "<group>"; };
+		8E3EC3BB214DE623004B6125 /* DateTimeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimeViewController.swift; sourceTree = "<group>"; };
+		8E3EC3BC214DE623004B6125 /* DateTimeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DateTimeViewController.xib; sourceTree = "<group>"; };
 		8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationConsumer.swift; sourceTree = "<group>"; };
 		8E4C38C92117762F0089502C /* Mobile */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Mobile; sourceTree = "<group>"; };
 		8E4C38CC2117B5340089502C /* Phone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phone.swift; sourceTree = "<group>"; };
@@ -168,10 +178,10 @@
 		8EAC5F1F2144A60900E187E0 /* DeviceFolderViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeviceFolderViewController.xib; sourceTree = "<group>"; };
 		8EB321CC20FA42AB00D8C71D /* Duplicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Duplicate.swift; sourceTree = "<group>"; };
 		8EB321CE20FA42C700D8C71D /* ModelStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelStore.swift; sourceTree = "<group>"; };
-		8EB321D020FA433500D8C71D /* ImageContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageContainer.swift; path = ImageDocker/Domain/ImageContainer.swift; sourceTree = SOURCE_ROOT; };
-		8EB321D120FA433500D8C71D /* ImagePlace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImagePlace.swift; path = ImageDocker/Domain/ImagePlace.swift; sourceTree = SOURCE_ROOT; };
-		8EB321D220FA433500D8C71D /* ImageEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageEvent.swift; path = ImageDocker/Domain/ImageEvent.swift; sourceTree = SOURCE_ROOT; };
-		8EB321D320FA433500D8C71D /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Image.swift; path = ImageDocker/Domain/Image.swift; sourceTree = SOURCE_ROOT; };
+		8EB321D020FA433500D8C71D /* ImageContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageContainer.swift; path = ImageDocker/Domain/GRDB/ImageContainer.swift; sourceTree = SOURCE_ROOT; };
+		8EB321D120FA433500D8C71D /* ImagePlace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImagePlace.swift; path = ImageDocker/Domain/GRDB/ImagePlace.swift; sourceTree = SOURCE_ROOT; };
+		8EB321D220FA433500D8C71D /* ImageEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageEvent.swift; path = ImageDocker/Domain/GRDB/ImageEvent.swift; sourceTree = SOURCE_ROOT; };
+		8EB321D320FA433500D8C71D /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Image.swift; path = ImageDocker/Domain/GRDB/Image.swift; sourceTree = SOURCE_ROOT; };
 		8EB986AF20B225230075B081 /* DetailViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewDelegate.swift; sourceTree = "<group>"; };
 		8EB986B220B30C910075B081 /* CollectionViewItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewItem.swift; sourceTree = "<group>"; };
 		8EB986B320B30C910075B081 /* ImageFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageFile.swift; sourceTree = "<group>"; };
@@ -273,13 +283,13 @@
 		8E0AFA3B208BDEA000CE8B68 /* ImageDocker */ = {
 			isa = PBXGroup;
 			children = (
-				8EFA7CF7211A36C900419777 /* Device */,
-				8EE1AB3A20D05E0C001C75B0 /* Popover */,
-				8E85B7D020B91E9E005A9845 /* Selection */,
 				8EB986AE20B223BF0075B081 /* Domain */,
-				8EB986AA20B21D3E0075B081 /* Tree */,
-				8EB986A820B21AEC0075B081 /* Collection */,
+				8EFA7CF7211A36C900419777 /* Device */,
 				8EB986B120B2255A0075B081 /* Detail */,
+				8EB986A820B21AEC0075B081 /* Collection */,
+				8E85B7D020B91E9E005A9845 /* Selection */,
+				8E3EC3B8214DB235004B6125 /* SelectionEditor */,
+				8EB986AA20B21D3E0075B081 /* Tree */,
 				8EB986AC20B223550075B081 /* Tools */,
 				8EBA69262090C37B00221131 /* Supporting Files */,
 				8E0AFA3C208BDEA000CE8B68 /* AppDelegate.swift */,
@@ -307,6 +317,53 @@
 				8E0AFA5C208BDEA100CE8B68 /* Info.plist */,
 			);
 			path = ImageDockerUITests;
+			sourceTree = "<group>";
+		};
+		8E3EC3B7214DB1E4004B6125 /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				8E3EC3B2214DB1B7004B6125 /* LunarCalendarView.swift */,
+				8E3EC3B3214DB1B7004B6125 /* LunarCalendarView.xib */,
+				8E3EC3B1214DB1B7004B6125 /* LunarSolarConverter.swift */,
+			);
+			name = Calendar;
+			path = "New Group";
+			sourceTree = "<group>";
+		};
+		8E3EC3B8214DB235004B6125 /* SelectionEditor */ = {
+			isa = PBXGroup;
+			children = (
+				8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */,
+				8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */,
+				8E98B8EE20D0EE3300771280 /* PlaceListViewController.swift */,
+				8E98B8EF20D0EE3300771280 /* PlaceListViewController.xib */,
+				8E3EC3BB214DE623004B6125 /* DateTimeViewController.swift */,
+				8E3EC3BC214DE623004B6125 /* DateTimeViewController.xib */,
+			);
+			path = SelectionEditor;
+			sourceTree = "<group>";
+		};
+		8E3EC3B9214DC0FC004B6125 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				8E2CF37420AED6BA00A93375 /* Model.xcdatamodeld */,
+				8EB986C020B317E70075B081 /* ModelStoreCoreData.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
+		8E3EC3BA214DC120004B6125 /* GRDB */ = {
+			isa = PBXGroup;
+			children = (
+				8EB321CE20FA42C700D8C71D /* ModelStore.swift */,
+				8EB321D320FA433500D8C71D /* Image.swift */,
+				8EB321D020FA433500D8C71D /* ImageContainer.swift */,
+				8EFA7CFA211D713700419777 /* ImageDevice.swift */,
+				8EFA7CFC211D72B300419777 /* ImageDeviceFile.swift */,
+				8EB321D220FA433500D8C71D /* ImageEvent.swift */,
+				8EB321D120FA433500D8C71D /* ImagePlace.swift */,
+			);
+			path = GRDB;
 			sourceTree = "<group>";
 		};
 		8E4C38CB2117B5190089502C /* Device */ = {
@@ -348,6 +405,7 @@
 			children = (
 				8EFA7D01211F93C000419777 /* Domain */,
 				8EFA7D00211F93B400419777 /* View */,
+				8EE1AB3A20D05E0C001C75B0 /* Search */,
 				8EFE763B2094AF6B00B7CFCA /* TreeController.swift */,
 				8E4C38D2211828B00089502C /* EventsTreeController.swift */,
 				8E4C38D4211828FF0089502C /* MomentsTreeController.swift */,
@@ -388,24 +446,17 @@
 		8EB986AE20B223BF0075B081 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
-				8EB321D320FA433500D8C71D /* Image.swift */,
-				8EB321D020FA433500D8C71D /* ImageContainer.swift */,
-				8EB321D220FA433500D8C71D /* ImageEvent.swift */,
-				8EB321D120FA433500D8C71D /* ImagePlace.swift */,
+				8E3EC3BA214DC120004B6125 /* GRDB */,
+				8E3EC3B9214DC0FC004B6125 /* CoreData */,
 				8EFAF1F920BFFC59007A7783 /* MetaInfo */,
 				8E0EAE99209D2623008C377F /* ImageFolderTreeScanner.swift */,
 				8EF500CC209A804100C9805F /* ImageFolder.swift */,
 				8EB986B320B30C910075B081 /* ImageFile.swift */,
-				8E2CF37420AED6BA00A93375 /* Model.xcdatamodeld */,
-				8EB321CE20FA42C700D8C71D /* ModelStore.swift */,
-				8EB986C020B317E70075B081 /* ModelStoreCoreData.swift */,
 				8E85B7D520BD9FD9005A9845 /* Location.swift */,
 				8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */,
 				8E85B7D920BE2515005A9845 /* LocationTextDelegate.swift */,
 				8E98B8F620D6044900771280 /* Event.swift */,
 				8EB321CC20FA42AB00D8C71D /* Duplicate.swift */,
-				8EFA7CFA211D713700419777 /* ImageDevice.swift */,
-				8EFA7CFC211D72B300419777 /* ImageDeviceFile.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -434,17 +485,13 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		8EE1AB3A20D05E0C001C75B0 /* Popover */ = {
+		8EE1AB3A20D05E0C001C75B0 /* Search */ = {
 			isa = PBXGroup;
 			children = (
-				8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */,
-				8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */,
-				8E98B8EE20D0EE3300771280 /* PlaceListViewController.swift */,
-				8E98B8EF20D0EE3300771280 /* PlaceListViewController.xib */,
 				8E95739820EBEBD7003BD651 /* FilterViewController.swift */,
 				8E95739920EBEBD7003BD651 /* FilterViewController.xib */,
 			);
-			path = Popover;
+			path = Search;
 			sourceTree = "<group>";
 		};
 		8EFA7CF7211A36C900419777 /* Device */ = {
@@ -480,6 +527,7 @@
 		8EFAF1F720BFFA6E007A7783 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				8E3EC3B7214DB1E4004B6125 /* Calendar */,
 				8E85B7D320BA2AD7005A9845 /* DarkSplitView.swift */,
 				8EB986C520B6EBC40075B081 /* DarkTableView.swift */,
 			);
@@ -627,6 +675,7 @@
 				8EBA69252090C2AA00221131 /* ExifTool in Resources */,
 				8EAC5F212144A60900E187E0 /* DeviceFolderViewController.xib in Resources */,
 				8EB986BB20B30C920075B081 /* HeaderView.xib in Resources */,
+				8E3EC3B6214DB1B8004B6125 /* LunarCalendarView.xib in Resources */,
 				8EF32D122094CB2000511538 /* SourceListIcons.xcassets in Resources */,
 				8EC82EAC2121C5A200FC0899 /* AddLocalDirectoryViewController.xib in Resources */,
 				8E0AFA41208BDEA100CE8B68 /* Assets.xcassets in Resources */,
@@ -635,6 +684,7 @@
 				8E0AFA44208BDEA100CE8B68 /* Main.storyboard in Resources */,
 				8E95739B20EBEBD7003BD651 /* FilterViewController.xib in Resources */,
 				8EB986BE20B30C920075B081 /* CollectionViewItem.xib in Resources */,
+				8E3EC3BE214DE623004B6125 /* DateTimeViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -711,6 +761,7 @@
 				8E7F71022092053400410C45 /* MetaInfoDelegate.swift in Sources */,
 				8E98B8F920D7950E00771280 /* ExportManager.swift in Sources */,
 				8EF32D142095355400511538 /* LCSourceListTableCellView.swift in Sources */,
+				8E3EC3BD214DE623004B6125 /* DateTimeViewController.swift in Sources */,
 				8EFA7CFD211D72B300419777 /* ImageDeviceFile.swift in Sources */,
 				8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */,
 				8EFA7CFB211D713700419777 /* ImageDevice.swift in Sources */,
@@ -739,6 +790,7 @@
 				8EFA7CF9211A36F700419777 /* DeviceCopyViewController.swift in Sources */,
 				8E4C38CD2117B5340089502C /* Phone.swift in Sources */,
 				8EFE763C2094AF6B00B7CFCA /* TreeController.swift in Sources */,
+				8E3EC3B5214DB1B8004B6125 /* LunarCalendarView.swift in Sources */,
 				8E31C37F2120A22600002546 /* DeviceShell.swift in Sources */,
 				8EC82EAE21283ED000FC0899 /* DirectoryViewDelegate.swift in Sources */,
 				8EB986BF20B30C920075B081 /* HeaderView.swift in Sources */,
@@ -769,6 +821,7 @@
 				8EFE76412094B98D00B7CFCA /* PhotoCollection.swift in Sources */,
 				8EBA692A2090C87D00221131 /* Helper.swift in Sources */,
 				8E4C38D5211828FF0089502C /* MomentsTreeController.swift in Sources */,
+				8E3EC3B4214DB1B8004B6125 /* LunarSolarConverter.swift in Sources */,
 				8E2CF37620AED6BA00A93375 /* Model.xcdatamodeld in Sources */,
 				8EFAF1FB20BFFC8A007A7783 /* MetaInfoHolder.swift in Sources */,
 				8EB321D720FA433500D8C71D /* Image.swift in Sources */,

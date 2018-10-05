@@ -82,6 +82,28 @@ struct IPHONE {
         }
     }
     
+    func unmountFuse(){
+        let pipe = Pipe()
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = FileHandle.nullDevice
+            command.launchPath = umount.path
+            command.arguments = ["ifuse@osxfuse0"]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
+        }
+        //        command.launch()
+        //        command.waitUntilExit()
+        let _ = pipe.fileHandleForReading.readDataToEndOfFile()
+        pipe.fileHandleForReading.closeFile()
+        //let _ = String(data: data, encoding: String.Encoding.utf8)!
+        
+    }
+    
     func unmount(path:String){
         let pipe = Pipe()
         autoreleasepool { () -> Void in
@@ -101,6 +123,7 @@ struct IPHONE {
         let _ = pipe.fileHandleForReading.readDataToEndOfFile()
         pipe.fileHandleForReading.closeFile()
         //let _ = String(data: data, encoding: String.Encoding.utf8)!
+        self.unmountFuse()
 
     }
     

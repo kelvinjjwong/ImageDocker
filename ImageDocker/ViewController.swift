@@ -1421,6 +1421,38 @@ class ViewController: NSViewController {
     }
     
     @IBAction func onButtonDatePickerClicked(_ sender: NSButton) {
+        self.createCalenderPopover()
+//        let now = Date()
+//        self.calendarView.date = now
+//        self.calendarView.selectedDate = now;
+        
+        let cellRect = sender.bounds
+        self.calendarPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
+    }
+    
+    var calendarPopover:NSPopover? = nil
+    var calendarViewController:DateTimeViewController!
+//    var calendarView:LunarCalendarView!
+//    var calendarDateFormatter:DateFormatter!
+    
+    func createCalenderPopover(){
+        var myPopover = self.calendarPopover
+        if(myPopover == nil){
+//            self.calendarDateFormatter = DateFormatter()
+//            self.calendarDateFormatter.dateFormat = "yyyy-MM-dd"
+            
+            let frame = CGRect(origin: .zero, size: CGSize(width: 800, height: 650))
+            self.calendarViewController = DateTimeViewController()
+            self.calendarViewController.view.frame = frame
+            
+            myPopover = NSPopover()
+            myPopover!.contentViewController = self.calendarViewController
+            myPopover!.appearance = NSAppearance(named: .aqua)!
+            //myPopover!.animates = true
+            myPopover!.delegate = self
+            myPopover!.behavior = NSPopover.Behavior.transient
+        }
+        self.calendarPopover = myPopover
     }
     
     
@@ -1712,7 +1744,11 @@ extension ViewController : NSWindowDelegate {
     }
 }
 
-
+extension ViewController : LunarCalendarViewDelegate {
+    @objc func didSelectDate(_ selectedDate: Date) {
+        print(selectedDate)
+    }
+}
 
 
 
