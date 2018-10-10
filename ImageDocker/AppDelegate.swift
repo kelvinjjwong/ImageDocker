@@ -28,7 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if fileManager.fileExists(atPath: dbFile.path) {
             let dateFormat = DateFormatter()
             dateFormat.dateFormat = "yyyyMMdd_HHmmss"
-            let backupFolder = "DataBackup-\(dateFormat.string(from: Date()))\(suffix)"
+            let backupFolder = "DataBackup/DataBackup-\(dateFormat.string(from: Date()))\(suffix)"
             let backupUrl = dbUrl.appendingPathComponent(backupFolder)
             do{
                 try fileManager.createDirectory(at: backupUrl, withIntermediateDirectories: true, attributes: nil)

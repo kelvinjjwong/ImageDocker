@@ -50,6 +50,18 @@ class LunarCalendarView:NSViewController{
         }
     }
     
+    var originDate:Date?{
+        didSet {
+            originDate = self.toUTC(originDate!)
+            
+            if !self.isViewLoaded {
+                return
+            }
+            
+            self.setCellOriginStatusBy(originDate)
+        }
+    }
+    
     fileprivate var dayCells:[[CalendarCell]]?
     fileprivate var dayLabels:[NSTextField]?
     
@@ -118,12 +130,31 @@ class LunarCalendarView:NSViewController{
         }
     }
     
+    fileprivate func setCellOriginStatusBy(_ date: Date?) {
+        if self.dayCells == nil {
+            return
+        }
+        for row in 0...5 {
+            for col in 0...6{
+                let cell = self.dayCells![row][col]
+                if ((cell.representedDate != nil)&&(date != nil)){
+                    let isSame = isSameDay(cell.representedDate!, d2: date!)
+                    cell.original = isSame
+                }
+                else{
+                    cell.original = false
+                }
+            }
+        }
+    }
+    
     func layoutCalendar(){
         for row in 0...5 {
             for col in 0...6 {
                 let cell = self.dayCells![row][col]
                 cell.representedDate = nil
                 cell.selected = false
+                cell.original = false
             }
         }
         
@@ -140,6 +171,11 @@ class LunarCalendarView:NSViewController{
                     let d = self.monthDay(day)
                     cell.representedDate = d
                     cell.selected = isSameDay(d!, d2: self.selectedDate!)
+                    if self.originDate != nil {
+                        cell.original = isSameDay(d!, d2: self.originDate!)
+                    }else{
+                        cell.original = false
+                    }
                     day += 1
                 }
             }
@@ -271,24 +307,24 @@ class LunarCalendarView:NSViewController{
     }
     
     @IBAction func nextMonth(_ sender: NSButton){
-        let currentSysTime = toUTCDateComponent(Date())
-        let selectSysTime = toUTCDateComponent(self.date!)
-        var step = 2
-        if currentSysTime.month! < 3 || currentSysTime.month! > 10 {
-            step = 3
+        //let currentSysTime = toUTCDateComponent(Date())
+        //let selectSysTime = toUTCDateComponent(self.date!)
+        //var step = 2
+        //if currentSysTime.month! < 3 || currentSysTime.month! > 10 {
+        //    step = 3
             
-        }
-        if selectSysTime.month! < currentSysTime.month! + step {
+        //}
+        //if selectSysTime.month! < currentSysTime.month! + step {
             self.stepMonth(1)
-        }
+        //}
     }
     
     @IBAction func prevMonth(_ sender: NSButton){
-        let currentSysTime = toUTCDateComponent(Date())
-        let selectSysTime = toUTCDateComponent(self.date!)
-        if selectSysTime.month! > currentSysTime.month! {
+        //let currentSysTime = toUTCDateComponent(Date())
+        //let selectSysTime = toUTCDateComponent(self.date!)
+        //if selectSysTime.month! <= currentSysTime.month! {
             self.stepMonth(-1)
-        }
+        //}
     }
 }
 
@@ -342,6 +378,8 @@ class CalendarCell:NSButton
         }
     }
     
+    var original:Bool = false
+    
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         self.commonInit()
@@ -368,7 +406,18 @@ class CalendarCell:NSButton
         return (cal as NSCalendar).components(NSCalendar.Unit(rawValue: dateFlag), from: d)
     }
     
-    fileprivate func isDate(_ d1:Date,beforeDate d2:Date)->Bool{
+    fileprivate func isDate(_ d1:Date, afterDate d2:Date)->Bool{
+        let cal  = Calendar.current
+        let result = (cal as NSCalendar).compare(d1, to: d2, toUnitGranularity: NSCalendar.Unit.day)
+        if result == ComparisonResult.orderedDescending {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+    
+    fileprivate func isDate(_ d1:Date, beforeDate d2:Date)->Bool{
         let cal  = Calendar.current
         let result = (cal as NSCalendar).compare(d1, to: d2, toUnitGranularity: NSCalendar.Unit.day)
         if result == ComparisonResult.orderedAscending {
@@ -377,6 +426,10 @@ class CalendarCell:NSButton
         else {
             return false
         }
+    }
+    
+    fileprivate func afterToday()->Bool{
+        return isDate(self.representedDate!, afterDate: Date())
     }
     
     fileprivate func beforeToday()->Bool{
@@ -421,8 +474,8 @@ class CalendarCell:NSButton
             paragraphStyle.lineBreakMode = .byWordWrapping
             paragraphStyle.alignment = .center
             
-            //today
-            if self.isToday(){
+            //today or origin date
+            if self.isToday() || self.original {
                 self.owner.todayMarkerColor!.set()
                 let bottomLine = NSBezierPath()
                 bottomLine.move(to: NSMakePoint(NSMinX(bounds), NSMaxY(bounds)))
@@ -449,7 +502,8 @@ class CalendarCell:NSButton
             //solar
             let solarFont = NSFont(name: self.font!.fontName, size: 15)!
             var textColor: NSColor!
-            if (self.beforeToday() || (!self.isInLimitedDate())) {
+            // FIXME: If you need to add some limitation
+            if (self.afterToday() || (!self.isInLimitedDate())) {
                 textColor = NSColor.gray
                 self.isEnabled = false
             }

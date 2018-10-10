@@ -23,7 +23,7 @@ extension ViewController {
                 self.addLibraryTreeEntry(imageFolder: imageFolder)
             }
             
-            ExportManager.disable()
+            ExportManager.default.disable()
             // scan photo files
             //let startingFolder:ImageFolder = imageFolders[0]
             DispatchQueue.global().async {
@@ -31,7 +31,7 @@ extension ViewController {
                     self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage,
                                                                   onCompleted: { data in
                                                                     self.creatingRepository = false
-                                                                    ExportManager.enable()
+                                                                    ExportManager.default.enable()
                     })
                     self.imagesLoader.load(from: folder.url, indicator:self.collectionLoadingIndicator)
                     //self.refreshCollectionView()

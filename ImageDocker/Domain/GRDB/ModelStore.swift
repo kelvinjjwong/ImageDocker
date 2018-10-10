@@ -402,6 +402,23 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
+    func getAllExportedImages(includeHidden:Bool = true, sharedDB:DatabaseWriter? = nil) -> [Image] {
+        var result:[Image] = []
+        do {
+            let db = try sharedDB ?? DatabasePool(path: dbfile)
+            try db.read { db in
+                if includeHidden {
+                    result = try Image.filter(sql: "exportToPath is not null and exportAsFilename is not null and exportToPath <> '' and exportAsFilename <> ''").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+                }else{
+                    result = try Image.filter(sql: "hidden = 0 and exportToPath is not null and exportAsFilename is not null and exportToPath <> '' and exportAsFilename <> ''").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
     func getAllExportedPhotoFilenames(includeHidden:Bool = true, sharedDB:DatabaseWriter? = nil) -> Set<String> {
         var result:Set<String> = []
         do {
@@ -634,6 +651,18 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }catch{
             print(error)
         }
+    }
+    
+    func cleanImageExportPath(path:String) {
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try db.execute("UPDATE Image set exportToPath = null, exportAsFilename = null, exportTime = null, exportState = null, exportFailMessage = '', exportedMD5 = null, WHERE path=?", arguments: StatementArguments([path]))
+            }
+        }catch{
+            print(error)
+        }
+        
     }
     
     // MARK: IMAGES - TREE

@@ -343,7 +343,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
                     if let imageData = image.imageData {
                         
                         let path = self.getOrCreateFolderOnDevice(basePath: destinationPath, photo: imageData, fm: targetFileSystemHandler)
-                        let fileState = ExportManager.getOrCreateFilename(photo: imageData,
+                        let fileState = ExportManager.default.getOrCreateFilename(photo: imageData,
                                                             toPath: path,
                                                             dateFormat: filenameDateFormatter,
                                                             targetFileManager: targetFileSystemHandler,

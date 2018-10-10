@@ -312,13 +312,13 @@ class ViewController: NSViewController {
         self.btnScanState.isHidden = true
         
         self.chbExport.state = NSButton.StateValue.off
-        ExportManager.messageBox = self.lblExportMessage
-        ExportManager.suppressed = true
+        ExportManager.default.messageBox = self.lblExportMessage
+        ExportManager.default.suppressed = true
         self.suppressedExport = true
         self.lastExportPhotos = Date()
         
         self.scanLocationChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
-            guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing else {return}
+            guard !ExportManager.default.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing else {return}
             print("\(Date()) SCANING LOCATION CHANGE")
             if self.lastCheckLocationChange != nil {
                 let photoFiles:[Image] = ModelStore.default.getPhotoFiles(after: self.lastCheckLocationChange!)
@@ -333,7 +333,7 @@ class ViewController: NSViewController {
         })
         
         self.scanPhotoTakenDateChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
-            guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing else {return}
+            guard !ExportManager.default.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing else {return}
             print("\(Date()) SCANING DATE CHANGE")
             if self.lastCheckPhotoTakenDateChange != nil {
                 let photoFiles:[Image] = ModelStore.default.getPhotoFiles(after: self.lastCheckPhotoTakenDateChange!)
@@ -348,7 +348,7 @@ class ViewController: NSViewController {
         })
         
         self.scanEventChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
-            guard !ExportManager.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing else {return}
+            guard !ExportManager.default.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing else {return}
             print("\(Date()) SCANING EVENT CHANGE")
             if self.lastCheckEventChange != nil {
                 let photoFiles:[Image] = ModelStore.default.getPhotoFiles(after: self.lastCheckEventChange!)
@@ -363,25 +363,25 @@ class ViewController: NSViewController {
         })
         
         self.exportPhotosTimers = Timer.scheduledTimer(withTimeInterval: 600, repeats: true, block:{_ in
-            print("\(Date()) TRYING TO EXPORT \(self.suppressedExport) \(ExportManager.suppressed) \(ExportManager.working)")
-            guard !self.suppressedExport && !ExportManager.suppressed && !ExportManager.working else {return}
+            print("\(Date()) TRYING TO EXPORT \(self.suppressedExport) \(ExportManager.default.suppressed) \(ExportManager.default.working)")
+            guard !self.suppressedExport && !ExportManager.default.suppressed && !ExportManager.default.working else {return}
             print("\(Date()) EXPORTING")
             DispatchQueue.global().async {
-                ExportManager.export(after: self.lastExportPhotos!)
+                ExportManager.default.export(after: self.lastExportPhotos!)
                 self.lastExportPhotos = Date()
             }
         })
         
         self.scanRepositoriesTimer = Timer.scheduledTimer(withTimeInterval: 180, repeats: true, block:{_ in
             print("\(Date()) TRY TO SCAN REPOS")
-            guard !self.suppressedScan && !ExportManager.working && !self.scaningRepositories && !self.creatingRepository else {return}
+            guard !self.suppressedScan && !ExportManager.default.working && !self.scaningRepositories && !self.creatingRepository else {return}
             print("\(Date()) SCANING REPOS")
             self.startScanRepositories()
         })
         
         self.scanPhotosToLoadExifTimer = Timer.scheduledTimer(withTimeInterval: 15, repeats: true, block:{_ in
             print("\(Date()) TRY TO SCAN PHOTO TO LOAD EXIF")
-            guard !self.suppressedScan && !ExportManager.working && !self.scaningRepositories && !self.creatingRepository else {return}
+            guard !self.suppressedScan && !ExportManager.default.working && !self.scaningRepositories && !self.creatingRepository else {return}
             print("\(Date()) SCANING PHOTOS TO LOAD EXIF")
             self.startScanRepositoriesToLoadExif()
         })
@@ -702,7 +702,7 @@ class ViewController: NSViewController {
     
     fileprivate func startScanRepositories(){
         DispatchQueue.global().async {
-            ExportManager.disable()
+            ExportManager.default.disable()
             self.creatingRepository = true
             DispatchQueue.main.async {
                 self.btnScanState.image = NSImage(named: NSImage.Name.statusAvailable)
@@ -712,7 +712,7 @@ class ViewController: NSViewController {
                                                     presetAddingMessage: "Importing images ...",
                                                     onCompleted: {data in
                                                         print("COMPLETE SCAN REPO")
-                                                        ExportManager.enable()
+                                                        ExportManager.default.enable()
                                                         self.creatingRepository = false
                                                         DispatchQueue.main.async {
                                                             self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
@@ -953,10 +953,10 @@ class ViewController: NSViewController {
     }
     
     fileprivate func startScanRepositoriesToLoadExif(){
-        if !ExportManager.working && !self.scaningRepositories && !self.creatingRepository {
+        if !ExportManager.default.working && !self.scaningRepositories && !self.creatingRepository {
             DispatchQueue.global().async {
                 
-                ExportManager.suppressed = true
+                ExportManager.default.suppressed = true
                 self.scaningRepositories = true
                 
                 print("EXTRACTING EXIF")
@@ -969,7 +969,7 @@ class ViewController: NSViewController {
                                                         onCompleted: { data in 
                                                             print("COMPLETE SCAN PHOTOS TO LOAD EXIF")
                                                             
-                                                            ExportManager.suppressed = false
+                                                            ExportManager.default.suppressed = false
                                                             self.scaningRepositories = false
                                                             DispatchQueue.main.async {
                                                                 self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
@@ -1059,12 +1059,12 @@ class ViewController: NSViewController {
         if self.chbExport.state == NSButton.StateValue.on {
             print("enabled export")
             self.suppressedExport = false
-            ExportManager.suppressed = false
+            ExportManager.default.suppressed = false
             
             // start exporting immediatetly
-            if !ExportManager.working {
+            if !ExportManager.default.working {
                 DispatchQueue.global().async {
-                    ExportManager.export(after: self.lastExportPhotos!)
+                    ExportManager.default.export(after: self.lastExportPhotos!)
                     self.lastExportPhotos = Date()
                 }
             }
@@ -1072,7 +1072,7 @@ class ViewController: NSViewController {
         }else {
             print("disabled export")
             self.suppressedExport = true
-            ExportManager.suppressed = true
+            ExportManager.default.suppressed = true
             //ExportManager.disable()
         }
     }
@@ -1421,13 +1421,19 @@ class ViewController: NSViewController {
     }
     
     @IBAction func onButtonDatePickerClicked(_ sender: NSButton) {
+        if self.selectionViewController.imagesLoader.getItems().count == 0 {
+            Alert.noImageSelected()
+            return
+        }
         self.createCalenderPopover()
+        
 //        let now = Date()
 //        self.calendarView.date = now
 //        self.calendarView.selectedDate = now;
         
         let cellRect = sender.bounds
         self.calendarPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
+        self.calendarViewController.loadFrom(images: self.selectionViewController.imagesLoader.getItems())
     }
     
     var calendarPopover:NSPopover? = nil
@@ -1441,7 +1447,7 @@ class ViewController: NSViewController {
 //            self.calendarDateFormatter = DateFormatter()
 //            self.calendarDateFormatter.dateFormat = "yyyy-MM-dd"
             
-            let frame = CGRect(origin: .zero, size: CGSize(width: 800, height: 650))
+            let frame = CGRect(origin: .zero, size: CGSize(width: 1200, height: 650))
             self.calendarViewController = DateTimeViewController()
             self.calendarViewController.view.frame = frame
             

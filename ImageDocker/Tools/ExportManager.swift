@@ -10,38 +10,110 @@ import Cocoa
 
 class ExportManager {
     
-    static var working:Bool = false
-    static var suppressed:Bool = false
-    static var messageBox:NSTextField? = nil
+    static let `default` = ExportManager()
     
-    @objc static func enable() {
-        suppressed = false
+    var working:Bool = false
+    var suppressed:Bool = false
+    var messageBox:NSTextField? = nil
+    
+    @objc func enable() {
+        self.suppressed = false
         
-        if messageBox != nil {
+        if self.messageBox != nil {
             DispatchQueue.main.async {
-                messageBox?.stringValue = ""
+                self.messageBox?.stringValue = ""
             }
         }
     }
     
-    @objc static func disable() {
-        suppressed = true
-        if messageBox != nil {
+    @objc func disable() {
+        self.suppressed = true
+        if self.messageBox != nil {
             DispatchQueue.main.async {
-                messageBox?.stringValue = ""
+                self.messageBox?.stringValue = ""
             }
         }
     }
     
-    static func export(after date:Date) {
-        if suppressed {
+    
+    /**
+     If suppressed from outside, stop immediately
+     */
+    fileprivate func nonStop() -> Bool {
+        if self.suppressed {
             print("ExportManager is suppressed.")
-            return
+            self.working = false
+            DispatchQueue.main.async {
+                self.messageBox?.stringValue = ""
+            }
+            return false
         }
-        if working {
-            print("ExportManager: Another instance is working, I'll take a rest.")
-            return
+        return true
+    }
+    
+    fileprivate func printMessage(_ text:String) {
+        if self.messageBox != nil {
+            DispatchQueue.main.async {
+                self.messageBox?.stringValue = text
+            }
         }
+    }
+    
+    fileprivate func getExportedFilenames() -> Set<String> {
+        let allExportedImagesStored = ModelStore.default.getAllExportedImages(includeHidden: false)
+        var allExportedFilenames:Set<String> = []
+        for image in allExportedImagesStored {
+            let path = "\(image.exportToPath ?? "")/\(image.exportAsFilename ?? "")"
+            let fileUrl = URL(fileURLWithPath: path) // maybe contains symbol links
+            let resolvedPath = fileUrl.resolvingSymlinksInPath().path
+            if !FileManager.default.fileExists(atPath: fileUrl.path) {
+                // no longer exists exported file, clean exported fields in database
+                ModelStore.default.cleanImageExportPath(path: image.path)
+            }else{
+                allExportedFilenames.insert(resolvedPath) // transform to non symbol link physical path
+            }
+        }
+        return allExportedFilenames
+    }
+    
+    fileprivate func checkIfExportedFilesExist(fileSystemHandler:FileSystemHandler) {
+        self.printMessage("Loading exported files for validation ...")
+        print("\(Date()) EXPORT: DB LOADING getAllExportedImages")
+        let allExportedImagesStored = ModelStore.default.getAllExportedImages(includeHidden: false)
+        print("\(Date()) EXPORT: DB LOADING getAllExportedImages : DONE")
+        let total = allExportedImagesStored.count
+        var k:Int = 0
+        
+        print("\(Date()) EXPORT: CHECKING IF MARKED EXPORTED ARE REALLY EXPORTED")
+        for photo in allExportedImagesStored {
+            
+            // if suppressed from outside, stop immediately
+            guard self.nonStop() else {return}
+            
+            k += 1
+            self.printMessage("Validating exported files ... ( \(k) / \(total) )")
+            
+            if photo.exportToPath != nil && photo.exportAsFilename != nil {
+                let fullpath:String = "\(photo.exportToPath ?? "")/\(photo.exportAsFilename ?? "")"
+                if !FileManager.default.fileExists(atPath: fullpath){
+                    ModelStore.default.cleanImageExportPath(path: photo.path)
+                }else{
+                    if photo.exportedMD5 == nil {
+                        self.printMessage("Updating MD5 of exported file ... ( \(k) / \(total) )")
+                        let md5 = fileSystemHandler.md5(pathOfFile: photo.path)
+                        ModelStore.default.storeImageExportedMD5(path: photo.path, md5: md5)
+                        
+                    }
+                }
+            }
+        }
+        
+        print("\(Date()) EXPORT: CHECKING IF MARKED EXPORTED ARE REALLY EXPORTED: DONE")
+    }
+    
+    func export(after date:Date) {
+        guard self.nonStop() && !self.working else {return}
+        
         if PreferencesController.exportDirectory() == "" {
             DispatchQueue.main.async {
                 Alert.invalidExportPath()
@@ -72,55 +144,12 @@ class ExportManager {
         }
         
         // check exported
+        self.printMessage("Validating ...")
         
-        if messageBox != nil {
-            DispatchQueue.main.async {
-                messageBox?.stringValue = "EXPORT Validating ..."
-            }
-        }
-        
-        let allMarkedExported = ModelStore.default.getAllPhotoFilesMarkedExported()
-        let totalMarked = allMarkedExported.count
-        var k:Int = 0
-        
-        
-        print("\(Date()) EXPORT: CHECKING IF MARKED EXPORTED ARE REALLY EXPORTED")
-        for photo in allMarkedExported {
-            
-            // if suppressed from outside, stop immediately
-            if suppressed {
-                ExportManager.working = false
-                DispatchQueue.main.async {
-                    messageBox?.stringValue = ""
-                }
-                return
-            }
-            
-            k += 1
-            if messageBox != nil {
-                DispatchQueue.main.async {
-                    messageBox?.stringValue = "EXPORT Validating ... ( \(k) / \(totalMarked) )"
-                }
-            }
-            
-            if photo.exportToPath != nil && photo.exportAsFilename != nil {
-                let fullpath:String = "\(photo.exportToPath ?? "")/\(photo.exportAsFilename ?? "")"
-                if !fm.fileExists(atPath: fullpath){
-                    ModelStore.default.cleanImageExportTime(path: photo.path)
-                    //photo.exportTime = nil
-                    //recovered = true
-                }
-            }
-        }
-        
-        print("\(Date()) EXPORT: CHECKING IF MARKED EXPORTED ARE REALLY EXPORTED: DONE")
+        self.checkIfExportedFilesExist(fileSystemHandler: targetFileSystemHandler)
         
         // check updates and which not exported
-        if messageBox != nil {
-            DispatchQueue.main.async {
-                messageBox?.stringValue = "EXPORT Searching for updates ..."
-            }
-        }
+        self.printMessage("Searching for updates ...")
         
         print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
         
@@ -135,11 +164,7 @@ class ExportManager {
         while(batchTotal > 0) {
             
             // check updates and which not exported
-            if messageBox != nil {
-                DispatchQueue.main.async {
-                    messageBox?.stringValue = "EXPORT Searching for updates ..."
-                }
-            }
+            self.printMessage("EXPORT Searching for updates ...")
             
             print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
         
@@ -152,25 +177,10 @@ class ExportManager {
             }
             
             for photo in photos {
-                
-                // if suppressed from outside, stop immediately
-                if suppressed {
-                    
-                    ExportManager.working = false
-                    DispatchQueue.main.async {
-                        messageBox?.stringValue = ""
-                    }
-                    return
-                }
-                
-                
+                guard self.nonStop() else {return}
                 
                 i += 1
-                if messageBox != nil {
-                    DispatchQueue.main.async {
-                        messageBox?.stringValue = "EXPORT Processing ... ( \(i) / \(total) )"
-                    }
-                }
+                self.printMessage("EXPORT Processing ... ( \(i) / \(total) )")
                 
                 print("EXPORT Processing \(i) : \(photo.path)")
                 
@@ -194,12 +204,15 @@ class ExportManager {
                     continue
                 }
                 
+                var fileChanged = false
+                
                 // patch image description into original image file, md5 will change
                 let originalImageDescription = photo.exportedLongDescription ?? ExifTool.helper.getImageDescription(url: pathUrl)
-                let generatedImageDescription = photo.longDescription ?? ExportManager.getImageDescription(photo: photo)
+                let generatedImageDescription = photo.longDescription ?? self.getImageDescription(photo: photo)
                 if originalImageDescription != generatedImageDescription {
                     print("\(Date()) Change ImageDescription for \(photo.path)")
                     ExifTool.helper.patchImageDescription(description: generatedImageDescription, url: pathUrl)
+                    fileChanged = true
                     print("\(Date()) Change ImageDescription for \(photo.path) : DONE")
                 }
                 
@@ -209,7 +222,8 @@ class ExportManager {
                                                     toPath: path,
                                                     dateFormat: dateFormatter,
                                                     targetFileManager: targetFileSystemHandler,
-                                                    sourceFileManager: sourceFileSystemHandler )
+                                                    sourceFileManager: sourceFileSystemHandler,
+                                                    forceGenerateMD5: fileChanged)
                 
                 let filename = fileState.filename
                 
@@ -233,55 +247,55 @@ class ExportManager {
                 }
                 
                 // not exist at path
+                self.printMessage("EXPORT Copying ... ( \(i) / \(total) )")
                 
-                if messageBox != nil {
-                    DispatchQueue.main.async {
-                        messageBox?.stringValue = "EXPORT Copying ... ( \(i) / \(total) )"
+                print("\(Date()) Copy file \(photo.path)")
+                var copied = false
+                var errorMessage = ""
+                autoreleasepool { () -> Void in
+                    do {
+                        try fm.copyItem(atPath: photo.path, toPath: "\(path)/\(filename)")
+                        copied = true
+                    }catch {
+                        print("Cannot copy from: \(photo.path) to: \(path)/\(filename) ")
+                        print(error)
+                        copied = false
+                        errorMessage = error.localizedDescription
                     }
                 }
-                print("\(Date()) Copy file \(photo.path)")
-                do {
-                    try fm.copyItem(atPath: photo.path, toPath: "\(path)/\(filename)")
-                }catch {
-                    print("Cannot copy from: \(photo.path) to: \(path)/\(filename) ")
-                    print(error)
-                    
-                    ModelStore.default.storeImageExportFail(path: photo.path, date: Date(), message: "ERROR: \(error.localizedDescription)")
+                if !copied {
+                    ModelStore.default.storeImageExportFail(path: photo.path, date: Date(), message: "ERROR: \(errorMessage)")
                     
                     continue
+                }else{
+                    print("\(Date()) Copy file \(photo.path) : DONE")
+                    
+                    ModelStore.default.storeImageExportSuccess(path: photo.path, date: Date(),
+                                                              exportToPath: path,
+                                                              exportedFilename: filename,
+                                                              exportedMD5: fileState.md5,
+                                                              exportedLongDescription: generatedImageDescription)
                 }
-                print("\(Date()) Copy file \(photo.path) : DONE")
-                
-                ModelStore.default.storeImageExportSuccess(path: photo.path, date: Date(),
-                                                          exportToPath: path,
-                                                          exportedFilename: filename,
-                                                          exportedMD5: fileState.md5,
-                                                          exportedLongDescription: generatedImageDescription)
             }
         } // end of while loop
-        
-        if messageBox != nil {
-            DispatchQueue.main.async {
-                messageBox?.stringValue = ""
-            }
-        }
+        self.printMessage("")
         
         print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED: DONE")
         
+        guard self.nonStop() else {return}
         
-        // if suppressed from outside, stop immediately
-        if suppressed {
-            ExportManager.working = false
-            DispatchQueue.main.async {
-                messageBox?.stringValue = ""
-            }
-            return
-        }
+        self.housekeep()
         
-        // house keep
+        self.working = false
         
+    }
+    
+    fileprivate func housekeep() {
         print("\(Date()) EXPORT: HOUSE KEEP")
-        let allExportedFilenames:Set<String> = ModelStore.default.getAllExportedPhotoFilenames(includeHidden: false)
+        
+        self.printMessage("Checking invalid exported files ...")
+        
+        let allExportedFilenames:Set<String> = self.getExportedFilenames()
         
         let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: PreferencesController.exportDirectory()),
                                                         includingPropertiesForKeys: [.isDirectoryKey, .isReadableKey, .isWritableKey ],
@@ -293,16 +307,10 @@ class ExportManager {
         var allExportedDirectories:Set<String> = []
         var uselessFiles:Set<String> = []
         for case let file as URL in enumerator {
+            guard self.nonStop() else {return}
             do {
                 
                 // if suppressed from outside, stop immediately
-                if suppressed {
-                    ExportManager.working = false
-                    DispatchQueue.main.async {
-                        messageBox?.stringValue = ""
-                    }
-                    return
-                }
                 
                 let url = try file.resourceValues(forKeys: [.isDirectoryKey, .isReadableKey, .isWritableKey])
                 if url.isWritable! {
@@ -321,105 +329,54 @@ class ExportManager {
             }
         }
         
-        // delete useless files
+        print("Useless exported file count: \(uselessFiles.count)")
+        
+        self.printMessage("Found invalid exported files: \(uselessFiles.count)")
+        
+        // delete useless exported files
         if uselessFiles.count > 0 {
             let total = uselessFiles.count
             var i = 0
             for uselessFile in uselessFiles {
                 
                 // if suppressed from outside, stop immediately
-                if suppressed {
-                    ExportManager.working = false
-                    DispatchQueue.main.async {
-                        messageBox?.stringValue = ""
-                    }
-                    return
-                }
-                i += 1
+                guard self.nonStop() else {return}
                 
-                if messageBox != nil {
-                    DispatchQueue.main.async {
-                        messageBox?.stringValue = "Invalid exported file ... ( \(i) / \(total) )"
-                    }
-                }
+                i += 1
+                self.printMessage("Deleting invalid exported file ... ( \(i) / \(total) )")
                 
                 print("deleting invalid exported file \(uselessFile)")
                 
                 do {
-                    try fm.removeItem(atPath: uselessFile)
+                    try FileManager.default.removeItem(atPath: uselessFile)
                 }catch {
                     print("Cannot delete invalid exported file \(uselessFile)")
                     print(error)
                 }
             }
         }
-        // recognize empty folders
-        for exportedFilePath in allExportedFilenames {
-            for folder in allExportedDirectories {
-                
-                // if suppressed from outside, stop immediately
-                if suppressed {
-                    ExportManager.working = false
-                    DispatchQueue.main.async {
-                        messageBox?.stringValue = ""
-                    }
-                    return
+        
+        self.printMessage("Checking empty exported folders ...")
+        
+        for folder in allExportedDirectories {
+            guard self.nonStop() else {return}
+            do {
+                let contents = try FileManager.default.contentsOfDirectory(atPath: folder)
+                if contents.count == 0 {
+                    try FileManager.default.removeItem(atPath: folder)
                 }
-                
-                if exportedFilePath.starts(with: folder) {
-                    allExportedDirectories.remove(folder)
-                    continue
-                }
+            }catch{
+                print("  Cannot delete empty exported folder \(folder)")
+                print(error)
             }
-        }
-        // delete empty folders
-        if allExportedDirectories.count > 0 {
-            print("  ")
-            let total = allExportedDirectories.count
-            var i = 0
-            for emptyFolder in allExportedDirectories {
-                
-                // if suppressed from outside, stop immediately
-                if suppressed {
-                    ExportManager.working = false
-                    DispatchQueue.main.async {
-                        messageBox?.stringValue = ""
-                    }
-                    return
-                }
-                
-                i += 1
-                
-                if messageBox != nil {
-                    DispatchQueue.main.async {
-                        messageBox?.stringValue = "Invalid exported folder ... ( \(i) / \(total) )"
-                    }
-                }
-                
-                print("deleting empty exported folder \(emptyFolder)")
-                do {
-                    try fm.removeItem(atPath: emptyFolder)
-                }catch{
-                    print("  Cannot delete empty exported folder \(emptyFolder)")
-                    print(error)
-                }
-            }
-            print("  ")
         }
         
-        if messageBox != nil {
-            DispatchQueue.main.async {
-                messageBox?.stringValue = ""
-            }
-        }
+        self.printMessage("")
         
         print("\(Date()) EXPORT: HOUSE KEEP: DONE")
-        
-        ExportManager.working = false
-        
     }
     
-    static func getOrCreateFolder(photo:Image, fm: FileSystemHandler) -> String{
+    fileprivate func getOrCreateFolder(photo:Image, fm: FileSystemHandler) -> String{
         var pathComponents:[String] = []
         pathComponents.append(PreferencesController.exportDirectory())
         pathComponents.append("\(photo.photoTakenYear ?? 0)年")
@@ -437,7 +394,7 @@ class ExportManager {
         }
     }
     
-    static func getImageDescription(photo:Image) -> String {
+    fileprivate func getImageDescription(photo:Image) -> String {
         var eventAndPlace = ""
         
         if photo.event != nil && photo.event != "" {
@@ -449,10 +406,11 @@ class ExportManager {
         return eventAndPlace
     }
     
-    static func getOrCreateFilename(photo:Image, toPath path:String, dateFormat dateFormatter:DateFormatter,
+    func getOrCreateFilename(photo:Image, toPath path:String, dateFormat dateFormatter:DateFormatter,
                                     targetFileManager fm:FileSystemHandler,
                                     sourceFileManager:FileSystemHandler,
-                                    ignoreDiffPathChecking:Bool = false) -> (isSamePath: Bool, existAtPath: FileExistState, filename:String, md5:String) {
+                                    ignoreDiffPathChecking:Bool = false,
+                                    forceGenerateMD5:Bool = false) -> (isSamePath: Bool, existAtPath: FileExistState, filename:String, md5:String) {
         
         var filenameComponents:[String] = []
         
@@ -503,7 +461,7 @@ class ExportManager {
         let isSamePath:Bool = ignoreDiffPathChecking ? true : ( previousTargetPath == targetPath )
         
         // detect duplicates
-        let md5OfSourceFile = photo.exportedMD5 ?? sourceFileManager.md5(pathOfFile: photo.path)
+        let md5OfSourceFile = forceGenerateMD5 ? sourceFileManager.md5(pathOfFile: photo.path) : ( photo.exportedMD5 ?? sourceFileManager.md5(pathOfFile: photo.path) )
         
         var state = fm.fileExists(atPath: targetPath, md5: md5OfSourceFile)
         

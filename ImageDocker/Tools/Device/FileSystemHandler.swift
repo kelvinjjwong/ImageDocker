@@ -66,6 +66,7 @@ class ComputerFileManager : FileSystemHandler {
     
     func md5(pathOfFile path:String) -> String {
         let pipe = Pipe()
+        var string:String = ""
         autoreleasepool { () -> Void in
             let cmd = Process()
             cmd.standardOutput = pipe
@@ -75,10 +76,12 @@ class ComputerFileManager : FileSystemHandler {
             cmd.arguments?.append(path)
             cmd.launch()
             cmd.waitUntilExit()
+            cmd.terminate()
+            
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            string = String(data: data, encoding: String.Encoding.utf8)!
+            pipe.fileHandleForReading.closeFile()
         }
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        let string:String = String(data: data, encoding: String.Encoding.utf8)!
-        pipe.fileHandleForReading.closeFile()
         print(string)
         if string != "" && string.starts(with: "MD5 (") {
             let comp:[String] = string.components(separatedBy: " = ")
