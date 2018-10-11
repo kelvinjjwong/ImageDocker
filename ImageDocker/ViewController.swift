@@ -562,6 +562,9 @@ class ViewController: NSViewController {
         
         // init controller
         selectionViewController = storyboard?.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "selectionView")) as! SelectionCollectionViewController
+        selectionViewController.onItemClicked = { image in
+            self.selectImageFile(image)
+        }
         self.addChildViewController(selectionViewController)
         
         // outlet
@@ -1425,6 +1428,7 @@ class ViewController: NSViewController {
 //
 //            let _ = accumulator.add()
 //        }
+        self.selectionViewController.imagesLoader.reload()
         self.selectionViewController.imagesLoader.reorganizeItems()
         self.selectionCollectionView.reloadData()
     }
@@ -1440,8 +1444,13 @@ class ViewController: NSViewController {
         self.notesPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
         self.notesViewController.loadFrom(images: self.selectionViewController.imagesLoader.getItems(),
                                              onApplyChanges: {
+                                                self.selectionViewController.imagesLoader.reload()
                                                 self.selectionViewController.imagesLoader.reorganizeItems()
                                                 self.selectionCollectionView.reloadData()
+                                                
+                                                self.imagesLoader.reload()
+                                                self.imagesLoader.reorganizeItems()
+                                                self.collectionView.reloadData()
         })
     }
     
@@ -1477,6 +1486,7 @@ class ViewController: NSViewController {
         self.calendarPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
         self.calendarViewController.loadFrom(images: self.selectionViewController.imagesLoader.getItems(),
                                              onApplyChanges: {
+                                                    self.selectionViewController.imagesLoader.reload()
                                                     self.selectionViewController.imagesLoader.reorganizeItems()
                                                     self.selectionCollectionView.reloadData()
                                                 },

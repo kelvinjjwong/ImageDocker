@@ -323,10 +323,23 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     // MARK: IMAGES
     
+    func getImage(path:String) -> Image?{
+        var image:Image?
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                image = try Image.fetchOne(db, key: path)
+            }
+        }catch{
+            print(error)
+        }
+        return image
+    }
+    
     func getOrCreatePhoto(filename:String, path:String, parentPath:String, sharedDB:DatabaseWriter? = nil) -> Image{
         var image:Image?
         do {
-            let db = try sharedDB ?? DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 image = try Image.fetchOne(db, key: path)
             }
@@ -346,7 +359,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     func saveImage(image: Image, sharedDB:DatabaseWriter? = nil){
         do {
-            let db = try sharedDB ?? DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
                 var image = image
                 try image.save(db)
@@ -382,7 +395,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func getAllPhotoPaths(includeHidden:Bool = true, sharedDB:DatabaseWriter? = nil) -> Set<String> {
         var result:Set<String> = []
         do {
-            let db = try sharedDB ?? DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 if includeHidden {
                     let cursor = try Image.order([Column("photoTakenDate").asc, Column("filename").asc]).fetchCursor(db)
@@ -405,7 +418,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func getAllExportedImages(includeHidden:Bool = true, sharedDB:DatabaseWriter? = nil) -> [Image] {
         var result:[Image] = []
         do {
-            let db = try sharedDB ?? DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 if includeHidden {
                     result = try Image.filter(sql: "exportToPath is not null and exportAsFilename is not null and exportToPath <> '' and exportAsFilename <> ''").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
@@ -422,7 +435,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func getAllExportedPhotoFilenames(includeHidden:Bool = true, sharedDB:DatabaseWriter? = nil) -> Set<String> {
         var result:Set<String> = []
         do {
-            let db = try sharedDB ?? DatabasePool(path: dbfile)
+            let db = ModelStore.sharedDBPool()
             try db.read { db in
                 if includeHidden {
                     let cursor = try Image.filter(sql: "exportToPath is not null and exportAsFilename is not null and exportToPath <> '' and exportAsFilename <> ''").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchCursor(db)

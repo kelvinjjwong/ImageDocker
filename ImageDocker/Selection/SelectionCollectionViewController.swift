@@ -15,6 +15,8 @@ class SelectionCollectionViewController : NSViewController {
     
     let imagesLoader = CollectionViewItemsLoader()
     
+    var onItemClicked: ((ImageFile) -> Void)? = nil
+    
     // MARK: Actions
     
     override func viewDidLoad() {
@@ -78,6 +80,10 @@ extension SelectionCollectionViewController : NSCollectionViewDelegate {
             guard let item = collectionView.item(at: indexPath) else {continue}
             let viewItem = item as! CollectionViewItem
             viewItem.setHighlight(selected: selected)
+            
+            if selected && self.onItemClicked != nil {
+                self.onItemClicked!(viewItem.imageFile!)
+            }
         }
     }
     

@@ -27,9 +27,40 @@ class CollectionViewItem: NSCollectionViewItem {
     var displayDateFormat:String = "HH:mm:ss"
     
     var imageFile: ImageFile? {
-    didSet {
-      guard isViewLoaded else { return }
-      if let imageFile = imageFile {
+        didSet {
+            guard isViewLoaded else { return }
+            if let imageFile = imageFile {
+                self.renderControls(imageFile)
+            } else {
+                imageView?.image = nil
+                textField?.stringValue = ""
+                lblPlace.stringValue = ""
+                checkBox.state = NSButton.StateValue.off
+                btnCaution.isHidden = true
+            }
+        }
+    }
+  
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.wantsLayer = true
+        view.layer?.backgroundColor = NSColor.darkGray.cgColor
+        view.layer?.borderWidth = 0.0
+        view.layer?.borderColor = NSColor(calibratedRed: 0.0, green: 0.5, blue: 1.0, alpha: 1.0).cgColor // Aqua
+
+        self.btnLook.image = NSImage(named: NSImage.Name.quickLookTemplate)
+        self.btnCaution.isHidden = true
+    }
+    
+    func reloadFromDatabase(){
+        if let oldImage = self.imageFile?.imageData  {
+            if let image = ModelStore.default.getImage(path: oldImage.path) {
+                self.imageFile = ImageFile(photoFile: image)
+            }
+        }
+    }
+    
+    fileprivate func renderControls(_ imageFile:ImageFile) {
         DispatchQueue.main.async {
             self.imageView?.image = imageFile.thumbnail
         }
@@ -61,40 +92,11 @@ class CollectionViewItem: NSCollectionViewItem {
         btnCaution.isHidden = !imageFile.hasDuplicates
         btnCaution.toolTip = imageFile.hasDuplicates ? "duplicates" : ""
         
-      } else {
-        imageView?.image = nil
-        textField?.stringValue = ""
-        lblPlace.stringValue = ""
-        checkBox.state = NSButton.StateValue.off
-        btnCaution.isHidden = true
-      }
     }
-  }
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    view.wantsLayer = true
-    view.layer?.backgroundColor = NSColor.darkGray.cgColor
-    view.layer?.borderWidth = 0.0
-    view.layer?.borderColor = NSColor(calibratedRed: 0.0, green: 0.5, blue: 1.0, alpha: 1.0).cgColor // Aqua
-    
-    self.btnLook.image = NSImage(named: NSImage.Name.quickLookTemplate)
-    self.btnCaution.isHidden = true
-  }
-  
-  func setHighlight(selected: Bool) {
-    view.layer?.borderWidth = selected ? 5.0 : 0.0
-    /*
-    if selected {
-        if !self.isChecked() {
-            self.check()
-        }else {
-            self.uncheck()
-        }
+    func setHighlight(selected: Bool) {
+        view.layer?.borderWidth = selected ? 5.0 : 0.0
     }
- */
-    
-  }
     
     func check(checkBySection:Bool = false){
         checkBox.state = NSButton.StateValue.on

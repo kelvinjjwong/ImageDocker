@@ -208,7 +208,7 @@ class ExportManager {
                 
                 // patch image description into original image file, md5 will change
                 let originalImageDescription = photo.exportedLongDescription ?? ExifTool.helper.getImageDescription(url: pathUrl)
-                let generatedImageDescription = photo.longDescription ?? self.getImageDescription(photo: photo)
+                let generatedImageDescription = photo.longDescription ?? self.getImageBrief(photo: photo)
                 if originalImageDescription != generatedImageDescription {
                     print("\(Date()) Change ImageDescription for \(photo.path)")
                     ExifTool.helper.patchImageDescription(description: generatedImageDescription, url: pathUrl)
@@ -397,11 +397,17 @@ class ExportManager {
         }
     }
     
-    fileprivate func getImageDescription(photo:Image) -> String {
+    fileprivate func getImageBrief(photo:Image) -> String {
         var eventAndPlace = ""
-        
+        if photo.shortDescription != nil && photo.shortDescription != "" {
+            eventAndPlace = "\(photo.shortDescription!)"
+        }
         if photo.event != nil && photo.event != "" {
-            eventAndPlace = "\(photo.event!)"
+            if eventAndPlace == "" {
+                eventAndPlace = "\(photo.event!)"
+            }else{
+                eventAndPlace = "\(eventAndPlace) - \(photo.event!)"
+            }
         }
         if photo.place != nil && photo.place != "" {
             eventAndPlace = "\(eventAndPlace) 在 \(photo.place!)"
@@ -425,7 +431,7 @@ class ExportManager {
         }
         
         // Event & Place
-        let eventAndPlace = getImageDescription(photo: photo)
+        let eventAndPlace = getImageBrief(photo: photo)
         if eventAndPlace != "" {
             filenameComponents.append(eventAndPlace)
         }
@@ -480,20 +486,20 @@ class ExportManager {
         if state == .existAtPathWithDifferentMD5 {
             
             // add camera model to suffix
-            filenameComponents.removeLast()
-            filenameComponents.removeLast()
-            if photo.cameraMaker != nil && photo.cameraMaker != "" {
-                filenameComponents.append(" (\(photo.cameraMaker!)")
-                
-                if photo.cameraModel != nil && photo.cameraModel != "" {
-                    filenameComponents.append(" \(photo.cameraModel!)")
-                }
-                filenameComponents.append(")")
-            }
-            filenameComponents.append(".")
-            filenameComponents.append(fileExt)
-            filename = filenameComponents.joined()
-            targetPath = "\(path)/\(filename)"
+//            filenameComponents.removeLast()
+//            filenameComponents.removeLast()
+//            if photo.cameraMaker != nil && photo.cameraMaker != "" {
+//                filenameComponents.append(" (\(photo.cameraMaker!)")
+//
+//                if photo.cameraModel != nil && photo.cameraModel != "" {
+//                    filenameComponents.append(" \(photo.cameraModel!)")
+//                }
+//                filenameComponents.append(")")
+//            }
+//            filenameComponents.append(".")
+//            filenameComponents.append(fileExt)
+//            filename = filenameComponents.joined()
+//            targetPath = "\(path)/\(filename)"
             
             // add number to suffix
             for i in 1...9999 {

@@ -1077,7 +1077,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="YcF-9O-gjA"/>
                                                 </constraints>
-                                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" id="RCs-T8-Zux">
+                                                <textFieldCell key="cell" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" id="RCs-T8-Zux">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

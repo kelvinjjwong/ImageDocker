@@ -146,17 +146,32 @@ class CollectionViewItemsLoader: NSObject {
         
     }
     
-    func reload() {
-        guard lastRequest.loadSource != nil else {return}
-        if lastRequest.indicator != nil {
-            lastRequest.indicator?.reset()
+    fileprivate func reloadImages() {
+        var images:[Image] = []
+        for imageFile in self.items {
+            if let oldImage = imageFile.imageData {
+                if let image = ModelStore.default.getImage(path: oldImage.path) {
+                    images.append(image)
+                }
+            }
         }
-        if lastRequest.loadSource == .repository {
-            self.load(from: lastRequest.folderURL!, indicator: lastRequest.indicator)
-        }else if lastRequest.loadSource == .moment {
-            self.load(year: lastRequest.year!, month: lastRequest.month!, day: lastRequest.day!, place: lastRequest.place, filterImageSource: lastRequest.imageSource, filterCameraModel: lastRequest.cameraModel, indicator: lastRequest.indicator)
-        }else if lastRequest.loadSource == .event {
-            self.load(year: lastRequest.year!, month: lastRequest.month!, day: lastRequest.day!, event: lastRequest.event!, place: lastRequest.place!, filterImageSource: lastRequest.imageSource, filterCameraModel: lastRequest.cameraModel, indicator: lastRequest.indicator)
+        setupItems(photoFiles: images)
+    }
+    
+    func reload() {
+        if lastRequest.loadSource == nil {
+            self.reloadImages()
+        }else{
+            if lastRequest.indicator != nil {
+                lastRequest.indicator?.reset()
+            }
+            if lastRequest.loadSource == .repository {
+                self.load(from: lastRequest.folderURL!, indicator: lastRequest.indicator)
+            }else if lastRequest.loadSource == .moment {
+                self.load(year: lastRequest.year!, month: lastRequest.month!, day: lastRequest.day!, place: lastRequest.place, filterImageSource: lastRequest.imageSource, filterCameraModel: lastRequest.cameraModel, indicator: lastRequest.indicator)
+            }else if lastRequest.loadSource == .event {
+                self.load(year: lastRequest.year!, month: lastRequest.month!, day: lastRequest.day!, event: lastRequest.event!, place: lastRequest.place!, filterImageSource: lastRequest.imageSource, filterCameraModel: lastRequest.cameraModel, indicator: lastRequest.indicator)
+            }
         }
     }
     
@@ -603,7 +618,6 @@ class CollectionViewItemsLoader: NSObject {
     }
     
     func addItem(_ imageFile:ImageFile){
-        // TODO: change to SET<String> for performance
         let i = items.index(where: { $0.url == imageFile.url })
         if i == nil {
             items.append(imageFile)
