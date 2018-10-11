@@ -159,11 +159,10 @@ class ViewController: NSViewController {
     
     // MARK: SELECTION BATCH EDITOR - DateTime
     
-    @IBOutlet weak var editorDatePicker: NSDatePicker!
     @IBOutlet weak var batchEditIndicator: NSProgressIndicator!
-    @IBOutlet weak var btnReplaceDateTime: NSButton!
     @IBOutlet weak var btnDatePicker: NSButton!
     
+    @IBOutlet weak var btnNotes: NSButton!
     
     // MARK: SELECTION BATCH EDITOR - EVENT & PLACE
     
@@ -398,7 +397,6 @@ class ViewController: NSViewController {
         self.btnManagePlaces.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnAddRepository.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnRemoveSelection.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.btnReplaceDateTime.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnReplaceLocation.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnRemoveRepository.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnRefreshRepository.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -420,10 +418,6 @@ class ViewController: NSViewController {
         self.chbScan.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.chbShowHidden.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.lblExportMessage.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        
-        self.editorDatePicker.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.editorDatePicker.backgroundColor = NSColor.darkGray
-        self.editorDatePicker.isBordered = false
         
         self.btnShow.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnHide.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -595,7 +589,6 @@ class ViewController: NSViewController {
     }
     
     func configureEditors(){
-        editorDatePicker.dateValue = Date()
         comboEventList.isEditable = false
         comboPlaceList.isEditable = false
     }
@@ -1102,18 +1095,16 @@ class ViewController: NSViewController {
         self.comboEventList.isHidden = true
         self.btnAssignEvent.isHidden = true
         self.btnManageEvents.isHidden = true
-        self.editorDatePicker.isHidden = true
-        self.btnReplaceDateTime.isHidden = true
         self.btnDatePicker.isHidden = true
+        self.btnNotes.isHidden = true
     }
     
     fileprivate func showSelectionBatchEditors() {
         self.comboEventList.isHidden = false
         self.btnAssignEvent.isHidden = false
         self.btnManageEvents.isHidden = false
-        self.editorDatePicker.isHidden = false
-        self.btnReplaceDateTime.isHidden = false
         self.btnDatePicker.isHidden = false
+        self.btnNotes.isHidden = false
     }
     
     // MARK: SELECTION BATCH EDITOR TOOLBAR - SWITCHER
@@ -1400,24 +1391,61 @@ class ViewController: NSViewController {
     // MARK: Selection View - Batch Editor - DateTime Actions
     
     @IBAction func onReplaceDateClicked(_ sender: Any) {
-        guard self.selectionViewController.imagesLoader.getItems().count > 0 else {return}
-        let accumulator:Accumulator = Accumulator(target: self.selectionViewController.imagesLoader.getItems().count, indicator: self.batchEditIndicator, suspended: false, lblMessage: nil)
-        for item:ImageFile in self.selectionViewController.imagesLoader.getItems() {
-            let url:URL = item.url as URL
-            
-            let imageType = url.imageType()
-            if imageType == .photo {
-                ExifTool.helper.patchDateForPhoto(date: self.editorDatePicker.dateValue, url: url)
-            }else if imageType == .video {
-                ExifTool.helper.patchDateForVideo(date: self.editorDatePicker.dateValue, url: url)
-            }
-            item.assignDate(date: self.editorDatePicker.dateValue)
-            item.save()
-            
-            let _ = accumulator.add()
-        }
+//        guard self.selectionViewController.imagesLoader.getItems().count > 0 else {return}
+//        let accumulator:Accumulator = Accumulator(target: self.selectionViewController.imagesLoader.getItems().count, indicator: self.batchEditIndicator, suspended: false, lblMessage: nil)
+//        for item:ImageFile in self.selectionViewController.imagesLoader.getItems() {
+//            let url:URL = item.url as URL
+//
+//            let imageType = url.imageType()
+//            if imageType == .photo {
+//                ExifTool.helper.patchDateForPhoto(date: self.editorDatePicker.dateValue, url: url)
+//            }else if imageType == .video {
+//                ExifTool.helper.patchDateForVideo(date: self.editorDatePicker.dateValue, url: url)
+//            }
+//            item.assignDate(date: self.editorDatePicker.dateValue)
+//            item.save()
+//
+//            let _ = accumulator.add()
+//        }
         self.selectionViewController.imagesLoader.reorganizeItems()
         self.selectionCollectionView.reloadData()
+    }
+    
+    @IBAction func onButtonNotesClicked(_ sender: NSButton) {
+        if self.selectionViewController.imagesLoader.getItems().count == 0 {
+            Alert.noImageSelected()
+            return
+        }
+        self.createNotesPopover()
+        
+        let cellRect = sender.bounds
+        self.notesPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
+        self.notesViewController.loadFrom(images: self.selectionViewController.imagesLoader.getItems(),
+                                             onApplyChanges: {
+                                                self.selectionViewController.imagesLoader.reorganizeItems()
+                                                self.selectionCollectionView.reloadData()
+        })
+    }
+    
+    
+    var notesPopover:NSPopover? = nil
+    var notesViewController:NotesViewController!
+    
+    func createNotesPopover(){
+        var myPopover = self.notesPopover
+        if(myPopover == nil){
+            
+            let frame = CGRect(origin: .zero, size: CGSize(width: 480, height: 280))
+            self.notesViewController = NotesViewController()
+            self.notesViewController.view.frame = frame
+            
+            myPopover = NSPopover()
+            myPopover!.contentViewController = self.notesViewController
+            myPopover!.appearance = NSAppearance(named: .aqua)!
+            myPopover!.delegate = self
+            myPopover!.behavior = NSPopover.Behavior.transient
+        }
+        self.notesPopover = myPopover
     }
     
     @IBAction func onButtonDatePickerClicked(_ sender: NSButton) {
@@ -1427,25 +1455,25 @@ class ViewController: NSViewController {
         }
         self.createCalenderPopover()
         
-//        let now = Date()
-//        self.calendarView.date = now
-//        self.calendarView.selectedDate = now;
-        
         let cellRect = sender.bounds
         self.calendarPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
-        self.calendarViewController.loadFrom(images: self.selectionViewController.imagesLoader.getItems())
+        self.calendarViewController.loadFrom(images: self.selectionViewController.imagesLoader.getItems(),
+                                             onApplyChanges: {
+                                                    self.selectionViewController.imagesLoader.reorganizeItems()
+                                                    self.selectionCollectionView.reloadData()
+                                                },
+                                             onClose: {
+                                                self.calendarPopover?.close()
+        })
     }
+    
     
     var calendarPopover:NSPopover? = nil
     var calendarViewController:DateTimeViewController!
-//    var calendarView:LunarCalendarView!
-//    var calendarDateFormatter:DateFormatter!
     
     func createCalenderPopover(){
         var myPopover = self.calendarPopover
         if(myPopover == nil){
-//            self.calendarDateFormatter = DateFormatter()
-//            self.calendarDateFormatter.dateFormat = "yyyy-MM-dd"
             
             let frame = CGRect(origin: .zero, size: CGSize(width: 1200, height: 650))
             self.calendarViewController = DateTimeViewController()
@@ -1454,9 +1482,8 @@ class ViewController: NSViewController {
             myPopover = NSPopover()
             myPopover!.contentViewController = self.calendarViewController
             myPopover!.appearance = NSAppearance(named: .aqua)!
-            //myPopover!.animates = true
             myPopover!.delegate = self
-            myPopover!.behavior = NSPopover.Behavior.transient
+            myPopover!.behavior = NSPopover.Behavior.applicationDefined
         }
         self.calendarPopover = myPopover
     }

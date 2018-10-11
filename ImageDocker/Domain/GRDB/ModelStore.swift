@@ -490,6 +490,52 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     // MARK: IMAGES - UPDATES
     
+    func updateImageDates(path:String, date:Date, fields:Set<String>){
+        var arguments:[Any] = []
+        var values:[String] = []
+        for field in fields {
+            if field == "DateTimeOriginal" {
+                values.append("exifDateTimeOriginal = ?")
+                arguments.append(date)
+                continue
+            }
+            if field == "CreateDate" {
+                values.append("exifCreateDate = ?")
+                arguments.append(date)
+                continue
+            }
+            if field == "ModifyDate" {
+                values.append("exifModifyDate = ?")
+                arguments.append(date)
+                continue
+            }
+            if field == "FileCreateDate" {
+                values.append("filesysCreateDate = ?")
+                arguments.append(date)
+                continue
+            }
+        }
+        values.append("photoTakenDate = ?, photoTakenYear = ?, photoTakenMonth = ?, photoTakenDay = ?")
+        arguments.append(date)
+        let year = Calendar.current.component(.year, from: date)
+        let month = Calendar.current.component(.month, from: date)
+        let day = Calendar.current.component(.day, from: date)
+        arguments.append(year)
+        arguments.append(month)
+        arguments.append(day)
+        arguments.append(path)
+        let valueSets = values.joined(separator: ",")
+        
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try db.execute("UPDATE Image set \(valueSets) WHERE path=?", arguments: StatementArguments(arguments))
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
     func getPhotoFilesWithoutExif(limit:Int? = nil) -> [Image] {
         var result:[Image] = []
         do {
@@ -609,11 +655,17 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
     }
     
-    func storeImageDescription(path:String, shortDescription:String, longDescription:String){
+    func storeImageDescription(path:String, shortDescription:String?, longDescription:String?){
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
-                try db.execute("UPDATE Image set shortDescription = ?, longDescription = ? WHERE path=?", arguments: StatementArguments([shortDescription, longDescription, path]))
+                if let brief = shortDescription, let detailed = longDescription {
+                    try db.execute("UPDATE Image set shortDescription = ?, longDescription = ? WHERE path=?", arguments: StatementArguments([brief, detailed, path]))
+                }else if let brief = shortDescription {
+                    try db.execute("UPDATE Image set shortDescription = ? WHERE path=?", arguments: StatementArguments([brief, path]))
+                }else if let detailed = longDescription {
+                    try db.execute("UPDATE Image set longDescription = ? WHERE path=?", arguments: StatementArguments([detailed, path]))
+                }
             }
         }catch{
             print(error)

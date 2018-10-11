@@ -64,7 +64,7 @@ struct ExifTool {
         return string
     }
     
-    func patchDateForVideos(date:Date, urls:[URL]) {
+    func patchDateForVideos(date:Date, urls:[URL], tags:Set<String>) {
         let dateFormatter:DateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let dateString:String = dateFormatter.string(from: date)
@@ -80,21 +80,24 @@ struct ExifTool {
             exiftool.arguments?.append("-overwrite_original")
             exiftool.arguments?.append("-MediaCreateDate=\"" + dateString + "\"")
             exiftool.arguments?.append("-MediaModifyDate=\"" + dateString + "\"")
-            exiftool.arguments?.append("-CreateDate=\"" + dateString + "\"")
-            exiftool.arguments?.append("-ModifyDate=\"" + dateString + "\"")
+            for tag in tags{
+                exiftool.arguments?.append("-\(tag)=\"" + dateString + "\"")
+            }
             for url in urls {
                 exiftool.arguments?.append(url.path)
             }
             exiftool.launch()
             exiftool.waitUntilExit()
+            exiftool.terminate()
+            
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            let string:String = String(data: data, encoding: String.Encoding.utf8)!
+            pipe.fileHandleForReading.closeFile()
+            print(string)
         }
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        let string:String = String(data: data, encoding: String.Encoding.utf8)!
-        pipe.fileHandleForReading.closeFile()
-        print(string)
     }
     
-    func patchDateForVideo(date:Date, url:URL) {
+    func patchDateForVideo(date:Date, url:URL, tags:Set<String>) {
         print("Changing date time for: \(url.path)")
         
         let dateFormatter:DateFormatter = DateFormatter()
@@ -111,19 +114,22 @@ struct ExifTool {
             exiftool.arguments?.append("-overwrite_original")
             exiftool.arguments?.append("-MediaCreateDate=\"" + dateString + "\"")
             exiftool.arguments?.append("-MediaModifyDate=\"" + dateString + "\"")
-            exiftool.arguments?.append("-CreateDate=\"" + dateString + "\"")
-            exiftool.arguments?.append("-ModifyDate=\"" + dateString + "\"")
+            for tag in tags{
+                exiftool.arguments?.append("-\(tag)=\"" + dateString + "\"")
+            }
             exiftool.arguments?.append(url.path)
             exiftool.launch()
             exiftool.waitUntilExit()
+            exiftool.terminate()
+            
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            let string:String = String(data: data, encoding: String.Encoding.utf8)!
+            pipe.fileHandleForReading.closeFile()
+            print(string)
         }
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        let string:String = String(data: data, encoding: String.Encoding.utf8)!
-        pipe.fileHandleForReading.closeFile()
-        print(string)
     }
     
-    func patchDateForPhotos(date:Date, urls:[URL]) {
+    func patchDateForPhotos(date:Date, urls:[URL], tags:Set<String>) {
         let dateFormatter:DateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let dateString:String = dateFormatter.string(from: date)
@@ -136,20 +142,24 @@ struct ExifTool {
             exiftool.launchPath = mainUrl.path
             exiftool.arguments = []
             exiftool.arguments?.append("-overwrite_original")
-            exiftool.arguments?.append("-DateTimeOriginal=\"" + dateString + "\"")
+            for tag in tags{
+                exiftool.arguments?.append("-\(tag)=\"" + dateString + "\"")
+            }
             for url in urls {
                 exiftool.arguments?.append(url.path)
             }
             exiftool.launch()
             exiftool.waitUntilExit()
+            exiftool.terminate()
+            
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            let string:String = String(data: data, encoding: String.Encoding.utf8)!
+            pipe.fileHandleForReading.closeFile()
+            print(string)
         }
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        let string:String = String(data: data, encoding: String.Encoding.utf8)!
-        pipe.fileHandleForReading.closeFile()
-        print(string)
     }
     
-    func patchDateForPhoto(date:Date, url:URL) {
+    func patchDateForPhoto(date:Date, url:URL, tags:Set<String>) {
         print("Changing date time for: \(url.path)")
         
         let dateFormatter:DateFormatter = DateFormatter()
@@ -164,15 +174,19 @@ struct ExifTool {
             exiftool.launchPath = mainUrl.path
             exiftool.arguments = []
             exiftool.arguments?.append("-overwrite_original")
-            exiftool.arguments?.append("-DateTimeOriginal=\"" + dateString + "\"")
+            for tag in tags{
+                exiftool.arguments?.append("-\(tag)=\"" + dateString + "\"")
+            }
             exiftool.arguments?.append(url.path)
             exiftool.launch()
             exiftool.waitUntilExit()
+            exiftool.terminate()
+            
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            let string:String = String(data: data, encoding: String.Encoding.utf8)!
+            pipe.fileHandleForReading.closeFile()
+            print(string)
         }
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        let string:String = String(data: data, encoding: String.Encoding.utf8)!
-        pipe.fileHandleForReading.closeFile()
-        print(string)
     }
     
     func patchGPSCoordinateForImages(latitude:Double, longitude:Double, urls:[URL]){
@@ -236,6 +250,7 @@ struct ExifTool {
             exiftool.arguments?.append(url.path)
             exiftool.launch()
             exiftool.waitUntilExit()
+            exiftool.terminate()
             
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
             let string:String = String(data: data, encoding: String.Encoding.utf8)!
@@ -267,6 +282,7 @@ struct ExifTool {
     
     func getImageDescription(url:URL) -> String {
         let pipe = Pipe()
+        var string = ""
         autoreleasepool { () -> Void in
             let exiftool = Process()
             exiftool.standardOutput = pipe
@@ -277,10 +293,12 @@ struct ExifTool {
             exiftool.arguments?.append(url.path)
             exiftool.launch()
             exiftool.waitUntilExit()
+            exiftool.terminate()
+            
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            string = String(data: data, encoding: String.Encoding.utf8)!
+            pipe.fileHandleForReading.closeFile()
         }
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        let string:String = String(data: data, encoding: String.Encoding.utf8)!
-        pipe.fileHandleForReading.closeFile()
         if string == "" || !string.hasPrefix("Image Description               : "){
             return ""
         }

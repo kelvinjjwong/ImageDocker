@@ -29,6 +29,8 @@ class DateTimeViewController: NSViewController {
     
     // MARK: Controls
     
+    @IBOutlet weak var btnClose: NSButton!
+    
     // Calendar
     
     @IBOutlet weak var calendarViewContainer: NSView!
@@ -139,7 +141,12 @@ class DateTimeViewController: NSViewController {
         
     }
     
-    func loadFrom(images:[ImageFile]){
+    fileprivate var onCompleted: (() -> Void)?
+    fileprivate var onClose: (() -> Void)?
+    
+    func loadFrom(images:[ImageFile], onApplyChanges: (() -> Void)? = nil, onClose: (() -> Void)? = nil ){
+        self.onCompleted = onApplyChanges
+        self.onClose = onClose
         self.images = []
         for entry in images {
             if let image = entry.imageData {
@@ -199,8 +206,15 @@ class DateTimeViewController: NSViewController {
     }
     
     @IBAction func onStepperSelectedYearClicked(_ sender: NSStepper) {
+        let newValue = sender.integerValue
+        let oldValue = self.txtSelectedYear.integerValue
+        if newValue > oldValue {
+            self.increaseSelectedYear()
+        }else{
+            self.decreaseSelectedYear()
+        }
         
-        self.chkAdjustYear.state = .on
+        self.chkSelectedDate.state = .on
         self.generateDate()
     }
     
@@ -221,7 +235,7 @@ class DateTimeViewController: NSViewController {
             self.decreaseSelectedMonth()
         }
         
-        self.chkAdjustMonth.state = .on
+        self.chkSelectedDate.state = .on
         self.generateDate()
     }
     
@@ -248,7 +262,7 @@ class DateTimeViewController: NSViewController {
             self.decreaseSelectedDay()
         }
         
-        self.chkAdjustDay.state = .on
+        self.chkSelectedDate.state = .on
         self.generateDate()
     }
     
@@ -271,7 +285,7 @@ class DateTimeViewController: NSViewController {
             self.decreaseSelectedHour()
         }
         
-        self.chkAdjustHour.state = .on
+        self.chkSelectedTime.state = .on
         self.generateTime()
     }
     
@@ -292,7 +306,7 @@ class DateTimeViewController: NSViewController {
             self.decreaseSelectedMinute()
         }
         
-        self.chkAdjustMinute.state = .on
+        self.chkSelectedTime.state = .on
         self.generateTime()
     }
     
@@ -309,7 +323,7 @@ class DateTimeViewController: NSViewController {
             self.txtSelectedSecond.integerValue = newValue
         }
         
-        self.chkAdjustSecond.state = .on
+        self.chkSelectedTime.state = .on
         self.generateTime()
     }
     
@@ -650,8 +664,85 @@ class DateTimeViewController: NSViewController {
     
     // MARK: OK
     
+    
+    fileprivate var accumulator:Accumulator?
+    
     @IBAction func onOKClicked(_ sender: NSButton) {
+        guard self.chkEXIFCreateDate.state == .on || self.chkEXIFModifyDate.state == .on || self.chkEXIFDateTimeOriginal.state == .on || self.chkFileCreateDate.state == .on else {
+            Alert.noOptionSelected(message: "NO [APPLY TO] SELECTED")
+            return
+        }
+        self.btnOK.isEnabled = false
+        self.btnClose.isEnabled = false
+        
+        var tags:Set<String> = []
+        if self.chkEXIFCreateDate.state == .on {
+            tags.insert("CreateDate")
+        }
+        if self.chkEXIFModifyDate.state == .on {
+            tags.insert("ModifyDate")
+        }
+        if self.chkEXIFDateTimeOriginal.state == .on {
+            tags.insert("DateTimeOriginal")
+        }
+        if self.chkFileCreateDate.state == .on {
+            tags.insert("FileCreateDate")
+        }
+        self.accumulator = Accumulator(target: self.images.count, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage)
+        
+        DispatchQueue.global().async {
+            for image in self.images {
+                
+                ExifTool.helper.patchDateForPhoto(date: image.valueDate!, url: URL(fileURLWithPath: image.path), tags: tags)
+                ModelStore.default.updateImageDates(path: image.path, date: image.valueDate!, fields: tags)
+                self.updateImageDates(image: image, date: image.valueDate!, fields: tags)
+                
+                DispatchQueue.main.async {
+                    let _ = self.accumulator?.add("")
+                }
+            }
+            DispatchQueue.main.async {
+                self.table.reloadData()
+                self.btnOK.isEnabled = true
+                self.btnClose.isEnabled = true
+                if self.onCompleted != nil {
+                    self.onCompleted!()
+                }
+            }
+        }
+        
     }
+    
+    fileprivate func updateImageDates(image:ImageTimestamp, date:Date, fields: Set<String>){
+        
+        for field in fields {
+            if field == "DateTimeOriginal" {
+                image.dateTimeOriginal = date
+                continue
+            }
+            if field == "CreateDate" {
+                image.exifCreateDate = date
+                continue
+            }
+            if field == "ModifyDate" {
+                image.exifModifyDate = date
+                image.fileModifyDate = date
+                continue
+            }
+            if field == "FileCreateDate" {
+                image.fileCreateDate = date
+                continue
+            }
+        }
+        image.photoTakenDate = date
+    }
+    
+    @IBAction func onCloseClicked(_ sender: NSButton) {
+        if self.onClose != nil {
+            self.onClose!()
+        }
+    }
+    
     
 }
 
@@ -700,7 +791,7 @@ extension DateTimeViewController: NSTableViewDelegate {
                 value = image.event
                 isAction = false
             case NSUserInterfaceItemIdentifier("path"):
-                value = image.path
+                value = image.folderPath
                 isAction = false
             case NSUserInterfaceItemIdentifier("valueDate"):
                 if image.valueDate == nil {
@@ -867,7 +958,7 @@ class ImageTimestamp {
     init(_ image:Image){
         self.path = image.path
         self.filename = image.filename
-        self.folderPath = URL(fileURLWithPath: image.path).deletingLastPathComponent().path
+        self.folderPath = image.containerPath ?? ""
         self.photoTakenDate = image.photoTakenDate
         self.dateTimeOriginal = image.exifDateTimeOriginal
         self.exifCreateDate = image.exifCreateDate

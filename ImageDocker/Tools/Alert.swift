@@ -69,4 +69,14 @@ struct Alert {
                                                   comment: "Please connect your Android device with USB Debug Mode enabled")
         alert.runModal()
     }
+    
+    static func noOptionSelected(message:String) {
+        let alert = NSAlert()
+        alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK"))
+        alert.messageText = NSLocalizedString(message,
+                                              comment: message)
+        alert.informativeText = NSLocalizedString("Please select one or more items first",
+                                                  comment: "Please select one or more items first")
+        alert.runModal()
+    }
 }

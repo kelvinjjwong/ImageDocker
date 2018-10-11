@@ -77,6 +77,8 @@
 		8EBA692A2090C87D00221131 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA69292090C87D00221131 /* Helper.swift */; };
 		8EBA692C2090DB0300221131 /* DropPlaceCommons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA692B2090DB0300221131 /* DropPlaceCommons.swift */; };
 		8EBA692E2090DB4B00221131 /* VideoDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA692D2090DB4B00221131 /* VideoDropView.swift */; };
+		8EBA9DDF216F8BB100DACAAD /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA9DDD216F8BB100DACAAD /* NotesViewController.swift */; };
+		8EBA9DE0216F8BB100DACAAD /* NotesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EBA9DDE216F8BB100DACAAD /* NotesViewController.xib */; };
 		8EC82EA42121C10A00FC0899 /* LocalDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC82EA32121C10A00FC0899 /* LocalDirectory.swift */; };
 		8EC82EAB2121C5A200FC0899 /* AddLocalDirectoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC82EA92121C5A200FC0899 /* AddLocalDirectoryViewController.swift */; };
 		8EC82EAC2121C5A200FC0899 /* AddLocalDirectoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EC82EAA2121C5A200FC0899 /* AddLocalDirectoryViewController.xib */; };
@@ -196,6 +198,8 @@
 		8EBA69292090C87D00221131 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		8EBA692B2090DB0300221131 /* DropPlaceCommons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropPlaceCommons.swift; sourceTree = "<group>"; };
 		8EBA692D2090DB4B00221131 /* VideoDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDropView.swift; sourceTree = "<group>"; };
+		8EBA9DDD216F8BB100DACAAD /* NotesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewController.swift; sourceTree = "<group>"; };
+		8EBA9DDE216F8BB100DACAAD /* NotesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotesViewController.xib; sourceTree = "<group>"; };
 		8EC82EA32121C10A00FC0899 /* LocalDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDirectory.swift; sourceTree = "<group>"; };
 		8EC82EA92121C5A200FC0899 /* AddLocalDirectoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocalDirectoryViewController.swift; sourceTree = "<group>"; };
 		8EC82EAA2121C5A200FC0899 /* AddLocalDirectoryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddLocalDirectoryViewController.xib; sourceTree = "<group>"; };
@@ -339,6 +343,8 @@
 				8E98B8EF20D0EE3300771280 /* PlaceListViewController.xib */,
 				8E3EC3BB214DE623004B6125 /* DateTimeViewController.swift */,
 				8E3EC3BC214DE623004B6125 /* DateTimeViewController.xib */,
+				8EBA9DDD216F8BB100DACAAD /* NotesViewController.swift */,
+				8EBA9DDE216F8BB100DACAAD /* NotesViewController.xib */,
 			);
 			path = SelectionEditor;
 			sourceTree = "<group>";
@@ -685,6 +691,7 @@
 				8E95739B20EBEBD7003BD651 /* FilterViewController.xib in Resources */,
 				8EB986BE20B30C920075B081 /* CollectionViewItem.xib in Resources */,
 				8E3EC3BE214DE623004B6125 /* DateTimeViewController.xib in Resources */,
+				8EBA9DE0216F8BB100DACAAD /* NotesViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -822,6 +829,7 @@
 				8EBA692A2090C87D00221131 /* Helper.swift in Sources */,
 				8E4C38D5211828FF0089502C /* MomentsTreeController.swift in Sources */,
 				8E3EC3B4214DB1B8004B6125 /* LunarSolarConverter.swift in Sources */,
+				8EBA9DDF216F8BB100DACAAD /* NotesViewController.swift in Sources */,
 				8E2CF37620AED6BA00A93375 /* Model.xcdatamodeld in Sources */,
 				8EFAF1FB20BFFC8A007A7783 /* MetaInfoHolder.swift in Sources */,
 				8EB321D720FA433500D8C71D /* Image.swift in Sources */,

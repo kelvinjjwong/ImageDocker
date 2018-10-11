@@ -22,7 +22,7 @@ extension ViewController: NSTableViewDelegate {
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
                 if let date = dateFormatter.date(from: datetime) {
-                    self.editorDatePicker.dateValue = date
+                    //self.editorDatePicker.dateValue = date
                 }
                 
                 
