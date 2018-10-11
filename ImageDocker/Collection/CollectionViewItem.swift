@@ -38,7 +38,15 @@ class CollectionViewItem: NSCollectionViewItem {
         }else {
             textField?.stringValue = imageFile.fileName
         }
-        lblPlace.stringValue = imageFile.place
+        if let image = imageFile.imageData {
+            if image.shortDescription != nil && image.shortDescription != "" {
+                lblPlace.stringValue = image.shortDescription ?? imageFile.place
+            }else{
+                lblPlace.stringValue = imageFile.place
+            }
+        }else{
+            lblPlace.stringValue = imageFile.place
+        }
         
         checkBox.state = NSButton.StateValue.off
         

@@ -63,20 +63,20 @@ extension ViewController: NSTableViewDelegate {
             if isAction {
                 colView.subviews.removeAll()
                 
-                
-                if info.category == "DateTime" {
-                    let button:NSButton = NSButton(frame: NSRect(x: 2, y: 2, width: 12, height: 12))
-                    button.setButtonType(NSButton.ButtonType.momentaryPushIn)
-                    button.isBordered = false
-                    button.bezelStyle = NSButton.BezelStyle.smallSquare
-                    button.image = NSImage(named: .multipleDocuments)
-                    button.action = #selector(ViewController.copyDateAction(sender:))
-                    button.isHidden = false
-                    if info.value != nil {
-                        button.toolTip = "Copy " + info.value!
-                    }
-                    colView.addSubview(button)
-                }
+//                
+//                if info.category == "DateTime" {
+//                    let button:NSButton = NSButton(frame: NSRect(x: 2, y: 2, width: 12, height: 12))
+//                    button.setButtonType(NSButton.ButtonType.momentaryPushIn)
+//                    button.isBordered = false
+//                    button.bezelStyle = NSButton.BezelStyle.smallSquare
+//                    button.image = NSImage(named: .multipleDocuments)
+//                    button.action = #selector(ViewController.copyDateAction(sender:))
+//                    button.isHidden = false
+//                    if info.value != nil {
+//                        button.toolTip = "Copy " + info.value!
+//                    }
+//                    colView.addSubview(button)
+//                }
                 
                 
                 

@@ -212,6 +212,9 @@ class ExportManager {
                 if originalImageDescription != generatedImageDescription {
                     print("\(Date()) Change ImageDescription for \(photo.path)")
                     ExifTool.helper.patchImageDescription(description: generatedImageDescription, url: pathUrl)
+                    if generatedImageDescription != photo.longDescription {
+                        ModelStore.default.storeImageDescription(path: photo.path, shortDescription: nil, longDescription: generatedImageDescription)
+                    }
                     fileChanged = true
                     print("\(Date()) Change ImageDescription for \(photo.path) : DONE")
                 }

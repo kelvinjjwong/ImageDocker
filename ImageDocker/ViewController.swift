@@ -48,6 +48,9 @@ class ViewController: NSViewController {
     var lastSelectedMetaInfoRow: Int?
     @IBOutlet weak var metaInfoTableView: NSTableView!
     
+    @IBOutlet weak var lblImageDescription: NSTextField!
+    
+    
     // MARK: Image Map
     var zoomSize:Int = 16
     var previousTick:Int = 3
@@ -671,6 +674,14 @@ class ViewController: NSViewController {
         self.metaInfoTableView.reloadData()
         img.loadLocation()
         self.loadBaiduMap()
+        
+        
+        if let image = self.img.imageData {
+            self.lblImageDescription.stringValue = """
+\(image.shortDescription ?? "")
+\(image.longDescription ?? "")
+"""
+        }
     }
     
     private func loadImage(imageFile:ImageFile){
@@ -680,6 +691,13 @@ class ViewController: NSViewController {
         img.metaInfoHolder.sort(by: MetaCategorySequence)
         self.metaInfoTableView.reloadData()
         self.loadBaiduMap()
+        
+        if let image = self.img.imageData {
+            self.lblImageDescription.stringValue = """
+\(image.shortDescription ?? "")
+\(image.longDescription ?? "")
+"""
+        }
     }
     
     private func loadBaiduMap() {
