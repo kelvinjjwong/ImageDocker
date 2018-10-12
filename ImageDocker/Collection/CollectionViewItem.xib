@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -51,20 +51,6 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button toolTip="Open in Finder" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CUx-5Z-7pI">
-                    <rect key="frame" x="0.0" y="5" width="20" height="18"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="18" id="iSy-dm-Tvq"/>
-                        <constraint firstAttribute="width" constant="20" id="jew-ve-Kcl"/>
-                    </constraints>
-                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="folderOpen" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="j4x-dw-mTi">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="onOpenFinderClicked:" target="-2" id="nyq-fD-ssU"/>
-                    </connections>
-                </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HhR-2S-1Qc">
                     <rect key="frame" x="18" y="23" width="444" height="15"/>
                     <constraints>
@@ -91,33 +77,53 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Id9-mY-ETc">
-                    <rect key="frame" x="459" y="23" width="16" height="23"/>
+                    <rect key="frame" x="463" y="25" width="12" height="12"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="23" id="bI2-9s-J5J"/>
-                        <constraint firstAttribute="width" constant="16" id="c5p-fG-JSk"/>
+                        <constraint firstAttribute="height" constant="12" id="bI2-9s-J5J"/>
+                        <constraint firstAttribute="width" constant="12" id="c5p-fG-JSk"/>
                     </constraints>
-                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSCaution" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="SdX-tV-EEy">
+                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="copy" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="SdX-tV-EEy">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
+                <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="HcE-Zh-rv4">
+                    <rect key="frame" x="-5" y="3" width="25" height="19"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="25" id="bH2-qx-dkq"/>
+                        <constraint firstAttribute="height" constant="19" id="tqO-X8-wzX"/>
+                    </constraints>
+                    <popUpButtonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" autoenablesItems="NO" id="x4F-Td-KzV">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <menu key="menu" autoenablesItems="NO" id="tEK-js-g3a">
+                            <items>
+                                <menuItem state="on" image="more_horizontal" hidden="YES" id="fyA-MO-0B9"/>
+                                <menuItem title="Reveal in Finder" id="Fee-pt-Seh"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <action selector="onPopUpButtonClicked:" target="-2" id="7ck-ss-Dqs"/>
+                    </connections>
+                </popUpButton>
             </subviews>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="9qX-pa-ugK" secondAttribute="bottom" constant="8" id="2MH-Yx-k6X"/>
                 <constraint firstItem="9qX-pa-ugK" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" id="2z6-mz-65p"/>
-                <constraint firstAttribute="bottom" secondItem="Id9-mY-ETc" secondAttribute="bottom" constant="23" id="CMj-4p-jod"/>
+                <constraint firstAttribute="bottom" secondItem="Id9-mY-ETc" secondAttribute="bottom" constant="25" id="CMj-4p-jod"/>
                 <constraint firstItem="FSe-ep-RM0" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="Cac-fe-lhi"/>
+                <constraint firstAttribute="bottom" secondItem="HcE-Zh-rv4" secondAttribute="bottom" constant="3" id="DKB-A6-8a3"/>
                 <constraint firstAttribute="trailing" secondItem="FSe-ep-RM0" secondAttribute="trailing" id="E7f-E0-rXP"/>
                 <constraint firstAttribute="trailing" secondItem="Onb-PG-8r4" secondAttribute="trailing" id="GEN-fF-l14"/>
                 <constraint firstAttribute="bottom" secondItem="Onb-PG-8r4" secondAttribute="bottom" constant="5" id="GkW-Ug-dZE"/>
                 <constraint firstAttribute="bottom" secondItem="AeO-Uo-9h3" secondAttribute="bottom" constant="21" id="M5U-Cp-61s"/>
+                <constraint firstItem="HcE-Zh-rv4" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="-5" id="MbH-Xd-Wgq"/>
                 <constraint firstItem="9qX-pa-ugK" firstAttribute="top" secondItem="HhR-2S-1Qc" secondAttribute="bottom" id="Xx6-IA-axd"/>
-                <constraint firstAttribute="bottom" secondItem="CUx-5Z-7pI" secondAttribute="bottom" constant="5" id="dvG-JS-5zk"/>
                 <constraint firstItem="HhR-2S-1Qc" firstAttribute="top" secondItem="FSe-ep-RM0" secondAttribute="bottom" id="eRF-wd-W2O"/>
                 <constraint firstAttribute="trailing" secondItem="HhR-2S-1Qc" secondAttribute="trailing" constant="20" id="eus-uP-aKn"/>
                 <constraint firstAttribute="trailing" secondItem="9qX-pa-ugK" secondAttribute="trailing" constant="20" id="o9W-j5-xVp"/>
                 <constraint firstAttribute="trailing" secondItem="Id9-mY-ETc" secondAttribute="trailing" constant="5" id="oh0-yJ-iw8"/>
-                <constraint firstItem="CUx-5Z-7pI" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="qBa-Xq-hNr"/>
                 <constraint firstItem="FSe-ep-RM0" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="sjp-Lb-bll"/>
                 <constraint firstItem="AeO-Uo-9h3" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="tzO-OO-1Ne"/>
                 <constraint firstItem="HhR-2S-1Qc" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" id="y4F-IE-8V6"/>
@@ -126,8 +132,8 @@
         <collectionViewItem id="c2X-bD-ueb" customClass="CollectionViewItem" customModule="ImageDocker" customModuleProvider="target"/>
     </objects>
     <resources>
-        <image name="NSCaution" width="32" height="32"/>
         <image name="NSStopProgressTemplate" width="11" height="11"/>
-        <image name="folderOpen" width="24" height="24"/>
+        <image name="copy" width="16" height="16"/>
+        <image name="more_horizontal" width="16" height="4"/>
     </resources>
 </document>

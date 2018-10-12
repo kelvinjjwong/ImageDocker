@@ -131,6 +131,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                     duplicates.yearMonths.insert(year * 1000 + month)
                     duplicates.yearMonthDays.insert(year * 100000 + month * 100 + day)
                     
+                    print("duplicated date: \(date)")
                     dupDates.insert(date)
                 }
             }
@@ -143,17 +144,29 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
+                print("duplicated date count: \(dupDates.count)")
                 let marks = repeatElement("?", count: dupDates.count).joined(separator: ",")
-                let photosInSameDate = try Row.fetchCursor(db, "SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place FROM Image WHERE photoTakenYear <> 0 AND photoTakenYear IS NOT NULL AND photoTakenDate in (\(marks))", arguments:StatementArguments(dupDates))
+                let sql = "SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,path FROM Image WHERE photoTakenYear <> 0 AND photoTakenYear IS NOT NULL AND photoTakenDate in (\(marks))"
+                print(sql)
+                let photosInSameDate = try Row.fetchCursor(db, sql, arguments:StatementArguments(dupDates))
                 
                 while let photo = try photosInSameDate.next() {
-                    let key = "\(photo["place"] ?? "")_\(photo["photoTakenYear"] ?? "0")_\(photo["photoTakenMonth"] ?? "0")_\(photo["photoTakenDay"] ?? "0")"
-                    if let first = firstPhotoInPlaceAndDate[key] {
-                        // duplicates
-                        duplicates.paths.insert(first)
-                        duplicates.paths.insert(photo["path"] ?? "")
-                    }else{
-                        firstPhotoInPlaceAndDate[key] = photo["path"] ?? ""
+                    if let date = photo["photoTakenDate"] as Date? {
+                        let year = Calendar.current.component(.year, from: date)
+                        let month = Calendar.current.component(.month, from: date)
+                        let day = Calendar.current.component(.day, from: date)
+                        let hour = Calendar.current.component(.hour, from: date)
+                        let minute = Calendar.current.component(.minute, from: date)
+                        let second = Calendar.current.component(.second, from: date)
+                        let key = "\(photo["place"] ?? "")_\(year)_\(month)_\(day)_\(hour)_\(minute)_\(second)"
+                        //print("duplicated record: \(key)")
+                        if let first = firstPhotoInPlaceAndDate[key] {
+                            // duplicates
+                            duplicates.paths.insert(first)
+                            duplicates.paths.insert(photo["path"] ?? "")
+                        }else{
+                            firstPhotoInPlaceAndDate[key] = photo["path"] ?? ""
+                        }
                     }
                 }
             }

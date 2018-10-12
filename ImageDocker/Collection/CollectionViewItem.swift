@@ -15,6 +15,7 @@ class CollectionViewItem: NSCollectionViewItem {
     @IBOutlet weak var lblPlace: NSTextField!
     @IBOutlet weak var btnLook: NSButton!
     @IBOutlet weak var btnCaution: NSButton!
+
     
     private var checkBoxDelegate:CollectionViewItemCheckDelegate?
     
@@ -131,9 +132,11 @@ class CollectionViewItem: NSCollectionViewItem {
             }
         }
     }
-    @IBAction func onOpenFinderClicked(_ sender: Any) {
-        if let url = self.imageFile?.url {
-            NSWorkspace.shared.activateFileViewerSelecting([url])
+    
+    @IBAction func onPopUpButtonClicked(_ sender: NSPopUpButton) {
+        let i = sender.indexOfSelectedItem
+        if i == 1 {
+            self.revealInFinder()
         }
     }
     
@@ -149,6 +152,12 @@ class CollectionViewItem: NSCollectionViewItem {
                 self.btnLook.toolTip = "Hidden"
             }
             //ModelStore.save()
+        }
+    }
+    
+    fileprivate func revealInFinder(){
+        if let url = self.imageFile?.url {
+            NSWorkspace.shared.activateFileViewerSelecting([url])
         }
     }
     

@@ -462,6 +462,7 @@ class CollectionViewItemsLoader: NSObject {
         }
         print("\(Date()) Loading duplicate photos from db")
         let duplicates:Duplicates = ModelStore.default.getDuplicatePhotos()
+        print("Found duplicates: \(duplicates.paths.count)")
         print("\(Date()) Loading duplicate photos from db: DONE")
         
         for url in urls {
@@ -473,6 +474,7 @@ class CollectionViewItemsLoader: NSObject {
             let imageFile = ImageFile(url: url, indicator: self.indicator, sharedDB:ModelStore.sharedDBPool())
             
             print("\(Date()) Checking duplicate for a photo")
+            // FIXME: bug
             if duplicates.paths.contains(url.path) {
                 imageFile.hasDuplicates = true
             }else {
@@ -501,6 +503,13 @@ class CollectionViewItemsLoader: NSObject {
         
         print("\(Date()) Loading duplicate photos from db")
         let duplicates:Duplicates = ModelStore.default.getDuplicatePhotos()
+        print("Found duplicates: \(duplicates.paths.count)")
+        print(lastRequest)
+//        if duplicates.paths.count > 0 {
+//            for dup in duplicates.paths {
+//                print(dup)
+//            }
+//        }
         print("\(Date()) Loading duplicate photos from db: DONE")
         
         for photoFile in photoFiles {
