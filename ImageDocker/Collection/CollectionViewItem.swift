@@ -18,11 +18,16 @@ class CollectionViewItem: NSCollectionViewItem {
 
     
     private var checkBoxDelegate:CollectionViewItemCheckDelegate?
+    private var showDuplicatesDelegate:CollectionViewItemShowDuplicatesDelegate?
     
     var sectionIndex:Int?
     
     func setCheckBoxDelegate(_ delegate:CollectionViewItemCheckDelegate){
         self.checkBoxDelegate = delegate
+    }
+    
+    func setShowDuplicatesDelegate(_ delegate:CollectionViewItemShowDuplicatesDelegate) {
+        self.showDuplicatesDelegate = delegate
     }
     
     var displayDateFormat:String = "HH:mm:ss"
@@ -154,6 +159,15 @@ class CollectionViewItem: NSCollectionViewItem {
             //ModelStore.save()
         }
     }
+    
+    @IBAction func onDuplicatesClicked(_ sender: NSButton) {
+        if let imageFile = self.imageFile {
+            if self.showDuplicatesDelegate != nil {
+                self.showDuplicatesDelegate?.onCollectionViewItemShowDuplicate(imageFile.duplicatesKey)
+            }
+        }
+    }
+    
     
     fileprivate func revealInFinder(){
         if let url = self.imageFile?.url {

@@ -68,6 +68,7 @@ extension ViewController : NSCollectionViewDataSource {
         let item = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "CollectionViewItem"), for: indexPath)
         guard let collectionViewItem = item as? CollectionViewItem else {return item}
         collectionViewItem.setCheckBoxDelegate(self)
+        collectionViewItem.setShowDuplicatesDelegate(self)
         collectionViewItem.sectionIndex = indexPath.section
 
         let imageFile = imagesLoader.item(for: indexPath as NSIndexPath)
@@ -132,6 +133,28 @@ extension ViewController : PlacesCompletionEvent {
             self.collectionView.reloadData()
         }
     }
+}
+
+protocol CollectionViewItemShowDuplicatesDelegate {
+    func onCollectionViewItemShowDuplicate(_ duplicatesKey:String)
+}
+
+extension ViewController : CollectionViewItemShowDuplicatesDelegate {
+    func onCollectionViewItemShowDuplicate(_ duplicatesKey: String) {
+        if let paths = ModelStore.default.getDuplicatePhotos().keyToPath[duplicatesKey] {
+            self.selectionViewController.imagesLoader.clean()
+            for path in paths {
+                if let image = ModelStore.default.getImage(path: path) {
+                    let imageFile = ImageFile(photoFile: image)
+                    self.selectionViewController.imagesLoader.addItem(imageFile)
+                }
+                
+            }
+            self.selectionViewController.imagesLoader.reorganizeItems()
+            self.selectionCollectionView.reloadData()
+        }
+    }
+    
 }
 
 protocol CollectionViewItemCheckDelegate {

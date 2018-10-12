@@ -86,6 +86,9 @@
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="onDuplicatesClicked:" target="-2" id="03e-IQ-x24"/>
+                    </connections>
                 </button>
                 <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="HcE-Zh-rv4">
                     <rect key="frame" x="-5" y="3" width="25" height="19"/>
