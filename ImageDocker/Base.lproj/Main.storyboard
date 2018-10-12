@@ -392,14 +392,14 @@
                                                                 </connections>
                                                             </button>
                                                             <progressIndicator wantsLayer="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="Sab-MP-Qfo">
-                                                                <rect key="frame" x="632" y="6" width="150" height="20"/>
+                                                                <rect key="frame" x="346" y="6" width="150" height="20"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="18" id="N29-ek-guG"/>
                                                                     <constraint firstAttribute="width" constant="150" id="lXt-MZ-I4h"/>
                                                                 </constraints>
                                                             </progressIndicator>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kAZ-Sm-Ax7">
-                                                                <rect key="frame" x="370" y="7" width="254" height="17"/>
+                                                                <rect key="frame" x="74" y="7" width="254" height="17"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="17" id="cbB-lt-2rd"/>
                                                                     <constraint firstAttribute="width" constant="250" id="itr-jB-jIC"/>
@@ -407,18 +407,6 @@
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="F6B-H1-H9y">
                                                                     <font key="font" metaFont="system"/>
                                                                     <color key="textColor" red="0.9607755829015544" green="0.9607755829015544" blue="0.9607755829015544" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xaZ-EP-rco">
-                                                                <rect key="frame" x="74" y="7" width="254" height="17"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="17" id="WDj-aJ-DxI"/>
-                                                                    <constraint firstAttribute="width" constant="250" id="qBi-Xh-pQy"/>
-                                                                </constraints>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="Uy5-1X-ONU">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
@@ -460,25 +448,46 @@
                                                                     <action selector="onRefreshCollectionButtonClicked:" target="XfG-lQ-9wD" id="Mi6-Nw-XuV"/>
                                                                 </connections>
                                                             </button>
+                                                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gkw-tO-uG9">
+                                                                <rect key="frame" x="689" y="4" width="95" height="25"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="22" id="WXq-VJ-o8B"/>
+                                                                    <constraint firstAttribute="width" constant="95" id="yDU-mD-v5y"/>
+                                                                </constraints>
+                                                                <popUpButtonCell key="cell" type="roundTextured" title="Combine" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" selectedItem="qDQ-0w-bFr" id="Lbn-50-OcH">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="menu"/>
+                                                                    <menu key="menu" id="4RJ-3g-5cq">
+                                                                        <items>
+                                                                            <menuItem title="Combine" state="on" image="combine" hidden="YES" id="qDQ-0w-bFr"/>
+                                                                            <menuItem title="Combine duplicated images in this collection only" id="J53-DU-cm5"/>
+                                                                            <menuItem title="Combine duplicated images in all libraries" id="8jd-qX-Y5y"/>
+                                                                        </items>
+                                                                    </menu>
+                                                                </popUpButtonCell>
+                                                                <connections>
+                                                                    <action selector="onCombineDuplicatesButtonClicked:" target="XfG-lQ-9wD" id="Mfq-f0-6Pn"/>
+                                                                </connections>
+                                                            </popUpButton>
                                                         </subviews>
                                                         <constraints>
+                                                            <constraint firstItem="Sab-MP-Qfo" firstAttribute="leading" secondItem="kAZ-Sm-Ax7" secondAttribute="trailing" constant="20" id="183-Wq-j1a"/>
                                                             <constraint firstAttribute="bottom" secondItem="y2t-Ke-hIj" secondAttribute="bottom" constant="10" id="3SS-ig-q5b"/>
                                                             <constraint firstItem="Qnu-5r-3Pb" firstAttribute="top" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="11" id="3eu-OV-l4Z"/>
-                                                            <constraint firstItem="Sab-MP-Qfo" firstAttribute="leading" secondItem="kAZ-Sm-Ax7" secondAttribute="trailing" constant="10" id="6FE-Sz-R1t"/>
                                                             <constraint firstAttribute="bottom" secondItem="Sab-MP-Qfo" secondAttribute="bottom" constant="7" id="9Y8-f8-enM"/>
+                                                            <constraint firstItem="kAZ-Sm-Ax7" firstAttribute="leading" secondItem="Qnu-5r-3Pb" secondAttribute="trailing" constant="10" id="ACF-Em-SRl"/>
                                                             <constraint firstItem="y2t-Ke-hIj" firstAttribute="leading" secondItem="eaf-Jq-heG" secondAttribute="trailing" constant="8" id="CZl-0L-Ruh"/>
                                                             <constraint firstItem="KZW-eM-F1C" firstAttribute="top" secondItem="m9M-hY-L99" secondAttribute="top" id="CiJ-4L-Rq1"/>
+                                                            <constraint firstItem="DpT-Dg-Oeb" firstAttribute="leading" secondItem="Gkw-tO-uG9" secondAttribute="trailing" constant="8" id="ESZ-gX-iIz"/>
                                                             <constraint firstAttribute="bottom" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="35" id="FQQ-0m-lCs"/>
                                                             <constraint firstItem="eaf-Jq-heG" firstAttribute="leading" secondItem="DpT-Dg-Oeb" secondAttribute="trailing" constant="10" id="HFK-qr-pmb"/>
                                                             <constraint firstAttribute="trailing" secondItem="KZW-eM-F1C" secondAttribute="trailing" id="Hj4-Gx-NJd"/>
                                                             <constraint firstItem="KZW-eM-F1C" firstAttribute="leading" secondItem="m9M-hY-L99" secondAttribute="leading" id="TrQ-Wm-NbH"/>
                                                             <constraint firstAttribute="bottom" secondItem="kAZ-Sm-Ax7" secondAttribute="bottom" constant="7" id="Ybw-3Z-dGC"/>
+                                                            <constraint firstItem="Gkw-tO-uG9" firstAttribute="top" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="7" id="a6L-mg-zAV"/>
                                                             <constraint firstItem="Qnu-5r-3Pb" firstAttribute="leading" secondItem="m9M-hY-L99" secondAttribute="leading" constant="8" id="aJL-mw-V0W"/>
-                                                            <constraint firstItem="DpT-Dg-Oeb" firstAttribute="leading" secondItem="Sab-MP-Qfo" secondAttribute="trailing" constant="10" id="dE9-v3-0p4"/>
                                                             <constraint firstItem="DpT-Dg-Oeb" firstAttribute="top" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="8" id="jCr-mg-vua"/>
                                                             <constraint firstAttribute="trailing" secondItem="y2t-Ke-hIj" secondAttribute="trailing" constant="15" id="mZA-F8-9Md"/>
-                                                            <constraint firstAttribute="bottom" secondItem="xaZ-EP-rco" secondAttribute="bottom" constant="7" id="req-py-ui9"/>
-                                                            <constraint firstItem="xaZ-EP-rco" firstAttribute="leading" secondItem="Qnu-5r-3Pb" secondAttribute="trailing" constant="10" id="syY-Tc-uY8"/>
                                                             <constraint firstItem="eaf-Jq-heG" firstAttribute="top" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="11" id="xrc-T9-jh9"/>
                                                         </constraints>
                                                     </customView>
@@ -1160,6 +1169,7 @@
                         <outlet property="btnAssignEvent" destination="xCg-De-lnA" id="Jab-Ym-d9U"/>
                         <outlet property="btnBatchEditorToolbarSwitcher" destination="ltZ-4C-dje" id="Cvz-B9-eBG"/>
                         <outlet property="btnChoiceMapService" destination="bhg-cd-YhI" id="kx1-3W-tkc"/>
+                        <outlet property="btnCombineDuplicates" destination="Gkw-tO-uG9" id="p8M-jW-YwA"/>
                         <outlet property="btnCopyLocation" destination="vj9-Vb-qDW" id="Hxx-t9-L6I"/>
                         <outlet property="btnCopyToDevice" destination="Zj8-N8-ari" id="0b1-3U-nKo"/>
                         <outlet property="btnDatePicker" destination="qYv-ia-zVJ" id="KVx-Yv-c0B"/>
@@ -1187,7 +1197,6 @@
                         <outlet property="comboPlaceList" destination="exh-M3-IJe" id="Z4V-Jb-5gh"/>
                         <outlet property="imgPhoto" destination="9Na-U8-3R2" id="b6k-Ma-bp4"/>
                         <outlet property="indicatorMessage" destination="kAZ-Sm-Ax7" id="QkM-9I-20Z"/>
-                        <outlet property="lblExportMessage" destination="xaZ-EP-rco" id="Dck-vd-NYl"/>
                         <outlet property="lblImageDescription" destination="q9K-Bh-dED" id="6j0-7g-FlX"/>
                         <outlet property="mapZoomSlider" destination="eId-m8-eKf" id="zoE-94-C0F"/>
                         <outlet property="metaInfoTableView" destination="ECf-s9-RCm" id="GLo-W4-I6C"/>
@@ -2273,6 +2282,7 @@
         <image name="NSStatusNone" width="16" height="16"/>
         <image name="broom" width="16" height="16"/>
         <image name="clock" width="16" height="16"/>
+        <image name="combine" width="16" height="16"/>
         <image name="edit" width="16" height="15"/>
         <image name="forward" width="17" height="16"/>
         <image name="hide" width="17" height="15"/>

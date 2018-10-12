@@ -474,11 +474,14 @@ class CollectionViewItemsLoader: NSObject {
             let imageFile = ImageFile(url: url, indicator: self.indicator, sharedDB:ModelStore.sharedDBPool())
             
             print("\(Date()) Checking duplicate for a photo")
-            // FIXME: bug
+
             if duplicates.paths.contains(url.path) {
                 imageFile.hasDuplicates = true
+                imageFile.duplicatesKey = duplicates.pathToKey[url.path] ?? ""
+                print(imageFile.duplicatesKey)
             }else {
                 imageFile.hasDuplicates = false
+                imageFile.duplicatesKey = ""
             }
             print("\(Date()) Checking duplicate for a photo: DONE")
             
@@ -525,8 +528,11 @@ class CollectionViewItemsLoader: NSObject {
             
             if duplicates.paths.contains(photoFile.path) {
                 imageFile.hasDuplicates = true
+                imageFile.duplicatesKey = duplicates.pathToKey[photoFile.path] ?? ""
+                print(imageFile.duplicatesKey)
             }else {
                 imageFile.hasDuplicates = false
+                imageFile.duplicatesKey = ""
             }
             
             // prefetch thumbnail to improve performance of collection view

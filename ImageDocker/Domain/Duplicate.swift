@@ -27,4 +27,6 @@ class Duplicates {
     var years:Set<Int> = []
     var yearMonths:Set<Int> = []
     var yearMonthDays:Set<Int> = []
+    var pathToKey:[String:String] = [:]
+    var keyToPath:[String:[String]] = [:]
 }

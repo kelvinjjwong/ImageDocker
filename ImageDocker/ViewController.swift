@@ -119,8 +119,6 @@ class ViewController: NSViewController {
     @IBOutlet weak var btnFilterRepository: NSButton!
     
     
-    @IBOutlet weak var lblExportMessage: NSTextField!
-    
     @IBOutlet weak var chbExport: NSButton!
     @IBOutlet weak var chbScan: NSButton!
     @IBOutlet weak var chbSelectAll: NSButton!
@@ -133,6 +131,8 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var indicatorMessage: NSTextField!
     @IBOutlet weak var btnRefreshCollectionView: NSButton!
+    @IBOutlet weak var btnCombineDuplicates: NSPopUpButton!
+    
     
     @IBOutlet weak var chbShowHidden: NSButton!
     
@@ -256,6 +256,7 @@ class ViewController: NSViewController {
         super.viewDidLoad()
         
         self.btnShare.sendAction(on: .leftMouseDown)
+        self.btnCombineDuplicates.toolTip = "Combine duplicated images to the 1st image"
         
         print("\(Date()) Loading view")
         ModelStore.default.checkData()
@@ -314,7 +315,7 @@ class ViewController: NSViewController {
         self.btnScanState.isHidden = true
         
         self.chbExport.state = NSButton.StateValue.off
-        ExportManager.default.messageBox = self.lblExportMessage
+        ExportManager.default.messageBox = self.indicatorMessage
         ExportManager.default.suppressed = true
         self.suppressedExport = true
         self.lastExportPhotos = Date()
@@ -405,6 +406,7 @@ class ViewController: NSViewController {
         self.btnRefreshRepository.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnFilterRepository.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnRefreshCollectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.btnCombineDuplicates.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
         self.comboEventList.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.comboEventList.backgroundColor = NSColor.darkGray
@@ -420,7 +422,6 @@ class ViewController: NSViewController {
         self.chbExport.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.chbScan.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.chbShowHidden.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.lblExportMessage.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
         self.btnShow.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnHide.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -492,6 +493,7 @@ class ViewController: NSViewController {
     fileprivate func hideToolbarOfCollectionView() {
         self.chbExport.isHidden = true
         self.btnRefreshCollectionView.isHidden = true
+        self.btnCombineDuplicates.isHidden = true
         self.chbSelectAll.isHidden = true
         self.chbShowHidden.isHidden = true
     }
@@ -507,6 +509,7 @@ class ViewController: NSViewController {
     fileprivate func showToolbarOfCollectionView() {
         self.chbExport.isHidden = false
         self.btnRefreshCollectionView.isHidden = false
+        self.btnCombineDuplicates.isHidden = false
         self.chbSelectAll.isHidden = false
         self.chbShowHidden.isHidden = false
     }
@@ -998,6 +1001,23 @@ class ViewController: NSViewController {
     
     // MARK: Collection View Controls
     
+    func disableCollectionViewControls() {
+        self.chbExport.isEnabled = false
+        self.btnRefreshCollectionView.isEnabled = false
+        self.chbSelectAll.isEnabled = false
+        self.chbShowHidden.isEnabled = false
+        self.btnCombineDuplicates.isEnabled = false
+    }
+    
+    
+    func enableCollectionViewControls() {
+        self.chbExport.isEnabled = true
+        self.btnRefreshCollectionView.isEnabled = true
+        self.chbSelectAll.isEnabled = true
+        self.chbShowHidden.isEnabled = true
+        self.btnCombineDuplicates.isEnabled = true
+    }
+    
     func selectImageFile(_ imageFile:ImageFile){
         self.selectedImageFile = imageFile.fileName
         //print("selected image file: \(filename)")
@@ -1024,6 +1044,92 @@ class ViewController: NSViewController {
     
     @IBAction func onRefreshCollectionButtonClicked(_ sender: Any) {
         self.refreshCollection()
+    }
+    
+    fileprivate func combineDuplicatesInCollectionView() {
+        guard self.imagesLoader.getItems().count > 0 else {
+            Alert.noImageSelected()
+            return
+        }
+        
+        self.disableCollectionViewControls()
+        
+        let accumulator:Accumulator = Accumulator(target: self.imagesLoader.getItems().count, indicator: self.collectionProgressIndicator, suspended: false, lblMessage: nil)
+        
+        DispatchQueue.global().async {
+            
+            for image in self.imagesLoader.getItems() {
+                if image.hasDuplicates {
+                    if let list = ModelStore.default.getDuplicatePhotos().keyToPath[image.duplicatesKey] {
+                        if image.url.path == list[0] {
+                            //print("\(image.duplicatesKey) MAJOR \(image.url.path)")
+                            ModelStore.default.markImageDuplicated(path: image.url.path, duplicatesKey: image.duplicatesKey, hide: false)
+                        }else{
+                            //print("\(image.duplicatesKey) SLAVE \(image.url.path)")
+                            ModelStore.default.markImageDuplicated(path: image.url.path, duplicatesKey: image.duplicatesKey, hide: true)
+                        }
+                    }
+                    
+                }
+                DispatchQueue.main.async {
+                    let _ = accumulator.add()
+                }
+            }
+            
+            self.imagesLoader.reload()
+            self.imagesLoader.reorganizeItems()
+            
+            DispatchQueue.main.async {
+                self.enableCollectionViewControls()
+                self.collectionView.reloadData()
+            }
+        }
+    }
+    
+    fileprivate func combineDuplicatesInAllLibraries() {
+        self.disableCollectionViewControls()
+        
+        let accumulator:Accumulator = Accumulator(target: ModelStore.default.getDuplicatePhotos().keyToPath.keys.count, indicator: self.collectionProgressIndicator, suspended: false, lblMessage: self.indicatorMessage)
+        
+        DispatchQueue.global().async {
+            
+            for key in ModelStore.default.getDuplicatePhotos().keyToPath.keys {
+                if let list = ModelStore.default.getDuplicatePhotos().keyToPath[key] {
+                    
+                    for i in 0..<list.count {
+                        let path = list[i]
+                        if i == 0 {
+                            ModelStore.default.markImageDuplicated(path: path, duplicatesKey: key, hide: false)
+                        }else{
+                            ModelStore.default.markImageDuplicated(path: path, duplicatesKey: key, hide: true)
+                        }
+                    }
+                }
+                DispatchQueue.main.async {
+                    let _ = accumulator.add("Combining duplicated images ...")
+                }
+            }
+            
+            if self.imagesLoader.getItems().count > 0 {
+                self.imagesLoader.reload()
+                self.imagesLoader.reorganizeItems()
+                
+                DispatchQueue.main.async {
+                    self.enableCollectionViewControls()
+                    self.collectionView.reloadData()
+                }
+            }
+        }
+    }
+    
+    
+    @IBAction func onCombineDuplicatesButtonClicked(_ sender: NSPopUpButton) {
+        let i = sender.indexOfSelectedItem
+        if i == 1 {
+            self.combineDuplicatesInCollectionView()
+        }else if i == 2 {
+            self.combineDuplicatesInAllLibraries()
+        }
     }
     
     

@@ -57,6 +57,7 @@ class ImageFile {
     }
     
     var hasDuplicates:Bool = false
+    var duplicatesKey = ""
     
     // image location
     //var coordinate: Coord?

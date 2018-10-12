@@ -97,6 +97,7 @@ struct Image : Codable {
     var exportedLongDescription:String?
     var exportState:String?
     var exportFailMessage:String?
+    var duplicatesKey:String?
     
     
     static func new(filename: String, path: String, parentFolder: String) -> Image {
@@ -187,7 +188,8 @@ struct Image : Codable {
             exportedMD5: nil,
             exportedLongDescription: nil,
             exportState: nil,
-            exportFailMessage: nil
+            exportFailMessage: nil,
+            duplicatesKey: nil
         )
     }
     

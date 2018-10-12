@@ -131,7 +131,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                     duplicates.yearMonths.insert(year * 1000 + month)
                     duplicates.yearMonthDays.insert(year * 100000 + month * 100 + day)
                     
-                    print("duplicated date: \(date)")
+                    //print("duplicated date: \(date)")
                     dupDates.insert(date)
                 }
             }
@@ -147,7 +147,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 print("duplicated date count: \(dupDates.count)")
                 let marks = repeatElement("?", count: dupDates.count).joined(separator: ",")
                 let sql = "SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,path FROM Image WHERE photoTakenYear <> 0 AND photoTakenYear IS NOT NULL AND photoTakenDate in (\(marks))"
-                print(sql)
+                //print(sql)
                 let photosInSameDate = try Row.fetchCursor(db, sql, arguments:StatementArguments(dupDates))
                 
                 while let photo = try photosInSameDate.next() {
@@ -160,16 +160,32 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                         let second = Calendar.current.component(.second, from: date)
                         let key = "\(photo["place"] ?? "")_\(year)_\(month)_\(day)_\(hour)_\(minute)_\(second)"
                         //print("duplicated record: \(key)")
+                        let path = photo["path"] as String? ?? ""
                         if let first = firstPhotoInPlaceAndDate[key] {
                             // duplicates
                             duplicates.paths.insert(first)
-                            duplicates.paths.insert(photo["path"] ?? "")
+                            duplicates.paths.insert(path)
                         }else{
-                            firstPhotoInPlaceAndDate[key] = photo["path"] ?? ""
+                            firstPhotoInPlaceAndDate[key] = path
+                        }
+                        
+                        // bi-direction mapping
+                        duplicates.pathToKey[path] = key
+                        if let _ = duplicates.keyToPath[key] {
+                            duplicates.keyToPath[key]?.append(path)
+                        }else{
+                            duplicates.keyToPath[key] = [path]
                         }
                     }
                 }
             }
+//            for key in duplicates.keyToPath.keys {
+//                print("-------")
+//                print("duplicated key: \(key)")
+//                for p in duplicates.keyToPath[key]! {
+//                    print("duplicated path: \(p)")
+//                }
+//            }
         }catch{
             print(error)
         }
@@ -402,6 +418,17 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             }catch{
                 print(error)
             }
+        }
+    }
+    
+    func markImageDuplicated(path:String, duplicatesKey:String, hide:Bool){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update Image set duplicatesKey = ?, hidden = ? where path = ?", arguments: [duplicatesKey, hide, path])
+            }
+        }catch{
+            print(error)
         }
     }
     
@@ -1450,6 +1477,12 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         migrator.registerMigration("v4") { db in
             try db.alter(table: "Image", body: { t in
                 t.add(column: "delFlag", .boolean)
+            })
+        }
+        
+        migrator.registerMigration("v5") { db in
+            try db.alter(table: "Image", body: { t in
+                t.add(column: "duplicatesKey", .text)
             })
         }
         
