@@ -421,7 +421,33 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
     }
     
-    func markImageDuplicated(path:String, duplicatesKey:String, hide:Bool){
+    func getChiefImageOfDuplicatedSet(duplicatesKey:String) -> Image?{
+        var result:Image? = nil
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.read { db in
+                result = try Image.filter(sql: "hidden=0 and duplicatesKey='\(duplicatesKey)'").fetchOne(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func getFirstImageOfDuplicatedSet(duplicatesKey:String) -> Image?{
+        var result:Image? = nil
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.read { db in
+                result = try Image.filter(sql: "duplicatesKey='\(duplicatesKey)'").order(Column("path").asc).fetchOne(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func markImageDuplicated(path:String, duplicatesKey:String?, hide:Bool){
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in

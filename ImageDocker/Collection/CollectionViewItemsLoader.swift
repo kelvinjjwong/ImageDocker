@@ -632,6 +632,27 @@ class CollectionViewItemsLoader: NSObject {
         return self.items
     }
     
+    func getCheckedItems() -> [ImageFile] {
+        print("testing checked")
+        var result:[ImageFile] = []
+        print("sections count: \(sections.count) ")
+        for section in sections {
+            print("items count: \(section.items.count)")
+            for item in section.items {
+                
+                print("viewItem is null? \(item.collectionViewItem == nil)")
+                print("imageFile is null? \(item.collectionViewItem == nil ||  item.collectionViewItem?.imageFile == nil)")
+                if let viewItem = item.collectionViewItem, let imageFile = viewItem.imageFile {
+                    print("checked? \(viewItem.isChecked())")
+                    if viewItem.isChecked() {
+                        result.append(imageFile)
+                    }
+                }
+            }
+        }
+        return result
+    }
+    
     func addItem(_ imageFile:ImageFile){
         let i = items.index(where: { $0.url == imageFile.url })
         if i == nil {

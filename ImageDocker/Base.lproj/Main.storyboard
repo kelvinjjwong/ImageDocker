@@ -454,7 +454,7 @@
                                                                     <constraint firstAttribute="height" constant="22" id="WXq-VJ-o8B"/>
                                                                     <constraint firstAttribute="width" constant="95" id="yDU-mD-v5y"/>
                                                                 </constraints>
-                                                                <popUpButtonCell key="cell" type="roundTextured" title="Combine" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" selectedItem="qDQ-0w-bFr" id="Lbn-50-OcH">
+                                                                <popUpButtonCell key="cell" type="roundTextured" title="Combine" bezelStyle="texturedRounded" imagePosition="leading" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" selectedItem="qDQ-0w-bFr" id="Lbn-50-OcH">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="menu"/>
                                                                     <menu key="menu" id="4RJ-3g-5cq">
@@ -656,6 +656,16 @@
                                                     <action selector="onAssignEventButtonClicked:" target="XfG-lQ-9wD" id="6De-vX-jxC"/>
                                                 </connections>
                                             </button>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qYv-ia-zVJ">
+                                                <rect key="frame" x="462" y="-2" width="141" height="32"/>
+                                                <buttonCell key="cell" type="push" title="Change Date" bezelStyle="rounded" image="clock" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="r9M-rt-OtB">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="onButtonDatePickerClicked:" target="XfG-lQ-9wD" id="AfQ-C5-xyH"/>
+                                                </connections>
+                                            </button>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ltZ-4C-dje">
                                                 <rect key="frame" x="0.0" y="4" width="16" height="21"/>
                                                 <constraints>
@@ -690,16 +700,37 @@
                                                     <action selector="onButtonNotesClicked:" target="XfG-lQ-9wD" id="KFQ-R7-1x9"/>
                                                 </connections>
                                             </button>
-                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qYv-ia-zVJ">
-                                                <rect key="frame" x="462" y="-2" width="141" height="32"/>
-                                                <buttonCell key="cell" type="push" title="Change Date" bezelStyle="rounded" image="clock" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="r9M-rt-OtB">
+                                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JAQ-3Z-0MW">
+                                                <rect key="frame" x="714" y="3" width="100" height="25"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="100" id="TtX-Ui-DiO"/>
+                                                </constraints>
+                                                <popUpButtonCell key="cell" type="roundTextured" title="Duplicate" bezelStyle="texturedRounded" imagePosition="leading" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="noArrow" altersStateOfSelectedItem="NO" selectedItem="7hi-2u-8xh" id="92P-Oj-IXC">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="system"/>
-                                                </buttonCell>
+                                                    <font key="font" metaFont="menu"/>
+                                                    <menu key="menu" id="zQo-Q2-kjc">
+                                                        <items>
+                                                            <menuItem title="Duplicate" image="combine" hidden="YES" id="7hi-2u-8xh">
+                                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                                            </menuItem>
+                                                            <menuItem title="Duplicate - Select CHECKED image as CHIEF" image="combine" id="bph-8x-GvH"/>
+                                                            <menuItem title="Duplicate - Decouple CHECKED images" image="combine" id="ygl-JT-A5A"/>
+                                                            <menuItem title="Duplicate - Combine CHECKED images to a NEW set" image="combine" id="ZOF-IM-ZZW">
+                                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                                            </menuItem>
+                                                            <menuItem title="Duplicate - Combine ALL images to a NEW set" image="combine" id="H6F-Rq-5pL">
+                                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                                            </menuItem>
+                                                            <menuItem title="Duplicate - Combine ALL images to a NEW set, mark the CHECKED one as CHIEF" image="combine" id="V5f-Xg-kri">
+                                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                                            </menuItem>
+                                                        </items>
+                                                    </menu>
+                                                </popUpButtonCell>
                                                 <connections>
-                                                    <action selector="onButtonDatePickerClicked:" target="XfG-lQ-9wD" id="AfQ-C5-xyH"/>
+                                                    <action selector="onButtonDuplicatesClicked:" target="XfG-lQ-9wD" id="Zc7-TI-iqM"/>
                                                 </connections>
-                                            </button>
+                                            </popUpButton>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="CaM-Tw-R04" secondAttribute="bottom" constant="8" id="02d-3o-exU"/>
@@ -709,6 +740,7 @@
                                             <constraint firstAttribute="bottom" secondItem="Zj8-N8-ari" secondAttribute="bottom" constant="5" id="5Gv-4r-JL0"/>
                                             <constraint firstItem="Zj8-N8-ari" firstAttribute="leading" secondItem="0by-PK-DjP" secondAttribute="trailing" constant="10" id="6oZ-nN-D4x"/>
                                             <constraint firstItem="0by-PK-DjP" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="10" id="7gI-ts-GlS"/>
+                                            <constraint firstItem="JAQ-3Z-0MW" firstAttribute="leading" secondItem="9Bs-pz-4CN" secondAttribute="trailing" constant="16" id="BXt-gD-A5w"/>
                                             <constraint firstAttribute="trailing" secondItem="Tuu-5h-g9B" secondAttribute="trailing" constant="10" id="Eld-NY-ewW"/>
                                             <constraint firstItem="9Bs-pz-4CN" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="10" id="G5p-1q-NBe"/>
                                             <constraint firstItem="QJ8-hF-79J" firstAttribute="leading" secondItem="W0U-Cw-aB7" secondAttribute="trailing" constant="10" id="HqI-Zn-chd"/>
@@ -734,6 +766,7 @@
                                             <constraint firstItem="Tuu-5h-g9B" firstAttribute="leading" secondItem="lT1-yY-BTR" secondAttribute="trailing" constant="10" id="ouy-3a-QQA"/>
                                             <constraint firstAttribute="bottom" secondItem="QJ8-hF-79J" secondAttribute="bottom" constant="4" id="pXB-Yj-7IB"/>
                                             <constraint firstItem="UJe-CL-XGt" firstAttribute="leading" secondItem="ltZ-4C-dje" secondAttribute="trailing" constant="5" id="qdf-OF-SLd"/>
+                                            <constraint firstItem="JAQ-3Z-0MW" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="9" id="ugw-DL-7PD"/>
                                             <constraint firstItem="xCg-De-lnA" firstAttribute="leading" secondItem="UJe-CL-XGt" secondAttribute="trailing" constant="8" id="vTQ-UU-Aeo"/>
                                             <constraint firstItem="W0U-Cw-aB7" firstAttribute="leading" secondItem="Zj8-N8-ari" secondAttribute="trailing" constant="10" id="wvO-qL-4Mc"/>
                                             <constraint firstAttribute="bottom" secondItem="lT1-yY-BTR" secondAttribute="bottom" constant="5" id="ywS-e6-idT"/>
@@ -1173,6 +1206,7 @@
                         <outlet property="btnCopyLocation" destination="vj9-Vb-qDW" id="Hxx-t9-L6I"/>
                         <outlet property="btnCopyToDevice" destination="Zj8-N8-ari" id="0b1-3U-nKo"/>
                         <outlet property="btnDatePicker" destination="qYv-ia-zVJ" id="KVx-Yv-c0B"/>
+                        <outlet property="btnDuplicates" destination="JAQ-3Z-0MW" id="3Uo-Pa-nb3"/>
                         <outlet property="btnFilterRepository" destination="0Z2-AE-WbE" id="LVn-Ev-D3R"/>
                         <outlet property="btnHide" destination="QJ8-hF-79J" id="41M-3L-1WH"/>
                         <outlet property="btnManageEvents" destination="fBu-cK-CdX" id="iHI-iO-KSb"/>

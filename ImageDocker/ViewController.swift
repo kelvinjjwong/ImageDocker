@@ -166,6 +166,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var btnDatePicker: NSButton!
     
     @IBOutlet weak var btnNotes: NSButton!
+    @IBOutlet weak var btnDuplicates: NSPopUpButton!
     
     // MARK: SELECTION BATCH EDITOR - EVENT & PLACE
     
@@ -1224,6 +1225,7 @@ class ViewController: NSViewController {
         self.btnManageEvents.isHidden = true
         self.btnDatePicker.isHidden = true
         self.btnNotes.isHidden = true
+        self.btnDuplicates.isHidden = true
     }
     
     fileprivate func showSelectionBatchEditors() {
@@ -1232,6 +1234,7 @@ class ViewController: NSViewController {
         self.btnManageEvents.isHidden = false
         self.btnDatePicker.isHidden = false
         self.btnNotes.isHidden = false
+        self.btnDuplicates.isHidden = false
     }
     
     // MARK: SELECTION BATCH EDITOR TOOLBAR - SWITCHER
@@ -1515,29 +1518,194 @@ class ViewController: NSViewController {
     }
     
     
-    // MARK: Selection View - Batch Editor - DateTime Actions
+    // MARK: Selection View - Batch Editor - Duplicates
     
-    @IBAction func onReplaceDateClicked(_ sender: Any) {
-//        guard self.selectionViewController.imagesLoader.getItems().count > 0 else {return}
-//        let accumulator:Accumulator = Accumulator(target: self.selectionViewController.imagesLoader.getItems().count, indicator: self.batchEditIndicator, suspended: false, lblMessage: nil)
-//        for item:ImageFile in self.selectionViewController.imagesLoader.getItems() {
-//            let url:URL = item.url as URL
-//
-//            let imageType = url.imageType()
-//            if imageType == .photo {
-//                ExifTool.helper.patchDateForPhoto(date: self.editorDatePicker.dateValue, url: url)
-//            }else if imageType == .video {
-//                ExifTool.helper.patchDateForVideo(date: self.editorDatePicker.dateValue, url: url)
-//            }
-//            item.assignDate(date: self.editorDatePicker.dateValue)
-//            item.save()
-//
-//            let _ = accumulator.add()
-//        }
+    fileprivate func markCheckedImageAsDuplicatedChief() {
+        let items = self.selectionViewController.imagesLoader.getItems()
+        if items.count == 0 {
+            Alert.noImageSelected()
+            return
+        }
+        let checked = self.selectionViewController.imagesLoader.getCheckedItems()
+        if checked.count != 1 {
+            Alert.checkOneImage()
+            return
+        }
+        let imageFile = checked[0]
+        if let image = ModelStore.default.getImage(path: imageFile.url.path), let duplicatesKey = image.duplicatesKey {
+            if let paths = ModelStore.default.getDuplicatePhotos().keyToPath[duplicatesKey] {
+                for path in paths {
+                    if path == imageFile.url.path {
+                        print("to be changed: show - \(path)")
+                        ModelStore.default.markImageDuplicated(path: path, duplicatesKey: duplicatesKey, hide: false)
+                    }else{
+                        print("to be changed: hide - \(path)")
+                        ModelStore.default.markImageDuplicated(path: path, duplicatesKey: duplicatesKey, hide: true)
+                    }
+                }
+                self.selectionViewController.imagesLoader.reload()
+                self.selectionViewController.imagesLoader.reorganizeItems()
+                self.selectionCollectionView.reloadData()
+                
+                self.imagesLoader.reload()
+                self.imagesLoader.reorganizeItems()
+                self.collectionView.reloadData()
+            }
+        }
+    }
+    
+    fileprivate func decoupleCheckedImages() {
+        let items = self.selectionViewController.imagesLoader.getItems()
+        if items.count == 0 {
+            Alert.noImageSelected()
+            return
+        }
+        let checked = self.selectionViewController.imagesLoader.getCheckedItems()
+        if checked.count == 0 {
+            Alert.checkImages()
+            return
+        }
+        for imageFile in checked {
+            ModelStore.default.markImageDuplicated(path: imageFile.url.path, duplicatesKey: nil, hide: false)
+        }
         self.selectionViewController.imagesLoader.reload()
         self.selectionViewController.imagesLoader.reorganizeItems()
         self.selectionCollectionView.reloadData()
+        
+        self.imagesLoader.reload()
+        self.imagesLoader.reorganizeItems()
+        self.collectionView.reloadData()
     }
+    
+    fileprivate func combineCheckedImages() {
+        let items = self.selectionViewController.imagesLoader.getItems()
+        if items.count == 0 {
+            Alert.noImageSelected()
+            return
+        }
+        let checked = self.selectionViewController.imagesLoader.getCheckedItems()
+        if checked.count == 0 {
+            Alert.checkImages()
+            return
+        }
+        let first = checked[0]
+        
+        if let image = ModelStore.default.getImage(path: first.url.path), let date = image.photoTakenDate {
+            let oldKey = image.duplicatesKey ?? ""
+            
+            // generate new key
+            let place = image.place ?? image.assignPlace ?? image.suggestPlace ?? ""
+            let year = Calendar.current.component(.year, from: date)
+            let month = Calendar.current.component(.month, from: date)
+            let day = Calendar.current.component(.day, from: date)
+            let hour = Calendar.current.component(.hour, from: date)
+            let minute = Calendar.current.component(.minute, from: date)
+            let second = Calendar.current.component(.second, from: date)
+            
+            let dateFormat = DateFormatter()
+            dateFormat.dateFormat = "yyyyMMddHHmmss"
+            let now = dateFormat.string(from: Date())
+            
+            let key = "\(place)_\(year)_\(month)_\(day)_\(hour)_\(minute)_\(second)_\(now)"
+            
+            // update images
+            for imageFile in checked {
+                if imageFile.url.path == first.url.path {
+                    ModelStore.default.markImageDuplicated(path: imageFile.url.path, duplicatesKey: key, hide: false)
+                }else{
+                    ModelStore.default.markImageDuplicated(path: imageFile.url.path, duplicatesKey: key, hide: true)
+                }
+                ModelStore.default.getDuplicatePhotos().updateMapping(key: key, path: imageFile.url.path)
+            }
+            
+            // health check for the original duplicated set (if exists)
+            if oldKey != "" {
+                let chiefOfOldKey = ModelStore.default.getChiefImageOfDuplicatedSet(duplicatesKey: oldKey)
+                if chiefOfOldKey == nil {
+                    if let firstOfOldKey = ModelStore.default.getFirstImageOfDuplicatedSet(duplicatesKey: oldKey) {
+                        ModelStore.default.markImageDuplicated(path: firstOfOldKey.path, duplicatesKey: oldKey, hide: false)
+                    }
+                }
+            }
+            
+            // refresh UI
+            self.selectionViewController.imagesLoader.reload()
+            self.selectionViewController.imagesLoader.reorganizeItems()
+            self.selectionCollectionView.reloadData()
+            
+            self.imagesLoader.reload()
+            self.imagesLoader.reorganizeItems()
+            self.collectionView.reloadData()
+        }
+    }
+    
+    fileprivate func combineSelectedImages(checkedAsChief:Bool) {
+        let items = self.selectionViewController.imagesLoader.getItems()
+        if items.count == 0 {
+            Alert.noImageSelected()
+            return
+        }
+        var major = items[0]
+        if checkedAsChief {
+            let checked = self.selectionViewController.imagesLoader.getCheckedItems()
+            if checked.count == 0 {
+                Alert.checkOneImage()
+                return
+            }
+            major = checked[0]
+        }
+        if let image = major.imageData, let date = image.photoTakenDate {
+            let place = image.place ?? image.assignPlace ?? image.suggestPlace ?? ""
+            let year = Calendar.current.component(.year, from: date)
+            let month = Calendar.current.component(.month, from: date)
+            let day = Calendar.current.component(.day, from: date)
+            let hour = Calendar.current.component(.hour, from: date)
+            let minute = Calendar.current.component(.minute, from: date)
+            let second = Calendar.current.component(.second, from: date)
+            
+            let dateFormat = DateFormatter()
+            dateFormat.dateFormat = "yyyyMMddHHmmss"
+            let now = dateFormat.string(from: Date())
+            
+            let key = "\(place)_\(year)_\(month)_\(day)_\(hour)_\(minute)_\(second)_\(now)"
+            for imageFile in items {
+                if imageFile.url.path == major.url.path {
+                    ModelStore.default.markImageDuplicated(path: imageFile.url.path, duplicatesKey: key, hide: false)
+                }else{
+                    ModelStore.default.markImageDuplicated(path: imageFile.url.path, duplicatesKey: key, hide: true)
+                }
+                ModelStore.default.getDuplicatePhotos().updateMapping(key: key, path: imageFile.url.path)
+            }
+            self.selectionViewController.imagesLoader.reload()
+            self.selectionViewController.imagesLoader.reorganizeItems()
+            self.selectionCollectionView.reloadData()
+            
+            self.imagesLoader.reload()
+            self.imagesLoader.reorganizeItems()
+            self.collectionView.reloadData()
+        }
+    }
+    
+    @IBAction func onButtonDuplicatesClicked(_ sender: NSPopUpButton) {
+        self.btnDuplicates.isEnabled = false
+        let i = sender.indexOfSelectedItem
+        
+        if i == 1 {
+            self.markCheckedImageAsDuplicatedChief()
+        }else if i == 2 {
+            self.decoupleCheckedImages()
+        }else if i == 3 {
+            self.combineCheckedImages()
+        }else if i == 4 {
+            self.combineSelectedImages(checkedAsChief: false)
+        }else if i == 5 {
+            self.combineSelectedImages(checkedAsChief: true)
+        }
+        self.btnDuplicates.isEnabled = true
+    }
+    
+    // MARK: Selection View - Batch Editor - Notes
+    
     
     @IBAction func onButtonNotesClicked(_ sender: NSButton) {
         if self.selectionViewController.imagesLoader.getItems().count == 0 {
@@ -1580,6 +1748,8 @@ class ViewController: NSViewController {
         }
         self.notesPopover = myPopover
     }
+    
+    // MARK: Selection View - Batch Editor - Date
     
     @IBAction func onButtonDatePickerClicked(_ sender: NSButton) {
         if self.selectionViewController.imagesLoader.getItems().count == 0 {

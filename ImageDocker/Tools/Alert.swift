@@ -60,6 +60,26 @@ struct Alert {
         alert.runModal()
     }
     
+    static func checkOneImage() {
+        let alert = NSAlert()
+        alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK"))
+        alert.messageText = NSLocalizedString("PLEASE CHECK ONE IMAGE",
+                                              comment: "PLEASE CHECK ONE IMAGE")
+        alert.informativeText = NSLocalizedString("Please check one image first",
+                                                  comment: "Please check one image first")
+        alert.runModal()
+    }
+    
+    static func checkImages() {
+        let alert = NSAlert()
+        alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK"))
+        alert.messageText = NSLocalizedString("NO IMAGE CHECHED",
+                                              comment: "NO IMAGE CHECHED")
+        alert.informativeText = NSLocalizedString("Please check one or more images first",
+                                                  comment: "Please check one or more images first")
+        alert.runModal()
+    }
+    
     static func noAndroidDeviceFound() {
         let alert = NSAlert()
         alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK"))

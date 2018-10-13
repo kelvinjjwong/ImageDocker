@@ -27,6 +27,23 @@ class Duplicates {
     var years:Set<Int> = []
     var yearMonths:Set<Int> = []
     var yearMonthDays:Set<Int> = []
+    
+    // bi-direction mapping
     var pathToKey:[String:String] = [:]
     var keyToPath:[String:[String]] = [:]
+    
+    func updateMapping(key:String, path:String){
+        if let oldKey = pathToKey[path] {
+            if let _ = keyToPath[oldKey] {
+                let i = keyToPath[oldKey]?.index(of: path)
+                keyToPath[oldKey]?.remove(at: i!)
+            }
+        }
+        pathToKey[path] = key
+        if let _ = keyToPath[key] {
+            keyToPath[key]?.append(path)
+        }else{
+            keyToPath[key] = [path]
+        }
+    }
 }

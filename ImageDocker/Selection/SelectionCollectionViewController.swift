@@ -40,12 +40,14 @@ extension SelectionCollectionViewController : NSCollectionViewDataSource {
     func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
         let item = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "CollectionViewItem"), for: indexPath)
         guard let collectionViewItem = item as? CollectionViewItem else {return item}
+        collectionViewItem.setCheckBoxDelegate(self)
         collectionViewItem.displayDateFormat = "yyyy-MM-dd  HH:mm:ss"
         
         let imageFile = imagesLoader.item(for: indexPath as NSIndexPath)
         DispatchQueue.main.async {
             collectionViewItem.imageFile = imageFile
         }
+        imageFile.collectionViewItem = collectionViewItem
         
         let isItemSelected = collectionView.selectionIndexPaths.contains(indexPath)
         collectionViewItem.setHighlight(selected: isItemSelected)
@@ -96,3 +98,27 @@ extension SelectionCollectionViewController : NSCollectionViewDelegate {
     }
     
 }
+
+
+extension SelectionCollectionViewController : CollectionViewItemCheckDelegate {
+    
+    func checkSectionIfAllItemsChecked(_ item: CollectionViewItem) {
+    }
+    
+    func uncheckSectionIfAllItemsUnchecked(_ item: CollectionViewItem) {
+    }
+    
+    func onCollectionViewItemCheck(_ item: CollectionViewItem, checkBySection:Bool) {
+        if let imageFile = item.imageFile {
+        }
+        
+    }
+    
+    func onCollectionViewItemUncheck(_ item: CollectionViewItem, checkBySection:Bool) {
+        if let imageFile = item.imageFile {
+        }
+    }
+    
+    
+}
+
