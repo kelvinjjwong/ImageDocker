@@ -188,6 +188,9 @@ class ViewController: NSViewController {
     
     var deviceCopyWindowController:NSWindowController!
     
+    // MARK: Theater Dialog
+    var theaterWindowController:NSWindowController!
+    
     // MARK: Concurrency Indicators
     
     var scaningRepositories:Bool = false
@@ -202,28 +205,22 @@ class ViewController: NSViewController {
     
     func resize() {
         guard !windowInitial else {return}
-        let dockerHeight = 80
-        let menubarHeight = 20
+        let size = UIHelper.windowSize()
         
-        let screenWidth = NSScreen.main?.frame.width
-        let screenHeight = NSScreen.main?.frame.height
-        
-        let windowOriginPoint = CGPoint(x: 0, y: dockerHeight)
-        let newWidth = screenWidth!
-        let newHeight = screenHeight! - CGFloat(dockerHeight + menubarHeight)
-        let windowSize = NSMakeSize(newWidth, newHeight)
+        let windowSize = NSMakeSize(size.width, size.height)
         let windowMinSize = NSMakeSize(CGFloat(600), CGFloat(500))
-        let windowMaxSize = NSMakeSize(screenWidth!, screenHeight! - CGFloat(5))
+        let windowMaxSize = NSMakeSize(size.widthMax, size.heightMax - CGFloat(5))
         
         var windowFrame = self.view.window?.frame
         windowFrame?.size = windowSize
-        windowFrame?.origin = windowOriginPoint
+        windowFrame?.origin = size.originPoint
         self.view.window?.maxSize = windowMaxSize
         self.view.window?.minSize = windowMinSize
         self.view.window?.setFrame(windowFrame!, display: true)
         
-        if Float(screenWidth!) < 1500 {
-            smallScreen = true
+        smallScreen = size.isSmallScreen
+        
+        if size.isSmallScreen {
             self.hideSelectionBatchEditors()
             self.btnBatchEditorToolbarSwitcher.image = NSImage(named: .goRightTemplate)
             self.btnBatchEditorToolbarSwitcher.toolTip = "Show event/datetime selectors"
@@ -233,16 +230,15 @@ class ViewController: NSViewController {
             self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(258)))
             self.playerContainer.display()
             
-            self.splitviewPreview.setPosition(newHeight - CGFloat(520), ofDividerAt: 0)
+            self.splitviewPreview.setPosition(size.height - CGFloat(520), ofDividerAt: 0)
         }else {
             print("BIG SCREEN")
-            smallScreen = false
             let constraintPlayerHeight = NSLayoutConstraint(item: self.playerContainer, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 408)
             self.playerContainer.addConstraint(constraintPlayerHeight)
             self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(408)))
             self.playerContainer.display()
             
-            self.splitviewPreview.setPosition(newHeight - CGFloat(670), ofDividerAt: 0)
+            self.splitviewPreview.setPosition(size.height - CGFloat(670), ofDividerAt: 0)
         }
         
         windowInitial = true
@@ -302,6 +298,8 @@ class ViewController: NSViewController {
         print("\(Date()) Loading view - update library tree: DONE")
         
         self.deviceCopyWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "DeviceCopyWindowController")) as! NSWindowController
+        
+        self.theaterWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "TheaterWindowController")) as! NSWindowController
         
         
         self.btnChoiceMapService.selectSegment(withTag: 1)

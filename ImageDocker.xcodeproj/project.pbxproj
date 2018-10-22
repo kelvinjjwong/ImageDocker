@@ -21,6 +21,9 @@
 		8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E174B6D208F851100FFE7C7 /* ExifTool.swift */; };
 		8E2CF37620AED6BA00A93375 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8E2CF37420AED6BA00A93375 /* Model.xcdatamodeld */; };
 		8E31C37F2120A22600002546 /* DeviceShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E31C37E2120A22600002546 /* DeviceShell.swift */; };
+		8E36B067217920B400646EA5 /* MonthListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E36B066217920B400646EA5 /* MonthListController.swift */; };
+		8E36B069217920C000646EA5 /* DayListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E36B068217920C000646EA5 /* DayListController.swift */; };
+		8E36B06C21792EDC00646EA5 /* CustomRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E36B06B21792EDC00646EA5 /* CustomRowView.swift */; };
 		8E3EC3B4214DB1B8004B6125 /* LunarSolarConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3EC3B1214DB1B7004B6125 /* LunarSolarConverter.swift */; };
 		8E3EC3B5214DB1B8004B6125 /* LunarCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3EC3B2214DB1B7004B6125 /* LunarCalendarView.swift */; };
 		8E3EC3B6214DB1B8004B6125 /* LunarCalendarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E3EC3B3214DB1B7004B6125 /* LunarCalendarView.xib */; };
@@ -79,6 +82,12 @@
 		8EBA692E2090DB4B00221131 /* VideoDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA692D2090DB4B00221131 /* VideoDropView.swift */; };
 		8EBA9DDF216F8BB100DACAAD /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA9DDD216F8BB100DACAAD /* NotesViewController.swift */; };
 		8EBA9DE0216F8BB100DACAAD /* NotesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EBA9DDE216F8BB100DACAAD /* NotesViewController.xib */; };
+		8EBA9DE32173C8F000DACAAD /* TheaterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA9DE22173C8F000DACAAD /* TheaterViewController.swift */; };
+		8EBA9DE52173CC7F00DACAAD /* TheaterQuickLookItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA9DE42173CC7F00DACAAD /* TheaterQuickLookItem.swift */; };
+		8EBA9DE7217477D900DACAAD /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA9DE6217477D900DACAAD /* UIHelper.swift */; };
+		8EBA9DE921766EAB00DACAAD /* TheaterCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA9DE821766EAB00DACAAD /* TheaterCollectionViewController.swift */; };
+		8EC5BA2E21775571001510AF /* TheaterCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC5BA2C21775571001510AF /* TheaterCollectionViewItem.swift */; };
+		8EC5BA2F21775571001510AF /* TheaterCollectionViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EC5BA2D21775571001510AF /* TheaterCollectionViewItem.xib */; };
 		8EC82EA42121C10A00FC0899 /* LocalDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC82EA32121C10A00FC0899 /* LocalDirectory.swift */; };
 		8EC82EAB2121C5A200FC0899 /* AddLocalDirectoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC82EA92121C5A200FC0899 /* AddLocalDirectoryViewController.swift */; };
 		8EC82EAC2121C5A200FC0899 /* AddLocalDirectoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EC82EAA2121C5A200FC0899 /* AddLocalDirectoryViewController.xib */; };
@@ -142,6 +151,9 @@
 		8E2CF36F20AED2FE00A93375 /* CollectionView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CollectionView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E2CF37520AED6BA00A93375 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		8E31C37E2120A22600002546 /* DeviceShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceShell.swift; sourceTree = "<group>"; };
+		8E36B066217920B400646EA5 /* MonthListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthListController.swift; sourceTree = "<group>"; };
+		8E36B068217920C000646EA5 /* DayListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayListController.swift; sourceTree = "<group>"; };
+		8E36B06B21792EDC00646EA5 /* CustomRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRowView.swift; sourceTree = "<group>"; };
 		8E3EC3B1214DB1B7004B6125 /* LunarSolarConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LunarSolarConverter.swift; sourceTree = "<group>"; };
 		8E3EC3B2214DB1B7004B6125 /* LunarCalendarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LunarCalendarView.swift; sourceTree = "<group>"; };
 		8E3EC3B3214DB1B7004B6125 /* LunarCalendarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LunarCalendarView.xib; sourceTree = "<group>"; };
@@ -200,6 +212,12 @@
 		8EBA692D2090DB4B00221131 /* VideoDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDropView.swift; sourceTree = "<group>"; };
 		8EBA9DDD216F8BB100DACAAD /* NotesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewController.swift; sourceTree = "<group>"; };
 		8EBA9DDE216F8BB100DACAAD /* NotesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotesViewController.xib; sourceTree = "<group>"; };
+		8EBA9DE22173C8F000DACAAD /* TheaterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheaterViewController.swift; sourceTree = "<group>"; };
+		8EBA9DE42173CC7F00DACAAD /* TheaterQuickLookItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheaterQuickLookItem.swift; sourceTree = "<group>"; };
+		8EBA9DE6217477D900DACAAD /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
+		8EBA9DE821766EAB00DACAAD /* TheaterCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheaterCollectionViewController.swift; sourceTree = "<group>"; };
+		8EC5BA2C21775571001510AF /* TheaterCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheaterCollectionViewItem.swift; sourceTree = "<group>"; };
+		8EC5BA2D21775571001510AF /* TheaterCollectionViewItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TheaterCollectionViewItem.xib; sourceTree = "<group>"; };
 		8EC82EA32121C10A00FC0899 /* LocalDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDirectory.swift; sourceTree = "<group>"; };
 		8EC82EA92121C5A200FC0899 /* AddLocalDirectoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocalDirectoryViewController.swift; sourceTree = "<group>"; };
 		8EC82EAA2121C5A200FC0899 /* AddLocalDirectoryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddLocalDirectoryViewController.xib; sourceTree = "<group>"; };
@@ -289,6 +307,7 @@
 			children = (
 				8EB986AE20B223BF0075B081 /* Domain */,
 				8EFA7CF7211A36C900419777 /* Device */,
+				8EBA9DE12173C7FC00DACAAD /* Theater */,
 				8EB986B120B2255A0075B081 /* Detail */,
 				8EB986A820B21AEC0075B081 /* Collection */,
 				8E85B7D020B91E9E005A9845 /* Selection */,
@@ -433,6 +452,7 @@
 				8E85B7CE20B8786C005A9845 /* Accumulator.swift */,
 				8E98B8F820D7950E00771280 /* ExportManager.swift */,
 				8E7B98E0214882080019ED87 /* Alert.swift */,
+				8EBA9DE6217477D900DACAAD /* UIHelper.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -491,6 +511,20 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		8EBA9DE12173C7FC00DACAAD /* Theater */ = {
+			isa = PBXGroup;
+			children = (
+				8EBA9DE22173C8F000DACAAD /* TheaterViewController.swift */,
+				8EBA9DE42173CC7F00DACAAD /* TheaterQuickLookItem.swift */,
+				8EBA9DE821766EAB00DACAAD /* TheaterCollectionViewController.swift */,
+				8EC5BA2C21775571001510AF /* TheaterCollectionViewItem.swift */,
+				8EC5BA2D21775571001510AF /* TheaterCollectionViewItem.xib */,
+				8E36B066217920B400646EA5 /* MonthListController.swift */,
+				8E36B068217920C000646EA5 /* DayListController.swift */,
+			);
+			path = Theater;
+			sourceTree = "<group>";
+		};
 		8EE1AB3A20D05E0C001C75B0 /* Search */ = {
 			isa = PBXGroup;
 			children = (
@@ -536,6 +570,7 @@
 				8E3EC3B7214DB1E4004B6125 /* Calendar */,
 				8E85B7D320BA2AD7005A9845 /* DarkSplitView.swift */,
 				8EB986C520B6EBC40075B081 /* DarkTableView.swift */,
+				8E36B06B21792EDC00646EA5 /* CustomRowView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -678,6 +713,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8E4C38CA211776300089502C /* Mobile in Resources */,
+				8EC5BA2F21775571001510AF /* TheaterCollectionViewItem.xib in Resources */,
 				8EBA69252090C2AA00221131 /* ExifTool in Resources */,
 				8EAC5F212144A60900E187E0 /* DeviceFolderViewController.xib in Resources */,
 				8EB986BB20B30C920075B081 /* HeaderView.xib in Resources */,
@@ -769,9 +805,11 @@
 				8E98B8F920D7950E00771280 /* ExportManager.swift in Sources */,
 				8EF32D142095355400511538 /* LCSourceListTableCellView.swift in Sources */,
 				8E3EC3BD214DE623004B6125 /* DateTimeViewController.swift in Sources */,
+				8EBA9DE921766EAB00DACAAD /* TheaterCollectionViewController.swift in Sources */,
 				8EFA7CFD211D72B300419777 /* ImageDeviceFile.swift in Sources */,
 				8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */,
 				8EFA7CFB211D713700419777 /* ImageDevice.swift in Sources */,
+				8E36B06C21792EDC00646EA5 /* CustomRowView.swift in Sources */,
 				8E95739A20EBEBD7003BD651 /* FilterViewController.swift in Sources */,
 				8E0EAE9A209D2623008C377F /* ImageFolderTreeScanner.swift in Sources */,
 				8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */,
@@ -784,17 +822,21 @@
 				8E015123208F7D34009C2549 /* StackedVideoViewController.swift in Sources */,
 				8EB986BA20B30C920075B081 /* ImageFile.swift in Sources */,
 				8EEB88842090B44B00CDEC81 /* ImageDropView.swift in Sources */,
+				8EBA9DE7217477D900DACAAD /* UIHelper.swift in Sources */,
 				8EC82EA42121C10A00FC0899 /* LocalDirectory.swift in Sources */,
 				8EA1A063208DFD92000C3B97 /* MetaInfo.swift in Sources */,
+				8EBA9DE52173CC7F00DACAAD /* TheaterQuickLookItem.swift in Sources */,
 				8EB986BD20B30C920075B081 /* CollectionViewItemsLoader.swift in Sources */,
 				8EFAF1FF20CAE422007A7783 /* Moment.swift in Sources */,
 				8E0AFA3F208BDEA000CE8B68 /* ViewController.swift in Sources */,
 				8EBA692C2090DB0300221131 /* DropPlaceCommons.swift in Sources */,
 				8EB321D620FA433500D8C71D /* ImageEvent.swift in Sources */,
 				8EB321D420FA433500D8C71D /* ImageContainer.swift in Sources */,
+				8E36B067217920B400646EA5 /* MonthListController.swift in Sources */,
 				8E98B8F320D5C90600771280 /* WindowController.swift in Sources */,
 				8EBA692E2090DB4B00221131 /* VideoDropView.swift in Sources */,
 				8EFA7CF9211A36F700419777 /* DeviceCopyViewController.swift in Sources */,
+				8EBA9DE32173C8F000DACAAD /* TheaterViewController.swift in Sources */,
 				8E4C38CD2117B5340089502C /* Phone.swift in Sources */,
 				8EFE763C2094AF6B00B7CFCA /* TreeController.swift in Sources */,
 				8E3EC3B5214DB1B8004B6125 /* LunarCalendarView.swift in Sources */,
@@ -827,10 +869,12 @@
 				8E0AFA3D208BDEA000CE8B68 /* AppDelegate.swift in Sources */,
 				8EFE76412094B98D00B7CFCA /* PhotoCollection.swift in Sources */,
 				8EBA692A2090C87D00221131 /* Helper.swift in Sources */,
+				8E36B069217920C000646EA5 /* DayListController.swift in Sources */,
 				8E4C38D5211828FF0089502C /* MomentsTreeController.swift in Sources */,
 				8E3EC3B4214DB1B8004B6125 /* LunarSolarConverter.swift in Sources */,
 				8EBA9DDF216F8BB100DACAAD /* NotesViewController.swift in Sources */,
 				8E2CF37620AED6BA00A93375 /* Model.xcdatamodeld in Sources */,
+				8EC5BA2E21775571001510AF /* TheaterCollectionViewItem.swift in Sources */,
 				8EFAF1FB20BFFC8A007A7783 /* MetaInfoHolder.swift in Sources */,
 				8EB321D720FA433500D8C71D /* Image.swift in Sources */,
 			);

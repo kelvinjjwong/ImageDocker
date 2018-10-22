@@ -15,10 +15,12 @@ class CollectionViewItem: NSCollectionViewItem {
     @IBOutlet weak var lblPlace: NSTextField!
     @IBOutlet weak var btnLook: NSButton!
     @IBOutlet weak var btnCaution: NSButton!
-
+    @IBOutlet weak var btnMenu: NSPopUpButton!
+    
     
     private var checkBoxDelegate:CollectionViewItemCheckDelegate?
     private var showDuplicatesDelegate:CollectionViewItemShowDuplicatesDelegate?
+    private var quickLookDelegate:CollectionViewItemQuickLookDelegate?
     
     var sectionIndex:Int?
     
@@ -28,6 +30,10 @@ class CollectionViewItem: NSCollectionViewItem {
     
     func setShowDuplicatesDelegate(_ delegate:CollectionViewItemShowDuplicatesDelegate) {
         self.showDuplicatesDelegate = delegate
+    }
+    
+    func setQuickLookDelegate(_ delegate:CollectionViewItemQuickLookDelegate) {
+        self.quickLookDelegate = delegate
     }
     
     var displayDateFormat:String = "HH:mm:ss"
@@ -46,11 +52,23 @@ class CollectionViewItem: NSCollectionViewItem {
             }
         }
     }
+    
+    var backgroundColor:NSColor?
+    
+    private var isControlsHidden = false
+    
+    func hideControls() {
+        self.btnLook.isHidden = true
+        self.btnCaution.isHidden = true
+        self.checkBox.isHidden = true
+        self.btnMenu.isHidden = true
+        self.isControlsHidden = true
+    }
   
     override func viewDidLoad() {
         super.viewDidLoad()
         view.wantsLayer = true
-        view.layer?.backgroundColor = NSColor.darkGray.cgColor
+        view.layer?.backgroundColor = (backgroundColor ?? NSColor.darkGray).cgColor
         view.layer?.borderWidth = 0.0
         view.layer?.borderColor = NSColor(calibratedRed: 0.0, green: 0.5, blue: 1.0, alpha: 1.0).cgColor // Aqua
 
@@ -95,7 +113,9 @@ class CollectionViewItem: NSCollectionViewItem {
             self.btnLook.toolTip = "Visible"
         }
         
-        btnCaution.isHidden = !imageFile.hasDuplicates
+        if !self.isControlsHidden {
+            btnCaution.isHidden = !imageFile.hasDuplicates
+        }
         btnCaution.toolTip = imageFile.hasDuplicates ? "duplicates" : ""
         
     }
@@ -142,6 +162,8 @@ class CollectionViewItem: NSCollectionViewItem {
         let i = sender.indexOfSelectedItem
         if i == 1 {
             self.revealInFinder()
+        }else if i == 2 {
+            self.quicklook()
         }
     }
     
@@ -172,6 +194,14 @@ class CollectionViewItem: NSCollectionViewItem {
     fileprivate func revealInFinder(){
         if let url = self.imageFile?.url {
             NSWorkspace.shared.activateFileViewerSelecting([url])
+        }
+    }
+    
+    fileprivate func quicklook(){
+        if let imageFile = self.imageFile, let url = self.imageFile?.url, FileManager.default.fileExists(atPath: url.path) {
+            if self.quickLookDelegate != nil {
+                self.quickLookDelegate?.onCollectionViewItemQuickLook(imageFile)
+            }
         }
     }
     

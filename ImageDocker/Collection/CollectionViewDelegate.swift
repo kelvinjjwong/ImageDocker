@@ -69,6 +69,7 @@ extension ViewController : NSCollectionViewDataSource {
         guard let collectionViewItem = item as? CollectionViewItem else {return item}
         collectionViewItem.setCheckBoxDelegate(self)
         collectionViewItem.setShowDuplicatesDelegate(self)
+        collectionViewItem.setQuickLookDelegate(self)
         collectionViewItem.sectionIndex = indexPath.section
 
         let imageFile = imagesLoader.item(for: indexPath as NSIndexPath)
@@ -131,6 +132,26 @@ extension ViewController : PlacesCompletionEvent {
         DispatchQueue.main.async{
             self.imagesLoader.reorganizeItems(considerPlaces: true)
             self.collectionView.reloadData()
+        }
+    }
+}
+
+protocol CollectionViewItemQuickLookDelegate {
+    func onCollectionViewItemQuickLook(_ image:ImageFile)
+}
+
+extension ViewController : CollectionViewItemQuickLookDelegate {
+    func onCollectionViewItemQuickLook(_ image:ImageFile) {
+        if let window = self.theaterWindowController.window {
+            if self.theaterWindowController.isWindowLoaded {
+                window.makeKeyAndOrderFront(self)
+                print("order to front")
+            }else{
+                self.theaterWindowController.showWindow(self)
+                print("show window")
+            }
+            let vc = window.contentViewController as! TheaterViewController
+            vc.viewInit(image: image)
         }
     }
 }

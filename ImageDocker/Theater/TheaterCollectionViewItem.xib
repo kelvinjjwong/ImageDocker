@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="TheaterCollectionViewItem" customModule="ImageDocker" customModuleProvider="target">
+            <connections>
+                <outlet property="imageView" destination="oet-Xd-Tke" id="Bvo-Zl-onV"/>
+                <outlet property="lblPlace" destination="lbf-5I-K2E" id="nQw-C8-9cQ"/>
+                <outlet property="textField" destination="K8P-LA-CUU" id="ZtR-iz-WRh"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <collectionViewItem id="r22-1t-Tst" customClass="TheaterCollectionViewItem" customModule="ImageDocker" customModuleProvider="target"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="oet-Xd-Tke">
+                    <rect key="frame" x="0.0" y="39" width="480" height="233"/>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="Bgt-Re-PuT"/>
+                </imageView>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lbf-5I-K2E">
+                    <rect key="frame" x="3" y="7" width="474" height="15"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="15" id="X28-oi-UTx"/>
+                    </constraints>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="v5R-Mp-oes">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="K8P-LA-CUU">
+                    <rect key="frame" x="3" y="22" width="474" height="15"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="15" id="5aU-RU-9sT"/>
+                    </constraints>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="32s-Vy-lkX">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstItem="oet-Xd-Tke" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="43U-Ki-pKM"/>
+                <constraint firstAttribute="trailing" secondItem="oet-Xd-Tke" secondAttribute="trailing" id="Ezq-XL-wJi"/>
+                <constraint firstItem="K8P-LA-CUU" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="5" id="VWQ-Nv-cbS"/>
+                <constraint firstAttribute="bottom" secondItem="lbf-5I-K2E" secondAttribute="bottom" constant="7" id="WxX-3q-Uzu"/>
+                <constraint firstItem="lbf-5I-K2E" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="5" id="cYL-Ih-r0n"/>
+                <constraint firstItem="lbf-5I-K2E" firstAttribute="top" secondItem="K8P-LA-CUU" secondAttribute="bottom" id="do3-Zf-m96"/>
+                <constraint firstItem="lbf-5I-K2E" firstAttribute="top" secondItem="K8P-LA-CUU" secondAttribute="bottom" id="eMo-YA-m7g"/>
+                <constraint firstItem="oet-Xd-Tke" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="fjl-GU-k5B"/>
+                <constraint firstAttribute="trailing" secondItem="lbf-5I-K2E" secondAttribute="trailing" constant="5" id="ntP-RP-4Bn"/>
+                <constraint firstItem="K8P-LA-CUU" firstAttribute="top" secondItem="oet-Xd-Tke" secondAttribute="bottom" constant="2" id="sWn-RN-E2L"/>
+                <constraint firstAttribute="trailing" secondItem="K8P-LA-CUU" secondAttribute="trailing" constant="5" id="wBf-Iy-2wu"/>
+            </constraints>
+        </customView>
+    </objects>
+</document>

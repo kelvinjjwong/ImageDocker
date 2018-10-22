@@ -397,7 +397,7 @@ class ExportManager {
         }
     }
     
-    fileprivate func getImageBrief(photo:Image) -> String {
+    func getImageBrief(photo:Image) -> String {
         var eventAndPlace = ""
         if photo.shortDescription != nil && photo.shortDescription != "" {
             eventAndPlace = "\(photo.shortDescription!)"

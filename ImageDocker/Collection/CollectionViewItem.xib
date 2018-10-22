@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="btnCaution" destination="Id9-mY-ETc" id="hln-Sc-T6m"/>
                 <outlet property="btnLook" destination="AeO-Uo-9h3" id="WII-Tf-ah3"/>
+                <outlet property="btnMenu" destination="HcE-Zh-rv4" id="45u-yk-0A7"/>
                 <outlet property="checkBox" destination="Onb-PG-8r4" id="bHB-Jv-sUi"/>
                 <outlet property="imageView" destination="FSe-ep-RM0" id="fCL-h0-ClX"/>
                 <outlet property="lblPlace" destination="9qX-pa-ugK" id="k8B-pG-7sE"/>
@@ -103,6 +104,9 @@
                             <items>
                                 <menuItem state="on" image="more_horizontal" hidden="YES" id="fyA-MO-0B9"/>
                                 <menuItem title="Reveal in Finder" id="Fee-pt-Seh"/>
+                                <menuItem title="Quick Look" id="7F1-BS-gxe">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
                             </items>
                         </menu>
                     </popUpButtonCell>

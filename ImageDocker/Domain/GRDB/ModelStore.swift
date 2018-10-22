@@ -352,6 +352,63 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     // MARK: IMAGES
     
+    func getDatesByYear(year:Int) -> [String:[String]] {
+        let sql = "select distinct photoTakenMonth,photoTakenDay from image where photoTakenYear=? order by photoTakenMonth,photoTakenDay"
+        //print(sql)
+        var result:[String:[String]] = [:]
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, sql, arguments:StatementArguments([year]))
+                for row in rows {
+                    let month = row["photoTakenMonth"] as Int? ?? 0
+                    let day = row["photoTakenDay"] as Int? ?? 0
+                    if result["\(month)"] == nil {
+                       result["\(month)"] = []
+                    }
+                    result["\(month)"]?.append("\(day)")
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    
+    func getImagesByDate(photoTakenDate:Date) -> [Image]{
+        let year = Calendar.current.component(.year, from: photoTakenDate)
+        let month = Calendar.current.component(.month, from: photoTakenDate)
+        let day = Calendar.current.component(.day, from: photoTakenDate)
+        var result:[Image] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.read { db in
+                result = try Image.filter(sql: "hidden=0 and photoTakenYear=\(year) and photoTakenMonth=\(month) and photoTakenDay=\(day)").fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func getImagesByHour(photoTakenDate:Date) -> [Image]{
+        let year = Calendar.current.component(.year, from: photoTakenDate)
+        let month = Calendar.current.component(.month, from: photoTakenDate)
+        let day = Calendar.current.component(.day, from: photoTakenDate)
+        let hour = Calendar.current.component(.hour, from: photoTakenDate)
+        var result:[Image] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.read { db in
+                result = try Image.filter(sql: "hidden=0 and photoTakenYear=\(year) and photoTakenMonth=\(month) and photoTakenDay=\(day) and photoTakenHour=\(hour)").fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
     func getImage(path:String) -> Image?{
         var image:Image?
         do {
