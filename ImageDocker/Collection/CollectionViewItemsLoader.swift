@@ -175,11 +175,36 @@ class CollectionViewItemsLoader: NSObject {
         }
     }
     
+    func getItem(at index:Int, section:Int = 0) -> ImageFile? {
+        if section >= sections.count {
+            return nil
+        }
+        if index >= sections[section].items.count {
+            return nil
+        }
+        return sections[section].items[index]
+    }
+    
     func getItem(path:String) -> ImageFile?{
         for item in items {
             if item.url.path == path {
                 return item
             }
+        }
+        return nil
+    }
+    
+    func getItemIndex(path:String, section:Int = 0) -> Int? {
+        if section >= sections.count {
+            return nil
+        }
+        let sec = sections[section]
+        var i = 0
+        for item in sec.items {
+            if item.url.path == path {
+                return i
+            }
+            i += 1
         }
         return nil
     }

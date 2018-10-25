@@ -376,10 +376,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     }
     
     
-    func getImagesByDate(photoTakenDate:Date) -> [Image]{
-        let year = Calendar.current.component(.year, from: photoTakenDate)
-        let month = Calendar.current.component(.month, from: photoTakenDate)
-        let day = Calendar.current.component(.day, from: photoTakenDate)
+    func getImagesByDate(year:Int, month:Int, day:Int) -> [Image]{
         var result:[Image] = []
         do {
             let db = ModelStore.sharedDBPool()
@@ -390,6 +387,14 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             print(error)
         }
         return result
+    }
+    
+    
+    func getImagesByDate(photoTakenDate:Date) -> [Image]{
+        let year = Calendar.current.component(.year, from: photoTakenDate)
+        let month = Calendar.current.component(.month, from: photoTakenDate)
+        let day = Calendar.current.component(.day, from: photoTakenDate)
+        return getImagesByDate(year: year, month: month, day: day)
     }
     
     func getImagesByHour(photoTakenDate:Date) -> [Image]{

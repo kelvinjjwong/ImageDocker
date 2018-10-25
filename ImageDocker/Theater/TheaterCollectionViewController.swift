@@ -17,6 +17,8 @@ class TheaterCollectionViewController : NSViewController {
     
     var onItemClicked: ((ImageFile) -> Void)? = nil
     
+    var selectedIndexSet:Set<IndexPath> = []
+    
     // MARK: Actions
     
     override func viewDidLoad() {
@@ -40,15 +42,18 @@ extension TheaterCollectionViewController : NSCollectionViewDataSource {
     func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
         let item = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "TheaterCollectionViewItem"), for: indexPath)
         guard let collectionViewItem = item as? TheaterCollectionViewItem else {return item}
-        print("created item")
+        //print("created item")
         let imageFile = imagesLoader.item(for: indexPath as NSIndexPath)
         DispatchQueue.main.async {
             collectionViewItem.imageFile = imageFile
         }
-        //imageFile.collectionViewItem = collectionViewItem
+        imageFile.threaterCollectionViewItem = collectionViewItem
         
-        //let isItemSelected = collectionView.selectionIndexPaths.contains(indexPath)
-        //collectionViewItem.setHighlight(selected: isItemSelected)
+        let isItemSelected = collectionView.selectionIndexPaths.contains(indexPath)
+        if selectedIndexSet.count == 0 && isItemSelected {
+            selectedIndexSet = [indexPath]
+        }
+        collectionViewItem.setHighlight(selected: isItemSelected)
         
         return item
     }
@@ -76,6 +81,7 @@ extension TheaterCollectionViewController : NSCollectionViewDelegateFlowLayout {
 extension TheaterCollectionViewController : NSCollectionViewDelegate {
     
     func highlightItems(selected: Bool, atIndexPaths: Set<IndexPath>) {
+        self.selectedIndexSet = atIndexPaths
         for indexPath in atIndexPaths {
             guard let item = collectionView.item(at: indexPath) else {continue}
             let viewItem = item as! TheaterCollectionViewItem
@@ -84,6 +90,14 @@ extension TheaterCollectionViewController : NSCollectionViewDelegate {
             if selected && self.onItemClicked != nil {
                 self.onItemClicked!(viewItem.imageFile!)
             }
+        }
+    }
+    
+    func cleanHighlights() {
+        for indexPath in self.selectedIndexSet {
+            guard let item = collectionView.item(at: indexPath) else {continue}
+            let viewItem = item as! TheaterCollectionViewItem
+            viewItem.setHighlight(selected: false)
         }
     }
     

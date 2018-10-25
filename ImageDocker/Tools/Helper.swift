@@ -6,7 +6,7 @@
 //  Copyright © 2018年 nonamecat. All rights reserved.
 //
 
-import Foundation
+import Cocoa
 
 extension String {
     

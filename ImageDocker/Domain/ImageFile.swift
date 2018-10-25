@@ -36,6 +36,7 @@ class ImageFile {
     
     private var indicator:Accumulator?
     var collectionViewItem:CollectionViewItem?
+    var threaterCollectionViewItem:TheaterCollectionViewItem?
     
     let metaInfoHolder:MetaInfoStoreDelegate
     

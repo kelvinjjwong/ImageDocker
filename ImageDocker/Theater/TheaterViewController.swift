@@ -8,6 +8,7 @@
 
 import Cocoa
 import Quartz
+import Carbon.HIToolbox
 
 class TheaterViewController: NSViewController {
     
@@ -28,6 +29,13 @@ class TheaterViewController: NSViewController {
     
     var collectionViewController:TheaterCollectionViewController!
     var photoTakenDate:Date?
+    var selectedImageFile:ImageFile?
+    var selectedIndex = 0
+    
+    var year = 0
+    var month = 0
+    var day = 0
+    var datesOfYear:[String:[String]] = [:]
     
     // MARK: INIT
     
@@ -51,6 +59,46 @@ class TheaterViewController: NSViewController {
         self.lstDay.dataSource = dayController
         self.lstDay.delegate = dayController
         
+        self.monthController.onClick = { str in
+            if let value = Int(str) {
+                self.month = value
+                self.dayController.days = self.datesOfYear["\(self.month)"] ?? []
+                self.lstDay.reloadData()
+                if !self.dayController.days.contains(String(self.day)) {
+                    self.day = 0
+                    for day in self.dayController.days.sorted(by: {$0 > $1}) {
+                        if let d = Int(day) {
+                            if d < self.day {
+                                self.day = d
+                                break
+                            }
+                        }
+                    }
+                    if self.day == 0 {
+                        self.day = Int(self.dayController.days[0]) ?? 0
+                    }
+                }
+                self.selectDay(day: self.day)
+                if self.dayController.days.count > 0 {
+                    self.reloadCollectionView(year: self.year, month: self.month, day: self.day)
+                }
+            }
+        }
+        
+        self.dayController.onClick = { str in
+            if let value = Int(str) {
+                self.day = value
+                self.reloadCollectionView(year: self.year, month: self.month, day: self.day)
+            }
+        }
+        
+        NSEvent.addLocalMonitorForEvents(matching: .keyDown) {
+            if self.onKeyDown(with: $0) {
+                return nil
+            } else {
+                return $0
+            }
+        }
     }
     
     override func viewDidAppear() {
@@ -102,19 +150,24 @@ class TheaterViewController: NSViewController {
     }
     
     func viewInit(image:ImageFile){
+        self.selectedImageFile = image
         self.previewImage(image: image)
         
         if let date = image.photoTakenDate() {
             self.photoTakenDate = image.photoTakenDate()
             self.displayDate()
-            let year = Calendar.current.component(.year, from: date)
-            let month = Calendar.current.component(.month, from: date)
-            let day = Calendar.current.component(.day, from: date)
-            let datesOfYear = ModelStore.default.getDatesByYear(year: year)
-            self.monthController.months = datesOfYear.keys.sorted()
+            year = Calendar.current.component(.year, from: date)
+            month = Calendar.current.component(.month, from: date)
+            day = Calendar.current.component(.day, from: date)
+            datesOfYear = ModelStore.default.getDatesByYear(year: year)
+            self.monthController.months = datesOfYear.keys.sorted(by: {$0 < $1})
             self.dayController.days = datesOfYear["\(month)"] ?? []
             self.lstMonth.reloadData()
             self.lstDay.reloadData()
+            
+            self.selectMonth(month: self.month)
+            self.selectDay(day: self.day)
+            
         }else{
             // FIXME: clean fields
         }
@@ -122,6 +175,20 @@ class TheaterViewController: NSViewController {
         self.reloadCollectionView()
         
         
+    }
+    
+    private func selectMonth(month:Int){
+        if let monthIndex = self.monthController.months.index(of: "\(month)") {
+            let index = self.monthController.months.distance(from: self.monthController.months.startIndex, to: monthIndex)
+            self.lstMonth.selectRowIndexes(NSIndexSet(index: index) as IndexSet, byExtendingSelection: false)
+        }
+    }
+    
+    private func selectDay(day:Int){
+        if let dayIndex = self.dayController.days.index(of: "\(day)") {
+            let index = self.dayController.days.distance(from: self.dayController.days.startIndex, to: dayIndex)
+            self.lstDay.selectRowIndexes(NSIndexSet(index: index) as IndexSet, byExtendingSelection: false)
+        }
     }
     
     override func dismiss(_ sender: Any?) {
@@ -206,6 +273,24 @@ extension TheaterViewController {
         collectionViewController.imagesLoader.showHidden = false
         collectionViewController.imagesLoader.clean()
         collectionViewController.collectionView.reloadData()
+        
+        collectionViewController.onItemClicked = { imageFile in
+            self.selectImage(imageFile: imageFile)
+            self.previewImage(image: imageFile)
+        }
+    }
+    
+    private func reloadCollectionView(year:Int, month:Int, day:Int){
+        self.collectionViewController.imagesLoader.clean()
+        let images = ModelStore.default.getImagesByDate(year: year, month:month, day:day)
+        self.collectionViewController.imagesLoader.setupItems(photoFiles: images)
+        self.collectionViewController.imagesLoader.reorganizeItems(considerPlaces: false)
+        self.collectionViewController.collectionView.reloadData()
+        
+        self.selectItem(at: 0)
+        if let image = self.collectionViewController.imagesLoader.getItem(at: 0) {
+            self.previewImage(image: image)
+        }
     }
     
     private func reloadCollectionView() {
@@ -218,6 +303,40 @@ extension TheaterViewController {
             self.collectionViewController.imagesLoader.setupItems(photoFiles: nil)
         }
         self.collectionViewController.collectionView.reloadData()
+        
+        if let imageFile = self.selectedImageFile {
+            self.selectImage(imageFile: imageFile)
+        }
+        
+    }
+    
+    private func selectImage(imageFile:ImageFile){
+        if let index = self.collectionViewController.imagesLoader.getItemIndex(path: imageFile.url.path) {
+            self.selectItem(at: index)
+        }
+    }
+    
+    private func selectItem(at index:Int, forceFocus:Bool = false){
+        print("select index: \(index)")
+        if index >= 0 && index < self.collectionViewController.imagesLoader.getItems().count {
+            print("select image \(index)")
+            let indexPath:IndexPath = IndexPath(item: index, section: 0)
+            let indexSet:Set<IndexPath> = [indexPath]
+            
+            if forceFocus {
+                self.collectionViewController.cleanHighlights()
+            }
+            self.collectionViewController.collectionView.selectItems(at: indexSet, scrollPosition: .centeredHorizontally)
+            if forceFocus {
+                self.collectionViewController.highlightItems(selected: true, atIndexPaths: indexSet)
+            }
+            self.selectedIndex = index
+        }
+    }
+    
+    private func selectItem(offset:Int){
+        print("select offset: \(offset)")
+        self.selectItem(at: self.selectedIndex + offset, forceFocus: true)
     }
 }
 
@@ -227,6 +346,35 @@ extension TheaterViewController : NSWindowDelegate {
     
     func windowWillClose(_ notification: Notification) {
         //NSApplication.shared.terminate(self)
+    }
+}
+
+// MARK: KEY STOKE EVENTS
+extension TheaterViewController {
+    
+    func onKeyDown(with event: NSEvent) -> Bool {
+        // handle keyDown only if current window has focus, i.e. is keyWindow
+        guard let locWindow = self.view.window,
+            NSApplication.shared.keyWindow === locWindow else { return false }
+        switch Int( event.keyCode) {
+        case kVK_Escape:
+            print("pressed escape")
+            return true
+        case kVK_DownArrow:
+            self.selectItem(offset: 1)
+            return true
+        case kVK_UpArrow:
+            self.selectItem(offset: -1)
+            return true
+        case kVK_LeftArrow:
+            self.selectItem(offset: -1)
+            return true
+        case kVK_RightArrow:
+            self.selectItem(offset: 1)
+            return true
+        default:
+            return false
+        }
     }
 }
 
