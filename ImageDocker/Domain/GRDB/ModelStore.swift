@@ -1398,6 +1398,19 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
     }
     
+    func getDeviceFiles(deviceId:String) -> [ImageDeviceFile] {
+        var result:[ImageDeviceFile] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try ImageDeviceFile.filter(sql: "deviceId='\(deviceId)'").order(Column("importToPath").asc).fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
     // MARK: SCHEMA VERSION MIGRATION
     
     fileprivate func versionCheck(){

@@ -65,6 +65,7 @@ class DeviceCopyViewController: NSViewController {
     @IBOutlet weak var btnUpdateRepository: NSButton!
     @IBOutlet weak var txtRepositoryPath: NSTextField!
     @IBOutlet weak var lblMessage: NSTextField!
+    @IBOutlet weak var btnBrowseRepository: NSButton!
     
     
     
@@ -361,6 +362,27 @@ class DeviceCopyViewController: NSViewController {
         }
     }
     
+    @IBAction func onBrowseRepositoryPathClicked(_ sender: NSButton) {
+        let openPanel = NSOpenPanel()
+        openPanel.canChooseDirectories  = true
+        openPanel.canChooseFiles        = false
+        openPanel.showsHiddenFiles      = false
+        openPanel.canCreateDirectories  = true
+        
+        openPanel.beginSheetModal(for: self.view.window!) { (response) -> Void in
+            guard response == NSApplication.ModalResponse.OK else {return}
+            if let path = openPanel.url?.path {
+                DispatchQueue.main.async {
+                    if path != "" {
+                        self.txtRepositoryPath.stringValue = path
+                        self.btnSave.isEnabled = true
+                    }
+                }
+            }
+        }
+    }
+    
+    
     @IBAction func onMountClicked(_ sender: NSButton) {
         print(self.device)
         if self.device.type == .iPhone {
@@ -404,42 +426,53 @@ class DeviceCopyViewController: NSViewController {
     
     // MARK: ACTION BUTTON - SAVE
     
-    @IBAction func onSaveClicked(_ sender: NSButton) {
+    fileprivate func validPaths() -> Bool {
+        
         self.lblMessage.stringValue = ""
-        let name = txtName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         let storagePath = txtStorePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         let repositoryPath = txtRepositoryPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         if storagePath == "" {
             self.lblMessage.stringValue = "ERROR: Path for Raw Copy should not be empty!"
-            return
+            return false
         }
         if repositoryPath == "" {
             self.lblMessage.stringValue = "ERROR: Path for Repository should not be empty!"
-            return
+            return false
         }
         
         if repositoryPath == storagePath {
             self.lblMessage.stringValue = "ERROR: Both paths should not be same!"
-            return
+            return false
         }
         
         var isDir:ObjCBool = false
         if FileManager.default.fileExists(atPath: storagePath, isDirectory: &isDir) {
             if isDir.boolValue == false {
                 self.lblMessage.stringValue = "ERROR: Path for Raw Copy is not a directory!"
-                return
+                return false
             }
         }else{
             self.lblMessage.stringValue = "ERROR: Path for Raw Copy does not exist!"
-            return
+            return false
         }
         if FileManager.default.fileExists(atPath: repositoryPath, isDirectory: &isDir) {
             if isDir.boolValue == false {
                 self.lblMessage.stringValue = "ERROR: Path for Repository is not a directory!"
-                return
+                return false
             }
         }else{
             self.lblMessage.stringValue = "ERROR: Path for Repository does not exist!"
+            return false
+        }
+        return true
+    }
+    
+    @IBAction func onSaveClicked(_ sender: NSButton) {
+        let name = txtName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        let storagePath = txtStorePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        let repositoryPath = txtRepositoryPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if !self.validPaths() {
             return
         }
         
@@ -626,6 +659,23 @@ class DeviceCopyViewController: NSViewController {
     }
     
     @IBAction func onUpdateRepositoryClicked(_ sender: Any) {
+        let storagePath = txtStorePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        let repositoryPath = txtRepositoryPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if !self.validPaths() {
+            return
+        }
+        
+        DispatchQueue.global().async {
+            let now = Date()
+            let deviceFiles = ModelStore.default.getDeviceFiles(deviceId: self.device.deviceId)
+            if deviceFiles.count > 0 {
+                for file in deviceFiles {
+                    let subpath = file.importToPath?.replacingOccurrences(of: storagePath, with: "")
+                    print(subpath)
+                }
+            }
+        }
     }
     
     
