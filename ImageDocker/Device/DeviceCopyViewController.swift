@@ -62,6 +62,9 @@ class DeviceCopyViewController: NSViewController {
     @IBOutlet weak var btnLoadFromLocal: NSButton!
     @IBOutlet weak var btnMount: NSButton!
     @IBOutlet weak var btnDeleteRecords: NSButton!
+    @IBOutlet weak var btnUpdateRepository: NSButton!
+    @IBOutlet weak var txtRepositoryPath: NSTextField!
+    @IBOutlet weak var lblMessage: NSTextField!
     
     
     
@@ -399,15 +402,51 @@ class DeviceCopyViewController: NSViewController {
     }
     
     
-    // MARK: TOOL BUTTON - OK
+    // MARK: ACTION BUTTON - SAVE
     
     @IBAction func onSaveClicked(_ sender: NSButton) {
-        let name = txtName.stringValue
-        let storagePath = txtStorePath.stringValue
-        guard storagePath != "" else {return}
+        self.lblMessage.stringValue = ""
+        let name = txtName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        let storagePath = txtStorePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        let repositoryPath = txtRepositoryPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        if storagePath == "" {
+            self.lblMessage.stringValue = "ERROR: Path for Raw Copy should not be empty!"
+            return
+        }
+        if repositoryPath == "" {
+            self.lblMessage.stringValue = "ERROR: Path for Repository should not be empty!"
+            return
+        }
+        
+        if repositoryPath == storagePath {
+            self.lblMessage.stringValue = "ERROR: Both paths should not be same!"
+            return
+        }
+        
+        var isDir:ObjCBool = false
+        if FileManager.default.fileExists(atPath: storagePath, isDirectory: &isDir) {
+            if isDir.boolValue == false {
+                self.lblMessage.stringValue = "ERROR: Path for Raw Copy is not a directory!"
+                return
+            }
+        }else{
+            self.lblMessage.stringValue = "ERROR: Path for Raw Copy does not exist!"
+            return
+        }
+        if FileManager.default.fileExists(atPath: repositoryPath, isDirectory: &isDir) {
+            if isDir.boolValue == false {
+                self.lblMessage.stringValue = "ERROR: Path for Repository is not a directory!"
+                return
+            }
+        }else{
+            self.lblMessage.stringValue = "ERROR: Path for Repository does not exist!"
+            return
+        }
+        
         var imageDevice = ModelStore.default.getOrCreateDevice(device: device)
         imageDevice.name = name
         imageDevice.storagePath = storagePath
+        imageDevice.repositoryPath = repositoryPath
         ModelStore.default.saveDevice(device: imageDevice)
     }
     
@@ -582,6 +621,10 @@ class DeviceCopyViewController: NSViewController {
             }
         }
     }
+    
+    @IBAction func onUpdateRepositoryClicked(_ sender: Any) {
+    }
+    
     
     @IBAction func onCheckboxShowCopiedClicked(_ sender: NSButton) {
         self.refreshFileList()
