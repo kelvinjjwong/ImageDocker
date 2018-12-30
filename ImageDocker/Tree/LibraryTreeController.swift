@@ -14,7 +14,7 @@ import GRDB
 extension ViewController {
     
     // MARK: DATA SOURCE
-    
+    /*
     func loadPathToTree(_ startingPath:String){
         let imageFolders = ImageFolderTreeScanner.default.scanImageFolder(path: startingPath)
         
@@ -40,7 +40,7 @@ extension ViewController {
             }
         }
     }
-    
+    */
     func loadPathToTreeFromDatabase(fast:Bool = true) {
         print("\(Date()) Loading image folders from db ")
         let imageFolders = ImageFolderTreeScanner.default.scanImageFolderFromDatabase(fast: fast)

@@ -15,6 +15,8 @@ struct ImageContainer: Codable {
     var parentFolder: String
     var path: String
     var imageCount: Int
+    var repositoryPath: String
+    var smallSizePath: String?
 }
 
 extension ImageContainer: FetchableRecord, MutablePersistableRecord, TableRecord {

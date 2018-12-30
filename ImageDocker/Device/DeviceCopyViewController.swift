@@ -411,12 +411,13 @@ class DeviceCopyViewController: NSViewController {
         ModelStore.default.saveDevice(device: imageDevice)
     }
     
-    // MARK: TOOL BUTTONS - FILE LIST
+    // MARK: ACTION BUTTON - DELETE RECORDS
     
     @IBAction func onDeleteRecordsClicked(_ sender: NSButton) {
         ModelStore.default.deleteDeviceFiles(deviceId: self.device.deviceId)
     }
     
+    // MARK: ACTION BUTTON - LOAD FILE LIST
     
     fileprivate func reloadFileList() {
         if paths.count > 0 {
@@ -459,6 +460,7 @@ class DeviceCopyViewController: NSViewController {
         self.reloadFileList()
     }
     
+    // MARK: ACTION BUTTON - COPY FILES
     
     fileprivate var accumulator:Accumulator?
     
@@ -593,6 +595,8 @@ class DeviceCopyViewController: NSViewController {
         let cellRect = sender.bounds
         self.addLocalDirectoryPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
     }
+    
+    // MARK: ACTION BUTTON - ADD / REMOVE SOURCE PATH
     
     @IBAction func onAddSourcePathClicked(_ sender: NSButton) {
         self.createOnDeviceDirectoryPopover()

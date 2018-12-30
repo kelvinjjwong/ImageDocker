@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.AVKitIBPlugin" version="14113"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
-        <plugIn identifier="com.apple.WebKit2IBPlugin" version="14113"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.AVKitIBPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.WebKit2IBPlugin" version="14460.31"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -79,7 +80,7 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="Image Docker" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
+                    <window key="window" title="Image Docker" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <rect key="contentRect" x="10" y="10" width="1900" height="920"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
@@ -1316,7 +1317,7 @@
                                                     <rect key="frame" x="150" y="211" width="300" height="22"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="bPo-5b-n8g">
                                                         <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
@@ -1424,7 +1425,7 @@
                                                     </constraints>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="XbI-Jh-lix">
                                                         <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
@@ -1435,7 +1436,7 @@
                                                     </constraints>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="V0o-Ri-e7W">
                                                         <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
@@ -1472,7 +1473,7 @@
                                                     </constraints>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="Fqq-q3-jhh">
                                                         <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
@@ -1617,7 +1618,7 @@
         <scene sceneID="oJX-lh-5pW">
             <objects>
                 <windowController storyboardIdentifier="DeviceCopyWindowController" id="ST8-e9-Yuo" sceneMemberID="viewController">
-                    <window key="window" title="Copy From Device" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="eTj-P8-0F7">
+                    <window key="window" title="Copy From Device" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="eTj-P8-0F7">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="294" y="313" width="800" height="600"/>
@@ -1676,7 +1677,7 @@
                                 <rect key="frame" x="110" y="499" width="572" height="22"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="hOz-nW-9m4">
                                     <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
@@ -1695,7 +1696,7 @@
                                 <rect key="frame" x="110" y="531" width="572" height="22"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="caB-vj-Inh">
                                     <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
@@ -2218,6 +2219,13 @@
                                     <action selector="onMountClicked:" target="1x0-sz-Ku7" id="mV2-A7-Gfx"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LK9-ne-o9K">
+                                <rect key="frame" x="234" y="463" width="153" height="32"/>
+                                <buttonCell key="cell" type="push" title="Update Repository" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JaD-cj-08Z">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="tLd-tc-hQi" firstAttribute="leading" secondItem="4uk-oE-BFl" secondAttribute="leading" constant="20" id="2Nx-eZ-l0F"/>
@@ -2228,6 +2236,7 @@
                             <constraint firstItem="qKz-sp-I2a" firstAttribute="top" secondItem="I7q-oS-uhG" secondAttribute="bottom" constant="10" id="90P-Pm-dZU"/>
                             <constraint firstItem="RSo-Uw-GHN" firstAttribute="top" secondItem="4uk-oE-BFl" secondAttribute="top" constant="20" id="9O1-xo-tOm"/>
                             <constraint firstItem="eO3-Ny-hJE" firstAttribute="top" secondItem="RSo-Uw-GHN" secondAttribute="bottom" constant="12" id="9dS-b2-WhW"/>
+                            <constraint firstItem="Q27-4O-hsj" firstAttribute="leading" secondItem="LK9-ne-o9K" secondAttribute="trailing" constant="20" id="AGL-wZ-tVa"/>
                             <constraint firstItem="eO3-Ny-hJE" firstAttribute="leading" secondItem="4uk-oE-BFl" secondAttribute="leading" constant="20" id="AaI-kx-VLH"/>
                             <constraint firstItem="pIP-4P-a84" firstAttribute="leading" secondItem="a0W-Pw-OUd" secondAttribute="trailing" constant="10" id="Auu-Y1-KrU"/>
                             <constraint firstItem="lnX-IP-vR3" firstAttribute="leading" secondItem="nwo-kc-8ks" secondAttribute="trailing" constant="10" id="EZ0-OG-QCu"/>
@@ -2236,6 +2245,7 @@
                             <constraint firstAttribute="trailing" secondItem="qKz-sp-I2a" secondAttribute="trailing" constant="20" id="HMK-qx-EdZ"/>
                             <constraint firstItem="Zd5-zA-K9J" firstAttribute="leading" secondItem="kpF-cK-mPN" secondAttribute="trailing" constant="10" id="JhH-t7-l9J"/>
                             <constraint firstItem="cj1-vF-4DN" firstAttribute="top" secondItem="gx3-Bs-RH4" secondAttribute="bottom" constant="10" id="Ksi-ct-m0n"/>
+                            <constraint firstItem="LK9-ne-o9K" firstAttribute="top" secondItem="a0W-Pw-OUd" secondAttribute="bottom" constant="8" id="Nl1-Pb-WVx"/>
                             <constraint firstAttribute="trailing" secondItem="t0Z-gb-Xxp" secondAttribute="trailing" constant="20" id="Oyw-Tr-57v"/>
                             <constraint firstItem="cj1-vF-4DN" firstAttribute="leading" secondItem="4uk-oE-BFl" secondAttribute="leading" constant="20" id="Ph0-vM-G9b"/>
                             <constraint firstItem="t0Z-gb-Xxp" firstAttribute="leading" secondItem="LWw-Mb-b2t" secondAttribute="trailing" constant="7" id="Qmo-Xq-ADK"/>
@@ -2310,7 +2320,7 @@
         <scene sceneID="1y9-Gf-GUb">
             <objects>
                 <windowController storyboardIdentifier="TheaterWindowController" id="Nr6-Ou-DSi" sceneMemberID="viewController">
-                    <window key="window" title="Image Viewer" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="UB3-cy-1gq">
+                    <window key="window" title="Image Viewer" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="UB3-cy-1gq">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="294" y="313" width="480" height="270"/>

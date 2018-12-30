@@ -303,7 +303,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
-    func getOrCreateContainer(name:String, path:String, parentPath:String = "", sharedDB:DatabaseWriter? = nil) -> ImageContainer {
+    func getOrCreateContainer(name:String, path:String, parentPath:String = "", repositoryPath:String, smallSizePath:String, sharedDB:DatabaseWriter? = nil) -> ImageContainer {
         var container:ImageContainer?
         do {
             let db = try sharedDB ?? DatabaseQueue(path: dbfile)
@@ -313,7 +313,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             if container == nil {
                 let queue = try sharedDB ?? DatabaseQueue(path: dbfile)
                 try queue.write { db in
-                    container = ImageContainer(name: name, parentFolder: parentPath, path: path, imageCount: 0)
+                    container = ImageContainer(name: name, parentFolder: parentPath, path: path, imageCount: 0, repositoryPath: repositoryPath, smallSizePath: smallSizePath)
                     try container?.save(db)
                 }
             }
@@ -1571,6 +1571,52 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         migrator.registerMigration("v5") { db in
             try db.alter(table: "Image", body: { t in
                 t.add(column: "duplicatesKey", .text)
+            })
+        }
+        
+        migrator.registerMigration("v6") { db in
+            try db.alter(table: "ImageContainer", body: { t in
+                t.add(column: "repositoryPath", .text).notNull().defaults(to: "")
+                t.add(column: "smallSizePath", .text)
+            })
+            try db.alter(table: "ImageDevice", body: { t in
+                t.add(column: "repositoryPath", .text)
+            })
+            try db.alter(table: "Image", body: { t in
+                t.add(column: "originPath", .text)
+                t.add(column: "facesPath", .text)
+                t.add(column: "id", .text)
+            })
+            try db.alter(table: "People", body: { t in
+                t.add(column: "id", .text).primaryKey().unique().notNull()
+                t.add(column: "name", .text).notNull()
+                t.add(column: "shortName", .text)
+                t.add(column: "faceDisplayName", .text)
+                t.add(column: "majorFacePath", .text)
+                t.add(column: "facesPath", .text)
+            })
+            try db.alter(table: "PeopleRelationship", body: { t in
+                t.add(column: "primary", .text).notNull()
+                t.add(column: "secondary", .text).notNull()
+                t.add(column: "callName", .text).notNull()
+            })
+            try db.alter(table: "Family", body: { t in
+                t.add(column: "id", .text).primaryKey().unique().notNull()
+                t.add(column: "name", .text).notNull()
+                t.add(column: "category", .text)
+            })
+            try db.alter(table: "FamilyMember", body: { t in
+                t.add(column: "familyId", .text).notNull()
+                t.add(column: "peopleId", .text).notNull()
+            })
+            try db.alter(table: "FamilyJoint", body: { t in
+                t.add(column: "bigFamilyId", .text).notNull()
+                t.add(column: "smallFamilyId", .text).notNull()
+            })
+            try db.alter(table: "ImagePeople", body: { t in
+                t.add(column: "imageId", .text).notNull()
+                t.add(column: "peopleId", .text).notNull()
+                t.add(column: "position", .text)
             })
         }
         

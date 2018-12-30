@@ -768,7 +768,27 @@ class ViewController: NSViewController {
         }
     }
     
-    @IBAction func onAddButtonClicked(_ sender: Any) {
+    var editRepositoryPopover:NSPopover? = nil
+    var editRepositoryViewController:EditRepositoryViewController!
+    
+    func createEditRepositoryPopover(){
+        var myPopover = self.editRepositoryPopover
+        if(myPopover == nil){
+            
+            let frame = CGRect(origin: .zero, size: CGSize(width: 480, height: 280))
+            self.editRepositoryViewController = EditRepositoryViewController()
+            self.editRepositoryViewController.view.frame = frame
+            
+            myPopover = NSPopover()
+            myPopover!.contentViewController = self.editRepositoryViewController
+            myPopover!.appearance = NSAppearance(named: .aqua)!
+            myPopover!.delegate = self
+            myPopover!.behavior = NSPopover.Behavior.transient
+        }
+        self.editRepositoryPopover = myPopover
+    }
+    
+    @IBAction func onAddButtonClicked(_ sender: NSButton) {
         let window = NSApplication.shared.windows.first
         
         let openPanel = NSOpenPanel()
@@ -778,14 +798,24 @@ class ViewController: NSViewController {
         
         openPanel.beginSheetModal(for: window!) { (response) -> Void in
             guard response == NSApplication.ModalResponse.OK else {return}
-            if let path = openPanel.url?.path {
-                //self.creatingRepository = true
-                //DispatchQueue.main.async {
-                    //self.loadPathToTree(path)
-                ImageFolderTreeScanner.createRepository(path: path)
-                self.updateLibraryTree()
-                    //self.sourceList.reloadData()
-                //}
+            if let url = openPanel.url {
+                
+                self.createEditRepositoryPopover()
+                
+                let cellRect = sender.bounds
+                self.editRepositoryPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
+                self.editRepositoryViewController.edit(url: url, onOK: {
+                    
+                    ////self.creatingRepository = true
+                    ////DispatchQueue.main.async {
+                    ////self.loadPathToTree(path)
+                    
+                    //ImageFolderTreeScanner.createRepository(path: url.path)
+                    self.updateLibraryTree()
+                    
+                    ////self.sourceList.reloadData()
+                    ////}
+                })
             }
         }
     }
