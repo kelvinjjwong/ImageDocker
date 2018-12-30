@@ -174,4 +174,20 @@ class CameraModelRecognizer {
         }
         return model
     }
+    
+    static func getMarketName(maker:String, model:String) -> String{
+        guard maker != "" && model != "" else {return model}
+        for m in models.keys {
+            if maker == m {
+                print("Recognized maker \(m), trying to get model \(model)")
+                for mm in models[m]! {
+                    if model.starts(with: mm.key) {
+                        return mm.value
+                    }
+                }
+                break
+            }
+        }
+        return ""
+    }
 }

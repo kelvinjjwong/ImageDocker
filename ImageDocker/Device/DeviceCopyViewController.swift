@@ -443,10 +443,13 @@ class DeviceCopyViewController: NSViewController {
             return
         }
         
+        let marketName = CameraModelRecognizer.getMarketName(maker: device.manufacture, model: device.model)
+        
         var imageDevice = ModelStore.default.getOrCreateDevice(device: device)
         imageDevice.name = name
         imageDevice.storagePath = storagePath
         imageDevice.repositoryPath = repositoryPath
+        imageDevice.marketName = marketName
         ModelStore.default.saveDevice(device: imageDevice)
     }
     
