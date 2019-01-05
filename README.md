@@ -21,6 +21,10 @@ A desktop application help organize pictures and videos between cameras/mobile d
 
 ## Screenshot
 
+v0.9.4
+![Image Docker of v0.9.4](Screenshots/Screenshot_v0.9.4_1.png)
+![Image Viewer of v0.9.4](Screenshots/Screenshot_v0.9.4_2.png)
+
 v0.9.3
 ![Screenshot of v0.9.3](Screenshots/Screenshot_v0.9.3.png)
 
