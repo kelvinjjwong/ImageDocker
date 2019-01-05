@@ -21,6 +21,7 @@ struct ImageDeviceFile : Codable {
     var importDate:String?
     var importToPath:String?
     var importAsFilename:String?
+    var localFilePath:String?
     
     static func new(fileId:String, deviceId:String, path:String, filename:String, fileDateTime:String, fileSize:String) -> ImageDeviceFile {
         return ImageDeviceFile(
@@ -33,7 +34,8 @@ struct ImageDeviceFile : Codable {
             fileMD5: nil,
             importDate: nil,
             importToPath: nil,
-            importAsFilename: nil
+            importAsFilename: nil,
+            localFilePath: nil
         )
     }
 }

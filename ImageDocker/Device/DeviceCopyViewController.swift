@@ -8,6 +8,11 @@
 
 import Cocoa
 
+enum ChecksumMode : Int {
+    case Rough
+    case Deep
+}
+
 enum DeviceCopyDestinationType:Int {
     case onDevice
     case localDirectory
@@ -66,6 +71,7 @@ class DeviceCopyViewController: NSViewController {
     @IBOutlet weak var txtRepositoryPath: NSTextField!
     @IBOutlet weak var lblMessage: NSTextField!
     @IBOutlet weak var btnBrowseRepository: NSButton!
+    @IBOutlet weak var btnDeepLoad: NSButton!
     
     
     
@@ -87,7 +93,7 @@ class DeviceCopyViewController: NSViewController {
         
         btnSave.isEnabled = false
         btnCopy.isEnabled = false
-        txtStorePath.isEditable = false
+        //txtStorePath.isEditable = false
         tblSourcePath.isEnabled = true
         
         sourcePathTableDelegate.sourcePathSelectionDelegate = self
@@ -102,6 +108,9 @@ class DeviceCopyViewController: NSViewController {
             print("DEVICE INIT")
             self.device = device
             
+            self.btnCopy.isEnabled = false
+            self.btnUpdateRepository.isEnabled = false
+            
             if device.type == .iPhone {
                 self.btnMount.isHidden = false
                 self.btnMount.isEnabled = true
@@ -110,9 +119,15 @@ class DeviceCopyViewController: NSViewController {
                 self.btnMount.isEnabled = false
             }
             
+            let marketName = CameraModelRecognizer.getMarketName(maker: device.manufacture, model: device.model)
+            var marketDisplayName = ""
+            if marketName != "" {
+                marketDisplayName = " (\(marketName))"
+            }
+            
             let imageDevice = ModelStore.default.getOrCreateDevice(device: device)
             
-            self.lblModel.stringValue = "\(imageDevice.manufacture ?? "") \(imageDevice.model ?? "")"
+            self.lblModel.stringValue = "\(imageDevice.manufacture ?? "") \(imageDevice.model ?? "")\(marketDisplayName)"
             if imageDevice.name != nil && imageDevice.name != "" {
                 self.txtName.stringValue = imageDevice.name ?? ""
             }else{
@@ -121,6 +136,11 @@ class DeviceCopyViewController: NSViewController {
             
             if imageDevice.storagePath != nil && imageDevice.storagePath != "" {
                 txtStorePath.stringValue = imageDevice.storagePath ?? ""
+                btnSave.isEnabled = true
+            }
+            
+            if imageDevice.repositoryPath != nil && imageDevice.repositoryPath != "" {
+                txtRepositoryPath.stringValue = imageDevice.repositoryPath ?? ""
                 btnSave.isEnabled = true
             }
             
@@ -200,7 +220,7 @@ class DeviceCopyViewController: NSViewController {
     
     // MARK: LOAD FROM PATH
     
-    fileprivate func loadFromLocalPath(path:String, pretendPath:String, reloadFileList:Bool = false) {
+    fileprivate func loadFromLocalPath(path:String, pretendPath:String, reloadFileList:Bool = false, checksumMode:ChecksumMode = .Rough) {
         print("LOAD FROM LOCAL \(path) - \(pretendPath)")
         
         DispatchQueue.main.async {
@@ -246,8 +266,14 @@ class DeviceCopyViewController: NSViewController {
                 }
                 DispatchQueue.main.async {
                     self.deviceFiles_fulllist[path]!.append(f)
-                    if !(f.stored && f.matched) {
-                        self.deviceFiles_filtered[path]!.append(f)
+                    if checksumMode == .Rough {
+                        if !(f.stored && f.matchedWithoutMD5) {
+                            self.deviceFiles_filtered[path]!.append(f)
+                        }
+                    }else{
+                        if !(f.stored && f.matched) {
+                            self.deviceFiles_filtered[path]!.append(f)
+                        }
                     }
                     let _ = self.accumulator?.add("")
                 }
@@ -264,7 +290,7 @@ class DeviceCopyViewController: NSViewController {
         }
     }
     
-    fileprivate func loadFromOnDevicePath(path:String, reloadFileList:Bool = false){
+    fileprivate func loadFromOnDevicePath(path:String, reloadFileList:Bool = false, checksumMode:ChecksumMode = .Rough){
         
         DispatchQueue.main.async {
             self.deviceFiles_filtered[path] = []
@@ -299,15 +325,30 @@ class DeviceCopyViewController: NSViewController {
             
             f.deviceFile = deviceFile
             
-            if (f.stored && !f.matched){
-                print("Getting MD5 of \(f.path)")
-                f.fileMD5 = Android.bridge.md5(device: self.device.deviceId, fileWithPath: f.path)
+            f.checksumMode = checksumMode
+            
+            if checksumMode == .Rough {
+                if (f.stored && !f.matchedWithoutMD5){
+                    print("Getting MD5 of \(f.path)")
+                    f.fileMD5 = Android.bridge.md5(device: self.device.deviceId, fileWithPath: f.path)
+                }
+            }else if checksumMode == .Deep {
+                if (f.stored && !f.matched){
+                    print("Getting MD5 of \(f.path)")
+                    f.fileMD5 = Android.bridge.md5(device: self.device.deviceId, fileWithPath: f.path)
+                }
             }
             
             DispatchQueue.main.async {
                 self.deviceFiles_fulllist[path]!.append(f)
-                if !(f.stored && f.matched) {
-                    self.deviceFiles_filtered[path]!.append(f)
+                if checksumMode == .Rough {
+                    if !(f.stored && f.matchedWithoutMD5) {
+                        self.deviceFiles_filtered[path]!.append(f)
+                    }
+                }else{
+                    if !(f.stored && f.matched) {
+                        self.deviceFiles_filtered[path]!.append(f)
+                    }
                 }
                 let _ = self.accumulator?.add("")
             }
@@ -324,9 +365,9 @@ class DeviceCopyViewController: NSViewController {
         }
     }
     
-    func loadFromPath(path: DeviceCopyDestination, reloadFileList:Bool = false) {
+    func loadFromPath(path: DeviceCopyDestination, reloadFileList:Bool = false, checksumMode:ChecksumMode = .Rough) {
         if path.type == .onDevice {
-            loadFromOnDevicePath(path: path.sourcePath, reloadFileList: reloadFileList)
+            loadFromOnDevicePath(path: path.sourcePath, reloadFileList: reloadFileList, checksumMode: checksumMode)
         }else if path.type == .localDirectory {
             loadFromLocalPath(path: path.sourcePath, pretendPath: path.toSubFolder, reloadFileList:reloadFileList)
         }
@@ -340,7 +381,7 @@ class DeviceCopyViewController: NSViewController {
         }
     }
     
-    // MARK: TOOL BUTTON - OPEN PANEL
+    // MARK: ACTION BUTTON - OPEN PANEL
     
     @IBAction func onBrowseStorePathClicked(_ sender: NSButton) {
         let openPanel = NSOpenPanel()
@@ -423,8 +464,34 @@ class DeviceCopyViewController: NSViewController {
         }
     }
     
+    // MARK: TOGGLE BUTTONS
     
-    // MARK: ACTION BUTTON - SAVE
+    fileprivate func toggleControls(state:Bool) {
+        self.btnMount.isEnabled = state
+        self.btnCopy.isEnabled = state
+        self.btnLoad.isEnabled = state
+        self.btnDeepLoad.isEnabled = state
+        self.btnSave.isEnabled = state
+        self.btnBrowseStorePath.isEnabled = state
+        self.btnBrowseRepository.isEnabled = state
+        self.btnAddSourcePath.isEnabled = state
+        self.btnRemoveSourcePath.isEnabled = state
+        self.btnLoadFromLocal.isEnabled = state
+        self.btnDeleteRecords.isEnabled = state
+        self.btnUpdateRepository.isEnabled = state
+        self.cbShowCopied.isEnabled = state
+        self.tblSourcePath.isEnabled = state
+    }
+    
+    fileprivate func disableButtons(){
+        self.toggleControls(state: false)
+    }
+    
+    fileprivate func enableButtons() {
+        self.toggleControls(state: true)
+    }
+    
+    // MARK: VALID PATHS
     
     fileprivate func validPaths() -> Bool {
         
@@ -467,7 +534,11 @@ class DeviceCopyViewController: NSViewController {
         return true
     }
     
+    
+    // MARK: ACTION BUTTON - SAVE
+    
     @IBAction func onSaveClicked(_ sender: NSButton) {
+        guard !self.working else {return}
         let name = txtName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         let storagePath = txtStorePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         let repositoryPath = txtRepositoryPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -476,58 +547,189 @@ class DeviceCopyViewController: NSViewController {
             return
         }
         
+        self.working = true
+        self.disableButtons()
+        
+        // TODO: IF storage path / repository path changed, MOVE files from old path to new path
+        
         let marketName = CameraModelRecognizer.getMarketName(maker: device.manufacture, model: device.model)
         
-        var imageDevice = ModelStore.default.getOrCreateDevice(device: device)
-        imageDevice.name = name
-        imageDevice.storagePath = storagePath
-        imageDevice.repositoryPath = repositoryPath
-        imageDevice.marketName = marketName
-        ModelStore.default.saveDevice(device: imageDevice)
+        self.accumulator = Accumulator(target: 1, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblProgressMessage)
+        
+        DispatchQueue.global().async {
+        
+            var imageDevice = ModelStore.default.getOrCreateDevice(device: self.device)
+            
+            if let oldStoragePath = imageDevice.storagePath, oldStoragePath != storagePath {
+                let deviceFiles = ModelStore.default.getDeviceFiles(deviceId: self.device.deviceId)
+                if deviceFiles.count > 0 {
+                    
+                    self.accumulator?.reset()
+                    self.accumulator?.setTarget(deviceFiles.count)
+ 
+                    for deviceFile in deviceFiles {
+                        if let oldImportToPath = deviceFile.importToPath, let filename = deviceFile.filename, let localFilePath = deviceFile.localFilePath, localFilePath != "" {
+                            
+                            DispatchQueue.main.async {
+                                self.lblMessage.stringValue = "Updating new RAW storage: \(localFilePath)"
+                            }
+                            
+                            let oldFilePath = URL(fileURLWithPath: oldImportToPath).appendingPathComponent(filename)
+                            let newFilePath = URL(fileURLWithPath: storagePath).appendingPathComponent(localFilePath)
+                            let newFolderPath = newFilePath.deletingLastPathComponent()
+                            if !FileManager.default.fileExists(atPath: newFilePath.path) {
+                                
+                                DispatchQueue.main.async {
+                                    self.lblMessage.stringValue = "Copying to new RAW storage: \(localFilePath)"
+                                }
+                                
+                                do {
+                                    try FileManager.default.createDirectory(at: newFolderPath, withIntermediateDirectories: true, attributes: nil)
+                                }catch{
+                                    print("Error occured when trying to create folder \(newFolderPath.path)")
+                                    print(error)
+                                }
+                                do {
+                                    try FileManager.default.copyItem(atPath: oldFilePath.path, toPath: newFilePath.path)
+                                }catch{
+                                    print("Error occured when trying to copy [\(oldFilePath.path)] to [\(newFilePath.path)]")
+                                    print(error)
+                                }
+                            }
+                            var file = deviceFile
+                            file.importToPath = newFolderPath.path
+                            print("Update [\(localFilePath)] with new importToPath: \(newFolderPath.path)")
+                            ModelStore.default.saveDeviceFile(file: file)
+                        }
+                        
+                        DispatchQueue.main.async {
+                            let _ = self.accumulator?.add("")
+                        }
+                    }
+                }
+            }
+        
+            if let oldRepositoryPath = imageDevice.repositoryPath, oldRepositoryPath != repositoryPath {
+                let deviceFiles = ModelStore.default.getDeviceFiles(deviceId: self.device.deviceId)
+                if deviceFiles.count > 0 {
+                    
+                    self.accumulator?.reset()
+                    self.accumulator?.setTarget(deviceFiles.count)
+                    
+                    for deviceFile in deviceFiles {
+                        if let localFilePath = deviceFile.localFilePath, localFilePath != "" {
+                            
+                            DispatchQueue.main.async {
+                                self.lblMessage.stringValue = "Updating new repository: \(localFilePath)"
+                            }
+                            
+                            let oldFilePath = URL(fileURLWithPath: oldRepositoryPath).appendingPathComponent(localFilePath)
+                            let newFilePath = URL(fileURLWithPath: repositoryPath).appendingPathComponent(localFilePath)
+                            let newFolderPath = newFilePath.deletingLastPathComponent()
+                            if !FileManager.default.fileExists(atPath: newFilePath.path) {
+                                
+                                DispatchQueue.main.async {
+                                    self.lblMessage.stringValue = "Copying to new repository: \(localFilePath)"
+                                }
+                                
+                                do {
+                                    try FileManager.default.createDirectory(at: newFolderPath, withIntermediateDirectories: true, attributes: nil)
+                                }catch{
+                                    print("Error occured when trying to create folder \(newFolderPath.path)")
+                                    print(error)
+                                }
+                                do {
+                                    try FileManager.default.copyItem(atPath: oldFilePath.path, toPath: newFilePath.path)
+                                }catch{
+                                    print("Error occured when trying to copy [\(oldFilePath.path)] to [\(newFilePath.path)]")
+                                    print(error)
+                                }
+                            }
+                        }
+                        
+                        DispatchQueue.main.async {
+                            let _ = self.accumulator?.add("")
+                        }
+                    }
+                }
+            }
+            
+            imageDevice.name = name
+            imageDevice.storagePath = storagePath
+            imageDevice.repositoryPath = repositoryPath
+            imageDevice.marketName = marketName
+            ModelStore.default.saveDevice(device: imageDevice)
+            
+            DispatchQueue.main.async {
+                self.enableButtons()
+                self.toggleSpecialButtons()
+                self.working = false
+                self.lblMessage.stringValue = "Device info saved."
+            }
+        }
     }
     
     // MARK: ACTION BUTTON - DELETE RECORDS
     
     @IBAction func onDeleteRecordsClicked(_ sender: NSButton) {
+        self.lblMessage.stringValue = "Deleting records ..."
         ModelStore.default.deleteDeviceFiles(deviceId: self.device.deviceId)
+        self.lblMessage.stringValue = "Deleted records."
     }
     
     // MARK: ACTION BUTTON - LOAD FILE LIST
     
-    fileprivate func reloadFileList() {
+    fileprivate func reloadFileList(checksumMode:ChecksumMode = .Rough) {
+        self.working = true
         if paths.count > 0 {
-            btnAddSourcePath.isEnabled = false
-            btnRemoveSourcePath.isEnabled = false
-            btnLoadFromLocal.isEnabled = false
-            tblSourcePath.isEnabled = false
-            cbShowCopied.isEnabled = false
-            btnLoad.isEnabled = false
-            btnDeleteRecords.isEnabled = false
-            if self.device.type == .iPhone {
-                self.btnMount.isEnabled = false
+            self.disableButtons()
+            
+            DispatchQueue.main.async {
+                self.lblMessage.stringValue = "Loading file list ..."
             }
+            
             DispatchQueue.global().async {
                 for path in self.paths {
-                    self.loadFromPath(path: path)
+                    self.loadFromPath(path: path, checksumMode: checksumMode)
                 }
                 DispatchQueue.main.async {
-                    self.btnAddSourcePath.isEnabled = true
-                    self.btnRemoveSourcePath.isEnabled = true
-                    self.btnLoadFromLocal.isEnabled = true
-                    self.tblSourcePath.isEnabled = true
-                    self.cbShowCopied.isEnabled = true
-                    self.btnLoad.isEnabled = true
-                    self.btnDeleteRecords.isEnabled = true
-                    if self.device.type == .iPhone {
-                        self.btnMount.isEnabled = true
-                    }
+                    
+                    self.enableButtons()
+                    
                     if self.selectedPath == nil {
                         self.selectDeviceSourcePath(path: self.paths[0])
                     }else{
                         self.selectDeviceSourcePath(path: self.selectedPath!)
                     }
+                    self.working = false
+                    
+                    self.toggleSpecialButtons()
                 }
             }
+        }else{
+            self.working = false
+        }
+    }
+    
+    fileprivate func toggleSpecialButtons() {
+        let sumOfFulllist = self.countFullList()
+        let sumOfFiltered = self.countFilteredList()
+        var timeRange = ""
+        if sumOfFiltered > 0 {
+            let maxDate = self.getFilteredMaxDate()
+            let minDate = self.getFilteredMinimalDate()
+            timeRange = " (\(minDate) - \(maxDate))"
+        }
+        self.lblMessage.stringValue = "TOTAL: \(sumOfFulllist), NEW: \(sumOfFiltered)\(timeRange)"
+        
+        if sumOfFiltered == 0 {
+            self.btnCopy.isEnabled = false
+        }
+        
+        if self.hasEmptyMD5() {
+            self.btnUpdateRepository.isEnabled = true
+        }else{
+            self.btnUpdateRepository.isEnabled = false
         }
     }
     
@@ -535,11 +737,77 @@ class DeviceCopyViewController: NSViewController {
         self.reloadFileList()
     }
     
+    @IBAction func onDeepLoadClicked(_ sender: NSButton) {
+        self.reloadFileList(checksumMode: .Deep)
+    }
+    
+    
+    // MARK: COUNT FILE LIST
+    
+    fileprivate func countFilteredList() -> Int {
+        var total = 0
+        for path in self.paths {
+            total += self.deviceFiles_filtered[path.sourcePath]!.count
+        }
+        return total
+    }
+    
+    fileprivate func countFullList() -> Int {
+        var total = 0
+        for path in self.paths {
+            total += self.deviceFiles_fulllist[path.sourcePath]!.count
+        }
+        return total
+    }
+    
+    fileprivate func hasEmptyMD5() -> Bool {
+        for path in self.paths {
+            if let files = self.deviceFiles_fulllist[path.sourcePath] {
+                for file in files {
+                    if file.importToPath != "" && file.storedMD5 == "" {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
+    
+    fileprivate func getFilteredMaxDate() -> String {
+        var max = "0000-00-00 00:00:00"
+        for path in self.paths {
+            if let files = self.deviceFiles_filtered[path.sourcePath] {
+                for file in files {
+                    if file.fileDateTime > max {
+                        max = file.fileDateTime
+                    }
+                }
+            }
+        }
+        return max
+    }
+    
+    fileprivate func getFilteredMinimalDate() -> String {
+        var min = "9999-00-00 00:00:00"
+        for path in self.paths {
+            if let files = self.deviceFiles_filtered[path.sourcePath] {
+                for file in files {
+                    if file.fileDateTime < min {
+                        min = file.fileDateTime
+                    }
+                }
+            }
+        }
+        return min
+    }
+    
     // MARK: ACTION BUTTON - COPY FILES
     
+    fileprivate var working = false
     fileprivate var accumulator:Accumulator?
     
     @IBAction func onCopyClicked(_ sender: NSButton) {
+        guard !working && self.validPaths() else {return}
         var total = 0
         for path in self.paths {
             print("TO BE COPIED: \(path.sourcePath) - \(self.deviceFiles_filtered[path.sourcePath]!.count)")
@@ -550,18 +818,17 @@ class DeviceCopyViewController: NSViewController {
         self.accumulator = Accumulator(target: total, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblProgressMessage)
         
         let destination = self.txtStorePath.stringValue
-        btnCopy.isEnabled = false
-        btnLoad.isEnabled = false
-        btnBrowseStorePath.isEnabled = false
-        btnDeleteRecords.isEnabled = false
-        cbShowCopied.isEnabled = false
-        btnAddSourcePath.isEnabled = false
-        btnRemoveSourcePath.isEnabled = false
-        btnLoadFromLocal.isEnabled = false
         
-        if self.device.type == .iPhone {
-            self.btnMount.isEnabled = false
-        }
+        self.working = true
+        self.disableButtons()
+        
+        let storagePath = txtStorePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        let repositoryPath = txtRepositoryPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        let storageUrl = URL(fileURLWithPath: storagePath)
+        let storageUrlWithSlash = "\(storageUrl.path)/"
+        
+        let computerFileHandler = ComputerFileManager()
         
         DispatchQueue.global().async {
             let now = Date()
@@ -584,12 +851,16 @@ class DeviceCopyViewController: NSViewController {
                     }
                 }
                 for file in self.deviceFiles_filtered[path.sourcePath]! {
+                    
+                    DispatchQueue.main.async {
+                        self.lblMessage.stringValue = "Copying from device: \(subFolder)/\(file.filename)"
+                    }
+                    var deviceFile = file.deviceFile!
                     if path.type == .onDevice {
                         if self.device.type == .Android {
                             if Android.bridge.pull(device: self.device.deviceId, from: file.path, to: destinationPath) {
                                 print("Copied \(file.path)")
                                 if file.deviceFile != nil {
-                                    var deviceFile = file.deviceFile!
                                     deviceFile.importToPath = destinationPath
                                     deviceFile.importAsFilename = file.filename
                                     deviceFile.importDate = date
@@ -603,7 +874,6 @@ class DeviceCopyViewController: NSViewController {
                             if IPHONE.bridge.pull(mountPoint: PreferencesController.iosDeviceMountPoint(), sourcePath:path.sourcePath, from: file.path, to: destinationPath) {
                                 print("Copied \(file.path)")
                                 if file.deviceFile != nil {
-                                    var deviceFile = file.deviceFile!
                                     deviceFile.importToPath = destinationPath
                                     deviceFile.importAsFilename = file.filename
                                     deviceFile.importDate = date
@@ -632,7 +902,6 @@ class DeviceCopyViewController: NSViewController {
                             }
                         }
                         if needSaveFile {
-                            var deviceFile:ImageDeviceFile = file.deviceFile!
                             deviceFile.importToPath = destinationPath
                             deviceFile.importAsFilename = file.filename
                             deviceFile.importDate = date
@@ -640,6 +909,9 @@ class DeviceCopyViewController: NSViewController {
                             print("Updated \(file.path)")
                         }
                     }
+                    
+                    self.updateDeviceFileIntoRepository(fileRecord: deviceFile, storageUrlWithSlash: storageUrlWithSlash, repositoryPath: repositoryPath, fileHandler: computerFileHandler)
+                    
                     DispatchQueue.main.async {
                         let _ = self.accumulator?.add("")
                     }
@@ -658,32 +930,103 @@ class DeviceCopyViewController: NSViewController {
         }
     }
     
-    @IBAction func onUpdateRepositoryClicked(_ sender: Any) {
-        let storagePath = txtStorePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        let repositoryPath = txtRepositoryPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        if !self.validPaths() {
-            return
-        }
-        
-        DispatchQueue.global().async {
-            let now = Date()
-            let deviceFiles = ModelStore.default.getDeviceFiles(deviceId: self.device.deviceId)
-            if deviceFiles.count > 0 {
-                for file in deviceFiles {
-                    let subpath = file.importToPath?.replacingOccurrences(of: storagePath, with: "")
-                    print(subpath)
+    // MARK: ACTION BUTTON - UPDATE REPOSITORY
+    
+    fileprivate func updateDeviceFileIntoRepository(fileRecord deviceFile:ImageDeviceFile, storageUrlWithSlash:String, repositoryPath:String, fileHandler:ComputerFileManager){
+        var file = deviceFile
+        if let filename = file.filename, let importToPath = file.importToPath, importToPath.starts(with: storageUrlWithSlash) {
+            
+            var needSave = false
+            let subpath = importToPath.replacingOccurrences(of: storageUrlWithSlash, with: "")
+            let localFilePath = "\(subpath)/\(filename)"
+            if localFilePath != "/" && ( file.localFilePath == nil || file.localFilePath == "" ) {
+                file.localFilePath = localFilePath
+                needSave = true
+            }else{
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.lblMessage.stringValue = "Updating repository: \(localFilePath)"
+            }
+            
+            let importedFileUrl = URL(fileURLWithPath: importToPath).appendingPathComponent(filename)
+            let repositoryFileUrl = URL(fileURLWithPath: repositoryPath).appendingPathComponent(localFilePath)
+            //print(repositoryFileUrl.path)
+            
+            let repositoryFolderUrl = repositoryFileUrl.deletingLastPathComponent()
+            do {
+                try FileManager.default.createDirectory(at: repositoryFolderUrl, withIntermediateDirectories: true, attributes: nil)
+            }catch{
+                print("Error occured when trying to create folder \(repositoryFolderUrl.path)")
+                print(error)
+            }
+            if !FileManager.default.fileExists(atPath: repositoryFileUrl.path) {
+                do {
+                    try FileManager.default.copyItem(atPath: importedFileUrl.path, toPath: repositoryFileUrl.path)
+                }catch{
+                    print("Error occured when trying to copy file from \(importedFileUrl.path) to \(repositoryFileUrl.path)")
+                    print(error)
                 }
+            }
+            if file.fileMD5 == nil || file.fileMD5 == "" {
+                let md5 = fileHandler.md5(pathOfFile: importedFileUrl.path)
+                if md5 != "" {
+                    file.fileMD5 = md5
+                    needSave = true
+                }
+            }
+            if needSave {
+                ModelStore.default.saveDeviceFile(file: file)
             }
         }
     }
     
+    @IBAction func onUpdateRepositoryClicked(_ sender: Any) {
+        guard !working && self.validPaths() else {return}
+        
+        self.working = true
+        
+        self.disableButtons()
+        
+        let deviceFiles = ModelStore.default.getDeviceFiles(deviceId: self.device.deviceId)
+        if deviceFiles.count > 0 {
+            self.accumulator = Accumulator(target: deviceFiles.count, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblProgressMessage)
+            
+            let storagePath = txtStorePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            let repositoryPath = txtRepositoryPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            let storageUrl = URL(fileURLWithPath: storagePath)
+            let storageUrlWithSlash = "\(storageUrl.path)/"
+            
+            let computerFileHandler = ComputerFileManager()
+            
+            DispatchQueue.global().async {
+                for deviceFile in deviceFiles {
+                    
+                    self.updateDeviceFileIntoRepository(fileRecord: deviceFile, storageUrlWithSlash: storageUrlWithSlash, repositoryPath: repositoryPath, fileHandler: computerFileHandler)
+                    
+                    DispatchQueue.main.async {
+                        let _ = self.accumulator?.add("")
+                    }
+                }
+                self.working = false
+                self.enableButtons()
+            }
+        }else{
+            self.lblMessage.stringValue = "No file record."
+            self.working = false
+            self.enableButtons()
+        }
+    }
+    
+    // MARK: ACTION BUTTON - CHECKBOX - SHOW COPIED
     
     @IBAction func onCheckboxShowCopiedClicked(_ sender: NSButton) {
         self.refreshFileList()
     }
     
-    // MARK: TOOL BUTTONS - SOURCE PATH
+    // MARK: ACTION BUTTONS - ADD LOCAL DIRECTORY AS SOURCE PATH
     
     @IBAction func onLoadFromLocalClicked(_ sender: NSButton) {
         self.createLocalDirectoryPopover()
@@ -948,7 +1291,11 @@ extension DeviceFileTableDelegate : NSTableViewDelegate {
                 value = info.storedDateTime
             case NSUserInterfaceItemIdentifier("copyState"):
                 column = "copyState"
-                value = info.stored && info.matched ? "Copied" : "NEW"
+                if info.checksumMode == .Rough {
+                    value = info.stored && info.matchedWithoutMD5 ? "Copied" : "NEW"
+                }else{
+                    value = info.stored && info.matched ? "Copied" : "NEW"
+                }
                 
             default:
                 break

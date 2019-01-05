@@ -1600,36 +1600,43 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 t.add(column: "facesPath", .text)
                 t.add(column: "id", .text)
             })
-            try db.alter(table: "People", body: { t in
-                t.add(column: "id", .text).primaryKey().unique().notNull()
-                t.add(column: "name", .text).notNull()
-                t.add(column: "shortName", .text)
-                t.add(column: "faceDisplayName", .text)
-                t.add(column: "majorFacePath", .text)
-                t.add(column: "facesPath", .text)
+            
+            try db.create(table: "People", body: { t in
+                t.column("id", .text).primaryKey().unique().notNull()
+                t.column("name", .text).notNull().indexed()
+                t.column("shortName", .text).indexed()
+                t.column("faceDisplayName", .text).indexed()
+                t.column("majorFacePath", .text)
+                t.column("facesPath", .text)
             })
-            try db.alter(table: "PeopleRelationship", body: { t in
-                t.add(column: "primary", .text).notNull()
-                t.add(column: "secondary", .text).notNull()
-                t.add(column: "callName", .text).notNull()
+            try db.create(table: "PeopleRelationship", body: { t in
+                t.column("primary", .text).notNull().indexed()
+                t.column("secondary", .text).notNull().indexed()
+                t.column("callName", .text).notNull()
             })
-            try db.alter(table: "Family", body: { t in
-                t.add(column: "id", .text).primaryKey().unique().notNull()
-                t.add(column: "name", .text).notNull()
-                t.add(column: "category", .text)
+            try db.create(table: "Family", body: { t in
+                t.column("id", .text).primaryKey().unique().notNull()
+                t.column("name", .text).notNull().indexed()
+                t.column("category", .text).indexed()
             })
-            try db.alter(table: "FamilyMember", body: { t in
-                t.add(column: "familyId", .text).notNull()
-                t.add(column: "peopleId", .text).notNull()
+            try db.create(table: "FamilyMember", body: { t in
+                t.column("familyId", .text).notNull().indexed()
+                t.column("peopleId", .text).notNull().indexed()
             })
-            try db.alter(table: "FamilyJoint", body: { t in
-                t.add(column: "bigFamilyId", .text).notNull()
-                t.add(column: "smallFamilyId", .text).notNull()
+            try db.create(table: "FamilyJoint", body: { t in
+                t.column("bigFamilyId", .text).notNull().indexed()
+                t.column("smallFamilyId", .text).notNull().indexed()
             })
-            try db.alter(table: "ImagePeople", body: { t in
-                t.add(column: "imageId", .text).notNull()
-                t.add(column: "peopleId", .text).notNull()
-                t.add(column: "position", .text)
+            try db.create(table: "ImagePeople", body: { t in
+                t.column("imageId", .text).notNull().indexed()
+                t.column("peopleId", .text).notNull().indexed()
+                t.column("position", .text)
+            })
+        }
+        
+        migrator.registerMigration("v7") { db in
+            try db.alter(table: "ImageDeviceFile", body: { t in
+                t.add(column: "localFilePath", .text)
             })
         }
         

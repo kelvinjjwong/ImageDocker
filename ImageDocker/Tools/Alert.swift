@@ -100,3 +100,20 @@ struct Alert {
         alert.runModal()
     }
 }
+
+struct PopNotification {
+    
+    static func enableDebugMode() {
+//        let notification = NSUserNotification()
+//        notification.identifier = "image-docker-device-connectivity"
+//        notification.title = "ImageDocker"
+//        //notification.subtitle = "How are you?"
+//        notification.informativeText = "If you've connected your phone via USB properly, please enable DEBUG MODE from [Settings >> System >> Developer Mode] on your phone."
+//
+//        notification.soundName = NSUserNotificationDefaultSoundName
+//
+//        print("deliver notification - debug mode")
+//        NSUserNotificationCenter.default.deliver(notification)
+        
+    }
+}

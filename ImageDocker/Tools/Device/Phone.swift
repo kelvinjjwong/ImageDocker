@@ -16,6 +16,7 @@ struct PhoneFile {
     var fileMD5:String = "" {
         didSet {
             matched = ( fileMD5 == storedMD5 && fileDateTime == storedDateTime && fileSize == storedSize )
+            matchedWithoutMD5 = ( fileDateTime == storedDateTime && fileSize == storedSize )
         }
     }
     var fileDateTime:String = ""
@@ -31,14 +32,18 @@ struct PhoneFile {
             
             if fileDateTime == "" { // from mac os
                 matched = ( fileSize == storedSize )
+                matchedWithoutMD5 = matched
                 //stored = matched
             } else { // from android device
                 matched = ( fileMD5 == storedMD5 && fileDateTime == storedDateTime && fileSize == storedSize )
+                matchedWithoutMD5 = ( fileDateTime == storedDateTime && fileSize == storedSize )
             }
         }
     }
     
     var matched:Bool = false
+    var matchedWithoutMD5:Bool = false
+    var checksumMode:ChecksumMode = .Rough
     var stored:Bool = false
     var deviceFile:ImageDeviceFile?
     var folder:String = ""

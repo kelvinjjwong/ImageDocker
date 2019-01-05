@@ -113,6 +113,8 @@ extension ViewController {
             if devices.count > 0 {
                 let item = self.treeIdItems["device_type_Android"]
                 self.sourceList.expandItem(item)
+            }else{
+                PopNotification.enableDebugMode()
             }
             
         }else if collection.identifier == "device_type_iPhone" {
