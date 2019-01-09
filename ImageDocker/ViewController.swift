@@ -36,6 +36,8 @@ class ViewController: NSViewController {
     @IBOutlet weak var splitviewPreview: DarkSplitView!
     @IBOutlet weak var scrollviewMetaInfoTable: NSScrollView!
     
+    var notificationPopover:NSPopover?
+    var notificationViewController:NotificationViewController!
     
     // MARK: Image preview
     var img:ImageFile!

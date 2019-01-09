@@ -9,6 +9,9 @@
 import Cocoa
 
 class NotificationViewController: NSViewController {
+    
+    @IBOutlet weak var lblMessage: NSTextField!
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()

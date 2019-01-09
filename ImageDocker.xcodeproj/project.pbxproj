@@ -102,6 +102,9 @@
 		8EF4CE5921D77BEA00C53AFF /* ImagePeople.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE5821D77BEA00C53AFF /* ImagePeople.swift */; };
 		8EF4CE5E21D8026800C53AFF /* EditRepositoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE5C21D8026800C53AFF /* EditRepositoryViewController.swift */; };
 		8EF4CE5F21D8026800C53AFF /* EditRepositoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EF4CE5D21D8026800C53AFF /* EditRepositoryViewController.xib */; };
+		8EF4CE6121E56CF700C53AFF /* ViewControllerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE6021E56CF700C53AFF /* ViewControllerUtils.swift */; };
+		8EF4CE6421E56DC100C53AFF /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE6221E56DC100C53AFF /* NotificationViewController.swift */; };
+		8EF4CE6521E56DC100C53AFF /* NotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EF4CE6321E56DC100C53AFF /* NotificationViewController.xib */; };
 		8EF500CD209A804100C9805F /* ImageFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF500CC209A804100C9805F /* ImageFolder.swift */; };
 		8EFA7CF9211A36F700419777 /* DeviceCopyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA7CF8211A36F700419777 /* DeviceCopyViewController.swift */; };
 		8EFA7CFB211D713700419777 /* ImageDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA7CFA211D713700419777 /* ImageDevice.swift */; };
@@ -237,6 +240,9 @@
 		8EF4CE5821D77BEA00C53AFF /* ImagePeople.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePeople.swift; sourceTree = "<group>"; };
 		8EF4CE5C21D8026800C53AFF /* EditRepositoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRepositoryViewController.swift; sourceTree = "<group>"; };
 		8EF4CE5D21D8026800C53AFF /* EditRepositoryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditRepositoryViewController.xib; sourceTree = "<group>"; };
+		8EF4CE6021E56CF700C53AFF /* ViewControllerUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerUtils.swift; sourceTree = "<group>"; };
+		8EF4CE6221E56DC100C53AFF /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
+		8EF4CE6321E56DC100C53AFF /* NotificationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotificationViewController.xib; sourceTree = "<group>"; };
 		8EF500CC209A804100C9805F /* ImageFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFolder.swift; sourceTree = "<group>"; };
 		8EFA7CF8211A36F700419777 /* DeviceCopyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCopyViewController.swift; sourceTree = "<group>"; };
 		8EFA7CFA211D713700419777 /* ImageDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDevice.swift; sourceTree = "<group>"; };
@@ -327,6 +333,7 @@
 				8EBA69262090C37B00221131 /* Supporting Files */,
 				8E0AFA3C208BDEA000CE8B68 /* AppDelegate.swift */,
 				8E0AFA3E208BDEA000CE8B68 /* ViewController.swift */,
+				8EF4CE6021E56CF700C53AFF /* ViewControllerUtils.swift */,
 				8E0AFA42208BDEA100CE8B68 /* Main.storyboard */,
 				8EA643F4208D6E5100C7D695 /* PreferencesController.swift */,
 				8E98B8F220D5C90600771280 /* WindowController.swift */,
@@ -586,6 +593,8 @@
 				8E85B7D320BA2AD7005A9845 /* DarkSplitView.swift */,
 				8EB986C520B6EBC40075B081 /* DarkTableView.swift */,
 				8E36B06B21792EDC00646EA5 /* CustomRowView.swift */,
+				8EF4CE6221E56DC100C53AFF /* NotificationViewController.swift */,
+				8EF4CE6321E56DC100C53AFF /* NotificationViewController.xib */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -742,6 +751,7 @@
 				8E95739B20EBEBD7003BD651 /* FilterViewController.xib in Resources */,
 				8EF4CE5F21D8026800C53AFF /* EditRepositoryViewController.xib in Resources */,
 				8EB986BE20B30C920075B081 /* CollectionViewItem.xib in Resources */,
+				8EF4CE6521E56DC100C53AFF /* NotificationViewController.xib in Resources */,
 				8E3EC3BE214DE623004B6125 /* DateTimeViewController.xib in Resources */,
 				8EBA9DE0216F8BB100DACAAD /* NotesViewController.xib in Resources */,
 			);
@@ -861,6 +871,7 @@
 				8E3EC3B5214DB1B8004B6125 /* LunarCalendarView.swift in Sources */,
 				8E31C37F2120A22600002546 /* DeviceShell.swift in Sources */,
 				8EC82EAE21283ED000FC0899 /* DirectoryViewDelegate.swift in Sources */,
+				8EF4CE6421E56DC100C53AFF /* NotificationViewController.swift in Sources */,
 				8EB986BF20B30C920075B081 /* HeaderView.swift in Sources */,
 				8E85B7D420BA2AD7005A9845 /* DarkSplitView.swift in Sources */,
 				8EF500CD209A804100C9805F /* ImageFolder.swift in Sources */,
@@ -882,6 +893,7 @@
 				8E7B98E1214882080019ED87 /* Alert.swift in Sources */,
 				8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */,
 				8E4C38D3211828B00089502C /* EventsTreeController.swift in Sources */,
+				8EF4CE6121E56CF700C53AFF /* ViewControllerUtils.swift in Sources */,
 				8EFA7CFF211F012A00419777 /* PlacesTreeController.swift in Sources */,
 				8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */,
 				8EB986C620B6EBC40075B081 /* DarkTableView.swift in Sources */,

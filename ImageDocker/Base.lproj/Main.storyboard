@@ -180,7 +180,7 @@
                                                                                                     <imageCell key="cell" refusesFirstResponder="YES" imageScaling="proportionallyDown" image="NSActionTemplate" id="W6D-eb-Iyf"/>
                                                                                                 </imageView>
                                                                                                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="l71-jS-LKT">
-                                                                                                    <rect key="frame" x="32" y="3" width="195" height="17"/>
+                                                                                                    <rect key="frame" x="32" y="3" width="172" height="17"/>
                                                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="KyJ-4k-Nhs">
                                                                                                         <font key="font" metaFont="system"/>
                                                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -188,7 +188,7 @@
                                                                                                     </textFieldCell>
                                                                                                 </textField>
                                                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HwO-MY-jH1">
-                                                                                                    <rect key="frame" x="234" y="2" width="26" height="14"/>
+                                                                                                    <rect key="frame" x="211" y="2" width="26" height="14"/>
                                                                                                     <constraints>
                                                                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="22" id="Vwc-fO-Tr3"/>
                                                                                                     </constraints>
@@ -198,18 +198,35 @@
                                                                                                         <color key="backgroundColor" name="scrollBarColor" catalog="System" colorSpace="catalog"/>
                                                                                                     </textFieldCell>
                                                                                                 </textField>
+                                                                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EzE-o7-epx">
+                                                                                                    <rect key="frame" x="243" y="1" width="18" height="15"/>
+                                                                                                    <constraints>
+                                                                                                        <constraint firstAttribute="width" constant="18" id="iVC-h2-vv1"/>
+                                                                                                    </constraints>
+                                                                                                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="more_horizontal" imagePosition="overlaps" alignment="right" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="z5s-4B-Qdt">
+                                                                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                                                        <font key="font" metaFont="system"/>
+                                                                                                    </buttonCell>
+                                                                                                    <color key="contentTintColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                                                                                    <connections>
+                                                                                                        <action selector="onMoreClicked:" target="Nb2-0v-aMh" id="2oV-zt-P0w"/>
+                                                                                                    </connections>
+                                                                                                </button>
                                                                                             </subviews>
                                                                                             <constraints>
                                                                                                 <constraint firstItem="HwO-MY-jH1" firstAttribute="centerY" secondItem="Nb2-0v-aMh" secondAttribute="centerY" id="1rK-y5-duh"/>
+                                                                                                <constraint firstAttribute="trailing" secondItem="EzE-o7-epx" secondAttribute="trailing" constant="2" id="Grx-rJ-ihf"/>
                                                                                                 <constraint firstAttribute="bottom" secondItem="l71-jS-LKT" secondAttribute="bottom" constant="3" id="LMv-sn-Lmt"/>
-                                                                                                <constraint firstAttribute="trailing" secondItem="HwO-MY-jH1" secondAttribute="trailing" constant="5" id="ZqP-Hw-q2T"/>
+                                                                                                <constraint firstItem="EzE-o7-epx" firstAttribute="centerY" secondItem="Nb2-0v-aMh" secondAttribute="centerY" id="bYV-wo-OVe"/>
                                                                                                 <constraint firstItem="k0a-LD-mrn" firstAttribute="leading" secondItem="Nb2-0v-aMh" secondAttribute="leading" constant="13" id="mfR-7p-kOH"/>
                                                                                                 <constraint firstItem="l71-jS-LKT" firstAttribute="leading" secondItem="k0a-LD-mrn" secondAttribute="trailing" constant="7" id="moB-jL-Njg"/>
                                                                                                 <constraint firstItem="HwO-MY-jH1" firstAttribute="leading" secondItem="l71-jS-LKT" secondAttribute="trailing" constant="11" id="n4l-6K-a4j"/>
+                                                                                                <constraint firstItem="EzE-o7-epx" firstAttribute="leading" secondItem="HwO-MY-jH1" secondAttribute="trailing" constant="8" id="oK2-dr-wUg"/>
                                                                                                 <constraint firstItem="k0a-LD-mrn" firstAttribute="top" secondItem="Nb2-0v-aMh" secondAttribute="top" constant="3" id="xo8-1s-nPv"/>
                                                                                             </constraints>
                                                                                             <connections>
                                                                                                 <outlet property="badge" destination="HwO-MY-jH1" id="YZ2-7t-pqT"/>
+                                                                                                <outlet property="btnMore" destination="EzE-o7-epx" id="nbw-rz-A6Y"/>
                                                                                                 <outlet property="imageView" destination="k0a-LD-mrn" id="K59-4A-0EU"/>
                                                                                                 <outlet property="textField" destination="l71-jS-LKT" id="ECi-1f-C2a"/>
                                                                                             </connections>
@@ -2696,6 +2713,7 @@
         <image name="edit" width="16" height="15"/>
         <image name="forward" width="17" height="16"/>
         <image name="hide" width="17" height="15"/>
+        <image name="more_horizontal" width="16" height="4"/>
         <image name="phone" width="12" height="16"/>
         <image name="search" width="16" height="16"/>
         <image name="trash" width="16" height="16"/>

@@ -20,6 +20,8 @@ let badgeSelectedHiddenTextColor:NSColor = NSColor(calibratedWhite: (170/255.0),
 class LCSourceListTableCellView : PXSourceListTableCellView {
     
     @IBOutlet public weak var badge:NSTextField?
+    @IBOutlet weak var btnMore: NSButton!
+    
     
     override func layout(){
         super.layout()
@@ -27,10 +29,15 @@ class LCSourceListTableCellView : PXSourceListTableCellView {
     
     override func viewWillDraw() {
         if badge != nil {
-            badge?.layer?.backgroundColor = badgeBackgroundColor.cgColor
-            badge?.textColor = badgeTextColor
+            badge?.layer?.backgroundColor = NSColor(calibratedWhite: 0.1, alpha: 0.8).cgColor //badgeBackgroundColor.cgColor
+            badge?.textColor = NSColor(calibratedWhite: 0.9, alpha: 0.8) // badgeTextColor
             badge?.layer?.cornerRadius = CGFloat(6)
         }
         
     }
+    
+    @IBAction func onMoreClicked(_ sender: NSButton) {
+    }
+    
+    
 }

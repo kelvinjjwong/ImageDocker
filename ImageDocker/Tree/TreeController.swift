@@ -190,6 +190,7 @@ extension ViewController : PXSourceListDelegate {
                     //}
                 }else{
                     let collection: PhotoCollection = sourceListItem.representedObject as! PhotoCollection
+                    collection.treeNodeView = cv
                     
                     //print("COLLECTION: \(collection.title) , count: \(collection.photoCount)")
                     
@@ -212,6 +213,14 @@ extension ViewController : PXSourceListDelegate {
                     if let badge = cv.badge {
                         badge.stringValue = " \(collection.photoCount) "
                         badge.isHidden = (collection.photoCount == 0)
+                    }
+                    
+                    if collection.enableMoreButton {
+                        cv.btnMore.isEnabled = true
+                        cv.btnMore.isHidden = false
+                    }else{
+                        cv.btnMore.isEnabled = false
+                        cv.btnMore.isHidden = true
                     }
                 
                 }

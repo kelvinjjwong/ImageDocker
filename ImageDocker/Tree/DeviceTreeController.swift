@@ -91,6 +91,7 @@ extension ViewController {
     }
     
     func selectDeviceType(_ collection:PhotoCollection) {
+        self.hideTreeNodeButton(collection: collection)
         if collection.identifier == "device_type_Android" {
             let devices:[String] = Android.bridge.devices()
             print("android device count: \(devices.count)")
@@ -114,7 +115,10 @@ extension ViewController {
                 let item = self.treeIdItems["device_type_Android"]
                 self.sourceList.expandItem(item)
             }else{
-                PopNotification.enableDebugMode()
+                self.showTreeNodeButton(collection: collection, image: NSImage(named: .caution))
+                
+                self.popNotification(message: "Enable [DEBUG MODE] in [Settings >> System >> Developer Options] if you've properly connected your phone via USB.")
+                
             }
             
         }else if collection.identifier == "device_type_iPhone" {

@@ -53,6 +53,10 @@ class PhotoCollection: NSObject {
     var hasDuplicates:Bool = false
     var isDateEntry:Bool = true
     
+    var enableMoreButton = false
+    
+    var treeNodeView:LCSourceListTableCellView? = nil
+    
     
     override init(){
         super.init()
