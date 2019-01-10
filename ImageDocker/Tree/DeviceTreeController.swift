@@ -128,6 +128,12 @@ extension ViewController {
                 return
             }
             
+            if !IPHONE.bridge.validCommands() {
+                self.showTreeNodeButton(collection: collection, image: NSImage(named: .caution))
+                
+                self.popNotification(message: "iFuse/iDevice is not installed. Please install it by command [brew cask install osxfuse] and then [brew install ifuse] in console. To install Homebrew as a prior condition, please access [https://brew.sh] for detail.")
+            }
+            
             let devices:[String] = IPHONE.bridge.devices()
             print("iphone device count: \(devices.count)")
             self.cleanCachedDeviceIds(type: .iPhone)
@@ -147,6 +153,10 @@ extension ViewController {
             if devices.count > 0 {
                 let item = self.treeIdItems["device_type_iPhone"]
                 self.sourceList.expandItem(item)
+            }else{
+                self.showTreeNodeButton(collection: collection, image: NSImage(named: .caution))
+                
+                self.popNotification(message: "No iOS devices found. Please connect your iPhone/iPad via USB.")
             }
         }
     }

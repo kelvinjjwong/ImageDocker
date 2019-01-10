@@ -29,6 +29,25 @@ struct IPHONE {
         umount = URL(fileURLWithPath: "/sbin/umount")
     }
     
+    func validCommands() -> Bool {
+        if !FileManager.default.fileExists(atPath: ideviceid.path) {
+            return false
+        }
+        if !FileManager.default.fileExists(atPath: ideviceinfo.path) {
+            return false
+        }
+        if !FileManager.default.fileExists(atPath: ifuse.path) {
+            return false
+        }
+        if !FileManager.default.fileExists(atPath: df.path) {
+            return false
+        }
+        if !FileManager.default.fileExists(atPath: umount.path) {
+            return false
+        }
+        return true
+    }
+    
     func devices() -> [String]{
         var result:[String] = []
         let pipe = Pipe()
