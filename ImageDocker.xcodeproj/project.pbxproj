@@ -105,6 +105,7 @@
 		8EF4CE6121E56CF700C53AFF /* ViewControllerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE6021E56CF700C53AFF /* ViewControllerUtils.swift */; };
 		8EF4CE6421E56DC100C53AFF /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE6221E56DC100C53AFF /* NotificationViewController.swift */; };
 		8EF4CE6521E56DC100C53AFF /* NotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EF4CE6321E56DC100C53AFF /* NotificationViewController.xib */; };
+		8EF4CE6721E6F29100C53AFF /* LCSourceListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE6621E6F29100C53AFF /* LCSourceListHeaderView.swift */; };
 		8EF500CD209A804100C9805F /* ImageFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF500CC209A804100C9805F /* ImageFolder.swift */; };
 		8EFA7CF9211A36F700419777 /* DeviceCopyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA7CF8211A36F700419777 /* DeviceCopyViewController.swift */; };
 		8EFA7CFB211D713700419777 /* ImageDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA7CFA211D713700419777 /* ImageDevice.swift */; };
@@ -243,6 +244,7 @@
 		8EF4CE6021E56CF700C53AFF /* ViewControllerUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerUtils.swift; sourceTree = "<group>"; };
 		8EF4CE6221E56DC100C53AFF /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		8EF4CE6321E56DC100C53AFF /* NotificationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotificationViewController.xib; sourceTree = "<group>"; };
+		8EF4CE6621E6F29100C53AFF /* LCSourceListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCSourceListHeaderView.swift; sourceTree = "<group>"; };
 		8EF500CC209A804100C9805F /* ImageFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFolder.swift; sourceTree = "<group>"; };
 		8EFA7CF8211A36F700419777 /* DeviceCopyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCopyViewController.swift; sourceTree = "<group>"; };
 		8EFA7CFA211D713700419777 /* ImageDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDevice.swift; sourceTree = "<group>"; };
@@ -573,6 +575,7 @@
 			isa = PBXGroup;
 			children = (
 				8EF32D132095355400511538 /* LCSourceListTableCellView.swift */,
+				8EF4CE6621E6F29100C53AFF /* LCSourceListHeaderView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -896,6 +899,7 @@
 				8EF4CE6121E56CF700C53AFF /* ViewControllerUtils.swift in Sources */,
 				8EFA7CFF211F012A00419777 /* PlacesTreeController.swift in Sources */,
 				8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */,
+				8EF4CE6721E6F29100C53AFF /* LCSourceListHeaderView.swift in Sources */,
 				8EB986C620B6EBC40075B081 /* DarkTableView.swift in Sources */,
 				8E4C38CF2117B54D0089502C /* Android.swift in Sources */,
 				8E0AFA3D208BDEA000CE8B68 /* AppDelegate.swift in Sources */,

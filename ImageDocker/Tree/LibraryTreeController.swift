@@ -55,7 +55,7 @@ extension ViewController {
     
     // MARK: REFRESH
     
-    func refreshLibraryTree(fast:Bool = true) {
+    @objc func refreshLibraryTree(fast:Bool = true) {
         //print("REFRESHING MOMENT TREE at \(Date())")
         let count = self.libraryItem().children.count
         // remove items in moments
@@ -74,9 +74,9 @@ extension ViewController {
                 self.libraryItem().children.removeAll()
             }
         }
-        self.loadPathToTreeFromDatabase(fast: fast)
         
         DispatchQueue.main.async {
+            self.loadPathToTreeFromDatabase(fast: fast)
             self.sourceList.reloadData()
         }
     }
@@ -99,6 +99,7 @@ extension ViewController {
         //self.modelObjects?.add(collection)
         _parent.addChildItem(item)
         collection.photoCount = imageFolder.countOfImages
+        collection.enableMoreButton = true
         
         self.identifiersOfLibraryTree[imageFolder.url.path] = item
         

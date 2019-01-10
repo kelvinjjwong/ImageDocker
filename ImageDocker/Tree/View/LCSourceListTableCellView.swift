@@ -21,10 +21,20 @@ class LCSourceListTableCellView : PXSourceListTableCellView {
     
     @IBOutlet public weak var badge:NSTextField?
     @IBOutlet weak var btnMore: NSButton!
+    var buttonShouldShow = false
+    
+    var buttonAction: (() -> Void)? = nil
+    
+    func setUpTrackingArea()
+    {
+        let trackingArea = NSTrackingArea(rect: self.frame, options: [NSTrackingArea.Options.mouseEnteredAndExited, NSTrackingArea.Options.activeAlways], owner: self, userInfo: nil)
+        self.addTrackingArea(trackingArea)
+    }
     
     
     override func layout(){
         super.layout()
+        setUpTrackingArea()
     }
     
     override func viewWillDraw() {
@@ -37,6 +47,21 @@ class LCSourceListTableCellView : PXSourceListTableCellView {
     }
     
     @IBAction func onMoreClicked(_ sender: NSButton) {
+        if self.buttonAction != nil {
+            self.buttonAction!()
+        }
+    }
+    
+    override func mouseEntered(with: NSEvent) {
+        if self.buttonShouldShow {
+            self.btnMore.isHidden = false
+        }
+    }
+    
+    override func mouseExited(with: NSEvent) {
+        if self.buttonShouldShow {
+            self.btnMore.isHidden = true
+        }
     }
     
     

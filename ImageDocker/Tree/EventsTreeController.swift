@@ -39,8 +39,8 @@ extension ViewController {
     
     // MARK: REFRESH
     
-    func refreshEventTree() {
-        //print("REFRESHING MOMENT TREE at \(Date())")
+    @objc func refreshEventTree() {
+        //print("REFRESHING EVENT TREE at \(Date())")
         let count = self.eventItem().children.count
         // remove items in moments
         
@@ -59,9 +59,9 @@ extension ViewController {
                 self.eventItem().children.removeAll()
             }
         }
-        self.loadEventsToTreeFromDatabase()
         
         DispatchQueue.main.async {
+            self.loadEventsToTreeFromDatabase()
             self.sourceList.reloadData()
         }
     }

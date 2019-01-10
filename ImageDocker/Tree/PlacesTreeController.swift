@@ -80,7 +80,7 @@ extension ViewController {
     
     // MARK: REFRESH
     
-    func refreshLocationTree() {
+    @objc func refreshLocationTree() {
         //print("REFRESHING LOCATION TREE at \(Date())")
         let count = self.placeItem().children.count
         // remove item in places
@@ -100,9 +100,9 @@ extension ViewController {
                 self.placeItem().children.removeAll()
             }
         }
-        self.loadPlacesToTreeFromDatabase(filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel)
         
         DispatchQueue.main.async {
+            self.loadPlacesToTreeFromDatabase(filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel)
             self.sourceList.reloadData()
         }
     }

@@ -150,17 +150,58 @@ extension ViewController : PXSourceListDelegate {
     
     func sourceList(_ aSourceList:PXSourceList!, viewForItem item: Any!) -> NSView {
         var cellView: LCSourceListTableCellView? = nil
+        var sectionCellView: LCSourceListHeaderView? = nil
         if let sourceListItem: PXSourceListItem = item as? PXSourceListItem {
             
             // SECTION
             if aSourceList.level(forItem: item) == 0 {
-                let sectionCellView:PXSourceListTableCellView = (aSourceList.makeView(withIdentifier: NSUserInterfaceItemIdentifier("HeaderCell"), owner: nil) as! PXSourceListTableCellView)
+                sectionCellView = (aSourceList.makeView(withIdentifier: NSUserInterfaceItemIdentifier("HeaderCell"), owner: nil) as! LCSourceListHeaderView)
                 
-                if let textField = sectionCellView.textField {
-                    textField.textColor = NSColor.white
-                    textField.stringValue = sourceListItem.title ?? ""
+                if let cv = sectionCellView {
+                    
+                    if let textField = cv.textField {
+                        textField.textColor = NSColor.white
+                        textField.stringValue = sourceListItem.title ?? ""
+                    }
+                    if let title = sourceListItem.title {
+                        
+                        if title == "EVENTS" {
+                            cv.buttonShouldShow = true
+                            cv.buttonAction = {
+                                DispatchQueue.main.async {
+                                    self.refreshEventTree()
+                                }
+                            }
+                        }else if title == "PLACES" {
+                            cv.buttonShouldShow = true
+                            cv.buttonAction = {
+                                DispatchQueue.main.async {
+                                    self.refreshLocationTree()
+                                }
+                            }
+                        }else if title == "MOMENTS" {
+                            cv.buttonShouldShow = true
+                            cv.buttonAction = {
+                                DispatchQueue.main.async {
+                                    self.refreshMomentTree()
+                                }
+                            }
+                        }else if title == "LIBRARY" {
+                            cv.buttonShouldShow = true
+                            cv.buttonAction = {
+                                DispatchQueue.main.async {
+                                    self.refreshLibraryTree()
+                                }
+                            }
+                        }else{
+                            cv.buttonShouldShow = false
+                        }
+                    }
+                    
+                    return cv
                 }
-                return sectionCellView
+                
+                return sectionCellView!
             }
             
             // ITEM
@@ -217,10 +258,10 @@ extension ViewController : PXSourceListDelegate {
                     
                     if collection.enableMoreButton {
                         cv.btnMore.isEnabled = true
-                        cv.btnMore.isHidden = false
+                        cv.buttonShouldShow = true
                     }else{
                         cv.btnMore.isEnabled = false
-                        cv.btnMore.isHidden = true
+                        cv.buttonShouldShow = false
                     }
                 
                 }

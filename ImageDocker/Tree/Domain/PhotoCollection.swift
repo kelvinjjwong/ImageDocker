@@ -6,7 +6,7 @@
 //  Copyright © 2018年 nonamecat. All rights reserved.
 //
 
-import Foundation
+import Cocoa
 
 enum PhotoCollectionType : Int {
     case library
@@ -54,6 +54,7 @@ class PhotoCollection: NSObject {
     var isDateEntry:Bool = true
     
     var enableMoreButton = false
+    var imageOfMoreButton:NSImage? = nil
     
     var treeNodeView:LCSourceListTableCellView? = nil
     

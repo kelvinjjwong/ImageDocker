@@ -61,7 +61,7 @@ extension ViewController {
     
     // MARK: REFRESH
     
-    func refreshMomentTree() {
+    @objc func refreshMomentTree() {
         
         //print("REFRESHING MOMENT TREE at \(Date())")
         let count = self.momentItem().children.count
@@ -81,9 +81,9 @@ extension ViewController {
                 self.momentItem().children.removeAll()
             }
         }
-        self.loadMomentsToTreeFromDatabase(filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel)
         
         DispatchQueue.main.async {
+            self.loadMomentsToTreeFromDatabase(filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel)
             self.sourceList.reloadData()
         }
         
