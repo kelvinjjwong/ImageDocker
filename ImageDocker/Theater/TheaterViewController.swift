@@ -17,6 +17,8 @@ class TheaterViewController: NSViewController {
     @IBOutlet weak var lblBrief: NSTextField!
     @IBOutlet weak var lblDate: NSTextField!
     @IBOutlet weak var lblDescription: NSTextField!
+    @IBOutlet weak var btnLastYear: NSButton!
+    @IBOutlet weak var btnNextYear: NSButton!
     
     
     @IBOutlet weak var bgBrief: NSView!
@@ -32,10 +34,14 @@ class TheaterViewController: NSViewController {
     var selectedImageFile:ImageFile?
     var selectedIndex = 0
     
+    var indexOfYear = 0
+    
     var year = 0
     var month = 0
     var day = 0
+    var years:[Int] = []
     var datesOfYear:[String:[String]] = [:]
+    var event:String? = nil
     
     // MARK: INIT
     
@@ -101,6 +107,54 @@ class TheaterViewController: NSViewController {
         }
     }
     
+    @IBAction func onLastYearClicked(_ sender: NSButton) {
+        let cursor = self.indexOfYear + 1
+        if cursor >= self.years.count {
+            return
+        }
+        self.indexOfYear = cursor
+        self.year = self.years[self.indexOfYear]
+        DispatchQueue.global().async {
+            self.changeYear(year: self.year, month: 0, day: 0, event: self.event)
+            
+            DispatchQueue.main.async {
+                self.updateLastNextYear(cursor: cursor)
+            }
+        }
+    }
+    
+    fileprivate func updateLastNextYear(cursor: Int) {
+        if cursor > 0 {
+            self.btnNextYear.isHidden = false
+            self.btnNextYear.title = "\(self.years[cursor-1])"
+        }else{
+            self.btnNextYear.isHidden = true
+        }
+        if cursor < self.years.count-1 {
+            self.btnLastYear.isHidden = false
+            self.btnLastYear.title = "\(self.years[cursor+1])"
+        }else{
+            self.btnLastYear.isHidden = true
+        }
+    }
+    
+    @IBAction func onNextYearClicked(_ sender: NSButton) {
+        let cursor = self.indexOfYear - 1
+        if cursor < 0 {
+            return
+        }
+        self.indexOfYear = cursor
+        self.year = self.years[self.indexOfYear]
+        DispatchQueue.global().async {
+            self.changeYear(year: self.year, month: 0, day: 0, event: self.event)
+            
+            DispatchQueue.main.async {
+                self.updateLastNextYear(cursor: cursor)
+            }
+        }
+    }
+    
+    
     override func viewDidAppear() {
         self.view.window?.delegate = self
         self.resize()
@@ -147,9 +201,89 @@ class TheaterViewController: NSViewController {
         bgBrief.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         bgBrief.layer?.backgroundColor = NSColor.black.cgColor
         
+        self.btnLastYear.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.btnNextYear.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
     }
     
-    func viewInit(image:ImageFile){
+    func viewInit(year:Int, month:Int, day:Int, event:String? = nil){
+        print("init theater with y:\(year) m:\(month) d:\(day) ev:\(event ?? "nil")")
+        
+        self.indexOfYear = 0
+        self.btnLastYear.title = "0000"
+        self.btnNextYear.title = "0000"
+        self.btnLastYear.isHidden = true
+        self.btnNextYear.isHidden = true
+        
+        DispatchQueue.global().async {
+            
+            var selectedYear = year
+            self.years.removeAll()
+            var years:[Int] = []
+            
+            if let ev = event {
+                self.event = ev
+                years = ModelStore.default.getYears(event: ev)
+                self.years.append(contentsOf: years)
+                if year == 0 && years.count > 0 {
+                    selectedYear = years[0]
+                }
+            }else{
+                self.event = nil
+                self.years.append(year)
+            }
+            self.changeYear(year: selectedYear, month: month, day: day, event: event)
+        }
+    }
+    
+    func changeYear(year: Int, month:Int, day:Int, event:String? = nil) {
+        let selectedYear = year
+        if let ev = event {
+            self.datesOfYear = ModelStore.default.getDatesByYear(year: selectedYear, event: ev)
+        }else{
+            self.datesOfYear = ModelStore.default.getDatesByYear(year: year)
+        }
+        self.monthController.months = self.datesOfYear.keys.sorted(by: {$0 < $1})
+        
+        var selectedMonth = month
+        if month == 0 && self.monthController.months.count > 0 {
+            selectedMonth = Int(self.monthController.months[0]) ?? 0
+        }
+        
+        self.dayController.days = self.datesOfYear["\(selectedMonth)"] ?? []
+        
+        var selectedDay = day
+        if day == 0 && self.dayController.days.count > 0 {
+            selectedDay = Int(self.dayController.days[0]) ?? 0
+        }
+        
+        self.year = selectedYear
+        self.month = selectedMonth
+        self.day = selectedDay
+        
+        DispatchQueue.main.async {
+            
+            self.lstMonth.reloadData()
+            self.lstDay.reloadData()
+            
+            self.selectMonth(month: selectedMonth)
+            self.selectDay(day: selectedDay)
+            
+            
+            if self.years.count > 1 {
+                self.btnLastYear.title = "\(self.years[1])"
+                self.btnLastYear.isHidden = false
+            }
+        }
+        
+        self.reloadCollectionView(year: selectedYear, month: selectedMonth, day: selectedDay)
+    }
+    
+    func viewInit(image:ImageFile, byEvent:Bool = false){
+        
+        self.btnLastYear.isHidden = true
+        self.btnNextYear.isHidden = true
+        
+        self.indexOfYear = 0
         self.selectedImageFile = image
         self.previewImage(image: image)
         
@@ -159,7 +293,18 @@ class TheaterViewController: NSViewController {
             year = Calendar.current.component(.year, from: date)
             month = Calendar.current.component(.month, from: date)
             day = Calendar.current.component(.day, from: date)
-            datesOfYear = ModelStore.default.getDatesByYear(year: year)
+            if byEvent {
+                self.event = image.event
+                self.years.removeAll()
+                let years = ModelStore.default.getYears(event: image.event)
+                self.years.append(contentsOf: years)
+                datesOfYear = ModelStore.default.getDatesByYear(year: year, event: image.event)
+            }else{
+                self.event = nil
+                self.years.removeAll()
+                self.years.append(year)
+                datesOfYear = ModelStore.default.getDatesByYear(year: year)
+            }
             self.monthController.months = datesOfYear.keys.sorted(by: {$0 < $1})
             self.dayController.days = datesOfYear["\(month)"] ?? []
             self.lstMonth.reloadData()
@@ -201,10 +346,12 @@ class TheaterViewController: NSViewController {
         let dateFormat = DateFormatter()
         dateFormat.dateFormat = "yyyy"
         
-        if let date = self.photoTakenDate {
-            self.lblDate.stringValue = dateFormat.string(from: date)
-        }else{
-            self.lblDate.stringValue = ""
+        DispatchQueue.main.async {
+            if let date = self.photoTakenDate {
+                self.lblDate.stringValue = dateFormat.string(from: date)
+            }else{
+                self.lblDate.stringValue = ""
+            }
         }
     }
     
@@ -281,22 +428,28 @@ extension TheaterViewController {
     }
     
     private func reloadCollectionView(year:Int, month:Int, day:Int){
+        print("reload collection view with y:\(year) m:\(month) d:\(day) ev:\(event ?? "nil")")
         self.collectionViewController.imagesLoader.clean()
-        let images = ModelStore.default.getImagesByDate(year: year, month:month, day:day)
+        let images = ModelStore.default.getImagesByDate(year: year, month:month, day:day, event: self.event)
         self.collectionViewController.imagesLoader.setupItems(photoFiles: images)
         self.collectionViewController.imagesLoader.reorganizeItems(considerPlaces: false)
-        self.collectionViewController.collectionView.reloadData()
         
-        self.selectItem(at: 0)
-        if let image = self.collectionViewController.imagesLoader.getItem(at: 0) {
-            self.previewImage(image: image)
+        DispatchQueue.main.async {
+            self.collectionViewController.collectionView.reloadData()
+            self.selectItem(at: 0)
+            
+            if let image = self.collectionViewController.imagesLoader.getItem(at: 0) {
+                self.previewImage(image: image)
+                self.photoTakenDate = image.photoTakenDate()
+                self.displayDate()
+            }
         }
     }
     
     private func reloadCollectionView() {
         self.collectionViewController.imagesLoader.clean()
         if let date = self.photoTakenDate {
-            let images = ModelStore.default.getImagesByDate(photoTakenDate: date)
+            let images = ModelStore.default.getImagesByDate(photoTakenDate: date, event: self.event)
             self.collectionViewController.imagesLoader.setupItems(photoFiles: images)
             self.collectionViewController.imagesLoader.reorganizeItems(considerPlaces: false)
         }else{

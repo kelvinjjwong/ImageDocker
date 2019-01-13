@@ -48,6 +48,7 @@ extension ViewController {
         collection.enableMoreButton = true
         if let img = image {
             collection.treeNodeView?.btnMore.image = img
+            collection.imageOfMoreButton = img
         }
     }
     

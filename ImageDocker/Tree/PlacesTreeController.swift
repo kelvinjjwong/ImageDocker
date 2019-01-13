@@ -115,6 +115,9 @@ extension ViewController {
                                                          type: place.photoCount == 0 ? .userCreated : .library,
                                                          source: .place)
         collection.photoCount = place.photoCount
+        collection.year = place.year
+        collection.month = place.month
+        collection.day = place.day
         collection.gov = place.gov
         collection.isDateEntry = false
         

@@ -98,6 +98,12 @@ extension ViewController {
                                                          source: .moment)
         collection.photoCount = year.photoCount
         collection.year = year.year
+        collection.month = year.month
+        collection.day = year.day
+        self.showTreeNodeButton(collection: collection, image: NSImage(named: .slideshowTemplate))
+        collection.buttonAction = {
+            self.onTreeItemQuickLook(collection: collection)
+        }
         
         let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: photosIcon)
         
@@ -121,6 +127,10 @@ extension ViewController {
         collection.photoCount = month.photoCount
         collection.year = month.year
         collection.month = month.month
+        self.showTreeNodeButton(collection: collection, image: NSImage(named: .slideshowTemplate))
+        collection.buttonAction = {
+            self.onTreeItemQuickLook(collection: collection)
+        }
         
         let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: photosIcon)
         
@@ -146,6 +156,10 @@ extension ViewController {
         collection.year = day.year
         collection.month = day.month
         collection.day = day.day
+        self.showTreeNodeButton(collection: collection, image: NSImage(named: .slideshowTemplate))
+        collection.buttonAction = {
+            self.onTreeItemQuickLook(collection: collection)
+        }
         
         let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: photosIcon)
         

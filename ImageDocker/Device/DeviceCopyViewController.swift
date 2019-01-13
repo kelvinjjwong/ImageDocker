@@ -104,8 +104,9 @@ class DeviceCopyViewController: NSViewController {
     }
     
     func viewInit(device:PhoneDevice){
-        if device.manufacture != self.device.manufacture && device.deviceId != self.device.deviceId && device.model != self.device.model {
+        if device.deviceId != self.device.deviceId {
             print("DEVICE INIT")
+            print("DIFFERENT DEVICE \(device.deviceId) != \(self.device.deviceId)")
             self.device = device
             
             self.btnCopy.isEnabled = false
@@ -177,6 +178,8 @@ class DeviceCopyViewController: NSViewController {
                     self.tblSourcePath.reloadData()
                 }
             }
+        }else{
+            print("SAME DEVICE \(device.deviceId) == \(self.device.deviceId)")
         }
     }
     

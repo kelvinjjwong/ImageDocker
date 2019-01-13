@@ -258,6 +258,12 @@ extension ViewController : PXSourceListDelegate {
                     
                     if collection.enableMoreButton {
                         cv.btnMore.isEnabled = true
+                        if let img = collection.imageOfMoreButton {
+                            cv.btnMore.image = img
+                        }
+                        if collection.buttonAction != nil {
+                            cv.buttonAction = collection.buttonAction
+                        }
                         cv.buttonShouldShow = true
                     }else{
                         cv.btnMore.isEnabled = false

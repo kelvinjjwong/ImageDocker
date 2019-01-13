@@ -81,7 +81,6 @@ extension ViewController {
                         print("order to front")
                     }else{
                         self.deviceCopyWindowController.showWindow(self)
-                        print("show window")
                     }
                     let vc = window.contentViewController as! DeviceCopyViewController
                     vc.viewInit(device: device)

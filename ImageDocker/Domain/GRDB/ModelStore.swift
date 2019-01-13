@@ -352,14 +352,46 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     // MARK: IMAGES
     
-    func getDatesByYear(year:Int) -> [String:[String]] {
-        let sql = "select distinct photoTakenMonth,photoTakenDay from image where photoTakenYear=? order by photoTakenMonth,photoTakenDay"
+    func getYears(event:String? = nil) -> [Int] {
+        var condition = ""
+        var args:[String] = []
+        if let ev = event {
+            condition = " where event=? "
+            args.append(ev)
+        }
+        let sql = "select distinct photoTakenYear from image \(condition) order by photoTakenYear desc"
+        
+        var result:[Int] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, sql, arguments:StatementArguments(args))
+                for row in rows {
+                    let year = row["photoTakenYear"] as Int? ?? 0
+                    result.append(year)
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func getDatesByYear(year:Int, event:String? = nil) -> [String:[String]] {
+        var sql = "select distinct photoTakenMonth,photoTakenDay from image where photoTakenYear=? order by photoTakenMonth,photoTakenDay"
+        var args:[Any] = [year]
+        
+        if let ev = event, ev != "" {
+            sql = "select distinct photoTakenMonth,photoTakenDay from image where photoTakenYear=? and event=? order by photoTakenMonth,photoTakenDay"
+            args.append(ev)
+        }
+        
         //print(sql)
         var result:[String:[String]] = [:]
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, sql, arguments:StatementArguments([year]))
+                let rows = try Row.fetchAll(db, sql, arguments:StatementArguments(args))
                 for row in rows {
                     let month = row["photoTakenMonth"] as Int? ?? 0
                     let day = row["photoTakenDay"] as Int? ?? 0
@@ -376,12 +408,16 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     }
     
     
-    func getImagesByDate(year:Int, month:Int, day:Int) -> [Image]{
+    func getImagesByDate(year:Int, month:Int, day:Int, event:String? = nil) -> [Image]{
+        var sql = "hidden=0 and photoTakenYear=\(year) and photoTakenMonth=\(month) and photoTakenDay=\(day)"
+        if let ev = event, ev != "" {
+            sql = "hidden=0 and photoTakenYear=\(year) and photoTakenMonth=\(month) and photoTakenDay=\(day) and event='\(ev)'"
+        }
         var result:[Image] = []
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.read { db in
-                result = try Image.filter(sql: "hidden=0 and photoTakenYear=\(year) and photoTakenMonth=\(month) and photoTakenDay=\(day)").fetchAll(db)
+                result = try Image.filter(sql: sql).fetchAll(db)
             }
         }catch{
             print(error)
@@ -390,11 +426,11 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     }
     
     
-    func getImagesByDate(photoTakenDate:Date) -> [Image]{
+    func getImagesByDate(photoTakenDate:Date, event:String? = nil) -> [Image]{
         let year = Calendar.current.component(.year, from: photoTakenDate)
         let month = Calendar.current.component(.month, from: photoTakenDate)
         let day = Calendar.current.component(.day, from: photoTakenDate)
-        return getImagesByDate(year: year, month: month, day: day)
+        return getImagesByDate(year: year, month: month, day: day, event: event)
     }
     
     func getImagesByHour(photoTakenDate:Date) -> [Image]{

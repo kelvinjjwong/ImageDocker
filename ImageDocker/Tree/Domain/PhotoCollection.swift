@@ -26,8 +26,8 @@ class Photo {
 }
 
 
-/* A simple example of a model class which is used by this project for storing information
- about a particular collection of objects in our sample library scenario. These objects
+/* A model class which is used for storing information
+ about a particular collection of entries in tree. These entries
  are used by the SourceListItems to populate the Source List's content without having to
  synchronise the data (e.g. title) with each SourceListItem.
  */
@@ -57,6 +57,7 @@ class PhotoCollection: NSObject {
     var imageOfMoreButton:NSImage? = nil
     
     var treeNodeView:LCSourceListTableCellView? = nil
+    var buttonAction: (() -> Void)? = nil
     
     
     override init(){

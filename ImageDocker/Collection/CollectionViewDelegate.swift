@@ -154,6 +154,20 @@ extension ViewController : CollectionViewItemQuickLookDelegate {
             vc.viewInit(image: image)
         }
     }
+    
+    func onTreeItemQuickLook(collection: PhotoCollection, event:String? = nil){
+        if let window = self.theaterWindowController.window {
+            if self.theaterWindowController.isWindowLoaded {
+                window.makeKeyAndOrderFront(self)
+                print("order to front")
+            }else{
+                self.theaterWindowController.showWindow(self)
+                print("show window")
+            }
+            let vc = window.contentViewController as! TheaterViewController
+            vc.viewInit(year: collection.year, month: collection.month, day: collection.day, event: event)
+        }
+    }
 }
 
 protocol CollectionViewItemShowDuplicatesDelegate {

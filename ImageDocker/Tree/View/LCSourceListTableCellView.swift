@@ -64,5 +64,8 @@ class LCSourceListTableCellView : PXSourceListTableCellView {
         }
     }
     
+    @IBAction func onCellClicked(_ sender: Any) {
+        print("cell clicked")
+    }
     
 }
