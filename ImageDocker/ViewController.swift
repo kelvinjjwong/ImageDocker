@@ -777,7 +777,7 @@ class ViewController: NSViewController {
         var myPopover = self.editRepositoryPopover
         if(myPopover == nil){
             
-            let frame = CGRect(origin: .zero, size: CGSize(width: 480, height: 280))
+            let frame = CGRect(origin: .zero, size: CGSize(width: 700, height: 330))
             self.editRepositoryViewController = EditRepositoryViewController()
             self.editRepositoryViewController.view.frame = frame
             

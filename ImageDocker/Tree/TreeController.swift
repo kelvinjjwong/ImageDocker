@@ -24,6 +24,8 @@ let anchorIcon:NSImage = NSImage(imageLiteralResourceName: "anchor")
 let phoneIcon:NSImage = NSImage(imageLiteralResourceName: "phone")
 let printIcon:NSImage = NSImage(imageLiteralResourceName: "print")
 let shareIcon:NSImage = NSImage(imageLiteralResourceName: "share")
+let moreVerticalIcon:NSImage = NSImage(imageLiteralResourceName: "more_vertical")
+let moreHorizontalIcon:NSImage = NSImage(imageLiteralResourceName: "more_horizontal")
 
 extension ViewController {
     

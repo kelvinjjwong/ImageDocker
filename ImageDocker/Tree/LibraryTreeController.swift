@@ -99,7 +99,11 @@ extension ViewController {
         //self.modelObjects?.add(collection)
         _parent.addChildItem(item)
         collection.photoCount = imageFolder.countOfImages
-        collection.enableMoreButton = true
+        
+        self.showTreeNodeButton(collection: collection, image: moreHorizontalIcon)
+        collection.buttonAction = {
+            print("open path: \(collection.identifier) - title: \(collection.title)")
+        }
         
         self.identifiersOfLibraryTree[imageFolder.url.path] = item
         

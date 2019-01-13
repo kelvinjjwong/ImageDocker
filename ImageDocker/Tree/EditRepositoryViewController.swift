@@ -12,10 +12,23 @@ class EditRepositoryViewController: NSViewController {
     
     // MARK: FIELDS
     @IBOutlet weak var txtName: NSTextField!
+    @IBOutlet weak var txtHomePath: NSTextField!
+    @IBOutlet weak var txtStoragePath: NSTextField!
     @IBOutlet weak var txtRepository: NSTextField!
     @IBOutlet weak var txtSmallSize: NSTextField!
+    @IBOutlet weak var txtCropPath: NSTextField!
     @IBOutlet weak var btnOK: NSButton!
     @IBOutlet weak var lblMessage: NSTextField!
+    @IBOutlet weak var btnBrowseHomePath: NSButton!
+    @IBOutlet weak var btnBrowseStoragePath: NSButton!
+    @IBOutlet weak var btnBrowseRepositoryPath: NSButton!
+    @IBOutlet weak var btnBrowseFacePath: NSButton!
+    @IBOutlet weak var btnBrowseCropPath: NSButton!
+    @IBOutlet weak var btnFindHomePath: NSButton!
+    @IBOutlet weak var btnFindStoragePath: NSButton!
+    @IBOutlet weak var btnFindRepositoryPath: NSButton!
+    @IBOutlet weak var btnFindFacePath: NSButton!
+    @IBOutlet weak var btnFindCropPath: NSButton!
     
     
     // MARK: INIT
@@ -72,6 +85,34 @@ class EditRepositoryViewController: NSViewController {
             self.onCompleted!()
         }
     }
+    @IBAction func onBrowseHomePath(_ sender: NSButton) {
+    }
     
+    @IBAction func onBrowseStoragePathClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onBrowseRepositoryPathClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onBrowseFacePathClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onBrowseCropPath(_ sender: NSButton) {
+    }
+    
+    @IBAction func onFindHomePath(_ sender: NSButton) {
+    }
+    
+    @IBAction func onFindStoragePathClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onFindRepositoryPathClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onFindFaceRepositoryPathClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onFindCropPath(_ sender: NSButton) {
+    }
     
 }
