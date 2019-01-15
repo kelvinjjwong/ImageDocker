@@ -101,7 +101,6 @@
 		8EF4CE5721D77BD600C53AFF /* Family.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE5621D77BD600C53AFF /* Family.swift */; };
 		8EF4CE5921D77BEA00C53AFF /* ImagePeople.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE5821D77BEA00C53AFF /* ImagePeople.swift */; };
 		8EF4CE5E21D8026800C53AFF /* EditRepositoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE5C21D8026800C53AFF /* EditRepositoryViewController.swift */; };
-		8EF4CE5F21D8026800C53AFF /* EditRepositoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EF4CE5D21D8026800C53AFF /* EditRepositoryViewController.xib */; };
 		8EF4CE6121E56CF700C53AFF /* ViewControllerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE6021E56CF700C53AFF /* ViewControllerUtils.swift */; };
 		8EF4CE6421E56DC100C53AFF /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE6221E56DC100C53AFF /* NotificationViewController.swift */; };
 		8EF4CE6521E56DC100C53AFF /* NotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EF4CE6321E56DC100C53AFF /* NotificationViewController.xib */; };
@@ -240,7 +239,6 @@
 		8EF4CE5621D77BD600C53AFF /* Family.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Family.swift; sourceTree = "<group>"; };
 		8EF4CE5821D77BEA00C53AFF /* ImagePeople.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePeople.swift; sourceTree = "<group>"; };
 		8EF4CE5C21D8026800C53AFF /* EditRepositoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRepositoryViewController.swift; sourceTree = "<group>"; };
-		8EF4CE5D21D8026800C53AFF /* EditRepositoryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditRepositoryViewController.xib; sourceTree = "<group>"; };
 		8EF4CE6021E56CF700C53AFF /* ViewControllerUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerUtils.swift; sourceTree = "<group>"; };
 		8EF4CE6221E56DC100C53AFF /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		8EF4CE6321E56DC100C53AFF /* NotificationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotificationViewController.xib; sourceTree = "<group>"; };
@@ -460,7 +458,6 @@
 				8E4C38D8211829410089502C /* DeviceTreeController.swift */,
 				8EFA7CFE211F012A00419777 /* PlacesTreeController.swift */,
 				8EF4CE5C21D8026800C53AFF /* EditRepositoryViewController.swift */,
-				8EF4CE5D21D8026800C53AFF /* EditRepositoryViewController.xib */,
 			);
 			path = Tree;
 			sourceTree = "<group>";
@@ -752,7 +749,6 @@
 				8EE1AB3E20D05E49001C75B0 /* EventListViewController.xib in Resources */,
 				8E0AFA44208BDEA100CE8B68 /* Main.storyboard in Resources */,
 				8E95739B20EBEBD7003BD651 /* FilterViewController.xib in Resources */,
-				8EF4CE5F21D8026800C53AFF /* EditRepositoryViewController.xib in Resources */,
 				8EB986BE20B30C920075B081 /* CollectionViewItem.xib in Resources */,
 				8EF4CE6521E56DC100C53AFF /* NotificationViewController.xib in Resources */,
 				8E3EC3BE214DE623004B6125 /* DateTimeViewController.xib in Resources */,

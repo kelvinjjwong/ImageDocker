@@ -56,7 +56,16 @@ class ImageFolderTreeScanner {
         var urlFolders:[String:ImageFolder] = [:]
         var foldersNeedSave:Set<ImageFolder> = []
         for container in containers {
-            let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path), name:container.name, repositoryPath: container.repositoryPath, smallSizePath: container.smallSizePath, countOfImages: Int(container.imageCount), updateModelStore: false, sharedDB: ModelStore.sharedDBPool())
+            let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path),
+                                                      name:container.name,
+                                                      repositoryPath: container.repositoryPath,
+                                                      homePath: container.homePath,
+                                                      storagePath: container.storagePath,
+                                                      facePath: container.facePath,
+                                                      cropPath: container.cropPath,
+                                                      countOfImages: Int(container.imageCount),
+                                                      updateModelStore: false,
+                                                      sharedDB: ModelStore.sharedDBPool())
             urlFolders[container.path] = imageFolder
             if fast { // fast
                 if container.parentFolder != "" {
@@ -93,40 +102,54 @@ class ImageFolderTreeScanner {
         return imageFolders
     }
     
-    func scanImageFolder(name:String, path: String, smallSizePath:String) -> [ImageFolder] {
-        let url:URL = URL(string: path)!
-        return scanImageFolder(name: name, startingURL: url, smallSizePath: smallSizePath)
-    }
-    
-    func scanImageFolder(name:String, startingURL: URL, smallSizePath:String) -> [ImageFolder] {
-        var imageFolders:[ImageFolder] = [ImageFolder]()
-        
-        let resourceKeys : [URLResourceKey] = [.creationDateKey, .isDirectoryKey, .isHiddenKey, .parentDirectoryURLKey, .isReadableKey]
-        
-        let countOfRootImage:Int = self.countImagesInFolder(startingURL)
-        imageFolders.append(ImageFolder(startingURL, name: name, repositoryPath: startingURL.path, smallSizePath: smallSizePath, countOfImages: countOfRootImage))
-        
-        let enumerator = self.walkthruDirectory(at: startingURL, resourceKeys: resourceKeys)
-        for case let folderURL as URL in enumerator {
-            do {
-                let resourceValues = try folderURL.resourceValues(forKeys: Set(resourceKeys))
-                if resourceValues.isDirectory! && !resourceValues.isHidden! && resourceValues.isReadable! {
-                    let countOfImage:Int = self.countImagesInFolder(folderURL)
-                    if countOfImage > 0 {
-                        let imageFolder:ImageFolder = ImageFolder(folderURL, repositoryPath: startingURL.path, countOfImages: countOfImage)
-                        if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) {
-                            imageFolder.setParent(parent)
-                        }
-                        imageFolders.append(imageFolder)
-                    }
-                }
-            } catch {
-                print(error)
-            }
-        }
-        //ModelStore.save()
-        return imageFolders
-    }
+//    func scanImageFolder(name:String, path: String, smallSizePath:String) -> [ImageFolder] {
+//        let url:URL = URL(string: path)!
+//        return scanImageFolder(name: name, startingURL: url, smallSizePath: smallSizePath)
+//    }
+//
+//    func scanImageFolder(name:String, startingURL: URL, smallSizePath:String) -> [ImageFolder] {
+//        var imageFolders:[ImageFolder] = [ImageFolder]()
+//
+//        let resourceKeys : [URLResourceKey] = [.creationDateKey, .isDirectoryKey, .isHiddenKey, .parentDirectoryURLKey, .isReadableKey]
+//
+//        let countOfRootImage:Int = self.countImagesInFolder(startingURL)
+//        imageFolders.append(ImageFolder(startingURL,
+//                                        name: name,
+//                                        repositoryPath: startingURL.path,
+//                                        homePath: "",
+//                                        storagePath: "",
+//                                        facePath: "",
+//                                        cropPath: "",
+//                                        countOfImages: countOfRootImage))
+//
+//        let enumerator = self.walkthruDirectory(at: startingURL, resourceKeys: resourceKeys)
+//        for case let folderURL as URL in enumerator {
+//            do {
+//                let resourceValues = try folderURL.resourceValues(forKeys: Set(resourceKeys))
+//                if resourceValues.isDirectory! && !resourceValues.isHidden! && resourceValues.isReadable! {
+//                    let countOfImage:Int = self.countImagesInFolder(folderURL)
+//                    if countOfImage > 0 {
+//                        let imageFolder:ImageFolder = ImageFolder(folderURL,
+//                                                                  name: "",
+//                                                                  repositoryPath: startingURL.path,
+//                                                                  homePath: "",
+//                                                                  storagePath: "",
+//                                                                  facePath: "",
+//                                                                  cropPath: "",
+//                                                                  countOfImages: countOfImage)
+//                        if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) {
+//                            imageFolder.setParent(parent)
+//                        }
+//                        imageFolders.append(imageFolder)
+//                    }
+//                }
+//            } catch {
+//                print(error)
+//            }
+//        }
+//        //ModelStore.save()
+//        return imageFolders
+//    }
     
     static func scanPhotosToLoadExif(indicator:Accumulator? = nil)  {
         if suppressedScan {
@@ -162,9 +185,19 @@ class ImageFolderTreeScanner {
         }
     }
     
-    static func createRepository(name:String, path:String, smallSizePath:String) {
-        let _ = ImageFolder(URL(fileURLWithPath: path), name: name, repositoryPath: path, smallSizePath: smallSizePath)
-        //ModelStore.save()
+    static func createRepository(name:String,
+                                 path:String,
+                                 homePath:String,
+                                 storagePath:String,
+                                 facePath:String,
+                                 cropPath:String) {
+        let _ = ImageFolder(URL(fileURLWithPath: path),
+                            name: name,
+                            repositoryPath: path,
+                            homePath: homePath,
+                            storagePath: storagePath,
+                            facePath: facePath,
+                            cropPath: cropPath)
     }
     
     static func scanRepositories(indicator:Accumulator? = nil)  {
@@ -180,6 +213,8 @@ class ImageFolderTreeScanner {
         print("REPO COUNT = \(repositories.count)")
         var filesysUrls:Set<String> = Set<String>()
         for repo in repositories {
+            var foldersysUrls:Set<String> = Set<String>()
+            
             if suppressedScan {
                 if indicator != nil {
                     indicator?.forceComplete()
@@ -213,18 +248,58 @@ class ImageFolderTreeScanner {
                     guard (UTTypeConformsTo(fileType as CFString, kUTTypeImage) || UTTypeConformsTo(fileType as CFString, kUTTypeMovie)) else { continue }
                     let url = url as URL
                     filesysUrls.insert(url.path)
+                    let folderUrl = url.deletingLastPathComponent()
+                    foldersysUrls.insert(folderUrl.path)
                 }
                 catch {
                     print("Unexpected error occured: \(error).")
                 }
             }
             print("\(Date()) CHECK REPO: ENUMERATING FILESYS: DONE")
+            
+            print("\(Date()) CHECK REPO: CHECK FOLDERS TO BE ADDED AND REMOVED")
+            
+            let folderDBUrls = ModelStore.default.getAllContainerPaths(rootPath: repo.path)
+            let folderUrlsToAdd:[String] = foldersysUrls.subtracting(folderDBUrls).sorted()
+            let folderUrlsToRemoved:Set<String> = folderDBUrls.subtracting(foldersysUrls)
+            
+            if folderUrlsToAdd.count > 0 {
+                for path in folderUrlsToAdd {
+                    let url = URL(fileURLWithPath: path)
+                    print("Adding container folder: \(path)")
+                    let name = url.lastPathComponent
+                    let _ = ImageFolder(url,
+                                        name: name,
+                                        repositoryPath: repo.path,
+                                        homePath: "",
+                                        storagePath: "",
+                                        facePath: "",
+                                        cropPath: "")
+                }
+                
+                if indicator != nil {
+                    indicator?.dataChanged()
+                }
+            }
+            
+            if folderUrlsToRemoved.count > 0 {
+                for path in folderUrlsToRemoved {
+                    //let url = URL(fileURLWithPath: path)
+                    // TODO: REMOVE CONTAINER FROM DB
+                    print("Should be REMOVE container folder: \(path)")
+                }
+                
+                if indicator != nil {
+                    indicator?.dataChanged()
+                }
+            }
         }
         
         print("\(Date()) CHECK REPO: CHECK TO BE ADDED AND REMOVED")
         if indicator != nil {
             indicator?.display(message: "Checking differences .....")
         }
+        
         let dbUrls = ModelStore.default.getAllPhotoPaths(sharedDB: ModelStore.sharedDBPool())
         print("EXISTING DB PHOTO COUNT = \(dbUrls.count)")
         print("EXISTING SYS PHOTO COUNT = \(filesysUrls.count)")
@@ -277,6 +352,9 @@ class ImageFolderTreeScanner {
                 
                 image.save()
             }
+            if indicator != nil {
+                indicator?.dataChanged()
+            }
             print("\(Date()) URLS TO ADD FROM FILESYS: SAVE DONE")
         }
         
@@ -299,6 +377,9 @@ class ImageFolderTreeScanner {
                 }
             }
             
+            if indicator != nil {
+                indicator?.dataChanged()
+            }
             //DispatchQueue.main.async {
                 //ModelStore.save()
             //}
@@ -312,7 +393,15 @@ class ImageFolderTreeScanner {
         let exists = ModelStore.default.getAllContainers()
         if exists.count > 0 {
             for exist in exists{
-                let imageFolder = ImageFolder(URL(fileURLWithPath: exist.path), name: exist.name, repositoryPath: exist.repositoryPath, smallSizePath: exist.smallSizePath, countOfImages: Int(exist.imageCount), sharedDB: ModelStore.sharedDBPool())
+                let imageFolder = ImageFolder(URL(fileURLWithPath: exist.path),
+                                              name: exist.name,
+                                              repositoryPath: exist.repositoryPath,
+                                              homePath: exist.homePath,
+                                              storagePath: exist.storagePath,
+                                              facePath: exist.facePath,
+                                              cropPath: exist.cropPath,
+                                              countOfImages: Int(exist.imageCount),
+                                              sharedDB: ModelStore.sharedDBPool())
                 imageFolders.append(imageFolder)
                 
                 let count = ModelStore.default.countPhotoFiles(rootPath: "\(imageFolder.url.path)/")
@@ -326,29 +415,27 @@ class ImageFolderTreeScanner {
             }
             //ModelStore.save()
         }
-        /*
-        let containers:[Row] = ModelStore.default.getAllContainerPaths()
-        if containers.count > 0 {
-            for cont in containers {
-                let path:String = cont["containerPath"] as! String
-                let photoCount:Int = cont["photoCount"] as Int
-                
-                let url:URL = URL(fileURLWithPath: path)
-                let imageFolder = ImageFolder(url, name: exist.name, repositoryPath: exist.repositoryPath, smallSizePath: exist.smallSizePath, countOfImages: photoCount, sharedDB: ModelStore.sharedDBPool())
-                imageFolders.append(imageFolder)
-                /--
-                let photos = ModelStore.getPhotoFiles(rootPath: "\(imageFolder.url.path)/")
-                let count = Int32(photos.count)
-                if let container = imageFolder.containerFolder {
-                    if imageFolder.containerFolder?.imageCount != count {
-                        container.imageCount = count
-                    }
-                }
-                --/
-            }
-            //ModelStore.save()
-        }
-         */
+//        let containers:[Row] = ModelStore.default.getAllContainerPaths()
+//        if containers.count > 0 {
+//            for cont in containers {
+//                let path:String = cont["containerPath"] as! String
+//                let photoCount:Int = cont["photoCount"] as Int
+//
+//                let url:URL = URL(fileURLWithPath: path)
+//                let imageFolder = ImageFolder(url, name: exist.name, repositoryPath: exist.repositoryPath, smallSizePath: exist.smallSizePath, countOfImages: photoCount, sharedDB: ModelStore.sharedDBPool())
+//                imageFolders.append(imageFolder)
+//                /--
+//                let photos = ModelStore.getPhotoFiles(rootPath: "\(imageFolder.url.path)/")
+//                let count = Int32(photos.count)
+//                if let container = imageFolder.containerFolder {
+//                    if imageFolder.containerFolder?.imageCount != count {
+//                        container.imageCount = count
+//                    }
+//                }
+//                --/
+//            }
+//            //ModelStore.save()
+//        }
         if onCompleted != nil {
             onCompleted!()
         }

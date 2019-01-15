@@ -193,6 +193,9 @@ class ViewController: NSViewController {
     // MARK: Theater Dialog
     var theaterWindowController:NSWindowController!
     
+    // MARK: Repository Dialog
+    var repositoryWindowController:NSWindowController!
+    
     // MARK: Concurrency Indicators
     
     var scaningRepositories:Bool = false
@@ -232,7 +235,7 @@ class ViewController: NSViewController {
             self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(258)))
             self.playerContainer.display()
             
-            self.splitviewPreview.setPosition(size.height - CGFloat(520), ofDividerAt: 0)
+            self.splitviewPreview.setPosition(size.height - CGFloat(520) - CGFloat(40), ofDividerAt: 0)
         }else {
             print("BIG SCREEN")
             let constraintPlayerHeight = NSLayoutConstraint(item: self.playerContainer, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 408)
@@ -240,7 +243,7 @@ class ViewController: NSViewController {
             self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(408)))
             self.playerContainer.display()
             
-            self.splitviewPreview.setPosition(size.height - CGFloat(670), ofDividerAt: 0)
+            self.splitviewPreview.setPosition(size.height - CGFloat(670) - CGFloat(40), ofDividerAt: 0)
         }
         
         windowInitial = true
@@ -299,9 +302,11 @@ class ViewController: NSViewController {
         updateLibraryTree()
         print("\(Date()) Loading view - update library tree: DONE")
         
-        self.deviceCopyWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "DeviceCopyWindowController")) as! NSWindowController
+        self.deviceCopyWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "DeviceCopyWindowController")) as? NSWindowController
         
-        self.theaterWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "TheaterWindowController")) as! NSWindowController
+        self.theaterWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "TheaterWindowController")) as? NSWindowController
+        
+        self.repositoryWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "EditRepositoryWindowController")) as? NSWindowController
         
         
         self.btnChoiceMapService.selectSegment(withTag: 1)
@@ -791,35 +796,46 @@ class ViewController: NSViewController {
     }
     
     @IBAction func onAddButtonClicked(_ sender: NSButton) {
-        let window = NSApplication.shared.windows.first
-        
-        let openPanel = NSOpenPanel()
-        openPanel.canChooseDirectories  = true
-        openPanel.canChooseFiles        = false
-        openPanel.showsHiddenFiles      = false
-        
-        openPanel.beginSheetModal(for: window!) { (response) -> Void in
-            guard response == NSApplication.ModalResponse.OK else {return}
-            if let url = openPanel.url {
-                
-                self.createEditRepositoryPopover()
-                
-                let cellRect = sender.bounds
-                self.editRepositoryPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
-                self.editRepositoryViewController.edit(url: url, onOK: {
-                    
-                    ////self.creatingRepository = true
-                    ////DispatchQueue.main.async {
-                    ////self.loadPathToTree(path)
-                    
-                    //ImageFolderTreeScanner.createRepository(path: url.path)
-                    self.updateLibraryTree()
-                    
-                    ////self.sourceList.reloadData()
-                    ////}
-                })
+        if let window = self.repositoryWindowController.window {
+            if self.repositoryWindowController.isWindowLoaded {
+                window.makeKeyAndOrderFront(self)
+                print("order to front")
+            }else{
+                self.repositoryWindowController.showWindow(self)
+                print("show window")
             }
+            let vc = window.contentViewController as! EditRepositoryViewController
+            //vc.viewInit(image: image)
         }
+//        let window = NSApplication.shared.windows.first
+//
+//        let openPanel = NSOpenPanel()
+//        openPanel.canChooseDirectories  = true
+//        openPanel.canChooseFiles        = false
+//        openPanel.showsHiddenFiles      = false
+//
+//        openPanel.beginSheetModal(for: window!) { (response) -> Void in
+////            guard response == NSApplication.ModalResponse.OK else {return}
+////            if let url = openPanel.url {
+////
+////                self.createEditRepositoryPopover()
+////
+////                let cellRect = sender.bounds
+////                self.editRepositoryPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
+////                self.editRepositoryViewController.edit(url: url, onOK: {
+////
+////                    ////self.creatingRepository = true
+////                    ////DispatchQueue.main.async {
+////                    ////self.loadPathToTree(path)
+////
+////                    //ImageFolderTreeScanner.createRepository(path: url.path)
+////                    self.updateLibraryTree()
+////
+////                    ////self.sourceList.reloadData()
+////                    ////}
+////                })
+////            }
+//        }
     }
     
     @IBAction func onDelButtonClicked(_ sender: Any) {

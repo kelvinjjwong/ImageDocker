@@ -203,21 +203,21 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     }
     
     
-    
-    func getAllContainerPaths() -> [Row] {
-        var rows:[Row] = []
-        do {
-            let db = ModelStore.sharedDBPool()
-            try db.read { db in
-                rows = try Row.fetchAll(db, "SELECT containerPath, count(path) as photoCount FROM Image GROUP BY containerPath")
-            }
-        }catch{
-            print(error)
-        }
-        
-        return rows
-        
-    }
+//
+//    func getAllContainerPaths() -> [Row] {
+//        var rows:[Row] = []
+//        do {
+//            let db = ModelStore.sharedDBPool()
+//            try db.read { db in
+//                rows = try Row.fetchAll(db, "SELECT containerPath, count(path) as photoCount FROM Image GROUP BY containerPath")
+//            }
+//        }catch{
+//            print(error)
+//        }
+//
+//        return rows
+//
+//    }
     
     // MARK: Options
     
@@ -303,7 +303,38 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
-    func getOrCreateContainer(name:String, path:String, parentPath:String = "", repositoryPath:String, smallSizePath:String, sharedDB:DatabaseWriter? = nil) -> ImageContainer {
+    func getAllContainerPaths(rootPath:String? = nil) -> Set<String> {
+        var result:Set<String> = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                if let root = rootPath {
+                    let cursor = try ImageContainer.filter(Column("path").like("\(root)%")).order(sql: "path").fetchCursor(db)
+                    while let container = try cursor.next() {
+                        result.insert(container.path)
+                    }
+                }else{
+                    let cursor = try ImageContainer.order(sql: "path").fetchCursor(db)
+                    while let container = try cursor.next() {
+                        result.insert(container.path)
+                    }
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func getOrCreateContainer(name:String,
+                              path:String,
+                              parentPath:String = "",
+                              repositoryPath:String,
+                              homePath:String,
+                              storagePath:String,
+                              facePath:String,
+                              cropPath:String,
+                              sharedDB:DatabaseWriter? = nil) -> ImageContainer {
         var container:ImageContainer?
         do {
             let db = try sharedDB ?? DatabaseQueue(path: dbfile)
@@ -313,7 +344,15 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             if container == nil {
                 let queue = try sharedDB ?? DatabaseQueue(path: dbfile)
                 try queue.write { db in
-                    container = ImageContainer(name: name, parentFolder: parentPath, path: path, imageCount: 0, repositoryPath: repositoryPath, smallSizePath: smallSizePath)
+                    container = ImageContainer(name: name,
+                                               parentFolder: parentPath,
+                                               path: path,
+                                               imageCount: 0,
+                                               repositoryPath: repositoryPath,
+                                               homePath: homePath,
+                                               storagePath: storagePath,
+                                               facePath: facePath,
+                                               cropPath: cropPath)
                     try container?.save(db)
                 }
             }
@@ -1626,8 +1665,8 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         migrator.registerMigration("v6") { db in
             try db.alter(table: "ImageContainer", body: { t in
                 t.add(column: "repositoryPath", .text).notNull().defaults(to: "")
-                t.add(column: "smallSizePath", .text)
             })
+            
             try db.alter(table: "ImageDevice", body: { t in
                 t.add(column: "repositoryPath", .text)
             })
@@ -1673,6 +1712,15 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         migrator.registerMigration("v7") { db in
             try db.alter(table: "ImageDeviceFile", body: { t in
                 t.add(column: "localFilePath", .text)
+            })
+        }
+        
+        migrator.registerMigration("v8") { db in
+            try db.alter(table: "ImageContainer", body: { t in
+                t.add(column: "homePath", .text).notNull().defaults(to: "")
+                t.add(column: "storagePath", .text).notNull().defaults(to: "")
+                t.add(column: "facePath", .text).notNull().defaults(to: "")
+                t.add(column: "cropPath", .text).notNull().defaults(to: "")
             })
         }
         
