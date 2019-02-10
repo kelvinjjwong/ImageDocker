@@ -58,7 +58,7 @@ class PhotoCollection: NSObject {
     
     var treeNodeView:LCSourceListTableCellView? = nil
     var buttonAction: (() -> Void)? = nil
-    
+    var buttonMenu:[MenuAction] = []
     
     override init(){
         super.init()

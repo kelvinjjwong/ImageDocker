@@ -775,26 +775,6 @@ class ViewController: NSViewController {
         }
     }
     
-    var editRepositoryPopover:NSPopover? = nil
-    var editRepositoryViewController:EditRepositoryViewController!
-    
-    func createEditRepositoryPopover(){
-        var myPopover = self.editRepositoryPopover
-        if(myPopover == nil){
-            
-            let frame = CGRect(origin: .zero, size: CGSize(width: 700, height: 330))
-            self.editRepositoryViewController = EditRepositoryViewController()
-            self.editRepositoryViewController.view.frame = frame
-            
-            myPopover = NSPopover()
-            myPopover!.contentViewController = self.editRepositoryViewController
-            myPopover!.appearance = NSAppearance(named: .aqua)!
-            myPopover!.delegate = self
-            myPopover!.behavior = NSPopover.Behavior.transient
-        }
-        self.editRepositoryPopover = myPopover
-    }
-    
     @IBAction func onAddButtonClicked(_ sender: NSButton) {
         if let window = self.repositoryWindowController.window {
             if self.repositoryWindowController.isWindowLoaded {
@@ -805,7 +785,10 @@ class ViewController: NSViewController {
                 print("show window")
             }
             let vc = window.contentViewController as! EditRepositoryViewController
-            //vc.viewInit(image: image)
+            vc.initNew(window: window, onOK: {
+                window.close()
+                self.updateLibraryTree()
+            })
         }
 //        let window = NSApplication.shared.windows.first
 //

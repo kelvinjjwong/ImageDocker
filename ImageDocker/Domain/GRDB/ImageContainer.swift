@@ -20,6 +20,8 @@ struct ImageContainer: Codable {
     var storagePath: String
     var facePath: String
     var cropPath: String
+    var subPath: String
+    var parentPath: String
 }
 
 extension ImageContainer: FetchableRecord, MutablePersistableRecord, TableRecord {

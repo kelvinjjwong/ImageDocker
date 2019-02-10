@@ -101,6 +101,8 @@ struct Image : Codable {
     var originPath:String?
     var facesPath:String?
     var id:String?
+    var repositoryPath:String
+    var subPath:String
     
     
     static func new(filename: String, path: String, parentFolder: String) -> Image {
@@ -195,7 +197,9 @@ struct Image : Codable {
             duplicatesKey: nil,
             originPath: nil,
             facesPath: nil,
-            id: nil
+            id: nil,
+            repositoryPath: "", // TODO: should be init
+            subPath: "" // TODO: should be init
         )
     }
     

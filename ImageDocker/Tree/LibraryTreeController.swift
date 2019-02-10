@@ -91,7 +91,7 @@ extension ViewController {
             _parent = self.identifiersOfLibraryTree[(imageFolder.parent?.url.path)!]!
         }
         
-        let collection:PhotoCollection = PhotoCollection(title: imageFolder.getPathExcludeParent(),
+        let collection:PhotoCollection = PhotoCollection(title: imageFolder.name,
                                                          identifier: imageFolder.url.path,
                                                          type: imageFolder.children.count == 0 ? .userCreated : .library,
                                                          source: .library)
@@ -101,8 +101,24 @@ extension ViewController {
         collection.photoCount = imageFolder.countOfImages
         
         self.showTreeNodeButton(collection: collection, image: moreHorizontalIcon)
-        collection.buttonAction = {
-            print("open path: \(collection.identifier) - title: \(collection.title)")
+        if imageFolder.parent == nil {
+            collection.buttonAction = {
+                if let window = self.repositoryWindowController.window {
+                    if self.repositoryWindowController.isWindowLoaded {
+                        window.makeKeyAndOrderFront(self)
+                        print("order to front")
+                    }else{
+                        self.repositoryWindowController.showWindow(self)
+                        print("show window")
+                    }
+                    let vc = window.contentViewController as! EditRepositoryViewController
+                    vc.initEdit(path: imageFolder.url.path, window: window)
+                }
+            }
+        }else{
+            collection.buttonAction = {
+                NSWorkspace.shared.activateFileViewerSelecting([imageFolder.url])
+            }
         }
         
         self.identifiersOfLibraryTree[imageFolder.url.path] = item

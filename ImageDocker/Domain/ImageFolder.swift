@@ -18,6 +18,7 @@ class ImageFolder : NSObject {
     var parent:ImageFolder? = nil
     var photoCollection:PhotoCollection? = nil
     var containerFolder:ImageContainer? = nil
+    var name:String = ""
     
     init(_ url:URL,
          name:String,
@@ -33,7 +34,17 @@ class ImageFolder : NSObject {
         self.countOfImages = countOfImages
         
         let path:String = url.path
-        let folderName:String = name ?? url.lastPathComponent
+        var folderName:String = name
+        if folderName == "" {
+            folderName = url.lastPathComponent
+        }
+        self.name = folderName
+        
+        var repoPath = repositoryPath
+        if !repoPath.hasSuffix("/") {
+            repoPath = "\(repoPath)/"
+        }
+        let subPath = url.path.replacingFirstOccurrence(of: repoPath, with: "")
         //print("LOAD FOLDER 2 \(name) \(path)")
         
         self.containerFolder = ModelStore.default.getOrCreateContainer(name: folderName,
@@ -43,6 +54,7 @@ class ImageFolder : NSObject {
                                                                        storagePath: storagePath,
                                                                        facePath: facePath,
                                                                        cropPath: cropPath,
+                                                                       subPath: subPath,
                                                                        sharedDB: sharedDB)
         if self.containerFolder?.imageCount == nil {
             self.containerFolder?.imageCount = countOfImages

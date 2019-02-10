@@ -426,6 +426,20 @@ class DeviceCopyViewController: NSViewController {
         }
     }
     
+    @IBAction func onBrowseHomePathClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onGotoHomeClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onGotoRepositoryClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onGotoRawClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onFollowHomeClicked(_ sender: NSButton) {
+    }
     
     @IBAction func onMountClicked(_ sender: NSButton) {
         print(self.device)
@@ -466,6 +480,8 @@ class DeviceCopyViewController: NSViewController {
             self.btnMount.isEnabled = false
         }
     }
+    
+    
     
     // MARK: TOGGLE BUTTONS
     

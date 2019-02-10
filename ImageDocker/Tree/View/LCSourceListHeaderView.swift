@@ -9,6 +9,17 @@
 import Cocoa
 import PXSourceList
 
+class MenuAction {
+    
+    var title:String = ""
+    var action: (() -> Void)
+    
+    init(title:String, action: @escaping (() -> Void)) {
+        self.title = title
+        self.action = action
+    }
+}
+
 class LCSourceListHeaderView : PXSourceListTableCellView {
     
     @IBOutlet weak var btnMore: NSButton!

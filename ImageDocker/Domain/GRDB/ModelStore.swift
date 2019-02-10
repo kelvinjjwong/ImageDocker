@@ -303,6 +303,19 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
+    func getContainer(path:String) -> ImageContainer? {
+        var result:ImageContainer?
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try ImageContainer.filter(sql: "path=?", arguments: StatementArguments([path])).fetchOne(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
     func getAllContainerPaths(rootPath:String? = nil) -> Set<String> {
         var result:Set<String> = []
         do {
@@ -328,12 +341,13 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     func getOrCreateContainer(name:String,
                               path:String,
-                              parentPath:String = "",
+                              parentPath parentFolder:String = "",
                               repositoryPath:String,
                               homePath:String,
                               storagePath:String,
                               facePath:String,
                               cropPath:String,
+                              subPath:String,
                               sharedDB:DatabaseWriter? = nil) -> ImageContainer {
         var container:ImageContainer?
         do {
@@ -345,14 +359,16 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 let queue = try sharedDB ?? DatabaseQueue(path: dbfile)
                 try queue.write { db in
                     container = ImageContainer(name: name,
-                                               parentFolder: parentPath,
+                                               parentFolder: parentFolder,
                                                path: path,
                                                imageCount: 0,
                                                repositoryPath: repositoryPath,
                                                homePath: homePath,
                                                storagePath: storagePath,
                                                facePath: facePath,
-                                               cropPath: cropPath)
+                                               cropPath: cropPath,
+                                               subPath: subPath,
+                                               parentPath: parentFolder.replacingFirstOccurrence(of: repositoryPath.withStash(), with: ""))
                     try container?.save(db)
                 }
             }
@@ -536,6 +552,74 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
     }
     
+    
+    
+    func updateImageRawBase(oldRawPath:String, newRawPath:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update Image set originPath = ? where originPath = ?", arguments: [newRawPath, oldRawPath])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func updateImageRawBase(repositoryPath:String, rawPath:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update Image set originPath = ? where repositoryPath = ?", arguments: [rawPath, repositoryPath])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func updateImageRawBase(pathStartsWith path:String, rawPath:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update Image set originPath = ? where path like ?", arguments: [rawPath, "\(path.withStash())%"])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func updateImageRepositoryBase(pathStartsWith path:String, repositoryPath:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update Image set repositoryPath = ? where path like ?", arguments: [repositoryPath, "\(path.withStash())%"])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func updateImageRepositoryBase(oldRepositoryPath:String, newRepository:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update Image set repositoryPath = ? where repositoryPath = ?", arguments: [newRepository, oldRepositoryPath])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func updateImagePath(repositoryPath:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update Image set path = repositoryPath || subPath where repositoryPath = ? and subPath <> ''", arguments: [repositoryPath])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
     func deletePhoto(atPath path:String, updateFlag:Bool = true){
         if updateFlag {
             do {
@@ -684,6 +768,19 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             let db = ModelStore.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(Column("path").like("\(rootPath)%")).fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func getPhotoFilesWithoutSubPath(rootPath:String) -> [Image] {
+        var result:[Image] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(Column("path").like("\(rootPath)%")).filter(Column("subPath") == "").fetchAll(db)
             }
         }catch{
             print(error)
@@ -1721,6 +1818,22 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 t.add(column: "storagePath", .text).notNull().defaults(to: "")
                 t.add(column: "facePath", .text).notNull().defaults(to: "")
                 t.add(column: "cropPath", .text).notNull().defaults(to: "")
+            })
+        }
+        
+        migrator.registerMigration("v9") { db in
+            try db.alter(table: "ImageContainer", body: { t in
+                t.add(column: "subPath", .text).notNull().defaults(to: "")
+            })
+            try db.alter(table: "Image", body: { t in
+                t.add(column: "repositoryPath", .text).notNull().defaults(to: "")
+                t.add(column: "subPath", .text).notNull().defaults(to: "")
+            })
+        }
+        
+        migrator.registerMigration("v10") { db in
+            try db.alter(table: "ImageContainer", body: { t in
+                t.add(column: "parentPath", .text).notNull().defaults(to: "")
             })
         }
         

@@ -266,6 +266,9 @@ extension ViewController : PXSourceListDelegate {
                         if collection.buttonAction != nil {
                             cv.buttonAction = collection.buttonAction
                         }
+                        if collection.buttonMenu.count > 0 {
+                            cv.buttonMenuItems = collection.buttonMenu
+                        }
                         cv.buttonShouldShow = true
                     }else{
                         cv.btnMore.isEnabled = false

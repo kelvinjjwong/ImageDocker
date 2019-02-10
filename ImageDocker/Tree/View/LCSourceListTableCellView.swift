@@ -25,6 +25,8 @@ class LCSourceListTableCellView : PXSourceListTableCellView {
     
     var buttonAction: (() -> Void)? = nil
     
+    var buttonMenuItems:[MenuAction] = []
+    
     func setUpTrackingArea()
     {
         let trackingArea = NSTrackingArea(rect: self.frame, options: [NSTrackingArea.Options.mouseEnteredAndExited, NSTrackingArea.Options.activeAlways], owner: self, userInfo: nil)
@@ -49,6 +51,15 @@ class LCSourceListTableCellView : PXSourceListTableCellView {
     @IBAction func onMoreClicked(_ sender: NSButton) {
         if self.buttonAction != nil {
             self.buttonAction!()
+        }else if self.buttonMenuItems.count > 0 {
+            print("build menu")
+            let contextMenu = NSMenu.init(title: "more")
+            for item in self.buttonMenuItems {
+                let menuItem = NSMenuItem.init(title: item.title, action: Selector(("menuItemClick:")), keyEquivalent: "")
+                menuItem.representedObject = item
+                contextMenu.addItem(menuItem)
+            }
+            NSMenu.popUpContextMenu(contextMenu, with: NSApp.currentEvent!, for: self.btnMore)
         }
     }
     
@@ -66,6 +77,16 @@ class LCSourceListTableCellView : PXSourceListTableCellView {
     
     @IBAction func onCellClicked(_ sender: Any) {
         print("cell clicked")
+    }
+    
+    @objc func menuItemClick(sender:NSMenuItem) {
+        print("menu item clicked")
+        if let obj = sender.representedObject {
+            if obj is MenuAction {
+                let myItem = obj as! MenuAction
+                NSLog("clicked: \(myItem.title)")
+            }
+        }
     }
     
 }

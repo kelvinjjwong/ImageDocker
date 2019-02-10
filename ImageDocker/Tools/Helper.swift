@@ -47,4 +47,16 @@ extension String {
             return []
         }
     }
+    
+    func replacingFirstOccurrence(of string: String, with replacement: String) -> String {
+        guard let range = self.range(of: string) else { return self }
+        return replacingCharacters(in: range, with: replacement)
+    }
+    
+    func withStash() -> String {
+        if !self.hasSuffix("/") {
+            return "\(self)/"
+        }
+        return ""
+    }
 }
