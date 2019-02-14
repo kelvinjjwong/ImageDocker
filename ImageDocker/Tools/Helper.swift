@@ -57,6 +57,6 @@ extension String {
         if !self.hasSuffix("/") {
             return "\(self)/"
         }
-        return ""
+        return self
     }
 }

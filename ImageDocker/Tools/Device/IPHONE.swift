@@ -184,7 +184,7 @@ struct IPHONE {
         autoreleasepool { () -> Void in
             let command = Process()
             command.standardOutput = pipe
-            command.standardError = FileHandle.nullDevice
+            command.standardError = pipe
             command.launchPath = ideviceinfo.path
             command.arguments = []
             command.launch()
@@ -193,7 +193,13 @@ struct IPHONE {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         pipe.fileHandleForReading.closeFile()
-        if string.starts(with: "No device found") || string.range(of: "Input/output error") != nil {
+        print(string)
+        if string.starts(with: "ERROR: Could not connect to lockdownd") {
+            print("Please unlock the screen of iOS device")
+            print("If failed again, refer to https://github.com/libimobiledevice/libimobiledevice/issues/717 , please reinstall libimobiledevice and ideviceinstaller by brew")
+            return nil
+        }
+        if string.starts(with: "ERROR") || string.starts(with: "No device found") || string.range(of: "Input/output error") != nil {
             return nil
         }
         var device:PhoneDevice

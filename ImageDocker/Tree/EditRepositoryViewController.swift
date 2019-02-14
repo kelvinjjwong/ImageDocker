@@ -45,14 +45,19 @@ class EditRepositoryViewController: NSViewController {
     @IBOutlet weak var btnUpdateRepositoryImages: NSButton!
     @IBOutlet weak var btnUpdateFaceImages: NSButton!
     @IBOutlet weak var btnUpdateCropImages: NSButton!
-    @IBOutlet weak var btnUpdateContainers: NSButton!
-    @IBOutlet weak var btnUpdateHomePath: NSButton!
     @IBOutlet weak var btnRemove: NSButton!
     @IBOutlet weak var lblDeviceId: NSTextField!
     @IBOutlet weak var lblDeviceName: NSTextField!
     @IBOutlet weak var btnLoadDevices: NSButton!
     @IBOutlet weak var btnCompareDevicePath: NSButton!
     @IBOutlet weak var btnCleanDevice: NSButton!
+    @IBOutlet weak var btnShowHide: NSButton!
+    @IBOutlet weak var btnNormalize: NSButton!
+    @IBOutlet weak var btnStat: NSButton!
+    @IBOutlet weak var btnFaceBackToOrigin: NSButton!
+    @IBOutlet weak var btnFaceFollowHome: NSButton!
+    @IBOutlet weak var btnPathsFollowDevice: NSButton!
+    
     
     private var accumulator:Accumulator? = nil
     
@@ -79,24 +84,34 @@ class EditRepositoryViewController: NSViewController {
     
     fileprivate var onCompleted: (() -> Void)?
     
-    fileprivate func emptyTextFields() {
+    // MARK: INIT
+    
+    fileprivate func emptyGeneralTextFields() {
         self.txtName.stringValue = ""
         self.lblNameRemark.stringValue = ""
         self.txtHomePath.stringValue = ""
         self.lblHomePathRemark.stringValue = ""
+        
+        self.lblDeviceId.stringValue = ""
+        self.lblDeviceName.stringValue = ""
+    }
+    
+    fileprivate func emptyStorageTextFields() {
         self.txtStoragePath.stringValue = ""
         self.lblStoragePathRemark.stringValue = ""
         self.txtRepository.stringValue = ""
         self.lblRepositoryPathRemark.stringValue = ""
+        self.btnRestoreOriginal.isHidden = true
+        self.btnCopyToRaw.isHidden = true
+        self.btnUpdateStorageImages.isHidden = true
+        self.btnUpdateRepositoryImages.isHidden = true
+    }
+    
+    fileprivate func emptyFaceTextFields() {
         self.txtFacePath.stringValue = ""
         self.lblFacePathRemark.stringValue = ""
         self.txtCropPath.stringValue = ""
         self.lblCropPathRemark.stringValue = ""
-        self.btnRestoreOriginal.isHidden = true
-        self.btnCopyToRaw.isHidden = true
-        self.btnUpdateContainers.isHidden = true
-        self.btnUpdateStorageImages.isHidden = true
-        self.btnUpdateRepositoryImages.isHidden = true
         self.btnUpdateFaceImages.isHidden = true
         self.btnUpdateCropImages.isHidden = true
     }
@@ -104,7 +119,9 @@ class EditRepositoryViewController: NSViewController {
     func initNew(window:NSWindow, onOK: (() -> Void)? = nil) {
         self.onCompleted = onOK
         self.window = window
-        self.emptyTextFields()
+        self.emptyGeneralTextFields()
+        self.emptyStorageTextFields()
+        self.emptyFaceTextFields()
         self.originalContainer = nil
         self.btnOK.title = "Save"
         self.lblMessage.stringValue = ""
@@ -116,19 +133,22 @@ class EditRepositoryViewController: NSViewController {
         self.btnBrowseCropPath.title = "Assign"
         self.btnRestoreOriginal.isHidden = true
         self.btnCopyToRaw.isHidden = true
-        self.btnUpdateContainers.isHidden = true
         self.btnUpdateStorageImages.isHidden = true
         self.btnUpdateRepositoryImages.isHidden = true
         self.btnUpdateFaceImages.isHidden = true
         self.btnUpdateCropImages.isHidden = true
-        self.btnUpdateHomePath.isHidden = true
         self.btnRemove.isHidden = true
+        
+        self.lblDeviceId.stringValue = ""
+        self.lblDeviceName.stringValue = ""
     }
     
     func initEdit(path:String, window:NSWindow, onOK: (() -> Void)? = nil) {
         self.onCompleted = onOK
         self.window = window
-        self.emptyTextFields()
+        self.emptyGeneralTextFields()
+        self.emptyStorageTextFields()
+        self.emptyFaceTextFields()
         self.lblMessage.stringValue = ""
         if let container = ModelStore.default.getContainer(path: path) {
             self.originalContainer = container
@@ -140,14 +160,12 @@ class EditRepositoryViewController: NSViewController {
             self.txtCropPath.stringValue = container.cropPath
             self.btnRestoreOriginal.isHidden = false
             self.btnCopyToRaw.isHidden = false
-            self.btnUpdateContainers.isHidden = false
             self.btnUpdateStorageImages.isHidden = false
             self.btnUpdateRepositoryImages.isHidden = false
             self.btnUpdateFaceImages.isHidden = false
             self.btnUpdateCropImages.isHidden = false
-            self.btnUpdateHomePath.isHidden = false
             self.btnRemove.isHidden = false
-            self.btnOK.title = "Save Name"
+            self.btnOK.title = "Update Name & Home"
             window.title = "Edit Repository"
             
             self.btnBrowseRepositoryPath.title = "Move..."
@@ -172,11 +190,56 @@ class EditRepositoryViewController: NSViewController {
             }else{
                 self.btnBrowseCropPath.title = "Move..."
             }
+            
+            self.stat()
+            
+            if container.hiddenByRepository {
+                self.btnShowHide.title = "Enable Repository"
+            }else{
+                self.btnShowHide.title = "Disable Repository"
+            }
+            
+            if container.deviceId != "" {
+                self.displayDeviceInfo(deviceId: container.deviceId)
+            }
+            
         }else{
             self.originalContainer = nil
             self.lblMessage.stringValue = "ERROR: Cannot find repository with path [\(path)]"
         }
     }
+    
+    // MARK: STATISTIC
+    
+    fileprivate func stat() {
+        if let container = self.originalContainer {
+            let path = container.path
+            
+            DispatchQueue.global().async {
+                let imagesTotal = ModelStore.default.countImages(repositoryRoot: path)
+                let imagesWithoutRepoPath = ModelStore.default.countImageWithoutRepositoryPath(repositoryRoot: path)
+                let imagesWithoutSubPath = ModelStore.default.countImageWithoutSubPath(repositoryRoot: path)
+                let imagesWithoutId = ModelStore.default.countImageWithoutId(repositoryRoot: path)
+                let imagesUnmatchedRepoPath = ModelStore.default.countImageUnmatchedRepositoryRoot(repositoryRoot: path)
+                let containersWithoutRepoPath = ModelStore.default.countContainersWithoutRepositoryPath(repositoryRoot: path)
+                let containersWithoutSubPath = ModelStore.default.countContainersWithoutSubPath(repositoryRoot: path)
+                
+                let msg = "Hidden:\(container.hiddenByRepository), Total:\(imagesTotal), No-repo:\(imagesWithoutRepoPath), No-sub:\(imagesWithoutSubPath), No-id:\(imagesWithoutId), Unmatch-repo:\(imagesUnmatchedRepoPath), container-no-repo:\(containersWithoutRepoPath), container-no-sub:\(containersWithoutSubPath)"
+                
+                print(msg)
+                DispatchQueue.main.async {
+                    self.lblMessage.stringValue = msg
+                }
+            }
+        }
+    }
+    
+    @IBAction func onStatClicked(_ sender: NSButton) {
+        self.stat()
+    }
+    
+    
+    // MARK: HELPER
     
     fileprivate func checkDirectory(path:String, messageBox:NSTextField) -> Bool {
         var isDir:ObjCBool = false
@@ -198,6 +261,8 @@ class EditRepositoryViewController: NSViewController {
         }
         return pass
     }
+    
+    // MARK: ACTION BUTTON - SAVE / OK
     
     fileprivate func saveNewRepository() {
         let name = self.txtName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -252,15 +317,24 @@ class EditRepositoryViewController: NSViewController {
         
         if let container = self.originalContainer { // edit
             let name = self.txtName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            let homePath = self.txtHomePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
             if name == "" {
                 self.lblNameRemark.stringValue = "Please give me a name."
                 return
             }
+            if self.txtHomePath.stringValue == "" {
+                self.lblHomePathRemark.stringValue = "Please assign path for home of this repository."
+                return
+            }
+            var pass = true
+            pass = pass && self.checkDirectory(path: self.txtHomePath.stringValue, messageBox: self.lblHomePathRemark)
+            guard pass else {return}
             
             var origin = container
             origin.name = name
+            origin.homePath = homePath
             ModelStore.default.saveImageContainer(container: origin)
-            self.lblMessage.stringValue = "Name updated."
+            self.lblMessage.stringValue = "General info updated."
             
         }else{ // new
             self.saveNewRepository()
@@ -271,24 +345,30 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    // MARK: ACTION BUTTON - RESTORE TO ORIGIN
+    
     @IBAction func onRestoreOriginalClicked(_ sender: NSButton) {
         if let container = self.originalContainer {
-            self.emptyTextFields()
+            self.emptyStorageTextFields()
             self.txtName.stringValue = container.name
             self.txtHomePath.stringValue = container.homePath
             self.txtStoragePath.stringValue = container.storagePath
             self.txtRepository.stringValue = container.path
-            self.txtFacePath.stringValue = container.facePath
-            self.txtCropPath.stringValue = container.cropPath
             self.btnRestoreOriginal.isHidden = false
             self.btnCopyToRaw.isHidden = false
         }
     }
     
     @IBAction func onRestoreOriginalFacePathClicked(_ sender: NSButton) {
+        
+        if let container = self.originalContainer {
+            self.emptyFaceTextFields()
+            self.txtFacePath.stringValue = container.facePath
+            self.txtCropPath.stringValue = container.cropPath
+        }
     }
     
-    
+    // MARK: ACTION BUTTON - FOLLOW HOME PATH
     
     @IBAction func onFollowHomePathClicked(_ sender: NSButton) {
         
@@ -304,20 +384,12 @@ class EditRepositoryViewController: NSViewController {
         let home = URL(fileURLWithPath: self.txtHomePath.stringValue)
         let storage = home.appendingPathComponent("import")
         let repository = home.appendingPathComponent("repository")
-        let face = home.appendingPathComponent("faces")
-        let crop = home.appendingPathComponent("crop")
         
         if self.txtRepository.stringValue != "" && self.txtRepository.stringValue != repository.path {
             self.lblRepositoryPathRemark.stringValue = "previous: \(self.txtRepository.stringValue)"
         }
         if self.txtStoragePath.stringValue != "" && self.txtStoragePath.stringValue != storage.path  {
             self.lblStoragePathRemark.stringValue = "previous: \(self.txtStoragePath.stringValue)"
-        }
-        if self.txtFacePath.stringValue != "" && self.txtFacePath.stringValue != face.path {
-            self.lblFacePathRemark.stringValue = "previous: \(self.txtFacePath.stringValue)"
-        }
-        if self.txtCropPath.stringValue != "" && self.txtCropPath.stringValue != crop.path {
-            self.lblCropPathRemark.stringValue = "previous: \(self.txtCropPath.stringValue)"
         }
         
         if let container = self.originalContainer {
@@ -327,6 +399,34 @@ class EditRepositoryViewController: NSViewController {
             if container.path != "" {
                 self.lblRepositoryPathRemark.stringValue = "original: \(container.path)"
             }
+        }
+        
+        self.txtRepository.stringValue = repository.path
+        self.txtStoragePath.stringValue = storage.path
+    }
+    
+    @IBAction func onFacePathFollowHomeClicked(_ sender: NSButton) {
+        
+        if self.txtHomePath.stringValue == "" {
+            self.lblHomePathRemark.stringValue = "Please assign path for home of this repository."
+            return
+        }
+        
+        if !self.checkDirectory(path: self.txtHomePath.stringValue, messageBox: self.lblHomePathRemark) {
+            return
+        }
+        let home = URL(fileURLWithPath: self.txtHomePath.stringValue)
+        let face = home.appendingPathComponent("faces")
+        let crop = home.appendingPathComponent("crop")
+        
+        if self.txtFacePath.stringValue != "" && self.txtFacePath.stringValue != face.path {
+            self.lblFacePathRemark.stringValue = "previous: \(self.txtFacePath.stringValue)"
+        }
+        if self.txtCropPath.stringValue != "" && self.txtCropPath.stringValue != crop.path {
+            self.lblCropPathRemark.stringValue = "previous: \(self.txtCropPath.stringValue)"
+        }
+        
+        if let container = self.originalContainer {
             if container.facePath != "" {
                 self.lblFacePathRemark.stringValue = "original: \(container.facePath)"
             }
@@ -334,25 +434,20 @@ class EditRepositoryViewController: NSViewController {
                 self.lblCropPathRemark.stringValue = "original: \(container.cropPath)"
             }
         }
-        
-        self.txtRepository.stringValue = repository.path
-        self.txtStoragePath.stringValue = storage.path
         self.txtFacePath.stringValue = face.path
         self.txtCropPath.stringValue = crop.path
     }
     
-    @IBAction func onFacePathFollowHomeClicked(_ sender: NSButton) {
-    }
-    
-    
+    // MARK: ACTION BUTTON - COPY IMAGES FROM EDITABLE TO RAW STORAGE
     
     @IBAction func onCopyToRawClicked(_ sender: NSButton) {
-        // TODO: Copy images from repository to RAW storage
+        // TODO: TODO FUNCTION
         print("TODO: Copy images from repository to RAW storage")
         
         self.lblMessage.stringValue = "TODO function"
     }
     
+    // MARK: ACTION BUTTON - OPEN DIALOG
     
     @IBAction func onBrowseHomePath(_ sender: NSButton) {
         if let win = self.window {
@@ -449,6 +544,8 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    // MARK: ACTION BUTTON - VIEW IN FINDER
+    
     @IBAction func onFindHomePath(_ sender: NSButton) {
         if self.txtHomePath.stringValue == "" {
             self.lblHomePathRemark.stringValue = "Please assign path for home of this repository."
@@ -519,6 +616,8 @@ class EditRepositoryViewController: NSViewController {
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     
+    // MARK: ACTION BUTTON - UPDATE IMAGES
+    
     @IBAction func onUpdateStorageImagesClicked(_ sender: NSButton) {
         guard !self.working else {return}
         if let repoContainer = self.originalContainer {
@@ -536,7 +635,8 @@ class EditRepositoryViewController: NSViewController {
             
             self.working = true
             
-            self.btnUpdateContainers.isEnabled = false
+            self.lblMessage.stringValue = "Checking for update ..."
+            
             self.btnUpdateStorageImages.isEnabled = false
             self.btnUpdateRepositoryImages.isEnabled = false
             self.btnUpdateFaceImages.isEnabled = false
@@ -546,7 +646,7 @@ class EditRepositoryViewController: NSViewController {
             
             DispatchQueue.global().async {
             
-                if originalRawPath != "/" { // clone from original RAW path
+                if originalRawPath != "/" && originalRawPath != "" { // clone from original RAW path
                     let oldBaseUrl = URL(fileURLWithPath: originalRawPath)
                     let newBaseUrl = URL(fileURLWithPath: newRawPath)
                     let oldFullUrl = oldBaseUrl.resolvingSymlinksInPath()
@@ -579,7 +679,7 @@ class EditRepositoryViewController: NSViewController {
                             
                             
                             DispatchQueue.main.async {
-                                let _ = self.accumulator?.add("Copying RAW file ...")
+                                let _ = self.accumulator?.add("Updating RAW images ...")
                             }
                         }
                     }
@@ -597,7 +697,6 @@ class EditRepositoryViewController: NSViewController {
                 self.originalContainer = repo
                 
                 DispatchQueue.main.async {
-                    self.btnUpdateContainers.isEnabled = true
                     self.btnUpdateStorageImages.isEnabled = true
                     self.btnUpdateRepositoryImages.isEnabled = true
                     self.btnUpdateFaceImages.isEnabled = true
@@ -620,13 +719,34 @@ class EditRepositoryViewController: NSViewController {
             let originalRepoPath = repoContainer.path.withStash()
             let newRepoPath = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withStash()
             
-            if newRepoPath == "/" || newRepoPath == originalRepoPath {
+            if newRepoPath == "/" || newRepoPath == "" {
+                return
+            }
+            
+            var go = false
+            
+            self.lblMessage.stringValue = "Checking for update ..."
+            
+            if newRepoPath == originalRepoPath {
+                let imagesWithoutRepoPath = ModelStore.default.countImageWithoutRepositoryPath(repositoryRoot: originalRepoPath)
+                let imagesWithoutSubPath = ModelStore.default.countImageWithoutSubPath(repositoryRoot: originalRepoPath)
+                let imagesWithoutId = ModelStore.default.countImageWithoutId(repositoryRoot: originalRepoPath)
+                let imagesUnmatchedRepoPath = ModelStore.default.countImageUnmatchedRepositoryRoot(repositoryRoot: originalRepoPath)
+                
+                let containersWithoutRepoPath = ModelStore.default.countContainersWithoutRepositoryPath(repositoryRoot: originalRepoPath)
+                let containersWithoutSubPath = ModelStore.default.countContainersWithoutSubPath(repositoryRoot: originalRepoPath)
+                
+                if imagesWithoutRepoPath > 0 || imagesWithoutSubPath > 0 || imagesWithoutId > 0 || imagesUnmatchedRepoPath > 0 || containersWithoutRepoPath > 0 ||  containersWithoutSubPath > 0 {
+                    go = true
+                }
+            }
+            guard go else {
+                self.lblMessage.stringValue = ""
                 return
             }
             
             self.working = true
             
-            self.btnUpdateContainers.isEnabled = false
             self.btnUpdateStorageImages.isEnabled = false
             self.btnUpdateRepositoryImages.isEnabled = false
             self.btnUpdateFaceImages.isEnabled = false
@@ -648,8 +768,14 @@ class EditRepositoryViewController: NSViewController {
                     }
                     
                     for image in images {
+                        
+                        DispatchQueue.main.async {
+                            let _ = self.accumulator?.add("Updating editable image files ...")
+                        }
+                        
                         var img = image
                         
+                        // fix unmatched repository path: fix physically inequal
                         let newPath = image.path.replacingFirstOccurrence(of: originalRepoPath, with: newRepoPath)
                         let containerUrl = URL(fileURLWithPath: newPath).deletingLastPathComponent()
                         
@@ -670,18 +796,22 @@ class EditRepositoryViewController: NSViewController {
                                 }
                             }
                         }
+                        
+                        // fix empty repository path
                         img.repositoryPath = newRepoPath
                         img.containerPath = containerUrl.path
+                        
+                        // fix empty sub path
                         img.subPath = img.path.replacingFirstOccurrence(of: originalRepoPath, with: "")
+                        
+                        // fix unmatched repository path: fix logically inequal
                         img.path = newPath
+                        
+                        // fix empty id
                         if img.id == nil {
                             img.id = UUID().uuidString
                         }
                         ModelStore.default.saveImage(image: img)
-                        
-                        DispatchQueue.main.async {
-                            let _ = self.accumulator?.add("Copying repository file ...")
-                        }
                     }
                 }
                 
@@ -696,6 +826,11 @@ class EditRepositoryViewController: NSViewController {
                 }
                 
                 for subContainer in subContainers {
+                    
+                    DispatchQueue.main.async {
+                        let _ = self.accumulator?.add("Updating sub-containers ...")
+                    }
+                    
                     var sub = subContainer
                     if sub.subPath == "" {
                         sub.subPath = sub.path.replacingFirstOccurrence(of: originalRepoPath, with: "")
@@ -704,13 +839,9 @@ class EditRepositoryViewController: NSViewController {
                         sub.parentPath = URL(fileURLWithPath: sub.path).deletingLastPathComponent().path.replacingFirstOccurrence(of: originalRepoPath, with: "")
                     }
                     sub.repositoryPath = newRepoPath
-                    sub.parentFolder = "\(newRepoPath)\(sub.parentPath)"
+                    sub.parentFolder = sub.parentFolder.replacingFirstOccurrence(of: originalRepoPath, with: newRepoPath)
                     sub.path = sub.path.replacingFirstOccurrence(of: originalRepoPath, with: newRepoPath)
                     ModelStore.default.saveImageContainer(container: sub)
-                    
-                    DispatchQueue.main.async {
-                        let _ = self.accumulator?.add("Updating sub-container ...")
-                    }
                 }
                 
                 // save repo's path
@@ -720,18 +851,20 @@ class EditRepositoryViewController: NSViewController {
                 self.originalContainer = repo
                 
                 DispatchQueue.main.async {
-                    self.btnUpdateContainers.isEnabled = true
                     self.btnUpdateStorageImages.isEnabled = true
                     self.btnUpdateRepositoryImages.isEnabled = true
                     self.btnUpdateFaceImages.isEnabled = true
                     self.btnUpdateCropImages.isEnabled = true
                     self.btnCopyToRaw.isEnabled = true
-                    self.lblMessage.stringValue = "Repository updated."
+                    //self.lblMessage.stringValue = "Repository updated."
+                    
+                    self.stat()
                     
                     self.working = false
                 }
                 
             }
+            
         }
     }
     
@@ -747,14 +880,12 @@ class EditRepositoryViewController: NSViewController {
             
             self.working = true
             
-            self.btnUpdateContainers.isEnabled = false
             self.btnUpdateStorageImages.isEnabled = false
             self.btnUpdateRepositoryImages.isEnabled = false
             self.btnUpdateFaceImages.isEnabled = false
             self.btnUpdateCropImages.isEnabled = false
             self.btnCopyToRaw.isEnabled = false
             self.lblMessage.stringValue = ""
-            
             
             DispatchQueue.global().async {
             
@@ -763,6 +894,8 @@ class EditRepositoryViewController: NSViewController {
                     let newBaseUrl = URL(fileURLWithPath: newFacePath)
                     let oldFullUrl = oldBaseUrl.resolvingSymlinksInPath()
                     let newFullUrl = newBaseUrl.resolvingSymlinksInPath()
+                    
+                    // copy physical files
                     if newFullUrl.path != oldFullUrl.path { // physically inequal, need copy files
                         let oldFiles = ImageFolderTreeScanner.default.walkthruDirectory(at: oldBaseUrl)
                         
@@ -773,6 +906,11 @@ class EditRepositoryViewController: NSViewController {
                         }
                         
                         for case let oldUrl as URL in oldFiles {
+                            
+                            DispatchQueue.main.async {
+                                let _ = self.accumulator?.add("Copying face file ...")
+                            }
+                            
                             let newFilePath = oldUrl.path.replacingFirstOccurrence(of: oldBaseUrl.path.withStash(), with: newBaseUrl.path.withStash())
                             let newUrl = URL(fileURLWithPath: newFilePath)
                             let containerUrl = newUrl.deletingLastPathComponent()
@@ -788,13 +926,12 @@ class EditRepositoryViewController: NSViewController {
                                     print(error)
                                 }
                             }
-                            
-                            DispatchQueue.main.async {
-                                let _ = self.accumulator?.add("Copying face file ...")
-                            }
                         }
                     }
                 }
+                
+                // TODO: update face-image records
+                
                 
                 // save repo's path
                 var repo = repoContainer
@@ -803,7 +940,6 @@ class EditRepositoryViewController: NSViewController {
                 self.originalContainer = repo
                 
                 DispatchQueue.main.async {
-                    self.btnUpdateContainers.isEnabled = true
                     self.btnUpdateStorageImages.isEnabled = true
                     self.btnUpdateRepositoryImages.isEnabled = true
                     self.btnUpdateFaceImages.isEnabled = true
@@ -831,7 +967,6 @@ class EditRepositoryViewController: NSViewController {
             
             self.working = true
             
-            self.btnUpdateContainers.isEnabled = false
             self.btnUpdateStorageImages.isEnabled = false
             self.btnUpdateRepositoryImages.isEnabled = false
             self.btnUpdateFaceImages.isEnabled = false
@@ -846,6 +981,8 @@ class EditRepositoryViewController: NSViewController {
                     let newBaseUrl = URL(fileURLWithPath: newCropPath)
                     let oldFullUrl = oldBaseUrl.resolvingSymlinksInPath()
                     let newFullUrl = newBaseUrl.resolvingSymlinksInPath()
+                    
+                    // copy physical files
                     if newFullUrl.path != oldFullUrl.path { // physically inequal, need copy files
                         let oldFiles = ImageFolderTreeScanner.default.walkthruDirectory(at: oldBaseUrl)
                         
@@ -856,6 +993,10 @@ class EditRepositoryViewController: NSViewController {
                         }
                         
                         for case let oldUrl as URL in oldFiles {
+                            DispatchQueue.main.async {
+                                let _ = self.accumulator?.add("Copying crop file ...")
+                            }
+                            
                             let newFilePath = oldUrl.path.replacingFirstOccurrence(of: oldBaseUrl.path.withStash(), with: newBaseUrl.path.withStash())
                             let newUrl = URL(fileURLWithPath: newFilePath)
                             let containerUrl = newUrl.deletingLastPathComponent()
@@ -872,12 +1013,13 @@ class EditRepositoryViewController: NSViewController {
                                 }
                             }
                             
-                            DispatchQueue.main.async {
-                                let _ = self.accumulator?.add("Copying crop file ...")
-                            }
+                            
                         }
                     }
                 }
+                
+                // TODO: update crop-image records
+                
                 
                 // save repo's path
                 var repo = repoContainer
@@ -886,7 +1028,6 @@ class EditRepositoryViewController: NSViewController {
                 self.originalContainer = repo
                 
                 DispatchQueue.main.async {
-                    self.btnUpdateContainers.isEnabled = true
                     self.btnUpdateStorageImages.isEnabled = true
                     self.btnUpdateRepositoryImages.isEnabled = true
                     self.btnUpdateFaceImages.isEnabled = true
@@ -902,109 +1043,351 @@ class EditRepositoryViewController: NSViewController {
        
     }
     
-    @IBAction func onUpdateContainersClicked(_ sender: NSButton) {
-        guard !self.working else {return}
-        if let repoContainer = self.originalContainer {
-            
-            self.working = true
-            
-            self.btnUpdateContainers.isEnabled = false
-            self.btnUpdateStorageImages.isEnabled = false
-            self.btnUpdateRepositoryImages.isEnabled = false
-            self.btnUpdateFaceImages.isEnabled = false
-            self.btnUpdateCropImages.isEnabled = false
-            self.btnCopyToRaw.isEnabled = false
-            self.lblMessage.stringValue = ""
-            
-            DispatchQueue.global().async {
-                var repo = repoContainer
-                let repoPath = repo.path.withStash()
-                var repoChanged = false
-                if repo.repositoryPath == "" {
-                    repo.repositoryPath = repoPath
-                    repoChanged = true
-                }
-                
-                let path = repo.path.withStash()
-                
-                if repoChanged {
-                    ModelStore.default.saveImageContainer(container: repo)
-                }
-                
-                let subContainers = ModelStore.default.getContainers(rootPath: path)
-                
-                let total = subContainers.count
-                
-                DispatchQueue.main.async {
-                    self.accumulator = Accumulator(target: total, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage)
-                }
-                
-                for subContainer in subContainers {
-                    var sub = subContainer
-                    var subChanged = false
-                    if sub.repositoryPath == "" {
-                        sub.repositoryPath = repoPath
-                        subChanged = true
-                    }
-                    if sub.parentPath == "" {
-                        sub.parentPath = URL(fileURLWithPath: sub.path).deletingLastPathComponent().path.replacingFirstOccurrence(of: repoPath, with: "")
-                        subChanged = true
-                    }
-                    if sub.subPath == "" {
-                        sub.subPath = sub.path.replacingFirstOccurrence(of: path, with: "")
-                        subChanged = true
-                    }
-                    if subChanged {
-                        ModelStore.default.saveImageContainer(container: sub)
-                    }
-                    
-                    
-                    DispatchQueue.main.async {
-                        let _ = self.accumulator?.add("Updating sub-containers ...")
-                    }
-                }
-                
-                DispatchQueue.main.async {
-                    self.btnUpdateContainers.isEnabled = true
-                    self.btnUpdateStorageImages.isEnabled = true
-                    self.btnUpdateRepositoryImages.isEnabled = true
-                    self.btnUpdateFaceImages.isEnabled = true
-                    self.btnUpdateCropImages.isEnabled = true
-                    self.btnCopyToRaw.isEnabled = true
-                    self.lblMessage.stringValue = "Sub-containers updated."
-                    
-                    self.working = false
-                }
-            }
+    
+    
+//    @IBAction func onUpdateContainersClicked(_ sender: NSButton) {
+//        guard !self.working else {return}
+//        if let repoContainer = self.originalContainer {
+//            
+//            self.working = true
+//            
+//            self.btnUpdateContainers.isEnabled = false
+//            self.btnUpdateStorageImages.isEnabled = false
+//            self.btnUpdateRepositoryImages.isEnabled = false
+//            self.btnUpdateFaceImages.isEnabled = false
+//            self.btnUpdateCropImages.isEnabled = false
+//            self.btnCopyToRaw.isEnabled = false
+//            self.lblMessage.stringValue = ""
+//            
+//            DispatchQueue.global().async {
+//                var repo = repoContainer
+//                let repoPath = repo.path.withStash()
+//                var repoChanged = false
+//                if repo.repositoryPath == "" {
+//                    repo.repositoryPath = repoPath
+//                    repoChanged = true
+//                }
+//                
+//                let path = repo.path.withStash()
+//                
+//                if repoChanged {
+//                    ModelStore.default.saveImageContainer(container: repo)
+//                }
+//                
+//                let subContainers = ModelStore.default.getContainers(rootPath: path)
+//                
+//                let total = subContainers.count
+//                
+//                DispatchQueue.main.async {
+//                    self.accumulator = Accumulator(target: total, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage)
+//                }
+//                
+//                for subContainer in subContainers {
+//                    var sub = subContainer
+//                    var subChanged = false
+//                    if sub.repositoryPath == "" {
+//                        sub.repositoryPath = repoPath
+//                        subChanged = true
+//                    }
+//                    if sub.parentPath == "" {
+//                        sub.parentPath = URL(fileURLWithPath: sub.path).deletingLastPathComponent().path.replacingFirstOccurrence(of: repoPath, with: "")
+//                        subChanged = true
+//                    }
+//                    if sub.subPath == "" {
+//                        sub.subPath = sub.path.replacingFirstOccurrence(of: path, with: "")
+//                        subChanged = true
+//                    }
+//                    if subChanged {
+//                        ModelStore.default.saveImageContainer(container: sub)
+//                    }
+//                    
+//                    
+//                    DispatchQueue.main.async {
+//                        let _ = self.accumulator?.add("Updating sub-containers ...")
+//                    }
+//                }
+//                
+//                DispatchQueue.main.async {
+//                    self.btnUpdateContainers.isEnabled = true
+//                    self.btnUpdateStorageImages.isEnabled = true
+//                    self.btnUpdateRepositoryImages.isEnabled = true
+//                    self.btnUpdateFaceImages.isEnabled = true
+//                    self.btnUpdateCropImages.isEnabled = true
+//                    self.btnCopyToRaw.isEnabled = true
+//                    self.lblMessage.stringValue = "Sub-containers updated."
+//                    
+//                    self.working = false
+//                }
+//            }
+//        }
+//    }
+    
+//    @IBAction func onUpdateHomePathClicked(_ sender: NSButton) {
+//        if let container = self.originalContainer { // edit
+//            let homePath = self.txtHomePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+//            if homePath == "" {
+//                self.lblHomePathRemark.stringValue = "Please assign home path."
+//                return
+//            }
+//            
+//            var origin = container
+//            origin.homePath = homePath
+//            ModelStore.default.saveImageContainer(container: origin)
+//            self.lblMessage.stringValue = "Home path updated."
+//            
+//        }
+//    }
+    
+    @IBAction func onNormalizeHiddenClicked(_ sender: NSButton) {
+        let repo = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withStash()
+        let raw = self.txtStoragePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withStash()
+        guard !self.working && repo != "/" && raw != "/" else {return}
+        self.working = true
+        
+        // TODO: disable buttons
+        
+        var updateCount = 0
+        var count = 0
+        
+        
+        DispatchQueue.main.async {
+            self.accumulator = Accumulator(target: 100, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage,
+                                           onCompleted: { data in
+                                                DispatchQueue.main.async {
+                                                    let msg = "Normalized \(count) duplicated image-sets. Updated \(updateCount) images."
+                                                    print(msg)
+                                                    self.lblMessage.stringValue = msg
+                                                    self.working = false
+                                                    // TODO: enable buttons
+                                                }
+                                           },
+                                           startupMessage: "Loading duplicates from database ..."
+                                          )
         }
+        DispatchQueue.global().async {
+            print("loading duplicates from database")
+            
+            let duplicates = ModelStore.default.getDuplicatedImages(repositoryRoot: repo, theOtherRepositoryRoot: raw)
+            print("loaded duplicates \(duplicates.count)")
+            
+            count = duplicates.count
+            self.accumulator?.setTarget(count)
+            
+            for key in duplicates.keys {
+                
+                let images = duplicates[key]!
+                if images.count >= 2{
+                    var rawImgHidden = true
+                    var rawImgCount = 0
+                    var repoImgCount = 0
+                    var showedRepoImgCount = 0
+                    for image in images {
+                        if image.path.starts(with: raw) {
+                            rawImgCount += 1 // if no raw image, no need proceed, nothing to hide
+                            rawImgHidden = rawImgHidden && image.hidden // if all raw images are hidden, no need proceed
+                        }else if image.path.starts(with: repo) {
+                            repoImgCount += 1 // if no repo image, no need proceed, nothing to show
+                            if !image.hidden {
+                                showedRepoImgCount += 1 // if already showed at least one repo image, no need proceed
+                            }
+                        }
+                    }
+                    var needHideRawImage = false
+                    var needShowRepoImage = false
+                    if repoImgCount > 0 && rawImgCount > 0 {
+                        // maybe need flip
+                        if !rawImgHidden {
+                            // if one or more raw images showed, need hide raw images
+                            needHideRawImage = true
+                            
+                            if showedRepoImgCount == 0 {
+                                // if no repo image showed, need show 1st repo image
+                                needShowRepoImage = true
+                            }
+                        }
+                    }
+                    if needHideRawImage || needShowRepoImage {
+                        var doneShowRepoImage = false
+                        for image in images {
+                            if needHideRawImage && image.path.starts(with: raw) && !image.hidden {
+                                // hide raw image if not hidden
+                                var img = image
+                                img.hidden = true
+                                ModelStore.default.saveImage(image: img)
+                                updateCount += 1
+                            }
+                            if !doneShowRepoImage && needShowRepoImage && image.path.starts(with: repo) {
+                                // show the 1st repo image
+                                var img = image
+                                img.hidden = false
+                                ModelStore.default.saveImage(image: img)
+                                updateCount += 1
+                                // only do once
+                                doneShowRepoImage = true
+                            }
+                        }
+                    }
+                }
+                
+                DispatchQueue.main.async {
+                    let _ = self.accumulator?.add("Normalizing duplicated image-sets ...")
+                }
+            }// end of for-loop
+            
+            
+        }// end of background thread
+        
     }
     
-    @IBAction func onUpdateHomePathClicked(_ sender: NSButton) {
-        if let container = self.originalContainer { // edit
-            let homePath = self.txtHomePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-            if homePath == "" {
-                self.lblHomePathRemark.stringValue = "Please assign home path."
-                return
-            }
-            
-            var origin = container
-            origin.homePath = homePath
-            ModelStore.default.saveImageContainer(container: origin)
-            self.lblMessage.stringValue = "Home path updated."
-            
-        }
-    }
+    // MARK: ACTION BUTTON - DELETE RECORDS
     
     @IBAction func onRemoveClicked(_ sender: NSButton) {
+        // TODO: TODO FUNCTION
+        self.lblMessage.stringValue = "TODO function"
     }
     
+    // MARK: ACTION BUTTON - DEVICE INFO AREA
+    
     @IBAction func onLoadDevicesClicked(_ sender: NSButton) {
+        self.createDevicesPopover()
+        self.devicesViewController.initView()
+        
+        let cellRect = sender.bounds
+        self.devicesPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
     }
     
     @IBAction func onCompareDevicePathClicked(_ sender: NSButton) {
+        let deviceId = self.lblDeviceId.stringValue
+        if deviceId != "" {
+            if let device = ModelStore.default.getDevice(deviceId: deviceId) {
+                let homePath = device.homePath ?? ""
+                let repoPath = device.repositoryPath ?? ""
+                let rawPath = device.storagePath ?? ""
+                if self.txtHomePath.stringValue != homePath {
+                    self.lblHomePathRemark.stringValue = "Different w/ device: [\(homePath)]"
+                }
+                if self.txtRepository.stringValue != repoPath {
+                    self.lblRepositoryPathRemark.stringValue = "Different w/ device: [\(repoPath)]"
+                }
+                if self.txtStoragePath.stringValue != rawPath {
+                    self.lblStoragePathRemark.stringValue = "Different w/ device: [\(rawPath)]"
+                }
+            }
+            
+        }
     }
     
     @IBAction func onCleanDeviceClicked(_ sender: NSButton) {
+        self.lblDeviceId.stringValue = ""
+        self.lblDeviceName.stringValue = ""
+        self.linkDeviceToRepository(deviceId: "")
     }
+    
+    fileprivate func linkDeviceToRepository(deviceId: String){
+        if let container = self.originalContainer {
+            var repo = container
+            repo.deviceId = deviceId
+            ModelStore.default.saveImageContainer(container: repo)
+        }
+    }
+    
+    @IBAction func onShowHideClicked(_ sender: NSButton) {
+        if let container = self.originalContainer {
+            if container.hiddenByRepository {
+                DispatchQueue.global().async {
+                    ModelStore.default.showRepository(repositoryRoot: container.path.withStash())
+                    self.originalContainer?.hiddenByRepository = false
+                    ModelStore.default.saveImageContainer(container: self.originalContainer!)
+                    
+                    DispatchQueue.main.async {
+                        self.lblMessage.stringValue = "Updated images as enabled"
+                        self.btnShowHide.title = "Disable Repository"
+                    }
+                    
+                    self.stat()
+                }
+            }else{
+                DispatchQueue.global().async {
+                    ModelStore.default.hideRepository(repositoryRoot: container.path.withStash())
+                    self.originalContainer?.hiddenByRepository = true
+                    ModelStore.default.saveImageContainer(container: self.originalContainer!)
+                    DispatchQueue.main.async {
+                        self.lblMessage.stringValue = "Updated images as disabled"
+                        self.btnShowHide.title = "Enable Repository"
+                    }
+                    
+                    self.stat()
+                }
+            }
+        }
+    }
+    
+    @IBAction func onFollowDevicePathsClicked(_ sender: NSButton) {
+        let deviceId = self.lblDeviceId.stringValue
+        if deviceId != "" {
+            if let device = ModelStore.default.getDevice(deviceId: deviceId) {
+                self.txtHomePath.stringValue = device.homePath ?? ""
+                self.txtRepository.stringValue = device.repositoryPath ?? ""
+                self.txtStoragePath.stringValue = device.storagePath ?? ""
+            }
+        }
+    }
+    
+    
+    // MARK: DEVICES LIST Popover
+    var devicesPopover:NSPopover?
+    var devicesViewController:DeviceListViewController!
+    
+    fileprivate func createDevicesPopover(){
+        var myPopover = self.devicesPopover
+        if(myPopover == nil){
+            myPopover = NSPopover()
+            
+            let frame = CGRect(origin: .zero, size: CGSize(width: 600, height: 400))
+            self.devicesViewController = DeviceListViewController()
+            self.devicesViewController.view.frame = frame
+            self.devicesViewController.selectionDelegate = self
+            
+            myPopover!.contentViewController = self.devicesViewController
+            myPopover!.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
+            //myPopover!.animates = true
+            myPopover!.delegate = self
+            myPopover!.behavior = NSPopover.Behavior.transient
+        }
+        self.devicesPopover = myPopover
+    }
+}
+
+extension EditRepositoryViewController : DeviceListDelegate {
+    
+    fileprivate func displayDeviceInfo(deviceId: String, updateDB:Bool = false) {
+        
+        if let device = ModelStore.default.getDevice(deviceId: deviceId) {
+            self.lblDeviceId.stringValue = device.deviceId ?? ""
+            var name = device.name ?? ""
+            if name == "" {
+                var model = device.marketName ?? ""
+                if model == "" {
+                    model = device.model ?? ""
+                }
+                name = "\(device.manufacture ?? "") \(model)"
+            }
+            self.lblDeviceName.stringValue = name
+            
+            if updateDB {
+                self.linkDeviceToRepository(deviceId: device.deviceId ?? "")
+            }
+        }else{
+            self.lblDeviceId.stringValue = ""
+            self.lblDeviceName.stringValue = ""
+        }
+    }
+    
+    func selectDevice(deviceId: String) {
+        self.displayDeviceInfo(deviceId: deviceId, updateDB: true)
+    }
+}
+
+extension EditRepositoryViewController : NSPopoverDelegate {
     
 }

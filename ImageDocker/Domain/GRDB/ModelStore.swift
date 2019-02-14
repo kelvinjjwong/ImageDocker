@@ -40,7 +40,12 @@ class ModelStore {
     static func sharedDBPool() -> DatabaseWriter{
         if _sharedDBPool == nil {
             do {
-                _sharedDBPool = try DatabasePool(path: ModelStore.default.dbfile)
+                //var config = Configuration()
+                //config.trace = { print($0) }     // Prints all SQL statements
+                
+                _sharedDBPool = try DatabasePool(path: ModelStore.default.dbfile
+                                                //, configuration: config
+                                                )
             }catch{
                 print(error)
             }
@@ -368,7 +373,10 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                                                facePath: facePath,
                                                cropPath: cropPath,
                                                subPath: subPath,
-                                               parentPath: parentFolder.replacingFirstOccurrence(of: repositoryPath.withStash(), with: ""))
+                                               parentPath: parentFolder.replacingFirstOccurrence(of: repositoryPath.withStash(), with: ""),
+                                               hiddenByRepository: false,
+                                               hiddenByContainer: false,
+                                               deviceId: "")
                     try container?.save(db)
                 }
             }
@@ -405,7 +413,262 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
     }
     
+    func hideRepository(repositoryRoot:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update ImageContainer set hiddenByRepository = 1 where path like '\(repositoryRoot.withStash())%'")
+                try db.execute("update ImageContainer set hiddenByRepository = 1 where repositoryPath = '\(repositoryRoot.withStash())'")
+                try db.execute("update Image set hiddenByRepository = 1 where path like '\(repositoryRoot.withStash())%'")
+                try db.execute("update Image set hiddenByRepository = 1 where repositoryPath = '\(repositoryRoot.withStash())'")
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func showRepository(repositoryRoot:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update ImageContainer set hiddenByRepository = 0 where path like '\(repositoryRoot.withStash())%'")
+                try db.execute("update ImageContainer set hiddenByRepository = 0 where repositoryPath = '\(repositoryRoot.withStash())'")
+                try db.execute("update Image set hiddenByRepository = 0 where path like '\(repositoryRoot.withStash())%'")
+                try db.execute("update Image set hiddenByRepository = 0 where repositoryPath = '\(repositoryRoot.withStash())'")
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
     // MARK: IMAGES
+    
+    func getOrCreatePhoto(filename:String, path:String, parentPath:String, sharedDB:DatabaseWriter? = nil) -> Image{
+        var image:Image?
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                image = try Image.fetchOne(db, key: path)
+            }
+            if image == nil {
+                let queue = try sharedDB ?? DatabaseQueue(path: dbfile)
+                try queue.write { db in
+                    image = Image.new(filename: filename, path: path, parentFolder: parentPath)
+                    try image?.save(db)
+                }
+                
+            }
+        }catch{
+            print(error)
+        }
+        return image!
+    }
+    
+    func saveImage(image: Image, sharedDB:DatabaseWriter? = nil){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                var image = image
+                try image.save(db)
+                //print("saved image")
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    
+    
+    func deletePhoto(atPath path:String, updateFlag:Bool = true){
+        if updateFlag {
+            do {
+                let db = ModelStore.sharedDBPool()
+                let _ = try db.write { db in
+                    try db.execute("update Image set delFlag = ?", arguments: [true])
+                }
+            }catch{
+                print(error)
+            }
+        }else{
+            do {
+                let db = ModelStore.sharedDBPool()
+                let _ = try db.write { db in
+                    try Image.deleteOne(db, key: path)
+                }
+            }catch{
+                print(error)
+            }
+        }
+    }
+    
+    // MARK: IMAGES GET BY TREE
+    
+    func getAllDates(imageSource:[String]? = nil, cameraModel:[String]? = nil) -> [Row] {
+        var sqlArgs:[Any] = []
+        var imageSourceWhere = ""
+        var cameraModelWhere = ""
+        inArray(field: "imageSource", array: imageSource, where: &imageSourceWhere, args: &sqlArgs)
+        inArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs)
+        
+        let sql = """
+        SELECT photoTakenYear, photoTakenMonth, photoTakenDay, count(path) as photoCount FROM
+        (SELECT IFNULL(photoTakenYear,0) AS photoTakenYear, IFNULL(photoTakenMonth,0) AS photoTakenMonth, IFNULL(photoTakenDay,0) AS photoTakenDay, path, imageSource, cameraModel from Image)
+        WHERE 1=1 \(imageSourceWhere) \(cameraModelWhere) GROUP BY photoTakenYear,photoTakenMonth,photoTakenDay ORDER BY photoTakenYear DESC,photoTakenMonth DESC,photoTakenDay DESC
+        """
+        print(sql)
+        var result:[Row] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try Row.fetchAll(db, sql, arguments:StatementArguments(sqlArgs))
+            }
+        }catch{
+            print(error)
+        }
+        return result
+        
+    }
+    
+    func getAllPlacesAndDates(imageSource:[String]? = nil, cameraModel:[String]? = nil) -> [Row] {
+        var sqlArgs:[Any] = []
+        var imageSourceWhere = ""
+        var cameraModelWhere = ""
+        inArray(field: "imageSource", array: imageSource, where: &imageSourceWhere, args: &sqlArgs)
+        inArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs)
+        
+        let sql = """
+        SELECT country, province, city, place, photoTakenYear, photoTakenMonth, photoTakenDay, count(path) as photoCount FROM
+        (
+        SELECT country, province, city, place, photoTakenYear, photoTakenMonth, photoTakenDay, path, imageSource,cameraModel from Image WHERE assignCountry is null and assignProvince is null and assignCity is null
+        UNION
+        SELECT assignCountry as country, assignProvince as province, assignCity as city, assignPlace as place, photoTakenYear, photoTakenMonth, photoTakenDay, path, imageSource,cameraModel from Image WHERE assignCountry is not null and assignProvince is not null and assignCity is not null
+        )
+        WHERE 1=1 \(imageSourceWhere) \(cameraModelWhere)
+        GROUP BY country,province,city,place,photoTakenYear,photoTakenMonth,photoTakenDay ORDER BY country,province,city,place,photoTakenYear DESC,photoTakenMonth DESC,photoTakenDay DESC
+        """
+        
+        print(sql)
+        var result:[Row] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try Row.fetchAll(db, sql, arguments:StatementArguments(sqlArgs))
+            }
+        }catch{
+            print(error)
+        }
+        return result
+        
+    }
+    
+    // MARK: IMAGES GET BY COLLECTION
+    
+    func getPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil ) -> [Image] {
+        
+        var hiddenWhere = ""
+        if !includeHidden {
+            hiddenWhere = "AND hidden=0"
+        }
+        var placeWhere = ""
+        if ((place == nil || place == "") && country != "" && province != "" && city != "" ){
+            placeWhere = "AND ( (country = '\(country)' AND province = '\(province)' AND city = '\(city)') OR (assignCountry = '\(country)' AND assignProvince = '\(province)' AND assignCity = '\(city)') )"
+        }else if place != nil {
+            placeWhere = "AND (place = '\(place ?? "")') OR (assignPlace = '\(place ?? "")') "
+        }
+        
+        
+        var stmtWithoutHiddenWhere = ""
+        
+        if year == 0 && month == 0 && day == 0 {
+            if ignoreDate {
+                stmtWithoutHiddenWhere = "1=1 \(placeWhere)"
+            }else{
+                stmtWithoutHiddenWhere = "( (photoTakenYear = 0 and photoTakenMonth = 0 and photoTakenDay = 0) OR (photoTakenYear is null and photoTakenMonth is null and photoTakenDay is null) ) \(placeWhere)"
+            }
+        }else{
+            if year == 0 {
+                // no condition
+            } else if month == 0 {
+                stmtWithoutHiddenWhere = "photoTakenYear = \(year) \(placeWhere) \(hiddenWhere)"
+            } else if day == 0 {
+                stmtWithoutHiddenWhere = "photoTakenYear = \(year) and photoTakenMonth = \(month) \(placeWhere)"
+            } else {
+                stmtWithoutHiddenWhere = "photoTakenYear = \(year) and photoTakenMonth = \(month) and photoTakenDay = \(day) \(placeWhere)"
+            }
+        }
+        
+        var sqlArgs:[Any] = []
+        
+        self.inArray(field: "imageSource", array: imageSource, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
+        self.inArray(field: "cameraModel", array: cameraModel, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
+        
+        let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
+        let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=1"
+        
+        print(stmt)
+        
+        var result:[Image] = []
+        var hiddenCount:Int = 0
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                hiddenCount = try Image.filter(sql: stmtHidden, arguments:StatementArguments(sqlArgs)).fetchCount(db)
+                result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs)).order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        if hiddenCountHandler != nil {
+            hiddenCountHandler!(hiddenCount)
+        }
+        return result
+    }
+    
+    
+    
+    func getPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil ) -> [Image] {
+        var hiddenWhere = ""
+        if !includeHidden {
+            hiddenWhere = "AND hidden=0"
+        }
+        var stmtWithoutHiddenWhere = ""
+        
+        if year == 0 {
+            stmtWithoutHiddenWhere = "event = '\(event)' \(hiddenWhere)"
+        } else if day == 0 {
+            stmtWithoutHiddenWhere = "event = '\(event)' and photoTakenYear = \(year) and photoTakenMonth = \(month) \(hiddenWhere)"
+        } else {
+            stmtWithoutHiddenWhere = "event = '\(event)' and photoTakenYear = \(year) and photoTakenMonth = \(month) and photoTakenDay = \(day) \(hiddenWhere)"
+        }
+        
+        var sqlArgs:[Any] = []
+        
+        self.inArray(field: "imageSource", array: imageSource, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
+        self.inArray(field: "cameraModel", array: cameraModel, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
+        
+        let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
+        let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=1"
+        
+        print(stmt)
+        
+        var result:[Image] = []
+        var hiddenCount:Int = 0
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                hiddenCount = try Image.filter(sql: stmtHidden, arguments:StatementArguments(sqlArgs)).fetchCount(db)
+                result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs)).order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        if hiddenCountHandler != nil {
+            hiddenCountHandler!(hiddenCount)
+        }
+        return result
+    }
+    
+    // MARK: IMAGES GET BY CONDITIONS
     
     func getYears(event:String? = nil) -> [Int] {
         var condition = ""
@@ -462,7 +725,6 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
-    
     func getImagesByDate(year:Int, month:Int, day:Int, event:String? = nil) -> [Image]{
         var sql = "hidden=0 and photoTakenYear=\(year) and photoTakenMonth=\(month) and photoTakenDay=\(day)"
         if let ev = event, ev != "" {
@@ -516,167 +778,6 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             print(error)
         }
         return image
-    }
-    
-    func getOrCreatePhoto(filename:String, path:String, parentPath:String, sharedDB:DatabaseWriter? = nil) -> Image{
-        var image:Image?
-        do {
-            let db = ModelStore.sharedDBPool()
-            try db.read { db in
-                image = try Image.fetchOne(db, key: path)
-            }
-            if image == nil {
-                let queue = try sharedDB ?? DatabaseQueue(path: dbfile)
-                try queue.write { db in
-                    image = Image.new(filename: filename, path: path, parentFolder: parentPath)
-                    try image?.save(db)
-                }
-                
-            }
-        }catch{
-            print(error)
-        }
-        return image!
-    }
-    
-    func saveImage(image: Image, sharedDB:DatabaseWriter? = nil){
-        do {
-            let db = ModelStore.sharedDBPool()
-            let _ = try db.write { db in
-                var image = image
-                try image.save(db)
-                //print("saved image")
-            }
-        }catch{
-            print(error)
-        }
-    }
-    
-    
-    
-    func updateImageRawBase(oldRawPath:String, newRawPath:String){
-        do {
-            let db = ModelStore.sharedDBPool()
-            let _ = try db.write { db in
-                try db.execute("update Image set originPath = ? where originPath = ?", arguments: [newRawPath, oldRawPath])
-            }
-        }catch{
-            print(error)
-        }
-    }
-    
-    func updateImageRawBase(repositoryPath:String, rawPath:String){
-        do {
-            let db = ModelStore.sharedDBPool()
-            let _ = try db.write { db in
-                try db.execute("update Image set originPath = ? where repositoryPath = ?", arguments: [rawPath, repositoryPath])
-            }
-        }catch{
-            print(error)
-        }
-    }
-    
-    func updateImageRawBase(pathStartsWith path:String, rawPath:String){
-        do {
-            let db = ModelStore.sharedDBPool()
-            let _ = try db.write { db in
-                try db.execute("update Image set originPath = ? where path like ?", arguments: [rawPath, "\(path.withStash())%"])
-            }
-        }catch{
-            print(error)
-        }
-    }
-    
-    func updateImageRepositoryBase(pathStartsWith path:String, repositoryPath:String){
-        do {
-            let db = ModelStore.sharedDBPool()
-            let _ = try db.write { db in
-                try db.execute("update Image set repositoryPath = ? where path like ?", arguments: [repositoryPath, "\(path.withStash())%"])
-            }
-        }catch{
-            print(error)
-        }
-    }
-    
-    func updateImageRepositoryBase(oldRepositoryPath:String, newRepository:String){
-        do {
-            let db = ModelStore.sharedDBPool()
-            let _ = try db.write { db in
-                try db.execute("update Image set repositoryPath = ? where repositoryPath = ?", arguments: [newRepository, oldRepositoryPath])
-            }
-        }catch{
-            print(error)
-        }
-    }
-    
-    func updateImagePath(repositoryPath:String){
-        do {
-            let db = ModelStore.sharedDBPool()
-            let _ = try db.write { db in
-                try db.execute("update Image set path = repositoryPath || subPath where repositoryPath = ? and subPath <> ''", arguments: [repositoryPath])
-            }
-        }catch{
-            print(error)
-        }
-    }
-    
-    func deletePhoto(atPath path:String, updateFlag:Bool = true){
-        if updateFlag {
-            do {
-                let db = ModelStore.sharedDBPool()
-                let _ = try db.write { db in
-                    try db.execute("update Image set delFlag = ?", arguments: [true])
-                }
-            }catch{
-                print(error)
-            }
-        }else{
-            do {
-                let db = ModelStore.sharedDBPool()
-                let _ = try db.write { db in
-                    try Image.deleteOne(db, key: path)
-                }
-            }catch{
-                print(error)
-            }
-        }
-    }
-    
-    func getChiefImageOfDuplicatedSet(duplicatesKey:String) -> Image?{
-        var result:Image? = nil
-        do {
-            let db = ModelStore.sharedDBPool()
-            let _ = try db.read { db in
-                result = try Image.filter(sql: "hidden=0 and duplicatesKey='\(duplicatesKey)'").fetchOne(db)
-            }
-        }catch{
-            print(error)
-        }
-        return result
-    }
-    
-    func getFirstImageOfDuplicatedSet(duplicatesKey:String) -> Image?{
-        var result:Image? = nil
-        do {
-            let db = ModelStore.sharedDBPool()
-            let _ = try db.read { db in
-                result = try Image.filter(sql: "duplicatesKey='\(duplicatesKey)'").order(Column("path").asc).fetchOne(db)
-            }
-        }catch{
-            print(error)
-        }
-        return result
-    }
-    
-    func markImageDuplicated(path:String, duplicatesKey:String?, hide:Bool){
-        do {
-            let db = ModelStore.sharedDBPool()
-            let _ = try db.write { db in
-                try db.execute("update Image set duplicatesKey = ?, hidden = ? where path = ?", arguments: [duplicatesKey, hide, path])
-            }
-        }catch{
-            print(error)
-        }
     }
     
     func getAllPhotoPaths(includeHidden:Bool = true, sharedDB:DatabaseWriter? = nil) -> Set<String> {
@@ -788,6 +889,113 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
+    func getPhotoFilesWithoutExif(limit:Int? = nil) -> [Image] {
+        var result:[Image] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "hidden != 1 AND (updateExifDate is null OR photoTakenYear is null OR photoTakenYear = 0 OR (latitude <> '0.0' AND latitudeBD = '0.0') OR (latitudeBD <> '0.0' AND COUNTRY = ''))").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+                // TODO: OR updateLocationDate is null
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func getPhotoFilesWithoutLocation() -> [Image] {
+        var result:[Image] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "hidden != 1 AND updateLocationDate is null").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func getPhotoFiles(after date:Date) -> [Image] {
+        var result:[Image] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "updateLocationDate >= ?", arguments: StatementArguments([date])).fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    // MARK: IMAGES DUPLICATES
+    
+    func getDuplicatedImages(repositoryRoot:String, theOtherRepositoryRoot:String) -> [String:[Image]] {
+        var result:[String:[Image]] = [:]
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.read { db in
+                let cursor = try Image.filter(sql: "(path like '\(repositoryRoot.withStash())%' or path like '\(theOtherRepositoryRoot.withStash())%') and duplicatesKey is not null and duplicatesKey != '' ").order(sql: "duplicatesKey asc, path asc").fetchCursor(db)
+                
+                while let image = try cursor.next() {
+                    if let key = image.duplicatesKey, key != "" {
+                        //print("found \(key) - \(image.path)")
+                        if let _ = result[key] {
+                            result[key]?.append(image)
+                        }else{
+                            result[key] = [image]
+                        }
+                    }
+                }
+            }
+            
+            
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func getChiefImageOfDuplicatedSet(duplicatesKey:String) -> Image?{
+        var result:Image? = nil
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.read { db in
+                result = try Image.filter(sql: "hidden=0 and duplicatesKey='\(duplicatesKey)'").fetchOne(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func getFirstImageOfDuplicatedSet(duplicatesKey:String) -> Image?{
+        var result:Image? = nil
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.read { db in
+                result = try Image.filter(sql: "duplicatesKey='\(duplicatesKey)'").order(Column("path").asc).fetchOne(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func markImageDuplicated(path:String, duplicatesKey:String?, hide:Bool){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update Image set duplicatesKey = ?, hidden = ? where path = ?", arguments: [duplicatesKey, hide, path])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    // MARK: IMAGES COUNT
+    
     func countPhotoFiles(rootPath:String) -> Int {
         var result:Int = 0
         do {
@@ -801,7 +1009,179 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
+    
+    func countImageWithoutRepositoryPath(repositoryRoot:String) -> Int {
+        var result = 0
+        let root = repositoryRoot.withStash()
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "repositoryPath='' and path like '\(root)%'").fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+        
+    }
+    
+    func countImageWithoutSubPath(repositoryRoot:String) -> Int {
+        var result = 0
+        let root = repositoryRoot.withStash()
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "subPath='' and path like '\(root)%'").fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+        
+    }
+    
+    func countImageWithoutId(repositoryRoot:String) -> Int {
+        var result = 0
+        let root = repositoryRoot.withStash()
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "id is null and path like '\(root)%'").fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+        
+    }
+    
+    func countImageUnmatchedRepositoryRoot(repositoryRoot:String) -> Int {
+        var result = 0
+        let root = repositoryRoot.withStash()
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "repositoryPath='\(root)' and path not like '\(root)%'").fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+        
+    }
+    
+    func countImages(repositoryRoot:String) -> Int {
+        var result = 0
+        let root = repositoryRoot.withStash()
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "path like '\(root)%'").fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+        
+    }
+    
+    func countContainersWithoutRepositoryPath(repositoryRoot:String) -> Int {
+        var result = 0
+        let root = repositoryRoot.withStash()
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try ImageContainer.filter(sql: "repositoryPath = '' and path like '\(root)%'").fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+        
+    }
+    
+    func countContainersWithoutSubPath(repositoryRoot:String) -> Int {
+        var result = 0
+        let root = repositoryRoot.withStash()
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try ImageContainer.filter(sql: "subPath = '' and path like '\(root)%'").fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+        
+    }
+    
     // MARK: IMAGES - UPDATES
+    
+    func updateImageRawBase(oldRawPath:String, newRawPath:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update Image set originPath = ? where originPath = ?", arguments: [newRawPath, oldRawPath])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func updateImageRawBase(repositoryPath:String, rawPath:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update Image set originPath = ? where repositoryPath = ?", arguments: [rawPath, repositoryPath])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func updateImageRawBase(pathStartsWith path:String, rawPath:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update Image set originPath = ? where path like ?", arguments: [rawPath, "\(path.withStash())%"])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func updateImageRepositoryBase(pathStartsWith path:String, repositoryPath:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update Image set repositoryPath = ? where path like ?", arguments: [repositoryPath, "\(path.withStash())%"])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func updateImageRepositoryBase(oldRepositoryPath:String, newRepository:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update Image set repositoryPath = ? where repositoryPath = ?", arguments: [newRepository, oldRepositoryPath])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func updateImagePath(repositoryPath:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update Image set path = repositoryPath || subPath where repositoryPath = ? and subPath <> ''", arguments: [repositoryPath])
+            }
+        }catch{
+            print(error)
+        }
+    }
     
     func updateImageDates(path:String, date:Date, fields:Set<String>){
         var arguments:[Any] = []
@@ -847,46 +1227,6 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }catch{
             print(error)
         }
-    }
-    
-    func getPhotoFilesWithoutExif(limit:Int? = nil) -> [Image] {
-        var result:[Image] = []
-        do {
-            let db = ModelStore.sharedDBPool()
-            try db.read { db in
-                result = try Image.filter(sql: "hidden != 1 AND (updateExifDate is null OR photoTakenYear is null OR photoTakenYear = 0 OR (latitude <> '0.0' AND latitudeBD = '0.0') OR (latitudeBD <> '0.0' AND COUNTRY = ''))").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
-                // TODO: OR updateLocationDate is null
-            }
-        }catch{
-            print(error)
-        }
-        return result
-    }
-    
-    func getPhotoFilesWithoutLocation() -> [Image] {
-        var result:[Image] = []
-        do {
-            let db = ModelStore.sharedDBPool()
-            try db.read { db in
-                result = try Image.filter(sql: "hidden != 1 AND updateLocationDate is null").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
-            }
-        }catch{
-            print(error)
-        }
-        return result
-    }
-    
-    func getPhotoFiles(after date:Date) -> [Image] {
-        var result:[Image] = []
-        do {
-            let db = ModelStore.sharedDBPool()
-            try db.read { db in
-                result = try Image.filter(sql: "updateLocationDate >= ?", arguments: StatementArguments([date])).fetchAll(db)
-            }
-        }catch{
-            print(error)
-        }
-        return result
     }
     
     // MARK: IMAGES - EXPORT
@@ -1028,173 +1368,6 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             print(error)
         }
         
-    }
-    
-    // MARK: IMAGES - TREE
-    
-    func getAllDates(imageSource:[String]? = nil, cameraModel:[String]? = nil) -> [Row] {
-        var sqlArgs:[Any] = []
-        var imageSourceWhere = ""
-        var cameraModelWhere = ""
-        inArray(field: "imageSource", array: imageSource, where: &imageSourceWhere, args: &sqlArgs)
-        inArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs)
-        
-        let sql = """
-        SELECT photoTakenYear, photoTakenMonth, photoTakenDay, count(path) as photoCount FROM
-        (SELECT IFNULL(photoTakenYear,0) AS photoTakenYear, IFNULL(photoTakenMonth,0) AS photoTakenMonth, IFNULL(photoTakenDay,0) AS photoTakenDay, path, imageSource, cameraModel from Image)
-        WHERE 1=1 \(imageSourceWhere) \(cameraModelWhere) GROUP BY photoTakenYear,photoTakenMonth,photoTakenDay ORDER BY photoTakenYear DESC,photoTakenMonth DESC,photoTakenDay DESC
-        """
-        print(sql)
-        var result:[Row] = []
-        do {
-            let db = ModelStore.sharedDBPool()
-            try db.read { db in
-                result = try Row.fetchAll(db, sql, arguments:StatementArguments(sqlArgs))
-            }
-        }catch{
-            print(error)
-        }
-        return result
-        
-    }
-    
-    func getAllPlacesAndDates(imageSource:[String]? = nil, cameraModel:[String]? = nil) -> [Row] {
-        var sqlArgs:[Any] = []
-        var imageSourceWhere = ""
-        var cameraModelWhere = ""
-        inArray(field: "imageSource", array: imageSource, where: &imageSourceWhere, args: &sqlArgs)
-        inArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs)
-        
-        let sql = """
-        SELECT country, province, city, place, photoTakenYear, photoTakenMonth, photoTakenDay, count(path) as photoCount FROM
-        (
-        SELECT country, province, city, place, photoTakenYear, photoTakenMonth, photoTakenDay, path, imageSource,cameraModel from Image WHERE assignCountry is null and assignProvince is null and assignCity is null
-        UNION
-        SELECT assignCountry as country, assignProvince as province, assignCity as city, assignPlace as place, photoTakenYear, photoTakenMonth, photoTakenDay, path, imageSource,cameraModel from Image WHERE assignCountry is not null and assignProvince is not null and assignCity is not null
-        )
-        WHERE 1=1 \(imageSourceWhere) \(cameraModelWhere)
-        GROUP BY country,province,city,place,photoTakenYear,photoTakenMonth,photoTakenDay ORDER BY country,province,city,place,photoTakenYear DESC,photoTakenMonth DESC,photoTakenDay DESC
-        """
-        
-        print(sql)
-        var result:[Row] = []
-        do {
-            let db = ModelStore.sharedDBPool()
-            try db.read { db in
-                result = try Row.fetchAll(db, sql, arguments:StatementArguments(sqlArgs))
-            }
-        }catch{
-            print(error)
-        }
-        return result
-        
-    }
-    
-    // MARK: IMAGES - COLLECTION
-    
-    func getPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil ) -> [Image] {
-        
-        var hiddenWhere = ""
-        if !includeHidden {
-            hiddenWhere = "AND hidden=0"
-        }
-        var placeWhere = ""
-        if ((place == nil || place == "") && country != "" && province != "" && city != "" ){
-            placeWhere = "AND ( (country = '\(country)' AND province = '\(province)' AND city = '\(city)') OR (assignCountry = '\(country)' AND assignProvince = '\(province)' AND assignCity = '\(city)') )"
-        }else if place != nil {
-            placeWhere = "AND (place = '\(place ?? "")') OR (assignPlace = '\(place ?? "")') "
-        }
-        
-        
-        var stmtWithoutHiddenWhere = ""
-        
-        if year == 0 && month == 0 && day == 0 {
-            if ignoreDate {
-                stmtWithoutHiddenWhere = "1=1 \(placeWhere)"
-            }else{
-                stmtWithoutHiddenWhere = "( (photoTakenYear = 0 and photoTakenMonth = 0 and photoTakenDay = 0) OR (photoTakenYear is null and photoTakenMonth is null and photoTakenDay is null) ) \(placeWhere)"
-            }
-        }else{
-            if year == 0 {
-                // no condition
-            } else if month == 0 {
-                stmtWithoutHiddenWhere = "photoTakenYear = \(year) \(placeWhere) \(hiddenWhere)"
-            } else if day == 0 {
-                stmtWithoutHiddenWhere = "photoTakenYear = \(year) and photoTakenMonth = \(month) \(placeWhere)"
-            } else {
-                stmtWithoutHiddenWhere = "photoTakenYear = \(year) and photoTakenMonth = \(month) and photoTakenDay = \(day) \(placeWhere)"
-            }
-        }
-        
-        var sqlArgs:[Any] = []
-        
-        self.inArray(field: "imageSource", array: imageSource, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
-        self.inArray(field: "cameraModel", array: cameraModel, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
-        
-        let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
-        let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=1"
-        
-        print(stmt)
-        
-        var result:[Image] = []
-        var hiddenCount:Int = 0
-        do {
-            let db = ModelStore.sharedDBPool()
-            try db.read { db in
-                hiddenCount = try Image.filter(sql: stmtHidden, arguments:StatementArguments(sqlArgs)).fetchCount(db)
-                result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs)).order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
-            }
-        }catch{
-            print(error)
-        }
-        if hiddenCountHandler != nil {
-            hiddenCountHandler!(hiddenCount)
-        }
-        return result
-    }
-    
-    
-    
-    func getPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil ) -> [Image] {
-        var hiddenWhere = ""
-        if !includeHidden {
-            hiddenWhere = "AND hidden=0"
-        }
-        var stmtWithoutHiddenWhere = ""
-        
-        if year == 0 {
-            stmtWithoutHiddenWhere = "event = '\(event)' \(hiddenWhere)"
-        } else if day == 0 {
-            stmtWithoutHiddenWhere = "event = '\(event)' and photoTakenYear = \(year) and photoTakenMonth = \(month) \(hiddenWhere)"
-        } else {
-            stmtWithoutHiddenWhere = "event = '\(event)' and photoTakenYear = \(year) and photoTakenMonth = \(month) and photoTakenDay = \(day) \(hiddenWhere)"
-        }
-        
-        var sqlArgs:[Any] = []
-        
-        self.inArray(field: "imageSource", array: imageSource, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
-        self.inArray(field: "cameraModel", array: cameraModel, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
-        
-        let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
-        let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=1"
-        
-        print(stmt)
-        
-        var result:[Image] = []
-        var hiddenCount:Int = 0
-        do {
-            let db = ModelStore.sharedDBPool()
-            try db.read { db in
-                hiddenCount = try Image.filter(sql: stmtHidden, arguments:StatementArguments(sqlArgs)).fetchCount(db)
-                result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs)).order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
-            }
-        }catch{
-            print(error)
-        }
-        if hiddenCountHandler != nil {
-            hiddenCountHandler!(hiddenCount)
-        }
-        return result
     }
     
     // MARK: PLACES
@@ -1470,6 +1643,19 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     // MARK: DEVICES
     
+    func getDevices() -> [ImageDevice] {
+        var result:[ImageDevice] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try ImageDevice.order(Column("name").asc).fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
     func getOrCreateDevice(device:PhoneDevice) -> ImageDevice{
         var dev:ImageDevice?
         do {
@@ -1494,6 +1680,19 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return dev!
     }
     
+    func getDevice(deviceId:String) -> ImageDevice? {
+        var dev:ImageDevice?
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                dev = try ImageDevice.fetchOne(db, key: deviceId)
+            }
+        }catch{
+            print(error)
+        }
+        return dev
+    }
+    
     func saveDevice(device:ImageDevice){
         var dev = device
         do {
@@ -1505,6 +1704,8 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             print(error)
         }
     }
+    
+    // MARK: DEVICE FILES
     
     func getImportedFile(deviceId:String, file:PhoneFile) -> ImageDeviceFile? {
         var deviceFile:ImageDeviceFile?
@@ -1579,6 +1780,78 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             }
         }catch{
             print(error)
+        }
+        return result
+    }
+    
+    // MARK: DEVICE PATHS
+    
+    func getDevicePath(deviceId:String, path:String) -> ImageDevicePath? {
+        var devicePath:ImageDevicePath?
+        do {
+            let key = "\(deviceId):\(path)"
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                devicePath = try ImageDevicePath.fetchOne(db, key: key)
+            }
+            return devicePath
+        }catch{
+            print(error)
+        }
+        return nil
+    }
+    
+    func saveDevicePath(file:ImageDevicePath){
+        var f = file
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try f.save(db)
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func deleteDevicePath(deviceId:String, path:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try db.execute("delete from ImageDevicePath where deviceId = ? and path = ?", arguments: [deviceId, path])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func getDevicePaths(deviceId:String, deviceType:MobileType = .Android) -> [ImageDevicePath] {
+        var result:[ImageDevicePath] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try ImageDevicePath.filter(sql: "deviceId='\(deviceId)'").order(Column("path").asc).fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        if result.count == 0 {
+            if deviceType == .Android {
+                result = [
+                    ImageDevicePath.include(deviceId: deviceId, path: "/sdcard/DCIM/Camera/", toSubFolder: "Camera"),
+                    ImageDevicePath.include(deviceId: deviceId, path: "/sdcard/tencent/MicroMsg/Weixin/", toSubFolder: "WeChat"),
+                    ImageDevicePath.include(deviceId: deviceId, path: "/sdcard/tencent/QQ_Images/", toSubFolder: "QQ"),
+                    ImageDevicePath.include(deviceId: deviceId, path: "/sdcard/tencent/QQ_Video/", toSubFolder: "QQ"),
+                    ImageDevicePath.include(deviceId: deviceId, path: "/sdcard/Snapseed/", toSubFolder: "Snapseed"),
+                    ImageDevicePath.include(deviceId: deviceId, path: "/sdcard/Pictures/Instagram/", toSubFolder: "Instagram")
+                ]
+            }else {
+                result = [
+                    ImageDevicePath.include(deviceId: deviceId, path: "/DCIM/", toSubFolder: "Camera")
+                ]
+            }
+            for devicePath in result {
+                ModelStore.default.saveDevicePath(file: devicePath)
+            }
         }
         return result
     }
@@ -1826,7 +2099,6 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 t.add(column: "subPath", .text).notNull().defaults(to: "")
             })
             try db.alter(table: "Image", body: { t in
-                t.add(column: "repositoryPath", .text).notNull().defaults(to: "")
                 t.add(column: "subPath", .text).notNull().defaults(to: "")
             })
         }
@@ -1836,6 +2108,49 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 t.add(column: "parentPath", .text).notNull().defaults(to: "")
             })
         }
+        
+        migrator.registerMigration("v11") { db in
+            try db.alter(table: "ImageDevice", body: { t in
+                t.add(column: "homePath", .text).notNull().defaults(to: "")
+            })
+        }
+        
+        migrator.registerMigration("v12") { db in
+            try db.alter(table: "Image", body: { t in
+                t.add(column: "hiddenByRepository", .boolean).defaults(to: false).indexed()
+                t.add(column: "hiddenByContainer", .boolean).defaults(to: false).indexed()
+            })
+        }
+        
+        migrator.registerMigration("v13") { db in
+            try db.alter(table: "Image", body: { t in
+                t.add(column: "repositoryPath", .text).defaults(to: "").indexed()
+            })
+        }
+        
+        migrator.registerMigration("v14") { db in
+            try db.alter(table: "ImageContainer", body: { t in
+                t.add(column: "hiddenByRepository", .boolean).defaults(to: false).indexed()
+                t.add(column: "hiddenByContainer", .boolean).defaults(to: false).indexed()
+            })
+        }
+        
+        migrator.registerMigration("v15") { db in
+            try db.create(table: "ImageDevicePath", body: { t in
+                t.column("id", .text).primaryKey().unique().notNull()
+                t.column("deviceId", .text).notNull().indexed()
+                t.column("path", .text).notNull().indexed()
+                t.column("toSubFolder", .text).notNull()
+                t.column("exclude", .boolean).defaults(to: false).indexed()
+            })
+        }
+        
+        migrator.registerMigration("v16") { db in
+            try db.alter(table: "ImageContainer", body: { t in
+                t.add(column: "deviceId", .text).defaults(to: "")
+            })
+        }
+        
         
         do {
             let dbQueue = try DatabaseQueue(path: dbfile)

@@ -23,7 +23,7 @@ class Accumulator : NSObject {
     private var onDataChanged:(() -> Void)?
     private var isDataChanged:Bool = false
     
-    init(target:Int, indicator:NSProgressIndicator? = nil, suspended:Bool = false, lblMessage:NSTextField? = nil){
+    init(target:Int, indicator:NSProgressIndicator? = nil, suspended:Bool = false, lblMessage:NSTextField? = nil, startupMessage:String = ""){
         count = 0
         self._target = target
         self.indicator = indicator
@@ -41,12 +41,12 @@ class Accumulator : NSObject {
         }
         if lblMessage != nil {
             DispatchQueue.main.async {
-                lblMessage?.stringValue = ""
+                lblMessage?.stringValue = startupMessage
             }
         }
     }
     
-    init(target:Int, indicator:NSProgressIndicator? = nil, suspended:Bool = false, lblMessage:NSTextField? = nil, presetAddingMessage:String? = nil, presetCompleteMessage:String? = nil, onCompleted: @escaping (_ data:[String:Int]) -> Void, onDataChanged: (() -> Void)? = nil){
+    init(target:Int, indicator:NSProgressIndicator? = nil, suspended:Bool = false, lblMessage:NSTextField? = nil, presetAddingMessage:String? = nil, presetCompleteMessage:String? = nil, onCompleted: @escaping (_ data:[String:Int]) -> Void, onDataChanged: (() -> Void)? = nil, startupMessage:String = ""){
         count = 0
         self._target = target
         self.indicator = indicator
@@ -66,7 +66,7 @@ class Accumulator : NSObject {
         }
         if lblMessage != nil {
             DispatchQueue.main.async {
-                lblMessage?.stringValue = ""
+                lblMessage?.stringValue = startupMessage
             }
         }
     }

@@ -19,6 +19,7 @@ struct ImageDevice : Codable {
     var storagePath:String?
     var marketName:String?
     var repositoryPath:String?
+    var homePath:String?
     
     static func databaseTableName() -> String
     {
@@ -34,7 +35,8 @@ struct ImageDevice : Codable {
             name: nil,
             storagePath: nil,
             marketName: nil,
-            repositoryPath: nil
+            repositoryPath: nil,
+            homePath: nil
         )
     }
 }

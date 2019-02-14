@@ -139,13 +139,16 @@ extension ViewController {
             if devices.count > 0 {
                 if let device:PhoneDevice = IPHONE.bridge.device() {
                     let imageDevice = ModelStore.default.getOrCreateDevice(device: device)
-                    
+                    print("connected ios device: \(imageDevice.deviceId ?? "")")
                     var dev = device
                     if imageDevice.name != "" {
                         dev.name = imageDevice.name ?? ""
                     }
                     self.deviceIdToDevice[device.deviceId] = dev
                     self.addDeviceTreeEntry(device: dev)
+                }else{
+                    print("Unable to connect to ios device: \(devices[0])")
+                    self.popNotification(message: "Unable to connect to iOS device. Please unlock the screen and then retry.")
                 }
             }
             self.sourceList.reloadData()

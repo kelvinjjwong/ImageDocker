@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -11,6 +12,7 @@
                 <outlet property="btnHome" destination="aKr-Xr-7en" id="K9n-v1-g1f"/>
                 <outlet property="btnOK" destination="wkm-Sc-MNa" id="ows-7d-Yih"/>
                 <outlet property="btnParent" destination="06y-3k-hYa" id="jET-uL-PaU"/>
+                <outlet property="chkExclude" destination="mp1-W6-p1i" id="zIZ-sg-9Kv"/>
                 <outlet property="lblToFolder" destination="Ief-I0-0Yd" id="K1i-zH-mol"/>
                 <outlet property="tblFiles" destination="WyE-8J-Vj5" id="R0w-zn-tE3"/>
                 <outlet property="tblFolders" destination="VWA-Fz-8zf" id="YIE-RR-neL"/>
@@ -41,7 +43,7 @@
                     <rect key="frame" x="104" y="395" width="527" height="22"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="4rI-AU-1Jb">
                         <font key="font" metaFont="system"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
@@ -73,7 +75,7 @@
                     </constraints>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="68l-ct-D9c">
                         <font key="font" metaFont="system"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
@@ -338,6 +340,13 @@ DQ
                         <action selector="onHomeClicked:" target="-2" id="mc5-Lb-BRv"/>
                     </connections>
                 </button>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mp1-W6-p1i">
+                    <rect key="frame" x="661" y="35" width="126" height="18"/>
+                    <buttonCell key="cell" type="check" title="Exclude this path" bezelStyle="regularSquare" imagePosition="left" inset="2" id="hRe-f8-UYb">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
             </subviews>
             <constraints>
                 <constraint firstItem="wkm-Sc-MNa" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="0BA-4k-giI"/>
@@ -346,6 +355,7 @@ DQ
                 <constraint firstItem="wkm-Sc-MNa" firstAttribute="top" secondItem="H6d-S3-D8u" secondAttribute="bottom" constant="34" id="DcL-7E-ds5"/>
                 <constraint firstItem="Xmh-5Q-CVk" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="10" id="Dhb-EI-qzI"/>
                 <constraint firstItem="29O-CJ-Uu8" firstAttribute="leading" secondItem="Vab-ow-6t4" secondAttribute="trailing" constant="10" id="EQ3-eF-FzD"/>
+                <constraint firstAttribute="trailing" secondItem="mp1-W6-p1i" secondAttribute="trailing" constant="15" id="GtW-g9-rCe"/>
                 <constraint firstAttribute="trailing" secondItem="aKr-Xr-7en" secondAttribute="trailing" constant="10" id="K2q-aI-Pd3"/>
                 <constraint firstItem="06y-3k-hYa" firstAttribute="leading" secondItem="5do-o2-M1t" secondAttribute="trailing" constant="10" id="KVn-y7-oOc"/>
                 <constraint firstItem="Lhb-ec-plZ" firstAttribute="top" secondItem="29O-CJ-Uu8" secondAttribute="bottom" constant="8" id="Ky1-Mq-KcT"/>
@@ -353,6 +363,7 @@ DQ
                 <constraint firstItem="Vab-ow-6t4" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="10" id="OBJ-O3-uir"/>
                 <constraint firstItem="Lhb-ec-plZ" firstAttribute="leading" secondItem="Xmh-5Q-CVk" secondAttribute="trailing" constant="8" id="QDq-BE-M62"/>
                 <constraint firstItem="29O-CJ-Uu8" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="18" id="RbV-6j-Tlo"/>
+                <constraint firstItem="mp1-W6-p1i" firstAttribute="top" secondItem="H6d-S3-D8u" secondAttribute="bottom" constant="16" id="Ryp-DW-ZyG"/>
                 <constraint firstItem="aKr-Xr-7en" firstAttribute="leading" secondItem="06y-3k-hYa" secondAttribute="trailing" constant="10" id="SZc-Ob-3J0"/>
                 <constraint firstItem="5do-o2-M1t" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="18" id="TLk-Xl-bB0"/>
                 <constraint firstItem="tR3-4E-Bk7" firstAttribute="top" secondItem="Lhb-ec-plZ" secondAttribute="bottom" constant="8" id="WUL-cO-43p"/>

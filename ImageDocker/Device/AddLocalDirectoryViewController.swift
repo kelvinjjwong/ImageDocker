@@ -33,7 +33,7 @@ class AddLocalDirectoryViewController: NSViewController, DirectoryViewGotoDelega
     var currentPath:URL
     
     // MARK: EVENT
-    var onApply: ((_ directory:String, _ toSubFolder:String) -> Void)?
+    var onApply: ((_ directory:String, _ toSubFolder:String, _ exclude:Bool) -> Void)?
     
     // MARK: CONTROLS
     
@@ -47,6 +47,7 @@ class AddLocalDirectoryViewController: NSViewController, DirectoryViewGotoDelega
     @IBOutlet weak var btnHome: NSButton!
     @IBOutlet weak var btnGoto: NSButton!
     @IBOutlet weak var lblToFolder: NSTextField!
+    @IBOutlet weak var chkExclude: NSButton!
     
     
     
@@ -63,7 +64,7 @@ class AddLocalDirectoryViewController: NSViewController, DirectoryViewGotoDelega
     // MARK: INIT
     
     
-    init(directoryViewDelegate:DirectoryViewDelegate, deviceType:MobileType, destinationType:DeviceCopyDestinationType, onApply: ((_ directory:String, _ toSubFolder:String) -> Void)? = nil){
+    init(directoryViewDelegate:DirectoryViewDelegate, deviceType:MobileType, destinationType:DeviceCopyDestinationType, onApply: ((_ directory:String, _ toSubFolder:String, _ exclude:Bool) -> Void)? = nil){
         self.currentPath = URL(fileURLWithPath: "/")
         self.directoryViewDelegate = directoryViewDelegate
         self.onApply = onApply
@@ -189,10 +190,12 @@ class AddLocalDirectoryViewController: NSViewController, DirectoryViewGotoDelega
         goto(path: self.directoryViewDelegate.home())
     }
     
+    // MARK: OK BUTTON
+    
     @IBAction func onOKClicked(_ sender: NSButton) {
         guard txtDirectory.stringValue != "" && txtSubFolder.stringValue != "" else {return}
         if let call = onApply {
-            call(txtDirectory.stringValue, txtSubFolder.stringValue)
+            call(txtDirectory.stringValue, txtSubFolder.stringValue, chkExclude.state == .on)
         }
     }
     
