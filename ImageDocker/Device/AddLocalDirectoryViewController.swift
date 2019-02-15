@@ -103,7 +103,7 @@ class AddLocalDirectoryViewController: NSViewController, DirectoryViewGotoDelega
         self.currentPath = URL(fileURLWithPath: directoryViewDelegate.home())
         txtDirectory.stringValue = directoryViewDelegate.home()
         txtSubFolder.stringValue = self.defaultToFolder
-        btnOK.isEnabled = false
+        btnOK.isEnabled = true
         
         tblShortcut.delegate = tblShortcutDelegate
         tblShortcut.dataSource = tblShortcutDelegate
@@ -166,11 +166,7 @@ class AddLocalDirectoryViewController: NSViewController, DirectoryViewGotoDelega
         self.tblFolders.reloadData()
         self.tblFiles.reloadData()
         
-        if files.count > 0 {
-            btnOK.isEnabled = true
-        }else{
-            btnOK.isEnabled = false
-        }
+        btnOK.isEnabled = true
     }
     
     func currentUrl() -> URL {
@@ -193,7 +189,10 @@ class AddLocalDirectoryViewController: NSViewController, DirectoryViewGotoDelega
     // MARK: OK BUTTON
     
     @IBAction func onOKClicked(_ sender: NSButton) {
-        guard txtDirectory.stringValue != "" && txtSubFolder.stringValue != "" else {return}
+        guard txtDirectory.stringValue != "" else {return}
+        if self.chkExclude.state == .off && txtSubFolder.stringValue == "" {
+            return
+        }
         if let call = onApply {
             call(txtDirectory.stringValue, txtSubFolder.stringValue, chkExclude.state == .on)
         }

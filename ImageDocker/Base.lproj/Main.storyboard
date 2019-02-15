@@ -1791,7 +1791,7 @@
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
-                                                <tableColumn width="14" minWidth="10" maxWidth="3.4028234663852886e+38" id="PxT-DD-0AR">
+                                                <tableColumn identifier="exclude" width="14" minWidth="10" maxWidth="3.4028234663852886e+38" id="PxT-DD-0AR">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>

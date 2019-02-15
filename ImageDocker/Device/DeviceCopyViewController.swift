@@ -204,6 +204,7 @@ class DeviceCopyViewController: NSViewController {
                     self.tblSourcePath.reloadData()
                 }
             }
+            self.fileTableDelegate.files = []
             self.tblFiles.reloadData()
         }else{
             print("SAME DEVICE \(device.deviceId) == \(self.device.deviceId)")
@@ -956,16 +957,34 @@ class DeviceCopyViewController: NSViewController {
                 }
                 for file in self.deviceFiles_filtered[path.sourcePath]! {
                     
+                    var destinationPathForFile = destinationPath
+                    if file.folder != "" {
+                        destinationPathForFile = URL(fileURLWithPath: destinationPath).appendingPathComponent(file.folder).path
+                        
+                        if !FileManager.default.fileExists(atPath: destinationPathForFile) {
+                            do {
+                                try FileManager.default.createDirectory(atPath: destinationPathForFile, withIntermediateDirectories: true, attributes: nil)
+                            }catch{
+                                print(error)
+                                destinationPathForFile = destinationPath
+                            }
+                        }
+                    }
+                    
                     DispatchQueue.main.async {
-                        self.lblMessage.stringValue = "Copying from device: \(subFolder)/\(file.filename)"
+                        if file.folder != "" {
+                            self.lblMessage.stringValue = "Copying from device: \(subFolder)/\(file.folder)/\(file.filename)"
+                        }else{
+                            self.lblMessage.stringValue = "Copying from device: \(subFolder)/\(file.filename)"
+                        }
                     }
                     var deviceFile = file.deviceFile!
                     if path.type == .onDevice {
                         if self.device.type == .Android {
-                            if Android.bridge.pull(device: self.device.deviceId, from: file.path, to: destinationPath) {
+                            if Android.bridge.pull(device: self.device.deviceId, from: file.path, to: destinationPathForFile) {
                                 print("Copied \(file.path)")
                                 if file.deviceFile != nil {
-                                    deviceFile.importToPath = destinationPath
+                                    deviceFile.importToPath = destinationPathForFile
                                     deviceFile.importAsFilename = file.filename
                                     deviceFile.importDate = date
                                     ModelStore.default.saveDeviceFile(file: deviceFile)
@@ -975,10 +994,10 @@ class DeviceCopyViewController: NSViewController {
                                 print("Failed to copy \(file.path)")
                             }
                         }else if self.device.type == .iPhone {
-                            if IPHONE.bridge.pull(mountPoint: PreferencesController.iosDeviceMountPoint(), sourcePath:path.sourcePath, from: file.path, to: destinationPath) {
+                            if IPHONE.bridge.pull(mountPoint: PreferencesController.iosDeviceMountPoint(), sourcePath:path.sourcePath, from: file.path, to: destinationPathForFile) {
                                 print("Copied \(file.path)")
                                 if file.deviceFile != nil {
-                                    deviceFile.importToPath = destinationPath
+                                    deviceFile.importToPath = destinationPathForFile
                                     deviceFile.importAsFilename = file.filename
                                     deviceFile.importDate = date
                                     ModelStore.default.saveDeviceFile(file: deviceFile)
@@ -992,7 +1011,7 @@ class DeviceCopyViewController: NSViewController {
                         print("COPYING LOCAL \(file.onDevicePath)")
                         
                         var needSaveFile:Bool = false
-                        let destinationFile = URL(fileURLWithPath: destinationPath).appendingPathComponent(file.filename).path
+                        let destinationFile = URL(fileURLWithPath: destinationPathForFile).appendingPathComponent(file.filename).path
                         if FileManager.default.fileExists(atPath: destinationFile) {
                             // exist file, avoid copy
                             needSaveFile = true
@@ -1006,7 +1025,7 @@ class DeviceCopyViewController: NSViewController {
                             }
                         }
                         if needSaveFile {
-                            deviceFile.importToPath = destinationPath
+                            deviceFile.importToPath = destinationPathForFile
                             deviceFile.importAsFilename = file.filename
                             deviceFile.importDate = date
                             ModelStore.default.saveDeviceFile(file: deviceFile)
@@ -1186,16 +1205,18 @@ class DeviceCopyViewController: NSViewController {
                                                                                    destinationType: .onDevice,
                                                                                    onApply: { (directory, toSubFolder, isExclude) in
                 print("\(directory) \(toSubFolder) \(isExclude)")
-                let dest = DeviceCopyDestination.new((directory, toSubFolder))
+                var dest = DeviceCopyDestination.new((directory, toSubFolder))
                 // on device directory need to be saved into db
                 if !self.sourcePathTableDelegate.paths.contains(where: {$0.sourcePath == dest.sourcePath && $0.type == .onDevice }) {
                     // TODO: SAVE DEVICE PATH TO DB
                     if isExclude {
                         let devicePath = ImageDevicePath.exclude(deviceId: self.device.deviceId, path: directory)
                         ModelStore.default.saveDevicePath(file: devicePath)
+                        dest = DeviceCopyDestination.from(devicePath)
                     }else{
                         let devicePath = ImageDevicePath.include(deviceId: self.device.deviceId, path: directory, toSubFolder: toSubFolder)
                         ModelStore.default.saveDevicePath(file: devicePath)
+                        dest = DeviceCopyDestination.from(devicePath)
                     }
                     self.paths.append(dest)
                     self.sourcePathTableDelegate.paths.append(dest)
