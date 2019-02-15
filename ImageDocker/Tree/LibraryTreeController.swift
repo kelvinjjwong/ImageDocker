@@ -117,7 +117,17 @@ extension ViewController {
             }
         }else{
             collection.buttonAction = {
-                NSWorkspace.shared.activateFileViewerSelecting([imageFolder.url])
+                if let window = self.containerWindowController.window {
+                    if self.containerWindowController.isWindowLoaded {
+                        window.makeKeyAndOrderFront(self)
+                        print("order to front")
+                    }else{
+                        self.containerWindowController.showWindow(self)
+                        print("show window")
+                    }
+                    let vc = window.contentViewController as! ContainerViewController
+                    vc.initContainer(path: imageFolder.url.path)
+                }
             }
         }
         

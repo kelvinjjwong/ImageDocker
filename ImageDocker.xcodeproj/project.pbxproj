@@ -98,6 +98,7 @@
 		8EF125A622140C0F00C423CA /* ImageDevicePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF125A522140C0F00C423CA /* ImageDevicePath.swift */; };
 		8EF125A92214590000C423CA /* DeviceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF125A72214590000C423CA /* DeviceListViewController.swift */; };
 		8EF125AA2214590000C423CA /* DeviceListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EF125A82214590000C423CA /* DeviceListViewController.xib */; };
+		8EF125AC2216ECC500C423CA /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF125AB2216ECC500C423CA /* ContainerViewController.swift */; };
 		8EF32D122094CB2000511538 /* SourceListIcons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8EF32D112094CB2000511538 /* SourceListIcons.xcassets */; };
 		8EF32D142095355400511538 /* LCSourceListTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF32D132095355400511538 /* LCSourceListTableCellView.swift */; };
 		8EF4CE5521D77BAB00C53AFF /* People.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE5421D77BAB00C53AFF /* People.swift */; };
@@ -239,6 +240,7 @@
 		8EF125A522140C0F00C423CA /* ImageDevicePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDevicePath.swift; sourceTree = "<group>"; };
 		8EF125A72214590000C423CA /* DeviceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceListViewController.swift; sourceTree = "<group>"; };
 		8EF125A82214590000C423CA /* DeviceListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeviceListViewController.xib; sourceTree = "<group>"; };
+		8EF125AB2216ECC500C423CA /* ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
 		8EF32D112094CB2000511538 /* SourceListIcons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = SourceListIcons.xcassets; sourceTree = "<group>"; };
 		8EF32D132095355400511538 /* LCSourceListTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCSourceListTableCellView.swift; sourceTree = "<group>"; };
 		8EF4CE5421D77BAB00C53AFF /* People.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = People.swift; sourceTree = "<group>"; };
@@ -467,6 +469,7 @@
 				8EF125A72214590000C423CA /* DeviceListViewController.swift */,
 				8EF125A82214590000C423CA /* DeviceListViewController.xib */,
 				8EF4CE5C21D8026800C53AFF /* EditRepositoryViewController.swift */,
+				8EF125AB2216ECC500C423CA /* ContainerViewController.swift */,
 			);
 			path = Tree;
 			sourceTree = "<group>";
@@ -884,6 +887,7 @@
 				8EC82EAE21283ED000FC0899 /* DirectoryViewDelegate.swift in Sources */,
 				8EF4CE6421E56DC100C53AFF /* NotificationViewController.swift in Sources */,
 				8EB986BF20B30C920075B081 /* HeaderView.swift in Sources */,
+				8EF125AC2216ECC500C423CA /* ContainerViewController.swift in Sources */,
 				8E85B7D420BA2AD7005A9845 /* DarkSplitView.swift in Sources */,
 				8EF500CD209A804100C9805F /* ImageFolder.swift in Sources */,
 				8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */,

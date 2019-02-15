@@ -2932,6 +2932,110 @@
             </objects>
             <point key="canvasLocation" x="-948" y="4215"/>
         </scene>
+        <!--Window Controller-->
+        <scene sceneID="8OX-yB-bOp">
+            <objects>
+                <windowController storyboardIdentifier="ContainerViewerWindowController" id="qPs-o8-VNv" sceneMemberID="viewController">
+                    <window key="window" identifier="ContainerViewerWindowController" title="Container" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="yfa-45-Arm">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="294" y="313" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
+                        <connections>
+                            <outlet property="delegate" destination="qPs-o8-VNv" id="t8Q-CX-37r"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="Gdp-d6-Rzj" kind="relationship" relationship="window.shadowedContentViewController" id="ydn-0M-FGK"/>
+                    </connections>
+                </windowController>
+                <customObject id="gEQ-MQ-8ol" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1714" y="5649"/>
+        </scene>
+        <!--Container View Controller-->
+        <scene sceneID="bol-cT-Chp">
+            <objects>
+                <viewController id="Gdp-d6-Rzj" customClass="ContainerViewController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="Ub4-7z-Y0N">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="115"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VYy-nh-Qqk">
+                                <rect key="frame" x="18" y="78" width="444" height="17"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" id="g7f-qw-Xpk">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="afn-bf-JCs">
+                                <rect key="frame" x="24" y="40" width="107" height="32"/>
+                                <buttonCell key="cell" type="push" title="Refresh" bezelStyle="rounded" image="NSRefreshFreestandingTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1SW-KJ-pc9">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onStatClicked:" target="Gdp-d6-Rzj" id="kIt-T9-14l"/>
+                                </connections>
+                            </button>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YeU-IF-SRH">
+                                <rect key="frame" x="18" y="10" width="444" height="17"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" id="xgU-P5-ZSh">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EtX-yr-EX4">
+                                <rect key="frame" x="170" y="40" width="141" height="32"/>
+                                <buttonCell key="cell" type="push" title="Hide Images" bezelStyle="rounded" image="NSQuickLookTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="CGe-ae-YqZ">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onShowHideClicked:" target="Gdp-d6-Rzj" id="A4q-yW-j8l"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="89E-oF-pmw">
+                                <rect key="frame" x="366" y="40" width="90" height="32"/>
+                                <buttonCell key="cell" type="push" title="Goto" bezelStyle="rounded" image="NSFollowLinkFreestandingTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8Gz-bG-ljF">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onGotoClicked:" target="Gdp-d6-Rzj" id="WZj-ee-QsW"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="YeU-IF-SRH" firstAttribute="top" secondItem="afn-bf-JCs" secondAttribute="bottom" constant="20" id="01E-p8-pub"/>
+                            <constraint firstItem="EtX-yr-EX4" firstAttribute="centerY" secondItem="Ub4-7z-Y0N" secondAttribute="centerY" id="7Ks-eZ-Sux"/>
+                            <constraint firstItem="afn-bf-JCs" firstAttribute="leading" secondItem="Ub4-7z-Y0N" secondAttribute="leading" constant="30" id="AvI-Fe-1vf"/>
+                            <constraint firstAttribute="trailing" secondItem="89E-oF-pmw" secondAttribute="trailing" constant="30" id="CZR-dh-cnS"/>
+                            <constraint firstItem="afn-bf-JCs" firstAttribute="top" secondItem="VYy-nh-Qqk" secondAttribute="bottom" constant="10" id="Iwu-4L-aSG"/>
+                            <constraint firstItem="EtX-yr-EX4" firstAttribute="top" secondItem="VYy-nh-Qqk" secondAttribute="bottom" constant="10" id="bWr-cn-JeS"/>
+                            <constraint firstItem="EtX-yr-EX4" firstAttribute="centerX" secondItem="Ub4-7z-Y0N" secondAttribute="centerX" id="by7-e3-EHv"/>
+                            <constraint firstItem="YeU-IF-SRH" firstAttribute="leading" secondItem="Ub4-7z-Y0N" secondAttribute="leading" constant="20" id="gIO-uy-B3O"/>
+                            <constraint firstItem="VYy-nh-Qqk" firstAttribute="leading" secondItem="Ub4-7z-Y0N" secondAttribute="leading" constant="20" id="hPY-1O-k6h"/>
+                            <constraint firstItem="VYy-nh-Qqk" firstAttribute="top" secondItem="Ub4-7z-Y0N" secondAttribute="top" constant="20" id="iqp-x7-FTK"/>
+                            <constraint firstAttribute="trailing" secondItem="VYy-nh-Qqk" secondAttribute="trailing" constant="20" id="mc3-1L-rdQ"/>
+                            <constraint firstItem="89E-oF-pmw" firstAttribute="top" secondItem="VYy-nh-Qqk" secondAttribute="bottom" constant="10" id="ovx-Z1-Ayn"/>
+                            <constraint firstAttribute="trailing" secondItem="YeU-IF-SRH" secondAttribute="trailing" constant="20" id="rLA-9F-CxM"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="btnGoto" destination="89E-oF-pmw" id="Yec-LQ-P8G"/>
+                        <outlet property="btnShowHide" destination="EtX-yr-EX4" id="D7n-Lw-06W"/>
+                        <outlet property="btnStat" destination="afn-bf-JCs" id="MMN-SC-DDT"/>
+                        <outlet property="lblMessage" destination="YeU-IF-SRH" id="955-AG-6Uo"/>
+                        <outlet property="lblPath" destination="VYy-nh-Qqk" id="yTk-q9-g57"/>
+                    </connections>
+                </viewController>
+                <customObject id="6PW-SB-7zp" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1714" y="6125"/>
+        </scene>
         <!--Edit Repository View Controller-->
         <scene sceneID="K4U-cB-xRI">
             <objects>

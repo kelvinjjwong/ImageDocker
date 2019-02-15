@@ -196,6 +196,9 @@ class ViewController: NSViewController {
     // MARK: Repository Dialog
     var repositoryWindowController:NSWindowController!
     
+    // MARK: Container Dialog
+    var containerWindowController:NSWindowController!
+    
     // MARK: Concurrency Indicators
     
     var scaningRepositories:Bool = false
@@ -307,6 +310,8 @@ class ViewController: NSViewController {
         self.theaterWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "TheaterWindowController")) as? NSWindowController
         
         self.repositoryWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "EditRepositoryWindowController")) as? NSWindowController
+        
+        self.containerWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "ContainerViewerWindowController")) as? NSWindowController
         
         
         self.btnChoiceMapService.selectSegment(withTag: 1)

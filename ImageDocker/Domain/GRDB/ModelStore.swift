@@ -413,6 +413,30 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
     }
     
+    func hideContainer(path:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update ImageContainer set hiddenByContainer = 1 where path = '\(path)'")
+                try db.execute("update Image set hiddenByContainer = 1 where path like '\(path.withStash())%'")
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func showContainer(path:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update ImageContainer set hiddenByContainer = 0 where path = '\(path)'")
+                try db.execute("update Image set hiddenByContainer = 0 where path like '\(path.withStash())%'")
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
     func hideRepository(repositoryRoot:String){
         do {
             let db = ModelStore.sharedDBPool()
