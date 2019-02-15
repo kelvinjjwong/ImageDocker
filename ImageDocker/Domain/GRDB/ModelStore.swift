@@ -441,6 +441,18 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
     }
     
+    func deleteRepository(repositoryRoot:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("delete from ImageContainer where repositoryPath = '\(repositoryRoot.withStash())'")
+                try db.execute("delete from Image where repositoryPath = '\(repositoryRoot.withStash())'")
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
     // MARK: IMAGES
     
     func getOrCreatePhoto(filename:String, path:String, parentPath:String, sharedDB:DatabaseWriter? = nil) -> Image{
@@ -462,6 +474,19 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             print(error)
         }
         return image!
+    }
+    
+    func getImage(path:String) -> Image?{
+        var image:Image?
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                image = try Image.fetchOne(db, key: path)
+            }
+        }catch{
+            print(error)
+        }
+        return image
     }
     
     func saveImage(image: Image, sharedDB:DatabaseWriter? = nil){
@@ -767,19 +792,6 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
-    func getImage(path:String) -> Image?{
-        var image:Image?
-        do {
-            let db = ModelStore.sharedDBPool()
-            try db.read { db in
-                image = try Image.fetchOne(db, key: path)
-            }
-        }catch{
-            print(error)
-        }
-        return image
-    }
-    
     func getAllPhotoPaths(includeHidden:Bool = true, sharedDB:DatabaseWriter? = nil) -> Set<String> {
         var result:Set<String> = []
         do {
@@ -856,6 +868,19 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             let db = ModelStore.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(sql: "containerPath = ? \(otherPredicate)", arguments: StatementArguments([parentPath])).order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func getImages(repositoryPath:String) -> [Image] {
+        var result:[Image] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "repositoryPath = '\(repositoryPath)'").order(sql: "path asc").fetchAll(db)
             }
         }catch{
             print(error)

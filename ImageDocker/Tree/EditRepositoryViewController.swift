@@ -116,16 +116,17 @@ class EditRepositoryViewController: NSViewController {
         self.btnUpdateCropImages.isHidden = true
     }
     
-    func initNew(window:NSWindow, onOK: (() -> Void)? = nil) {
-        self.onCompleted = onOK
-        self.window = window
+    fileprivate func freshNew() {
+        
         self.emptyGeneralTextFields()
         self.emptyStorageTextFields()
         self.emptyFaceTextFields()
         self.originalContainer = nil
         self.btnOK.title = "Save"
         self.lblMessage.stringValue = ""
-        window.title = "Add Repository"
+        if let window = self.window {
+            window.title = "Add Repository"
+        }
         self.btnBrowseHomePath.title = "Assign"
         self.btnBrowseStoragePath.title = "Assign"
         self.btnBrowseRepositoryPath.title = "Assign"
@@ -141,6 +142,12 @@ class EditRepositoryViewController: NSViewController {
         
         self.lblDeviceId.stringValue = ""
         self.lblDeviceName.stringValue = ""
+    }
+    
+    func initNew(window:NSWindow, onOK: (() -> Void)? = nil) {
+        self.onCompleted = onOK
+        self.window = window
+        freshNew()
     }
     
     func initEdit(path:String, window:NSWindow, onOK: (() -> Void)? = nil) {
@@ -441,10 +448,99 @@ class EditRepositoryViewController: NSViewController {
     // MARK: ACTION BUTTON - COPY IMAGES FROM EDITABLE TO RAW STORAGE
     
     @IBAction func onCopyToRawClicked(_ sender: NSButton) {
-        // TODO: TODO FUNCTION
-        print("TODO: Copy images from repository to RAW storage")
-        
-        self.lblMessage.stringValue = "TODO function"
+        if let container = self.originalContainer {
+            if container.repositoryPath == "" {
+                self.lblMessage.stringValue = "ERROR: Path for storing editable images cannot be empty. Please assign it and save first."
+                return
+            }
+            if container.storagePath == "" {
+                self.lblMessage.stringValue = "ERROR: Path for storing raw images cannot be empty. Please assign it and save first."
+                return
+            }
+            var isDir:ObjCBool = false
+            if !FileManager.default.fileExists(atPath: container.repositoryPath, isDirectory: &isDir) {
+                self.lblMessage.stringValue = "ERROR: Path for storing editable images doesn't exist. Please re-assign it and save first."
+                return
+            }else if isDir.boolValue == false {
+                self.lblMessage.stringValue = "ERROR: Path for storing editable images must be a directory. Please re-assign it and save first."
+                return
+            }
+            if !FileManager.default.fileExists(atPath: container.storagePath, isDirectory: &isDir) {
+                self.lblMessage.stringValue = "ERROR: Path for storing raw images doesn't exist. Please re-assign it and save first."
+                return
+            }else if isDir.boolValue == false {
+                self.lblMessage.stringValue = "ERROR: Path for storing raw images must be a directory. Please re-assign it and save first."
+                return
+            }
+            
+            guard !self.working else {return}
+            
+            self.working = true
+            // TODO: disable buttons
+            
+            var count = 0
+            var copiedCount = 0
+            var abnormalCount = 0
+            var errorCount = 0
+            DispatchQueue.main.async {
+                self.accumulator = Accumulator(target: 100, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage,
+                                               onCompleted: { data in
+                                                self.lblMessage.stringValue = "Total \(count) images, copied \(copiedCount) images, \(errorCount) images occured error, \(abnormalCount) images ignored (no-sub-path) "
+                                                self.working = false
+                                                // TODO: enable buttons
+                                               },
+                                               startupMessage: "Loading images from database ..."
+                                              )
+            }
+            
+            DispatchQueue.global().async {
+                let images = ModelStore.default.getImages(repositoryPath: container.repositoryPath)
+                
+                if images.count == 0 {
+                    DispatchQueue.main.async {
+                        self.lblMessage.stringValue = "No image could be copied. Please update image-records in the repository if they really exist."
+                        self.working = false
+                        // TODO: enable buttons
+                    }
+                    return
+                }
+                count = images.count
+                DispatchQueue.main.async {
+                    self.accumulator?.setTarget(count)
+                }
+                
+                for image in images {
+                    if image.subPath != "" {
+                        let sourcePath = image.path
+                        let targetPath = "\(container.storagePath.withStash())\(image.subPath)"
+                        if FileManager.default.fileExists(atPath: sourcePath) && !FileManager.default.fileExists(atPath: targetPath) {
+                            let containerUrl = URL(fileURLWithPath: targetPath).deletingLastPathComponent()
+                            
+                            do {
+                                try FileManager.default.createDirectory(at: containerUrl, withIntermediateDirectories: true, attributes: nil)
+                            }catch{
+                                print(error)
+                            }
+                            do { // copy file
+                                try FileManager.default.copyItem(atPath: sourcePath, toPath: targetPath)
+                                copiedCount += 1
+                            }catch{
+                                print(error)
+                                errorCount += 1
+                            }
+                        }
+                    }else{
+                        abnormalCount += 1
+                    }
+                    DispatchQueue.main.async {
+                        let _ = self.accumulator?.add("Processing images ...")
+                    }
+                }
+            }
+        }else{
+            self.lblMessage.stringValue = "New repository has to be saved first."
+            return
+        }
     }
     
     // MARK: ACTION BUTTON - OPEN DIALOG
@@ -1242,8 +1338,18 @@ class EditRepositoryViewController: NSViewController {
     // MARK: ACTION BUTTON - DELETE RECORDS
     
     @IBAction func onRemoveClicked(_ sender: NSButton) {
-        // TODO: TODO FUNCTION
-        self.lblMessage.stringValue = "TODO function"
+        if let container = self.originalContainer {
+            if Alert.dialogOKCancel(question: "Remove all records and image-records of this repository from database ?", text: container.path) {
+                // TODO: disable buttons
+                DispatchQueue.global().async {
+                    ModelStore.default.deleteRepository(repositoryRoot: container.path)
+                    
+                    self.freshNew()
+                    self.lblMessage.stringValue = "All records and image-records of this repository have been removed from database."
+                    // TODO: use delegate from main window to close this window and refresh library tree in main window
+                }
+            }
+        }
     }
     
     // MARK: ACTION BUTTON - DEVICE INFO AREA
