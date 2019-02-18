@@ -38,6 +38,10 @@
 		8E4C38D5211828FF0089502C /* MomentsTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D4211828FF0089502C /* MomentsTreeController.swift */; };
 		8E4C38D72118291F0089502C /* LibraryTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D62118291F0089502C /* LibraryTreeController.swift */; };
 		8E4C38D9211829410089502C /* DeviceTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D8211829410089502C /* DeviceTreeController.swift */; };
+		8E4E5B672217349600FE4B68 /* FaceDetection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B662217349600FE4B68 /* FaceDetection.swift */; };
+		8E4E5B6922195BFF00FE4B68 /* FaceRecognition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B6822195BFF00FE4B68 /* FaceRecognition.swift */; };
+		8E4E5B762219624D00FE4B68 /* FaceRecognitionOpenCV in Resources */ = {isa = PBXBuildFile; fileRef = 8E4E5B752219624D00FE4B68 /* FaceRecognitionOpenCV */; };
+		8E4E5B78221985A400FE4B68 /* ImageFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B77221985A400FE4B68 /* ImageFace.swift */; };
 		8E7B98DF2147E7880019ED87 /* FileSystemHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7B98DE2147E7880019ED87 /* FileSystemHandler.swift */; };
 		8E7B98E1214882080019ED87 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7B98E0214882080019ED87 /* Alert.swift */; };
 		8E7F71002091F14300410C45 /* BaiduLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F70FF2091F14200410C45 /* BaiduLocation.swift */; };
@@ -180,6 +184,10 @@
 		8E4C38D4211828FF0089502C /* MomentsTreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsTreeController.swift; sourceTree = "<group>"; };
 		8E4C38D62118291F0089502C /* LibraryTreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTreeController.swift; sourceTree = "<group>"; };
 		8E4C38D8211829410089502C /* DeviceTreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTreeController.swift; sourceTree = "<group>"; };
+		8E4E5B662217349600FE4B68 /* FaceDetection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetection.swift; sourceTree = "<group>"; };
+		8E4E5B6822195BFF00FE4B68 /* FaceRecognition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceRecognition.swift; sourceTree = "<group>"; };
+		8E4E5B752219624D00FE4B68 /* FaceRecognitionOpenCV */ = {isa = PBXFileReference; lastKnownFileType = folder; path = FaceRecognitionOpenCV; sourceTree = "<group>"; };
+		8E4E5B77221985A400FE4B68 /* ImageFace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFace.swift; sourceTree = "<group>"; };
 		8E7B98DE2147E7880019ED87 /* FileSystemHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemHandler.swift; sourceTree = "<group>"; };
 		8E7B98E0214882080019ED87 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		8E7F70FF2091F14200410C45 /* BaiduLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaiduLocation.swift; sourceTree = "<group>"; };
@@ -416,6 +424,7 @@
 				8EF4CE5621D77BD600C53AFF /* Family.swift */,
 				8EF4CE5821D77BEA00C53AFF /* ImagePeople.swift */,
 				8EF125A522140C0F00C423CA /* ImageDevicePath.swift */,
+				8E4E5B77221985A400FE4B68 /* ImageFace.swift */,
 			);
 			path = GRDB;
 			sourceTree = "<group>";
@@ -486,6 +495,8 @@
 				8E98B8F820D7950E00771280 /* ExportManager.swift */,
 				8E7B98E0214882080019ED87 /* Alert.swift */,
 				8EBA9DE6217477D900DACAAD /* UIHelper.swift */,
+				8E4E5B662217349600FE4B68 /* FaceDetection.swift */,
+				8E4E5B6822195BFF00FE4B68 /* FaceRecognition.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -533,6 +544,7 @@
 		8EBA69262090C37B00221131 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8E4E5B752219624D00FE4B68 /* FaceRecognitionOpenCV */,
 				8E4C38C92117762F0089502C /* Mobile */,
 				8EF32D112094CB2000511538 /* SourceListIcons.xcassets */,
 				8EFE763D2094B12200B7CFCA /* ImageDocker-Bridging-Header.h */,
@@ -761,6 +773,7 @@
 				8EE1AB3E20D05E49001C75B0 /* EventListViewController.xib in Resources */,
 				8E0AFA44208BDEA100CE8B68 /* Main.storyboard in Resources */,
 				8E95739B20EBEBD7003BD651 /* FilterViewController.xib in Resources */,
+				8E4E5B762219624D00FE4B68 /* FaceRecognitionOpenCV in Resources */,
 				8EB986BE20B30C920075B081 /* CollectionViewItem.xib in Resources */,
 				8EF4CE6521E56DC100C53AFF /* NotificationViewController.xib in Resources */,
 				8E3EC3BE214DE623004B6125 /* DateTimeViewController.xib in Resources */,
@@ -843,6 +856,7 @@
 				8E7F71022092053400410C45 /* MetaInfoDelegate.swift in Sources */,
 				8EF125A92214590000C423CA /* DeviceListViewController.swift in Sources */,
 				8E98B8F920D7950E00771280 /* ExportManager.swift in Sources */,
+				8E4E5B672217349600FE4B68 /* FaceDetection.swift in Sources */,
 				8EF32D142095355400511538 /* LCSourceListTableCellView.swift in Sources */,
 				8E3EC3BD214DE623004B6125 /* DateTimeViewController.swift in Sources */,
 				8EBA9DE921766EAB00DACAAD /* TheaterCollectionViewController.swift in Sources */,
@@ -850,6 +864,7 @@
 				8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */,
 				8EFA7CFB211D713700419777 /* ImageDevice.swift in Sources */,
 				8E36B06C21792EDC00646EA5 /* CustomRowView.swift in Sources */,
+				8E4E5B6922195BFF00FE4B68 /* FaceRecognition.swift in Sources */,
 				8EF4CE5521D77BAB00C53AFF /* People.swift in Sources */,
 				8E95739A20EBEBD7003BD651 /* FilterViewController.swift in Sources */,
 				8E0EAE9A209D2623008C377F /* ImageFolderTreeScanner.swift in Sources */,
@@ -893,6 +908,7 @@
 				8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */,
 				8EB986C120B317E70075B081 /* ModelStoreCoreData.swift in Sources */,
 				8E7B98DF2147E7880019ED87 /* FileSystemHandler.swift in Sources */,
+				8E4E5B78221985A400FE4B68 /* ImageFace.swift in Sources */,
 				8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */,
 				8E98B8F720D6044900771280 /* Event.swift in Sources */,
 				8E4C38D12117B56A0089502C /* IPHONE.swift in Sources */,

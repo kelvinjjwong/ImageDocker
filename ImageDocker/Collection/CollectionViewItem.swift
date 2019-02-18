@@ -164,6 +164,10 @@ class CollectionViewItem: NSCollectionViewItem {
             self.revealInFinder()
         }else if i == 2 {
             self.quicklook()
+        }else if i == 3 {
+            self.findFaces()
+        }else if i == 4 {
+            self.recognizeFaces()
         }
     }
     
@@ -202,6 +206,91 @@ class CollectionViewItem: NSCollectionViewItem {
             if self.quickLookDelegate != nil {
                 self.quickLookDelegate?.onCollectionViewItemQuickLook(imageFile)
             }
+        }
+    }
+    
+    fileprivate func findFaces() {
+        if let _ = self.imageFile, let url = self.imageFile?.url, FileManager.default.fileExists(atPath: url.path) {
+            DispatchQueue.global().async {
+                if let image = ModelStore.default.getImage(path: url.path) {
+                    if image.repositoryPath != "", let repository = ModelStore.default.getRepository(repositoryPath: image.repositoryPath) {
+                        if repository.cropPath != "" {
+                            // ensure base crop path exists
+                            var isDir:ObjCBool = false
+                            if FileManager.default.fileExists(atPath: repository.cropPath, isDirectory: &isDir) {
+                                if !isDir.boolValue {
+                                    print("ERROR: Crop path of repository is not a directory: \(repository.cropPath)")
+                                    return
+                                }
+                            }
+                            
+                            // ensure image-filename-aware crop path exists
+                            let cropPath = URL(fileURLWithPath: repository.cropPath).appendingPathComponent(image.subPath)
+                            print("Trying to create directory: \(cropPath.path)")
+                            if FileManager.default.fileExists(atPath: repository.cropPath, isDirectory: &isDir), isDir.boolValue {
+                                do {
+                                    try FileManager.default.createDirectory(atPath: cropPath.path, withIntermediateDirectories: true, attributes: nil)
+                                }catch{
+                                    print(error)
+                                    print("ERROR: Cannot create directory for storing crops at path: \(cropPath.path)")
+                                    return
+                                }
+                            }
+                            if !FileManager.default.fileExists(atPath: cropPath.path, isDirectory: &isDir) {
+                                print("ERROR: Cannot create directory: \(cropPath.path)")
+                                return
+                            }
+                            
+                            FaceDetection.default.findFace(from: url, into: cropPath, onCompleted: {faces in
+                                for face in faces {
+                                    print("Found face: \(face.filename) at (\(face.x), \(face.y), \(face.width), \(face.height))")
+                                    
+                                    // TODO: save into db
+                                }
+                                print("Face detection done in \(cropPath.path)")
+                            })
+                            
+                        }else{
+                            print("ERROR: Crop path is empty, please assign it first: \(repository.path)")
+                            return
+                        }
+                    }else{
+                        print("ERROR: Cannot find image's repository by repository path: \(image.repositoryPath)")
+                        return
+                    }
+                }else{
+                    print("ERROR: Cannot find image record: \(url.path)")
+                    return
+                }
+            }
+            
+        }else{
+            print("ERROR: Image object is null or file doesn't exist.")
+            return
+        }
+    }
+    
+    func recognizeFaces() {
+        if let _ = self.imageFile, let url = self.imageFile?.url, FileManager.default.fileExists(atPath: url.path) {
+            DispatchQueue.global().async {
+                if let image = ModelStore.default.getImage(path: url.path) {
+                    if image.repositoryPath != "", let repository = ModelStore.default.getRepository(repositoryPath: image.repositoryPath) {
+                        
+                        
+                        
+                    }else{
+                        print("ERROR: Cannot find image's repository by repository path: \(image.repositoryPath)")
+                        return
+                    }
+                }else{
+                    print("ERROR: Cannot find image record: \(url.path)")
+                    return
+                }
+            }
+            
+        }else{
+            print("ERROR: Image object is null or file doesn't exist.")
+            return
         }
     }
     

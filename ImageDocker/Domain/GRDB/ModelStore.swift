@@ -401,6 +401,20 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         
     }
     
+    func getRepository(repositoryPath:String) -> ImageContainer? {
+        var result:ImageContainer? = nil
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try ImageContainer.filter(sql: "repositoryPath = '\(repositoryPath)' and parentFolder=''").fetchOne(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+        
+    }
+    
     func saveImageContainer(container:ImageContainer){
         var container = container
         do {
