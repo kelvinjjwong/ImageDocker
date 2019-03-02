@@ -14,9 +14,15 @@ struct People : Codable {
     var id: String
     var name: String
     var shortName: String?
-    var faceDisplayName: String?
-    var majorFacePath: String?
-    var facesPath: String?
+    var iconRepositoryPath:String
+    var iconCropPath:String
+    var iconSubPath:String
+    var iconFilename:String
+    
+    static func new(id:String, name:String, shortName:String) -> People{
+        return People(id: id, name: name, shortName: shortName,
+                      iconRepositoryPath: "", iconCropPath: "", iconSubPath: "", iconFilename: "")
+    }
 }
 
 extension People: FetchableRecord, MutablePersistableRecord, TableRecord {

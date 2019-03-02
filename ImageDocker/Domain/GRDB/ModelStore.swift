@@ -527,6 +527,19 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return image
     }
     
+    func getImage(id:String) -> Image? {
+        var image:Image?
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                image = try Image.filter(sql: "id='\(id)'").fetchOne(db)
+            }
+        }catch{
+            print(error)
+        }
+        return image
+    }
+    
     func saveImage(image: Image, sharedDB:DatabaseWriter? = nil){
         do {
             let db = ModelStore.sharedDBPool()
@@ -1919,6 +1932,97 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
+    // MARK: PEOPLE
+    
+    func getPeople() -> [People] {
+        var obj:[People] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                obj = try People.order(sql: "name asc").fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return obj
+    }
+    
+    func getPerson(id: String) -> People? {
+        var obj:People?
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                obj = try People.fetchOne(db, key: id)
+            }
+            return obj
+        }catch{
+            print(error)
+        }
+        return nil
+    }
+    
+    func savePersonName(id:String, name:String, shortName:String) {
+        var person = People.new(id: id, name: name, shortName: shortName)
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try person.save(db)
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func updatePersonIconImage(id:String, repositoryPath:String, cropPath:String, subPath:String, filename:String) -> Bool{
+        if let person = getPerson(id: id) {
+            var ps = person
+            ps.iconRepositoryPath = repositoryPath
+            ps.iconCropPath = cropPath
+            ps.iconSubPath = subPath
+            ps.iconFilename = filename
+            do {
+                let db = ModelStore.sharedDBPool()
+                try db.write { db in
+                    try ps.save(db)
+                }
+                return true
+            }catch{
+                print(error)
+                return false
+            }
+        }else{
+            return false
+        }
+    }
+    
+    func deletePerson(id:String) {
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try db.execute("update ImageFace set peopleId = '', peopleAge = 0 where peopleId = ?", arguments: [id])
+                try db.execute("delete from People where id = ?", arguments: [id])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    // MARK: FACE
+    
+    func getFace(id: String) -> ImageFace? {
+        var obj:ImageFace?
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                obj = try ImageFace.fetchOne(db, key: id)
+            }
+            return obj
+        }catch{
+            print(error)
+        }
+        return nil
+    }
+    
     // MARK: SCHEMA VERSION MIGRATION
     
     fileprivate func versionCheck(){
@@ -2113,9 +2217,6 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 t.column("id", .text).primaryKey().unique().notNull()
                 t.column("name", .text).notNull().indexed()
                 t.column("shortName", .text).indexed()
-                t.column("faceDisplayName", .text).indexed()
-                t.column("majorFacePath", .text)
-                t.column("facesPath", .text)
             })
             try db.create(table: "PeopleRelationship", body: { t in
                 t.column("primary", .text).notNull().indexed()
@@ -2211,6 +2312,46 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         migrator.registerMigration("v16") { db in
             try db.alter(table: "ImageContainer", body: { t in
                 t.add(column: "deviceId", .text).defaults(to: "")
+            })
+        }
+        
+        migrator.registerMigration("v17") { db in
+            try db.create(table: "ImageFace", body: { t in
+                t.column("id", .text).primaryKey().unique().notNull()
+                t.column("imageId", .text).notNull().indexed()
+                t.column("imageDate", .datetime)
+                t.column("imageYear", .integer).defaults(to: 0)
+                t.column("imageMonth", .integer).defaults(to: 0)
+                t.column("imageDay", .integer).defaults(to: 0)
+                t.column("repositoryPath", .text).notNull().indexed()
+                t.column("cropPath", .text).notNull()
+                t.column("subPath", .text).notNull()
+                t.column("filename", .text).notNull()
+                t.column("peopleId", .text)
+                t.column("peopleAge", .integer).defaults(to: 0).indexed()
+                t.column("recognizeBy", .text)
+                t.column("recognizeVersion", .text)
+                t.column("recognizeDate", .datetime)
+                t.column("sampleChoice", .boolean).defaults(to: false).indexed()
+                t.column("faceX", .text).defaults(to: "")
+                t.column("faceY", .text).defaults(to: "")
+                t.column("faceWidth", .text).defaults(to: "")
+                t.column("faceHeight", .text).defaults(to: "")
+                t.column("frameX", .text).defaults(to: "")
+                t.column("frameY", .text).defaults(to: "")
+                t.column("frameWidth", .text).defaults(to: "")
+                t.column("franeHeight", .text).defaults(to: "")
+                t.column("iconChoice", .boolean).defaults(to: false).indexed()
+                t.column("tagOnly", .boolean).defaults(to: false).indexed()
+                t.column("remark", .text).defaults(to: "")
+            })
+            
+            
+            try db.alter(table: "People", body: { t in
+                t.add(column: "iconRepositoryPath", .text).notNull().defaults(to: "")
+                t.add(column: "iconCropPath", .text).notNull().defaults(to: "")
+                t.add(column: "iconSubPath", .text).notNull().defaults(to: "")
+                t.add(column: "iconFilename", .text).notNull().defaults(to: "")
             })
         }
         

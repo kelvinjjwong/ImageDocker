@@ -196,6 +196,8 @@ class ViewController: NSViewController {
     // MARK: Repository Dialog
     var repositoryWindowController:NSWindowController!
     
+    var peopleWindowController:NSWindowController!
+    
     // MARK: Container Dialog
     var containerWindowController:NSWindowController!
     
@@ -246,7 +248,7 @@ class ViewController: NSViewController {
             self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(408)))
             self.playerContainer.display()
             
-            self.splitviewPreview.setPosition(size.height - CGFloat(670) - CGFloat(40), ofDividerAt: 0)
+            self.splitviewPreview.setPosition(size.height - CGFloat(670) - CGFloat(40) - CGFloat(30), ofDividerAt: 0)
         }
         
         windowInitial = true
@@ -312,6 +314,8 @@ class ViewController: NSViewController {
         self.repositoryWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "EditRepositoryWindowController")) as? NSWindowController
         
         self.containerWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "ContainerViewerWindowController")) as? NSWindowController
+        
+        self.peopleWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "PeopleWindowController")) as? NSWindowController
         
         
         self.btnChoiceMapService.selectSegment(withTag: 1)
@@ -1925,6 +1929,25 @@ class ViewController: NSViewController {
         self.imagesLoader.reorganizeItems()
         self.collectionView.reloadData()
     }
+    
+    // MARK: FACE
+    
+    @IBAction func onPeopleClicked(_ sender: NSButton) {
+        if let window = self.peopleWindowController.window {
+            if self.peopleWindowController.isWindowLoaded {
+                window.makeKeyAndOrderFront(self)
+                print("order to front")
+            }else{
+                self.peopleWindowController.showWindow(self)
+                print("show window")
+            }
+            //let vc = window.contentViewController as! PeopleViewController
+//            vc.initNew(window: window, onOK: {
+//                window.close()
+//            })
+        }
+    }
+    
     
     
 }
