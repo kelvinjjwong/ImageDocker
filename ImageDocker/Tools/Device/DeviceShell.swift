@@ -70,7 +70,7 @@ struct DeviceShell {
             }
             //print(line)
             var filename = ""
-            if deviceOS == .android {
+            //if deviceOS == .android {
                 let referFilenames = reference[folder] ?? []
                 if referFilenames.count > 0 && filerowIndex < referFilenames.count {
                     filename = referFilenames[filerowIndex]
@@ -84,9 +84,9 @@ struct DeviceShell {
                     filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)
                     print("OBJ BAD LUCK, use old method: \(filename)")
                 }
-            }else{
-                filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)
-            }
+            //}else{
+            //    filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)
+            //}
             
             if filename == "" || excludeFilenames.contains(filename) {
                 continue
@@ -157,7 +157,7 @@ struct DeviceShell {
             filerowIndex = filenames!.count - 1
             
             var filename = ""
-            if deviceOS == .android {
+            //if deviceOS == .android {
                 let referFilenames = reference[folder] ?? []
                 if referFilenames.count > 0 && filerowIndex < referFilenames.count {
                     filename = referFilenames[filerowIndex]
@@ -171,9 +171,9 @@ struct DeviceShell {
                     filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)
                     print("STR BAD LUCK, use old method: \(filename)")
                 }
-            }else{
-                filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)
-            }
+            //}else{
+            //    filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)
+            //}
             
             if filename == "" || excludeFilenames.contains(filename)  {
                 continue
