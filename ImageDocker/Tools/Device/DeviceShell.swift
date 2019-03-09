@@ -29,20 +29,36 @@ struct DeviceShell {
         return filename
     }
     
-    static func getFilenames(from string:String, basePath:String, excludeFilenames:Set<String>, allowedExt:Set<String>, deviceOS:DeviceOS = .android) -> [PhoneFile] {
+    static func getFilenames(from string:String, refer reference:[String:[String]] = [:], basePath:String, excludeFilenames:Set<String>, allowedExt:Set<String>, allowedSuffix:Set<String>, deviceOS:DeviceOS = .android) -> [PhoneFile] {
         var result:[PhoneFile] = []
+        
+        var filerows:[String:[String]] = [:]
+        var filerowIndex = 0
+        
         let lines = string.components(separatedBy: "\n")
         var subFolder = ""
         for line in lines {
             if line == "" || line.starts(with: "total ") {continue}
-            if line.starts(with: ".") {
+            if line.hasPrefix(".") && line.hasSuffix(":") {
                 let folder = line.replacingOccurrences(of: ":", with: "")
                 subFolder = folder == "." ? "" : folder
                 if subFolder.starts(with: "./") {
                     let indexStartOfText = subFolder.index(subFolder.startIndex, offsetBy: 2)
                     subFolder = String(subFolder[indexStartOfText...])
                 }
+                continue
             }
+            
+            let folder = subFolder == "" ? "." : subFolder
+            var filenames = filerows[folder]
+            if filenames == nil {
+                filenames = [line]
+                filerows[folder] = filenames
+            }else{
+                filenames!.append(line)
+                filerows[folder] = filenames
+            }
+            filerowIndex = filenames!.count - 1
             
             var columns:[String] = []
             let cols = line.components(separatedBy: " ")
@@ -53,7 +69,24 @@ struct DeviceShell {
                 columns.append(col)
             }
             //print(line)
-            let filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)
+            var filename = ""
+            if deviceOS == .android {
+                let referFilenames = reference[folder] ?? []
+                if referFilenames.count > 0 && filerowIndex < referFilenames.count {
+                    filename = referFilenames[filerowIndex]
+                    //print("filename [\(filename)] found in folder: [\(folder)] refer array count:\(referFilenames.count) filerowIndex:\(filerowIndex)")
+                }else{
+                    print("filename not found in folder: [\(folder)] refer array count:\(referFilenames.count) filerowIndex:\(filerowIndex)")
+                }
+                if filename != "" && line.hasSuffix(filename) {
+                    //print("bingo: \(filename)")
+                }else{
+                    filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)
+                    print("OBJ BAD LUCK, use old method: \(filename)")
+                }
+            }else{
+                filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)
+            }
             
             if filename == "" || excludeFilenames.contains(filename) {
                 continue
@@ -61,7 +94,18 @@ struct DeviceShell {
             
             let filenameParts = filename.components(separatedBy: ".")
             let ext = filenameParts[filenameParts.count - 1].lowercased()
-            guard allowedExt.contains(ext) && columns.count > 5 else {continue}
+            
+            var includedSuffix = false
+            if allowedSuffix.count > 0 {
+                for suffix in allowedSuffix {
+                    if filename.hasSuffix(suffix){
+                        includedSuffix = true
+                        break
+                    }
+                }
+            }
+            
+            guard (includedSuffix || allowedExt.contains(ext)) && columns.count > 5 else {continue}
             
             let size = deviceOS == .android ? columns[2] : columns[2]
             let date = deviceOS == .android ? columns[3] : ""
@@ -73,29 +117,22 @@ struct DeviceShell {
             file.fileDateTime = deviceOS == .android ? "\(date) \(time)" : ""
             file.folder = subFolder
             result.append(file)
+            
         }
         return result
     }
     
-    static func getFolderNames(from string:String) -> [String] {
-        var result:[String] = []
-        let lines = string.components(separatedBy: "\n")
-        for line in lines {
-            if line == "" || !line.starts(with: "./") || line.starts(with: "./.") {continue}
-            
-            let indexStartOfText = line.index(line.startIndex, offsetBy: 2)
-            let filename = String(line[indexStartOfText...])
-            
-            result.append(filename.trimmingCharacters(in: .whitespacesAndNewlines))
-        }
-        return result.sorted()
-    }
     
-    static func getFilenames(from string:String, excludeFilenames:Set<String>, allowedExt:Set<String>, deviceOS:DeviceOS = .mac) -> [String] {
+    static func getFilenames(from string:String, refer reference:[String:[String]] = [:], excludeFilenames:Set<String>, allowedExt:Set<String>, allowedSuffix:Set<String>,  deviceOS:DeviceOS = .mac) -> [String] {
         var result:[String] = []
+        
+        var filerows:[String:[String]] = [:]
+        var filerowIndex = 0
+        
         let lines = string.components(separatedBy: "\n")
+        let subFolder = "" // no consider of sub folders
         for line in lines {
-            if line == "" {continue}
+            if line == "" || line.hasPrefix("total ") {continue}
             
             var columns:[String] = []
             let cols = line.components(separatedBy: " ")
@@ -108,7 +145,35 @@ struct DeviceShell {
             //print(line)
             //print(deviceOS)
             
-            let filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)
+            let folder = subFolder == "" ? "." : subFolder
+            var filenames = filerows[folder]
+            if filenames == nil {
+                filenames = [line]
+                filerows[folder] = filenames
+            }else{
+                filenames!.append(line)
+                filerows[folder] = filenames
+            }
+            filerowIndex = filenames!.count - 1
+            
+            var filename = ""
+            if deviceOS == .android {
+                let referFilenames = reference[folder] ?? []
+                if referFilenames.count > 0 && filerowIndex < referFilenames.count {
+                    filename = referFilenames[filerowIndex]
+                    //print("filename [\(filename)] found in folder: [\(folder)] refer array count:\(referFilenames.count) filerowIndex:\(filerowIndex)")
+                }else{
+                    print("filename not found in folder: [\(folder)] refer array count:\(referFilenames.count) filerowIndex:\(filerowIndex)")
+                }
+                if filename != "" && line.hasSuffix(filename) {
+                    //print("bingo: \(filename)")
+                }else{
+                    filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)
+                    print("STR BAD LUCK, use old method: \(filename)")
+                }
+            }else{
+                filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)
+            }
             
             if filename == "" || excludeFilenames.contains(filename)  {
                 continue
@@ -116,9 +181,34 @@ struct DeviceShell {
             
             let filenameParts = filename.components(separatedBy: ".")
             let ext = filenameParts[filenameParts.count - 1].lowercased()
-            guard allowedExt.contains(ext) else {continue}
+            
+            var includedSuffix = false
+            if allowedSuffix.count > 0 {
+                for suffix in allowedSuffix {
+                    if filename.hasSuffix(suffix){
+                        includedSuffix = true
+                        break
+                    }
+                }
+            }
+            
+            guard (includedSuffix || allowedExt.contains(ext)) else {continue}
             
             result.append(filename)
+        }
+        return result.sorted()
+    }
+    
+    static func getFolderNames(from string:String) -> [String] {
+        var result:[String] = []
+        let lines = string.components(separatedBy: "\n")
+        for line in lines {
+            if line == "" || !line.starts(with: "./") || line.starts(with: "./.") {continue}
+            
+            let indexStartOfText = line.index(line.startIndex, offsetBy: 2)
+            let filename = String(line[indexStartOfText...])
+            
+            result.append(filename.trimmingCharacters(in: .whitespacesAndNewlines))
         }
         return result.sorted()
     }

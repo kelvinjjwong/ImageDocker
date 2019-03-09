@@ -1338,6 +1338,8 @@ extension DeviceSourcePathTableDelegate : NSTableViewDelegate {
             switch id {
             case NSUserInterfaceItemIdentifier("path"):
                 value = info.sourcePath
+            case NSUserInterfaceItemIdentifier("destination"):
+                value = info.toSubFolder
             case NSUserInterfaceItemIdentifier("exclude"):
                 if info.exclude {
                     value = "X"
