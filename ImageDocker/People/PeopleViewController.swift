@@ -508,7 +508,7 @@ class PeopleViewController: NSViewController {
         if self.selectedFamilyId != "" && name != "" && type != "" {
             var msg = "BEFORE: \(self.selectedFamilyName) [\(self.selectedFamilyType)]\n"
             msg +=    "AFTER : \(name) [\(type)]"
-            if Alert.dialogOKCancel(question: "Change this organization ?", text: msg) {
+            if Alert.dialogOKCancel(question: "Change this organization ?", text: msg, width: 350) {
                 if let _ = ModelStore.default.saveFamily(familyId: self.selectedFamilyId, name: name, type: type) {
                     self.lblFamilyMessage.stringValue = "Updated."
                     self.loadFamilies()
@@ -525,7 +525,7 @@ class PeopleViewController: NSViewController {
         self.lblFamilyMessage.stringValue = ""
         if self.selectedFamilyId != "" {
             let msg = "\(self.selectedFamilyName) [\(self.selectedFamilyType)]"
-            if Alert.dialogOKCancel(question: "DELETE this organization and all memberships ?", text: msg) {
+            if Alert.dialogOKCancel(question: "DELETE this organization and all memberships ?", text: msg, width: 350) {
                 ModelStore.default.deleteFamily(id: self.selectedFamilyId)
                 self.lblFamilyMessage.stringValue = "Deleted."
                 self.selectedFamilyId = ""

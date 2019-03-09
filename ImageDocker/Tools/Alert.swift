@@ -10,11 +10,14 @@ import Cocoa
 
 struct Alert {
     
-    static func dialogOKCancel(question: String, text: String) -> Bool {
+    static func dialogOKCancel(question: String, text: String, width:Int = 0) -> Bool {
         let alert = NSAlert()
         alert.messageText = "\(question)\n\n\(text)\n\n"
 //        alert.informativeText = text
         alert.alertStyle = .warning
+        if width > 200 {
+            alert.accessoryView = NSView(frame: NSMakeRect(0, 0, CGFloat(width), 0))
+        }
         alert.addButton(withTitle: "OK")
         alert.addButton(withTitle: "Cancel")
         return alert.runModal() == .alertFirstButtonReturn
