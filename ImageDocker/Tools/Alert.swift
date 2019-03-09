@@ -12,8 +12,8 @@ struct Alert {
     
     static func dialogOKCancel(question: String, text: String) -> Bool {
         let alert = NSAlert()
-        alert.messageText = question
-        alert.informativeText = text
+        alert.messageText = "\(question)\n\n\(text)\n\n"
+//        alert.informativeText = text
         alert.alertStyle = .warning
         alert.addButton(withTitle: "OK")
         alert.addButton(withTitle: "Cancel")

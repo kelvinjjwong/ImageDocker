@@ -1932,6 +1932,171 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
+    // MARK: FAMILY
+    
+    func getFamilies() -> [Family] {
+        var result:[Family] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try Family.order(sql: "name asc").fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func getFamilies(peopleId:String) -> [String] {
+        var result:[String] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, "SELECT familyId FROM FamilyMember WHERE peopleId='\(peopleId)'")
+                for row in rows {
+                    if let id = row["familyId"] as String? {
+                        result.append(id)
+                    }
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func saveFamilyMember(peopleId:String, familyId:String) {
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                let rows = try Row.fetchAll(db, "SELECT familyId,peopleId FROM FamilyMember WHERE familyId='\(familyId)' AND peopleId='\(peopleId)'")
+                if rows.count == 0 {
+                    try db.execute("INSERT INTO FamilyMember (familyId, peopleId) VALUES ('\(familyId)','\(peopleId)')")
+                }
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func deleteFamilyMember(peopleId:String, familyId:String) {
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try db.execute("DELETE FROM FamilyMember WHERE familyId='\(familyId)' AND peopleId='\(peopleId)'")
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func saveFamily(familyId:String?=nil, name:String, type:String) -> String? {
+        var recordId:String? = ""
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                var needInsert = false
+                if let id = familyId {
+                    let rows = try Row.fetchAll(db, "SELECT id FROM Family WHERE id='\(id)'")
+                    if rows.count > 0 {
+                        recordId = id
+                        try db.execute("UPDATE Family SET name='\(name)',category='\(type)' WHERE id='\(id)'")
+                    }else{
+                        needInsert = true
+                    }
+                }else{
+                    needInsert = true
+                }
+                if needInsert {
+                    recordId = UUID().uuidString
+                    try db.execute("INSERT INTO Family (id, name, category) VALUES ('\(recordId!)','\(name)','\(type)')")
+                }
+            }
+        }catch{
+            print(error)
+            recordId = nil
+        }
+        return recordId
+    }
+    
+    func deleteFamily(id:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try db.execute("DELETE FROM FamilyMember WHERE familyId='\(id)'")
+                try db.execute("DELETE FROM FamilyJoint WHERE smallFamilyId='\(id)'")
+                try db.execute("DELETE FROM FamilyJoint WHERE bigFamilyId='\(id)'")
+                try db.execute("DELETE FROM Family WHERE id='\(id)'")
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    // MARK: RELATIONSHIP
+    
+    func getRelationship(primary:String, secondary:String) -> (String, String) {
+        var value1 = ""
+        var value2 = ""
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                let rows1 = try Row.fetchAll(db, "SELECT subject,object,callName FROM PeopleRelationship WHERE subject='\(primary)' AND object='\(secondary)'")
+                if rows1.count > 0, let callName = rows1[0]["callName"] {
+                    value1 = "\(callName)"
+                }
+                
+                let rows2 = try Row.fetchAll(db, "SELECT subject,object,callName FROM PeopleRelationship WHERE subject='\(secondary)' AND object='\(primary)'")
+                if rows2.count > 0, let callName = rows2[0]["callName"] {
+                    value2 = "\(callName)"
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return (value1, value2)
+    }
+    
+    func getRelationships(peopleId:String) -> [[String:String]] {
+        var result:[[String:String]] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, "SELECT subject,object,callName FROM PeopleRelationship WHERE subject='\(peopleId)' OR object='\(peopleId)'")
+                for row in rows {
+                    if let primary = row["subject"] as String?,
+                        let secondary = row["object"] as String?,
+                        let callName = row["callName"] as String? {
+                        var dict:[String:String] = [:]
+                        dict["primary"] = primary
+                        dict["secondary"] = secondary
+                        dict["callName"] = callName
+                        result.append(dict)
+                    }
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func saveRelationship(primary:String, secondary:String, callName:String) {
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                let rows = try Row.fetchAll(db, "SELECT subject,object,callName FROM PeopleRelationship WHERE subject='\(primary)' AND object='\(secondary)'")
+                if rows.count > 0 {
+                    try db.execute("UPDATE PeopleRelationship SET callName='\(callName)' WHERE subject='\(primary)' AND object='\(secondary)'")
+                }else{
+                    try db.execute("INSERT INTO PeopleRelationship (subject, object, callName) VALUES ('\(primary)','\(secondary)','\(callName)')")
+                }
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
     // MARK: PEOPLE
     
     func getPeople() -> [People] {
@@ -1940,6 +2105,19 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             let db = ModelStore.sharedDBPool()
             try db.read { db in
                 obj = try People.order(sql: "name asc").fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return obj
+    }
+    
+    func getPeople(except:String) -> [People] {
+        var obj:[People] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                obj = try People.filter(sql: "id <> '\(except)'").order(sql: "name asc").fetchAll(db)
             }
         }catch{
             print(error)
@@ -2330,8 +2508,8 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 t.column("shortName", .text).indexed()
             })
             try db.create(table: "PeopleRelationship", body: { t in
-                t.column("primary", .text).notNull().indexed()
-                t.column("secondary", .text).notNull().indexed()
+                t.column("subject", .text).notNull().indexed()
+                t.column("object", .text).notNull().indexed()
                 t.column("callName", .text).notNull()
             })
             try db.create(table: "Family", body: { t in

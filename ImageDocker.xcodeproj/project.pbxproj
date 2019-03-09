@@ -60,6 +60,7 @@
 		8E8D471A2229AC430091E9C3 /* FaceCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D47192229AC430091E9C3 /* FaceCollectionViewController.swift */; };
 		8E8D471C22315F540091E9C3 /* SingleColumnTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D471B22315F540091E9C3 /* SingleColumnTableViewController.swift */; };
 		8E8D472022338DAC0091E9C3 /* TextListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D471F22338DAC0091E9C3 /* TextListViewController.swift */; };
+		8E8D47222233DCD30091E9C3 /* DictionaryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D47212233DCD30091E9C3 /* DictionaryTableViewController.swift */; };
 		8E95739A20EBEBD7003BD651 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E95739820EBEBD7003BD651 /* FilterViewController.swift */; };
 		8E95739B20EBEBD7003BD651 /* FilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E95739920EBEBD7003BD651 /* FilterViewController.xib */; };
 		8E98B8F020D0EE3300771280 /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E98B8EE20D0EE3300771280 /* PlaceListViewController.swift */; };
@@ -215,6 +216,7 @@
 		8E8D47192229AC430091E9C3 /* FaceCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceCollectionViewController.swift; sourceTree = "<group>"; };
 		8E8D471B22315F540091E9C3 /* SingleColumnTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleColumnTableViewController.swift; sourceTree = "<group>"; };
 		8E8D471F22338DAC0091E9C3 /* TextListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextListViewController.swift; sourceTree = "<group>"; };
+		8E8D47212233DCD30091E9C3 /* DictionaryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryTableViewController.swift; sourceTree = "<group>"; };
 		8E95739820EBEBD7003BD651 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
 		8E95739920EBEBD7003BD651 /* FilterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FilterViewController.xib; sourceTree = "<group>"; };
 		8E98B8EE20D0EE3300771280 /* PlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
@@ -654,6 +656,7 @@
 				8EF4CE6321E56DC100C53AFF /* NotificationViewController.xib */,
 				8E8D471B22315F540091E9C3 /* SingleColumnTableViewController.swift */,
 				8E8D471F22338DAC0091E9C3 /* TextListViewController.swift */,
+				8E8D47212233DCD30091E9C3 /* DictionaryTableViewController.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -933,6 +936,7 @@
 				8E36B067217920B400646EA5 /* MonthListController.swift in Sources */,
 				8E98B8F320D5C90600771280 /* WindowController.swift in Sources */,
 				8EBA692E2090DB4B00221131 /* VideoDropView.swift in Sources */,
+				8E8D47222233DCD30091E9C3 /* DictionaryTableViewController.swift in Sources */,
 				8EFA7CF9211A36F700419777 /* DeviceCopyViewController.swift in Sources */,
 				8EBA9DE32173C8F000DACAAD /* TheaterViewController.swift in Sources */,
 				8E4C38CD2117B5340089502C /* Phone.swift in Sources */,
