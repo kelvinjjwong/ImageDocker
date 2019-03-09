@@ -2023,6 +2023,117 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return nil
     }
     
+    func getFaceCrops(imageId: String) -> [ImageFace] {
+        var result:[ImageFace] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try ImageFace.filter(sql: "imageId='\(imageId)'").fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func findFaceCrop(imageId: String, x:String, y:String, width:String, height:String) -> ImageFace? {
+        var obj:ImageFace?
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                obj = try ImageFace.filter(sql: "imageId='\(imageId)' and faceX='\(x)' and faceY='\(y)' and faceWidth='\(width)' and faceHeight='\(height)'").fetchOne(db)
+            }
+            return obj
+        }catch{
+            print(error)
+        }
+        return nil
+    }
+    
+    func getYearsOfFaceCrops(peopleId:String) -> [String]{
+        let condition = peopleId == "Unknown" || peopleId == "" ? "peopleId is null or peopleId='Unknown'" : "peopleId='\(peopleId)'"
+        var results:[String] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, "SELECT DISTINCT imageYear FROM ImageFace WHERE \(condition)")
+                for row in rows {
+                    if let value = row["imageYear"] as Int? {
+                        results.append("\(value)")
+                    }
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return results
+    }
+    
+    func getMonthsOfFaceCrops(peopleId:String, imageYear:String) -> [String]{
+        let condition = peopleId == "Unknown" || peopleId == "" ? "(peopleId is null or peopleId='Unknown')" : "peopleId='\(peopleId)'"
+        var results:[String] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, "SELECT DISTINCT imageMonth FROM ImageFace WHERE imageYear=\(imageYear) and \(condition)")
+                for row in rows {
+                    if let value = row["imageMonth"] as Int? {
+                        results.append("\(value)")
+                    }
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return results
+    }
+    
+    func getFaceCrops(peopleId:String, year:Int? = nil, month:Int? = nil, sample:Bool? = nil, icon:Bool? = nil, tag:Bool? = nil) -> [ImageFace]{
+        var sql = ""
+        if peopleId != "" && peopleId != "Unknown" {
+            sql = "peopleId='\(peopleId)'"
+        }else{
+            sql = "(peopleId is null or peopleId='Unknown')"
+        }
+        if let year = year {
+            sql = "\(sql) and imageYear=\(year)"
+        }
+        if let month = month {
+            sql = "\(sql) and imageMonth=\(month)"
+        }
+        if let sample = sample {
+            sql = "\(sql) and sampleChoice=\(sample ? 1 : 0)"
+        }
+        if let icon = icon {
+            sql = "\(sql) and iconChoice=\(icon ? 1 : 0)"
+        }
+        if let tag = tag {
+            sql = "\(sql) and tagOnly=\(tag ? 1 : 0)"
+        }
+        var result:[ImageFace] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try ImageFace.filter(sql: sql).fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func saveFaceCrop(_ face:ImageFace) {
+        var f = face
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try f.save(db)
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
     // MARK: SCHEMA VERSION MIGRATION
     
     fileprivate func versionCheck(){
@@ -2340,7 +2451,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 t.column("frameX", .text).defaults(to: "")
                 t.column("frameY", .text).defaults(to: "")
                 t.column("frameWidth", .text).defaults(to: "")
-                t.column("franeHeight", .text).defaults(to: "")
+                t.column("frameHeight", .text).defaults(to: "")
                 t.column("iconChoice", .boolean).defaults(to: false).indexed()
                 t.column("tagOnly", .boolean).defaults(to: false).indexed()
                 t.column("remark", .text).defaults(to: "")

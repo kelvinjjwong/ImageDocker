@@ -58,9 +58,16 @@ class PeopleFace {
     fileprivate func loadPersonName() -> String {
         if self.person == nil {
             if let peopleId = self.data.peopleId, let person = ModelStore.default.getPerson(id: peopleId) {
+                self.person = person
+                if let shortName = person.shortName, shortName != "" {
+                    return shortName
+                }
                 return person.name
             }
         }else{
+            if let shortName = self.person?.shortName, shortName != "" {
+                return shortName
+            }
             return self.person?.name ?? "Noname"
         }
         return "Unknown"
@@ -70,11 +77,15 @@ class PeopleFace {
     
     lazy var sourceImage:NSImage? = self.loadSourceImage()
     
+    var sourceDescription = ""
+    
     fileprivate func loadSourceImage() -> NSImage? {
         if let sourceImage = ModelStore.default.getImage(id: self.data.imageId) {
             let url = URL(fileURLWithPath: sourceImage.path)
+            self.sourceDescription = ExportManager.default.getImageBrief(photo: sourceImage)
             return self.loadImage(url, size: PeopleFace.SourceImageSize)
         }
+        self.sourceDescription = ""
         return nil
     }
     

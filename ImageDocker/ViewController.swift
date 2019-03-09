@@ -1941,7 +1941,8 @@ class ViewController: NSViewController {
                 self.peopleWindowController.showWindow(self)
                 print("show window")
             }
-            //let vc = window.contentViewController as! PeopleViewController
+            let vc = window.contentViewController as! PeopleViewController
+            vc.initView()
 //            vc.initNew(window: window, onOK: {
 //                window.close()
 //            })

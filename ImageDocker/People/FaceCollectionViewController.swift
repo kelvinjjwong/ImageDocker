@@ -46,9 +46,11 @@ extension FaceCollectionViewController : NSCollectionViewDataSource {
     func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
         let item = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "FaceCollectionViewItem"), for: indexPath)
         guard let collectionViewItem = item as? FaceCollectionViewItem else {return item}
+        
         collectionViewItem.enableNameLabel = self.enableNameLabel
         
         let face = imagesLoader.item(for: indexPath as NSIndexPath)
+        
         DispatchQueue.main.async {
             collectionViewItem.face = face
         }
@@ -61,6 +63,7 @@ extension FaceCollectionViewController : NSCollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: NSCollectionView, viewForSupplementaryElementOfKind kind: NSCollectionView.SupplementaryElementKind, at indexPath: IndexPath) -> NSView {
+        
         let view = collectionView.makeSupplementaryView(ofKind: NSCollectionView.SupplementaryElementKind.sectionHeader, withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "HeaderView"), for: indexPath as IndexPath) as! HeaderView
         view.sectionTitle.stringValue = imagesLoader.titleOfSection(indexPath.section)
         let numberOfItemsInSection = imagesLoader.numberOfItems(in: indexPath.section)

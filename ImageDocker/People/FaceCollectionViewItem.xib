@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="FaceCollectionViewItem" customModule="ImageDocker" customModuleProvider="target">
             <connections>
+                <outlet property="bottom" destination="WVu-Mt-BjO" id="0qK-Af-SnG"/>
                 <outlet property="imageView" destination="uoC-SV-1w5" id="LJB-H5-EIS"/>
                 <outlet property="textField" destination="VLv-th-RIL" id="499-hd-fPp"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
@@ -16,19 +17,19 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+            <rect key="frame" x="0.0" y="0.0" width="140" height="140"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uoC-SV-1w5">
-                    <rect key="frame" x="0.0" y="15" width="60" height="45"/>
+                    <rect key="frame" x="5" y="15" width="130" height="120"/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="hIk-wY-0uM"/>
                 </imageView>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VLv-th-RIL">
-                    <rect key="frame" x="-2" y="0.0" width="64" height="15"/>
+                    <rect key="frame" x="3" y="5" width="134" height="15"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="15" id="ic8-po-DCq"/>
                     </constraints>
-                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" id="Mhn-9z-3uC">
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="ABC" id="Mhn-9z-3uC">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -36,15 +37,16 @@
                 </textField>
             </subviews>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="VLv-th-RIL" secondAttribute="trailing" id="Azz-H4-Dl4"/>
-                <constraint firstItem="VLv-th-RIL" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="J3C-WC-3VZ"/>
-                <constraint firstItem="uoC-SV-1w5" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="JyG-EQ-c1N"/>
-                <constraint firstAttribute="trailing" secondItem="uoC-SV-1w5" secondAttribute="trailing" id="SsR-HF-otB"/>
+                <constraint firstAttribute="trailing" secondItem="VLv-th-RIL" secondAttribute="trailing" constant="5" id="Azz-H4-Dl4"/>
+                <constraint firstItem="VLv-th-RIL" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="5" id="J3C-WC-3VZ"/>
+                <constraint firstItem="uoC-SV-1w5" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="5" id="JyG-EQ-c1N"/>
+                <constraint firstAttribute="trailing" secondItem="uoC-SV-1w5" secondAttribute="trailing" constant="5" id="SsR-HF-otB"/>
                 <constraint firstAttribute="bottom" secondItem="uoC-SV-1w5" secondAttribute="bottom" constant="15" id="WVu-Mt-BjO"/>
-                <constraint firstAttribute="bottom" secondItem="VLv-th-RIL" secondAttribute="bottom" id="aTD-fe-1xX"/>
-                <constraint firstItem="uoC-SV-1w5" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="j6b-HA-RJF"/>
+                <constraint firstAttribute="bottom" secondItem="VLv-th-RIL" secondAttribute="bottom" constant="5" id="aTD-fe-1xX"/>
+                <constraint firstItem="uoC-SV-1w5" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="5" id="j6b-HA-RJF"/>
             </constraints>
             <point key="canvasLocation" x="-69" y="48"/>
         </customView>
+        <collectionViewItem id="DWq-5B-YaF" customClass="FaceCollectionViewItem" customModule="ImageDocker" customModuleProvider="target"/>
     </objects>
 </document>

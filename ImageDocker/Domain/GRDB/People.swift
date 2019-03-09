@@ -23,6 +23,11 @@ struct People : Codable {
         return People(id: id, name: name, shortName: shortName,
                       iconRepositoryPath: "", iconCropPath: "", iconSubPath: "", iconFilename: "")
     }
+    
+    static func unknown() -> People {
+        return People(id: "", name: "Unknown", shortName: "Unknown",
+                      iconRepositoryPath: "", iconCropPath: "", iconSubPath: "", iconFilename: "")
+    }
 }
 
 extension People: FetchableRecord, MutablePersistableRecord, TableRecord {

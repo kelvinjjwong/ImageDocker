@@ -8,7 +8,11 @@
 
 import Cocoa
 
+let unknownFaceIcon:NSImage = NSImage(imageLiteralResourceName: "UnknownFace")
+
 class FaceCollectionViewItem: NSCollectionViewItem {
+    
+    @IBOutlet weak var bottom: NSLayoutConstraint!
     
     
     var backgroundColor:NSColor?
@@ -20,8 +24,8 @@ class FaceCollectionViewItem: NSCollectionViewItem {
             if let face = face {
                 self.renderControls(face)
             } else {
-                imageView?.image = nil
-                textField?.stringValue = ""
+                imageView?.image = unknownFaceIcon
+                textField?.stringValue = "Unknown"
             }
         }
     }
@@ -29,25 +33,28 @@ class FaceCollectionViewItem: NSCollectionViewItem {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.wantsLayer = true
-        view.layer?.backgroundColor = (backgroundColor ?? NSColor.darkGray).cgColor
-        view.layer?.borderWidth = 0.0
-        view.layer?.borderColor = NSColor(calibratedRed: 0.0, green: 0.5, blue: 1.0, alpha: 1.0).cgColor // Aqua
+        //view.layer?.backgroundColor = (backgroundColor ?? NSColor.darkGray).cgColor
+        view.layer?.borderWidth = 1.0
+        view.layer?.borderColor = NSColor(calibratedRed: 0.2, green: 0.2, blue: 0.2, alpha: 0.2).cgColor // Aqua
     }
     
     fileprivate func renderControls(_ face:PeopleFace) {
         DispatchQueue.main.async {
-            self.imageView?.image = face.thumbnail
+            self.imageView?.image = face.thumbnail ?? unknownFaceIcon
             if self.enableNameLabel {
                 self.textField?.stringValue = face.personName
+                self.textField?.isHidden = false
             }else{
                 self.textField?.stringValue = ""
+                self.textField?.isHidden = true
+                self.bottom.constant = self.imageView!.lastBaselineOffsetFromBottom
             }
         }
         
     }
     
     func setHighlight(selected: Bool) {
-        view.layer?.borderWidth = selected ? 5.0 : 0.0
+        view.layer?.borderWidth = selected ? 5.0 : 1.0
     }
     
 }

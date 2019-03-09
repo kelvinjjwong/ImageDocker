@@ -58,6 +58,8 @@
 		8E8D4716222991230091E9C3 /* FaceCollectionViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E8D4714222991230091E9C3 /* FaceCollectionViewItem.xib */; };
 		8E8D47182229AC220091E9C3 /* FaceIconCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D47172229AC220091E9C3 /* FaceIconCollectionViewController.swift */; };
 		8E8D471A2229AC430091E9C3 /* FaceCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D47192229AC430091E9C3 /* FaceCollectionViewController.swift */; };
+		8E8D471C22315F540091E9C3 /* SingleColumnTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D471B22315F540091E9C3 /* SingleColumnTableViewController.swift */; };
+		8E8D471E22315F860091E9C3 /* RelationshipListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D471D22315F860091E9C3 /* RelationshipListViewController.swift */; };
 		8E95739A20EBEBD7003BD651 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E95739820EBEBD7003BD651 /* FilterViewController.swift */; };
 		8E95739B20EBEBD7003BD651 /* FilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E95739920EBEBD7003BD651 /* FilterViewController.xib */; };
 		8E98B8F020D0EE3300771280 /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E98B8EE20D0EE3300771280 /* PlaceListViewController.swift */; };
@@ -211,6 +213,8 @@
 		8E8D4714222991230091E9C3 /* FaceCollectionViewItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FaceCollectionViewItem.xib; sourceTree = "<group>"; };
 		8E8D47172229AC220091E9C3 /* FaceIconCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceIconCollectionViewController.swift; sourceTree = "<group>"; };
 		8E8D47192229AC430091E9C3 /* FaceCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceCollectionViewController.swift; sourceTree = "<group>"; };
+		8E8D471B22315F540091E9C3 /* SingleColumnTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleColumnTableViewController.swift; sourceTree = "<group>"; };
+		8E8D471D22315F860091E9C3 /* RelationshipListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipListViewController.swift; sourceTree = "<group>"; };
 		8E95739820EBEBD7003BD651 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
 		8E95739920EBEBD7003BD651 /* FilterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FilterViewController.xib; sourceTree = "<group>"; };
 		8E98B8EE20D0EE3300771280 /* PlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
@@ -466,6 +470,8 @@
 				8E8D4714222991230091E9C3 /* FaceCollectionViewItem.xib */,
 				8E8D47172229AC220091E9C3 /* FaceIconCollectionViewController.swift */,
 				8E8D47192229AC430091E9C3 /* FaceCollectionViewController.swift */,
+				8E8D471B22315F540091E9C3 /* SingleColumnTableViewController.swift */,
+				8E8D471D22315F860091E9C3 /* RelationshipListViewController.swift */,
 			);
 			path = People;
 			sourceTree = "<group>";
@@ -883,6 +889,7 @@
 				8EF4CE5E21D8026800C53AFF /* EditRepositoryViewController.swift in Sources */,
 				8E85B7DA20BE2515005A9845 /* LocationTextDelegate.swift in Sources */,
 				8E85B7D620BD9FD9005A9845 /* Location.swift in Sources */,
+				8E8D471E22315F860091E9C3 /* RelationshipListViewController.swift in Sources */,
 				8E7F71022092053400410C45 /* MetaInfoDelegate.swift in Sources */,
 				8EF125A92214590000C423CA /* DeviceListViewController.swift in Sources */,
 				8E98B8F920D7950E00771280 /* ExportManager.swift in Sources */,
@@ -977,6 +984,7 @@
 				8EC5BA2E21775571001510AF /* TheaterCollectionViewItem.swift in Sources */,
 				8EFAF1FB20BFFC8A007A7783 /* MetaInfoHolder.swift in Sources */,
 				8EB321D720FA433500D8C71D /* Image.swift in Sources */,
+				8E8D471C22315F540091E9C3 /* SingleColumnTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

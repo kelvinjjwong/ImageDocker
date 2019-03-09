@@ -28,52 +28,74 @@ class FaceCollectionViewItemsLoader: NSObject {
     private var sections:[FaceCollectionViewSection] = []
     
     func loadIcons() {
-        let people = ModelStore.default.getPeople()
         self.items = []
+        self.items.append(PeopleFace(person: People.unknown()))
+        let people = ModelStore.default.getPeople()
         if people.count > 0 {
-            print("GOT \(people.count) PEOPLE")
             for person in people {
                 let icon = PeopleFace(person: person)
                 self.items.append(icon)
             }
-            self.setupItems(self.items)
+            //self.setupItems(self.items)
         }else{
             print("NO PEOPLE")
-            self.setupItems(nil)
+            //self.setupItems(nil)
         }
-        self.reorganizeItems()
+        self.collectDomainItemToSingleSection()
     }
     
-    func setupItems(_ items: [PeopleFace]?){
-        if self.items.count > 0 {
-            self.items.removeAll()
+    func loadFaces(peopleId:String, year:Int?=nil, month:Int?=nil, sample:Bool?=nil, icon:Bool?=nil, tag:Bool?=nil) {
+        self.items = []
+        let faces = ModelStore.default.getFaceCrops(peopleId: peopleId, year: year, month: month, sample: sample, icon: icon, tag: tag)
+        if faces.count > 0 {
+            for face in faces {
+                let f = PeopleFace(face)
+                self.items.append(f)
+            }
+        }else{
+            print("NO FACE CROP")
         }
-        
-        for section in sections {
-            section.items.removeAll()
-        }
-        
-        numberOfSections = 0
-        sections.removeAll()
-        
-        guard items != nil && (items?.count)! > 0 else {
-            self.loading = false
-            return
-        }
-        
-        self.loading = false
+        self.collectDomainItemToSingleSection()
     }
     
-    func reorganizeItems() {
+    func clean(){
+        self.items = []
+        let section = self.getSection(title: "All")!
+        section.items.removeAll()
         
-        if sections.count > 0 {
-            sections.removeAll()
-        }
-        
-        numberOfSections = 1
-        
-        collectDomainItemToSingleSection()
+        self.numberOfSections = 1
     }
+    
+//    func setupItems(_ items: [PeopleFace]?){
+//        if self.items.count > 0 {
+//            self.items.removeAll()
+//        }
+//
+//        for section in sections {
+//            section.items.removeAll()
+//        }
+//
+//        numberOfSections = 0
+//        sections.removeAll()
+//
+//        guard items != nil && (items?.count)! > 0 else {
+//            self.loading = false
+//            return
+//        }
+//
+//        self.loading = false
+//    }
+    
+//    func reorganizeItems() {
+//
+//        if sections.count > 0 {
+//            sections.removeAll()
+//        }
+//
+//        numberOfSections = 1
+//
+//        collectDomainItemToSingleSection()
+//    }
 
     private func collectDomainItemToSingleSection() {
         let section = self.getSection(title: "All")!

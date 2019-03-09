@@ -29,6 +29,8 @@ struct FaceClip {
 @available(OSX 10.13, *)
 class FaceDetection {
     
+    fileprivate let CropSize:Int = 200
+    
     static let `default` = FaceDetection()
     
     // smaller value, smaller size of face-image
@@ -81,28 +83,82 @@ class FaceDetection {
             print("got \(i)")
             // Create image file from detected faces
             let data = NSBitmapImageRep.init(cgImage: image).representation(using: .jpeg, properties: [:])
-            
-            var filename = ""
-            if nameBy == .number {
-                filename = "\(i).jpg"
-            }else{
-                filename = "\(observation.uuid).jpg"
-            }
-            print("Creating crop file: \(filename)")
-            filenames.append(FaceClip.new(filename, x, y, width, height, frameX, frameY, frameWidth, frameHeight))
-            let faceURL = cropsPath.appendingPathComponent(filename)
             if data == nil {
                 print("data object is nil")
-            }
-            do {
-                try data?.write(to: faceURL)
-            }catch{
-                print(error)
+                
+            }else{
+            
+                var filename = ""
+                var filenameTemporary = ""
+                if nameBy == .number {
+                    filename = "\(i).jpg"
+                    filenameTemporary = "\(i)-temp.jpg"
+                }else{
+                    filename = "\(observation.uuid).jpg"
+                    filenameTemporary = "\(observation.uuid)-temp.jpg"
+                }
+                let faceURL = cropsPath.appendingPathComponent(filename)
+                print("Creating crop file: \(filename)")
+                if Int(frameWidth) > CropSize || Int(frameHeight) > CropSize {
+                    let tempURL = cropsPath.appendingPathComponent(filenameTemporary)
+                    
+                    do {
+                        try data?.write(to: tempURL)
+                    }catch{
+                        print("Unable to save big size crop to temporary file: \(tempURL.path)")
+                        print(error)
+                    }
+                    
+                    if let image = self.createThumbnail(from: tempURL, size: CropSize) {
+                        if let cgImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil) {
+                            let cgData = NSBitmapImageRep.init(cgImage: cgImage).representation(using: .jpeg, properties: [:])
+                            if cgData != nil {
+                                do {
+                                    try cgData?.write(to: faceURL)
+                                }catch{
+                                    print("Unable to save resized crop to file: \(faceURL.path)")
+                                    print(error)
+                                }
+                            }
+                        }
+                    }
+                    do {
+                        try FileManager.default.removeItem(at: tempURL)
+                    }catch{
+                        print("Unable to delete temporary file: \(tempURL.path)")
+                        print(error)
+                    }
+                    
+                    
+                }else{
+                    do {
+                        try data?.write(to: faceURL)
+                    }catch{
+                        print(error)
+                    }
+                }
+                
+                filenames.append(FaceClip.new(filename, x, y, width, height, frameX, frameY, frameWidth, frameHeight))
             }
         }
         if onCompleted != nil {
             onCompleted!(filenames)
         }
+    }
+    
+    fileprivate func createThumbnail(from url:URL, size:Int) -> NSImage? {
+        let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil)
+        if let imageSource = imageSource {
+            guard CGImageSourceGetType(imageSource) != nil else { return nil }
+            
+            let thumbnailOptions = [
+                String(kCGImageSourceCreateThumbnailFromImageIfAbsent): true,
+                String(kCGImageSourceThumbnailMaxPixelSize): size
+                ] as [String : Any]
+            guard let thumbnailRef = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, thumbnailOptions as CFDictionary) else { return nil}
+            return NSImage(cgImage: thumbnailRef, size: NSSize.zero)
+        }
+        return nil
     }
 }
 
