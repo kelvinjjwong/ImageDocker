@@ -26,8 +26,6 @@ class PeopleViewController: NSViewController {
     @IBOutlet weak var faceCollectionView: NSCollectionView!
     @IBOutlet weak var imgFacePreview: NSImageView!
     @IBOutlet weak var chkIcon: NSButton!
-    @IBOutlet weak var txtAge: NSTextField!
-    @IBOutlet weak var btnSaveAge: NSButton!
     @IBOutlet weak var btnDifferentPerson: NSButton!
     @IBOutlet weak var lstPeople: NSPopUpButton!
     @IBOutlet weak var txtCallAs: NSTextField!
@@ -40,7 +38,6 @@ class PeopleViewController: NSViewController {
     @IBOutlet weak var lblSourceDescription: NSTextField!
     @IBOutlet weak var btnSourceLargerView: NSButton!
     @IBOutlet weak var chkSample: NSButton!
-    @IBOutlet weak var lblAge: NSTextField!
     @IBOutlet weak var txtFamilyName: NSTextField!
     @IBOutlet weak var lblFamilyName: NSTextField!
     @IBOutlet weak var btnChangeFamilyName: NSButton!
@@ -54,6 +51,8 @@ class PeopleViewController: NSViewController {
     @IBOutlet weak var lblRelationshipMessage: NSTextField!
     @IBOutlet weak var lstFamilyType: NSPopUpButton!
     @IBOutlet weak var lblFamilyMessage: NSTextField!
+    @IBOutlet weak var lblFaceDescription: NSTextField!
+    @IBOutlet weak var btnRecognize: NSButton!
     
     
     var iconCollectionViewController : FaceIconCollectionViewController!
@@ -184,7 +183,6 @@ class PeopleViewController: NSViewController {
         self.imgFacePreview.image = nil
         self.chkIcon.state = .off
         self.chkSample.state = .off
-        self.txtAge.stringValue = ""
         // TODO: set face table views to empty
         // TODO: set face collection to empty
     }
@@ -211,20 +209,19 @@ class PeopleViewController: NSViewController {
     fileprivate func adjustButtonsForUnknownFace(preview:Bool) {
         if preview {
             self.btnDifferentPerson.isHidden = false
+            self.btnRecognize.isHidden = false
             self.btnSourceLargerView.isHidden = false
             self.lblSourceDate.isHidden = false
             self.lblSourceDescription.isHidden = false
         }else{
             self.btnDifferentPerson.isHidden = true
+            self.btnRecognize.isHidden = true
             self.btnSourceLargerView.isHidden = true
             self.lblSourceDate.isHidden = true
             self.lblSourceDescription.isHidden = true
         }
-        self.txtAge.isHidden = true
-        self.btnSaveAge.isHidden = true
         self.chkIcon.isHidden = true
         self.chkSample.isHidden = true
-        self.lblAge.isHidden = true
         self.boxFamily.isHidden = true
         self.boxRelationship.isHidden = true
         
@@ -235,23 +232,19 @@ class PeopleViewController: NSViewController {
 
     fileprivate func adjustButtonsForKnownFace(preview:Bool) {
         if preview {
-            self.txtAge.isHidden = false
-            self.btnSaveAge.isHidden = false
             self.chkIcon.isHidden = false
             self.chkSample.isHidden = false
-            self.lblAge.isHidden = false
             self.btnDifferentPerson.isHidden = false
+            self.btnRecognize.isHidden = false
             self.btnSourceLargerView.isHidden = false
             self.lblSourceDate.isHidden = false
             self.lblSourceDescription.isHidden = false
         }else{
-            self.txtAge.isHidden = true
-            self.btnSaveAge.isHidden = true
             self.chkIcon.isHidden = true
             self.chkSample.isHidden = true
-            self.lblAge.isHidden = true
             self.txtPeopleId.isEnabled = true
             self.btnDifferentPerson.isHidden = true
+            self.btnRecognize.isHidden = true
             self.btnSourceLargerView.isHidden = true
             self.lblSourceDate.isHidden = true
             self.lblSourceDescription.isHidden = true
@@ -387,7 +380,6 @@ class PeopleViewController: NSViewController {
         }else{
             self.chkIcon.state = .off
         }
-        self.txtAge.stringValue = "\(face.data.peopleAge)"
         
         self.cleanSourceInfo()
         self.imgSourcePreview.image = face.sourceImage
@@ -556,6 +548,9 @@ class PeopleViewController: NSViewController {
 //        self.txtBeCalledAs.stringValue = ""
 //        self.lblRelationshipMessage.stringValue = ""
 //        self.loadRelationships()
+    }
+    
+    @IBAction func onRecognizeClicked(_ sender: NSButton) {
     }
     
     

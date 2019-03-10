@@ -4191,7 +4191,7 @@ DQ
                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="UGh-Un-ApM"/>
                                         </imageView>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xKT-W6-Lzy">
-                                            <rect key="frame" x="107" y="16" width="139" height="32"/>
+                                            <rect key="frame" x="117" y="3" width="139" height="32"/>
                                             <buttonCell key="cell" type="push" title="Different Person" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="38r-kS-DVQ">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
@@ -4201,7 +4201,7 @@ DQ
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ms0-vc-0WA">
-                                            <rect key="frame" x="18" y="59" width="48" height="18"/>
+                                            <rect key="frame" x="121" y="49" width="48" height="18"/>
                                             <buttonCell key="cell" type="check" title="Icon" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="JFx-3k-NeI">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
@@ -4210,38 +4210,26 @@ DQ
                                                 <action selector="onChkIconClicked:" target="Y9X-Oo-HLH" id="KTc-nD-ItU"/>
                                             </connections>
                                         </button>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KVr-Wa-asx">
-                                            <rect key="frame" x="81" y="60" width="32" height="17"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Age:" id="aCg-bc-nWl">
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LTG-sS-lD7">
+                                            <rect key="frame" x="18" y="75" width="224" height="17"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" id="EEA-fw-m03">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lFV-GD-CEu">
-                                            <rect key="frame" x="113" y="58" width="58" height="22"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="58" id="1TA-ge-fCG"/>
-                                            </constraints>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="NAl-0l-4qg">
-                                                <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="Nkq-0q-AwX"/>
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IG5-sI-c10">
-                                            <rect key="frame" x="176" y="51" width="70" height="32"/>
-                                            <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jgI-3R-B4G">
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6hw-Ms-iiU">
+                                            <rect key="frame" x="4" y="3" width="103" height="32"/>
+                                            <buttonCell key="cell" type="push" title="Recognize" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="G1T-yG-13d">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="onSaveAgeClicked:" target="Y9X-Oo-HLH" id="EiU-bB-k4Y"/>
+                                                <action selector="onRecognizeClicked:" target="Y9X-Oo-HLH" id="8Hs-cx-PcT"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="crb-ad-k2F">
-                                            <rect key="frame" x="18" y="25" width="67" height="18"/>
+                                            <rect key="frame" x="18" y="49" width="67" height="18"/>
                                             <buttonCell key="cell" type="check" title="Sample" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="r73-4v-qgV">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
@@ -4252,21 +4240,20 @@ DQ
                                         </button>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="KVr-Wa-asx" firstAttribute="leading" secondItem="ms0-vc-0WA" secondAttribute="trailing" constant="19" id="15n-x7-7f5"/>
-                                        <constraint firstItem="lFV-GD-CEu" firstAttribute="top" secondItem="3N8-G4-USc" secondAttribute="bottom" constant="18" id="1VO-OZ-aJ8"/>
-                                        <constraint firstItem="ms0-vc-0WA" firstAttribute="leading" secondItem="Jqa-1O-5KG" secondAttribute="leading" constant="20" id="6F8-U3-kNV"/>
-                                        <constraint firstItem="ms0-vc-0WA" firstAttribute="top" secondItem="3N8-G4-USc" secondAttribute="bottom" constant="23" id="6yF-Yu-xy7"/>
+                                        <constraint firstItem="ms0-vc-0WA" firstAttribute="leading" secondItem="crb-ad-k2F" secondAttribute="trailing" constant="40" id="0k1-a2-zLo"/>
+                                        <constraint firstItem="crb-ad-k2F" firstAttribute="leading" secondItem="Jqa-1O-5KG" secondAttribute="leading" constant="20" id="33l-b2-aCb"/>
+                                        <constraint firstItem="6hw-Ms-iiU" firstAttribute="leading" secondItem="Jqa-1O-5KG" secondAttribute="leading" constant="10" id="AR2-3G-Fpe"/>
                                         <constraint firstItem="3N8-G4-USc" firstAttribute="top" secondItem="Jqa-1O-5KG" secondAttribute="top" constant="8" id="BEU-5t-6hO"/>
-                                        <constraint firstItem="lFV-GD-CEu" firstAttribute="leading" secondItem="KVr-Wa-asx" secondAttribute="trailing" constant="2" id="IYg-hY-NhJ"/>
-                                        <constraint firstItem="crb-ad-k2F" firstAttribute="leading" secondItem="Jqa-1O-5KG" secondAttribute="leading" constant="20" id="Idm-9u-cwR"/>
-                                        <constraint firstItem="xKT-W6-Lzy" firstAttribute="top" secondItem="lFV-GD-CEu" secondAttribute="bottom" constant="14" id="RpD-LA-tjh"/>
-                                        <constraint firstAttribute="trailing" secondItem="IG5-sI-c10" secondAttribute="trailing" constant="20" id="Z1a-Fv-X0c"/>
+                                        <constraint firstItem="LTG-sS-lD7" firstAttribute="top" secondItem="3N8-G4-USc" secondAttribute="bottom" constant="6" id="Cl6-Ut-CA8"/>
+                                        <constraint firstItem="ms0-vc-0WA" firstAttribute="top" secondItem="LTG-sS-lD7" secondAttribute="bottom" constant="10" id="JTy-5l-yof"/>
+                                        <constraint firstAttribute="bottom" secondItem="6hw-Ms-iiU" secondAttribute="bottom" constant="10" id="S4j-po-grp"/>
+                                        <constraint firstAttribute="bottom" secondItem="xKT-W6-Lzy" secondAttribute="bottom" constant="10" id="SQc-eY-V6W"/>
                                         <constraint firstAttribute="trailing" secondItem="3N8-G4-USc" secondAttribute="trailing" id="fCG-Xy-OPJ"/>
+                                        <constraint firstAttribute="trailing" secondItem="LTG-sS-lD7" secondAttribute="trailing" constant="20" id="gfG-5N-Bip"/>
+                                        <constraint firstItem="crb-ad-k2F" firstAttribute="top" secondItem="LTG-sS-lD7" secondAttribute="bottom" constant="10" id="hAZ-16-1de"/>
+                                        <constraint firstItem="LTG-sS-lD7" firstAttribute="leading" secondItem="Jqa-1O-5KG" secondAttribute="leading" constant="20" id="i6o-6j-0gP"/>
                                         <constraint firstItem="3N8-G4-USc" firstAttribute="leading" secondItem="Jqa-1O-5KG" secondAttribute="leading" id="v0J-dR-1rc"/>
-                                        <constraint firstItem="crb-ad-k2F" firstAttribute="top" secondItem="ms0-vc-0WA" secondAttribute="bottom" constant="20" id="xlo-R5-OGT"/>
-                                        <constraint firstItem="IG5-sI-c10" firstAttribute="top" secondItem="3N8-G4-USc" secondAttribute="bottom" constant="19" id="xyS-Yf-BB5"/>
-                                        <constraint firstAttribute="trailing" secondItem="xKT-W6-Lzy" secondAttribute="trailing" constant="20" id="y48-V2-UcU"/>
-                                        <constraint firstItem="KVr-Wa-asx" firstAttribute="top" secondItem="3N8-G4-USc" secondAttribute="bottom" constant="21" id="zy0-TW-Ooq"/>
+                                        <constraint firstAttribute="trailing" secondItem="xKT-W6-Lzy" secondAttribute="trailing" constant="10" id="y48-V2-UcU"/>
                                     </constraints>
                                 </view>
                                 <constraints>
@@ -4949,7 +4936,7 @@ DQ
                         <outlet property="btnCreateFamily" destination="2Gy-WB-Jyv" id="v5p-kc-Gpu"/>
                         <outlet property="btnDeleteFamily" destination="FPh-LN-mhg" id="Qp3-NI-SVl"/>
                         <outlet property="btnDifferentPerson" destination="xKT-W6-Lzy" id="sPv-JK-yMD"/>
-                        <outlet property="btnSaveAge" destination="IG5-sI-c10" id="32c-Ja-66M"/>
+                        <outlet property="btnRecognize" destination="6hw-Ms-iiU" id="q2G-48-cgd"/>
                         <outlet property="btnSaveCall" destination="sSX-GK-8TE" id="ffA-ij-gY3"/>
                         <outlet property="btnSaveId" destination="kWW-uC-gVe" id="B1B-RF-E8p"/>
                         <outlet property="btnSourceLargerView" destination="WhZ-A7-zr6" id="iZQ-8V-ie3"/>
@@ -4959,10 +4946,10 @@ DQ
                         <outlet property="iconCollectionView" destination="8qp-hY-LJF" id="g5j-uP-qxn"/>
                         <outlet property="imgFacePreview" destination="3N8-G4-USc" id="Hnx-9h-htJ"/>
                         <outlet property="imgSourcePreview" destination="Bth-Me-BEd" id="Qlk-Mp-IaI"/>
-                        <outlet property="lblAge" destination="KVr-Wa-asx" id="gNV-2c-Agm"/>
                         <outlet property="lblAs" destination="ILG-jT-B88" id="hlw-QX-BSA"/>
                         <outlet property="lblBeCalledAs" destination="GJ9-WF-tXy" id="XB9-TE-KvR"/>
                         <outlet property="lblCall" destination="Swq-2K-b0m" id="Ddz-wQ-vyV"/>
+                        <outlet property="lblFaceDescription" destination="LTG-sS-lD7" id="vhh-Xz-3W1"/>
                         <outlet property="lblFamilyMessage" destination="oek-ZJ-x7L" id="MNI-gy-u1h"/>
                         <outlet property="lblFamilyName" destination="3MJ-o8-yMg" id="2DG-uH-BYk"/>
                         <outlet property="lblFilename" destination="3MJ-o8-yMg" id="zys-Fl-Rq0"/>
@@ -4975,7 +4962,6 @@ DQ
                         <outlet property="tblFaceYear" destination="Yp7-ZA-vO1" id="u7B-g6-74U"/>
                         <outlet property="tblFamily" destination="QNQ-2n-xe7" id="3U6-jr-mHj"/>
                         <outlet property="tblRelationship" destination="Z9B-S8-hRy" id="yP2-aa-lya"/>
-                        <outlet property="txtAge" destination="lFV-GD-CEu" id="Lno-I9-5Ac"/>
                         <outlet property="txtBeCalledAs" destination="rrn-Fm-7FL" id="9Y0-BO-7sB"/>
                         <outlet property="txtCallAs" destination="glr-X7-iVp" id="sU3-5Y-1mt"/>
                         <outlet property="txtFamilyName" destination="ItT-Dd-e0E" id="GQs-GP-gXH"/>

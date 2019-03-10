@@ -10,7 +10,7 @@ import Cocoa
 
 struct Alert {
     
-    static func dialogOKCancel(question: String, text: String, width:Int = 0) -> Bool {
+    static func dialogOKCancel(question: String, text: String, width:Int = 0, image:NSImage? = nil) -> Bool {
         let alert = NSAlert()
         alert.messageText = "\(question)\n\n\(text)\n\n"
 //        alert.informativeText = text
@@ -20,6 +20,11 @@ struct Alert {
         }
         alert.addButton(withTitle: "OK")
         alert.addButton(withTitle: "Cancel")
+        
+        if let icon = image {
+            alert.icon = icon
+        }
+        
         return alert.runModal() == .alertFirstButtonReturn
     }
     
