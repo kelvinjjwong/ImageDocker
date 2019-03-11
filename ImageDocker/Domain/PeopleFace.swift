@@ -45,6 +45,14 @@ class PeopleFace {
         self.generateFaceUrl()
     }
     
+    func reloadData(){
+        let id = self.data.id
+        if let face = ModelStore.default.getFace(id: id) {
+            self.data = face
+            self.personName = self.loadPersonName()
+        }
+    }
+    
     fileprivate func generateFaceUrl() {
         // get face url for thumbnail and preview
         if self.data.cropPath != "" && self.data.subPath != "" && self.data.filename != "" {
@@ -70,7 +78,7 @@ class PeopleFace {
             }
             return self.person?.name ?? "Noname"
         }
-        return "Unknown"
+        return "Unrecognized"
     }
     
     // MARK: SOURCE IMAGE

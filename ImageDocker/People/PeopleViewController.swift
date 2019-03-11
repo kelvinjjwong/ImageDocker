@@ -53,6 +53,7 @@ class PeopleViewController: NSViewController {
     @IBOutlet weak var lblFamilyMessage: NSTextField!
     @IBOutlet weak var lblFaceDescription: NSTextField!
     @IBOutlet weak var btnRecognize: NSButton!
+    @IBOutlet weak var lblIdentityMessasge: NSTextField!
     
     
     var iconCollectionViewController : FaceIconCollectionViewController!
@@ -66,6 +67,8 @@ class PeopleViewController: NSViewController {
     
     var familyTypesListController : TextListViewPopupController!
     var familyTableController : DictionaryTableViewController!
+    
+    var menuPopover : MenuPopover!
     
     // MARK: INIT
     
@@ -166,23 +169,48 @@ class PeopleViewController: NSViewController {
         
         self.lblFamilyMessage.stringValue = ""
         
+        self.menuPopover = MenuPopover() { id, name, action in
+            self.onDifferentPersonClicked(id: id, name: name)
+        }
     }
     
     func initView() {
+        self.cleanIdentity()
+        self.cleanFaceCollection()
+        self.cleanFaceInfo()
+        self.cleanSourceInfo()
+        self.cleanRelationship()
+        self.faceCategoryController.clean()
+        self.faceSubCategoryController.clean()
+        
         self.loadIcons()
         self.adjustButtonsForUnknownFace(preview: false)
+        
+        self.lblIdentityMessasge.stringValue = ""
+        self.lblFamilyMessage.stringValue = ""
+        self.lblRelationshipMessage.stringValue = ""
+        
+        self.selectedFamilyType = ""
+        self.selectedFamilyName = ""
+        self.selectedFamilyId = ""
+        self.selectedPeopleId = ""
+        self.selectedFaceId = ""
+        self.selectedCategory = ""
+        self.selectedSubCategory = ""
     }
     
     fileprivate func cleanIdentity() {
         self.txtPeopleId.stringValue = ""
         self.txtPeopleName.stringValue = ""
         self.txtPeopleNickName.stringValue = ""
+        self.lblIdentityMessasge.stringValue = ""
     }
     
     fileprivate func cleanFaceInfo() {
         self.imgFacePreview.image = nil
         self.chkIcon.state = .off
         self.chkSample.state = .off
+        self.lblFaceDescription.stringValue = ""
         // TODO: set face table views to empty
         // TODO: set face collection to empty
     }
@@ -360,14 +388,21 @@ class PeopleViewController: NSViewController {
         
     }
     
+    fileprivate var selectedFaceId:String = ""
+    
     fileprivate func selectFace(_ face:PeopleFace) {
         self.cleanFaceInfo()
+        self.selectedFaceId = face.data.id
         
         if self.selectedPeopleId == "Unknown" || self.selectedPeopleId == "" {
             self.adjustButtonsForUnknownFace(preview: true)
         }else{
             self.adjustButtonsForKnownFace(preview: true)
         }
+        
+        face.reloadData()
+        
+        self.lblFaceDescription.stringValue = face.personName
         
         self.imgFacePreview.image = face.preview
         if face.data.sampleChoice {
@@ -450,22 +485,71 @@ class PeopleViewController: NSViewController {
         }
     }
     
+    fileprivate func onDifferentPersonClicked(id:String, name:String){
+        print("selected \(id) \(name)")
+        self.lblFaceDescription.stringValue = ""
+        if self.selectedFaceId != "" {
+            if let crop = ModelStore.default.getFace(id: self.selectedFaceId) {
+                var c = crop
+                c.peopleId = id
+                c.recognizeBy = "UserAssign"
+                c.recognizeDate = Date()
+                if c.recognizeVersion == nil {
+                    c.recognizeVersion = "1"
+                }else{
+                    var version = Int(c.recognizeVersion ?? "0") ?? 0
+                    version += 1
+                    c.recognizeVersion = "\(version)"
+                }
+                ModelStore.default.saveFaceCrop(c)
+                print("Face crop \(crop.id) assigned as [\(name)], updated into DB.")
+                
+                if let person = ModelStore.default.getPerson(id: id) {
+                    DispatchQueue.main.async {
+                        self.lblFaceDescription.stringValue = person.shortName ?? person.name
+                    }
+                }
+            }
+        }
+    }
+    
     // MARK: ACTION
     
     @IBAction func onSaveIdClicked(_ sender: NSButton) {
-        // TODO: TODO FUNCTION
+        self.lblIdentityMessasge.stringValue = ""
+        let id = self.txtPeopleId.stringValue
+        let name = self.txtPeopleName.stringValue
+        let shortName = self.txtPeopleNickName.stringValue
+        if id != "" && name != "" && shortName != "" {
+            ModelStore.default.savePersonName(id: id, name: name, shortName: shortName)
+            self.lblIdentityMessasge.stringValue = "Saved."
+        }else{
+            self.lblIdentityMessasge.stringValue = "ERROR: Empty."
+        }
     }
     
     @IBAction func onChkIconClicked(_ sender: NSButton) {
-        // TODO: TODO FUNCTION
-    }
-    
-    @IBAction func onSaveAgeClicked(_ sender: NSButton) {
-        // TODO: TODO FUNCTION
+        if self.selectedFaceId != "" && self.selectedPeopleId != "" {
+            if sender.state == .on {
+                ModelStore.default.updateFaceIconFlag(id: self.selectedFaceId, peopleId: self.selectedPeopleId)
+                self.loadIcons()
+                self.iconCollectionViewController.restoreHighlightedItems()
+            }else{
+                ModelStore.default.removeFaceIcon(peopleId: self.selectedPeopleId)
+                self.loadIcons()
+                self.iconCollectionViewController.restoreHighlightedItems()
+            }
+        }
     }
     
     @IBAction func onDifferentPersonClicked(_ sender: NSButton) {
-        // TODO: TODO FUNCTION
+        let people = ModelStore.default.getPeople(except: self.selectedPeopleId)
+        var menu:[(String, String)] = []
+        for person in people {
+            menu.append((person.id, person.shortName ?? person.name))
+        }
+        self.menuPopover.load(menu)
+        self.menuPopover.show(sender)
     }
     
     @IBAction func onSaveCallClicked(_ sender: NSButton) {
@@ -490,7 +574,10 @@ class PeopleViewController: NSViewController {
     }
     
     @IBAction func onChkSampleClicked(_ sender: NSButton) {
-        // TODO: TODO FUNCTION
+        if self.selectedFaceId != "" && self.selectedPeopleId != "" {
+            ModelStore.default.updateFaceSampleFlag(id: self.selectedFaceId, flag: (sender.state == .on) )
+            // TODO: copy or remove face crop to/from recognition sample directory
+        }
     }
     
     @IBAction func onChangeFamilyNameClicked(_ sender: NSButton) {
@@ -551,6 +638,56 @@ class PeopleViewController: NSViewController {
     }
     
     @IBAction func onRecognizeClicked(_ sender: NSButton) {
+        self.lblFaceDescription.stringValue = ""
+        if self.selectedFaceId != "" {
+            if let crop = ModelStore.default.getFace(id: self.selectedFaceId) {
+                let path = URL(fileURLWithPath: crop.cropPath).appendingPathComponent(crop.subPath).appendingPathComponent(crop.filename)
+                self.btnRecognize.isEnabled = false
+                self.btnDifferentPerson.isEnabled = false
+                self.lblFaceDescription.stringValue = "Recognizing ..."
+                DispatchQueue.global().async {
+                    let recognition = FaceRecognition.default.recognize(imagePath: path.path)
+                    if recognition.count > 0 {
+                        let name = recognition[0]
+                        if name == "Unknown" {
+                            DispatchQueue.main.async {
+                                self.lblFaceDescription.stringValue = "Unrecognized"
+                            }
+                        }else{
+                            var c = crop
+                            c.peopleId = name
+                            c.recognizeBy = "FaceRecognitionOpenCV"
+                            c.recognizeDate = Date()
+                            if c.recognizeVersion == nil {
+                                c.recognizeVersion = "1"
+                            }else{
+                                var version = Int(c.recognizeVersion ?? "0") ?? 0
+                                version += 1
+                                c.recognizeVersion = "\(version)"
+                            }
+                            ModelStore.default.saveFaceCrop(c)
+                            print("Face crop \(crop.id) recognized as [\(name)], updated into DB.")
+                            
+                            if let person = ModelStore.default.getPerson(id: name) {
+                                DispatchQueue.main.async {
+                                    self.lblFaceDescription.stringValue = person.shortName ?? person.name
+                                }
+                            }
+                        }
+                    }else{
+                        DispatchQueue.main.async {
+                            self.lblFaceDescription.stringValue = "Unrecognized"
+                        }
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.btnRecognize.isEnabled = true
+                        self.btnDifferentPerson.isEnabled = true
+                    }
+                }
+                
+            }
+        }
     }
     
     

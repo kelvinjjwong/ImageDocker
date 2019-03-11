@@ -65,37 +65,6 @@ class FaceCollectionViewItemsLoader: NSObject {
         
         self.numberOfSections = 1
     }
-    
-//    func setupItems(_ items: [PeopleFace]?){
-//        if self.items.count > 0 {
-//            self.items.removeAll()
-//        }
-//
-//        for section in sections {
-//            section.items.removeAll()
-//        }
-//
-//        numberOfSections = 0
-//        sections.removeAll()
-//
-//        guard items != nil && (items?.count)! > 0 else {
-//            self.loading = false
-//            return
-//        }
-//
-//        self.loading = false
-//    }
-    
-//    func reorganizeItems() {
-//
-//        if sections.count > 0 {
-//            sections.removeAll()
-//        }
-//
-//        numberOfSections = 1
-//
-//        collectDomainItemToSingleSection()
-//    }
 
     private func collectDomainItemToSingleSection() {
         let section = self.getSection(title: "All")!

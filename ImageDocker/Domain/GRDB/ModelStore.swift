@@ -2312,6 +2312,55 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
     }
     
+    func updateFaceIconFlag(id:String, peopleId:String) {
+        if let face = self.getFace(id: id) {
+            do {
+                let db = ModelStore.sharedDBPool()
+                try db.write { db in
+                    try db.execute("update ImageFace set iconChoice = 0 where peopleId = ? and iconChoice = 1", arguments: [peopleId])
+                    try db.execute("update ImageFace set iconChoice = 1 where peopleId = ? and id = ?", arguments: [peopleId, id])
+                    try db.execute("update People set iconRepositoryPath = ?, iconCropPath = ?, iconSubPath = ?, iconFilename = ? WHERE id = ?", arguments: [face.repositoryPath, face.cropPath, face.subPath, face.filename, peopleId]);
+                }
+            }catch{
+                print(error)
+            }
+        }
+    }
+    
+    func removeFaceIcon(peopleId:String) {
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try db.execute("update ImageFace set iconChoice = 0 where peopleId = ? and iconChoice = 1", arguments: [peopleId])
+                try db.execute("update People set iconRepositoryPath = '', iconCropPath = '', iconSubPath = '', iconFilename = '' WHERE id = ?", arguments: [peopleId]);
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func updateFaceSampleFlag(id:String, flag:Bool) {
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try db.execute("update ImageFace set sampleChoice = \(flag ? 1 : 0) where id = ?", arguments: [id])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func updateFaceTagFlag(id:String, flag:Bool) {
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try db.execute("update ImageFace set tagOnly = \(flag ? 1 : 0) where id = ?", arguments: [id])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
     // MARK: SCHEMA VERSION MIGRATION
     
     fileprivate func versionCheck(){

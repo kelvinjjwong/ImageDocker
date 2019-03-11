@@ -23,6 +23,9 @@ class FaceCollectionViewController : NSViewController {
     
     var onItemClicked: ((PeopleFace) -> Void)? = nil
     
+    
+    fileprivate var selectedIndexPaths:Set<IndexPath> = []
+    
     // MARK: Actions
     
     override func viewDidLoad() {
@@ -85,19 +88,28 @@ extension FaceCollectionViewController : NSCollectionViewDelegateFlowLayout {
 // MARK: - NSCollectionViewDelegate
 extension FaceCollectionViewController : NSCollectionViewDelegate {
     
-    func highlightItems(selected: Bool, atIndexPaths: Set<IndexPath>) {
+    func restoreHighlightedItems() {
+        if self.selectedIndexPaths.count > 0 {
+            self.highlightItems(selected: true, atIndexPaths: self.selectedIndexPaths, click: false)
+        }
+    }
+    
+    
+    func highlightItems(selected: Bool, atIndexPaths: Set<IndexPath>, click:Bool = true) {
         for indexPath in atIndexPaths {
             guard let item = collectionView.item(at: indexPath) else {continue}
             let viewItem = item as! FaceCollectionViewItem
             viewItem.setHighlight(selected: selected)
             
-            if selected && self.onItemClicked != nil {
+            if click && selected && self.onItemClicked != nil {
                 self.onItemClicked!(viewItem.face!)
             }
         }
     }
     
     public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
+        self.selectedIndexPaths = indexPaths
+        print("selected: \(indexPaths.first?.item)")
         highlightItems(selected: true, atIndexPaths: indexPaths)
     }
     
