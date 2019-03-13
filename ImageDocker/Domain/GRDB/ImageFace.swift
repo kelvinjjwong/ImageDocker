@@ -38,6 +38,7 @@ struct ImageFace : Codable {
     var iconChoice : Bool
     var tagOnly : Bool
     var remark:String
+    var sampleChangeDate: Date?
     
     static func fromPerson(peopleId:String, repositoryPath:String, cropPath:String, subPath:String, filename:String) -> ImageFace {
         return ImageFace(id: "",
@@ -66,7 +67,8 @@ struct ImageFace : Codable {
                          frameHeight: "",
                          iconChoice: false,
                          tagOnly: false,
-                         remark: "")
+                         remark: "",
+                         sampleChangeDate: nil)
     }
     
     static func new(imageId:String, repositoryPath:String, cropPath:String, subPath:String, filename:String,
@@ -100,7 +102,8 @@ struct ImageFace : Codable {
                          frameHeight: frameHeight,
                          iconChoice: false,
                          tagOnly: tagOnly,
-                         remark: remark)
+                         remark: remark,
+                         sampleChangeDate: nil)
     }
 }
 

@@ -2343,7 +2343,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
-                try db.execute("update ImageFace set sampleChoice = \(flag ? 1 : 0) where id = ?", arguments: [id])
+                try db.execute("update ImageFace set sampleChoice = \(flag ? 1 : 0), sampleChangeDate = ? where id = ?", arguments: [Date(), id])
             }
         }catch{
             print(error)
@@ -2690,6 +2690,12 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 t.add(column: "iconCropPath", .text).notNull().defaults(to: "")
                 t.add(column: "iconSubPath", .text).notNull().defaults(to: "")
                 t.add(column: "iconFilename", .text).notNull().defaults(to: "")
+            })
+        }
+        
+        migrator.registerMigration("v18") { db in
+            try db.alter(table: "ImageFace", body: { t in
+                t.add(column: "sampleChangeDate", .date)
             })
         }
         

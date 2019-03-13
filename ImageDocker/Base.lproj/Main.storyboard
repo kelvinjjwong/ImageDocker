@@ -3949,11 +3949,11 @@ DQ
             <objects>
                 <viewController id="Y9X-Oo-HLH" customClass="PeopleViewController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="moI-D7-nru">
-                        <rect key="frame" x="0.0" y="0.0" width="1200" height="780"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1200" height="802"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <box title="People" translatesAutoresizingMaskIntoConstraints="NO" id="EfP-WR-kzr">
-                                <rect key="frame" x="17" y="646" width="1166" height="114"/>
+                                <rect key="frame" x="17" y="648" width="1166" height="114"/>
                                 <view key="contentView" id="UAF-F3-AM7">
                                     <rect key="frame" x="2" y="2" width="1162" height="97"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3996,7 +3996,7 @@ DQ
                                 </constraints>
                             </box>
                             <box title="Faces" translatesAutoresizingMaskIntoConstraints="NO" id="QTH-B4-7Ki">
-                                <rect key="frame" x="17" y="327" width="895" height="228"/>
+                                <rect key="frame" x="17" y="329" width="895" height="228"/>
                                 <view key="contentView" id="oPf-dl-UTy">
                                     <rect key="frame" x="2" y="2" width="891" height="211"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4178,7 +4178,7 @@ DQ
                                 </constraints>
                             </box>
                             <box title="Face" translatesAutoresizingMaskIntoConstraints="NO" id="6uQ-13-4Bg">
-                                <rect key="frame" x="919" y="326" width="264" height="304"/>
+                                <rect key="frame" x="919" y="328" width="264" height="304"/>
                                 <view key="contentView" id="Jqa-1O-5KG">
                                     <rect key="frame" x="2" y="2" width="260" height="287"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4262,7 +4262,7 @@ DQ
                                 </constraints>
                             </box>
                             <box title="Source Image" translatesAutoresizingMaskIntoConstraints="NO" id="ZjK-ZL-Gzs">
-                                <rect key="frame" x="919" y="19" width="264" height="291"/>
+                                <rect key="frame" x="919" y="21" width="264" height="291"/>
                                 <view key="contentView" id="sZG-Kk-gQT">
                                     <rect key="frame" x="2" y="2" width="260" height="274"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4321,7 +4321,7 @@ DQ
                                 </constraints>
                             </box>
                             <box title="Relationship" translatesAutoresizingMaskIntoConstraints="NO" id="Dpv-5R-YLR">
-                                <rect key="frame" x="17" y="20" width="390" height="291"/>
+                                <rect key="frame" x="17" y="22" width="390" height="291"/>
                                 <view key="contentView" id="VJl-o2-uZG">
                                     <rect key="frame" x="2" y="2" width="386" height="274"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4569,7 +4569,7 @@ DQ
                                 </constraints>
                             </box>
                             <box title="Member of" translatesAutoresizingMaskIntoConstraints="NO" id="AW2-2G-ZG0">
-                                <rect key="frame" x="418" y="20" width="494" height="291"/>
+                                <rect key="frame" x="418" y="22" width="494" height="291"/>
                                 <view key="contentView" id="adv-H5-W5u">
                                     <rect key="frame" x="2" y="2" width="490" height="274"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4815,7 +4815,7 @@ DQ
                                 </constraints>
                             </box>
                             <box title="Identity" translatesAutoresizingMaskIntoConstraints="NO" id="rme-UT-bZX">
-                                <rect key="frame" x="17" y="571" width="895" height="59"/>
+                                <rect key="frame" x="17" y="573" width="895" height="59"/>
                                 <view key="contentView" id="QdO-dD-cJL">
                                     <rect key="frame" x="2" y="2" width="891" height="42"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4926,23 +4926,66 @@ DQ
                                     <constraint firstAttribute="height" constant="55" id="xS6-85-hyf"/>
                                 </constraints>
                             </box>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6Wj-n4-HQG">
+                                <rect key="frame" x="1059" y="764" width="127" height="32"/>
+                                <buttonCell key="cell" type="push" title="Begin Training" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Zor-ol-Mzg">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onTrainingClicked:" target="Y9X-Oo-HLH" id="lA3-JC-15g"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yYH-7s-KIC">
+                                <rect key="frame" x="839" y="764" width="202" height="32"/>
+                                <buttonCell key="cell" type="push" title="Recognize Unknown Faces" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="U9o-68-iqa">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onRecognizeAllClicked:" target="Y9X-Oo-HLH" id="8e1-jy-cye"/>
+                                </connections>
+                            </button>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hYl-KJ-xHv">
+                                <rect key="frame" x="20" y="774" width="204" height="17"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="N8h-r8-DAS"/>
+                                </constraints>
+                                <textFieldCell key="cell" lineBreakMode="clipping" id="Tol-4Z-1MB">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <progressIndicator wantsLayer="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="7Pk-qv-Z8w">
+                                <rect key="frame" x="237" y="769" width="568" height="20"/>
+                            </progressIndicator>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="hYl-KJ-xHv" firstAttribute="leading" secondItem="moI-D7-nru" secondAttribute="leading" constant="22" id="1Ad-dE-6hs"/>
                             <constraint firstItem="rme-UT-bZX" firstAttribute="leading" secondItem="moI-D7-nru" secondAttribute="leading" constant="20" id="26d-gj-I09"/>
                             <constraint firstItem="Dpv-5R-YLR" firstAttribute="leading" secondItem="moI-D7-nru" secondAttribute="leading" constant="20" id="6BM-BM-wFO"/>
+                            <constraint firstItem="6Wj-n4-HQG" firstAttribute="leading" secondItem="yYH-7s-KIC" secondAttribute="trailing" constant="30" id="7O1-qf-fRC"/>
                             <constraint firstItem="QTH-B4-7Ki" firstAttribute="leading" secondItem="moI-D7-nru" secondAttribute="leading" constant="20" id="8Ee-rp-x4Z"/>
                             <constraint firstItem="QTH-B4-7Ki" firstAttribute="top" secondItem="rme-UT-bZX" secondAttribute="bottom" constant="20" id="Ad8-lj-qw9"/>
                             <constraint firstItem="rme-UT-bZX" firstAttribute="top" secondItem="EfP-WR-kzr" secondAttribute="bottom" constant="20" id="Dfb-xh-Lgu"/>
                             <constraint firstItem="ZjK-ZL-Gzs" firstAttribute="leading" secondItem="AW2-2G-ZG0" secondAttribute="trailing" constant="13" id="GF1-gv-LZc"/>
                             <constraint firstItem="EfP-WR-kzr" firstAttribute="leading" secondItem="moI-D7-nru" secondAttribute="leading" constant="20" id="Hkc-ue-bcA"/>
+                            <constraint firstItem="yYH-7s-KIC" firstAttribute="top" secondItem="moI-D7-nru" secondAttribute="top" constant="10" id="MIN-PC-rkm"/>
+                            <constraint firstItem="7Pk-qv-Z8w" firstAttribute="leading" secondItem="hYl-KJ-xHv" secondAttribute="trailing" constant="15" id="Txn-VG-otJ"/>
                             <constraint firstItem="AW2-2G-ZG0" firstAttribute="top" secondItem="QTH-B4-7Ki" secondAttribute="bottom" constant="20" id="Ydq-qh-diq"/>
                             <constraint firstAttribute="trailing" secondItem="EfP-WR-kzr" secondAttribute="trailing" constant="20" id="ZBT-yg-O43"/>
+                            <constraint firstItem="6Wj-n4-HQG" firstAttribute="top" secondItem="moI-D7-nru" secondAttribute="top" constant="10" id="dU5-co-bbl"/>
+                            <constraint firstAttribute="trailing" secondItem="6Wj-n4-HQG" secondAttribute="trailing" constant="20" id="fII-LR-Nz4"/>
                             <constraint firstItem="ZjK-ZL-Gzs" firstAttribute="top" secondItem="6uQ-13-4Bg" secondAttribute="bottom" constant="20" id="fm0-bF-UYH"/>
-                            <constraint firstItem="EfP-WR-kzr" firstAttribute="top" secondItem="moI-D7-nru" secondAttribute="top" constant="20" id="iLC-bJ-Js3"/>
+                            <constraint firstItem="EfP-WR-kzr" firstAttribute="top" secondItem="moI-D7-nru" secondAttribute="top" constant="40" id="iLC-bJ-Js3"/>
+                            <constraint firstItem="yYH-7s-KIC" firstAttribute="leading" secondItem="7Pk-qv-Z8w" secondAttribute="trailing" constant="40" id="lh5-bG-btj"/>
                             <constraint firstItem="Dpv-5R-YLR" firstAttribute="top" secondItem="QTH-B4-7Ki" secondAttribute="bottom" constant="20" id="meG-4e-HEF"/>
+                            <constraint firstItem="7Pk-qv-Z8w" firstAttribute="top" secondItem="moI-D7-nru" secondAttribute="top" constant="14" id="nsZ-EK-alC"/>
                             <constraint firstItem="AW2-2G-ZG0" firstAttribute="leading" secondItem="Dpv-5R-YLR" secondAttribute="trailing" constant="17" id="pUe-hC-s2E"/>
                             <constraint firstItem="6uQ-13-4Bg" firstAttribute="leading" secondItem="QTH-B4-7Ki" secondAttribute="trailing" constant="13" id="uo6-e1-Nvk"/>
                             <constraint firstItem="6uQ-13-4Bg" firstAttribute="top" secondItem="EfP-WR-kzr" secondAttribute="bottom" constant="20" id="z8R-Nb-i9j"/>
+                            <constraint firstItem="hYl-KJ-xHv" firstAttribute="top" secondItem="moI-D7-nru" secondAttribute="top" constant="11" id="zoT-mJ-hWC"/>
                         </constraints>
                     </view>
                     <connections>
@@ -4953,9 +4996,11 @@ DQ
                         <outlet property="btnDeleteFamily" destination="FPh-LN-mhg" id="Qp3-NI-SVl"/>
                         <outlet property="btnDifferentPerson" destination="xKT-W6-Lzy" id="sPv-JK-yMD"/>
                         <outlet property="btnRecognize" destination="6hw-Ms-iiU" id="q2G-48-cgd"/>
+                        <outlet property="btnRecognizeAll" destination="yYH-7s-KIC" id="Xzl-pM-aGz"/>
                         <outlet property="btnSaveCall" destination="sSX-GK-8TE" id="ffA-ij-gY3"/>
                         <outlet property="btnSaveId" destination="kWW-uC-gVe" id="B1B-RF-E8p"/>
                         <outlet property="btnSourceLargerView" destination="WhZ-A7-zr6" id="iZQ-8V-ie3"/>
+                        <outlet property="btnTraining" destination="6Wj-n4-HQG" id="j2E-Ns-N1d"/>
                         <outlet property="chkIcon" destination="ms0-vc-0WA" id="9Z8-Z1-f29"/>
                         <outlet property="chkSample" destination="crb-ad-k2F" id="aWS-ZM-nRT"/>
                         <outlet property="faceCollectionView" destination="3GB-9Y-vdr" id="Gg5-qM-UJD"/>
@@ -4970,11 +5015,13 @@ DQ
                         <outlet property="lblFamilyName" destination="3MJ-o8-yMg" id="2DG-uH-BYk"/>
                         <outlet property="lblFilename" destination="3MJ-o8-yMg" id="zys-Fl-Rq0"/>
                         <outlet property="lblIdentityMessasge" destination="AMs-hV-5qm" id="LGw-y1-uwp"/>
+                        <outlet property="lblProgressMessage" destination="hYl-KJ-xHv" id="MYX-4H-42r"/>
                         <outlet property="lblRelationshipMessage" destination="LoL-Mw-zZE" id="PSv-cj-UOL"/>
                         <outlet property="lblSourceDate" destination="mfL-0z-qDV" id="sIk-os-cmn"/>
                         <outlet property="lblSourceDescription" destination="K7p-E7-8y6" id="nGC-9H-ily"/>
                         <outlet property="lstFamilyType" destination="apC-qY-d0a" id="tGg-xs-DxT"/>
                         <outlet property="lstPeople" destination="NZ4-aO-VVD" id="cAW-YS-caF"/>
+                        <outlet property="progressIndicator" destination="7Pk-qv-Z8w" id="x1h-uo-3tE"/>
                         <outlet property="tblFaceMonth" destination="e6H-pB-OOC" id="88c-Vt-4eU"/>
                         <outlet property="tblFaceYear" destination="Yp7-ZA-vO1" id="u7B-g6-74U"/>
                         <outlet property="tblFamily" destination="QNQ-2n-xe7" id="3U6-jr-mHj"/>
@@ -4989,7 +5036,7 @@ DQ
                 </viewController>
                 <customObject id="zCS-g8-AxN" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1035" y="5078"/>
+            <point key="canvasLocation" x="1035" y="5089"/>
         </scene>
         <!--Face Collection View Controller-->
         <scene sceneID="fZc-Ot-Kvt">

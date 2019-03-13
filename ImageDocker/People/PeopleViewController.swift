@@ -54,6 +54,11 @@ class PeopleViewController: NSViewController {
     @IBOutlet weak var lblFaceDescription: NSTextField!
     @IBOutlet weak var btnRecognize: NSButton!
     @IBOutlet weak var lblIdentityMessasge: NSTextField!
+    @IBOutlet weak var btnTraining: NSButton!
+    @IBOutlet weak var btnRecognizeAll: NSButton!
+    @IBOutlet weak var progressIndicator: NSProgressIndicator!
+    @IBOutlet weak var lblProgressMessage: NSTextField!
+    
     
     
     var iconCollectionViewController : FaceIconCollectionViewController!
@@ -87,6 +92,8 @@ class PeopleViewController: NSViewController {
     }
     
     fileprivate func configureControllers() {
+        self.progressIndicator.isDisplayedWhenStopped = false
+        
         self.iconCollectionViewController = (storyboard?.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "faceIconCollectionView")) as! FaceIconCollectionViewController)
         self.iconCollectionView.delegate = self.iconCollectionViewController
         self.iconCollectionView.dataSource = self.iconCollectionViewController
@@ -576,7 +583,35 @@ class PeopleViewController: NSViewController {
     @IBAction func onChkSampleClicked(_ sender: NSButton) {
         if self.selectedFaceId != "" && self.selectedPeopleId != "" {
             ModelStore.default.updateFaceSampleFlag(id: self.selectedFaceId, flag: (sender.state == .on) )
-            // TODO: copy or remove face crop to/from recognition sample directory
+            // copy or remove face crop to/from recognition sample directory
+            if let face = ModelStore.default.getFace(id: self.selectedFaceId) {
+                let targetFolder = URL(fileURLWithPath: FaceRecognition.trainingSamplePath).appendingPathComponent(self.selectedPeopleId)
+                let target = targetFolder.appendingPathComponent("\(self.selectedFaceId).jpg")
+                if sender.state == .on {
+                    do {
+                        try FileManager.default.createDirectory(at: targetFolder, withIntermediateDirectories: true, attributes: nil)
+                    }catch{
+                        print("Unable to create directory at \(targetFolder.path)")
+                        print(error)
+                    }
+                    let source = URL(fileURLWithPath: face.cropPath).appendingPathComponent(face.subPath).appendingPathComponent(face.filename)
+                    do {
+                        try FileManager.default.copyItem(at: source, to: target)
+                        print("Copied sample file from [\(source.path)] to [\(target.path)]")
+                    }catch{
+                        print("Unable to copy sample file from [\(source.path)] to [\(target.path)]")
+                        print(error)
+                    }
+                }else{
+                    do {
+                        try FileManager.default.removeItem(at: target)
+                    }catch{
+                        print("Failed to delete sample file: \(target.path)")
+                        print(error)
+                    }
+                }
+            }
+            
         }
     }
     
@@ -688,6 +723,14 @@ class PeopleViewController: NSViewController {
                 
             }
         }
+    }
+    
+    @IBAction func onTrainingClicked(_ sender: NSButton) {
+        // TODO: TODO FUNCTION
+    }
+    
+    @IBAction func onRecognizeAllClicked(_ sender: NSButton) {
+        // TODO: TODO FUNCTION
     }
     
     
