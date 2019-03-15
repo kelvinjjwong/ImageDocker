@@ -12,6 +12,7 @@ import argparse
 import pickle
 import cv2
 import os
+import numpy
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -26,6 +27,9 @@ args = vars(ap.parse_args())
 # grab the paths to the input images in our dataset
 print("STARTUP {} Quantifying faces...".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))))
 imagePaths = list(paths.list_images(args["dataset"]))
+
+total = len(imagePaths)
+print("TOTAL {}".format(total))
 
 # initialize the list of known encodings and known names
 knownEncodings = []

@@ -725,8 +725,50 @@ class PeopleViewController: NSViewController {
         }
     }
     
+    fileprivate var totalSamples = 0
+    
     @IBAction func onTrainingClicked(_ sender: NSButton) {
-        // TODO: TODO FUNCTION
+        self.lblProgressMessage.stringValue = "Begining training..."
+        DispatchQueue.global().async {
+            FaceRecognition.default.training(onOutput: { content in
+                let lines = content.components(separatedBy: "\n")
+                if lines.count > 0 {
+                    for line in lines {
+                        if line.starts(with: "STARTUP ") {
+                            DispatchQueue.main.async {
+                                self.lblProgressMessage.stringValue = "Preparing trainer..."
+                            }
+                        }else if line.starts(with: "TOTAL ") {
+                            let parts = line.components(separatedBy: " ")
+                            if let total = Int(parts[1]) {
+                                self.totalSamples = total
+                                print("total \(total) samples")
+                                DispatchQueue.main.async {
+                                    self.lblProgressMessage.stringValue = "Preparing trainer..."
+                                }
+                            }else{
+                                print("unable to get total number from \(line)")
+                            }
+                        }else if line.starts(with: "PROCESSING IMAGE ") {
+                            let parts = line.components(separatedBy: " ")
+                            let numbers = parts[4]
+                            let dividen = numbers.components(separatedBy: "/")
+                            let number = dividen[0]
+                            let name = parts[5]
+                            print("processing \(number), recognized as \(name)")
+                            DispatchQueue.main.async {
+                                self.lblProgressMessage.stringValue = "Processing sample No.\(number)..."
+                            }
+                        }else if line.starts(with: "DONE ") {
+                            DispatchQueue.main.async {
+                                self.lblProgressMessage.stringValue = "Training completed with \(self.totalSamples) samples."
+                            }
+                        }
+                    }
+                }
+                
+            })
+        }
     }
     
     @IBAction func onRecognizeAllClicked(_ sender: NSButton) {

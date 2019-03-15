@@ -4947,9 +4947,9 @@ DQ
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hYl-KJ-xHv">
-                                <rect key="frame" x="20" y="774" width="204" height="17"/>
+                                <rect key="frame" x="20" y="774" width="304" height="17"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="N8h-r8-DAS"/>
+                                    <constraint firstAttribute="width" constant="300" id="N8h-r8-DAS"/>
                                 </constraints>
                                 <textFieldCell key="cell" lineBreakMode="clipping" id="Tol-4Z-1MB">
                                     <font key="font" metaFont="system"/>
@@ -4958,7 +4958,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <progressIndicator wantsLayer="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="7Pk-qv-Z8w">
-                                <rect key="frame" x="237" y="769" width="568" height="20"/>
+                                <rect key="frame" x="337" y="769" width="468" height="20"/>
                             </progressIndicator>
                         </subviews>
                         <constraints>
