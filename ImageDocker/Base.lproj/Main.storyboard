@@ -1416,7 +1416,7 @@
                                     </tabViewItem>
                                     <tabViewItem label="Android" identifier="" id="6tw-bO-Xxt">
                                         <view key="view" id="c1f-jA-2z5">
-                                            <rect key="frame" x="10" y="33" width="570" height="297"/>
+                                            <rect key="frame" x="10" y="33" width="571" height="297"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         </view>
                                     </tabViewItem>
@@ -1467,7 +1467,7 @@
                                     </tabViewItem>
                                     <tabViewItem label="Baidu" identifier="" id="ube-eX-1ug">
                                         <view key="view" id="k0Y-fA-V35">
-                                            <rect key="frame" x="10" y="33" width="570" height="297"/>
+                                            <rect key="frame" x="10" y="33" width="571" height="297"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="u6K-E3-xnp">
@@ -1523,7 +1523,7 @@
                                     </tabViewItem>
                                     <tabViewItem label="Google" identifier="" id="A47-4g-Cq4">
                                         <view key="view" id="slc-tn-Nwv">
-                                            <rect key="frame" x="10" y="33" width="570" height="297"/>
+                                            <rect key="frame" x="10" y="33" width="571" height="297"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VdP-ur-xT0">
@@ -1600,6 +1600,48 @@
                                             </constraints>
                                         </view>
                                     </tabViewItem>
+                                    <tabViewItem label="Face Recognition" identifier="" id="aLE-h6-zdO">
+                                        <view key="view" id="62z-YH-nL3">
+                                            <rect key="frame" x="10" y="33" width="571" height="297"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hJA-2G-6XX">
+                                                    <rect key="frame" x="15" y="266" width="47" height="17"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Python" id="Ljg-eh-H9a">
+                                                        <font key="font" usesAppearanceFont="YES"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8ys-RO-oHt">
+                                                    <rect key="frame" x="80" y="264" width="232" height="22"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="XNh-BQ-Qt6">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ogz-6a-nro">
+                                                    <rect key="frame" x="323" y="258" width="103" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Re-Locate" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mo2-xA-Kxh">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                </button>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v92-C8-SZG">
+                                                    <rect key="frame" x="426" y="258" width="122" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Find in Finder" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bah-Lu-TGQ">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                </button>
+                                            </subviews>
+                                        </view>
+                                    </tabViewItem>
                                 </tabViewItems>
                             </tabView>
                         </subviews>
@@ -1625,7 +1667,7 @@
                 </viewController>
                 <customObject id="VgO-wr-HZa" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1491" y="-428"/>
+            <point key="canvasLocation" x="1490.5" y="-428"/>
         </scene>
         <!--Stacked Video View Controller-->
         <scene sceneID="5qv-yD-6bp">
