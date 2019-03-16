@@ -74,6 +74,7 @@ class PeopleViewController: NSViewController {
     var familyTableController : DictionaryTableViewController!
     
     var menuPopover : MenuPopover!
+    var menuRecognizeUnknown : MenuPopover!
     
     // MARK: INIT
     
@@ -178,6 +179,10 @@ class PeopleViewController: NSViewController {
         
         self.menuPopover = MenuPopover() { id, name, action in
             self.onDifferentPersonClicked(id: id, name: name)
+        }
+        
+        self.menuRecognizeUnknown = MenuPopover(width: 230, height: 150) { id, name, action in
+            self.onRecognizeUnknownClicked(id: id)
         }
     }
     
@@ -520,6 +525,65 @@ class PeopleViewController: NSViewController {
         }
     }
     
+    fileprivate func onRecognizeUnknownClicked(id:String) {
+        // TODO FUNCTION
+        print("selected menu: \(id)")
+        self.lblProgressMessage.stringValue = "Recognizing..."
+        var faces:[ImageFace] = []
+        if id == "all" {
+            faces = ModelStore.default.getFaceCrops(peopleId: "", year: nil, month: nil, sample: false, icon: nil, tag: nil)
+        }else if id == "selected" {
+            if self.tblFaceYear.numberOfSelectedRows > 0 && self.tblFaceMonth.numberOfSelectedRows > 0 && self.selectedCategory != "Unknown" {
+                print("selection at \(self.selectedCategory),\(self.selectedSubCategory)")
+                faces = ModelStore.default.getFaceCrops(peopleId: "", year: Int(self.selectedCategory), month: Int(selectedSubCategory), sample: false, icon: nil, tag: nil)
+            }else{
+                print("no selection")
+                return
+            }
+        }else{
+            faces = ModelStore.default.getFaceCrops(peopleId: "", year: Int(id), month: nil, sample: false, icon: nil, tag: nil)
+        }
+        DispatchQueue.global().async {
+            let total = faces.count
+            var i = 0
+            var k = 0
+            for face in faces {
+                i += 1
+                let url = URL(fileURLWithPath: face.cropPath).appendingPathComponent(face.subPath).appendingPathComponent(face.filename)
+                let names = FaceRecognition.default.recognize(imagePath: url.path)
+                if names.count > 0 {
+                    let name = names[0]
+                    if name != "Unknown" {
+                        var c = face
+                        c.peopleId = name
+                        c.recognizeBy = "FaceRecognitionOpenCV"
+                        c.recognizeDate = Date()
+                        if c.recognizeVersion == nil {
+                            c.recognizeVersion = "1"
+                        }else{
+                            var version = Int(c.recognizeVersion ?? "0") ?? 0
+                            version += 1
+                            c.recognizeVersion = "\(version)"
+                        }
+                        ModelStore.default.saveFaceCrop(c)
+                        print("Face crop \(face.id) recognized as [\(name)], updated into DB.")
+                        k += 1
+                        DispatchQueue.main.async {
+                            self.lblProgressMessage.stringValue = "Recognizing \(i)/\(total): Recognized [\(name)]"
+                        }
+                    }else{
+                        DispatchQueue.main.async {
+                            self.lblProgressMessage.stringValue = "Recognizing \(i)/\(total): Unrecognized"
+                        }
+                    }
+                }
+            }
+            DispatchQueue.main.async {
+                self.lblProgressMessage.stringValue = "\(k)/\(total) faces are recognized."
+            }
+        }
+    }
+    
     // MARK: ACTION
     
     @IBAction func onSaveIdClicked(_ sender: NSButton) {
@@ -728,7 +792,7 @@ class PeopleViewController: NSViewController {
     fileprivate var totalSamples = 0
     
     @IBAction func onTrainingClicked(_ sender: NSButton) {
-        self.lblProgressMessage.stringValue = "Begining training..."
+        self.lblProgressMessage.stringValue = "Training model..."
         DispatchQueue.global().async {
             FaceRecognition.default.training(onOutput: { content in
                 let lines = content.components(separatedBy: "\n")
@@ -772,7 +836,18 @@ class PeopleViewController: NSViewController {
     }
     
     @IBAction func onRecognizeAllClicked(_ sender: NSButton) {
-        // TODO: TODO FUNCTION
+        let years = ModelStore.default.getYearsOfFaceCrops(peopleId: "")
+        var menu:[(String, String)] = []
+        menu.append(("all", "All Unknown Faces"))
+        menu.append(("selected", "Unknown faces in selected month"))
+        for year in years {
+            menu.append((year, "Unknown faces in \(year)"))
+        }
+        for a in menu {
+            print("menu: \(a)")
+        }
+        self.menuRecognizeUnknown.load(menu)
+        self.menuRecognizeUnknown.show(sender)
     }
     
     

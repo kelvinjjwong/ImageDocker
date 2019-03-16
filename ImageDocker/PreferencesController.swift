@@ -30,7 +30,7 @@ final class PreferencesController: NSViewController {
     
     
     
-    // MARK: Actions
+    // MARK: ACTION BUTTONS
     @IBAction func onButtonApplyClick(_ sender: NSButton) {
         self.savePreferences()
         self.dismiss(sender)
@@ -89,6 +89,8 @@ final class PreferencesController: NSViewController {
         }
     }
     
+    // MARK: BAIDU
+    
     
     class func baiduAK() -> String {
         let defaults = UserDefaults.standard
@@ -102,11 +104,15 @@ final class PreferencesController: NSViewController {
         return txt
     }
     
+    // MARK: GOOGLE
+    
     class func googleAPIKey() -> String {
         let defaults = UserDefaults.standard
         guard let txt = defaults.string(forKey: googleAKKey) else {return ""}
         return txt
     }
+    
+    // MARK: EXPORT
     
     class func exportToAndroidDirectory() -> String {
         let defaults = UserDefaults.standard
@@ -129,6 +135,8 @@ final class PreferencesController: NSViewController {
         }
     }
     
+    // MARK: DATABASE
+    
     class func databasePath() -> String {
         let defaults = UserDefaults.standard
         guard let txt = defaults.string(forKey: databasePathKey) else {
@@ -150,6 +158,8 @@ final class PreferencesController: NSViewController {
         let url = URL(fileURLWithPath: databasePath()).appendingPathComponent(filename)
         return url.path
     }
+    
+    // MARK: IPHONE
     
     class func iosDeviceMountPoint() -> String {
         let defaults = UserDefaults.standard
@@ -177,6 +187,8 @@ final class PreferencesController: NSViewController {
         }
     }
     
+    // MARK: SAVE SETTINGS
+    
     func savePreferences() {
         let defaults = UserDefaults.standard
         defaults.set(txtBaiduAK.stringValue,
@@ -195,6 +207,8 @@ final class PreferencesController: NSViewController {
                      forKey: PreferencesController.iosMountPointKey)
 
     }
+    
+    // MARK: HEALTH CHECK
     
     class func healthCheck() {
         

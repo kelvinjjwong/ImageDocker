@@ -227,7 +227,7 @@ class CollectionViewItem: NSCollectionViewItem {
                             // ensure image-filename-aware crop path exists
                             let cropPath = URL(fileURLWithPath: repository.cropPath).appendingPathComponent(image.subPath)
                             print("Trying to create directory: \(cropPath.path)")
-                            if FileManager.default.fileExists(atPath: repository.cropPath, isDirectory: &isDir), isDir.boolValue {
+                            //if FileManager.default.fileExists(atPath: repository.cropPath, isDirectory: &isDir), isDir.boolValue {
                                 do {
                                     try FileManager.default.createDirectory(atPath: cropPath.path, withIntermediateDirectories: true, attributes: nil)
                                 }catch{
@@ -235,7 +235,7 @@ class CollectionViewItem: NSCollectionViewItem {
                                     print("ERROR: Cannot create directory for storing crops at path: \(cropPath.path)")
                                     return
                                 }
-                            }
+                            //}
                             if !FileManager.default.fileExists(atPath: cropPath.path, isDirectory: &isDir) {
                                 print("ERROR: Cannot create directory: \(cropPath.path)")
                                 return
