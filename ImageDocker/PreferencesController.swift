@@ -96,18 +96,47 @@ final class PreferencesController: NSViewController {
     }
     
     @IBAction func onLocateHomebrewClicked(_ sender: NSButton) {
+        let path = ExecutionEnvironment.default.locate("brew")
+        if path != "" {
+            self.txtHomebrewPath.stringValue = path
+            self.lblHomebrewMessage.stringValue = ""
+        }else{
+            self.txtHomebrewPath.stringValue = ""
+            self.lblHomebrewMessage.stringValue = "ERROR: Missing Homebrew"
+        }
     }
     
     @IBAction func onInstallHomebrewClicked(_ sender: NSButton) {
     }
     
     @IBAction func onLocatePythonClicked(_ sender: NSButton) {
+        let path = ExecutionEnvironment.default.locate("python3")
+        if path != "" {
+            self.txtPythonPath.stringValue = path
+            self.lblPythonMessage.stringValue = ""
+        }else{
+            self.txtPythonPath.stringValue = ""
+            self.lblPythonMessage.stringValue = "ERROR: Missing Python 3"
+        }
     }
     
     @IBAction func onInstallPythonClicked(_ sender: NSButton) {
     }
     
     @IBAction func onCheckComponentsClicked(_ sender: NSButton) {
+        let py3 = self.txtPythonPath.stringValue
+        let brew = self.txtHomebrewPath.stringValue
+        if py3 == "" || brew == "" {
+            return
+        }
+        if !FileManager.default.fileExists(atPath: py3) || !FileManager.default.fileExists(atPath: brew) {
+            return
+        }
+        let pips = ExecutionEnvironment.default.pipList(py3)
+        let brews = ExecutionEnvironment.default.brewList(brew)
+        let casks = ExecutionEnvironment.default.brewCaskList(brew)
+        
+        // TODO: TODO FUNCTION
     }
     
     
@@ -253,6 +282,8 @@ final class PreferencesController: NSViewController {
         txtDatabasePath.stringValue = PreferencesController.databasePath()
         txtIOSMountPoint.stringValue = PreferencesController.iosDeviceMountPoint()
         txtExportToAndroidPath.stringValue = PreferencesController.exportToAndroidDirectory()
+        
+        self.lblComponentsInstruction.stringValue = ExecutionEnvironment.default.instructionForDlibFaceRecognition()
     }
     
     override var representedObject: Any? {

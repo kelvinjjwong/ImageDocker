@@ -43,6 +43,7 @@
 		8E4E5B762219624D00FE4B68 /* FaceRecognitionOpenCV in Resources */ = {isa = PBXBuildFile; fileRef = 8E4E5B752219624D00FE4B68 /* FaceRecognitionOpenCV */; };
 		8E4E5B78221985A400FE4B68 /* ImageFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B77221985A400FE4B68 /* ImageFace.swift */; };
 		8E4E5B7F221F3D1800FE4B68 /* PeopleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B7E221F3D1800FE4B68 /* PeopleViewController.swift */; };
+		8E73E382223E494C00C14A90 /* ExecutionEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E73E381223E494C00C14A90 /* ExecutionEnvironment.swift */; };
 		8E7B98DF2147E7880019ED87 /* FileSystemHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7B98DE2147E7880019ED87 /* FileSystemHandler.swift */; };
 		8E7B98E1214882080019ED87 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7B98E0214882080019ED87 /* Alert.swift */; };
 		8E7F71002091F14300410C45 /* BaiduLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F70FF2091F14200410C45 /* BaiduLocation.swift */; };
@@ -202,6 +203,7 @@
 		8E4E5B752219624D00FE4B68 /* FaceRecognitionOpenCV */ = {isa = PBXFileReference; lastKnownFileType = folder; path = FaceRecognitionOpenCV; sourceTree = "<group>"; };
 		8E4E5B77221985A400FE4B68 /* ImageFace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFace.swift; sourceTree = "<group>"; };
 		8E4E5B7E221F3D1800FE4B68 /* PeopleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleViewController.swift; sourceTree = "<group>"; };
+		8E73E381223E494C00C14A90 /* ExecutionEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutionEnvironment.swift; sourceTree = "<group>"; };
 		8E7B98DE2147E7880019ED87 /* FileSystemHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemHandler.swift; sourceTree = "<group>"; };
 		8E7B98E0214882080019ED87 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		8E7F70FF2091F14200410C45 /* BaiduLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaiduLocation.swift; sourceTree = "<group>"; };
@@ -537,6 +539,7 @@
 				8EBA9DE6217477D900DACAAD /* UIHelper.swift */,
 				8E4E5B662217349600FE4B68 /* FaceDetection.swift */,
 				8E4E5B6822195BFF00FE4B68 /* FaceRecognition.swift */,
+				8E73E381223E494C00C14A90 /* ExecutionEnvironment.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -965,6 +968,7 @@
 				8E7B98DF2147E7880019ED87 /* FileSystemHandler.swift in Sources */,
 				8E4E5B78221985A400FE4B68 /* ImageFace.swift in Sources */,
 				8E8D471022213A330091E9C3 /* PeopleFace.swift in Sources */,
+				8E73E382223E494C00C14A90 /* ExecutionEnvironment.swift in Sources */,
 				8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */,
 				8E98B8F720D6044900771280 /* Event.swift in Sources */,
 				8E4C38D12117B56A0089502C /* IPHONE.swift in Sources */,
