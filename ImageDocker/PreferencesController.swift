@@ -27,6 +27,12 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var txtDatabasePath: NSTextField!
     @IBOutlet weak var txtIOSMountPoint: NSTextField!
     @IBOutlet weak var txtExportToAndroidPath: NSTextField!
+    @IBOutlet weak var txtHomebrewPath: NSTextField!
+    @IBOutlet weak var txtPythonPath: NSTextField!
+    @IBOutlet weak var lblHomebrewMessage: NSTextField!
+    @IBOutlet weak var lblPythonMessage: NSTextField!
+    @IBOutlet weak var lblComponentsStatus: NSTextField!
+    @IBOutlet weak var lblComponentsInstruction: NSTextField!
     
     
     
@@ -88,6 +94,23 @@ final class PreferencesController: NSViewController {
             }
         }
     }
+    
+    @IBAction func onLocateHomebrewClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onInstallHomebrewClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onLocatePythonClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onInstallPythonClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onCheckComponentsClicked(_ sender: NSButton) {
+    }
+    
+    
     
     // MARK: BAIDU
     
