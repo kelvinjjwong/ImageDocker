@@ -1711,9 +1711,9 @@
                                                     </connections>
                                                 </button>
                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="du1-qf-YN1">
-                                                    <rect key="frame" x="15" y="384" width="91" height="18"/>
+                                                    <rect key="frame" x="15" y="384" width="97" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" title="facePickle1" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="BUD-95-cHs">
+                                                    <buttonCell key="cell" type="check" title="Major Model" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="BUD-95-cHs">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" metaFont="system"/>
                                                     </buttonCell>
@@ -1722,14 +1722,43 @@
                                                     </connections>
                                                 </button>
                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="riS-QC-UQ3">
-                                                    <rect key="frame" x="15" y="349" width="92" height="18"/>
+                                                    <rect key="frame" x="15" y="349" width="129" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" title="facePickle2" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="odD-pT-Q2B">
+                                                    <buttonCell key="cell" type="check" title="Alternative Model" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="odD-pT-Q2B">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" metaFont="system"/>
                                                     </buttonCell>
                                                     <connections>
                                                         <action selector="onAlternativeFaceModelClicked:" target="UOy-CF-cGN" id="jlh-gx-sc5"/>
+                                                    </connections>
+                                                </button>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oGj-ct-Bre">
+                                                    <rect key="frame" x="153" y="386" width="576" height="17"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" id="AtM-UA-AeK">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9ka-nL-Bsc">
+                                                    <rect key="frame" x="155" y="347" width="472" height="22"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="80L-6O-0jM">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bju-WY-eF1">
+                                                    <rect key="frame" x="637" y="340" width="96" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Browse..." bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="PqX-vk-Von">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="onBrowseAlternativeFaceModelClicked:" target="UOy-CF-cGN" id="G3h-FJ-kCl"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -1753,8 +1782,10 @@
                         <outlet property="lblComponentsInstruction" destination="nIB-WQ-QlK" id="o1X-CH-gbV"/>
                         <outlet property="lblComponentsStatus" destination="gFM-D0-rYX" id="i6z-xD-o7m"/>
                         <outlet property="lblHomebrewMessage" destination="Ckg-bl-dWF" id="tBM-4y-wsW"/>
+                        <outlet property="lblMajorFaceModelPath" destination="oGj-ct-Bre" id="4p6-eR-Kxf"/>
                         <outlet property="lblPythonMessage" destination="b3e-eh-klZ" id="7Pa-Oi-gxm"/>
                         <outlet property="tabs" destination="2L9-ci-i6l" id="i7B-53-DnW"/>
+                        <outlet property="txtAlternativeFaceModelPath" destination="9ka-nL-Bsc" id="wOu-Qq-b0U"/>
                         <outlet property="txtBaiduAK" destination="7ip-IX-oLK" id="Bnn-li-aIV"/>
                         <outlet property="txtBaiduSK" destination="OA4-S5-YiR" id="ylE-e0-HDl"/>
                         <outlet property="txtDatabasePath" destination="RiT-bF-Pll" id="sXb-W3-37B"/>

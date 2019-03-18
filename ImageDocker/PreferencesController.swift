@@ -20,6 +20,7 @@ final class PreferencesController: NSViewController {
     fileprivate static let homebrewKey = "HomebrewKey"
     fileprivate static let pythonKey = "PythonKey"
     fileprivate static let faceRecognitionModelKey = "FaceRecognitionModelKey"
+    fileprivate static let alternativeFaceModelPathKey = "AlternativeFaceModelPathKey"
     
     // MARK: Properties
     @IBOutlet weak var txtBaiduAK: NSTextField!
@@ -38,7 +39,10 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var lblComponentsInstruction: NSTextField!
     @IBOutlet weak var chkMajorFaceRecognitionModel: NSButton!
     @IBOutlet weak var chkAlternativeFaceRecognitionModel: NSButton!
+    @IBOutlet weak var lblMajorFaceModelPath: NSTextField!
+    @IBOutlet weak var txtAlternativeFaceModelPath: NSTextField!
     
+    fileprivate var selectedFaceModel = "major"
     
     
     // MARK: ACTION BUTTONS
@@ -153,10 +157,24 @@ final class PreferencesController: NSViewController {
     }
     
     @IBAction func onMajorFaceModelClicked(_ sender: NSButton) {
+        if sender.state == .on {
+            self.chkAlternativeFaceRecognitionModel.state = .off
+        }else{
+            self.chkAlternativeFaceRecognitionModel.state = .on
+        }
     }
     
     @IBAction func onAlternativeFaceModelClicked(_ sender: NSButton) {
+        if sender.state == .on {
+            self.chkMajorFaceRecognitionModel.state = .off
+        }else{
+            self.chkMajorFaceRecognitionModel.state = .on
+        }
     }
+    
+    @IBAction func onBrowseAlternativeFaceModelClicked(_ sender: NSButton) {
+    }
+    
     
     
     // MARK: FACE RECOGNITION
@@ -177,6 +195,12 @@ final class PreferencesController: NSViewController {
     class func faceRecognitionModel() -> String {
         let defaults = UserDefaults.standard
         guard let txt = defaults.string(forKey: faceRecognitionModelKey) else {return "major"}
+        return txt
+    }
+    
+    class func alternativeFaceModel() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: alternativeFaceModelPathKey) else {return "major"}
         return txt
     }
     
@@ -327,11 +351,11 @@ final class PreferencesController: NSViewController {
         txtExportToAndroidPath.stringValue = PreferencesController.exportToAndroidDirectory()
         txtHomebrewPath.stringValue = PreferencesController.homebrewPath()
         txtPythonPath.stringValue = PreferencesController.pythonPath()
+        lblMajorFaceModelPath.stringValue = FaceRecognition.recognitionModelPath
+        
         
         self.lblComponentsInstruction.stringValue = ExecutionEnvironment.instructionForDlibFaceRecognition
         
-        self.chkMajorFaceRecognitionModel.title = FaceRecognition.recognitionModelPath
-        self.chkAlternativeFaceRecognitionModel.title = FaceRecognition.recognitionModelPath2
     }
     
     override var representedObject: Any? {
