@@ -41,6 +41,9 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var chkAlternativeFaceRecognitionModel: NSButton!
     @IBOutlet weak var lblMajorFaceModelPath: NSTextField!
     @IBOutlet weak var txtAlternativeFaceModelPath: NSTextField!
+    @IBOutlet weak var btnCheckFaceComponents: NSButton!
+    
+    
     
     fileprivate var selectedFaceModel = "major"
     
@@ -127,14 +130,19 @@ final class PreferencesController: NSViewController {
     }
     
     @IBAction func onCheckComponentsClicked(_ sender: NSButton) {
+        let _ = self.checkComponentStatus()
+    }
+    
+    fileprivate func checkComponentStatus() -> Bool {
         let py3 = self.txtPythonPath.stringValue
         let brew = self.txtHomebrewPath.stringValue
         if py3 == "" || brew == "" {
-            return
+            return false
         }
         if !FileManager.default.fileExists(atPath: py3) || !FileManager.default.fileExists(atPath: brew) {
-            return
+            return false
         }
+        self.btnCheckFaceComponents.isEnabled = false
         DispatchQueue.global().async {
             let pip = ExecutionEnvironment.default.locate("pip3")
             let pips = ExecutionEnvironment.default.pipList(pip)
@@ -144,35 +152,56 @@ final class PreferencesController: NSViewController {
             var result = ""
             for component in ExecutionEnvironment.componentsForDlibFaceRecognition {
                 if pips.contains(component) || brews.contains(component) || casks.contains(component) {
-                    result += "\(component) INSTALLED\n"
+                    result += "INSTALLED: \(component)\n"
                 }else{
-                    result += "\(component) NOT FOUND\n"
+                    result += "NOT FOUND: \(component)\n"
                 }
             }
             DispatchQueue.main.async {
                 self.lblComponentsStatus.stringValue = result
+                self.btnCheckFaceComponents.isEnabled = true
             }
         }
-        
+        return true
     }
     
     @IBAction func onMajorFaceModelClicked(_ sender: NSButton) {
         if sender.state == .on {
             self.chkAlternativeFaceRecognitionModel.state = .off
+            self.selectedFaceModel = "major"
         }else{
             self.chkAlternativeFaceRecognitionModel.state = .on
+            self.selectedFaceModel = "alternative"
         }
     }
     
     @IBAction func onAlternativeFaceModelClicked(_ sender: NSButton) {
         if sender.state == .on {
             self.chkMajorFaceRecognitionModel.state = .off
+            self.selectedFaceModel = "alternative"
         }else{
             self.chkMajorFaceRecognitionModel.state = .on
+            self.selectedFaceModel = "major"
         }
     }
     
     @IBAction func onBrowseAlternativeFaceModelClicked(_ sender: NSButton) {
+        let openPanel = NSOpenPanel()
+        openPanel.canChooseDirectories  = false
+        openPanel.canChooseFiles        = true
+        openPanel.showsHiddenFiles      = false
+        openPanel.canCreateDirectories  = false
+        
+        openPanel.beginSheetModal(for: self.view.window!) { (response) -> Void in
+            guard response == NSApplication.ModalResponse.OK else {return}
+            if let path = openPanel.url?.path {
+                DispatchQueue.main.async {
+                    if path != "" {
+                        self.txtAlternativeFaceModelPath.stringValue = path
+                    }
+                }
+            }
+        }
     }
     
     
@@ -200,7 +229,7 @@ final class PreferencesController: NSViewController {
     
     class func alternativeFaceModel() -> String {
         let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: alternativeFaceModelPathKey) else {return "major"}
+        guard let txt = defaults.string(forKey: alternativeFaceModelPathKey) else {return ""}
         return txt
     }
     
@@ -324,6 +353,10 @@ final class PreferencesController: NSViewController {
                      forKey: PreferencesController.homebrewKey)
         defaults.set(txtPythonPath.stringValue,
                      forKey: PreferencesController.pythonKey)
+        defaults.set(txtAlternativeFaceModelPath.stringValue,
+                     forKey: PreferencesController.alternativeFaceModelPathKey)
+        defaults.set(self.selectedFaceModel,
+                     forKey: PreferencesController.faceRecognitionModelKey)
 
     }
     
@@ -351,11 +384,35 @@ final class PreferencesController: NSViewController {
         txtExportToAndroidPath.stringValue = PreferencesController.exportToAndroidDirectory()
         txtHomebrewPath.stringValue = PreferencesController.homebrewPath()
         txtPythonPath.stringValue = PreferencesController.pythonPath()
-        lblMajorFaceModelPath.stringValue = FaceRecognition.recognitionModelPath
+        lblMajorFaceModelPath.stringValue = FaceRecognition.defaultModelPath
+        txtAlternativeFaceModelPath.stringValue = PreferencesController.alternativeFaceModel()
+        self.selectedFaceModel = PreferencesController.faceRecognitionModel()
+        if self.selectedFaceModel == "major" {
+            self.chkMajorFaceRecognitionModel.state = .on
+            self.chkAlternativeFaceRecognitionModel.state = .off
+        }else{
+            self.chkMajorFaceRecognitionModel.state = .off
+            self.chkAlternativeFaceRecognitionModel.state = .on
+        }
         
-        
+        self.btnCheckFaceComponents.isEnabled = false
+        var result = ""
         self.lblComponentsInstruction.stringValue = ExecutionEnvironment.instructionForDlibFaceRecognition
-        
+        var testing = true
+        if PreferencesController.pythonPath() != "" && PreferencesController.homebrewPath() != "" {
+            testing = self.checkComponentStatus()
+        }
+        if testing {
+            for component in ExecutionEnvironment.componentsForDlibFaceRecognition {
+                result += "CHECKING: \(component)\n"
+            }
+        }else{
+            self.btnCheckFaceComponents.isEnabled = true
+            for component in ExecutionEnvironment.componentsForDlibFaceRecognition {
+                result += "REQUIRED: \(component)\n"
+            }
+        }
+        self.lblComponentsStatus.stringValue = result
     }
     
     override var representedObject: Any? {

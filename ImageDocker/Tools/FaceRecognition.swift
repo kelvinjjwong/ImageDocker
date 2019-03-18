@@ -12,15 +12,24 @@ struct FaceRecognition {
     
     static let `default` = FaceRecognitionOpenCV()
     
-    static let recognitionModelPath = PreferencesController.databasePath(filename: "faceRecognitionModel.pickle")
-    static let recognitionModelPath2 = URL(fileURLWithPath: "/Users/kelvinwong/git-other/face-recognition-opencv/family.pickle").path
+    static let defaultModelPath = PreferencesController.databasePath(filename: "faceRecognitionModel.pickle")
     static let trainingSamplePath = PreferencesController.databasePath(filename: "faceTrainingSamples")
+    
+    static func selectedModelPath() -> String {
+        let option = PreferencesController.faceRecognitionModel()
+        if option == "alternative" {
+            let alternative = PreferencesController.alternativeFaceModel()
+            if alternative != "" {
+                return alternative
+            }
+        }
+        return defaultModelPath
+    }
 
 }
 
 struct FaceRecognitionOpenCV {
     
-    fileprivate var python: URL = URL(fileURLWithPath: "/Library/Frameworks/Python.framework/Versions/3.7/bin/python3")
     fileprivate var workingPath: URL
     
     init() {
@@ -31,10 +40,20 @@ struct FaceRecognitionOpenCV {
         }
     }
     
-    func training(dataSetPath:String = FaceRecognition.trainingSamplePath, modelPath:String = FaceRecognition.recognitionModelPath, onOutput:@escaping (String) -> Void) {
+    func training(dataSetPath:String = FaceRecognition.trainingSamplePath, modelPath:String = FaceRecognition.defaultModelPath, onOutput:@escaping (String) -> Void) {
         print("training")
         print(dataSetPath)
         print(modelPath)
+        
+        let python = PreferencesController.pythonPath()
+        if python == "" {
+            print("Path for python has not been located.")
+            return
+        }
+        if !FileManager.default.fileExists(atPath: python) {
+            print("Python not found in \(python)")
+            return
+        }
         
         let pipe = Pipe()
         
@@ -42,23 +61,11 @@ struct FaceRecognitionOpenCV {
             let cmd = Process()
             cmd.standardOutput = pipe
             cmd.standardError = pipe
-            cmd.launchPath = python.path
+            cmd.launchPath = python
             cmd.currentDirectoryPath = workingPath.path
             cmd.arguments = ["encode_faces.py", "--dataset", dataSetPath.withStash(), "--encodings", modelPath]
-//            do {
-//                try cmd.run()
-//            }catch{
-//                print(error)
-//            }
-            //cmd.terminate()
-            
-//            let data = pipe.fileHandleForReading.readDataToEndOfFile()
-//            let string = String(data: data, encoding: String.Encoding.utf8)!
-//            pipe.fileHandleForReading.closeFile()
-//            print(string)
             
             let outHandle = pipe.fileHandleForReading
-            //outHandle.readInBackgroundAndNotify()
             outHandle.waitForDataInBackgroundAndNotify()
             
             
@@ -87,30 +94,12 @@ struct FaceRecognitionOpenCV {
                                                             NotificationCenter.default.removeObserver(obs2)
             }
             
-//            outHandle.readabilityHandler = { pipe in
-//                if let line = String(data: pipe.availableData, encoding: String.Encoding.utf8) {
-//                    // Update your view with the new text here
-//                    if line != "" {
-//                        print("New ouput: \(line)")
-//                    }
-//                } else {
-//                    print("Error decoding data: \(pipe.availableData)")
-//                }
-//            }
             cmd.launch()
             cmd.waitUntilExit()
-//            do {
-//                try cmd.run()
-//            }catch{
-//                print(error)
-//            }
-//            let data = outHandle.readDataToEndOfFile()
-//            let string = String(data: data, encoding: String.Encoding.utf8)!
-//            print(string)
         }
     }
     
-    func recognize(imagePath:String, modelPath:String = FaceRecognition.recognitionModelPath) -> [String]{
+    func recognize(imagePath:String, modelPath:String = FaceRecognition.selectedModelPath()) -> [String]{
         
         let pipe = Pipe()
         
@@ -118,14 +107,28 @@ struct FaceRecognitionOpenCV {
         
         var modelpath = modelPath
         if !FileManager.default.fileExists(atPath: modelpath) {
-            modelpath = FaceRecognition.recognitionModelPath2
+            modelpath = FaceRecognition.defaultModelPath
+        }
+        if !FileManager.default.fileExists(atPath: modelpath) {
+            print("No available encoded model for recognition")
+            return []
+        }
+        
+        let python = PreferencesController.pythonPath()
+        if python == "" {
+            print("Path for python has not been located.")
+            return []
+        }
+        if !FileManager.default.fileExists(atPath: python) {
+            print("Python not found in \(python)")
+            return []
         }
         
         autoreleasepool { () -> Void in
             let cmd = Process()
             cmd.standardOutput = pipe
             cmd.standardError = pipe
-            cmd.launchPath = python.path
+            cmd.launchPath = python
             cmd.currentDirectoryPath = workingPath.path
             cmd.arguments = ["recognize_faces_image.py", "--encodings", modelpath, "--image", imagePath, "--display", "0"]
             do {
@@ -133,7 +136,6 @@ struct FaceRecognitionOpenCV {
             }catch{
                 print(error)
             }
-            //cmd.terminate()
             
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
             let string = String(data: data, encoding: String.Encoding.utf8)!
