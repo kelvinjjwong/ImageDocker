@@ -2229,7 +2229,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     }
     
     func getYearsOfFaceCrops(peopleId:String) -> [String]{
-        let condition = peopleId == "Unknown" || peopleId == "" ? "peopleId is null or peopleId='Unknown'" : "peopleId='\(peopleId)'"
+        let condition = peopleId == "Unknown" || peopleId == "" ? "peopleId is null or peopleId='' or peopleId='Unknown'" : "peopleId='\(peopleId)'"
         var results:[String] = []
         do {
             let db = ModelStore.sharedDBPool()
@@ -2244,11 +2244,11 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }catch{
             print(error)
         }
-        return results
+        return results.sorted().reversed()
     }
     
     func getMonthsOfFaceCrops(peopleId:String, imageYear:String) -> [String]{
-        let condition = peopleId == "Unknown" || peopleId == "" ? "(peopleId is null or peopleId='Unknown')" : "peopleId='\(peopleId)'"
+        let condition = peopleId == "Unknown" || peopleId == "" ? "(peopleId is null or peopleId='' or peopleId='Unknown')" : "peopleId='\(peopleId)'"
         var results:[String] = []
         do {
             let db = ModelStore.sharedDBPool()
@@ -2263,15 +2263,15 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }catch{
             print(error)
         }
-        return results
+        return results.sorted().reversed()
     }
     
-    func getFaceCrops(peopleId:String, year:Int? = nil, month:Int? = nil, sample:Bool? = nil, icon:Bool? = nil, tag:Bool? = nil) -> [ImageFace]{
+    func getFaceCrops(peopleId:String, year:Int? = nil, month:Int? = nil, sample:Bool? = nil, icon:Bool? = nil, tag:Bool? = nil, locked:Bool? = nil) -> [ImageFace]{
         var sql = ""
         if peopleId != "" && peopleId != "Unknown" {
             sql = "peopleId='\(peopleId)'"
         }else{
-            sql = "(peopleId is null or peopleId='Unknown')"
+            sql = "(peopleId is null or peopleId='Unknown' or peopleId='')"
         }
         if let year = year {
             sql = "\(sql) and imageYear=\(year)"
@@ -2287,6 +2287,9 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
         if let tag = tag {
             sql = "\(sql) and tagOnly=\(tag ? 1 : 0)"
+        }
+        if let locked = locked {
+            sql = "\(sql) and locked=\(locked ? 1 : 0)"
         }
         var result:[ImageFace] = []
         do {
@@ -2355,6 +2358,17 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try db.execute("update ImageFace set tagOnly = \(flag ? 1 : 0) where id = ?", arguments: [id])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func updateFaceLockFlag(id:String, flag:Bool) {
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try db.execute("update ImageFace set locked = \(flag ? 1 : 0) where id = ?", arguments: [id])
             }
         }catch{
             print(error)
@@ -2696,6 +2710,12 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         migrator.registerMigration("v18") { db in
             try db.alter(table: "ImageFace", body: { t in
                 t.add(column: "sampleChangeDate", .date)
+            })
+        }
+        
+        migrator.registerMigration("v19") { db in
+            try db.alter(table: "ImageFace", body: { t in
+                t.add(column: "locked", .boolean).defaults(to: false).indexed()
             })
         }
         

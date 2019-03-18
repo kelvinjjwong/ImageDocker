@@ -58,6 +58,7 @@ class PeopleViewController: NSViewController {
     @IBOutlet weak var btnRecognizeAll: NSButton!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
     @IBOutlet weak var lblProgressMessage: NSTextField!
+    @IBOutlet weak var chkLock: NSButton!
     
     
     
@@ -222,6 +223,7 @@ class PeopleViewController: NSViewController {
         self.imgFacePreview.image = nil
         self.chkIcon.state = .off
         self.chkSample.state = .off
+        self.chkLock.state = .off
         self.lblFaceDescription.stringValue = ""
         // TODO: set face table views to empty
         // TODO: set face collection to empty
@@ -253,12 +255,14 @@ class PeopleViewController: NSViewController {
             self.btnSourceLargerView.isHidden = false
             self.lblSourceDate.isHidden = false
             self.lblSourceDescription.isHidden = false
+            self.chkLock.isHidden = false
         }else{
             self.btnDifferentPerson.isHidden = true
             self.btnRecognize.isHidden = true
             self.btnSourceLargerView.isHidden = true
             self.lblSourceDate.isHidden = true
             self.lblSourceDescription.isHidden = true
+            self.chkLock.isHidden = true
         }
         self.chkIcon.isHidden = true
         self.chkSample.isHidden = true
@@ -274,6 +278,7 @@ class PeopleViewController: NSViewController {
         if preview {
             self.chkIcon.isHidden = false
             self.chkSample.isHidden = false
+            self.chkLock.isHidden = false
             self.btnDifferentPerson.isHidden = false
             self.btnRecognize.isHidden = false
             self.btnSourceLargerView.isHidden = false
@@ -282,6 +287,7 @@ class PeopleViewController: NSViewController {
         }else{
             self.chkIcon.isHidden = true
             self.chkSample.isHidden = true
+            self.chkLock.isHidden = true
             self.txtPeopleId.isEnabled = true
             self.btnDifferentPerson.isHidden = true
             self.btnRecognize.isHidden = true
@@ -427,6 +433,11 @@ class PeopleViewController: NSViewController {
         }else{
             self.chkIcon.state = .off
         }
+        if face.data.locked {
+            self.chkLock.state = .on
+        }else{
+            self.chkLock.state = .off
+        }
         
         self.cleanSourceInfo()
         self.imgSourcePreview.image = face.sourceImage
@@ -447,11 +458,14 @@ class PeopleViewController: NSViewController {
         self.cleanFaceInfo()
         self.cleanSourceInfo()
         self.selectedCategory = value
+        
         if value == "Samples" {
+            self.adjustButtonsForUnknownFace(preview: false)
             self.faceSubCategoryController.clean()
             self.faceCollectionViewController.imagesLoader.loadFaces(peopleId: self.selectedPeopleId, sample:true)
             self.faceCollectionView.reloadData()
         }else{
+            self.adjustButtonsForKnownFace(preview: false)
             let subCategories = ModelStore.default.getMonthsOfFaceCrops(peopleId: self.selectedPeopleId, imageYear: value)
             self.faceSubCategoryController.load(subCategories)
         }
@@ -460,6 +474,11 @@ class PeopleViewController: NSViewController {
     fileprivate func onFaceSubCategoryClicked(_ value:String){
         self.cleanFaceInfo()
         self.cleanSourceInfo()
+        if selectedCategory == "Samples" {
+            self.adjustButtonsForUnknownFace(preview: false)
+        }else{
+            self.adjustButtonsForKnownFace(preview: false)
+        }
         self.selectedSubCategory = value
         let year:Int = Int(selectedCategory) ?? 0
         let month:Int = Int(selectedSubCategory) ?? 0
@@ -531,17 +550,28 @@ class PeopleViewController: NSViewController {
         self.lblProgressMessage.stringValue = "Recognizing..."
         var faces:[ImageFace] = []
         if id == "all" {
-            faces = ModelStore.default.getFaceCrops(peopleId: "", year: nil, month: nil, sample: false, icon: nil, tag: nil)
+            faces = ModelStore.default.getFaceCrops(peopleId: "", year: nil, month: nil, sample: false, icon: nil, tag: nil, locked: false)
         }else if id == "selected" {
             if self.tblFaceYear.numberOfSelectedRows > 0 && self.tblFaceMonth.numberOfSelectedRows > 0 && self.selectedCategory != "Unknown" {
                 print("selection at \(self.selectedCategory),\(self.selectedSubCategory)")
-                faces = ModelStore.default.getFaceCrops(peopleId: "", year: Int(self.selectedCategory), month: Int(selectedSubCategory), sample: false, icon: nil, tag: nil)
+                faces = ModelStore.default.getFaceCrops(peopleId: "", year: Int(self.selectedCategory), month: Int(selectedSubCategory), sample: false, icon: nil, tag: nil, locked: false)
             }else{
                 print("no selection")
+                self.lblProgressMessage.stringValue = "No category is selected."
                 return
             }
         }else{
-            faces = ModelStore.default.getFaceCrops(peopleId: "", year: Int(id), month: nil, sample: false, icon: nil, tag: nil)
+            faces = ModelStore.default.getFaceCrops(peopleId: "", year: Int(id), month: nil, sample: false, icon: nil, tag: nil, locked: false)
+        }
+        if faces.count == 0 {
+            self.lblProgressMessage.stringValue = "No face need to be recognized."
+            print("no faces need to be recognized")
+            return
+        }
+        var peopleName:[String:String] = [:]
+        let people = ModelStore.default.getPeople()
+        for person in people {
+            peopleName[person.id] = person.shortName ?? person.name
         }
         DispatchQueue.global().async {
             let total = faces.count
@@ -569,7 +599,8 @@ class PeopleViewController: NSViewController {
                         print("Face crop \(face.id) recognized as [\(name)], updated into DB.")
                         k += 1
                         DispatchQueue.main.async {
-                            self.lblProgressMessage.stringValue = "Recognizing \(i)/\(total): Recognized [\(name)]"
+                            let personName = peopleName[name] ?? name
+                            self.lblProgressMessage.stringValue = "Recognizing \(i)/\(total): Recognized [\(personName)]"
                         }
                     }else{
                         DispatchQueue.main.async {
@@ -579,7 +610,7 @@ class PeopleViewController: NSViewController {
                 }
             }
             DispatchQueue.main.async {
-                self.lblProgressMessage.stringValue = "\(k)/\(total) faces are recognized."
+                self.lblProgressMessage.stringValue = "Recognized \(k) faces. \(total-k) unrecognized."
             }
         }
     }
@@ -616,6 +647,7 @@ class PeopleViewController: NSViewController {
     @IBAction func onDifferentPersonClicked(_ sender: NSButton) {
         let people = ModelStore.default.getPeople(except: self.selectedPeopleId)
         var menu:[(String, String)] = []
+        menu.append(("", "Unknown"))
         for person in people {
             menu.append((person.id, person.shortName ?? person.name))
         }
@@ -848,6 +880,16 @@ class PeopleViewController: NSViewController {
         }
         self.menuRecognizeUnknown.load(menu)
         self.menuRecognizeUnknown.show(sender)
+    }
+    
+    @IBAction func onChkLockClicked(_ sender: NSButton) {
+        if self.selectedFaceId != "" && self.selectedPeopleId != "" {
+            if sender.state == .on {
+                ModelStore.default.updateFaceLockFlag(id: self.selectedFaceId, flag: true)
+            }else{
+                ModelStore.default.updateFaceLockFlag(id: self.selectedFaceId, flag: false)
+            }
+        }
     }
     
     

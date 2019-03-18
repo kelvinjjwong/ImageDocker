@@ -1343,11 +1343,11 @@
                                 <tabViewItems>
                                     <tabViewItem label="Export" identifier="" id="9Hj-NK-W1w">
                                         <view key="view" id="wjX-9i-cgg">
-                                            <rect key="frame" x="10" y="33" width="744" height="411"/>
+                                            <rect key="frame" x="10" y="33" width="744" height="422"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nj4-Mx-gjF">
-                                                    <rect key="frame" x="18" y="372" width="114" height="17"/>
+                                                    <rect key="frame" x="18" y="383" width="114" height="17"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="110" id="BfO-gb-EKM"/>
                                                     </constraints>
@@ -1358,7 +1358,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NyT-vJ-lrP">
-                                                    <rect key="frame" x="638" y="363" width="92" height="32"/>
+                                                    <rect key="frame" x="638" y="374" width="92" height="32"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="80" id="gfa-Oj-spg"/>
                                                     </constraints>
@@ -1371,7 +1371,7 @@
                                                     </connections>
                                                 </button>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Tk4-9a-fy4">
-                                                    <rect key="frame" x="18" y="328" width="114" height="17"/>
+                                                    <rect key="frame" x="18" y="339" width="114" height="17"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="110" id="LJc-pF-XGP"/>
                                                     </constraints>
@@ -1382,7 +1382,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d2m-gP-3Vb">
-                                                    <rect key="frame" x="150" y="325" width="474" height="22"/>
+                                                    <rect key="frame" x="150" y="336" width="474" height="22"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="bPo-5b-n8g">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -1390,7 +1390,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UlF-B2-5No">
-                                                    <rect key="frame" x="150" y="369" width="474" height="22"/>
+                                                    <rect key="frame" x="150" y="380" width="474" height="22"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="vlJ-5g-D7y">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -4413,10 +4413,22 @@ DQ
                                                 <action selector="onChkSampleClicked:" target="Y9X-Oo-HLH" id="PUI-NF-zq7"/>
                                             </connections>
                                         </button>
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZNc-JJ-kW4">
+                                            <rect key="frame" x="199" y="46" width="51" height="18"/>
+                                            <buttonCell key="cell" type="check" title="Lock" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="N7N-w7-e85">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="onChkLockClicked:" target="Y9X-Oo-HLH" id="3VO-Op-zUe"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="ms0-vc-0WA" firstAttribute="leading" secondItem="crb-ad-k2F" secondAttribute="trailing" constant="40" id="0k1-a2-zLo"/>
                                         <constraint firstItem="crb-ad-k2F" firstAttribute="leading" secondItem="Jqa-1O-5KG" secondAttribute="leading" constant="20" id="33l-b2-aCb"/>
+                                        <constraint firstItem="ZNc-JJ-kW4" firstAttribute="top" secondItem="LTG-sS-lD7" secondAttribute="bottom" constant="10" id="6aI-0O-653"/>
+                                        <constraint firstItem="ZNc-JJ-kW4" firstAttribute="leading" secondItem="ms0-vc-0WA" secondAttribute="trailing" constant="34" id="ACp-vO-dtY"/>
                                         <constraint firstItem="6hw-Ms-iiU" firstAttribute="leading" secondItem="Jqa-1O-5KG" secondAttribute="leading" constant="10" id="AR2-3G-Fpe"/>
                                         <constraint firstItem="3N8-G4-USc" firstAttribute="top" secondItem="Jqa-1O-5KG" secondAttribute="top" constant="8" id="BEU-5t-6hO"/>
                                         <constraint firstItem="LTG-sS-lD7" firstAttribute="top" secondItem="3N8-G4-USc" secondAttribute="bottom" constant="6" id="Cl6-Ut-CA8"/>
@@ -5177,6 +5189,7 @@ DQ
                         <outlet property="btnSourceLargerView" destination="WhZ-A7-zr6" id="iZQ-8V-ie3"/>
                         <outlet property="btnTraining" destination="6Wj-n4-HQG" id="j2E-Ns-N1d"/>
                         <outlet property="chkIcon" destination="ms0-vc-0WA" id="9Z8-Z1-f29"/>
+                        <outlet property="chkLock" destination="ZNc-JJ-kW4" id="Mce-WP-vGc"/>
                         <outlet property="chkSample" destination="crb-ad-k2F" id="aWS-ZM-nRT"/>
                         <outlet property="faceCollectionView" destination="3GB-9Y-vdr" id="Gg5-qM-UJD"/>
                         <outlet property="iconCollectionView" destination="8qp-hY-LJF" id="g5j-uP-qxn"/>
