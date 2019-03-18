@@ -17,6 +17,9 @@ final class PreferencesController: NSViewController {
     fileprivate static let exportToAndroidPathKey = "ExportToAndroidPath"
     fileprivate static let databasePathKey = "DatabasePathKey"
     fileprivate static let iosMountPointKey = "IOSMountPointKey"
+    fileprivate static let homebrewKey = "HomebrewKey"
+    fileprivate static let pythonKey = "PythonKey"
+    fileprivate static let faceRecognitionModelKey = "FaceRecognitionModelKey"
     
     // MARK: Properties
     @IBOutlet weak var txtBaiduAK: NSTextField!
@@ -33,6 +36,8 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var lblPythonMessage: NSTextField!
     @IBOutlet weak var lblComponentsStatus: NSTextField!
     @IBOutlet weak var lblComponentsInstruction: NSTextField!
+    @IBOutlet weak var chkMajorFaceRecognitionModel: NSButton!
+    @IBOutlet weak var chkAlternativeFaceRecognitionModel: NSButton!
     
     
     
@@ -106,9 +111,6 @@ final class PreferencesController: NSViewController {
         }
     }
     
-    @IBAction func onInstallHomebrewClicked(_ sender: NSButton) {
-    }
-    
     @IBAction func onLocatePythonClicked(_ sender: NSButton) {
         let path = ExecutionEnvironment.default.locate("python3")
         if path != "" {
@@ -120,9 +122,6 @@ final class PreferencesController: NSViewController {
         }
     }
     
-    @IBAction func onInstallPythonClicked(_ sender: NSButton) {
-    }
-    
     @IBAction func onCheckComponentsClicked(_ sender: NSButton) {
         let py3 = self.txtPythonPath.stringValue
         let brew = self.txtHomebrewPath.stringValue
@@ -132,14 +131,54 @@ final class PreferencesController: NSViewController {
         if !FileManager.default.fileExists(atPath: py3) || !FileManager.default.fileExists(atPath: brew) {
             return
         }
-        let pips = ExecutionEnvironment.default.pipList(py3)
-        let brews = ExecutionEnvironment.default.brewList(brew)
-        let casks = ExecutionEnvironment.default.brewCaskList(brew)
+        DispatchQueue.global().async {
+            let pip = ExecutionEnvironment.default.locate("pip3")
+            let pips = ExecutionEnvironment.default.pipList(pip)
+            let brews = ExecutionEnvironment.default.brewList(brew)
+            let casks = ExecutionEnvironment.default.brewCaskList(brew)
+            
+            var result = ""
+            for component in ExecutionEnvironment.componentsForDlibFaceRecognition {
+                if pips.contains(component) || brews.contains(component) || casks.contains(component) {
+                    result += "\(component) INSTALLED\n"
+                }else{
+                    result += "\(component) NOT FOUND\n"
+                }
+            }
+            DispatchQueue.main.async {
+                self.lblComponentsStatus.stringValue = result
+            }
+        }
         
-        // TODO: TODO FUNCTION
+    }
+    
+    @IBAction func onMajorFaceModelClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onAlternativeFaceModelClicked(_ sender: NSButton) {
     }
     
     
+    // MARK: FACE RECOGNITION
+    
+    
+    class func homebrewPath() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: homebrewKey) else {return ""}
+        return txt
+    }
+    
+    class func pythonPath() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: pythonKey) else {return ""}
+        return txt
+    }
+    
+    class func faceRecognitionModel() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: faceRecognitionModelKey) else {return "major"}
+        return txt
+    }
     
     // MARK: BAIDU
     
@@ -257,6 +296,10 @@ final class PreferencesController: NSViewController {
                      forKey: PreferencesController.databasePathKey)
         defaults.set(txtIOSMountPoint.stringValue,
                      forKey: PreferencesController.iosMountPointKey)
+        defaults.set(txtHomebrewPath.stringValue,
+                     forKey: PreferencesController.homebrewKey)
+        defaults.set(txtPythonPath.stringValue,
+                     forKey: PreferencesController.pythonKey)
 
     }
     
@@ -282,8 +325,13 @@ final class PreferencesController: NSViewController {
         txtDatabasePath.stringValue = PreferencesController.databasePath()
         txtIOSMountPoint.stringValue = PreferencesController.iosDeviceMountPoint()
         txtExportToAndroidPath.stringValue = PreferencesController.exportToAndroidDirectory()
+        txtHomebrewPath.stringValue = PreferencesController.homebrewPath()
+        txtPythonPath.stringValue = PreferencesController.pythonPath()
         
-        self.lblComponentsInstruction.stringValue = ExecutionEnvironment.default.instructionForDlibFaceRecognition()
+        self.lblComponentsInstruction.stringValue = ExecutionEnvironment.instructionForDlibFaceRecognition
+        
+        self.chkMajorFaceRecognitionModel.title = FaceRecognition.recognitionModelPath
+        self.chkAlternativeFaceRecognitionModel.title = FaceRecognition.recognitionModelPath2
     }
     
     override var representedObject: Any? {

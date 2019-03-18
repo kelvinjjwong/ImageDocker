@@ -12,9 +12,9 @@ struct ExecutionEnvironment {
     
     static let `default` = ExecutionEnvironment()
     
-    fileprivate let WHICH = URL(fileURLWithPath: "/usr/bin/which")
+    fileprivate let RUBY = URL(fileURLWithPath: "/usr/bin/ruby")
     
-    func locate(_ command:String) -> String{
+    func installHomebrew() -> String{
         var result = ""
         let pipe = Pipe()
         
@@ -22,8 +22,8 @@ struct ExecutionEnvironment {
             let cmd = Process()
             cmd.standardOutput = pipe
             cmd.standardError = pipe
-            cmd.launchPath = WHICH.path
-            cmd.arguments = [command]
+            cmd.launchPath = RUBY.path
+            cmd.arguments = ["-e", "\"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)\""]
             do {
                 try cmd.run()
             }catch{
@@ -40,7 +40,66 @@ struct ExecutionEnvironment {
         return result
     }
     
+    func uninstallHomebrew() -> String{
+        var result = ""
+        let pipe = Pipe()
+        
+        autoreleasepool { () -> Void in
+            let cmd = Process()
+            cmd.standardOutput = pipe
+            cmd.standardError = pipe
+            cmd.launchPath = RUBY.path
+            cmd.arguments = ["-e", "\"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)\""]
+            do {
+                try cmd.run()
+            }catch{
+                print(error)
+            }
+            //cmd.terminate()
+            
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            let string = String(data: data, encoding: String.Encoding.utf8)!
+            pipe.fileHandleForReading.closeFile()
+            
+            result = string
+        }
+        return result
+    }
+    
+    func locate(_ command:String) -> String{
+        var paths:[String] = ["/usr/local/bin","/usr/bin","/bin","/usr/sbin","/sbin"]
+        autoreleasepool { () -> Void in
+            let taskShell = Process()
+            taskShell.launchPath = "/bin/ls"
+            taskShell.arguments = ["-r", "/Library/Frameworks/Python.framework/Versions/"]
+            let pipeShell = Pipe()
+            taskShell.standardOutput = pipeShell
+            taskShell.standardError = pipeShell
+            taskShell.launch()
+            taskShell.waitUntilExit()
+            let data = pipeShell.fileHandleForReading.readDataToEndOfFile()
+            let output = String(data: data, encoding: String.Encoding.utf8)!
+            pipeShell.fileHandleForReading.closeFile()
+            if output != "" {
+                let versions = output.components(separatedBy: "\n")
+                for version in versions {
+                    paths.append("/Library/Frameworks/Python.framework/Versions/\(version)/bin")
+                }
+            }
+        }
+        
+        for path in paths {
+            let p = URL(fileURLWithPath: path).appendingPathComponent(command).path
+            //print(p)
+            if FileManager.default.fileExists(atPath: p) {
+                return p
+            }
+        }
+        return ""
+    }
+    
     func pipList(_ pipPath:String) -> Set<String>{
+        print("calling pip: \(pipPath)")
         var result:Set<String> = []
         let pipe = Pipe()
         
@@ -60,7 +119,7 @@ struct ExecutionEnvironment {
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
             let string = String(data: data, encoding: String.Encoding.utf8)!
             pipe.fileHandleForReading.closeFile()
-            
+            print(string)
             let lines = string.components(separatedBy: "\n")
             for line in lines {
                 let part = line.components(separatedBy: " ")
@@ -142,38 +201,23 @@ struct ExecutionEnvironment {
         return result
     }
     
-    func instructionForDlibFaceRecognition() -> String {
-        return """
-        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"
-
-        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-        
-        brew install python3
-        
-        brew cask install xquartz
-        
-        brew install gtk+3 boost
-        
-        brew install boost-python
-        
-        pip3 install virtualenv virtualenvwrapper
-        
-        pip3 install numpy scipy matplotlib scikit-image scikit-learn ipython
-        
-        brew install dlib
-        
-        pip3 install imutils
-        
-        pip3 install opencv-python
-        
-        brew install cmake
-        
-        pip3 install face_recognition
-        
+    static let instructionForDlibFaceRecognition = """
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+brew install python3
+brew cask install xquartz
+brew install gtk+3 boost
+brew install boost-python
+pip3 install virtualenv virtualenvwrapper
+pip3 install numpy scipy matplotlib scikit-image scikit-learn ipython
+brew install dlib
+pip3 install imutils
+pip3 install opencv-python
+brew install cmake
+pip3 install face_recognition
 """
-    }
     
-    let componentsForDlibFaceRecognition:Set<String> = ["xquartz", "gtk+3", "boost-python", "virtualenv", "virtualenvwrapper", "numpy",
-                                                        "scipy", "matplotlib", "scikit-image", "scikit-learn", "ipython", "dlib", "imutils",
-                                                        "opencv-python", "cmake", "face_recognition"]
+    static let componentsForDlibFaceRecognition:[String] = ["boost-python", "numpy", "dlib", "imutils", "opencv-python", "face-recognition"]
+    
+
 }
