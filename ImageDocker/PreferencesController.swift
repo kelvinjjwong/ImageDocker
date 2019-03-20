@@ -21,6 +21,9 @@ final class PreferencesController: NSViewController {
     fileprivate static let pythonKey = "PythonKey"
     fileprivate static let faceRecognitionModelKey = "FaceRecognitionModelKey"
     fileprivate static let alternativeFaceModelPathKey = "AlternativeFaceModelPathKey"
+    fileprivate static let ifuseKey = "ifuseKey"
+    fileprivate static let ideviceidKey = "ideviceidKey"
+    fileprivate static let ideviceinfoKey = "ideviceinfoKey"
     
     // MARK: Properties
     @IBOutlet weak var txtBaiduAK: NSTextField!
@@ -36,12 +39,20 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var lblHomebrewMessage: NSTextField!
     @IBOutlet weak var lblPythonMessage: NSTextField!
     @IBOutlet weak var lblComponentsStatus: NSTextField!
-    @IBOutlet weak var lblComponentsInstruction: NSTextField!
     @IBOutlet weak var chkMajorFaceRecognitionModel: NSButton!
     @IBOutlet weak var chkAlternativeFaceRecognitionModel: NSButton!
     @IBOutlet weak var lblMajorFaceModelPath: NSTextField!
     @IBOutlet weak var txtAlternativeFaceModelPath: NSTextField!
     @IBOutlet weak var btnCheckFaceComponents: NSButton!
+    @IBOutlet weak var txtIfusePath: NSTextField!
+    @IBOutlet weak var txtIdeviceIdPath: NSTextField!
+    @IBOutlet weak var txtIdeviceInfoPath: NSTextField!
+    @IBOutlet weak var lblDatabaseBackupPath: NSTextField!
+    @IBOutlet var lblComponentsInstruction: NSTextView!
+    @IBOutlet weak var lblIOSMountPointMessage: NSTextField!
+    @IBOutlet weak var lblIfuseMessage: NSTextField!
+    @IBOutlet weak var lblIdeviceIdMessage: NSTextField!
+    @IBOutlet weak var lblIdeviceInfoMessage: NSTextField!
     
     
     
@@ -204,6 +215,57 @@ final class PreferencesController: NSViewController {
         }
     }
     
+    @IBAction func onBaiduLinkClicked(_ sender: Any) {
+        if let url = URL(string: "http://lbsyun.baidu.com"),
+            NSWorkspace.shared.open(url) {
+            print("triggered link \(url)")
+        }
+    }
+    
+    @IBAction func onGoogleLinkClicked(_ sender: Any) {
+        if let url = URL(string: "https://developers.google.com/maps/documentation/maps-static/intro"),
+            NSWorkspace.shared.open(url) {
+            print("triggered link \(url)")
+        }
+    }
+    
+    @IBAction func onLocateIfuseClicked(_ sender: NSButton) {
+        let path = ExecutionEnvironment.default.locate("ifuse")
+        if path != "" {
+            self.txtIfusePath.stringValue = path
+            self.lblIfuseMessage.stringValue = ""
+        }else{
+            self.txtIfusePath.stringValue = ""
+            self.lblIfuseMessage.stringValue = "ERROR: Missing ifuse"
+        }
+    }
+    
+    @IBAction func onLocateIdeviceIdClicked(_ sender: NSButton) {
+        let path = ExecutionEnvironment.default.locate("idevice_id")
+        if path != "" {
+            self.txtIdeviceIdPath.stringValue = path
+            self.lblIdeviceIdMessage.stringValue = ""
+        }else{
+            self.txtIdeviceIdPath.stringValue = ""
+            self.lblIdeviceIdMessage.stringValue = "ERROR: Missing imobiledevice"
+        }
+    }
+    
+    @IBAction func onLocateIdeviceInfoClicked(_ sender: NSButton) {
+        let path = ExecutionEnvironment.default.locate("ideviceinfo")
+        if path != "" {
+            self.txtIdeviceInfoPath.stringValue = path
+            self.lblIdeviceInfoMessage.stringValue = ""
+        }else{
+            self.txtIdeviceInfoPath.stringValue = ""
+            self.lblIdeviceInfoMessage.stringValue = "ERROR: Missing imobiledevice"
+        }
+    }
+    
+    @IBAction func onFindDatabaseBackupClicked(_ sender: NSButton) {
+        NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: self.lblDatabaseBackupPath.stringValue)])
+    }
+    
     
     
     // MARK: FACE RECOGNITION
@@ -331,6 +393,24 @@ final class PreferencesController: NSViewController {
         }
     }
     
+    class func ideviceidPath() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: ideviceidKey) else {return ""}
+        return txt
+    }
+    
+    class func ideviceinfoPath() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: ideviceinfoKey) else {return ""}
+        return txt
+    }
+    
+    class func ifusePath() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: ifuseKey) else {return ""}
+        return txt
+    }
+    
     // MARK: SAVE SETTINGS
     
     func savePreferences() {
@@ -349,6 +429,12 @@ final class PreferencesController: NSViewController {
                      forKey: PreferencesController.databasePathKey)
         defaults.set(txtIOSMountPoint.stringValue,
                      forKey: PreferencesController.iosMountPointKey)
+        defaults.set(txtIfusePath.stringValue,
+                     forKey: PreferencesController.ifuseKey)
+        defaults.set(txtIdeviceIdPath.stringValue,
+                     forKey: PreferencesController.ideviceidKey)
+        defaults.set(txtIdeviceInfoPath.stringValue,
+                     forKey: PreferencesController.ideviceinfoKey)
         defaults.set(txtHomebrewPath.stringValue,
                      forKey: PreferencesController.homebrewKey)
         defaults.set(txtPythonPath.stringValue,
@@ -381,6 +467,9 @@ final class PreferencesController: NSViewController {
         txtExportPath.stringValue = PreferencesController.exportDirectory()
         txtDatabasePath.stringValue = PreferencesController.databasePath()
         txtIOSMountPoint.stringValue = PreferencesController.iosDeviceMountPoint()
+        txtIfusePath.stringValue = PreferencesController.ifusePath()
+        txtIdeviceIdPath.stringValue = PreferencesController.ideviceidPath()
+        txtIdeviceInfoPath.stringValue = PreferencesController.ideviceinfoPath()
         txtExportToAndroidPath.stringValue = PreferencesController.exportToAndroidDirectory()
         txtHomebrewPath.stringValue = PreferencesController.homebrewPath()
         txtPythonPath.stringValue = PreferencesController.pythonPath()
@@ -397,7 +486,7 @@ final class PreferencesController: NSViewController {
         
         self.btnCheckFaceComponents.isEnabled = false
         var result = ""
-        self.lblComponentsInstruction.stringValue = ExecutionEnvironment.instructionForDlibFaceRecognition
+        self.lblComponentsInstruction.string = ExecutionEnvironment.instructionForDlibFaceRecognition
         var testing = true
         if PreferencesController.pythonPath() != "" && PreferencesController.homebrewPath() != "" {
             testing = self.checkComponentStatus()
@@ -413,6 +502,8 @@ final class PreferencesController: NSViewController {
             }
         }
         self.lblComponentsStatus.stringValue = result
+        self.lblDatabaseBackupPath.stringValue = URL(fileURLWithPath: PreferencesController.databasePath()).appendingPathComponent("DataBackup").path
+        
     }
     
     override var representedObject: Any? {
