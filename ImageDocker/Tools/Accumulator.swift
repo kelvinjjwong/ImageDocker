@@ -121,7 +121,7 @@ class Accumulator : NSObject {
         }
     }
     
-    func forceComplete() {
+    func forceComplete(_ message:String = "") {
         DispatchQueue.main.async {
             if self.indicator != nil {
                 self.indicator?.doubleValue = 0
@@ -131,7 +131,7 @@ class Accumulator : NSObject {
                 if self.presetCompleteMessage != nil {
                     self.lblMessage?.stringValue = self.presetCompleteMessage!
                 }else{
-                    self.lblMessage?.stringValue = ""
+                    self.lblMessage?.stringValue = message
                 }
             }
             if self.hasOnCompleted {

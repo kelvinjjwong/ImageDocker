@@ -57,6 +57,10 @@ class EditRepositoryViewController: NSViewController {
     @IBOutlet weak var btnFaceBackToOrigin: NSButton!
     @IBOutlet weak var btnFaceFollowHome: NSButton!
     @IBOutlet weak var btnPathsFollowDevice: NSButton!
+    @IBOutlet weak var btnFindFaces: NSButton!
+    @IBOutlet weak var boxRepository: NSBox!
+    @IBOutlet weak var boxFaces: NSBox!
+    @IBOutlet weak var boxDevice: NSBox!
     
     
     private var accumulator:Accumulator? = nil
@@ -83,6 +87,49 @@ class EditRepositoryViewController: NSViewController {
     // MARK: ACTIONS
     
     fileprivate var onCompleted: (() -> Void)?
+    
+    // MARK: BUTTONS CONTROL
+    
+    fileprivate func toggleButtons(_ show:Bool){
+        DispatchQueue.main.async {
+            self.btnFindFaces.isEnabled = show
+            self.btnOK.isEnabled = show
+            self.btnStat.isEnabled = show
+            self.btnRemove.isEnabled = show
+            self.btnShowHide.isEnabled = show
+            self.btnCopyToRaw.isEnabled = show
+            self.btnNormalize.isEnabled = show
+            self.btnCleanDevice.isEnabled = show
+            self.btnLoadDevices.isEnabled = show
+            self.btnFindCropPath.isEnabled = show
+            self.btnFindFacePath.isEnabled = show
+            self.btnFindHomePath.isEnabled = show
+            self.btnBrowseCropPath.isEnabled = show
+            self.btnBrowseFacePath.isEnabled = show
+            self.btnBrowseHomePath.isEnabled = show
+            self.btnFaceFollowHome.isEnabled = show
+            self.btnFollowHomePath.isEnabled = show
+            self.btnFindStoragePath.isEnabled = show
+            self.btnRestoreOriginal.isEnabled = show
+            self.btnFaceBackToOrigin.isEnabled = show
+            self.btnUpdateCropImages.isEnabled = show
+            self.btnUpdateFaceImages.isEnabled = show
+            self.btnBrowseStoragePath.isEnabled = show
+            self.btnCompareDevicePath.isEnabled = show
+            self.btnPathsFollowDevice.isEnabled = show
+            self.btnFindRepositoryPath.isEnabled = show
+            self.btnUpdateStorageImages.isEnabled = show
+            self.btnBrowseRepositoryPath.isEnabled = show
+            self.btnUpdateRepositoryImages.isEnabled = show
+            self.txtName.isEnabled = show
+            self.txtCropPath.isEnabled = show
+            self.txtFacePath.isEnabled = show
+            self.txtHomePath.isEnabled = show
+            self.txtRepository.isEnabled = show
+            self.txtStoragePath.isEnabled = show
+        }
+        
+    }
     
     // MARK: INIT
     
@@ -221,7 +268,7 @@ class EditRepositoryViewController: NSViewController {
     fileprivate func stat() {
         if let container = self.originalContainer {
             let path = container.path
-            
+            self.toggleButtons(false)
             DispatchQueue.global().async {
                 let imagesTotal = ModelStore.default.countImages(repositoryRoot: path)
                 let imagesWithoutRepoPath = ModelStore.default.countImageWithoutRepositoryPath(repositoryRoot: path)
@@ -230,12 +277,15 @@ class EditRepositoryViewController: NSViewController {
                 let imagesUnmatchedRepoPath = ModelStore.default.countImageUnmatchedRepositoryRoot(repositoryRoot: path)
                 let containersWithoutRepoPath = ModelStore.default.countContainersWithoutRepositoryPath(repositoryRoot: path)
                 let containersWithoutSubPath = ModelStore.default.countContainersWithoutSubPath(repositoryRoot: path)
+                let imageWithoutFace = ModelStore.default.countImageWithoutFace(repositoryRoot: path)
+                let imageNotYetFacialDetection = ModelStore.default.countImageNotYetFacialDetection(repositoryRoot: path)
                 
-                let msg = "Hidden:\(container.hiddenByRepository), Total:\(imagesTotal), No-repo:\(imagesWithoutRepoPath), No-sub:\(imagesWithoutSubPath), No-id:\(imagesWithoutId), Unmatch-repo:\(imagesUnmatchedRepoPath), container-no-repo:\(containersWithoutRepoPath), container-no-sub:\(containersWithoutSubPath)"
+                let msg = "Hidden:\(container.hiddenByRepository), Total:\(imagesTotal), No-repo:\(imagesWithoutRepoPath), No-sub:\(imagesWithoutSubPath), No-id:\(imagesWithoutId), Unmatch-repo:\(imagesUnmatchedRepoPath), container-no-repo:\(containersWithoutRepoPath), container-no-sub:\(containersWithoutSubPath), No-face:\(imageWithoutFace), Not-yet-scan:\(imageNotYetFacialDetection)"
                 
                 print(msg)
                 DispatchQueue.main.async {
                     self.lblMessage.stringValue = msg
+                    self.toggleButtons(true)
                 }
             }
         }
@@ -476,18 +526,18 @@ class EditRepositoryViewController: NSViewController {
             guard !self.working else {return}
             
             self.working = true
-            // TODO: disable buttons
             
             var count = 0
             var copiedCount = 0
             var abnormalCount = 0
             var errorCount = 0
+            self.toggleButtons(false)
             DispatchQueue.main.async {
                 self.accumulator = Accumulator(target: 100, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage,
                                                onCompleted: { data in
                                                 self.lblMessage.stringValue = "Total \(count) images, copied \(copiedCount) images, \(errorCount) images occured error, \(abnormalCount) images ignored (no-sub-path) "
                                                 self.working = false
-                                                // TODO: enable buttons
+                                                self.toggleButtons(true)
                                                },
                                                startupMessage: "Loading images from database ..."
                                               )
@@ -500,7 +550,7 @@ class EditRepositoryViewController: NSViewController {
                     DispatchQueue.main.async {
                         self.lblMessage.stringValue = "No image could be copied. Please update image-records in the repository if they really exist."
                         self.working = false
-                        // TODO: enable buttons
+                        self.toggleButtons(true)
                     }
                     return
                 }
@@ -733,11 +783,8 @@ class EditRepositoryViewController: NSViewController {
             
             self.lblMessage.stringValue = "Checking for update ..."
             
-            self.btnUpdateStorageImages.isEnabled = false
-            self.btnUpdateRepositoryImages.isEnabled = false
-            self.btnUpdateFaceImages.isEnabled = false
-            self.btnUpdateCropImages.isEnabled = false
-            self.btnCopyToRaw.isEnabled = false
+            
+            self.toggleButtons(false)
             self.lblMessage.stringValue = ""
             
             DispatchQueue.global().async {
@@ -793,11 +840,7 @@ class EditRepositoryViewController: NSViewController {
                 self.originalContainer = repo
                 
                 DispatchQueue.main.async {
-                    self.btnUpdateStorageImages.isEnabled = true
-                    self.btnUpdateRepositoryImages.isEnabled = true
-                    self.btnUpdateFaceImages.isEnabled = true
-                    self.btnUpdateCropImages.isEnabled = true
-                    self.btnCopyToRaw.isEnabled = true
+                    self.toggleButtons(true)
                     self.lblMessage.stringValue = "RAW storage updated."
                     
                     self.working = false
@@ -843,11 +886,8 @@ class EditRepositoryViewController: NSViewController {
             
             self.working = true
             
-            self.btnUpdateStorageImages.isEnabled = false
-            self.btnUpdateRepositoryImages.isEnabled = false
-            self.btnUpdateFaceImages.isEnabled = false
-            self.btnUpdateCropImages.isEnabled = false
-            self.btnCopyToRaw.isEnabled = false
+            
+            self.toggleButtons(false)
             self.lblMessage.stringValue = ""
             
             DispatchQueue.global().async {
@@ -947,11 +987,8 @@ class EditRepositoryViewController: NSViewController {
                 self.originalContainer = repo
                 
                 DispatchQueue.main.async {
-                    self.btnUpdateStorageImages.isEnabled = true
-                    self.btnUpdateRepositoryImages.isEnabled = true
-                    self.btnUpdateFaceImages.isEnabled = true
-                    self.btnUpdateCropImages.isEnabled = true
-                    self.btnCopyToRaw.isEnabled = true
+                    
+                    self.toggleButtons(true)
                     //self.lblMessage.stringValue = "Repository updated."
                     
                     self.stat()
@@ -976,11 +1013,8 @@ class EditRepositoryViewController: NSViewController {
             
             self.working = true
             
-            self.btnUpdateStorageImages.isEnabled = false
-            self.btnUpdateRepositoryImages.isEnabled = false
-            self.btnUpdateFaceImages.isEnabled = false
-            self.btnUpdateCropImages.isEnabled = false
-            self.btnCopyToRaw.isEnabled = false
+            
+            self.toggleButtons(false)
             self.lblMessage.stringValue = ""
             
             DispatchQueue.global().async {
@@ -1036,11 +1070,8 @@ class EditRepositoryViewController: NSViewController {
                 self.originalContainer = repo
                 
                 DispatchQueue.main.async {
-                    self.btnUpdateStorageImages.isEnabled = true
-                    self.btnUpdateRepositoryImages.isEnabled = true
-                    self.btnUpdateFaceImages.isEnabled = true
-                    self.btnUpdateCropImages.isEnabled = true
-                    self.btnCopyToRaw.isEnabled = true
+                    
+                    self.toggleButtons(true)
                     self.lblMessage.stringValue = "Face files updated."
                     
                     self.working = false
@@ -1063,11 +1094,8 @@ class EditRepositoryViewController: NSViewController {
             
             self.working = true
             
-            self.btnUpdateStorageImages.isEnabled = false
-            self.btnUpdateRepositoryImages.isEnabled = false
-            self.btnUpdateFaceImages.isEnabled = false
-            self.btnUpdateCropImages.isEnabled = false
-            self.btnCopyToRaw.isEnabled = false
+            
+            self.toggleButtons(false)
             self.lblMessage.stringValue = ""
             
             DispatchQueue.global().async {
@@ -1124,11 +1152,8 @@ class EditRepositoryViewController: NSViewController {
                 self.originalContainer = repo
                 
                 DispatchQueue.main.async {
-                    self.btnUpdateStorageImages.isEnabled = true
-                    self.btnUpdateRepositoryImages.isEnabled = true
-                    self.btnUpdateFaceImages.isEnabled = true
-                    self.btnUpdateCropImages.isEnabled = true
-                    self.btnCopyToRaw.isEnabled = true
+                    
+                    self.toggleButtons(true)
                     self.lblMessage.stringValue = "Crop files updated."
                     
                     self.working = false
@@ -1140,107 +1165,14 @@ class EditRepositoryViewController: NSViewController {
     }
     
     
-    
-//    @IBAction func onUpdateContainersClicked(_ sender: NSButton) {
-//        guard !self.working else {return}
-//        if let repoContainer = self.originalContainer {
-//            
-//            self.working = true
-//            
-//            self.btnUpdateContainers.isEnabled = false
-//            self.btnUpdateStorageImages.isEnabled = false
-//            self.btnUpdateRepositoryImages.isEnabled = false
-//            self.btnUpdateFaceImages.isEnabled = false
-//            self.btnUpdateCropImages.isEnabled = false
-//            self.btnCopyToRaw.isEnabled = false
-//            self.lblMessage.stringValue = ""
-//            
-//            DispatchQueue.global().async {
-//                var repo = repoContainer
-//                let repoPath = repo.path.withStash()
-//                var repoChanged = false
-//                if repo.repositoryPath == "" {
-//                    repo.repositoryPath = repoPath
-//                    repoChanged = true
-//                }
-//                
-//                let path = repo.path.withStash()
-//                
-//                if repoChanged {
-//                    ModelStore.default.saveImageContainer(container: repo)
-//                }
-//                
-//                let subContainers = ModelStore.default.getContainers(rootPath: path)
-//                
-//                let total = subContainers.count
-//                
-//                DispatchQueue.main.async {
-//                    self.accumulator = Accumulator(target: total, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage)
-//                }
-//                
-//                for subContainer in subContainers {
-//                    var sub = subContainer
-//                    var subChanged = false
-//                    if sub.repositoryPath == "" {
-//                        sub.repositoryPath = repoPath
-//                        subChanged = true
-//                    }
-//                    if sub.parentPath == "" {
-//                        sub.parentPath = URL(fileURLWithPath: sub.path).deletingLastPathComponent().path.replacingFirstOccurrence(of: repoPath, with: "")
-//                        subChanged = true
-//                    }
-//                    if sub.subPath == "" {
-//                        sub.subPath = sub.path.replacingFirstOccurrence(of: path, with: "")
-//                        subChanged = true
-//                    }
-//                    if subChanged {
-//                        ModelStore.default.saveImageContainer(container: sub)
-//                    }
-//                    
-//                    
-//                    DispatchQueue.main.async {
-//                        let _ = self.accumulator?.add("Updating sub-containers ...")
-//                    }
-//                }
-//                
-//                DispatchQueue.main.async {
-//                    self.btnUpdateContainers.isEnabled = true
-//                    self.btnUpdateStorageImages.isEnabled = true
-//                    self.btnUpdateRepositoryImages.isEnabled = true
-//                    self.btnUpdateFaceImages.isEnabled = true
-//                    self.btnUpdateCropImages.isEnabled = true
-//                    self.btnCopyToRaw.isEnabled = true
-//                    self.lblMessage.stringValue = "Sub-containers updated."
-//                    
-//                    self.working = false
-//                }
-//            }
-//        }
-//    }
-    
-//    @IBAction func onUpdateHomePathClicked(_ sender: NSButton) {
-//        if let container = self.originalContainer { // edit
-//            let homePath = self.txtHomePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-//            if homePath == "" {
-//                self.lblHomePathRemark.stringValue = "Please assign home path."
-//                return
-//            }
-//            
-//            var origin = container
-//            origin.homePath = homePath
-//            ModelStore.default.saveImageContainer(container: origin)
-//            self.lblMessage.stringValue = "Home path updated."
-//            
-//        }
-//    }
-    
     @IBAction func onNormalizeHiddenClicked(_ sender: NSButton) {
         let repo = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withStash()
         let raw = self.txtStoragePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withStash()
         guard !self.working && repo != "/" && raw != "/" else {return}
         self.working = true
         
-        // TODO: disable buttons
+        
+        self.toggleButtons(false)
         
         var updateCount = 0
         var count = 0
@@ -1254,7 +1186,8 @@ class EditRepositoryViewController: NSViewController {
                                                     print(msg)
                                                     self.lblMessage.stringValue = msg
                                                     self.working = false
-                                                    // TODO: enable buttons
+                                                    
+                                                    self.toggleButtons(true)
                                                 }
                                            },
                                            startupMessage: "Loading duplicates from database ..."
@@ -1340,11 +1273,14 @@ class EditRepositoryViewController: NSViewController {
     @IBAction func onRemoveClicked(_ sender: NSButton) {
         if let container = self.originalContainer {
             if Alert.dialogOKCancel(question: "Remove all records and image-records of this repository from database ?", text: container.path) {
-                // TODO: disable buttons
+                
+                self.toggleButtons(false)
                 DispatchQueue.global().async {
                     ModelStore.default.deleteRepository(repositoryRoot: container.path)
                     
                     self.freshNew()
+                    
+                    self.toggleButtons(true)
                     self.lblMessage.stringValue = "All records and image-records of this repository have been removed from database."
                     // TODO: use delegate from main window to close this window and refresh library tree in main window
                 }
@@ -1438,6 +1374,162 @@ class EditRepositoryViewController: NSViewController {
             }
         }
     }
+    
+    @IBAction func onFindFacesClicked(_ sender: NSButton) {
+        // TODO: TODO FUNCTION
+        guard !self.working else {
+            print("other task is running. abort this task.")
+            return
+        }
+        var total = 0
+        var count = 0
+        if let repository = self.originalContainer {
+            
+            if repository.cropPath == "" {
+                print("ERROR: Crop path is empty, please assign it first: \(repository.path)")
+                self.lblMessage.stringValue = "ERROR: Crop path is empty, please assign it first"
+                return
+            }
+            
+            // ensure base crop path exists
+            var isDir:ObjCBool = false
+            if FileManager.default.fileExists(atPath: repository.cropPath, isDirectory: &isDir) {
+                if !isDir.boolValue {
+                    print("ERROR: Crop path of repository is not a directory: \(repository.cropPath)")
+                    self.lblMessage.stringValue = "ERROR: Crop path of repository is not a directory"
+                    return
+                }
+            }
+            
+            
+            let totalRam = ProcessInfo.processInfo.physicalMemory / 1024 / 1024
+            let limitRam = totalRam / 3
+            var stopByExceedLimit = false
+            
+            self.toggleButtons(false)
+            self.working = true
+            self.accumulator = Accumulator(target: 100, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage,
+                                           onCompleted: { data in
+                                                DispatchQueue.main.async {
+                                                    var msg = "Found \(count) images with face(s). Total \(total) images."
+                                                    if stopByExceedLimit {
+                                                        msg += " Stopped since total size exceeds limitation \(limitRam) MB, you can run again a bit later."
+                                                    }
+                                                    print(msg)
+                                                    self.lblMessage.stringValue = msg
+                                                    self.working = false
+                                                    
+                                                    self.toggleButtons(true)
+                                                }
+                                            },
+                                            startupMessage: "Loading images from database ..."
+                                            )
+            DispatchQueue.global().async {
+                let images = ModelStore.default.getImagesWithoutFace(repositoryRoot: repository.path.withStash())
+                if images.count > 0 {
+                    total = images.count
+                    self.accumulator?.setTarget(total)
+                    count = 0
+                    for image in images {
+                        
+                        if image.path.hasSuffix(".mp4") || image.path.hasSuffix(".mov") || image.path.hasSuffix(".mpeg") || image.path.hasSuffix(".mpg") || image.path.hasSuffix(".ts") || image.path.hasSuffix(".MP4") || image.path.hasSuffix(".MOV") || image.path.hasSuffix(".MPEG") || image.path.hasSuffix(".MPG") || image.path.hasSuffix(".TS") {
+                            continue
+                        }
+                        
+                        var taskInfo = mach_task_basic_info()
+                        var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
+                        let kerr: kern_return_t = withUnsafeMutablePointer(to: &taskInfo) {
+                            $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
+                                task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
+                            }
+                        }
+                        
+                        if kerr == KERN_SUCCESS {
+                            let usedRam = taskInfo.resident_size / 1024 / 1024
+                            
+                            if usedRam >= limitRam {
+                                stopByExceedLimit = true
+                                print("##### EXCEEDS SIZE LIMIT")
+                                self.accumulator?.forceComplete("Total file size exceeds limitation \(limitRam)")
+                                return
+                            }
+                        }
+                        
+                        // ensure image-filename-aware crop path exists
+                        let cropPath = URL(fileURLWithPath: repository.cropPath).appendingPathComponent(image.subPath)
+                        
+                        var img = image
+                        if img.id == nil {
+                            img.id = UUID().uuidString
+                            ModelStore.default.saveImage(image: img)
+                        }
+                        let imageId = img.id!
+                        
+                        FaceDetection.default.findFace(from: image.path, into: cropPath.path, onCompleted: {faces in
+                            if faces.count == 0 {
+                                do {
+                                    try FileManager.default.removeItem(atPath: cropPath.path)
+                                }catch{
+                                    print(error)
+                                    print("ERROR: Cannot delete directory for storing crops at path: \(cropPath.path)")
+                                }
+                            } else {
+                                count += 1
+                                for face in faces {
+                                    print("Found face: \(face.filename) at (\(face.x), \(face.y), \(face.width), \(face.height))")
+                                    let exist = ModelStore.default.findFaceCrop(imageId: imageId,
+                                                                                x: face.x.databaseValue.description,
+                                                                                y: face.y.databaseValue.description,
+                                                                                width: face.width.databaseValue.description,
+                                                                                height: face.height.databaseValue.description)
+                                    if exist == nil {
+                                        autoreleasepool(invoking: { () -> Void in
+                                            let imageFace = ImageFace.new(imageId: imageId,
+                                                                          repositoryPath: repository.repositoryPath.withStash(),
+                                                                          cropPath: repository.cropPath,
+                                                                          subPath: image.subPath,
+                                                                          filename: face.filename,
+                                                                          faceX: face.x.databaseValue.description,
+                                                                          faceY: face.y.databaseValue.description,
+                                                                          faceWidth: face.width.databaseValue.description,
+                                                                          faceHeight: face.height.databaseValue.description,
+                                                                          frameX: face.frameX.databaseValue.description,
+                                                                          frameY: face.frameY.databaseValue.description,
+                                                                          frameWidth: face.frameWidth.databaseValue.description,
+                                                                          frameHeight: face.frameHeight.databaseValue.description,
+                                                                          imageDate: image.photoTakenDate,
+                                                                          tagOnly: false,
+                                                                          remark: "",
+                                                                          year: image.photoTakenYear ?? 0,
+                                                                          month: image.photoTakenMonth ?? 0,
+                                                                          day: image.photoTakenDay ?? 0)
+                                            ModelStore.default.saveFaceCrop(imageFace)
+                                            print("Face crop \(imageFace.id) saved.")
+                                        })
+                                        
+                                    }else{
+                                        print("Face already in DB")
+                                    }
+                                }
+                            }
+                            
+                            print("Face detection done in \(cropPath.path)")
+                        }) // end of face detection
+                        
+                        if img.scanedFace != true {
+                            img.scanedFace = true
+                            ModelStore.default.saveImage(image: img)
+                        }
+                        
+                        DispatchQueue.main.async {
+                            let _ = self.accumulator?.add("Finding faces from images ...")
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     
     
     // MARK: DEVICES LIST Popover

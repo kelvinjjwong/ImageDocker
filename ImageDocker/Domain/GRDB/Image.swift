@@ -105,6 +105,7 @@ struct Image : Codable {
     var subPath:String
     var hiddenByRepository:Bool
     var hiddenByContainer:Bool
+    var scanedFace:Bool
     
     
     static func new(filename: String, path: String, parentFolder: String) -> Image {
@@ -203,7 +204,8 @@ struct Image : Codable {
             repositoryPath: "", // TODO: should be init
             subPath: "", // TODO: should be init
             hiddenByRepository: false,
-            hiddenByContainer: false
+            hiddenByContainer: false,
+            scanedFace:false
         )
     }
     

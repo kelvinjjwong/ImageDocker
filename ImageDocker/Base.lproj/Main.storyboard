@@ -1341,84 +1341,119 @@
                                 <rect key="frame" x="-7" y="51" width="764" height="495"/>
                                 <font key="font" metaFont="system"/>
                                 <tabViewItems>
-                                    <tabViewItem label="Database" identifier="" id="6Rp-DL-tiJ">
+                                    <tabViewItem label="Data" identifier="" id="6Rp-DL-tiJ">
                                         <view key="view" id="q79-Dt-jlX">
                                             <rect key="frame" x="10" y="33" width="744" height="449"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RiT-bF-Pll">
-                                                    <rect key="frame" x="181" y="404" width="350" height="22"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="350" id="pqM-mf-nse"/>
-                                                    </constraints>
-                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="URQ-dI-ike">
-                                                        <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cE7-mi-Muy">
-                                                    <rect key="frame" x="545" y="396" width="96" height="32"/>
-                                                    <buttonCell key="cell" type="push" title="Browse..." bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="DqQ-Yf-HBa">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="system"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <action selector="onBrowseDatabasePathClicked:" target="UOy-CF-cGN" id="xSJ-aa-JvO"/>
-                                                    </connections>
-                                                </button>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oFL-af-472">
-                                                    <rect key="frame" x="23" y="407" width="125" height="17"/>
-                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="SQLite File Location" id="z8u-yu-7DB">
-                                                        <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="62y-AY-elg">
-                                                    <rect key="frame" x="23" y="364" width="149" height="17"/>
-                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="SQLite Backup Location" id="Esv-Bh-TKN">
-                                                        <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zo7-4b-cBE">
-                                                    <rect key="frame" x="183" y="364" width="348" height="17"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="344" id="JeI-5h-475"/>
-                                                    </constraints>
-                                                    <textFieldCell key="cell" lineBreakMode="clipping" selectable="YES" id="yXY-kT-swX">
-                                                        <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gEm-Oh-tRP">
-                                                    <rect key="frame" x="545" y="353" width="122" height="32"/>
-                                                    <buttonCell key="cell" type="push" title="Find in Finder" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5pr-DZ-ZG7">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="system"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <action selector="onFindDatabaseBackupClicked:" target="UOy-CF-cGN" id="XZv-Gi-rfD"/>
-                                                    </connections>
-                                                </button>
+                                                <box fixedFrame="YES" title="Database" translatesAutoresizingMaskIntoConstraints="NO" id="zPw-Us-MkP">
+                                                    <rect key="frame" x="23" y="312" width="698" height="114"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <view key="contentView" id="Ywl-0Z-569">
+                                                        <rect key="frame" x="2" y="2" width="694" height="97"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RiT-bF-Pll">
+                                                                <rect key="frame" x="176" y="55" width="350" height="22"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="URQ-dI-ike">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cE7-mi-Muy">
+                                                                <rect key="frame" x="540" y="47" width="96" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" title="Browse..." bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="DqQ-Yf-HBa">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onBrowseDatabasePathClicked:" target="UOy-CF-cGN" id="xSJ-aa-JvO"/>
+                                                                </connections>
+                                                            </button>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oFL-af-472">
+                                                                <rect key="frame" x="18" y="58" width="125" height="17"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="SQLite File Location" id="z8u-yu-7DB">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="62y-AY-elg">
+                                                                <rect key="frame" x="18" y="15" width="149" height="17"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="SQLite Backup Location" id="Esv-Bh-TKN">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zo7-4b-cBE">
+                                                                <rect key="frame" x="178" y="15" width="348" height="17"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" selectable="YES" id="yXY-kT-swX">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gEm-Oh-tRP">
+                                                                <rect key="frame" x="540" y="4" width="122" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" title="Find in Finder" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5pr-DZ-ZG7">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onFindDatabaseBackupClicked:" target="UOy-CF-cGN" id="XZv-Gi-rfD"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                    </view>
+                                                </box>
+                                                <box fixedFrame="YES" title="Export Images" translatesAutoresizingMaskIntoConstraints="NO" id="wXk-CJ-MJr">
+                                                    <rect key="frame" x="23" y="199" width="698" height="95"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <view key="contentView" id="GHu-nV-uw2">
+                                                        <rect key="frame" x="2" y="2" width="694" height="78"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nj4-Mx-gjF">
+                                                                <rect key="frame" x="18" y="39" width="114" height="17"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="To Local Directory" id="RAN-9g-bRL">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UlF-B2-5No">
+                                                                <rect key="frame" x="178" y="36" width="350" height="22"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="vlJ-5g-D7y">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NyT-vJ-lrP">
+                                                                <rect key="frame" x="543" y="29" width="96" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" title="Browse..." bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IwN-eA-gWp">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onButtonBrowseClicked:" target="UOy-CF-cGN" id="a0i-4m-HG6"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                    </view>
+                                                </box>
                                             </subviews>
-                                            <constraints>
-                                                <constraint firstItem="oFL-af-472" firstAttribute="top" secondItem="q79-Dt-jlX" secondAttribute="top" constant="25" id="HCq-85-0o0"/>
-                                                <constraint firstItem="zo7-4b-cBE" firstAttribute="leading" secondItem="62y-AY-elg" secondAttribute="trailing" constant="15" id="IfO-Ae-w3n"/>
-                                                <constraint firstItem="gEm-Oh-tRP" firstAttribute="top" secondItem="cE7-mi-Muy" secondAttribute="bottom" constant="22" id="MV6-Hh-Nt3"/>
-                                                <constraint firstItem="62y-AY-elg" firstAttribute="top" secondItem="oFL-af-472" secondAttribute="bottom" constant="26" id="Mmt-0Q-Ee4"/>
-                                                <constraint firstItem="oFL-af-472" firstAttribute="leading" secondItem="q79-Dt-jlX" secondAttribute="leading" constant="25" id="St4-Az-Soj"/>
-                                                <constraint firstItem="cE7-mi-Muy" firstAttribute="top" secondItem="q79-Dt-jlX" secondAttribute="top" constant="25" id="Uh0-b9-tpN"/>
-                                                <constraint firstItem="RiT-bF-Pll" firstAttribute="leading" secondItem="oFL-af-472" secondAttribute="trailing" constant="35" id="XUl-Pc-Mee"/>
-                                                <constraint firstItem="RiT-bF-Pll" firstAttribute="top" secondItem="q79-Dt-jlX" secondAttribute="top" constant="23" id="ecU-Wf-m9i"/>
-                                                <constraint firstItem="gEm-Oh-tRP" firstAttribute="leading" secondItem="zo7-4b-cBE" secondAttribute="trailing" constant="22" id="fd7-kW-cGS"/>
-                                                <constraint firstItem="62y-AY-elg" firstAttribute="leading" secondItem="q79-Dt-jlX" secondAttribute="leading" constant="25" id="iEl-Bh-fCf"/>
-                                                <constraint firstItem="zo7-4b-cBE" firstAttribute="top" secondItem="RiT-bF-Pll" secondAttribute="bottom" constant="23" id="pFl-lN-0B2"/>
-                                                <constraint firstItem="cE7-mi-Muy" firstAttribute="leading" secondItem="RiT-bF-Pll" secondAttribute="trailing" constant="20" id="zrJ-u5-lmU"/>
-                                            </constraints>
                                         </view>
                                     </tabViewItem>
                                     <tabViewItem label="Mobile Device" identifier="" id="izW-fJ-2f0">
@@ -1649,55 +1684,6 @@ brew install ifuse</string>
                                                     </view>
                                                 </box>
                                             </subviews>
-                                        </view>
-                                    </tabViewItem>
-                                    <tabViewItem label="Export Destination" identifier="" id="9Hj-NK-W1w">
-                                        <view key="view" id="wjX-9i-cgg">
-                                            <rect key="frame" x="10" y="33" width="744" height="449"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <subviews>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nj4-Mx-gjF">
-                                                    <rect key="frame" x="18" y="410" width="114" height="17"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="110" id="BfO-gb-EKM"/>
-                                                    </constraints>
-                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="To Local Directory" id="RAN-9g-bRL">
-                                                        <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NyT-vJ-lrP">
-                                                    <rect key="frame" x="638" y="401" width="92" height="32"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="80" id="gfa-Oj-spg"/>
-                                                    </constraints>
-                                                    <buttonCell key="cell" type="push" title="Browse" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IwN-eA-gWp">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="system"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <action selector="onButtonBrowseClicked:" target="UOy-CF-cGN" id="a0i-4m-HG6"/>
-                                                    </connections>
-                                                </button>
-                                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UlF-B2-5No">
-                                                    <rect key="frame" x="150" y="407" width="474" height="22"/>
-                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="vlJ-5g-D7y">
-                                                        <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="NyT-vJ-lrP" firstAttribute="top" secondItem="wjX-9i-cgg" secondAttribute="top" constant="20" id="Fpg-UW-FGb"/>
-                                                <constraint firstItem="nj4-Mx-gjF" firstAttribute="leading" secondItem="wjX-9i-cgg" secondAttribute="leading" constant="20" id="Lvg-x6-iOJ"/>
-                                                <constraint firstItem="UlF-B2-5No" firstAttribute="leading" secondItem="nj4-Mx-gjF" secondAttribute="trailing" constant="20" id="N1l-5X-PTa"/>
-                                                <constraint firstAttribute="trailing" secondItem="NyT-vJ-lrP" secondAttribute="trailing" constant="20" id="XLD-vD-7Zf"/>
-                                                <constraint firstItem="nj4-Mx-gjF" firstAttribute="top" secondItem="wjX-9i-cgg" secondAttribute="top" constant="22" id="gwe-tn-Qyu"/>
-                                                <constraint firstItem="UlF-B2-5No" firstAttribute="top" secondItem="wjX-9i-cgg" secondAttribute="top" constant="20" id="sWQ-2L-bMz"/>
-                                                <constraint firstItem="NyT-vJ-lrP" firstAttribute="leading" secondItem="UlF-B2-5No" secondAttribute="trailing" constant="20" id="zn7-Xc-7wf"/>
-                                            </constraints>
                                         </view>
                                     </tabViewItem>
                                     <tabViewItem label="Face Recognition" identifier="" id="aLE-h6-zdO">
@@ -4251,6 +4237,16 @@ DQ
                                     <action selector="onStatClicked:" target="eYK-LM-Fdq" id="s0a-Vs-SRA"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="h4k-oT-y6x">
+                                <rect key="frame" x="462" y="723" width="121" height="32"/>
+                                <buttonCell key="cell" type="push" title="Find Faces" bezelStyle="rounded" image="NSIconViewTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="G8e-K0-5UI">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onFindFacesClicked:" target="eYK-LM-Fdq" id="QxT-ZD-lYZ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="I96-22-OkP" firstAttribute="leading" secondItem="dRb-39-NQz" secondAttribute="trailing" constant="12" id="0ia-Se-x77"/>
@@ -4261,6 +4257,7 @@ DQ
                             <constraint firstAttribute="trailing" secondItem="70B-T5-w7t" secondAttribute="trailing" constant="10" id="4Ek-QZ-TPf"/>
                             <constraint firstItem="0q5-Bd-MPD" firstAttribute="leading" secondItem="Jck-8I-iJc" secondAttribute="leading" constant="10" id="4N4-3o-7Fe"/>
                             <constraint firstItem="m18-bY-lb8" firstAttribute="leading" secondItem="I96-22-OkP" secondAttribute="trailing" constant="12" id="4tw-va-9bV"/>
+                            <constraint firstItem="h4k-oT-y6x" firstAttribute="leading" secondItem="m18-bY-lb8" secondAttribute="trailing" constant="12" id="66P-i9-c09"/>
                             <constraint firstItem="4Y1-Gb-8dg" firstAttribute="top" secondItem="AMo-eL-xdy" secondAttribute="bottom" constant="74" id="8XV-qK-GVr"/>
                             <constraint firstItem="mlY-7Z-k7c" firstAttribute="top" secondItem="KKD-I3-Ts2" secondAttribute="bottom" constant="10" id="BmV-Gv-JQC"/>
                             <constraint firstItem="4Y1-Gb-8dg" firstAttribute="leading" secondItem="da9-kd-aOe" secondAttribute="trailing" constant="10" id="E0x-sh-ggd"/>
@@ -4294,10 +4291,14 @@ DQ
                             <constraint firstItem="KWk-Y2-gee" firstAttribute="leading" secondItem="Jck-8I-iJc" secondAttribute="leading" constant="20" id="vhK-tz-JGn"/>
                             <constraint firstItem="gpP-tg-Byi" firstAttribute="leading" secondItem="hat-i5-IFe" secondAttribute="trailing" id="wdD-dv-IDc"/>
                             <constraint firstItem="X5W-JG-8Ve" firstAttribute="top" secondItem="gpP-tg-Byi" secondAttribute="bottom" constant="1" id="xLi-ty-oHA"/>
+                            <constraint firstItem="h4k-oT-y6x" firstAttribute="top" secondItem="Jck-8I-iJc" secondAttribute="top" constant="12" id="xqQ-Jl-N2f"/>
                             <constraint firstItem="m18-bY-lb8" firstAttribute="top" secondItem="Jck-8I-iJc" secondAttribute="top" constant="12" id="yse-oQ-RDB"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="boxDevice" destination="70B-T5-w7t" id="O2e-1d-9AP"/>
+                        <outlet property="boxFaces" destination="8V7-Dt-Wli" id="WAk-bY-NSl"/>
+                        <outlet property="boxRepository" destination="0q5-Bd-MPD" id="Q2r-Nb-8Hk"/>
                         <outlet property="btnBrowseCropPath" destination="oUr-V1-X5E" id="Uez-fl-CJX"/>
                         <outlet property="btnBrowseFacePath" destination="w9I-fF-UZj" id="OUw-5a-zXg"/>
                         <outlet property="btnBrowseHomePath" destination="4Y1-Gb-8dg" id="73o-CV-jdw"/>
@@ -4310,6 +4311,7 @@ DQ
                         <outlet property="btnFaceFollowHome" destination="Uyi-DC-Hps" id="WGo-OB-reh"/>
                         <outlet property="btnFindCropPath" destination="O3T-Gt-eIb" id="aDd-G7-H74"/>
                         <outlet property="btnFindFacePath" destination="sID-Bt-ven" id="2Fk-ez-16O"/>
+                        <outlet property="btnFindFaces" destination="h4k-oT-y6x" id="i9l-sh-JTc"/>
                         <outlet property="btnFindHomePath" destination="U1C-w2-XM0" id="cjo-tV-Rsc"/>
                         <outlet property="btnFindRepositoryPath" destination="ZS9-u2-XP3" id="fSG-99-Ejn"/>
                         <outlet property="btnFindStoragePath" destination="19q-aw-RQA" id="5qE-Lx-uJg"/>
@@ -5522,6 +5524,7 @@ DQ
         <image name="NSFollowLinkFreestandingTemplate" width="14" height="14"/>
         <image name="NSGoBackTemplate" width="9" height="12"/>
         <image name="NSGoLeftTemplate" width="9" height="12"/>
+        <image name="NSIconViewTemplate" width="10" height="10"/>
         <image name="NSListViewTemplate" width="14" height="10"/>
         <image name="NSMenuOnStateTemplate" width="12" height="12"/>
         <image name="NSPathTemplate" width="16" height="10"/>

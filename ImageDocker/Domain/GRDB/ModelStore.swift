@@ -406,7 +406,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
-                result = try ImageContainer.filter(sql: "repositoryPath = '\(repositoryPath)' and parentFolder=''").fetchOne(db)
+                result = try ImageContainer.filter(sql: "repositoryPath = ? and parentFolder=''", arguments: [repositoryPath]).fetchOne(db)
             }
         }catch{
             print(error)
@@ -431,8 +431,8 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update ImageContainer set hiddenByContainer = 1 where path = '\(path)'")
-                try db.execute("update Image set hiddenByContainer = 1 where path like '\(path.withStash())%'")
+                try db.execute("update ImageContainer set hiddenByContainer = 1 where path = ?", arguments: [path])
+                try db.execute("update Image set hiddenByContainer = 1 where path like ?", arguments:["\(path.withStash())%"])
             }
         }catch{
             print(error)
@@ -443,8 +443,8 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update ImageContainer set hiddenByContainer = 0 where path = '\(path)'")
-                try db.execute("update Image set hiddenByContainer = 0 where path like '\(path.withStash())%'")
+                try db.execute("update ImageContainer set hiddenByContainer = 0 where path = ?", arguments: [path])
+                try db.execute("update Image set hiddenByContainer = 0 where path like ?", arguments:["\(path.withStash())%"])
             }
         }catch{
             print(error)
@@ -455,10 +455,10 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update ImageContainer set hiddenByRepository = 1 where path like '\(repositoryRoot.withStash())%'")
-                try db.execute("update ImageContainer set hiddenByRepository = 1 where repositoryPath = '\(repositoryRoot.withStash())'")
-                try db.execute("update Image set hiddenByRepository = 1 where path like '\(repositoryRoot.withStash())%'")
-                try db.execute("update Image set hiddenByRepository = 1 where repositoryPath = '\(repositoryRoot.withStash())'")
+                try db.execute("update ImageContainer set hiddenByRepository = 1 where path like ?", arguments: ["\(repositoryRoot.withStash())%"])
+                try db.execute("update ImageContainer set hiddenByRepository = 1 where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
+                try db.execute("update Image set hiddenByRepository = 1 where path like ?", arguments: ["\(repositoryRoot.withStash())%"])
+                try db.execute("update Image set hiddenByRepository = 1 where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
             }
         }catch{
             print(error)
@@ -469,10 +469,10 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update ImageContainer set hiddenByRepository = 0 where path like '\(repositoryRoot.withStash())%'")
-                try db.execute("update ImageContainer set hiddenByRepository = 0 where repositoryPath = '\(repositoryRoot.withStash())'")
-                try db.execute("update Image set hiddenByRepository = 0 where path like '\(repositoryRoot.withStash())%'")
-                try db.execute("update Image set hiddenByRepository = 0 where repositoryPath = '\(repositoryRoot.withStash())'")
+                try db.execute("update ImageContainer set hiddenByRepository = 0 where path like ?", arguments: ["\(repositoryRoot.withStash())%"])
+                try db.execute("update ImageContainer set hiddenByRepository = 0 where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
+                try db.execute("update Image set hiddenByRepository = 0 where path like ?", arguments: ["\(repositoryRoot.withStash())%"])
+                try db.execute("update Image set hiddenByRepository = 0 where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
             }
         }catch{
             print(error)
@@ -483,8 +483,8 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("delete from ImageContainer where repositoryPath = '\(repositoryRoot.withStash())'")
-                try db.execute("delete from Image where repositoryPath = '\(repositoryRoot.withStash())'")
+                try db.execute("delete from ImageContainer where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
+                try db.execute("delete from Image where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
             }
         }catch{
             print(error)
@@ -931,7 +931,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
-                result = try Image.filter(sql: "repositoryPath = '\(repositoryPath)'").order(sql: "path asc").fetchAll(db)
+                result = try Image.filter(sql: "repositoryPath = ?", arguments:[repositoryPath]).order(sql: "path asc").fetchAll(db)
             }
         }catch{
             print(error)
@@ -1012,7 +1012,9 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.read { db in
-                let cursor = try Image.filter(sql: "(path like '\(repositoryRoot.withStash())%' or path like '\(theOtherRepositoryRoot.withStash())%') and duplicatesKey is not null and duplicatesKey != '' ").order(sql: "duplicatesKey asc, path asc").fetchCursor(db)
+                let keyword = "\(repositoryRoot.withStash())%"
+                let otherKeyword = "\(theOtherRepositoryRoot.withStash())%"
+                let cursor = try Image.filter(sql: "(path like ? or path like ?) and duplicatesKey is not null and duplicatesKey != '' ", arguments:[keyword, otherKeyword]).order(sql: "duplicatesKey asc, path asc").fetchCursor(db)
                 
                 while let image = try cursor.next() {
                     if let key = image.duplicatesKey, key != "" {
@@ -1072,6 +1074,49 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     // MARK: IMAGES COUNT
     
+    func countImageWithoutFace(repositoryRoot:String) -> Int {
+        var result = 0
+        let root = repositoryRoot.withStash()
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "repositoryPath=? and hidden=0 and id not in (select distinct imageid from imageface)", arguments:[root]).fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func countImageNotYetFacialDetection(repositoryRoot:String) -> Int {
+        var result = 0
+        let root = repositoryRoot.withStash()
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "repositoryPath=? and hidden=0 and scanedFace<>1 and id not in (select distinct imageid from imageface)", arguments:[root]).fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func getImagesWithoutFace(repositoryRoot:String, includeScanned:Bool = false) -> [Image] {
+        var result:[Image] = []
+        let root = repositoryRoot.withStash()
+        let scannedCondition = includeScanned ? "" : " and scanedFace=0"
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "repositoryPath=? and hidden=0 \(scannedCondition) and id not in (select distinct imageid from imageface)", arguments:[root]).fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
     func countPhotoFiles(rootPath:String) -> Int {
         var result:Int = 0
         do {
@@ -1092,7 +1137,8 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
-                result = try Image.filter(sql: "repositoryPath='' and path like '\(root)%'").fetchCount(db)
+                let keyword = "\(root)%"
+                result = try Image.filter(sql: "repositoryPath='' and path like ?", arguments:[keyword]).fetchCount(db)
             }
         }catch{
             print(error)
@@ -1107,7 +1153,8 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
-                result = try Image.filter(sql: "subPath='' and path like '\(root)%'").fetchCount(db)
+                let keyword = "\(root)%"
+                result = try Image.filter(sql: "subPath='' and path like ?", arguments:[keyword]).fetchCount(db)
             }
         }catch{
             print(error)
@@ -1122,7 +1169,8 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
-                result = try Image.filter(sql: "id is null and path like '\(root)%'").fetchCount(db)
+                let keyword = "\(root)%"
+                result = try Image.filter(sql: "id is null and path like ?", arguments:[keyword]).fetchCount(db)
             }
         }catch{
             print(error)
@@ -1137,7 +1185,8 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
-                result = try Image.filter(sql: "repositoryPath='\(root)' and path not like '\(root)%'").fetchCount(db)
+                let keyword = "\(root)%"
+                result = try Image.filter(sql: "repositoryPath = ? and path not like ?", arguments: [root, keyword]).fetchCount(db)
             }
         }catch{
             print(error)
@@ -1152,7 +1201,8 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
-                result = try Image.filter(sql: "path like '\(root)%'").fetchCount(db)
+                let keyword = "\(root)%"
+                result = try Image.filter(sql: "path like ?", arguments: [keyword]).fetchCount(db)
             }
         }catch{
             print(error)
@@ -1167,7 +1217,8 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
-                result = try ImageContainer.filter(sql: "repositoryPath = '' and path like '\(root)%'").fetchCount(db)
+                let keyword = "\(root)%"
+                result = try ImageContainer.filter(sql: "repositoryPath = '' and path like ?", arguments: [keyword]).fetchCount(db)
             }
         }catch{
             print(error)
@@ -1182,7 +1233,8 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
-                result = try ImageContainer.filter(sql: "subPath = '' and path like '\(root)%'").fetchCount(db)
+                let keyword = "\(root)%"
+                result = try ImageContainer.filter(sql: "subPath = '' and path like ?", arguments: [keyword]).fetchCount(db)
             }
         }catch{
             print(error)
@@ -2716,6 +2768,12 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         migrator.registerMigration("v19") { db in
             try db.alter(table: "ImageFace", body: { t in
                 t.add(column: "locked", .boolean).defaults(to: false).indexed()
+            })
+        }
+        
+        migrator.registerMigration("v20") { db in
+            try db.alter(table: "Image", body: { t in
+                t.add(column: "scanedFace", .boolean).defaults(to: false).indexed()
             })
         }
         

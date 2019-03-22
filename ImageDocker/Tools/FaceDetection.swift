@@ -57,22 +57,46 @@ class FaceDetection {
             return
         }
         // Start face detection via Vision
-        let facesRequest = VNDetectFaceRectanglesRequest { request, error in
-            guard error == nil else {
-                print("ERROR: \(error!.localizedDescription)")
-                return
+        autoreleasepool { () -> Void in
+            let facesRequest = VNDetectFaceRectanglesRequest { request, error in
+                guard error == nil else {
+                    print("ERROR: \(error!.localizedDescription)")
+                    return
+                }
+                self.handleFaces(request, cgImage: cgImage, cropsPath: cropsStorage, nameBy: nameBy, onCompleted: onCompleted)
             }
-            self.handleFaces(request, cgImage: cgImage, cropsPath: cropsStorage, nameBy: nameBy, onCompleted: onCompleted)
+            try? VNImageRequestHandler(cgImage: cgImage).perform([facesRequest])
         }
-        try? VNImageRequestHandler(cgImage: cgImage).perform([facesRequest])
+        
     }
     
     fileprivate func handleFaces(_ request: VNRequest, cgImage: CGImage, cropsPath:URL, nameBy:NamingRule = .number, onCompleted: (([FaceClip]) -> Void)? = nil) {
         guard let observations = request.results as? [VNFaceObservation] else {
             return
         }
+        
+        
+        print("Trying to create directory: \(cropsPath.path)")
+        var isDir:ObjCBool = false
+        do {
+            try FileManager.default.createDirectory(atPath: cropsPath.path, withIntermediateDirectories: true, attributes: nil)
+        }catch{
+            print(error)
+            print("ERROR: Cannot create directory for storing crops at path: \(cropsPath.path)")
+            return
+        }
+        if !FileManager.default.fileExists(atPath: cropsPath.path, isDirectory: &isDir) {
+            print("ERROR: Cannot create directory: \(cropsPath.path)")
+            return
+        }
+        if !isDir.boolValue {
+            print("ERROR: Cannot create directory: \(cropsPath.path), it's occupied by a file.")
+            return
+        }
+        
         var i = 0
         var filenames:[FaceClip] = []
+        
         observations.forEach { observation in
             let (cgImage, x, y, width, height, frameX, frameY, frameWidth, frameHeight) = cgImage.cropImageToFace(observation, borderPercentage: self.BorderPercentage)
             guard let image = cgImage else {
@@ -82,65 +106,69 @@ class FaceDetection {
             i += 1
             print("got \(i)")
             // Create image file from detected faces
-            let data = NSBitmapImageRep.init(cgImage: image).representation(using: .jpeg, properties: [:])
-            if data == nil {
-                print("data object is nil")
-                
-            }else{
-            
-                var filename = ""
-                var filenameTemporary = ""
-                if nameBy == .number {
-                    filename = "\(i).jpg"
-                    filenameTemporary = "\(i)-temp.jpg"
+            autoreleasepool(invoking: { () -> Void in
+                let data = NSBitmapImageRep.init(cgImage: image).representation(using: .jpeg, properties: [:])
+                if data == nil {
+                    print("data object is nil")
+                    
                 }else{
-                    filename = "\(observation.uuid).jpg"
-                    filenameTemporary = "\(observation.uuid)-temp.jpg"
-                }
-                let faceURL = cropsPath.appendingPathComponent(filename)
-                print("Creating crop file: \(filename)")
-                if Int(frameWidth) > CropSize || Int(frameHeight) > CropSize {
-                    let tempURL = cropsPath.appendingPathComponent(filenameTemporary)
                     
-                    do {
-                        try data?.write(to: tempURL)
-                    }catch{
-                        print("Unable to save big size crop to temporary file: \(tempURL.path)")
-                        print(error)
+                    var filename = ""
+                    var filenameTemporary = ""
+                    if nameBy == .number {
+                        filename = "\(i).jpg"
+                        filenameTemporary = "\(i)-temp.jpg"
+                    }else{
+                        filename = "\(observation.uuid).jpg"
+                        filenameTemporary = "\(observation.uuid)-temp.jpg"
                     }
-                    
-                    if let image = self.createThumbnail(from: tempURL, size: CropSize) {
-                        if let cgImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil) {
-                            let cgData = NSBitmapImageRep.init(cgImage: cgImage).representation(using: .jpeg, properties: [:])
-                            if cgData != nil {
-                                do {
-                                    try cgData?.write(to: faceURL)
-                                }catch{
-                                    print("Unable to save resized crop to file: \(faceURL.path)")
-                                    print(error)
+                    let faceURL = cropsPath.appendingPathComponent(filename)
+                    print("Creating crop file: \(filename)")
+                    if Int(frameWidth) > CropSize || Int(frameHeight) > CropSize {
+                        let tempURL = cropsPath.appendingPathComponent(filenameTemporary)
+                        
+                        do {
+                            try data?.write(to: tempURL)
+                        }catch{
+                            print("Unable to save big size crop to temporary file: \(tempURL.path)")
+                            print(error)
+                        }
+                        
+                        if let image = self.createThumbnail(from: tempURL, size: CropSize) {
+                            if let cgImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil) {
+                                let cgData = NSBitmapImageRep.init(cgImage: cgImage).representation(using: .jpeg, properties: [:])
+                                if cgData != nil {
+                                    do {
+                                        try cgData?.write(to: faceURL)
+                                    }catch{
+                                        print("Unable to save resized crop to file: \(faceURL.path)")
+                                        print(error)
+                                    }
                                 }
                             }
                         }
-                    }
-                    do {
-                        try FileManager.default.removeItem(at: tempURL)
-                    }catch{
-                        print("Unable to delete temporary file: \(tempURL.path)")
-                        print(error)
+                        do {
+                            try FileManager.default.removeItem(at: tempURL)
+                        }catch{
+                            print("Unable to delete temporary file: \(tempURL.path)")
+                            print(error)
+                        }
+                        
+                        
+                    }else{
+                        do {
+                            try data?.write(to: faceURL)
+                        }catch{
+                            print(error)
+                        }
                     }
                     
-                    
-                }else{
-                    do {
-                        try data?.write(to: faceURL)
-                    }catch{
-                        print(error)
-                    }
+                    filenames.append(FaceClip.new(filename, x, y, width, height, frameX, frameY, frameWidth, frameHeight))
                 }
-                
-                filenames.append(FaceClip.new(filename, x, y, width, height, frameX, frameY, frameWidth, frameHeight))
-            }
+            })
+            
         }
+        
         if onCompleted != nil {
             onCompleted!(filenames)
         }
