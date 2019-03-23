@@ -77,8 +77,23 @@ class Accumulator : NSObject {
         data[key] = value
     }
     
+    func cleanData() {
+        self.data.removeAll()
+    }
+    
+    func getData(key: String) -> Int{
+        return self.data[key] ?? 0
+    }
+    
+    func increaseData(key:String, by:Int = 1) {
+        var i = data[key] ?? 0
+        i += by
+        data[key] = i
+    }
+    
     func add(_ message:String = "") -> Bool{
         self.count += 1
+        self.assignData(key: "count", value: self.count)
         let completed:Bool = (count >= _target)
         if indicator != nil {
             if self.count == 1 { // start counting
@@ -160,6 +175,7 @@ class Accumulator : NSObject {
     
     func setTarget(_ value:Int){
         self._target = value
+        self.assignData(key: "total", value: value)
         if indicator != nil {
             DispatchQueue.main.async {
                 self.indicator?.maxValue = Double(value)
