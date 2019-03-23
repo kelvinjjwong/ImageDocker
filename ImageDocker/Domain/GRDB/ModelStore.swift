@@ -427,6 +427,28 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
     }
     
+    func updateImageContainerPaths(oldPath:String, newPath:String, repositoryPath:String, parentFolder:String, subPath:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update ImageContainer set path = ?, repositoryPath = ?, parentFolder = ?, subPath = ? where path = ?", arguments: [newPath, repositoryPath, parentFolder, subPath, oldPath])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func updateImageContainerRepositoryPaths(oldPath:String, newPath:String, repositoryPath:String) {
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update ImageContainer set path = ?, repositoryPath = ? where path = ?", arguments: [newPath, repositoryPath, oldPath])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
     func hideContainer(path:String){
         do {
             let db = ModelStore.sharedDBPool()
@@ -547,6 +569,17 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 var image = image
                 try image.save(db)
                 //print("saved image")
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func updateImagePaths(oldPath:String, newPath:String, repositoryPath:String, subPath:String, containerPath:String, id:String) {
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update Image set path = ?, repositoryPath = ?, subPath = ?, containerPath = ?, id = ? where path = ?", arguments: [newPath, repositoryPath, subPath, containerPath, id, oldPath])
             }
         }catch{
             print(error)

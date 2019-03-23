@@ -856,6 +856,7 @@ class EditRepositoryViewController: NSViewController {
         if let repoContainer = self.originalContainer {
             
             let originalRepoPath = repoContainer.path.withStash()
+            let newRepoPathNoStash = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
             let newRepoPath = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withStash()
             
             if newRepoPath == "/" || newRepoPath == "" {
@@ -917,8 +918,6 @@ class EditRepositoryViewController: NSViewController {
                             let _ = self.accumulator?.add("Updating editable image files ...")
                         }
                         
-                        var img = image
-                        
                         // fix unmatched repository path: fix physically inequal
                         let newPath = image.path.replacingFirstOccurrence(of: originalRepoPath, with: newRepoPath)
                         let containerUrl = URL(fileURLWithPath: newPath).deletingLastPathComponent()
@@ -942,21 +941,19 @@ class EditRepositoryViewController: NSViewController {
                         }
                         
                         // fix empty repository path
-                        img.repositoryPath = newRepoPath
-                        img.containerPath = containerUrl.path
+                        let containerPath = containerUrl.path
                         
                         // fix empty sub path
-                        img.subPath = img.path.replacingFirstOccurrence(of: originalRepoPath, with: "")
+                        let subPath = image.path.replacingFirstOccurrence(of: originalRepoPath, with: "")
                         
                         // fix unmatched repository path: fix logically inequal
                         // change image path to new place
-                        img.path = newPath
+                        let oldPath = image.path
                         
                         // fix empty id
-                        if img.id == nil {
-                            img.id = UUID().uuidString
-                        }
-                        ModelStore.default.saveImage(image: img)
+                        let id = image.id ?? UUID().uuidString
+                        
+                        ModelStore.default.updateImagePaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath, subPath: subPath, containerPath: containerPath, id: id)
                     }
                 }
                 
@@ -977,6 +974,7 @@ class EditRepositoryViewController: NSViewController {
                     }
                     
                     var sub = subContainer
+                    let oldPath = sub.path
                     if sub.subPath == "" {
                         sub.subPath = sub.path.replacingFirstOccurrence(of: originalRepoPath, with: "")
                     }
@@ -986,16 +984,19 @@ class EditRepositoryViewController: NSViewController {
                     sub.repositoryPath = newRepoPath
                     sub.parentFolder = sub.parentFolder.replacingFirstOccurrence(of: originalRepoPath, with: newRepoPath)
                     sub.path = sub.path.replacingFirstOccurrence(of: originalRepoPath, with: newRepoPath)
-                    ModelStore.default.saveImageContainer(container: sub)
+                    ModelStore.default.updateImageContainerPaths(oldPath: oldPath, newPath: sub.path, repositoryPath: sub.repositoryPath, parentFolder: sub.parentFolder, subPath: sub.subPath)
                 }
                 
                 // save repo's path
                 var repo = repoContainer
+                let oldPath = repo.path
+                let newPath = newRepoPathNoStash
                 repo.repositoryPath = newRepoPath
-                ModelStore.default.saveImageContainer(container: repo)
+                ModelStore.default.updateImageContainerRepositoryPaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath)
                 self.originalContainer = repo
                 
                 DispatchQueue.main.async {
+                    self.initEdit(path: newPath, window: self.window!) // reload repository data to form
                     
                     self.toggleButtons(true)
                     //self.lblMessage.stringValue = "Repository updated."
