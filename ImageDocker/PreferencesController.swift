@@ -24,6 +24,7 @@ final class PreferencesController: NSViewController {
     fileprivate static let ifuseKey = "ifuseKey"
     fileprivate static let ideviceidKey = "ideviceidKey"
     fileprivate static let ideviceinfoKey = "ideviceinfoKey"
+    fileprivate static let memoryPeakKey = "memoryPeakKey"
     
     // MARK: Properties
     @IBOutlet weak var txtBaiduAK: NSTextField!
@@ -53,6 +54,13 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var lblIfuseMessage: NSTextField!
     @IBOutlet weak var lblIdeviceIdMessage: NSTextField!
     @IBOutlet weak var lblIdeviceInfoMessage: NSTextField!
+    @IBOutlet weak var memorySlider: NSSlider!
+    @IBOutlet weak var lblMinMemory: NSTextField!
+    @IBOutlet weak var lblMidMemory: NSTextField!
+    @IBOutlet weak var lblMaxMemory: NSTextField!
+    @IBOutlet weak var lblSelectedMemory: NSTextField!
+    @IBOutlet weak var lblMin2Memory: NSTextField!
+    @IBOutlet weak var lblMid2Memory: NSTextField!
     
     
     
@@ -267,6 +275,20 @@ final class PreferencesController: NSViewController {
     }
     
     
+    // MARK: MEMORY USAGE
+    
+    class func peakMemory() -> Int {
+        
+        let totalRam = ProcessInfo.processInfo.physicalMemory / 1024 / 1024 / 1024
+        let max = Int(totalRam)
+        let mid = Int(totalRam / 2)
+        let defaults = UserDefaults.standard
+        let value = defaults.integer(forKey: memoryPeakKey)
+        if value > max {
+            return mid
+        }
+        return value
+    }
     
     // MARK: FACE RECOGNITION
     
@@ -443,6 +465,8 @@ final class PreferencesController: NSViewController {
                      forKey: PreferencesController.alternativeFaceModelPathKey)
         defaults.set(self.selectedFaceModel,
                      forKey: PreferencesController.faceRecognitionModelKey)
+        defaults.set(Int(self.memorySlider.intValue),
+                     forKey: PreferencesController.memoryPeakKey)
 
     }
     
@@ -503,8 +527,41 @@ final class PreferencesController: NSViewController {
         }
         self.lblComponentsStatus.stringValue = result
         self.lblDatabaseBackupPath.stringValue = URL(fileURLWithPath: PreferencesController.databasePath()).appendingPathComponent("DataBackup").path
+        self.setupMemorySlider()
+    }
+    
+    fileprivate func setupMemorySlider() {
+        let totalRam = ProcessInfo.processInfo.physicalMemory / 1024 / 1024 / 1024
+        self.memorySlider.maxValue = Double(totalRam)
+        self.memorySlider.minValue = 0
+        self.memorySlider.numberOfTickMarks = Int(totalRam) + 1
+        self.memorySlider.allowsTickMarkValuesOnly = true
+        self.memorySlider.tickMarkPosition = .below
+        self.memorySlider.altIncrementValue = 1
+        self.lblMinMemory.stringValue = "0 (Unlimited)"
+        self.lblMaxMemory.stringValue = "\(totalRam) GB"
+        self.lblMidMemory.stringValue = "\(totalRam / 2) GB"
+        self.lblMin2Memory.stringValue = "\(totalRam / 2 - totalRam / 4) GB"
+        self.lblMid2Memory.stringValue = "\(totalRam / 2 + totalRam / 4) GB"
+        self.memorySlider.intValue = Int32(PreferencesController.peakMemory())
+        let value = self.memorySlider.intValue
+        if value > 0 {
+            self.lblSelectedMemory.stringValue = "Selected \(value) GB as Peak"
+        }else{
+            self.lblSelectedMemory.stringValue = "Selected Unlimited"
+        }
         
     }
+    
+    @IBAction func onMemorySliderClicked(_ sender: NSSlider) {
+        let value = self.memorySlider.intValue
+        if value > 0 {
+            self.lblSelectedMemory.stringValue = "Selected \(value) GB as Peak"
+        }else{
+            self.lblSelectedMemory.stringValue = "Selected Unlimited"
+        }
+    }
+    
     
     override var representedObject: Any? {
         didSet {

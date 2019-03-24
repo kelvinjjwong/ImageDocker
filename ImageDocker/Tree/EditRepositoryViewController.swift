@@ -1412,8 +1412,7 @@ class EditRepositoryViewController: NSViewController {
             }
             
             
-            let totalRam = ProcessInfo.processInfo.physicalMemory / 1024 / 1024
-            let limitRam = totalRam / 8
+            let limitRam = PreferencesController.peakMemory() * 1024
             self.stopByExceedLimit = false
             
             self.accumulator = Accumulator(target: 100, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage,
@@ -1476,8 +1475,7 @@ class EditRepositoryViewController: NSViewController {
     
     fileprivate func scanFaces(from images:[Image], in repository:ImageContainer){
         
-        let totalRam = ProcessInfo.processInfo.physicalMemory / 1024 / 1024
-        let limitRam = totalRam / 8
+        let limitRam = PreferencesController.peakMemory() * 1024
         
         self.toggleButtons(false)
         self.working = true
@@ -1502,22 +1500,25 @@ class EditRepositoryViewController: NSViewController {
                         continue
                     }
                     
-                    var taskInfo = mach_task_basic_info()
-                    var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
-                    let kerr: kern_return_t = withUnsafeMutablePointer(to: &taskInfo) {
-                        $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
-                            task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
-                        }
-                    }
+                    if limitRam > 0 {
                     
-                    if kerr == KERN_SUCCESS {
-                        let usedRam = taskInfo.resident_size / 1024 / 1024
+                        var taskInfo = mach_task_basic_info()
+                        var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
+                        let kerr: kern_return_t = withUnsafeMutablePointer(to: &taskInfo) {
+                            $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
+                                task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
+                            }
+                        }
                         
-                        if usedRam >= limitRam {
-                            self.stopByExceedLimit = true
-                            print("##### EXCEEDS SIZE LIMIT")
-                            self.accumulator?.forceComplete()
-                            return
+                        if kerr == KERN_SUCCESS {
+                            let usedRam = taskInfo.resident_size / 1024 / 1024
+                            
+                            if usedRam >= limitRam {
+                                self.stopByExceedLimit = true
+                                print("##### EXCEEDS SIZE LIMIT")
+                                self.accumulator?.forceComplete()
+                                return
+                            }
                         }
                     }
                     
