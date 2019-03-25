@@ -212,6 +212,7 @@ class ImageFolderTreeScanner {
         let repositories = ModelStore.default.getRepositories()
         print("REPO COUNT = \(repositories.count)")
         var filesysUrls:Set<String> = Set<String>()
+        var fileUrlToRepo:[String:ImageContainer] = [:]
         for repo in repositories {
             var foldersysUrls:Set<String> = Set<String>()
             
@@ -248,6 +249,7 @@ class ImageFolderTreeScanner {
                     guard (UTTypeConformsTo(fileType as CFString, kUTTypeImage) || UTTypeConformsTo(fileType as CFString, kUTTypeMovie)) else { continue }
                     let url = url as URL
                     filesysUrls.insert(url.path)
+                    fileUrlToRepo[url.path] = repo
                     let folderUrl = url.deletingLastPathComponent()
                     foldersysUrls.insert(folderUrl.path)
                 }
@@ -348,9 +350,16 @@ class ImageFolderTreeScanner {
                 }
                 
                 //print("CREATING PHOTO \(url.path)")
-                let image = ImageFile(url: URL(fileURLWithPath: url), indicator: indicator, quickCreate: true, sharedDB: ModelStore.sharedDBPool())
+                if let repo = fileUrlToRepo[url]{
+                    let image = ImageFile(url: URL(fileURLWithPath: url),
+                                          repository: repo,
+                                          indicator: indicator,
+                                          quickCreate: true,
+                                          sharedDB: ModelStore.sharedDBPool())
+                    
+                    image.save()
+                }
                 
-                image.save()
             }
             if indicator != nil {
                 indicator?.dataChanged()

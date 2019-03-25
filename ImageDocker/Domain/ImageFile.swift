@@ -120,6 +120,7 @@ class ImageFile {
     
     // MARK: INIT IMAGE
     
+    // READ FROM DATABASE
     init (photoFile:Image, indicator:Accumulator? = nil, metaInfoStore:MetaInfoStoreDelegate? = nil, sharedDB:DatabaseWriter? = nil) {
         exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"
         exifDateFormatWithTimezone.dateFormat = "yyyy:MM:dd HH:mm:ssxxx"
@@ -137,7 +138,7 @@ class ImageFile {
         self.metaInfoHolder = metaInfoStore ?? MetaInfoHolder()
         self.imageData = photoFile
         
-        loadMetaInfoFromDatabase(photoFile, sharedDB: sharedDB)
+        loadMetaInfoFromDatabase()
         
         var needSave:Bool = false
         
@@ -241,7 +242,8 @@ class ImageFile {
         self.notifyAccumulator(notifyIndicator: true)
     }
 
-    init (url: URL, indicator:Accumulator? = nil, metaInfoStore:MetaInfoStoreDelegate? = nil, quickCreate:Bool = false, sharedDB:DatabaseWriter? = nil) {
+    // IMPORT FROM FILE SYSTEM
+    init (url: URL, repository:ImageContainer? = nil, indicator:Accumulator? = nil, metaInfoStore:MetaInfoStoreDelegate? = nil, quickCreate:Bool = false, sharedDB:DatabaseWriter? = nil) {
         exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"
         exifDateFormatWithTimezone.dateFormat = "yyyy:MM:dd HH:mm:ssxxx"
         
@@ -257,11 +259,24 @@ class ImageFile {
         
         self.metaInfoHolder = metaInfoStore ?? MetaInfoHolder()
         
-        self.imageData = ModelStore.default.getOrCreatePhoto(filename: fileName, path: url.path, parentPath: url.deletingLastPathComponent().path, sharedDB:sharedDB)
+        if let repo = repository {
+        
+            self.imageData = ModelStore.default.getOrCreatePhoto(filename: fileName,
+                                                             path: url.path,
+                                                             parentPath: url.deletingLastPathComponent().path,
+                                                             repositoryPath: repo.repositoryPath.withStash(),
+                                                             sharedDB:sharedDB)
+        }else{
+            self.imageData = ModelStore.default.getOrCreatePhoto(filename: fileName,
+                                                                 path: url.path,
+                                                                 parentPath: url.deletingLastPathComponent().path,
+                                                                 repositoryPath: nil,
+                                                                 sharedDB:sharedDB)
+        }
         
         if !quickCreate {
             print("LOAD META FROM DB BY IMAGE URL")
-            loadMetaInfoFromDatabase(self.imageData)
+            loadMetaInfoFromDatabase()
             
             if self.imageData?.updateExifDate == nil || self.imageData?.photoTakenYear == 0 {
                 
@@ -1110,12 +1125,16 @@ class ImageFile {
         }
     }
     
-    public func loadMetaInfoFromDatabase(_ record:Image? = nil, sharedDB:DatabaseWriter? = nil) {
+    public func loadMetaInfoFromDatabase() {
+        if self.imageData == nil {
+            print("ERROR: IMAGE DATA IS NIL, unable to [loadMetaInfoFromDatabase]")
+            return
+        }
         let filename:String = url.lastPathComponent
         let path:String = url.path
         let parentPath:String = (url.deletingLastPathComponent().path)
         
-        var photoFile = record ?? ModelStore.default.getOrCreatePhoto(filename: filename, path: path, parentPath: parentPath, sharedDB: sharedDB)
+        var photoFile = self.imageData!
         //print("loaded PhotoFile for \(filename)")
         
         location.country = photoFile.assignCountry ?? photoFile.country ?? ""
@@ -1158,7 +1177,7 @@ class ImageFile {
         self.imageData = photoFile
         if needSave {
             print("UPDATE COORD TO NON ZERO")
-            ModelStore.default.saveImage(image: photoFile, sharedDB: sharedDB)
+            ModelStore.default.saveImage(image: photoFile, sharedDB: ModelStore.sharedDBPool())
         }
 
         //print("COORD IS ZERO ? \(location.coordinate?.isZero) - \(fileName)")

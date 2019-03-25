@@ -108,7 +108,7 @@ struct Image : Codable {
     var scanedFace:Bool
     
     
-    static func new(filename: String, path: String, parentFolder: String) -> Image {
+    static func new(filename: String, path: String, parentFolder: String, repositoryPath: String) -> Image {
         return Image(
             //id: nil,
             addDate: nil,
@@ -200,9 +200,9 @@ struct Image : Codable {
             duplicatesKey: nil,
             originPath: nil,
             facesPath: nil,
-            id: nil,
-            repositoryPath: "", // TODO: should be init
-            subPath: "", // TODO: should be init
+            id: UUID().uuidString,
+            repositoryPath: repositoryPath.withStash(),
+            subPath: path.replacingFirstOccurrence(of: repositoryPath.withStash(), with: ""),
             hiddenByRepository: false,
             hiddenByContainer: false,
             scanedFace:false

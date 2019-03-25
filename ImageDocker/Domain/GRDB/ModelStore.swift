@@ -515,7 +515,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     // MARK: IMAGES
     
-    func getOrCreatePhoto(filename:String, path:String, parentPath:String, sharedDB:DatabaseWriter? = nil) -> Image{
+    func getOrCreatePhoto(filename:String, path:String, parentPath:String, repositoryPath:String? = nil, sharedDB:DatabaseWriter? = nil) -> Image{
         var image:Image?
         do {
             let db = ModelStore.sharedDBPool()
@@ -525,7 +525,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             if image == nil {
                 let queue = try sharedDB ?? DatabaseQueue(path: dbfile)
                 try queue.write { db in
-                    image = Image.new(filename: filename, path: path, parentFolder: parentPath)
+                    image = Image.new(filename: filename, path: path, parentFolder: parentPath, repositoryPath: repositoryPath ?? "")
                     try image?.save(db)
                 }
                 
