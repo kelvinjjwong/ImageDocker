@@ -9,6 +9,12 @@
 import Foundation
 import GRDB
 
+class DirectoryPaths : NSObject {
+    var filesysUrls:Set<String> = Set<String>()
+    var fileUrlToRepo:[String:ImageContainer] = [:]
+    var foldersysUrls:Set<String> = Set<String>()
+}
+
 class ImageFolderTreeScanner {
     
     static let `default` = ImageFolderTreeScanner()
@@ -102,55 +108,6 @@ class ImageFolderTreeScanner {
         return imageFolders
     }
     
-//    func scanImageFolder(name:String, path: String, smallSizePath:String) -> [ImageFolder] {
-//        let url:URL = URL(string: path)!
-//        return scanImageFolder(name: name, startingURL: url, smallSizePath: smallSizePath)
-//    }
-//
-//    func scanImageFolder(name:String, startingURL: URL, smallSizePath:String) -> [ImageFolder] {
-//        var imageFolders:[ImageFolder] = [ImageFolder]()
-//
-//        let resourceKeys : [URLResourceKey] = [.creationDateKey, .isDirectoryKey, .isHiddenKey, .parentDirectoryURLKey, .isReadableKey]
-//
-//        let countOfRootImage:Int = self.countImagesInFolder(startingURL)
-//        imageFolders.append(ImageFolder(startingURL,
-//                                        name: name,
-//                                        repositoryPath: startingURL.path,
-//                                        homePath: "",
-//                                        storagePath: "",
-//                                        facePath: "",
-//                                        cropPath: "",
-//                                        countOfImages: countOfRootImage))
-//
-//        let enumerator = self.walkthruDirectory(at: startingURL, resourceKeys: resourceKeys)
-//        for case let folderURL as URL in enumerator {
-//            do {
-//                let resourceValues = try folderURL.resourceValues(forKeys: Set(resourceKeys))
-//                if resourceValues.isDirectory! && !resourceValues.isHidden! && resourceValues.isReadable! {
-//                    let countOfImage:Int = self.countImagesInFolder(folderURL)
-//                    if countOfImage > 0 {
-//                        let imageFolder:ImageFolder = ImageFolder(folderURL,
-//                                                                  name: "",
-//                                                                  repositoryPath: startingURL.path,
-//                                                                  homePath: "",
-//                                                                  storagePath: "",
-//                                                                  facePath: "",
-//                                                                  cropPath: "",
-//                                                                  countOfImages: countOfImage)
-//                        if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) {
-//                            imageFolder.setParent(parent)
-//                        }
-//                        imageFolders.append(imageFolder)
-//                    }
-//                }
-//            } catch {
-//                print(error)
-//            }
-//        }
-//        //ModelStore.save()
-//        return imageFolders
-//    }
-    
     static func scanPhotosToLoadExif(indicator:Accumulator? = nil)  {
         if suppressedScan {
             if indicator != nil {
@@ -200,6 +157,47 @@ class ImageFolderTreeScanner {
                             cropPath: cropPath)
     }
     
+    static func walkthruDirectoryForPaths(repository:ImageContainer) -> DirectoryPaths{
+        let result = DirectoryPaths()
+        let startingURL = URL(fileURLWithPath: repository.path)
+        let realPhysicalPath = startingURL.resolvingSymlinksInPath().path.withStash()
+        let repositoryPath = repository.path.withStash()
+        let options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles]
+        let resourceValueKeys = [URLResourceKey.isRegularFileKey, URLResourceKey.typeIdentifierKey, URLResourceKey.isDirectoryKey]
+        guard let directoryEnumerator = FileManager.default.enumerator(at: startingURL,
+                                                               includingPropertiesForKeys: resourceValueKeys,
+                                                               options: options,
+                                                               errorHandler: { url, error in
+                                                                print("`directoryEnumerator` error: \(error).")
+                                                                return true
+        }
+            ) else { return result}
+        
+        for case let url as NSURL in directoryEnumerator {
+            do {
+                let resourceValues = try url.resourceValues(forKeys: resourceValueKeys)
+                guard let isRegularFileResourceValue = resourceValues[URLResourceKey.isRegularFileKey] as? NSNumber else { continue }
+                guard isRegularFileResourceValue.boolValue else { continue }
+                guard let fileType = resourceValues[URLResourceKey.typeIdentifierKey] as? String else { continue }
+                guard (UTTypeConformsTo(fileType as CFString, kUTTypeImage) || UTTypeConformsTo(fileType as CFString, kUTTypeMovie)) else { continue }
+                let url = url as URL
+                
+                // to support soft link
+                let path = url.path.replacingFirstOccurrence(of: realPhysicalPath, with: repositoryPath)
+                let transformedURL = URL(fileURLWithPath: path)
+                
+                result.filesysUrls.insert(path)
+                result.fileUrlToRepo[path] = repository
+                let folderUrl = transformedURL.deletingLastPathComponent()
+                result.foldersysUrls.insert(folderUrl.path)
+            }
+            catch {
+                print("Unexpected error occured: \(error).")
+            }
+        }
+        return result
+    }
+    
     static func scanRepositories(indicator:Accumulator? = nil)  {
         
         if suppressedScan {
@@ -223,46 +221,46 @@ class ImageFolderTreeScanner {
                 return
             }
             
-            print("\(Date()) CHECKING REPO \(repo.path)")
-            let startingURL = URL(fileURLWithPath: repo.path)
-            let realPhysicalPath = startingURL.resolvingSymlinksInPath().path
-            
-            let options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles]
-            let fileManager = FileManager.default
-            let resourceValueKeys = [URLResourceKey.isRegularFileKey, URLResourceKey.typeIdentifierKey, URLResourceKey.isDirectoryKey]
-            
-            print("\(Date()) CHECK REPO: ENUMERATING FILESYS")
-            guard let directoryEnumerator = fileManager.enumerator(at: startingURL as URL,
-                                                                   includingPropertiesForKeys: resourceValueKeys,
-                                                                   options: options,
-                                                                   errorHandler: { url, error in
-                                                                    print("`directoryEnumerator` error: \(error).")
-                                                                    return true
-                                                                    }
-            ) else { return }
-            
-            for case let url as NSURL in directoryEnumerator {
-                do {
-                    let resourceValues = try url.resourceValues(forKeys: resourceValueKeys)
-                    guard let isRegularFileResourceValue = resourceValues[URLResourceKey.isRegularFileKey] as? NSNumber else { continue }
-                    guard isRegularFileResourceValue.boolValue else { continue }
-                    guard let fileType = resourceValues[URLResourceKey.typeIdentifierKey] as? String else { continue }
-                    guard (UTTypeConformsTo(fileType as CFString, kUTTypeImage) || UTTypeConformsTo(fileType as CFString, kUTTypeMovie)) else { continue }
-                    let url = url as URL
-                    
-                    // to support soft link
-                    let path = url.path.replacingFirstOccurrence(of: realPhysicalPath.withStash(), with: repo.path.withStash())
-                    let transformedURL = URL(fileURLWithPath: path)
-                    
-                    filesysUrls.insert(path)
-                    fileUrlToRepo[path] = repo
-                    let folderUrl = transformedURL.deletingLastPathComponent()
-                    foldersysUrls.insert(folderUrl.path)
-                }
-                catch {
-                    print("Unexpected error occured: \(error).")
+//            var pathToDeviceSubFolder:[String:String] = [:]
+            if repo.deviceId != "" {
+                let devicePaths = ModelStore.default.getDevicePaths(deviceId: repo.deviceId)
+                if devicePaths.count > 0 {
+                    for devicePath in devicePaths {
+                        if !devicePath.exclude {
+                            let path = URL(fileURLWithPath: repo.path).appendingPathComponent(devicePath.toSubFolder).path
+//                            pathToDeviceSubFolder[path] = devicePath.toSubFolder
+                            
+                            let _ = ImageFolder(URL(fileURLWithPath: path),
+                                                          name: devicePath.toSubFolder,
+                                                          repositoryPath: repo.path,
+                                                          homePath: "",
+                                                          storagePath: "",
+                                                          facePath: "",
+                                                          cropPath: "",
+                                                          countOfImages: 0,
+                                                          sharedDB: ModelStore.sharedDBPool())
+                        }
+                    }
                 }
             }
+            
+            print("\(Date()) CHECKING REPO \(repo.path)")
+            
+            print("\(Date()) CHECK REPO: ENUMERATING FILESYS")
+            
+            autoreleasepool { () -> Void in
+                let directoryPaths = ImageFolderTreeScanner.walkthruDirectoryForPaths(repository: repo)
+                for filesysUrl in directoryPaths.filesysUrls {
+                    filesysUrls.insert(filesysUrl)
+                }
+                for key in directoryPaths.fileUrlToRepo.keys {
+                    fileUrlToRepo[key] = directoryPaths.fileUrlToRepo[key]
+                }
+                for folderUrl in directoryPaths.foldersysUrls {
+                    foldersysUrls.insert(folderUrl)
+                }
+            }
+            
             print("\(Date()) CHECK REPO: ENUMERATING FILESYS: DONE")
             
             print("\(Date()) CHECK REPO: CHECK FOLDERS TO BE ADDED AND REMOVED")

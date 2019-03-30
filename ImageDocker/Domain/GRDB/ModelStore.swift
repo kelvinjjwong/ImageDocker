@@ -442,6 +442,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update ImageContainer set hiddenByContainer = 1 where path = ?", arguments: [path])
+                try db.execute("update ImageContainer set hiddenByContainer = 1 where path like ?", arguments: ["\(path.withStash())%"])
                 try db.execute("update Image set hiddenByContainer = 1 where path like ?", arguments:["\(path.withStash())%"])
             }
         }catch{

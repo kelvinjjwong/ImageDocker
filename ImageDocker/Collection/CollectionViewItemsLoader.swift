@@ -81,10 +81,13 @@ class CollectionViewItemsLoader: NSObject {
         //print("loading folder from database: \(folderURL.path)")
         let photoFiles = walkthruDatabaseForPhotoFiles(startingURL: folderURL, includeHidden: showHidden)
         if photoFiles == nil || photoFiles?.count == 0 {
+            print("LOADED nothing from entry \(folderURL.path)")
             //print("loading folder from filesystem instead: \(folderURL.path)")
-            let urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
-            setupItems(urls: urls)
+            //let urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
+            //setupItems(urls: urls)
+            setupItems(photoFiles: [])
         }else{
+            print("LOADED \(photoFiles?.count ?? 0) images from entry \(folderURL.path)")
             setupItems(photoFiles: photoFiles)
         }
     }

@@ -166,6 +166,7 @@ extension ViewController {
                     self.refreshCollectionView()
                 })
             }else{
+                print("LOADING from library entry \(imageFolder.name)")
                 self.imagesLoader.load(from: imageFolder.url, indicator:self.collectionLoadingIndicator)
                 self.refreshCollectionView()
             }
