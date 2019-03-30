@@ -134,33 +134,33 @@ class EditRepositoryViewController: NSViewController {
     // MARK: INIT
     
     fileprivate func emptyGeneralTextFields() {
-        self.txtName.stringValue = ""
-        self.lblNameRemark.stringValue = ""
-        self.txtHomePath.stringValue = ""
-        self.lblHomePathRemark.stringValue = ""
-        
-        self.lblDeviceId.stringValue = ""
-        self.lblDeviceName.stringValue = ""
+            self.txtName.stringValue = ""
+            self.lblNameRemark.stringValue = ""
+            self.txtHomePath.stringValue = ""
+            self.lblHomePathRemark.stringValue = ""
+            
+            self.lblDeviceId.stringValue = ""
+            self.lblDeviceName.stringValue = ""
     }
     
     fileprivate func emptyStorageTextFields() {
-        self.txtStoragePath.stringValue = ""
-        self.lblStoragePathRemark.stringValue = ""
-        self.txtRepository.stringValue = ""
-        self.lblRepositoryPathRemark.stringValue = ""
-        self.btnRestoreOriginal.isHidden = true
-        self.btnCopyToRaw.isHidden = true
-        self.btnUpdateStorageImages.isHidden = true
-        self.btnUpdateRepositoryImages.isHidden = true
+            self.txtStoragePath.stringValue = ""
+            self.lblStoragePathRemark.stringValue = ""
+            self.txtRepository.stringValue = ""
+            self.lblRepositoryPathRemark.stringValue = ""
+            self.btnRestoreOriginal.isHidden = true
+            self.btnCopyToRaw.isHidden = true
+            self.btnUpdateStorageImages.isHidden = true
+            self.btnUpdateRepositoryImages.isHidden = true
     }
     
     fileprivate func emptyFaceTextFields() {
-        self.txtFacePath.stringValue = ""
-        self.lblFacePathRemark.stringValue = ""
-        self.txtCropPath.stringValue = ""
-        self.lblCropPathRemark.stringValue = ""
-        self.btnUpdateFaceImages.isHidden = true
-        self.btnUpdateCropImages.isHidden = true
+            self.txtFacePath.stringValue = ""
+            self.lblFacePathRemark.stringValue = ""
+            self.txtCropPath.stringValue = ""
+            self.lblCropPathRemark.stringValue = ""
+            self.btnUpdateFaceImages.isHidden = true
+            self.btnUpdateCropImages.isHidden = true
     }
     
     fileprivate func freshNew() {
@@ -1288,10 +1288,13 @@ class EditRepositoryViewController: NSViewController {
                 DispatchQueue.global().async {
                     ModelStore.default.deleteRepository(repositoryRoot: container.path)
                     
-                    self.freshNew()
-                    
-                    self.toggleButtons(true)
-                    self.lblMessage.stringValue = "All records and image-records of this repository have been removed from database."
+                    DispatchQueue.main.async {
+                        
+                        self.freshNew()
+                        
+                        self.toggleButtons(true)
+                        self.lblMessage.stringValue = "All records and image-records of this repository have been removed from database."
+                    }
                     // TODO: use delegate from main window to close this window and refresh library tree in main window
                 }
             }
