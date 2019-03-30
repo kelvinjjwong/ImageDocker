@@ -371,6 +371,7 @@ class ImageFile {
             guard CGImageSourceGetType(imageSource) != nil else { return nil }
             
             let thumbnailOptions = [
+                String(createThumbnailWithTransform): true,
                 String(kCGImageSourceCreateThumbnailFromImageIfAbsent): true,
                 String(kCGImageSourceThumbnailMaxPixelSize): 180
                 ] as [String : Any]
@@ -441,6 +442,12 @@ class ImageFile {
                     let context = currentContext.cgContext
                     context.draw(imgPreview, in: imgRect)
                 }
+//                if orientation == 6 {
+//                    image = image.rotate(degrees: 90.0)
+//                }else if orientation == 3 {
+//                    image = image.rotate(degrees: 180.0)
+//                }
+                
                 image.unlockFocus()
             }
             checkSize = false
