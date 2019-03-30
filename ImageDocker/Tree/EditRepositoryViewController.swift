@@ -882,6 +882,9 @@ class EditRepositoryViewController: NSViewController {
                 if imagesWithoutRepoPath > 0 || imagesWithoutSubPath > 0 || imagesWithoutId > 0 || imagesUnmatchedRepoPath > 0 || containersWithoutRepoPath > 0 ||  containersWithoutSubPath > 0 {
                     go = true
                 }
+                if imagesWithoutRepoPath == 0 && imagesWithoutSubPath == 0 && imagesWithoutId == 0 && imagesUnmatchedRepoPath == 0 && containersWithoutRepoPath == 0 &&  containersWithoutSubPath == 0 {
+                    go = true
+                }
             }else{
                 // change place
                 print("repo changed place")

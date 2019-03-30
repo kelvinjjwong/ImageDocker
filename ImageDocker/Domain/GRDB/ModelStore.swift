@@ -23,19 +23,7 @@ class ModelStore {
     
     // MARK: SHARED DATABASE INSTANCE
     
-    private static var _sharedDBQueue:DatabaseWriter?
     private static var _sharedDBPool:DatabaseWriter?
-    
-    static func sharedDBQueue() -> DatabaseWriter{
-        if _sharedDBQueue == nil {
-            do {
-                _sharedDBQueue = try DatabaseQueue(path: ModelStore.default.dbfile)
-            }catch{
-                print(error)
-            }
-        }
-        return _sharedDBQueue!
-    }
     
     static func sharedDBPool() -> DatabaseWriter{
         if _sharedDBPool == nil {

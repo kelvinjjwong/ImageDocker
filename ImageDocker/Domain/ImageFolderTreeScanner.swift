@@ -225,6 +225,7 @@ class ImageFolderTreeScanner {
             
             print("\(Date()) CHECKING REPO \(repo.path)")
             let startingURL = URL(fileURLWithPath: repo.path)
+            let realPhysicalPath = startingURL.resolvingSymlinksInPath().path
             
             let options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles]
             let fileManager = FileManager.default
@@ -248,9 +249,14 @@ class ImageFolderTreeScanner {
                     guard let fileType = resourceValues[URLResourceKey.typeIdentifierKey] as? String else { continue }
                     guard (UTTypeConformsTo(fileType as CFString, kUTTypeImage) || UTTypeConformsTo(fileType as CFString, kUTTypeMovie)) else { continue }
                     let url = url as URL
-                    filesysUrls.insert(url.path)
-                    fileUrlToRepo[url.path] = repo
-                    let folderUrl = url.deletingLastPathComponent()
+                    
+                    // to support soft link
+                    let path = url.path.replacingFirstOccurrence(of: realPhysicalPath.withStash(), with: repo.path.withStash())
+                    let transformedURL = URL(fileURLWithPath: path)
+                    
+                    filesysUrls.insert(path)
+                    fileUrlToRepo[path] = repo
+                    let folderUrl = transformedURL.deletingLastPathComponent()
                     foldersysUrls.insert(folderUrl.path)
                 }
                 catch {
