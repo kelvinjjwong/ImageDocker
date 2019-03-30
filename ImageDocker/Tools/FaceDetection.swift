@@ -180,6 +180,7 @@ class FaceDetection {
             guard CGImageSourceGetType(imageSource) != nil else { return nil }
             
             let thumbnailOptions = [
+                String(createThumbnailWithTransform): true,
                 String(kCGImageSourceCreateThumbnailFromImageIfAbsent): true,
                 String(kCGImageSourceThumbnailMaxPixelSize): size
                 ] as [String : Any]
