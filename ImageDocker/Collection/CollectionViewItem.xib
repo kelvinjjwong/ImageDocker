@@ -105,13 +105,25 @@
                             <items>
                                 <menuItem state="on" image="more_horizontal" hidden="YES" id="fyA-MO-0B9"/>
                                 <menuItem title="Reveal in Finder" id="Fee-pt-Seh"/>
+                                <menuItem isSeparatorItem="YES" id="Lfr-qp-zvR"/>
+                                <menuItem title="Preivew (editable version)" id="zFL-FL-qGO">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem title="Preview (backup version)" id="1Ki-Mg-RCo">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
                                 <menuItem title="Large View" id="7F1-BS-gxe">
                                     <modifierMask key="keyEquivalentModifierMask"/>
                                 </menuItem>
+                                <menuItem isSeparatorItem="YES" id="QRi-e3-hdU"/>
                                 <menuItem title="Find Faces" id="pRO-pa-zpy">
                                     <modifierMask key="keyEquivalentModifierMask"/>
                                 </menuItem>
                                 <menuItem title="Recognize Faces" id="OLE-KJ-wUP">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem isSeparatorItem="YES" id="4AG-cR-dQG"/>
+                                <menuItem title="Replace with Backup Version" id="nQl-wu-n9k">
                                     <modifierMask key="keyEquivalentModifierMask"/>
                                 </menuItem>
                             </items>

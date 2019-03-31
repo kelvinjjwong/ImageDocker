@@ -648,6 +648,37 @@ class ViewController: NSViewController {
         loadImage(urls[0])
     }
     
+    func previewImage(url:URL, isPhoto:Bool) {
+        for sView in self.playerContainer.subviews {
+            sView.removeFromSuperview()
+        }
+        
+        if stackedVideoViewController != nil && stackedVideoViewController.videoDisplayer != nil && stackedVideoViewController.videoDisplayer.player != nil {
+            stackedVideoViewController.videoDisplayer.player?.pause()
+        }
+        
+        if isPhoto {
+            
+            // switch to image view
+            stackedImageViewController.view.frame = self.playerContainer.bounds
+            self.playerContainer.addSubview(stackedImageViewController.view)
+            
+            // show image
+            stackedImageViewController.imageDisplayer.image = url.loadImage(maxDimension: 512)
+            
+        } else {
+            
+            // switch to video view
+            stackedVideoViewController.view.frame = self.playerContainer.bounds
+            self.playerContainer.addSubview(stackedVideoViewController.view)
+            
+            // show video
+            stackedVideoViewController.videoDisplayer.player = AVPlayer(url: url)
+            stackedVideoViewController.videoDisplayer.player?.play()
+            
+        }
+    }
+    
     private func previewImage(image:ImageFile) {
         for sView in self.playerContainer.subviews {
             sView.removeFromSuperview()

@@ -249,6 +249,7 @@ class ImageFolderTreeScanner {
             print("\(Date()) CHECK REPO: ENUMERATING FILESYS")
             
             autoreleasepool { () -> Void in
+                print(">>> WALKING THRU DIRECTORY begin <<<")
                 let directoryPaths = ImageFolderTreeScanner.walkthruDirectoryForPaths(repository: repo)
                 for filesysUrl in directoryPaths.filesysUrls {
                     filesysUrls.insert(filesysUrl)
@@ -259,6 +260,7 @@ class ImageFolderTreeScanner {
                 for folderUrl in directoryPaths.foldersysUrls {
                     foldersysUrls.insert(folderUrl)
                 }
+                print(">>> WALKING THRU DIRECTORY done <<<")
             }
             
             print("\(Date()) CHECK REPO: ENUMERATING FILESYS: DONE")

@@ -162,12 +162,18 @@ class CollectionViewItem: NSCollectionViewItem {
         let i = sender.indexOfSelectedItem
         if i == 1 {
             self.revealInFinder()
-        }else if i == 2 {
-            self.quicklook()
         }else if i == 3 {
-            self.findFaces()
+            // TODO: PREVIEW EDITABLE VERSION
         }else if i == 4 {
+            // TODO: PREVIEW BACKUP VERSION
+        }else if i == 5 {
+            self.quicklook()
+        }else if i == 7 {
+            self.findFaces()
+        }else if i == 8 {
             self.recognizeFaces()
+        }else if i == 9 {
+            // TODO: REPLACE WITH BACKUP VERSION
         }
     }
     

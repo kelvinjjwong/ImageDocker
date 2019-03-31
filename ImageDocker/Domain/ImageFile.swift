@@ -396,63 +396,9 @@ class ImageFile {
     /// do not exist the file is assumed to be a non-image file and a zero
     /// sized empty image is returned.
     private func loadPreview() -> NSImage {
-        var image = NSImage(size: NSMakeRect(0, 0, 0, 0).size)
-        if self.isVideo == true { return image }
+        if self.isVideo == true { return NSImage(size: NSMakeRect(0, 0, 0, 0).size) }
         
-        var imgSrc:CGImageSource? = CGImageSourceCreateWithURL(url as CFURL, nil)
-        if imgSrc == nil {
-            if FileManager.default.fileExists(atPath: url.path) {
-                if let img = NSImage(byReferencingFile: url.path) {
-                    imgSrc = CGImageSourceCreateWithData(img.tiffRepresentation! as CFData , nil)
-                }
-            }
-        }
-        if imgSrc == nil {
-            return image
-        }
-        let imgRef = imgSrc!
-        
-        // Create a "preview" of the image. If the image is larger than
-        // 512x512 constrain the preview to that size.  512x512 is an
-        // arbitrary limit.   Preview generation is used to work around a
-        // performance hit when using large raw images
-        let maxDimension = 512
-        var imgOpts: [String: AnyObject] = [
-            createThumbnailWithTransform : kCFBooleanTrue,
-            createThumbnailFromImageIfAbsent : kCFBooleanTrue,
-            thumbnailMaxPixelSize : maxDimension as AnyObject
-        ]
-        var checkSize = true
-        repeat {
-            if let imgPreview = CGImageSourceCreateThumbnailAtIndex(imgRef, 0, imgOpts as NSDictionary) {
-                // Create an NSImage from the preview
-                let imgHeight = CGFloat(imgPreview.height)
-                let imgWidth = CGFloat(imgPreview.width)
-                if imgOpts[createThumbnailFromImageAlways] == nil &&
-                    imgHeight < 512 && imgWidth < 512 {
-                    // thumbnail too small.   Build a larger thumbnail
-                    imgOpts[createThumbnailFromImageIfAbsent] = nil
-                    imgOpts[createThumbnailFromImageAlways] = kCFBooleanTrue
-                    continue
-                }
-                let imgRect = NSMakeRect(0.0, 0.0, imgWidth, imgHeight)
-                image = NSImage(size: imgRect.size)
-                image.lockFocus()
-                if let currentContext = NSGraphicsContext.current {
-                    let context = currentContext.cgContext
-                    context.draw(imgPreview, in: imgRect)
-                }
-//                if orientation == 6 {
-//                    image = image.rotate(degrees: 90.0)
-//                }else if orientation == 3 {
-//                    image = image.rotate(degrees: 180.0)
-//                }
-                
-                image.unlockFocus()
-            }
-            checkSize = false
-        } while checkSize
-        return image
+        return url.loadImage(maxDimension: 512)
     }
     
     // MARK: PROGRESS INDICATOR
