@@ -113,6 +113,8 @@
 		8EE1AB3D20D05E49001C75B0 /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */; };
 		8EE1AB3E20D05E49001C75B0 /* EventListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */; };
 		8EEB88842090B44B00CDEC81 /* ImageDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEB88832090B44B00CDEC81 /* ImageDropView.swift */; };
+		8EEF071A2256C9D9000520B7 /* DevicePathDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEF07182256C9D9000520B7 /* DevicePathDetailViewController.swift */; };
+		8EEF071B2256C9D9000520B7 /* DevicePathDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EEF07192256C9D9000520B7 /* DevicePathDetailViewController.xib */; };
 		8EF125A622140C0F00C423CA /* ImageDevicePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF125A522140C0F00C423CA /* ImageDevicePath.swift */; };
 		8EF125A92214590000C423CA /* DeviceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF125A72214590000C423CA /* DeviceListViewController.swift */; };
 		8EF125AA2214590000C423CA /* DeviceListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EF125A82214590000C423CA /* DeviceListViewController.xib */; };
@@ -273,6 +275,8 @@
 		8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListViewController.swift; sourceTree = "<group>"; };
 		8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventListViewController.xib; sourceTree = "<group>"; };
 		8EEB88832090B44B00CDEC81 /* ImageDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDropView.swift; sourceTree = "<group>"; };
+		8EEF07182256C9D9000520B7 /* DevicePathDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePathDetailViewController.swift; sourceTree = "<group>"; };
+		8EEF07192256C9D9000520B7 /* DevicePathDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DevicePathDetailViewController.xib; sourceTree = "<group>"; };
 		8EF125A522140C0F00C423CA /* ImageDevicePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDevicePath.swift; sourceTree = "<group>"; };
 		8EF125A72214590000C423CA /* DeviceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceListViewController.swift; sourceTree = "<group>"; };
 		8EF125A82214590000C423CA /* DeviceListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeviceListViewController.xib; sourceTree = "<group>"; };
@@ -447,12 +451,12 @@
 				8EB321D020FA433500D8C71D /* ImageContainer.swift */,
 				8EFA7CFA211D713700419777 /* ImageDevice.swift */,
 				8EFA7CFC211D72B300419777 /* ImageDeviceFile.swift */,
+				8EF125A522140C0F00C423CA /* ImageDevicePath.swift */,
 				8EB321D220FA433500D8C71D /* ImageEvent.swift */,
 				8EB321D120FA433500D8C71D /* ImagePlace.swift */,
 				8EF4CE5421D77BAB00C53AFF /* People.swift */,
 				8EF4CE5621D77BD600C53AFF /* Family.swift */,
 				8EF4CE5821D77BEA00C53AFF /* ImagePeople.swift */,
-				8EF125A522140C0F00C423CA /* ImageDevicePath.swift */,
 				8E4E5B77221985A400FE4B68 /* ImageFace.swift */,
 			);
 			path = GRDB;
@@ -632,6 +636,8 @@
 				8EC82EAD21283ED000FC0899 /* DirectoryViewDelegate.swift */,
 				8EAC5F1E2144A60900E187E0 /* DeviceFolderViewController.swift */,
 				8EAC5F1F2144A60900E187E0 /* DeviceFolderViewController.xib */,
+				8EEF07182256C9D9000520B7 /* DevicePathDetailViewController.swift */,
+				8EEF07192256C9D9000520B7 /* DevicePathDetailViewController.xib */,
 			);
 			path = Device;
 			sourceTree = "<group>";
@@ -828,6 +834,7 @@
 				8E4E5B762219624D00FE4B68 /* FaceRecognitionOpenCV in Resources */,
 				8EB986BE20B30C920075B081 /* CollectionViewItem.xib in Resources */,
 				8EF4CE6521E56DC100C53AFF /* NotificationViewController.xib in Resources */,
+				8EEF071B2256C9D9000520B7 /* DevicePathDetailViewController.xib in Resources */,
 				8E3EC3BE214DE623004B6125 /* DateTimeViewController.xib in Resources */,
 				8EF125AA2214590000C423CA /* DeviceListViewController.xib in Resources */,
 				8EBA9DE0216F8BB100DACAAD /* NotesViewController.xib in Resources */,
@@ -1004,6 +1011,7 @@
 				8EC5BA2E21775571001510AF /* TheaterCollectionViewItem.swift in Sources */,
 				8EFAF1FB20BFFC8A007A7783 /* MetaInfoHolder.swift in Sources */,
 				8EB321D720FA433500D8C71D /* Image.swift in Sources */,
+				8EEF071A2256C9D9000520B7 /* DevicePathDetailViewController.swift in Sources */,
 				8E8D471C22315F540091E9C3 /* SingleColumnTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

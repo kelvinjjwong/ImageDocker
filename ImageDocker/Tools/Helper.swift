@@ -59,10 +59,26 @@ extension String {
         }
         return self
     }
+    
+    func isParentOf(_ path:String) -> Bool {
+        let theOtherPath = path.withStash()
+        let myPath = self.withStash()
+        return theOtherPath.starts(with: myPath) && theOtherPath != myPath
+    }
+    
+    func getNearestParent(from sortedPaths: [String]) -> String?{
+        if sortedPaths.count == 0 { return nil }
+        for path in sortedPaths {
+            if path.isParentOf(self) {
+                return path
+            }
+        }
+        return nil
+    }
 }
 
 public extension NSImage {
-    public func rotate(degrees:CGFloat) -> NSImage {
+    func rotate(degrees:CGFloat) -> NSImage {
         
         var imageBounds = NSZeroRect ; imageBounds.size = self.size
         let pathBounds = NSBezierPath(rect: imageBounds)
@@ -94,6 +110,13 @@ public extension NSImage {
 }
 
 public extension URL {
+    
+    func isParentOf(_ url:URL) -> Bool {
+        let theOtherPath = "\(url.path)/"
+        let myPath = "\(self.path)/"
+        return theOtherPath.starts(with: myPath)
+    }
+    
     
     func loadImage(maxDimension:Int = 512) -> NSImage {
         var image = NSImage(size: NSMakeRect(0, 0, 0, 0).size)

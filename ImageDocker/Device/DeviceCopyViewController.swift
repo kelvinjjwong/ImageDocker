@@ -23,17 +23,22 @@ struct DeviceCopyDestination {
     var toSubFolder:String
     var type:DeviceCopyDestinationType
     var exclude:Bool
+    var manyChildren:Bool
     
     static func new(_ pair:(String, String)) -> DeviceCopyDestination {
-        return DeviceCopyDestination(sourcePath: pair.0, toSubFolder: pair.1, type:.onDevice, exclude: false)
+        return DeviceCopyDestination(sourcePath: pair.0, toSubFolder: pair.1, type:.onDevice, exclude: false, manyChildren: false)
     }
     
     static func local(_ pair:(String, String)) -> DeviceCopyDestination {
-        return DeviceCopyDestination(sourcePath: pair.0, toSubFolder: pair.1, type:.localDirectory, exclude: false)
+        return DeviceCopyDestination(sourcePath: pair.0, toSubFolder: pair.1, type:.localDirectory, exclude: false, manyChildren: false)
     }
     
     static func from(_ devicePath: ImageDevicePath) -> DeviceCopyDestination {
-        return DeviceCopyDestination(sourcePath: devicePath.path, toSubFolder: devicePath.toSubFolder, type:.onDevice, exclude: devicePath.exclude)
+        return DeviceCopyDestination(sourcePath: devicePath.path,
+                                     toSubFolder: devicePath.toSubFolder,
+                                     type:.onDevice,
+                                     exclude: devicePath.exclude,
+                                     manyChildren: devicePath.manyChildren)
     }
     
     static func from(_ devicePaths: [ImageDevicePath]) -> [DeviceCopyDestination] {
@@ -1203,7 +1208,7 @@ class DeviceCopyViewController: NSViewController {
             self.addLocalDirectoryViewController = AddLocalDirectoryViewController(directoryViewDelegate: directoryViewDelegate,
                                                                                    deviceType: self.device.type,
                                                                                    destinationType: .onDevice,
-                                                                                   onApply: { (directory, toSubFolder, isExclude) in
+                                                                                   onApply: { (directory, toSubFolder, isExclude, hasManyChildren) in
                 print("\(directory) \(toSubFolder) \(isExclude)")
                 var dest = DeviceCopyDestination.new((directory, toSubFolder))
                 // on device directory need to be saved into db
@@ -1214,7 +1219,7 @@ class DeviceCopyViewController: NSViewController {
                         ModelStore.default.saveDevicePath(file: devicePath)
                         dest = DeviceCopyDestination.from(devicePath)
                     }else{
-                        let devicePath = ImageDevicePath.include(deviceId: self.device.deviceId, path: directory, toSubFolder: toSubFolder)
+                        let devicePath = ImageDevicePath.include(deviceId: self.device.deviceId, path: directory, toSubFolder: toSubFolder, manyChildren: hasManyChildren)
                         ModelStore.default.saveDevicePath(file: devicePath)
                         dest = DeviceCopyDestination.from(devicePath)
                     }
@@ -1253,7 +1258,7 @@ class DeviceCopyViewController: NSViewController {
             self.addLocalDirectoryViewController = AddLocalDirectoryViewController(directoryViewDelegate: directoryViewDelegate,
                                                                                    deviceType: self.device.type,
                                                                                    destinationType: .localDirectory,
-                                                                                   onApply: { (directory, toSubFolder, isExclude) in
+                                                                                   onApply: { (directory, toSubFolder, isExclude, hasManyChildren) in
                 print("\(directory) \(toSubFolder) \(isExclude)")
                 let dest = DeviceCopyDestination.local((directory, toSubFolder))
                 // local directory no need to be saved into db
@@ -1343,6 +1348,12 @@ extension DeviceSourcePathTableDelegate : NSTableViewDelegate {
             case NSUserInterfaceItemIdentifier("exclude"):
                 if info.exclude {
                     value = "X"
+                }else{
+                    value = ""
+                }
+            case NSUserInterfaceItemIdentifier("manyChildren"):
+                if info.manyChildren {
+                    value = "MC"
                 }else{
                     value = ""
                 }

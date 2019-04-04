@@ -25,6 +25,8 @@ struct ImageContainer: Codable {
     var hiddenByRepository: Bool
     var hiddenByContainer: Bool
     var deviceId: String
+    var manyChildren: Bool
+    var hideByParent: Bool
 }
 
 extension ImageContainer: FetchableRecord, MutablePersistableRecord, TableRecord {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -13,6 +13,7 @@
                 <outlet property="btnOK" destination="wkm-Sc-MNa" id="ows-7d-Yih"/>
                 <outlet property="btnParent" destination="06y-3k-hYa" id="jET-uL-PaU"/>
                 <outlet property="chkExclude" destination="mp1-W6-p1i" id="zIZ-sg-9Kv"/>
+                <outlet property="chkManyChildren" destination="tXz-c4-XEM" id="IuM-jh-48t"/>
                 <outlet property="lblToFolder" destination="Ief-I0-0Yd" id="K1i-zH-mol"/>
                 <outlet property="tblFiles" destination="WyE-8J-Vj5" id="R0w-zn-tE3"/>
                 <outlet property="tblFolders" destination="VWA-Fz-8zf" id="YIE-RR-neL"/>
@@ -145,11 +146,11 @@ DQ
                     <constraints>
                         <constraint firstAttribute="width" constant="150" id="539-Br-qi7"/>
                     </constraints>
-                    <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="Ifj-de-CFG">
+                    <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Ifj-de-CFG">
                         <rect key="frame" x="1" y="303" width="148" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
-                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="0VT-1w-W83">
+                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="0VT-1w-W83">
                         <rect key="frame" x="224" y="17" width="15" height="102"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
@@ -208,11 +209,11 @@ DQ
                             </tableView>
                         </subviews>
                     </clipView>
-                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="faT-HX-2Vl">
+                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="faT-HX-2Vl">
                         <rect key="frame" x="1" y="303" width="225" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
-                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="e7R-lr-NHe">
+                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="e7R-lr-NHe">
                         <rect key="frame" x="224" y="17" width="15" height="102"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
@@ -307,11 +308,11 @@ DQ
                     <constraints>
                         <constraint firstAttribute="width" constant="385" id="Khn-Tn-zwr"/>
                     </constraints>
-                    <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="Ple-KO-vCp">
+                    <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Ple-KO-vCp">
                         <rect key="frame" x="1" y="303" width="383" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
-                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="1q5-F1-Xkd">
+                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="1q5-F1-Xkd">
                         <rect key="frame" x="224" y="17" width="15" height="102"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
@@ -347,9 +348,17 @@ DQ
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tXz-c4-XEM">
+                    <rect key="frame" x="661" y="10" width="134" height="18"/>
+                    <buttonCell key="cell" type="check" title="Has many children" bezelStyle="regularSquare" imagePosition="left" inset="2" id="72M-pJ-aHf">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
             </subviews>
             <constraints>
                 <constraint firstItem="wkm-Sc-MNa" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="0BA-4k-giI"/>
+                <constraint firstItem="tXz-c4-XEM" firstAttribute="top" secondItem="mp1-W6-p1i" secondAttribute="bottom" constant="11" id="6zv-5N-TkY"/>
                 <constraint firstAttribute="bottom" secondItem="wkm-Sc-MNa" secondAttribute="bottom" constant="12" id="7E3-2R-wiU"/>
                 <constraint firstItem="Vab-ow-6t4" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="20" id="82E-Kc-V14"/>
                 <constraint firstItem="wkm-Sc-MNa" firstAttribute="top" secondItem="H6d-S3-D8u" secondAttribute="bottom" constant="34" id="DcL-7E-ds5"/>
@@ -373,6 +382,7 @@ DQ
                 <constraint firstItem="H6d-S3-D8u" firstAttribute="leading" secondItem="Lhb-ec-plZ" secondAttribute="trailing" constant="8" id="gmD-8h-QSh"/>
                 <constraint firstAttribute="bottom" secondItem="Ief-I0-0Yd" secondAttribute="bottom" constant="40" id="j3f-zG-Cc0"/>
                 <constraint firstItem="Xmh-5Q-CVk" firstAttribute="top" secondItem="29O-CJ-Uu8" secondAttribute="bottom" constant="8" id="lRB-WH-cPz"/>
+                <constraint firstAttribute="trailing" secondItem="tXz-c4-XEM" secondAttribute="trailing" constant="7" id="noN-9Q-2DX"/>
                 <constraint firstItem="aKr-Xr-7en" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="18" id="rQa-IZ-iOC"/>
                 <constraint firstItem="Ief-I0-0Yd" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" id="rkA-TY-Iih"/>
                 <constraint firstAttribute="trailing" secondItem="H6d-S3-D8u" secondAttribute="trailing" constant="10" id="ryz-Sx-dvJ"/>

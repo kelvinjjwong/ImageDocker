@@ -786,7 +786,7 @@ class ViewController: NSViewController {
             }
             )
             autoreleasepool(invoking: { () -> Void in
-                ImageFolderTreeScanner.scanRepositories(indicator: self.treeLoadingIndicator)
+                ImageFolderTreeScanner.default.scanRepositories(indicator: self.treeLoadingIndicator)
             })
             
         }
@@ -796,7 +796,7 @@ class ViewController: NSViewController {
         self.creatingRepository = true
         print("\(Date()) UPDATING CONTAINERS")
         DispatchQueue.global().async {
-            ImageFolderTreeScanner.updateContainers(onCompleted: {
+            ImageFolderTreeScanner.default.updateContainers(onCompleted: {
                 
                 print("\(Date()) UPDATING CONTAINERS: DONE")
                 
@@ -1022,7 +1022,7 @@ class ViewController: NSViewController {
         if self.chbScan.state == NSButton.StateValue.on {
             print("enabled scan")
             self.suppressedScan = false
-            ImageFolderTreeScanner.suppressedScan = false
+            ImageFolderTreeScanner.default.suppressedScan = false
             
             self.btnScanState.isHidden = false
             self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
@@ -1032,7 +1032,7 @@ class ViewController: NSViewController {
         }else {
             print("disabled scan")
             self.suppressedScan = true
-            ImageFolderTreeScanner.suppressedScan = true
+            ImageFolderTreeScanner.default.suppressedScan = true
             
             self.btnScanState.image = NSImage(named: NSImage.Name.statusNone)
             self.btnScanState.isHidden = true
@@ -1064,7 +1064,7 @@ class ViewController: NSViewController {
                                                             }
                 }
                 )
-                ImageFolderTreeScanner.scanPhotosToLoadExif(indicator: self.treeLoadingIndicator)
+                ImageFolderTreeScanner.default.scanPhotosToLoadExif(indicator: self.treeLoadingIndicator)
             }
         }
     }

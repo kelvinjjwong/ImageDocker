@@ -13,43 +13,39 @@ import GRDB
 
 extension ViewController {
     
-    // MARK: DATA SOURCE
-    /*
-    func loadPathToTree(_ startingPath:String){
-        let imageFolders = ImageFolderTreeScanner.default.scanImageFolder(path: startingPath)
-        
-        if imageFolders.count > 0 {
-            for imageFolder:ImageFolder in imageFolders {
-                self.addLibraryTreeEntry(imageFolder: imageFolder)
-            }
-            
-            ExportManager.default.disable()
-            // scan photo files
-            //let startingFolder:ImageFolder = imageFolders[0]
-            DispatchQueue.global().async {
-                for folder in imageFolders {
-                    self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage,
-                                                                  onCompleted: { data in
-                                                                    self.creatingRepository = false
-                                                                    ExportManager.default.enable()
-                    })
-                    self.imagesLoader.load(from: folder.url, indicator:self.collectionLoadingIndicator)
-                    //self.refreshCollectionView()
-                }
-                
-            }
-        }
-    }
-    */
     func loadPathToTreeFromDatabase(fast:Bool = true) {
         print("\(Date()) Loading image folders from db ")
-        let imageFolders = ImageFolderTreeScanner.default.scanImageFolderFromDatabase(fast: fast)
-        
-        print("\(Date()) Adding image folders as tree entries ")
-        if imageFolders.count > 0 {
-            for imageFolder:ImageFolder in imageFolders {
-                self.addLibraryTreeEntry(imageFolder: imageFolder)
-            }
+        DispatchQueue.global().async {
+            
+            autoreleasepool(invoking: { () -> Void in
+                
+                let imageFolders = ImageFolderTreeScanner.default.scanImageFolderFromDatabase(fast: fast)
+                
+                print("\(Date()) Adding image folders as tree entries ")
+                if imageFolders.count > 0 {
+                    DispatchQueue.main.async {
+                        for imageFolder:ImageFolder in imageFolders {
+                            if let container = imageFolder.containerFolder, container.hideByParent {
+                                // hide by parent
+                                // ignore this one
+                            }else{
+                                if let parent = imageFolder.parent {
+                                    if let parentContainer = parent.containerFolder, !parentContainer.manyChildren {
+                                        // parent has a few children
+                                        self.addLibraryTreeEntry(imageFolder: imageFolder)
+                                    }else{
+                                        // parent has many children
+                                        // ignore this one
+                                    }
+                                }else{ // no parent
+                                    self.addLibraryTreeEntry(imageFolder: imageFolder)
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+            
         }
     }
     

@@ -33,7 +33,7 @@ class AddLocalDirectoryViewController: NSViewController, DirectoryViewGotoDelega
     var currentPath:URL
     
     // MARK: EVENT
-    var onApply: ((_ directory:String, _ toSubFolder:String, _ exclude:Bool) -> Void)?
+    var onApply: ((_ directory:String, _ toSubFolder:String, _ exclude:Bool, _ hasManyChildren:Bool) -> Void)?
     
     // MARK: CONTROLS
     
@@ -48,6 +48,7 @@ class AddLocalDirectoryViewController: NSViewController, DirectoryViewGotoDelega
     @IBOutlet weak var btnGoto: NSButton!
     @IBOutlet weak var lblToFolder: NSTextField!
     @IBOutlet weak var chkExclude: NSButton!
+    @IBOutlet weak var chkManyChildren: NSButton!
     
     
     
@@ -64,7 +65,7 @@ class AddLocalDirectoryViewController: NSViewController, DirectoryViewGotoDelega
     // MARK: INIT
     
     
-    init(directoryViewDelegate:DirectoryViewDelegate, deviceType:MobileType, destinationType:DeviceCopyDestinationType, onApply: ((_ directory:String, _ toSubFolder:String, _ exclude:Bool) -> Void)? = nil){
+    init(directoryViewDelegate:DirectoryViewDelegate, deviceType:MobileType, destinationType:DeviceCopyDestinationType, onApply: ((_ directory:String, _ toSubFolder:String, _ exclude:Bool, _ hasManyChildren:Bool) -> Void)? = nil){
         self.currentPath = URL(fileURLWithPath: "/")
         self.directoryViewDelegate = directoryViewDelegate
         self.onApply = onApply
@@ -84,10 +85,16 @@ class AddLocalDirectoryViewController: NSViewController, DirectoryViewGotoDelega
         super.init(nibName: NSNib.Name(rawValue: "AddLocalDirectoryViewController"), bundle: nil)
         self.tblShortcutDelegate.gotoDelegate = self
         self.tblFoldersDelegate.gotoDelegate = self
+        chkExclude.state = .off
+        chkManyChildren.state = .off
         if destinationType == .onDevice {
             labelToFolder = "To SubFolder:"
+            chkExclude.isHidden = false
+            chkManyChildren.isHidden = false
         }else{
             labelToFolder = "Pretend as:"
+            chkExclude.isHidden = true
+            chkManyChildren.isHidden = true
         }
     }
     
@@ -194,7 +201,7 @@ class AddLocalDirectoryViewController: NSViewController, DirectoryViewGotoDelega
             return
         }
         if let call = onApply {
-            call(txtDirectory.stringValue, txtSubFolder.stringValue, chkExclude.state == .on)
+            call(txtDirectory.stringValue, txtSubFolder.stringValue, chkExclude.state == .on, chkManyChildren.state == .on)
         }
     }
     

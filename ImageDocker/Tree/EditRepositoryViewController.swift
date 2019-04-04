@@ -362,7 +362,7 @@ class EditRepositoryViewController: NSViewController {
         
         guard pass else {return}
         
-        ImageFolderTreeScanner.createRepository(name: name,
+        ImageFolderTreeScanner.default.createRepository(name: name,
                                                 path: repositoryPath,
                                                 homePath: homePath,
                                                 storagePath: storagePath,

@@ -28,6 +28,7 @@ class ImageFolder : NSObject {
          facePath:String,
          cropPath:String,
          countOfImages:Int = 0,
+         manyChildren:Bool = false,
          updateModelStore:Bool = true,
          sharedDB:DatabaseWriter? = nil){
         self.url = url
@@ -55,6 +56,7 @@ class ImageFolder : NSObject {
                                                                        facePath: facePath,
                                                                        cropPath: cropPath,
                                                                        subPath: subPath,
+                                                                       manyChildren: manyChildren,
                                                                        sharedDB: sharedDB)
         if self.containerFolder?.imageCount == nil {
             self.containerFolder?.imageCount = countOfImages

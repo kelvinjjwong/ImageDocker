@@ -35,7 +35,7 @@ class ModelStore {
                                                 //, configuration: config
                                                 )
             }catch{
-                print(error)
+                print(error) //SQLite error 5: database is locked
             }
             
         }
@@ -332,6 +332,51 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
+    func getAllContainerPaths(repositoryPath:String? = nil) -> Set<String> {
+        var result:Set<String> = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                if let repoPath = repositoryPath {
+                    let cursor = try ImageContainer.filter(sql: "repositoryPath = ?", arguments: [repoPath]).order(sql: "path").fetchCursor(db)
+                    while let container = try cursor.next() {
+                        result.insert(container.path)
+                    }
+                }else{
+                    let cursor = try ImageContainer.order(sql: "path").fetchCursor(db)
+                    while let container = try cursor.next() {
+                        result.insert(container.path)
+                    }
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func updateImageContainerParentFolder(path:String, parentFolder:String){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update ImageContainer set parentFolder = ? where path = ?", arguments: [parentFolder, path])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func updateImageContainerHideByParent(path:String, hideByParent:Bool){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update ImageContainer set hideByParent = \(hideByParent ? 1 : 0) where path = ?", arguments: [path])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
     func getOrCreateContainer(name:String,
                               path:String,
                               parentPath parentFolder:String = "",
@@ -341,6 +386,8 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                               facePath:String,
                               cropPath:String,
                               subPath:String,
+                              manyChildren:Bool = false,
+                              hideByParent:Bool = false,
                               sharedDB:DatabaseWriter? = nil) -> ImageContainer {
         var container:ImageContainer?
         do {
@@ -364,7 +411,10 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                                                parentPath: parentFolder.replacingFirstOccurrence(of: repositoryPath.withStash(), with: ""),
                                                hiddenByRepository: false,
                                                hiddenByContainer: false,
-                                               deviceId: "")
+                                               deviceId: "",
+                                               manyChildren: manyChildren,
+                                               hideByParent: hideByParent
+                                              )
                     try container?.save(db)
                 }
             }
@@ -2796,6 +2846,21 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         migrator.registerMigration("v20") { db in
             try db.alter(table: "Image", body: { t in
                 t.add(column: "scanedFace", .boolean).defaults(to: false).indexed()
+            })
+        }
+        
+        migrator.registerMigration("v21") { db in
+            try db.alter(table: "ImageContainer", body: { t in
+                t.add(column: "manyChildren", .boolean).defaults(to: false).indexed()
+            })
+        }
+        
+        migrator.registerMigration("v22") { db in
+            try db.alter(table: "ImageDevicePath", body: { t in
+                t.add(column: "manyChildren", .boolean).defaults(to: false).indexed()
+            })
+            try db.alter(table: "ImageContainer", body: { t in
+                t.add(column: "hideByParent", .boolean).defaults(to: false).indexed()
             })
         }
         
