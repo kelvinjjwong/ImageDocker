@@ -99,37 +99,41 @@ class ImageFolderTreeScanner {
             if continousWorking {
                 autoreleasepool { () -> Void in
                     let container = containers[index]
-                    print("Setting for container \(index)/\(jall) [\(container.path)]")
-                    let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path),
-                                                              name:container.name,
-                                                              repositoryPath: container.repositoryPath,
-                                                              homePath: container.homePath,
-                                                              storagePath: container.storagePath,
-                                                              facePath: container.facePath,
-                                                              cropPath: container.cropPath,
-                                                              countOfImages: Int(container.imageCount),
-                                                              updateModelStore: false,
-                                                              sharedDB: ModelStore.sharedDBPool())
-                    urlFolders[container.path] = imageFolder
-                    if fast { // fast
-                        if container.parentFolder != "" {
-                            if let parentFolder = urlFolders[container.parentFolder] {
-                                imageFolder.setParent(parentFolder)
+                    if container.hideByParent {
+                        // do nothing
+                    }else{
+                        print("Setting for container \(index)/\(jall) [\(container.path)]")
+                        let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path),
+                                                                  name:container.name,
+                                                                  repositoryPath: container.repositoryPath,
+                                                                  homePath: container.homePath,
+                                                                  storagePath: container.storagePath,
+                                                                  facePath: container.facePath,
+                                                                  cropPath: container.cropPath,
+                                                                  countOfImages: Int(container.imageCount),
+                                                                  updateModelStore: false,
+                                                                  sharedDB: ModelStore.sharedDBPool())
+                        urlFolders[container.path] = imageFolder
+                        if fast { // fast
+                            if container.parentFolder != "" {
+                                if let parentFolder = urlFolders[container.parentFolder] {
+                                    imageFolder.setParent(parentFolder)
+                                }
+                            }else{
+                                if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
+                                    imageFolder.setParent(parent)
+                                    foldersNeedSave.insert(imageFolder)
+                                }
                             }
+                            
                         }else{
                             if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
                                 imageFolder.setParent(parent)
                                 foldersNeedSave.insert(imageFolder)
                             }
                         }
-                        
-                    }else{
-                        if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
-                            imageFolder.setParent(parent)
-                            foldersNeedSave.insert(imageFolder)
-                        }
+                        imageFolders.append(imageFolder)
                     }
-                    imageFolders.append(imageFolder)
                     index += 1
                 } // end of autorelease
                 

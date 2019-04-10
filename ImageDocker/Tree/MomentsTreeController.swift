@@ -101,7 +101,7 @@ extension ViewController {
         collection.month = year.month
         collection.day = year.day
         self.showTreeNodeButton(collection: collection, image: NSImage(named: .slideshowTemplate))
-        collection.buttonAction = {
+        collection.buttonAction = { sender in
             self.onTreeItemQuickLook(collection: collection)
         }
         
@@ -128,7 +128,7 @@ extension ViewController {
         collection.year = month.year
         collection.month = month.month
         self.showTreeNodeButton(collection: collection, image: NSImage(named: .slideshowTemplate))
-        collection.buttonAction = {
+        collection.buttonAction = { sender in
             self.onTreeItemQuickLook(collection: collection)
         }
         
@@ -157,7 +157,7 @@ extension ViewController {
         collection.month = day.month
         collection.day = day.day
         self.showTreeNodeButton(collection: collection, image: NSImage(named: .slideshowTemplate))
-        collection.buttonAction = {
+        collection.buttonAction = { sender in 
             self.onTreeItemQuickLook(collection: collection)
         }
         

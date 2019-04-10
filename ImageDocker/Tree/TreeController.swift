@@ -169,28 +169,28 @@ extension ViewController : PXSourceListDelegate {
                         
                         if title == "EVENTS" {
                             cv.buttonShouldShow = true
-                            cv.buttonAction = {
+                            cv.buttonAction = { sender in
                                 DispatchQueue.main.async {
                                     self.refreshEventTree()
                                 }
                             }
                         }else if title == "PLACES" {
                             cv.buttonShouldShow = true
-                            cv.buttonAction = {
+                            cv.buttonAction = { sender in
                                 DispatchQueue.main.async {
                                     self.refreshLocationTree()
                                 }
                             }
                         }else if title == "MOMENTS" {
                             cv.buttonShouldShow = true
-                            cv.buttonAction = {
+                            cv.buttonAction = { sender in
                                 DispatchQueue.main.async {
                                     self.refreshMomentTree()
                                 }
                             }
                         }else if title == "LIBRARY" {
                             cv.buttonShouldShow = true
-                            cv.buttonAction = {
+                            cv.buttonAction = { sender in
                                 DispatchQueue.main.async {
                                     self.refreshLibraryTree()
                                 }

@@ -24,13 +24,14 @@ struct DeviceCopyDestination {
     var type:DeviceCopyDestinationType
     var exclude:Bool
     var manyChildren:Bool
+    var data:ImageDevicePath? = nil
     
     static func new(_ pair:(String, String)) -> DeviceCopyDestination {
-        return DeviceCopyDestination(sourcePath: pair.0, toSubFolder: pair.1, type:.onDevice, exclude: false, manyChildren: false)
+        return DeviceCopyDestination(sourcePath: pair.0, toSubFolder: pair.1, type:.onDevice, exclude: false, manyChildren: false, data: nil)
     }
     
     static func local(_ pair:(String, String)) -> DeviceCopyDestination {
-        return DeviceCopyDestination(sourcePath: pair.0, toSubFolder: pair.1, type:.localDirectory, exclude: false, manyChildren: false)
+        return DeviceCopyDestination(sourcePath: pair.0, toSubFolder: pair.1, type:.localDirectory, exclude: false, manyChildren: false, data: nil)
     }
     
     static func from(_ devicePath: ImageDevicePath) -> DeviceCopyDestination {
@@ -38,7 +39,9 @@ struct DeviceCopyDestination {
                                      toSubFolder: devicePath.toSubFolder,
                                      type:.onDevice,
                                      exclude: devicePath.exclude,
-                                     manyChildren: devicePath.manyChildren)
+                                     manyChildren: devicePath.manyChildren,
+                                     data: devicePath
+                                    )
     }
     
     static func from(_ devicePaths: [ImageDevicePath]) -> [DeviceCopyDestination] {
@@ -104,6 +107,9 @@ class DeviceCopyViewController: NSViewController {
     var addLocalDirectoryViewController:AddLocalDirectoryViewController!
     var addOnDeviceDirectoryPopover:NSPopover?
     
+    var devicePathPopover:NSPopover?
+    var devicePathViewController:DevicePathDetailViewController!
+    
     // MARK: TABLE DELEGATES
     
     let sourcePathTableDelegate:DeviceSourcePathTableDelegate = DeviceSourcePathTableDelegate()
@@ -125,6 +131,26 @@ class DeviceCopyViewController: NSViewController {
         self.tblSourcePath.dataSource = sourcePathTableDelegate
         self.tblFiles.delegate = fileTableDelegate
         self.tblFiles.dataSource = fileTableDelegate
+        
+        self.tblSourcePath.action = #selector(onSourcePathTableClicked)
+    }
+    
+    @objc func onSourcePathTableClicked() {
+        print("row \(tblSourcePath.clickedRow), col \(tblSourcePath.clickedColumn) clicked")
+        if sourcePathTableDelegate.paths.count > 0 && tblSourcePath.clickedRow < paths.count {
+            let devicePath = paths[tblSourcePath.clickedRow]
+            if let data = devicePath.data {
+                self.createDevicePathDetailPopover()
+                self.devicePathPopover?.close()
+                self.devicePathViewController.initView(data, self.txtRepositoryPath.stringValue)
+                let rect = self.tblSourcePath.rect(ofRow: tblSourcePath.clickedRow)
+                let cellRect = NSMakeRect(5, 255-rect.origin.y, 100, 100)
+                self.devicePathPopover?.show(relativeTo: cellRect, of: self.view, preferredEdge: .minX)
+                
+            }else{
+                print("CLICKED, NO DATA")
+            }
+        }
     }
     
     func viewInit(device:PhoneDevice){
@@ -413,6 +439,7 @@ class DeviceCopyViewController: NSViewController {
     }
     
     func loadFromPath(path: DeviceCopyDestination, reloadFileList:Bool = false, checksumMode:ChecksumMode = .Rough, excludePaths:[String]) {
+        
         if path.type == .onDevice {
             loadFromOnDevicePath(path: path.sourcePath, reloadFileList: reloadFileList, checksumMode: checksumMode, excludePaths: excludePaths)
         }else if path.type == .localDirectory {
@@ -421,10 +448,19 @@ class DeviceCopyViewController: NSViewController {
     }
     
     func refreshFileList(){
-        if selectedPath != nil {
-            self.fileTableDelegate.files = cbShowCopied.state == .on ? self.getFileFullList(from: selectedPath!, reloadFileList: true) : self.getFileFilteredList(from: selectedPath!, reloadFileList: true)
+        if let selectedPath = self.selectedPath {
+            let state = self.cbShowCopied.state == .on
             
-            self.tblFiles.reloadData()
+            self.lblMessage.stringValue = "Loading from: \(selectedPath.sourcePath)"
+        
+            DispatchQueue.global().async {
+                self.fileTableDelegate.files = state ? self.getFileFullList(from: selectedPath, reloadFileList: true) : self.getFileFilteredList(from: selectedPath, reloadFileList: true)
+                
+                DispatchQueue.main.async {
+                    self.tblFiles.reloadData()
+                    self.toggleSpecialButtons()
+                }
+            }
         }
     }
     
@@ -793,6 +829,9 @@ class DeviceCopyViewController: NSViewController {
             DispatchQueue.global().async {
                 for path in self.paths {
                     if !path.exclude {
+                        DispatchQueue.main.async {
+                            self.lblMessage.stringValue = "Loading from: \(path.sourcePath)"
+                        }
                         self.loadFromPath(path: path, checksumMode: checksumMode, excludePaths: excludePaths)
                     }
                 }
@@ -824,7 +863,9 @@ class DeviceCopyViewController: NSViewController {
             let minDate = self.getFilteredMinimalDate()
             timeRange = " (\(minDate) - \(maxDate))"
         }
-        self.lblMessage.stringValue = "TOTAL: \(sumOfFulllist), NEW: \(sumOfFiltered)\(timeRange)"
+        let msg = "TOTAL: \(sumOfFulllist), NEW: \(sumOfFiltered)\(timeRange)"
+        self.lblMessage.stringValue = msg
+        print(msg)
         
         if sumOfFiltered == 0 {
             self.btnCopy.isEnabled = false
@@ -1195,6 +1236,26 @@ class DeviceCopyViewController: NSViewController {
         }
     }
     
+    // MARK: POPOVER - DEVICE PATH DETAIL
+    fileprivate func createDevicePathDetailPopover(){
+        var myPopover = self.devicePathPopover
+        if(myPopover == nil){
+            myPopover = NSPopover()
+            
+            let frame = CGRect(origin: .zero, size: CGSize(width: 500, height: 280))
+            
+            self.devicePathViewController = DevicePathDetailViewController()
+            self.devicePathViewController.view.frame = frame
+            
+            myPopover!.contentViewController = self.devicePathViewController
+            //myPopover!.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
+            //myPopover!.animates = true
+            //myPopover!.delegate = self
+            myPopover!.behavior = NSPopover.Behavior.transient
+        }
+        self.devicePathPopover = myPopover
+    }
+    
     // MARK: POPOVER - ON DEVICE DIRECTORY
     
     fileprivate func createOnDeviceDirectoryPopover(){
@@ -1302,11 +1363,13 @@ extension DeviceCopyViewController : DeviceSourcePathSelectionDelegate {
         selectedPath = path
         print("SELECTED \(path.sourcePath) - \(path.toSubFolder) - \(path.type)")
         self.refreshFileList()
+        
     }
 }
 
 class DeviceSourcePathTableDelegate : NSObject {
     var paths:[DeviceCopyDestination] = []
+    var clickAction: ( (_ devicePath:DeviceCopyDestination, _ rowIndex:Int) -> Void )? = nil
     
     var sourcePathSelectionDelegate : DeviceSourcePathSelectionDelegate?
     var lastSelectedRow:Int?{
@@ -1385,6 +1448,15 @@ extension DeviceSourcePathTableDelegate : NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
         lastSelectedRow = row
+        if lastSelectedRow != nil && paths.count > 0 && lastSelectedRow! < paths.count {
+            
+            
+            if clickAction != nil {
+                print("TRIGGER CLICK ACTION")
+                let devicePath = paths[lastSelectedRow!]
+                clickAction!(devicePath, lastSelectedRow!)
+            }
+        }
         return true
     }
 }

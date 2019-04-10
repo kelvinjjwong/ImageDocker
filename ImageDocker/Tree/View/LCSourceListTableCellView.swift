@@ -23,7 +23,7 @@ class LCSourceListTableCellView : PXSourceListTableCellView {
     @IBOutlet weak var btnMore: NSButton!
     var buttonShouldShow = false
     
-    var buttonAction: (() -> Void)? = nil
+    var buttonAction: ((_ sender:NSButton) -> Void)? = nil
     
     var buttonMenuItems:[MenuAction] = []
     
@@ -50,7 +50,7 @@ class LCSourceListTableCellView : PXSourceListTableCellView {
     
     @IBAction func onMoreClicked(_ sender: NSButton) {
         if self.buttonAction != nil {
-            self.buttonAction!()
+            self.buttonAction!(sender)
         }else if self.buttonMenuItems.count > 0 {
             print("build menu")
             let contextMenu = NSMenu.init(title: "more")

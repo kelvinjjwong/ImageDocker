@@ -98,7 +98,7 @@ extension ViewController {
         
         self.showTreeNodeButton(collection: collection, image: moreHorizontalIcon)
         if imageFolder.parent == nil {
-            collection.buttonAction = {
+            collection.buttonAction = { sender in
                 if let window = self.repositoryWindowController.window {
                     if self.repositoryWindowController.isWindowLoaded {
                         window.makeKeyAndOrderFront(self)
@@ -112,7 +112,7 @@ extension ViewController {
                 }
             }
         }else{
-            collection.buttonAction = {
+            collection.buttonAction = { sender in 
                 if let window = self.containerWindowController.window {
                     if self.containerWindowController.isWindowLoaded {
                         window.makeKeyAndOrderFront(self)

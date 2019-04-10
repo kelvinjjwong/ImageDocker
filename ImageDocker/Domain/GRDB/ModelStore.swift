@@ -487,6 +487,18 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
     }
     
+    func updateImageContainerToggleManyChildren(path:String, state:Bool) {
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update ImageContainer set manyChildren = \(state ? 1 : 0) where path = ?", arguments: [path])
+                try db.execute("update ImageContainer set hideByParent = \(state ? 1 : 0) where path like ?", arguments: ["\(path.withStash())%"])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
     func hideContainer(path:String){
         do {
             let db = ModelStore.sharedDBPool()

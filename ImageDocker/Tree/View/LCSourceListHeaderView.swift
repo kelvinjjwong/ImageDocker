@@ -25,7 +25,7 @@ class LCSourceListHeaderView : PXSourceListTableCellView {
     @IBOutlet weak var btnMore: NSButton!
     var buttonShouldShow = false
     
-    var buttonAction: (() -> Void)? = nil
+    var buttonAction: ((_ sender:NSButton) -> Void)? = nil
     
     func setUpTrackingArea()
     {
@@ -43,7 +43,7 @@ class LCSourceListHeaderView : PXSourceListTableCellView {
     
     @IBAction func onMoreClicked(_ sender: NSButton) {
         if self.buttonAction != nil {
-            self.buttonAction!()
+            self.buttonAction!(sender)
         }
     }
     
