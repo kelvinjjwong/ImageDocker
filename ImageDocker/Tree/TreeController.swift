@@ -295,26 +295,38 @@ extension ViewController : PXSourceListDelegate {
             if let collection:PhotoCollection = selectedItem.representedObject as? PhotoCollection {
                 
                 if collection.source! == .library {
-                    self.selectImageFolder(collection.imageFolder!)
+                    if PreferencesController.amountForPagination() > 0 && collection.photoCount > PreferencesController.amountForPagination() {
+                        self.btnRefreshCollectionView.title = "Pages..."
+                        self.selectImageFolder(collection.imageFolder!, pageSize: 200, pageNumber: 1, subdirectories: true)
+                    }else{
+                        self.btnRefreshCollectionView.title = "Reload"
+                        self.selectImageFolder(collection.imageFolder!)
+                    }
                 }else if collection.source! == .moment {
                     //print("selected moment \(collection.title)")
                     if PreferencesController.amountForPagination() > 0 && collection.photoCount > PreferencesController.amountForPagination() {
+                        self.btnRefreshCollectionView.title = "Pages..."
                         self.selectMomentsTreeEntry(collection, pageSize: 200, pageNumber: 1)
                     }else{
+                        self.btnRefreshCollectionView.title = "Reload"
                         self.selectMomentsTreeEntry(collection)
                     }
                 }else if collection.source! == .place {
                     //print("selected place moment \(collection.title)")
                     if PreferencesController.amountForPagination() > 0 && collection.photoCount > PreferencesController.amountForPagination() {
+                        self.btnRefreshCollectionView.title = "Pages..."
                         self.selectPlacesTreeEntry(collection, pageSize: 200, pageNumber: 1)
                     }else{
+                        self.btnRefreshCollectionView.title = "Reload"
                         self.selectPlacesTreeEntry(collection)
                     }
                 }else if collection.source! == .event {
                     //print("selected place moment \(collection.title)")
                     if PreferencesController.amountForPagination() > 0 && collection.photoCount > PreferencesController.amountForPagination() {
+                        self.btnRefreshCollectionView.title = "Pages..."
                         self.selectEvent(collection, pageSize: 200, pageNumber: 1)
                     }else{
+                        self.btnRefreshCollectionView.title = "Reload"
                         self.selectEvent(collection)
                     }
                 }else if collection.source! == .device {
