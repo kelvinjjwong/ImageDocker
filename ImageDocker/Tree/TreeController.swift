@@ -298,13 +298,25 @@ extension ViewController : PXSourceListDelegate {
                     self.selectImageFolder(collection.imageFolder!)
                 }else if collection.source! == .moment {
                     //print("selected moment \(collection.title)")
-                    self.selectMomentsTreeEntry(collection)
+                    if PreferencesController.amountForPagination() > 0 && collection.photoCount > PreferencesController.amountForPagination() {
+                        self.selectMomentsTreeEntry(collection, pageSize: 200, pageNumber: 1)
+                    }else{
+                        self.selectMomentsTreeEntry(collection)
+                    }
                 }else if collection.source! == .place {
                     //print("selected place moment \(collection.title)")
-                    self.selectPlacesTreeEntry(collection)
+                    if PreferencesController.amountForPagination() > 0 && collection.photoCount > PreferencesController.amountForPagination() {
+                        self.selectPlacesTreeEntry(collection, pageSize: 200, pageNumber: 1)
+                    }else{
+                        self.selectPlacesTreeEntry(collection)
+                    }
                 }else if collection.source! == .event {
                     //print("selected place moment \(collection.title)")
-                    self.selectEvent(collection)
+                    if PreferencesController.amountForPagination() > 0 && collection.photoCount > PreferencesController.amountForPagination() {
+                        self.selectEvent(collection, pageSize: 200, pageNumber: 1)
+                    }else{
+                        self.selectEvent(collection)
+                    }
                 }else if collection.source! == .device {
                     self.selectDeviceNode(collection)
                 }

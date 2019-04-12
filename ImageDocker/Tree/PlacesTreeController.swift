@@ -248,17 +248,52 @@ extension ViewController {
         self.treeIdItems[day.id] = item
     }
     
+    func reloadPlaceCollection(sender:NSButton) {
+        if let collection = self.selectedCollection {
+            self.createCollectionPaginationPopover()
+            self.collectionPaginationViewController
+                .initView(self.imagesLoader.lastRequest,
+                          onCountTotal: {
+                            return ModelStore.default.countPhotoFiles(year: collection.year, month: collection.month, day: collection.day,
+                                                                      ignoreDate: !collection.isDateEntry,
+                                                                      country: collection.countryData,
+                                                                      province: collection.provinceData,
+                                                                      city: collection.cityData,
+                                                                      place: collection.placeData,
+                                                                      imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
+                },
+                          onCountHidden: {
+                            return ModelStore.default.countHiddenPhotoFiles(year: collection.year, month: collection.month, day: collection.day,
+                                                                            ignoreDate: !collection.isDateEntry,
+                                                                            country: collection.countryData,
+                                                                            province: collection.provinceData,
+                                                                            city: collection.cityData,
+                                                                            place: collection.placeData,
+                                                                            imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
+                },
+                          onLoad: { pageSize, pageNumber in
+                            self.selectMomentsTreeEntry(collection, pageSize: pageSize, pageNumber: pageNumber)
+                })
+            
+            let cellRect = sender.bounds
+            self.collectionPaginationPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .minY)
+        }
+    }
+    
     // MARK: CLICK ACTION
     
-    func selectPlacesTreeEntry(_ collection:PhotoCollection){
+    func selectPlacesTreeEntry(_ collection:PhotoCollection, pageSize:Int = 0, pageNumber:Int = 0){
         if collection.placeData == "" && collection.countryData == "" && collection.provinceData == "" && collection.cityData == "" {
             return
         }
+        self.selectedCollection = collection
         //guard !self.scaningRepositories && !self.creatingRepository else {return}
         self.scaningRepositories = true
         
         self.imagesLoader.clean()
         collectionView.reloadData()
+        
+        self.imagesLoader.showHidden = self.chbShowHidden.state == .on
         
         DispatchQueue.global().async {
             self.collectionLoadingIndicator = Accumulator(target: collection.photoCount, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {data in
@@ -285,7 +320,7 @@ extension ViewController {
                         place: collection.placeData,
                         filterImageSource: self.filterImageSource,
                         filterCameraModel: self.filterCameraModel,
-                        indicator:self.collectionLoadingIndicator)
+                        indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber)
                     self.refreshCollectionView()
                 })
             }else{
@@ -300,7 +335,7 @@ extension ViewController {
                     place: collection.placeData,
                     filterImageSource: self.filterImageSource,
                     filterCameraModel: self.filterCameraModel,
-                    indicator:self.collectionLoadingIndicator)
+                    indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber)
                 self.refreshCollectionView()
             }
             

@@ -839,7 +839,7 @@
                                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     </tableHeaderCell>
-                                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="db2-k1-PpD">
+                                                                    <textFieldCell key="dataCell" lineBreakMode="charWrapping" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="db2-k1-PpD">
                                                                         <font key="font" metaFont="system"/>
                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1366,7 +1366,7 @@
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" selectable="YES" id="2QJ-No-35H">
                                                                     <font key="font" metaFont="system"/>
-                                                                    <string key="title">When the system memory usage of this application exceeds the peak you selected above, the task will pause for a short while to free up memory and then continue with the task.</string>
+                                                                    <string key="title">When system memory usage of this application exceeds the peak you selected above, ongoing task will pause for a short while to free up memory and then resume.</string>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -1420,6 +1420,52 @@
                                                                 <rect key="frame" x="451" y="140" width="37" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="TvI-hO-SyE">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                        </subviews>
+                                                    </view>
+                                                </box>
+                                                <box fixedFrame="YES" title="Pagination" translatesAutoresizingMaskIntoConstraints="NO" id="CjS-97-1Ra">
+                                                    <rect key="frame" x="28" y="119" width="683" height="96"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <view key="contentView" id="euX-Pn-GMJ">
+                                                        <rect key="frame" x="3" y="3" width="677" height="78"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qbl-6o-qIU">
+                                                                <rect key="frame" x="18" y="35" width="210" height="17"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="When amount of items larger than" id="de7-uA-Skk">
+                                                                    <font key="font" usesAppearanceFont="YES"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="C0h-yv-KP9">
+                                                                <rect key="frame" x="232" y="30" width="96" height="25"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <popUpButtonCell key="cell" type="push" title="Unlimited" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="wLI-hN-ljJ" id="avN-z9-oWW">
+                                                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="menu"/>
+                                                                    <menu key="menu" id="GDu-M2-15e">
+                                                                        <items>
+                                                                            <menuItem title="Unlimited" id="wLI-hN-ljJ">
+                                                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                                                            </menuItem>
+                                                                            <menuItem title="500" state="on" id="Kqs-aX-xSb"/>
+                                                                            <menuItem title="700" id="Ts9-Ko-p03"/>
+                                                                            <menuItem title="1000" id="bKF-lo-L7x"/>
+                                                                        </items>
+                                                                    </menu>
+                                                                </popUpButtonCell>
+                                                            </popUpButton>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iGI-Rr-Cbh">
+                                                                <rect key="frame" x="331" y="35" width="261" height="17"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" title=", items will be paginated in collection view." id="WjS-WF-5Bl">
                                                                     <font key="font" metaFont="system"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2131,6 +2177,7 @@ brew install ifuse</string>
                         <outlet property="lblMinMemory" destination="MKU-CI-l5p" id="xPZ-Se-00A"/>
                         <outlet property="lblPythonMessage" destination="b3e-eh-klZ" id="7Pa-Oi-gxm"/>
                         <outlet property="lblSelectedMemory" destination="Cby-mt-lNm" id="fpb-gO-p3b"/>
+                        <outlet property="lstAmountForPagination" destination="C0h-yv-KP9" id="nbL-kr-yMt"/>
                         <outlet property="memorySlider" destination="vjx-6i-AGL" id="mvi-kn-bhT"/>
                         <outlet property="tabs" destination="2L9-ci-i6l" id="i7B-53-DnW"/>
                         <outlet property="txtAlternativeFaceModelPath" destination="9ka-nL-Bsc" id="wOu-Qq-b0U"/>

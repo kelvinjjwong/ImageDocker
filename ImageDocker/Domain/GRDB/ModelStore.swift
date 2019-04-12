@@ -288,7 +288,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
-                result = try ImageContainer.filter(Column("path").like("\(rootPath)%")).fetchAll(db)
+                result = try ImageContainer.filter(Column("path").like("\(rootPath.withStash())%")).fetchAll(db)
             }
         }catch{
             print(error)
@@ -469,6 +469,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
+                //print("UPDATE CONTAINER old path = \(oldPath) with new path = \(newPath)")
                 try db.execute("update ImageContainer set path = ?, repositoryPath = ?, parentFolder = ?, subPath = ? where path = ?", arguments: [newPath, repositoryPath, parentFolder, subPath, oldPath])
             }
         }catch{
@@ -723,8 +724,8 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     // MARK: IMAGES GET BY COLLECTION
     
-    func getPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil ) -> [Image] {
-        
+    // sql by date & place
+    fileprivate func generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String, String, [Any]) {
         var hiddenWhere = ""
         if !includeHidden {
             hiddenWhere = "AND hidden=0"
@@ -767,13 +768,62 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         
         print(stmt)
         
+        return (stmt, stmtHidden, sqlArgs)
+    }
+    
+    // count by date & place
+    func countPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> Int {
+        let (stmt, _, sqlArgs) = self.generateSQLStatementForPhotoFiles(year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
+        
+        var result = 0
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs)).fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    // count by date & place
+    func countHiddenPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> Int {
+        let (_, stmtHidden, sqlArgs) = self.generateSQLStatementForPhotoFiles(year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
+        
+        var result = 0
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql:stmtHidden, arguments:StatementArguments(sqlArgs)).fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    // get by date & place
+    func getPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil , pageSize:Int = 0, pageNumber:Int = 0) -> [Image] {
+        
+        let (stmt, stmtHidden, sqlArgs) = self.generateSQLStatementForPhotoFiles(year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
+        
         var result:[Image] = []
         var hiddenCount:Int = 0
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
                 hiddenCount = try Image.filter(sql: stmtHidden, arguments:StatementArguments(sqlArgs)).fetchCount(db)
-                result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs)).order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+                if pageNumber > 0 && pageSize > 0 {
+                    result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs))
+                        .order([Column("photoTakenDate").asc, Column("filename").asc])
+                        .limit(pageSize, offset: pageSize * (pageNumber - 1))
+                        .fetchAll(db)
+                }else{
+                    result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs))
+                        .order([Column("photoTakenDate").asc, Column("filename").asc])
+                        .fetchAll(db)
+                }
             }
         }catch{
             print(error)
@@ -784,9 +834,8 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
-    
-    
-    func getPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil ) -> [Image] {
+    // sql by date & event & place
+    fileprivate func generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String, String, [Any]) {
         var hiddenWhere = ""
         if !includeHidden {
             hiddenWhere = "AND hidden=0"
@@ -811,13 +860,62 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         
         print(stmt)
         
+        return (stmt, stmtHidden, sqlArgs)
+    }
+    
+    // count by date & event & place
+    func countPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> Int {
+        let (stmt, _, sqlArgs) = self.generateSQLStatementForPhotoFiles(year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
+        
+        var result = 0
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs)).fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    // count by date & event & place
+    func countHiddenPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> Int {
+        let (_, stmtHidden, sqlArgs) = self.generateSQLStatementForPhotoFiles(year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
+        
+        var result = 0
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql:stmtHidden, arguments:StatementArguments(sqlArgs)).fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    // get by date & event & place
+    func getPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil , pageSize:Int = 0, pageNumber:Int = 0) -> [Image] {
+        
+        let (stmt, stmtHidden, sqlArgs) = self.generateSQLStatementForPhotoFiles(year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
+        
         var result:[Image] = []
         var hiddenCount:Int = 0
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
                 hiddenCount = try Image.filter(sql: stmtHidden, arguments:StatementArguments(sqlArgs)).fetchCount(db)
-                result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs)).order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+                if pageNumber > 0 && pageSize > 0 {
+                    result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs))
+                        .order([Column("photoTakenDate").asc, Column("filename").asc])
+                        .limit(pageSize, offset: pageSize * (pageNumber - 1))
+                        .fetchAll(db)
+                }else{
+                    result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs))
+                        .order([Column("photoTakenDate").asc, Column("filename").asc])
+                        .fetchAll(db)
+                }
             }
         }catch{
             print(error)
@@ -992,17 +1090,28 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
-    func getPhotoFiles(parentPath:String, includeHidden:Bool = true) -> [Image] {
+    func getPhotoFiles(parentPath:String, includeHidden:Bool = true, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false) -> [Image] {
         var otherPredicate:String = ""
         if !includeHidden {
             otherPredicate = " AND (hidden is null || hidden = 0)"
+        }
+        
+        var condition = "containerPath = ?"
+        var key:[String] = [parentPath]
+        if subdirectories {
+            condition = "(containerPath = ? or containerPath like ?)"
+            key.append("\(parentPath.withStash())%")
         }
         
         var result:[Image] = []
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
-                result = try Image.filter(sql: "containerPath = ? \(otherPredicate)", arguments: StatementArguments([parentPath])).order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+                if pageSize > 0 && pageNumber > 0 {
+                    result = try Image.filter(sql: "\(condition) \(otherPredicate)", arguments: StatementArguments(key)).order([Column("photoTakenDate").asc, Column("path").asc]).limit(pageSize, offset: pageSize * (pageNumber - 1)).fetchAll(db)
+                }else{
+                    result = try Image.filter(sql: "\(condition) \(otherPredicate)", arguments: StatementArguments(key)).order([Column("photoTakenDate").asc, Column("path").asc]).fetchAll(db)
+                }
             }
         }catch{
             print(error)
@@ -1201,6 +1310,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
+    // count by path~
     func countPhotoFiles(rootPath:String) -> Int {
         var result:Int = 0
         do {
@@ -1287,6 +1397,22 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             try db.read { db in
                 let keyword = "\(root)%"
                 result = try Image.filter(sql: "path like ?", arguments: [keyword]).fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+        
+    }
+    
+    func countHiddenImages(repositoryRoot:String) -> Int {
+        var result = 0
+        let root = repositoryRoot.withStash()
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                let keyword = "\(root)%"
+                result = try Image.filter(sql: "path like ? and hidden = 1", arguments: [keyword]).fetchCount(db)
             }
         }catch{
             print(error)

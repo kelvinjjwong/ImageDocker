@@ -900,7 +900,7 @@ class EditRepositoryViewController: NSViewController {
             
             
             self.toggleButtons(false)
-            self.lblMessage.stringValue = ""
+            self.lblMessage.stringValue = "Loading editable image files ..."
             
             DispatchQueue.global().async {
             
@@ -962,6 +962,10 @@ class EditRepositoryViewController: NSViewController {
                 
                 // save sub-containers' path
                 
+                DispatchQueue.main.async {
+                    self.lblMessage.stringValue = "Loading sub-folders ..."
+                }
+                
                 let subContainers = ModelStore.default.getContainers(rootPath: originalRepoPath)
                 
                 let total = subContainers.count
@@ -985,7 +989,7 @@ class EditRepositoryViewController: NSViewController {
                         sub.parentPath = URL(fileURLWithPath: sub.path).deletingLastPathComponent().path.replacingFirstOccurrence(of: originalRepoPath, with: "")
                     }
                     sub.repositoryPath = newRepoPath
-                    sub.parentFolder = sub.parentFolder.replacingFirstOccurrence(of: originalRepoPath, with: newRepoPath)
+                    sub.parentFolder = sub.parentFolder.replacingFirstOccurrence(of: repoContainer.path, with: newRepoPathNoStash) // without stash
                     sub.path = sub.path.replacingFirstOccurrence(of: originalRepoPath, with: newRepoPath)
                     ModelStore.default.updateImageContainerPaths(oldPath: oldPath, newPath: sub.path, repositoryPath: sub.repositoryPath, parentFolder: sub.parentFolder, subPath: sub.subPath)
                 }

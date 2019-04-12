@@ -115,6 +115,10 @@
 		8EEB88842090B44B00CDEC81 /* ImageDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEB88832090B44B00CDEC81 /* ImageDropView.swift */; };
 		8EEF071A2256C9D9000520B7 /* DevicePathDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEF07182256C9D9000520B7 /* DevicePathDetailViewController.swift */; };
 		8EEF071B2256C9D9000520B7 /* DevicePathDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EEF07192256C9D9000520B7 /* DevicePathDetailViewController.xib */; };
+		8EEF071E225FCF8E000520B7 /* ContainerDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEF071C225FCF8E000520B7 /* ContainerDetailViewController.swift */; };
+		8EEF071F225FCF8E000520B7 /* ContainerDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EEF071D225FCF8E000520B7 /* ContainerDetailViewController.xib */; };
+		8EEF07222260D0E1000520B7 /* CollectionPaginationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEF07202260D0E1000520B7 /* CollectionPaginationViewController.swift */; };
+		8EEF07232260D0E1000520B7 /* CollectionPaginationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EEF07212260D0E1000520B7 /* CollectionPaginationViewController.xib */; };
 		8EF125A622140C0F00C423CA /* ImageDevicePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF125A522140C0F00C423CA /* ImageDevicePath.swift */; };
 		8EF125A92214590000C423CA /* DeviceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF125A72214590000C423CA /* DeviceListViewController.swift */; };
 		8EF125AA2214590000C423CA /* DeviceListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EF125A82214590000C423CA /* DeviceListViewController.xib */; };
@@ -277,6 +281,10 @@
 		8EEB88832090B44B00CDEC81 /* ImageDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDropView.swift; sourceTree = "<group>"; };
 		8EEF07182256C9D9000520B7 /* DevicePathDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePathDetailViewController.swift; sourceTree = "<group>"; };
 		8EEF07192256C9D9000520B7 /* DevicePathDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DevicePathDetailViewController.xib; sourceTree = "<group>"; };
+		8EEF071C225FCF8E000520B7 /* ContainerDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerDetailViewController.swift; sourceTree = "<group>"; };
+		8EEF071D225FCF8E000520B7 /* ContainerDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContainerDetailViewController.xib; sourceTree = "<group>"; };
+		8EEF07202260D0E1000520B7 /* CollectionPaginationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionPaginationViewController.swift; sourceTree = "<group>"; };
+		8EEF07212260D0E1000520B7 /* CollectionPaginationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionPaginationViewController.xib; sourceTree = "<group>"; };
 		8EF125A522140C0F00C423CA /* ImageDevicePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDevicePath.swift; sourceTree = "<group>"; };
 		8EF125A72214590000C423CA /* DeviceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceListViewController.swift; sourceTree = "<group>"; };
 		8EF125A82214590000C423CA /* DeviceListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeviceListViewController.xib; sourceTree = "<group>"; };
@@ -525,6 +533,10 @@
 				8EF125A82214590000C423CA /* DeviceListViewController.xib */,
 				8EF4CE5C21D8026800C53AFF /* EditRepositoryViewController.swift */,
 				8EF125AB2216ECC500C423CA /* ContainerViewController.swift */,
+				8EEF071C225FCF8E000520B7 /* ContainerDetailViewController.swift */,
+				8EEF071D225FCF8E000520B7 /* ContainerDetailViewController.xib */,
+				8EEF07202260D0E1000520B7 /* CollectionPaginationViewController.swift */,
+				8EEF07212260D0E1000520B7 /* CollectionPaginationViewController.xib */,
 			);
 			path = Tree;
 			sourceTree = "<group>";
@@ -828,6 +840,7 @@
 				8E8D4716222991230091E9C3 /* FaceCollectionViewItem.xib in Resources */,
 				8E0AFA41208BDEA100CE8B68 /* Assets.xcassets in Resources */,
 				8E98B8F120D0EE3300771280 /* PlaceListViewController.xib in Resources */,
+				8EEF071F225FCF8E000520B7 /* ContainerDetailViewController.xib in Resources */,
 				8EE1AB3E20D05E49001C75B0 /* EventListViewController.xib in Resources */,
 				8E0AFA44208BDEA100CE8B68 /* Main.storyboard in Resources */,
 				8E95739B20EBEBD7003BD651 /* FilterViewController.xib in Resources */,
@@ -835,6 +848,7 @@
 				8EB986BE20B30C920075B081 /* CollectionViewItem.xib in Resources */,
 				8EF4CE6521E56DC100C53AFF /* NotificationViewController.xib in Resources */,
 				8EEF071B2256C9D9000520B7 /* DevicePathDetailViewController.xib in Resources */,
+				8EEF07232260D0E1000520B7 /* CollectionPaginationViewController.xib in Resources */,
 				8E3EC3BE214DE623004B6125 /* DateTimeViewController.xib in Resources */,
 				8EF125AA2214590000C423CA /* DeviceListViewController.xib in Resources */,
 				8EBA9DE0216F8BB100DACAAD /* NotesViewController.xib in Resources */,
@@ -919,6 +933,7 @@
 				8EF32D142095355400511538 /* LCSourceListTableCellView.swift in Sources */,
 				8E3EC3BD214DE623004B6125 /* DateTimeViewController.swift in Sources */,
 				8EBA9DE921766EAB00DACAAD /* TheaterCollectionViewController.swift in Sources */,
+				8EEF07222260D0E1000520B7 /* CollectionPaginationViewController.swift in Sources */,
 				8EFA7CFD211D72B300419777 /* ImageDeviceFile.swift in Sources */,
 				8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */,
 				8EFA7CFB211D713700419777 /* ImageDevice.swift in Sources */,
@@ -1000,6 +1015,7 @@
 				8EB986C620B6EBC40075B081 /* DarkTableView.swift in Sources */,
 				8E4C38CF2117B54D0089502C /* Android.swift in Sources */,
 				8E8D47182229AC220091E9C3 /* FaceIconCollectionViewController.swift in Sources */,
+				8EEF071E225FCF8E000520B7 /* ContainerDetailViewController.swift in Sources */,
 				8E0AFA3D208BDEA000CE8B68 /* AppDelegate.swift in Sources */,
 				8EFE76412094B98D00B7CFCA /* PhotoCollection.swift in Sources */,
 				8EBA692A2090C87D00221131 /* Helper.swift in Sources */,

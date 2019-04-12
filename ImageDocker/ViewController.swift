@@ -105,7 +105,7 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var treeIndicator: NSLevelIndicator!
     
-
+    var selectedCollection:PhotoCollection?
     var selectedImageFolder:ImageFolder?
     var selectedImageFile:String = ""
     
@@ -200,6 +200,14 @@ class ViewController: NSViewController {
     
     // MARK: Container Dialog
     var containerWindowController:NSWindowController!
+    
+    
+    var containerDetailPopover:NSPopover?
+    var containerDetailViewController:ContainerDetailViewController!
+    
+    
+    var collectionPaginationPopover:NSPopover?
+    var collectionPaginationViewController:CollectionPaginationViewController!
     
     // MARK: Concurrency Indicators
     
@@ -1112,8 +1120,22 @@ class ViewController: NSViewController {
         }
     }
     
-    @IBAction func onRefreshCollectionButtonClicked(_ sender: Any) {
-        self.refreshCollection()
+    var isCollectionPaginated:Bool = false
+    
+    @IBAction func onRefreshCollectionButtonClicked(_ sender: NSButton) {
+        if self.imagesLoader.lastRequest.loadSource == .repository && self.imagesLoader.lastRequest.pageNumber > 0 && self.imagesLoader.lastRequest.pageSize > 0 {
+            self.reloadImageFolder(sender: sender)
+        }else if self.imagesLoader.lastRequest.loadSource == .moment && self.imagesLoader.lastRequest.pageNumber > 0 && self.imagesLoader.lastRequest.pageSize > 0 {
+            if self.imagesLoader.lastRequest.place == nil {
+                self.reloadMomentCollection(sender: sender)
+            }else{
+                self.reloadPlaceCollection(sender: sender)
+            }
+        }else if self.imagesLoader.lastRequest.loadSource == .event && self.imagesLoader.lastRequest.pageNumber > 0 && self.imagesLoader.lastRequest.pageSize > 0 {
+            self.reloadEventCollection(sender: sender)
+        }else{
+            self.refreshCollection()
+        }
     }
     
     fileprivate func combineDuplicatesInCollectionView() {

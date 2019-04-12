@@ -32,13 +32,17 @@ extension ViewController {
                                 if let parent = imageFolder.parent {
                                     if let parentContainer = parent.containerFolder, !parentContainer.manyChildren {
                                         // parent has a few children
-                                        self.addLibraryTreeEntry(imageFolder: imageFolder)
+                                        if imageFolder.countOfImages > 0 {
+                                            self.addLibraryTreeEntry(imageFolder: imageFolder)
+                                        }
                                     }else{
                                         // parent has many children
                                         // ignore this one
                                     }
                                 }else{ // no parent
-                                    self.addLibraryTreeEntry(imageFolder: imageFolder)
+                                    if imageFolder.countOfImages > 0 {
+                                        self.addLibraryTreeEntry(imageFolder: imageFolder)
+                                    }
                                 }
                             }
                         }
@@ -113,16 +117,16 @@ extension ViewController {
             }
         }else{
             collection.buttonAction = { sender in 
-                if let window = self.containerWindowController.window {
-                    if self.containerWindowController.isWindowLoaded {
-                        window.makeKeyAndOrderFront(self)
-                        print("order to front")
-                    }else{
-                        self.containerWindowController.showWindow(self)
-                        print("show window")
-                    }
-                    let vc = window.contentViewController as! ContainerViewController
-                    vc.initContainer(path: imageFolder.url.path)
+                
+                if let container = imageFolder.containerFolder {
+                    self.createContainerDetailPopover()
+                    self.containerDetailViewController.initView(container, onLoad: { pageSize, pageNumber in
+                        print("CALLED ONLOAD \(pageSize) \(pageNumber)")
+                        self.selectImageFolder(imageFolder, pageSize: pageSize, pageNumber: pageNumber, subdirectories: container.manyChildren)
+                    })
+                    
+                    let cellRect = sender.bounds
+                    self.containerDetailPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxX)
                 }
             }
         }
@@ -136,9 +140,30 @@ extension ViewController {
         
     }
     
-    // MARK: CLICK ACTION
+    func reloadImageFolder(sender:NSButton) {
+        if let imageFolder = self.selectedImageFolder, let container = imageFolder.containerFolder {
+            self.createCollectionPaginationPopover()
+            self.collectionPaginationViewController
+                .initView(self.imagesLoader.lastRequest,
+                          onCountTotal: {
+                            return ModelStore.default.countImages(repositoryRoot: container.path.withStash())
+                },
+                          onCountHidden: {
+                            return ModelStore.default.countHiddenImages(repositoryRoot: container.path.withStash())
+                },
+                          onLoad: { pageSize, pageNumber in
+                            print("CALLED ONLOAD \(pageSize) \(pageNumber)")
+                            self.selectImageFolder(imageFolder, pageSize: pageSize, pageNumber: pageNumber, subdirectories: container.manyChildren)
+            })
+            
+            let cellRect = sender.bounds
+            self.collectionPaginationPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .minY)
+        }
+    }
     
-    func selectImageFolder(_ imageFolder:ImageFolder){
+    // MARK: CLICK ACTION, LOAD COLLECTION
+    
+    func selectImageFolder(_ imageFolder:ImageFolder, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){
         //guard !self.scaningRepositories && !self.creatingRepository else {return}
         self.selectedImageFolder = imageFolder
         //print("selected image folder: \(imageFolder.url.path)")
@@ -146,6 +171,8 @@ extension ViewController {
         
         self.imagesLoader.clean()
         collectionView.reloadData()
+        
+        self.imagesLoader.showHidden = self.chbShowHidden.state == .on
         
         DispatchQueue.global().async {
             self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: { data in
@@ -157,15 +184,54 @@ extension ViewController {
                 }
             )
             if self.imagesLoader.isLoading() {
+                DispatchQueue.main.async {
+                    self.indicatorMessage.stringValue = "Cancelling last request ..."
+                }
                 self.imagesLoader.cancel(onCancelled: {
-                    self.imagesLoader.load(from: imageFolder.url, indicator:self.collectionLoadingIndicator)
+                    self.imagesLoader.load(from: imageFolder.url, indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
                     self.refreshCollectionView()
                 })
             }else{
                 print("LOADING from library entry \(imageFolder.name)")
-                self.imagesLoader.load(from: imageFolder.url, indicator:self.collectionLoadingIndicator)
+                self.imagesLoader.load(from: imageFolder.url, indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
                 self.refreshCollectionView()
             }
         }
+    }
+    
+    func createContainerDetailPopover(){
+        var myPopover = self.containerDetailPopover
+        if(myPopover == nil){
+            myPopover = NSPopover()
+            
+            let frame = CGRect(origin: .zero, size: CGSize(width: 540, height: 390))
+            self.containerDetailViewController = ContainerDetailViewController()
+            self.containerDetailViewController.view.frame = frame
+            
+            myPopover!.contentViewController = self.containerDetailViewController
+            myPopover!.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
+            //myPopover!.animates = true
+            myPopover!.delegate = self
+            myPopover!.behavior = NSPopover.Behavior.transient
+        }
+        self.containerDetailPopover = myPopover
+    }
+    
+    func createCollectionPaginationPopover(){
+        var myPopover = self.collectionPaginationPopover
+        if(myPopover == nil){
+            myPopover = NSPopover()
+            
+            let frame = CGRect(origin: .zero, size: CGSize(width: 540, height: 180))
+            self.collectionPaginationViewController = CollectionPaginationViewController()
+            self.collectionPaginationViewController.view.frame = frame
+            
+            myPopover!.contentViewController = self.collectionPaginationViewController
+            myPopover!.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
+            //myPopover!.animates = true
+            myPopover!.delegate = self
+            myPopover!.behavior = NSPopover.Behavior.transient
+        }
+        self.collectionPaginationPopover = myPopover
     }
 }

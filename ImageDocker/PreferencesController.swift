@@ -25,6 +25,7 @@ final class PreferencesController: NSViewController {
     fileprivate static let ideviceidKey = "ideviceidKey"
     fileprivate static let ideviceinfoKey = "ideviceinfoKey"
     fileprivate static let memoryPeakKey = "memoryPeakKey"
+    fileprivate static let amountForPaginationKey = "amountForPaginationKey"
     
     // MARK: Properties
     @IBOutlet weak var txtBaiduAK: NSTextField!
@@ -61,6 +62,7 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var lblSelectedMemory: NSTextField!
     @IBOutlet weak var lblMin2Memory: NSTextField!
     @IBOutlet weak var lblMid2Memory: NSTextField!
+    @IBOutlet weak var lstAmountForPagination: NSPopUpButton!
     
     
     
@@ -274,6 +276,13 @@ final class PreferencesController: NSViewController {
         NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: self.lblDatabaseBackupPath.stringValue)])
     }
     
+    // MARK: PAGINATION
+    
+    class func amountForPagination() -> Int {
+        let defaults = UserDefaults.standard
+        let value = defaults.integer(forKey: amountForPaginationKey)
+        return value
+    }
     
     // MARK: MEMORY USAGE
     
@@ -467,6 +476,14 @@ final class PreferencesController: NSViewController {
                      forKey: PreferencesController.faceRecognitionModelKey)
         defaults.set(Int(self.memorySlider.intValue),
                      forKey: PreferencesController.memoryPeakKey)
+        
+        var paginationAmount = 0
+        if self.lstAmountForPagination.stringValue != "Unlimited" {
+            paginationAmount = Int(self.lstAmountForPagination.titleOfSelectedItem ?? "0") ?? 0
+        }
+        print("SET AMOUNT FOR PAGINATION AS \(paginationAmount)")
+        defaults.set(paginationAmount,
+                     forKey: PreferencesController.amountForPaginationKey)
 
     }
     
@@ -528,6 +545,14 @@ final class PreferencesController: NSViewController {
         self.lblComponentsStatus.stringValue = result
         self.lblDatabaseBackupPath.stringValue = URL(fileURLWithPath: PreferencesController.databasePath()).appendingPathComponent("DataBackup").path
         self.setupMemorySlider()
+        
+        let paginationAmount = PreferencesController.amountForPagination()
+        print("GOT AMOUNT FOR PAGINATION \(paginationAmount)")
+        if paginationAmount == 0 {
+            self.lstAmountForPagination.selectItem(withTitle: "Unlimited")
+        }else{
+            self.lstAmountForPagination.selectItem(withTitle: "\(paginationAmount)")
+        }
     }
     
     fileprivate func setupMemorySlider() {
