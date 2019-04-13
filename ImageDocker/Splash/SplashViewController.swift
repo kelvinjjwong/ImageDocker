@@ -18,6 +18,9 @@ class SplashViewController: NSViewController {
     @IBOutlet weak var lblProgress: NSTextField!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
     
+    @IBOutlet weak var lblSubMessage: NSTextField!
+    @IBOutlet weak var lblSubProgress: NSTextField!
+    @IBOutlet weak var subProgressIndicator: NSProgressIndicator!
     
     required init?(coder: NSCoder) {
         self.onStartup = {}
@@ -43,12 +46,69 @@ class SplashViewController: NSViewController {
         self.btnRetry.isHidden = true
         self.btnQuit.isHidden = true
         
+        self.lblSubMessage.isHidden = true
+        self.lblSubProgress.isHidden = true
+        self.subProgressIndicator.isHidden = true
+        
         self.lblProgress.stringValue = "0 %"
         self.progressIndicator.minValue = 0
         self.progressIndicator.maxValue = 100
         self.progressIndicator.doubleValue = 0
         
+        NotificationCenter.default.addObserver(self, selector: #selector(beginSubProgress(notification:)), name: NSNotification.Name(rawValue: "FOLDERSETTER_BEGIN"), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(setTotalOfSubProgress(notification:)), name: NSNotification.Name(rawValue: "FOLDERSETTER_TOTAL"), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(increSubProgress(notification:)), name: NSNotification.Name(rawValue: "FOLDERSETTER_INCREMENT"), object: nil)
+        
         self.onStartup()
+    }
+    
+    @objc func beginSubProgress(notification:Notification){
+        print("BEGIN SUB PROGRESS")
+        DispatchQueue.main.async {
+            self.subProgressIndicator.minValue = 0
+            self.subProgressIndicator.maxValue = 100
+            self.subProgressIndicator.doubleValue = 0
+            
+            self.lblSubMessage.stringValue = "Preparing folders ..."
+            self.lblSubMessage.isHidden = false
+            self.lblSubProgress.isHidden = true
+            self.subProgressIndicator.isHidden = false
+        }
+    }
+    
+    @objc func increSubProgress(notification:Notification){
+        
+        print("INCREASE SUB PROGRESS BY 1")
+        DispatchQueue.main.async {
+            self.subProgressIndicator.increment(by: 1)
+            let value = Int(self.subProgressIndicator.doubleValue)
+            let total = Int(self.subProgressIndicator.maxValue)
+            self.lblSubProgress.stringValue = "\(value) / \(total)"
+            
+            if value == total {
+                self.lblSubMessage.isHidden = true
+                self.lblSubProgress.isHidden = true
+                self.subProgressIndicator.isHidden = true
+                
+                self.message("Preparing UI ...", progress: 6)
+            }
+        }
+    }
+    
+    @objc func setTotalOfSubProgress(notification:Notification){
+        if let obj = notification.object {
+            let total = obj as? Int ?? 0
+            print("SET SUB TOTAL TO \(total)")
+            DispatchQueue.main.async {
+                self.subProgressIndicator.minValue = 0
+                self.subProgressIndicator.maxValue = Double(total)
+                self.subProgressIndicator.doubleValue = 0
+                self.lblSubProgress.stringValue = "0 / \(total)"
+                self.lblSubProgress.isHidden = false
+            }
+        }
     }
     
     func progressWillEnd(at:Int) {

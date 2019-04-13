@@ -56,6 +56,7 @@ class ImageFolderTreeScanner {
         var imageFolders:[ImageFolder] = [ImageFolder]()
         
         print("\(Date()) Loading containers from db ")
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "FOLDERSETTER_BEGIN"), object: nil)
         let containers = ModelStore.default.getAllContainers()
         
         print("\(Date()) Setting up containers' parent ")
@@ -69,6 +70,7 @@ class ImageFolderTreeScanner {
         var foldersNeedSave:Set<ImageFolder> = []
         
         let jall = containers.count
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "FOLDERSETTER_TOTAL"), object: containers.count)
         while(index < containers.count ){
         //for container in containers { // TODO: most high memory impact
             
@@ -134,6 +136,8 @@ class ImageFolderTreeScanner {
                         }
                         imageFolders.append(imageFolder)
                     }
+                    
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "FOLDERSETTER_INCREMENT"), object: nil)
                     index += 1
                 } // end of autorelease
                 

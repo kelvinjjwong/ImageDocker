@@ -12,7 +12,6 @@
 		8E015123208F7D34009C2549 /* StackedVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015122208F7D34009C2549 /* StackedVideoViewController.swift */; };
 		8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E06AAFB20EEFFAD000A40C9 /* GoogleLocation.swift */; };
 		8E0AFA3D208BDEA000CE8B68 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0AFA3C208BDEA000CE8B68 /* AppDelegate.swift */; };
-		8E0AFA3F208BDEA000CE8B68 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0AFA3E208BDEA000CE8B68 /* ViewController.swift */; };
 		8E0AFA41208BDEA100CE8B68 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E0AFA40208BDEA100CE8B68 /* Assets.xcassets */; };
 		8E0AFA44208BDEA100CE8B68 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E0AFA42208BDEA100CE8B68 /* Main.storyboard */; };
 		8E0AFA50208BDEA100CE8B68 /* ImageDockerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0AFA4F208BDEA100CE8B68 /* ImageDockerTests.swift */; };
@@ -121,6 +120,7 @@
 		8EEF07232260D0E1000520B7 /* CollectionPaginationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EEF07212260D0E1000520B7 /* CollectionPaginationViewController.xib */; };
 		8EEF0728226215E7000520B7 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEF0726226215E7000520B7 /* SplashViewController.swift */; };
 		8EEF0729226215E7000520B7 /* SplashViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EEF0727226215E7000520B7 /* SplashViewController.xib */; };
+		8EEF072B22626FE8000520B7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEF072A22626FE7000520B7 /* ViewController.swift */; };
 		8EF125A622140C0F00C423CA /* ImageDevicePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF125A522140C0F00C423CA /* ImageDevicePath.swift */; };
 		8EF125A92214590000C423CA /* DeviceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF125A72214590000C423CA /* DeviceListViewController.swift */; };
 		8EF125AA2214590000C423CA /* DeviceListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EF125A82214590000C423CA /* DeviceListViewController.xib */; };
@@ -173,7 +173,6 @@
 		8E06AAFB20EEFFAD000A40C9 /* GoogleLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLocation.swift; sourceTree = "<group>"; };
 		8E0AFA39208BDEA000CE8B68 /* ImageDocker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageDocker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E0AFA3C208BDEA000CE8B68 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		8E0AFA3E208BDEA000CE8B68 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		8E0AFA40208BDEA100CE8B68 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8E0AFA43208BDEA100CE8B68 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8E0AFA45208BDEA100CE8B68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -289,6 +288,7 @@
 		8EEF07212260D0E1000520B7 /* CollectionPaginationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionPaginationViewController.xib; sourceTree = "<group>"; };
 		8EEF0726226215E7000520B7 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		8EEF0727226215E7000520B7 /* SplashViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SplashViewController.xib; sourceTree = "<group>"; };
+		8EEF072A22626FE7000520B7 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		8EF125A522140C0F00C423CA /* ImageDevicePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDevicePath.swift; sourceTree = "<group>"; };
 		8EF125A72214590000C423CA /* DeviceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceListViewController.swift; sourceTree = "<group>"; };
 		8EF125A82214590000C423CA /* DeviceListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeviceListViewController.xib; sourceTree = "<group>"; };
@@ -394,8 +394,8 @@
 				8EB986AC20B223550075B081 /* Tools */,
 				8EBA69262090C37B00221131 /* Supporting Files */,
 				8E0AFA3C208BDEA000CE8B68 /* AppDelegate.swift */,
-				8E0AFA3E208BDEA000CE8B68 /* ViewController.swift */,
 				8EF4CE6021E56CF700C53AFF /* ViewControllerUtils.swift */,
+				8EEF072A22626FE7000520B7 /* ViewController.swift */,
 				8E0AFA42208BDEA100CE8B68 /* Main.storyboard */,
 				8EA643F4208D6E5100C7D695 /* PreferencesController.swift */,
 				8E98B8F220D5C90600771280 /* WindowController.swift */,
@@ -978,7 +978,6 @@
 				8EB986BD20B30C920075B081 /* CollectionViewItemsLoader.swift in Sources */,
 				8E8D472022338DAC0091E9C3 /* TextListViewController.swift in Sources */,
 				8EFAF1FF20CAE422007A7783 /* Moment.swift in Sources */,
-				8E0AFA3F208BDEA000CE8B68 /* ViewController.swift in Sources */,
 				8EBA692C2090DB0300221131 /* DropPlaceCommons.swift in Sources */,
 				8E8D471A2229AC430091E9C3 /* FaceCollectionViewController.swift in Sources */,
 				8EB321D620FA433500D8C71D /* ImageEvent.swift in Sources */,
@@ -1035,6 +1034,7 @@
 				8EFE76412094B98D00B7CFCA /* PhotoCollection.swift in Sources */,
 				8EBA692A2090C87D00221131 /* Helper.swift in Sources */,
 				8E36B069217920C000646EA5 /* DayListController.swift in Sources */,
+				8EEF072B22626FE8000520B7 /* ViewController.swift in Sources */,
 				8E4C38D5211828FF0089502C /* MomentsTreeController.swift in Sources */,
 				8E3EC3B4214DB1B8004B6125 /* LunarSolarConverter.swift in Sources */,
 				8EBA9DDF216F8BB100DACAAD /* NotesViewController.swift in Sources */,

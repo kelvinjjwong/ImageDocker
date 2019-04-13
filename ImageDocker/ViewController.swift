@@ -279,7 +279,7 @@ class ViewController: NSViewController {
         self.startingUp = true
         
         DispatchQueue.global().async {
-            self.splashController.progressWillEnd(at: 5)
+            self.splashController.progressWillEnd(at: 6)
             self.splashController.message("Creating database backup ...", progress: 1)
             ExecutionEnvironment.default.createDataBackup(suffix: "-on-launch")
             IPHONE.bridge.unmountFuse()
@@ -606,7 +606,7 @@ class ViewController: NSViewController {
                 print("\(Date()) Loading view - configure tree - reloading tree view: DONE")
                 
                 if self.startingUp {
-                    self.splashController.message("Loaded library tree ...", progress: 5)
+                    self.splashController.message("Preparing UI ...", progress: 5)
                 }
             }
         }
@@ -924,6 +924,10 @@ class ViewController: NSViewController {
                     print("\(Date()) UPDATING LIBRARY TREE: DONE")
                     
                     self.creatingRepository = false
+                    
+//                    if self.startingUp {
+//                        self.splashController.message("Preparing UI ...", progress: 6)
+//                    }
                     
                 }
                 

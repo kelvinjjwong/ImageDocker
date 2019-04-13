@@ -13,18 +13,21 @@
                 <outlet property="btnRetry" destination="bxy-Qd-MPj" id="Wwq-VB-LQh"/>
                 <outlet property="lblMessage" destination="a4v-wU-H78" id="wmI-zv-sbi"/>
                 <outlet property="lblProgress" destination="feI-XN-UM6" id="px6-Ga-37G"/>
+                <outlet property="lblSubMessage" destination="ZiZ-Yi-CO1" id="Zoq-va-UWR"/>
+                <outlet property="lblSubProgress" destination="YkY-Jg-t3O" id="f9x-vt-Kg6"/>
                 <outlet property="progressIndicator" destination="fIf-WG-aXa" id="VR8-ZI-YMU"/>
+                <outlet property="subProgressIndicator" destination="DUi-x0-nKE" id="e8j-NW-4iA"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
+            <rect key="frame" x="0.0" y="0.0" width="480" height="477"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="a4v-wU-H78">
-                    <rect key="frame" x="8" y="125" width="464" height="22"/>
+                    <rect key="frame" x="8" y="228" width="464" height="22"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Starting ..." id="ADZ-xM-xWJ">
                         <font key="font" metaFont="system" size="18"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -32,7 +35,7 @@
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="X5V-f4-t0C">
-                    <rect key="frame" x="207" y="27" width="66" height="32"/>
+                    <rect key="frame" x="207" y="130" width="66" height="32"/>
                     <buttonCell key="cell" type="push" title="Quit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Rlu-zN-WdH">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -42,7 +45,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bxy-Qd-MPj">
-                    <rect key="frame" x="126" y="27" width="73" height="32"/>
+                    <rect key="frame" x="126" y="130" width="73" height="32"/>
                     <buttonCell key="cell" type="push" title="Retry" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vcf-Ve-W1x">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -52,7 +55,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="neH-xZ-fxH">
-                    <rect key="frame" x="281" y="27" width="116" height="32"/>
+                    <rect key="frame" x="281" y="130" width="116" height="32"/>
                     <buttonCell key="cell" type="push" title="Abort &amp; Quit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="axT-jg-Glo">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -62,7 +65,7 @@
                     </connections>
                 </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="feI-XN-UM6">
-                    <rect key="frame" x="188" y="98" width="104" height="17"/>
+                    <rect key="frame" x="188" y="201" width="104" height="17"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="100" id="8tA-YZ-tU4"/>
                     </constraints>
@@ -73,19 +76,49 @@
                     </textFieldCell>
                 </textField>
                 <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="fIf-WG-aXa">
-                    <rect key="frame" x="40" y="71" width="400" height="20"/>
+                    <rect key="frame" x="40" y="174" width="400" height="20"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="400" id="Mnp-Cl-y83"/>
                     </constraints>
                 </progressIndicator>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZiZ-Yi-CO1">
+                    <rect key="frame" x="8" y="91" width="464" height="22"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Preparing folders ..." id="dH6-x8-3Qx">
+                        <font key="font" metaFont="system" size="18"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YkY-Jg-t3O">
+                    <rect key="frame" x="38" y="66" width="404" height="17"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="400" id="6YO-gk-AQc"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="500 / 1000" id="u34-cp-AYC">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="DUi-x0-nKE">
+                    <rect key="frame" x="40" y="32" width="400" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="400" id="faM-Js-IDT"/>
+                    </constraints>
+                </progressIndicator>
             </subviews>
             <constraints>
+                <constraint firstItem="DUi-x0-nKE" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="9TK-xc-4uF"/>
                 <constraint firstItem="X5V-f4-t0C" firstAttribute="leading" secondItem="bxy-Qd-MPj" secondAttribute="trailing" constant="20" id="FfN-5s-lBd"/>
                 <constraint firstItem="fIf-WG-aXa" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="JVw-Et-ULb"/>
+                <constraint firstItem="YkY-Jg-t3O" firstAttribute="top" secondItem="ZiZ-Yi-CO1" secondAttribute="bottom" constant="8" id="Jln-zC-9Ey"/>
+                <constraint firstItem="ZiZ-Yi-CO1" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="10" id="KTx-uO-nfi"/>
                 <constraint firstItem="neH-xZ-fxH" firstAttribute="leading" secondItem="X5V-f4-t0C" secondAttribute="trailing" constant="20" id="M61-dB-Nq6"/>
                 <constraint firstItem="X5V-f4-t0C" firstAttribute="top" secondItem="a4v-wU-H78" secondAttribute="bottom" constant="70" id="Maf-dX-8P8"/>
                 <constraint firstAttribute="trailing" secondItem="a4v-wU-H78" secondAttribute="trailing" constant="10" id="P4W-fG-FdR"/>
                 <constraint firstItem="bxy-Qd-MPj" firstAttribute="top" secondItem="a4v-wU-H78" secondAttribute="bottom" constant="70" id="US6-k7-Trl"/>
+                <constraint firstItem="DUi-x0-nKE" firstAttribute="top" secondItem="YkY-Jg-t3O" secondAttribute="bottom" constant="15" id="UW7-CO-6iF"/>
+                <constraint firstAttribute="trailing" secondItem="ZiZ-Yi-CO1" secondAttribute="trailing" constant="10" id="VNO-2g-tyv"/>
                 <constraint firstItem="X5V-f4-t0C" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="YbQ-fd-cqK"/>
                 <constraint firstItem="a4v-wU-H78" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="ZfD-jq-Pgd"/>
                 <constraint firstItem="feI-XN-UM6" firstAttribute="top" secondItem="a4v-wU-H78" secondAttribute="bottom" constant="10" id="cpq-u7-7cy"/>
@@ -93,8 +126,12 @@
                 <constraint firstItem="fIf-WG-aXa" firstAttribute="top" secondItem="feI-XN-UM6" secondAttribute="bottom" constant="8" id="lXB-xa-Ng7"/>
                 <constraint firstItem="neH-xZ-fxH" firstAttribute="top" secondItem="a4v-wU-H78" secondAttribute="bottom" constant="70" id="mAm-jP-q9Z"/>
                 <constraint firstItem="a4v-wU-H78" firstAttribute="centerY" secondItem="Hz6-mo-xeY" secondAttribute="centerY" id="nNB-fX-vwk"/>
+                <constraint firstItem="ZiZ-Yi-CO1" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="nNj-bB-91J"/>
+                <constraint firstItem="ZiZ-Yi-CO1" firstAttribute="top" secondItem="X5V-f4-t0C" secondAttribute="bottom" constant="24" id="o4t-8Z-Jb0"/>
                 <constraint firstItem="a4v-wU-H78" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="10" id="rqs-pP-CaX"/>
+                <constraint firstItem="YkY-Jg-t3O" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="vTq-9r-OS5"/>
             </constraints>
+            <point key="canvasLocation" x="141" y="256.5"/>
         </customView>
     </objects>
 </document>
