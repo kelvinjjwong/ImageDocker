@@ -173,7 +173,7 @@ extension ViewController {
                                                                             imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
                 },
                           onLoad: { pageSize, pageNumber in
-                            self.selectMomentsTreeEntry(collection, pageSize: pageSize, pageNumber: pageNumber)
+                            self.selectEvent(collection, pageSize: pageSize, pageNumber: pageNumber)
                 })
             
             let cellRect = sender.bounds
@@ -206,11 +206,21 @@ extension ViewController {
                     self.indicatorMessage.stringValue = "Cancelling last request ..."
                 }
                 self.imagesLoader.cancel(onCancelled: {
-                    self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, event: collection.event, place: collection.place, filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel, indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber)
+                    self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day,
+                                           event: collection.event,
+                                           place: collection.place,
+                                           filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel,
+                                           indicator:self.collectionLoadingIndicator,
+                                           pageSize: pageSize, pageNumber: pageNumber)
                     self.refreshCollectionView()
                 })
             }else{
-                self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day, event: collection.event, place: collection.place, filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel, indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber)
+                self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day,
+                                       event: collection.event,
+                                       place: collection.place,
+                                       filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel,
+                                       indicator:self.collectionLoadingIndicator,
+                                       pageSize: pageSize, pageNumber: pageNumber)
                 self.refreshCollectionView()
             }
             

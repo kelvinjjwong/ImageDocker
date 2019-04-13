@@ -1235,11 +1235,7 @@ class ViewController: NSViewController {
     
     
     @IBAction func onCheckShowHiddenClicked(_ sender: NSButton) {
-        if self.chbShowHidden.state == NSButton.StateValue.on {
-            self.imagesLoader.showHidden = true
-        }else{
-            self.imagesLoader.showHidden = false
-        }
+        self.imagesLoader.showHidden = self.chbShowHidden.state == .on
         
         self.scaningRepositories = true
         

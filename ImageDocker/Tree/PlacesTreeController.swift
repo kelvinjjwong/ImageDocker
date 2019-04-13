@@ -119,6 +119,9 @@ extension ViewController {
         collection.month = place.month
         collection.day = place.day
         collection.gov = place.gov
+        collection.countryData = place.countryData
+        collection.provinceData = place.provinceData
+        collection.cityData = place.cityData
         collection.isDateEntry = false
         
         let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: placesIcon)
@@ -272,7 +275,7 @@ extension ViewController {
                                                                             imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
                 },
                           onLoad: { pageSize, pageNumber in
-                            self.selectMomentsTreeEntry(collection, pageSize: pageSize, pageNumber: pageNumber)
+                            self.selectPlacesTreeEntry(collection, pageSize: pageSize, pageNumber: pageNumber)
                 })
             
             let cellRect = sender.bounds
@@ -283,9 +286,15 @@ extension ViewController {
     // MARK: CLICK ACTION
     
     func selectPlacesTreeEntry(_ collection:PhotoCollection, pageSize:Int = 0, pageNumber:Int = 0){
-        if collection.placeData == "" && collection.countryData == "" && collection.provinceData == "" && collection.cityData == "" {
-            return
-        }
+        // disable click event on gov nodes
+//        if collection.placeData == "" && collection.countryData == "" && collection.provinceData == "" && collection.cityData == "" {
+//            print("SELECTED GOV COLLECTION:")
+//            print("\(collection.countryData) | \(collection.provinceData) | \(collection.cityData) | \(collection.placeData)")
+//            return
+//        }
+        print("SELECTED PLACE COLLECTION:")
+        print("\(collection.countryData) | \(collection.provinceData) | \(collection.cityData) | \(collection.placeData)")
+        
         self.selectedCollection = collection
         //guard !self.scaningRepositories && !self.creatingRepository else {return}
         self.scaningRepositories = true

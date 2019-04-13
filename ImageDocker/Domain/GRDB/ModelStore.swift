@@ -726,15 +726,26 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     // sql by date & place
     fileprivate func generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String, String, [Any]) {
+        
+        print("\(year) | \(month) | \(day) | ignoreDate:\(ignoreDate) | \(country) | \(province) | \(city)")
+        
         var hiddenWhere = ""
         if !includeHidden {
             hiddenWhere = "AND hidden=0"
         }
         var placeWhere = ""
-        if ((place == nil || place == "") && country != "" && province != "" && city != "" ){
-            placeWhere = "AND ( (country = '\(country)' AND province = '\(province)' AND city = '\(city)') OR (assignCountry = '\(country)' AND assignProvince = '\(province)' AND assignCity = '\(city)') )"
-        }else if place != nil {
-            placeWhere = "AND (place = '\(place ?? "")') OR (assignPlace = '\(place ?? "")') "
+        if (place == nil || place == ""){
+            if country != "" {
+                placeWhere += " AND (country = '\(country)' OR assignCountry = '\(country)')"
+            }
+            if province != "" {
+                placeWhere += " AND (province = '\(province)' OR assignProvince = '\(province)')"
+            }
+            if city != "" {
+                placeWhere += " AND (city = '\(city)' OR assignCity = '\(city)')"
+            }
+        }else {
+            placeWhere = "AND (place = '\(place ?? "")' OR assignPlace = '\(place ?? "")') "
         }
         
         
@@ -806,6 +817,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     // get by date & place
     func getPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil , pageSize:Int = 0, pageNumber:Int = 0) -> [Image] {
         
+        print("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
         let (stmt, stmtHidden, sqlArgs) = self.generateSQLStatementForPhotoFiles(year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
         
         var result:[Image] = []
@@ -836,6 +848,9 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     // sql by date & event & place
     fileprivate func generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String, String, [Any]) {
+        
+        print("\(year) | \(month) | \(day) | event:\(event) | \(country) | \(province) | \(city)")
+        
         var hiddenWhere = ""
         if !includeHidden {
             hiddenWhere = "AND hidden=0"
@@ -898,6 +913,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     // get by date & event & place
     func getPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil , pageSize:Int = 0, pageNumber:Int = 0) -> [Image] {
         
+        print("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
         let (stmt, stmtHidden, sqlArgs) = self.generateSQLStatementForPhotoFiles(year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
         
         var result:[Image] = []

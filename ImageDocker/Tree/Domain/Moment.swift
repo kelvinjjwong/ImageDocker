@@ -252,6 +252,9 @@ class Moments {
                 govEntry = places.first(where: {$0.gov == gov})!
             }
             govEntry.photoCount += photoCount
+            govEntry.countryData = data["country"] as? String ?? ""
+            govEntry.provinceData = data["province"] as? String ?? ""
+            govEntry.cityData = data["city"] as? String ?? ""
             
             // TODO: change to SET<String> for performance
             if govEntry.children.index(where: {$0.place == place}) == nil {
