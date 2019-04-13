@@ -119,6 +119,8 @@
 		8EEF071F225FCF8E000520B7 /* ContainerDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EEF071D225FCF8E000520B7 /* ContainerDetailViewController.xib */; };
 		8EEF07222260D0E1000520B7 /* CollectionPaginationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEF07202260D0E1000520B7 /* CollectionPaginationViewController.swift */; };
 		8EEF07232260D0E1000520B7 /* CollectionPaginationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EEF07212260D0E1000520B7 /* CollectionPaginationViewController.xib */; };
+		8EEF0728226215E7000520B7 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEF0726226215E7000520B7 /* SplashViewController.swift */; };
+		8EEF0729226215E7000520B7 /* SplashViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EEF0727226215E7000520B7 /* SplashViewController.xib */; };
 		8EF125A622140C0F00C423CA /* ImageDevicePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF125A522140C0F00C423CA /* ImageDevicePath.swift */; };
 		8EF125A92214590000C423CA /* DeviceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF125A72214590000C423CA /* DeviceListViewController.swift */; };
 		8EF125AA2214590000C423CA /* DeviceListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EF125A82214590000C423CA /* DeviceListViewController.xib */; };
@@ -285,6 +287,8 @@
 		8EEF071D225FCF8E000520B7 /* ContainerDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContainerDetailViewController.xib; sourceTree = "<group>"; };
 		8EEF07202260D0E1000520B7 /* CollectionPaginationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionPaginationViewController.swift; sourceTree = "<group>"; };
 		8EEF07212260D0E1000520B7 /* CollectionPaginationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionPaginationViewController.xib; sourceTree = "<group>"; };
+		8EEF0726226215E7000520B7 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		8EEF0727226215E7000520B7 /* SplashViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SplashViewController.xib; sourceTree = "<group>"; };
 		8EF125A522140C0F00C423CA /* ImageDevicePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDevicePath.swift; sourceTree = "<group>"; };
 		8EF125A72214590000C423CA /* DeviceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceListViewController.swift; sourceTree = "<group>"; };
 		8EF125A82214590000C423CA /* DeviceListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeviceListViewController.xib; sourceTree = "<group>"; };
@@ -377,6 +381,7 @@
 		8E0AFA3B208BDEA000CE8B68 /* ImageDocker */ = {
 			isa = PBXGroup;
 			children = (
+				8EEF0725226215C8000520B7 /* Splash */,
 				8EB986AE20B223BF0075B081 /* Domain */,
 				8EFA7CF7211A36C900419777 /* Device */,
 				8EBA9DE12173C7FC00DACAAD /* Theater */,
@@ -639,6 +644,15 @@
 			path = Search;
 			sourceTree = "<group>";
 		};
+		8EEF0725226215C8000520B7 /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				8EEF0726226215E7000520B7 /* SplashViewController.swift */,
+				8EEF0727226215E7000520B7 /* SplashViewController.xib */,
+			);
+			path = Splash;
+			sourceTree = "<group>";
+		};
 		8EFA7CF7211A36C900419777 /* Device */ = {
 			isa = PBXGroup;
 			children = (
@@ -846,6 +860,7 @@
 				8E95739B20EBEBD7003BD651 /* FilterViewController.xib in Resources */,
 				8E4E5B762219624D00FE4B68 /* FaceRecognitionOpenCV in Resources */,
 				8EB986BE20B30C920075B081 /* CollectionViewItem.xib in Resources */,
+				8EEF0729226215E7000520B7 /* SplashViewController.xib in Resources */,
 				8EF4CE6521E56DC100C53AFF /* NotificationViewController.xib in Resources */,
 				8EEF071B2256C9D9000520B7 /* DevicePathDetailViewController.xib in Resources */,
 				8EEF07232260D0E1000520B7 /* CollectionPaginationViewController.xib in Resources */,
@@ -1023,6 +1038,7 @@
 				8E4C38D5211828FF0089502C /* MomentsTreeController.swift in Sources */,
 				8E3EC3B4214DB1B8004B6125 /* LunarSolarConverter.swift in Sources */,
 				8EBA9DDF216F8BB100DACAAD /* NotesViewController.swift in Sources */,
+				8EEF0728226215E7000520B7 /* SplashViewController.swift in Sources */,
 				8E2CF37620AED6BA00A93375 /* Model.xcdatamodeld in Sources */,
 				8EC5BA2E21775571001510AF /* TheaterCollectionViewItem.swift in Sources */,
 				8EFAF1FB20BFFC8A007A7783 /* MetaInfoHolder.swift in Sources */,

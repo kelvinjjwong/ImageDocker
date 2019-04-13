@@ -42,6 +42,36 @@ class ModelStore {
         return _sharedDBPool!
     }
     
+//    fileprivate let debug_pass_at = 2
+//    fileprivate var debug_attempt = 0
+    
+    func testDatabase() -> (Bool, Error?) {
+        if ModelStore._sharedDBPool == nil {
+//            if debug_attempt == debug_pass_at {
+                do {
+                    //var config = Configuration()
+                    //config.trace = { print($0) }     // Prints all SQL statements
+                    
+                        ModelStore._sharedDBPool = try DatabasePool(path: ModelStore.default.dbfile
+                        //, configuration: config
+                        )
+                }catch{
+                    print(error) //SQLite error 5: database is locked
+                    return (false, error)
+                }
+//            }else{
+//                debug_attempt += 1
+//            }
+            if ModelStore._sharedDBPool == nil {
+                return (false, nil)
+            }else{
+                return (true, nil)
+            }
+        }else{
+            return (true, nil)
+        }
+    }
+    
     // MARK: COMMONS
     
     fileprivate func inArray(field:String, array:[Any]?, where whereStmt:inout String, args sqlArgs:inout [Any]){

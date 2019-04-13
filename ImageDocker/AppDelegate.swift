@@ -12,42 +12,12 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
     
     func applicationWillFinishLaunching(_ notification: Notification) {
-        DispatchQueue.global().async {
-            self.createDataBackup(suffix:"-on-launch")
-            IPHONE.bridge.unmountFuse()
-        }
+//        DispatchQueue.global().async {
+//            ExecutionEnvironment.default.createDataBackup(suffix:"-on-launch")
+//            IPHONE.bridge.unmountFuse()
+//        }
     }
     
-    func createDataBackup(suffix:String){
-        print("\(Date()) Start to create db backup")
-        let dbUrl = URL(fileURLWithPath: PreferencesController.databasePath())
-        let dbFile = dbUrl.appendingPathComponent("ImageDocker.sqlite")
-        let dbFileSHM = dbUrl.appendingPathComponent("ImageDocker.sqlite-shm")
-        let dbFileWAL = dbUrl.appendingPathComponent("ImageDocker.sqlite-wal")
-        let fileManager = FileManager.default
-        if fileManager.fileExists(atPath: dbFile.path) {
-            let dateFormat = DateFormatter()
-            dateFormat.dateFormat = "yyyyMMdd_HHmmss"
-            let backupFolder = "DataBackup/DataBackup-\(dateFormat.string(from: Date()))\(suffix)"
-            let backupUrl = dbUrl.appendingPathComponent(backupFolder)
-            do{
-                try fileManager.createDirectory(at: backupUrl, withIntermediateDirectories: true, attributes: nil)
-                
-                print("Backup data to: \(backupUrl.path)")
-                try fileManager.copyItem(at: dbFile, to: backupUrl.appendingPathComponent("ImageDocker.sqlite"))
-                if fileManager.fileExists(atPath: dbFileSHM.path){
-                    try fileManager.copyItem(at: dbFileSHM, to: backupUrl.appendingPathComponent("ImageDocker.sqlite-shm"))
-                }
-                if fileManager.fileExists(atPath: dbFileWAL.path){
-                    try fileManager.copyItem(at: dbFileWAL, to: backupUrl.appendingPathComponent("ImageDocker.sqlite-wal"))
-                }
-            }catch{
-                print(error)
-                return
-            }
-        }
-        print("\(Date()) Finish create db backup")
-    }
     
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -57,7 +27,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
-        self.createDataBackup(suffix:"-on-exit")
+        ExecutionEnvironment.default.createDataBackup(suffix:"-on-exit")
         IPHONE.bridge.unmountFuse()
     }
     

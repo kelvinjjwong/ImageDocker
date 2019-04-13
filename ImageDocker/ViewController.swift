@@ -259,41 +259,101 @@ class ViewController: NSViewController {
             self.splitviewPreview.setPosition(size.height - CGFloat(670) - CGFloat(40) - CGFloat(30), ofDividerAt: 0)
         }
         
+        
+        splashController.view.frame = self.view.bounds
+        
         windowInitial = true
     }
     
     override func viewDidAppear() {
         self.view.window?.delegate = self
         self.resize()
+        
+        print("AFTER SIZE \(self.view.frame.size.width) x \(self.view.frame.size.height)")
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    var startingUp = false
+    var splashController:SplashViewController!
+    
+    fileprivate func doStartWork() {
+        self.startingUp = true
         
-        self.btnShare.sendAction(on: .leftMouseDown)
-        self.btnCombineDuplicates.toolTip = "Combine duplicated images to the 1st image"
-        
-        print("\(Date()) Loading view")
-        ModelStore.default.checkData()
-        
-        //self.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        
-        //progressIndicator.isDisplayedWhenStopped = false
-        collectionProgressIndicator.isDisplayedWhenStopped = false
-        batchEditIndicator.isDisplayedWhenStopped = false
-        
-        print("\(Date()) Loading view - configure dark mode")
-        configureDarkMode()
-        
-        self.imagesLoader.hiddenCountHandler = { hiddenCount in
-            DispatchQueue.main.async {
-                self.chbShowHidden.title = "Hidden (\(hiddenCount))"
-                print("hidden: \(hiddenCount)")
+        DispatchQueue.global().async {
+            self.splashController.progressWillEnd(at: 5)
+            self.splashController.message("Creating database backup ...", progress: 1)
+            ExecutionEnvironment.default.createDataBackup(suffix: "-on-launch")
+            IPHONE.bridge.unmountFuse()
+            
+            
+            let idleSeconds = 15
+            let maxAttempt = 3
+            var retry = 0
+            var dbConnected = false
+            var additionalMessage = ""
+            
+            while(!dbConnected && retry < maxAttempt) {
+                
+                if self.splashController.decideQuit {
+                    break
+                }
+                let retryDisplay = retry > 0 ? ", retrying \(retry)/\(maxAttempt)" : ""
+                self.splashController.message("Connecting database ... \(additionalMessage)\(retryDisplay)", progress: 2)
+                if retry > 0 {
+                    for i in 0..<idleSeconds {
+                        if self.splashController.cancelWaiting {
+                            self.splashController.cancelWaiting = false
+                            break
+                        }else{
+                            self.splashController.showRetry(15 - i)
+                            sleep(1)
+                        }
+                    }
+                }
+                if self.splashController.decideQuit {
+                    break
+                }
+                let (connected, error) = ModelStore.default.testDatabase()
+                if !connected {
+                    
+                    retry += 1
+                    if let err = error {
+                        additionalMessage = "\(err)"
+                    }else{
+                        additionalMessage = "failed with unknown reason"
+                    }
+                    
+                }else{
+                    self.splashController.hideRetry()
+                }
+                dbConnected = connected
+            }
+            
+            if self.splashController.decideQuit {
+                self.doQuit()
+            }
+            
+            if !dbConnected {
+                self.splashController.showQuit()
+            }else{
+                self.splashController.message("Initializing user interface ...", progress: 3)
+                DispatchQueue.main.async {
+                    self.initView()
+                }
             }
         }
-        
-        self.chbShowHidden.state = NSButton.StateValue.off
-        
+    }
+    
+    fileprivate func didStartWork() {
+        self.view.subviews.removeLast()
+        self.startingUp = false
+        print("FINISHED STARTUP WORK")
+    }
+    
+    fileprivate func doQuit() {
+        NSApplication.shared.terminate(self)
+    }
+    
+    fileprivate func initView() {
         print("\(Date()) Loading view - preview zone")
         self.configurePreview()
         print("\(Date()) Loading view - selection view")
@@ -311,7 +371,9 @@ class ViewController: NSViewController {
         setupEventList()
         print("\(Date()) Loading view - setup place list")
         setupPlaceList()
+        
         print("\(Date()) Loading view - update library tree")
+        self.splashController.message("Loading libraries ...", progress: 4)
         updateLibraryTree()
         print("\(Date()) Loading view - update library tree: DONE")
         
@@ -415,6 +477,45 @@ class ViewController: NSViewController {
         print("\(Date()) Loading view: DONE")
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.btnShare.sendAction(on: .leftMouseDown)
+        self.btnCombineDuplicates.toolTip = "Combine duplicated images to the 1st image"
+        
+        self.splashController = SplashViewController(onStartup: {
+            self.doStartWork()
+        }, onCompleted: {
+            self.didStartWork()
+        })
+        //splashController.view.frame = self.view.frame
+        self.view.addSubview(splashController.view)
+        self.addChildViewController(splashController)
+        
+        print("\(Date()) Loading view")
+        //ModelStore.default.checkData() // no need anymore
+        
+        //self.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        
+        //progressIndicator.isDisplayedWhenStopped = false
+        collectionProgressIndicator.isDisplayedWhenStopped = false
+        batchEditIndicator.isDisplayedWhenStopped = false
+        
+        print("\(Date()) Loading view - configure dark mode")
+        configureDarkMode()
+        
+        self.imagesLoader.hiddenCountHandler = { hiddenCount in
+            DispatchQueue.main.async {
+                self.chbShowHidden.title = "Hidden (\(hiddenCount))"
+                print("hidden: \(hiddenCount)")
+            }
+        }
+        
+        self.chbShowHidden.state = NSButton.StateValue.off
+        
+        
+    }
+    
     func configureDarkMode() {
         view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         view.layer?.backgroundColor = NSColor.darkGray.cgColor
@@ -501,6 +602,12 @@ class ViewController: NSViewController {
                 
                 self.showToolbarOfTree()
                 self.showToolbarOfCollectionView()
+                
+                print("\(Date()) Loading view - configure tree - reloading tree view: DONE")
+                
+                if self.startingUp {
+                    self.splashController.message("Loaded library tree ...", progress: 5)
+                }
             }
         }
     }
@@ -817,6 +924,7 @@ class ViewController: NSViewController {
                     print("\(Date()) UPDATING LIBRARY TREE: DONE")
                     
                     self.creatingRepository = false
+                    
                 }
                 
             })
@@ -2193,5 +2301,3 @@ extension ViewController : LunarCalendarViewDelegate {
         print(selectedDate)
     }
 }
-
-

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="SplashViewController" customModule="ImageDocker" customModuleProvider="target">
+            <connections>
+                <outlet property="btnAbort" destination="neH-xZ-fxH" id="vz2-Ck-SXl"/>
+                <outlet property="btnQuit" destination="X5V-f4-t0C" id="6fR-gT-O7d"/>
+                <outlet property="btnRetry" destination="bxy-Qd-MPj" id="Wwq-VB-LQh"/>
+                <outlet property="lblMessage" destination="a4v-wU-H78" id="wmI-zv-sbi"/>
+                <outlet property="lblProgress" destination="feI-XN-UM6" id="px6-Ga-37G"/>
+                <outlet property="progressIndicator" destination="fIf-WG-aXa" id="VR8-ZI-YMU"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="a4v-wU-H78">
+                    <rect key="frame" x="8" y="125" width="464" height="22"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Starting ..." id="ADZ-xM-xWJ">
+                        <font key="font" metaFont="system" size="18"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="X5V-f4-t0C">
+                    <rect key="frame" x="207" y="27" width="66" height="32"/>
+                    <buttonCell key="cell" type="push" title="Quit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Rlu-zN-WdH">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="onQuitClicked:" target="-2" id="yav-Az-ToQ"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bxy-Qd-MPj">
+                    <rect key="frame" x="126" y="27" width="73" height="32"/>
+                    <buttonCell key="cell" type="push" title="Retry" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vcf-Ve-W1x">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="onRetryClicked:" target="-2" id="aZx-fD-AoA"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="neH-xZ-fxH">
+                    <rect key="frame" x="281" y="27" width="116" height="32"/>
+                    <buttonCell key="cell" type="push" title="Abort &amp; Quit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="axT-jg-Glo">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="onAbortClicked:" target="-2" id="iFP-1k-VoE"/>
+                    </connections>
+                </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="feI-XN-UM6">
+                    <rect key="frame" x="188" y="98" width="104" height="17"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="100" id="8tA-YZ-tU4"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="100%" id="EZn-q3-1qd">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="fIf-WG-aXa">
+                    <rect key="frame" x="40" y="71" width="400" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="400" id="Mnp-Cl-y83"/>
+                    </constraints>
+                </progressIndicator>
+            </subviews>
+            <constraints>
+                <constraint firstItem="X5V-f4-t0C" firstAttribute="leading" secondItem="bxy-Qd-MPj" secondAttribute="trailing" constant="20" id="FfN-5s-lBd"/>
+                <constraint firstItem="fIf-WG-aXa" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="JVw-Et-ULb"/>
+                <constraint firstItem="neH-xZ-fxH" firstAttribute="leading" secondItem="X5V-f4-t0C" secondAttribute="trailing" constant="20" id="M61-dB-Nq6"/>
+                <constraint firstItem="X5V-f4-t0C" firstAttribute="top" secondItem="a4v-wU-H78" secondAttribute="bottom" constant="70" id="Maf-dX-8P8"/>
+                <constraint firstAttribute="trailing" secondItem="a4v-wU-H78" secondAttribute="trailing" constant="10" id="P4W-fG-FdR"/>
+                <constraint firstItem="bxy-Qd-MPj" firstAttribute="top" secondItem="a4v-wU-H78" secondAttribute="bottom" constant="70" id="US6-k7-Trl"/>
+                <constraint firstItem="X5V-f4-t0C" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="YbQ-fd-cqK"/>
+                <constraint firstItem="a4v-wU-H78" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="ZfD-jq-Pgd"/>
+                <constraint firstItem="feI-XN-UM6" firstAttribute="top" secondItem="a4v-wU-H78" secondAttribute="bottom" constant="10" id="cpq-u7-7cy"/>
+                <constraint firstItem="feI-XN-UM6" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="fFk-ca-WZz"/>
+                <constraint firstItem="fIf-WG-aXa" firstAttribute="top" secondItem="feI-XN-UM6" secondAttribute="bottom" constant="8" id="lXB-xa-Ng7"/>
+                <constraint firstItem="neH-xZ-fxH" firstAttribute="top" secondItem="a4v-wU-H78" secondAttribute="bottom" constant="70" id="mAm-jP-q9Z"/>
+                <constraint firstItem="a4v-wU-H78" firstAttribute="centerY" secondItem="Hz6-mo-xeY" secondAttribute="centerY" id="nNB-fX-vwk"/>
+                <constraint firstItem="a4v-wU-H78" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="10" id="rqs-pP-CaX"/>
+            </constraints>
+        </customView>
+    </objects>
+</document>

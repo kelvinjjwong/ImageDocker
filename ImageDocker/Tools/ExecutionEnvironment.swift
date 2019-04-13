@@ -219,6 +219,37 @@ pip3 install face_recognition
 """
     
     static let componentsForDlibFaceRecognition:[String] = ["boost-python", "numpy", "dlib", "imutils", "opencv-python", "face-recognition"]
+
     
+    func createDataBackup(suffix:String){
+        print("\(Date()) Start to create db backup")
+        let dbUrl = URL(fileURLWithPath: PreferencesController.databasePath())
+        let dbFile = dbUrl.appendingPathComponent("ImageDocker.sqlite")
+        let dbFileSHM = dbUrl.appendingPathComponent("ImageDocker.sqlite-shm")
+        let dbFileWAL = dbUrl.appendingPathComponent("ImageDocker.sqlite-wal")
+        let fileManager = FileManager.default
+        if fileManager.fileExists(atPath: dbFile.path) {
+            let dateFormat = DateFormatter()
+            dateFormat.dateFormat = "yyyyMMdd_HHmmss"
+            let backupFolder = "DataBackup/DataBackup-\(dateFormat.string(from: Date()))\(suffix)"
+            let backupUrl = dbUrl.appendingPathComponent(backupFolder)
+            do{
+                try fileManager.createDirectory(at: backupUrl, withIntermediateDirectories: true, attributes: nil)
+                
+                print("Backup data to: \(backupUrl.path)")
+                try fileManager.copyItem(at: dbFile, to: backupUrl.appendingPathComponent("ImageDocker.sqlite"))
+                if fileManager.fileExists(atPath: dbFileSHM.path){
+                    try fileManager.copyItem(at: dbFileSHM, to: backupUrl.appendingPathComponent("ImageDocker.sqlite-shm"))
+                }
+                if fileManager.fileExists(atPath: dbFileWAL.path){
+                    try fileManager.copyItem(at: dbFileWAL, to: backupUrl.appendingPathComponent("ImageDocker.sqlite-wal"))
+                }
+            }catch{
+                print(error)
+                return
+            }
+        }
+        print("\(Date()) Finish create db backup")
+    }
 
 }
