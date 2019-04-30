@@ -94,6 +94,7 @@ class PeopleViewController: NSViewController {
     }
     
     fileprivate func configureControllers() {
+        self.progressIndicator.isHidden = true
         self.progressIndicator.isDisplayedWhenStopped = false
         
         self.iconCollectionViewController = (storyboard?.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "faceIconCollectionView")) as! FaceIconCollectionViewController)

@@ -683,6 +683,7 @@ class ViewController: NSViewController {
     }
     
     private func configureCollectionView() {
+        collectionProgressIndicator.isHidden = true
         let flowLayout = NSCollectionViewFlowLayout()
         flowLayout.itemSize = NSSize(width: 180.0, height: 150.0)
         flowLayout.sectionInset = NSEdgeInsets(top: 10.0, left: 20, bottom: 10.0, right: 20.0)
@@ -737,6 +738,7 @@ class ViewController: NSViewController {
     }
     
     func configureEditors(){
+        batchEditIndicator.isHidden = true
         comboEventList.isEditable = false
         comboPlaceList.isEditable = false
     }
