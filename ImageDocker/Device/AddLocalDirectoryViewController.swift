@@ -64,11 +64,13 @@ class AddLocalDirectoryViewController: NSViewController, DirectoryViewGotoDelega
     
     // MARK: INIT
     
+    private var destinationType:DeviceCopyDestinationType = .onDevice
     
     init(directoryViewDelegate:DirectoryViewDelegate, deviceType:MobileType, destinationType:DeviceCopyDestinationType, onApply: ((_ directory:String, _ toSubFolder:String, _ exclude:Bool, _ hasManyChildren:Bool) -> Void)? = nil){
         self.currentPath = URL(fileURLWithPath: "/")
         self.directoryViewDelegate = directoryViewDelegate
         self.onApply = onApply
+        self.destinationType = destinationType
         if deviceType == .Android {
             if destinationType == .onDevice {
                 self.defaultToFolder = "Camera"
@@ -85,17 +87,6 @@ class AddLocalDirectoryViewController: NSViewController, DirectoryViewGotoDelega
         super.init(nibName: NSNib.Name(rawValue: "AddLocalDirectoryViewController"), bundle: nil)
         self.tblShortcutDelegate.gotoDelegate = self
         self.tblFoldersDelegate.gotoDelegate = self
-        chkExclude.state = .off
-        chkManyChildren.state = .off
-        if destinationType == .onDevice {
-            labelToFolder = "To SubFolder:"
-            chkExclude.isHidden = false
-            chkManyChildren.isHidden = false
-        }else{
-            labelToFolder = "Pretend as:"
-            chkExclude.isHidden = true
-            chkManyChildren.isHidden = true
-        }
     }
     
     
@@ -132,6 +123,19 @@ class AddLocalDirectoryViewController: NSViewController, DirectoryViewGotoDelega
     }
     
     func viewInit(path:String, shortcuts:[DirectoryViewShortcut]){
+        
+        
+        chkExclude.state = .off
+        chkManyChildren.state = .off
+        if destinationType == .onDevice {
+            labelToFolder = "To SubFolder:"
+            chkExclude.isHidden = false
+            chkManyChildren.isHidden = false
+        }else{
+            labelToFolder = "Pretend as:"
+            chkExclude.isHidden = true
+            chkManyChildren.isHidden = true
+        }
         
         tblShortcutDelegate.shortcuts = shortcuts
         tblShortcut.reloadData()

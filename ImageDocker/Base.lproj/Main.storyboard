@@ -1447,15 +1447,15 @@
                                                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="C0h-yv-KP9">
                                                                 <rect key="frame" x="232" y="30" width="96" height="25"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <popUpButtonCell key="cell" type="push" title="Unlimited" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="wLI-hN-ljJ" id="avN-z9-oWW">
+                                                                <popUpButtonCell key="cell" type="push" title="Unlimited" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="wLI-hN-ljJ" id="avN-z9-oWW">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="menu"/>
                                                                     <menu key="menu" id="GDu-M2-15e">
                                                                         <items>
-                                                                            <menuItem title="Unlimited" id="wLI-hN-ljJ">
+                                                                            <menuItem title="Unlimited" state="on" id="wLI-hN-ljJ">
                                                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                                                             </menuItem>
-                                                                            <menuItem title="500" state="on" id="Kqs-aX-xSb"/>
+                                                                            <menuItem title="500" id="Kqs-aX-xSb"/>
                                                                             <menuItem title="700" id="Ts9-Ko-p03"/>
                                                                             <menuItem title="1000" id="bKF-lo-L7x"/>
                                                                         </items>
@@ -2295,9 +2295,9 @@ brew install ifuse</string>
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nwo-kc-8ks">
-                                <rect key="frame" x="108" y="523" width="704" height="17"/>
+                                <rect key="frame" x="108" y="523" width="504" height="17"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="700" id="7FD-PX-j1h"/>
+                                    <constraint firstAttribute="width" constant="500" id="7FD-PX-j1h"/>
                                 </constraints>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="0s6-mv-ZmX">
                                     <font key="font" metaFont="system"/>
@@ -2350,7 +2350,7 @@ brew install ifuse</string>
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rah-YJ-7iO">
-                                <rect key="frame" x="614" y="387" width="107" height="32"/>
+                                <rect key="frame" x="614" y="386" width="107" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="95" id="MII-X9-1Na"/>
                                 </constraints>
@@ -2373,11 +2373,11 @@ brew install ifuse</string>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pIP-4P-a84">
-                                <rect key="frame" x="614" y="487" width="100" height="32"/>
+                                <rect key="frame" x="614" y="486" width="100" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="88" id="KOh-8v-yla"/>
                                 </constraints>
-                                <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qDg-Ds-lIL">
+                                <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" image="NSGoForwardTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qDg-Ds-lIL">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -2508,7 +2508,7 @@ brew install ifuse</string>
                                     <rect key="frame" x="1" y="300" width="178" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="xTE-z7-oq5">
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="xTE-z7-oq5">
                                     <rect key="frame" x="224" y="17" width="15" height="102"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -2835,7 +2835,7 @@ brew install ifuse</string>
                                     <rect key="frame" x="1" y="298" width="588" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="GcN-Oc-aAV">
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="GcN-Oc-aAV">
                                     <rect key="frame" x="224" y="17" width="15" height="102"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -2909,19 +2909,6 @@ brew install ifuse</string>
                                 </buttonCell>
                                 <connections>
                                     <action selector="onLoadFromLocalClicked:" target="1x0-sz-Ku7" id="wDz-ut-dyZ"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lnX-IP-vR3">
-                                <rect key="frame" x="716" y="562" width="100" height="32"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="88" id="0pk-uT-TqR"/>
-                                </constraints>
-                                <buttonCell key="cell" type="push" title="Mount" bezelStyle="rounded" image="folderOpen" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8vY-5N-hcW">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="onMountClicked:" target="1x0-sz-Ku7" id="mV2-A7-Gfx"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LK9-ne-o9K">
@@ -3016,7 +3003,7 @@ brew install ifuse</string>
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1kS-HD-5uW">
-                                <rect key="frame" x="614" y="453" width="107" height="32"/>
+                                <rect key="frame" x="614" y="452" width="107" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="95" id="WTh-Ho-VLF"/>
                                 </constraints>
@@ -3068,7 +3055,7 @@ brew install ifuse</string>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VAH-nV-6Ds">
-                                <rect key="frame" x="614" y="420" width="107" height="32"/>
+                                <rect key="frame" x="614" y="419" width="107" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="95" id="luy-9w-9k8"/>
                                 </constraints>
@@ -3080,12 +3067,38 @@ brew install ifuse</string>
                                     <action selector="onBrowseRepositoryPathClicked:" target="1x0-sz-Ku7" id="57z-7B-xck"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ry2-5f-ueP">
+                                <rect key="frame" x="708" y="562" width="100" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="88" id="9n7-Oa-WNe"/>
+                                </constraints>
+                                <buttonCell key="cell" type="push" title="STOP" bezelStyle="rounded" image="NSStopProgressFreestandingTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7Ou-pp-sYT">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onStopClicked:" target="1x0-sz-Ku7" id="hnn-XC-p0V"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lnX-IP-vR3">
+                                <rect key="frame" x="614" y="515" width="100" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="88" id="0pk-uT-TqR"/>
+                                </constraints>
+                                <buttonCell key="cell" type="push" title="Mount" bezelStyle="rounded" image="folderOpen" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8vY-5N-hcW">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onMountClicked:" target="1x0-sz-Ku7" id="mV2-A7-Gfx"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="rwg-jm-kk4" firstAttribute="leading" secondItem="LK9-ne-o9K" secondAttribute="trailing" constant="10" id="0WC-PL-VFX"/>
                             <constraint firstItem="Zqi-gM-UqA" firstAttribute="top" secondItem="v6g-JH-cZC" secondAttribute="bottom" constant="18" id="2Eq-eJ-c2s"/>
                             <constraint firstItem="tLd-tc-hQi" firstAttribute="leading" secondItem="4uk-oE-BFl" secondAttribute="leading" constant="20" id="2Nx-eZ-l0F"/>
-                            <constraint firstItem="lnX-IP-vR3" firstAttribute="top" secondItem="4uk-oE-BFl" secondAttribute="top" constant="10" id="474-oZ-hhK"/>
+                            <constraint firstItem="8ZA-gt-ZeZ" firstAttribute="top" secondItem="GYO-ri-Gfi" secondAttribute="bottom" constant="74" id="2S6-QY-ucK"/>
                             <constraint firstItem="VAH-nV-6Ds" firstAttribute="top" secondItem="1kS-HD-5uW" secondAttribute="bottom" constant="12" id="4Rg-ZA-hsJ"/>
                             <constraint firstItem="qKz-sp-I2a" firstAttribute="top" secondItem="cWP-lf-bVb" secondAttribute="bottom" constant="10" id="4qZ-3V-SXW"/>
                             <constraint firstItem="Q27-4O-hsj" firstAttribute="leading" secondItem="4uk-oE-BFl" secondAttribute="leading" constant="20" id="7Ul-nR-VHn"/>
@@ -3110,9 +3123,8 @@ brew install ifuse</string>
                             <constraint firstItem="1kS-HD-5uW" firstAttribute="top" secondItem="pIP-4P-a84" secondAttribute="bottom" constant="13" id="KyG-1w-RBa"/>
                             <constraint firstItem="LK9-ne-o9K" firstAttribute="top" secondItem="4uk-oE-BFl" secondAttribute="top" constant="10" id="N0w-Rt-T2Q"/>
                             <constraint firstItem="gCq-nt-IlC" firstAttribute="leading" secondItem="4uk-oE-BFl" secondAttribute="leading" constant="240" id="N1R-zu-5Pb"/>
-                            <constraint firstItem="8ZA-gt-ZeZ" firstAttribute="top" secondItem="nwo-kc-8ks" secondAttribute="bottom" constant="42" id="PXE-1w-YO0"/>
+                            <constraint firstItem="pIP-4P-a84" firstAttribute="top" secondItem="lnX-IP-vR3" secondAttribute="bottom" constant="8" id="PGu-ci-w3k"/>
                             <constraint firstItem="cj1-vF-4DN" firstAttribute="leading" secondItem="4uk-oE-BFl" secondAttribute="leading" constant="20" id="Ph0-vM-G9b"/>
-                            <constraint firstAttribute="trailing" secondItem="lnX-IP-vR3" secondAttribute="trailing" constant="20" id="R1p-GI-xmo"/>
                             <constraint firstItem="v6g-JH-cZC" firstAttribute="leading" secondItem="4uk-oE-BFl" secondAttribute="leading" constant="20" id="R3Z-eG-lOW"/>
                             <constraint firstItem="RSo-Uw-GHN" firstAttribute="top" secondItem="GYO-ri-Gfi" secondAttribute="bottom" constant="15" id="RBl-gC-sj6"/>
                             <constraint firstAttribute="bottom" secondItem="cj1-vF-4DN" secondAttribute="bottom" constant="20" id="RRz-GF-LYt"/>
@@ -3122,7 +3134,6 @@ brew install ifuse</string>
                             <constraint firstItem="1kS-HD-5uW" firstAttribute="leading" secondItem="2We-wJ-phT" secondAttribute="trailing" constant="10" id="VcD-v9-NiK"/>
                             <constraint firstAttribute="bottom" secondItem="qKz-sp-I2a" secondAttribute="bottom" constant="20" id="WMs-2N-i9b"/>
                             <constraint firstItem="ks4-iP-5pB" firstAttribute="top" secondItem="gCq-nt-IlC" secondAttribute="bottom" constant="6" id="X8Q-wa-4Us"/>
-                            <constraint firstItem="lnX-IP-vR3" firstAttribute="leading" secondItem="t0Z-gb-Xxp" secondAttribute="trailing" constant="20" id="Xao-pU-8Rk"/>
                             <constraint firstItem="cj1-vF-4DN" firstAttribute="top" secondItem="kpF-cK-mPN" secondAttribute="bottom" constant="10" id="YTs-k4-qfU"/>
                             <constraint firstItem="oU2-GY-7QD" firstAttribute="top" secondItem="8sT-87-UCa" secondAttribute="bottom" constant="12" id="Yf8-hB-3cU"/>
                             <constraint firstItem="LK9-ne-o9K" firstAttribute="leading" secondItem="Q27-4O-hsj" secondAttribute="trailing" constant="10" id="Z1T-vJ-Pb1"/>
@@ -3132,11 +3143,14 @@ brew install ifuse</string>
                             <constraint firstItem="t0Z-gb-Xxp" firstAttribute="leading" secondItem="LWw-Mb-b2t" secondAttribute="trailing" constant="12" id="avE-L0-xDj"/>
                             <constraint firstItem="t0Z-gb-Xxp" firstAttribute="top" secondItem="4uk-oE-BFl" secondAttribute="top" constant="10" id="c3N-uf-ncN"/>
                             <constraint firstItem="a0W-Pw-OUd" firstAttribute="top" secondItem="nwo-kc-8ks" secondAttribute="bottom" constant="8" id="cPx-6K-UpV"/>
+                            <constraint firstItem="lnX-IP-vR3" firstAttribute="top" secondItem="GYO-ri-Gfi" secondAttribute="bottom" constant="12" id="cvZ-nl-EX2"/>
+                            <constraint firstItem="lnX-IP-vR3" firstAttribute="leading" secondItem="nwo-kc-8ks" secondAttribute="trailing" constant="10" id="dMz-9l-FDL"/>
                             <constraint firstItem="v6g-JH-cZC" firstAttribute="top" secondItem="tLd-tc-hQi" secondAttribute="bottom" constant="15" id="dbC-OF-wqh"/>
                             <constraint firstItem="Zd5-zA-K9J" firstAttribute="top" secondItem="eO3-Ny-hJE" secondAttribute="bottom" constant="31" id="fWd-IQ-Cg1"/>
                             <constraint firstItem="CM0-sw-gvb" firstAttribute="top" secondItem="huy-in-kKk" secondAttribute="bottom" constant="10" id="g87-lU-fCI"/>
                             <constraint firstAttribute="trailing" secondItem="cWP-lf-bVb" secondAttribute="trailing" constant="20" id="gtF-QF-miu"/>
                             <constraint firstItem="gx3-Bs-RH4" firstAttribute="leading" secondItem="Zd5-zA-K9J" secondAttribute="trailing" constant="10" id="iT6-Pu-B76"/>
+                            <constraint firstItem="ry2-5f-ueP" firstAttribute="leading" secondItem="t0Z-gb-Xxp" secondAttribute="trailing" constant="12" id="j9h-R0-XZR"/>
                             <constraint firstItem="VAH-nV-6Ds" firstAttribute="leading" secondItem="huy-in-kKk" secondAttribute="trailing" constant="10" id="mlI-Up-T1y"/>
                             <constraint firstItem="LWw-Mb-b2t" firstAttribute="leading" secondItem="rwg-jm-kk4" secondAttribute="trailing" constant="12" id="nXw-cw-f0Q"/>
                             <constraint firstItem="rah-YJ-7iO" firstAttribute="leading" secondItem="CM0-sw-gvb" secondAttribute="trailing" constant="10" id="oPr-Kj-SZe"/>
@@ -3148,10 +3162,10 @@ brew install ifuse</string>
                             <constraint firstItem="rah-YJ-7iO" firstAttribute="top" secondItem="VAH-nV-6Ds" secondAttribute="bottom" constant="12" id="r3H-k6-bTH"/>
                             <constraint firstItem="I7q-oS-uhG" firstAttribute="top" secondItem="gCq-nt-IlC" secondAttribute="bottom" constant="10" id="r7J-Bs-UkF"/>
                             <constraint firstItem="8sT-87-UCa" firstAttribute="leading" secondItem="VAH-nV-6Ds" secondAttribute="trailing" constant="8" id="rMR-s0-HZP"/>
-                            <constraint firstItem="pIP-4P-a84" firstAttribute="top" secondItem="nwo-kc-8ks" secondAttribute="bottom" constant="8" id="uH0-Dt-ZxR"/>
                             <constraint firstItem="oU2-GY-7QD" firstAttribute="leading" secondItem="rah-YJ-7iO" secondAttribute="trailing" constant="8" id="uNx-XI-Szy"/>
                             <constraint firstItem="RSo-Uw-GHN" firstAttribute="leading" secondItem="4uk-oE-BFl" secondAttribute="leading" constant="20" id="uQm-Ds-RfY"/>
                             <constraint firstItem="Zqi-gM-UqA" firstAttribute="leading" secondItem="4uk-oE-BFl" secondAttribute="leading" constant="20" id="ugi-U7-omc"/>
+                            <constraint firstItem="ry2-5f-ueP" firstAttribute="top" secondItem="4uk-oE-BFl" secondAttribute="top" constant="10" id="v7k-Ak-U2w"/>
                             <constraint firstItem="GYO-ri-Gfi" firstAttribute="top" secondItem="Q27-4O-hsj" secondAttribute="bottom" constant="13" id="x8P-oN-mKe"/>
                             <constraint firstItem="qKz-sp-I2a" firstAttribute="leading" secondItem="cj1-vF-4DN" secondAttribute="trailing" constant="20" id="yPK-6R-F0n"/>
                             <constraint firstItem="eO3-Ny-hJE" firstAttribute="top" secondItem="Zqi-gM-UqA" secondAttribute="bottom" constant="13" id="zky-UW-gpR"/>
@@ -3169,6 +3183,7 @@ brew install ifuse</string>
                         <outlet property="btnMount" destination="lnX-IP-vR3" id="Yx4-9q-EDV"/>
                         <outlet property="btnRemoveSourcePath" destination="Zd5-zA-K9J" id="gPO-3q-gfL"/>
                         <outlet property="btnSave" destination="pIP-4P-a84" id="tuZ-C6-slU"/>
+                        <outlet property="btnStop" destination="ry2-5f-ueP" id="51F-fO-TKE"/>
                         <outlet property="btnUpdateRepository" destination="LK9-ne-o9K" id="o7c-Zx-2NG"/>
                         <outlet property="cbShowCopied" destination="I7q-oS-uhG" id="iPw-lX-44D"/>
                         <outlet property="lblMessage" destination="gCq-nt-IlC" id="dJb-md-ShH"/>
@@ -5671,6 +5686,7 @@ DQ
         <image name="NSAddTemplate" width="11" height="11"/>
         <image name="NSFollowLinkFreestandingTemplate" width="14" height="14"/>
         <image name="NSGoBackTemplate" width="9" height="12"/>
+        <image name="NSGoForwardTemplate" width="9" height="12"/>
         <image name="NSGoLeftTemplate" width="9" height="12"/>
         <image name="NSIconViewTemplate" width="14" height="10"/>
         <image name="NSListViewTemplate" width="14" height="10"/>

@@ -52,6 +52,10 @@ class DevicePathDetailViewController: NSViewController {
         }
         var data = self.devicePath!
         data.toSubFolder = self.txtSubFolder.stringValue.trimmingCharacters(in: .whitespaces)
+        
+        // TODO: UPDATE RELATED physical directory of IMAGE DEVICE FILES
+        // TODO: UPDATE RELATED importToPath of IMAGE DEVICE FILES
+        // TODO: UPDATE RELATED path AND subpath of IMAGEs where IMAGE.path = (IMAGE DEVICE FILE.importToPath + importAsFilename)
         ModelStore.default.saveDevicePath(file: data)
         self.lblMessage.stringValue = "Updated local folder."
     }

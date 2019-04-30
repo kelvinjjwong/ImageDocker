@@ -21,7 +21,7 @@ class ModelStore {
         self.versionCheck()
     }
     
-    // MARK: SHARED DATABASE INSTANCE
+    // MARK: - SHARED DATABASE INSTANCE
     
     private static var _sharedDBPool:DatabaseWriter?
     
@@ -72,7 +72,7 @@ class ModelStore {
         }
     }
     
-    // MARK: COMMONS
+    // MARK: - COMMONS
     
     fileprivate func inArray(field:String, array:[Any]?, where whereStmt:inout String, args sqlArgs:inout [Any]){
         if let array = array {
@@ -103,7 +103,7 @@ class ModelStore {
         return ""
     }
     
-    // MARK: Duplicates
+    // MARK: - Duplicates
     
     var _duplicates:Duplicates? = nil
     
@@ -242,7 +242,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
 //
 //    }
     
-    // MARK: Options
+    // MARK: - Options
     
     func getImageSources() -> [String:Bool]{
         var results:[String:Bool] = [:]
@@ -285,7 +285,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return results
     }
     
-    // MARK: CONTAINERS
+    // MARK: - CONTAINERS
     
     func getAllContainers() -> [ImageContainer] {
         var containers:[ImageContainer] = []
@@ -595,7 +595,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
     }
     
-    // MARK: IMAGES
+    // MARK: - IMAGES
     
     func getOrCreatePhoto(filename:String, path:String, parentPath:String, repositoryPath:String? = nil, sharedDB:DatabaseWriter? = nil) -> Image{
         var image:Image?
@@ -1754,7 +1754,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         
     }
     
-    // MARK: PLACES
+    // MARK: - PLACES
     
     
     func getAllPlaces() -> [ImagePlace] {
@@ -1912,7 +1912,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
     }
     
-    // MARK: EVENTS
+    // MARK: - EVENTS
     
     func getAllEvents() -> [ImageEvent] {
         var events:[ImageEvent] = []
@@ -2025,7 +2025,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         
     }
     
-    // MARK: DEVICES
+    // MARK: - DEVICES
     
     func getDevices() -> [ImageDevice] {
         var result:[ImageDevice] = []
@@ -2240,7 +2240,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
-    // MARK: FAMILY
+    // MARK: - FAMILY
     
     func getFamilies() -> [Family] {
         var result:[Family] = []
@@ -2493,7 +2493,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
     }
     
-    // MARK: FACE
+    // MARK: - FACE
     
     func getFace(id: String) -> ImageFace? {
         var obj:ImageFace?
@@ -2683,7 +2683,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
     }
     
-    // MARK: SCHEMA VERSION MIGRATION
+    // MARK: - SCHEMA VERSION MIGRATION
     
     fileprivate func versionCheck(){
         var migrator = DatabaseMigrator()
@@ -3057,7 +3057,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
     }
     
-    // MARK: DATA MIGRATION FROM CORE DATA
+    // MARK: - DATA MIGRATION FROM CORE DATA
     
     func checkDatabase() {
         let dbpath = URL(fileURLWithPath: dbfile).deletingLastPathComponent().path

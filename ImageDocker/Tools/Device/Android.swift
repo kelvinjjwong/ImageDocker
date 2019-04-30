@@ -332,9 +332,10 @@ struct Android {
         return lines.count > 1 ? lines[lines.count - 2] : ""
     }
     
-    func pull(device id: String, from filePath:String, to targetPath:String) -> Bool{
+    func pull(device id: String, from filePath:String, to targetPath:String) -> (Bool, Error?){
         print("pulling from \(filePath) to \(targetPath)")
         let pipe = Pipe()
+        var err:Error?
         autoreleasepool { () -> Void in
             let command = Process()
             command.standardOutput = pipe
@@ -345,6 +346,7 @@ struct Android {
                 try command.run()
             }catch{
                 print(error)
+                err = error
             }
         }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
@@ -353,11 +355,13 @@ struct Android {
         pipe.fileHandleForReading.closeFile()
         let lines = string.components(separatedBy: "\n")
         let result = lines.count > 1 ? lines[lines.count - 2] : ""
-        return result.range(of: "\(filePath): 1 file pulled.") != nil
+        let rtn = result.range(of: "\(filePath): 1 file pulled.") != nil
+        return (rtn, err)
     }
     
-    func push(device id: String, from filePath:String, to remoteFolder:String) -> String{
+    func push(device id: String, from filePath:String, to remoteFolder:String) -> (String, Error?){
         let pipe = Pipe()
+        var err:Error?
         autoreleasepool { () -> Void in
             let command = Process()
             command.standardOutput = pipe
@@ -368,6 +372,7 @@ struct Android {
                 try command.run()
             }catch{
                 print(error)
+                err = error
             }
         }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
@@ -375,7 +380,8 @@ struct Android {
         pipe.fileHandleForReading.closeFile()
         print(string)
         let lines = string.components(separatedBy: "\n")
-        return lines.count > 1 ? lines[lines.count - 2] : ""
+        let rtn = lines.count > 1 ? lines[lines.count - 2] : ""
+        return (rtn, err)
     }
     
     

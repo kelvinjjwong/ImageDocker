@@ -99,6 +99,7 @@ class DeviceCopyViewController: NSViewController {
     @IBOutlet weak var btnBrowseRepository: NSButton!
     @IBOutlet weak var btnDeepLoad: NSButton!
     @IBOutlet weak var txtHomePath: NSTextField!
+    @IBOutlet weak var btnStop: NSButton!
     
     
     
@@ -115,7 +116,9 @@ class DeviceCopyViewController: NSViewController {
     let sourcePathTableDelegate:DeviceSourcePathTableDelegate = DeviceSourcePathTableDelegate()
     let fileTableDelegate:DeviceFileTableDelegate = DeviceFileTableDelegate()
     
-    // MARK: INIT
+    // MARK: -
+    
+    // MARK: - INIT
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -133,11 +136,13 @@ class DeviceCopyViewController: NSViewController {
         self.tblFiles.dataSource = fileTableDelegate
         
         self.tblSourcePath.action = #selector(onSourcePathTableClicked)
+        
+        btnStop.isHidden = true
     }
     
     @objc func onSourcePathTableClicked() {
         print("row \(tblSourcePath.clickedRow), col \(tblSourcePath.clickedColumn) clicked")
-        if sourcePathTableDelegate.paths.count > 0 && tblSourcePath.clickedRow < paths.count {
+        if sourcePathTableDelegate.paths.count > 0 && tblSourcePath.clickedRow < paths.count && tblSourcePath.clickedRow >= 0 && tblSourcePath.clickedColumn >= 0 {
             let devicePath = paths[tblSourcePath.clickedRow]
             if let data = devicePath.data {
                 self.createDevicePathDetailPopover()
@@ -255,7 +260,7 @@ class DeviceCopyViewController: NSViewController {
         }
     }
     
-    // MARK: GET FILE LIST
+    // MARK: - GET FILE LIST
     
     func getFileFullList(from path:DeviceCopyDestination, reloadFileList:Bool = false) -> [PhoneFile]{
         print("GET FULL LIST FROM \(path)")
@@ -282,7 +287,7 @@ class DeviceCopyViewController: NSViewController {
         return self.deviceFiles_filtered[path.sourcePath]!
     }
     
-    // MARK: LOAD FROM PATH
+    // MARK: - LOAD FROM PATH
     
     fileprivate func loadFromLocalPath(path:String, pretendPath:String, reloadFileList:Bool = false, checksumMode:ChecksumMode = .Rough) {
         print("LOAD FROM LOCAL \(path) - \(pretendPath)")
@@ -375,6 +380,10 @@ class DeviceCopyViewController: NSViewController {
             self.accumulator = Accumulator(target: total, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblProgressMessage)
         }
         for file in files {
+            
+            guard !self.forceStop else {
+                break
+            }
             var shouldExclude = false
             for excludePath in excludePaths {
                 if file.path.starts(with: excludePath.withStash()) {
@@ -425,7 +434,8 @@ class DeviceCopyViewController: NSViewController {
                 }
                 let _ = self.accumulator?.add("")
             }
-        }
+        }// end of file loop
+        self.forceStop = false
         // Enable "Copy Files" button if any path includes new file(s)
         DispatchQueue.main.async {
             if self.deviceFiles_filtered[path]!.count > 0 {
@@ -464,7 +474,7 @@ class DeviceCopyViewController: NSViewController {
         }
     }
     
-    // MARK: ACTION BUTTON - OPEN PANEL
+    // MARK: - ACTION BUTTON - OPEN PANEL
     
     @IBAction func onBrowseStorePathClicked(_ sender: NSButton) {
         let openPanel = NSOpenPanel()
@@ -588,23 +598,26 @@ class DeviceCopyViewController: NSViewController {
     
     
     
-    // MARK: TOGGLE BUTTONS
+    // MARK: - TOGGLE BUTTONS
     
     fileprivate func toggleControls(state:Bool) {
-        self.btnMount.isEnabled = state
-        self.btnCopy.isEnabled = state
-        self.btnLoad.isEnabled = state
-        self.btnDeepLoad.isEnabled = state
-        self.btnSave.isEnabled = state
-        self.btnBrowseStorePath.isEnabled = state
-        self.btnBrowseRepository.isEnabled = state
-        self.btnAddSourcePath.isEnabled = state
-        self.btnRemoveSourcePath.isEnabled = state
-        self.btnLoadFromLocal.isEnabled = state
-        self.btnDeleteRecords.isEnabled = state
-        self.btnUpdateRepository.isEnabled = state
-        self.cbShowCopied.isEnabled = state
-        self.tblSourcePath.isEnabled = state
+        DispatchQueue.main.async {
+            self.btnMount.isEnabled = state
+            self.btnCopy.isEnabled = state
+            self.btnLoad.isEnabled = state
+            self.btnDeepLoad.isEnabled = state
+            self.btnSave.isEnabled = state
+            self.btnBrowseStorePath.isEnabled = state
+            self.btnBrowseRepository.isEnabled = state
+            self.btnAddSourcePath.isEnabled = state
+            self.btnRemoveSourcePath.isEnabled = state
+            self.btnLoadFromLocal.isEnabled = state
+            self.btnDeleteRecords.isEnabled = state
+            self.btnUpdateRepository.isEnabled = state
+            self.cbShowCopied.isEnabled = state
+            self.tblSourcePath.isEnabled = state
+            self.btnStop.isHidden = state
+        }
     }
     
     fileprivate func disableButtons(){
@@ -615,7 +628,7 @@ class DeviceCopyViewController: NSViewController {
         self.toggleControls(state: true)
     }
     
-    // MARK: VALID PATHS
+    // MARK: - VALID PATHS
     
     fileprivate func validPaths() -> Bool {
         
@@ -659,7 +672,7 @@ class DeviceCopyViewController: NSViewController {
     }
     
     
-    // MARK: ACTION BUTTON - SAVE
+    // MARK: - ACTION BUTTON - SAVE
     
     @IBAction func onSaveClicked(_ sender: NSButton) {
         guard !self.working else {return}
@@ -803,7 +816,7 @@ class DeviceCopyViewController: NSViewController {
         self.lblMessage.stringValue = "Deleted records."
     }
     
-    // MARK: ACTION BUTTON - LOAD FILE LIST
+    // MARK: - ACTION BUTTON - LOAD FILE LIST
     
     fileprivate func getExcludedPaths() -> [String] {
         var excludePaths:[String] = []
@@ -817,6 +830,7 @@ class DeviceCopyViewController: NSViewController {
     
     fileprivate func reloadFileList(checksumMode:ChecksumMode = .Rough) {
         self.working = true
+        self.forceStop = false
         if paths.count > 0 {
             self.disableButtons()
             
@@ -828,6 +842,10 @@ class DeviceCopyViewController: NSViewController {
             
             DispatchQueue.global().async {
                 for path in self.paths {
+                    
+                    guard !self.forceStop else {
+                        break
+                    }
                     if !path.exclude {
                         DispatchQueue.main.async {
                             self.lblMessage.stringValue = "Loading from: \(path.sourcePath)"
@@ -887,7 +905,7 @@ class DeviceCopyViewController: NSViewController {
     }
     
     
-    // MARK: COUNT FILE LIST
+    // MARK: - COUNT FILE LIST
     
     fileprivate func countFilteredList() -> Int {
         var total = 0
@@ -946,8 +964,16 @@ class DeviceCopyViewController: NSViewController {
         return min
     }
     
-    // MARK: ACTION BUTTON - COPY FILES
+    // MARK: - ACTION BUTTON - STOP COPY
     
+    @IBAction func onStopClicked(_ sender: NSButton) {
+        self.forceStop = true
+    }
+    
+    
+    // MARK: - ACTION BUTTON - COPY FILES
+    
+    fileprivate var forceStop = false
     fileprivate var working = false
     fileprivate var accumulator:Accumulator?
     
@@ -967,6 +993,7 @@ class DeviceCopyViewController: NSViewController {
         
         let destination = self.txtStorePath.stringValue
         
+        self.forceStop = false
         self.working = true
         self.disableButtons()
         
@@ -982,6 +1009,11 @@ class DeviceCopyViewController: NSViewController {
             let now = Date()
             let date = self.dateFormatter.string(from: now)
             for path in self.paths {
+                
+                guard !self.forceStop else {
+                    break
+                }
+                
                 if path.exclude {
                     continue
                 }
@@ -1002,6 +1034,10 @@ class DeviceCopyViewController: NSViewController {
                     }
                 }
                 for file in self.deviceFiles_filtered[path.sourcePath]! {
+                    
+                    guard !self.forceStop else {
+                        break
+                    }
                     
                     var destinationPathForFile = destinationPath
                     if file.folder != "" {
@@ -1027,7 +1063,8 @@ class DeviceCopyViewController: NSViewController {
                     var deviceFile = file.deviceFile!
                     if path.type == .onDevice {
                         if self.device.type == .Android {
-                            if Android.bridge.pull(device: self.device.deviceId, from: file.path, to: destinationPathForFile) {
+                            let (result, error) = Android.bridge.pull(device: self.device.deviceId, from: file.path, to: destinationPathForFile)
+                            if result && error == nil {
                                 print("Copied \(file.path)")
                                 if file.deviceFile != nil {
                                     deviceFile.importToPath = destinationPathForFile
@@ -1038,6 +1075,14 @@ class DeviceCopyViewController: NSViewController {
                                 }
                             }else{
                                 print("Failed to copy \(file.path)")
+                                if let err = error {
+                                    if err.localizedDescription.range(of: "device '\(self.device.deviceId)' not found") != nil {
+                                        self.forceStop = true
+                                        DispatchQueue.main.async {
+                                            self.lblMessage.stringValue = "Device disconnected accidentially."
+                                        }
+                                    }
+                                }
                             }
                         }else if self.device.type == .iPhone {
                             if IPHONE.bridge.pull(mountPoint: PreferencesController.iosDeviceMountPoint(), sourcePath:path.sourcePath, from: file.path, to: destinationPathForFile) {
@@ -1084,8 +1129,18 @@ class DeviceCopyViewController: NSViewController {
                     DispatchQueue.main.async {
                         let _ = self.accumulator?.add("")
                     }
+                } // end of file-loop
+            } // end of path-loop
+            
+            guard !self.forceStop else {
+                self.forceStop = false
+                self.working = false
+                DispatchQueue.main.async {
+                    self.enableButtons()
                 }
+                return
             }
+            
             DispatchQueue.main.async {
                 //self.refreshFileList()
 //                self.btnCopy.isEnabled = true
@@ -1099,7 +1154,7 @@ class DeviceCopyViewController: NSViewController {
         }
     }
     
-    // MARK: ACTION BUTTON - UPDATE REPOSITORY
+    // MARK: - ACTION BUTTON - UPDATE REPOSITORY
     
     fileprivate func updateDeviceFileIntoRepository(fileRecord deviceFile:ImageDeviceFile, storageUrlWithSlash:String, repositoryPath:String, fileHandler:ComputerFileManager){
         var file = deviceFile
@@ -1154,6 +1209,7 @@ class DeviceCopyViewController: NSViewController {
     @IBAction func onUpdateRepositoryClicked(_ sender: Any) {
         guard !working && self.validPaths() else {return}
         
+        self.forceStop = false
         self.working = true
         
         self.disableButtons()
@@ -1173,29 +1229,35 @@ class DeviceCopyViewController: NSViewController {
             DispatchQueue.global().async {
                 for deviceFile in deviceFiles {
                     
+                    guard !self.forceStop else {
+                        break
+                    }
+                    
                     self.updateDeviceFileIntoRepository(fileRecord: deviceFile, storageUrlWithSlash: storageUrlWithSlash, repositoryPath: repositoryPath, fileHandler: computerFileHandler)
                     
                     DispatchQueue.main.async {
                         let _ = self.accumulator?.add("")
                     }
                 }
+                self.forceStop = false
                 self.working = false
                 self.enableButtons()
             }
         }else{
             self.lblMessage.stringValue = "No file record."
+            self.forceStop = false
             self.working = false
             self.enableButtons()
         }
     }
     
-    // MARK: ACTION BUTTON - CHECKBOX - SHOW COPIED
+    // MARK: - ACTION BUTTON - CHECKBOX - SHOW COPIED
     
     @IBAction func onCheckboxShowCopiedClicked(_ sender: NSButton) {
         self.refreshFileList()
     }
     
-    // MARK: ACTION BUTTONS - ADD LOCAL DIRECTORY AS SOURCE PATH
+    // MARK: - ACTION BUTTONS - ADD LOCAL DIRECTORY AS SOURCE PATH
     
     @IBAction func onLoadFromLocalClicked(_ sender: NSButton) {
         self.createLocalDirectoryPopover()
@@ -1236,7 +1298,7 @@ class DeviceCopyViewController: NSViewController {
         }
     }
     
-    // MARK: POPOVER - DEVICE PATH DETAIL
+    // MARK: - POPOVER - DEVICE PATH DETAIL
     fileprivate func createDevicePathDetailPopover(){
         var myPopover = self.devicePathPopover
         if(myPopover == nil){
@@ -1350,7 +1412,7 @@ class DeviceCopyViewController: NSViewController {
     
 }
 
-// MARK: SOURCE PATH TABLE
+// MARK: - SOURCE PATH TABLE
 
 protocol DeviceSourcePathSelectionDelegate {
     func selectDeviceSourcePath(path:DeviceCopyDestination)
