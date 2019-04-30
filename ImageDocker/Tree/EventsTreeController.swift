@@ -15,25 +15,38 @@ extension ViewController {
     
     // MARK: DATA SOURCE
     
-    func loadEventsToTreeFromDatabase() {
-        let dates:[Row] = ModelStore.default.getAllEvents(imageSource: filterImageSource, cameraModel: filterCameraModel)
-        if dates.count > 0 {
-            let events:[Event] = Events().read(dates)
-            for event in events {
-                if event.event == ""{
-                    continue
-                }
-                self.addEventTreeEntry(event: event)
-                for month in event.children {
-                    self.addEventMonthTreeEntry(month: month)
-                    for day in month.children {
-                        self.addEventDayTreeEntry(day: day)
+    func loadEventsToTreeFromDatabase(onCompleted:( () -> Void )? = nil) {
+        print("\(Date()) LOAD EVENTS TREE: BEGIN")
+        DispatchQueue.global().async {
+            
+            autoreleasepool(invoking: { () -> Void in
+                let dates:[Row] = ModelStore.default.getAllEvents(imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
+                if dates.count > 0 {
+                    let events:[Event] = Events().read(dates)
+                    for event in events {
+                        if event.event == ""{
+                            continue
+                        }
+                        self.addEventTreeEntry(event: event)
+                        for month in event.children {
+                            self.addEventMonthTreeEntry(month: month)
+                            for day in month.children {
+                                self.addEventDayTreeEntry(day: day)
+                            }
+                        }
                     }
+                    self.lastCheckEventChange = Date()
+                    
+                    print("\(Date()) LOAD EVENTS TREE: DONE")
+                }else{
+                    print("\(Date()) LOAD EVENTS TREE: NONE")
+                    print("no events")
                 }
-            }
-            self.lastCheckEventChange = Date()
-        }else{
-            print("no events")
+                
+                if onCompleted != nil {
+                    onCompleted!()
+                }
+            })
         }
     }
     
@@ -60,10 +73,14 @@ extension ViewController {
             }
         }
         
-        DispatchQueue.main.async {
-            self.loadEventsToTreeFromDatabase()
-            self.sourceList.reloadData()
-        }
+        self.loadEventsToTreeFromDatabase(onCompleted: {
+            DispatchQueue.main.async {
+                print("\(Date()) RELOADING SOURCE LIST DATASET: BEGIN")
+                print("EVENT MAJOR ENTRIES: \(self.eventItem().hasChildren()) \(self.eventItem().children?.count ?? 0)")
+                self.sourceList.reloadData()
+                print("\(Date()) RELOADING SOURCE LIST DATASET: DONE")
+            }
+        })
     }
     
     // MARK: ADD NODES

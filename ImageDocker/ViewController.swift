@@ -20,7 +20,7 @@ class ViewController: NSViewController {
     // MARK: Icon
     let tick:NSImage = NSImage.init(named: NSImage.Name.menuOnStateTemplate)!
     
-    // MARK: Timer
+    // MARK: - Timer
     var scanLocationChangeTimer:Timer!
     var lastCheckLocationChange:Date?
     var scanPhotoTakenDateChangeTimer:Timer!
@@ -39,13 +39,13 @@ class ViewController: NSViewController {
     var notificationPopover:NSPopover?
     var notificationViewController:NotificationViewController!
     
-    // MARK: Image preview
+    // MARK: - Image preview
     var img:ImageFile!
     @IBOutlet weak var playerContainer: NSView!
     var stackedImageViewController : StackedImageViewController!
     var stackedVideoViewController : StackedVideoViewController!
     
-    // MARK: MetaInfo table view
+    // MARK: - MetaInfo table view
     //var metaInfo:[MetaInfo] = [MetaInfo]()
     var lastSelectedMetaInfoRow: Int?
     @IBOutlet weak var metaInfoTableView: NSTableView!
@@ -53,13 +53,13 @@ class ViewController: NSViewController {
     @IBOutlet weak var lblImageDescription: NSTextField!
     
     
-    // MARK: Image Map
+    // MARK: - Image Map
     var zoomSize:Int = 16
     var previousTick:Int = 3
     @IBOutlet weak var webLocation: WKWebView!
     @IBOutlet weak var mapZoomSlider: NSSlider!
     
-    // MARK: Editor - Map
+    // MARK: - Editor - Map
     var zoomSizeForPossibleAddress:Int = 16
     var previousTickForPossibleAddress:Int = 3
     @IBOutlet weak var addressSearcher: NSSearchField!
@@ -78,7 +78,7 @@ class ViewController: NSViewController {
     
     var coordinateAPI:LocationAPI = .baidu
     
-    // MARK: Tree
+    // MARK: - Tree
     //var modelObjects:NSMutableArray?
     var sourceListItems:NSMutableArray?
     var identifiersOfLibraryTree:[String : PXSourceListItem] = [String : PXSourceListItem] ()
@@ -126,7 +126,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var chbSelectAll: NSButton!
     
     
-    // MARK: Collection View for browsing
+    // MARK: - Collection View for browsing
     
     @IBOutlet weak var collectionView: NSCollectionView!
     @IBOutlet weak var collectionProgressIndicator: NSProgressIndicator!
@@ -141,7 +141,7 @@ class ViewController: NSViewController {
     let imagesLoader = CollectionViewItemsLoader()
     var collectionLoadingIndicator:Accumulator?
     
-    // MARK: SELECTION VIEW
+    // MARK: - SELECTION VIEW
     var selectionViewController : SelectionCollectionViewController!
     
     @IBOutlet weak var selectionCollectionView: NSCollectionView!
@@ -186,7 +186,7 @@ class ViewController: NSViewController {
     var eventListController:EventListComboController!
     var placeListController:PlaceListComboController!
     
-    // MARK: Device Copy Dialog
+    // MARK: - Device Copy Dialog
     
     var deviceCopyWindowController:NSWindowController!
     
@@ -216,7 +216,7 @@ class ViewController: NSViewController {
     var suppressedExport:Bool = false
     var suppressedScan:Bool = false
     
-    // MARK: init
+    // MARK: - init
     
     var windowInitial:Bool = false
     var smallScreen:Bool = false
@@ -460,12 +460,12 @@ class ViewController: NSViewController {
             }
         })
         
-        self.scanRepositoriesTimer = Timer.scheduledTimer(withTimeInterval: 180, repeats: true, block:{_ in
-            print("\(Date()) TRY TO SCAN REPOS")
-            guard !self.suppressedScan && !ExportManager.default.working && !self.scaningRepositories && !self.creatingRepository else {return}
-            print("\(Date()) SCANING REPOS")
-            self.startScanRepositories()
-        })
+//        self.scanRepositoriesTimer = Timer.scheduledTimer(withTimeInterval: 180, repeats: true, block:{_ in
+//            print("\(Date()) TRY TO SCAN REPOS")
+//            guard !self.suppressedScan && !ExportManager.default.working && !self.scaningRepositories && !self.creatingRepository else {return}
+//            print("\(Date()) SCANING REPOS")
+//            self.startScanRepositories()
+//        })
         
         self.scanPhotosToLoadExifTimer = Timer.scheduledTimer(withTimeInterval: 15, repeats: true, block:{_ in
             print("\(Date()) TRY TO SCAN PHOTO TO LOAD EXIF")
@@ -559,56 +559,65 @@ class ViewController: NSViewController {
         
     }
     
+    fileprivate var startupAggregateFlag: Int = 0 {
+        didSet {
+            if startupAggregateFlag == 5 {
+                
+                
+                DispatchQueue.main.async {
+                    
+                    print("\(Date()) Loading view - configure tree - reloading tree view")
+                    
+                    self.sourceList.reloadData()
+                    self.treeIndicator.isEnabled = false
+                    self.treeIndicator.isHidden = true
+                    
+                    self.showToolbarOfTree()
+                    self.showToolbarOfCollectionView()
+                    
+                    print("\(Date()) Loading view - configure tree - reloading tree view: DONE")
+                    
+                    if self.startingUp {
+                        self.splashController.message("Preparing UI ...", progress: 5)
+                    }
+                }
+            }
+        }
+    }
+    
     // init trees
     func configureTree(){
         self.sourceList.backgroundColor = NSColor.darkGray
         
         self.hideToolbarOfTree()
         self.hideToolbarOfCollectionView()
-        self.treeIndicator.isEnabled = true
-        self.treeIndicator.isHidden = false
+        self.treeIndicator.isEnabled = false
+        self.treeIndicator.isHidden = true
+        self.treeIndicator.doubleValue = 0.0
+        self.startupAggregateFlag = 0
         DispatchQueue.global().async {
             
             self.initTreeDataModel()
-            DispatchQueue.main.async {
-                self.treeIndicator.doubleValue = 1.0
-            }
+            self.startupAggregateFlag += 1
             print("\(Date()) Loading view - configure tree - loading path to tree from db")
-            self.loadPathToTreeFromDatabase()
-            DispatchQueue.main.async {
-                self.treeIndicator.doubleValue = 2.0
-            }
-            print("\(Date()) Loading view - configure tree - loading moments to tree from db")
-            self.loadMomentsToTreeFromDatabase()
-            DispatchQueue.main.async {
-                self.treeIndicator.doubleValue = 3.0
-            }
-            print("\(Date()) Loading view - configure tree - loading places to tree from db")
-            self.loadPlacesToTreeFromDatabase()
-            DispatchQueue.main.async {
-                self.treeIndicator.doubleValue = 4.0
-            }
-            print("\(Date()) Loading view - configure tree - loading events to tree from db")
-            self.loadEventsToTreeFromDatabase()
-            DispatchQueue.main.async {
-                self.treeIndicator.doubleValue = 5.0
-            }
+            self.loadPathToTreeFromDatabase(onCompleted: {
+                
+                self.startupAggregateFlag += 1
+            })
             
-            print("\(Date()) Loading view - configure tree - reloading tree view")
-            DispatchQueue.main.async {
-                self.sourceList.reloadData()
-                self.treeIndicator.isEnabled = false
-                self.treeIndicator.isHidden = true
+            print("\(Date()) Loading view - configure tree - loading moments to tree from db")
+            self.loadMomentsToTreeFromDatabase(onCompleted: {
+                self.startupAggregateFlag += 1
+            })
+            print("\(Date()) Loading view - configure tree - loading places to tree from db")
+            self.loadPlacesToTreeFromDatabase(onCompleted: {
                 
-                self.showToolbarOfTree()
-                self.showToolbarOfCollectionView()
-                
-                print("\(Date()) Loading view - configure tree - reloading tree view: DONE")
-                
-                if self.startingUp {
-                    self.splashController.message("Preparing UI ...", progress: 5)
-                }
-            }
+                self.startupAggregateFlag += 1
+            })
+            print("\(Date()) Loading view - configure tree - loading events to tree from db")
+            self.loadEventsToTreeFromDatabase(onCompleted: {
+                self.startupAggregateFlag += 1
+            })
         }
     }
     
@@ -732,7 +741,7 @@ class ViewController: NSViewController {
         comboPlaceList.isEditable = false
     }
     
-    // MARK: Preview Zone
+    // MARK: - Preview Zone
     
     @IBAction func onMapSliderClick(_ sender: NSSliderCell) {
         let tick:Int = sender.integerValue
@@ -876,7 +885,7 @@ class ViewController: NSViewController {
         }
     }
     
-    // MARK: Tree Node Controls
+    // MARK: - Tree Node Controls
     
     fileprivate func startScanRepositories(){
         DispatchQueue.global().async {
@@ -1189,7 +1198,7 @@ class ViewController: NSViewController {
         }
     }
     
-    // MARK: Collection View Controls
+    // MARK: - Collection View Controls
     
     func disableCollectionViewControls() {
         self.chbExport.isEnabled = false
@@ -1436,7 +1445,7 @@ class ViewController: NSViewController {
         self.btnDuplicates.isHidden = false
     }
     
-    // MARK: SELECTION BATCH EDITOR TOOLBAR - SWITCHER
+    // MARK: - SELECTION BATCH EDITOR TOOLBAR - SWITCHER
     
     @IBAction func onBatchEditorToolbarSwitcherClicked(_ sender: NSButton) {
         if self.btnBatchEditorToolbarSwitcher.image == NSImage(named: NSImage.Name.goLeftTemplate) {
@@ -2091,7 +2100,7 @@ class ViewController: NSViewController {
         self.collectionView.reloadData()
     }
     
-    // MARK: FACE
+    // MARK: - FACE
     
     @IBAction func onPeopleClicked(_ sender: NSButton) {
         if let window = self.peopleWindowController.window {
@@ -2113,6 +2122,8 @@ class ViewController: NSViewController {
     
     
 }
+
+// MARK: -
 
 extension ViewController : EventListRefreshDelegate{
     
@@ -2182,6 +2193,8 @@ class EventListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
         return -1
     }
 }
+
+// MARK: -
 
 extension ViewController : PlaceListRefreshDelegate{
     
@@ -2291,7 +2304,7 @@ class PlaceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
     
 }
 
-// MARK: WINDOW CONTROLLER
+// MARK: - WINDOW CONTROLLER
 extension ViewController : NSWindowDelegate {
     
     
@@ -2299,6 +2312,8 @@ extension ViewController : NSWindowDelegate {
         NSApplication.shared.terminate(self)
     }
 }
+
+// MARK: -
 
 extension ViewController : LunarCalendarViewDelegate {
     @objc func didSelectDate(_ selectedDate: Date) {

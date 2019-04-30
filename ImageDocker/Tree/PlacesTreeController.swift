@@ -17,64 +17,76 @@ extension ViewController {
     
     // MARK: DATA SOURCE
     
-    func loadPlacesToTreeFromDatabase(filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil){
-        let dates:[Row] = ModelStore.default.getAllPlacesAndDates(imageSource: filterImageSource, cameraModel: filterCameraModel)
-        //print("!!! \(dates.count)")
-        if dates.count > 0 {
-            let places:[Moment] = Moments().readPlaces(dates)
+    func loadPlacesToTreeFromDatabase(filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil, onCompleted:( () -> Void )? = nil){
+        print("\(Date()) LOAD PLACES TREE: BEGIN")
+        
+        DispatchQueue.global().async {
             
-            let duplicates:Duplicates = ModelStore.default.getDuplicatePhotos()
-            
-            for gov in places {
-                self.addPlacesTreeGovEntry(place: gov)
+            autoreleasepool(invoking: { () -> Void in
                 
-                //print("GOV \(gov.gov)")
-                for place in gov.children {
-                    if place.place == "" {
-                        continue
-                    }
-                    //print("     PLACE \(place.place)")
-                    self.addPlacesTreePlaceEntry(place: place)
-                    for year in place.children {
-                        //print("          YEAR \(year.year)")
-                        var duplicateInYear:Bool = false
-                        if duplicates.years.contains(year.year) {
-                            duplicateInYear = true
-                        }
-                        year.hasDuplicates = duplicateInYear
+                let dates:[Row] = ModelStore.default.getAllPlacesAndDates(imageSource: filterImageSource, cameraModel: filterCameraModel)
+                //print("!!! \(dates.count)")
+                if dates.count > 0 {
+                    let places:[Moment] = Moments().readPlaces(dates)
+                    
+                    let duplicates:Duplicates = ModelStore.default.getDuplicatePhotos()
+                    
+                    for gov in places {
+                        self.addPlacesTreeGovEntry(place: gov)
                         
-                        self.addPlacesTreeYearEntry(year: year)
-                        for month in year.children {
-                            //print("              MONTH \(month.month)")
-                            var duplicateInMonth:Bool = false
-                            if duplicates.yearMonths.contains(month.year * 1000 + month.month) {
-                                duplicateInMonth = true
+                        //print("GOV \(gov.gov)")
+                        for place in gov.children {
+                            if place.place == "" {
+                                continue
                             }
-                            month.hasDuplicates = duplicateInMonth
-                            
-                            self.addPlacesTreeMonthEntry(month: month)
-                            for day in month.children {
-                                //print("                   DAY \(day.day)")
-                                var duplicateInDay:Bool = false
-                                if duplicates.yearMonthDays.contains(day.year * 100000 + day.month * 100 + day.day) {
-                                    duplicateInDay = true
+                            //print("     PLACE \(place.place)")
+                            self.addPlacesTreePlaceEntry(place: place)
+                            for year in place.children {
+                                //print("          YEAR \(year.year)")
+                                var duplicateInYear:Bool = false
+                                if duplicates.years.contains(year.year) {
+                                    duplicateInYear = true
                                 }
-                                day.hasDuplicates = duplicateInDay
+                                year.hasDuplicates = duplicateInYear
                                 
-                                self.addPlacesTreeDayEntry(day: day)
+                                self.addPlacesTreeYearEntry(year: year)
+                                for month in year.children {
+                                    //print("              MONTH \(month.month)")
+                                    var duplicateInMonth:Bool = false
+                                    if duplicates.yearMonths.contains(month.year * 1000 + month.month) {
+                                        duplicateInMonth = true
+                                    }
+                                    month.hasDuplicates = duplicateInMonth
+                                    
+                                    self.addPlacesTreeMonthEntry(month: month)
+                                    for day in month.children {
+                                        //print("                   DAY \(day.day)")
+                                        var duplicateInDay:Bool = false
+                                        if duplicates.yearMonthDays.contains(day.year * 100000 + day.month * 100 + day.day) {
+                                            duplicateInDay = true
+                                        }
+                                        day.hasDuplicates = duplicateInDay
+                                        
+                                        self.addPlacesTreeDayEntry(day: day)
+                                    }
+                                }
                             }
                         }
                     }
+                    
+                    
+                    
+                    self.lastCheckLocationChange = Date()
+                    print("\(Date()) LOAD PLACES TREE: DONE")
+                }else{
+                    print("\(Date()) LOAD PLACES TREE: NONE")
+                    print("no dates")
                 }
-            }
-            
-            
-            
-            self.lastCheckLocationChange = Date()
                 
-            
-        }else{
-            print("no dates")
+                if onCompleted != nil {
+                    onCompleted!()
+                }
+            })
         }
     }
     
@@ -98,13 +110,18 @@ extension ViewController {
             
             DispatchQueue.main.async {
                 self.placeItem().children.removeAll()
+                print("REMOVED ALL PLACES CHILDREN")
             }
         }
         
-        DispatchQueue.main.async {
-            self.loadPlacesToTreeFromDatabase(filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel)
-            self.sourceList.reloadData()
-        }
+        self.loadPlacesToTreeFromDatabase(filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel, onCompleted: {
+            DispatchQueue.main.async {
+                print("\(Date()) RELOADING SOURCE LIST DATASET: BEGIN")
+                print("PLACE MAJOR ENTRIES: \(self.placeItem().hasChildren()) \(self.placeItem().children?.count ?? 0)")
+                self.sourceList.reloadData()
+                print("\(Date()) RELOADING SOURCE LIST DATASET: DONE")
+            }
+        })
     }
     
     // MARK: ADD NODES
@@ -128,6 +145,7 @@ extension ViewController {
         
         // add tree relationship
         self.placeItem().addChildItem(item)
+        print("PLACES CHILDREN: \(self.placeItem().children?.count ?? 0)")
         
         // avoid collection object to be purged from memory
         self.momentToCollectionGroupByPlace["\(place.id)"] = collection

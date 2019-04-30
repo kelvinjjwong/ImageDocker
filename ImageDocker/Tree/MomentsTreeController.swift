@@ -15,47 +15,60 @@ extension ViewController {
     
     // MARK: DATA SOURCE
     
-    func loadMomentsToTreeFromDatabase(filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil){
-        let dates:[Row] = ModelStore.default.getAllDates(imageSource: filterImageSource, cameraModel: filterCameraModel)
-        if dates.count > 0 {
-            let moments:[Moment] = Moments().readMoments(dates)
+    func loadMomentsToTreeFromDatabase(filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil, onCompleted:( () -> Void )? = nil){
+        print("\(Date()) LOAD MOMENTS TREE: BEGIN")
+        DispatchQueue.global().async {
             
-            let duplicates:Duplicates = ModelStore.default.getDuplicatePhotos()
-            
-            for year in moments {
+            autoreleasepool(invoking: { () -> Void in
                 
-                var duplicateInYear:Bool = false
-                if duplicates.years.contains(year.year) {
-                    duplicateInYear = true
-                }
-                year.hasDuplicates = duplicateInYear
-                
-                self.addMomentsTreeYearEntry(year: year)
-                for month in year.children {
+                let dates:[Row] = ModelStore.default.getAllDates(imageSource: filterImageSource, cameraModel: filterCameraModel)
+                if dates.count > 0 {
+                    let moments:[Moment] = Moments().readMoments(dates)
                     
-                    var duplicateInMonth:Bool = false
-                    if duplicates.yearMonths.contains(month.year * 1000 + month.month) {
-                        duplicateInMonth = true
-                    }
-                    month.hasDuplicates = duplicateInMonth
+                    let duplicates:Duplicates = ModelStore.default.getDuplicatePhotos()
                     
-                    self.addMomentsTreeMonthEntry(month: month)
-                    for day in month.children {
+                    for year in moments {
                         
-                        var duplicateInDay:Bool = false
-                        if duplicates.yearMonthDays.contains(day.year * 100000 + day.month * 100 + day.day) {
-                            duplicateInDay = true
+                        var duplicateInYear:Bool = false
+                        if duplicates.years.contains(year.year) {
+                            duplicateInYear = true
                         }
-                        day.hasDuplicates = duplicateInDay
+                        year.hasDuplicates = duplicateInYear
                         
-                        self.addMomentsTreeDayEntry(day: day)
+                        self.addMomentsTreeYearEntry(year: year)
+                        for month in year.children {
+                            
+                            var duplicateInMonth:Bool = false
+                            if duplicates.yearMonths.contains(month.year * 1000 + month.month) {
+                                duplicateInMonth = true
+                            }
+                            month.hasDuplicates = duplicateInMonth
+                            
+                            self.addMomentsTreeMonthEntry(month: month)
+                            for day in month.children {
+                                
+                                var duplicateInDay:Bool = false
+                                if duplicates.yearMonthDays.contains(day.year * 100000 + day.month * 100 + day.day) {
+                                    duplicateInDay = true
+                                }
+                                day.hasDuplicates = duplicateInDay
+                                
+                                self.addMomentsTreeDayEntry(day: day)
+                            }
+                        }
                     }
+                    self.lastCheckPhotoTakenDateChange = Date()
+                    print("\(Date()) LOAD MOMENTS TREE: DONE")
+                    
+                }else{
+                    print("\(Date()) LOAD MOMENTS TREE: NONE")
+                    print("no dates")
                 }
-            }
-            self.lastCheckPhotoTakenDateChange = Date()
-            
-        }else{
-            print("no dates")
+                
+                if onCompleted != nil {
+                    onCompleted!()
+                }
+            })
         }
     }
     
@@ -82,10 +95,14 @@ extension ViewController {
             }
         }
         
-        DispatchQueue.main.async {
-            self.loadMomentsToTreeFromDatabase(filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel)
-            self.sourceList.reloadData()
-        }
+        self.loadMomentsToTreeFromDatabase(filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel, onCompleted: {
+            DispatchQueue.main.async {
+                print("\(Date()) RELOADING SOURCE LIST DATASET: BEGIN")
+                print("EVENT MOMENT ENTRIES: \(self.momentItem().hasChildren()) \(self.momentItem().children?.count ?? 0)")
+                self.sourceList.reloadData()
+                print("\(Date()) RELOADING SOURCE LIST DATASET: DONE")
+            }
+        })
         
     }
     

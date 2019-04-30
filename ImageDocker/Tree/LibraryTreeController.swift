@@ -13,7 +13,7 @@ import GRDB
 
 extension ViewController {
     
-    func loadPathToTreeFromDatabase(fast:Bool = true) {
+    func loadPathToTreeFromDatabase(fast:Bool = true, onCompleted:( () -> Void )? = nil) {
         print("\(Date()) Loading image folders from db ")
         DispatchQueue.global().async {
             
@@ -21,7 +21,7 @@ extension ViewController {
                 
                 let imageFolders = ImageFolderTreeScanner.default.scanImageFolderFromDatabase(fast: fast)
                 
-                print("\(Date()) Adding image folders as tree entries ")
+                print("\(Date()) Adding image folders as tree entries: BEGIN")
                 if imageFolders.count > 0 {
                     DispatchQueue.main.async {
                         for imageFolder:ImageFolder in imageFolders {
@@ -48,6 +48,11 @@ extension ViewController {
                         }
                     }
                 }
+                print("\(Date()) Adding image folders as tree entries: DONE")
+                
+                if onCompleted != nil {
+                    onCompleted!()
+                }
             })
             
         }
@@ -56,7 +61,7 @@ extension ViewController {
     // MARK: REFRESH
     
     @objc func refreshLibraryTree(fast:Bool = true) {
-        //print("REFRESHING MOMENT TREE at \(Date())")
+        print("\(Date()) REFRESHING LIBRARY TREE")
         let count = self.libraryItem().children.count
         // remove items in moments
         
@@ -75,10 +80,15 @@ extension ViewController {
             }
         }
         
-        DispatchQueue.main.async {
-            self.loadPathToTreeFromDatabase(fast: fast)
-            self.sourceList.reloadData()
-        }
+        
+        self.loadPathToTreeFromDatabase(fast: fast, onCompleted: {
+            DispatchQueue.main.async {
+                print("\(Date()) RELOADING SOURCE LIST DATASET: BEGIN")
+                print("EVENT LIBRARY ENTRIES: \(self.libraryItem().hasChildren()) \(self.libraryItem().children?.count ?? 0)")
+                self.sourceList.reloadData()
+                print("\(Date()) RELOADING SOURCE LIST DATASET: DONE")
+            }
+        })
     }
     
     // MARK: ADD NODES
@@ -86,7 +96,7 @@ extension ViewController {
     fileprivate func addLibraryTreeEntry(imageFolder:ImageFolder) {
         var _parent:PXSourceListItem
         if imageFolder.parent == nil {
-            _parent = self.librarySectionOfTree!
+            _parent = self.libraryItem() //self.librarySectionOfTree!
         }else{
             _parent = self.identifiersOfLibraryTree[(imageFolder.parent?.url.path)!]!
         }
