@@ -1233,10 +1233,55 @@
                                             <action selector="onPeopleClicked:" target="XfG-lQ-9wD" id="A1z-TA-zPj"/>
                                         </connections>
                                     </button>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wQ3-4F-bW7">
+                                        <rect key="frame" x="110" y="10" width="80" height="19"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="80" id="Lk7-f6-m05"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="recessed" title="Faces" bezelStyle="recessed" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="noArrow" selectedItem="Cjw-tm-gEJ" id="pos-94-t0j">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
+                                            <font key="font" metaFont="systemBold" size="12"/>
+                                            <menu key="menu" id="Ago-NQ-F0j">
+                                                <items>
+                                                    <menuItem title="Faces" state="on" image="people" id="Cjw-tm-gEJ"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <connections>
+                                            <action selector="onFacesClicked:" target="XfG-lQ-9wD" id="bJq-le-RnS"/>
+                                        </connections>
+                                    </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kL0-v4-mKZ">
+                                        <rect key="frame" x="902" y="13" width="304" height="17"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="300" id="gsP-mn-F5f"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" id="oon-EU-u89">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="L5J-oA-BUH">
+                                        <rect key="frame" x="1208" y="2" width="95" height="32"/>
+                                        <buttonCell key="cell" type="push" title="STOP" bezelStyle="rounded" image="NSStopProgressFreestandingTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4Ur-F2-sqb">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onStopClicked:" target="XfG-lQ-9wD" id="d6A-XM-PaB"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="L5J-oA-BUH" secondAttribute="trailing" constant="5" id="BxZ-JF-Tu2"/>
+                                    <constraint firstItem="wQ3-4F-bW7" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="11" id="Cpz-BF-ZaT"/>
+                                    <constraint firstItem="L5J-oA-BUH" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="Cxp-QY-2oQ"/>
                                     <constraint firstItem="sqA-Sl-Ts2" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="5" id="H6A-zE-Qbi"/>
+                                    <constraint firstItem="kL0-v4-mKZ" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="Jqa-hL-mjj"/>
                                     <constraint firstItem="sqA-Sl-Ts2" firstAttribute="leading" secondItem="gVf-na-PZy" secondAttribute="leading" constant="10" id="KPw-Kn-g2R"/>
+                                    <constraint firstItem="wQ3-4F-bW7" firstAttribute="leading" secondItem="sqA-Sl-Ts2" secondAttribute="trailing" constant="22" id="iIy-J6-xAn"/>
+                                    <constraint firstItem="L5J-oA-BUH" firstAttribute="leading" secondItem="kL0-v4-mKZ" secondAttribute="trailing" constant="10" id="ovv-6i-2iA"/>
                                 </constraints>
                             </customView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="kIX-ny-abJ">
@@ -1276,6 +1321,7 @@
                         <outlet property="btnCopyToDevice" destination="Zj8-N8-ari" id="0b1-3U-nKo"/>
                         <outlet property="btnDatePicker" destination="qYv-ia-zVJ" id="KVx-Yv-c0B"/>
                         <outlet property="btnDuplicates" destination="JAQ-3Z-0MW" id="3Uo-Pa-nb3"/>
+                        <outlet property="btnFaces" destination="wQ3-4F-bW7" id="NgX-tX-28L"/>
                         <outlet property="btnFilterRepository" destination="0Z2-AE-WbE" id="LVn-Ev-D3R"/>
                         <outlet property="btnHide" destination="QJ8-hF-79J" id="41M-3L-1WH"/>
                         <outlet property="btnManageEvents" destination="fBu-cK-CdX" id="iHI-iO-KSb"/>
@@ -1290,6 +1336,7 @@
                         <outlet property="btnScanState" destination="XhD-V8-W0f" id="62F-lW-Dyb"/>
                         <outlet property="btnShare" destination="0by-PK-DjP" id="b9S-z4-3RB"/>
                         <outlet property="btnShow" destination="W0U-Cw-aB7" id="rYg-OY-AwZ"/>
+                        <outlet property="btnStop" destination="L5J-oA-BUH" id="MPI-iS-1bF"/>
                         <outlet property="chbExport" destination="Qnu-5r-3Pb" id="shB-wc-ZF2"/>
                         <outlet property="chbScan" destination="pmP-SX-vWx" id="d0K-gZ-IpG"/>
                         <outlet property="chbSelectAll" destination="eaf-Jq-heG" id="LF3-04-nwk"/>
@@ -1301,6 +1348,7 @@
                         <outlet property="imgPhoto" destination="9Na-U8-3R2" id="b6k-Ma-bp4"/>
                         <outlet property="indicatorMessage" destination="kAZ-Sm-Ax7" id="QkM-9I-20Z"/>
                         <outlet property="lblImageDescription" destination="q9K-Bh-dED" id="6j0-7g-FlX"/>
+                        <outlet property="lblProgressMessage" destination="kL0-v4-mKZ" id="5kj-yC-kdM"/>
                         <outlet property="mapZoomSlider" destination="eId-m8-eKf" id="zoE-94-C0F"/>
                         <outlet property="metaInfoTableView" destination="ECf-s9-RCm" id="GLo-W4-I6C"/>
                         <outlet property="playerContainer" destination="73d-nT-eRs" id="WGK-6c-bD3"/>

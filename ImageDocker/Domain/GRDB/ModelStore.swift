@@ -1047,6 +1047,21 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     }
     
     
+    func getImagesByYear(year:String) -> [Image]{
+        let sql = "hidden=0 and photoTakenYear=\(year)"
+        var result:[Image] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.read { db in
+                result = try Image.filter(sql: sql).fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    
     func getImagesByDate(photoTakenDate:Date, event:String? = nil) -> [Image]{
         let year = Calendar.current.component(.year, from: photoTakenDate)
         let month = Calendar.current.component(.month, from: photoTakenDate)
@@ -2514,7 +2529,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
-                result = try ImageFace.filter(sql: "imageId='\(imageId)'").fetchAll(db)
+                result = try ImageFace.filter(sql: "imageId='\(imageId)'").order(sql: "cast(faceX as decimal)").fetchAll(db)
             }
         }catch{
             print(error)
@@ -2564,7 +2579,11 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 let rows = try Row.fetchAll(db, "SELECT DISTINCT imageMonth FROM ImageFace WHERE imageYear=\(imageYear) and \(condition)")
                 for row in rows {
                     if let value = row["imageMonth"] as Int? {
-                        results.append("\(value)")
+                        if value < 10 {
+                            results.append("0\(value)")
+                        }else{
+                            results.append("\(value)")
+                        }
                     }
                 }
             }

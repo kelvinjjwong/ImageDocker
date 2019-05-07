@@ -20,6 +20,11 @@ class ViewController: NSViewController {
     // MARK: Icon
     let tick:NSImage = NSImage.init(named: NSImage.Name.menuOnStateTemplate)!
     
+    @IBOutlet weak var btnFaces: NSPopUpButton!
+    @IBOutlet weak var lblProgressMessage: NSTextField!
+    
+    @IBOutlet weak var btnStop: NSButton!
+    
     // MARK: - Timer
     var scanLocationChangeTimer:Timer!
     var lastCheckLocationChange:Date?
@@ -353,6 +358,27 @@ class ViewController: NSViewController {
         NSApplication.shared.terminate(self)
     }
     
+    fileprivate func setupFacesMenu() {
+        self.btnStop.isHidden = true
+        
+        let years = ModelStore.default.getYears()
+        self.btnFaces.addItem(withTitle: "Scan faces in selected collection")
+        for year in years {
+            if year == 0 {
+                continue
+            }
+            self.btnFaces.addItem(withTitle: "Scan faces in \(year)")
+        }
+        self.btnFaces.menu?.addItem(NSMenuItem.separator())
+        self.btnFaces.addItem(withTitle: "Recognize faces in selected collection")
+        for year in years {
+            if year == 0 {
+                continue
+            }
+            self.btnFaces.addItem(withTitle: "Recognize faces in \(year)")
+        }
+    }
+    
     fileprivate func initView() {
         print("\(Date()) Loading view - preview zone")
         self.configurePreview()
@@ -360,6 +386,8 @@ class ViewController: NSViewController {
         self.configureSelectionView()
         
         PreferencesController.healthCheck()
+        
+        setupFacesMenu()
         
         print("\(Date()) Loading view - configure tree")
         configureTree()
@@ -852,11 +880,26 @@ class ViewController: NSViewController {
         self.metaInfoTableView.reloadData()
         img.loadLocation()
         self.loadBaiduMap()
-        
-        
+        self.loadImageDescription(img)
+    }
+    
+    private func loadImageDescription(_ img:ImageFile){
         if let image = self.img.imageData {
+            var people = ""
+            if let id = image.id {
+                let faces = ModelStore.default.getFaceCrops(imageId: id)
+                for face in faces {
+                    if let peopleId = face.peopleId, peopleId != "" {
+                        var name = FaceTask.default.people(id: peopleId)
+                        if name == "" {
+                            name = "(unknown)"
+                        }
+                        people += "\(name) "
+                    }
+                }
+            }
             self.lblImageDescription.stringValue = """
-\(image.shortDescription ?? "")
+\(people) \(image.shortDescription ?? "")
 \(image.longDescription ?? "")
 """
         }
@@ -869,13 +912,7 @@ class ViewController: NSViewController {
         img.metaInfoHolder.sort(by: MetaCategorySequence)
         self.metaInfoTableView.reloadData()
         self.loadBaiduMap()
-        
-        if let image = self.img.imageData {
-            self.lblImageDescription.stringValue = """
-\(image.shortDescription ?? "")
-\(image.longDescription ?? "")
-"""
-        }
+        self.loadImageDescription(img)
     }
     
     private func loadBaiduMap() {
@@ -2121,7 +2158,134 @@ class ViewController: NSViewController {
         }
     }
     
+    @objc func taskletObserver(notification:Notification) {
+        if let obj = notification.object {
+            if let tasklet = obj as? Tasklet {
+                DispatchQueue.main.async {
+                    self.lblProgressMessage.stringValue = "\(tasklet.name): \(tasklet.progress) / \(tasklet.total)"
+                }
+                if tasklet.progress == tasklet.total {
+                    DispatchQueue.main.async {
+                        self.lblProgressMessage.stringValue = ""
+                        self.btnStop.isHidden = true
+                    }
+                    self.runningFaceTask = false
+                    self.stopFacesTask = false
+                    tasklet.removeObserver(self)
+                }
+            }
+            
+        }
+    }
     
+    var runningFaceTask = false
+    
+    @IBAction func onFacesClicked(_ sender: NSPopUpButton) {
+        let title = sender.titleOfSelectedItem ?? ""
+        sender.selectItem(at: 0)
+        if !runningFaceTask && title != "" && title != "Faces" {
+            let parts = title.components(separatedBy: " ")
+            let action = parts[0]
+            let area = parts[parts.count-1]
+            print("\(action) \(area)")
+            if area == "collection" {
+                if self.imagesLoader.getItems().count > 0 {
+                    let tasklet = TaskletManager.default.task(name: "\(action) in collection")
+                    tasklet.total = self.imagesLoader.getItems().count
+                    tasklet.progress = 0
+                    tasklet.running = true
+                    tasklet.addObserver(self, selector: #selector(taskletObserver(notification:)))
+                    self.runningFaceTask = true
+                    self.stopFacesTask = false
+                    self.btnStop.isHidden = false
+                    DispatchQueue.main.async {
+                        self.lblProgressMessage.stringValue = "\(action) in collection: loading images ..."
+                    }
+                    DispatchQueue.global().async {
+                        for imageFile in self.imagesLoader.getItems() {
+                            if self.stopFacesTask {
+                                tasklet.forceStop = true
+                                tasklet.running = false
+                                tasklet.forceStopped = true
+                                DispatchQueue.main.async {
+                                    self.btnStop.isHidden = true
+                                }
+                                self.runningFaceTask = false
+                                self.stopFacesTask = false
+                                tasklet.removeObserver(self)
+                                break
+                            }
+                            let url = imageFile.url
+                            if action == "Scan" {
+                                let _ = FaceTask.default.findFaces(path: url.path)
+                            }else if action == "Recognize" {
+                                let _ = FaceTask.default.recognizeFaces(path: url.path)
+                            }
+                            tasklet.progress += 1
+                            tasklet.notifyChange()
+                        }
+                    }
+                }else{
+                    print("no item in collection")
+                }
+            }else{
+                let tasklet = TaskletManager.default.task(name: "\(action) in \(area)")
+                tasklet.total = 1
+                tasklet.progress = 0
+                tasklet.running = true
+                tasklet.addObserver(self, selector: #selector(taskletObserver(notification:)))
+                self.runningFaceTask = true
+                self.stopFacesTask = false
+                self.btnStop.isHidden = false
+                
+                DispatchQueue.main.async {
+                    self.lblProgressMessage.stringValue = "\(action) in \(area): loading images ..."
+                }
+                DispatchQueue.global().async {
+                    
+                    let images = ModelStore.default.getImagesByYear(year: area)
+                    if images.count > 0 {
+                        tasklet.total = images.count
+                        for image in images {
+                            if self.stopFacesTask {
+                                tasklet.forceStop = true
+                                tasklet.running = false
+                                tasklet.forceStopped = true
+                                DispatchQueue.main.async {
+                                    self.btnStop.isHidden = true
+                                }
+                                self.runningFaceTask = false
+                                self.stopFacesTask = false
+                                tasklet.removeObserver(self)
+                                break
+                            }
+                            if action == "Scan" {
+                                let _ = FaceTask.default.findFaces(image: image)
+                            }else if action == "Recognize" {
+                                let _ = FaceTask.default.recognizeFaces(image: image)
+                            }
+                        }
+                    }else{
+                        tasklet.forceStop = false
+                        tasklet.forceStopped = false
+                        tasklet.running = false
+                        self.btnStop.isHidden = true
+                        self.runningFaceTask = false
+                        self.stopFacesTask = false
+                        tasklet.removeObserver(self)
+                    }
+                }
+            }
+        }else{
+            print("no selection")
+        }
+    }
+    
+    var stopFacesTask = false
+    
+    @IBAction func onStopClicked(_ sender: NSButton) {
+        self.stopFacesTask = true
+    }
     
 }
 

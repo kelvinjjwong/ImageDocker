@@ -406,7 +406,11 @@ struct IPHONE {
     }
     
     func files(mountPoint:String, in path: String) -> [PhoneFile] {
-        let workpath = URL(fileURLWithPath: mountPoint).appendingPathComponent(path).path
+        let workURL = URL(fileURLWithPath: mountPoint).appendingPathComponent(path)
+        if !FileManager.default.fileExists(atPath: workURL.path) {
+            return []
+        }
+        let workpath = workURL.path
         print("getting files from \(workpath)")
         var result:[PhoneFile] = []
         let pipe = Pipe()

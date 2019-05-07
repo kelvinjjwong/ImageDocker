@@ -626,6 +626,8 @@ class PeopleViewController: NSViewController {
         if id != "" && name != "" && shortName != "" {
             ModelStore.default.savePersonName(id: id, name: name, shortName: shortName)
             self.lblIdentityMessasge.stringValue = "Saved."
+            FaceTask.default.reloadPeople()
+            self.loadIcons()
         }else{
             self.lblIdentityMessasge.stringValue = "ERROR: Empty."
         }

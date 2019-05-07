@@ -375,6 +375,13 @@ class DeviceCopyViewController: NSViewController {
         }else{
             files = IPHONE.bridge.files(mountPoint: PreferencesController.iosDeviceMountPoint(), in: path)
         }
+        guard files.count > 0 else {
+            print("NO FILE FOUND in \(path)")
+            DispatchQueue.main.async {
+                self.lblProgressMessage.stringValue = "No file found in \(path)"
+            }
+            return
+        }
         let total = files.count
         DispatchQueue.main.async {
             self.accumulator = Accumulator(target: total, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblProgressMessage)

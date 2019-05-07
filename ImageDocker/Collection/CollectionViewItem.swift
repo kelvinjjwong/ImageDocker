@@ -216,94 +216,9 @@ class CollectionViewItem: NSCollectionViewItem {
     }
     
     fileprivate func findFaces() {
-        if let _ = self.imageFile, let url = self.imageFile?.url, FileManager.default.fileExists(atPath: url.path) {
+        if let _ = self.imageFile, let url = self.imageFile?.url {
             DispatchQueue.global().async {
-                if let image = ModelStore.default.getImage(path: url.path) {
-                    if image.repositoryPath != "", let repository = ModelStore.default.getRepository(repositoryPath: image.repositoryPath) {
-                        if repository.cropPath != "" {
-                            // ensure base crop path exists
-                            var isDir:ObjCBool = false
-                            if FileManager.default.fileExists(atPath: repository.cropPath, isDirectory: &isDir) {
-                                if !isDir.boolValue {
-                                    print("ERROR: Crop path of repository is not a directory: \(repository.cropPath)")
-                                    return
-                                }
-                            }
-                            
-                            // ensure image-filename-aware crop path exists
-                            let cropPath = URL(fileURLWithPath: repository.cropPath).appendingPathComponent(image.subPath)
-                            print("Trying to create directory: \(cropPath.path)")
-                            //if FileManager.default.fileExists(atPath: repository.cropPath, isDirectory: &isDir), isDir.boolValue {
-                                do {
-                                    try FileManager.default.createDirectory(atPath: cropPath.path, withIntermediateDirectories: true, attributes: nil)
-                                }catch{
-                                    print(error)
-                                    print("ERROR: Cannot create directory for storing crops at path: \(cropPath.path)")
-                                    return
-                                }
-                            //}
-                            if !FileManager.default.fileExists(atPath: cropPath.path, isDirectory: &isDir) {
-                                print("ERROR: Cannot create directory: \(cropPath.path)")
-                                return
-                            }
-                            
-                            var img = image
-                            if img.id == nil {
-                                img.id = UUID().uuidString
-                                ModelStore.default.saveImage(image: img)
-                            }
-                            let imageId = img.id!
-                            
-                            FaceDetection.default.findFace(from: url, into: cropPath, onCompleted: {faces in
-                                for face in faces {
-                                    print("Found face: \(face.filename) at (\(face.x), \(face.y), \(face.width), \(face.height))")
-                                    let exist = ModelStore.default.findFaceCrop(imageId: imageId,
-                                                                                x: face.x.databaseValue.description,
-                                                                                y: face.y.databaseValue.description,
-                                                                                width: face.width.databaseValue.description,
-                                                                                height: face.height.databaseValue.description)
-                                    if exist == nil {
-                                        let imageFace = ImageFace.new(imageId: imageId,
-                                                                      repositoryPath: repository.repositoryPath.withStash(),
-                                                                      cropPath: repository.cropPath,
-                                                                      subPath: image.subPath,
-                                                                      filename: face.filename,
-                                                                      faceX: face.x.databaseValue.description,
-                                                                      faceY: face.y.databaseValue.description,
-                                                                      faceWidth: face.width.databaseValue.description,
-                                                                      faceHeight: face.height.databaseValue.description,
-                                                                      frameX: face.frameX.databaseValue.description,
-                                                                      frameY: face.frameY.databaseValue.description,
-                                                                      frameWidth: face.frameWidth.databaseValue.description,
-                                                                      frameHeight: face.frameHeight.databaseValue.description,
-                                                                      imageDate: image.photoTakenDate,
-                                                                      tagOnly: false,
-                                                                      remark: "",
-                                                                      year: image.photoTakenYear ?? 0,
-                                                                      month: image.photoTakenMonth ?? 0,
-                                                                      day: image.photoTakenDay ?? 0)
-                                        ModelStore.default.saveFaceCrop(imageFace)
-                                        print("Face crop \(imageFace.id) saved.")
-                                    }else{
-                                        print("Face already in DB")
-                                    }
-                                }
-                                    
-                                print("Face detection done in \(cropPath.path)")
-                            })
-                            
-                        }else{
-                            print("ERROR: Crop path is empty, please assign it first: \(repository.path)")
-                            return
-                        }
-                    }else{
-                        print("ERROR: Cannot find image's repository by repository path: \(image.repositoryPath)")
-                        return
-                    }
-                }else{
-                    print("ERROR: Cannot find image record: \(url.path)")
-                    return
-                }
+                FaceTask.default.findFaces(path: url.path)
             }
             
         }else{
@@ -313,51 +228,10 @@ class CollectionViewItem: NSCollectionViewItem {
     }
     
     func recognizeFaces() {
-        if let _ = self.imageFile, let url = self.imageFile?.url, FileManager.default.fileExists(atPath: url.path) {
+        if let _ = self.imageFile, let url = self.imageFile?.url {
             DispatchQueue.global().async {
-                if let image = ModelStore.default.getImage(path: url.path) {
-                    if let imageId = image.id {
-                        let crops = ModelStore.default.getFaceCrops(imageId: imageId)
-                        if crops.count > 0 {
-                            for crop in crops {
-                                let path = URL(fileURLWithPath: crop.cropPath).appendingPathComponent(crop.subPath).appendingPathComponent(crop.filename)
-                                let recognition = FaceRecognition.default.recognize(imagePath: path.path)
-                                if recognition.count > 0 {
-                                    let name = recognition[0]
-                                    print("Face crop \(crop.id) is recognized as \(name)")
-                                    var c = crop
-                                    c.peopleId = name
-                                    c.recognizeBy = "FaceRecognitionOpenCV"
-                                    c.recognizeDate = Date()
-                                    if c.recognizeVersion == nil {
-                                        c.recognizeVersion = "1"
-                                    }else{
-                                        var version = Int(c.recognizeVersion ?? "0") ?? 0
-                                        version += 1
-                                        c.recognizeVersion = "\(version)"
-                                    }
-                                    ModelStore.default.saveFaceCrop(c)
-                                    print("Face crop \(crop.id) updated into DB.")
-                                }else{
-                                    print("No face recognized for image [\(imageId)].")
-                                }
-                            }
-                        }else{
-                            print("No crops for this image.")
-                            return
-                        }
-                        
-                        
-                    }else{
-                        print("ERROR: Image ID is not set.")
-                        return
-                    }
-                }else{
-                    print("ERROR: Cannot find image record: \(url.path)")
-                    return
-                }
+                FaceTask.default.recognizeFaces(path: url.path)
             }
-            
         }else{
             print("ERROR: Image object is null or file doesn't exist.")
             return

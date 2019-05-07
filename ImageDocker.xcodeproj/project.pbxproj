@@ -103,6 +103,8 @@
 		8EBA9DE52173CC7F00DACAAD /* TheaterQuickLookItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA9DE42173CC7F00DACAAD /* TheaterQuickLookItem.swift */; };
 		8EBA9DE7217477D900DACAAD /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA9DE6217477D900DACAAD /* UIHelper.swift */; };
 		8EBA9DE921766EAB00DACAAD /* TheaterCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA9DE821766EAB00DACAAD /* TheaterCollectionViewController.swift */; };
+		8EC20B302281B4C0000F4819 /* TaskHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC20B2F2281B4C0000F4819 /* TaskHelper.swift */; };
+		8EC20B322281C0B8000F4819 /* FaceTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC20B312281C0B8000F4819 /* FaceTask.swift */; };
 		8EC5BA2E21775571001510AF /* TheaterCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC5BA2C21775571001510AF /* TheaterCollectionViewItem.swift */; };
 		8EC5BA2F21775571001510AF /* TheaterCollectionViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EC5BA2D21775571001510AF /* TheaterCollectionViewItem.xib */; };
 		8EC82EA42121C10A00FC0899 /* LocalDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC82EA32121C10A00FC0899 /* LocalDirectory.swift */; };
@@ -271,6 +273,8 @@
 		8EBA9DE42173CC7F00DACAAD /* TheaterQuickLookItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheaterQuickLookItem.swift; sourceTree = "<group>"; };
 		8EBA9DE6217477D900DACAAD /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
 		8EBA9DE821766EAB00DACAAD /* TheaterCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheaterCollectionViewController.swift; sourceTree = "<group>"; };
+		8EC20B2F2281B4C0000F4819 /* TaskHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskHelper.swift; sourceTree = "<group>"; };
+		8EC20B312281C0B8000F4819 /* FaceTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTask.swift; sourceTree = "<group>"; };
 		8EC5BA2C21775571001510AF /* TheaterCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheaterCollectionViewItem.swift; sourceTree = "<group>"; };
 		8EC5BA2D21775571001510AF /* TheaterCollectionViewItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TheaterCollectionViewItem.xib; sourceTree = "<group>"; };
 		8EC82EA32121C10A00FC0899 /* LocalDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDirectory.swift; sourceTree = "<group>"; };
@@ -560,7 +564,9 @@
 				8EBA9DE6217477D900DACAAD /* UIHelper.swift */,
 				8E4E5B662217349600FE4B68 /* FaceDetection.swift */,
 				8E4E5B6822195BFF00FE4B68 /* FaceRecognition.swift */,
+				8EC20B312281C0B8000F4819 /* FaceTask.swift */,
 				8E73E381223E494C00C14A90 /* ExecutionEnvironment.swift */,
+				8EC20B2F2281B4C0000F4819 /* TaskHelper.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -992,6 +998,7 @@
 				8E4C38CD2117B5340089502C /* Phone.swift in Sources */,
 				8EFE763C2094AF6B00B7CFCA /* TreeController.swift in Sources */,
 				8E3EC3B5214DB1B8004B6125 /* LunarCalendarView.swift in Sources */,
+				8EC20B302281B4C0000F4819 /* TaskHelper.swift in Sources */,
 				8E31C37F2120A22600002546 /* DeviceShell.swift in Sources */,
 				8EC82EAE21283ED000FC0899 /* DirectoryViewDelegate.swift in Sources */,
 				8EF4CE6421E56DC100C53AFF /* NotificationViewController.swift in Sources */,
@@ -1036,6 +1043,7 @@
 				8E36B069217920C000646EA5 /* DayListController.swift in Sources */,
 				8EEF072B22626FE8000520B7 /* ViewController.swift in Sources */,
 				8E4C38D5211828FF0089502C /* MomentsTreeController.swift in Sources */,
+				8EC20B322281C0B8000F4819 /* FaceTask.swift in Sources */,
 				8E3EC3B4214DB1B8004B6125 /* LunarSolarConverter.swift in Sources */,
 				8EBA9DDF216F8BB100DACAAD /* NotesViewController.swift in Sources */,
 				8EEF0728226215E7000520B7 /* SplashViewController.swift in Sources */,
