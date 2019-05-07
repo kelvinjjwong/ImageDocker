@@ -6,23 +6,32 @@ A desktop application help organize pictures and videos between cameras/mobile d
 
 ## Major objectives
 
-- Import images from local directories
+- Import images from local directories and mobile devices
 - Change photo-taken-date and geolocation of images
 - Export images to another directory in well-organized directory structure to feed Plex Media Server
 
 ## Features
 
-- A tree view to organize images by directories, dates and places
-- A collection view to preview thumbnail of images happened during a day
-- A table view to list EXIF infos, such as dates, geolocation and camera models
-- Preview picture/video in a bigger size
-- A map view for geolocation of an image
-- Update multiple images by assigning photo-taken-date and geolocation in a batch
+- Organize images by directories, dates, events and places.
+- EXIF information, such as dates, geolocation, camera models, etc. Could be modified in batch.
+- Detect and recognize faces.
 
 ## Screenshot
+v0.10.0
+New feature: splash screen on startup
+![Splash screen of v0.10.0](Screenshots/Screenshot_v0.10.0_1.png)
+New feature: pagination for collection view
+![Pagination of v0.10.0](Screenshots/Screenshot_v0.10.0_2.png)
+New feature: scan and recognize faces (required dlib+python libraries)
+![Pagination of v0.10.0](Screenshots/Screenshot_v0.10.0_3.png)
+New feature: performance control
+![Pagination of v0.10.0](Screenshots/Screenshot_v0.10.0_4.png)
+
 
 v0.9.4
+New feature: combine similar images into a group
 ![Image Docker of v0.9.4](Screenshots/Screenshot_v0.9.4_1.png)
+New feature: Larger view of image
 ![Image Viewer of v0.9.4](Screenshots/Screenshot_v0.9.4_2.png)
 
 v0.9.3
