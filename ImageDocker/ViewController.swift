@@ -358,25 +358,85 @@ class ViewController: NSViewController {
         NSApplication.shared.terminate(self)
     }
     
+    @objc func faceMenuManageAction(_ menuItem:NSMenuItem) {
+        print("manage action \(menuItem.title)")
+        self.btnFaces.selectItem(at: 0)
+        if let window = self.peopleWindowController.window {
+            if self.peopleWindowController.isWindowLoaded {
+                window.makeKeyAndOrderFront(self)
+                print("order to front")
+            }else{
+                self.peopleWindowController.showWindow(self)
+                print("show window")
+            }
+            let vc = window.contentViewController as! PeopleViewController
+            vc.initView()
+            //            vc.initNew(window: window, onOK: {
+            //                window.close()
+            //            })
+        }
+    }
+    
+    @objc func faceMenuScanAction(_ menuItem:NSMenuItem) {
+        self.doFaceMenuAction("Scan \(menuItem.title)")
+    }
+    
+    
+    @objc func faceMenuRecognizeAction(_ menuItem:NSMenuItem) {
+        self.doFaceMenuAction("Recognize \(menuItem.title)")
+    }
+    
+    @objc func faceMenuForceScanAction(_ menuItem:NSMenuItem) {
+        self.doFaceMenuAction("Force-Scan \(menuItem.title)")
+    }
+    
+    
+    @objc func faceMenuForceRecognizeAction(_ menuItem:NSMenuItem) {
+        self.doFaceMenuAction("Force-Recognize \(menuItem.title)")
+    }
+    
     fileprivate func setupFacesMenu() {
         self.btnStop.isHidden = true
         
-        let years = ModelStore.default.getYears()
-        self.btnFaces.addItem(withTitle: "Scan faces in selected collection")
-        for year in years {
-            if year == 0 {
-                continue
-            }
-            self.btnFaces.addItem(withTitle: "Scan faces in \(year)")
-        }
         self.btnFaces.menu?.addItem(NSMenuItem.separator())
-        self.btnFaces.addItem(withTitle: "Recognize faces in selected collection")
+        self.btnFaces.menu?.addItem(withTitle: "Manage faces", action: #selector(faceMenuManageAction(_:)), keyEquivalent: "")
+        self.btnFaces.menu?.addItem(NSMenuItem.separator())
+        
+        let menuScan = NSMenuItem(title: "Scan", action: nil, keyEquivalent: "")
+        let menuRecognize = NSMenuItem(title: "Recognize", action: nil, keyEquivalent: "")
+        let subMenuScan = NSMenu()
+        let subMenuRecognize = NSMenu()
+        
+        let menuForceScan = NSMenuItem(title: "Force Re-Scan", action: nil, keyEquivalent: "")
+        let menuForceRecognize = NSMenuItem(title: "Force Re-Recognize", action: nil, keyEquivalent: "")
+        let subMenuForceScan = NSMenu()
+        let subMenuForceRecognize = NSMenu()
+        
+        let years = ModelStore.default.getYears()
+        subMenuScan.addItem(withTitle: "Pictures in collection", action: #selector(faceMenuScanAction(_:)), keyEquivalent: "")
+        subMenuRecognize.addItem(withTitle: "Pictures in collection", action: #selector(faceMenuRecognizeAction(_:)), keyEquivalent: "")
+        subMenuForceScan.addItem(withTitle: "Pictures in collection", action: #selector(faceMenuForceScanAction(_:)), keyEquivalent: "")
+        subMenuForceRecognize.addItem(withTitle: "Pictures in collection", action: #selector(faceMenuForceRecognizeAction(_:)), keyEquivalent: "")
         for year in years {
             if year == 0 {
                 continue
             }
-            self.btnFaces.addItem(withTitle: "Recognize faces in \(year)")
+            
+            subMenuScan.addItem(withTitle: "Pictures in \(year)", action: #selector(faceMenuScanAction(_:)), keyEquivalent: "")
+            subMenuRecognize.addItem(withTitle: "Pictures in \(year)", action: #selector(faceMenuRecognizeAction(_:)), keyEquivalent: "")
+            subMenuForceScan.addItem(withTitle: "Pictures in \(year)", action: #selector(faceMenuForceScanAction(_:)), keyEquivalent: "")
+            subMenuForceRecognize.addItem(withTitle: "Pictures in \(year)", action: #selector(faceMenuForceRecognizeAction(_:)), keyEquivalent: "")
         }
+        menuScan.submenu = subMenuScan
+        menuRecognize.submenu = subMenuRecognize
+        menuForceScan.submenu = subMenuForceScan
+        menuForceRecognize.submenu = subMenuForceRecognize
+        
+        self.btnFaces.menu?.addItem(menuScan)
+        self.btnFaces.menu?.addItem(menuForceScan)
+        self.btnFaces.menu?.addItem(NSMenuItem.separator())
+        self.btnFaces.menu?.addItem(menuRecognize)
+        self.btnFaces.menu?.addItem(menuForceRecognize)
     }
     
     fileprivate func initView() {
@@ -2180,9 +2240,7 @@ class ViewController: NSViewController {
     
     var runningFaceTask = false
     
-    @IBAction func onFacesClicked(_ sender: NSPopUpButton) {
-        let title = sender.titleOfSelectedItem ?? ""
-        sender.selectItem(at: 0)
+    fileprivate func doFaceMenuAction(_ title:String) {
         if !runningFaceTask && title != "" && title != "Faces" {
             let parts = title.components(separatedBy: " ")
             let action = parts[0]
@@ -2248,7 +2306,7 @@ class ViewController: NSViewController {
                         images = ModelStore.default.getImagesByYear(year: area, scannedFace: false)
                     }else if action == "Recognize" {
                         images = ModelStore.default.getImagesByYear(year: area, recognizedFace: false)
-                    }else if action == "Force-Recognize" {
+                    }else if action == "Force-Scan" || action == "Force-Recognize" {
                         images = ModelStore.default.getImagesByYear(year: area)
                     }
                     if images.count > 0 {
@@ -2301,7 +2359,7 @@ class ViewController: NSViewController {
                             if continousWorking {
                                 autoreleasepool { () -> Void in
                                     let image = images[index]
-                                    if action == "Scan" {
+                                    if action == "Scan" || action == "Force-Scan" {
                                         let _ = FaceTask.default.findFaces(image: image)
                                     }else if action == "Recognize" || action == "Force-Recognize" {
                                         let _ = FaceTask.default.recognizeFaces(image: image)

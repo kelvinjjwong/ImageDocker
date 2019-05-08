@@ -1220,21 +1220,8 @@
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="gVf-na-PZy">
                                 <rect key="frame" x="6" y="880" width="1302" height="40"/>
                                 <subviews>
-                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sqA-Sl-Ts2">
-                                        <rect key="frame" x="10" y="4" width="78" height="31"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="yEB-hd-fFf"/>
-                                        </constraints>
-                                        <buttonCell key="cell" type="recessed" title="People" bezelStyle="recessed" image="people" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Pks-X3-ud6">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="systemBold" size="12"/>
-                                        </buttonCell>
-                                        <connections>
-                                            <action selector="onPeopleClicked:" target="XfG-lQ-9wD" id="A1z-TA-zPj"/>
-                                        </connections>
-                                    </button>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wQ3-4F-bW7">
-                                        <rect key="frame" x="110" y="10" width="80" height="19"/>
+                                        <rect key="frame" x="10" y="10" width="80" height="19"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="80" id="Lk7-f6-m05"/>
                                         </constraints>
@@ -1247,9 +1234,6 @@
                                                 </items>
                                             </menu>
                                         </popUpButtonCell>
-                                        <connections>
-                                            <action selector="onFacesClicked:" target="XfG-lQ-9wD" id="bJq-le-RnS"/>
-                                        </connections>
                                     </popUpButton>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kL0-v4-mKZ">
                                         <rect key="frame" x="902" y="13" width="304" height="17"/>
@@ -1277,11 +1261,9 @@
                                     <constraint firstAttribute="trailing" secondItem="L5J-oA-BUH" secondAttribute="trailing" constant="5" id="BxZ-JF-Tu2"/>
                                     <constraint firstItem="wQ3-4F-bW7" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="11" id="Cpz-BF-ZaT"/>
                                     <constraint firstItem="L5J-oA-BUH" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="Cxp-QY-2oQ"/>
-                                    <constraint firstItem="sqA-Sl-Ts2" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="5" id="H6A-zE-Qbi"/>
                                     <constraint firstItem="kL0-v4-mKZ" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="Jqa-hL-mjj"/>
-                                    <constraint firstItem="sqA-Sl-Ts2" firstAttribute="leading" secondItem="gVf-na-PZy" secondAttribute="leading" constant="10" id="KPw-Kn-g2R"/>
-                                    <constraint firstItem="wQ3-4F-bW7" firstAttribute="leading" secondItem="sqA-Sl-Ts2" secondAttribute="trailing" constant="22" id="iIy-J6-xAn"/>
                                     <constraint firstItem="L5J-oA-BUH" firstAttribute="leading" secondItem="kL0-v4-mKZ" secondAttribute="trailing" constant="10" id="ovv-6i-2iA"/>
+                                    <constraint firstItem="wQ3-4F-bW7" firstAttribute="leading" secondItem="gVf-na-PZy" secondAttribute="leading" constant="10" id="vrS-mp-TFb"/>
                                 </constraints>
                             </customView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="kIX-ny-abJ">
