@@ -39,6 +39,9 @@ class FaceTask {
             print("ERROR: No file found at \(image.path)")
             return false
         }
+        if image.path.hasSuffix(".MOV") || image.path.hasSuffix(".MP4") || image.path.hasSuffix(".mov") || image.path.hasSuffix(".mp4") {
+            return false
+        }
         if image.repositoryPath != "", let repository = ModelStore.default.getRepository(repositoryPath: image.repositoryPath) {
             if repository.cropPath != "" {
                 // ensure base crop path exists
@@ -112,7 +115,10 @@ class FaceTask {
                     }
                     
                     print("Face detection done in \(cropPath.path)")
-                })
+                    
+                    img.scanedFace = true
+                    ModelStore.default.updateImageScannedFace(imageId: imageId, facesCount: faces.count)
+                }) // another thread
                 
             }else{
                 print("ERROR: Crop path is empty, please assign it first: \(repository.path)")
@@ -140,7 +146,11 @@ class FaceTask {
             print("ERROR: No file found at \(image.path)")
             return false
         }
+        if image.path.hasSuffix(".MOV") || image.path.hasSuffix(".MP4") || image.path.hasSuffix(".mov") || image.path.hasSuffix(".mp4") {
+            return false
+        }
         if let imageId = image.id {
+            var recognizedPeopleIds = ","
             let crops = ModelStore.default.getFaceCrops(imageId: imageId)
             if crops.count > 0 {
                 for crop in crops {
@@ -149,6 +159,9 @@ class FaceTask {
                     if recognition.count > 0 {
                         let name = recognition[0]
                         print("Face crop \(crop.id) is recognized as \(name)")
+                        if name != "unknown" && name != "Unknown" && name != "" {
+                            recognizedPeopleIds += "\(name),"
+                        }
                         var c = crop
                         c.peopleId = name
                         c.recognizeBy = "FaceRecognitionOpenCV"
@@ -170,6 +183,8 @@ class FaceTask {
                 print("No crops for this image.")
                 return false
             }
+            
+            ModelStore.default.updateImageRecognizedFace(imageId: imageId, recognizedPeopleIds: recognizedPeopleIds)
             
             
         }else{

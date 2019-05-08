@@ -106,6 +106,9 @@ struct Image : Codable {
     var hiddenByRepository:Bool
     var hiddenByContainer:Bool
     var scanedFace:Bool
+    var recognizedFace:Bool
+    var facesCount:Int
+    var recognizedPeopleIds:String
     
     
     static func new(filename: String, path: String, parentFolder: String, repositoryPath: String) -> Image {
@@ -205,7 +208,10 @@ struct Image : Codable {
             subPath: path.replacingFirstOccurrence(of: repositoryPath.withStash(), with: ""),
             hiddenByRepository: false,
             hiddenByContainer: false,
-            scanedFace:false
+            scanedFace:false,
+            recognizedFace:false,
+            facesCount:0,
+            recognizedPeopleIds:""
         )
     }
     

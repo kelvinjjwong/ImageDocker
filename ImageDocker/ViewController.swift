@@ -2243,10 +2243,24 @@ class ViewController: NSViewController {
                 }
                 DispatchQueue.global().async {
                     
-                    let images = ModelStore.default.getImagesByYear(year: area)
+                    var images:[Image] = []
+                    if action == "Scan" {
+                        images = ModelStore.default.getImagesByYear(year: area, scannedFace: false)
+                    }else if action == "Recognize" {
+                        images = ModelStore.default.getImagesByYear(year: area, recognizedFace: false)
+                    }else if action == "Force-Recognize" {
+                        images = ModelStore.default.getImagesByYear(year: area)
+                    }
                     if images.count > 0 {
                         tasklet.total = images.count
-                        for image in images {
+                        
+                        let limitRam = PreferencesController.peakMemory() * 1024
+                        var continousWorking = true
+                        var index = 0
+                        var attempt = 0
+                        
+                        while(index < images.count ){
+                        //for image in images {
                             if self.stopFacesTask {
                                 tasklet.forceStop = true
                                 tasklet.running = false
@@ -2259,10 +2273,44 @@ class ViewController: NSViewController {
                                 tasklet.removeObserver(self)
                                 break
                             }
-                            if action == "Scan" {
-                                let _ = FaceTask.default.findFaces(image: image)
-                            }else if action == "Recognize" {
-                                let _ = FaceTask.default.recognizeFaces(image: image)
+                            
+                            if limitRam > 0 {
+                                var taskInfo = mach_task_basic_info()
+                                var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
+                                let kerr: kern_return_t = withUnsafeMutablePointer(to: &taskInfo) {
+                                    $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
+                                        task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
+                                    }
+                                }
+                                
+                                if kerr == KERN_SUCCESS {
+                                    let usedRam = taskInfo.resident_size / 1024 / 1024
+                                    
+                                    if usedRam >= limitRam {
+                                        attempt += 1
+                                        print("waiting for releasing memory for face detection, attempt: \(attempt)")
+                                        continousWorking = false
+                                        sleep(10)
+                                    }else{
+                                        print("continue for face detection, last attempt: \(attempt)")
+                                        continousWorking = true
+                                    }
+                                }
+                            }
+                            
+                            if continousWorking {
+                                autoreleasepool { () -> Void in
+                                    let image = images[index]
+                                    if action == "Scan" {
+                                        let _ = FaceTask.default.findFaces(image: image)
+                                    }else if action == "Recognize" || action == "Force-Recognize" {
+                                        let _ = FaceTask.default.recognizeFaces(image: image)
+                                    }
+                                    tasklet.progress += 1
+                                    tasklet.notifyChange()
+                                    
+                                    index += 1
+                                }
                             }
                         }
                     }else{

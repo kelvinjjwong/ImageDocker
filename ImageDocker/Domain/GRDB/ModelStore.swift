@@ -1047,8 +1047,22 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     }
     
     
-    func getImagesByYear(year:String) -> [Image]{
-        let sql = "hidden=0 and photoTakenYear=\(year)"
+    func getImagesByYear(year:String, scannedFace:Bool? = nil, recognizedFace:Bool? = nil) -> [Image]{
+        var sql = "hidden=0 and photoTakenYear=\(year)"
+        if let flag = scannedFace {
+            if flag {
+                sql += " and scanedFace=1"
+            }else{
+                sql += " and scanedFace=0"
+            }
+        }
+        if let flag = recognizedFace {
+            if flag {
+                sql += " and recognizedFace=1"
+            }else{
+                sql += " and recognizedFace=0"
+            }
+        }
         var result:[Image] = []
         do {
             let db = ModelStore.sharedDBPool()
@@ -1576,6 +1590,28 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update Image set path = repositoryPath || subPath where repositoryPath = ? and subPath <> ''", arguments: [repositoryPath])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func updateImageScannedFace(imageId:String, facesCount:Int = 0){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update Image set scanedFace=1, facesCount=? where id=?", arguments: [facesCount, imageId])
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func updateImageRecognizedFace(imageId:String, recognizedPeopleIds:String = ""){
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("update Image set recognizedFace=1,recognizedPeopleIds=? where id=?", arguments: [recognizedPeopleIds,imageId])
             }
         }catch{
             print(error)
@@ -3064,6 +3100,19 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             })
             try db.alter(table: "ImageContainer", body: { t in
                 t.add(column: "hideByParent", .boolean).defaults(to: false).indexed()
+            })
+        }
+        
+        migrator.registerMigration("v23") { db in
+            try db.alter(table: "Image", body: { t in
+                t.add(column: "recognizedFace", .boolean).defaults(to: false).indexed()
+                t.add(column: "facesCount", .integer).defaults(to: 0)
+            })
+        }
+        
+        migrator.registerMigration("v24") { db in
+            try db.alter(table: "Image", body: { t in
+                t.add(column: "recognizedPeopleIds", .text).defaults(to: "")
             })
         }
         
