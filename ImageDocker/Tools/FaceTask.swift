@@ -202,9 +202,9 @@ class FaceTask {
                     if recognition.count > 0 {
                         let name = recognition[0]
                         print("Face crop \(crop.id) is recognized as \(name)")
-                        if name != "unknown" && name != "Unknown" && name != "" {
+                        //if name != "unknown" && name != "Unknown" && name != "" {
                             recognizedPeopleIds += "\(name),"
-                        }
+                        //}
                         var c = crop
                         c.peopleId = name
                         c.recognizeBy = "FaceRecognitionOpenCV"
