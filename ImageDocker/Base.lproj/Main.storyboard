@@ -1256,14 +1256,28 @@
                                             <action selector="onStopClicked:" target="XfG-lQ-9wD" id="d6A-XM-PaB"/>
                                         </connections>
                                     </button>
+                                    <searchField wantsLayer="YES" focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0O0-hl-4CA">
+                                        <rect key="frame" x="272" y="10" width="612" height="22"/>
+                                        <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" focusRingType="none" usesSingleLineMode="YES" bezelStyle="round" sendsWholeSearchString="YES" id="SkT-1n-nAK">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </searchFieldCell>
+                                        <connections>
+                                            <action selector="onSearchAction:" target="XfG-lQ-9wD" id="Ui0-Th-Kj4"/>
+                                        </connections>
+                                    </searchField>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="L5J-oA-BUH" secondAttribute="trailing" constant="5" id="BxZ-JF-Tu2"/>
                                     <constraint firstItem="wQ3-4F-bW7" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="11" id="Cpz-BF-ZaT"/>
                                     <constraint firstItem="L5J-oA-BUH" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="Cxp-QY-2oQ"/>
                                     <constraint firstItem="kL0-v4-mKZ" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="Jqa-hL-mjj"/>
+                                    <constraint firstItem="0O0-hl-4CA" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="8" id="O8x-BN-Se3"/>
+                                    <constraint firstItem="0O0-hl-4CA" firstAttribute="leading" secondItem="wQ3-4F-bW7" secondAttribute="trailing" constant="182" id="Q5F-6R-Vcp"/>
                                     <constraint firstItem="L5J-oA-BUH" firstAttribute="leading" secondItem="kL0-v4-mKZ" secondAttribute="trailing" constant="10" id="ovv-6i-2iA"/>
                                     <constraint firstItem="wQ3-4F-bW7" firstAttribute="leading" secondItem="gVf-na-PZy" secondAttribute="leading" constant="10" id="vrS-mp-TFb"/>
+                                    <constraint firstItem="kL0-v4-mKZ" firstAttribute="leading" secondItem="0O0-hl-4CA" secondAttribute="trailing" constant="20" id="yIN-CP-PyT"/>
                                 </constraints>
                             </customView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="kIX-ny-abJ">
@@ -1341,6 +1355,7 @@
                         <outlet property="sourceList" destination="gHI-hX-hSc" id="8ew-IO-5cp"/>
                         <outlet property="splitviewPreview" destination="giR-in-kR4" id="kmu-km-TA6"/>
                         <outlet property="treeIndicator" destination="vYn-Q1-Bht" id="Bkx-Sh-euL"/>
+                        <outlet property="txtSearch" destination="0O0-hl-4CA" id="sjr-zk-RrW"/>
                         <outlet property="webLocation" destination="A1f-6H-jB4" id="wMq-w7-Ou5"/>
                         <outlet property="webPossibleLocation" destination="JL6-YH-lBk" id="NEr-J7-0aQ"/>
                     </connections>

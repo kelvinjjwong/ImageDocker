@@ -908,6 +908,169 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return (stmt, stmtHidden, sqlArgs)
     }
     
+    
+    // search by date & people & any keywords
+    func searchPhotoFiles(years:[Int], months:[Int], days:[Int], peopleIds:[String], keywords:[String], includeHidden:Bool = true, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil , pageSize:Int = 0, pageNumber:Int = 0) -> [Image] {
+        
+        print("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
+        let (stmt, stmtHidden) = self.generateSQLStatementForSearchingPhotoFiles(years: years, months: months, days: days, peopleIds: peopleIds, keywords: keywords, includeHidden:includeHidden)
+        
+        var result:[Image] = []
+        var hiddenCount:Int = 0
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                hiddenCount = try Image.filter(sql: stmtHidden).fetchCount(db)
+                if pageNumber > 0 && pageSize > 0 {
+                    result = try Image.filter(sql:stmt)
+                        .order([Column("photoTakenDate").asc, Column("filename").asc])
+                        .limit(pageSize, offset: pageSize * (pageNumber - 1))
+                        .fetchAll(db)
+                }else{
+                    result = try Image.filter(sql:stmt)
+                        .order([Column("photoTakenDate").asc, Column("filename").asc])
+                        .fetchAll(db)
+                }
+            }
+        }catch{
+            print(error)
+        }
+        if hiddenCountHandler != nil {
+            hiddenCountHandler!(hiddenCount)
+        }
+        return result
+    }
+    
+    fileprivate func joinArrayToStatementCondition(values:[String], field:String, like:Bool = false) -> String {
+        var statement = ""
+        if values.count > 0 {
+            for i in 0..<values.count {
+                let value = values[i]
+                if like {
+                    statement += " \(field) like '%\(value)%' "
+                }else{
+                    statement += " \(field) = '\(value)' "
+                }
+                if i != (values.count - 1) {
+                    statement += "OR"
+                }
+            }
+        }
+        return statement
+    }
+    
+    fileprivate func joinArrayToStatementCondition(values:[Int], field:String) -> String {
+        var statement = ""
+        if values.count > 0 {
+            for i in 0..<values.count {
+                let value = values[i]
+                statement += " \(field) = \(value) "
+                if i != (values.count - 1) {
+                    statement += "OR"
+                }
+            }
+        }
+        return statement
+    }
+    
+    fileprivate func joinStatementConditions(conditions:[String], or:Bool = false) -> String {
+        var statement = ""
+        for i in 0..<conditions.count {
+            let subStatement = conditions[i]
+            if subStatement != "" {
+                if statement != "" {
+                    if or {
+                        statement += " OR "
+                    }else{
+                        statement += " AND "
+                    }
+                }
+                statement += "(\(subStatement))"
+            }
+        }
+        return statement
+    }
+    
+    // search sql by date & event & place
+    func generateSQLStatementForSearchingPhotoFiles(years:[Int], months:[Int], days:[Int], peopleIds:[String], keywords:[String], includeHidden:Bool = true) -> (String, String) {
+        
+        var hiddenFlagStatement = ""
+        if !includeHidden {
+            hiddenFlagStatement = "AND hidden=0 AND hiddenByRepository=0 AND hiddenByContainer=0"
+        }
+        let hiddenStatement = "AND (hidden=1 OR hiddenByRepository=1 OR hiddenByContainer=1)"
+        
+        let yearStatement = self.joinArrayToStatementCondition(values: years, field: "photoTakenYear")
+        let monthStatement = self.joinArrayToStatementCondition(values: months, field: "photoTakenMonth")
+        let dayStatement = self.joinArrayToStatementCondition(values: days, field: "photoTakenDay")
+        
+        let dateStatement = self.joinStatementConditions(conditions: [yearStatement, monthStatement, dayStatement])
+        
+        let peopleIdStatement = self.joinArrayToStatementCondition(values: peopleIds, field: "recognizedPeopleIds", like: true)
+        
+        let eventStatement = self.joinArrayToStatementCondition(values: keywords, field: "event", like: true)
+        let longDescStatement = self.joinArrayToStatementCondition(values: keywords, field: "longDescription", like: true)
+        let shortDescStatement = self.joinArrayToStatementCondition(values: keywords, field: "shortDescription", like: true)
+        
+        let placeStatement = self.joinArrayToStatementCondition(values: keywords, field: "place", like: true)
+        let countryStatement = self.joinArrayToStatementCondition(values: keywords, field: "country", like: true)
+        let provinceStatement = self.joinArrayToStatementCondition(values: keywords, field: "province", like: true)
+        let cityStatement = self.joinArrayToStatementCondition(values: keywords, field: "city", like: true)
+        let districtStatement = self.joinArrayToStatementCondition(values: keywords, field: "district", like: true)
+        let businessCircleStatement = self.joinArrayToStatementCondition(values: keywords, field: "businessCircle", like: true)
+        let streetStatement = self.joinArrayToStatementCondition(values: keywords, field: "street", like: true)
+        let addressStatement = self.joinArrayToStatementCondition(values: keywords, field: "address", like: true)
+        let addressDescStatement = self.joinArrayToStatementCondition(values: keywords, field: "addressDescription", like: true)
+        
+        let assignPlaceStatement = self.joinArrayToStatementCondition(values: keywords, field: "assignPlace", like: true)
+        let assignCountryStatement = self.joinArrayToStatementCondition(values: keywords, field: "assignCountry", like: true)
+        let assignProvinceStatement = self.joinArrayToStatementCondition(values: keywords, field: "assignProvince", like: true)
+        let assignCityStatement = self.joinArrayToStatementCondition(values: keywords, field: "assignCity", like: true)
+        let assignDistrictStatement = self.joinArrayToStatementCondition(values: keywords, field: "assignDistrict", like: true)
+        let assignBusinessCircleStatement = self.joinArrayToStatementCondition(values: keywords, field: "assignBusinessCircle", like: true)
+        let assignStreetStatement = self.joinArrayToStatementCondition(values: keywords, field: "assignStreet", like: true)
+        let assignAddressStatement = self.joinArrayToStatementCondition(values: keywords, field: "assignAddress", like: true)
+        let assignAddressDescStatement = self.joinArrayToStatementCondition(values: keywords, field: "assignAddressDescription", like: true)
+        
+        let keywordStatement = self.joinStatementConditions(conditions: [
+            eventStatement,
+            shortDescStatement,
+            longDescStatement,
+            
+            placeStatement,
+            countryStatement,
+            provinceStatement,
+            cityStatement,
+            districtStatement,
+            businessCircleStatement,
+            streetStatement,
+            addressStatement,
+            addressDescStatement,
+            
+            assignPlaceStatement,
+            assignCountryStatement,
+            assignProvinceStatement,
+            assignCityStatement,
+            assignDistrictStatement,
+            assignBusinessCircleStatement,
+            assignStreetStatement,
+            assignAddressStatement,
+            assignAddressDescStatement,
+            
+            ], or: true)
+        
+        let stmtWithoutHiddenFlag = self.joinStatementConditions(conditions: [dateStatement, peopleIdStatement, keywordStatement])
+        
+        let stmt = "\(stmtWithoutHiddenFlag) \(hiddenFlagStatement)"
+        let stmtHidden = "\(stmtWithoutHiddenFlag) \(hiddenStatement)"
+        
+        print("------")
+        print(stmt)
+        print("------")
+        
+        return (stmt, stmtHidden)
+    }
+    
     // count by date & event & place
     func countPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> Int {
         let (stmt, _, sqlArgs) = self.generateSQLStatementForPhotoFiles(year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
@@ -1047,8 +1210,13 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     }
     
     
-    func getImagesByYear(year:String, scannedFace:Bool? = nil, recognizedFace:Bool? = nil) -> [Image]{
-        var sql = "hidden=0 and photoTakenYear=\(year)"
+    func getImagesByYear(year:String? = nil, scannedFace:Bool? = nil, recognizedFace:Bool? = nil) -> [Image]{
+        var sql = "hidden=0"
+        if let y = year, y != "" {
+            sql += " and photoTakenYear=\(y)"
+        }else{
+            sql += " and photoTakenYear > 1920"
+        }
         if let flag = scannedFace {
             if flag {
                 sql += " and scanedFace=1"
@@ -2454,6 +2622,19 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }catch{
             print(error)
         }
+    }
+    
+    func getRelationships() -> [PeopleRelationship] {
+        var obj:[PeopleRelationship] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                obj = try PeopleRelationship.fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return obj
     }
     
     // MARK: PEOPLE

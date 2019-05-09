@@ -23,10 +23,13 @@ enum CollectionViewLoadSource : Int {
     case repository
     case moment
     case event
+    case search
+    case unknown
 }
 
 struct CollectionViewLastRequest {
     var loadSource:CollectionViewLoadSource? = nil
+    var lastLoadSource:CollectionViewLoadSource? = nil
     var indicator:Accumulator? = nil
     var folderURL:URL? = nil
     var year:Int? = nil
@@ -43,6 +46,7 @@ struct CollectionViewLastRequest {
     var pageSize = 0
     var pageNumber = 0
     var subdirectories = false
+    var searchCondition:SearchCondition? = nil
 }
 
 class CollectionViewItemsLoader: NSObject {
@@ -99,6 +103,7 @@ class CollectionViewItemsLoader: NSObject {
         }
     }
     
+    // load without event, paginated
     func load(year:Int, month:Int, day:Int, ignoreDate:Bool = false,
               country:String = "", province:String = "", city:String = "", place:String?,
               filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil,
@@ -141,6 +146,7 @@ class CollectionViewItemsLoader: NSObject {
         print("\(Date()) Set up items DONE")
     }
     
+    // load with event, paginated
     func load(year:Int, month:Int, day:Int,
               event:String,
               country:String = "", province:String = "", city:String = "", place:String,
@@ -183,6 +189,46 @@ class CollectionViewItemsLoader: NSObject {
         
     }
     
+    func clearSearch(pageSize:Int = 0, pageNumber:Int = 0) {
+        lastRequest.loadSource = lastRequest.lastLoadSource
+        lastRequest.searchCondition = nil
+        lastRequest.pageSize = pageSize
+        lastRequest.pageNumber = pageNumber
+    }
+    
+    // search, paginated
+    func search(conditions:SearchCondition,
+              indicator:Accumulator? = nil,
+              pageSize:Int = 0, pageNumber:Int = 0) {
+        loading = true
+        
+        lastRequest.lastLoadSource = lastRequest.loadSource
+        lastRequest.loadSource = .search
+        lastRequest.searchCondition = conditions
+        lastRequest.pageSize = pageSize
+        lastRequest.pageNumber = pageNumber
+        lastRequest.subdirectories = false
+        lastRequest.indicator = indicator
+        
+        self.indicator = indicator
+        
+        //var urls: [URL] = []
+        let photoFiles = ModelStore.default.searchPhotoFiles(years: conditions.years,
+                                                             months: conditions.months,
+                                                             days: conditions.days,
+                                                             peopleIds: conditions.peopleIds,
+                                                             keywords: conditions.keywords,
+                                                             includeHidden: conditions.includeHidden,
+                                                             hiddenCountHandler: self.hiddenCountHandler,
+                                                             pageSize: pageSize, pageNumber: pageNumber)
+        //print("GOT PHOTOS for year:\(year) month:\(month) day:\(day) event:\(event) place:\(place) count \(photoFiles.count)")
+        //for photoFile in photoFiles {
+        //    urls.append(URL(fileURLWithPath: photoFile.path!))
+        //}
+        setupItems(photoFiles: photoFiles)
+        
+    }
+    
     fileprivate func reloadImages() {
         var images:[Image] = []
         for imageFile in self.items {
@@ -196,7 +242,7 @@ class CollectionViewItemsLoader: NSObject {
     }
     
     func reload() {
-        print("RELOAD LAST SOURCE = \(lastRequest.loadSource)")
+        print("RELOAD LAST SOURCE = \(lastRequest.loadSource ?? .unknown)")
         if lastRequest.loadSource == nil {
             self.reloadImages()
         }else{
@@ -223,6 +269,11 @@ class CollectionViewItemsLoader: NSObject {
                           filterImageSource: lastRequest.imageSource, filterCameraModel: lastRequest.cameraModel,
                           indicator: lastRequest.indicator,
                           pageSize: lastRequest.pageSize, pageNumber: lastRequest.pageNumber)
+            }else if lastRequest.loadSource == .search, let condition = lastRequest.searchCondition {
+                self.search(conditions: condition,
+                            indicator: lastRequest.indicator,
+                            pageSize: lastRequest.pageSize,
+                            pageNumber: lastRequest.pageNumber)
             }
         }
     }

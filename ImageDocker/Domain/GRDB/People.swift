@@ -39,8 +39,8 @@ extension People: FetchableRecord, MutablePersistableRecord, TableRecord {
 
 struct PeopleRelationship : Codable {
     //var id: Int64?      // <- the row id
-    var primary: String
-    var secondary: String
+    var subject: String
+    var object: String
     var callName: String
 }
 

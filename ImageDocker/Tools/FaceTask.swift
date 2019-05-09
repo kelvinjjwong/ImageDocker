@@ -13,24 +13,51 @@ class FaceTask {
     static let `default` = FaceTask()
     
     var peopleName:[String:String] = [:]
+    var peopleIds:[String] = []
     
     func people(id:String, reload:Bool = false) -> String {
         if reload || peopleName.count == 0 {
-            self.peopleName = [:]
-            let people = ModelStore.default.getPeople()
-            for person in people {
-                peopleName[person.id] = person.shortName ?? person.name
-            }
+            self.reloadPeople()
         }
         return peopleName[id] ?? ""
         
     }
     
+    func peopleId(name:String, reload:Bool = false) -> String? {
+        if reload || peopleIds.count == 0 {
+            self.reloadPeople()
+        }
+        for names in peopleIds {
+            if names.contains(name) {
+                let parts = names.components(separatedBy: ",")
+                return parts[0]
+            }
+        }
+        return nil
+    }
+    
     func reloadPeople() {
         self.peopleName = [:]
         let people = ModelStore.default.getPeople()
+        let relationships = ModelStore.default.getRelationships()
+        var ids:[String:String] = [:]
         for person in people {
             peopleName[person.id] = person.shortName ?? person.name
+            ids[person.id] = "\(person.shortName ?? person.name),\(person.name)"
+        }
+        for relationship in relationships {
+            var names = ids[relationship.object] ?? ""
+            if names != "" {
+                names += ",\(relationship.callName)"
+                ids[relationship.object] = names
+            }
+        }
+        self.peopleIds = []
+        for id in ids.keys {
+            if let names = ids[id] {
+                let value = "\(id),\(names)"
+                self.peopleIds.append(value)
+            }
         }
     }
     
@@ -39,7 +66,15 @@ class FaceTask {
             print("ERROR: No file found at \(image.path)")
             return false
         }
-        if image.path.hasSuffix(".MOV") || image.path.hasSuffix(".MP4") || image.path.hasSuffix(".mov") || image.path.hasSuffix(".mp4") {
+        if image.path.hasSuffix(".MOV")
+            || image.path.hasSuffix(".MP4")
+            || image.path.hasSuffix(".MPG")
+            || image.path.hasSuffix(".mpg")
+            || image.path.hasSuffix(".mov")
+            || image.path.hasSuffix(".mp4")
+            || image.path.hasSuffix(".m2ts")
+            || image.path.hasSuffix(".mts")
+            || image.path.hasSuffix(".MTS")  {
             return false
         }
         if image.repositoryPath != "", let repository = ModelStore.default.getRepository(repositoryPath: image.repositoryPath) {
@@ -146,7 +181,15 @@ class FaceTask {
             print("ERROR: No file found at \(image.path)")
             return false
         }
-        if image.path.hasSuffix(".MOV") || image.path.hasSuffix(".MP4") || image.path.hasSuffix(".mov") || image.path.hasSuffix(".mp4") {
+        if image.path.hasSuffix(".MOV")
+            || image.path.hasSuffix(".MP4")
+            || image.path.hasSuffix(".MPG")
+            || image.path.hasSuffix(".mpg")
+            || image.path.hasSuffix(".mov")
+            || image.path.hasSuffix(".mp4")
+            || image.path.hasSuffix(".m2ts")
+            || image.path.hasSuffix(".mts")
+            || image.path.hasSuffix(".MTS")  {
             return false
         }
         if let imageId = image.id {

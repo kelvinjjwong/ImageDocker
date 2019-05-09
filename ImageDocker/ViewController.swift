@@ -25,6 +25,9 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var btnStop: NSButton!
     
+    @IBOutlet weak var txtSearch: NSSearchField!
+    
+    
     // MARK: - Timer
     var scanLocationChangeTimer:Timer!
     var lastCheckLocationChange:Date?
@@ -417,6 +420,11 @@ class ViewController: NSViewController {
         subMenuRecognize.addItem(withTitle: "Pictures in collection", action: #selector(faceMenuRecognizeAction(_:)), keyEquivalent: "")
         subMenuForceScan.addItem(withTitle: "Pictures in collection", action: #selector(faceMenuForceScanAction(_:)), keyEquivalent: "")
         subMenuForceRecognize.addItem(withTitle: "Pictures in collection", action: #selector(faceMenuForceRecognizeAction(_:)), keyEquivalent: "")
+        
+        subMenuScan.addItem(withTitle: "Pictures in all-years", action: #selector(faceMenuScanAction(_:)), keyEquivalent: "")
+        subMenuRecognize.addItem(withTitle: "Pictures in all-years", action: #selector(faceMenuRecognizeAction(_:)), keyEquivalent: "")
+        subMenuForceScan.addItem(withTitle: "Pictures in all-years", action: #selector(faceMenuForceScanAction(_:)), keyEquivalent: "")
+        subMenuForceRecognize.addItem(withTitle: "Pictures in all-years", action: #selector(faceMenuForceRecognizeAction(_:)), keyEquivalent: "")
         for year in years {
             if year == 0 {
                 continue
@@ -2244,7 +2252,7 @@ class ViewController: NSViewController {
         if !runningFaceTask && title != "" && title != "Faces" {
             let parts = title.components(separatedBy: " ")
             let action = parts[0]
-            let area = parts[parts.count-1]
+            var area = parts[parts.count-1]
             print("\(action) \(area)")
             if area == "collection" {
                 if self.imagesLoader.getItems().count > 0 {
@@ -2256,9 +2264,8 @@ class ViewController: NSViewController {
                     self.runningFaceTask = true
                     self.stopFacesTask = false
                     self.btnStop.isHidden = false
-                    DispatchQueue.main.async {
-                        self.lblProgressMessage.stringValue = "\(action) in collection: loading images ..."
-                    }
+                    self.lblProgressMessage.stringValue = "\(action) in collection: loading images ..."
+                    
                     DispatchQueue.global().async {
                         for imageFile in self.imagesLoader.getItems() {
                             if self.stopFacesTask {
@@ -2296,8 +2303,10 @@ class ViewController: NSViewController {
                 self.stopFacesTask = false
                 self.btnStop.isHidden = false
                 
-                DispatchQueue.main.async {
-                    self.lblProgressMessage.stringValue = "\(action) in \(area): loading images ..."
+                self.lblProgressMessage.stringValue = "\(action) in \(area): loading images ..."
+                
+                if area == "all-years" {
+                    area = ""
                 }
                 DispatchQueue.global().async {
                     
@@ -2392,6 +2401,62 @@ class ViewController: NSViewController {
     @IBAction func onStopClicked(_ sender: NSButton) {
         self.stopFacesTask = true
     }
+    
+    // MARK: - SEARCH
+    
+    var runningSearch = false
+    
+    @IBAction func onSearchAction(_ sender: NSSearchField) {
+        print("search: \(sender.stringValue)")
+        guard !runningSearch else {
+            return
+        }
+        runningSearch = true
+        if sender.stringValue != "" {
+            let condition = SearchCondition.get(from: sender.stringValue)
+            
+            self.scaningRepositories = true
+            
+            self.imagesLoader.clean()
+            collectionView.reloadData()
+            
+            self.imagesLoader.showHidden = self.chbShowHidden.state == .on
+            
+            DispatchQueue.global().async {
+                self.collectionLoadingIndicator = Accumulator(target: 100, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {data in
+                    self.scaningRepositories = false
+                    //                let total:Int = data["total"] ?? 0
+                    //                let hidden:Int = data["hidden"] ?? 0
+                    //                let message:String = "\(total) images, \(hidden) hidden"
+                    //                self.indicatorMessage.stringValue = message
+                })
+                if self.imagesLoader.isLoading() {
+                    DispatchQueue.main.async {
+                        self.indicatorMessage.stringValue = "Cancelling last request ..."
+                    }
+                    self.imagesLoader.cancel(onCancelled: {
+                        self.imagesLoader.search(conditions: condition, indicator: self.collectionLoadingIndicator, pageSize: 200, pageNumber: 1)
+                        self.refreshCollectionView()
+                    })
+                }else{
+                    self.imagesLoader.search(conditions: condition, indicator: self.collectionLoadingIndicator, pageSize: 200, pageNumber: 1)
+                    self.refreshCollectionView()
+                }
+                self.runningSearch = false
+                
+            }
+        }else{
+            self.imagesLoader.clean()
+            collectionView.reloadData()
+            self.imagesLoader.clearSearch(pageSize: 200, pageNumber: 1)
+            DispatchQueue.global().async {
+                self.imagesLoader.reload()
+                self.refreshCollectionView()
+                self.runningSearch = false
+            }
+        }
+    }
+    
     
 }
 

@@ -377,9 +377,9 @@ class DeviceCopyViewController: NSViewController {
         }
         guard files.count > 0 else {
             print("NO FILE FOUND in \(path)")
-            DispatchQueue.main.async {
-                self.lblProgressMessage.stringValue = "No file found in \(path)"
-            }
+//            DispatchQueue.main.async {
+//                self.lblProgressMessage.stringValue = "No file found in \(path)"
+//            }
             return
         }
         let total = files.count
