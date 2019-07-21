@@ -44,6 +44,20 @@ class FaceCollectionViewItemsLoader: NSObject {
         self.collectDomainItemToSingleSection()
     }
     
+    func removeItems(faceIds:[String]){
+        var ids:[Int] = []
+        for i in 0..<items.count {
+            let face = items[i]
+            if faceIds.contains(face.data.id) {
+                ids.append(i)
+            }
+        }
+        for i in ids.reversed() {
+            items.remove(at: i)
+        }
+        self.collectDomainItemToSingleSection()
+    }
+    
     func loadFaces(peopleId:String, year:Int?=nil, month:Int?=nil, sample:Bool?=nil, icon:Bool?=nil, tag:Bool?=nil) {
         self.items = []
         let faces = ModelStore.default.getFaceCrops(peopleId: peopleId, year: year, month: month, sample: sample, icon: icon, tag: tag)

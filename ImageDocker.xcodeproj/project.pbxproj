@@ -84,6 +84,7 @@
 		8EB321D520FA433500D8C71D /* ImagePlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321D120FA433500D8C71D /* ImagePlace.swift */; };
 		8EB321D620FA433500D8C71D /* ImageEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321D220FA433500D8C71D /* ImageEvent.swift */; };
 		8EB321D720FA433500D8C71D /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321D320FA433500D8C71D /* Image.swift */; };
+		8EB8D6FE22E456170096DD75 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EB8D6FD22E456160096DD75 /* WebKit.framework */; };
 		8EB986B020B225230075B081 /* DetailViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB986AF20B225230075B081 /* DetailViewDelegate.swift */; };
 		8EB986B920B30C920075B081 /* CollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB986B220B30C910075B081 /* CollectionViewItem.swift */; };
 		8EB986BA20B30C920075B081 /* ImageFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB986B320B30C910075B081 /* ImageFile.swift */; };
@@ -255,6 +256,7 @@
 		8EB321D120FA433500D8C71D /* ImagePlace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImagePlace.swift; path = ImageDocker/Domain/GRDB/ImagePlace.swift; sourceTree = SOURCE_ROOT; };
 		8EB321D220FA433500D8C71D /* ImageEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageEvent.swift; path = ImageDocker/Domain/GRDB/ImageEvent.swift; sourceTree = SOURCE_ROOT; };
 		8EB321D320FA433500D8C71D /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Image.swift; path = ImageDocker/Domain/GRDB/Image.swift; sourceTree = SOURCE_ROOT; };
+		8EB8D6FD22E456160096DD75 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		8EB986AF20B225230075B081 /* DetailViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewDelegate.swift; sourceTree = "<group>"; };
 		8EB986B220B30C910075B081 /* CollectionViewItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewItem.swift; sourceTree = "<group>"; };
 		8EB986B320B30C910075B081 /* ImageFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageFile.swift; sourceTree = "<group>"; };
@@ -329,6 +331,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8EB8D6FE22E456170096DD75 /* WebKit.framework in Frameworks */,
 				211CCB1CC9D5DDCDB077A2DC /* Pods_ImageDocker.framework in Frameworks */,
 				912F0ED0D9261254EE71E67E /* Pods_ImageDocker.framework in Frameworks */,
 			);
@@ -737,6 +740,7 @@
 		BF292D703FDC467A9B710F29 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8EB8D6FD22E456160096DD75 /* WebKit.framework */,
 				8E2CF36F20AED2FE00A93375 /* CollectionView.framework */,
 				B479F2387DA097A86444200D /* Pods_ImageDocker.framework */,
 				82AE2A4F2692BE8252178D24 /* Pods_ImageDocker.framework */,
@@ -815,6 +819,11 @@
 					8E0AFA38208BDEA000CE8B68 = {
 						CreatedOnToolsVersion = 9.3;
 						LastSwiftMigration = 0930;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
 					};
 					8E0AFA4A208BDEA100CE8B68 = {
 						CreatedOnToolsVersion = 9.3;
@@ -1222,7 +1231,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = ImageDocker/ImageDocker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = ZU637G36U2;
@@ -1245,7 +1253,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = ImageDocker/ImageDocker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = ZU637G36U2;

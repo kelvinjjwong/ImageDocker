@@ -12,6 +12,21 @@ class FaceTask {
     
     static let `default` = FaceTask()
     
+    func isVideo(_ filename:String) -> Bool {
+        if filename.hasSuffix(".MOV")
+            || filename.hasSuffix(".MP4")
+            || filename.hasSuffix(".MPG")
+            || filename.hasSuffix(".mpg")
+            || filename.hasSuffix(".mov")
+            || filename.hasSuffix(".mp4")
+            || filename.hasSuffix(".m2ts")
+            || filename.hasSuffix(".mts")
+            || filename.hasSuffix(".MTS")  {
+            return true
+        }
+        return false
+    }
+    
     var peopleName:[String:String] = [:]
     var peopleIds:[String] = []
     
@@ -66,15 +81,7 @@ class FaceTask {
             print("ERROR: No file found at \(image.path)")
             return false
         }
-        if image.path.hasSuffix(".MOV")
-            || image.path.hasSuffix(".MP4")
-            || image.path.hasSuffix(".MPG")
-            || image.path.hasSuffix(".mpg")
-            || image.path.hasSuffix(".mov")
-            || image.path.hasSuffix(".mp4")
-            || image.path.hasSuffix(".m2ts")
-            || image.path.hasSuffix(".mts")
-            || image.path.hasSuffix(".MTS")  {
+        if self.isVideo(image.path)  {
             return false
         }
         if image.repositoryPath != "", let repository = ModelStore.default.getRepository(repositoryPath: image.repositoryPath) {
@@ -181,15 +188,7 @@ class FaceTask {
             print("ERROR: No file found at \(image.path)")
             return false
         }
-        if image.path.hasSuffix(".MOV")
-            || image.path.hasSuffix(".MP4")
-            || image.path.hasSuffix(".MPG")
-            || image.path.hasSuffix(".mpg")
-            || image.path.hasSuffix(".mov")
-            || image.path.hasSuffix(".mp4")
-            || image.path.hasSuffix(".m2ts")
-            || image.path.hasSuffix(".mts")
-            || image.path.hasSuffix(".MTS")  {
+        if self.isVideo(image.path)  {
             return false
         }
         if let imageId = image.id {
@@ -222,12 +221,14 @@ class FaceTask {
                         print("No face recognized for image [\(imageId)].")
                     }
                 }
+                
+                ModelStore.default.updateImageRecognizedFace(imageId: imageId, recognizedPeopleIds: recognizedPeopleIds)
             }else{
                 print("No crops for this image.")
+                ModelStore.default.updateImageRecognizedFace(imageId: imageId)
                 return false
             }
             
-            ModelStore.default.updateImageRecognizedFace(imageId: imageId, recognizedPeopleIds: recognizedPeopleIds)
             
             
         }else{

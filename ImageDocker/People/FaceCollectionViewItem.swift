@@ -54,7 +54,12 @@ class FaceCollectionViewItem: NSCollectionViewItem {
     }
     
     func setHighlight(selected: Bool) {
-        view.layer?.borderWidth = selected ? 5.0 : 1.0
+        view.layer?.borderWidth = selected ? 3.0 : 1.0
+        if selected {
+            view.layer?.borderColor = NSColor(calibratedRed: 0.1, green: 0.2, blue: 0.8, alpha: 0.8).cgColor
+        }else{
+            view.layer?.borderColor = NSColor(calibratedRed: 0.2, green: 0.2, blue: 0.2, alpha: 0.2).cgColor
+        }
     }
     
 }

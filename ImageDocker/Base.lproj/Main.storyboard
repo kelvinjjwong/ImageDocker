@@ -4787,7 +4787,7 @@ DQ
                                                 <rect key="frame" x="1" y="1" width="746" height="208"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <collectionView identifier="faceCollectionView" selectable="YES" id="3GB-9Y-vdr">
+                                                    <collectionView identifier="faceCollectionView" selectable="YES" allowsMultipleSelection="YES" id="3GB-9Y-vdr">
                                                         <rect key="frame" x="0.0" y="0.0" width="746" height="208"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                                         <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="yKX-GP-vwM">

@@ -12,6 +12,8 @@ class FaceCollectionViewController : NSViewController {
     
     private var enableNameLabel = true
     
+    var selectedFaceIds:[String] = []
+    
     func withoutName() {
         self.enableNameLabel = false
     }
@@ -21,7 +23,7 @@ class FaceCollectionViewController : NSViewController {
     
     let imagesLoader = FaceCollectionViewItemsLoader()
     
-    var onItemClicked: ((PeopleFace) -> Void)? = nil
+    var onItemClicked: ((PeopleFace, Bool) -> Void)? = nil
     
     
     fileprivate var selectedIndexPaths:Set<IndexPath> = []
@@ -32,6 +34,41 @@ class FaceCollectionViewController : NSViewController {
         super.viewDidLoad()
     }
     
+    fileprivate func addSelectedFace(_ id:String) {
+        for existId in self.selectedFaceIds {
+            if existId == id {
+                return
+            }
+        }
+        self.selectedFaceIds.append(id)
+    }
+    
+    fileprivate func removeSelectedFace(_ id:String) {
+        if self.selectedFaceIds.count > 0 {
+            var removeIndex = -1
+            for i in 0..<self.selectedFaceIds.count {
+                let faceid = self.selectedFaceIds[i]
+                if id == faceid {
+                    removeIndex = i
+                }
+            }
+            if removeIndex >= 0 {
+                self.selectedFaceIds.remove(at: removeIndex)
+            }
+        }
+    }
+    
+    func clearSelections() {
+        self.selectedFaceIds = []
+    }
+    
+    func removeSelections() {
+        if self.selectedIndexPaths.count > 0 {
+            collectionView.deleteItems(at: self.selectedIndexPaths)
+            self.selectedIndexPaths.removeAll()
+        }
+        self.selectedFaceIds = []
+    }
 }
 
 
@@ -62,6 +99,12 @@ extension FaceCollectionViewController : NSCollectionViewDataSource {
         let isItemSelected = collectionView.selectionIndexPaths.contains(indexPath)
         collectionViewItem.setHighlight(selected: isItemSelected)
         
+//        if isItemSelected {
+//            self.addSelectedFace(face.data.id)
+//        }else{
+//            self.removeSelectedFace(face.data.id)
+//        }
+//
         return item
     }
     
@@ -101,15 +144,22 @@ extension FaceCollectionViewController : NSCollectionViewDelegate {
             let viewItem = item as! FaceCollectionViewItem
             viewItem.setHighlight(selected: selected)
             
-            if click && selected && self.onItemClicked != nil {
-                self.onItemClicked!(viewItem.face!)
+            if click && self.onItemClicked != nil {
+                self.onItemClicked!(viewItem.face!, selected)
+            }
+            
+            let face = imagesLoader.item(for: indexPath as NSIndexPath)
+            if selected {
+                self.addSelectedFace(face.data.id)
+            }else{
+                self.removeSelectedFace(face.data.id)
             }
         }
     }
     
     public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
         self.selectedIndexPaths = indexPaths
-        print("selected: \(indexPaths.first?.item)")
+        //print("selected: \(indexPaths.first?.item)")
         highlightItems(selected: true, atIndexPaths: indexPaths)
     }
     

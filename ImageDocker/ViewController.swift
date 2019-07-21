@@ -224,7 +224,7 @@ class ViewController: NSViewController {
     var suppressedExport:Bool = false
     var suppressedScan:Bool = false
     
-    // MARK: - init
+    // MARK: - WINDOW SIZE CONTROL
     
     var windowInitial:Bool = false
     var smallScreen:Bool = false
@@ -279,6 +279,8 @@ class ViewController: NSViewController {
         
         print("AFTER SIZE \(self.view.frame.size.width) x \(self.view.frame.size.height)")
     }
+    
+    // MARK: - SPLASH SCREEN ON STARTUP
     
     var startingUp = false
     var splashController:SplashViewController!
@@ -361,6 +363,8 @@ class ViewController: NSViewController {
         NSApplication.shared.terminate(self)
     }
     
+    // MARK: - FACE MENU
+    
     @objc func faceMenuManageAction(_ menuItem:NSMenuItem) {
         print("manage action \(menuItem.title)")
         self.btnFaces.selectItem(at: 0)
@@ -398,6 +402,10 @@ class ViewController: NSViewController {
         self.doFaceMenuAction("Force-Recognize \(menuItem.title)")
     }
     
+    @objc func faceMenuForceRecognizeUnknownAction(_ menuItem:NSMenuItem) {
+        self.doFaceMenuAction("Recognize-Unknown \(menuItem.title)")
+    }
+    
     fileprivate func setupFacesMenu() {
         self.btnStop.isHidden = true
         
@@ -405,14 +413,14 @@ class ViewController: NSViewController {
         self.btnFaces.menu?.addItem(withTitle: "Manage faces", action: #selector(faceMenuManageAction(_:)), keyEquivalent: "")
         self.btnFaces.menu?.addItem(NSMenuItem.separator())
         
-        let menuScan = NSMenuItem(title: "Scan", action: nil, keyEquivalent: "")
-        let menuRecognize = NSMenuItem(title: "Recognize", action: nil, keyEquivalent: "")
+        let menuScan = NSMenuItem(title: "Scan faces in pictures", action: nil, keyEquivalent: "")
         let subMenuScan = NSMenu()
-        let subMenuRecognize = NSMenu()
-        
-        let menuForceScan = NSMenuItem(title: "Force Re-Scan", action: nil, keyEquivalent: "")
-        let menuForceRecognize = NSMenuItem(title: "Force Re-Recognize", action: nil, keyEquivalent: "")
+        let menuForceScan = NSMenuItem(title: "Force Re-Scan all pictures", action: nil, keyEquivalent: "")
         let subMenuForceScan = NSMenu()
+        
+        let menuRecognize = NSMenuItem(title: "Recognize faces in pictures", action: nil, keyEquivalent: "")
+        let subMenuRecognize = NSMenu()
+        let menuForceRecognize = NSMenuItem(title: "Force Re-Recognize all pictures", action: nil, keyEquivalent: "")
         let subMenuForceRecognize = NSMenu()
         
         let years = ModelStore.default.getYears()
@@ -446,6 +454,8 @@ class ViewController: NSViewController {
         self.btnFaces.menu?.addItem(menuRecognize)
         self.btnFaces.menu?.addItem(menuForceRecognize)
     }
+    
+    // MARK: - INIT VIEW
     
     fileprivate func initView() {
         print("\(Date()) Loading view - preview zone")
@@ -2256,7 +2266,7 @@ class ViewController: NSViewController {
             print("\(action) \(area)")
             if area == "collection" {
                 if self.imagesLoader.getItems().count > 0 {
-                    let tasklet = TaskletManager.default.task(name: "\(action) in collection")
+                    let tasklet = TaskletManager.default.task(name: "\(action) faces in collection")
                     tasklet.total = self.imagesLoader.getItems().count
                     tasklet.progress = 0
                     tasklet.running = true
@@ -2264,7 +2274,7 @@ class ViewController: NSViewController {
                     self.runningFaceTask = true
                     self.stopFacesTask = false
                     self.btnStop.isHidden = false
-                    self.lblProgressMessage.stringValue = "\(action) in collection: loading images ..."
+                    self.lblProgressMessage.stringValue = "\(action) faces in collection: loading images ..."
                     
                     DispatchQueue.global().async {
                         for imageFile in self.imagesLoader.getItems() {
@@ -2294,7 +2304,7 @@ class ViewController: NSViewController {
                     print("no item in collection")
                 }
             }else{
-                let tasklet = TaskletManager.default.task(name: "\(action) in \(area)")
+                let tasklet = TaskletManager.default.task(name: "\(action) faces in \(area)")
                 tasklet.total = 1
                 tasklet.progress = 0
                 tasklet.running = true
@@ -2303,7 +2313,7 @@ class ViewController: NSViewController {
                 self.stopFacesTask = false
                 self.btnStop.isHidden = false
                 
-                self.lblProgressMessage.stringValue = "\(action) in \(area): loading images ..."
+                self.lblProgressMessage.stringValue = "\(action) faces in \(area): loading images ..."
                 
                 if area == "all-years" {
                     area = ""

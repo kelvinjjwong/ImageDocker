@@ -102,8 +102,10 @@ class PeopleViewController: NSViewController {
         self.iconCollectionView.dataSource = self.iconCollectionViewController
         self.iconCollectionViewController.collectionView = self.iconCollectionView
         
-        self.iconCollectionViewController.onItemClicked = { face in
-            self.selectIcon(face)
+        self.iconCollectionViewController.onItemClicked = { face, selected in
+            if selected {
+                self.selectIcon(face)
+            }
         }
         
         // flow layout
@@ -126,8 +128,10 @@ class PeopleViewController: NSViewController {
         self.faceCollectionView.dataSource = self.faceCollectionViewController
         self.faceCollectionViewController.collectionView = self.faceCollectionView
         
-        self.faceCollectionViewController.onItemClicked = { face in
-            self.selectFace(face)
+        self.faceCollectionViewController.onItemClicked = { face, selected in
+            if selected {
+                self.selectFace(face)
+            }
         }
         
         // flow layout
@@ -211,6 +215,8 @@ class PeopleViewController: NSViewController {
         self.selectedFaceId = ""
         self.selectedCategory = ""
         self.selectedSubCategory = ""
+        
+        self.faceCollectionViewController.clearSelections()
     }
     
     fileprivate func cleanIdentity() {
@@ -314,6 +320,8 @@ class PeopleViewController: NSViewController {
         self.cleanFaceInfo()
         self.cleanSourceInfo()
         self.cleanRelationship()
+        
+        self.faceCollectionViewController.clearSelections()
         
         if face.personName != "Unknown" {
             self.adjustButtonsForKnownFace(preview: false)
@@ -460,6 +468,8 @@ class PeopleViewController: NSViewController {
         self.cleanSourceInfo()
         self.selectedCategory = value
         
+        self.faceCollectionViewController.clearSelections()
+        
         if value == "Samples" {
             self.adjustButtonsForUnknownFace(preview: false)
             self.faceSubCategoryController.clean()
@@ -475,6 +485,9 @@ class PeopleViewController: NSViewController {
     fileprivate func onFaceSubCategoryClicked(_ value:String){
         self.cleanFaceInfo()
         self.cleanSourceInfo()
+        
+        self.faceCollectionViewController.clearSelections()
+        
         if selectedCategory == "Samples" {
             self.adjustButtonsForUnknownFace(preview: false)
         }else{
@@ -520,28 +533,37 @@ class PeopleViewController: NSViewController {
     fileprivate func onDifferentPersonClicked(id:String, name:String){
         print("selected \(id) \(name)")
         self.lblFaceDescription.stringValue = ""
-        if self.selectedFaceId != "" {
-            if let crop = ModelStore.default.getFace(id: self.selectedFaceId) {
-                var c = crop
-                c.peopleId = id
-                c.recognizeBy = "UserAssign"
-                c.recognizeDate = Date()
-                if c.recognizeVersion == nil {
-                    c.recognizeVersion = "1"
-                }else{
-                    var version = Int(c.recognizeVersion ?? "0") ?? 0
-                    version += 1
-                    c.recognizeVersion = "\(version)"
-                }
-                ModelStore.default.saveFaceCrop(c)
-                print("Face crop \(crop.id) assigned as [\(name)], updated into DB.")
-                
-                if let person = ModelStore.default.getPerson(id: id) {
-                    DispatchQueue.main.async {
-                        self.lblFaceDescription.stringValue = person.shortName ?? person.name
+        
+        if self.faceCollectionViewController.selectedFaceIds.count > 0 {
+            for selectedFaceId in self.faceCollectionViewController.selectedFaceIds {
+                if let crop = ModelStore.default.getFace(id: selectedFaceId) {
+                    var c = crop
+                    c.peopleId = id
+                    c.recognizeBy = "UserAssign"
+                    c.recognizeDate = Date()
+                    if c.recognizeVersion == nil {
+                        c.recognizeVersion = "1"
+                    }else{
+                        var version = Int(c.recognizeVersion ?? "0") ?? 0
+                        version += 1
+                        c.recognizeVersion = "\(version)"
+                    }
+//                    if name != "Unknown" {
+                        c.locked = true
+//                    }
+                    ModelStore.default.saveFaceCrop(c)
+                    print("Face crop \(crop.id) assigned as [\(name)], updated into DB.")
+                    
+                    if let person = ModelStore.default.getPerson(id: id) {
+                        DispatchQueue.main.async {
+                            self.lblFaceDescription.stringValue = person.shortName ?? person.name
+                        }
                     }
                 }
             }
+            self.faceCollectionViewController.imagesLoader.removeItems(faceIds: self.faceCollectionViewController.selectedFaceIds)
+            self.faceCollectionViewController.selectedFaceIds = []
+            self.faceCollectionView.reloadData()
         }
     }
     
@@ -680,37 +702,38 @@ class PeopleViewController: NSViewController {
     }
     
     @IBAction func onChkSampleClicked(_ sender: NSButton) {
-        if self.selectedFaceId != "" && self.selectedPeopleId != "" {
-            ModelStore.default.updateFaceSampleFlag(id: self.selectedFaceId, flag: (sender.state == .on) )
-            // copy or remove face crop to/from recognition sample directory
-            if let face = ModelStore.default.getFace(id: self.selectedFaceId) {
-                let targetFolder = URL(fileURLWithPath: FaceRecognition.trainingSamplePath).appendingPathComponent(self.selectedPeopleId)
-                let target = targetFolder.appendingPathComponent("\(self.selectedFaceId).jpg")
-                if sender.state == .on {
-                    do {
-                        try FileManager.default.createDirectory(at: targetFolder, withIntermediateDirectories: true, attributes: nil)
-                    }catch{
-                        print("Unable to create directory at \(targetFolder.path)")
-                        print(error)
-                    }
-                    let source = URL(fileURLWithPath: face.cropPath).appendingPathComponent(face.subPath).appendingPathComponent(face.filename)
-                    do {
-                        try FileManager.default.copyItem(at: source, to: target)
-                        print("Copied sample file from [\(source.path)] to [\(target.path)]")
-                    }catch{
-                        print("Unable to copy sample file from [\(source.path)] to [\(target.path)]")
-                        print(error)
-                    }
-                }else{
-                    do {
-                        try FileManager.default.removeItem(at: target)
-                    }catch{
-                        print("Failed to delete sample file: \(target.path)")
-                        print(error)
+        if self.faceCollectionViewController.selectedFaceIds.count > 0 {
+            for selectedFaceId in self.faceCollectionViewController.selectedFaceIds {
+                ModelStore.default.updateFaceSampleFlag(id: selectedFaceId, flag: (sender.state == .on) )
+                // copy or remove face crop to/from recognition sample directory
+                if let face = ModelStore.default.getFace(id: selectedFaceId) {
+                    let targetFolder = URL(fileURLWithPath: FaceRecognition.trainingSamplePath).appendingPathComponent(selectedPeopleId)
+                    let target = targetFolder.appendingPathComponent("\(selectedFaceId).jpg")
+                    if sender.state == .on {
+                        do {
+                            try FileManager.default.createDirectory(at: targetFolder, withIntermediateDirectories: true, attributes: nil)
+                        }catch{
+                            print("Unable to create directory at \(targetFolder.path)")
+                            print(error)
+                        }
+                        let source = URL(fileURLWithPath: face.cropPath).appendingPathComponent(face.subPath).appendingPathComponent(face.filename)
+                        do {
+                            try FileManager.default.copyItem(at: source, to: target)
+                            print("Copied sample file from [\(source.path)] to [\(target.path)]")
+                        }catch{
+                            print("Unable to copy sample file from [\(source.path)] to [\(target.path)]")
+                            print(error)
+                        }
+                    }else{
+                        do {
+                            try FileManager.default.removeItem(at: target)
+                        }catch{
+                            print("Failed to delete sample file: \(target.path)")
+                            print(error)
+                        }
                     }
                 }
             }
-            
         }
     }
     
@@ -886,11 +909,13 @@ class PeopleViewController: NSViewController {
     }
     
     @IBAction func onChkLockClicked(_ sender: NSButton) {
-        if self.selectedFaceId != "" && self.selectedPeopleId != "" {
-            if sender.state == .on {
-                ModelStore.default.updateFaceLockFlag(id: self.selectedFaceId, flag: true)
-            }else{
-                ModelStore.default.updateFaceLockFlag(id: self.selectedFaceId, flag: false)
+        if self.faceCollectionViewController.selectedFaceIds.count > 0 {
+            for selectedFaceId in self.faceCollectionViewController.selectedFaceIds {
+                if sender.state == .on {
+                    ModelStore.default.updateFaceLockFlag(id: selectedFaceId, flag: true)
+                }else{
+                    ModelStore.default.updateFaceLockFlag(id: selectedFaceId, flag: false)
+                }
             }
         }
     }
