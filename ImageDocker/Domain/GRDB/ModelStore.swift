@@ -3297,6 +3297,12 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             })
         }
         
+        migrator.registerMigration("v25") { db in
+            try db.alter(table: "ImageDevicePath", body: { t in
+                t.add(column: "excludeImported", .boolean).defaults(to: false).indexed()
+            })
+        }
+        
         
         do {
             let dbQueue = try DatabaseQueue(path: dbfile)

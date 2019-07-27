@@ -87,6 +87,8 @@ class SplashViewController: NSViewController {
             let total = Int(self.subProgressIndicator.maxValue)
             self.lblSubProgress.stringValue = "\(value) / \(total)"
             
+            print("value=\(value), total=\(total)")
+            
             if value == total {
                 self.lblSubMessage.isHidden = true
                 self.lblSubProgress.isHidden = true
@@ -131,6 +133,8 @@ class SplashViewController: NSViewController {
         DispatchQueue.main.async {
             self.lblMessage.stringValue = value
             
+            print("progressStage=\(self.progressStage)")
+            
             if self.progressStage != progress {
                 // progress indicator + 1
                 self.progressStep += 1
@@ -140,6 +144,9 @@ class SplashViewController: NSViewController {
                 self.progressIndicator.increment(by: 1)
                 
                 self.progressStage = progress
+                
+                print("message=\(value)")
+                print("progress=\(progress), step=\(self.progressStep), end=\(self.progressEnd)")
                 
                 if self.progressStep >= self.progressEnd {
                     self.onCompleted()

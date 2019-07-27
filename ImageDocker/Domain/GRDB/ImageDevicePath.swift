@@ -17,7 +17,7 @@ struct ImageDevicePath : Codable {
     var toSubFolder: String
     var exclude: Bool
     var manyChildren: Bool
-    
+    var excludeImported: Bool
     
     
     static func include(deviceId: String, path:String, toSubFolder:String, manyChildren:Bool = false) -> ImageDevicePath {
@@ -28,7 +28,8 @@ struct ImageDevicePath : Codable {
             path: path,
             toSubFolder: toSubFolder,
             exclude: false,
-            manyChildren: manyChildren
+            manyChildren: manyChildren,
+            excludeImported: false
         )
     }
     
@@ -40,7 +41,8 @@ struct ImageDevicePath : Codable {
             path: path,
             toSubFolder: "",
             exclude: true,
-            manyChildren: false
+            manyChildren: false,
+            excludeImported: false
         )
     }
 }

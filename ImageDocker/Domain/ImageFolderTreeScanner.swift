@@ -71,78 +71,82 @@ class ImageFolderTreeScanner {
         
         let jall = containers.count
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "FOLDERSETTER_TOTAL"), object: containers.count)
-        while(index < containers.count ){
-        //for container in containers { // TODO: most high memory impact
-            
-            if limitRam > 0 {
-                var taskInfo = mach_task_basic_info()
-                var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
-                let kerr: kern_return_t = withUnsafeMutablePointer(to: &taskInfo) {
-                    $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
-                        task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
+        if containers.count == 0 {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "FOLDERSETTER_INCREMENT"), object: nil)
+        }else{
+            while(index < containers.count ){
+            //for container in containers { // TODO: most high memory impact
+                
+                if limitRam > 0 {
+                    var taskInfo = mach_task_basic_info()
+                    var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
+                    let kerr: kern_return_t = withUnsafeMutablePointer(to: &taskInfo) {
+                        $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
+                            task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
+                        }
+                    }
+                    
+                    if kerr == KERN_SUCCESS {
+                        let usedRam = taskInfo.resident_size / 1024 / 1024
+                        
+                        if usedRam >= limitRam {
+                            attempt += 1
+                            print("waiting for releasing memory for Setting up containers' parent, attempt: \(attempt)")
+                            continousWorking = false
+                            sleep(10)
+                        }else{
+                            print("continue for Setting up containers' parent, last attempt: \(attempt)")
+                            continousWorking = true
+                        }
                     }
                 }
                 
-                if kerr == KERN_SUCCESS {
-                    let usedRam = taskInfo.resident_size / 1024 / 1024
-                    
-                    if usedRam >= limitRam {
-                        attempt += 1
-                        print("waiting for releasing memory for Setting up containers' parent, attempt: \(attempt)")
-                        continousWorking = false
-                        sleep(10)
-                    }else{
-                        print("continue for Setting up containers' parent, last attempt: \(attempt)")
-                        continousWorking = true
-                    }
-                }
-            }
-            
-            if continousWorking {
-                autoreleasepool { () -> Void in
-                    let container = containers[index]
-                    if container.hideByParent {
-                        // do nothing
-                    }else{
-                        print("Setting for container \(index)/\(jall) [\(container.path)]")
-                        let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path),
-                                                                  name:container.name,
-                                                                  repositoryPath: container.repositoryPath,
-                                                                  homePath: container.homePath,
-                                                                  storagePath: container.storagePath,
-                                                                  facePath: container.facePath,
-                                                                  cropPath: container.cropPath,
-                                                                  countOfImages: Int(container.imageCount),
-                                                                  updateModelStore: false,
-                                                                  sharedDB: ModelStore.sharedDBPool())
-                        urlFolders[container.path] = imageFolder
-                        if fast { // fast
-                            if container.parentFolder != "" {
-                                if let parentFolder = urlFolders[container.parentFolder] {
-                                    imageFolder.setParent(parentFolder)
+                if continousWorking {
+                    autoreleasepool { () -> Void in
+                        let container = containers[index]
+                        if container.hideByParent {
+                            // do nothing
+                        }else{
+                            print("Setting for container \(index)/\(jall) [\(container.path)]")
+                            let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path),
+                                                                      name:container.name,
+                                                                      repositoryPath: container.repositoryPath,
+                                                                      homePath: container.homePath,
+                                                                      storagePath: container.storagePath,
+                                                                      facePath: container.facePath,
+                                                                      cropPath: container.cropPath,
+                                                                      countOfImages: Int(container.imageCount),
+                                                                      updateModelStore: false,
+                                                                      sharedDB: ModelStore.sharedDBPool())
+                            urlFolders[container.path] = imageFolder
+                            if fast { // fast
+                                if container.parentFolder != "" {
+                                    if let parentFolder = urlFolders[container.parentFolder] {
+                                        imageFolder.setParent(parentFolder)
+                                    }
+                                }else{
+                                    if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
+                                        imageFolder.setParent(parent)
+                                        foldersNeedSave.insert(imageFolder)
+                                    }
                                 }
+                                
                             }else{
                                 if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
                                     imageFolder.setParent(parent)
                                     foldersNeedSave.insert(imageFolder)
                                 }
                             }
-                            
-                        }else{
-                            if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
-                                imageFolder.setParent(parent)
-                                foldersNeedSave.insert(imageFolder)
-                            }
+                            imageFolders.append(imageFolder)
                         }
-                        imageFolders.append(imageFolder)
-                    }
+                        
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "FOLDERSETTER_INCREMENT"), object: nil)
+                        index += 1
+                    } // end of autorelease
                     
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "FOLDERSETTER_INCREMENT"), object: nil)
-                    index += 1
-                } // end of autorelease
-                
-            } // end of continuous working
-        } // end of while loop
+                } // end of continuous working
+            } // end of while loop
+        }// end of if-containers-is-empty
         urlFolders.removeAll()
         print("\(Date()) Setting up containers' parent: DONE ")
         

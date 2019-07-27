@@ -11,6 +11,7 @@
                 <outlet property="btnGoto" destination="Ccn-3T-XWz" id="AJJ-S5-EDN"/>
                 <outlet property="btnUpdate" destination="17S-f6-JsL" id="xGh-XF-Qs2"/>
                 <outlet property="chkExclude" destination="ILr-S7-rKx" id="FK9-6P-HxM"/>
+                <outlet property="chkExcludeImported" destination="Scq-RR-WrR" id="ENp-8y-ahM"/>
                 <outlet property="chkManyChildren" destination="fEC-Xh-fWE" id="2d0-49-7qn"/>
                 <outlet property="lblMessage" destination="Jcl-zi-hMy" id="f5N-En-hmi"/>
                 <outlet property="lblPath" destination="YIj-D4-0Py" id="2C4-x0-sml"/>
@@ -27,14 +28,14 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <box fixedFrame="YES" title="From Path in Device" translatesAutoresizingMaskIntoConstraints="NO" id="CDe-Wz-JsY">
-                    <rect key="frame" x="17" y="138" width="446" height="114"/>
+                    <rect key="frame" x="17" y="157" width="446" height="95"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <view key="contentView" id="8BM-Eu-Rjh">
-                        <rect key="frame" x="3" y="3" width="440" height="96"/>
+                        <rect key="frame" x="3" y="3" width="440" height="77"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YIj-D4-0Py">
-                                <rect key="frame" x="18" y="12" width="404" height="73"/>
+                                <rect key="frame" x="18" y="14" width="404" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" lineBreakMode="charWrapping" selectable="YES" id="CrT-X1-7Ty">
                                     <font key="font" usesAppearanceFont="YES"/>
@@ -46,15 +47,15 @@
                     </view>
                 </box>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ILr-S7-rKx">
-                    <rect key="frame" x="18" y="103" width="70" height="18"/>
+                    <rect key="frame" x="20" y="96" width="228" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="check" title="Exclude" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="JKC-OZ-z8J">
+                    <buttonCell key="cell" type="check" title="Do not import images from device" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="JKC-OZ-z8J">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fEC-Xh-fWE">
-                    <rect key="frame" x="255" y="66" width="207" height="18"/>
+                    <rect key="frame" x="20" y="39" width="207" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Do not expand sub-directories" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="fQl-2s-PxI">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -65,7 +66,7 @@
                     </connections>
                 </button>
                 <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aqx-dD-4ZO">
-                    <rect key="frame" x="257" y="101" width="203" height="22"/>
+                    <rect key="frame" x="123" y="124" width="203" height="22"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="xg5-IO-ZRm">
                         <font key="font" metaFont="system"/>
@@ -74,7 +75,7 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wnt-It-NyP">
-                    <rect key="frame" x="154" y="102" width="97" height="17"/>
+                    <rect key="frame" x="20" y="127" width="97" height="17"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="To Local Folder" id="doo-mA-aYc">
                         <font key="font" metaFont="system"/>
@@ -82,17 +83,6 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="17S-f6-JsL">
-                    <rect key="frame" x="383" y="27" width="85" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="push" title="Update" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TUb-QB-rtH">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="onUpdateClicked:" target="-2" id="sNx-CP-Ew5"/>
-                    </connections>
-                </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jcl-zi-hMy">
                     <rect key="frame" x="20" y="12" width="316" height="17"/>
                     <autoresizingMask key="autoresizingMask"/>
@@ -107,7 +97,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                 </progressIndicator>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ccn-3T-XWz">
-                    <rect key="frame" x="292" y="27" width="84" height="32"/>
+                    <rect key="frame" x="382" y="117" width="84" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="push" title="Goto" bezelStyle="rounded" image="NSFollowLinkFreestandingTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="lry-c3-F20">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -115,6 +105,25 @@
                     </buttonCell>
                     <connections>
                         <action selector="onGotoClicked:" target="-2" id="rXE-i6-fK0"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Scq-RR-WrR">
+                    <rect key="frame" x="20" y="68" width="292" height="18"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="check" title="Do not scan imported images into repository" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Dzr-pc-nHd">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="17S-f6-JsL">
+                    <rect key="frame" x="381" y="30" width="85" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="push" title="Update" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TUb-QB-rtH">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="onUpdateClicked:" target="-2" id="sNx-CP-Ew5"/>
                     </connections>
                 </button>
             </subviews>

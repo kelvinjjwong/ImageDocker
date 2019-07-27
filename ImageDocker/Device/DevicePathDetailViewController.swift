@@ -19,6 +19,7 @@ class DevicePathDetailViewController: NSViewController {
     @IBOutlet weak var btnUpdate: NSButton!
     @IBOutlet weak var lblMessage: NSTextField!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
+    @IBOutlet weak var chkExcludeImported: NSButton!
     
     @IBOutlet weak var btnGoto: NSButton!
     
@@ -52,6 +53,7 @@ class DevicePathDetailViewController: NSViewController {
         }
         var data = self.devicePath!
         data.toSubFolder = self.txtSubFolder.stringValue.trimmingCharacters(in: .whitespaces)
+        data.excludeImported = (self.chkExcludeImported.state == .on)
         
         // TODO: UPDATE RELATED physical directory of IMAGE DEVICE FILES
         // TODO: UPDATE RELATED importToPath of IMAGE DEVICE FILES
@@ -94,6 +96,8 @@ class DevicePathDetailViewController: NSViewController {
                 self.chkManyChildren.state = .off
                 self.btnUpdate.isHidden = true
                 self.btnGoto.isHidden = true
+                self.chkExcludeImported.isHidden = true
+                self.chkExcludeImported.state = .off
             }else{
                 self.chkExclude.isHidden = true
                 self.chkExclude.state = .off
@@ -109,6 +113,8 @@ class DevicePathDetailViewController: NSViewController {
                 }else{
                     self.btnGoto.isHidden = true
                 }
+                self.chkExcludeImported.isHidden = false
+                self.chkExcludeImported.state = devPath.excludeImported ? .on : .off
             }
         }
     }
