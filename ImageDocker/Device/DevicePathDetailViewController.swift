@@ -53,7 +53,7 @@ class DevicePathDetailViewController: NSViewController {
         }
         self.btnUpdate.isEnabled = false
         
-        // apply changes to database when device path's local folder to be renamed
+        
         
         DispatchQueue.global().async {
             var data = self.devicePath!
@@ -61,9 +61,9 @@ class DevicePathDetailViewController: NSViewController {
             data.toSubFolder = self.txtSubFolder.stringValue.trimmingCharacters(in: .whitespaces)
             data.excludeImported = (self.chkExcludeImported.state == .on)
             
- 
-            
             print("deviceId=\(data.deviceId), old localFolder=\(oldLocalFolder), new localFolder=\(data.toSubFolder), repository=\(self.repositoryPath)")
+            
+            // apply changes to database when device path is decided to be excluded
             
             if data.excludeImported && self.repositoryPath.trimmingCharacters(in: .whitespaces) != "" {
                 DispatchQueue.main.async {
@@ -76,6 +76,8 @@ class DevicePathDetailViewController: NSViewController {
                     self.lblMessage.stringValue = "Deleted related containers and images."
                 }
             }
+            
+            // apply changes to database when device path's local folder to be renamed
             
             if !data.exclude && !data.excludeImported && oldLocalFolder != data.toSubFolder {
                 print("changed local folder from [\(oldLocalFolder)] to [\(data.toSubFolder)]")
