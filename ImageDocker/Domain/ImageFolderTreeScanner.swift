@@ -309,7 +309,7 @@ class ImageFolderTreeScanner {
                 let devicePaths = ModelStore.default.getDevicePaths(deviceId: repo.deviceId)
                 if devicePaths.count > 0 {
                     for devicePath in devicePaths {
-                        if !devicePath.exclude {
+                        if !devicePath.exclude && !devicePath.excludeImported {
                             let path = URL(fileURLWithPath: repo.path).appendingPathComponent(devicePath.toSubFolder).path
 //                            pathToDeviceSubFolder[path] = devicePath.toSubFolder
                             

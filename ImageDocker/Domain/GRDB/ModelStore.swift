@@ -305,8 +305,8 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
-                try db.execute("DELETE FROM ImageContainer WHERE path LIKE '\(path)/%'")
-                try db.execute("DELETE FROM Image WHERE path LIKE '\(path)/%'")
+                try db.execute("DELETE FROM ImageContainer WHERE path LIKE '\(path.withStash())%'")
+                try db.execute("DELETE FROM Image WHERE path LIKE '\(path.withStash())%'")
             }
         }catch{
             print(error)
@@ -1380,7 +1380,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
-                result = try Image.filter(Column("path").like("\(rootPath)%")).fetchAll(db)
+                result = try Image.filter(Column("path").like("\(rootPath.withStash())%")).fetchAll(db)
             }
         }catch{
             print(error)
@@ -1393,7 +1393,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
-                result = try Image.filter(Column("path").like("\(rootPath)%")).filter(Column("subPath") == "").fetchAll(db)
+                result = try Image.filter(Column("path").like("\(rootPath.withStash())%")).filter(Column("subPath") == "").fetchAll(db)
             }
         }catch{
             print(error)
@@ -2380,6 +2380,19 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             let db = ModelStore.sharedDBPool()
             try db.read { db in
                 result = try ImageDeviceFile.filter(sql: "deviceId='\(deviceId)'").order(Column("importToPath").asc).fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func getDeviceFiles(deviceId:String, importToPath:String) -> [ImageDeviceFile] {
+        var result:[ImageDeviceFile] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try ImageDeviceFile.filter(sql: "deviceId='\(deviceId)' and importToPath='\(importToPath)'").order(Column("fileId").asc).fetchAll(db)
             }
         }catch{
             print(error)
