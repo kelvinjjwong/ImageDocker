@@ -53,6 +53,8 @@ class DevicePathDetailViewController: NSViewController {
         }
         self.btnUpdate.isEnabled = false
         
+        // apply changes to database when device path's local folder to be renamed
+        
         DispatchQueue.global().async {
             var data = self.devicePath!
             let oldLocalFolder = data.toSubFolder
