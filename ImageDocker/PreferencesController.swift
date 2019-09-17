@@ -27,6 +27,11 @@ final class PreferencesController: NSViewController {
     fileprivate static let memoryPeakKey = "memoryPeakKey"
     fileprivate static let amountForPaginationKey = "amountForPaginationKey"
     
+    
+    fileprivate static let storageLocationKey = "storageLocationKey"
+    fileprivate static let networkDatabaseLocationKey = "networkDatabaseLocationKey"
+    fileprivate static let networkStoragePrefixKey = "networkStoragePrefixKey"
+    
     // MARK: Properties
     @IBOutlet weak var txtBaiduAK: NSTextField!
     @IBOutlet weak var txtBaiduSK: NSTextField!
@@ -64,6 +69,18 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var lblMid2Memory: NSTextField!
     @IBOutlet weak var lstAmountForPagination: NSPopUpButton!
     
+    @IBOutlet weak var txtNetworkDatabaseLocation: NSTextField!
+    @IBOutlet weak var lblNetworkDBBackupLocation: NSTextField!
+    @IBOutlet weak var txtNetworkStoragePrefix: NSTextField!
+    @IBOutlet weak var btnBrowseNetworkDatabaseLocation: NSButton!
+    @IBOutlet weak var btnGotoNetworkDatabaseLocation: NSButton!
+    @IBOutlet weak var btnGotoNetworkDBBackupLocation: NSButton!
+    @IBOutlet weak var btnVerifyNetworkRepo: NSButton!
+    @IBOutlet weak var lblNetworkVerifyMessage: NSTextField!
+    @IBOutlet weak var chkLocalLocation: NSButton!
+    @IBOutlet weak var chkNetworkLocation: NSButton!
+    
+    
     
     
     fileprivate var selectedFaceModel = "major"
@@ -74,6 +91,9 @@ final class PreferencesController: NSViewController {
         self.savePreferences()
         self.dismiss(sender)
     }
+    
+    // MARK: -
+    // MARK: ACTION BUTTONS FOR DATA LOCATION
     
     @IBAction func onButtonBrowseClicked(_ sender: Any) {
         //let window = NSApplication.shared.windows.first!
@@ -110,6 +130,55 @@ final class PreferencesController: NSViewController {
             }
         }
     }
+    
+    @IBAction func onBrowseNetworkDatabaseLocationClicked(_ sender: NSButton) {
+        let openPanel = NSOpenPanel()
+        openPanel.canChooseDirectories  = true
+        openPanel.canChooseFiles        = false
+        openPanel.showsHiddenFiles      = false
+        openPanel.canCreateDirectories  = true
+        
+        openPanel.beginSheetModal(for: self.view.window!) { (response) -> Void in
+            guard response == NSApplication.ModalResponse.OK else {return}
+            if let path = openPanel.url?.path {
+                DispatchQueue.main.async {
+                    self.txtNetworkDatabaseLocation.stringValue = path
+                }
+            }
+        }
+    }
+    
+    @IBAction func onGotoNetworkDatabaseLocationClicked(_ sender: NSButton) {
+        NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: self.txtNetworkDatabaseLocation.stringValue)])
+    }
+    
+    @IBAction func onGotoNetworkDBBackupLocationClicked(_ sender: NSButton) {
+        NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: self.lblNetworkDBBackupLocation.stringValue)])
+    }
+    
+    private var selectedStorageLocation = "local"
+    
+    @IBAction func onCheckLocalLocationClicked(_ sender: NSButton) {
+        if sender.state == .on {
+            self.chkLocalLocation.state = .off
+            self.selectedStorageLocation = "network"
+        }else{
+            self.chkLocalLocation.state = .on
+            self.selectedStorageLocation = "local"
+        }
+    }
+    
+    @IBAction func onCheckNetworkLocationClicked(_ sender: NSButton) {
+        if sender.state == .on {
+            self.chkNetworkLocation.state = .off
+            self.selectedStorageLocation = "local"
+        }else{
+            self.chkNetworkLocation.state = .on
+            self.selectedStorageLocation = "network"
+        }
+    }
+    
+    // MARK: -
     
     @IBAction func onBrowseIOSMountPointClicked(_ sender: Any) {
         let openPanel = NSOpenPanel()
@@ -396,6 +465,24 @@ final class PreferencesController: NSViewController {
         return url.path
     }
     
+    class func networkDatabaseLocation() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: networkDatabaseLocationKey) else {return ""}
+        return txt
+    }
+    
+    class func networkStoragePrefix() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: networkStoragePrefixKey) else {return ""}
+        return txt
+    }
+    
+    class func storageLocationSelection() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: storageLocationKey) else {return ""}
+        return txt
+    }
+    
     // MARK: IPHONE
     
     class func iosDeviceMountPoint() -> String {
@@ -458,6 +545,12 @@ final class PreferencesController: NSViewController {
                      forKey: PreferencesController.googleAKKey)
         defaults.set(txtDatabasePath.stringValue,
                      forKey: PreferencesController.databasePathKey)
+        defaults.set(txtNetworkDatabaseLocation.stringValue,
+                     forKey: PreferencesController.networkDatabaseLocationKey)
+        defaults.set(txtNetworkStoragePrefix.stringValue,
+                     forKey: PreferencesController.networkStoragePrefixKey)
+        defaults.set(self.selectedStorageLocation,
+                     forKey: PreferencesController.storageLocationKey)
         defaults.set(txtIOSMountPoint.stringValue,
                      forKey: PreferencesController.iosMountPointKey)
         defaults.set(txtIfusePath.stringValue,
@@ -507,6 +600,17 @@ final class PreferencesController: NSViewController {
         txtGoogleAPIKey.stringValue = PreferencesController.googleAPIKey()
         txtExportPath.stringValue = PreferencesController.exportDirectory()
         txtDatabasePath.stringValue = PreferencesController.databasePath()
+        txtNetworkDatabaseLocation.stringValue = PreferencesController.networkDatabaseLocation()
+        txtNetworkStoragePrefix.stringValue = PreferencesController.networkStoragePrefix()
+        self.selectedStorageLocation = PreferencesController.storageLocationSelection()
+        if self.selectedStorageLocation == "local" {
+            self.chkLocalLocation.state = .on
+            self.chkNetworkLocation.state = .off
+        }else{
+            self.chkLocalLocation.state = .off
+            self.chkNetworkLocation.state = .on
+        }
+        
         txtIOSMountPoint.stringValue = PreferencesController.iosDeviceMountPoint()
         txtIfusePath.stringValue = PreferencesController.ifusePath()
         txtIdeviceIdPath.stringValue = PreferencesController.ideviceidPath()
@@ -545,7 +649,9 @@ final class PreferencesController: NSViewController {
         self.lblComponentsStatus.stringValue = result
         self.lblDatabaseBackupPath.stringValue = URL(fileURLWithPath: PreferencesController.databasePath()).appendingPathComponent("DataBackup").path
         self.setupMemorySlider()
-        
+        if PreferencesController.networkDatabaseLocation() != "" {
+            self.lblNetworkDBBackupLocation.stringValue = URL(fileURLWithPath: PreferencesController.networkDatabaseLocation()).appendingPathComponent("DataBackup").path
+        }
         let paginationAmount = PreferencesController.amountForPagination()
         print("GOT AMOUNT FOR PAGINATION \(paginationAmount)")
         if paginationAmount == 0 {
