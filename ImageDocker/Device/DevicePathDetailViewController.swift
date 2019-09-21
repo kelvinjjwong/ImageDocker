@@ -54,14 +54,14 @@ class DevicePathDetailViewController: NSViewController {
         self.btnUpdate.isEnabled = false
         
         
+        var data = self.devicePath!
+        let oldLocalFolder = data.toSubFolder
+        data.toSubFolder = self.txtSubFolder.stringValue.trimmingCharacters(in: .whitespaces)
+        data.excludeImported = (self.chkExcludeImported.state == .on)
+        
+        print("deviceId=\(data.deviceId), old localFolder=\(oldLocalFolder), new localFolder=\(data.toSubFolder), repository=\(self.repositoryPath)")
         
         DispatchQueue.global().async {
-            var data = self.devicePath!
-            let oldLocalFolder = data.toSubFolder
-            data.toSubFolder = self.txtSubFolder.stringValue.trimmingCharacters(in: .whitespaces)
-            data.excludeImported = (self.chkExcludeImported.state == .on)
-            
-            print("deviceId=\(data.deviceId), old localFolder=\(oldLocalFolder), new localFolder=\(data.toSubFolder), repository=\(self.repositoryPath)")
             
             // apply changes to database when device path is decided to be excluded
             
@@ -72,8 +72,9 @@ class DevicePathDetailViewController: NSViewController {
                 let localPath = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(oldLocalFolder).path
                 print("deleting container which local path=\(localPath)")
                 ModelStore.default.deleteContainer(path: localPath)
+                ModelStore.default.saveDevicePath(file: data)
                 DispatchQueue.main.async {
-                    self.lblMessage.stringValue = "Deleted related containers and images."
+                    self.lblMessage.stringValue = "Deleted related containers and imported images accordingly."
                 }
             }
             
@@ -211,11 +212,11 @@ class DevicePathDetailViewController: NSViewController {
                         DispatchQueue.main.async {
                             self.lblMessage.stringValue = "Updated local folder."
                         }
-                    }
-                }
+                    } // end of renamedLocalFolder
+                } // end of existNewPath
                 
                 
-            }
+            } // end of !data.exclude && !data.excludeImported && oldLocalFolder != data.toSubFolder
             
             DispatchQueue.main.async {
                 self.btnUpdate.isEnabled = true
