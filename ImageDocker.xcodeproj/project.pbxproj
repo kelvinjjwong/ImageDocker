@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -78,6 +78,14 @@
 		8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA643F4208D6E5100C7D695 /* PreferencesController.swift */; };
 		8EAC5F202144A60900E187E0 /* DeviceFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAC5F1E2144A60900E187E0 /* DeviceFolderViewController.swift */; };
 		8EAC5F212144A60900E187E0 /* DeviceFolderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EAC5F1F2144A60900E187E0 /* DeviceFolderViewController.xib */; };
+		8EAD03AF2337290E00AAC7C6 /* ModelStore+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03AE2337290E00AAC7C6 /* ModelStore+Image.swift */; };
+		8EAD03B12337299E00AAC7C6 /* ModelStore+ImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B02337299E00AAC7C6 /* ModelStore+ImageContainer.swift */; };
+		8EAD03B323372BC800AAC7C6 /* ModelStore+ImagePlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B223372BC800AAC7C6 /* ModelStore+ImagePlace.swift */; };
+		8EAD03B523372C0100AAC7C6 /* ModelStore+ImageEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B423372C0100AAC7C6 /* ModelStore+ImageEvent.swift */; };
+		8EAD03B723372C4600AAC7C6 /* ModelStore+ImageDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B623372C4600AAC7C6 /* ModelStore+ImageDevice.swift */; };
+		8EAD03B923372C8C00AAC7C6 /* ModelStore+FaceFamily.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B823372C8C00AAC7C6 /* ModelStore+FaceFamily.swift */; };
+		8EAD03BB23372CF100AAC7C6 /* ModelStore+VersionMigrate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03BA23372CF100AAC7C6 /* ModelStore+VersionMigrate.swift */; };
+		8EAD03BD23372D5E00AAC7C6 /* ModelStore+Image+Meta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03BC23372D5E00AAC7C6 /* ModelStore+Image+Meta.swift */; };
 		8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CC20FA42AB00D8C71D /* Duplicate.swift */; };
 		8EB321CF20FA42C700D8C71D /* ModelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CE20FA42C700D8C71D /* ModelStore.swift */; };
 		8EB321D420FA433500D8C71D /* ImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321D020FA433500D8C71D /* ImageContainer.swift */; };
@@ -250,6 +258,14 @@
 		8EA643F4208D6E5100C7D695 /* PreferencesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesController.swift; sourceTree = "<group>"; };
 		8EAC5F1E2144A60900E187E0 /* DeviceFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceFolderViewController.swift; sourceTree = "<group>"; };
 		8EAC5F1F2144A60900E187E0 /* DeviceFolderViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeviceFolderViewController.xib; sourceTree = "<group>"; };
+		8EAD03AE2337290E00AAC7C6 /* ModelStore+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+Image.swift"; sourceTree = "<group>"; };
+		8EAD03B02337299E00AAC7C6 /* ModelStore+ImageContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+ImageContainer.swift"; sourceTree = "<group>"; };
+		8EAD03B223372BC800AAC7C6 /* ModelStore+ImagePlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+ImagePlace.swift"; sourceTree = "<group>"; };
+		8EAD03B423372C0100AAC7C6 /* ModelStore+ImageEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+ImageEvent.swift"; sourceTree = "<group>"; };
+		8EAD03B623372C4600AAC7C6 /* ModelStore+ImageDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+ImageDevice.swift"; sourceTree = "<group>"; };
+		8EAD03B823372C8C00AAC7C6 /* ModelStore+FaceFamily.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+FaceFamily.swift"; sourceTree = "<group>"; };
+		8EAD03BA23372CF100AAC7C6 /* ModelStore+VersionMigrate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+VersionMigrate.swift"; sourceTree = "<group>"; };
+		8EAD03BC23372D5E00AAC7C6 /* ModelStore+Image+Meta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+Image+Meta.swift"; sourceTree = "<group>"; };
 		8EB321CC20FA42AB00D8C71D /* Duplicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Duplicate.swift; sourceTree = "<group>"; };
 		8EB321CE20FA42C700D8C71D /* ModelStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelStore.swift; sourceTree = "<group>"; };
 		8EB321D020FA433500D8C71D /* ImageContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageContainer.swift; path = ImageDocker/Domain/GRDB/ImageContainer.swift; sourceTree = SOURCE_ROOT; };
@@ -469,6 +485,14 @@
 			isa = PBXGroup;
 			children = (
 				8EB321CE20FA42C700D8C71D /* ModelStore.swift */,
+				8EAD03AE2337290E00AAC7C6 /* ModelStore+Image.swift */,
+				8EAD03BC23372D5E00AAC7C6 /* ModelStore+Image+Meta.swift */,
+				8EAD03B02337299E00AAC7C6 /* ModelStore+ImageContainer.swift */,
+				8EAD03B223372BC800AAC7C6 /* ModelStore+ImagePlace.swift */,
+				8EAD03B423372C0100AAC7C6 /* ModelStore+ImageEvent.swift */,
+				8EAD03B623372C4600AAC7C6 /* ModelStore+ImageDevice.swift */,
+				8EAD03B823372C8C00AAC7C6 /* ModelStore+FaceFamily.swift */,
+				8EAD03BA23372CF100AAC7C6 /* ModelStore+VersionMigrate.swift */,
 				8EB321D320FA433500D8C71D /* Image.swift */,
 				8EB321D020FA433500D8C71D /* ImageContainer.swift */,
 				8EFA7CFA211D713700419777 /* ImageDevice.swift */,
@@ -978,6 +1002,7 @@
 				8E8D47292236F63C0091E9C3 /* MenuPopover.swift in Sources */,
 				8E0EAE9A209D2623008C377F /* ImageFolderTreeScanner.swift in Sources */,
 				8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */,
+				8EAD03B523372C0100AAC7C6 /* ModelStore+ImageEvent.swift in Sources */,
 				8E4C38D9211829410089502C /* DeviceTreeController.swift in Sources */,
 				8E85B7CF20B8786C005A9845 /* Accumulator.swift in Sources */,
 				8EB986B020B225230075B081 /* DetailViewDelegate.swift in Sources */,
@@ -1005,9 +1030,11 @@
 				8E98B8F320D5C90600771280 /* WindowController.swift in Sources */,
 				8EBA692E2090DB4B00221131 /* VideoDropView.swift in Sources */,
 				8E8D47222233DCD30091E9C3 /* DictionaryTableViewController.swift in Sources */,
+				8EAD03BB23372CF100AAC7C6 /* ModelStore+VersionMigrate.swift in Sources */,
 				8EFA7CF9211A36F700419777 /* DeviceCopyViewController.swift in Sources */,
 				8EBA9DE32173C8F000DACAAD /* TheaterViewController.swift in Sources */,
 				8E4C38CD2117B5340089502C /* Phone.swift in Sources */,
+				8EAD03B323372BC800AAC7C6 /* ModelStore+ImagePlace.swift in Sources */,
 				8EFE763C2094AF6B00B7CFCA /* TreeController.swift in Sources */,
 				8E3EC3B5214DB1B8004B6125 /* LunarCalendarView.swift in Sources */,
 				8EC20B302281B4C0000F4819 /* TaskHelper.swift in Sources */,
@@ -1028,12 +1055,14 @@
 				8E98B8F720D6044900771280 /* Event.swift in Sources */,
 				8E4C38D12117B56A0089502C /* IPHONE.swift in Sources */,
 				8EB321D520FA433500D8C71D /* ImagePlace.swift in Sources */,
+				8EAD03B723372C4600AAC7C6 /* ModelStore+ImageDevice.swift in Sources */,
 				8E8D4715222991230091E9C3 /* FaceCollectionViewItem.swift in Sources */,
 				8EC82EAB2121C5A200FC0899 /* AddLocalDirectoryViewController.swift in Sources */,
 				8E4C38D72118291F0089502C /* LibraryTreeController.swift in Sources */,
 				8EAC5F202144A60900E187E0 /* DeviceFolderViewController.swift in Sources */,
 				8EE1AB3D20D05E49001C75B0 /* EventListViewController.swift in Sources */,
 				8EB986B920B30C920075B081 /* CollectionViewItem.swift in Sources */,
+				8EAD03BD23372D5E00AAC7C6 /* ModelStore+Image+Meta.swift in Sources */,
 				8EF4CE5921D77BEA00C53AFF /* ImagePeople.swift in Sources */,
 				8EB986BC20B30C920075B081 /* CollectionViewDelegate.swift in Sources */,
 				8E4B7C1920929EFA00DDD9E0 /* LocationConsumer.swift in Sources */,
@@ -1043,6 +1072,8 @@
 				8E4C38D3211828B00089502C /* EventsTreeController.swift in Sources */,
 				8EF4CE6121E56CF700C53AFF /* ViewControllerUtils.swift in Sources */,
 				8EFA7CFF211F012A00419777 /* PlacesTreeController.swift in Sources */,
+				8EAD03B12337299E00AAC7C6 /* ModelStore+ImageContainer.swift in Sources */,
+				8EAD03B923372C8C00AAC7C6 /* ModelStore+FaceFamily.swift in Sources */,
 				8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */,
 				8E8D47262236733B0091E9C3 /* OneColumnTableViewController.swift in Sources */,
 				8EF4CE6721E6F29100C53AFF /* LCSourceListHeaderView.swift in Sources */,
@@ -1066,6 +1097,7 @@
 				8EB321D720FA433500D8C71D /* Image.swift in Sources */,
 				8EEF071A2256C9D9000520B7 /* DevicePathDetailViewController.swift in Sources */,
 				8E8D471C22315F540091E9C3 /* SingleColumnTableViewController.swift in Sources */,
+				8EAD03AF2337290E00AAC7C6 /* ModelStore+Image.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
