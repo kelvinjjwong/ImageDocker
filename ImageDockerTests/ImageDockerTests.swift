@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import ImageDocker
+//@testable import ImageDocker
 
 class ImageDockerTests: XCTestCase {
     
@@ -24,6 +24,7 @@ class ImageDockerTests: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+        
     }
     
     func testPerformanceExample() {

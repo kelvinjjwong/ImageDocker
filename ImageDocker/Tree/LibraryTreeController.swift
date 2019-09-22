@@ -22,7 +22,7 @@ extension ViewController {
                 let imageFolders = ImageFolderTreeScanner.default.scanImageFolderFromDatabase(fast: fast)
                 
                 print("\(Date()) Adding image folders as tree entries: BEGIN")
-                // TODO: sort containers
+                
                 if imageFolders.count > 0 {
                     DispatchQueue.main.async {
                         for imageFolder:ImageFolder in imageFolders {
@@ -50,6 +50,17 @@ extension ViewController {
                     }
                 }
                 print("\(Date()) Adding image folders as tree entries: DONE")
+                
+                
+                // sort root repositories ascending
+                self.libraryItem().children.sort(by: { (left, right) -> Bool in
+                    if let a1:PXSourceListItem = left as? PXSourceListItem, let a2:PXSourceListItem = right as? PXSourceListItem {
+                        if let c1:PhotoCollection = a1.representedObject as? PhotoCollection, let c2:PhotoCollection = a2.representedObject as? PhotoCollection {
+                            return c1.title < c2.title
+                        }
+                    }
+                    return false
+                })
                 
                 if onCompleted != nil {
                     onCompleted!()
