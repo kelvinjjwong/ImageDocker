@@ -367,6 +367,7 @@ class ImageFolderTreeScanner {
                 let folderUrlsToAdd:[String] = foldersysUrls.subtracting(folderDBUrls).sorted()
                 let folderUrlsToRemoved:Set<String> = folderDBUrls.subtracting(foldersysUrls)
                 
+                // TODO: urlsToAdd should minus those excluded device paths
                 if folderUrlsToAdd.count > 0 {
                     var k = 0
                     let kall = folderUrlsToAdd.count
