@@ -22,6 +22,7 @@ extension ViewController {
                 let imageFolders = ImageFolderTreeScanner.default.scanImageFolderFromDatabase(fast: fast)
                 
                 print("\(Date()) Adding image folders as tree entries: BEGIN")
+                // TODO: sort containers
                 if imageFolders.count > 0 {
                     DispatchQueue.main.async {
                         for imageFolder:ImageFolder in imageFolders {
