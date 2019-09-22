@@ -13,6 +13,8 @@ import GRDB
 
 extension ViewController {
     
+    // MARK: - LOADER
+    
     func loadPathToTreeFromDatabase(fast:Bool = true, onCompleted:( () -> Void )? = nil) {
         print("\(Date()) Loading image folders from db ")
         DispatchQueue.global().async {
@@ -70,7 +72,9 @@ extension ViewController {
         }
     }
     
-    // MARK: REFRESH
+    // TODO: load containers in the same layer only, count children of each container node
+    
+    // MARK: - REFRESH TREE
     
     @objc func refreshLibraryTree(fast:Bool = true) {
         print("\(Date()) REFRESHING LIBRARY TREE")
@@ -103,9 +107,7 @@ extension ViewController {
         })
     }
     
-    // MARK: ADD NODES
-    
-    // TODO: add tree nodes: for root nodes, zero images should be included
+    // MARK: - ADD TREE NODES
     
     fileprivate func addLibraryTreeEntry(imageFolder:ImageFolder) {
         var _parent:PXSourceListItem
@@ -157,7 +159,7 @@ extension ViewController {
                     self.createContainerDetailPopover()
                     self.containerDetailViewController.initView(container, onLoad: { pageSize, pageNumber in
                         print("CALLED ONLOAD \(pageSize) \(pageNumber)")
-                        self.selectImageFolder(imageFolder, pageSize: pageSize, pageNumber: pageNumber, subdirectories: container.manyChildren)
+                        self.loadCollectionByContainer(imageFolder, pageSize: pageSize, pageNumber: pageNumber, subdirectories: container.manyChildren)
                     })
                     
                     let cellRect = sender.bounds
@@ -175,30 +177,9 @@ extension ViewController {
         
     }
     
-    func reloadImageFolder(sender:NSButton) {
-        if let imageFolder = self.selectedImageFolder, let container = imageFolder.containerFolder {
-            self.createCollectionPaginationPopover()
-            self.collectionPaginationViewController
-                .initView(self.imagesLoader.lastRequest,
-                          onCountTotal: {
-                            return ModelStore.default.countImages(repositoryRoot: container.path.withStash())
-                },
-                          onCountHidden: {
-                            return ModelStore.default.countHiddenImages(repositoryRoot: container.path.withStash())
-                },
-                          onLoad: { pageSize, pageNumber in
-                            print("CALLED ONLOAD \(pageSize) \(pageNumber)")
-                            self.selectImageFolder(imageFolder, pageSize: pageSize, pageNumber: pageNumber, subdirectories: container.manyChildren)
-            })
-            
-            let cellRect = sender.bounds
-            self.collectionPaginationPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .minY)
-        }
-    }
+    // MARK: - LOAD COLLECTION
     
-    // MARK: CLICK ACTION, LOAD COLLECTION
-    
-    func selectImageFolder(_ imageFolder:ImageFolder, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){
+    fileprivate func loadCollectionByContainer(_ imageFolder:ImageFolder, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){
         //guard !self.scaningRepositories && !self.creatingRepository else {return}
         self.selectedImageFolder = imageFolder
         //print("selected image folder: \(imageFolder.url.path)")
@@ -233,6 +214,29 @@ extension ViewController {
             }
         }
     }
+    
+    func reloadImageFolder(sender:NSButton) {
+        if let imageFolder = self.selectedImageFolder, let container = imageFolder.containerFolder {
+            self.createCollectionPaginationPopover()
+            self.collectionPaginationViewController
+                .initView(self.imagesLoader.lastRequest,
+                          onCountTotal: {
+                            return ModelStore.default.countImages(repositoryRoot: container.path.withStash())
+                },
+                          onCountHidden: {
+                            return ModelStore.default.countHiddenImages(repositoryRoot: container.path.withStash())
+                },
+                          onLoad: { pageSize, pageNumber in
+                            print("CALLED ONLOAD \(pageSize) \(pageNumber)")
+                            self.loadCollectionByContainer(imageFolder, pageSize: pageSize, pageNumber: pageNumber, subdirectories: container.manyChildren)
+                })
+            
+            let cellRect = sender.bounds
+            self.collectionPaginationPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .minY)
+        }
+    }
+    
+    // MARK: - POPOVER
     
     func createContainerDetailPopover(){
         var myPopover = self.containerDetailPopover
