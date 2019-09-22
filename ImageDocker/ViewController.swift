@@ -673,6 +673,7 @@ class ViewController: NSViewController {
                     
                     print("\(Date()) Loading view - configure tree - reloading tree view")
                     
+                    self.sortLibraryTreeRepositories()
                     self.sourceList.reloadData()
                     self.treeIndicator.isEnabled = false
                     self.treeIndicator.isHidden = true

@@ -54,15 +54,6 @@ extension ViewController {
                 print("\(Date()) Adding image folders as tree entries: DONE")
                 
                 
-                // sort root repositories ascending
-                self.libraryItem().children.sort(by: { (left, right) -> Bool in
-                    if let a1:PXSourceListItem = left as? PXSourceListItem, let a2:PXSourceListItem = right as? PXSourceListItem {
-                        if let c1:PhotoCollection = a1.representedObject as? PhotoCollection, let c2:PhotoCollection = a2.representedObject as? PhotoCollection {
-                            return c1.title < c2.title
-                        }
-                    }
-                    return false
-                })
                 
                 if onCompleted != nil {
                     onCompleted!()
@@ -101,9 +92,23 @@ extension ViewController {
             DispatchQueue.main.async {
                 print("\(Date()) RELOADING SOURCE LIST DATASET: BEGIN")
                 print("EVENT LIBRARY ENTRIES: \(self.libraryItem().hasChildren()) \(self.libraryItem().children?.count ?? 0)")
+                
+                self.sortLibraryTreeRepositories()
                 self.sourceList.reloadData()
                 print("\(Date()) RELOADING SOURCE LIST DATASET: DONE")
             }
+        })
+    }
+    
+    func sortLibraryTreeRepositories() {
+        // sort root repositories ascending
+        self.libraryItem().children.sort(by: { (left, right) -> Bool in
+            if let a1:PXSourceListItem = left as? PXSourceListItem, let a2:PXSourceListItem = right as? PXSourceListItem {
+                if let c1:PhotoCollection = a1.representedObject as? PhotoCollection, let c2:PhotoCollection = a2.representedObject as? PhotoCollection {
+                    return c1.title < c2.title
+                }
+            }
+            return false
         })
     }
     
