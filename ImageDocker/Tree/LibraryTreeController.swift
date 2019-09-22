@@ -179,7 +179,7 @@ extension ViewController {
     
     // MARK: - LOAD COLLECTION
     
-    fileprivate func loadCollectionByContainer(_ imageFolder:ImageFolder, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){
+    internal func loadCollectionByContainer(_ imageFolder:ImageFolder, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){
         //guard !self.scaningRepositories && !self.creatingRepository else {return}
         self.selectedImageFolder = imageFolder
         //print("selected image folder: \(imageFolder.url.path)")
