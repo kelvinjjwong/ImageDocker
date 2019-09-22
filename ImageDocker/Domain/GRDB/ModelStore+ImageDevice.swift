@@ -75,7 +75,7 @@ extension ModelStore {
         return .OK
     }
     
-    // MARK: DEVICE FILES
+    // MARK: - FILES ON DEVICE
     
     func getImportedFile(deviceId:String, file:PhoneFile) -> ImageDeviceFile? {
         var deviceFile:ImageDeviceFile?
@@ -169,7 +169,7 @@ extension ModelStore {
         return result
     }
     
-    // MARK: DEVICE PATHS
+    // MARK: - PATHS ON DEVICE
     
     func getDevicePath(deviceId:String, path:String) -> ImageDevicePath? {
         var devicePath:ImageDevicePath?

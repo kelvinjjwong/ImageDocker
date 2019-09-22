@@ -115,7 +115,7 @@ extension ModelStore {
         return .OK
     }
     
-    // MARK: RELATIONSHIP
+    // MARK: - RELATIONSHIP
     
     func getRelationship(primary:String, secondary:String) -> (String, String) {
         var value1 = ""
@@ -193,7 +193,7 @@ extension ModelStore {
         return obj
     }
     
-    // MARK: PEOPLE
+    // MARK: - PEOPLE
     
     func getPeople() -> [People] {
         var obj:[People] = []

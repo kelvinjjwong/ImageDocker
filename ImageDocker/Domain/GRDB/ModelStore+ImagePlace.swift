@@ -10,8 +10,57 @@ import Foundation
 import GRDB
 
 extension ModelStore {
-    // MARK: - PLACES
     
+    // MARK: - CREATE
+    
+    func getOrCreatePlace(name:String, location:Location) -> ImagePlace{
+        var place:ImagePlace?
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                place = try ImagePlace.fetchOne(db, key: name)
+            }
+            if place == nil {
+                try db.write { db in
+                    place = ImagePlace(
+                        name: name,
+                        country:             location.country,
+                        province:            location.province,
+                        city:                location.city,
+                        district:            location.district,
+                        businessCircle:      location.businessCircle,
+                        street:              location.street,
+                        address:             location.address,
+                        addressDescription:  location.addressDescription,
+                        latitude:            location.coordinate?.latitude.description ?? "",
+                        latitudeBD:          location.coordinateBD?.latitude.description ?? "",
+                        longitude:           location.coordinate?.longitude.description ?? "",
+                        longitudeBD:         location.coordinateBD?.longitude.description ?? "" )
+                    try place?.save(db)
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return place!
+    }
+    
+    // MARK: - GETTER
+    
+    func getPlace(name:String) -> ImagePlace? {
+        var place:ImagePlace?
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                place = try ImagePlace.fetchOne(db, key: name)
+            }
+        }catch{
+            print(error)
+        }
+        return place
+    }
+    
+    // MARK: - SEARCH
     
     func getAllPlaces() -> [ImagePlace] {
         var places:[ImagePlace] = []
@@ -49,52 +98,8 @@ extension ModelStore {
         return result
     }
     
-    func getOrCreatePlace(name:String, location:Location) -> ImagePlace{
-        var place:ImagePlace?
-        do {
-            let db = ModelStore.sharedDBPool()
-            try db.read { db in
-                place = try ImagePlace.fetchOne(db, key: name)
-            }
-            if place == nil {
-                try db.write { db in
-                    place = ImagePlace(
-                        name: name,
-                        country:             location.country,
-                        province:            location.province,
-                        city:                location.city,
-                        district:            location.district,
-                        businessCircle:      location.businessCircle,
-                        street:              location.street,
-                        address:             location.address,
-                        addressDescription:  location.addressDescription,
-                        latitude:            location.coordinate?.latitude.description ?? "",
-                        latitudeBD:          location.coordinateBD?.latitude.description ?? "",
-                        longitude:           location.coordinate?.longitude.description ?? "",
-                        longitudeBD:         location.coordinateBD?.longitude.description ?? "" )
-                    try place?.save(db)
-                }
-            }
-        }catch{
-            print(error)
-        }
-        return place!
-    }
+    // MARK: - UPDATE
     
-    
-    
-    func getPlace(name:String) -> ImagePlace? {
-        var place:ImagePlace?
-        do {
-            let db = ModelStore.sharedDBPool()
-            try db.read { db in
-                place = try ImagePlace.fetchOne(db, key: name)
-            }
-        }catch{
-            print(error)
-        }
-        return place
-    }
     
     func renamePlace(oldName:String, newName:String) -> ExecuteState{
         print("trying to rename place from \(oldName) to \(newName)")
@@ -158,6 +163,8 @@ extension ModelStore {
         }
         return .OK
     }
+    
+    // MARK: - DELETE
     
     func deletePlace(name:String) -> ExecuteState{
         do {

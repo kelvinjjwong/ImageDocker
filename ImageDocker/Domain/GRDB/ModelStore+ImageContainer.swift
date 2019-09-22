@@ -10,7 +10,128 @@ import Foundation
 import GRDB
 
 extension ModelStore {
-    // MARK: - CONTAINERS
+    // MARK: - CREATE
+    
+    func getOrCreateContainer(name:String,
+                              path:String,
+                              parentPath parentFolder:String = "",
+                              repositoryPath:String,
+                              homePath:String,
+                              storagePath:String,
+                              facePath:String,
+                              cropPath:String,
+                              subPath:String,
+                              manyChildren:Bool = false,
+                              hideByParent:Bool = false,
+                              sharedDB:DatabaseWriter? = nil) -> ImageContainer {
+        var container:ImageContainer?
+        do {
+            let db = try sharedDB ?? DatabaseQueue(path: dbfile)
+            try db.read { db in
+                container = try ImageContainer.fetchOne(db, key: path)
+            }
+            if container == nil {
+                let queue = try sharedDB ?? DatabaseQueue(path: dbfile)
+                try queue.write { db in
+                    container = ImageContainer(name: name,
+                                               parentFolder: parentFolder,
+                                               path: path,
+                                               imageCount: 0,
+                                               repositoryPath: repositoryPath,
+                                               homePath: homePath,
+                                               storagePath: storagePath,
+                                               facePath: facePath,
+                                               cropPath: cropPath,
+                                               subPath: subPath,
+                                               parentPath: parentFolder.replacingFirstOccurrence(of: repositoryPath.withStash(), with: ""),
+                                               hiddenByRepository: false,
+                                               hiddenByContainer: false,
+                                               deviceId: "",
+                                               manyChildren: manyChildren,
+                                               hideByParent: hideByParent
+                    )
+                    try container?.save(db)
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return container!
+    }
+    
+    // MARK: - DELETE
+    
+    func deleteContainer(path: String) -> ExecuteState {
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try db.execute("DELETE FROM ImageContainer WHERE path LIKE '\(path.withStash())%'")
+                try db.execute("DELETE FROM Image WHERE path LIKE '\(path.withStash())%'")
+            }
+        }catch{
+            return self.errorState(error)
+        }
+        return .OK
+    }
+    
+    func deleteRepository(repositoryRoot:String) -> ExecuteState{
+        do {
+            let db = ModelStore.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute("delete from ImageContainer where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
+                try db.execute("delete from Image where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
+            }
+        }catch{
+            return self.errorState(error)
+        }
+        return .OK
+    }
+    
+    // MARK: - GETTER
+    
+    func getContainer(path:String) -> ImageContainer? {
+        var result:ImageContainer?
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try ImageContainer.filter(sql: "path=?", arguments: StatementArguments([path])).fetchOne(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func getRepository(repositoryPath:String) -> ImageContainer? {
+        var result:ImageContainer? = nil
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try ImageContainer.filter(sql: "repositoryPath = ? and parentFolder=''", arguments: [repositoryPath]).fetchOne(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+        
+    }
+    
+    // MARK: - SEARCH
+    
+    func getRepositories() -> [ImageContainer] {
+        var result:[ImageContainer] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                result = try ImageContainer.filter(sql: "parentFolder=''").order(Column("path").asc).fetchAll(db)
+                print(result.count)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+        
+    }
     
     func getAllContainers() -> [ImageContainer] {
         var containers:[ImageContainer] = []
@@ -26,38 +147,12 @@ extension ModelStore {
         return containers
     }
     
-    func deleteContainer(path: String) -> ExecuteState {
-        do {
-            let db = ModelStore.sharedDBPool()
-            try db.write { db in
-                try db.execute("DELETE FROM ImageContainer WHERE path LIKE '\(path.withStash())%'")
-                try db.execute("DELETE FROM Image WHERE path LIKE '\(path.withStash())%'")
-            }
-        }catch{
-            return self.errorState(error)
-        }
-        return .OK
-    }
-    
     func getContainers(rootPath:String) -> [ImageContainer] {
         var result:[ImageContainer] = []
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
                 result = try ImageContainer.filter(Column("path").like("\(rootPath.withStash())%")).fetchAll(db)
-            }
-        }catch{
-            print(error)
-        }
-        return result
-    }
-    
-    func getContainer(path:String) -> ImageContainer? {
-        var result:ImageContainer?
-        do {
-            let db = ModelStore.sharedDBPool()
-            try db.read { db in
-                result = try ImageContainer.filter(sql: "path=?", arguments: StatementArguments([path])).fetchOne(db)
             }
         }catch{
             print(error)
@@ -111,6 +206,23 @@ extension ModelStore {
         return result
     }
     
+    // MARK: - UPDATE SINGLE
+    
+    func saveImageContainer(container:ImageContainer) -> ExecuteState{
+        var container = container
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try container.save(db)
+            }
+        }catch{
+            return self.errorState(error)
+        }
+        return .OK
+    }
+    
+    // MARK: - UPDATE
+    
     func updateImageContainerParentFolder(path:String, parentFolder:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
@@ -128,95 +240,6 @@ extension ModelStore {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update ImageContainer set hideByParent = \(hideByParent ? 1 : 0) where path = ?", arguments: [path])
-            }
-        }catch{
-            return self.errorState(error)
-        }
-        return .OK
-    }
-    
-    func getOrCreateContainer(name:String,
-                              path:String,
-                              parentPath parentFolder:String = "",
-                              repositoryPath:String,
-                              homePath:String,
-                              storagePath:String,
-                              facePath:String,
-                              cropPath:String,
-                              subPath:String,
-                              manyChildren:Bool = false,
-                              hideByParent:Bool = false,
-                              sharedDB:DatabaseWriter? = nil) -> ImageContainer {
-        var container:ImageContainer?
-        do {
-            let db = try sharedDB ?? DatabaseQueue(path: dbfile)
-            try db.read { db in
-                container = try ImageContainer.fetchOne(db, key: path)
-            }
-            if container == nil {
-                let queue = try sharedDB ?? DatabaseQueue(path: dbfile)
-                try queue.write { db in
-                    container = ImageContainer(name: name,
-                                               parentFolder: parentFolder,
-                                               path: path,
-                                               imageCount: 0,
-                                               repositoryPath: repositoryPath,
-                                               homePath: homePath,
-                                               storagePath: storagePath,
-                                               facePath: facePath,
-                                               cropPath: cropPath,
-                                               subPath: subPath,
-                                               parentPath: parentFolder.replacingFirstOccurrence(of: repositoryPath.withStash(), with: ""),
-                                               hiddenByRepository: false,
-                                               hiddenByContainer: false,
-                                               deviceId: "",
-                                               manyChildren: manyChildren,
-                                               hideByParent: hideByParent
-                    )
-                    try container?.save(db)
-                }
-            }
-        }catch{
-            print(error)
-        }
-        return container!
-    }
-    
-    func getRepositories() -> [ImageContainer] {
-        var result:[ImageContainer] = []
-        do {
-            let db = ModelStore.sharedDBPool()
-            try db.read { db in
-                result = try ImageContainer.filter(sql: "parentFolder=''").order(Column("path").asc).fetchAll(db)
-                print(result.count)
-            }
-        }catch{
-            print(error)
-        }
-        return result
-        
-    }
-    
-    func getRepository(repositoryPath:String) -> ImageContainer? {
-        var result:ImageContainer? = nil
-        do {
-            let db = ModelStore.sharedDBPool()
-            try db.read { db in
-                result = try ImageContainer.filter(sql: "repositoryPath = ? and parentFolder=''", arguments: [repositoryPath]).fetchOne(db)
-            }
-        }catch{
-            print(error)
-        }
-        return result
-        
-    }
-    
-    func saveImageContainer(container:ImageContainer) -> ExecuteState{
-        var container = container
-        do {
-            let db = ModelStore.sharedDBPool()
-            try db.write { db in
-                try container.save(db)
             }
         }catch{
             return self.errorState(error)
@@ -261,6 +284,8 @@ extension ModelStore {
         }
         return .OK
     }
+    
+    // MARK: - SHOW HIDE
     
     func hideContainer(path:String) -> ExecuteState{
         do {
@@ -312,19 +337,6 @@ extension ModelStore {
                 try db.execute("update ImageContainer set hiddenByRepository = 0 where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
                 try db.execute("update Image set hiddenByRepository = 0 where path like ?", arguments: ["\(repositoryRoot.withStash())%"])
                 try db.execute("update Image set hiddenByRepository = 0 where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
-            }
-        }catch{
-            return self.errorState(error)
-        }
-        return .OK
-    }
-    
-    func deleteRepository(repositoryRoot:String) -> ExecuteState{
-        do {
-            let db = ModelStore.sharedDBPool()
-            let _ = try db.write { db in
-                try db.execute("delete from ImageContainer where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
-                try db.execute("delete from Image where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
             }
         }catch{
             return self.errorState(error)

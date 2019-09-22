@@ -10,7 +10,29 @@ import Foundation
 import GRDB
 
 extension ModelStore {
-    // MARK: - EVENTS
+    
+    // MARK: - CREATE
+    
+    func getOrCreateEvent(name:String) -> ImageEvent{
+        var event:ImageEvent?
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                event = try ImageEvent.fetchOne(db, key: name)
+            }
+            if event == nil {
+                try db.write { db in
+                    event = ImageEvent(name: name)
+                    try event?.save(db)
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return event!
+    }
+    
+    // MARK: - SEARCH
     
     func getAllEvents() -> [ImageEvent] {
         var events:[ImageEvent] = []
@@ -48,37 +70,29 @@ extension ModelStore {
         return result
     }
     
-    func getOrCreateEvent(name:String) -> ImageEvent{
-        var event:ImageEvent?
+    func getAllEvents(imageSource:[String]? = nil, cameraModel:[String]? = nil) -> [Row] {
+        var sqlArgs:[Any] = []
+        var imageSourceWhere = ""
+        var cameraModelWhere = ""
+        inArray(field: "imageSource", array: imageSource, where: &imageSourceWhere, args: &sqlArgs)
+        inArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs)
+        
+        let sql = "SELECT event, photoTakenYear, photoTakenMonth, photoTakenDay, place, count(path) as photoCount FROM Image WHERE 1=1 \(imageSourceWhere) \(cameraModelWhere) GROUP BY event, photoTakenYear,photoTakenMonth,photoTakenDay,place ORDER BY event DESC,photoTakenYear DESC,photoTakenMonth DESC,photoTakenDay DESC,place"
+        print(sql)
+        var result:[Row] = []
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
-                event = try ImageEvent.fetchOne(db, key: name)
-            }
-            if event == nil {
-                try db.write { db in
-                    event = ImageEvent(name: name)
-                    try event?.save(db)
-                }
+                result = try Row.fetchAll(db, sql, arguments:StatementArguments(sqlArgs))
             }
         }catch{
             print(error)
         }
-        return event!
+        return result
+        
     }
     
-    func deleteEvent(name:String) -> ExecuteState{
-        do {
-            let db = ModelStore.sharedDBPool()
-            try db.write { db in
-                try ImageEvent.deleteOne(db, key: name)
-                try db.execute("UPDATE Image SET event='' WHERE event=?", arguments: StatementArguments([name]))
-            }
-        }catch{
-            return self.errorState(error)
-        }
-        return .OK
-    }
+    // MARK: - UPDATE
     
     func renameEvent(oldName:String, newName:String) -> ExecuteState{
         print("RENAME EVENT \(oldName) to \(newName)")
@@ -101,27 +115,18 @@ extension ModelStore {
         return .OK
     }
     
-    // MARK: EVENTS - TREE
+    // MARK: - DELETE
     
-    func getAllEvents(imageSource:[String]? = nil, cameraModel:[String]? = nil) -> [Row] {
-        var sqlArgs:[Any] = []
-        var imageSourceWhere = ""
-        var cameraModelWhere = ""
-        inArray(field: "imageSource", array: imageSource, where: &imageSourceWhere, args: &sqlArgs)
-        inArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs)
-        
-        let sql = "SELECT event, photoTakenYear, photoTakenMonth, photoTakenDay, place, count(path) as photoCount FROM Image WHERE 1=1 \(imageSourceWhere) \(cameraModelWhere) GROUP BY event, photoTakenYear,photoTakenMonth,photoTakenDay,place ORDER BY event DESC,photoTakenYear DESC,photoTakenMonth DESC,photoTakenDay DESC,place"
-        print(sql)
-        var result:[Row] = []
+    func deleteEvent(name:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
-            try db.read { db in
-                result = try Row.fetchAll(db, sql, arguments:StatementArguments(sqlArgs))
+            try db.write { db in
+                try ImageEvent.deleteOne(db, key: name)
+                try db.execute("UPDATE Image SET event='' WHERE event=?", arguments: StatementArguments([name]))
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
-        return result
-        
+        return .OK
     }
 }

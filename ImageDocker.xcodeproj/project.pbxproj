@@ -86,6 +86,10 @@
 		8EAD03B923372C8C00AAC7C6 /* ModelStore+FaceFamily.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B823372C8C00AAC7C6 /* ModelStore+FaceFamily.swift */; };
 		8EAD03BB23372CF100AAC7C6 /* ModelStore+VersionMigrate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03BA23372CF100AAC7C6 /* ModelStore+VersionMigrate.swift */; };
 		8EAD03BD23372D5E00AAC7C6 /* ModelStore+Image+Meta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03BC23372D5E00AAC7C6 /* ModelStore+Image+Meta.swift */; };
+		8EB271512337B6E4003BF3AF /* ModelStore+Image+Duplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271502337B6E4003BF3AF /* ModelStore+Image+Duplicate.swift */; };
+		8EB271532337B768003BF3AF /* ModelStore+Image+Statistic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271522337B768003BF3AF /* ModelStore+Image+Statistic.swift */; };
+		8EB271552337B8BC003BF3AF /* ModelStore+Image+Update.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271542337B8BC003BF3AF /* ModelStore+Image+Update.swift */; };
+		8EB271572337B9C3003BF3AF /* ModelStore+Image+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271562337B9C3003BF3AF /* ModelStore+Image+Search.swift */; };
 		8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CC20FA42AB00D8C71D /* Duplicate.swift */; };
 		8EB321CF20FA42C700D8C71D /* ModelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CE20FA42C700D8C71D /* ModelStore.swift */; };
 		8EB321D420FA433500D8C71D /* ImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321D020FA433500D8C71D /* ImageContainer.swift */; };
@@ -266,6 +270,10 @@
 		8EAD03B823372C8C00AAC7C6 /* ModelStore+FaceFamily.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+FaceFamily.swift"; sourceTree = "<group>"; };
 		8EAD03BA23372CF100AAC7C6 /* ModelStore+VersionMigrate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+VersionMigrate.swift"; sourceTree = "<group>"; };
 		8EAD03BC23372D5E00AAC7C6 /* ModelStore+Image+Meta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+Image+Meta.swift"; sourceTree = "<group>"; };
+		8EB271502337B6E4003BF3AF /* ModelStore+Image+Duplicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+Image+Duplicate.swift"; sourceTree = "<group>"; };
+		8EB271522337B768003BF3AF /* ModelStore+Image+Statistic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+Image+Statistic.swift"; sourceTree = "<group>"; };
+		8EB271542337B8BC003BF3AF /* ModelStore+Image+Update.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+Image+Update.swift"; sourceTree = "<group>"; };
+		8EB271562337B9C3003BF3AF /* ModelStore+Image+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+Image+Search.swift"; sourceTree = "<group>"; };
 		8EB321CC20FA42AB00D8C71D /* Duplicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Duplicate.swift; sourceTree = "<group>"; };
 		8EB321CE20FA42C700D8C71D /* ModelStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelStore.swift; sourceTree = "<group>"; };
 		8EB321D020FA433500D8C71D /* ImageContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageContainer.swift; path = ImageDocker/Domain/GRDB/ImageContainer.swift; sourceTree = SOURCE_ROOT; };
@@ -486,6 +494,10 @@
 			children = (
 				8EB321CE20FA42C700D8C71D /* ModelStore.swift */,
 				8EAD03AE2337290E00AAC7C6 /* ModelStore+Image.swift */,
+				8EB271562337B9C3003BF3AF /* ModelStore+Image+Search.swift */,
+				8EB271542337B8BC003BF3AF /* ModelStore+Image+Update.swift */,
+				8EB271522337B768003BF3AF /* ModelStore+Image+Statistic.swift */,
+				8EB271502337B6E4003BF3AF /* ModelStore+Image+Duplicate.swift */,
 				8EAD03BC23372D5E00AAC7C6 /* ModelStore+Image+Meta.swift */,
 				8EAD03B02337299E00AAC7C6 /* ModelStore+ImageContainer.swift */,
 				8EAD03B223372BC800AAC7C6 /* ModelStore+ImagePlace.swift */,
@@ -1032,6 +1044,7 @@
 				8E8D47222233DCD30091E9C3 /* DictionaryTableViewController.swift in Sources */,
 				8EAD03BB23372CF100AAC7C6 /* ModelStore+VersionMigrate.swift in Sources */,
 				8EFA7CF9211A36F700419777 /* DeviceCopyViewController.swift in Sources */,
+				8EB271552337B8BC003BF3AF /* ModelStore+Image+Update.swift in Sources */,
 				8EBA9DE32173C8F000DACAAD /* TheaterViewController.swift in Sources */,
 				8E4C38CD2117B5340089502C /* Phone.swift in Sources */,
 				8EAD03B323372BC800AAC7C6 /* ModelStore+ImagePlace.swift in Sources */,
@@ -1052,6 +1065,7 @@
 				8E8D471022213A330091E9C3 /* PeopleFace.swift in Sources */,
 				8E73E382223E494C00C14A90 /* ExecutionEnvironment.swift in Sources */,
 				8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */,
+				8EB271532337B768003BF3AF /* ModelStore+Image+Statistic.swift in Sources */,
 				8E98B8F720D6044900771280 /* Event.swift in Sources */,
 				8E4C38D12117B56A0089502C /* IPHONE.swift in Sources */,
 				8EB321D520FA433500D8C71D /* ImagePlace.swift in Sources */,
@@ -1089,6 +1103,7 @@
 				8E4C38D5211828FF0089502C /* MomentsTreeController.swift in Sources */,
 				8EC20B322281C0B8000F4819 /* FaceTask.swift in Sources */,
 				8E3EC3B4214DB1B8004B6125 /* LunarSolarConverter.swift in Sources */,
+				8EB271572337B9C3003BF3AF /* ModelStore+Image+Search.swift in Sources */,
 				8EBA9DDF216F8BB100DACAAD /* NotesViewController.swift in Sources */,
 				8EEF0728226215E7000520B7 /* SplashViewController.swift in Sources */,
 				8E2CF37620AED6BA00A93375 /* Model.xcdatamodeld in Sources */,
@@ -1098,6 +1113,7 @@
 				8EEF071A2256C9D9000520B7 /* DevicePathDetailViewController.swift in Sources */,
 				8E8D471C22315F540091E9C3 /* SingleColumnTableViewController.swift in Sources */,
 				8EAD03AF2337290E00AAC7C6 /* ModelStore+Image.swift in Sources */,
+				8EB271512337B6E4003BF3AF /* ModelStore+Image+Duplicate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

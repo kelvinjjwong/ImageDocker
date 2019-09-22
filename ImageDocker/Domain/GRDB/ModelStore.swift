@@ -25,6 +25,8 @@ class ModelStore {
     
     static let `default` = ModelStore()
     
+    var _duplicates:Duplicates? = nil
+    
     init(){
         self.checkDatabase()
         self.versionCheck()
@@ -51,8 +53,7 @@ class ModelStore {
         return _sharedDBPool!
     }
     
-//    fileprivate let debug_pass_at = 2
-//    fileprivate var debug_attempt = 0
+    // MARK: - HEALTH CHECK
     
     func testDatabase() -> (Bool, Error?) {
         if ModelStore._sharedDBPool == nil {
@@ -81,7 +82,30 @@ class ModelStore {
         }
     }
     
-    // MARK: - COMMONS
+    func checkDatabase() {
+        let dbpath = URL(fileURLWithPath: dbfile).deletingLastPathComponent().path
+        if !FileManager.default.fileExists(atPath: dbpath) {
+            do {
+                try FileManager.default.createDirectory(atPath: dbpath, withIntermediateDirectories: true, attributes: nil)
+            }catch{
+                print("Unable to create directory for database file")
+                print(error)
+            }
+        }
+    }
+    
+    // MARK: - HELPER
+    
+    internal func errorState(_ error:Error) -> ExecuteState {
+        print(error)
+        if error.localizedDescription.starts(with: "SQLite error") {
+            if error.localizedDescription.hasSuffix("database is locked") {
+                return .DATABASE_LOCKED
+            }
+            return .ERROR
+        }
+        return .NON_SQL_ERROR
+    }
     
     internal func inArray(field:String, array:[Any]?, where whereStmt:inout String, args sqlArgs:inout [Any]){
         if let array = array {
@@ -111,21 +135,6 @@ class ModelStore {
         }
         return ""
     }
-    
-    internal func errorState(_ error:Error) -> ExecuteState {
-        print(error)
-        if error.localizedDescription.starts(with: "SQLite error") {
-            if error.localizedDescription.hasSuffix("database is locked") {
-                return .DATABASE_LOCKED
-            }
-            return .ERROR
-        }
-        return .NON_SQL_ERROR
-    }
-    
-    // MARK: - Duplicates
-    
-    var _duplicates:Duplicates? = nil
     
     internal func joinArrayToStatementCondition(values:[String], field:String, like:Bool = false) -> String {
         var statement = ""
@@ -175,17 +184,5 @@ class ModelStore {
             }
         }
         return statement
-    }
-    
-    func checkDatabase() {
-        let dbpath = URL(fileURLWithPath: dbfile).deletingLastPathComponent().path
-        if !FileManager.default.fileExists(atPath: dbpath) {
-            do {
-                try FileManager.default.createDirectory(atPath: dbpath, withIntermediateDirectories: true, attributes: nil)
-            }catch{
-                print("Unable to create directory for database file")
-                print(error)
-            }
-        }
     }
 }
