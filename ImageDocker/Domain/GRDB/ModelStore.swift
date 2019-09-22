@@ -83,7 +83,7 @@ class ModelStore {
     
     // MARK: - COMMONS
     
-    fileprivate func inArray(field:String, array:[Any]?, where whereStmt:inout String, args sqlArgs:inout [Any]){
+    private func inArray(field:String, array:[Any]?, where whereStmt:inout String, args sqlArgs:inout [Any]){
         if let array = array {
             if array.count > 0 {
                 let marks = repeatElement("?", count: array.count).joined(separator: ",")
@@ -93,7 +93,7 @@ class ModelStore {
         }
     }
     
-    fileprivate func likeArray(field:String, array:[Any]?, wildcardPrefix:Bool = true, wildcardSuffix:Bool = true) -> String{
+    private func likeArray(field:String, array:[Any]?, wildcardPrefix:Bool = true, wildcardSuffix:Bool = true) -> String{
         if let array = array {
             if array.count > 0 {
                 var stmts:[String] = []
@@ -112,7 +112,7 @@ class ModelStore {
         return ""
     }
     
-    fileprivate func errorState(_ error:Error) -> ExecuteState {
+    private func errorState(_ error:Error) -> ExecuteState {
         print(error)
         if error.localizedDescription.starts(with: "SQLite error") {
             if error.localizedDescription.hasSuffix("database is locked") {
@@ -791,7 +791,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     // MARK: IMAGES GET BY COLLECTION
     
     // sql by date & place
-    fileprivate func generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String, String, [Any]) {
+    private func generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String, String, [Any]) {
         
         print("\(year) | \(month) | \(day) | ignoreDate:\(ignoreDate) | \(country) | \(province) | \(city)")
         
@@ -913,7 +913,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     }
     
     // sql by date & event & place
-    fileprivate func generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String, String, [Any]) {
+    private func generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String, String, [Any]) {
         
         print("\(year) | \(month) | \(day) | event:\(event) | \(country) | \(province) | \(city)")
         
@@ -977,7 +977,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
-    fileprivate func joinArrayToStatementCondition(values:[String], field:String, like:Bool = false) -> String {
+    private func joinArrayToStatementCondition(values:[String], field:String, like:Bool = false) -> String {
         var statement = ""
         if values.count > 0 {
             for i in 0..<values.count {
@@ -995,7 +995,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return statement
     }
     
-    fileprivate func joinArrayToStatementCondition(values:[Int], field:String) -> String {
+    private func joinArrayToStatementCondition(values:[Int], field:String) -> String {
         var statement = ""
         if values.count > 0 {
             for i in 0..<values.count {
@@ -1009,7 +1009,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return statement
     }
     
-    fileprivate func joinStatementConditions(conditions:[String], or:Bool = false) -> String {
+    private func joinStatementConditions(conditions:[String], or:Bool = false) -> String {
         var statement = ""
         for i in 0..<conditions.count {
             let subStatement = conditions[i]
@@ -3010,7 +3010,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     // MARK: - SCHEMA VERSION MIGRATION
     
-    fileprivate func versionCheck(){
+    private func versionCheck(){
         var migrator = DatabaseMigrator()
         
         migrator.registerMigration("v1") { db in
@@ -3412,140 +3412,6 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 print("Unable to create directory for database file")
                 print(error)
             }
-        }
-    }
-    
-    func checkData(){
-        
-        do {
-            let dbQueue = try DatabaseQueue(path: dbfile)
-            var containerCount:Int = -1
-            var eventCount:Int = -1
-            var placeCount:Int = -1
-            var imageCount:Int = -1
-            var cdContainer:Bool = false
-            var cdEvent:Bool = false
-            var cdPlace:Bool = false
-            var cdImage:Bool = false
-            try dbQueue.read { db in
-                cdContainer = try db.tableExists("ZCONTAINERFOLDER")
-                cdEvent = try db.tableExists("ZPHOTOEVENT")
-                cdPlace = try db.tableExists("ZPHOTOPLACE")
-                cdImage = try db.tableExists("ZPHOTOFILE")
-                if cdContainer {
-                    containerCount = try ImageContainer.fetchCount(db)
-                }
-                if cdEvent {
-                    eventCount = try ImageEvent.fetchCount(db)
-                }
-                if cdPlace {
-                    placeCount = try ImagePlace.fetchCount(db)
-                }
-                if cdImage {
-                    imageCount = try Image.fetchCount(db)
-                }
-            }
-            
-            if containerCount == 0 {
-                self.cloneImageContainersFromCoreDate()
-            }
-            
-            if eventCount == 0 {
-                self.cloneImageEventsFromCoreDate()
-            }
-            
-            if placeCount == 0 {
-                self.cloneImagePlacesFromCoreDate()
-            }
-            
-            if imageCount == 0 {
-                self.cloneImagesFromCoreDate()
-            }
-            
-            
-        }catch{
-            print(error)
-        }
-    }
-    
-    fileprivate func cloneImageContainersFromCoreDate(){
-        do {
-            let dbQueue = try DatabaseQueue(path: dbfile)
-            try dbQueue.write { db in
-                try db.execute("INSERT INTO ImageContainer (PATH, NAME, PARENTFOLDER, IMAGECOUNT) SELECT ZPATH, ZNAME, ZPARENTFOLDER, ZIMAGECOUNT FROM ZCONTAINERFOLDER")
-            }
-        }catch{
-            print(error)
-        }
-    }
-    
-    fileprivate func cloneImageEventsFromCoreDate(){
-        do {
-            let dbQueue = try DatabaseQueue(path: dbfile)
-            try dbQueue.write { db in
-                try db.execute("""
-INSERT INTO ImageEvent (NAME, STARTDATE, STARTYEAR, STARTMONTH, STARTDAY, ENDDATE,ENDYEAR, ENDMONTH, ENDDAY)
-SELECT ZNAME, DATETIME(ZSTARTDATE + 978307200, 'unixepoch'), ZSTARTYEAR, ZSTARTMONTH, ZSTARTDAY,
-DATETIME(ZENDDATE + 978307200, 'unixepoch'),ZENDYEAR, ZENDMONTH, ZENDDAY FROM ZPHOTOEVENT
-""")
-            }
-        }catch{
-            print(error)
-        }
-    }
-    
-    fileprivate func cloneImagePlacesFromCoreDate(){
-        do {
-            let dbQueue = try DatabaseQueue(path: dbfile)
-            try dbQueue.write { db in
-                try db.execute("INSERT INTO ImagePlace (NAME, LATITUDE, LATITUDEBD, LONGITUDE, LONGITUDEBD, COUNTRY, PROVINCE, CITY, DISTRICT, BUSINESSCIRCLE, STREET, ADDRESS, ADDRESSDESCRIPTION) SELECT ZNAME, ZLATITUDE, ZLATITUDEBD, ZLONGITUDE, ZLONGITUDEBD, ZCOUNTRY, ZPROVINCE, ZCITY, ZDISTRICT, ZBUSINESSCIRCLE, ZSTREET, ZADDRESS, ZADDRESSDESCRIPTION FROM ZPHOTOPLACE ORDER BY ZCOUNTRY,ZPROVINCE,ZCITY,ZNAME")
-            }
-        }catch{
-            print(error)
-        }
-    }
-    
-    fileprivate func cloneImagesFromCoreDate(){
-        do {
-            let dbQueue = try DatabaseQueue(path: dbfile)
-            try dbQueue.write { db in
-                try db.execute("""
-INSERT INTO Image (addDate, address, addressDescription, aperture, assignAddress, assignAddressDescription, assignBusinessCircle, assignCity, assignCountry, assignDateTime, assignDistrict, assignLatitude, assignLatitudeBD, assignLongitude, assignLongitudeBD, assignPlace, assignProvince, assignStreet, audioBits, audioChannels, audioRate, businessCircle, cameraMaker, cameraModel, city, containerPath, country, dateTimeFromFilename, district, event, exifCreateDate, exifDateTimeOriginal, exifModifyDate, exportAsFilename, exportTime, exportToPath, exposureTime, filename, filenameDate, fileSize, filesysCreateDate, gpsDate, hidden, hideForSourceFilename, imageHeight, imageSource, imageWidth, iso, latitude, latitudeBD, longitude, longitudeBD, path, photoDescription, photoTakenDate, photoTakenDay, photoTakenHour, photoTakenMonth, photoTakenYear, place, province, rotation, softwareModifiedTime, softwareName, street, suggestPlace, trackCreateDate, trackModifyDate, updateDateTimeDate, updateEventDate, updateExifDate, updateLocationDate, updatePhotoTakenDate, videoBitRate, videoCreateDate, videoDuration, videoFormat, videoFrameRate, videoModifyDate)
-SELECT
-DATETIME(zaddDate + 978307200, 'unixepoch'),
-zaddress, zaddressDescription, zaperture, zassignAddress, zassignAddressDescription, zassignBusinessCircle, zassignCity, zassignCountry, zassignDateTime, zassignDistrict, zassignLatitude, zassignLatitudeBD, zassignLongitude, zassignLongitudeBD, zassignPlace, zassignProvince, zassignStreet, zaudioBits, zaudioChannels, zaudioRate, zbusinessCircle, zcameraMaker, zcameraModel, zcity, zcontainerPath, zcountry,zdateTimeFromFilename,zdistrict, zevent,
-DATETIME(zexifCreateDate + 978307200, 'unixepoch'),
-DATETIME(zexifDateTimeOriginal + 978307200, 'unixepoch'),
-DATETIME(zexifModifyDate + 978307200, 'unixepoch'),
-zexportAsFilename,
-DATETIME(zexportTime + 978307200, 'unixepoch'),
-zexportToPath, zexposureTime, zfilename,
-DATETIME(zfilenameDate + 978307200, 'unixepoch'),
-zfileSize,
-DATETIME(zfilesysCreateDate + 978307200, 'unixepoch'),
-zgpsDate,
-IFNULL(zhidden,0),
-zhideForSourceFilename, zimageHeight, zimageSource, zimageWidth, ziso, zlatitude, zlatitudeBD, zlongitude, zlongitudeBD, zpath, zphotoDescription,
-DATETIME(zphotoTakenDate + 978307200, 'unixepoch'),
-zphotoTakenDay, zphotoTakenHour, zphotoTakenMonth, zphotoTakenYear, zplace, zprovince, zrotation,
-DATETIME(zsoftwareModifiedTime + 978307200, 'unixepoch'),
-zsoftwareName, zstreet, zsuggestPlace,
-DATETIME(ztrackCreateDate + 978307200, 'unixepoch'),
-DATETIME(ztrackModifyDate + 978307200, 'unixepoch'),
-DATETIME(zupdateDateTimeDate + 978307200, 'unixepoch'),
-DATETIME(zupdateEventDate + 978307200, 'unixepoch'),
-DATETIME(zupdateExifDate + 978307200, 'unixepoch'),
-DATETIME(zupdateLocationDate + 978307200, 'unixepoch'),
-DATETIME(zupdatePhotoTakenDate + 978307200, 'unixepoch'),
-zvideoBitRate,
-DATETIME(zvideoCreateDate + 978307200, 'unixepoch'),
-zvideoDuration, zvideoFormat, zvideoFrameRate,
-DATETIME(zvideoModifyDate + 978307200, 'unixepoch')
-FROM ZPHOTOFILE order by zpath
-""")
-            }
-        }catch{
-            print(error)
         }
     }
 }

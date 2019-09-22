@@ -599,7 +599,6 @@ class ViewController: NSViewController {
         self.addChildViewController(splashController)
         
         print("\(Date()) Loading view")
-        //ModelStore.default.checkData() // no need anymore
         
         //self.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
