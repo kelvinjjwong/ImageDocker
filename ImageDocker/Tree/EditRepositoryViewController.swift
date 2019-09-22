@@ -1352,6 +1352,8 @@ class EditRepositoryViewController: NSViewController {
             let state = ModelStore.default.saveImageContainer(container: repo)
             if state != .OK {
                 self.lblMessage.stringValue = "\(state) - Unable to link repository with device in database."
+            }else{
+                self.lblMessage.stringValue = "\(state) - Updated link between repository and device [\(deviceId)]."
             }
         }
     }

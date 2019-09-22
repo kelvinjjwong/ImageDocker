@@ -39,10 +39,10 @@ extension ViewController {
                                         // parent has many children
                                         // ignore this one
                                     }
-                                }else{ // no parent
-                                    if imageFolder.countOfImages > 0 {
+                                }else{ // no parent, is a root node, even if it has no images
+                                    //if imageFolder.countOfImages > 0 {
                                         self.addLibraryTreeEntry(imageFolder: imageFolder)
-                                    }
+                                    //}
                                 }
                             }
                         }
@@ -93,12 +93,25 @@ extension ViewController {
     
     // MARK: ADD NODES
     
+    // TODO: add tree nodes: for root nodes, zero images should be included
+    
     fileprivate func addLibraryTreeEntry(imageFolder:ImageFolder) {
         var _parent:PXSourceListItem
         if imageFolder.parent == nil {
             _parent = self.libraryItem() //self.librarySectionOfTree!
         }else{
-            _parent = self.identifiersOfLibraryTree[(imageFolder.parent?.url.path)!]!
+            if let parent = imageFolder.parent {
+                let path = parent.url.path
+                if let p = self.identifiersOfLibraryTree[path] {
+                    _parent = p
+                }else{
+                    print("ERROR: NULL returned from identifiersOfLibraryTree with argument [\(path)]")
+                    return
+                }
+            }else{
+                print("ERROR: NULL returned from imageFolder.parent, imageFolder is \(imageFolder.url.path)")
+                return
+            }
         }
         
         let collection:PhotoCollection = PhotoCollection(title: imageFolder.name,
