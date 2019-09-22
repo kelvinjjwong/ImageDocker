@@ -242,4 +242,33 @@ extension ModelStore {
         }
         return result
     }
+    
+    func getExcludedImportedContainerPaths(withStash:Bool = false) -> Set<String>{
+        let sql = """
+select distinct (d.repositoryPath || '/' || p.tosubfolder) path from imagedevicepath p
+left join (select deviceid,repositorypath from imagedevice where repositorypath is not null) d
+on p.deviceId=d.deviceId
+where p.excludeimported=1
+"""
+        var results:Set<String> = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, sql)
+                for row in rows {
+                    if let path = row["path"] as String? {
+                        if withStash {
+                            results.insert(path.withStash())
+                        }else{
+                            results.insert(path)
+                        }
+                    }
+                }
+            }
+        }catch{
+            print(error)
+        }
+        
+        return results
+    }
 }

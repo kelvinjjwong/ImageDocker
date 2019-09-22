@@ -53,6 +53,8 @@ class ImageFolderTreeScanner {
     }
     
     func scanImageFolderFromDatabase(fast:Bool = true) -> [ImageFolder] {
+        let excludedContainerPaths = ModelStore.default.getExcludedImportedContainerPaths()
+        
         var imageFolders:[ImageFolder] = [ImageFolder]()
         
         print("\(Date()) Loading containers from db ")
@@ -104,7 +106,20 @@ class ImageFolderTreeScanner {
                 if continousWorking {
                     autoreleasepool { () -> Void in
                         let container = containers[index]
-                        if container.hideByParent {
+                        
+                        var exclude = false
+                        if excludedContainerPaths.contains(container.path) {
+                            exclude = true
+                        }else{
+                            for excludedPath in excludedContainerPaths {
+                                if container.path.hasPrefix(excludedPath.withStash()) {
+                                    exclude = true
+                                    break
+                                }
+                            }
+                        }
+                        
+                        if container.hideByParent || exclude {
                             // do nothing
                         }else{
                             print("Setting for container \(index)/\(jall) [\(container.path)]")
@@ -175,6 +190,7 @@ class ImageFolderTreeScanner {
             }
             return
         }
+        let excludedContainerPaths = ModelStore.default.getExcludedImportedContainerPaths(withStash: true)
         // TODO: avoid duplicate running in recent minutes
         let photos = ModelStore.default.getPhotoFilesWithoutExif()
         print("PHOTOS WITHOUT EXIF: \(photos.count)")
@@ -191,7 +207,22 @@ class ImageFolderTreeScanner {
                     }
                     return
                 }
-                let _ = ImageFile(photoFile: photo, indicator: indicator, sharedDB: ModelStore.sharedDBPool())
+                var exclude = false
+                for excludedPath in excludedContainerPaths {
+                    if photo.path.hasPrefix(excludedPath) {
+                        exclude = true
+                        break
+                    }
+                }
+                if !exclude {
+                    let _ = ImageFile(photoFile: photo, indicator: indicator, sharedDB: ModelStore.sharedDBPool())
+                }else{
+                    if indicator != nil {
+                        DispatchQueue.main.async {
+                            let _ = indicator?.add("Searching images ...")
+                        }
+                    }
+                }
             }
             //ModelStore.save()
             print("\(Date()) UPDATING EXIF: SAVE DONE")
@@ -279,6 +310,8 @@ class ImageFolderTreeScanner {
             indicator?.display(message: "Scanning \(repositories.count) repositories .....")
         }
         
+        let excludedContainerPaths = ModelStore.default.getExcludedImportedContainerPaths()
+        
         var filesysUrls:Set<String> = Set<String>()
         var fileUrlToRepo:[String:ImageContainer] = [:]
         let totalCount = repositories.count
@@ -300,7 +333,6 @@ class ImageFolderTreeScanner {
             if indicator != nil {
                 indicator?.display(message: "Scanning repository \(i)/\(totalCount) .....")
             }
-            
             
             var containers = ModelStore.default.getAllContainerPaths(repositoryPath: repositoryPath).sorted()
             
@@ -367,8 +399,9 @@ class ImageFolderTreeScanner {
                 let folderUrlsToAdd:[String] = foldersysUrls.subtracting(folderDBUrls).sorted()
                 let folderUrlsToRemoved:Set<String> = folderDBUrls.subtracting(foldersysUrls)
                 
-                // TODO: urlsToAdd should minus those excluded device paths
+                // urlsToAdd should minus those excluded device paths
                 if folderUrlsToAdd.count > 0 {
+                    
                     var k = 0
                     let kall = folderUrlsToAdd.count
                     for path in folderUrlsToAdd {
@@ -381,25 +414,42 @@ class ImageFolderTreeScanner {
                         }
                         
                         k += 1
-                        let url = URL(fileURLWithPath: path)
-                        print("Adding container folder \(k)/\(kall): \(path)")
-                        if indicator != nil {
-                            indicator?.display(message: "Adding container folder \(k)/\(kall) .....")
-                        }
-                        let name = url.lastPathComponent
-                        let _ = ImageFolder(url,
-                                            name: name,
-                                            repositoryPath: repositoryPath,
-                                            homePath: "",
-                                            storagePath: "",
-                                            facePath: "",
-                                            cropPath: "")
                         
-                        if !containers.contains(path) {
-                            containers.append(path)
+                        var exclude = false
+                        if excludedContainerPaths.contains(path) {
+                            exclude = true
+                        }else{
+                            for excludedPath in excludedContainerPaths {
+                                if path.hasPrefix(excludedPath.withStash()) {
+                                    exclude = true
+                                    break
+                                }
+                            }
                         }
-                    }
+                        
+                        if !exclude {
+                        
+                            let url = URL(fileURLWithPath: path)
+                            print("Adding container folder \(k)/\(kall): \(path)")
+                            if indicator != nil {
+                                indicator?.display(message: "Adding container folder \(k)/\(kall) .....")
+                            }
+                            let name = url.lastPathComponent
+                            let _ = ImageFolder(url,
+                                                name: name,
+                                                repositoryPath: repositoryPath,
+                                                homePath: "",
+                                                storagePath: "",
+                                                facePath: "",
+                                                cropPath: "")
+                            
+                            if !containers.contains(path) {
+                                containers.append(path)
+                            }
+                        } // end of not excluded
+                    } // end of loop folderUrlsToAdd
                     
+                    // TODO: where use this containers?
                     containers = containers.sorted().reversed() // put the shortest root to bottom, make it hardest to be found
                     var j = 0
                     for path in folderUrlsToAdd {
@@ -412,20 +462,35 @@ class ImageFolderTreeScanner {
                         }
                         
                         j += 1
-                        print("Getting parent folder \(j)/\(kall): \(path)")
-                        if indicator != nil {
-                            indicator?.display(message: "Getting parent folder \(j)/\(kall) .....")
-                        }
-                        if let parentFolder = path.getNearestParent(from: containers) {
-                            print(">>> parent folder: \(parentFolder)")
-                            ModelStore.default.updateImageContainerParentFolder(path: path, parentFolder: parentFolder)
-                            
-                            if let parent = ModelStore.default.getContainer(path: parentFolder), parent.manyChildren == true {
-                                ModelStore.default.updateImageContainerHideByParent(path: path, hideByParent: true)
+                        
+                        var exclude = false
+                        if excludedContainerPaths.contains(path) {
+                            exclude = true
+                        }else{
+                            for excludedPath in excludedContainerPaths {
+                                if path.hasPrefix(excludedPath.withStash()) {
+                                    exclude = true
+                                    break
+                                }
                             }
                         }
                         
-                    }
+                        if !exclude {
+                            print("Getting parent folder \(j)/\(kall): \(path)")
+                            if indicator != nil {
+                                indicator?.display(message: "Getting parent folder \(j)/\(kall) .....")
+                            }
+                            if let parentFolder = path.getNearestParent(from: containers) {
+                                print(">>> parent folder: \(parentFolder)")
+                                ModelStore.default.updateImageContainerParentFolder(path: path, parentFolder: parentFolder)
+                                
+                                if let parent = ModelStore.default.getContainer(path: parentFolder), parent.manyChildren == true {
+                                    ModelStore.default.updateImageContainerHideByParent(path: path, hideByParent: true)
+                                }
+                            }
+                        } // end of not excluded
+                        
+                    } // end of loop folderUrlsToAdd
                     
 //                    if indicator != nil {
 //                        indicator?.dataChanged()
@@ -531,7 +596,22 @@ class ImageFolderTreeScanner {
                 if continousWorking {
                     autoreleasepool { () -> Void in
                         let url = urlsToAdd[index]
-                        self.createImageIfAbsent(url: url, fileUrlToRepo: fileUrlToRepo, indicator: indicator)
+                        
+                        var exclude = false
+                        if excludedContainerPaths.contains(url) {
+                            exclude = true
+                        }else{
+                            for excludedPath in excludedContainerPaths {
+                                if url.hasPrefix(excludedPath.withStash()) {
+                                    exclude = true
+                                    break
+                                }
+                            }
+                        }
+                        
+                        if !exclude {
+                            self.createImageIfAbsent(url: url, fileUrlToRepo: fileUrlToRepo, indicator: indicator)
+                        }
                         index += 1
                     }
                 }
