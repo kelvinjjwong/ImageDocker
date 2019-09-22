@@ -219,7 +219,7 @@ class Moments {
                         gov = "\(province)\(city)"
                     }
                 }else{
-                    gov = "\(country), \(city)"
+                    gov = "\(country)"
                 }
             }
             

@@ -50,6 +50,8 @@ class PhotoCollection: NSObject {
     var provinceData:String = ""
     var cityData:String = ""
     
+    var deviceConnected = false
+    
     var hasDuplicates:Bool = false
     var isDateEntry:Bool = true
     

@@ -1349,7 +1349,10 @@ class EditRepositoryViewController: NSViewController {
         if let container = self.originalContainer {
             var repo = container
             repo.deviceId = deviceId
-            ModelStore.default.saveImageContainer(container: repo)
+            let state = ModelStore.default.saveImageContainer(container: repo)
+            if state != .OK {
+                self.lblMessage.stringValue = "\(state) - Unable to link repository with device in database."
+            }
         }
     }
     
@@ -1649,7 +1652,9 @@ extension EditRepositoryViewController : DeviceListDelegate {
             }
             self.lblDeviceName.stringValue = name
             
+            print("update db? \(updateDB)")
             if updateDB {
+                print("linking repo with device \(device.deviceId)")
                 self.linkDeviceToRepository(deviceId: device.deviceId ?? "")
             }
         }else{

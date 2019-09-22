@@ -175,7 +175,7 @@ class ImageFolderTreeScanner {
             }
             return
         }
-        
+        // TODO: avoid duplicate running in recent minutes
         let photos = ModelStore.default.getPhotoFilesWithoutExif()
         print("PHOTOS WITHOUT EXIF: \(photos.count)")
         if photos.count > 0 {
@@ -371,6 +371,14 @@ class ImageFolderTreeScanner {
                     var k = 0
                     let kall = folderUrlsToAdd.count
                     for path in folderUrlsToAdd {
+                        
+                        if suppressedScan {
+                            if indicator != nil {
+                                indicator?.forceComplete()
+                            }
+                            return
+                        }
+                        
                         k += 1
                         let url = URL(fileURLWithPath: path)
                         print("Adding container folder \(k)/\(kall): \(path)")
@@ -394,6 +402,14 @@ class ImageFolderTreeScanner {
                     containers = containers.sorted().reversed() // put the shortest root to bottom, make it hardest to be found
                     var j = 0
                     for path in folderUrlsToAdd {
+                        
+                        if suppressedScan {
+                            if indicator != nil {
+                                indicator?.forceComplete()
+                            }
+                            return
+                        }
+                        
                         j += 1
                         print("Getting parent folder \(j)/\(kall): \(path)")
                         if indicator != nil {

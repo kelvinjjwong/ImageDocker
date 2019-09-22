@@ -58,6 +58,7 @@ class DevicePathDetailViewController: NSViewController {
         let oldLocalFolder = data.toSubFolder
         data.toSubFolder = self.txtSubFolder.stringValue.trimmingCharacters(in: .whitespaces)
         data.excludeImported = (self.chkExcludeImported.state == .on)
+        data.manyChildren = (self.chkManyChildren.state == .on)
         
         print("deviceId=\(data.deviceId), old localFolder=\(oldLocalFolder), new localFolder=\(data.toSubFolder), repository=\(self.repositoryPath)")
         
@@ -71,10 +72,28 @@ class DevicePathDetailViewController: NSViewController {
                 }
                 let localPath = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(oldLocalFolder).path
                 print("deleting container which local path=\(localPath)")
-                ModelStore.default.deleteContainer(path: localPath)
-                ModelStore.default.saveDevicePath(file: data)
-                DispatchQueue.main.async {
-                    self.lblMessage.stringValue = "Deleted related containers and imported images accordingly."
+                let state1 = ModelStore.default.deleteContainer(path: localPath)
+                let state2 = ModelStore.default.saveDevicePath(file: data)
+                if state1 != .OK {
+                    DispatchQueue.main.async {
+                        self.lblMessage.stringValue = "\(state1) - Unable to delete related containers and images."
+                    }
+                }else if state2 != .OK {
+                    DispatchQueue.main.async {
+                        self.lblMessage.stringValue = "\(state1) - Unable to update setting."
+                    }
+                }else{
+                    // physically delete path in disk
+                    do {
+                        try
+                            FileManager.default.removeItem(atPath: localPath)
+                    }catch{
+                        print("Unable to delete path in disk: \(localPath)")
+                        print(error)
+                    }
+                    DispatchQueue.main.async {
+                        self.lblMessage.stringValue = "Deleted related containers and imported images."
+                    }
                 }
             }
             

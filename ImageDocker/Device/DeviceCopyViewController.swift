@@ -74,6 +74,8 @@ class DeviceCopyViewController: NSViewController {
     
     var selectedPath:DeviceCopyDestination? = nil
     
+    var connected = false
+    
     // MARK: CONTROLS
     
     @IBOutlet weak var lblModel: NSTextField!
@@ -158,7 +160,7 @@ class DeviceCopyViewController: NSViewController {
         }
     }
     
-    func viewInit(device:PhoneDevice){
+    func viewInit(device:PhoneDevice, connected:Bool = false){
         if device.deviceId != self.device.deviceId {
             print("DEVICE INIT")
             print("DIFFERENT DEVICE \(device.deviceId) != \(self.device.deviceId)")
@@ -166,6 +168,11 @@ class DeviceCopyViewController: NSViewController {
             
             self.btnCopy.isEnabled = false
             self.btnUpdateRepository.isEnabled = false
+            
+            self.connected = connected
+            
+            self.btnLoad.isEnabled = connected
+            self.btnDeepLoad.isEnabled = connected
             
             if device.type == .iPhone {
                 self.btnMount.isHidden = false
@@ -465,6 +472,12 @@ class DeviceCopyViewController: NSViewController {
     }
     
     func refreshFileList(){
+        if !self.connected {
+            DispatchQueue.main.async {
+                self.lblMessage.stringValue = "Device has not been connected."
+            }
+            return
+        }
         if let selectedPath = self.selectedPath {
             let state = self.cbShowCopied.state == .on
             

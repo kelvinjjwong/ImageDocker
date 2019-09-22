@@ -34,15 +34,15 @@ extension ViewController {
                     for gov in places {
                         self.addPlacesTreeGovEntry(place: gov)
                         
-                        //print("GOV \(gov.gov)")
+                        print("GOV \(gov.gov)")
                         for place in gov.children {
                             if place.place == "" {
                                 continue
                             }
-                            //print("     PLACE \(place.place)")
+                            print("     PLACE \(place.place)")
                             self.addPlacesTreePlaceEntry(place: place)
                             for year in place.children {
-                                //print("          YEAR \(year.year)")
+                                print("          YEAR \(year.year)")
                                 var duplicateInYear:Bool = false
                                 if duplicates.years.contains(year.year) {
                                     duplicateInYear = true

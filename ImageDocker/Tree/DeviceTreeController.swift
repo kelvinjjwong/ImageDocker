@@ -37,12 +37,13 @@ extension ViewController {
         
     }
     
-    func addDeviceTreeEntry(device:PhoneDevice){
+    func addDeviceTreeEntry(device:PhoneDevice, connected:Bool = false){
         let collection:PhotoCollection = PhotoCollection(title: device.represent() ,
                                                          identifier: device.deviceId,
                                                          type: .library,
                                                          source: .device )
         collection.photoCount = 0
+        collection.deviceConnected = connected
         
         if let exist = self.treeIdItems[device.deviceId] {
             if device.type == .Android {
@@ -83,7 +84,7 @@ extension ViewController {
                         self.deviceCopyWindowController.showWindow(self)
                     }
                     let vc = window.contentViewController as! DeviceCopyViewController
-                    vc.viewInit(device: device)
+                    vc.viewInit(device: device, connected: collection.deviceConnected)
                 }
             }
         }
@@ -91,7 +92,15 @@ extension ViewController {
     
     func selectDeviceType(_ collection:PhotoCollection) {
         self.hideTreeNodeButton(collection: collection)
+        var deviceIds:[String] = []
+        let devs = ModelStore.default.getDevices()
+        for device in devs {
+            if let id = device.deviceId {
+                deviceIds.append(id)
+            }
+        }
         if collection.identifier == "device_type_Android" {
+            // list all devices, tag the connected ones
             let devices:[String] = Android.bridge.devices()
             print("android device count: \(devices.count)")
             self.cleanCachedDeviceIds(type: .Android)
@@ -99,13 +108,28 @@ extension ViewController {
                 for deviceId in devices {
                     if let device:PhoneDevice = Android.bridge.device(id: deviceId) {
                         let imageDevice = ModelStore.default.getOrCreateDevice(device: device)
-                        
                         var dev:PhoneDevice = Android.bridge.memory(device: device)
                         if imageDevice.name != "" {
                             dev.name = imageDevice.name ?? ""
                         }
                         self.deviceIdToDevice[deviceId] = dev
-                        self.addDeviceTreeEntry(device: dev)
+                        self.addDeviceTreeEntry(device: dev, connected: true)
+                        
+                        if let id = imageDevice.deviceId, let i = deviceIds.index(of: id) {
+                            deviceIds.remove(at: i)
+                        }
+                    }
+                }
+            }
+            // devices those not connected
+            if deviceIds.count > 0 {
+                for device in devs {
+                    if let id = device.deviceId, let _ = deviceIds.index(of: id), let t = device.type, t == "Android" {
+                        var dev:PhoneDevice = PhoneDevice(type: .Android, deviceId: id, manufacture: device.manufacture ?? "", model: device.model ?? "")
+                        dev.name = device.name ?? ""
+                        
+                        self.deviceIdToDevice[id] = dev
+                        self.addDeviceTreeEntry(device: dev, connected: false)
                     }
                 }
             }
@@ -133,6 +157,7 @@ extension ViewController {
                 self.popNotification(message: "iFuse/iDevice is not installed. Please install it by command [brew cask install osxfuse] and then [brew install ifuse] in console. To install Homebrew as a prior condition, please access [https://brew.sh] for detail.")
             }
             
+            // devices those connected
             let devices:[String] = IPHONE.bridge.devices()
             print("iphone device count: \(devices.count)")
             self.cleanCachedDeviceIds(type: .iPhone)
@@ -145,10 +170,26 @@ extension ViewController {
                         dev.name = imageDevice.name ?? ""
                     }
                     self.deviceIdToDevice[device.deviceId] = dev
-                    self.addDeviceTreeEntry(device: dev)
+                    self.addDeviceTreeEntry(device: dev, connected: true)
+                    
+                    if let id = imageDevice.deviceId, let i = deviceIds.index(of: id) {
+                        deviceIds.remove(at: i)
+                    }
                 }else{
                     print("Unable to connect to ios device: \(devices[0])")
                     self.popNotification(message: "Unable to connect to iOS device. Please unlock the screen and then retry.")
+                }
+            }
+            // devices those not connected
+            if deviceIds.count > 0 {
+                for device in devs {
+                    if let id = device.deviceId, let _ = deviceIds.index(of: id), let t = device.type, t == "iPhone" {
+                        var dev:PhoneDevice = PhoneDevice(type: .iPhone, deviceId: id, manufacture: device.manufacture ?? "", model: device.model ?? "")
+                        dev.name = device.name ?? ""
+                        
+                        self.deviceIdToDevice[id] = dev
+                        self.addDeviceTreeEntry(device: dev, connected: false)
+                    }
                 }
             }
             self.sourceList.reloadData()

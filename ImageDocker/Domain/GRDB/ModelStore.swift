@@ -10,6 +10,15 @@ import Foundation
 import GRDB
 
 
+
+enum ExecuteState : Int {
+    case OK
+    case DATABASE_LOCKED
+    case NON_SQL_ERROR
+    case ERROR
+    case NO_RECORD
+}
+
 class ModelStore {
     
     fileprivate let dbfile = PreferencesController.databasePath(filename: "ImageDocker.sqlite")
@@ -101,6 +110,17 @@ class ModelStore {
             }
         }
         return ""
+    }
+    
+    fileprivate func errorState(_ error:Error) -> ExecuteState {
+        print(error)
+        if error.localizedDescription.starts(with: "SQLite error") {
+            if error.localizedDescription.hasSuffix("database is locked") {
+                return .DATABASE_LOCKED
+            }
+            return .ERROR
+        }
+        return .NON_SQL_ERROR
     }
     
     // MARK: - Duplicates
@@ -301,7 +321,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return containers
     }
     
-    func deleteContainer(path: String) {
+    func deleteContainer(path: String) -> ExecuteState {
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
@@ -309,8 +329,9 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try db.execute("DELETE FROM Image WHERE path LIKE '\(path.withStash())%'")
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
     func getContainers(rootPath:String) -> [ImageContainer] {
@@ -385,26 +406,28 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
-    func updateImageContainerParentFolder(path:String, parentFolder:String){
+    func updateImageContainerParentFolder(path:String, parentFolder:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update ImageContainer set parentFolder = ? where path = ?", arguments: [parentFolder, path])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func updateImageContainerHideByParent(path:String, hideByParent:Bool){
+    func updateImageContainerHideByParent(path:String, hideByParent:Bool) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update ImageContainer set hideByParent = \(hideByParent ? 1 : 0) where path = ?", arguments: [path])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
     func getOrCreateContainer(name:String,
@@ -483,7 +506,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         
     }
     
-    func saveImageContainer(container:ImageContainer){
+    func saveImageContainer(container:ImageContainer) -> ExecuteState{
         var container = container
         do {
             let db = ModelStore.sharedDBPool()
@@ -491,11 +514,12 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try container.save(db)
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func updateImageContainerPaths(oldPath:String, newPath:String, repositoryPath:String, parentFolder:String, subPath:String){
+    func updateImageContainerPaths(oldPath:String, newPath:String, repositoryPath:String, parentFolder:String, subPath:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
@@ -503,22 +527,24 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try db.execute("update ImageContainer set path = ?, repositoryPath = ?, parentFolder = ?, subPath = ? where path = ?", arguments: [newPath, repositoryPath, parentFolder, subPath, oldPath])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func updateImageContainerRepositoryPaths(oldPath:String, newPath:String, repositoryPath:String) {
+    func updateImageContainerRepositoryPaths(oldPath:String, newPath:String, repositoryPath:String) -> ExecuteState {
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update ImageContainer set path = ?, repositoryPath = ? where path = ?", arguments: [newPath, repositoryPath, oldPath])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func updateImageContainerToggleManyChildren(path:String, state:Bool) {
+    func updateImageContainerToggleManyChildren(path:String, state:Bool) -> ExecuteState {
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
@@ -526,11 +552,12 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try db.execute("update ImageContainer set hideByParent = \(state ? 1 : 0) where path like ?", arguments: ["\(path.withStash())%"])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func hideContainer(path:String){
+    func hideContainer(path:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
@@ -539,11 +566,12 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try db.execute("update Image set hiddenByContainer = 1 where path like ?", arguments:["\(path.withStash())%"])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func showContainer(path:String){
+    func showContainer(path:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
@@ -551,11 +579,12 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try db.execute("update Image set hiddenByContainer = 0 where path like ?", arguments:["\(path.withStash())%"])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func hideRepository(repositoryRoot:String){
+    func hideRepository(repositoryRoot:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
@@ -565,11 +594,12 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try db.execute("update Image set hiddenByRepository = 1 where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func showRepository(repositoryRoot:String){
+    func showRepository(repositoryRoot:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
@@ -579,11 +609,12 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try db.execute("update Image set hiddenByRepository = 0 where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func deleteRepository(repositoryRoot:String){
+    func deleteRepository(repositoryRoot:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
@@ -591,8 +622,9 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try db.execute("delete from Image where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
     // MARK: - IMAGES
@@ -644,7 +676,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return image
     }
     
-    func saveImage(image: Image, sharedDB:DatabaseWriter? = nil){
+    func saveImage(image: Image, sharedDB:DatabaseWriter? = nil) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
@@ -653,24 +685,26 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 //print("saved image")
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func updateImagePaths(oldPath:String, newPath:String, repositoryPath:String, subPath:String, containerPath:String, id:String) {
+    func updateImagePaths(oldPath:String, newPath:String, repositoryPath:String, subPath:String, containerPath:String, id:String) -> ExecuteState {
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update Image set path = ?, repositoryPath = ?, subPath = ?, containerPath = ?, id = ? where path = ?", arguments: [newPath, repositoryPath, subPath, containerPath, id, oldPath])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
     
     
-    func deletePhoto(atPath path:String, updateFlag:Bool = true){
+    func deletePhoto(atPath path:String, updateFlag:Bool = true) -> ExecuteState{
         if updateFlag {
             do {
                 let db = ModelStore.sharedDBPool()
@@ -678,8 +712,9 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                     try db.execute("update Image set delFlag = ?", arguments: [true])
                 }
             }catch{
-                print(error)
+                return self.errorState(error)
             }
+            return .OK
         }else{
             do {
                 let db = ModelStore.sharedDBPool()
@@ -687,8 +722,9 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                     try Image.deleteOne(db, key: path)
                 }
             }catch{
-                print(error)
+                return self.errorState(error)
             }
+            return .OK
         }
     }
     
@@ -1698,95 +1734,103 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     // MARK: IMAGES - UPDATES
     
-    func updateImageRawBase(oldRawPath:String, newRawPath:String){
+    func updateImageRawBase(oldRawPath:String, newRawPath:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update Image set originPath = ? where originPath = ?", arguments: [newRawPath, oldRawPath])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func updateImageRawBase(repositoryPath:String, rawPath:String){
+    func updateImageRawBase(repositoryPath:String, rawPath:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update Image set originPath = ? where repositoryPath = ?", arguments: [rawPath, repositoryPath])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func updateImageRawBase(pathStartsWith path:String, rawPath:String){
+    func updateImageRawBase(pathStartsWith path:String, rawPath:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update Image set originPath = ? where path like ?", arguments: [rawPath, "\(path.withStash())%"])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func updateImageRepositoryBase(pathStartsWith path:String, repositoryPath:String){
+    func updateImageRepositoryBase(pathStartsWith path:String, repositoryPath:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update Image set repositoryPath = ? where path like ?", arguments: [repositoryPath, "\(path.withStash())%"])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func updateImageRepositoryBase(oldRepositoryPath:String, newRepository:String){
+    func updateImageRepositoryBase(oldRepositoryPath:String, newRepository:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update Image set repositoryPath = ? where repositoryPath = ?", arguments: [newRepository, oldRepositoryPath])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func updateImagePath(repositoryPath:String){
+    func updateImagePath(repositoryPath:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update Image set path = repositoryPath || subPath where repositoryPath = ? and subPath <> ''", arguments: [repositoryPath])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func updateImageScannedFace(imageId:String, facesCount:Int = 0){
+    func updateImageScannedFace(imageId:String, facesCount:Int = 0) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update Image set scanedFace=1, facesCount=? where id=?", arguments: [facesCount, imageId])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func updateImageRecognizedFace(imageId:String, recognizedPeopleIds:String = ""){
+    func updateImageRecognizedFace(imageId:String, recognizedPeopleIds:String = "") -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update Image set recognizedFace=1,recognizedPeopleIds=? where id=?", arguments: [recognizedPeopleIds,imageId])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func updateImageDates(path:String, date:Date, fields:Set<String>){
+    func updateImageDates(path:String, date:Date, fields:Set<String>) -> ExecuteState{
         var arguments:[Any] = []
         var values:[String] = []
         for field in fields {
@@ -1828,8 +1872,9 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try db.execute("UPDATE Image set \(valueSets) WHERE path=?", arguments: StatementArguments(arguments))
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
     // MARK: IMAGES - EXPORT
@@ -1878,40 +1923,43 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
-    func cleanImageExportTime(path:String) {
+    func cleanImageExportTime(path:String) -> ExecuteState {
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try db.execute("UPDATE Image set exportTime = null WHERE path='\(path)'")
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func storeImageOriginalMD5(path:String, md5:String){
+    func storeImageOriginalMD5(path:String, md5:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try db.execute("UPDATE Image set originalMD5 = ? WHERE path=?", arguments: StatementArguments([md5, path]))
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func storeImageExportedMD5(path:String, md5:String){
+    func storeImageExportedMD5(path:String, md5:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try db.execute("UPDATE Image set exportedMD5 = ? WHERE path=?", arguments: StatementArguments([md5, path]))
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func storeImageDescription(path:String, shortDescription:String?, longDescription:String?){
+    func storeImageDescription(path:String, shortDescription:String?, longDescription:String?) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
@@ -1924,52 +1972,57 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 }
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func storeImageExportSuccess(path:String, date:Date, exportToPath:String, exportedFilename:String, exportedMD5:String, exportedLongDescription:String){
+    func storeImageExportSuccess(path:String, date:Date, exportToPath:String, exportedFilename:String, exportedMD5:String, exportedLongDescription:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try db.execute("UPDATE Image set exportTime = ?, exportToPath = ?, exportAsFilename = ?, exportedMD5 = ?, exportedLongDescription = ?, exportState = 'OK', exportFailMessage = '' WHERE path=?", arguments: StatementArguments([date, exportToPath, exportedFilename, exportedMD5, exportedLongDescription, path]))
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func storeImageExportedTime(path:String, date:Date){
+    func storeImageExportedTime(path:String, date:Date) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try db.execute("UPDATE Image set exportTime = ? WHERE path=?", arguments: StatementArguments([date, path]))
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func storeImageExportFail(path:String, date:Date, message:String){
+    func storeImageExportFail(path:String, date:Date, message:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try db.execute("UPDATE Image set exportTime = ?, exportState = 'FAIL', exportFailMessage = ? WHERE path=?", arguments: StatementArguments([date, message, path]))
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func cleanImageExportPath(path:String) {
+    func cleanImageExportPath(path:String) -> ExecuteState {
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try db.execute("UPDATE Image set exportToPath = null, exportAsFilename = null, exportTime = null, exportState = null, exportFailMessage = '', exportedMD5 = null, WHERE path=?", arguments: StatementArguments([path]))
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
         
     }
     
@@ -2059,7 +2112,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return place
     }
     
-    func renamePlace(oldName:String, newName:String){
+    func renamePlace(oldName:String, newName:String) -> ExecuteState{
         print("trying to rename place from \(oldName) to \(newName)")
         do {
             let db = ModelStore.sharedDBPool()
@@ -2076,11 +2129,12 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try ImagePlace.deleteOne(db, key: oldName)  // delete old one at last
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func updatePlace(name:String, location:Location){
+    func updatePlace(name:String, location:Location) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
@@ -2116,19 +2170,21 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 }
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func deletePlace(name:String){
+    func deletePlace(name:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
                 let _ = try ImagePlace.deleteOne(db, key: name)
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
     // MARK: - EVENTS
@@ -2188,7 +2244,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return event!
     }
     
-    func deleteEvent(name:String){
+    func deleteEvent(name:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
@@ -2196,11 +2252,12 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try db.execute("UPDATE Image SET event='' WHERE event=?", arguments: StatementArguments([name]))
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func renameEvent(oldName:String, newName:String){
+    func renameEvent(oldName:String, newName:String) -> ExecuteState{
         print("RENAME EVENT \(oldName) to \(newName)")
         do {
             let db = ModelStore.sharedDBPool()
@@ -2216,8 +2273,9 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try db.execute("UPDATE Image SET AssignPlace=? WHERE AssignPlace=?", arguments: StatementArguments([oldName, newName]))
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
     // MARK: EVENTS - TREE
@@ -2296,7 +2354,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return dev
     }
     
-    func saveDevice(device:ImageDevice){
+    func saveDevice(device:ImageDevice) -> ExecuteState{
         var dev = device
         do {
             let db = ModelStore.sharedDBPool()
@@ -2304,8 +2362,9 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try dev.save(db)
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
     // MARK: DEVICE FILES
@@ -2351,7 +2410,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return deviceFile!
     }
     
-    func saveDeviceFile(file:ImageDeviceFile){
+    func saveDeviceFile(file:ImageDeviceFile) -> ExecuteState{
         var f = file
         do {
             let db = ModelStore.sharedDBPool()
@@ -2359,19 +2418,21 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try f.save(db)
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func deleteDeviceFiles(deviceId:String){
+    func deleteDeviceFiles(deviceId:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try db.execute("delete from ImageDeviceFile where deviceId = ?", arguments: [deviceId])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
     func getDeviceFiles(deviceId:String) -> [ImageDeviceFile] {
@@ -2417,7 +2478,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return nil
     }
     
-    func saveDevicePath(file:ImageDevicePath){
+    func saveDevicePath(file:ImageDevicePath) -> ExecuteState {
         var f = file
         do {
             let db = ModelStore.sharedDBPool()
@@ -2425,19 +2486,21 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try f.save(db)
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func deleteDevicePath(deviceId:String, path:String){
+    func deleteDevicePath(deviceId:String, path:String) -> ExecuteState{
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try db.execute("delete from ImageDevicePath where deviceId = ? and path = ?", arguments: [deviceId, path])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
     func getDevicePaths(deviceId:String, deviceType:MobileType = .Android) -> [ImageDevicePath] {
@@ -2466,7 +2529,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 ]
             }
             for devicePath in result {
-                ModelStore.default.saveDevicePath(file: devicePath)
+                let _ = ModelStore.default.saveDevicePath(file: devicePath)
             }
         }
         return result
@@ -2505,7 +2568,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
-    func saveFamilyMember(peopleId:String, familyId:String) {
+    func saveFamilyMember(peopleId:String, familyId:String) -> ExecuteState {
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
@@ -2515,19 +2578,21 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 }
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func deleteFamilyMember(peopleId:String, familyId:String) {
+    func deleteFamilyMember(peopleId:String, familyId:String) -> ExecuteState {
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try db.execute("DELETE FROM FamilyMember WHERE familyId='\(familyId)' AND peopleId='\(peopleId)'")
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
     func saveFamily(familyId:String?=nil, name:String, type:String) -> String? {
@@ -2559,7 +2624,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return recordId
     }
     
-    func deleteFamily(id:String){
+    func deleteFamily(id:String) -> ExecuteState {
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
@@ -2569,8 +2634,9 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try db.execute("DELETE FROM Family WHERE id='\(id)'")
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
     // MARK: RELATIONSHIP
@@ -2621,7 +2687,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
-    func saveRelationship(primary:String, secondary:String, callName:String) {
+    func saveRelationship(primary:String, secondary:String, callName:String) -> ExecuteState {
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
@@ -2633,8 +2699,9 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 }
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
     func getRelationships() -> [PeopleRelationship] {
@@ -2692,7 +2759,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return nil
     }
     
-    func savePersonName(id:String, name:String, shortName:String) {
+    func savePersonName(id:String, name:String, shortName:String) -> ExecuteState {
         var person = People.new(id: id, name: name, shortName: shortName)
         do {
             let db = ModelStore.sharedDBPool()
@@ -2700,8 +2767,9 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try person.save(db)
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
     func updatePersonIconImage(id:String, repositoryPath:String, cropPath:String, subPath:String, filename:String) -> Bool{
@@ -2726,7 +2794,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
     }
     
-    func deletePerson(id:String) {
+    func deletePerson(id:String) -> ExecuteState {
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
@@ -2734,8 +2802,9 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try db.execute("delete from People where id = ?", arguments: [id])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
     // MARK: - FACE
@@ -2860,7 +2929,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
-    func saveFaceCrop(_ face:ImageFace) {
+    func saveFaceCrop(_ face:ImageFace) -> ExecuteState {
         var f = face
         do {
             let db = ModelStore.sharedDBPool()
@@ -2868,11 +2937,12 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try f.save(db)
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func updateFaceIconFlag(id:String, peopleId:String) {
+    func updateFaceIconFlag(id:String, peopleId:String) -> ExecuteState {
         if let face = self.getFace(id: id) {
             do {
                 let db = ModelStore.sharedDBPool()
@@ -2882,12 +2952,14 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                     try db.execute("update People set iconRepositoryPath = ?, iconCropPath = ?, iconSubPath = ?, iconFilename = ? WHERE id = ?", arguments: [face.repositoryPath, face.cropPath, face.subPath, face.filename, peopleId]);
                 }
             }catch{
-                print(error)
+                return self.errorState(error)
             }
+            return .OK
         }
+        return .NO_RECORD
     }
     
-    func removeFaceIcon(peopleId:String) {
+    func removeFaceIcon(peopleId:String) -> ExecuteState {
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
@@ -2895,41 +2967,45 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try db.execute("update People set iconRepositoryPath = '', iconCropPath = '', iconSubPath = '', iconFilename = '' WHERE id = ?", arguments: [peopleId]);
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func updateFaceSampleFlag(id:String, flag:Bool) {
+    func updateFaceSampleFlag(id:String, flag:Bool) -> ExecuteState {
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try db.execute("update ImageFace set sampleChoice = \(flag ? 1 : 0), sampleChangeDate = ? where id = ?", arguments: [Date(), id])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func updateFaceTagFlag(id:String, flag:Bool) {
+    func updateFaceTagFlag(id:String, flag:Bool) -> ExecuteState {
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try db.execute("update ImageFace set tagOnly = \(flag ? 1 : 0) where id = ?", arguments: [id])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
-    func updateFaceLockFlag(id:String, flag:Bool) {
+    func updateFaceLockFlag(id:String, flag:Bool) -> ExecuteState {
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
                 try db.execute("update ImageFace set locked = \(flag ? 1 : 0) where id = ?", arguments: [id])
             }
         }catch{
-            print(error)
+            return self.errorState(error)
         }
+        return .OK
     }
     
     // MARK: - SCHEMA VERSION MIGRATION

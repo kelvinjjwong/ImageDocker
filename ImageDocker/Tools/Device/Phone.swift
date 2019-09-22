@@ -84,6 +84,7 @@ struct PhoneDevice {
         self.model = model
     }
     
+    // present as title in tree node
     func represent() -> String {
         var summary = ""
         if totalSize != "" {
@@ -93,7 +94,7 @@ struct PhoneDevice {
         }
         if name != "" {
             let recognizedModel = CameraModelRecognizer.recognize(maker: manufacture, model: model)
-            return "\(manufacture) \(recognizedModel) (\(name)) [\(summary)]"
+            return "\(name) (\(manufacture) \(recognizedModel)) [\(summary)]"
             
         }
         if model != "" && manufacture != "" {
