@@ -191,7 +191,7 @@ class ImageFolderTreeScanner {
             return
         }
         let excludedContainerPaths = ModelStore.default.getExcludedImportedContainerPaths(withStash: true)
-        // TODO: avoid duplicate running in recent minutes
+
         let photos = ModelStore.default.getPhotoFilesWithoutExif()
         print("PHOTOS WITHOUT EXIF: \(photos.count)")
         if photos.count > 0 {
@@ -439,6 +439,8 @@ class ImageFolderTreeScanner {
                         
                             let url = URL(fileURLWithPath: path)
                             let name = url.lastPathComponent
+                            
+                            // create container db record
                             let _ = ImageFolder(url,
                                                 name: name,
                                                 repositoryPath: repositoryPath,
@@ -453,7 +455,7 @@ class ImageFolderTreeScanner {
                         } // end of not excluded\
                     } // end of loop folderUrlsToAdd
                     
-                    // TODO: where use this containers?
+                    // current + added containers used for each container to get nearest parent
                     containers = containers.sorted().reversed() // put the shortest root to bottom, make it hardest to be found
                     var j = 0
                     for path in folderUrlsToAdd {

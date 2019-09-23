@@ -17,7 +17,6 @@ import GRDB
 let MetaCategorySequence:[String] = ["Location", "DateTime", "Camera", "Lens", "EXIF", "Video", "Audio", "Coordinate", "Software", "System"]
 
 extension ImageFile {
-    // MARK: LOAD META INFO
     
     func transformDomainToMetaInfo() {
         if let photoFile = self.imageData {
@@ -32,6 +31,9 @@ extension ImageFile {
             
             metaInfoHolder.setMetaInfo(MetaInfo(category: "Software", subCategory: "", title: "Name", value: photoFile.softwareName))
             
+            if let imgSrc = photoFile.imageSource {
+                metaInfoHolder.setMetaInfo(MetaInfo(category: "Software", subCategory: "", title: "Source", value: imgSrc))
+            }
             if photoFile.dateTimeFromFilename != nil {
                 self.metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "From Filename", value: photoFile.dateTimeFromFilename))
             }
@@ -351,6 +353,9 @@ extension ImageFile {
     public func loadMetaInfoFromExif() {
         guard !(isStandalone && isLoadedExif) else {return}
         
+        let now = Date()
+        let nowToSeconds = Int(now.timeIntervalSince1970)
+        
         let jsonStr:String = ExifTool.helper.getFormattedExif(url: url)
         //print(jsonStr)
         let json:JSON = JSON(parseJSON: jsonStr)
@@ -429,7 +434,12 @@ extension ImageFile {
                 
                 imageData?.audioRate = json[0]["QuickTime"]["AudioSampleRate"].int ?? 0
             }
-            imageData?.updateExifDate = Date()
+            imageData?.updateExifDate = now
+            imageData?.lastTimeExtractExif = nowToSeconds
+            imageData?.noneExif = false
+        }else{
+            imageData?.lastTimeExtractExif = nowToSeconds
+            imageData?.noneExif = true
         }
         
         let jsonStr2:String = ExifTool.helper.getUnformattedExif(url: url)
@@ -449,6 +459,12 @@ extension ImageFile {
                     setCoordinate(latitude: lat, longitude: lon)
                 }
             }
+            imageData?.updateExifDate = Date()
+            imageData?.lastTimeExtractExif = nowToSeconds
+            imageData?.noneExif = false
+        }else{
+            imageData?.lastTimeExtractExif = nowToSeconds
+            imageData?.noneExif = true
         }
         isLoadedExif = true
     }

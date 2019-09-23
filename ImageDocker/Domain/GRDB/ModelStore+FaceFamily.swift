@@ -483,4 +483,16 @@ extension ModelStore {
         }
         return .OK
     }
+    
+    func updateFaceCropPaths(old:String, new:String) -> ExecuteState {
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.write { db in
+                try db.execute("update ImageFace set cropPath = ? where cropPath = ?", arguments: [new, old])
+            }
+        }catch{
+            return self.errorState(error)
+        }
+        return .OK
+    }
 }

@@ -708,8 +708,6 @@ class DeviceCopyViewController: NSViewController {
         self.working = true
         self.disableButtons()
         
-        // TODO: IF storage path / repository path changed, MOVE files from old path to new path
-        
         let marketName = CameraModelRecognizer.getMarketName(maker: device.manufacture, model: device.model)
         
         self.accumulator = Accumulator(target: 1, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblProgressMessage)
@@ -726,6 +724,8 @@ class DeviceCopyViewController: NSViewController {
                     self.accumulator?.setTarget(deviceFiles.count)
  
                     for deviceFile in deviceFiles {
+                        
+                        // IF storage path changed, MOVE files from old path to new path
                         if let oldImportToPath = deviceFile.importToPath, let filename = deviceFile.filename, let localFilePath = deviceFile.localFilePath, localFilePath != "" {
                             
                             DispatchQueue.main.async {
@@ -775,6 +775,9 @@ class DeviceCopyViewController: NSViewController {
                     self.accumulator?.setTarget(deviceFiles.count)
                     
                     for deviceFile in deviceFiles {
+                        
+                        // IF repository path changed, MOVE files from old path to new path
+                        
                         if let localFilePath = deviceFile.localFilePath, localFilePath != "" {
                             
                             DispatchQueue.main.async {
@@ -1356,7 +1359,7 @@ class DeviceCopyViewController: NSViewController {
                 var dest = DeviceCopyDestination.new((directory, toSubFolder))
                 // on device directory need to be saved into db
                 if !self.sourcePathTableDelegate.paths.contains(where: {$0.sourcePath == dest.sourcePath && $0.type == .onDevice }) {
-                    // TODO: SAVE DEVICE PATH TO DB
+                    // SAVE DEVICE PATH TO DB
                     if isExclude {
                         let devicePath = ImageDevicePath.exclude(deviceId: self.device.deviceId, path: directory)
                         ModelStore.default.saveDevicePath(file: devicePath)

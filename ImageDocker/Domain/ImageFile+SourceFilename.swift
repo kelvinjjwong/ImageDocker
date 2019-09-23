@@ -100,8 +100,6 @@ extension ImageFile {
         // huawei video
         self.recognizeDateTimeFromFilename("VID_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})\\.([A-Za-z0-9]{3}+)")
         
-        
-        
         // file exported by wechat
         self.recognizeUnixTimeFromFilename("mmexport([0-9]{13})\\.([A-Za-z0-9]{3}+)")
         self.recognizeUnixTimeFromFilename("mmexport([0-9]{13})-[0-9]+\\.([A-Za-z0-9]{3}+)")
@@ -130,10 +128,9 @@ extension ImageFile {
         self.recognizeUnixTimeFromFilename("([0-9]{13})\\.([A-Za-z0-9]{3}+)")
     }
     
-    // TODO: cache datetime patterns with names for re-used by front-end operation
-    
     internal func recognizeDateTimeFromFilename(_ pattern:String){
         guard !isRecognizedDateTimeFromFilename else {return}
+        
         let parts:[String] = url.lastPathComponent.matches(for: pattern)
         if parts.count > 0 {
             let dateTime:String = "\(parts[1]):\(parts[2]):\(parts[3]) \(parts[4]):\(parts[5]):\(parts[6])"

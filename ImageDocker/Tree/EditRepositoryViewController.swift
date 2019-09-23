@@ -12,7 +12,7 @@ class EditRepositoryViewController: NSViewController {
     
     private var originalContainer:ImageContainer? = nil
     
-    // MARK: FIELDS
+    // MARK: - FIELDS
     @IBOutlet weak var txtName: NSTextField!
     @IBOutlet weak var txtHomePath: NSTextField!
     @IBOutlet weak var txtStoragePath: NSTextField!
@@ -63,11 +63,17 @@ class EditRepositoryViewController: NSViewController {
     @IBOutlet weak var boxDevice: NSBox!
     
     
+    private var window:NSWindow? = nil
+    
     private var accumulator:Accumulator? = nil
     
     private var working = false
     
-    // MARK: INIT
+    // MARK: - FUTURE ACTIONS
+    
+    fileprivate var onCompleted: (() -> Void)?
+    
+    // MARK: - INIT
     
     init(){
         super.init(nibName: NSNib.Name(rawValue: "EditRepositoryViewController"), bundle: nil)
@@ -81,14 +87,6 @@ class EditRepositoryViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
-    private var window:NSWindow? = nil
-    
-    // MARK: ACTIONS
-    
-    fileprivate var onCompleted: (() -> Void)?
-    
-    // MARK: BUTTONS CONTROL
     
     fileprivate func toggleButtons(_ show:Bool){
         DispatchQueue.main.async {
@@ -130,8 +128,6 @@ class EditRepositoryViewController: NSViewController {
         }
         
     }
-    
-    // MARK: INIT
     
     fileprivate func emptyGeneralTextFields() {
             self.txtName.stringValue = ""
@@ -1077,7 +1073,7 @@ class EditRepositoryViewController: NSViewController {
                     }
                 }
                 
-                // TODO: update face-image records
+                // Paths of face-images are not necessary to update as the table does not store full paths for faces.
                 
                 
                 // save repo's path
@@ -1159,8 +1155,8 @@ class EditRepositoryViewController: NSViewController {
                     }
                 }
                 
-                // TODO: update crop-image records
-                
+                // update crop-image records
+                ModelStore.default.updateFaceCropPaths(old: originalCropPath, new: newCropPath)
                 
                 // save repo's path
                 var repo = repoContainer
@@ -1301,8 +1297,8 @@ class EditRepositoryViewController: NSViewController {
                         
                         self.toggleButtons(true)
                         self.lblMessage.stringValue = "All records and image-records of this repository have been removed from database."
+                        
                     }
-                    // TODO: use delegate from main window to close this window and refresh library tree in main window
                 }
             }
         }

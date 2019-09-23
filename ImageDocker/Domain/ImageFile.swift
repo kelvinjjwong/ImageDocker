@@ -19,9 +19,10 @@ class ImageFile {
     
     // MARK: - URL
   
-    //private(set) var thumbnail: NSImage?
-    var fileName: String
     var url: URL
+    var fileName: String
+    var filenamePatterns:[String:Set<String>] = [:]
+    var filenameConverters:[String:String] = [:]
     
     /// The string representation of the location of an image for copy and paste.
     /// The representation of no location is an empty string.
