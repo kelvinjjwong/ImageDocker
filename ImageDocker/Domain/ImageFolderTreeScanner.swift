@@ -266,6 +266,9 @@ class ImageFolderTreeScanner {
         
         for case let url as NSURL in directoryEnumerator {
             do {
+                if ImageFolderTreeScanner.default.suppressedScan {
+                    break
+                }
                 let resourceValues = try url.resourceValues(forKeys: resourceValueKeys)
                 guard let isRegularFileResourceValue = resourceValues[URLResourceKey.isRegularFileKey] as? NSNumber else { continue }
                 guard isRegularFileResourceValue.boolValue else { continue }

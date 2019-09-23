@@ -109,6 +109,8 @@ struct Image : Codable {
     var recognizedFace:Bool
     var facesCount:Int
     var recognizedPeopleIds:String
+    var lastTimeExtractExif:Int?
+    var noneExif:Bool
     
     
     static func new(filename: String, path: String, parentFolder: String, repositoryPath: String) -> Image {
@@ -211,7 +213,9 @@ struct Image : Codable {
             scanedFace:false,
             recognizedFace:false,
             facesCount:0,
-            recognizedPeopleIds:""
+            recognizedPeopleIds:"",
+            lastTimeExtractExif: 0,
+            noneExif: false
         )
     }
     

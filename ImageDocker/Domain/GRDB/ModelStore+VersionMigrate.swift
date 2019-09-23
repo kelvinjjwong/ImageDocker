@@ -394,6 +394,13 @@ extension ModelStore {
             })
         }
         
+        migrator.registerMigration("v26") { db in
+            try db.alter(table: "Image", body: { t in
+                t.add(column: "lastTimeExtractExif", .integer).defaults(to: 0)
+                t.add(column: "noneExif", .boolean).defaults(to: false).indexed()
+            })
+        }
+        
         
         do {
             let dbQueue = try DatabaseQueue(path: dbfile)
