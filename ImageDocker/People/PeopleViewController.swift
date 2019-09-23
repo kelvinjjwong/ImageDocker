@@ -232,8 +232,6 @@ class PeopleViewController: NSViewController {
         self.chkSample.state = .off
         self.chkLock.state = .off
         self.lblFaceDescription.stringValue = ""
-        // TODO: set face table views to empty
-        // TODO: set face collection to empty
     }
     
     fileprivate func cleanSourceInfo() {
@@ -246,8 +244,6 @@ class PeopleViewController: NSViewController {
         self.txtCallAs.stringValue = ""
         self.txtBeCalledAs.stringValue = ""
         self.lblRelationshipMessage.stringValue = ""
-        // TODO: set table view to empty
-        // TODO: reset family table view
     }
     
     fileprivate func cleanFaceCollection() {

@@ -65,7 +65,11 @@ extension ModelStore {
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
+                // delete container-self
+                try db.execute("DELETE FROM ImageContainer WHERE path='\(path)'")
+                // delete sub-containers
                 try db.execute("DELETE FROM ImageContainer WHERE path LIKE '\(path.withStash())%'")
+                // delete images
                 try db.execute("DELETE FROM Image WHERE path LIKE '\(path.withStash())%'")
             }
         }catch{

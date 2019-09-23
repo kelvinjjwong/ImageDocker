@@ -1118,7 +1118,6 @@ class ViewController: NSViewController {
                     let selectedItem:PXSourceListItem = self.sourceList.item(atRow: self.sourceList.selectedRow) as! PXSourceListItem
                     let parentItem:PXSourceListItem = self.libraryItem()
                     
-                    // TODO: change to SET<String> for performance
                     self.sourceList.removeItems(at: NSIndexSet(index: parentItem.children.index(where: {$0 as! PXSourceListItem === selectedItem})! ) as IndexSet,
                                                 inParent: parentItem,
                                                 withAnimation: NSTableView.AnimationOptions.slideUp)
@@ -1688,7 +1687,7 @@ class ViewController: NSViewController {
         // uncheck in browser if exists there (if user changed to another folder, it won't be there)
         for item in self.collectionView.visibleItems() {
             let item = item as! CollectionViewItem
-            // TODO: change to SET<String> for performance
+            
             let i = images.index(where: { $0.url == item.imageFile?.url })
             if i != nil {
                 item.uncheck()

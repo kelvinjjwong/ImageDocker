@@ -77,7 +77,7 @@ class ImageFolderTreeScanner {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "FOLDERSETTER_INCREMENT"), object: nil)
         }else{
             while(index < containers.count ){
-            //for container in containers { // TODO: most high memory impact
+            //for container in containers { // most high memory impact
                 
                 if limitRam > 0 {
                     var taskInfo = mach_task_basic_info()
@@ -430,13 +430,14 @@ class ImageFolderTreeScanner {
                             }
                         }
                         
+                        print("Adding container folder \(k)/\(kall): \(path)")
+                        if indicator != nil {
+                            indicator?.display(message: "Adding container folder \(k)/\(kall) .....")
+                        }
+                        
                         if !exclude {
                         
                             let url = URL(fileURLWithPath: path)
-                            print("Adding container folder \(k)/\(kall): \(path)")
-                            if indicator != nil {
-                                indicator?.display(message: "Adding container folder \(k)/\(kall) .....")
-                            }
                             let name = url.lastPathComponent
                             let _ = ImageFolder(url,
                                                 name: name,
@@ -449,7 +450,7 @@ class ImageFolderTreeScanner {
                             if !containers.contains(path) {
                                 containers.append(path)
                             }
-                        } // end of not excluded
+                        } // end of not excluded\
                     } // end of loop folderUrlsToAdd
                     
                     // TODO: where use this containers?
@@ -478,11 +479,13 @@ class ImageFolderTreeScanner {
                             }
                         }
                         
+                        
+                        print("Getting parent folder \(j)/\(kall): \(path)")
+                        if indicator != nil {
+                            indicator?.display(message: "Getting parent folder \(j)/\(kall) .....")
+                        }
+                        
                         if !exclude {
-                            print("Getting parent folder \(j)/\(kall): \(path)")
-                            if indicator != nil {
-                                indicator?.display(message: "Getting parent folder \(j)/\(kall) .....")
-                            }
                             if let parentFolder = path.getNearestParent(from: containers) {
                                 print(">>> parent folder: \(parentFolder)")
                                 ModelStore.default.updateImageContainerParentFolder(path: path, parentFolder: parentFolder)
@@ -502,9 +505,8 @@ class ImageFolderTreeScanner {
                 
                 if folderUrlsToRemoved.count > 0 {
                     for path in folderUrlsToRemoved {
-                        //let url = URL(fileURLWithPath: path)
-                        // TODO: REMOVE CONTAINER FROM DB
-                        print("Should be REMOVE container folder: \(path)")
+                        // REMOVE CONTAINER FROM DB
+                        ModelStore.default.deleteContainer(path: path)
                     }
                     
 //                    if indicator != nil {
@@ -564,7 +566,7 @@ class ImageFolderTreeScanner {
             var attempt = 0
             
             while(index < urlsToAdd.count ){
-            //for url in urlsToAdd { // TODO: most high memory impact
+            //for url in urlsToAdd { // most high memory impact
                 
                 if suppressedScan {
                     if indicator != nil {
@@ -614,6 +616,12 @@ class ImageFolderTreeScanner {
                         
                         if !exclude {
                             self.createImageIfAbsent(url: url, fileUrlToRepo: fileUrlToRepo, indicator: indicator)
+                        }else{
+                            if indicator != nil {
+                                DispatchQueue.main.async {
+                                    let _ = indicator?.add("Searching images ...")
+                                }
+                            }
                         }
                         index += 1
                     }

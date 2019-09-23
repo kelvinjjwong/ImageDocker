@@ -105,7 +105,6 @@ class Events {
             var eventEntry:Event
             var monthEntry:Event
             
-            // TODO: change to SET<String> for performance
             if events.index(where: {$0.event == event}) == nil {
                 eventEntry = Event(event: event)
                 events.append(eventEntry)
@@ -114,7 +113,6 @@ class Events {
             }
             eventEntry.photoCount += photoCount
             
-            // TODO: change to SET<String> for performance
             if eventEntry.children.index(where: {$0.year == year && $0.month == month}) == nil {
                 monthEntry = Event(month: month, ofYear: year, event:event, place: place)
                 

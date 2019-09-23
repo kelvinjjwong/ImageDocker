@@ -789,7 +789,6 @@ class CollectionViewItemsLoader: NSObject {
     }
     
     func removeItem(_ imageFile:ImageFile){
-        // TODO: change to SET<String> for performance
         if let i = items.index(where: { $0.url == imageFile.url }) {
             items.remove(at: i)
         }

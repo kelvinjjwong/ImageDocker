@@ -1403,7 +1403,6 @@ class EditRepositoryViewController: NSViewController {
     
     
     @IBAction func onFindFacesClicked(_ sender: NSButton) {
-        // TODO: TODO FUNCTION
         guard !self.working else {
             print("other task is running. abort this task.")
             return
