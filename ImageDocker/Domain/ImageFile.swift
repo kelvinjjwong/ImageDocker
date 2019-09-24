@@ -20,6 +20,19 @@ class ImageFile {
     // MARK: - URL
   
     var url: URL
+    public lazy var backupUrl: URL? = self.getBackupUrl()
+    
+    func getBackupUrl() -> URL? {
+        if let img = self.imageData {
+            let pathOfRepository = img.repositoryPath.withoutStash()
+            if let repo = ModelStore.default.getContainer(path: pathOfRepository) {
+                print("backup url: \(repo.storagePath.withStash())\(img.subPath)")
+                return URL(fileURLWithPath: "\(repo.storagePath.withStash())\(img.subPath)")
+            }
+        }
+        return nil
+    }
+    
     var fileName: String
     var filenamePatterns:[String:Set<String>] = [:]
     var filenameConverters:[String:String] = [:]

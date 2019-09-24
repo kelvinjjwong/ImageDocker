@@ -60,6 +60,32 @@ extension String {
         return self
     }
     
+    func withoutStash() -> String {
+        if self.hasSuffix("/") {
+            return self.substring(from: 0, to: -1)
+        }
+        return self
+    }
+    
+    public func substring(from: Int, to: Int) -> String {
+        let length = self.lengthOfBytes(using: String.Encoding.unicode)
+        if 0 <= from && from < to && to < length && 0 < to {
+            let start = self.index(self.startIndex, offsetBy: from)
+            let end = self.index(self.startIndex, offsetBy: to)
+            let subString = self[start..<end]
+            
+            return String(subString)
+        } else if 0 <= from && from < length && to < 0 {
+            let start = self.index(self.startIndex, offsetBy: from)
+            let end = self.index(self.endIndex, offsetBy: to)
+            let subString = self[start..<end]
+            
+            return String(subString)
+        } else {
+            return self
+        }
+    }
+    
     func isParentOf(_ path:String) -> Bool {
         let theOtherPath = path.withStash()
         let myPath = self.withStash()

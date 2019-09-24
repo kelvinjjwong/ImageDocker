@@ -911,7 +911,7 @@ class ViewController: NSViewController {
         }
     }
     
-    private func previewImage(image:ImageFile) {
+    internal func previewImage(image:ImageFile) {
         for sView in self.playerContainer.subviews {
             sView.removeFromSuperview()
         }

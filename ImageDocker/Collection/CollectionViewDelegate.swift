@@ -53,7 +53,8 @@ extension ViewController {
 }
 
 
-// MARK: - NSCollectionViewDataSource
+// MARK: - DATA SOURCE
+
 extension ViewController : NSCollectionViewDataSource {
   
     public func numberOfSections(in collectionView: NSCollectionView) -> Int {
@@ -70,6 +71,8 @@ extension ViewController : NSCollectionViewDataSource {
         collectionViewItem.setCheckBoxDelegate(self)
         collectionViewItem.setShowDuplicatesDelegate(self)
         collectionViewItem.setQuickLookDelegate(self)
+        collectionViewItem.setPreviewDelegate(self)
+        collectionViewItem.setPreviewMessageDelegate(self)
         collectionViewItem.sectionIndex = indexPath.section
 
         let imageFile = imagesLoader.item(for: indexPath as NSIndexPath)
@@ -99,7 +102,8 @@ extension ViewController : NSCollectionViewDataSource {
   
 }
 
-// MARK: - NSCollectionViewDelegateFlowLayout
+// MARK: - SELECTION
+
 extension ViewController : NSCollectionViewDelegateFlowLayout {
   
     func collectionView(_ collectionView: NSCollectionView, layout collectionViewLayout: NSCollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> NSSize {
@@ -108,7 +112,6 @@ extension ViewController : NSCollectionViewDelegateFlowLayout {
   
 }
 
-// MARK: - NSCollectionViewDelegate
 extension ViewController : NSCollectionViewDelegate {
   
     public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
@@ -121,20 +124,31 @@ extension ViewController : NSCollectionViewDelegate {
   
 }
 
+// MARK: - PREVIEW
 
-protocol PlacesCompletionEvent {
-    func onPlacesCompleted()
+protocol CollectionViewItemPreviewDelegate {
+    func onCollectionViewItemPreview(url:URL, isPhoto:Bool)
 }
 
-extension ViewController : PlacesCompletionEvent {
-    
-    func onPlacesCompleted() {
-        DispatchQueue.main.async{
-            self.imagesLoader.reorganizeItems(considerPlaces: true)
-            self.collectionView.reloadData()
-        }
+extension ViewController : CollectionViewItemPreviewDelegate {
+    func onCollectionViewItemPreview(url:URL, isPhoto:Bool) {
+        self.previewImage(url: url, isPhoto: isPhoto)
     }
 }
+
+// MARK: - PREVIEW MESSAGE
+
+protocol CollectionViewItemPreviewMessageDelegate {
+    func onCollectionViewItemPreviewMessage(description:String)
+}
+
+extension ViewController : CollectionViewItemPreviewMessageDelegate {
+    func onCollectionViewItemPreviewMessage(description:String) {
+        self.lblImageDescription.stringValue = description
+    }
+}
+
+// MARK: - QUICK LOOK
 
 protocol CollectionViewItemQuickLookDelegate {
     func onCollectionViewItemQuickLook(_ image:ImageFile)
@@ -170,6 +184,8 @@ extension ViewController : CollectionViewItemQuickLookDelegate {
     }
 }
 
+// MARK: - DUPLICATED IMAGES
+
 protocol CollectionViewItemShowDuplicatesDelegate {
     func onCollectionViewItemShowDuplicate(_ duplicatesKey:String)
 }
@@ -191,6 +207,8 @@ extension ViewController : CollectionViewItemShowDuplicatesDelegate {
     }
     
 }
+
+// MARK: - CHECKBOX
 
 protocol CollectionViewItemCheckDelegate {
     func onCollectionViewItemCheck(_ item:CollectionViewItem, checkBySection:Bool)
@@ -288,6 +306,8 @@ extension ViewController : CollectionViewItemCheckDelegate {
     
 }
 
+// MARK: - HEADER CHECKBOX
+
 protocol CollectionViewHeaderCheckDelegate {
     func onCollectionViewHeaderCheck(_ header: HeaderView)
     func onCollectionViewHeaderUncheck(_ header: HeaderView)
@@ -313,6 +333,22 @@ extension ViewController : CollectionViewHeaderCheckDelegate {
         
     }
     
+}
+
+// MARK: - PLACE LOCATION
+
+protocol PlacesCompletionEvent {
+    func onPlacesCompleted()
+}
+
+extension ViewController : PlacesCompletionEvent {
+    
+    func onPlacesCompleted() {
+        DispatchQueue.main.async{
+            self.imagesLoader.reorganizeItems(considerPlaces: true)
+            self.collectionView.reloadData()
+        }
+    }
 }
 
 class MetaConsumer : LocationConsumer {

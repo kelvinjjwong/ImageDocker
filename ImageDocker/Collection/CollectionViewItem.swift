@@ -17,10 +17,11 @@ class CollectionViewItem: NSCollectionViewItem {
     @IBOutlet weak var btnCaution: NSButton!
     @IBOutlet weak var btnMenu: NSPopUpButton!
     
-    
     private var checkBoxDelegate:CollectionViewItemCheckDelegate?
     private var showDuplicatesDelegate:CollectionViewItemShowDuplicatesDelegate?
     private var quickLookDelegate:CollectionViewItemQuickLookDelegate?
+    private var previewDelegate:CollectionViewItemPreviewDelegate?
+    private var previewMessageDelegate:CollectionViewItemPreviewMessageDelegate?
     
     var sectionIndex:Int?
     
@@ -34,6 +35,14 @@ class CollectionViewItem: NSCollectionViewItem {
     
     func setQuickLookDelegate(_ delegate:CollectionViewItemQuickLookDelegate) {
         self.quickLookDelegate = delegate
+    }
+    
+    func setPreviewDelegate(_ delegate:CollectionViewItemPreviewDelegate) {
+        self.previewDelegate = delegate
+    }
+    
+    func setPreviewMessageDelegate(_ delegate:CollectionViewItemPreviewMessageDelegate) {
+        self.previewMessageDelegate = delegate
     }
     
     var displayDateFormat:String = "HH:mm:ss"
@@ -158,14 +167,18 @@ class CollectionViewItem: NSCollectionViewItem {
         }
     }
     
+    var mouseLocation:NSPoint? = nil
+    
     @IBAction func onPopUpButtonClicked(_ sender: NSPopUpButton) {
+        
+        self.mouseLocation = NSEvent.mouseLocation
         let i = sender.indexOfSelectedItem
         if i == 1 {
             self.revealInFinder()
         }else if i == 3 {
-            // TODO: PREVIEW EDITABLE VERSION
+            self.previewEditableVersion()
         }else if i == 4 {
-            // TODO: PREVIEW BACKUP VERSION
+            self.previewBackupVersion()
         }else if i == 5 {
             self.quicklook()
         }else if i == 7 {
@@ -174,6 +187,7 @@ class CollectionViewItem: NSCollectionViewItem {
             self.recognizeFaces()
         }else if i == 9 {
             // TODO: REPLACE WITH BACKUP VERSION
+            // copy physical file
         }
     }
     
@@ -215,6 +229,28 @@ class CollectionViewItem: NSCollectionViewItem {
         }
     }
     
+    fileprivate func previewEditableVersion() {
+        if let imageFile = self.imageFile, let url = self.imageFile?.url, FileManager.default.fileExists(atPath: url.path) {
+            if self.previewDelegate != nil {
+                self.previewDelegate?.onCollectionViewItemPreview(url: url, isPhoto: imageFile.isPhoto)
+                self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "EDITABLE VERSION PREVIEW")
+            }
+        }else{
+            self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "EDITABLE VERSION DOES NOT EXIST")
+        }
+    }
+    
+    fileprivate func previewBackupVersion() {
+        if let imageFile = self.imageFile, let url = self.imageFile?.backupUrl, FileManager.default.fileExists(atPath: url.path) {
+            if self.previewDelegate != nil {
+                self.previewDelegate?.onCollectionViewItemPreview(url: url, isPhoto: imageFile.isPhoto)
+                self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "BACKUP VERSION PREVIEW")
+            }
+        }else{
+            self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "BACKUP VERSION DOES NOT EXIST")
+        }
+    }
+    
     fileprivate func findFaces() {
         if let _ = self.imageFile, let url = self.imageFile?.url {
             DispatchQueue.global().async {
@@ -238,5 +274,8 @@ class CollectionViewItem: NSCollectionViewItem {
         }
     }
     
+}
+
+extension CollectionViewItem : NSPopoverDelegate {
     
 }
