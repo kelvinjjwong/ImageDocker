@@ -266,6 +266,10 @@ class ImageFile {
         
         self.recognizePlace()
         
+        if self.imageData?.updateExifDate == nil {
+            self.imageData?.updateExifDate = Date()
+        }
+        
         if needSave {
             save()
         }

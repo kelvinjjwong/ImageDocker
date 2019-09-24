@@ -303,6 +303,9 @@ extension ImageFile {
         var photoFile = self.imageData!
         //print("loaded PhotoFile for \(filename)")
         
+        let now = Date()
+        let nowToSeconds = Int(now.timeIntervalSince1970)
+        
         location.country = photoFile.assignCountry ?? photoFile.country ?? ""
         location.province = photoFile.assignProvince ?? photoFile.province ?? ""
         location.city = photoFile.assignCity ?? photoFile.city ?? ""
@@ -341,6 +344,12 @@ extension ImageFile {
         location.setCoordinateWithoutConvert(coord: coord, coordBD: coordBD)
         
         self.imageData = photoFile
+        
+        if photoFile.lastTimeExtractExif == nil {
+            photoFile.lastTimeExtractExif = nowToSeconds
+            needSave = true
+        }
+        
         if needSave {
             print("UPDATE COORD TO NON ZERO")
             ModelStore.default.saveImage(image: photoFile, sharedDB: ModelStore.sharedDBPool())

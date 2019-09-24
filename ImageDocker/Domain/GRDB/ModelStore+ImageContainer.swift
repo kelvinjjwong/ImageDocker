@@ -61,7 +61,7 @@ extension ModelStore {
     
     // MARK: - DELETE
     
-    func deleteContainer(path: String) -> ExecuteState {
+    func deleteContainer(path: String, deleteImage:Bool = false) -> ExecuteState {
         do {
             let db = ModelStore.sharedDBPool()
             try db.write { db in
@@ -70,7 +70,9 @@ extension ModelStore {
                 // delete sub-containers
                 try db.execute("DELETE FROM ImageContainer WHERE path LIKE '\(path.withStash())%'")
                 // delete images
-                try db.execute("DELETE FROM Image WHERE path LIKE '\(path.withStash())%'")
+                if deleteImage {
+                    try db.execute("DELETE FROM Image WHERE path LIKE '\(path.withStash())%'")
+                }
             }
         }catch{
             return self.errorState(error)

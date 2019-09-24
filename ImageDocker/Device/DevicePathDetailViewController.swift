@@ -20,6 +20,7 @@ class DevicePathDetailViewController: NSViewController {
     @IBOutlet weak var lblMessage: NSTextField!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
     @IBOutlet weak var chkExcludeImported: NSButton!
+    @IBOutlet weak var btnRestore: NSButton!
     
     @IBOutlet weak var btnGoto: NSButton!
     
@@ -46,6 +47,52 @@ class DevicePathDetailViewController: NSViewController {
     }
     
     
+    @IBAction func onRestoreClicked(_ sender: NSButton) {
+        // TODO: physically restore from backup folder to repository folder
+        
+        if let data = self.devicePath {
+            let subfolder = data.toSubFolder
+            DispatchQueue.global().async {
+                
+                // apply changes to database when device path is decided to be excluded
+                
+                if self.repositoryPath.trimmingCharacters(in: .whitespaces) != "" {
+                    DispatchQueue.main.async {
+                        self.lblMessage.stringValue = "Restoring images from backup ..."
+                    }
+                    let localPath = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(subfolder).path
+                    if let repository = ModelStore.default.getContainer(path: self.repositoryPath.withoutStash()) {
+                        let storagePath = URL(fileURLWithPath: repository.storagePath).appendingPathComponent(subfolder).path
+                        
+                        do {
+                            try
+                                FileManager.default.copyItem(atPath: storagePath, toPath: localPath)
+                            DispatchQueue.main.async {
+                                self.lblMessage.stringValue = "Restored images from backup storage."
+                            }
+                        }catch{
+                            DispatchQueue.main.async {
+                                self.lblMessage.stringValue = "Unable to restore from backup storage."
+                            }
+                            print("Unable to restore from backup storage: [\(storagePath)] to [\(localPath)]")
+                            print(error)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    @IBAction func onExcludeImportedClicked(_ sender: NSButton) {
+        if self.chkExcludeImported.state == .on {
+            self.btnRestore.isHidden = true
+        }else{
+            self.btnRestore.isHidden = false
+        }
+    }
+    
+    
+    
     @IBAction func onUpdateClicked(_ sender: NSButton) {
         guard self.txtSubFolder.stringValue != "" else {
             self.lblMessage.stringValue = "ERROR: Local folder cannot be empty."
@@ -64,38 +111,45 @@ class DevicePathDetailViewController: NSViewController {
         
         DispatchQueue.global().async {
             
-            // apply changes to database when device path is decided to be excluded
-            
-            if data.excludeImported && self.repositoryPath.trimmingCharacters(in: .whitespaces) != "" {
+            if data.toSubFolder == oldLocalFolder {
+                // subfolder unchanged
+                ModelStore.default.saveDevicePath(file: data)
                 DispatchQueue.main.async {
-                    self.lblMessage.stringValue = "Deleting related containers and images..."
-                }
-                let localPath = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(oldLocalFolder).path
-                print("deleting container which local path=\(localPath)")
-                let state1 = ModelStore.default.deleteContainer(path: localPath)
-                let state2 = ModelStore.default.saveDevicePath(file: data)
-                if state1 != .OK {
-                    DispatchQueue.main.async {
-                        self.lblMessage.stringValue = "\(state1) - Unable to delete related containers and images."
-                    }
-                }else if state2 != .OK {
-                    DispatchQueue.main.async {
-                        self.lblMessage.stringValue = "\(state1) - Unable to update setting."
-                    }
-                }else{
-                    // physically delete path in disk
-                    do {
-                        try
-                            FileManager.default.removeItem(atPath: localPath)
-                    }catch{
-                        print("Unable to delete path in disk: \(localPath)")
-                        print(error)
-                    }
-                    DispatchQueue.main.async {
-                        self.lblMessage.stringValue = "Deleted related containers and imported images."
-                    }
+                    self.lblMessage.stringValue = "Saved toggles."
                 }
             }
+            
+            // apply changes to database when device path is decided to be excluded
+            
+//            if data.excludeImported && self.repositoryPath.trimmingCharacters(in: .whitespaces) != "" {
+//                DispatchQueue.main.async {
+//                    self.lblMessage.stringValue = "Deleting related containers and images..."
+//                }
+//                //let localPath = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(oldLocalFolder).path
+//                //print("deleting container which local path=\(localPath)")
+//                //let state1 = ModelStore.default.deleteContainer(path: localPath)
+//                let state = ModelStore.default.saveDevicePath(file: data)
+//                if state != .OK {
+//                    DispatchQueue.main.async {
+//                        self.lblMessage.stringValue = "\(state) - Unable to update setting."
+//                    }
+//                }else{
+//                    // physically delete path in disk
+////                    do {
+////                        try
+////                            FileManager.default.removeItem(atPath: localPath)
+////                            DispatchQueue.main.async {
+////                                self.lblMessage.stringValue = "Deleted related containers and imported images."
+////                            }
+////                    }catch{
+////                        DispatchQueue.main.async {
+////                            self.lblMessage.stringValue = "Unable to delete path in disk."
+////                        }
+////                        print("Unable to delete path in disk: \(localPath)")
+////                        print(error)
+////                    }
+//                }
+//            }
             
             // apply changes to database when device path's local folder to be renamed
             
@@ -231,8 +285,8 @@ class DevicePathDetailViewController: NSViewController {
                         DispatchQueue.main.async {
                             self.lblMessage.stringValue = "Updated local folder."
                         }
-                    } // end of renamedLocalFolder
-                } // end of existNewPath
+                    } // end of if renamedLocalFolder
+                } // end of if existNewPath
                 
                 
             } // end of !data.exclude && !data.excludeImported && oldLocalFolder != data.toSubFolder
@@ -298,6 +352,13 @@ class DevicePathDetailViewController: NSViewController {
                 }
                 self.chkExcludeImported.isHidden = false
                 self.chkExcludeImported.state = devPath.excludeImported ? .on : .off
+            }
+            
+            
+            if self.chkExcludeImported.state == .on {
+                self.btnRestore.isHidden = true
+            }else{
+                self.btnRestore.isHidden = false
             }
         }
     }

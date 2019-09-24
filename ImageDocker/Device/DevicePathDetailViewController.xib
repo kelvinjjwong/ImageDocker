@@ -9,6 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="DevicePathDetailViewController" customModule="ImageDocker" customModuleProvider="target">
             <connections>
                 <outlet property="btnGoto" destination="Ccn-3T-XWz" id="AJJ-S5-EDN"/>
+                <outlet property="btnRestore" destination="wGF-fS-uAJ" id="h12-4U-4d0"/>
                 <outlet property="btnUpdate" destination="17S-f6-JsL" id="xGh-XF-Qs2"/>
                 <outlet property="chkExclude" destination="ILr-S7-rKx" id="FK9-6P-HxM"/>
                 <outlet property="chkExcludeImported" destination="Scq-RR-WrR" id="ENp-8y-ahM"/>
@@ -114,6 +115,9 @@
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="onExcludeImportedClicked:" target="-2" id="hSs-3y-WCC"/>
+                    </connections>
                 </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="17S-f6-JsL">
                     <rect key="frame" x="381" y="30" width="85" height="32"/>
@@ -124,6 +128,17 @@
                     </buttonCell>
                     <connections>
                         <action selector="onUpdateClicked:" target="-2" id="sNx-CP-Ew5"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wGF-fS-uAJ">
+                    <rect key="frame" x="382" y="63" width="84" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="push" title="Restore" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1Rt-5c-rZy">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="onRestoreClicked:" target="-2" id="LPQ-Xg-qCT"/>
                     </connections>
                 </button>
             </subviews>

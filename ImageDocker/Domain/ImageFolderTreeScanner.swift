@@ -210,6 +210,7 @@ class ImageFolderTreeScanner {
                 var exclude = false
                 for excludedPath in excludedContainerPaths {
                     if photo.path.hasPrefix(excludedPath) {
+                        print("Exclude image (exclude device path): \(photo.path)")
                         exclude = true
                         break
                     }
@@ -248,7 +249,7 @@ class ImageFolderTreeScanner {
                             cropPath: cropPath)
     }
     
-    func walkthruDirectoryForPaths(repository:ImageContainer) -> DirectoryPaths{
+    func walkthruDirectoryForPaths(repository:ImageContainer, indicator:Accumulator? = nil) -> DirectoryPaths{
         let result = DirectoryPaths()
         let startingURL = URL(fileURLWithPath: repository.path)
         let realPhysicalPath = startingURL.resolvingSymlinksInPath().path.withStash()
@@ -279,7 +280,11 @@ class ImageFolderTreeScanner {
                 // to support soft link
                 let path = url.path.replacingFirstOccurrence(of: realPhysicalPath, with: repositoryPath)
                 let transformedURL = URL(fileURLWithPath: path)
-                print("Getting entry: \(path)")
+                print("[FileSys Scan] Getting entry: \(path)")
+                
+                if indicator != nil {
+                    indicator?.display(message: "[FileSys Scan] \(repositoryPath) ...")
+                }
                 
                 result.filesysUrls.insert(path)
                 result.fileUrlToRepo[path] = repository
@@ -289,6 +294,9 @@ class ImageFolderTreeScanner {
             catch {
                 print("Unexpected error occured: \(error).")
             }
+        }
+        if indicator != nil {
+            indicator?.display(message: "")
         }
         return result
     }
@@ -377,9 +385,9 @@ class ImageFolderTreeScanner {
             autoreleasepool { () -> Void in
                 print(">>> WALKING THRU DIRECTORY begin \(i)/\(totalCount) <<<")
                 if indicator != nil {
-                    indicator?.display(message: "Walking thru directory \(i)/\(totalCount) .....")
+                    indicator?.display(message: "Walking thru directory [\(i)/\(totalCount)] [\(repo.name)]")
                 }
-                let directoryPaths = self.walkthruDirectoryForPaths(repository: repo)
+                let directoryPaths = self.walkthruDirectoryForPaths(repository: repo, indicator: indicator)
                 for filesysUrl in directoryPaths.filesysUrls {
                     filesysUrls.insert(filesysUrl)
                 }
@@ -421,10 +429,12 @@ class ImageFolderTreeScanner {
                         var exclude = false
                         if excludedContainerPaths.contains(path) {
                             exclude = true
+                            print("Exclude container: \(path)")
                         }else{
                             for excludedPath in excludedContainerPaths {
                                 if path.hasPrefix(excludedPath.withStash()) {
                                     exclude = true
+                                    print("Exclude container: \(path)")
                                     break
                                 }
                             }
@@ -472,10 +482,12 @@ class ImageFolderTreeScanner {
                         var exclude = false
                         if excludedContainerPaths.contains(path) {
                             exclude = true
+                            print("Exclude container: \(path)")
                         }else{
                             for excludedPath in excludedContainerPaths {
                                 if path.hasPrefix(excludedPath.withStash()) {
                                     exclude = true
+                                    print("Exclude container: \(path)")
                                     break
                                 }
                             }
@@ -503,12 +515,21 @@ class ImageFolderTreeScanner {
 //                    if indicator != nil {
 //                        indicator?.dataChanged()
 //                    }
-                }
+                }// end of folderUrlsToAdd.count > 0
                 
                 if folderUrlsToRemoved.count > 0 {
+                    var k=0
                     for path in folderUrlsToRemoved {
-                        // REMOVE CONTAINER FROM DB
-                        ModelStore.default.deleteContainer(path: path)
+                        k+=1
+                        // REMOVE sub CONTAINER FROM DB
+                        if !FileManager.default.fileExists(atPath: path) {
+                            print("Deleting container and related images from DB: \(path)")
+                            ModelStore.default.deleteContainer(path: path, deleteImage: true)
+                            
+                            if indicator != nil {
+                                indicator?.display(message: "Removing non-exist container [\(k)/\(folderUrlsToRemoved.count)]")
+                            }
+                        }
                     }
                     
 //                    if indicator != nil {
@@ -606,10 +627,12 @@ class ImageFolderTreeScanner {
                         
                         var exclude = false
                         if excludedContainerPaths.contains(url) {
+                            print("Exclude image (excluded device path): \(url)")
                             exclude = true
                         }else{
                             for excludedPath in excludedContainerPaths {
                                 if url.hasPrefix(excludedPath.withStash()) {
+                                    print("Exclude image (excluded device path): \(url)")
                                     exclude = true
                                     break
                                 }
@@ -648,6 +671,8 @@ class ImageFolderTreeScanner {
                     return
                 }
                 
+                
+                print("Deleting image from DB (delFlag): \(url)")
                 ModelStore.default.deletePhoto(atPath: url)
                 
                 if indicator != nil {
@@ -681,12 +706,15 @@ class ImageFolderTreeScanner {
                                   indicator: indicator,
                                   quickCreate: true,
                                   sharedDB: ModelStore.sharedDBPool())
+            if indicator != nil {
+                indicator?.display(message: "Imported image [\(image.fileName)]")
+            }
             
             image.save()
         }
     }
     
-    func updateContainers(onCompleted: (() -> Void)? = nil ) {
+    func updateContainers(onCompleted: (() -> Void)? = nil , indicator:Accumulator? = nil) {
         var imageFolders:[ImageFolder] = []
         let exists = ModelStore.default.getAllContainers()
         if exists.count > 0 {
@@ -705,9 +733,18 @@ class ImageFolderTreeScanner {
                 let count = ModelStore.default.countPhotoFiles(rootPath: "\(imageFolder.url.path)/")
                 if var container = imageFolder.containerFolder {
                     if container.imageCount != count {
+                        var countChange = ""
+                        if container.imageCount > count {
+                            countChange = "-\(container.imageCount - count)"
+                        }else{
+                            countChange = "+\(container.imageCount - count)"
+                        }
                         print("= changing \(container.imageCount) to \(count)")  // don't delete this comment to avoid crash
                         container.imageCount = count
                         ModelStore.default.saveImageContainer(container: container)
+                        if indicator != nil {
+                            indicator?.display(message: "Updated [\(container.name) \(countChange) (\(container.parentFolder))]")
+                        }
                     }
                 }
             }
