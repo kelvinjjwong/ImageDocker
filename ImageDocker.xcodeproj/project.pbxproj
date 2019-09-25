@@ -96,6 +96,8 @@
 		8EB2715F23384469003BF3AF /* ImageFile+Meta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2715E23384469003BF3AF /* ImageFile+Meta.swift */; };
 		8EB27161233844C9003BF3AF /* ImageFile+Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB27160233844C9003BF3AF /* ImageFile+Location.swift */; };
 		8EB27163233845F0003BF3AF /* ImageFile+Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB27162233845F0003BF3AF /* ImageFile+Event.swift */; };
+		8EB27169233BB408003BF3AF /* RepositoryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB27167233BB408003BF3AF /* RepositoryDetailViewController.swift */; };
+		8EB2716A233BB408003BF3AF /* RepositoryDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EB27168233BB408003BF3AF /* RepositoryDetailViewController.xib */; };
 		8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CC20FA42AB00D8C71D /* Duplicate.swift */; };
 		8EB321CF20FA42C700D8C71D /* ModelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CE20FA42C700D8C71D /* ModelStore.swift */; };
 		8EB321D420FA433500D8C71D /* ImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321D020FA433500D8C71D /* ImageContainer.swift */; };
@@ -286,6 +288,8 @@
 		8EB2715E23384469003BF3AF /* ImageFile+Meta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageFile+Meta.swift"; sourceTree = "<group>"; };
 		8EB27160233844C9003BF3AF /* ImageFile+Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageFile+Location.swift"; sourceTree = "<group>"; };
 		8EB27162233845F0003BF3AF /* ImageFile+Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageFile+Event.swift"; sourceTree = "<group>"; };
+		8EB27167233BB408003BF3AF /* RepositoryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryDetailViewController.swift; sourceTree = "<group>"; };
+		8EB27168233BB408003BF3AF /* RepositoryDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RepositoryDetailViewController.xib; sourceTree = "<group>"; };
 		8EB321CC20FA42AB00D8C71D /* Duplicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Duplicate.swift; sourceTree = "<group>"; };
 		8EB321CE20FA42C700D8C71D /* ModelStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelStore.swift; sourceTree = "<group>"; };
 		8EB321D020FA433500D8C71D /* ImageContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageContainer.swift; path = ImageDocker/Domain/GRDB/ImageContainer.swift; sourceTree = SOURCE_ROOT; };
@@ -566,9 +570,43 @@
 			path = Selection;
 			sourceTree = "<group>";
 		};
+		8EB27164233BB244003BF3AF /* LibraryTree */ = {
+			isa = PBXGroup;
+			children = (
+				8E4C38D62118291F0089502C /* LibraryTreeController.swift */,
+				8EF4CE5C21D8026800C53AFF /* EditRepositoryViewController.swift */,
+				8EF125AB2216ECC500C423CA /* ContainerViewController.swift */,
+				8EEF071C225FCF8E000520B7 /* ContainerDetailViewController.swift */,
+				8EEF071D225FCF8E000520B7 /* ContainerDetailViewController.xib */,
+				8EB27167233BB408003BF3AF /* RepositoryDetailViewController.swift */,
+				8EB27168233BB408003BF3AF /* RepositoryDetailViewController.xib */,
+			);
+			path = LibraryTree;
+			sourceTree = "<group>";
+		};
+		8EB27165233BB274003BF3AF /* DeviceTree */ = {
+			isa = PBXGroup;
+			children = (
+				8E4C38D8211829410089502C /* DeviceTreeController.swift */,
+				8EF125A72214590000C423CA /* DeviceListViewController.swift */,
+				8EF125A82214590000C423CA /* DeviceListViewController.xib */,
+			);
+			path = DeviceTree;
+			sourceTree = "<group>";
+		};
+		8EB27166233BB301003BF3AF /* Pagination */ = {
+			isa = PBXGroup;
+			children = (
+				8EEF07202260D0E1000520B7 /* CollectionPaginationViewController.swift */,
+				8EEF07212260D0E1000520B7 /* CollectionPaginationViewController.xib */,
+			);
+			path = Pagination;
+			sourceTree = "<group>";
+		};
 		8EB986A820B21AEC0075B081 /* Collection */ = {
 			isa = PBXGroup;
 			children = (
+				8EB27166233BB301003BF3AF /* Pagination */,
 				8EB986B520B30C910075B081 /* CollectionViewDelegate.swift */,
 				8EB986B220B30C910075B081 /* CollectionViewItem.swift */,
 				8EB986B720B30C920075B081 /* CollectionViewItem.xib */,
@@ -582,23 +620,15 @@
 		8EB986AA20B21D3E0075B081 /* Tree */ = {
 			isa = PBXGroup;
 			children = (
+				8EB27165233BB274003BF3AF /* DeviceTree */,
+				8EB27164233BB244003BF3AF /* LibraryTree */,
 				8EFA7D01211F93C000419777 /* Domain */,
 				8EFA7D00211F93B400419777 /* View */,
 				8EE1AB3A20D05E0C001C75B0 /* Search */,
 				8EFE763B2094AF6B00B7CFCA /* TreeController.swift */,
 				8E4C38D2211828B00089502C /* EventsTreeController.swift */,
 				8E4C38D4211828FF0089502C /* MomentsTreeController.swift */,
-				8E4C38D62118291F0089502C /* LibraryTreeController.swift */,
-				8E4C38D8211829410089502C /* DeviceTreeController.swift */,
 				8EFA7CFE211F012A00419777 /* PlacesTreeController.swift */,
-				8EF125A72214590000C423CA /* DeviceListViewController.swift */,
-				8EF125A82214590000C423CA /* DeviceListViewController.xib */,
-				8EF4CE5C21D8026800C53AFF /* EditRepositoryViewController.swift */,
-				8EF125AB2216ECC500C423CA /* ContainerViewController.swift */,
-				8EEF071C225FCF8E000520B7 /* ContainerDetailViewController.swift */,
-				8EEF071D225FCF8E000520B7 /* ContainerDetailViewController.xib */,
-				8EEF07202260D0E1000520B7 /* CollectionPaginationViewController.swift */,
-				8EEF07212260D0E1000520B7 /* CollectionPaginationViewController.xib */,
 			);
 			path = Tree;
 			sourceTree = "<group>";
@@ -931,6 +961,7 @@
 				8E0AFA44208BDEA100CE8B68 /* Main.storyboard in Resources */,
 				8E95739B20EBEBD7003BD651 /* FilterViewController.xib in Resources */,
 				8E4E5B762219624D00FE4B68 /* FaceRecognitionOpenCV in Resources */,
+				8EB2716A233BB408003BF3AF /* RepositoryDetailViewController.xib in Resources */,
 				8EB986BE20B30C920075B081 /* CollectionViewItem.xib in Resources */,
 				8EEF0729226215E7000520B7 /* SplashViewController.xib in Resources */,
 				8EF4CE6521E56DC100C53AFF /* NotificationViewController.xib in Resources */,
@@ -1069,6 +1100,7 @@
 				8EB271552337B8BC003BF3AF /* ModelStore+Image+Update.swift in Sources */,
 				8EBA9DE32173C8F000DACAAD /* TheaterViewController.swift in Sources */,
 				8E4C38CD2117B5340089502C /* Phone.swift in Sources */,
+				8EB27169233BB408003BF3AF /* RepositoryDetailViewController.swift in Sources */,
 				8EAD03B323372BC800AAC7C6 /* ModelStore+ImagePlace.swift in Sources */,
 				8EFE763C2094AF6B00B7CFCA /* TreeController.swift in Sources */,
 				8E3EC3B5214DB1B8004B6125 /* LunarCalendarView.swift in Sources */,

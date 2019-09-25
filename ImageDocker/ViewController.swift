@@ -213,6 +213,9 @@ class ViewController: NSViewController {
     var containerDetailPopover:NSPopover?
     var containerDetailViewController:ContainerDetailViewController!
     
+    var repositoryDetailPopover:NSPopover?
+    var repositoryDetailViewController:RepositoryDetailViewController!
+    
     
     var collectionPaginationPopover:NSPopover?
     var collectionPaginationViewController:CollectionPaginationViewController!

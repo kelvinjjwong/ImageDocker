@@ -113,7 +113,7 @@ extension ModelStore {
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
-                result = try ImageContainer.filter(sql: "repositoryPath = ? and parentFolder=''", arguments: [repositoryPath]).fetchOne(db)
+                result = try ImageContainer.filter(sql: "(repositoryPath = ? or repositoryPath = ?) and parentFolder=''", arguments: [repositoryPath.withoutStash(), repositoryPath.withStash()]).fetchOne(db)
             }
         }catch{
             print(error)

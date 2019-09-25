@@ -145,16 +145,35 @@ extension ViewController {
         self.showTreeNodeButton(collection: collection, image: moreHorizontalIcon)
         if imageFolder.parent == nil {
             collection.buttonAction = { sender in
-                if let window = self.repositoryWindowController.window {
-                    if self.repositoryWindowController.isWindowLoaded {
-                        window.makeKeyAndOrderFront(self)
-                        print("order to front")
-                    }else{
-                        self.repositoryWindowController.showWindow(self)
-                        print("show window")
-                    }
-                    let vc = window.contentViewController as! EditRepositoryViewController
-                    vc.initEdit(path: imageFolder.url.path, window: window)
+//                if let window = self.repositoryWindowController.window {
+//                    if self.repositoryWindowController.isWindowLoaded {
+//                        window.makeKeyAndOrderFront(self)
+//                        print("order to front")
+//                    }else{
+//                        self.repositoryWindowController.showWindow(self)
+//                        print("show window")
+//                    }
+//                    let vc = window.contentViewController as! EditRepositoryViewController
+//                    vc.initEdit(path: imageFolder.url.path, window: window)
+//                }
+                if let container = imageFolder.containerFolder {
+                    self.createRepositoryDetailPopover()
+                    self.repositoryDetailViewController.initView(path: container.path, onConfigure: {
+                        if let window = self.repositoryWindowController.window {
+                            if self.repositoryWindowController.isWindowLoaded {
+                                window.makeKeyAndOrderFront(self)
+                                print("order to front")
+                            }else{
+                                self.repositoryWindowController.showWindow(self)
+                                print("show window")
+                            }
+                            let vc = window.contentViewController as! EditRepositoryViewController
+                            vc.initEdit(path: imageFolder.url.path, window: window)
+                        }
+                    })
+                    
+                    let cellRect = sender.bounds
+                    self.repositoryDetailPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxX)
                 }
             }
         }else{
@@ -242,6 +261,24 @@ extension ViewController {
     }
     
     // MARK: - POPOVER
+    
+    func createRepositoryDetailPopover(){
+        var myPopover = self.repositoryDetailPopover
+        if(myPopover == nil){
+            myPopover = NSPopover()
+            
+            let frame = CGRect(origin: .zero, size: CGSize(width: 370, height: 330))
+            self.repositoryDetailViewController = RepositoryDetailViewController()
+            self.repositoryDetailViewController.view.frame = frame
+            
+            myPopover!.contentViewController = self.repositoryDetailViewController
+            myPopover!.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
+            //myPopover!.animates = true
+            myPopover!.delegate = self
+            myPopover!.behavior = NSPopover.Behavior.transient
+        }
+        self.repositoryDetailPopover = myPopover
+    }
     
     func createContainerDetailPopover(){
         var myPopover = self.containerDetailPopover

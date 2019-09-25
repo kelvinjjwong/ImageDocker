@@ -194,4 +194,48 @@ struct LocalDirectory {
         print("got \(result.count) files from \(path)")
         return result
     }
+    
+    func occupiedDiskSpace(path: String) -> [String:String] {
+        print("getting occupied disk space of \(path)")
+        let pipe = Pipe()
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = pipe
+            command.currentDirectoryPath = path
+            command.launchPath = "/usr/bin/du"
+            command.arguments = ["-h", "."]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
+        }
+        //command.waitUntilExit()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
+        
+        var result:[String:String] = [:]
+        let lines = string.components(separatedBy: "\n")
+        for line in lines {
+            if line == "" {continue}
+            print(line)
+            var columns:[String] = []
+            let cols = line.components(separatedBy: "\t")
+            for col in cols {
+                if col == "" || col == " " {
+                    continue
+                }
+                print("col -> \(col)")
+                columns.append(col)
+            }
+            let space = columns[0].trimmingCharacters(in: .whitespacesAndNewlines)
+            let subpath = columns[1].trimmingCharacters(in: .whitespacesAndNewlines)
+            result[subpath] = space
+            print("\(subpath) -> \(space)")
+        }
+        result["console_output"] = string
+        return result
+    }
 }
