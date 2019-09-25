@@ -446,7 +446,7 @@ class PeopleViewController: NSViewController {
         
         self.cleanSourceInfo()
         self.imgSourcePreview.image = face.sourceImage
-        self.lblSourceDate.stringValue = "\(face.data.imageDate?.description ?? "")" // TODO: timezone maybe wrong
+        self.lblSourceDate.stringValue = "\(face.data.imageDate?.description ?? "")" // timezone maybe wrong
         self.lblSourceDescription.stringValue = face.sourceDescription
         
     }
@@ -694,7 +694,7 @@ class PeopleViewController: NSViewController {
     }
     
     @IBAction func onSourceLargerViewClicked(_ sender: NSButton) {
-        // TODO: TODO FUNCTION
+        // TODO: larger view of source image
     }
     
     @IBAction func onChkSampleClicked(_ sender: NSButton) {

@@ -48,7 +48,7 @@ class DevicePathDetailViewController: NSViewController {
     
     
     @IBAction func onRestoreClicked(_ sender: NSButton) {
-        // TODO: physically restore from backup folder to repository folder
+        // physically restore from backup folder to repository folder
         
         if let data = self.devicePath {
             let subfolder = data.toSubFolder

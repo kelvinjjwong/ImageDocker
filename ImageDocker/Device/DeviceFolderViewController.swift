@@ -298,6 +298,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
     
     private var accumulator:Accumulator? = nil
     
+    /// Push images from computer to device
     @IBAction func onOKClicked(_ sender: NSButton) {
         guard txtDirectory.stringValue != "" else {return}
         let i = self.comboDeviceList.indexOfSelectedItem
@@ -350,8 +351,6 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
                                                             sourceFileManager: sourceFileSystemHandler,
                                                             ignoreDiffPathChecking: true)
                         if fileState.existAtPath == .notExistAtPath {
-                            
-                            // TODO: patch image description
                             
                             let filename = fileState.filename
                             let url = URL(fileURLWithPath: path).appendingPathComponent(filename)

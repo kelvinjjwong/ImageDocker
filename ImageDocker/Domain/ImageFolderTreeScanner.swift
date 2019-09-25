@@ -134,7 +134,7 @@ class ImageFolderTreeScanner {
                             if container.hideByParent || exclude {
                                 // do nothing
                             }else{
-                                print("Setting for container \(index)/\(jall) [\(container.path)]")
+                                print("[Container DB Scan] Setting parent for container \(index)/\(jall) [\(container.path)]")
                                 let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path),
                                                                           name:container.name,
                                                                           repositoryPath: container.repositoryPath,
