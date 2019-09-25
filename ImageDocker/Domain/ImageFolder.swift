@@ -58,6 +58,7 @@ class ImageFolder : NSObject {
                                                                        subPath: subPath,
                                                                        manyChildren: manyChildren,
                                                                        sharedDB: sharedDB)
+        //print("Got or Created container: \(path)")
         if self.containerFolder?.imageCount == nil {
             self.containerFolder?.imageCount = countOfImages
         }

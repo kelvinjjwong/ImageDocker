@@ -107,53 +107,66 @@ class ImageFolderTreeScanner {
                     autoreleasepool { () -> Void in
                         let container = containers[index]
                         
-                        var exclude = false
-                        if excludedContainerPaths.contains(container.path) {
-                            exclude = true
-                        }else{
-                            for excludedPath in excludedContainerPaths {
-                                if container.path.hasPrefix(excludedPath.withStash()) {
-                                    exclude = true
-                                    break
-                                }
+                        var containerExistInFileSys = false
+                        var isDir:ObjCBool = false
+                        if FileManager.default.fileExists(atPath: container.path, isDirectory: &isDir) {
+                            if isDir.boolValue == true {
+                                containerExistInFileSys = true
                             }
                         }
-                        
-                        if container.hideByParent || exclude {
-                            // do nothing
+                        if !containerExistInFileSys {
+                            print("Container does not exist in FileSys, ignore processing: \(index)/\(jall): \(container.path)")
+
                         }else{
-                            print("Setting for container \(index)/\(jall) [\(container.path)]")
-                            let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path),
-                                                                      name:container.name,
-                                                                      repositoryPath: container.repositoryPath,
-                                                                      homePath: container.homePath,
-                                                                      storagePath: container.storagePath,
-                                                                      facePath: container.facePath,
-                                                                      cropPath: container.cropPath,
-                                                                      countOfImages: Int(container.imageCount),
-                                                                      updateModelStore: false,
-                                                                      sharedDB: ModelStore.sharedDBPool())
-                            urlFolders[container.path] = imageFolder
-                            if fast { // fast
-                                if container.parentFolder != "" {
-                                    if let parentFolder = urlFolders[container.parentFolder] {
-                                        imageFolder.setParent(parentFolder)
+                        
+                            var exclude = false
+                            if excludedContainerPaths.contains(container.path) {
+                                exclude = true
+                            }else{
+                                for excludedPath in excludedContainerPaths {
+                                    if container.path.hasPrefix(excludedPath.withStash()) {
+                                        exclude = true
+                                        break
                                     }
+                                }
+                            }
+                        
+                            if container.hideByParent || exclude {
+                                // do nothing
+                            }else{
+                                print("Setting for container \(index)/\(jall) [\(container.path)]")
+                                let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path),
+                                                                          name:container.name,
+                                                                          repositoryPath: container.repositoryPath,
+                                                                          homePath: container.homePath,
+                                                                          storagePath: container.storagePath,
+                                                                          facePath: container.facePath,
+                                                                          cropPath: container.cropPath,
+                                                                          countOfImages: Int(container.imageCount),
+                                                                          updateModelStore: false,
+                                                                          sharedDB: ModelStore.sharedDBPool())
+                                urlFolders[container.path] = imageFolder
+                                if fast { // fast
+                                    if container.parentFolder != "" {
+                                        if let parentFolder = urlFolders[container.parentFolder] {
+                                            imageFolder.setParent(parentFolder)
+                                        }
+                                    }else{
+                                        if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
+                                            imageFolder.setParent(parent)
+                                            foldersNeedSave.insert(imageFolder)
+                                        }
+                                    }
+                                    
                                 }else{
                                     if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
                                         imageFolder.setParent(parent)
                                         foldersNeedSave.insert(imageFolder)
                                     }
                                 }
-                                
-                            }else{
-                                if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
-                                    imageFolder.setParent(parent)
-                                    foldersNeedSave.insert(imageFolder)
-                                }
-                            }
-                            imageFolders.append(imageFolder)
-                        }
+                                imageFolders.append(imageFolder)
+                            } // end of if excluded
+                        } // end of if containerExistInFileSys
                         
                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "FOLDERSETTER_INCREMENT"), object: nil)
                         index += 1
@@ -172,8 +185,24 @@ class ImageFolderTreeScanner {
             for imageFolder in foldersNeedSave {
                 k += 1
                 if let imageContainer = imageFolder.containerFolder {
-                    print("Saving container into DB \(k)/\(kall): \(imageContainer.path)")
-                    ModelStore.default.saveImageContainer(container: imageContainer)
+                    var containerExistInFileSys = false
+                    var isDir:ObjCBool = false
+                    if FileManager.default.fileExists(atPath: imageContainer.path, isDirectory: &isDir) {
+                        if isDir.boolValue == true {
+                            containerExistInFileSys = true
+                        }
+                    }
+                    if !containerExistInFileSys {
+                        print("Container does not exist in FileSys, ignore saving in DB: \(k)/\(kall): \(imageContainer.path)")
+                        continue;
+                    }
+                    
+                    let saveState = ModelStore.default.saveImageContainer(container: imageContainer)
+                    if saveState == .OK {
+                        print("Saved container into DB \(k)/\(kall): \(imageContainer.path)")
+                    }else{
+                        print("[\(saveState)] Unable to save container into DB \(k)/\(kall): \(imageContainer.path)")
+                    }
                 }
             }
             print("\(Date()) Saving containers' parent: DONE ")
@@ -240,6 +269,7 @@ class ImageFolderTreeScanner {
                                  storagePath:String,
                                  facePath:String,
                                  cropPath:String) {
+        print("Creating repository with name:\(name) , path:\(path)")
         let _ = ImageFolder(URL(fileURLWithPath: path),
                             name: name,
                             repositoryPath: path,
@@ -301,7 +331,7 @@ class ImageFolderTreeScanner {
         return result
     }
     
-    func scanRepositories(indicator:Accumulator? = nil)  {
+    func scanRepositories(indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil)  {
         
         if suppressedScan {
             if indicator != nil {
@@ -345,6 +375,30 @@ class ImageFolderTreeScanner {
                 indicator?.display(message: "Scanning repository \(i)/\(totalCount) .....")
             }
             
+            var repoExistInFileSys = false
+            var isDir:ObjCBool = false
+            if FileManager.default.fileExists(atPath: repo.path, isDirectory: &isDir) {
+                if isDir.boolValue == true {
+                    repoExistInFileSys = true
+                }
+            }
+            
+            if !repoExistInFileSys {
+                print("[Repository Scan] Repository does not exist in FileSys: [\(repo.path)]")
+                let deleteState = ModelStore.default.deleteContainer(path: repo.path, deleteImage: true)
+                if deleteState == .OK {
+                    print("[Repository Scan] Deleted non-exist repository and related images in DB: [\(repo.path)]")
+                }else{
+                    print("[Repository Scan] [\(deleteState)] Unable to delete non-exist repository and related images in DB: [\(repo.path)]")
+                }
+                continue
+            }
+            
+            if repo.path.withStash() != repo.repositoryPath.withStash() {
+                print("[Repository Scan] Record is not a valid repository: path=[\(repo.path)] , it should belong to repositoryPath=[\(repo.repositoryPath)]")
+                continue
+            }
+            
             var containers = ModelStore.default.getAllContainerPaths(repositoryPath: repositoryPath).sorted()
             
 //            var pathToDeviceSubFolder:[String:String] = [:]
@@ -356,6 +410,7 @@ class ImageFolderTreeScanner {
                             let path = URL(fileURLWithPath: repo.path).appendingPathComponent(devicePath.toSubFolder).path
 //                            pathToDeviceSubFolder[path] = devicePath.toSubFolder
                             
+                            print("[Repository Scan] get or create container for device [id=\(repo.deviceId)] path [\(path)]")
                             let folder = ImageFolder(URL(fileURLWithPath: path),
                                                           name: devicePath.toSubFolder,
                                                           repositoryPath: repositoryPath,
@@ -373,10 +428,10 @@ class ImageFolderTreeScanner {
                             if !containers.contains(path) {
                                 containers.append(path)
                             }
-                        }
-                    }
-                }
-            }
+                        } // end of if not excluded
+                    } // end of loop devicePaths
+                } // end of if devicePaths.count > 0
+            } // end of if repo.deviceid != ""
             
             print("\(Date()) CHECKING REPO \(repo.path)")
             
@@ -387,6 +442,7 @@ class ImageFolderTreeScanner {
                 if indicator != nil {
                     indicator?.display(message: "Walking thru directory [\(i)/\(totalCount)] [\(repo.name)]")
                 }
+                        
                 let directoryPaths = self.walkthruDirectoryForPaths(repository: repo, indicator: indicator)
                 for filesysUrl in directoryPaths.filesysUrls {
                     filesysUrls.insert(filesysUrl)
@@ -524,10 +580,14 @@ class ImageFolderTreeScanner {
                         // REMOVE sub CONTAINER FROM DB
                         if !FileManager.default.fileExists(atPath: path) {
                             print("Deleting container and related images from DB: \(path)")
-                            ModelStore.default.deleteContainer(path: path, deleteImage: true)
+                            let deleteState = ModelStore.default.deleteContainer(path: path, deleteImage: true)
                             
                             if indicator != nil {
-                                indicator?.display(message: "Removing non-exist container [\(k)/\(folderUrlsToRemoved.count)]")
+                                if deleteState == .OK {
+                                    indicator?.display(message: "Removed non-exist container [\(k)/\(folderUrlsToRemoved.count)]")
+                                }else{
+                                    indicator?.display(message: "Failed to remove non-exist container [\(k)/\(folderUrlsToRemoved.count)]")
+                                }
                             }
                         }
                     }
@@ -555,12 +615,20 @@ class ImageFolderTreeScanner {
 //        }
         print("EXISTING DB PHOTO COUNT2 = \(dbUrls.count)")
         
+        if indicator != nil {
+            if dbUrls.count == filesysUrls.count {
+                indicator?.display(message: "Images have no difference btw FileSys and DB.")
+            }else if dbUrls.count < filesysUrls.count {
+                let gap = dbUrls.count - filesysUrls.count
+                indicator?.display(message: "Images in DB[\(dbUrls.count)] less (\(gap)) than in FileSys[\(filesysUrls.count)].")
+            }else if dbUrls.count > filesysUrls.count {
+                let gap = dbUrls.count - filesysUrls.count
+                indicator?.display(message: "Images in DB[\(dbUrls.count)] more (+\(gap) than in FileSys[\(filesysUrls.count)].")
+            }
+        }
+        
         let urlsToAdd:[String] = filesysUrls.subtracting(dbUrls).sorted()
         let urlsToRemoved:Set<String> = dbUrls.subtracting(filesysUrls)
-        
-        if indicator != nil {
-            indicator?.display(message: "")
-        }
         
         print("\(Date()) CHECK REPO: CHECK TO BE ADDED AND REMOVED : DONE")
         
@@ -571,6 +639,10 @@ class ImageFolderTreeScanner {
                 indicator?.forceComplete()
             }
             return
+        }
+        
+        if indicator != nil {
+            indicator?.display(message: "Ready for add/remove image records...")
         }
         
         if indicator != nil {
@@ -640,13 +712,21 @@ class ImageFolderTreeScanner {
                         }
                         
                         if !exclude {
-                            self.createImageIfAbsent(url: url, fileUrlToRepo: fileUrlToRepo, indicator: indicator)
-                        }else{
+                            let createState = self.createImageIfAbsent(url: url, fileUrlToRepo: fileUrlToRepo, indicator: indicator)
                             if indicator != nil {
-                                DispatchQueue.main.async {
-                                    let _ = indicator?.add("Searching images ...")
+                                if createState == .OK {
+                                    DispatchQueue.main.async {
+                                        print("Imported images ... (\(index)/\(urlsToAdd.count))")
+                                        let _ = indicator?.add("Imported images ... (\(index)/\(urlsToAdd.count))")
+                                    }
+                                }else{
+                                    DispatchQueue.main.async {
+                                        print("[\(createState)] Unable to import images ... (\(index)/\(urlsToAdd.count))")
+                                        let _ = indicator?.add("[\(createState)] Unable to import images ... (\(index)/\(urlsToAdd.count))")
+                                    }
                                 }
                             }
+                        }else{
                         }
                         index += 1
                     }
@@ -659,8 +739,10 @@ class ImageFolderTreeScanner {
             print("\(Date()) URLS TO ADD FROM FILESYS: SAVE DONE")
         }
         
+        var k = 0
         if urlsToRemoved.count > 0 {
             print("\(Date()) PHOTOS TO REMOVED FROM DB: \(urlsToRemoved.count)")
+            k += 1
 //            indicator?.dataChanged()
             for url in urlsToRemoved {
                 
@@ -673,10 +755,16 @@ class ImageFolderTreeScanner {
                 
                 
                 print("Deleting image from DB (delFlag): \(url)")
-                ModelStore.default.deletePhoto(atPath: url)
+                let deleteState = ModelStore.default.deletePhoto(atPath: url)
                 
                 if indicator != nil {
-                    let _ = indicator?.add()
+                    if deleteState == .OK {
+                        print("Deleted images ... (\(k)/\(urlsToRemoved.count))")
+                        let _ = indicator?.add("Deleted images ... (\(k)/\(urlsToRemoved.count))")
+                    }else{
+                        print("[\(deleteState)] Unable to delete images ... (\(k)/\(urlsToRemoved.count))")
+                        let _ = indicator?.add("[\(deleteState)] Unable to delete images ... (\(k)/\(urlsToRemoved.count))")
+                    }
                 }
             }
             
@@ -693,11 +781,15 @@ class ImageFolderTreeScanner {
         
         print("\(Date()) TRIGGER ON DATA CHANGED EVENT AFTER FINISHED SCANNING REPOSITORIES")
         if indicator != nil {
+            indicator?.display(message: "Repositories scan done.")
             indicator?.dataChanged()
+        }
+        if onCompleted != nil {
+            onCompleted!()
         }
     }
     
-    func createImageIfAbsent(url:String, fileUrlToRepo:[String:ImageContainer], indicator:Accumulator? = nil) {
+    func createImageIfAbsent(url:String, fileUrlToRepo:[String:ImageContainer], indicator:Accumulator? = nil) -> ExecuteState {
         //print("CREATING PHOTO \(url.path)")
         if let repo = fileUrlToRepo[url]{
             print(">>> Creating image \(url), repo: \(repo.repositoryPath)")
@@ -706,19 +798,20 @@ class ImageFolderTreeScanner {
                                   indicator: indicator,
                                   quickCreate: true,
                                   sharedDB: ModelStore.sharedDBPool())
-            if indicator != nil {
-                indicator?.display(message: "Imported image [\(image.fileName)]")
-            }
             
-            image.save()
+            return image.save()
+        }else{
+            return .NO_RECORD
         }
     }
     
+    // TODO: this procedure keep running in background for a long long time, keep getting and counting db records, need consider performance issue, or need change data structure
     func updateContainers(onCompleted: (() -> Void)? = nil , indicator:Accumulator? = nil) {
         var imageFolders:[ImageFolder] = []
         let exists = ModelStore.default.getAllContainers()
         if exists.count > 0 {
             for exist in exists{
+                //print("Updating image count of container: \(exist.path)")
                 let imageFolder = ImageFolder(URL(fileURLWithPath: exist.path),
                                               name: exist.name,
                                               repositoryPath: exist.repositoryPath,
@@ -741,9 +834,15 @@ class ImageFolderTreeScanner {
                         }
                         print("= changing \(container.imageCount) to \(count)")  // don't delete this comment to avoid crash
                         container.imageCount = count
-                        ModelStore.default.saveImageContainer(container: container)
+                        let updateState = ModelStore.default.saveImageContainer(container: container)
                         if indicator != nil {
-                            indicator?.display(message: "Updated [\(container.name) \(countChange) (\(container.parentFolder))]")
+                            if updateState == .OK {
+                                print("Updated image count [\(container.name) \(countChange) (\(container.parentFolder))]")
+                                indicator?.display(message: "Updated [\(container.name) \(countChange) (\(container.parentFolder))]")
+                            }else{
+                                print("[\(updateState)] Failed to update image count [\(container.name) \(countChange) (\(container.parentFolder))]")
+                                indicator?.display(message: "Failed to update [\(container.name) \(countChange) (\(container.parentFolder))]")
+                            }
                         }
                     }
                 }

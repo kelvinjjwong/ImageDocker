@@ -1027,7 +1027,10 @@ class ViewController: NSViewController {
             }
             )
             autoreleasepool(invoking: { () -> Void in
-                ImageFolderTreeScanner.default.scanRepositories(indicator: self.treeLoadingIndicator)
+                ImageFolderTreeScanner.default.scanRepositories(indicator: self.treeLoadingIndicator, onCompleted: {
+//                    self.chbScan.state = .off
+//                    self.onScanDisabled()
+                })
             })
             
         }
@@ -1263,24 +1266,32 @@ class ViewController: NSViewController {
         self.filterPopover = myPopover
     }
     
+    private func onScanEnabled() {
+        print("enabled scan")
+        self.suppressedScan = false
+        ImageFolderTreeScanner.default.suppressedScan = false
+        
+        self.btnScanState.isHidden = false
+        self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
+        
+        // start scaning immediatetly
+        self.startScanRepositories()
+    }
+    
+    private func onScanDisabled() {
+        print("disabled scan")
+        self.suppressedScan = true
+        ImageFolderTreeScanner.default.suppressedScan = true
+        
+        self.btnScanState.image = NSImage(named: NSImage.Name.statusNone)
+        self.btnScanState.isHidden = true
+    }
+    
     @IBAction func onCheckScanClicked(_ sender: NSButton) {
         if self.chbScan.state == NSButton.StateValue.on {
-            print("enabled scan")
-            self.suppressedScan = false
-            ImageFolderTreeScanner.default.suppressedScan = false
-            
-            self.btnScanState.isHidden = false
-            self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
-            
-            // start scaning immediatetly
-            self.startScanRepositories()
+            self.onScanEnabled()
         }else {
-            print("disabled scan")
-            self.suppressedScan = true
-            ImageFolderTreeScanner.default.suppressedScan = true
-            
-            self.btnScanState.image = NSImage(named: NSImage.Name.statusNone)
-            self.btnScanState.isHidden = true
+            self.onScanDisabled()
         }
     }
     

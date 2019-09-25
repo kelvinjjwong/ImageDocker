@@ -146,9 +146,11 @@ class ImageFile {
     
     // MARK: - UPDATE
     
-    func save(){
+    func save() -> ExecuteState{
         if self.imageData != nil {
-            ModelStore.default.saveImage(image: self.imageData!)
+            return ModelStore.default.saveImage(image: self.imageData!)
+        }else{
+            return .NO_RECORD
         }
     }
     
