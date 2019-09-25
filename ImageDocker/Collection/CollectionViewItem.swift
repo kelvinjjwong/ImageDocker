@@ -186,8 +186,7 @@ class CollectionViewItem: NSCollectionViewItem {
         }else if i == 8 {
             self.recognizeFaces()
         }else if i == 9 {
-            // TODO: REPLACE WITH BACKUP VERSION
-            // copy physical file
+            self.restoreBackupImage()
         }
     }
     
@@ -248,6 +247,49 @@ class CollectionViewItem: NSCollectionViewItem {
             }
         }else{
             self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "BACKUP VERSION DOES NOT EXIST")
+        }
+    }
+    
+    fileprivate func restoreBackupImage() {
+        DispatchQueue.global().async {
+            if let imageFile = self.imageFile, let url = self.imageFile?.url, FileManager.default.fileExists(atPath: url.path) {
+                if let backupUrl = self.imageFile?.backupUrl, FileManager.default.fileExists(atPath: backupUrl.path) {
+                    
+                    let uuid = UUID().uuidString
+                    let filename = imageFile.fileName
+                    let tmpFolder = "/tmp/\(uuid)"
+                    let tmpPath = "\(tmpFolder)/\(filename)"
+                    do {
+                        print("Restoring backup image from [\(backupUrl.path)] to [url.path]")
+                        try FileManager.default.createDirectory(atPath: tmpFolder, withIntermediateDirectories: true, attributes: nil)
+                        try FileManager.default.moveItem(atPath: url.path, toPath: tmpPath)
+                        try FileManager.default.copyItem(atPath: backupUrl.path, toPath: url.path)
+                        self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "RESTORED FROM BACKUP VERSION")
+                    }catch{
+                        print("Unable to restore backup image from [\(backupUrl.path)] to [url.path]")
+                        print(error)
+                        self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "RESTORE BACKUP VERSION FAILED")
+                        print("Restoring original editable version from \(tmpPath)")
+                        do {
+                            try FileManager.default.removeItem(atPath: url.path)
+                            try FileManager.default.moveItem(atPath: tmpPath, toPath: url.path)
+                        }catch{
+                            print("Unable to restore original editable version from [\(tmpPath)] to [\(url.path)]")
+                            print(error)
+                        }
+                    }
+                    do {
+                        try FileManager.default.removeItem(atPath: tmpPath)
+                        try FileManager.default.removeItem(atPath: tmpFolder)
+                    }catch{
+                        print(error)
+                    }
+                }else{
+                    self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "BACKUP VERSION DOES NOT EXIST")
+                }
+            }else{
+                self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "EDITABLE VERSION DOES NOT EXIST")
+            }
         }
     }
     

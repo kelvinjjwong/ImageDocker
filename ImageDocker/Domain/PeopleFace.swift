@@ -85,6 +85,9 @@ class PeopleFace {
     
     lazy var sourceImage:NSImage? = self.loadSourceImage()
     
+    lazy var sourceImageFile:ImageFile? = self.loadSourceImageFile()
+    
+    
     var sourceDescription = ""
     
     fileprivate func loadSourceImage() -> NSImage? {
@@ -94,6 +97,13 @@ class PeopleFace {
             return self.loadImage(url, size: PeopleFace.SourceImageSize)
         }
         self.sourceDescription = ""
+        return nil
+    }
+    
+    fileprivate func loadSourceImageFile() -> ImageFile? {
+        if let sourceImage = ModelStore.default.getImage(id: self.data.imageId) {
+            return ImageFile(photoFile: sourceImage)
+        }
         return nil
     }
     

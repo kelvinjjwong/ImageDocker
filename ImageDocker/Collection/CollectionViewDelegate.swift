@@ -144,11 +144,13 @@ protocol CollectionViewItemPreviewMessageDelegate {
 
 extension ViewController : CollectionViewItemPreviewMessageDelegate {
     func onCollectionViewItemPreviewMessage(description:String) {
-        self.lblImageDescription.stringValue = description
+        DispatchQueue.main.async {
+            self.lblImageDescription.stringValue = description
+        }
     }
 }
 
-// MARK: - QUICK LOOK
+// MARK: - QUICK LOOK (larger view)
 
 protocol CollectionViewItemQuickLookDelegate {
     func onCollectionViewItemQuickLook(_ image:ImageFile)

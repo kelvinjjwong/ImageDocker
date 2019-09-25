@@ -91,6 +91,8 @@ class PeopleViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureControllers()
+        
+        self.theaterWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "TheaterWindowController")) as? NSWindowController
     }
     
     fileprivate func configureControllers() {
@@ -413,9 +415,12 @@ class PeopleViewController: NSViewController {
     
     fileprivate var selectedFaceId:String = ""
     
+    fileprivate var selectedFace:PeopleFace? = nil
+    
     fileprivate func selectFace(_ face:PeopleFace) {
         self.cleanFaceInfo()
         self.selectedFaceId = face.data.id
+        self.selectedFace = face
         
         if self.selectedPeopleId == "Unknown" || self.selectedPeopleId == "" {
             self.adjustButtonsForUnknownFace(preview: true)
@@ -693,8 +698,23 @@ class PeopleViewController: NSViewController {
         }
     }
     
+    var theaterWindowController:NSWindowController!
+    
     @IBAction func onSourceLargerViewClicked(_ sender: NSButton) {
-        // TODO: larger view of source image
+        // larger view of source image
+        if let face = self.selectedFace, let imageFile = face.sourceImageFile {
+            if let window = self.theaterWindowController.window {
+                if self.theaterWindowController.isWindowLoaded {
+                    window.makeKeyAndOrderFront(self)
+                    print("order to front")
+                }else{
+                    self.theaterWindowController.showWindow(self)
+                    print("show window")
+                }
+                let vc = window.contentViewController as! TheaterViewController
+                vc.viewInit(image: imageFile)
+            }
+        }
     }
     
     @IBAction func onChkSampleClicked(_ sender: NSButton) {
