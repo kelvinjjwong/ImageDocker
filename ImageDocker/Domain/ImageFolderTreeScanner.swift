@@ -579,14 +579,15 @@ class ImageFolderTreeScanner {
                         k+=1
                         // REMOVE sub CONTAINER FROM DB
                         if !FileManager.default.fileExists(atPath: path) {
-                            print("Deleting container and related images from DB: \(path)")
                             let deleteState = ModelStore.default.deleteContainer(path: path, deleteImage: true)
                             
                             if indicator != nil {
                                 if deleteState == .OK {
+                                    print("Deleted container and related images from DB: \(path)")
                                     indicator?.display(message: "Removed non-exist container [\(k)/\(folderUrlsToRemoved.count)]")
                                 }else{
-                                    indicator?.display(message: "Failed to remove non-exist container [\(k)/\(folderUrlsToRemoved.count)]")
+                                    print("[\(deleteState)] Failed to delete container and related images from DB: \(path)")
+                                    indicator?.display(message: "[\(deleteState)] Failed to remove non-exist container [\(k)/\(folderUrlsToRemoved.count)]")
                                 }
                             }
                         }
