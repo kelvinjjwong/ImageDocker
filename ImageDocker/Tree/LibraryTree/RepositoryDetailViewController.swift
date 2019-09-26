@@ -60,6 +60,7 @@ class RepositoryDetailViewController: NSViewController {
             if let repository = ModelStore.default.getRepository(repositoryPath: path) {
                 var totalSize = 0.0
                 
+                // TODO: abstract below code to common function, provide UI to present a grid to show space occupation of all libraries
                 var repoDiskFree = ""
                 var repoDiskTotal = ""
                 if repository.repositoryPath != "" && FileManager.default.fileExists(atPath: repository.repositoryPath) {

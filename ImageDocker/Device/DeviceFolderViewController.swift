@@ -298,6 +298,8 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
     
     private var accumulator:Accumulator? = nil
     
+    // TODO: copy images to computer folder as well
+    
     /// Push images from computer to device
     @IBAction func onOKClicked(_ sender: NSButton) {
         guard txtDirectory.stringValue != "" else {return}
