@@ -1619,18 +1619,19 @@ class ViewController: NSViewController {
         
     }
     
+    // MARK: - COPY IMAGES TO ELSEWHERE (COMPUTER OR DEVICE)
     
     @IBAction func onCopyToDeviceClicked(_ sender: NSButton) {
         let images = self.selectionViewController.imagesLoader.getItems()
-        let devices = Android.bridge.devices()
+        //let devices = Android.bridge.devices()
         if images.count == 0 {
             Alert.noImageSelected()
             return
         }
-        if devices.count == 0 {
-            Alert.noAndroidDeviceFound()
-            return
-        }
+//        if devices.count == 0 {
+//            Alert.noAndroidDeviceFound()
+//            return
+//        }
         self.createCopyToDevicePopover(images: images)
         let cellRect = sender.bounds
         self.copyToDevicePopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
@@ -1659,6 +1660,7 @@ class ViewController: NSViewController {
         self.copyToDevicePopover = myPopover
     }
     
+    // MARK: - SELECTION AREA
     
     @IBAction func onSelectionRemoveAllClicked(_ sender: Any) {
         // remove from selection
@@ -1734,7 +1736,7 @@ class ViewController: NSViewController {
         }
     }
     
-    // MARK: Selection View - Batch Editor - Location Actions
+    // MARK: - Selection View - Batch Editor - Location Actions
     
     @IBAction func onAddressSearcherAction(_ sender: Any) {
         let address:String = addressSearcher.stringValue

@@ -220,22 +220,68 @@ struct LocalDirectory {
         let lines = string.components(separatedBy: "\n")
         for line in lines {
             if line == "" {continue}
-            print(line)
+            //print(line)
             var columns:[String] = []
             let cols = line.components(separatedBy: "\t")
             for col in cols {
                 if col == "" || col == " " {
                     continue
                 }
-                print("col -> \(col)")
+                //print("col -> \(col)")
                 columns.append(col)
             }
             let space = columns[0].trimmingCharacters(in: .whitespacesAndNewlines)
             let subpath = columns[1].trimmingCharacters(in: .whitespacesAndNewlines)
             result[subpath] = space
-            print("\(subpath) -> \(space)")
+            //print("\(subpath) -> \(space)")
         }
         result["console_output"] = string
         return result
+    }
+    
+    func freeSpace(path: String) -> (String, String) {
+        print("getting free space of \(path)")
+        let pipe = Pipe()
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = pipe
+            command.currentDirectoryPath = path
+            command.launchPath = "/bin/df"
+            command.arguments = ["-bH", "."]
+            do {
+                try command.run()
+            }catch{
+                print(error)
+            }
+        }
+        //command.waitUntilExit()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
+        
+        var totalSize = ""
+        var freeSize = ""
+        
+        let lines = string.components(separatedBy: "\n")
+        for line in lines {
+            if line == "" || line.hasPrefix("Filesystem") {continue}
+            //print(line)
+            var columns:[String] = []
+            let cols = line.components(separatedBy: " ")
+            for col in cols {
+                if col == "" || col == " " {
+                    continue
+                }
+                //print("col -> \(col)")
+                columns.append(col)
+            }
+            if columns.count >= 6 {
+                totalSize = columns[1].trimmingCharacters(in: .whitespacesAndNewlines)
+                freeSize = columns[3].trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+        }
+        //print("\(freeSize) / \(totalSize)")
+        return (totalSize, freeSize)
     }
 }
