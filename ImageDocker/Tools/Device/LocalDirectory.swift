@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Cocoa
 
 struct LocalDirectory {
     
@@ -283,5 +284,66 @@ struct LocalDirectory {
         }
         //print("\(freeSize) / \(totalSize)")
         return (totalSize, freeSize)
+    }
+    
+    public func getDiskSpace(path:String, lblDiskFree:NSTextField? = nil, lblDiskOccupied:NSTextField? = nil) -> (Double, String, [String:String]){
+        var spaceDetail:[String:String] = [:]
+        var spaceFree = "0M / 0T"
+        if path != "" && FileManager.default.fileExists(atPath: path) {
+            spaceDetail = self.occupiedDiskSpace(path: path)
+            
+            var diskFree = ""
+            var diskTotal = ""
+            (diskTotal, diskFree) = self.freeSpace(path: path)
+            if diskTotal != "" && diskFree != "" {
+                spaceFree = "\(diskFree) / \(diskTotal)"
+                if let lbl = lblDiskFree {
+                    DispatchQueue.main.async {
+                        lbl.stringValue = spaceFree
+                    }
+                }
+            }
+        }else{
+            spaceDetail = [:]
+        }
+        
+        var sizeGB = 0.0
+        if let size = spaceDetail["."] {
+            if let lbl = lblDiskOccupied {
+                DispatchQueue.main.async {
+                    lbl.stringValue = size
+                }
+            }
+            sizeGB = self.getSizeInGB(size: size)
+        }
+        return (sizeGB, spaceFree, spaceDetail)
+    }
+    
+    public func getSizeInGB(size:String) -> Double{
+        var sizeAmount = 0.0
+        sizeAmount = Double(size.substring(from: 0, to: -1)) ?? 0
+        if size.hasSuffix("T") {
+            sizeAmount = sizeAmount * 1000 * 1000
+        }
+        if size.hasSuffix("G") {
+            sizeAmount = sizeAmount * 1000
+        }
+        if size.hasSuffix("B") || size.hasSuffix("K") {
+            sizeAmount = 0
+        }
+        let sizeGB:Double = sizeAmount / 1000
+        return sizeGB
+    }
+    
+    public func getRepositorySpaceOccupationInGB(repository:ImageContainer) -> (Double, Double, Double, Double) {
+        let (repoSize, _, _) = self.getDiskSpace(path: repository.repositoryPath)
+        
+        let (backupSize, _, _) = self.getDiskSpace(path: repository.storagePath)
+        
+        let (faceSize, _, _) = self.getDiskSpace(path: repository.cropPath)
+        
+        let totalSize = repoSize + backupSize + faceSize
+        
+        return (repoSize, backupSize, faceSize, totalSize)
     }
 }

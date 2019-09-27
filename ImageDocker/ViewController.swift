@@ -210,6 +210,9 @@ class ViewController: NSViewController {
     var containerWindowController:NSWindowController!
     
     
+    var librariesViewPopover:NSPopover?
+    var librariesViewController:LibrariesViewController!
+    
     var containerDetailPopover:NSPopover?
     var containerDetailViewController:ContainerDetailViewController!
     

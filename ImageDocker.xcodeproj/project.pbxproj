@@ -35,7 +35,7 @@
 		8E4C38D12117B56A0089502C /* IPHONE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D02117B56A0089502C /* IPHONE.swift */; };
 		8E4C38D3211828B00089502C /* EventsTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D2211828B00089502C /* EventsTreeController.swift */; };
 		8E4C38D5211828FF0089502C /* MomentsTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D4211828FF0089502C /* MomentsTreeController.swift */; };
-		8E4C38D72118291F0089502C /* LibraryTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D62118291F0089502C /* LibraryTreeController.swift */; };
+		8E4C38D72118291F0089502C /* TreeController+LibraryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D62118291F0089502C /* TreeController+LibraryEntry.swift */; };
 		8E4C38D9211829410089502C /* DeviceTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D8211829410089502C /* DeviceTreeController.swift */; };
 		8E4E5B672217349600FE4B68 /* FaceDetection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B662217349600FE4B68 /* FaceDetection.swift */; };
 		8E4E5B6922195BFF00FE4B68 /* FaceRecognition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B6822195BFF00FE4B68 /* FaceRecognition.swift */; };
@@ -98,6 +98,9 @@
 		8EB27163233845F0003BF3AF /* ImageFile+Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB27162233845F0003BF3AF /* ImageFile+Event.swift */; };
 		8EB27169233BB408003BF3AF /* RepositoryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB27167233BB408003BF3AF /* RepositoryDetailViewController.swift */; };
 		8EB2716A233BB408003BF3AF /* RepositoryDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EB27168233BB408003BF3AF /* RepositoryDetailViewController.xib */; };
+		8EB2716D233E0729003BF3AF /* LibrariesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2716B233E0729003BF3AF /* LibrariesViewController.swift */; };
+		8EB2716E233E0729003BF3AF /* LibrariesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EB2716C233E0729003BF3AF /* LibrariesViewController.xib */; };
+		8EB27170233E15B0003BF3AF /* TreeController+LibrarySectionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2716F233E15AF003BF3AF /* TreeController+LibrarySectionMenu.swift */; };
 		8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CC20FA42AB00D8C71D /* Duplicate.swift */; };
 		8EB321CF20FA42C700D8C71D /* ModelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CE20FA42C700D8C71D /* ModelStore.swift */; };
 		8EB321D420FA433500D8C71D /* ImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321D020FA433500D8C71D /* ImageContainer.swift */; };
@@ -227,7 +230,7 @@
 		8E4C38D02117B56A0089502C /* IPHONE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPHONE.swift; sourceTree = "<group>"; };
 		8E4C38D2211828B00089502C /* EventsTreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsTreeController.swift; sourceTree = "<group>"; };
 		8E4C38D4211828FF0089502C /* MomentsTreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsTreeController.swift; sourceTree = "<group>"; };
-		8E4C38D62118291F0089502C /* LibraryTreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTreeController.swift; sourceTree = "<group>"; };
+		8E4C38D62118291F0089502C /* TreeController+LibraryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TreeController+LibraryEntry.swift"; sourceTree = "<group>"; };
 		8E4C38D8211829410089502C /* DeviceTreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTreeController.swift; sourceTree = "<group>"; };
 		8E4E5B662217349600FE4B68 /* FaceDetection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetection.swift; sourceTree = "<group>"; };
 		8E4E5B6822195BFF00FE4B68 /* FaceRecognition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceRecognition.swift; sourceTree = "<group>"; };
@@ -290,6 +293,9 @@
 		8EB27162233845F0003BF3AF /* ImageFile+Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageFile+Event.swift"; sourceTree = "<group>"; };
 		8EB27167233BB408003BF3AF /* RepositoryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryDetailViewController.swift; sourceTree = "<group>"; };
 		8EB27168233BB408003BF3AF /* RepositoryDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RepositoryDetailViewController.xib; sourceTree = "<group>"; };
+		8EB2716B233E0729003BF3AF /* LibrariesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrariesViewController.swift; sourceTree = "<group>"; };
+		8EB2716C233E0729003BF3AF /* LibrariesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LibrariesViewController.xib; sourceTree = "<group>"; };
+		8EB2716F233E15AF003BF3AF /* TreeController+LibrarySectionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TreeController+LibrarySectionMenu.swift"; sourceTree = "<group>"; };
 		8EB321CC20FA42AB00D8C71D /* Duplicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Duplicate.swift; sourceTree = "<group>"; };
 		8EB321CE20FA42C700D8C71D /* ModelStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelStore.swift; sourceTree = "<group>"; };
 		8EB321D020FA433500D8C71D /* ImageContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageContainer.swift; path = ImageDocker/Domain/GRDB/ImageContainer.swift; sourceTree = SOURCE_ROOT; };
@@ -573,13 +579,16 @@
 		8EB27164233BB244003BF3AF /* LibraryTree */ = {
 			isa = PBXGroup;
 			children = (
-				8E4C38D62118291F0089502C /* LibraryTreeController.swift */,
+				8EB2716F233E15AF003BF3AF /* TreeController+LibrarySectionMenu.swift */,
+				8E4C38D62118291F0089502C /* TreeController+LibraryEntry.swift */,
 				8EF4CE5C21D8026800C53AFF /* EditRepositoryViewController.swift */,
 				8EF125AB2216ECC500C423CA /* ContainerViewController.swift */,
 				8EEF071C225FCF8E000520B7 /* ContainerDetailViewController.swift */,
 				8EEF071D225FCF8E000520B7 /* ContainerDetailViewController.xib */,
 				8EB27167233BB408003BF3AF /* RepositoryDetailViewController.swift */,
 				8EB27168233BB408003BF3AF /* RepositoryDetailViewController.xib */,
+				8EB2716B233E0729003BF3AF /* LibrariesViewController.swift */,
+				8EB2716C233E0729003BF3AF /* LibrariesViewController.xib */,
 			);
 			path = LibraryTree;
 			sourceTree = "<group>";
@@ -603,6 +612,30 @@
 			path = Pagination;
 			sourceTree = "<group>";
 		};
+		8EB27171233E1796003BF3AF /* EventsTree */ = {
+			isa = PBXGroup;
+			children = (
+				8E4C38D2211828B00089502C /* EventsTreeController.swift */,
+			);
+			path = EventsTree;
+			sourceTree = "<group>";
+		};
+		8EB27172233E17A3003BF3AF /* PlacesTree */ = {
+			isa = PBXGroup;
+			children = (
+				8EFA7CFE211F012A00419777 /* PlacesTreeController.swift */,
+			);
+			path = PlacesTree;
+			sourceTree = "<group>";
+		};
+		8EB27173233E17AF003BF3AF /* MomentsTree */ = {
+			isa = PBXGroup;
+			children = (
+				8E4C38D4211828FF0089502C /* MomentsTreeController.swift */,
+			);
+			path = MomentsTree;
+			sourceTree = "<group>";
+		};
 		8EB986A820B21AEC0075B081 /* Collection */ = {
 			isa = PBXGroup;
 			children = (
@@ -620,15 +653,15 @@
 		8EB986AA20B21D3E0075B081 /* Tree */ = {
 			isa = PBXGroup;
 			children = (
+				8EB27173233E17AF003BF3AF /* MomentsTree */,
+				8EB27172233E17A3003BF3AF /* PlacesTree */,
+				8EB27171233E1796003BF3AF /* EventsTree */,
 				8EB27165233BB274003BF3AF /* DeviceTree */,
 				8EB27164233BB244003BF3AF /* LibraryTree */,
 				8EFA7D01211F93C000419777 /* Domain */,
-				8EFA7D00211F93B400419777 /* View */,
+				8EFA7D00211F93B400419777 /* TreeView */,
 				8EE1AB3A20D05E0C001C75B0 /* Search */,
 				8EFE763B2094AF6B00B7CFCA /* TreeController.swift */,
-				8E4C38D2211828B00089502C /* EventsTreeController.swift */,
-				8E4C38D4211828FF0089502C /* MomentsTreeController.swift */,
-				8EFA7CFE211F012A00419777 /* PlacesTreeController.swift */,
 			);
 			path = Tree;
 			sourceTree = "<group>";
@@ -764,13 +797,13 @@
 			path = Device;
 			sourceTree = "<group>";
 		};
-		8EFA7D00211F93B400419777 /* View */ = {
+		8EFA7D00211F93B400419777 /* TreeView */ = {
 			isa = PBXGroup;
 			children = (
 				8EF32D132095355400511538 /* LCSourceListTableCellView.swift */,
 				8EF4CE6621E6F29100C53AFF /* LCSourceListHeaderView.swift */,
 			);
-			path = View;
+			path = TreeView;
 			sourceTree = "<group>";
 		};
 		8EFA7D01211F93C000419777 /* Domain */ = {
@@ -950,6 +983,7 @@
 				8EBA69252090C2AA00221131 /* ExifTool in Resources */,
 				8EAC5F212144A60900E187E0 /* DeviceFolderViewController.xib in Resources */,
 				8EB986BB20B30C920075B081 /* HeaderView.xib in Resources */,
+				8EB2716E233E0729003BF3AF /* LibrariesViewController.xib in Resources */,
 				8E3EC3B6214DB1B8004B6125 /* LunarCalendarView.xib in Resources */,
 				8EF32D122094CB2000511538 /* SourceListIcons.xcassets in Resources */,
 				8EC82EAC2121C5A200FC0899 /* AddLocalDirectoryViewController.xib in Resources */,
@@ -1126,7 +1160,7 @@
 				8EAD03B723372C4600AAC7C6 /* ModelStore+ImageDevice.swift in Sources */,
 				8E8D4715222991230091E9C3 /* FaceCollectionViewItem.swift in Sources */,
 				8EC82EAB2121C5A200FC0899 /* AddLocalDirectoryViewController.swift in Sources */,
-				8E4C38D72118291F0089502C /* LibraryTreeController.swift in Sources */,
+				8E4C38D72118291F0089502C /* TreeController+LibraryEntry.swift in Sources */,
 				8EAC5F202144A60900E187E0 /* DeviceFolderViewController.swift in Sources */,
 				8EE1AB3D20D05E49001C75B0 /* EventListViewController.swift in Sources */,
 				8EB986B920B30C920075B081 /* CollectionViewItem.swift in Sources */,
@@ -1147,6 +1181,7 @@
 				8E8D47262236733B0091E9C3 /* OneColumnTableViewController.swift in Sources */,
 				8EF4CE6721E6F29100C53AFF /* LCSourceListHeaderView.swift in Sources */,
 				8EB986C620B6EBC40075B081 /* DarkTableView.swift in Sources */,
+				8EB2716D233E0729003BF3AF /* LibrariesViewController.swift in Sources */,
 				8E4C38CF2117B54D0089502C /* Android.swift in Sources */,
 				8E8D47182229AC220091E9C3 /* FaceIconCollectionViewController.swift in Sources */,
 				8EEF071E225FCF8E000520B7 /* ContainerDetailViewController.swift in Sources */,
@@ -1160,6 +1195,7 @@
 				8EC20B322281C0B8000F4819 /* FaceTask.swift in Sources */,
 				8E3EC3B4214DB1B8004B6125 /* LunarSolarConverter.swift in Sources */,
 				8EB271572337B9C3003BF3AF /* ModelStore+Image+Search.swift in Sources */,
+				8EB27170233E15B0003BF3AF /* TreeController+LibrarySectionMenu.swift in Sources */,
 				8EBA9DDF216F8BB100DACAAD /* NotesViewController.swift in Sources */,
 				8EEF0728226215E7000520B7 /* SplashViewController.swift in Sources */,
 				8E2CF37620AED6BA00A93375 /* Model.xcdatamodeld in Sources */,

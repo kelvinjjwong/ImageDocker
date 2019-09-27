@@ -298,7 +298,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
     
     private var accumulator:Accumulator? = nil
     
-    // TODO: copy images to computer folder as well
+    // TODO: copy images to computer folder as well, let user choose or input a folder 
     
     /// Push images from computer to device
     @IBAction func onOKClicked(_ sender: NSButton) {

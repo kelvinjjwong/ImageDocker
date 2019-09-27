@@ -191,9 +191,10 @@ extension ViewController : PXSourceListDelegate {
                         }else if title == "LIBRARY" {
                             cv.buttonShouldShow = true
                             cv.buttonAction = { sender in
-                                DispatchQueue.main.async {
-                                    self.refreshLibraryTree()
-                                }
+                                self.createLibrariesViewPopover()
+                                
+                                let cellRect = sender.bounds
+                                self.librariesViewPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxX)
                             }
                         }else{
                             cv.buttonShouldShow = false
