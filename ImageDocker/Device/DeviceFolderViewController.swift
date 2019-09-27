@@ -10,7 +10,7 @@ import Cocoa
 
 class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
     
-    // MARK: PROPERTIES
+    // MARK: - PROPERTIES
     
     private let defaultBasePath = "/sdcard/Pictures/"
     private let spaceAlternative = "."
@@ -18,7 +18,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
     private var images:[ImageFile]
     private var currentPath:URL
     
-    // MARK: CONTROLS
+    // MARK: - CONTROLS
     
     @IBOutlet weak var txtDirectory: NSTextField!
     @IBOutlet weak var btnOK: NSButton!
@@ -34,7 +34,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
     
     @IBOutlet weak var lblProgressMessage: NSTextField!
     
-    // MARK: TABLE DELEGATES
+    // MARK: - TABLE DELEGATES
     
     private let tblShortcutDelegate = DirectoryShortcutTableDelegate()
     private let tblFoldersDelegate = DirectoryFolderTableDelegate()
@@ -44,7 +44,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
     
     private var directoryViewDelegate:DirectoryViewDelegate
     
-    // MARK: INIT
+    // MARK: - VIEW INIT
     // 1st time:   init -> viewDidLoad -> setupDeviceList -> refreshDeviceList -> viewInit
     //>2nd time: reinit -> refreshDeviceList -> viewInit
     
@@ -81,47 +81,58 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
         self.setupDeviceList()
     }
     
-    // Executes on pop up every time
+    /// - If device dropdown list loaded with devices, pick the selected one (usually the first one)
+    /// and load default starting path from configuration, try to locate the path in the selected
+    /// device and refresh the folder list and filename list.
+    /// - If no device connected, load from computer desktop
+    /// - Note: Executes on pop up every time
     private func viewInit(){
+        var k = -1
         if self.deviceListController.deviceItems.count > 0 {
             let i = self.comboDeviceList.indexOfSelectedItem
             if i >= 0 && i < self.deviceListController.deviceItems.count {
-                let device = self.deviceListController.deviceItems[i]
-                
-                self.directoryViewDelegate = AndroidDirectoryViewDelegate(deviceId: device.deviceId)
-                
-                var referDefaultBasePath = false
-                var basePath = PreferencesController.exportToAndroidDirectory().trimmingCharacters(in: .whitespacesAndNewlines)
-                
-                if basePath == "" {
-                    referDefaultBasePath = true
-                }else{
-                    if !Android.bridge.exists(device: device.deviceId, path: basePath) {
-                        Android.bridge.mkdir(device: device.deviceId, path: basePath)
-                        if !Android.bridge.exists(device: device.deviceId, path: basePath) {
-                            referDefaultBasePath = true
-                        }
-                    }
-                }
-                
-                if referDefaultBasePath {
-                    if Android.bridge.exists(device: device.deviceId, path: defaultBasePath){
-                        basePath = defaultBasePath
-                    }else{
-                        basePath = "/sdcard/"
-                    }
-                }
-                
-                viewInit(path: basePath, shortcuts: directoryViewDelegate.shortcuts())
-            }else{
-                viewInit(path: "", shortcuts: [])
+                k = i
             }
+        }
+        if k > 0 { // if k > 1 when my computer is an option
+            let device = self.deviceListController.deviceItems[k]
+            
+            self.directoryViewDelegate = AndroidDirectoryViewDelegate(deviceId: device.deviceId)
+            
+            var referDefaultBasePath = false
+            var basePath = PreferencesController.exportToAndroidDirectory().trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            if basePath == "" {
+                referDefaultBasePath = true
+            }else{
+                if !Android.bridge.exists(device: device.deviceId, path: basePath) {
+                    Android.bridge.mkdir(device: device.deviceId, path: basePath)
+                    if !Android.bridge.exists(device: device.deviceId, path: basePath) {
+                        referDefaultBasePath = true
+                    }
+                }
+            }
+            
+            if referDefaultBasePath {
+                if Android.bridge.exists(device: device.deviceId, path: defaultBasePath){
+                    basePath = defaultBasePath
+                }else{
+                    basePath = "/sdcard/"
+                }
+            }
+            
+            viewInit(path: basePath, shortcuts: directoryViewDelegate.shortcuts())
         }else{
+            // TODO: load folders and files from computer desktop
+            // basePath is ~/desktop
+            // shortcuts includes desktop, documents, pictures, user home
+            // add a flag to indicate operating on my computer or a device
             viewInit(path: "", shortcuts: [])
         }
     }
     
-    // Executes on pop up every time
+    /// Replace shortcuts list with given list, reload folder list and filename list from the given path.
+    /// - Note: Executes on pop up every time
     private func viewInit(path:String, shortcuts:[DirectoryViewShortcut]){
         
         tblShortcutDelegate.shortcuts = shortcuts
@@ -144,58 +155,11 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
         self.refreshDeviceList()
     }
     
-    // Executes only once
-    private func setupDeviceList() {
-        if self.deviceListController == nil {
-            self.deviceListController = DeviceListComboController()
-            self.deviceListController.combobox = self.comboDeviceList
-            self.comboDeviceList.dataSource = self.deviceListController
-            self.comboDeviceList.delegate = self.deviceListController
-        }
-        self.refreshDeviceList()
-    }
-    
-    // Executes on pop up every time
-    func refreshDeviceList() {
-        self.lblProgressMessage.stringValue = ""
-        self.deviceListController.loadAndroidDevices()
-        self.comboDeviceList.reloadData()
-        if self.deviceListController.deviceItems.count > 0 {
-            // enable tables and buttons
-            self.tblShortcut.isEnabled = true
-            self.tblFolders.isEnabled = true
-            self.tblFiles.isEnabled = true
-            self.btnGoto.isEnabled = true
-            self.btnParent.isEnabled = true
-            self.btnHome.isEnabled = true
-            self.txtDirectory.isEnabled = true
-            self.btnOK.isEnabled = true
-            
-            self.comboDeviceList.selectItem(at: 0)
-            
-            self.lblProgressMessage.stringValue = "\(self.images.count) IMAGES TO BE COPIED"
-            
-        }else{
-            self.lblProgressMessage.stringValue = "NO DEVICES FOUND, PLEASE REFRESH TO RETRY"
-            // disable tables and buttons
-            self.tblShortcut.isEnabled = false
-            self.tblFolders.isEnabled = false
-            self.tblFiles.isEnabled = false
-            self.btnGoto.isEnabled = false
-            self.btnParent.isEnabled = false
-            self.btnHome.isEnabled = false
-            self.txtDirectory.isEnabled = false
-            self.btnOK.isEnabled = false
-        }
-        self.viewInit()
-    }
-    
-    // MARK: ACTION
-    
     @IBAction func onRefreshDevicesClicked(_ sender: Any) {
         self.refreshDeviceList()
     }
     
+    // MARK: - GOTO ACTION
     
     @IBAction func onBrowseClicked(_ sender: NSButton) {
         self.goto(path: txtDirectory.stringValue)
@@ -209,6 +173,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
         self.gotoHome()
     }
     
+    /// a router to decide load real data into lists or clean up lists
     internal func goto(path:String){
         if path != "" {
             currentPath = URL(fileURLWithPath: path)
@@ -225,6 +190,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
         }
     }
     
+    /// load folders and files into lists from the given url(path).
     private func goto(url:URL){
         
         let path = url.path
@@ -276,31 +242,12 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
         goto(path: self.directoryViewDelegate.home())
     }
     
-    private func getOrCreateFolderOnDevice(basePath: URL, photo: Image, fm: FileSystemHandler) -> String {
-        var album = ""
-        var event = photo.event ?? "家人照片"
-        if event == "" {
-            event = "家人照片"
-        }
-        if let year = photo.photoTakenYear {
-            album = "\(event) \(year)年"
-        }else{
-            album = event
-        }
-        album = album.replacingOccurrences(of: " ", with: spaceAlternative)
-        let url = basePath.appendingPathComponent(album)
-        if fm.createDirectory(atPath: url.path) {
-            return url.path
-        }else{
-            return basePath.path
-        }
-    }
-    
     private var accumulator:Accumulator? = nil
     
-    // TODO: copy images to computer folder as well, let user choose or input a folder 
+    // MARK: - EXPORT ACTION
     
-    /// Push images from computer to device
+    /// export selected images to given folder in computer or device
+    // TODO: user provide folder name
     @IBAction func onOKClicked(_ sender: NSButton) {
         guard txtDirectory.stringValue != "" else {return}
         let i = self.comboDeviceList.indexOfSelectedItem
@@ -378,6 +325,78 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
                 
             }
         }
+    }
+    
+    // MARK: - DEVICE FILESYS HANDLER
+    
+    private func getOrCreateFolderOnDevice(basePath: URL, photo: Image, fm: FileSystemHandler) -> String {
+        var album = ""
+        var event = photo.event ?? "家人照片"
+        if event == "" {
+            event = "家人照片"
+        }
+        if let year = photo.photoTakenYear {
+            album = "\(event) \(year)年"
+        }else{
+            album = event
+        }
+        album = album.replacingOccurrences(of: " ", with: spaceAlternative)
+        let url = basePath.appendingPathComponent(album)
+        if fm.createDirectory(atPath: url.path) {
+            return url.path
+        }else{
+            return basePath.path
+        }
+    }
+    
+    // MARK: - DEVICE DROPDOWN LIST
+    
+    /// Initialize device dropdown list controller, then call refreshDeviceList() method
+    /// - Note: Executes only once
+    private func setupDeviceList() {
+        if self.deviceListController == nil {
+            self.deviceListController = DeviceListComboController()
+            self.deviceListController.combobox = self.comboDeviceList
+            self.comboDeviceList.dataSource = self.deviceListController
+            self.comboDeviceList.delegate = self.deviceListController
+        }
+        self.refreshDeviceList()
+    }
+    
+    /// Refresh device dropdown list, then call viewInit() method
+    /// - Note: Executes on pop up every time
+    func refreshDeviceList() {
+        self.lblProgressMessage.stringValue = ""
+        self.deviceListController.loadAndroidDevices()
+        self.comboDeviceList.reloadData()
+        if self.deviceListController.deviceItems.count > 0 {
+            // enable tables and buttons
+            self.tblShortcut.isEnabled = true
+            self.tblFolders.isEnabled = true
+            self.tblFiles.isEnabled = true
+            self.btnGoto.isEnabled = true
+            self.btnParent.isEnabled = true
+            self.btnHome.isEnabled = true
+            self.txtDirectory.isEnabled = true
+            self.btnOK.isEnabled = true
+            
+            self.comboDeviceList.selectItem(at: 0)
+            
+            self.lblProgressMessage.stringValue = "\(self.images.count) IMAGES TO BE COPIED"
+            
+        }else{
+            self.lblProgressMessage.stringValue = "NO DEVICES FOUND, PLEASE REFRESH TO RETRY"
+            // disable tables and buttons
+            self.tblShortcut.isEnabled = false
+            self.tblFolders.isEnabled = false
+            self.tblFiles.isEnabled = false
+            self.btnGoto.isEnabled = false
+            self.btnParent.isEnabled = false
+            self.btnHome.isEnabled = false
+            self.txtDirectory.isEnabled = false
+            self.btnOK.isEnabled = false
+        }
+        self.viewInit()
     }
     
 }

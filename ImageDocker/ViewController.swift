@@ -1653,7 +1653,7 @@ class ViewController: NSViewController {
             self.deviceFolderViewController.view.frame = frame
             
             myPopover!.contentViewController = self.deviceFolderViewController
-            myPopover!.appearance = NSAppearance(named: NSAppearance.Name.aqua)!
+            myPopover!.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
             //myPopover!.animates = true
             myPopover!.delegate = self
             myPopover!.behavior = NSPopover.Behavior.transient
