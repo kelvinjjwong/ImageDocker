@@ -208,6 +208,10 @@ struct DeviceShell {
             let indexStartOfText = line.index(line.startIndex, offsetBy: 2)
             let filename = String(line[indexStartOfText...])
             
+            if filename.hasSuffix(".app") {
+                continue
+            }
+            
             result.append(filename.trimmingCharacters(in: .whitespacesAndNewlines))
         }
         return result.sorted()

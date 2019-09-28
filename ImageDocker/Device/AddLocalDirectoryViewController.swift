@@ -16,7 +16,7 @@ struct DirectoryViewShortcut {
 
 protocol DirectoryViewDelegate {
     func listSubFolders(in:String) -> [String]
-    func listFiles(in:String) -> [String]
+    func listFiles(in:String, ext:Set<String>?) -> [String]
     func home() -> String
     func shortcuts() -> [DirectoryViewShortcut]
 }
@@ -171,7 +171,7 @@ class AddLocalDirectoryViewController: NSViewController, DirectoryViewGotoDelega
         let folders = self.directoryViewDelegate.listSubFolders(in: path)
         self.tblFoldersDelegate.folders = folders
         
-        let files = self.directoryViewDelegate.listFiles(in: path)
+        let files = self.directoryViewDelegate.listFiles(in: path, ext: nil)
         self.tblFilesDelegate.files = files
         
         self.tblFolders.reloadData()

@@ -415,6 +415,7 @@ class ExportManager {
         return eventAndPlace
     }
     
+    /// - deprecated
     func getOrCreateFilename(photo:Image, toPath path:String, dateFormat dateFormatter:DateFormatter,
                                     targetFileManager fm:FileSystemHandler,
                                     sourceFileManager:FileSystemHandler,

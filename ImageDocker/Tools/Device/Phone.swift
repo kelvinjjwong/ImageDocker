@@ -63,6 +63,7 @@ struct PhoneFile {
 enum MobileType:Int {
     case Android
     case iPhone
+    case Unknown
 }
 
 struct PhoneDevice {

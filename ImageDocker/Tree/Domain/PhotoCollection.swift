@@ -52,6 +52,8 @@ class PhotoCollection: NSObject {
     
     var deviceConnected = false
     
+    var isAwaitingEntry:Bool = false
+    
     var hasDuplicates:Bool = false
     var isDateEntry:Bool = true
     
