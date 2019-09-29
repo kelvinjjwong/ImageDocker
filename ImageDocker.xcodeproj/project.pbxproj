@@ -178,7 +178,7 @@
 		8EF4CE5721D77BD600C53AFF /* Family.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE5621D77BD600C53AFF /* Family.swift */; };
 		8EF4CE5921D77BEA00C53AFF /* ImagePeople.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE5821D77BEA00C53AFF /* ImagePeople.swift */; };
 		8EF4CE5E21D8026800C53AFF /* EditRepositoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE5C21D8026800C53AFF /* EditRepositoryViewController.swift */; };
-		8EF4CE6121E56CF700C53AFF /* ViewControllerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE6021E56CF700C53AFF /* ViewControllerUtils.swift */; };
+		8EF4CE6121E56CF700C53AFF /* ViewController+Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE6021E56CF700C53AFF /* ViewController+Notification.swift */; };
 		8EF4CE6421E56DC100C53AFF /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE6221E56DC100C53AFF /* NotificationViewController.swift */; };
 		8EF4CE6521E56DC100C53AFF /* NotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EF4CE6321E56DC100C53AFF /* NotificationViewController.xib */; };
 		8EF4CE6721E6F29100C53AFF /* LCSourceListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE6621E6F29100C53AFF /* LCSourceListHeaderView.swift */; };
@@ -393,7 +393,7 @@
 		8EF4CE5621D77BD600C53AFF /* Family.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Family.swift; sourceTree = "<group>"; };
 		8EF4CE5821D77BEA00C53AFF /* ImagePeople.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePeople.swift; sourceTree = "<group>"; };
 		8EF4CE5C21D8026800C53AFF /* EditRepositoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRepositoryViewController.swift; sourceTree = "<group>"; };
-		8EF4CE6021E56CF700C53AFF /* ViewControllerUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerUtils.swift; sourceTree = "<group>"; };
+		8EF4CE6021E56CF700C53AFF /* ViewController+Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Notification.swift"; sourceTree = "<group>"; };
 		8EF4CE6221E56DC100C53AFF /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		8EF4CE6321E56DC100C53AFF /* NotificationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotificationViewController.xib; sourceTree = "<group>"; };
 		8EF4CE6621E6F29100C53AFF /* LCSourceListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCSourceListHeaderView.swift; sourceTree = "<group>"; };
@@ -489,7 +489,6 @@
 				8EB986AC20B223550075B081 /* Tools */,
 				8EBA69262090C37B00221131 /* Supporting Files */,
 				8E0AFA3C208BDEA000CE8B68 /* AppDelegate.swift */,
-				8EF4CE6021E56CF700C53AFF /* ViewControllerUtils.swift */,
 				8EEF072A22626FE7000520B7 /* ViewController.swift */,
 				8EB271982340F22F003BF3AF /* ViewController+Search.swift */,
 				8EB271962340F1FF003BF3AF /* ViewController+Progress.swift */,
@@ -511,6 +510,7 @@
 				8EB271762340D867003BF3AF /* ViewController+CollectionArea.swift */,
 				8EB2719A2340F907003BF3AF /* ViewController+CollectionArea+CombineDuplicated.swift */,
 				8EB271742340D7B0003BF3AF /* ViewController+Menu.swift */,
+				8EF4CE6021E56CF700C53AFF /* ViewController+Notification.swift */,
 				8E0AFA42208BDEA100CE8B68 /* Main.storyboard */,
 				8EA643F4208D6E5100C7D695 /* PreferencesController.swift */,
 				8E98B8F220D5C90600771280 /* WindowController.swift */,
@@ -1248,7 +1248,7 @@
 				8E7B98E1214882080019ED87 /* Alert.swift in Sources */,
 				8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */,
 				8E4C38D3211828B00089502C /* EventsTreeController.swift in Sources */,
-				8EF4CE6121E56CF700C53AFF /* ViewControllerUtils.swift in Sources */,
+				8EF4CE6121E56CF700C53AFF /* ViewController+Notification.swift in Sources */,
 				8EFA7CFF211F012A00419777 /* PlacesTreeController.swift in Sources */,
 				8EB2715B23384364003BF3AF /* ImageFile+SourceFilename.swift in Sources */,
 				8EAD03B12337299E00AAC7C6 /* ModelStore+ImageContainer.swift in Sources */,

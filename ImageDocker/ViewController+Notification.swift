@@ -43,16 +43,4 @@ extension ViewController {
         
         self.notificationPopover?.show(relativeTo: invisibleWindow.contentView!.frame, of: invisibleWindow.contentView!, preferredEdge: .maxY)
     }
-    
-    func showTreeNodeButton(collection: PhotoCollection, image: NSImage? = nil) {
-        collection.enableMoreButton = true
-        if let img = image {
-            collection.treeNodeView?.btnMore.image = img
-            collection.imageOfMoreButton = img
-        }
-    }
-    
-    func hideTreeNodeButton(collection: PhotoCollection){
-        collection.enableMoreButton = false
-    }
 }
