@@ -320,7 +320,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
         
         if self.isComputer {
             DispatchQueue.global().async {
-                let (_, freeSize) = LocalDirectory.bridge.freeSpace(path: path)
+                let (_, freeSize, _) = LocalDirectory.bridge.freeSpace(path: path)
                 DispatchQueue.main.async {
                     self.lblFreeSpace.stringValue = freeSize
                 }

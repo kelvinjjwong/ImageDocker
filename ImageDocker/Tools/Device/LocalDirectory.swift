@@ -245,7 +245,7 @@ struct LocalDirectory {
         return result
     }
     
-    func freeSpace(path: String) -> (String, String) {
+    func freeSpace(path: String) -> (String, String, String) {
         print("getting free space of \(path)")
         let pipe = Pipe()
         autoreleasepool { () -> Void in
@@ -268,11 +268,12 @@ struct LocalDirectory {
         
         var totalSize = ""
         var freeSize = ""
+        var mountPoint = ""
         
         let lines = string.components(separatedBy: "\n")
         for line in lines {
             if line == "" || line.hasPrefix("Filesystem") {continue}
-            //print(line)
+            print(line)
             var columns:[String] = []
             let cols = line.components(separatedBy: " ")
             for col in cols {
@@ -285,21 +286,26 @@ struct LocalDirectory {
             if columns.count >= 6 {
                 totalSize = columns[1].trimmingCharacters(in: .whitespacesAndNewlines)
                 freeSize = columns[3].trimmingCharacters(in: .whitespacesAndNewlines)
+                for i in 5...(columns.count-1) {
+                    mountPoint += columns[i]
+                    mountPoint += " "
+                }
             }
         }
-        //print("\(freeSize) / \(totalSize)")
-        return (totalSize, freeSize)
+        print("\(mountPoint) -> \(freeSize) / \(totalSize)")
+        return (totalSize, freeSize, mountPoint.trimmingCharacters(in: .whitespacesAndNewlines))
     }
     
-    public func getDiskSpace(path:String, lblDiskFree:NSTextField? = nil, lblDiskOccupied:NSTextField? = nil) -> (Double, String, [String:String]){
+    public func getDiskSpace(path:String, lblDiskFree:NSTextField? = nil, lblDiskOccupied:NSTextField? = nil) -> (Double, String, String, [String:String]){
         var spaceDetail:[String:String] = [:]
         var spaceFree = "0M / 0T"
+        var mountPoint = ""
         if path != "" && FileManager.default.fileExists(atPath: path) {
             spaceDetail = self.occupiedDiskSpace(path: path)
             
             var diskFree = ""
             var diskTotal = ""
-            (diskTotal, diskFree) = self.freeSpace(path: path)
+            (diskTotal, diskFree, mountPoint) = self.freeSpace(path: path)
             if diskTotal != "" && diskFree != "" {
                 spaceFree = "\(diskFree) / \(diskTotal)"
                 if let lbl = lblDiskFree {
@@ -321,7 +327,7 @@ struct LocalDirectory {
             }
             sizeGB = self.getSizeInGB(size: size)
         }
-        return (sizeGB, spaceFree, spaceDetail)
+        return (sizeGB, spaceFree, mountPoint, spaceDetail)
     }
     
     public func getSizeInGB(size:String) -> Double{
@@ -340,15 +346,37 @@ struct LocalDirectory {
         return sizeGB
     }
     
-    public func getRepositorySpaceOccupationInGB(repository:ImageContainer) -> (Double, Double, Double, Double) {
-        let (repoSize, _, _) = self.getDiskSpace(path: repository.repositoryPath)
+    public func getRepositorySpaceOccupationInGB(repository:ImageContainer, diskUsage:[String:Double]? = nil) -> (Double, Double, Double, Double, [String:Double]) {
+        var usage:[String:Double] = [:]
+        if let u = diskUsage {
+            usage = u
+        }
+        let (repoSize, _, repoDisk, _) = self.getDiskSpace(path: repository.repositoryPath)
+        let repoDiskUsed = usage[repoDisk]
+        if repoDiskUsed == nil {
+            usage[repoDisk] = repoSize
+        }else{
+            usage[repoDisk] = repoDiskUsed! + repoSize
+        }
         
-        let (backupSize, _, _) = self.getDiskSpace(path: repository.storagePath)
+        let (backupSize, _, backupDisk, _) = self.getDiskSpace(path: repository.storagePath)
+        let backupDiskUsed = usage[backupDisk]
+        if backupDiskUsed == nil {
+            usage[backupDisk] = backupSize
+        }else{
+            usage[backupDisk] = backupDiskUsed! + backupSize
+        }
         
-        let (faceSize, _, _) = self.getDiskSpace(path: repository.cropPath)
+        let (faceSize, _, faceDisk, _) = self.getDiskSpace(path: repository.cropPath)
+        let faceDiskUsed = usage[faceDisk]
+        if faceDiskUsed == nil {
+            usage[faceDisk] = faceSize
+        }else{
+            usage[faceDisk] = faceDiskUsed! + faceSize
+        }
         
         let totalSize = repoSize + backupSize + faceSize
         
-        return (repoSize, backupSize, faceSize, totalSize)
+        return (repoSize, backupSize, faceSize, totalSize, usage)
     }
 }

@@ -54,8 +54,10 @@ class LibrariesViewController: NSViewController {
             var totalRepo = 0.0
             var totalBackup = 0.0
             var totalFace = 0.0
+            var diskUsage:[String:Double] = [:]
             for repo in repos {
-                let (repoSize, backupSize, faceSize, totalSize) = LocalDirectory.bridge.getRepositorySpaceOccupationInGB(repository: repo)
+                let (repoSize, backupSize, faceSize, totalSize, usage) = LocalDirectory.bridge.getRepositorySpaceOccupationInGB(repository: repo, diskUsage: diskUsage)
+                diskUsage = usage
                 let total = self.getBytesText(totalSize)
                 let repoTxt = self.getBytesText(repoSize)
                 let backupTxt = self.getBytesText(backupSize)
@@ -74,6 +76,15 @@ class LibrariesViewController: NSViewController {
                                  self.getBytesText(totalRepo),
                                  self.getBytesText(totalBackup),
                                  self.getBytesText(totalFace)))
+            
+            self.records.append(("", "", "", "", ""))
+            self.records.append(("Disk", "Used", "Free", "Total", ""))
+            
+            for key in diskUsage.keys {
+                let (diskTotal, diskFree, _) = LocalDirectory.bridge.freeSpace(path: key)
+                self.records.append((key, "\(diskUsage[key] ?? 0) G", diskFree, diskTotal, ""))
+            }
+            
             DispatchQueue.main.async {
                 self.tblSpaceOccupation.reloadData()
                 self.btnCalculate.isEnabled = true
