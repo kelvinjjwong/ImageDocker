@@ -48,7 +48,6 @@ extension ViewController {
     }
     
     internal func hideToolbarOfTree() {
-        self.chbScan.isHidden = true
         self.btnAddRepository.isHidden = true
         self.btnRemoveRepository.isHidden = true
         self.btnRefreshRepository.isHidden = true
@@ -56,7 +55,6 @@ extension ViewController {
     }
     
     internal func showToolbarOfTree() {
-        self.chbScan.isHidden = false
         self.btnAddRepository.isHidden = false
         self.btnRemoveRepository.isHidden = false
         self.btnRefreshRepository.isHidden = false

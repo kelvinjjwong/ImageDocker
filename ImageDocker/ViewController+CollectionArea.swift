@@ -30,7 +30,6 @@ extension ViewController {
     }
     
     internal func hideToolbarOfCollectionView() {
-        self.chbExport.isHidden = true
         self.btnRefreshCollectionView.isHidden = true
         self.btnCombineDuplicates.isHidden = true
         self.chbSelectAll.isHidden = true
@@ -38,7 +37,6 @@ extension ViewController {
     }
     
     internal func showToolbarOfCollectionView() {
-        self.chbExport.isHidden = false
         self.btnRefreshCollectionView.isHidden = false
         self.btnCombineDuplicates.isHidden = false
         self.chbSelectAll.isHidden = false
@@ -48,7 +46,6 @@ extension ViewController {
     
     
     internal func disableCollectionViewControls() {
-        self.chbExport.isEnabled = false
         self.btnRefreshCollectionView.isEnabled = false
         self.chbSelectAll.isEnabled = false
         self.chbShowHidden.isEnabled = false
@@ -57,7 +54,6 @@ extension ViewController {
     
     
     internal func enableCollectionViewControls() {
-        self.chbExport.isEnabled = true
         self.btnRefreshCollectionView.isEnabled = true
         self.chbSelectAll.isEnabled = true
         self.chbShowHidden.isEnabled = true

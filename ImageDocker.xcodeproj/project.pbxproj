@@ -101,7 +101,7 @@
 		8EB2716D233E0729003BF3AF /* LibrariesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2716B233E0729003BF3AF /* LibrariesViewController.swift */; };
 		8EB2716E233E0729003BF3AF /* LibrariesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EB2716C233E0729003BF3AF /* LibrariesViewController.xib */; };
 		8EB27170233E15B0003BF3AF /* TreeController+LibrarySectionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2716F233E15AF003BF3AF /* TreeController+LibrarySectionMenu.swift */; };
-		8EB271752340D7B0003BF3AF /* ViewController+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271742340D7B0003BF3AF /* ViewController+Menu.swift */; };
+		8EB271752340D7B0003BF3AF /* ViewController+Menu+Face.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271742340D7B0003BF3AF /* ViewController+Menu+Face.swift */; };
 		8EB271772340D867003BF3AF /* ViewController+CollectionArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271762340D867003BF3AF /* ViewController+CollectionArea.swift */; };
 		8EB271792340D8A3003BF3AF /* ViewController+PreviewArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271782340D8A3003BF3AF /* ViewController+PreviewArea.swift */; };
 		8EB2717B2340D8BC003BF3AF /* ViewController+SelectionArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2717A2340D8BC003BF3AF /* ViewController+SelectionArea.swift */; };
@@ -117,10 +117,11 @@
 		8EB2718F2340EE95003BF3AF /* ViewController+TreeArea+Scan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2718E2340EE95003BF3AF /* ViewController+TreeArea+Scan.swift */; };
 		8EB271912340EED2003BF3AF /* ViewController+TreeArea+Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271902340EED2003BF3AF /* ViewController+TreeArea+Filter.swift */; };
 		8EB271932340EF6F003BF3AF /* ViewController+Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271922340EF6F003BF3AF /* ViewController+Schedule.swift */; };
-		8EB271952340F13C003BF3AF /* ViewController+Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271942340F13C003BF3AF /* ViewController+Export.swift */; };
 		8EB271972340F1FF003BF3AF /* ViewController+Progress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271962340F1FF003BF3AF /* ViewController+Progress.swift */; };
 		8EB271992340F22F003BF3AF /* ViewController+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271982340F22F003BF3AF /* ViewController+Search.swift */; };
 		8EB2719B2340F907003BF3AF /* ViewController+CollectionArea+CombineDuplicated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2719A2340F907003BF3AF /* ViewController+CollectionArea+CombineDuplicated.swift */; };
+		8EB2719D23412FD5003BF3AF /* ViewController+Menu+Scan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2719C23412FD5003BF3AF /* ViewController+Menu+Scan.swift */; };
+		8EB2719F23412FE8003BF3AF /* ViewController+Menu+Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2719E23412FE8003BF3AF /* ViewController+Menu+Export.swift */; };
 		8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CC20FA42AB00D8C71D /* Duplicate.swift */; };
 		8EB321CF20FA42C700D8C71D /* ModelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CE20FA42C700D8C71D /* ModelStore.swift */; };
 		8EB321D420FA433500D8C71D /* ImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321D020FA433500D8C71D /* ImageContainer.swift */; };
@@ -316,7 +317,7 @@
 		8EB2716B233E0729003BF3AF /* LibrariesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrariesViewController.swift; sourceTree = "<group>"; };
 		8EB2716C233E0729003BF3AF /* LibrariesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LibrariesViewController.xib; sourceTree = "<group>"; };
 		8EB2716F233E15AF003BF3AF /* TreeController+LibrarySectionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TreeController+LibrarySectionMenu.swift"; sourceTree = "<group>"; };
-		8EB271742340D7B0003BF3AF /* ViewController+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Menu.swift"; sourceTree = "<group>"; };
+		8EB271742340D7B0003BF3AF /* ViewController+Menu+Face.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Menu+Face.swift"; sourceTree = "<group>"; };
 		8EB271762340D867003BF3AF /* ViewController+CollectionArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+CollectionArea.swift"; sourceTree = "<group>"; };
 		8EB271782340D8A3003BF3AF /* ViewController+PreviewArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+PreviewArea.swift"; sourceTree = "<group>"; };
 		8EB2717A2340D8BC003BF3AF /* ViewController+SelectionArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+SelectionArea.swift"; sourceTree = "<group>"; };
@@ -332,10 +333,11 @@
 		8EB2718E2340EE95003BF3AF /* ViewController+TreeArea+Scan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+TreeArea+Scan.swift"; sourceTree = "<group>"; };
 		8EB271902340EED2003BF3AF /* ViewController+TreeArea+Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+TreeArea+Filter.swift"; sourceTree = "<group>"; };
 		8EB271922340EF6F003BF3AF /* ViewController+Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Schedule.swift"; sourceTree = "<group>"; };
-		8EB271942340F13C003BF3AF /* ViewController+Export.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Export.swift"; sourceTree = "<group>"; };
 		8EB271962340F1FF003BF3AF /* ViewController+Progress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Progress.swift"; sourceTree = "<group>"; };
 		8EB271982340F22F003BF3AF /* ViewController+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Search.swift"; sourceTree = "<group>"; };
 		8EB2719A2340F907003BF3AF /* ViewController+CollectionArea+CombineDuplicated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+CollectionArea+CombineDuplicated.swift"; sourceTree = "<group>"; };
+		8EB2719C23412FD5003BF3AF /* ViewController+Menu+Scan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Menu+Scan.swift"; sourceTree = "<group>"; };
+		8EB2719E23412FE8003BF3AF /* ViewController+Menu+Export.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Menu+Export.swift"; sourceTree = "<group>"; };
 		8EB321CC20FA42AB00D8C71D /* Duplicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Duplicate.swift; sourceTree = "<group>"; };
 		8EB321CE20FA42C700D8C71D /* ModelStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelStore.swift; sourceTree = "<group>"; };
 		8EB321D020FA433500D8C71D /* ImageContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageContainer.swift; path = ImageDocker/Domain/GRDB/ImageContainer.swift; sourceTree = SOURCE_ROOT; };
@@ -492,7 +494,6 @@
 				8EEF072A22626FE7000520B7 /* ViewController.swift */,
 				8EB271982340F22F003BF3AF /* ViewController+Search.swift */,
 				8EB271962340F1FF003BF3AF /* ViewController+Progress.swift */,
-				8EB271942340F13C003BF3AF /* ViewController+Export.swift */,
 				8EB271922340EF6F003BF3AF /* ViewController+Schedule.swift */,
 				8EB271802340E578003BF3AF /* ViewController+Window.swift */,
 				8EB2717E2340D989003BF3AF /* ViewController+Startup.swift */,
@@ -509,7 +510,9 @@
 				8EB271782340D8A3003BF3AF /* ViewController+PreviewArea.swift */,
 				8EB271762340D867003BF3AF /* ViewController+CollectionArea.swift */,
 				8EB2719A2340F907003BF3AF /* ViewController+CollectionArea+CombineDuplicated.swift */,
-				8EB271742340D7B0003BF3AF /* ViewController+Menu.swift */,
+				8EB271742340D7B0003BF3AF /* ViewController+Menu+Face.swift */,
+				8EB2719E23412FE8003BF3AF /* ViewController+Menu+Export.swift */,
+				8EB2719C23412FD5003BF3AF /* ViewController+Menu+Scan.swift */,
 				8EF4CE6021E56CF700C53AFF /* ViewController+Notification.swift */,
 				8E0AFA42208BDEA100CE8B68 /* Main.storyboard */,
 				8EA643F4208D6E5100C7D695 /* PreferencesController.swift */,
@@ -1179,7 +1182,7 @@
 				8EEB88842090B44B00CDEC81 /* ImageDropView.swift in Sources */,
 				8EBA9DE7217477D900DACAAD /* UIHelper.swift in Sources */,
 				8EC82EA42121C10A00FC0899 /* LocalDirectory.swift in Sources */,
-				8EB271752340D7B0003BF3AF /* ViewController+Menu.swift in Sources */,
+				8EB271752340D7B0003BF3AF /* ViewController+Menu+Face.swift in Sources */,
 				8EB271872340EA34003BF3AF /* ViewController+SelectionArea+ReplaceDate.swift in Sources */,
 				8EA1A063208DFD92000C3B97 /* MetaInfo.swift in Sources */,
 				8EBA9DE52173CC7F00DACAAD /* TheaterQuickLookItem.swift in Sources */,
@@ -1193,6 +1196,7 @@
 				8EB321D620FA433500D8C71D /* ImageEvent.swift in Sources */,
 				8EB27159233842E4003BF3AF /* ImageFile+Preview.swift in Sources */,
 				8E4E5B7F221F3D1800FE4B68 /* PeopleViewController.swift in Sources */,
+				8EB2719D23412FD5003BF3AF /* ViewController+Menu+Scan.swift in Sources */,
 				8EB321D420FA433500D8C71D /* ImageContainer.swift in Sources */,
 				8E36B067217920B400646EA5 /* MonthListController.swift in Sources */,
 				8E98B8F320D5C90600771280 /* WindowController.swift in Sources */,
@@ -1216,7 +1220,6 @@
 				8EF125AC2216ECC500C423CA /* ContainerViewController.swift in Sources */,
 				8E85B7D420BA2AD7005A9845 /* DarkSplitView.swift in Sources */,
 				8EF500CD209A804100C9805F /* ImageFolder.swift in Sources */,
-				8EB271952340F13C003BF3AF /* ViewController+Export.swift in Sources */,
 				8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */,
 				8EB271912340EED2003BF3AF /* ViewController+TreeArea+Filter.swift in Sources */,
 				8EB271972340F1FF003BF3AF /* ViewController+Progress.swift in Sources */,
@@ -1285,6 +1288,7 @@
 				8E8D471C22315F540091E9C3 /* SingleColumnTableViewController.swift in Sources */,
 				8EB271932340EF6F003BF3AF /* ViewController+Schedule.swift in Sources */,
 				8EAD03AF2337290E00AAC7C6 /* ModelStore+Image.swift in Sources */,
+				8EB2719F23412FE8003BF3AF /* ViewController+Menu+Export.swift in Sources */,
 				8EB271512337B6E4003BF3AF /* ModelStore+Image+Duplicate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -59,6 +59,47 @@ extension ViewController {
         self.btnFaces.menu?.addItem(menuForceRecognize)
     }
     
+    @objc func faceMenuManageAction(_ menuItem:NSMenuItem) {
+        print("manage action \(menuItem.title)")
+        self.btnFaces.selectItem(at: 0)
+        if let window = self.peopleWindowController.window {
+            if self.peopleWindowController.isWindowLoaded {
+                window.makeKeyAndOrderFront(self)
+                print("order to front")
+            }else{
+                self.peopleWindowController.showWindow(self)
+                print("show window")
+            }
+            let vc = window.contentViewController as! PeopleViewController
+            vc.initView()
+            //            vc.initNew(window: window, onOK: {
+            //                window.close()
+            //            })
+        }
+    }
+    
+    @objc func faceMenuScanAction(_ menuItem:NSMenuItem) {
+        self.doFaceMenuAction("Scan \(menuItem.title)")
+    }
+    
+    
+    @objc func faceMenuRecognizeAction(_ menuItem:NSMenuItem) {
+        self.doFaceMenuAction("Recognize \(menuItem.title)")
+    }
+    
+    @objc func faceMenuForceScanAction(_ menuItem:NSMenuItem) {
+        self.doFaceMenuAction("Force-Scan \(menuItem.title)")
+    }
+    
+    
+    @objc func faceMenuForceRecognizeAction(_ menuItem:NSMenuItem) {
+        self.doFaceMenuAction("Force-Recognize \(menuItem.title)")
+    }
+    
+    @objc func faceMenuForceRecognizeUnknownAction(_ menuItem:NSMenuItem) {
+        self.doFaceMenuAction("Recognize-Unknown \(menuItem.title)")
+    }
+    
     internal func openFaceManager() {
         if let window = self.peopleWindowController.window {
             if self.peopleWindowController.isWindowLoaded {

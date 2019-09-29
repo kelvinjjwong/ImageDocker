@@ -20,6 +20,10 @@ class ViewController: NSViewController {
     // MARK: Icon
     let tick:NSImage = NSImage.init(named: NSImage.Name.menuOnStateTemplate)!
     
+    
+    
+    @IBOutlet weak var btnExport: NSPopUpButton!
+    @IBOutlet weak var btnScan: NSPopUpButton!
     @IBOutlet weak var btnFaces: NSPopUpButton!
     @IBOutlet weak var lblProgressMessage: NSTextField!
     
@@ -131,8 +135,6 @@ class ViewController: NSViewController {
     @IBOutlet weak var btnFilterRepository: NSButton!
     
     
-    @IBOutlet weak var chbExport: NSButton!
-    @IBOutlet weak var chbScan: NSButton!
     @IBOutlet weak var chbSelectAll: NSButton!
     
     
@@ -251,47 +253,6 @@ class ViewController: NSViewController {
     
     // MARK: - FACE MENU
     
-    @objc func faceMenuManageAction(_ menuItem:NSMenuItem) {
-        print("manage action \(menuItem.title)")
-        self.btnFaces.selectItem(at: 0)
-        if let window = self.peopleWindowController.window {
-            if self.peopleWindowController.isWindowLoaded {
-                window.makeKeyAndOrderFront(self)
-                print("order to front")
-            }else{
-                self.peopleWindowController.showWindow(self)
-                print("show window")
-            }
-            let vc = window.contentViewController as! PeopleViewController
-            vc.initView()
-            //            vc.initNew(window: window, onOK: {
-            //                window.close()
-            //            })
-        }
-    }
-    
-    @objc func faceMenuScanAction(_ menuItem:NSMenuItem) {
-        self.doFaceMenuAction("Scan \(menuItem.title)")
-    }
-    
-    
-    @objc func faceMenuRecognizeAction(_ menuItem:NSMenuItem) {
-        self.doFaceMenuAction("Recognize \(menuItem.title)")
-    }
-    
-    @objc func faceMenuForceScanAction(_ menuItem:NSMenuItem) {
-        self.doFaceMenuAction("Force-Scan \(menuItem.title)")
-    }
-    
-    
-    @objc func faceMenuForceRecognizeAction(_ menuItem:NSMenuItem) {
-        self.doFaceMenuAction("Force-Recognize \(menuItem.title)")
-    }
-    
-    @objc func faceMenuForceRecognizeUnknownAction(_ menuItem:NSMenuItem) {
-        self.doFaceMenuAction("Recognize-Unknown \(menuItem.title)")
-    }
-    
     // MARK: - INIT VIEW
     
     internal func initView() {
@@ -303,6 +264,8 @@ class ViewController: NSViewController {
         PreferencesController.healthCheck()
         
         self.setupFacesMenu()
+        self.setupScanMenu()
+        self.setupExportMenu()
         
         print("\(Date()) Loading view - configure tree")
         configureTree()
@@ -337,12 +300,10 @@ class ViewController: NSViewController {
         self.btnChoiceMapService.setImage(nil, forSegment: 0)
         self.btnChoiceMapService.setImage(tick, forSegment: 1)
         
-        self.chbScan.state = NSButton.StateValue.off
         self.suppressedScan = true
         self.btnScanState.image = NSImage(named: NSImage.Name.statusNone)
         self.btnScanState.isHidden = true
         
-        self.chbExport.state = NSButton.StateValue.off
         ExportManager.default.messageBox = self.indicatorMessage
         ExportManager.default.suppressed = true
         self.suppressedExport = true
@@ -418,8 +379,6 @@ class ViewController: NSViewController {
         
         self.btnBatchEditorToolbarSwitcher.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.selectionCheckAllBox.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.chbExport.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.chbScan.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.chbShowHidden.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
         self.btnShow.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -477,14 +436,6 @@ class ViewController: NSViewController {
         self.filterPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
     }
     
-    @IBAction func onCheckScanClicked(_ sender: NSButton) {
-        if self.chbScan.state == NSButton.StateValue.on {
-            self.onScanEnabled()
-        }else {
-            self.onScanDisabled()
-        }
-    }
-    
     // MARK: - Collection View Controls
     
     var isCollectionPaginated:Bool = false
@@ -511,12 +462,6 @@ class ViewController: NSViewController {
     
     @IBAction func onCheckShowHiddenClicked(_ sender: NSButton) {
         self.switchShowHideState()
-    }
-    
-    // MARK: COLLECTION VIEW - EXPORT
-    
-    @IBAction func onCheckExportClicked(_ sender: NSButton) {
-        self.startExport()
     }
     
     // MARK: - SELECTION BATCH EDITOR TOOLBAR - SWITCHER
