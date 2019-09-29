@@ -97,7 +97,7 @@ class ImageFolderTreeScanner {
                             continousWorking = false
                             sleep(10)
                         }else{
-                            print("continue for Setting up containers' parent, last attempt: \(attempt)")
+//                            print("continue for Setting up containers' parent, last attempt: \(attempt)")
                             continousWorking = true
                         }
                     }
@@ -134,7 +134,7 @@ class ImageFolderTreeScanner {
                             if container.hideByParent || exclude {
                                 // do nothing
                             }else{
-                                print("[Container DB Scan] Setting parent for container \(index)/\(jall) [\(container.path)]")
+//                                print("[Container DB Scan] Setting parent for container \(index)/\(jall) [\(container.path)]")
                                 let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path),
                                                                           name:container.name,
                                                                           repositoryPath: container.repositoryPath,
@@ -143,17 +143,19 @@ class ImageFolderTreeScanner {
                                                                           facePath: container.facePath,
                                                                           cropPath: container.cropPath,
                                                                           countOfImages: Int(container.imageCount),
-                                                                          updateModelStore: false,
+                                                                          withContainer: true,
                                                                           sharedDB: ModelStore.sharedDBPool())
                                 urlFolders[container.path] = imageFolder
                                 if fast { // fast
                                     if container.parentFolder != "" {
                                         if let parentFolder = urlFolders[container.parentFolder] {
                                             imageFolder.setParent(parentFolder)
+//                                            print("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "") << FROM CACHE")
                                         }
                                     }else{
                                         if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
                                             imageFolder.setParent(parent)
+//                                            print("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
                                             foldersNeedSave.insert(imageFolder)
                                         }
                                     }
@@ -161,7 +163,62 @@ class ImageFolderTreeScanner {
                                 }else{
                                     if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
                                         imageFolder.setParent(parent)
+//                                        print("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
                                         foldersNeedSave.insert(imageFolder)
+                                    }
+                                }
+                                if let parent = imageFolder.parent {
+                                    let subPath = container.path.replacingFirstOccurrence(of: "\(parent.url.path.withStash())", with: "")
+                                    imageFolder.name = subPath
+                                    
+//                                    print("SUB PATH -> \(subPath)")
+                                    
+                                    if subPath.contains("/") {
+                                        let parts = subPath.components(separatedBy: "/")
+                                        var midPaths:[String] = []
+                                        for part in parts {
+                                            if part == "" {continue}
+                                            if midPaths.count == 0 {
+                                                let midPath = parent.url.appendingPathComponent(part).path
+//                                                print("MID FOLDER EXTRACTED FROM SUB PATH: \(midPath)")
+                                                midPaths.append(midPath)
+                                            }else{
+                                                let parentMidPath = midPaths[midPaths.count-1]
+                                                let midPath = URL(fileURLWithPath: parentMidPath).appendingPathComponent(part).path
+//                                                print("MID FOLDER EXTRACTED FROM SUB PATH: \(midPath)")
+                                                midPaths.append(midPath)
+                                            }
+                                        }
+                                        var parents:[ImageFolder] = [parent]
+                                        var midFolders:[ImageFolder] = []
+                                        for midPath in midPaths {
+                                            if midPath.withStash() == container.path.withStash() {
+                                                continue
+                                            }
+                                            // create imagefolder without container data
+                                            let midUrl = URL(fileURLWithPath: midPath)
+                                            
+                                            // get middle dummy ImageFolder from cache if it exists
+                                            var midFolder = urlFolders[midPath]
+                                            if midFolder == nil {
+                                                // create dummy ImageFolder in the middle
+                                                midFolder = ImageFolder(midUrl, name: midUrl.lastPathComponent)
+                                                midFolder!.setParent(parents[parents.count - 1])
+//                                                print("SET PARENT FOR \(midFolder!.url.path) -> PARENT SET TO \(midFolder!.parent?.url.path ?? "") << CREATED DUMMY")
+                                                
+                                                // to be added to the whole set
+                                                midFolders.append(midFolder!)
+                                                
+                                                // cache mapping
+                                                urlFolders[midPath] = midFolder!
+                                            }
+                                            parents.append(midFolder!) // for next calculation
+                                        }
+                                        imageFolder.setParent(parents[parents.count - 1])
+//                                        print("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
+                                        imageFolder.name = URL(fileURLWithPath: container.path).lastPathComponent
+                                        
+                                        imageFolders.append(contentsOf: midFolders)
                                     }
                                 }
                                 imageFolders.append(imageFolder)
@@ -208,6 +265,12 @@ class ImageFolderTreeScanner {
             print("\(Date()) Saving containers' parent: DONE ")
         }
         foldersNeedSave.removeAll()
+        
+//        print("======================")
+//        for imgf in imageFolders {
+//            print("\(imgf.url.path) -> PARENT -> \(imgf.parent?.url.path ?? "")")
+//        }
+//        print("======================")
         
         return imageFolders
     }

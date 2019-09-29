@@ -34,15 +34,15 @@ extension ViewController {
                     for gov in places {
                         self.addPlacesTreeGovEntry(place: gov)
                         
-                        print("GOV \(gov.gov)")
+                        //print("GOV \(gov.gov)")
                         for place in gov.children {
                             if place.place == "" {
                                 continue
                             }
-                            print("     PLACE \(place.place)")
+                            //print("     PLACE \(place.place)")
                             self.addPlacesTreePlaceEntry(place: place)
                             for year in place.children {
-                                print("          YEAR \(year.year)")
+                                //print("          YEAR \(year.year)")
                                 var duplicateInYear:Bool = false
                                 if duplicates.years.contains(year.year) {
                                     duplicateInYear = true
@@ -80,7 +80,7 @@ extension ViewController {
                     print("\(Date()) LOAD PLACES TREE: DONE")
                 }else{
                     print("\(Date()) LOAD PLACES TREE: NONE")
-                    print("no dates")
+                    print("no places")
                 }
                 
                 if onCompleted != nil {
@@ -145,7 +145,7 @@ extension ViewController {
         
         // add tree relationship
         self.placeItem().addChildItem(item)
-        print("PLACES CHILDREN: \(self.placeItem().children?.count ?? 0)")
+        //print("PLACES CHILDREN: \(self.placeItem().children?.count ?? 0)")
         
         // avoid collection object to be purged from memory
         self.momentToCollectionGroupByPlace["\(place.id)"] = collection

@@ -33,6 +33,7 @@ class Photo {
  */
 class PhotoCollection: NSObject {
     var title = ""
+    var url:URL = URL(fileURLWithPath: "/")
     var identifier = ""
     var photoCount:Int = 0
     var photos = [Any]()

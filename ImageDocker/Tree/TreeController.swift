@@ -298,10 +298,15 @@ extension ViewController : PXSourceListDelegate {
                 if collection.source! == .library {
                     if PreferencesController.amountForPagination() > 0 && collection.photoCount > PreferencesController.amountForPagination() {
                         self.btnRefreshCollectionView.title = "Pages..."
-                        self.loadCollectionByContainer(collection.imageFolder!, pageSize: 200, pageNumber: 1, subdirectories: true)
+                        if collection.url.path != "/" {
+                            self.loadCollectionByContainer(name:collection.title, url:collection.url, pageSize: 200, pageNumber: 1, subdirectories: true)
+                        }else{
+                            print("WARN: collection url is null")
+                        }
                     }else{
                         self.btnRefreshCollectionView.title = "Reload"
-                        self.loadCollectionByContainer(collection.imageFolder!)
+                        self.loadCollectionByContainer(name:collection.title, url:collection.url)
+                        //self.loadCollectionByContainer(collection.imageFolder!)
                     }
                 }else if collection.source! == .moment {
                     //print("selected moment \(collection.title)")

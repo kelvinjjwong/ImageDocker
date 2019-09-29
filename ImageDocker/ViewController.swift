@@ -113,6 +113,8 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var treeIndicator: NSLevelIndicator!
     
+    var cachedTreeCollections:[PhotoCollection] = []
+    
     var selectedCollection:PhotoCollection?
     var selectedImageFolder:ImageFolder?
     var selectedImageFile:String = ""

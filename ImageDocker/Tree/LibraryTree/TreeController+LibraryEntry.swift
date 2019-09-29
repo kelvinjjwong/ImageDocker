@@ -29,25 +29,12 @@ extension ViewController {
                     DispatchQueue.main.async {
                         for imageFolder:ImageFolder in imageFolders {
                             if let container = imageFolder.containerFolder, container.hideByParent {
-                                // hide by parent
-                                // ignore this one
-                            }else{
-                                if let parent = imageFolder.parent {
-                                    if let parentContainer = parent.containerFolder, !parentContainer.manyChildren {
-                                        // parent has a few children
-                                        if imageFolder.countOfImages > 0 {
-                                            self.addLibraryTreeEntry(imageFolder: imageFolder)
-                                        }
-                                    }else{
-                                        // parent has many children
-                                        // ignore this one
-                                    }
-                                }else{ // no parent, is a root node, even if it has no images
-                                    //if imageFolder.countOfImages > 0 {
-                                        self.addLibraryTreeEntry(imageFolder: imageFolder)
-                                    //}
-                                }
+                                continue
                             }
+                            if let parent = imageFolder.parent, let parentContainer = parent.containerFolder, parentContainer.manyChildren {
+                                continue
+                            }
+                            self.addLibraryTreeEntry(imageFolder: imageFolder)
                         }
                     }
                 }
@@ -62,8 +49,6 @@ extension ViewController {
             
         }
     }
-    
-    // TODO: load containers in the same layer only, count children of each container node
     
     // MARK: - REFRESH TREE
     
@@ -115,48 +100,34 @@ extension ViewController {
     // MARK: - ADD TREE NODES
     
     fileprivate func addLibraryTreeEntry(imageFolder:ImageFolder) {
+        self.addLibraryTreeEntry(title: imageFolder.name, url: imageFolder.url,
+                                 imageCount: imageFolder.countOfImages,
+                                 parentPath: imageFolder.parent?.url.path,
+                                 container: imageFolder.containerFolder)
+    }
+    
+    fileprivate func addLibraryTreeEntry(title:String, url:URL, imageCount:Int, parentPath:String?, container:ImageContainer?) {
         var _parent:PXSourceListItem
-        if imageFolder.parent == nil {
-            _parent = self.libraryItem() //self.librarySectionOfTree!
+        if let parentPath = parentPath, let parentNode = self.identifiersOfLibraryTree[parentPath] {
+            _parent = parentNode
         }else{
-            if let parent = imageFolder.parent {
-                let path = parent.url.path
-                if let p = self.identifiersOfLibraryTree[path] {
-                    _parent = p
-                }else{
-                    print("ERROR: NULL returned from identifiersOfLibraryTree with argument [\(path)]")
-                    return
-                }
-            }else{
-                print("ERROR: NULL returned from imageFolder.parent, imageFolder is \(imageFolder.url.path)")
-                return
-            }
+            _parent = self.libraryItem()
         }
         
-        let collection:PhotoCollection = PhotoCollection(title: imageFolder.name,
-                                                         identifier: imageFolder.url.path,
-                                                         type: imageFolder.children.count == 0 ? .userCreated : .library,
+        let collection:PhotoCollection = PhotoCollection(title: title,
+                                                         identifier: url.path,
+                                                         type: .library,
                                                          source: .library)
+        collection.url = url
         let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: photosIcon)
         //self.modelObjects?.add(collection)
         _parent.addChildItem(item)
-        collection.photoCount = imageFolder.countOfImages
+        collection.photoCount = imageCount
         
         self.showTreeNodeButton(collection: collection, image: moreHorizontalIcon)
-        if imageFolder.parent == nil {
+        if parentPath == nil { // repository
             collection.buttonAction = { sender in
-//                if let window = self.repositoryWindowController.window {
-//                    if self.repositoryWindowController.isWindowLoaded {
-//                        window.makeKeyAndOrderFront(self)
-//                        print("order to front")
-//                    }else{
-//                        self.repositoryWindowController.showWindow(self)
-//                        print("show window")
-//                    }
-//                    let vc = window.contentViewController as! EditRepositoryViewController
-//                    vc.initEdit(path: imageFolder.url.path, window: window)
-//                }
-                if let container = imageFolder.containerFolder {
+                if let container = container { // show popover only if has container data
                     self.createRepositoryDetailPopover()
                     self.repositoryDetailViewController.initView(path: container.path, onConfigure: {
                         if let window = self.repositoryWindowController.window {
@@ -168,7 +139,7 @@ extension ViewController {
                                 print("show window")
                             }
                             let vc = window.contentViewController as! EditRepositoryViewController
-                            vc.initEdit(path: imageFolder.url.path, window: window)
+                            vc.initEdit(path: url.path, window: window)
                         }
                     })
                     
@@ -176,14 +147,15 @@ extension ViewController {
                     self.repositoryDetailPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxX)
                 }
             }
-        }else{
+        }else{ // sub-container
             collection.buttonAction = { sender in 
                 
-                if let container = imageFolder.containerFolder {
+                if let container = container, container.imageCount > 0 {
                     self.createContainerDetailPopover()
                     self.containerDetailViewController.initView(container, onLoad: { pageSize, pageNumber in
                         print("CALLED ONLOAD \(pageSize) \(pageNumber)")
-                        self.loadCollectionByContainer(imageFolder, pageSize: pageSize, pageNumber: pageNumber, subdirectories: container.manyChildren)
+                        self.loadCollectionByContainer(name:title, url:url,
+                                                       pageSize: pageSize, pageNumber: pageNumber, subdirectories: container.manyChildren)
                     })
                     
                     let cellRect = sender.bounds
@@ -192,21 +164,30 @@ extension ViewController {
             }
         }
         
-        self.identifiersOfLibraryTree[imageFolder.url.path] = item
+        self.identifiersOfLibraryTree[url.path] = item
         
-        collection.imageFolder = imageFolder
-        imageFolder.photoCollection = collection
+//        collection.imageFolder = imageFolder
+//        imageFolder.photoCollection = collection
         
-        self.treeIdItems[imageFolder.url.path] = item
+        self.cachedTreeCollections.append(collection)
+        
+        self.treeIdItems[url.path] = item
         
     }
     
     // MARK: - LOAD COLLECTION
     
     internal func loadCollectionByContainer(_ imageFolder:ImageFolder, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){
-        //guard !self.scaningRepositories && !self.creatingRepository else {return}
         self.selectedImageFolder = imageFolder
-        //print("selected image folder: \(imageFolder.url.path)")
+        if imageFolder.url.path == "/" {
+            print("ERROR: imageFolder.url.path is null")
+            return
+        }
+        self.loadCollectionByContainer(name: imageFolder.name, url: imageFolder.url,
+                                       pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
+    }
+    
+    internal func loadCollectionByContainer(name:String, url:URL, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){
         self.scaningRepositories = true
         
         self.imagesLoader.clean()
@@ -217,10 +198,6 @@ extension ViewController {
         DispatchQueue.global().async {
             self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: { data in
                     self.scaningRepositories = false
-                    //                let total:Int = data["total"] ?? 0
-                    //                let hidden:Int = data["hidden"] ?? 0
-                    //                let message:String = "\(total) images, \(hidden) hidden"
-                    //                self.indicatorMessage.stringValue = message
                 }
             )
             if self.imagesLoader.isLoading() {
@@ -228,12 +205,12 @@ extension ViewController {
                     self.indicatorMessage.stringValue = "Cancelling last request ..."
                 }
                 self.imagesLoader.cancel(onCancelled: {
-                    self.imagesLoader.load(from: imageFolder.url, indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
+                    self.imagesLoader.load(from: url, indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
                     self.refreshCollectionView()
                 })
             }else{
-                print("LOADING from library entry \(imageFolder.name)")
-                self.imagesLoader.load(from: imageFolder.url, indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
+                print("LOADING from library entry \(name)")
+                self.imagesLoader.load(from: url, indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
                 self.refreshCollectionView()
             }
         }

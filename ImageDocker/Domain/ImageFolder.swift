@@ -20,7 +20,20 @@ class ImageFolder : NSObject {
     var containerFolder:ImageContainer? = nil
     var name:String = ""
     
-    init(_ url:URL,
+    override init(){
+        self.url = URL(fileURLWithPath: "/")
+        super.init()
+    }
+    
+    /// Create a dummy ImageFolder certainly without container data
+    convenience init(_ url:URL, name:String) {
+        self.init()
+        self.url = url
+        self.name = name
+    }
+    
+    /// Create a normal ImageFolder from container data
+    convenience init(_ url:URL,
          name:String,
          repositoryPath:String,
          homePath:String,
@@ -29,8 +42,11 @@ class ImageFolder : NSObject {
          cropPath:String,
          countOfImages:Int = 0,
          manyChildren:Bool = false,
-         updateModelStore:Bool = true,
+         withContainer:Bool = true,
          sharedDB:DatabaseWriter? = nil){
+        
+        self.init()
+        
         self.url = url
         self.countOfImages = countOfImages
         
@@ -47,8 +63,8 @@ class ImageFolder : NSObject {
         }
         let subPath = url.path.replacingFirstOccurrence(of: repoPath, with: "")
         //print("LOAD FOLDER 2 \(name) \(path)")
-        
-        self.containerFolder = ModelStore.default.getOrCreateContainer(name: folderName,
+        if withContainer {
+            self.containerFolder = ModelStore.default.getOrCreateContainer(name: folderName,
                                                                        path: path,
                                                                        repositoryPath: repositoryPath,
                                                                        homePath: homePath,
@@ -58,6 +74,7 @@ class ImageFolder : NSObject {
                                                                        subPath: subPath,
                                                                        manyChildren: manyChildren,
                                                                        sharedDB: sharedDB)
+        }
         //print("Got or Created container: \(path)")
         if self.containerFolder?.imageCount == nil {
             self.containerFolder?.imageCount = countOfImages
