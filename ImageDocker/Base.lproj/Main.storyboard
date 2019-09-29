@@ -1221,9 +1221,9 @@
                                 <rect key="frame" x="6" y="880" width="1302" height="40"/>
                                 <subviews>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wQ3-4F-bW7">
-                                        <rect key="frame" x="10" y="10" width="80" height="19"/>
+                                        <rect key="frame" x="10" y="10" width="70" height="19"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="80" id="Lk7-f6-m05"/>
+                                            <constraint firstAttribute="width" constant="70" id="Lk7-f6-m05"/>
                                         </constraints>
                                         <popUpButtonCell key="cell" type="recessed" title="Faces" bezelStyle="recessed" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="noArrow" selectedItem="Cjw-tm-gEJ" id="pos-94-t0j">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
@@ -1267,14 +1267,50 @@
                                             <action selector="onSearchAction:" target="XfG-lQ-9wD" id="Ui0-Th-Kj4"/>
                                         </connections>
                                     </searchField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jTT-pc-Bka">
+                                        <rect key="frame" x="90" y="6" width="70" height="25"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="70" id="p1H-Cp-ISQ"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="recessed" title="Scan" bezelStyle="recessed" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="noArrow" selectedItem="Pyw-8u-9fp" id="1PR-RK-w3Z">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
+                                            <font key="font" metaFont="systemBold" size="12"/>
+                                            <menu key="menu" id="n5k-n5-EK1">
+                                                <items>
+                                                    <menuItem title="Scan" state="on" image="NSIconViewTemplate" id="Pyw-8u-9fp"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kCb-sM-PKJ">
+                                        <rect key="frame" x="170" y="8" width="72" height="22"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="72" id="czr-e9-fZe"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="recessed" title="Export" bezelStyle="recessed" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="noArrow" selectedItem="uGb-fx-HPZ" id="agT-XF-MJ8">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
+                                            <font key="font" metaFont="systemBold" size="12"/>
+                                            <menu key="menu" id="itw-fF-Htw">
+                                                <items>
+                                                    <menuItem title="Export" state="on" image="NSShareTemplate" id="uGb-fx-HPZ"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="kCb-sM-PKJ" secondAttribute="bottom" constant="9" id="1Fo-1G-pWg"/>
                                     <constraint firstAttribute="trailing" secondItem="L5J-oA-BUH" secondAttribute="trailing" constant="5" id="BxZ-JF-Tu2"/>
                                     <constraint firstItem="wQ3-4F-bW7" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="11" id="Cpz-BF-ZaT"/>
                                     <constraint firstItem="L5J-oA-BUH" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="Cxp-QY-2oQ"/>
+                                    <constraint firstItem="kCb-sM-PKJ" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="EaW-Ms-XCk"/>
+                                    <constraint firstAttribute="bottom" secondItem="jTT-pc-Bka" secondAttribute="bottom" constant="7" id="HDa-DN-CyL"/>
+                                    <constraint firstItem="jTT-pc-Bka" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="9" id="I3l-uY-J4e"/>
                                     <constraint firstItem="kL0-v4-mKZ" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="Jqa-hL-mjj"/>
                                     <constraint firstItem="0O0-hl-4CA" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="8" id="O8x-BN-Se3"/>
-                                    <constraint firstItem="0O0-hl-4CA" firstAttribute="leading" secondItem="wQ3-4F-bW7" secondAttribute="trailing" constant="182" id="Q5F-6R-Vcp"/>
+                                    <constraint firstItem="0O0-hl-4CA" firstAttribute="leading" secondItem="kCb-sM-PKJ" secondAttribute="trailing" constant="30" id="Q2S-K9-ata"/>
+                                    <constraint firstItem="kCb-sM-PKJ" firstAttribute="leading" secondItem="jTT-pc-Bka" secondAttribute="trailing" constant="10" id="bcj-Hn-PnS"/>
+                                    <constraint firstItem="jTT-pc-Bka" firstAttribute="leading" secondItem="wQ3-4F-bW7" secondAttribute="trailing" constant="10" id="hnC-Sn-lZ6"/>
                                     <constraint firstItem="L5J-oA-BUH" firstAttribute="leading" secondItem="kL0-v4-mKZ" secondAttribute="trailing" constant="10" id="ovv-6i-2iA"/>
                                     <constraint firstItem="wQ3-4F-bW7" firstAttribute="leading" secondItem="gVf-na-PZy" secondAttribute="leading" constant="10" id="vrS-mp-TFb"/>
                                     <constraint firstItem="kL0-v4-mKZ" firstAttribute="leading" secondItem="0O0-hl-4CA" secondAttribute="trailing" constant="20" id="yIN-CP-PyT"/>
@@ -5896,6 +5932,7 @@ DQ
         <image name="NSRefreshTemplate" width="11" height="15"/>
         <image name="NSRemoveTemplate" width="11" height="11"/>
         <image name="NSRevealFreestandingTemplate" width="14" height="14"/>
+        <image name="NSShareTemplate" width="11" height="16"/>
         <image name="NSStatusNone" width="16" height="16"/>
         <image name="NSStopProgressFreestandingTemplate" width="14" height="14"/>
         <image name="NSStopProgressTemplate" width="11" height="11"/>

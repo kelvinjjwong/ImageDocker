@@ -101,6 +101,26 @@
 		8EB2716D233E0729003BF3AF /* LibrariesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2716B233E0729003BF3AF /* LibrariesViewController.swift */; };
 		8EB2716E233E0729003BF3AF /* LibrariesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EB2716C233E0729003BF3AF /* LibrariesViewController.xib */; };
 		8EB27170233E15B0003BF3AF /* TreeController+LibrarySectionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2716F233E15AF003BF3AF /* TreeController+LibrarySectionMenu.swift */; };
+		8EB271752340D7B0003BF3AF /* ViewController+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271742340D7B0003BF3AF /* ViewController+Menu.swift */; };
+		8EB271772340D867003BF3AF /* ViewController+CollectionArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271762340D867003BF3AF /* ViewController+CollectionArea.swift */; };
+		8EB271792340D8A3003BF3AF /* ViewController+PreviewArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271782340D8A3003BF3AF /* ViewController+PreviewArea.swift */; };
+		8EB2717B2340D8BC003BF3AF /* ViewController+SelectionArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2717A2340D8BC003BF3AF /* ViewController+SelectionArea.swift */; };
+		8EB2717D2340D8D5003BF3AF /* ViewController+TreeArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2717C2340D8D5003BF3AF /* ViewController+TreeArea.swift */; };
+		8EB2717F2340D989003BF3AF /* ViewController+Startup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2717E2340D989003BF3AF /* ViewController+Startup.swift */; };
+		8EB271812340E578003BF3AF /* ViewController+Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271802340E578003BF3AF /* ViewController+Window.swift */; };
+		8EB271832340E98B003BF3AF /* ViewController+SelectionArea+CombineDuplicated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271822340E98B003BF3AF /* ViewController+SelectionArea+CombineDuplicated.swift */; };
+		8EB271852340E9C6003BF3AF /* ViewController+SelectionArea+ReplacePlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271842340E9C6003BF3AF /* ViewController+SelectionArea+ReplacePlace.swift */; };
+		8EB271872340EA34003BF3AF /* ViewController+SelectionArea+ReplaceDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271862340EA34003BF3AF /* ViewController+SelectionArea+ReplaceDate.swift */; };
+		8EB271892340EDC5003BF3AF /* ViewController+SelectionArea+AssignEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271882340EDC5003BF3AF /* ViewController+SelectionArea+AssignEvent.swift */; };
+		8EB2718B2340EE18003BF3AF /* ViewController+SelectionArea+ExportSelected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2718A2340EE18003BF3AF /* ViewController+SelectionArea+ExportSelected.swift */; };
+		8EB2718D2340EE4C003BF3AF /* ViewController+SelectionArea+WriteNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2718C2340EE4C003BF3AF /* ViewController+SelectionArea+WriteNote.swift */; };
+		8EB2718F2340EE95003BF3AF /* ViewController+TreeArea+Scan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2718E2340EE95003BF3AF /* ViewController+TreeArea+Scan.swift */; };
+		8EB271912340EED2003BF3AF /* ViewController+TreeArea+Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271902340EED2003BF3AF /* ViewController+TreeArea+Filter.swift */; };
+		8EB271932340EF6F003BF3AF /* ViewController+Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271922340EF6F003BF3AF /* ViewController+Schedule.swift */; };
+		8EB271952340F13C003BF3AF /* ViewController+Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271942340F13C003BF3AF /* ViewController+Export.swift */; };
+		8EB271972340F1FF003BF3AF /* ViewController+Progress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271962340F1FF003BF3AF /* ViewController+Progress.swift */; };
+		8EB271992340F22F003BF3AF /* ViewController+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271982340F22F003BF3AF /* ViewController+Search.swift */; };
+		8EB2719B2340F907003BF3AF /* ViewController+CollectionArea+CombineDuplicated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2719A2340F907003BF3AF /* ViewController+CollectionArea+CombineDuplicated.swift */; };
 		8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CC20FA42AB00D8C71D /* Duplicate.swift */; };
 		8EB321CF20FA42C700D8C71D /* ModelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CE20FA42C700D8C71D /* ModelStore.swift */; };
 		8EB321D420FA433500D8C71D /* ImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321D020FA433500D8C71D /* ImageContainer.swift */; };
@@ -296,6 +316,26 @@
 		8EB2716B233E0729003BF3AF /* LibrariesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrariesViewController.swift; sourceTree = "<group>"; };
 		8EB2716C233E0729003BF3AF /* LibrariesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LibrariesViewController.xib; sourceTree = "<group>"; };
 		8EB2716F233E15AF003BF3AF /* TreeController+LibrarySectionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TreeController+LibrarySectionMenu.swift"; sourceTree = "<group>"; };
+		8EB271742340D7B0003BF3AF /* ViewController+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Menu.swift"; sourceTree = "<group>"; };
+		8EB271762340D867003BF3AF /* ViewController+CollectionArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+CollectionArea.swift"; sourceTree = "<group>"; };
+		8EB271782340D8A3003BF3AF /* ViewController+PreviewArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+PreviewArea.swift"; sourceTree = "<group>"; };
+		8EB2717A2340D8BC003BF3AF /* ViewController+SelectionArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+SelectionArea.swift"; sourceTree = "<group>"; };
+		8EB2717C2340D8D5003BF3AF /* ViewController+TreeArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+TreeArea.swift"; sourceTree = "<group>"; };
+		8EB2717E2340D989003BF3AF /* ViewController+Startup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Startup.swift"; sourceTree = "<group>"; };
+		8EB271802340E578003BF3AF /* ViewController+Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Window.swift"; sourceTree = "<group>"; };
+		8EB271822340E98B003BF3AF /* ViewController+SelectionArea+CombineDuplicated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+SelectionArea+CombineDuplicated.swift"; sourceTree = "<group>"; };
+		8EB271842340E9C6003BF3AF /* ViewController+SelectionArea+ReplacePlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+SelectionArea+ReplacePlace.swift"; sourceTree = "<group>"; };
+		8EB271862340EA34003BF3AF /* ViewController+SelectionArea+ReplaceDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+SelectionArea+ReplaceDate.swift"; sourceTree = "<group>"; };
+		8EB271882340EDC5003BF3AF /* ViewController+SelectionArea+AssignEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+SelectionArea+AssignEvent.swift"; sourceTree = "<group>"; };
+		8EB2718A2340EE18003BF3AF /* ViewController+SelectionArea+ExportSelected.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+SelectionArea+ExportSelected.swift"; sourceTree = "<group>"; };
+		8EB2718C2340EE4C003BF3AF /* ViewController+SelectionArea+WriteNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+SelectionArea+WriteNote.swift"; sourceTree = "<group>"; };
+		8EB2718E2340EE95003BF3AF /* ViewController+TreeArea+Scan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+TreeArea+Scan.swift"; sourceTree = "<group>"; };
+		8EB271902340EED2003BF3AF /* ViewController+TreeArea+Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+TreeArea+Filter.swift"; sourceTree = "<group>"; };
+		8EB271922340EF6F003BF3AF /* ViewController+Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Schedule.swift"; sourceTree = "<group>"; };
+		8EB271942340F13C003BF3AF /* ViewController+Export.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Export.swift"; sourceTree = "<group>"; };
+		8EB271962340F1FF003BF3AF /* ViewController+Progress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Progress.swift"; sourceTree = "<group>"; };
+		8EB271982340F22F003BF3AF /* ViewController+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Search.swift"; sourceTree = "<group>"; };
+		8EB2719A2340F907003BF3AF /* ViewController+CollectionArea+CombineDuplicated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+CollectionArea+CombineDuplicated.swift"; sourceTree = "<group>"; };
 		8EB321CC20FA42AB00D8C71D /* Duplicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Duplicate.swift; sourceTree = "<group>"; };
 		8EB321CE20FA42C700D8C71D /* ModelStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelStore.swift; sourceTree = "<group>"; };
 		8EB321D020FA433500D8C71D /* ImageContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageContainer.swift; path = ImageDocker/Domain/GRDB/ImageContainer.swift; sourceTree = SOURCE_ROOT; };
@@ -451,6 +491,26 @@
 				8E0AFA3C208BDEA000CE8B68 /* AppDelegate.swift */,
 				8EF4CE6021E56CF700C53AFF /* ViewControllerUtils.swift */,
 				8EEF072A22626FE7000520B7 /* ViewController.swift */,
+				8EB271982340F22F003BF3AF /* ViewController+Search.swift */,
+				8EB271962340F1FF003BF3AF /* ViewController+Progress.swift */,
+				8EB271942340F13C003BF3AF /* ViewController+Export.swift */,
+				8EB271922340EF6F003BF3AF /* ViewController+Schedule.swift */,
+				8EB271802340E578003BF3AF /* ViewController+Window.swift */,
+				8EB2717E2340D989003BF3AF /* ViewController+Startup.swift */,
+				8EB2717C2340D8D5003BF3AF /* ViewController+TreeArea.swift */,
+				8EB271902340EED2003BF3AF /* ViewController+TreeArea+Filter.swift */,
+				8EB2718E2340EE95003BF3AF /* ViewController+TreeArea+Scan.swift */,
+				8EB2717A2340D8BC003BF3AF /* ViewController+SelectionArea.swift */,
+				8EB2718C2340EE4C003BF3AF /* ViewController+SelectionArea+WriteNote.swift */,
+				8EB2718A2340EE18003BF3AF /* ViewController+SelectionArea+ExportSelected.swift */,
+				8EB271882340EDC5003BF3AF /* ViewController+SelectionArea+AssignEvent.swift */,
+				8EB271862340EA34003BF3AF /* ViewController+SelectionArea+ReplaceDate.swift */,
+				8EB271842340E9C6003BF3AF /* ViewController+SelectionArea+ReplacePlace.swift */,
+				8EB271822340E98B003BF3AF /* ViewController+SelectionArea+CombineDuplicated.swift */,
+				8EB271782340D8A3003BF3AF /* ViewController+PreviewArea.swift */,
+				8EB271762340D867003BF3AF /* ViewController+CollectionArea.swift */,
+				8EB2719A2340F907003BF3AF /* ViewController+CollectionArea+CombineDuplicated.swift */,
+				8EB271742340D7B0003BF3AF /* ViewController+Menu.swift */,
 				8E0AFA42208BDEA100CE8B68 /* Main.storyboard */,
 				8EA643F4208D6E5100C7D695 /* PreferencesController.swift */,
 				8E98B8F220D5C90600771280 /* WindowController.swift */,
@@ -1076,6 +1136,7 @@
 				8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */,
 				8EB2715D23384401003BF3AF /* ImageFile+PhotoTakenDate.swift in Sources */,
 				8E85B7D220B91ED1005A9845 /* SelectionCollectionViewController.swift in Sources */,
+				8EB2718F2340EE95003BF3AF /* ViewController+TreeArea+Scan.swift in Sources */,
 				8EF4CE5E21D8026800C53AFF /* EditRepositoryViewController.swift in Sources */,
 				8EB2715F23384469003BF3AF /* ImageFile+Meta.swift in Sources */,
 				8E85B7DA20BE2515005A9845 /* LocationTextDelegate.swift in Sources */,
@@ -1101,23 +1162,31 @@
 				8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */,
 				8EAD03B523372C0100AAC7C6 /* ModelStore+ImageEvent.swift in Sources */,
 				8E4C38D9211829410089502C /* DeviceTreeController.swift in Sources */,
+				8EB2719B2340F907003BF3AF /* ViewController+CollectionArea+CombineDuplicated.swift in Sources */,
+				8EB271832340E98B003BF3AF /* ViewController+SelectionArea+CombineDuplicated.swift in Sources */,
 				8E85B7CF20B8786C005A9845 /* Accumulator.swift in Sources */,
+				8EB271792340D8A3003BF3AF /* ViewController+PreviewArea.swift in Sources */,
+				8EB2717B2340D8BC003BF3AF /* ViewController+SelectionArea.swift in Sources */,
 				8EB986B020B225230075B081 /* DetailViewDelegate.swift in Sources */,
 				8E7F71002091F14300410C45 /* BaiduLocation.swift in Sources */,
 				8E98B8F020D0EE3300771280 /* PlaceListViewController.swift in Sources */,
 				8EB321CF20FA42C700D8C71D /* ModelStore.swift in Sources */,
 				8EF125A622140C0F00C423CA /* ImageDevicePath.swift in Sources */,
+				8EB271812340E578003BF3AF /* ViewController+Window.swift in Sources */,
 				8EF4CE5721D77BD600C53AFF /* Family.swift in Sources */,
 				8E015123208F7D34009C2549 /* StackedVideoViewController.swift in Sources */,
 				8EB986BA20B30C920075B081 /* ImageFile.swift in Sources */,
 				8EEB88842090B44B00CDEC81 /* ImageDropView.swift in Sources */,
 				8EBA9DE7217477D900DACAAD /* UIHelper.swift in Sources */,
 				8EC82EA42121C10A00FC0899 /* LocalDirectory.swift in Sources */,
+				8EB271752340D7B0003BF3AF /* ViewController+Menu.swift in Sources */,
+				8EB271872340EA34003BF3AF /* ViewController+SelectionArea+ReplaceDate.swift in Sources */,
 				8EA1A063208DFD92000C3B97 /* MetaInfo.swift in Sources */,
 				8EBA9DE52173CC7F00DACAAD /* TheaterQuickLookItem.swift in Sources */,
 				8EB27161233844C9003BF3AF /* ImageFile+Location.swift in Sources */,
 				8EB986BD20B30C920075B081 /* CollectionViewItemsLoader.swift in Sources */,
 				8E8D472022338DAC0091E9C3 /* TextListViewController.swift in Sources */,
+				8EB271772340D867003BF3AF /* ViewController+CollectionArea.swift in Sources */,
 				8EFAF1FF20CAE422007A7783 /* Moment.swift in Sources */,
 				8EBA692C2090DB0300221131 /* DropPlaceCommons.swift in Sources */,
 				8E8D471A2229AC430091E9C3 /* FaceCollectionViewController.swift in Sources */,
@@ -1136,6 +1205,7 @@
 				8E4C38CD2117B5340089502C /* Phone.swift in Sources */,
 				8EB27169233BB408003BF3AF /* RepositoryDetailViewController.swift in Sources */,
 				8EAD03B323372BC800AAC7C6 /* ModelStore+ImagePlace.swift in Sources */,
+				8EB271852340E9C6003BF3AF /* ViewController+SelectionArea+ReplacePlace.swift in Sources */,
 				8EFE763C2094AF6B00B7CFCA /* TreeController.swift in Sources */,
 				8E3EC3B5214DB1B8004B6125 /* LunarCalendarView.swift in Sources */,
 				8EC20B302281B4C0000F4819 /* TaskHelper.swift in Sources */,
@@ -1146,7 +1216,10 @@
 				8EF125AC2216ECC500C423CA /* ContainerViewController.swift in Sources */,
 				8E85B7D420BA2AD7005A9845 /* DarkSplitView.swift in Sources */,
 				8EF500CD209A804100C9805F /* ImageFolder.swift in Sources */,
+				8EB271952340F13C003BF3AF /* ViewController+Export.swift in Sources */,
 				8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */,
+				8EB271912340EED2003BF3AF /* ViewController+TreeArea+Filter.swift in Sources */,
+				8EB271972340F1FF003BF3AF /* ViewController+Progress.swift in Sources */,
 				8EB986C120B317E70075B081 /* ModelStoreCoreData.swift in Sources */,
 				8E7B98DF2147E7880019ED87 /* FileSystemHandler.swift in Sources */,
 				8E4E5B78221985A400FE4B68 /* ImageFace.swift in Sources */,
@@ -1167,8 +1240,11 @@
 				8EAD03BD23372D5E00AAC7C6 /* ModelStore+Image+Meta.swift in Sources */,
 				8EF4CE5921D77BEA00C53AFF /* ImagePeople.swift in Sources */,
 				8EB986BC20B30C920075B081 /* CollectionViewDelegate.swift in Sources */,
+				8EB2717F2340D989003BF3AF /* ViewController+Startup.swift in Sources */,
 				8E4B7C1920929EFA00DDD9E0 /* LocationConsumer.swift in Sources */,
 				8E99DBFB2284A18600654C03 /* SearchHelper.swift in Sources */,
+				8EB2718B2340EE18003BF3AF /* ViewController+SelectionArea+ExportSelected.swift in Sources */,
+				8EB271992340F22F003BF3AF /* ViewController+Search.swift in Sources */,
 				8E7B98E1214882080019ED87 /* Alert.swift in Sources */,
 				8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */,
 				8E4C38D3211828B00089502C /* EventsTreeController.swift in Sources */,
@@ -1179,10 +1255,13 @@
 				8EAD03B923372C8C00AAC7C6 /* ModelStore+FaceFamily.swift in Sources */,
 				8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */,
 				8E8D47262236733B0091E9C3 /* OneColumnTableViewController.swift in Sources */,
+				8EB2717D2340D8D5003BF3AF /* ViewController+TreeArea.swift in Sources */,
+				8EB271892340EDC5003BF3AF /* ViewController+SelectionArea+AssignEvent.swift in Sources */,
 				8EF4CE6721E6F29100C53AFF /* LCSourceListHeaderView.swift in Sources */,
 				8EB986C620B6EBC40075B081 /* DarkTableView.swift in Sources */,
 				8EB2716D233E0729003BF3AF /* LibrariesViewController.swift in Sources */,
 				8E4C38CF2117B54D0089502C /* Android.swift in Sources */,
+				8EB2718D2340EE4C003BF3AF /* ViewController+SelectionArea+WriteNote.swift in Sources */,
 				8E8D47182229AC220091E9C3 /* FaceIconCollectionViewController.swift in Sources */,
 				8EEF071E225FCF8E000520B7 /* ContainerDetailViewController.swift in Sources */,
 				8E0AFA3D208BDEA000CE8B68 /* AppDelegate.swift in Sources */,
@@ -1204,6 +1283,7 @@
 				8EB321D720FA433500D8C71D /* Image.swift in Sources */,
 				8EEF071A2256C9D9000520B7 /* DevicePathDetailViewController.swift in Sources */,
 				8E8D471C22315F540091E9C3 /* SingleColumnTableViewController.swift in Sources */,
+				8EB271932340EF6F003BF3AF /* ViewController+Schedule.swift in Sources */,
 				8EAD03AF2337290E00AAC7C6 /* ModelStore+Image.swift in Sources */,
 				8EB271512337B6E4003BF3AF /* ModelStore+Image+Duplicate.swift in Sources */,
 			);
