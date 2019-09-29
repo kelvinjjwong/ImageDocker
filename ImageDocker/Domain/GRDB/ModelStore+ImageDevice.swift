@@ -271,4 +271,37 @@ where p.excludeimported=1
         
         return results
     }
+    
+    func getLastImportDateOfDevices() -> ([String:String], [(String,String,String?,String?)]) {
+        let sql = """
+select (CASE WHEN c.name IS NULL THEN 'NOT_SCAN' ELSE c.name END) name,d.deviceid, d.name deviceName, f.lastImportDate,d.repositoryPath,d.storagePath from imageDevice d left join (
+select max(importDate) lastImportDate,deviceId from imagedevicefile group by deviceId ) f on d.deviceId=f.deviceId
+left join
+(select name,deviceid from imageContainer where parentFolder='') c on d.deviceId=c.deviceId
+order by c.name
+"""
+        var notScans:[(String,String,String?,String?)] = []
+        var results:[String:String] = [:]
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, sql)
+                for row in rows {
+                    if let name = row["name"] as String?, let date = row["lastImportDate"] as String?, let deviceName = row["deviceName"] as String? {
+                        if name == "NOT_SCAN" {
+                            let repoPath = row["repositoryPath"] as String?
+                            let backupPath = row["storagePath"] as String?
+                            notScans.append((deviceName, date, repoPath, backupPath))
+                        }else{
+                            results[name] = date
+                        }
+                    }
+                }
+            }
+        }catch{
+            print(error)
+        }
+        
+        return (results, notScans)
+    }
 }

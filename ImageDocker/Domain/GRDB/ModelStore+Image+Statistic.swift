@@ -268,4 +268,31 @@ extension ModelStore {
         }
         return result
     }
+    
+    // MARK: - DATE
+    
+    func getLastPhotoTakenDateOfRepositories() -> [String:String] {
+        let sql = """
+select name,lastPhotoTakenDate from
+(select name,(path || '/') repositoryPath from imageContainer where parentfolder='') c left join (
+select max(photoTakenDate) lastPhotoTakenDate,repositoryPath from image group by repositoryPath) i on c.repositoryPath = i.repositoryPath
+order by name
+"""
+        var results:[String:String] = [:]
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, sql)
+                for row in rows {
+                    if let name = row["name"] as String?, let date = row["lastPhotoTakenDate"] as String? {
+                        results[name] = date
+                    }
+                }
+            }
+        }catch{
+            print(error)
+        }
+        
+        return results
+    }
 }

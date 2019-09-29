@@ -16,7 +16,7 @@ extension ViewController {
         if(myPopover == nil){
             myPopover = NSPopover()
             
-            let frame = CGRect(origin: .zero, size: CGSize(width: 600, height: 340))
+            let frame = CGRect(origin: .zero, size: CGSize(width: 810, height: 390))
             self.librariesViewController = LibrariesViewController(onReload: {
                 DispatchQueue.main.async {
                     self.refreshLibraryTree()

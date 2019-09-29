@@ -14,7 +14,7 @@ class LibrariesViewController: NSViewController {
     @IBOutlet weak var btnCalculate: NSButton!
     @IBOutlet weak var tblSpaceOccupation: NSTableView!
     
-    var records:[(String,String,String,String,String)] = []
+    var records:[(String,String,String,String,String, String,String)] = []
     var onReload: (() -> Void)? = nil
     
     // MARK: INIT VIEW
@@ -49,7 +49,12 @@ class LibrariesViewController: NSViewController {
         self.btnCalculate.isEnabled = false
         DispatchQueue.global().async {
             self.records.removeAll()
-            let repos = ModelStore.default.getRepositories()
+            let (lastImportDates, notyetScanDevices) = ModelStore.default.getLastImportDateOfDevices()
+            let lastPhotoTakenDates = ModelStore.default.getLastPhotoTakenDateOfRepositories()
+            
+            let repos = ModelStore.default.getRepositories().sorted(by: { (left, right) -> Bool in
+                return left.name < right.name
+            })
             var totalTotal = 0.0
             var totalRepo = 0.0
             var totalBackup = 0.0
@@ -62,7 +67,12 @@ class LibrariesViewController: NSViewController {
                 let repoTxt = self.getBytesText(repoSize)
                 let backupTxt = self.getBytesText(backupSize)
                 let faceTxt = self.getBytesText(faceSize)
-                self.records.append((repo.name, total, repoTxt, backupTxt, faceTxt))
+                
+                let lastImportDate = lastImportDates[repo.name] ?? ""
+                var lastPhotoTakenDate = lastPhotoTakenDates[repo.name] ?? ""
+                lastPhotoTakenDate = lastPhotoTakenDate.components(separatedBy: " ")[0]
+                
+                self.records.append((repo.name, total, repoTxt, backupTxt, faceTxt, lastImportDate, lastPhotoTakenDate))
                 DispatchQueue.main.async {
                     self.tblSpaceOccupation.reloadData()
                 }
@@ -71,18 +81,62 @@ class LibrariesViewController: NSViewController {
                 totalBackup += backupSize
                 totalFace += faceSize
             }
+            for notScanDevice in notyetScanDevices {
+                let name = notScanDevice.0
+                let lastImportDate = notScanDevice.1
+                var totalSize = 0.0
+                var repoTxt = ""
+                var backupTxt = ""
+                if let repoPath = notScanDevice.2 {
+                    let (repoSize, _, repoDisk, _) = LocalDirectory.bridge.getDiskSpace(path: repoPath)
+                    repoTxt = self.getBytesText(repoSize)
+                    totalSize += repoSize
+                    
+                    let repoDiskUsed = diskUsage[repoDisk]
+                    if repoDiskUsed == nil {
+                        diskUsage[repoDisk] = repoSize
+                    }else{
+                        diskUsage[repoDisk] = repoDiskUsed! + repoSize
+                    }
+                    totalRepo += repoSize
+                }
+                if let backupPath = notScanDevice.3 {
+                    let (backupSize, _, backupDisk, _) = LocalDirectory.bridge.getDiskSpace(path: backupPath)
+                    backupTxt = self.getBytesText(backupSize)
+                    totalSize += backupSize
+                    
+                    let backupDiskUsed = diskUsage[backupDisk]
+                    if backupDiskUsed == nil {
+                        diskUsage[backupDisk] = backupSize
+                    }else{
+                        diskUsage[backupDisk] = backupDiskUsed! + backupSize
+                    }
+                    totalBackup += backupSize
+                }
+                totalTotal += totalSize
+                let total = self.getBytesText(totalSize)
+                self.records.append((name, total, repoTxt, backupTxt, "", lastImportDate, "(NOT SCANNED)"))
+                DispatchQueue.main.async {
+                    self.tblSpaceOccupation.reloadData()
+                }
+            }
+            self.records.sort(by: { (left, right) -> Bool in
+                return left.0 < right.0
+            })
+            
             self.records.append(("TOTAL",
                                  self.getBytesText(totalTotal),
                                  self.getBytesText(totalRepo),
                                  self.getBytesText(totalBackup),
-                                 self.getBytesText(totalFace)))
+                                 self.getBytesText(totalFace),
+                                 "", ""))
             
-            self.records.append(("", "", "", "", ""))
-            self.records.append(("Disk", "Used", "Free", "Total", ""))
+            self.records.append(("", "", "", "", "", "", ""))
+            self.records.append(("Disk", "Used", "Free", "Total", "", "", ""))
             
             for key in diskUsage.keys {
                 let (diskTotal, diskFree, _) = LocalDirectory.bridge.freeSpace(path: key)
-                self.records.append((key, "\(diskUsage[key] ?? 0) G", diskFree, diskTotal, ""))
+                self.records.append((key, "\(diskUsage[key] ?? 0) G", diskFree, diskTotal, "", "", ""))
             }
             
             DispatchQueue.main.async {
@@ -105,7 +159,7 @@ extension LibrariesViewController: NSTableViewDelegate {
         if row > (self.records.count - 1) {
             return nil
         }
-        let info:(String,String,String,String,String) = self.records[row]
+        let info:(String,String,String,String,String,String,String) = self.records[row]
         var value = ""
         //var tip: String? = nil
         if let id = tableColumn?.identifier {
@@ -120,6 +174,10 @@ extension LibrariesViewController: NSTableViewDelegate {
                 value = info.3
             case NSUserInterfaceItemIdentifier("face"):
                 value = info.4
+            case NSUserInterfaceItemIdentifier("lastImportDate"):
+                value = info.5
+            case NSUserInterfaceItemIdentifier("lastPhotoTakenDate"):
+                value = info.6
                 
             default:
                 break
