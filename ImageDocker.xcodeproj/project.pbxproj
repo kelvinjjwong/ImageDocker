@@ -124,6 +124,8 @@
 		8EB2719F23412FE8003BF3AF /* ViewController+Menu+Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2719E23412FE8003BF3AF /* ViewController+Menu+Export.swift */; };
 		8EB271A323413CE7003BF3AF /* ExportConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271A123413CE7003BF3AF /* ExportConfigurationViewController.swift */; };
 		8EB271A423413CE7003BF3AF /* ExportConfigurationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EB271A223413CE7003BF3AF /* ExportConfigurationViewController.xib */; };
+		8EB271A623418503003BF3AF /* ExportStackItems.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8EB271A523418503003BF3AF /* ExportStackItems.storyboard */; };
+		8EB271A823418C68003BF3AF /* ExportProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271A723418C68003BF3AF /* ExportProfileViewController.swift */; };
 		8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CC20FA42AB00D8C71D /* Duplicate.swift */; };
 		8EB321CF20FA42C700D8C71D /* ModelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CE20FA42C700D8C71D /* ModelStore.swift */; };
 		8EB321D420FA433500D8C71D /* ImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321D020FA433500D8C71D /* ImageContainer.swift */; };
@@ -342,6 +344,8 @@
 		8EB2719E23412FE8003BF3AF /* ViewController+Menu+Export.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Menu+Export.swift"; sourceTree = "<group>"; };
 		8EB271A123413CE7003BF3AF /* ExportConfigurationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportConfigurationViewController.swift; sourceTree = "<group>"; };
 		8EB271A223413CE7003BF3AF /* ExportConfigurationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExportConfigurationViewController.xib; sourceTree = "<group>"; };
+		8EB271A523418503003BF3AF /* ExportStackItems.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ExportStackItems.storyboard; sourceTree = "<group>"; };
+		8EB271A723418C68003BF3AF /* ExportProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportProfileViewController.swift; sourceTree = "<group>"; };
 		8EB321CC20FA42AB00D8C71D /* Duplicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Duplicate.swift; sourceTree = "<group>"; };
 		8EB321CE20FA42C700D8C71D /* ModelStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelStore.swift; sourceTree = "<group>"; };
 		8EB321D020FA433500D8C71D /* ImageContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageContainer.swift; path = ImageDocker/Domain/GRDB/ImageContainer.swift; sourceTree = SOURCE_ROOT; };
@@ -709,6 +713,8 @@
 			children = (
 				8EB271A123413CE7003BF3AF /* ExportConfigurationViewController.swift */,
 				8EB271A223413CE7003BF3AF /* ExportConfigurationViewController.xib */,
+				8EB271A523418503003BF3AF /* ExportStackItems.storyboard */,
+				8EB271A723418C68003BF3AF /* ExportProfileViewController.swift */,
 			);
 			path = Export;
 			sourceTree = "<group>";
@@ -1081,6 +1087,7 @@
 				8E3EC3BE214DE623004B6125 /* DateTimeViewController.xib in Resources */,
 				8EF125AA2214590000C423CA /* DeviceListViewController.xib in Resources */,
 				8EBA9DE0216F8BB100DACAAD /* NotesViewController.xib in Resources */,
+				8EB271A623418503003BF3AF /* ExportStackItems.storyboard in Resources */,
 				8EB271A423413CE7003BF3AF /* ExportConfigurationViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1293,6 +1300,7 @@
 				8EB271A323413CE7003BF3AF /* ExportConfigurationViewController.swift in Sources */,
 				8E3EC3B4214DB1B8004B6125 /* LunarSolarConverter.swift in Sources */,
 				8EB271572337B9C3003BF3AF /* ModelStore+Image+Search.swift in Sources */,
+				8EB271A823418C68003BF3AF /* ExportProfileViewController.swift in Sources */,
 				8EB27170233E15B0003BF3AF /* TreeController+LibrarySectionMenu.swift in Sources */,
 				8EBA9DDF216F8BB100DACAAD /* NotesViewController.swift in Sources */,
 				8EEF0728226215E7000520B7 /* SplashViewController.swift in Sources */,
