@@ -122,6 +122,8 @@
 		8EB2719B2340F907003BF3AF /* ViewController+CollectionArea+CombineDuplicated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2719A2340F907003BF3AF /* ViewController+CollectionArea+CombineDuplicated.swift */; };
 		8EB2719D23412FD5003BF3AF /* ViewController+Menu+Scan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2719C23412FD5003BF3AF /* ViewController+Menu+Scan.swift */; };
 		8EB2719F23412FE8003BF3AF /* ViewController+Menu+Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2719E23412FE8003BF3AF /* ViewController+Menu+Export.swift */; };
+		8EB271A323413CE7003BF3AF /* ExportConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271A123413CE7003BF3AF /* ExportConfigurationViewController.swift */; };
+		8EB271A423413CE7003BF3AF /* ExportConfigurationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EB271A223413CE7003BF3AF /* ExportConfigurationViewController.xib */; };
 		8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CC20FA42AB00D8C71D /* Duplicate.swift */; };
 		8EB321CF20FA42C700D8C71D /* ModelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CE20FA42C700D8C71D /* ModelStore.swift */; };
 		8EB321D420FA433500D8C71D /* ImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321D020FA433500D8C71D /* ImageContainer.swift */; };
@@ -338,6 +340,8 @@
 		8EB2719A2340F907003BF3AF /* ViewController+CollectionArea+CombineDuplicated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+CollectionArea+CombineDuplicated.swift"; sourceTree = "<group>"; };
 		8EB2719C23412FD5003BF3AF /* ViewController+Menu+Scan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Menu+Scan.swift"; sourceTree = "<group>"; };
 		8EB2719E23412FE8003BF3AF /* ViewController+Menu+Export.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Menu+Export.swift"; sourceTree = "<group>"; };
+		8EB271A123413CE7003BF3AF /* ExportConfigurationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportConfigurationViewController.swift; sourceTree = "<group>"; };
+		8EB271A223413CE7003BF3AF /* ExportConfigurationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExportConfigurationViewController.xib; sourceTree = "<group>"; };
 		8EB321CC20FA42AB00D8C71D /* Duplicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Duplicate.swift; sourceTree = "<group>"; };
 		8EB321CE20FA42C700D8C71D /* ModelStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelStore.swift; sourceTree = "<group>"; };
 		8EB321D020FA433500D8C71D /* ImageContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageContainer.swift; path = ImageDocker/Domain/GRDB/ImageContainer.swift; sourceTree = SOURCE_ROOT; };
@@ -487,6 +491,7 @@
 				8EB986A820B21AEC0075B081 /* Collection */,
 				8E85B7D020B91E9E005A9845 /* Selection */,
 				8E3EC3B8214DB235004B6125 /* SelectionEditor */,
+				8EB271A023413CB0003BF3AF /* Export */,
 				8EB986AA20B21D3E0075B081 /* Tree */,
 				8EB986AC20B223550075B081 /* Tools */,
 				8EBA69262090C37B00221131 /* Supporting Files */,
@@ -697,6 +702,15 @@
 				8E4C38D4211828FF0089502C /* MomentsTreeController.swift */,
 			);
 			path = MomentsTree;
+			sourceTree = "<group>";
+		};
+		8EB271A023413CB0003BF3AF /* Export */ = {
+			isa = PBXGroup;
+			children = (
+				8EB271A123413CE7003BF3AF /* ExportConfigurationViewController.swift */,
+				8EB271A223413CE7003BF3AF /* ExportConfigurationViewController.xib */,
+			);
+			path = Export;
 			sourceTree = "<group>";
 		};
 		8EB986A820B21AEC0075B081 /* Collection */ = {
@@ -1067,6 +1081,7 @@
 				8E3EC3BE214DE623004B6125 /* DateTimeViewController.xib in Resources */,
 				8EF125AA2214590000C423CA /* DeviceListViewController.xib in Resources */,
 				8EBA9DE0216F8BB100DACAAD /* NotesViewController.xib in Resources */,
+				8EB271A423413CE7003BF3AF /* ExportConfigurationViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1275,6 +1290,7 @@
 				8EEF072B22626FE8000520B7 /* ViewController.swift in Sources */,
 				8E4C38D5211828FF0089502C /* MomentsTreeController.swift in Sources */,
 				8EC20B322281C0B8000F4819 /* FaceTask.swift in Sources */,
+				8EB271A323413CE7003BF3AF /* ExportConfigurationViewController.swift in Sources */,
 				8E3EC3B4214DB1B8004B6125 /* LunarSolarConverter.swift in Sources */,
 				8EB271572337B9C3003BF3AF /* ModelStore+Image+Search.swift in Sources */,
 				8EB27170233E15B0003BF3AF /* TreeController+LibrarySectionMenu.swift in Sources */,
