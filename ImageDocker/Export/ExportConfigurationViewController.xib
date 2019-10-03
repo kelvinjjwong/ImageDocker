@@ -8,7 +8,22 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ExportConfigurationViewController" customModule="ImageDocker" customModuleProvider="target">
             <connections>
+                <outlet property="btnAssign" destination="dEa-11-yMp" id="3VR-Zp-V5R"/>
+                <outlet property="btnGoto" destination="GJa-qz-wH4" id="SEM-Qk-cYZ"/>
+                <outlet property="btnSave" destination="Btt-76-DEE" id="Fpe-Oo-Np6"/>
+                <outlet property="btnSelectEvent" destination="jiV-lY-p1I" id="suD-FP-a3q"/>
+                <outlet property="btnSelectPeople" destination="riB-bX-hMS" id="LPm-69-cbw"/>
+                <outlet property="chkDeviceModelSuffix" destination="RTE-n8-rbD" id="tSy-kj-II6"/>
+                <outlet property="chkDeviceNameSuffix" destination="4f0-w4-h4F" id="iSt-Gm-Kol"/>
+                <outlet property="chkEvents" destination="z7q-9H-81f" id="XTx-ps-KBC"/>
+                <outlet property="chkNumberSuffix" destination="rlW-mf-YH9" id="pQC-kE-fwB"/>
+                <outlet property="chkOverwriteDuplicate" destination="5S6-ZH-o9Y" id="P30-Ha-ncf"/>
+                <outlet property="chkPeople" destination="E81-GP-ppk" id="X4n-97-CBp"/>
                 <outlet property="stackView" destination="Bfq-zr-1HI" id="jDm-gU-rvK"/>
+                <outlet property="txtDirectory" destination="dVz-lC-R5m" id="vUb-3k-5OP"/>
+                <outlet property="txtEvents" destination="GVc-p2-C9b" id="WZ2-HZ-usu"/>
+                <outlet property="txtName" destination="fnO-QY-J4Q" id="Y2r-4N-gho"/>
+                <outlet property="txtPeople" destination="r6R-Ur-LA1" id="vaf-Jw-dk5"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
@@ -68,6 +83,9 @@
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="onAssignDirectoryClicked:" target="-2" id="3Dl-cv-ogX"/>
+                                </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Btt-76-DEE">
                                 <rect key="frame" x="476" y="166" width="93" height="32"/>
@@ -76,6 +94,9 @@
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="onSaveClicked:" target="-2" id="M4S-Ab-qSM"/>
+                                </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="E81-GP-ppk">
                                 <rect key="frame" x="18" y="83" width="68" height="18"/>
@@ -84,6 +105,9 @@
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="onCheckPeopleClicked:" target="-2" id="aW2-1F-ZJi"/>
+                                </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z7q-9H-81f">
                                 <rect key="frame" x="18" y="32" width="76" height="31"/>
@@ -92,6 +116,9 @@
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="onCheckEventsClicked:" target="-2" id="DkH-Fz-8WQ"/>
+                                </connections>
                             </button>
                             <box fixedFrame="YES" title="When filename is duplicated" translatesAutoresizingMaskIntoConstraints="NO" id="m65-Qq-iQP">
                                 <rect key="frame" x="679" y="16" width="234" height="178"/>
@@ -160,6 +187,9 @@
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="onSelectPeopleClicked:" target="-2" id="kvO-Ja-FVc"/>
+                                </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jiV-lY-p1I">
                                 <rect key="frame" x="476" y="28" width="93" height="32"/>
@@ -168,6 +198,9 @@
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="onSelectEventClicked:" target="-2" id="YdP-GM-bIr"/>
+                                </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GJa-qz-wH4">
                                 <rect key="frame" x="569" y="120" width="90" height="32"/>
@@ -176,6 +209,9 @@
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="onGotoDirectoryClicked:" target="-2" id="xw7-VO-vsX"/>
+                                </connections>
                             </button>
                         </subviews>
                     </view>

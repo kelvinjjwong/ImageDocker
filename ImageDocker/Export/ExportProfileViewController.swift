@@ -16,6 +16,10 @@ class ExportProfileViewController : NSViewController {
     @IBOutlet weak var btnEdit: NSButton!
     @IBOutlet weak var btnDelete: NSButton!
     
+    var onEdit: (() -> Void)? = nil
+    
+    var onDelete: (() -> Void)? = nil
+    
     init() {
         super.init(nibName: NSNib.Name(rawValue: "ExportProfileViewController"), bundle: nil)
     }
@@ -40,20 +44,29 @@ class ExportProfileViewController : NSViewController {
     var path = ""
     var options = ""
     
-    func initView(id:String, name:String, path:String, options:String){
+    func initView(id:String, name:String, path:String, options:String,
+                  onEdit: (() -> Void)? = nil, onDelete: (() -> Void)? = nil){
         self.id = id
         self.name = name
         self.path = path
         self.options = options
+        self.onEdit = onEdit
+        self.onDelete = onDelete
         print("init profile view id=\(id) name=\(name)")
     }
     
     @IBAction func onEditClicked(_ sender: NSButton) {
         print("edit profile \(id) -> \(name)")
+        if onEdit != nil {
+            onEdit!()
+        }
     }
     
     @IBAction func onDeleteClicked(_ sender: NSButton) {
         print("delete profile \(id) -> \(name)")
+        if onDelete != nil {
+            onDelete!()
+        }
     }
     
 }
