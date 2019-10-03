@@ -585,7 +585,7 @@ final class PreferencesController: NSViewController {
     class func healthCheck() {
         
         if baiduAK() == "" || baiduSK() == "" {
-            Alert.invalidBaiduMapAK()
+            //Alert.invalidBaiduMapAK()
             return
         }
     }

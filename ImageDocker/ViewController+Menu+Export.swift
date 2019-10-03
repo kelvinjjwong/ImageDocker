@@ -21,6 +21,16 @@ extension ViewController {
     @objc func exportMenuConfigAction(_ menuItem:NSMenuItem) {
         print("clicked export menu configuration")
         self.btnExport.selectItem(at: 0)
+        
+        let viewController = ExportConfigurationViewController()
+        let window = NSWindow(contentViewController: viewController)
+        
+        let frame = CGRect(origin: CGPoint(x: 300, y: 200), size: CGSize(width: 1000, height: 600))
+        window.title = "Export Manager"
+        window.setFrame(frame, display: false)
+        window.makeKeyAndOrderFront(self)
+        
+        
     }
     
     @objc func exportMenuExportAction(_ menuItem:NSMenuItem) {

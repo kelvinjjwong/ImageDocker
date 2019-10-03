@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ExportConfigurationViewController" customModule="ImageDocker" customModuleProvider="target">
             <connections>
+                <outlet property="stackView" destination="Bfq-zr-1HI" id="jDm-gU-rvK"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
@@ -179,6 +180,29 @@
                         </subviews>
                     </view>
                 </box>
+                <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eBp-l1-H17">
+                    <rect key="frame" x="20" y="13" width="930" height="278"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <clipView key="contentView" ambiguous="YES" id="gPm-ny-JHP">
+                        <rect key="frame" x="1" y="1" width="913" height="261"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" ambiguous="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bfq-zr-1HI" customClass="CustomStackView" customModule="ImageDocker" customModuleProvider="target"/>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="Bfq-zr-1HI" firstAttribute="top" secondItem="gPm-ny-JHP" secondAttribute="top" id="5cP-Bj-TfQ"/>
+                            <constraint firstItem="Bfq-zr-1HI" firstAttribute="leading" secondItem="gPm-ny-JHP" secondAttribute="leading" id="6eV-Xa-x5k"/>
+                        </constraints>
+                    </clipView>
+                    <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="uWp-ga-zlR">
+                        <rect key="frame" x="1" y="262" width="913" height="15"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="pWf-EL-Zmt">
+                        <rect key="frame" x="914" y="1" width="15" height="261"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                </scrollView>
             </subviews>
             <point key="canvasLocation" x="385" y="297"/>
         </customView>
