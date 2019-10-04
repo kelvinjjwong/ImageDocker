@@ -19,6 +19,7 @@ class RepositoryDetailViewController: NSViewController {
     @IBOutlet weak var lblBackupFree: NSTextField!
     @IBOutlet weak var lblCropFree: NSTextField!
     @IBOutlet weak var lblTotalSize: NSTextField!
+    @IBOutlet weak var btnDataMaintenance: NSButton!
     
     
     // MARK: INIT VIEW
@@ -117,5 +118,8 @@ class RepositoryDetailViewController: NSViewController {
         }
     }
     
+    @IBAction func onDataMaintenanceClicked(_ sender: NSButton) {
+        // TODO: use folder name as event name for those images imported from local folders
+    }
     
 }

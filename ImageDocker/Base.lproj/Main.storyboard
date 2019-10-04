@@ -1278,7 +1278,7 @@
                                         <constraints>
                                             <constraint firstAttribute="width" constant="90" id="6j4-Oa-hic"/>
                                         </constraints>
-                                        <buttonCell key="cell" type="recessed" title="Progress" bezelStyle="recessed" image="tick" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="szk-Qw-8j3">
+                                        <buttonCell key="cell" type="recessed" title="Progress" bezelStyle="recessed" image="NSPathTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="szk-Qw-8j3">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="systemBold" size="12"/>
                                         </buttonCell>
@@ -5930,7 +5930,6 @@ DQ
         <image name="more_horizontal" width="16" height="4"/>
         <image name="people" width="16" height="16"/>
         <image name="search" width="16" height="16"/>
-        <image name="tick" width="16" height="16"/>
         <image name="trash" width="16" height="16"/>
         <image name="view" width="16" height="16"/>
     </resources>

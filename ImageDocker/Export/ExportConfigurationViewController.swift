@@ -29,6 +29,9 @@ class ExportConfigurationViewController: NSViewController {
     @IBOutlet weak var chkDeviceNameSuffix: NSButton!
     @IBOutlet weak var chkDeviceModelSuffix: NSButton!
     @IBOutlet weak var chkNumberSuffix: NSButton!
+    @IBOutlet weak var chkRepository: NSButton!
+    @IBOutlet weak var txtRepository: NSTextField!
+    @IBOutlet weak var btnSelectRepository: NSButton!
     
     
     @IBOutlet weak var stackView: NSStackView!
@@ -97,23 +100,36 @@ class ExportConfigurationViewController: NSViewController {
     }
     
     @IBAction func onAssignDirectoryClicked(_ sender: NSButton) {
+        // TODO: assign folder to export
     }
     
     @IBAction func onGotoDirectoryClicked(_ sender: NSButton) {
+        // TODO: reveal folder in finder
     }
     
     @IBAction func onSelectPeopleClicked(_ sender: NSButton) {
+        // TODO: select people (or clear selection) from a list, put their names into textfield separated by comma
     }
     
     @IBAction func onSelectEventClicked(_ sender: NSButton) {
+        // TODO: select events (or clear selection) from a list, put their names into textfield separated by comma
     }
     
     @IBAction func onCheckPeopleClicked(_ sender: NSButton) {
+        // TODO: set enable/disable in db
     }
     
     @IBAction func onCheckEventsClicked(_ sender: NSButton) {
+        // TODO: set enable/disable in db
     }
     
+    @IBAction func onCheckRepository(_ sender: NSButton) {
+        // TODO: set enable/disable in db
+    }
+    
+    @IBAction func onSelectRepository(_ sender: NSButton) {
+        // TODO: select repositories (or clear selection) from a list, put their names into textfield separated by comma
+    }
     
 }
 

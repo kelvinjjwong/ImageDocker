@@ -21,6 +21,7 @@ class TaskProgressViewController: NSViewController {
     }
     
     var tasks:[String] = []
+    // TODO: maintenance tasks' progress centralized
     
 
     // run only once

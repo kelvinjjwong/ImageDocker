@@ -9,6 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="RepositoryDetailViewController" customModule="ImageDocker" customModuleProvider="target">
             <connections>
                 <outlet property="btnConfig" destination="0H0-eA-dKu" id="bJP-MQ-0rV"/>
+                <outlet property="btnDataMaintenance" destination="XBl-9x-9Re" id="Eax-fZ-VaW"/>
                 <outlet property="lblBackupFree" destination="kUt-lf-Kd9" id="MRq-Lu-x7e"/>
                 <outlet property="lblBackupSpace" destination="Zh0-Im-ZDk" id="wzw-qJ-9Et"/>
                 <outlet property="lblCropFree" destination="ZG9-nT-zO1" id="4z5-0r-lE6"/>
@@ -237,6 +238,17 @@
                         </subviews>
                     </view>
                 </box>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XBl-9x-9Re">
+                    <rect key="frame" x="122" y="310" width="150" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="push" title="Data Maintenance" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aki-Jb-H4w">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="onDataMaintenanceClicked:" target="-2" id="Qlc-SB-Eeq"/>
+                    </connections>
+                </button>
             </subviews>
             <point key="canvasLocation" x="228" y="197"/>
         </customView>
