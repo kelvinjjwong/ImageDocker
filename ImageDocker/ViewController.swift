@@ -31,6 +31,7 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var txtSearch: NSSearchField!
     
+    @IBOutlet weak var btnTask: NSButton!
     
     // MARK: - Timer
     var scanLocationChangeTimer:Timer!
@@ -50,6 +51,9 @@ class ViewController: NSViewController {
     
     var notificationPopover:NSPopover?
     var notificationViewController:NotificationViewController!
+    
+    var taskProgressPopover:NSPopover?
+    var taskProgressViewController:TaskProgressViewController!
     
     // MARK: - Image preview
     var img:ImageFile!
@@ -602,5 +606,9 @@ class ViewController: NSViewController {
         self.search(sender.stringValue)
     }
     
+    
+    @IBAction func onTaskClicked(_ sender: NSButton) {
+        self.popTasks(sender)
+    }
     
 }

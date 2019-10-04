@@ -1191,7 +1191,7 @@
                                 </holdingPriorities>
                             </splitView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="gVf-na-PZy">
-                                <rect key="frame" x="6" y="880" width="1302" height="40"/>
+                                <rect key="frame" x="6" y="880" width="1889" height="40"/>
                                 <subviews>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wQ3-4F-bW7">
                                         <rect key="frame" x="10" y="10" width="70" height="19"/>
@@ -1209,10 +1209,7 @@
                                         </popUpButtonCell>
                                     </popUpButton>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kL0-v4-mKZ">
-                                        <rect key="frame" x="902" y="13" width="304" height="17"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="300" id="gsP-mn-F5f"/>
-                                        </constraints>
+                                        <rect key="frame" x="890" y="13" width="808" height="17"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" id="oon-EU-u89">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1220,17 +1217,23 @@
                                         </textFieldCell>
                                     </textField>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="L5J-oA-BUH">
-                                        <rect key="frame" x="1208" y="2" width="95" height="32"/>
-                                        <buttonCell key="cell" type="push" title="STOP" bezelStyle="rounded" image="NSStopProgressFreestandingTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4Ur-F2-sqb">
+                                        <rect key="frame" x="1706" y="11" width="83" height="19"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="83" id="heg-4p-CzH"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="recessed" title="STOP" bezelStyle="recessed" image="NSStopProgressFreestandingTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4Ur-F2-sqb">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                            <font key="font" metaFont="systemBold" size="12"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="onStopClicked:" target="XfG-lQ-9wD" id="d6A-XM-PaB"/>
                                         </connections>
                                     </button>
                                     <searchField wantsLayer="YES" focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0O0-hl-4CA">
-                                        <rect key="frame" x="272" y="10" width="612" height="22"/>
+                                        <rect key="frame" x="272" y="10" width="600" height="22"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="600" id="J5T-qO-ODx"/>
+                                        </constraints>
                                         <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" focusRingType="none" usesSingleLineMode="YES" bezelStyle="round" sendsWholeSearchString="YES" id="SkT-1n-nAK">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -1270,10 +1273,22 @@
                                             </menu>
                                         </popUpButtonCell>
                                     </popUpButton>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QOJ-Qq-wsE">
+                                        <rect key="frame" x="1799" y="12" width="90" height="19"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="90" id="6j4-Oa-hic"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="recessed" title="Progress" bezelStyle="recessed" image="tick" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="szk-Qw-8j3">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="systemBold" size="12"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onTaskClicked:" target="XfG-lQ-9wD" id="vH7-KW-O0g"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="kCb-sM-PKJ" secondAttribute="bottom" constant="9" id="1Fo-1G-pWg"/>
-                                    <constraint firstAttribute="trailing" secondItem="L5J-oA-BUH" secondAttribute="trailing" constant="5" id="BxZ-JF-Tu2"/>
                                     <constraint firstItem="wQ3-4F-bW7" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="11" id="Cpz-BF-ZaT"/>
                                     <constraint firstItem="L5J-oA-BUH" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="Cxp-QY-2oQ"/>
                                     <constraint firstItem="kCb-sM-PKJ" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="EaW-Ms-XCk"/>
@@ -1285,32 +1300,26 @@
                                     <constraint firstItem="kCb-sM-PKJ" firstAttribute="leading" secondItem="jTT-pc-Bka" secondAttribute="trailing" constant="10" id="bcj-Hn-PnS"/>
                                     <constraint firstItem="jTT-pc-Bka" firstAttribute="leading" secondItem="wQ3-4F-bW7" secondAttribute="trailing" constant="10" id="hnC-Sn-lZ6"/>
                                     <constraint firstItem="L5J-oA-BUH" firstAttribute="leading" secondItem="kL0-v4-mKZ" secondAttribute="trailing" constant="10" id="ovv-6i-2iA"/>
+                                    <constraint firstItem="QOJ-Qq-wsE" firstAttribute="leading" secondItem="L5J-oA-BUH" secondAttribute="trailing" constant="10" id="qaB-cy-VVo"/>
+                                    <constraint firstAttribute="trailing" secondItem="QOJ-Qq-wsE" secondAttribute="trailing" id="s4O-4M-5Lv"/>
                                     <constraint firstItem="wQ3-4F-bW7" firstAttribute="leading" secondItem="gVf-na-PZy" secondAttribute="leading" constant="10" id="vrS-mp-TFb"/>
+                                    <constraint firstItem="QOJ-Qq-wsE" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="9" id="vwY-NO-24d"/>
                                     <constraint firstItem="kL0-v4-mKZ" firstAttribute="leading" secondItem="0O0-hl-4CA" secondAttribute="trailing" constant="20" id="yIN-CP-PyT"/>
-                                </constraints>
-                            </customView>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="kIX-ny-abJ">
-                                <rect key="frame" x="1308" y="880" width="587" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="587" id="MgS-dw-CNl"/>
                                 </constraints>
                             </customView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="kIX-ny-abJ" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="1ou-D9-c8e"/>
                             <constraint firstAttribute="bottom" secondItem="giR-in-kR4" secondAttribute="bottom" constant="6" id="E0E-HH-ZVq"/>
                             <constraint firstItem="X01-1a-Mbk" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="6" id="HRe-Nh-4Jd"/>
                             <constraint firstItem="giR-in-kR4" firstAttribute="leading" secondItem="X01-1a-Mbk" secondAttribute="trailing" constant="8" id="NhE-wn-mW3"/>
                             <constraint firstItem="gVf-na-PZy" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="6" id="Olq-Vb-vkL"/>
                             <constraint firstItem="gVf-na-PZy" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="SAH-L8-45W"/>
                             <constraint firstItem="giR-in-kR4" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="40" id="Sew-8p-zbw"/>
-                            <constraint firstItem="giR-in-kR4" firstAttribute="top" secondItem="kIX-ny-abJ" secondAttribute="bottom" id="aMm-zj-36y"/>
+                            <constraint firstAttribute="trailing" secondItem="gVf-na-PZy" secondAttribute="trailing" constant="5" id="TSf-1a-2DS"/>
                             <constraint firstAttribute="trailing" secondItem="giR-in-kR4" secondAttribute="trailing" constant="5" id="nOQ-T3-Onc"/>
                             <constraint firstItem="X01-1a-Mbk" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="40" id="nR9-9S-AoE"/>
                             <constraint firstAttribute="bottom" secondItem="X01-1a-Mbk" secondAttribute="bottom" id="rO4-c3-NCl"/>
                             <constraint firstItem="X01-1a-Mbk" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="bottom" id="rfK-3A-CHy"/>
-                            <constraint firstItem="kIX-ny-abJ" firstAttribute="leading" secondItem="gVf-na-PZy" secondAttribute="trailing" id="sfQ-A0-hFK"/>
-                            <constraint firstAttribute="trailing" secondItem="kIX-ny-abJ" secondAttribute="trailing" constant="5" id="yfu-xk-OIn"/>
                         </constraints>
                     </view>
                     <connections>
@@ -1344,6 +1353,7 @@
                         <outlet property="btnShare" destination="0by-PK-DjP" id="b9S-z4-3RB"/>
                         <outlet property="btnShow" destination="W0U-Cw-aB7" id="rYg-OY-AwZ"/>
                         <outlet property="btnStop" destination="L5J-oA-BUH" id="MPI-iS-1bF"/>
+                        <outlet property="btnTask" destination="QOJ-Qq-wsE" id="mbD-NK-eOj"/>
                         <outlet property="chbSelectAll" destination="eaf-Jq-heG" id="LF3-04-nwk"/>
                         <outlet property="chbShowHidden" destination="y2t-Ke-hIj" id="VwI-t7-yiN"/>
                         <outlet property="collectionProgressIndicator" destination="Sab-MP-Qfo" id="tTT-fa-2Dw"/>
@@ -5920,6 +5930,7 @@ DQ
         <image name="more_horizontal" width="16" height="4"/>
         <image name="people" width="16" height="16"/>
         <image name="search" width="16" height="16"/>
+        <image name="tick" width="16" height="16"/>
         <image name="trash" width="16" height="16"/>
         <image name="view" width="16" height="16"/>
     </resources>
