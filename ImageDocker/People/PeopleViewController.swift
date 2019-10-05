@@ -703,18 +703,33 @@ class PeopleViewController: NSViewController {
     @IBAction func onSourceLargerViewClicked(_ sender: NSButton) {
         // larger view of source image
         if let face = self.selectedFace, let imageFile = face.sourceImageFile {
-            if let window = self.theaterWindowController.window {
-                if self.theaterWindowController.isWindowLoaded {
-                    window.makeKeyAndOrderFront(self)
-                    print("order to front")
-                }else{
-                    self.theaterWindowController.showWindow(self)
-                    print("show window")
-                }
-                let vc = window.contentViewController as! TheaterViewController
-                vc.viewInit(image: imageFile)
-            }
+            let viewController = TheaterViewController()
+            let window = NSWindow(contentViewController: viewController)
+            let screenWidth = Int(NSScreen.main?.frame.width ?? 0)
+            let screenHeight = Int(NSScreen.main?.frame.height ?? 0)
+            let windowWidth = 1200
+            let windowHeight = 830
+            let originX = (screenWidth - windowWidth) / 2
+            let originY = (screenHeight - windowHeight) / 2
+            
+            let frame = CGRect(origin: CGPoint(x: originX, y: originY), size: CGSize(width: windowWidth, height: windowHeight))
+            window.title = "Image Viewer"
+            window.setFrame(frame, display: false)
+            window.makeKeyAndOrderFront(self)
+            viewController.viewInit(image: imageFile)
         }
+        
+//            if let window = self.theaterWindowController.window {
+//                if self.theaterWindowController.isWindowLoaded {
+//                    window.makeKeyAndOrderFront(self)
+//                    print("order to front")
+//                }else{
+//                    self.theaterWindowController.showWindow(self)
+//                    print("show window")
+//                }
+//                let vc = window.contentViewController as! TheaterViewController
+//                vc.viewInit(image: imageFile)
+//            }
     }
     
     @IBAction func onChkSampleClicked(_ sender: NSButton) {

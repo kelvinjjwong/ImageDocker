@@ -75,6 +75,8 @@
 		8E9D8039234884040062692A /* EditRepositoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E9D8038234884040062692A /* EditRepositoryViewController.xib */; };
 		8E9D803B2348A9EE0062692A /* ModelStore+ExportProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9D803A2348A9EE0062692A /* ModelStore+ExportProfile.swift */; };
 		8E9D803D2348AA550062692A /* ExportProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9D803C2348AA550062692A /* ExportProfile.swift */; };
+		8E9D803F23495E9B0062692A /* TheaterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E9D803E23495E9B0062692A /* TheaterViewController.xib */; };
+		8E9D804123495F100062692A /* LargeViewItems.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E9D804023495F100062692A /* LargeViewItems.storyboard */; };
 		8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */; };
 		8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */; };
 		8EA1A063208DFD92000C3B97 /* MetaInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A062208DFD92000C3B97 /* MetaInfo.swift */; };
@@ -302,6 +304,8 @@
 		8E9D8038234884040062692A /* EditRepositoryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditRepositoryViewController.xib; sourceTree = "<group>"; };
 		8E9D803A2348A9EE0062692A /* ModelStore+ExportProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+ExportProfile.swift"; sourceTree = "<group>"; };
 		8E9D803C2348AA550062692A /* ExportProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportProfile.swift; sourceTree = "<group>"; };
+		8E9D803E23495E9B0062692A /* TheaterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TheaterViewController.xib; sourceTree = "<group>"; };
+		8E9D804023495F100062692A /* LargeViewItems.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LargeViewItems.storyboard; sourceTree = "<group>"; };
 		8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateConverter.swift; sourceTree = "<group>"; };
 		8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaTableViewController.swift; sourceTree = "<group>"; };
 		8EA1A062208DFD92000C3B97 /* MetaInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfo.swift; sourceTree = "<group>"; };
@@ -866,12 +870,14 @@
 			isa = PBXGroup;
 			children = (
 				8EBA9DE22173C8F000DACAAD /* TheaterViewController.swift */,
+				8E9D803E23495E9B0062692A /* TheaterViewController.xib */,
 				8EBA9DE42173CC7F00DACAAD /* TheaterQuickLookItem.swift */,
 				8EBA9DE821766EAB00DACAAD /* TheaterCollectionViewController.swift */,
 				8EC5BA2C21775571001510AF /* TheaterCollectionViewItem.swift */,
 				8EC5BA2D21775571001510AF /* TheaterCollectionViewItem.xib */,
 				8E36B066217920B400646EA5 /* MonthListController.swift */,
 				8E36B068217920C000646EA5 /* DayListController.swift */,
+				8E9D804023495F100062692A /* LargeViewItems.storyboard */,
 			);
 			path = Theater;
 			sourceTree = "<group>";
@@ -1111,6 +1117,8 @@
 				8E4E5B762219624D00FE4B68 /* FaceRecognitionOpenCV in Resources */,
 				8EB2716A233BB408003BF3AF /* RepositoryDetailViewController.xib in Resources */,
 				8EB986BE20B30C920075B081 /* CollectionViewItem.xib in Resources */,
+				8E9D804123495F100062692A /* LargeViewItems.storyboard in Resources */,
+				8E9D803F23495E9B0062692A /* TheaterViewController.xib in Resources */,
 				8EEF0729226215E7000520B7 /* SplashViewController.xib in Resources */,
 				8EF4CE6521E56DC100C53AFF /* NotificationViewController.xib in Resources */,
 				8EEF071B2256C9D9000520B7 /* DevicePathDetailViewController.xib in Resources */,

@@ -51,6 +51,14 @@ class TheaterViewController: NSViewController {
     let monthController = MonthListController()
     let dayController = DayListController()
     
+    init() {
+        super.init(nibName: NSNib.Name(rawValue: "TheaterViewController"), bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureDarkMode()
@@ -386,7 +394,9 @@ extension TheaterViewController {
     
     private func configureCollectionView() {
         
-        collectionViewController = storyboard?.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "theaterCollectionView")) as! TheaterCollectionViewController
+        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "LargeViewItems"), bundle: nil)
+        
+        collectionViewController = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "theaterCollectionView")) as! TheaterCollectionViewController
         self.addChildViewController(collectionViewController)
         
         // outlet
