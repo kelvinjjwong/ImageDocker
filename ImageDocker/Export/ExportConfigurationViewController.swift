@@ -33,6 +33,20 @@ class ExportConfigurationViewController: NSViewController {
     @IBOutlet weak var txtRepository: NSTextField!
     @IBOutlet weak var btnSelectRepository: NSButton!
     
+    @IBOutlet weak var chkPatchImageDescription: NSButton!
+    @IBOutlet weak var chkPatchDateTime: NSButton!
+    @IBOutlet weak var chkPatchGeolocation: NSButton!
+    
+    
+    @IBOutlet weak var chkNoSubFolder: NSButton!
+    @IBOutlet weak var chkDateEventSubFolder: NSButton!
+    @IBOutlet weak var chkEventSubFolder: NSButton!
+    @IBOutlet weak var chkExportDateTimeSubFolder: NSButton!
+    
+    @IBOutlet weak var chkOriginFilename: NSButton!
+    @IBOutlet weak var chkDateTimeFilename: NSButton!
+    @IBOutlet weak var chkDateTimeBriefFilename: NSButton!
+    
     
     @IBOutlet weak var stackView: NSStackView!
     
@@ -129,6 +143,38 @@ class ExportConfigurationViewController: NSViewController {
     
     @IBAction func onSelectRepository(_ sender: NSButton) {
         // TODO: select repositories (or clear selection) from a list, put their names into textfield separated by comma
+    }
+    
+    @IBAction func onNoSubFolderClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onDateEventSubFolderClicked(_ sender: NSButton) {
+    }
+    
+    
+    @IBAction func onEventSubFolderClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onExportDateTimeSubFolderClicked(_ sender: NSButton) {
+    }
+    
+    
+    @IBAction func onOriginFilenameClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onDateTimeFilenameClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onDateTimeBriefFilenameClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onPatchImageDescriptionClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onPatchDateTimeClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onPatchGeolocationClicked(_ sender: NSButton) {
     }
     
 }

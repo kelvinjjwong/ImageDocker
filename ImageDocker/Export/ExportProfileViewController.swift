@@ -15,6 +15,10 @@ class ExportProfileViewController : NSViewController {
     @IBOutlet weak var lblDescription: NSTextField!
     @IBOutlet weak var btnEdit: NSButton!
     @IBOutlet weak var btnDelete: NSButton!
+    @IBOutlet weak var lblRepository: NSTextField!
+    @IBOutlet weak var lblDuplicatedStrategy: NSTextField!
+    @IBOutlet weak var lblEXIFPatching: NSTextField!
+    @IBOutlet weak var lblSubFolder: NSTextField!
     
     var onEdit: (() -> Void)? = nil
     

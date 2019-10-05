@@ -401,6 +401,54 @@ extension ModelStore {
             })
         }
         
+        migrator.registerMigration("v27") { db in
+            try db.alter(table: "ImageContainer", body: { t in
+                t.add(column: "useFirstFolderAsEvent", .boolean).defaults(to: false)
+            })
+            
+            try db.create(table: "ExportProfile", body: { t in
+                t.column("id", .text).primaryKey().unique().notNull()
+                t.column("name", .text).notNull().indexed()
+                t.column("directory", .text).notNull()
+                t.column("duplicateStrategy", .text).notNull()
+                t.column("specifyPeople", .boolean).defaults(to: false)
+                t.column("specifyEvent", .boolean).defaults(to: false)
+                t.column("specifyRepository", .boolean).defaults(to: false)
+                t.column("people", .text).defaults(to: "")
+                t.column("events", .text).defaults(to: "")
+                t.column("repositoryPath", .text).defaults(to: "").indexed()
+                t.column("enabled", .boolean).defaults(to: true).indexed()
+                t.column("lastExportTime", .datetime)
+            })
+        }
+        
+        migrator.registerMigration("v28") { db in
+            try db.alter(table: "ExportProfile", body: { t in
+                t.add(column: "patchImageDescription", .boolean).defaults(to: false)
+            })
+            
+            try db.create(table: "ExportLog", body: { t in
+                t.column("imageId", .text).notNull().indexed()
+                t.column("profileId", .text).notNull().indexed()
+                t.column("lastExportTime", .datetime)
+            })
+        }
+        
+        migrator.registerMigration("v29") { db in
+            try db.alter(table: "ExportProfile", body: { t in
+                t.add(column: "patchDateTime", .boolean).defaults(to: false)
+                t.add(column: "patchGeolocation", .boolean).defaults(to: false)
+                t.add(column: "fileNaming", .text).defaults(to: "")
+                t.add(column: "subFolder", .text).defaults(to: "")
+            })
+            
+            try db.alter(table: "ExportLog", body: { t in
+                t.add(column: "repositoryPath", .text).defaults(to: "").indexed()
+                t.add(column: "subfolder", .text).defaults(to: "")
+                t.add(column: "filename", .text).defaults(to: "")
+            })
+        }
+        
         
         do {
             let dbQueue = try DatabaseQueue(path: dbfile)

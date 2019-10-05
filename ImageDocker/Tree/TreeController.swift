@@ -11,7 +11,7 @@ import PXSourceList
 import GRDB
 
 let photosIcon:NSImage = NSImage(imageLiteralResourceName: "photos")
-let eventsIcon:NSImage = NSImage(imageLiteralResourceName: "events")
+let eventsIcon:NSImage = NSImage(imageLiteralResourceName: "airplane")
 let peopleIcon:NSImage = NSImage(imageLiteralResourceName: "people")
 let placesIcon:NSImage = NSImage(imageLiteralResourceName: "places")
 let albumIcon:NSImage = NSImage(imageLiteralResourceName: "album")
