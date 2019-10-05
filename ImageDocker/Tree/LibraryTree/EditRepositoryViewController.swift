@@ -175,6 +175,11 @@ class EditRepositoryViewController: NSViewController {
         self.btnBrowseRepositoryPath.title = "Assign"
         self.btnBrowseFacePath.title = "Assign"
         self.btnBrowseCropPath.title = "Assign"
+        self.btnFaceBackToOrigin.isHidden = true
+        self.btnNormalize.isHidden = true
+        self.btnFindFaces.isHidden = true
+        self.btnShowHide.isHidden = true
+        self.btnStat.isHidden = true
         self.btnRestoreOriginal.isHidden = true
         self.btnCopyToRaw.isHidden = true
         self.btnUpdateStorageImages.isHidden = true
@@ -208,6 +213,11 @@ class EditRepositoryViewController: NSViewController {
             self.txtRepository.stringValue = container.path
             self.txtFacePath.stringValue = container.facePath
             self.txtCropPath.stringValue = container.cropPath
+            self.btnFaceBackToOrigin.isHidden = false
+            self.btnNormalize.isHidden = false
+            self.btnFindFaces.isHidden = false
+            self.btnShowHide.isHidden = false
+            self.btnStat.isHidden = false
             self.btnRestoreOriginal.isHidden = false
             self.btnCopyToRaw.isHidden = false
             self.btnUpdateStorageImages.isHidden = false

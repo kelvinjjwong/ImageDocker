@@ -17,8 +17,8 @@ extension ViewController {
             DispatchQueue.main.async {
                 self.btnScanState.image = NSImage(named: NSImage.Name.statusAvailable)
             }
-            self.treeLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true,
-                                                    lblMessage: self.indicatorMessage,
+            self.treeLoadingIndicator = Accumulator(target: 1000, indicator: self.progressIndicator, suspended: true,
+                                                    lblMessage: self.lblProgressMessage,
                                                     presetAddingMessage: "Importing images ...",
                                                     onCompleted: {data in
                                                         print("COMPLETE SCAN REPO")
@@ -74,8 +74,8 @@ extension ViewController {
                 DispatchQueue.main.async {
                     self.btnScanState.image = NSImage(named: NSImage.Name.statusAvailable)
                 }
-                self.treeLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true,
-                                                        lblMessage: self.indicatorMessage,
+                self.treeLoadingIndicator = Accumulator(target: 1000, indicator: self.progressIndicator, suspended: true,
+                                                        lblMessage: self.lblProgressMessage,
                                                         presetAddingMessage: "Extracting EXIF ...",
                                                         onCompleted: { data in
                                                             print("COMPLETE SCAN PHOTOS TO LOAD EXIF")
@@ -84,7 +84,7 @@ extension ViewController {
                                                             self.scaningRepositories = false
                                                             DispatchQueue.main.async {
                                                                 self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
-                                                                self.indicatorMessage.stringValue = ""
+                                                                self.lblProgressMessage.stringValue = ""
                                                             }
                 }
                 )

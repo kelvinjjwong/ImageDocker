@@ -26,6 +26,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var btnScan: NSPopUpButton!
     @IBOutlet weak var btnFaces: NSPopUpButton!
     @IBOutlet weak var lblProgressMessage: NSTextField!
+    @IBOutlet weak var progressIndicator: NSProgressIndicator!
     
     @IBOutlet weak var btnStop: NSButton!
     
@@ -308,7 +309,7 @@ class ViewController: NSViewController {
         self.btnScanState.image = NSImage(named: NSImage.Name.statusNone)
         self.btnScanState.isHidden = true
         
-        ExportManager.default.messageBox = self.indicatorMessage
+        ExportManager.default.messageBox = self.lblProgressMessage
         ExportManager.default.suppressed = true
         self.suppressedExport = true
         self.lastExportPhotos = Date()
@@ -339,6 +340,10 @@ class ViewController: NSViewController {
         
         //progressIndicator.isDisplayedWhenStopped = false
         collectionProgressIndicator.isDisplayedWhenStopped = false
+        
+        progressIndicator.isDisplayedWhenStopped = false
+        progressIndicator.isHidden = true
+        
         batchEditIndicator.isDisplayedWhenStopped = false
         
         print("\(Date()) Loading view - configure dark mode")
