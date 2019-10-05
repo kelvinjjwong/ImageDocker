@@ -121,20 +121,38 @@ extension ViewController {
     }
     
     internal func openAddTreeNodeDialog() {
-        if let window = self.repositoryWindowController.window {
-            if self.repositoryWindowController.isWindowLoaded {
-                window.makeKeyAndOrderFront(self)
-                print("order to front")
-            }else{
-                self.repositoryWindowController.showWindow(self)
-                print("show window")
-            }
-            let vc = window.contentViewController as! EditRepositoryViewController
-            vc.initNew(window: window, onOK: {
-                window.close()
-                self.updateLibraryTree()
-            })
-        }
+        let viewController = EditRepositoryViewController()
+        let window = NSWindow(contentViewController: viewController)
+        
+        let screenWidth = Int(NSScreen.main?.frame.width ?? 0)
+        let screenHeight = Int(NSScreen.main?.frame.height ?? 0)
+        let windowWidth = 980
+        let windowHeight = 780
+        let originX = (screenWidth - windowWidth) / 2
+        let originY = (screenHeight - windowHeight) / 2
+        
+        let frame = CGRect(origin: CGPoint(x: originX, y: originY), size: CGSize(width: windowWidth, height: windowHeight))
+        window.title = "Repository Configuration"
+        window.setFrame(frame, display: false)
+        window.makeKeyAndOrderFront(self)
+        viewController.initNew(window: window, onOK: {
+                            window.close()
+                            self.updateLibraryTree()
+                        })
+//        if let window = self.repositoryWindowController.window {
+//            if self.repositoryWindowController.isWindowLoaded {
+//                window.makeKeyAndOrderFront(self)
+//                print("order to front")
+//            }else{
+//                self.repositoryWindowController.showWindow(self)
+//                print("show window")
+//            }
+//            let vc = window.contentViewController as! EditRepositoryViewController
+//            vc.initNew(window: window, onOK: {
+//                window.close()
+//                self.updateLibraryTree()
+//            })
+//        }
     }
     
     internal func confirmDeleteTreeNode() {

@@ -61,6 +61,8 @@ class EditRepositoryViewController: NSViewController {
     @IBOutlet weak var boxRepository: NSBox!
     @IBOutlet weak var boxFaces: NSBox!
     @IBOutlet weak var boxDevice: NSBox!
+    @IBOutlet weak var chkFirstFolderAsEvent: NSButton!
+    @IBOutlet weak var btnUpdateEmptyEvent: NSButton!
     
     
     private var window:NSWindow? = nil
@@ -125,6 +127,7 @@ class EditRepositoryViewController: NSViewController {
             self.txtHomePath.isEnabled = show
             self.txtRepository.isEnabled = show
             self.txtStoragePath.isEnabled = show
+            self.btnUpdateEmptyEvent.isEnabled = show
         }
         
     }
@@ -187,6 +190,7 @@ class EditRepositoryViewController: NSViewController {
         self.btnUpdateFaceImages.isHidden = true
         self.btnUpdateCropImages.isHidden = true
         self.btnRemove.isHidden = true
+        self.btnUpdateEmptyEvent.isHidden = true
         
         self.lblDeviceId.stringValue = ""
         self.lblDeviceName.stringValue = ""
@@ -225,6 +229,7 @@ class EditRepositoryViewController: NSViewController {
             self.btnUpdateFaceImages.isHidden = false
             self.btnUpdateCropImages.isHidden = false
             self.btnRemove.isHidden = false
+            self.btnUpdateEmptyEvent.isHidden = false
             self.btnOK.title = "Update Name & Home"
             window.title = "Edit Repository"
             
@@ -269,7 +274,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
-    // MARK: STATISTIC
+    // MARK: - STATISTIC
     
     fileprivate func stat() {
         if let container = self.originalContainer {
@@ -302,7 +307,7 @@ class EditRepositoryViewController: NSViewController {
     }
     
     
-    // MARK: HELPER
+    // MARK: - HELPER
     
     fileprivate func checkDirectory(path:String, messageBox:NSTextField) -> Bool {
         var isDir:ObjCBool = false
@@ -325,7 +330,7 @@ class EditRepositoryViewController: NSViewController {
         return pass
     }
     
-    // MARK: ACTION BUTTON - SAVE / OK
+    // MARK: - ACTION BUTTON - SAVE / OK
     
     fileprivate func saveNewRepository() {
         let name = self.txtName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -408,7 +413,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
-    // MARK: ACTION BUTTON - RESTORE TO ORIGIN
+    // MARK: - ACTION BUTTON - RESTORE TO ORIGIN
     
     @IBAction func onRestoreOriginalClicked(_ sender: NSButton) {
         if let container = self.originalContainer {
@@ -431,7 +436,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
-    // MARK: ACTION BUTTON - FOLLOW HOME PATH
+    // MARK: - ACTION BUTTON - FOLLOW HOME PATH
     
     @IBAction func onFollowHomePathClicked(_ sender: NSButton) {
         
@@ -501,7 +506,7 @@ class EditRepositoryViewController: NSViewController {
         self.txtCropPath.stringValue = crop.path
     }
     
-    // MARK: ACTION BUTTON - COPY IMAGES FROM EDITABLE TO RAW STORAGE
+    // MARK: - ACTION BUTTON - COPY IMAGES FROM EDITABLE TO RAW STORAGE
     
     @IBAction func onCopyToRawClicked(_ sender: NSButton) {
         if let container = self.originalContainer {
@@ -599,7 +604,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
-    // MARK: ACTION BUTTON - OPEN DIALOG
+    // MARK: - ACTION BUTTON - OPEN DIALOG
     
     @IBAction func onBrowseHomePath(_ sender: NSButton) {
         if let win = self.window {
@@ -696,7 +701,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
-    // MARK: ACTION BUTTON - VIEW IN FINDER
+    // MARK: - ACTION BUTTON - VIEW IN FINDER
     
     @IBAction func onFindHomePath(_ sender: NSButton) {
         if self.txtHomePath.stringValue == "" {
@@ -768,7 +773,7 @@ class EditRepositoryViewController: NSViewController {
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     
-    // MARK: ACTION BUTTON - UPDATE IMAGES
+    // MARK: - ACTION BUTTON - UPDATE IMAGES
     
     @IBAction func onUpdateStorageImagesClicked(_ sender: NSButton) {
         guard !self.working else {return}
@@ -1291,7 +1296,7 @@ class EditRepositoryViewController: NSViewController {
         
     }
     
-    // MARK: ACTION BUTTON - DELETE RECORDS
+    // MARK: - ACTION BUTTON - DELETE RECORDS
     
     @IBAction func onRemoveClicked(_ sender: NSButton) {
         if let container = self.originalContainer {
@@ -1314,7 +1319,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
-    // MARK: ACTION BUTTON - DEVICE INFO AREA
+    // MARK: - ACTION BUTTON - DEVICE INFO AREA
     
     @IBAction func onLoadDevicesClicked(_ sender: NSButton) {
         self.createDevicesPopover()
@@ -1364,6 +1369,8 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    // MARK: - ACTION BUTTON - SHOW HIDE IMAGES
+    
     @IBAction func onShowHideClicked(_ sender: NSButton) {
         if let container = self.originalContainer {
             if container.hiddenByRepository {
@@ -1406,7 +1413,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
-    
+    // MARK: - FIND FACES
     
     @IBAction func onFindFacesClicked(_ sender: NSButton) {
         guard !self.working else {
@@ -1617,9 +1624,15 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    // MARK: - UPDATE EVENT
+    
+    @IBAction func onUpdateEmptyEventClicked(_ sender: NSButton) {
+        // TODO: update event with images' container's first level folder name if event is not set
+    }
     
     
-    // MARK: DEVICES LIST Popover
+    
+    // MARK: - DEVICES LIST Popover
     var devicesPopover:NSPopover?
     var devicesViewController:DeviceListViewController!
     

@@ -25,7 +25,14 @@ extension ViewController {
         let viewController = ExportConfigurationViewController()
         let window = NSWindow(contentViewController: viewController)
         
-        let frame = CGRect(origin: CGPoint(x: 300, y: 200), size: CGSize(width: 1000, height: 600))
+        let screenWidth = Int(NSScreen.main?.frame.width ?? 0)
+        let screenHeight = Int(NSScreen.main?.frame.height ?? 0)
+        let windowWidth = 1000
+        let windowHeight = 600
+        let originX = (screenWidth - windowWidth) / 2
+        let originY = (screenHeight - windowHeight) / 2
+        
+        let frame = CGRect(origin: CGPoint(x: originX, y: originY), size: CGSize(width: windowWidth, height: windowHeight))
         window.title = "Export Manager"
         window.setFrame(frame, display: false)
         window.makeKeyAndOrderFront(self)
