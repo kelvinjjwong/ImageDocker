@@ -19,6 +19,8 @@ class ExportProfileViewController : NSViewController {
     @IBOutlet weak var lblDuplicatedStrategy: NSTextField!
     @IBOutlet weak var lblEXIFPatching: NSTextField!
     @IBOutlet weak var lblSubFolder: NSTextField!
+    @IBOutlet weak var lblFileNaming: NSTextField!
+    
     
     var onEdit: (() -> Void)? = nil
     
@@ -35,39 +37,74 @@ class ExportProfileViewController : NSViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        print("export profile view didload")
         
         view.wantsLayer = true
-        self.lblName.stringValue = name
-        self.lblDirectory.stringValue = path
-        self.lblDescription.stringValue = options
+        self.refreshFields()
     }
     
-    var id = ""
-    var name = ""
-    var path = ""
-    var options = ""
+    private func refreshFields() {
+        if let profile = self.profile {
+            self.lblName.stringValue = profile.name
+            self.lblDirectory.stringValue = profile.directory
+            if !profile.specifyRepository {
+                self.lblRepository.stringValue = "any"
+            }else{
+                self.lblRepository.stringValue = profile.repositoryPath
+            }
+            self.lblDuplicatedStrategy.stringValue = profile.duplicateStrategy
+            self.lblSubFolder.stringValue = profile.subFolder
+            self.lblFileNaming.stringValue = profile.fileNaming
+            var patching = ""
+            if profile.patchImageDescription {
+                patching += "Image Description, "
+            }
+            if profile.patchDateTime {
+                patching += "Photo Taken Date, "
+            }
+            if profile.patchGeolocation {
+                patching += "GeoLocation, "
+            }
+            patching = patching.substring(from: 0, to: -2)
+            self.lblEXIFPatching.stringValue = patching
+            
+            var people = ""
+            if !profile.specifyPeople || profile.people == "" {
+                people = "Any people"
+            }else{
+                people = profile.people
+            }
+            var events = ""
+            if !profile.specifyEvent || profile.events == "" {
+                events = "Any event"
+            }else{
+                events = profile.events
+            }
+            self.lblDescription.stringValue = "People: \(people) ; Event: \(events)"
+        }
+    }
     
-    func initView(id:String, name:String, path:String, options:String,
+    var profile:ExportProfile? = nil
+    
+    func initView(profile:ExportProfile,
                   onEdit: (() -> Void)? = nil, onDelete: (() -> Void)? = nil){
-        self.id = id
-        self.name = name
-        self.path = path
-        self.options = options
+        self.profile = profile
         self.onEdit = onEdit
         self.onDelete = onDelete
-        print("init profile view id=\(id) name=\(name)")
+//        self.refreshFields()
+    }
+    
+    func updateView(profile:ExportProfile){
+        self.profile = profile
+        self.refreshFields()
     }
     
     @IBAction func onEditClicked(_ sender: NSButton) {
-        print("edit profile \(id) -> \(name)")
         if onEdit != nil {
             onEdit!()
         }
     }
     
     @IBAction func onDeleteClicked(_ sender: NSButton) {
-        print("delete profile \(id) -> \(name)")
         if onDelete != nil {
             onDelete!()
         }

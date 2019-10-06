@@ -16,13 +16,19 @@ extension ModelStore {
     func getOrCreateExportProfile(id:String,
                                   name:String,
                                   directory: String,
-                                  duplicateStrategy: String,
+                                  repositoryPath: String,
                                   specifyPeople: Bool,
                                   specifyEvent: Bool,
                                   specifyRepository: Bool,
                                   people: String,
                                   events: String,
-                                  repositoryPath: String) -> ExportProfile{
+                                  duplicateStrategy: String,
+                                  fileNaming: String,
+                                  subFolder: String,
+                                  patchImageDescription:Bool,
+                                  patchDateTime:Bool,
+                                  patchGeolocation:Bool
+                                  ) -> ExportProfile{
         var profile:ExportProfile?
         do {
             let db = ModelStore.sharedDBPool()
@@ -35,13 +41,18 @@ extension ModelStore {
                         id: id,
                         name: name,
                         directory: directory,
-                        duplicateStrategy: duplicateStrategy,
+                        repositoryPath: repositoryPath,
                         specifyPeople: specifyPeople,
                         specifyEvent: specifyEvent,
                         specifyRepository: specifyRepository,
                         people: people,
                         events: events,
-                        repositoryPath: repositoryPath,
+                        duplicateStrategy: duplicateStrategy,
+                        fileNaming: fileNaming,
+                        subFolder: subFolder,
+                        patchImageDescription: patchImageDescription,
+                        patchDateTime: patchDateTime,
+                        patchGeolocation: patchGeolocation,
                         enabled: true,
                         lastExportTime: nil
                     )

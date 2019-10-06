@@ -36,6 +36,7 @@ extension ViewController {
         window.title = "Export Manager"
         window.setFrame(frame, display: false)
         window.makeKeyAndOrderFront(self)
+        viewController.initView(window: window)
         
         
     }

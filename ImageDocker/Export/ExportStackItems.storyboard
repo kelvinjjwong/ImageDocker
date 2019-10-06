@@ -278,6 +278,7 @@
                         <outlet property="lblDirectory" destination="jse-dE-Im2" id="ebC-vt-jMv"/>
                         <outlet property="lblDuplicatedStrategy" destination="lXZ-4j-p8W" id="ey9-Jm-JTd"/>
                         <outlet property="lblEXIFPatching" destination="FLJ-sh-arg" id="JGc-0S-6c7"/>
+                        <outlet property="lblFileNaming" destination="rqA-V5-t6j" id="Ktx-f1-cot"/>
                         <outlet property="lblName" destination="ym9-Zs-iaJ" id="tx8-LD-aTr"/>
                         <outlet property="lblRepository" destination="Q27-N3-PpC" id="gIm-vV-YX5"/>
                         <outlet property="lblSubFolder" destination="0Gd-Vr-27o" id="ybd-cJ-jNK"/>

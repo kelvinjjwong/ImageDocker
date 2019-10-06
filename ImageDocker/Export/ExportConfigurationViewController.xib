@@ -9,6 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="ExportConfigurationViewController" customModule="ImageDocker" customModuleProvider="target">
             <connections>
                 <outlet property="btnAssign" destination="dEa-11-yMp" id="3VR-Zp-V5R"/>
+                <outlet property="btnClean" destination="lG5-iQ-i7b" id="qe4-I4-zj6"/>
                 <outlet property="btnGoto" destination="GJa-qz-wH4" id="SEM-Qk-cYZ"/>
                 <outlet property="btnSave" destination="Btt-76-DEE" id="Fpe-Oo-Np6"/>
                 <outlet property="btnSelectEvent" destination="jiV-lY-p1I" id="suD-FP-a3q"/>
@@ -63,9 +64,9 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w55-yG-MjF">
-                                <rect key="frame" x="26" y="296" width="64" height="17"/>
+                                <rect key="frame" x="26" y="296" width="82" height="17"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Directory:" id="Lvc-56-1Uu">
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="To Directory:" id="Lvc-56-1Uu">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -147,6 +148,9 @@
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="onOverwriteClicked:" target="-2" id="aSx-QV-h8q"/>
+                                            </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RTE-n8-rbD">
                                             <rect key="frame" x="18" y="54" width="185" height="18"/>
@@ -155,6 +159,9 @@
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="onDeviceModelSuffixClicked:" target="-2" id="WZv-2r-raq"/>
+                                            </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rlW-mf-YH9">
                                             <rect key="frame" x="18" y="18" width="151" height="18"/>
@@ -163,6 +170,9 @@
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="onNumberSuffixClicked:" target="-2" id="khs-ql-gXn"/>
+                                            </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4f0-w4-h4F">
                                             <rect key="frame" x="18" y="90" width="181" height="18"/>
@@ -171,6 +181,9 @@
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="onDeviceNameSuffixClicked:" target="-2" id="DTH-K8-zHA"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                 </view>
@@ -397,6 +410,17 @@
                                     </subviews>
                                 </view>
                             </box>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lG5-iQ-i7b">
+                                <rect key="frame" x="569" y="330" width="90" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Clean" bezelStyle="rounded" image="broom" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="saX-dH-qXQ">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onCleanClicked:" target="-2" id="05B-eO-1T0"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                 </box>
@@ -435,5 +459,6 @@
         <image name="NSIconViewTemplate" width="14" height="10"/>
         <image name="NSMenuOnStateTemplate" width="12" height="12"/>
         <image name="NSPathTemplate" width="16" height="10"/>
+        <image name="broom" width="16" height="16"/>
     </resources>
 </document>

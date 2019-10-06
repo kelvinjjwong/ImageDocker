@@ -13,13 +13,18 @@ struct ExportProfile : Codable {
     var id: String
     var name: String
     var directory: String
-    var duplicateStrategy: String
+    var repositoryPath: String
     var specifyPeople: Bool
     var specifyEvent: Bool
     var specifyRepository: Bool
     var people: String
     var events: String
-    var repositoryPath: String
+    var duplicateStrategy: String
+    var fileNaming:String
+    var subFolder:String
+    var patchImageDescription:Bool
+    var patchDateTime:Bool
+    var patchGeolocation:Bool
     var enabled: Bool
     var lastExportTime: Date?
 }

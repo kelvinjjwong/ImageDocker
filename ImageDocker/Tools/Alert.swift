@@ -107,4 +107,12 @@ struct Alert {
                                                   comment: "Please select one or more items first")
         alert.runModal()
     }
+    
+    static func show(message:String) {
+        let alert = NSAlert()
+        alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK"))
+        alert.messageText = NSLocalizedString(message,
+                                              comment: message)
+        alert.runModal()
+    }
 }

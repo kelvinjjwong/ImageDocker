@@ -8,6 +8,8 @@
 
 import Cocoa
 
+/// Popover + TableView + Clickable, support up to 3 table-columns
+/// Steps (1) init with onClick (2) load (3) show
 class MenuPopover : NSObject, NSPopoverDelegate {
     
     fileprivate var popover:NSPopover!
