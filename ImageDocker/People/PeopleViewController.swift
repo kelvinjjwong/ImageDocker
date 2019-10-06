@@ -79,9 +79,9 @@ class PeopleViewController: NSViewController {
     
     // MARK: INIT
     
-    init(){
-        super.init(nibName: NSNib.Name(rawValue: "PeopleViewController"), bundle: nil)
-    }
+//    init(){
+//        super.init(nibName: NSNib.Name(rawValue: "PeopleViewController"), bundle: nil)
+//    }
     
     
     required init?(coder: NSCoder) {
@@ -92,14 +92,16 @@ class PeopleViewController: NSViewController {
         super.viewDidLoad()
         self.configureControllers()
         
-        self.theaterWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "TheaterWindowController")) as? NSWindowController
+//        self.theaterWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "TheaterWindowController")) as? NSWindowController
     }
     
     fileprivate func configureControllers() {
         self.progressIndicator.isHidden = true
         self.progressIndicator.isDisplayedWhenStopped = false
         
-        self.iconCollectionViewController = (storyboard?.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "faceIconCollectionView")) as! FaceIconCollectionViewController)
+        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "PeopleFaceViewItems"), bundle: nil)
+        
+        self.iconCollectionViewController = (storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "faceIconCollectionView")) as! FaceIconCollectionViewController)
         self.iconCollectionView.delegate = self.iconCollectionViewController
         self.iconCollectionView.dataSource = self.iconCollectionViewController
         self.iconCollectionViewController.collectionView = self.iconCollectionView
@@ -124,7 +126,7 @@ class PeopleViewController: NSViewController {
         //self.iconCollectionView.layer?.backgroundColor = NSColor.darkGray.cgColor
         //self.iconCollectionView.layer?.borderColor = NSColor.darkGray.cgColor
         
-        self.faceCollectionViewController = (storyboard?.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "faceCollectionView")) as! FaceCollectionViewController)
+        self.faceCollectionViewController = (storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "faceCollectionView")) as! FaceCollectionViewController)
         self.faceCollectionViewController.withoutName()
         self.faceCollectionView.delegate = self.faceCollectionViewController
         self.faceCollectionView.dataSource = self.faceCollectionViewController

@@ -62,20 +62,38 @@ extension ViewController {
     @objc func faceMenuManageAction(_ menuItem:NSMenuItem) {
         print("manage action \(menuItem.title)")
         self.btnFaces.selectItem(at: 0)
-        if let window = self.peopleWindowController.window {
-            if self.peopleWindowController.isWindowLoaded {
-                window.makeKeyAndOrderFront(self)
-                print("order to front")
-            }else{
-                self.peopleWindowController.showWindow(self)
-                print("show window")
-            }
-            let vc = window.contentViewController as! PeopleViewController
-            vc.initView()
-            //            vc.initNew(window: window, onOK: {
-            //                window.close()
-            //            })
-        }
+        
+        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "PeopleFaceViewItems"), bundle: nil)
+        let viewController = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "PeopleViewController")) as! PeopleViewController
+        let window = NSWindow(contentViewController: viewController)
+        
+        let screenWidth = Int(NSScreen.main?.frame.width ?? 0)
+        let screenHeight = Int(NSScreen.main?.frame.height ?? 0)
+        let windowWidth = 1220
+        let windowHeight = 820
+        let originX = (screenWidth - windowWidth) / 2
+        let originY = (screenHeight - windowHeight) / 2
+        
+        let frame = CGRect(origin: CGPoint(x: originX, y: originY), size: CGSize(width: windowWidth, height: windowHeight))
+        window.title = "Export Manager"
+        window.setFrame(frame, display: false)
+        window.makeKeyAndOrderFront(self)
+        viewController.initView()
+        
+//        if let window = self.peopleWindowController.window {
+//            if self.peopleWindowController.isWindowLoaded {
+//                window.makeKeyAndOrderFront(self)
+//                print("order to front")
+//            }else{
+//                self.peopleWindowController.showWindow(self)
+//                print("show window")
+//            }
+//            let vc = window.contentViewController as! PeopleViewController
+//            vc.initView()
+//            //            vc.initNew(window: window, onOK: {
+//            //                window.close()
+//            //            })
+//        }
     }
     
     @objc func faceMenuScanAction(_ menuItem:NSMenuItem) {
@@ -101,20 +119,37 @@ extension ViewController {
     }
     
     internal func openFaceManager() {
-        if let window = self.peopleWindowController.window {
-            if self.peopleWindowController.isWindowLoaded {
-                window.makeKeyAndOrderFront(self)
-                print("order to front")
-            }else{
-                self.peopleWindowController.showWindow(self)
-                print("show window")
-            }
-            let vc = window.contentViewController as! PeopleViewController
-            vc.initView()
-            //            vc.initNew(window: window, onOK: {
-            //                window.close()
-            //            })
-        }
+        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "PeopleFaceViewItems"), bundle: nil)
+        let viewController = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "PeopleViewController")) as! PeopleViewController
+        let window = NSWindow(contentViewController: viewController)
+        
+        let screenWidth = Int(NSScreen.main?.frame.width ?? 0)
+        let screenHeight = Int(NSScreen.main?.frame.height ?? 0)
+        let windowWidth = 1220
+        let windowHeight = 820
+        let originX = (screenWidth - windowWidth) / 2
+        let originY = (screenHeight - windowHeight) / 2
+        
+        let frame = CGRect(origin: CGPoint(x: originX, y: originY), size: CGSize(width: windowWidth, height: windowHeight))
+        window.title = "Export Manager"
+        window.setFrame(frame, display: false)
+        window.makeKeyAndOrderFront(self)
+        viewController.initView()
+        
+//        if let window = self.peopleWindowController.window {
+//            if self.peopleWindowController.isWindowLoaded {
+//                window.makeKeyAndOrderFront(self)
+//                print("order to front")
+//            }else{
+//                self.peopleWindowController.showWindow(self)
+//                print("show window")
+//            }
+//            let vc = window.contentViewController as! PeopleViewController
+//            vc.initView()
+//            //            vc.initNew(window: window, onOK: {
+//            //                window.close()
+//            //            })
+//        }
     }
     
     internal func doFaceMenuAction(_ title:String) {
