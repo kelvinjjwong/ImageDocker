@@ -53,7 +53,7 @@ extension ViewController {
             }
         }
         
-        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: phoneIcon)
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: connected ? phoneConnectedIcon : phoneIcon)
         
         if device.type == .Android {
             self.treeIdItems["device_type_Android"]?.addChildItem(item)
