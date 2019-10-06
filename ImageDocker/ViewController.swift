@@ -34,6 +34,9 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var btnTask: NSButton!
     
+    @IBOutlet weak var btnMemories: NSButton!
+    
+    
     // MARK: - Timer
     var scanLocationChangeTimer:Timer!
     var lastCheckLocationChange:Date?
@@ -615,5 +618,10 @@ class ViewController: NSViewController {
     @IBAction func onTaskClicked(_ sender: NSButton) {
         self.popTasks(sender)
     }
+    
+    @IBAction func onMemoriesClicked(_ sender: NSButton) {
+        // TODO: open a window to display pictures taken in last years
+    }
+    
     
 }

@@ -1209,7 +1209,7 @@
                                         </popUpButtonCell>
                                     </popUpButton>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kL0-v4-mKZ">
-                                        <rect key="frame" x="890" y="13" width="808" height="17"/>
+                                        <rect key="frame" x="921" y="13" width="777" height="17"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" id="oon-EU-u89">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1230,9 +1230,9 @@
                                         </connections>
                                     </button>
                                     <searchField wantsLayer="YES" focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0O0-hl-4CA">
-                                        <rect key="frame" x="272" y="10" width="600" height="22"/>
+                                        <rect key="frame" x="272" y="10" width="500" height="22"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="600" id="J5T-qO-ODx"/>
+                                            <constraint firstAttribute="width" constant="500" id="J5T-qO-ODx"/>
                                         </constraints>
                                         <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" focusRingType="none" usesSingleLineMode="YES" bezelStyle="round" sendsWholeSearchString="YES" id="SkT-1n-nAK">
                                             <font key="font" metaFont="system"/>
@@ -1287,13 +1287,27 @@
                                         </connections>
                                     </button>
                                     <progressIndicator wantsLayer="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="5p8-Qa-YiE">
-                                        <rect key="frame" x="902" y="-1" width="774" height="20"/>
+                                        <rect key="frame" x="933" y="-1" width="743" height="20"/>
                                     </progressIndicator>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zJa-km-Rrl">
+                                        <rect key="frame" x="786" y="2" width="123" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="111" id="5yR-cB-FY9"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="push" title="Memories" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oYI-I8-d8j">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onMemoriesClicked:" target="XfG-lQ-9wD" id="aqf-Sb-bT6"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="kCb-sM-PKJ" secondAttribute="bottom" constant="9" id="1Fo-1G-pWg"/>
                                     <constraint firstItem="wQ3-4F-bW7" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="11" id="Cpz-BF-ZaT"/>
                                     <constraint firstItem="L5J-oA-BUH" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="Cxp-QY-2oQ"/>
+                                    <constraint firstItem="5p8-Qa-YiE" firstAttribute="leading" secondItem="zJa-km-Rrl" secondAttribute="trailing" constant="30" id="Dot-9P-yhK"/>
                                     <constraint firstItem="kCb-sM-PKJ" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="EaW-Ms-XCk"/>
                                     <constraint firstAttribute="bottom" secondItem="jTT-pc-Bka" secondAttribute="bottom" constant="7" id="HDa-DN-CyL"/>
                                     <constraint firstItem="jTT-pc-Bka" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="9" id="I3l-uY-J4e"/>
@@ -1301,8 +1315,10 @@
                                     <constraint firstAttribute="bottom" secondItem="5p8-Qa-YiE" secondAttribute="bottom" id="ImH-Rs-foi"/>
                                     <constraint firstItem="kL0-v4-mKZ" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="Jqa-hL-mjj"/>
                                     <constraint firstItem="0O0-hl-4CA" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="8" id="O8x-BN-Se3"/>
+                                    <constraint firstItem="kL0-v4-mKZ" firstAttribute="leading" secondItem="zJa-km-Rrl" secondAttribute="trailing" constant="20" id="OfP-oA-Uwj"/>
+                                    <constraint firstItem="zJa-km-Rrl" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="Px4-S5-6va"/>
                                     <constraint firstItem="0O0-hl-4CA" firstAttribute="leading" secondItem="kCb-sM-PKJ" secondAttribute="trailing" constant="30" id="Q2S-K9-ata"/>
-                                    <constraint firstItem="5p8-Qa-YiE" firstAttribute="leading" secondItem="0O0-hl-4CA" secondAttribute="trailing" constant="30" id="Y9q-Kk-gPU"/>
+                                    <constraint firstItem="zJa-km-Rrl" firstAttribute="leading" secondItem="0O0-hl-4CA" secondAttribute="trailing" constant="20" id="Uu8-K1-0KD"/>
                                     <constraint firstItem="kCb-sM-PKJ" firstAttribute="leading" secondItem="jTT-pc-Bka" secondAttribute="trailing" constant="10" id="bcj-Hn-PnS"/>
                                     <constraint firstItem="jTT-pc-Bka" firstAttribute="leading" secondItem="wQ3-4F-bW7" secondAttribute="trailing" constant="10" id="hnC-Sn-lZ6"/>
                                     <constraint firstItem="L5J-oA-BUH" firstAttribute="leading" secondItem="kL0-v4-mKZ" secondAttribute="trailing" constant="10" id="ovv-6i-2iA"/>
@@ -1310,7 +1326,6 @@
                                     <constraint firstAttribute="trailing" secondItem="QOJ-Qq-wsE" secondAttribute="trailing" id="s4O-4M-5Lv"/>
                                     <constraint firstItem="wQ3-4F-bW7" firstAttribute="leading" secondItem="gVf-na-PZy" secondAttribute="leading" constant="10" id="vrS-mp-TFb"/>
                                     <constraint firstItem="QOJ-Qq-wsE" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="9" id="vwY-NO-24d"/>
-                                    <constraint firstItem="kL0-v4-mKZ" firstAttribute="leading" secondItem="0O0-hl-4CA" secondAttribute="trailing" constant="20" id="yIN-CP-PyT"/>
                                 </constraints>
                             </customView>
                         </subviews>
@@ -1347,6 +1362,7 @@
                         <outlet property="btnHide" destination="QJ8-hF-79J" id="41M-3L-1WH"/>
                         <outlet property="btnManageEvents" destination="fBu-cK-CdX" id="iHI-iO-KSb"/>
                         <outlet property="btnManagePlaces" destination="cF6-tu-IsK" id="mFM-9f-mVe"/>
+                        <outlet property="btnMemories" destination="zJa-km-Rrl" id="meg-5b-t0p"/>
                         <outlet property="btnNotes" destination="9Bs-pz-4CN" id="lkJ-oH-a9Q"/>
                         <outlet property="btnRefreshCollectionView" destination="DpT-Dg-Oeb" id="ze3-El-bMX"/>
                         <outlet property="btnRefreshRepository" destination="Ew1-wa-ZwC" id="T3N-xh-xVF"/>
