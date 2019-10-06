@@ -118,9 +118,13 @@ class DeviceCopyViewController: NSViewController {
     let sourcePathTableDelegate:DeviceSourcePathTableDelegate = DeviceSourcePathTableDelegate()
     let fileTableDelegate:DeviceFileTableDelegate = DeviceFileTableDelegate()
     
-    // MARK: -
+    
     
     // MARK: - INIT
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

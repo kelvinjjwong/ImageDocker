@@ -76,16 +76,33 @@ extension ViewController {
             self.selectDeviceType(collection)
         }else {
             if let device = self.deviceIdToDevice[collection.identifier] {
-                if let window = self.deviceCopyWindowController.window {
-                    if self.deviceCopyWindowController.isWindowLoaded {
-                        window.makeKeyAndOrderFront(self)
-                        print("order to front")
-                    }else{
-                        self.deviceCopyWindowController.showWindow(self)
-                    }
-                    let vc = window.contentViewController as! DeviceCopyViewController
-                    vc.viewInit(device: device, connected: collection.deviceConnected)
-                }
+                let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "DeviceCopyView"), bundle: nil)
+                let viewController = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "DeviceCopyViewController")) as! DeviceCopyViewController
+                let window = NSWindow(contentViewController: viewController)
+                
+                let screenWidth = Int(NSScreen.main?.frame.width ?? 0)
+                let screenHeight = Int(NSScreen.main?.frame.height ?? 0)
+                let windowWidth = 850
+                let windowHeight = 620
+                let originX = (screenWidth - windowWidth) / 2
+                let originY = (screenHeight - windowHeight) / 2
+                
+                let frame = CGRect(origin: CGPoint(x: originX, y: originY), size: CGSize(width: windowWidth, height: windowHeight))
+                window.title = "Export Manager"
+                window.setFrame(frame, display: false)
+                window.makeKeyAndOrderFront(self)
+                viewController.viewInit(device: device, connected: collection.deviceConnected)
+                
+//                if let window = self.deviceCopyWindowController.window {
+//                    if self.deviceCopyWindowController.isWindowLoaded {
+//                        window.makeKeyAndOrderFront(self)
+//                        print("order to front")
+//                    }else{
+//                        self.deviceCopyWindowController.showWindow(self)
+//                    }
+//                    let vc = window.contentViewController as! DeviceCopyViewController
+//                    vc.viewInit(device: device, connected: collection.deviceConnected)
+//                }
             }
         }
     }

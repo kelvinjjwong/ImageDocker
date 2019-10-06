@@ -78,6 +78,7 @@
 		8E9D803F23495E9B0062692A /* TheaterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E9D803E23495E9B0062692A /* TheaterViewController.xib */; };
 		8E9D804123495F100062692A /* LargeViewItems.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E9D804023495F100062692A /* LargeViewItems.storyboard */; };
 		8E9D8043234988DD0062692A /* PeopleFaceViewItems.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E9D8042234988DD0062692A /* PeopleFaceViewItems.storyboard */; };
+		8E9D8045234990A00062692A /* DeviceCopyView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E9D8044234990A00062692A /* DeviceCopyView.storyboard */; };
 		8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */; };
 		8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */; };
 		8EA1A063208DFD92000C3B97 /* MetaInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA1A062208DFD92000C3B97 /* MetaInfo.swift */; };
@@ -308,6 +309,7 @@
 		8E9D803E23495E9B0062692A /* TheaterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TheaterViewController.xib; sourceTree = "<group>"; };
 		8E9D804023495F100062692A /* LargeViewItems.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LargeViewItems.storyboard; sourceTree = "<group>"; };
 		8E9D8042234988DD0062692A /* PeopleFaceViewItems.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PeopleFaceViewItems.storyboard; sourceTree = "<group>"; };
+		8E9D8044234990A00062692A /* DeviceCopyView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DeviceCopyView.storyboard; sourceTree = "<group>"; };
 		8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateConverter.swift; sourceTree = "<group>"; };
 		8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaTableViewController.swift; sourceTree = "<group>"; };
 		8EA1A062208DFD92000C3B97 /* MetaInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaInfo.swift; sourceTree = "<group>"; };
@@ -914,6 +916,7 @@
 				8EAC5F1F2144A60900E187E0 /* DeviceFolderViewController.xib */,
 				8EEF07182256C9D9000520B7 /* DevicePathDetailViewController.swift */,
 				8EEF07192256C9D9000520B7 /* DevicePathDetailViewController.xib */,
+				8E9D8044234990A00062692A /* DeviceCopyView.storyboard */,
 			);
 			path = Device;
 			sourceTree = "<group>";
@@ -1132,6 +1135,7 @@
 				8EF125AA2214590000C423CA /* DeviceListViewController.xib in Resources */,
 				8EBA9DE0216F8BB100DACAAD /* NotesViewController.xib in Resources */,
 				8EB271A623418503003BF3AF /* ExportStackItems.storyboard in Resources */,
+				8E9D8045234990A00062692A /* DeviceCopyView.storyboard in Resources */,
 				8EB271A423413CE7003BF3AF /* ExportConfigurationViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
