@@ -1493,7 +1493,7 @@ extension DeviceSourcePathTableDelegate : NSTableViewDelegate {
         //var tip: String? = nil
         if let id = tableColumn?.identifier {
             switch id {
-            case NSUserInterfaceItemIdentifier("path"):
+            case NSUserInterfaceItemIdentifier("sourcePath"):
                 value = info.sourcePath
             case NSUserInterfaceItemIdentifier("destination"):
                 value = info.toSubFolder
