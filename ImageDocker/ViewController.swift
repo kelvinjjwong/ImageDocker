@@ -620,7 +620,7 @@ class ViewController: NSViewController {
     }
     
     @IBAction func onMemoriesClicked(_ sender: NSButton) {
-        // TODO: open a window to display pictures taken in last years
+        self.showMemories()
     }
     
     

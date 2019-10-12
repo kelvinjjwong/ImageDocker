@@ -28,6 +28,7 @@
 		8E3EC3B6214DB1B8004B6125 /* LunarCalendarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E3EC3B3214DB1B7004B6125 /* LunarCalendarView.xib */; };
 		8E3EC3BD214DE623004B6125 /* DateTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3EC3BB214DE623004B6125 /* DateTimeViewController.swift */; };
 		8E3EC3BE214DE623004B6125 /* DateTimeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E3EC3BC214DE623004B6125 /* DateTimeViewController.xib */; };
+		8E3FA91A2351769D00B677A3 /* ViewController+Memories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3FA9192351769D00B677A3 /* ViewController+Memories.swift */; };
 		8E4B7C1920929EFA00DDD9E0 /* LocationConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */; };
 		8E4C38CA211776300089502C /* Mobile in Resources */ = {isa = PBXBuildFile; fileRef = 8E4C38C92117762F0089502C /* Mobile */; };
 		8E4C38CD2117B5340089502C /* Phone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38CC2117B5340089502C /* Phone.swift */; };
@@ -259,6 +260,7 @@
 		8E3EC3B3214DB1B7004B6125 /* LunarCalendarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LunarCalendarView.xib; sourceTree = "<group>"; };
 		8E3EC3BB214DE623004B6125 /* DateTimeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimeViewController.swift; sourceTree = "<group>"; };
 		8E3EC3BC214DE623004B6125 /* DateTimeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DateTimeViewController.xib; sourceTree = "<group>"; };
+		8E3FA9192351769D00B677A3 /* ViewController+Memories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Memories.swift"; sourceTree = "<group>"; };
 		8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationConsumer.swift; sourceTree = "<group>"; };
 		8E4C38C92117762F0089502C /* Mobile */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Mobile; sourceTree = "<group>"; };
 		8E4C38CC2117B5340089502C /* Phone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phone.swift; sourceTree = "<group>"; };
@@ -524,6 +526,7 @@
 				8EBA69262090C37B00221131 /* Supporting Files */,
 				8E0AFA3C208BDEA000CE8B68 /* AppDelegate.swift */,
 				8EEF072A22626FE7000520B7 /* ViewController.swift */,
+				8E3FA9192351769D00B677A3 /* ViewController+Memories.swift */,
 				8EB271982340F22F003BF3AF /* ViewController+Search.swift */,
 				8EB271962340F1FF003BF3AF /* ViewController+TaskProgress.swift */,
 				8EB271922340EF6F003BF3AF /* ViewController+Schedule.swift */,
@@ -1261,6 +1264,7 @@
 				8EB27161233844C9003BF3AF /* ImageFile+Location.swift in Sources */,
 				8EB986BD20B30C920075B081 /* CollectionViewItemsLoader.swift in Sources */,
 				8E8D472022338DAC0091E9C3 /* TextListViewController.swift in Sources */,
+				8E3FA91A2351769D00B677A3 /* ViewController+Memories.swift in Sources */,
 				8EB271772340D867003BF3AF /* ViewController+CollectionArea.swift in Sources */,
 				8EFAF1FF20CAE422007A7783 /* Moment.swift in Sources */,
 				8EBA692C2090DB0300221131 /* DropPlaceCommons.swift in Sources */,
