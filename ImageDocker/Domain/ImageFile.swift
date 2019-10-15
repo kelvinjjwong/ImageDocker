@@ -116,6 +116,7 @@ class ImageFile {
     
     var collectionViewItem:CollectionViewItem?
     var threaterCollectionViewItem:TheaterCollectionViewItem?
+    var memoryCollectionViewItem:MemoryCollectionViewItem?
     
     // MARK: - SHOW HIDE
     

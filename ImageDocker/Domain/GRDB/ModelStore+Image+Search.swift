@@ -190,6 +190,136 @@ extension ModelStore {
         return result
     }
     
+    private func getMaxPhotoTakenYear() -> Int {
+        let sql = "select distinct max(photoTakenYear) photoTakenYear from image where hidden=0"
+        
+        var result:Int = 0
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, sql)
+                if rows.count > 0 {
+                    result = rows[0]["photoTakenYear"] as Int? ?? 0
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    private func getMinPhotoTakenYear() -> Int {
+        let sql = "select distinct min(photoTakenYear) photoTakenYear from image where hidden=0"
+        
+        var result:Int = 0
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, sql)
+                if rows.count > 0 {
+                    result = rows[0]["photoTakenYear"] as Int? ?? 0
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    private func getSqlByTodayInPrevious() -> String {
+        let max = self.getMaxPhotoTakenYear()
+        let min = self.getMinPhotoTakenYear()
+        var sql = ""
+        var k = 0
+        for i in min..<max {
+            k += 1
+            sql += "DATE('now', 'localtime', '-\(k) year'), DATE('now', 'localtime', '-\(k) year', '-1 day'), DATE('now', 'localtime', '-\(k) year', '-2 day'), DATE('now', 'localtime', '-\(k) year', '+1 day'), DATE('now', 'localtime', '-\(k) year', '+2 day')"
+            if i+1 != max {
+                sql += ","
+            }
+        }
+        return sql
+    }
+    
+    func getYearsByTodayInPrevious() -> [Int]{
+        var sql = "select distinct photoTakenYear from image where hidden=0 and DATE(phototakendate) IN ("
+        sql += self.getSqlByTodayInPrevious()
+        sql += ") order by photoTakenYear desc"
+        
+        var result:[Int] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, sql)
+                if rows.count > 0 {
+                    for row in rows {
+                        result.append(row["photoTakenYear"] as Int? ?? 0)
+                    }
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func getDatesAroundToday() -> [String] {
+        let sql = """
+select DATE('now', 'localtime', '-1 day') date union
+select DATE('now', 'localtime', '-2 day') date union
+select DATE('now', 'localtime', '+1 day') date union
+select DATE('now', 'localtime', '+2 day') date union
+select DATE('now', 'localtime')  date
+"""
+        var result:[String] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, sql)
+                if rows.count > 0 {
+                    for row in rows {
+                        if let date = row["date"] as String? {
+                            result.append(date)
+                        }
+                    }
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func getDatesByTodayInPrevious(year:Int) -> [String]{
+        let now = Date()
+        let calendar = Calendar.current
+        let currentYear = calendar.component(.year, from: now)
+        let k = currentYear - year
+        
+        var sql = "select distinct DATE(photoTakenDate) as photoTakenDate from image where hidden=0 and DATE(phototakendate) IN ("
+        sql += "DATE('now', 'localtime', '-\(k) year'), DATE('now', 'localtime', '-\(k) year', '-1 day'), DATE('now', 'localtime', '-\(k) year', '-2 day'), DATE('now', 'localtime', '-\(k) year', '+1 day'), DATE('now', 'localtime', '-\(k) year', '+2 day')"
+        sql += ") order by DATE(photoTakenDate) desc"
+        print(sql)
+        
+        var result:[String] = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, sql)
+                if rows.count > 0 {
+                    for row in rows {
+                        if let date = row["photoTakenDate"] as String? {
+                            result.append(date)
+                        }
+                    }
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
     // MARK: - EXIF
     
     func getPhotoFilesWithoutExif(limit:Int? = nil) -> [Image] {

@@ -84,6 +84,8 @@ extension ViewController {
         self.view.subviews.removeLast()
         self.startingUp = false
         print("FINISHED STARTUP WORK")
+        
+        self.showMemories()
     }
     
     internal func doQuit() {

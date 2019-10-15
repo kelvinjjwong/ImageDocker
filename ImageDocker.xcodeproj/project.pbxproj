@@ -29,6 +29,11 @@
 		8E3EC3BD214DE623004B6125 /* DateTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3EC3BB214DE623004B6125 /* DateTimeViewController.swift */; };
 		8E3EC3BE214DE623004B6125 /* DateTimeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E3EC3BC214DE623004B6125 /* DateTimeViewController.xib */; };
 		8E3FA91A2351769D00B677A3 /* ViewController+Memories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3FA9192351769D00B677A3 /* ViewController+Memories.swift */; };
+		8E3FA91D235310AA00B677A3 /* MemoriesViews.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E3FA91C235310AA00B677A3 /* MemoriesViews.storyboard */; };
+		8E3FA9202353310600B677A3 /* MemoryCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3FA91E2353310600B677A3 /* MemoryCollectionViewItem.swift */; };
+		8E3FA9212353310600B677A3 /* MemoryCollectionViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E3FA91F2353310600B677A3 /* MemoryCollectionViewItem.xib */; };
+		8E3FA92323535C5800B677A3 /* MemoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3FA92223535C5800B677A3 /* MemoriesViewController.swift */; };
+		8E3FA9252355047400B677A3 /* MemoriesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3FA9242355047400B677A3 /* MemoriesCollectionViewController.swift */; };
 		8E4B7C1920929EFA00DDD9E0 /* LocationConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */; };
 		8E4C38CA211776300089502C /* Mobile in Resources */ = {isa = PBXBuildFile; fileRef = 8E4C38C92117762F0089502C /* Mobile */; };
 		8E4C38CD2117B5340089502C /* Phone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38CC2117B5340089502C /* Phone.swift */; };
@@ -261,6 +266,11 @@
 		8E3EC3BB214DE623004B6125 /* DateTimeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimeViewController.swift; sourceTree = "<group>"; };
 		8E3EC3BC214DE623004B6125 /* DateTimeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DateTimeViewController.xib; sourceTree = "<group>"; };
 		8E3FA9192351769D00B677A3 /* ViewController+Memories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Memories.swift"; sourceTree = "<group>"; };
+		8E3FA91C235310AA00B677A3 /* MemoriesViews.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MemoriesViews.storyboard; sourceTree = "<group>"; };
+		8E3FA91E2353310600B677A3 /* MemoryCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryCollectionViewItem.swift; sourceTree = "<group>"; };
+		8E3FA91F2353310600B677A3 /* MemoryCollectionViewItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MemoryCollectionViewItem.xib; sourceTree = "<group>"; };
+		8E3FA92223535C5800B677A3 /* MemoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoriesViewController.swift; sourceTree = "<group>"; };
+		8E3FA9242355047400B677A3 /* MemoriesCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoriesCollectionViewController.swift; sourceTree = "<group>"; };
 		8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationConsumer.swift; sourceTree = "<group>"; };
 		8E4C38C92117762F0089502C /* Mobile */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Mobile; sourceTree = "<group>"; };
 		8E4C38CC2117B5340089502C /* Phone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phone.swift; sourceTree = "<group>"; };
@@ -510,6 +520,7 @@
 		8E0AFA3B208BDEA000CE8B68 /* ImageDocker */ = {
 			isa = PBXGroup;
 			children = (
+				8E3FA91B2352904B00B677A3 /* Memories */,
 				8EEF0725226215C8000520B7 /* Splash */,
 				8EB986AE20B223BF0075B081 /* Domain */,
 				8EFA7CF7211A36C900419777 /* Device */,
@@ -640,6 +651,18 @@
 				8E9D803C2348AA550062692A /* ExportProfile.swift */,
 			);
 			path = GRDB;
+			sourceTree = "<group>";
+		};
+		8E3FA91B2352904B00B677A3 /* Memories */ = {
+			isa = PBXGroup;
+			children = (
+				8E3FA91C235310AA00B677A3 /* MemoriesViews.storyboard */,
+				8E3FA91E2353310600B677A3 /* MemoryCollectionViewItem.swift */,
+				8E3FA91F2353310600B677A3 /* MemoryCollectionViewItem.xib */,
+				8E3FA92223535C5800B677A3 /* MemoriesViewController.swift */,
+				8E3FA9242355047400B677A3 /* MemoriesCollectionViewController.swift */,
+			);
+			path = Memories;
 			sourceTree = "<group>";
 		};
 		8E4C38CB2117B5190089502C /* Device */ = {
@@ -1117,6 +1140,7 @@
 				8EC82EAC2121C5A200FC0899 /* AddLocalDirectoryViewController.xib in Resources */,
 				8E8D4716222991230091E9C3 /* FaceCollectionViewItem.xib in Resources */,
 				8E0AFA41208BDEA100CE8B68 /* Assets.xcassets in Resources */,
+				8E3FA91D235310AA00B677A3 /* MemoriesViews.storyboard in Resources */,
 				8E9D8039234884040062692A /* EditRepositoryViewController.xib in Resources */,
 				8E98B8F120D0EE3300771280 /* PlaceListViewController.xib in Resources */,
 				8EEF071F225FCF8E000520B7 /* ContainerDetailViewController.xib in Resources */,
@@ -1133,6 +1157,7 @@
 				8EF4CE6521E56DC100C53AFF /* NotificationViewController.xib in Resources */,
 				8EEF071B2256C9D9000520B7 /* DevicePathDetailViewController.xib in Resources */,
 				8EEF07232260D0E1000520B7 /* CollectionPaginationViewController.xib in Resources */,
+				8E3FA9212353310600B677A3 /* MemoryCollectionViewItem.xib in Resources */,
 				8E3EC3BE214DE623004B6125 /* DateTimeViewController.xib in Resources */,
 				8EB271AF2346BEAA003BF3AF /* TaskProgressStackItem.storyboard in Resources */,
 				8EF125AA2214590000C423CA /* DeviceListViewController.xib in Resources */,
@@ -1238,6 +1263,7 @@
 				8E0EAE9A209D2623008C377F /* ImageFolderTreeScanner.swift in Sources */,
 				8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */,
 				8EAD03B523372C0100AAC7C6 /* ModelStore+ImageEvent.swift in Sources */,
+				8E3FA9252355047400B677A3 /* MemoriesCollectionViewController.swift in Sources */,
 				8E4C38D9211829410089502C /* DeviceTreeController.swift in Sources */,
 				8EB2719B2340F907003BF3AF /* ViewController+CollectionArea+CombineDuplicated.swift in Sources */,
 				8EB271832340E98B003BF3AF /* ViewController+SelectionArea+CombineDuplicated.swift in Sources */,
@@ -1307,6 +1333,7 @@
 				8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */,
 				8EB271532337B768003BF3AF /* ModelStore+Image+Statistic.swift in Sources */,
 				8E98B8F720D6044900771280 /* Event.swift in Sources */,
+				8E3FA9202353310600B677A3 /* MemoryCollectionViewItem.swift in Sources */,
 				8E9D803D2348AA550062692A /* ExportProfile.swift in Sources */,
 				8E4C38D12117B56A0089502C /* IPHONE.swift in Sources */,
 				8EB321D520FA433500D8C71D /* ImagePlace.swift in Sources */,
@@ -1339,6 +1366,7 @@
 				8EB2717D2340D8D5003BF3AF /* ViewController+TreeArea.swift in Sources */,
 				8EB271892340EDC5003BF3AF /* ViewController+SelectionArea+AssignEvent.swift in Sources */,
 				8EF4CE6721E6F29100C53AFF /* LCSourceListHeaderView.swift in Sources */,
+				8E3FA92323535C5800B677A3 /* MemoriesViewController.swift in Sources */,
 				8EB986C620B6EBC40075B081 /* DarkTableView.swift in Sources */,
 				8EB2716D233E0729003BF3AF /* LibrariesViewController.swift in Sources */,
 				8E4C38CF2117B54D0089502C /* Android.swift in Sources */,
