@@ -42,13 +42,21 @@ class MemoriesViewController : NSViewController {
         
         self.configureCollectionView()
         
+        self.startCollectionLoop()
+    }
+    
+    override func viewWillDisappear() {
+        super.viewWillDisappear()
+        self.stopCollectionLoop()
+    }
+    
+    internal func startCollectionLoop() {
         if self.timer == nil {
             self.timer = Timer.scheduledTimer(timeInterval: 4.0, target: self, selector: #selector(self.selectNextItem(timer:)), userInfo: "timer", repeats: true)
         }
     }
     
-    override func viewWillDisappear() {
-        super.viewWillDisappear()
+    internal func stopCollectionLoop() {
         if self.timer != nil {
             self.timer?.invalidate()
             self.timer = nil
@@ -354,6 +362,7 @@ extension MemoriesViewController {
     }
     
     private func reloadCollectionView(year:Int, month:Int, day:Int){
+        self.stopCollectionLoop()
         DispatchQueue.global().async {
             
             self.collectionViewController.imagesLoader.clean()
@@ -370,6 +379,8 @@ extension MemoriesViewController {
                     self.selectedIndex = 0
                     self.previewImage(image: image)
                 }
+                
+                self.startCollectionLoop()
             }
         }
     }
