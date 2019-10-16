@@ -399,6 +399,7 @@ extension MemoriesViewController {
     
     @objc func selectNextItem(timer: Timer!) {
         guard self.collectionViewController != nil && self.collectionViewController.imagesLoader.getItems().count  > 0 else {return}
+        // TODO: return if video has not ended
         var next = self.selectedIndex + 1
         if next >= self.collectionViewController.imagesLoader.getItems().count {
             next = 0
