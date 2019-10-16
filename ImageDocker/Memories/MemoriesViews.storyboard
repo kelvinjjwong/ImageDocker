@@ -27,7 +27,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="BAV-dg-kgV">
-                                <rect key="frame" x="28" y="882" width="794" height="36"/>
+                                <rect key="frame" x="58" y="882" width="734" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="Jjq-tO-fZe"/>
                                 </constraints>
@@ -169,17 +169,38 @@
                                     <action selector="onMenuClicked:" target="TrO-vQ-e8p" id="o6z-mV-hC3"/>
                                 </connections>
                             </button>
-                            <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="elt-8v-FXS">
-                                <rect key="frame" x="5" y="894" width="16" height="16"/>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FF4-2T-Aqd">
+                                <rect key="frame" x="788" y="891" width="30" height="19"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="16" id="s1s-tJ-gdH"/>
+                                    <constraint firstAttribute="width" constant="30" id="ne0-Kv-rfh"/>
                                 </constraints>
-                            </progressIndicator>
+                                <buttonCell key="cell" type="recessed" title="Button" bezelStyle="recessed" image="hide" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ehV-S0-3KP">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="systemBold" size="12"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onHideClicked:" target="TrO-vQ-e8p" id="1rM-hc-7aK"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Dpd-JC-1r5">
+                                <rect key="frame" x="3" y="891" width="30" height="19"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="30" id="Bpk-P7-5KQ"/>
+                                </constraints>
+                                <buttonCell key="cell" type="recessed" title="Button" bezelStyle="recessed" image="pause" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="C2x-Of-RMQ">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="systemBold" size="12"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onPlayClicked:" target="TrO-vQ-e8p" id="LDf-rg-QTi"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="BAV-dg-kgV" firstAttribute="centerX" secondItem="ZKT-3Q-3ym" secondAttribute="centerX" id="3mN-na-0ww"/>
+                            <constraint firstItem="Dpd-JC-1r5" firstAttribute="leading" secondItem="ZKT-3Q-3ym" secondAttribute="leading" constant="3" id="53o-SM-Mva"/>
                             <constraint firstItem="pDq-FQ-dsb" firstAttribute="leading" secondItem="Vym-ag-xEC" secondAttribute="trailing" constant="50" id="7cf-yj-xPh"/>
-                            <constraint firstItem="elt-8v-FXS" firstAttribute="top" secondItem="ZKT-3Q-3ym" secondAttribute="top" constant="40" id="AA6-R9-2xL"/>
+                            <constraint firstItem="R3K-ef-ayH" firstAttribute="top" secondItem="FF4-2T-Aqd" secondAttribute="bottom" constant="12" id="9V4-2L-rOQ"/>
                             <constraint firstItem="R3K-ef-ayH" firstAttribute="leading" secondItem="ZKT-3Q-3ym" secondAttribute="leading" id="Eix-Lx-DJ4"/>
                             <constraint firstItem="Vym-ag-xEC" firstAttribute="top" secondItem="R3K-ef-ayH" secondAttribute="bottom" constant="3" id="EzP-zr-aOM"/>
                             <constraint firstItem="4fm-vo-9G0" firstAttribute="leading" secondItem="QUn-qi-pOl" secondAttribute="trailing" constant="50" id="FWW-6g-acE"/>
@@ -189,6 +210,8 @@
                             <constraint firstItem="R3K-ef-ayH" firstAttribute="top" secondItem="BAV-dg-kgV" secondAttribute="bottom" constant="2" id="JVx-Ki-iBG"/>
                             <constraint firstItem="4fm-vo-9G0" firstAttribute="top" secondItem="R3K-ef-ayH" secondAttribute="bottom" constant="3" id="KbM-55-8JL"/>
                             <constraint firstAttribute="trailing" secondItem="0Ni-z6-mWg" secondAttribute="trailing" id="Li4-Pl-3sh"/>
+                            <constraint firstItem="z3C-eV-QAf" firstAttribute="leading" secondItem="FF4-2T-Aqd" secondAttribute="trailing" constant="2" id="Nlq-M2-NWd"/>
+                            <constraint firstItem="R3K-ef-ayH" firstAttribute="top" secondItem="Dpd-JC-1r5" secondAttribute="bottom" constant="12" id="O9E-zp-oLJ"/>
                             <constraint firstItem="pDq-FQ-dsb" firstAttribute="top" secondItem="R3K-ef-ayH" secondAttribute="bottom" constant="3" id="O9X-8K-Gkc"/>
                             <constraint firstAttribute="trailing" secondItem="z3C-eV-QAf" secondAttribute="trailing" id="RYy-PB-xme"/>
                             <constraint firstItem="dxe-5Q-qHk" firstAttribute="leading" secondItem="4fm-vo-9G0" secondAttribute="trailing" constant="50" id="SEE-Ye-MiW"/>
@@ -200,11 +223,10 @@
                             <constraint firstAttribute="bottom" secondItem="0Ni-z6-mWg" secondAttribute="bottom" id="cry-K4-z9z"/>
                             <constraint firstItem="BAV-dg-kgV" firstAttribute="top" secondItem="lyR-AX-Myb" secondAttribute="bottom" constant="3" id="gTv-Fu-EC0"/>
                             <constraint firstAttribute="trailing" secondItem="R3K-ef-ayH" secondAttribute="trailing" id="hTt-IU-VQJ"/>
-                            <constraint firstAttribute="trailing" secondItem="BAV-dg-kgV" secondAttribute="trailing" constant="30" id="hqz-r7-zOH"/>
-                            <constraint firstItem="BAV-dg-kgV" firstAttribute="leading" secondItem="ZKT-3Q-3ym" secondAttribute="leading" constant="30" id="huD-9I-GHw"/>
+                            <constraint firstAttribute="trailing" secondItem="BAV-dg-kgV" secondAttribute="trailing" constant="60" id="hqz-r7-zOH"/>
+                            <constraint firstItem="BAV-dg-kgV" firstAttribute="leading" secondItem="ZKT-3Q-3ym" secondAttribute="leading" constant="60" id="huD-9I-GHw"/>
                             <constraint firstItem="uqv-BS-XjP" firstAttribute="leading" secondItem="lyR-AX-Myb" secondAttribute="trailing" constant="10" id="jlB-MH-rcx"/>
                             <constraint firstItem="dAJ-9V-QSf" firstAttribute="top" secondItem="ZKT-3Q-3ym" secondAttribute="top" constant="6" id="laG-ta-GHQ"/>
-                            <constraint firstItem="elt-8v-FXS" firstAttribute="leading" secondItem="ZKT-3Q-3ym" secondAttribute="leading" constant="5" id="q6T-Px-tlz"/>
                             <constraint firstItem="dxe-5Q-qHk" firstAttribute="top" secondItem="R3K-ef-ayH" secondAttribute="bottom" constant="3" id="qTh-3M-HWh"/>
                             <constraint firstItem="lyR-AX-Myb" firstAttribute="leading" secondItem="dAJ-9V-QSf" secondAttribute="trailing" constant="10" id="rV6-mT-s6i"/>
                             <constraint firstItem="QUn-qi-pOl" firstAttribute="top" secondItem="R3K-ef-ayH" secondAttribute="bottom" constant="3" id="sa6-aN-tge"/>
@@ -217,20 +239,21 @@
                         <outlet property="btnDayAddTwo" destination="pDq-FQ-dsb" id="2c4-JY-Y96"/>
                         <outlet property="btnDayMinusOne" destination="4fm-vo-9G0" id="E9u-ww-60d"/>
                         <outlet property="btnDayMinusTwo" destination="QUn-qi-pOl" id="MYA-jD-7Dv"/>
+                        <outlet property="btnHide" destination="FF4-2T-Aqd" id="fIV-Xu-Uku"/>
                         <outlet property="btnLastYear" destination="dAJ-9V-QSf" id="dmi-3S-gBR"/>
                         <outlet property="btnMenu" destination="z3C-eV-QAf" id="nCu-GI-8TG"/>
                         <outlet property="btnNextYear" destination="uqv-BS-XjP" id="ZNp-jL-PyJ"/>
+                        <outlet property="btnPlay" destination="Dpd-JC-1r5" id="BwL-J6-30k"/>
                         <outlet property="btnToday" destination="dxe-5Q-qHk" id="Qjc-ZG-CIr"/>
                         <outlet property="collectionView" destination="fhm-iJ-iNf" id="Lkv-hT-RiF"/>
                         <outlet property="lblDescription" destination="BAV-dg-kgV" id="8su-C1-yBv"/>
                         <outlet property="lblToday" destination="lyR-AX-Myb" id="D5g-an-OB5"/>
                         <outlet property="preview" destination="R3K-ef-ayH" id="5zz-41-WOL"/>
-                        <outlet property="progressIndicator" destination="elt-8v-FXS" id="vNi-W5-U0d"/>
                     </connections>
                 </viewController>
                 <customObject id="8Fo-TL-mUQ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="136" y="243.5"/>
+            <point key="canvasLocation" x="136" y="243"/>
         </scene>
         <!--Memories Collection View Controller-->
         <scene sceneID="pHm-me-WVs">
@@ -249,6 +272,8 @@
     <resources>
         <image name="NSGoBackTemplate" width="9" height="12"/>
         <image name="NSGoForwardTemplate" width="9" height="12"/>
+        <image name="hide" width="17" height="15"/>
         <image name="more_vertical" width="16" height="16"/>
+        <image name="pause" width="11" height="15"/>
     </resources>
 </document>

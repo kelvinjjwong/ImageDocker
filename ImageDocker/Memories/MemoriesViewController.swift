@@ -24,12 +24,17 @@ class MemoriesViewController : NSViewController {
     @IBOutlet weak var btnDayAddOne: NSButton!
     @IBOutlet weak var btnMenu: NSButton!
     @IBOutlet weak var collectionView: NSCollectionView!
-    @IBOutlet weak var progressIndicator: NSProgressIndicator!
+    @IBOutlet weak var btnHide: NSButton!
+    @IBOutlet weak var btnPlay: NSButton!
     
     
     var collectionViewController:MemoriesCollectionViewController!
     var selectedImageFile:ImageFile?
     var selectedIndex = 0
+    
+    internal var selectYear = 0
+    internal var selectMonth = 0
+    internal var selectDay = 0
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -49,6 +54,8 @@ class MemoriesViewController : NSViewController {
         super.viewWillDisappear()
         self.stopCollectionLoop()
     }
+    
+    internal var timerStarted = true
     
     internal func startCollectionLoop() {
         if self.timer == nil {
@@ -178,7 +185,7 @@ class MemoriesViewController : NSViewController {
     
     /// reload collection with images taken on specific date
     private func reloadCollection(date:String) {
-        print("reload collection on \(date)")
+        //print("reload collection on \(date)")
         let parts = date.components(separatedBy: "-")
         let year = Int(parts[0]) ?? 0
         let month = Int(parts[1]) ?? 0
@@ -270,6 +277,36 @@ class MemoriesViewController : NSViewController {
         // TODO: menus: export to local folder, share to facebook, larger view, open in tree
     }
     
+    @IBAction func onHideClicked(_ sender: NSButton) {
+        if let imageFile = self.selectedImageFile {
+            // remove item and reload collection
+            DispatchQueue.global().async {
+                imageFile.hide()
+                self.selectedIndex -= 1
+                
+                if self.selectedIndex < 0 {
+                    self.selectedIndex = 0
+                }
+                
+                self.reloadCollectionView(year: self.selectYear, month:self.selectMonth, day:self.selectDay, focusIndex: self.selectedIndex)
+            }
+            
+        }
+    }
+    
+    @IBAction func onPlayClicked(_ sender: NSButton) {
+        if self.btnPlay.image == playIcon {
+            self.btnPlay.image = pauseIcon
+            self.timerStarted = true
+            self.startCollectionLoop()
+        }else{
+            self.btnPlay.image = playIcon
+            self.timerStarted = false
+            self.stopCollectionLoop()
+        }
+    }
+    
+    
     internal var previewView:QLPreviewView? = nil
     
     private func previewImage(image:ImageFile){
@@ -305,6 +342,8 @@ class MemoriesViewController : NSViewController {
 """.trimmingCharacters(in: .whitespacesAndNewlines)
             self.lblDescription.stringValue = content
         }
+        
+        self.selectedImageFile = image
         
     }
     
@@ -345,8 +384,15 @@ extension MemoriesViewController {
         collectionViewController.collectionView.reloadData()
         
         collectionViewController.onItemClicked = { imageFile in
+            if self.timerStarted {
+                self.stopCollectionLoop()
+            }
             self.selectImage(imageFile: imageFile)
             self.previewImage(image: imageFile)
+            
+            if self.timerStarted {
+                self.startCollectionLoop()
+            }
         }
     }
     
@@ -361,8 +407,13 @@ extension MemoriesViewController {
         self.selectedIndex = next
     }
     
-    private func reloadCollectionView(year:Int, month:Int, day:Int){
-        self.stopCollectionLoop()
+    private func reloadCollectionView(year:Int, month:Int, day:Int, focusIndex:Int = 0){
+        self.selectYear = year
+        self.selectMonth = month
+        self.selectDay = day
+        if self.timerStarted {
+            self.stopCollectionLoop()
+        }
         DispatchQueue.global().async {
             
             self.collectionViewController.imagesLoader.clean()
@@ -372,15 +423,17 @@ extension MemoriesViewController {
             
             DispatchQueue.main.async {
                 self.collectionViewController.collectionView.reloadData()
-                self.selectItem(at: 0)
+                self.selectItem(at: focusIndex)
                 
                 
-                if let image = self.collectionViewController.imagesLoader.getItem(at: 0) {
-                    self.selectedIndex = 0
+                if let image = self.collectionViewController.imagesLoader.getItem(at: focusIndex) {
+                    self.selectedIndex = focusIndex
                     self.previewImage(image: image)
                 }
                 
-                self.startCollectionLoop()
+                if self.timerStarted {
+                    self.startCollectionLoop()
+                }
             }
         }
     }
@@ -392,9 +445,9 @@ extension MemoriesViewController {
     }
     
     private func selectItem(at index:Int, forceFocus:Bool = false){
-        print("select index: \(index)")
+        //print("select index: \(index)")
         if index >= 0 && index < self.collectionViewController.imagesLoader.getItems().count {
-            print("select image \(index)")
+            //print("select image \(index)")
             let indexPath:IndexPath = IndexPath(item: index, section: 0)
             let indexSet:Set<IndexPath> = [indexPath]
             
