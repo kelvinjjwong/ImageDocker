@@ -55,6 +55,10 @@ class MemoriesViewController : NSViewController {
         self.stopCollectionLoop()
     }
     
+    @objc func playerDidFinishPlaying() {
+        print("video ends")
+    }
+    
     internal var timerStarted = true
     
     internal func startCollectionLoop() {
@@ -63,10 +67,29 @@ class MemoriesViewController : NSViewController {
         }
     }
     
+    internal func startVideoTimer(seconds:Double) {
+        if self.timerStarted {
+            self.stopCollectionLoop()
+        }
+        self.isPlayingVideo = true
+        self.timer = Timer.scheduledTimer(timeInterval: seconds, target: self, selector: #selector(self.endOfVideoTimer(timer:)), userInfo: "timer", repeats: true)
+    }
+    
     internal func stopCollectionLoop() {
         if self.timer != nil {
             self.timer?.invalidate()
             self.timer = nil
+        }
+    }
+    
+    @objc func endOfVideoTimer(timer: Timer!) {
+        self.isPlayingVideo = false
+        if self.timer != nil {
+            self.timer?.invalidate()
+            self.timer = nil
+        }
+        if self.timerStarted {
+            self.startCollectionLoop()
         }
     }
     
@@ -306,6 +329,7 @@ class MemoriesViewController : NSViewController {
         }
     }
     
+    internal var isPlayingVideo = false
     
     internal var previewView:QLPreviewView? = nil
     
@@ -321,6 +345,25 @@ class MemoriesViewController : NSViewController {
             previewView?.autostarts = true
             previewView?.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
             self.preview.addSubview(previewView!)
+        }
+        
+        if let data = image.imageData, let duration = data.videoDuration {
+            var seconds = 1.0
+            if duration.hasSuffix(" s") {
+                seconds = Double(duration.replacingFirstOccurrence(of: " s", with: "")) ?? 0.0
+            }else{
+                let parts = duration.components(separatedBy: ":")
+                let hours = Double(parts[0]) ?? 0.0
+                let minutes = Double(parts[1]) ?? 0.0
+                let secs = Double(parts[2]) ?? 0.0
+                seconds = secs + minutes * 60 + hours * 3600
+            }
+            let interval = 2.0 // interval of looping timer is 4 seconds, i.e. next image will be shown after (+ 4 - 2) seconds
+            if (seconds - interval) > 0.0 {
+                self.startVideoTimer(seconds: seconds - interval)
+            }else{
+                self.startVideoTimer(seconds: seconds)
+            }
         }
         
         let quickLookItem = TheaterQuickLookItem()
