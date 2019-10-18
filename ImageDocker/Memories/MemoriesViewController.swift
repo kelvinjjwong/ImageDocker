@@ -27,6 +27,7 @@ class MemoriesViewController : NSViewController {
     @IBOutlet weak var btnHide: NSButton!
     @IBOutlet weak var btnPlay: NSButton!
     
+    fileprivate var onLoadMainCollection: ((Int,Int,Int) -> Void)? = nil
     
     var collectionViewController:MemoriesCollectionViewController!
     var selectedImageFile:ImageFile?
@@ -39,8 +40,6 @@ class MemoriesViewController : NSViewController {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-    
-    var timer:Timer? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,9 +54,26 @@ class MemoriesViewController : NSViewController {
         self.stopCollectionLoop()
     }
     
-    @objc func playerDidFinishPlaying() {
-        print("video ends")
+    func initView(onLoadMainCollection: ((Int,Int,Int) -> Void)? = nil) {
+        
+        self.onLoadMainCollection = onLoadMainCollection
+        
+        // load available years
+        self.years = ModelStore.default.getYearsByTodayInPrevious()
+        guard self.years.count > 0 else {return}
+        
+        // load dates present on buttons
+        let aroundDates = ModelStore.default.getDatesAroundToday()
+        self.btnDayMinusTwo.title = self.presentDate(aroundDates[0])
+        self.btnDayMinusOne.title = self.presentDate(aroundDates[1])
+        self.btnToday.title = self.presentDate(aroundDates[2])
+        self.btnDayAddOne.title = self.presentDate(aroundDates[3])
+        self.btnDayAddTwo.title = self.presentDate(aroundDates[4])
+        
+        self.pickYear(year: years[0])
     }
+    
+    var timer:Timer? = nil
     
     internal var timerStarted = true
     
@@ -216,23 +232,6 @@ class MemoriesViewController : NSViewController {
         self.reloadCollectionView(year: year, month: month, day: day)
     }
     
-    func initView() {
-        
-        // load available years
-        self.years = ModelStore.default.getYearsByTodayInPrevious()
-        guard self.years.count > 0 else {return}
-        
-        // load dates present on buttons
-        let aroundDates = ModelStore.default.getDatesAroundToday()
-        self.btnDayMinusTwo.title = self.presentDate(aroundDates[0])
-        self.btnDayMinusOne.title = self.presentDate(aroundDates[1])
-        self.btnToday.title = self.presentDate(aroundDates[2])
-        self.btnDayAddOne.title = self.presentDate(aroundDates[3])
-        self.btnDayAddTwo.title = self.presentDate(aroundDates[4])
-        
-        self.pickYear(year: years[0])
-    }
-    
     @IBAction func onLastYearClicked(_ sender: NSButton) {
         self.pickYear(year: Int(self.btnLastYear.title) ?? 0)
     }
@@ -298,6 +297,9 @@ class MemoriesViewController : NSViewController {
     
     @IBAction func onMenuClicked(_ sender: NSButton) {
         // TODO: menus: export to local folder, share to facebook, larger view, open in tree
+        if self.onLoadMainCollection != nil {
+            self.onLoadMainCollection!(self.selectYear, self.selectMonth, self.selectDay)
+        }
     }
     
     @IBAction func onHideClicked(_ sender: NSButton) {
@@ -358,7 +360,7 @@ class MemoriesViewController : NSViewController {
                 let secs = Double(parts[2]) ?? 0.0
                 seconds = secs + minutes * 60 + hours * 3600
             }
-            let interval = 2.0 // interval of looping timer is 4 seconds, i.e. next image will be shown after (+ 4 - 2) seconds
+            let interval = 3.0 // interval of looping timer is 4 seconds, i.e. next image will be shown after (+ 4 - 3) seconds
             if (seconds - interval) > 0.0 {
                 self.startVideoTimer(seconds: seconds - interval)
             }else{
@@ -442,7 +444,6 @@ extension MemoriesViewController {
     
     @objc func selectNextItem(timer: Timer!) {
         guard self.collectionViewController != nil && self.collectionViewController.imagesLoader.getItems().count  > 0 else {return}
-        // TODO: return if video has not ended
         var next = self.selectedIndex + 1
         if next >= self.collectionViewController.imagesLoader.getItems().count {
             next = 0

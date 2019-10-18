@@ -30,7 +30,9 @@ extension ViewController {
         window.title = "Today in Previous Years"
         window.setFrame(frame, display: false)
         window.makeKeyAndOrderFront(self)
-        viewController.initView()
+        viewController.initView { (year, month, day) in
+            self.selectMomentsTreeEntry(year: year, month: month, day: day, pageSize: 0, pageNumber: 0)
+        }
     }
 
 }

@@ -19,6 +19,9 @@ extension ModelStore {
         print("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
         let (stmt, stmtHidden, sqlArgs) = self.generateSQLStatementForPhotoFiles(year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
         
+        print(stmt)
+        print(stmtHidden)
+        
         var result:[Image] = []
         var hiddenCount:Int = 0
         do {
@@ -42,6 +45,7 @@ extension ModelStore {
         if hiddenCountHandler != nil {
             hiddenCountHandler!(hiddenCount)
         }
+        print("loaded \(result.count) records")
         return result
     }
     
