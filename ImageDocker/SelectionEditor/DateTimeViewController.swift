@@ -98,7 +98,7 @@ class DateTimeViewController: NSViewController {
     @IBOutlet weak var btnOK: NSButton!
     
     
-    // MARK: INIT
+    // MARK: - INIT
     
     init(){
         super.init(nibName: NSNib.Name(rawValue: "DateTimeViewController"), bundle: nil)
@@ -141,10 +141,12 @@ class DateTimeViewController: NSViewController {
         
     }
     
+    fileprivate var onBeforeChanges: (() -> Void)? = nil
     fileprivate var onCompleted: (() -> Void)?
     fileprivate var onClose: (() -> Void)?
     
-    func loadFrom(images:[ImageFile], onApplyChanges: (() -> Void)? = nil, onClose: (() -> Void)? = nil ){
+    func loadFrom(images:[ImageFile], onBeforeChanges: (() -> Void)? = nil, onApplyChanges: (() -> Void)? = nil, onClose: (() -> Void)? = nil ){
+        self.onBeforeChanges = onBeforeChanges
         self.onCompleted = onApplyChanges
         self.onClose = onClose
         self.images = []
@@ -165,7 +167,7 @@ class DateTimeViewController: NSViewController {
         self.txtAdjustSecond.integerValue = 0
     }
     
-    // MARK: DATE TIME CASCADE
+    // MARK: - DATE TIME CASCADE
     
     private func increaseNumberField(this:NSTextField, thisStepper:NSStepper, next:NSTextField, addNext:Selector, start:Int, end:Int){
         let old = this.integerValue
@@ -662,7 +664,7 @@ class DateTimeViewController: NSViewController {
         return nil
     }
     
-    // MARK: OK
+    // MARK: - OK
     
     
     fileprivate var accumulator:Accumulator?
@@ -674,6 +676,12 @@ class DateTimeViewController: NSViewController {
         }
         self.btnOK.isEnabled = false
         self.btnClose.isEnabled = false
+        
+        if self.onBeforeChanges != nil {
+            DispatchQueue.main.async {
+                self.onBeforeChanges!()
+            }
+        }
         
         var tags:Set<String> = []
         if self.chkEXIFCreateDate.state == .on {
@@ -746,7 +754,7 @@ class DateTimeViewController: NSViewController {
     
 }
 
-// MARK: Calendar delegate
+// MARK: - Calendar delegate
 
 extension DateTimeViewController : LunarCalendarViewDelegate {
     @objc func didSelectDate(_ selectedDate: Date) {
@@ -767,7 +775,7 @@ extension DateTimeViewController : LunarCalendarViewDelegate {
 }
 
 
-// MARK: TableView delegate functions
+// MARK: - TableView delegate functions
 
 extension DateTimeViewController: NSTableViewDelegate {
     
@@ -842,6 +850,30 @@ extension DateTimeViewController: NSTableViewDelegate {
                 }else{
                     value = self.tableDateTimeFormatter.string(from: image.softwareModifyDate!)
                 }
+            case NSUserInterfaceItemIdentifier("VideoCreateDate"):
+                if image.videoCreateDate == nil {
+                    value = ""
+                }else{
+                    value = self.tableDateTimeFormatter.string(from: image.videoCreateDate!)
+                }
+            case NSUserInterfaceItemIdentifier("VideoModifyDate"):
+                if image.videoModifyDate == nil {
+                    value = ""
+                }else{
+                    value = self.tableDateTimeFormatter.string(from: image.videoModifyDate!)
+                }
+            case NSUserInterfaceItemIdentifier("TrackCreateDate"):
+                if image.trackCreateDate == nil {
+                    value = ""
+                }else{
+                    value = self.tableDateTimeFormatter.string(from: image.trackCreateDate!)
+                }
+            case NSUserInterfaceItemIdentifier("TrackModifyDate"):
+                if image.trackModifyDate == nil {
+                    value = ""
+                }else{
+                    value = self.tableDateTimeFormatter.string(from: image.trackModifyDate!)
+                }
                 
             default:
                 break
@@ -884,7 +916,7 @@ extension DateTimeViewController: NSTableViewDelegate {
     }
 }
 
-// MARK: TableView data source functions
+// MARK: - TableView data source functions
 
 extension DateTimeViewController: NSTableViewDataSource {
     
@@ -953,6 +985,10 @@ class ImageTimestamp {
     var fileCreateDate:Date?
     var fileModifyDate:Date?
     var softwareModifyDate:Date?
+    var videoCreateDate:Date?
+    var videoModifyDate:Date?
+    var trackCreateDate:Date?
+    var trackModifyDate:Date?
     var event:String = ""
     
     init(_ image:Image){
@@ -966,6 +1002,10 @@ class ImageTimestamp {
         self.fileCreateDate = image.filesysCreateDate
         self.fileModifyDate = image.exifModifyDate
         self.softwareModifyDate = image.softwareModifiedTime
+        self.videoCreateDate = image.videoCreateDate
+        self.videoModifyDate = image.videoModifyDate
+        self.trackCreateDate = image.trackCreateDate
+        self.trackModifyDate = image.trackModifyDate
         self.event = image.event ?? ""
     }
 }

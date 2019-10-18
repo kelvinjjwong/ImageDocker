@@ -38,10 +38,16 @@ extension ViewController {
         let cellRect = sender.bounds
         self.calendarPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
         self.calendarViewController.loadFrom(images: self.selectionViewController.imagesLoader.getItems(),
+                                             onBeforeChanges: {
+                                                self.selectionEditing = true
+                                                
+        },
                                              onApplyChanges: {
                                                 self.selectionViewController.imagesLoader.reload()
                                                 self.selectionViewController.imagesLoader.reorganizeItems()
                                                 self.selectionCollectionView.reloadData()
+                                                
+                                                self.selectionEditing = false
         },
                                              onClose: {
                                                 self.calendarPopover?.close()

@@ -162,6 +162,7 @@ class ViewController: NSViewController {
     var collectionLoadingIndicator:Accumulator?
     
     // MARK: - SELECTION VIEW
+    var selectionEditing = false
     var selectionViewController : SelectionCollectionViewController!
     
     @IBOutlet weak var selectionCollectionView: NSCollectionView!

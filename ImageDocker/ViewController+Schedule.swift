@@ -12,7 +12,7 @@ extension ViewController {
     
     internal func startSchedules() {
         self.scanLocationChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
-            guard !ExportManager.default.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing else {return}
+            guard !ExportManager.default.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing && !self.selectionEditing else {return}
             print("\(Date()) SCANING LOCATION CHANGE")
             if self.lastCheckLocationChange != nil {
                 let photoFiles:[Image] = ModelStore.default.getPhotoFiles(after: self.lastCheckLocationChange!)
@@ -27,7 +27,7 @@ extension ViewController {
         })
         
         self.scanPhotoTakenDateChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
-            guard !ExportManager.default.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing else {return}
+            guard !ExportManager.default.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing && !self.selectionEditing else {return}
             print("\(Date()) SCANING DATE CHANGE")
             if self.lastCheckPhotoTakenDateChange != nil {
                 let photoFiles:[Image] = ModelStore.default.getPhotoFiles(after: self.lastCheckPhotoTakenDateChange!)
@@ -42,7 +42,7 @@ extension ViewController {
         })
         
         self.scanEventChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
-            guard !ExportManager.default.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing else {return}
+            guard !ExportManager.default.working && !self.scaningRepositories && !self.creatingRepository && !self.treeRefreshing && !self.selectionEditing else {return}
             print("\(Date()) SCANING EVENT CHANGE")
             if self.lastCheckEventChange != nil {
                 let photoFiles:[Image] = ModelStore.default.getPhotoFiles(after: self.lastCheckEventChange!)
@@ -75,7 +75,7 @@ extension ViewController {
         
         self.scanPhotosToLoadExifTimer = Timer.scheduledTimer(withTimeInterval: 15, repeats: true, block:{_ in
             print("\(Date()) TRY TO SCAN PHOTO TO LOAD EXIF")
-            guard !self.suppressedScan && !ExportManager.default.working && !self.scaningRepositories && !self.creatingRepository else {return}
+            guard !self.suppressedScan && !ExportManager.default.working && !self.scaningRepositories && !self.creatingRepository && !self.selectionEditing else {return}
             print("\(Date()) SCANING PHOTOS TO LOAD EXIF")
             self.startScanRepositoriesToLoadExif()
         })
