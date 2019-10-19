@@ -16,6 +16,36 @@ import GRDB
 
 extension ImageFile {
     
+    func isNeedLoadLocation() -> Bool {
+        //print("loaded image coordinate: \(self.latitudeBaidu) \(self.longitudeBaidu)")
+        var needLoadLocation:Bool = false
+        
+        // force update location
+        if self.imageData != nil && self.imageData!.latitudeBD != "0.0" && self.imageData!.country == "" {
+            needLoadLocation = true
+        }
+        
+        //print("coordBD zero? \(self.location.coordinateBD?.isZero) country empty? \(self.location.country == "")")
+        if self.location.coordinateBD != nil && self.location.coordinateBD!.isNotZero && self.location.country == "" {
+            //print("NEED LOAD LOCATION")
+            needLoadLocation = true
+        }
+        if self.imageData?.updateLocationDate == nil {
+            if self.location.coordinate != nil && self.location.coordinate!.isNotZero {
+                //BaiduLocation.queryForAddress(lat: self.latitudeBaidu, lon: self.longitudeBaidu, locationConsumer: self)
+                //print("COORD NOT ZERO")
+                needLoadLocation = true
+            }
+        }else {
+            // if latitude not zero, but location is empty, update location
+            if self.location.coordinate != nil && self.location.coordinate!.isNotZero && self.location.country == "" {
+                print("COORD NOT ZERO BUT LOCATION IS EMPTY: \(self.url.path)")
+                needLoadLocation = true
+            }
+        }
+        return needLoadLocation
+    }
+    
     func assignLocation(location:Location){
         //print("location address is \(location.address)")
         //print("location addressDesc is \(location.addressDescription)")
@@ -51,36 +81,8 @@ extension ImageFile {
     // MARK: RECOGNIZE PLACE
     
     func recognizePlace() {
-        var prefix:String = ""
-        
-        var country = ""
-        var city = ""
-        var district = ""
-        var place = ""
-        if let photoFile = self.imageData {
-            country = photoFile.assignCountry ?? photoFile.country ?? ""
-            city = photoFile.assignCity ?? photoFile.city ?? ""
-            city = city.replacingOccurrences(of: "特别行政区", with: "")
-            district = photoFile.assignDistrict ?? photoFile.district ?? ""
-            place = photoFile.assignPlace ?? photoFile.suggestPlace ?? photoFile.businessCircle ?? ""
-            place = place.replacingOccurrences(of: "特别行政区", with: "")
-        }
-        if country == "中国" {
-            if city != "" && city.reversed().starts(with: "市") {
-                city = city.replacingOccurrences(of: "市", with: "")
-            }
-            prefix = "\(city)"
-            
-            if city == "佛山" && district == "顺德区" {
-                prefix = "顺德"
-            }
-        }
-        if place != "" {
-            if place.starts(with: prefix) {
-                self.place = place
-            }else {
-                self.place = "\(prefix)\(place)"
-            }
+        if let data = self.imageData {
+            self.place = Naming.Place.recognize(from: data)
         }else{
             self.place = ""
         }

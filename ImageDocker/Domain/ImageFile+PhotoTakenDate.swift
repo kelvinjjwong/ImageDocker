@@ -18,67 +18,15 @@ extension ImageFile {
     // MARK: CHOOSE PHOTO TAKEN DATE
     
     internal func choosePhotoTakenDateFromMetaInfo() -> String? {
-        let now:Date = Date()
         var dt:Date? = nil
         if let photoFile = self.imageData {
-            dt = photoFile.assignDateTime ?? photoFile.exifDateTimeOriginal ?? photoFile.exifCreateDate
-            
-            if (dt == nil || dt! > now) && photoFile.dateTimeFromFilename != nil {
-                let dtFilename = exifDateFormat.date(from: photoFile.dateTimeFromFilename!)
-                dt = dtFilename
-            }
-            if (dt == nil || dt! > now) {
-                dt = photoFile.softwareModifiedTime ?? photoFile.exifModifyDate ?? photoFile.exifCreateDate
-            }
-            if (dt == nil || dt! > now) && self.isVideo {
-                dt = photoFile.videoCreateDate ?? photoFile.videoModifyDate
-            }
+            dt = Naming.DateTime.get(from: photoFile)
         }
         
         var result:String? = nil
         if let dateTime = dt {
             result = exifDateFormat.string(from: dateTime)
         }
-        
-        
-        //        var dateTime:String? = self.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "Assigned")
-        //
-        //        if dateTime == nil {
-        //            dateTime = self.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "DateTimeOriginal")
-        //        }
-        //        if dateTime == nil {
-        //            dateTime = self.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "From Filename")
-        //        }
-        //        if dateTime == nil {
-        //            dateTime = self.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "Software Modified")
-        //        }
-        //        if dateTime == nil {
-        //            dateTime = self.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "ExifModifyDate")
-        //        }
-        //        if dateTime == nil {
-        //            dateTime = self.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "ExifCreateDate")
-        //        }
-        //        if self.isVideo {
-        //            if dateTime == nil {
-        //                dateTime = self.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "VideoCreateDate")
-        //                if dateTime == "0000:00:00 00:00:00" {
-        //                    dateTime = nil
-        //                }
-        //            }
-        //            if dateTime == nil {
-        //                dateTime = self.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "TrackCreateDate")
-        //                if dateTime == "0000:00:00 00:00:00" {
-        //                    dateTime = nil
-        //                }
-        //            }
-        //        }
-        //if dateTime == nil {
-        //    dateTime = self.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "FileModifyDate")
-        //}
-        
-        //if dateTime == nil {
-        //  self.loadMetaInfoFromExif()
-        //}
         return result
     }
     
@@ -149,19 +97,5 @@ extension ImageFile {
             self._photoTakenTimeString = ""
             return ""
         }
-    }
-    
-    // MARK: ASSIGN
-    
-    func assignDate(date:Date) {
-        if imageData != nil {
-            imageData?.assignDateTime = date
-            imageData?.updateDateTimeDate = Date()
-        }
-        
-        let photoTakenDate:String? = self.choosePhotoTakenDateFromMetaInfo()
-        self.storePhotoTakenDate(dateTime: photoTakenDate)
-        
-        self.transformDomainToMetaInfo()
     }
 }

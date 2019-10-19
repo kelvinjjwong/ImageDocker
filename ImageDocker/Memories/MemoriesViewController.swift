@@ -382,7 +382,7 @@ class MemoriesViewController : NSViewController {
         
         if let data = image.imageData {
             let content = """
-\(data.event ?? "") \(data.shortDescription ?? "") \(data.assignPlace ?? data.place ?? "")
+\(data.event ?? "") \(data.shortDescription ?? "") \(Naming.Place.place(from: data))
 \(data.longDescription ?? "")
 """.trimmingCharacters(in: .whitespacesAndNewlines)
             self.lblDescription.stringValue = content

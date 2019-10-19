@@ -34,8 +34,8 @@ class ImageFile {
     }
     
     var fileName: String
-    var filenamePatterns:[String:Set<String>] = [:]
-    var filenameConverters:[String:String] = [:]
+//    var filenamePatterns:[String:Set<String>] = [:]
+//    var filenameConverters:[String:String] = [:]
     
     /// The string representation of the location of an image for copy and paste.
     /// The representation of no location is an empty string.
@@ -74,15 +74,15 @@ class ImageFile {
     // image date/time created
     var date: String = ""
     var timeZone: TimeZone?
-    var dateFromEpoch: TimeInterval {
-        let format = DateFormatter()
-        format.dateFormat = "yyyy:MM:dd HH:mm:ss"
-        format.timeZone = TimeZone.current
-        if let convertedDate = format.date(from: date) {
-            return convertedDate.timeIntervalSince1970
-        }
-        return 0
-    }
+//    var dateFromEpoch: TimeInterval {
+//        let format = DateFormatter()
+//        format.dateFormat = "yyyy:MM:dd HH:mm:ss"
+//        format.timeZone = TimeZone.current
+//        if let convertedDate = format.date(from: date) {
+//            return convertedDate.timeIntervalSince1970
+//        }
+//        return 0
+//    }
     
     
     var name: String? {
@@ -209,33 +209,8 @@ class ImageFile {
             }
             
         }
-        //print("loaded image coordinate: \(self.latitudeBaidu) \(self.longitudeBaidu)")
-        var needLoadLocation:Bool = false
         
-        // force update location
-        if self.imageData != nil && self.imageData!.latitudeBD != "0.0" && self.imageData!.country == "" {
-            needLoadLocation = true
-        }
-        
-        //print("coordBD zero? \(self.location.coordinateBD?.isZero) country empty? \(self.location.country == "")")
-        if self.location.coordinateBD != nil && self.location.coordinateBD!.isNotZero && self.location.country == "" {
-            //print("NEED LOAD LOCATION")
-            needLoadLocation = true
-        }
-        if self.imageData?.updateLocationDate == nil {
-            if self.location.coordinate != nil && self.location.coordinate!.isNotZero {
-                //BaiduLocation.queryForAddress(lat: self.latitudeBaidu, lon: self.longitudeBaidu, locationConsumer: self)
-                //print("COORD NOT ZERO")
-                needLoadLocation = true
-            }
-        }else {
-            // if latitude not zero, but location is empty, update location
-            if self.location.coordinate != nil && self.location.coordinate!.isNotZero && self.location.country == "" {
-                print("COORD NOT ZERO BUT LOCATION IS EMPTY: \(self.url.path)")
-                needLoadLocation = true
-            }
-        }
-        if needLoadLocation {
+        if self.isNeedLoadLocation() {
             needSave = true
             autoreleasepool { () -> Void in
                 //print("LOADING LOCATION")
@@ -326,6 +301,7 @@ class ImageFile {
         //self.setThumbnail(url as URL)
         
         self.recognizeImageSource()
+        
         
         if !quickCreate {
             self.recognizePlace()

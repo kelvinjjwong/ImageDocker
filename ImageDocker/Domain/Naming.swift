@@ -8,10 +8,68 @@
 
 import Foundation
 
+enum ImageType : Int {
+    case photo
+    case video
+    case other
+}
+
 struct Naming {
     static let Camera = CameraModelRecognizer()
     static let Source = ImageSourceRecognizer()
     static let DateTime = DateTimeRecognizer()
+    static let Place = PlaceRecognizer()
+    static let FileType = FileTypeRecognizer()
+}
+
+// MARK: - FILE TYPE
+
+struct FileTypeRecognizer {
+    
+    let photoExts:[String] = ["jpg", "jpeg", "png"]
+    let videoExts:[String] = ["mov", "mp4", "mpeg"]
+    
+    let allowed:Set<String> = ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg", "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "vcf", "amr"]
+    
+    func recognize(from url:URL) -> ImageType {
+        var type = self.recognize(from: url.lastPathComponent)
+        
+        if type == .other {
+            do {
+                let properties = try url.resourceValues(forKeys: [.typeIdentifierKey])
+                guard let fileType = properties.typeIdentifier else { return type }
+                if UTTypeConformsTo(fileType as CFString, kUTTypeImage) {
+                    type = .photo
+                }else if UTTypeConformsTo(fileType as CFString, kUTTypeMovie) {
+                    type = .video
+                }
+            }
+            catch {
+                print("Unexpected error occured when recognizing image type: \(error).")
+            }
+        }
+        
+        return type
+    }
+    
+    func recognize(from filename: String) -> ImageType {
+        let fileExt:String = (filename.split(separator: Character(".")).last?.lowercased()) ?? filename
+        if self.photoExts.contains(fileExt) {
+            return.photo
+        }else if self.videoExts.contains(fileExt) {
+            return.video
+        }
+        return .other
+    }
+}
+
+// MARK: - EVENT
+
+struct EventRecognizer {
+    
+    func recognize(from url:URL, level index:Int) -> String {
+        return url.pathComponents[index]
+    }
 }
 
 // MARK: - SOURCE
@@ -126,22 +184,37 @@ class CameraModelRecognizer {
 
 struct DateTimeRecognizer {
     
+    let exifDateFormat = DateFormatter()
+    let exifDateFormatWithTimezone = DateFormatter()
+    
+    init() {
+        exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"
+        exifDateFormatWithTimezone.dateFormat = "yyyy:MM:dd HH:mm:ssxxx"
+    }
+    
     func get(from data:Image) -> Date? {
+        let now:Date = Date()
         var date:Date? = data.photoTakenDate
-        if date != nil { return date }
+        if date != nil && date! < now { return date }
         date = data.assignDateTime
-        if date != nil { return date }
+        if date != nil && date! < now { return date }
         date = data.exifDateTimeOriginal
-        if date != nil { return date }
+        if date != nil && date! < now { return date }
+        if let dt = data.dateTimeFromFilename {
+            date = exifDateFormat.date(from: dt)
+        }
+        if date != nil && date! < now { return date }
         date = data.exifCreateDate
-        if date != nil { return date }
+        if date != nil && date! < now { return date }
         date = data.exifModifyDate
-        if date != nil { return date }
+        if date != nil && date! < now { return date }
         date = data.videoCreateDate
-        if date != nil { return date }
+        if date != nil && date! < now { return date }
         date = data.trackCreateDate
-        if date != nil { return date }
+        if date != nil && date! < now { return date }
         date = data.filesysCreateDate
+        if date != nil && date! < now { return date }
+        date = data.softwareModifiedTime
         return date
     }
     
@@ -364,5 +437,82 @@ struct DateTimeRecognizer {
         dateFormatter.dateFormat = dateFormat
         let dateTime = dateFormatter.string(from: date as Date)
         return dateTime
+    }
+}
+
+// MARK: - PLACE
+
+struct PlaceRecognizer {
+    
+    func country(from photoFile:Image) -> String {
+        return photoFile.assignCountry ?? photoFile.country ?? ""
+    }
+    
+    func province(from photoFile:Image) -> String {
+        return photoFile.assignProvince ?? photoFile.province ?? ""
+    }
+
+    func city(from photoFile:Image) -> String {
+        return photoFile.assignCity ?? photoFile.city ?? ""
+    }
+    
+    func district(from photoFile:Image) -> String {
+        return photoFile.assignDistrict ?? photoFile.district ?? ""
+    }
+    
+    func street(from photoFile:Image) -> String {
+        return photoFile.assignStreet ?? photoFile.street ?? ""
+    }
+    
+    func businessCircle(from photoFile:Image) -> String {
+        return photoFile.assignBusinessCircle ?? photoFile.businessCircle ?? ""
+    }
+    
+    func address(from photoFile:Image) -> String {
+        return photoFile.assignAddress ?? photoFile.address ?? ""
+    }
+    
+    func addressDescription(from photoFile:Image) -> String {
+        return photoFile.assignAddressDescription ?? photoFile.addressDescription ?? ""
+    }
+    
+    func place(from photoFile:Image) -> String {
+        return photoFile.assignPlace ?? photoFile.suggestPlace ?? photoFile.businessCircle ?? ""
+    }
+    
+    func recognize(from data:Image) -> String {
+        var prefix:String = ""
+        
+        var country = ""
+        var city = ""
+        var district = ""
+        var place = ""
+        
+        country = data.assignCountry ?? data.country ?? ""
+        city = data.assignCity ?? data.city ?? ""
+        city = city.replacingOccurrences(of: "特别行政区", with: "")
+        district = data.assignDistrict ?? data.district ?? ""
+        place = data.assignPlace ?? data.suggestPlace ?? data.businessCircle ?? ""
+        place = place.replacingOccurrences(of: "特别行政区", with: "")
+    
+        if country == "中国" {
+            if city != "" && city.reversed().starts(with: "市") {
+                city = city.replacingOccurrences(of: "市", with: "")
+            }
+            prefix = "\(city)"
+            
+            if city == "佛山" && district == "顺德区" {
+                prefix = "顺德"
+            }
+        }
+        if place != "" {
+            if place.starts(with: prefix) {
+                return place
+            }else {
+                return "\(prefix)\(place)"
+            }
+        }else{
+            return ""
+        }
     }
 }

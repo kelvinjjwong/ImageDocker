@@ -255,7 +255,7 @@ struct Android {
                                           refer: filenamesForReference,
                                           basePath: path,
                                             excludeFilenames: ["directory", "killing...", "successfully"],
-                                            allowedExt: ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg", "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "vcf", "amr"],
+                                            allowedExt: Naming.FileType.allowed,
                                             allowedSuffix: ["_backup_hd"], // wechat chatroom image/video thumbnails
                                             deviceOS: .android)
         print("got \(result.count) files from \(id) \(path)")
@@ -507,7 +507,7 @@ struct Android {
         result = DeviceShell.getFilenames(from: string,
                                           refer: filenamesForReference,
                                           excludeFilenames: ["directory", ".", ".."],
-                                          allowedExt: ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg", "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "vcf", "amr"],
+                                          allowedExt: Naming.FileType.allowed,
                                           allowedSuffix: ["_backup_hd"], // wechat chatroom image/video thumbnails
                                           deviceOS: .android)
         print("got \(result.count) files from \(path)")

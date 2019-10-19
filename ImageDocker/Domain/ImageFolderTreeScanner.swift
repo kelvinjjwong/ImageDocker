@@ -31,11 +31,7 @@ class ImageFolderTreeScanner {
     }
     
     func isImageFile(_ file: URL) -> Bool {
-        if file.pathExtension == "jpg" || file.pathExtension == "JPG"
-            || file.pathExtension == "jpeg" || file.pathExtension == "JPEG"
-            || file.pathExtension == "mp4" || file.pathExtension == "MP4"
-            || file.pathExtension == "MOV" || file.pathExtension == "MOV"
-            || file.pathExtension == "mpg" || file.pathExtension == "MPG" {
+        if Naming.FileType.recognize(from: file) != .other {
             return true
         }
         return false

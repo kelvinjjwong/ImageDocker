@@ -73,7 +73,7 @@ struct LocalDirectory {
                                           refer: filenamesForReference,
                                           basePath: path,
                                           excludeFilenames: ["directory", ".", ".."],
-                                          allowedExt: ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg", "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "vcf", "amr"],
+                                          allowedExt: Naming.FileType.allowed,
                                           allowedSuffix: ["_backup_hd"], // wechat chatroom image/video thumbnails
                                           deviceOS: .mac)
         print("got \(result.count) files from \(path)")
@@ -186,15 +186,10 @@ struct LocalDirectory {
         
         let filenamesForReference = self.filenamesForReference(in: path)
         
-        var allowedExt:Set<String> = ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg", "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "vcf", "amr"]
-        if let exts = ext {
-            allowedExt = exts
-        }
-        
         result = DeviceShell.getFilenames(from: string,
                                           refer: filenamesForReference,
                                           excludeFilenames: ["directory", ".", ".."],
-                                          allowedExt: allowedExt,
+                                          allowedExt: ext ?? Naming.FileType.allowed,
                                           allowedSuffix: ["_backup_hd"], // wechat chatroom image/video thumbnails
                                           deviceOS: .mac)
         print("got \(result.count) files from \(path)")

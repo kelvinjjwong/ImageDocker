@@ -96,41 +96,9 @@ extension ImageFile {
 
 // MARK: HELPER
 
-enum ImageType : Int {
-    case photo
-    case video
-    case other
-}
-
 extension URL {
     
     func imageType() -> ImageType {
-        var type:ImageType = .other
-        
-        if lastPathComponent.split(separator: Character(".")).count > 1 {
-            let fileExt:String = (lastPathComponent.split(separator: Character(".")).last?.lowercased())!
-            if fileExt == "jpg" || fileExt == "jpeg" || fileExt == "png" {
-                type = .photo
-            }else if fileExt == "mov" || fileExt == "mp4" || fileExt == "mpeg" {
-                type = .video
-            }
-        }
-        
-        if type == .other {
-            do {
-                let properties = try self.resourceValues(forKeys: [.typeIdentifierKey])
-                guard let fileType = properties.typeIdentifier else { return type }
-                if UTTypeConformsTo(fileType as CFString, kUTTypeImage) {
-                    type = .photo
-                }else if UTTypeConformsTo(fileType as CFString, kUTTypeMovie) {
-                    type = .video
-                }
-            }
-            catch {
-                print("Unexpected error occured when recognizing image type: \(error).")
-            }
-        }
-        
-        return type
+        return Naming.FileType.recognize(from: self)
     }
 }

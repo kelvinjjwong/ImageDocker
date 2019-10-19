@@ -43,7 +43,7 @@ extension ViewController {
             major = checked[0]
         }
         if let image = major.imageData, let date = image.photoTakenDate {
-            let place = image.place ?? image.assignPlace ?? image.suggestPlace ?? ""
+            let place = Naming.Place.place(from: image)
             let year = Calendar.current.component(.year, from: date)
             let month = Calendar.current.component(.month, from: date)
             let day = Calendar.current.component(.day, from: date)
@@ -150,7 +150,7 @@ extension ViewController {
             let oldKey = image.duplicatesKey ?? ""
             
             // generate new key
-            let place = image.place ?? image.assignPlace ?? image.suggestPlace ?? ""
+            let place = Naming.Place.place(from: image)
             let year = Calendar.current.component(.year, from: date)
             let month = Calendar.current.component(.month, from: date)
             let day = Calendar.current.component(.day, from: date)

@@ -296,9 +296,6 @@ extension ImageFile {
             print("ERROR: IMAGE DATA IS NIL, unable to [loadMetaInfoFromDatabase]")
             return
         }
-        let filename:String = url.lastPathComponent
-        let path:String = url.path
-        let parentPath:String = (url.deletingLastPathComponent().path)
         
         var photoFile = self.imageData!
         //print("loaded PhotoFile for \(filename)")
@@ -306,15 +303,15 @@ extension ImageFile {
         let now = Date()
         let nowToSeconds = Int(now.timeIntervalSince1970)
         
-        location.country = photoFile.assignCountry ?? photoFile.country ?? ""
-        location.province = photoFile.assignProvince ?? photoFile.province ?? ""
-        location.city = photoFile.assignCity ?? photoFile.city ?? ""
-        location.district = photoFile.assignDistrict ?? photoFile.district ?? ""
-        location.street = photoFile.assignStreet ?? photoFile.street ?? ""
-        location.businessCircle = photoFile.assignBusinessCircle ?? photoFile.businessCircle ?? ""
-        location.address = photoFile.assignAddress ?? photoFile.address ?? ""
-        location.addressDescription = photoFile.assignAddressDescription ?? photoFile.addressDescription ?? ""
-        location.place = photoFile.assignPlace ?? photoFile.suggestPlace ?? photoFile.businessCircle ?? ""
+        location.country = Naming.Place.country(from: photoFile)
+        location.province = Naming.Place.province(from: photoFile)
+        location.city = Naming.Place.city(from: photoFile)
+        location.district = Naming.Place.district(from: photoFile)
+        location.street = Naming.Place.street(from: photoFile)
+        location.businessCircle = Naming.Place.businessCircle(from: photoFile)
+        location.address = Naming.Place.address(from: photoFile)
+        location.addressDescription = Naming.Place.addressDescription(from: photoFile)
+        location.place = Naming.Place.place(from: photoFile)
         
         var needSave:Bool = false
         

@@ -153,8 +153,6 @@ class ExportManager {
         
         print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
         
-        let allowedExt:Set<String> = ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg"]
-        
         let total = ModelStore.default.countAllPhotoFilesForExporting(after: date)
         
         var batchTotal = 1
@@ -193,7 +191,7 @@ class ExportManager {
                 let pathExt = pathUrl.pathExtension.lowercased()
                 
                 // invalid file-ext
-                if !allowedExt.contains(pathExt){
+                if !Naming.FileType.allowed.contains(pathExt){
                     ModelStore.default.storeImageExportFail(path: photo.path, date: Date(), message: "FILE EXT DISALLOWED")
                     continue
                 }

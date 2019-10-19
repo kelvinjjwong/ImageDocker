@@ -439,7 +439,7 @@ struct IPHONE {
                                           refer: filenamesForReference,
                                           basePath: path,
                                           excludeFilenames: ["directory", ".", ".."],
-                                          allowedExt: ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg", "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "vcf", "amr"],
+                                          allowedExt: Naming.FileType.allowed,
                                           allowedSuffix: ["_backup_hd"], // wechat chatroom image/video thumbnails
                                           deviceOS: .mac)
         print("got \(result.count) files from \(workpath)")
@@ -559,7 +559,7 @@ struct IPHONE {
         result = DeviceShell.getFilenames(from: string,
                                           refer: filenamesForReference,
                                           excludeFilenames: ["directory", ".", ".."],
-                                          allowedExt: ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg", "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "vcf", "amr"],
+                                          allowedExt: Naming.FileType.allowed,
                                           allowedSuffix: ["_backup_hd"], // wechat chatroom image/video thumbnails
                                           deviceOS: .mac)
         print("got \(result.count) files from \(workpath)")
