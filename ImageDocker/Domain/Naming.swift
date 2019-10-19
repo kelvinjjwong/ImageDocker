@@ -21,6 +21,7 @@ struct Naming {
     static let Place = PlaceRecognizer()
     static let FileType = FileTypeRecognizer()
     static let Event = EventRecognizer()
+    static let Export = NamingForExporting()
 }
 
 // MARK: - FILE TYPE
@@ -28,7 +29,7 @@ struct Naming {
 struct FileTypeRecognizer {
     
     let photoExts:[String] = ["jpg", "jpeg", "png"]
-    let videoExts:[String] = ["mov", "mp4", "mpeg"]
+    let videoExts:[String] = ["mov", "mp4", "mpeg", "mts", "m2ts"]
     
     let allowed:Set<String> = ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg", "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "vcf", "amr"]
     
@@ -69,7 +70,7 @@ struct FileTypeRecognizer {
 struct EventRecognizer {
     
     func recognize(from url:URL, level:Int) -> String {
-        if (level - 1) < 0 {
+        if (level - 1) < 0 || level >= url.pathComponents.count { // last part is filename
             return ""
         }
         return url.pathComponents[level - 1]
@@ -519,4 +520,11 @@ struct PlaceRecognizer {
             return ""
         }
     }
+}
+
+// MARK: - EXPORT
+
+struct NamingForExporting {
+    
+    
 }
