@@ -58,6 +58,7 @@
 		8E85B7D420BA2AD7005A9845 /* DarkSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7D320BA2AD7005A9845 /* DarkSplitView.swift */; };
 		8E85B7D620BD9FD9005A9845 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7D520BD9FD9005A9845 /* Location.swift */; };
 		8E85B7DA20BE2515005A9845 /* LocationTextDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B7D920BE2515005A9845 /* LocationTextDelegate.swift */; };
+		8E8CF269235AA3860016932A /* Naming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8CF268235AA3860016932A /* Naming.swift */; };
 		8E8D471022213A330091E9C3 /* PeopleFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D470F22213A330091E9C3 /* PeopleFace.swift */; };
 		8E8D471222279AA80091E9C3 /* FaceCollectionViewItemsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D471122279AA80091E9C3 /* FaceCollectionViewItemsLoader.swift */; };
 		8E8D4715222991230091E9C3 /* FaceCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D4713222991230091E9C3 /* FaceCollectionViewItem.swift */; };
@@ -295,6 +296,7 @@
 		8E85B7D320BA2AD7005A9845 /* DarkSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkSplitView.swift; sourceTree = "<group>"; };
 		8E85B7D520BD9FD9005A9845 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		8E85B7D920BE2515005A9845 /* LocationTextDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTextDelegate.swift; sourceTree = "<group>"; };
+		8E8CF268235AA3860016932A /* Naming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Naming.swift; sourceTree = "<group>"; };
 		8E8D470F22213A330091E9C3 /* PeopleFace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleFace.swift; sourceTree = "<group>"; };
 		8E8D471122279AA80091E9C3 /* FaceCollectionViewItemsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceCollectionViewItemsLoader.swift; sourceTree = "<group>"; };
 		8E8D4713222991230091E9C3 /* FaceCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceCollectionViewItem.swift; sourceTree = "<group>"; };
@@ -868,6 +870,7 @@
 				8E98B8F620D6044900771280 /* Event.swift */,
 				8EB321CC20FA42AB00D8C71D /* Duplicate.swift */,
 				8E8D470F22213A330091E9C3 /* PeopleFace.swift */,
+				8E8CF268235AA3860016932A /* Naming.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -1392,6 +1395,7 @@
 				8EC5BA2E21775571001510AF /* TheaterCollectionViewItem.swift in Sources */,
 				8EFAF1FB20BFFC8A007A7783 /* MetaInfoHolder.swift in Sources */,
 				8EB321D720FA433500D8C71D /* Image.swift in Sources */,
+				8E8CF269235AA3860016932A /* Naming.swift in Sources */,
 				8EEF071A2256C9D9000520B7 /* DevicePathDetailViewController.swift in Sources */,
 				8E8D471C22315F540091E9C3 /* SingleColumnTableViewController.swift in Sources */,
 				8EB271932340EF6F003BF3AF /* ViewController+Schedule.swift in Sources */,

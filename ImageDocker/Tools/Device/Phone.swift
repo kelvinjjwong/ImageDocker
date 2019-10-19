@@ -94,12 +94,12 @@ struct PhoneDevice {
             summary = deviceId
         }
         if name != "" {
-            let recognizedModel = CameraModelRecognizer.recognize(maker: manufacture, model: model)
+            let recognizedModel = Naming.Camera.recognize(maker: manufacture, model: model)
             return "\(name) (\(manufacture) \(recognizedModel)) [\(summary)]"
             
         }
         if model != "" && manufacture != "" {
-            let recognizedModel = CameraModelRecognizer.recognize(maker: manufacture, model: model)
+            let recognizedModel = Naming.Camera.recognize(maker: manufacture, model: model)
             return "\(manufacture) \(recognizedModel) [\(summary)]"
         }
         if deviceId != "" {

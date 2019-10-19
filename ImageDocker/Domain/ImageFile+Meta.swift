@@ -26,7 +26,7 @@ extension ImageFile {
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "", title: "Size", value: "\(photoFile.imageWidth ?? 0) x \(photoFile.imageHeight ?? 0)"))
             }
             metaInfoHolder.setMetaInfo(MetaInfo(category: "Camera", subCategory: "", title: "Manufacture", value: photoFile.cameraMaker))
-            let model = CameraModelRecognizer.recognize(maker: photoFile.cameraMaker ?? "", model: photoFile.cameraModel ?? "")
+            let model = Naming.Camera.recognize(maker: photoFile.cameraMaker ?? "", model: photoFile.cameraModel ?? "")
             metaInfoHolder.setMetaInfo(MetaInfo(category: "Camera", subCategory: "", title: "Model", value: model))
             
             metaInfoHolder.setMetaInfo(MetaInfo(category: "Software", subCategory: "", title: "Name", value: photoFile.softwareName))

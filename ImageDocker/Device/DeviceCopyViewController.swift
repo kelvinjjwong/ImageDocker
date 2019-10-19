@@ -192,7 +192,7 @@ class DeviceCopyViewController: NSViewController {
                 accumulate.reset()
             }
             
-            let marketName = CameraModelRecognizer.getMarketName(maker: device.manufacture, model: device.model)
+            let marketName = Naming.Camera.getMarketName(maker: device.manufacture, model: device.model)
             var marketDisplayName = ""
             if marketName != "" {
                 marketDisplayName = " (\(marketName))"
@@ -712,7 +712,7 @@ class DeviceCopyViewController: NSViewController {
         self.working = true
         self.disableButtons()
         
-        let marketName = CameraModelRecognizer.getMarketName(maker: device.manufacture, model: device.model)
+        let marketName = Naming.Camera.getMarketName(maker: device.manufacture, model: device.model)
         
         self.accumulator = Accumulator(target: 1, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblProgressMessage)
         
