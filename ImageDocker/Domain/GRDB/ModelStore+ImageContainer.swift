@@ -48,7 +48,9 @@ extension ModelStore {
                                                hiddenByContainer: false,
                                                deviceId: "",
                                                manyChildren: manyChildren,
-                                               hideByParent: hideByParent
+                                               hideByParent: hideByParent,
+                                               folderAsEvent: false,
+                                               eventFolderLevel: 2
                     )
                     try container?.save(db)
                 }

@@ -302,9 +302,12 @@ class ImageFile {
         
         self.recognizeImageSource()
         
+        if let repo = repository, repo.folderAsEvent {
+            self.imageData?.event = Naming.Event.recognize(from: url, level: repo.eventFolderLevel)
+        }
         
         if !quickCreate {
-            self.recognizePlace()
+            self.recognizePlace() // TODO: why imageFile.quicksave no need recognize place?
             
             save()
         }

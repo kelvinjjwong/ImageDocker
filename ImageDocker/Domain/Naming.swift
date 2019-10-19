@@ -20,6 +20,7 @@ struct Naming {
     static let DateTime = DateTimeRecognizer()
     static let Place = PlaceRecognizer()
     static let FileType = FileTypeRecognizer()
+    static let Event = EventRecognizer()
 }
 
 // MARK: - FILE TYPE
@@ -67,8 +68,11 @@ struct FileTypeRecognizer {
 
 struct EventRecognizer {
     
-    func recognize(from url:URL, level index:Int) -> String {
-        return url.pathComponents[index]
+    func recognize(from url:URL, level:Int) -> String {
+        if (level - 1) < 0 {
+            return ""
+        }
+        return url.pathComponents[level - 1]
     }
 }
 
