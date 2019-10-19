@@ -373,12 +373,22 @@ class EditRepositoryViewController: NSViewController {
         
         guard pass else {return}
         
-        ImageFolderTreeScanner.default.createRepository(name: name,
+        
+        
+        let imagefolder = ImageFolderTreeScanner.default.createRepository(name: name,
                                                 path: repositoryPath,
                                                 homePath: homePath,
                                                 storagePath: storagePath,
                                                 facePath: facePath,
                                                 cropPath: cropPath)
+        
+        if let repository = imagefolder.containerFolder {
+            var repo = repository
+            if self.chkFirstFolderAsEvent.state == .on {
+                repo.folderAsEvent = true
+                ModelStore.default.saveImageContainer(container: repo)
+            }
+        }
     }
     
     @IBAction func onOKClicked(_ sender: Any) {
@@ -401,6 +411,7 @@ class EditRepositoryViewController: NSViewController {
             var origin = container
             origin.name = name
             origin.homePath = homePath
+            origin.folderAsEvent = self.chkFirstFolderAsEvent.state == .on
             ModelStore.default.saveImageContainer(container: origin)
             self.lblMessage.stringValue = "General info updated."
             

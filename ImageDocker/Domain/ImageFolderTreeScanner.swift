@@ -327,9 +327,9 @@ class ImageFolderTreeScanner {
                                  homePath:String,
                                  storagePath:String,
                                  facePath:String,
-                                 cropPath:String) {
+                                 cropPath:String) -> ImageFolder {
         print("Creating repository with name:\(name) , path:\(path)")
-        let _ = ImageFolder(URL(fileURLWithPath: path),
+        return ImageFolder(URL(fileURLWithPath: path),
                             name: name,
                             repositoryPath: path,
                             homePath: homePath,
