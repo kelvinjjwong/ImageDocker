@@ -50,7 +50,7 @@ extension ModelStore {
                                                manyChildren: manyChildren,
                                                hideByParent: hideByParent,
                                                folderAsEvent: false,
-                                               eventFolderLevel: 3
+                                               eventFolderLevel: 2
                     )
                     try container?.save(db)
                 }
