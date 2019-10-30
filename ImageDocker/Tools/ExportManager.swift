@@ -76,7 +76,7 @@ class ExportManager {
         return allExportedFilenames
     }
     
-    fileprivate func checkIfExportedFilesExist(fileSystemHandler:FileSystemHandler) {
+    fileprivate func checkIfExportedFilesExist() {
         self.printMessage("Loading exported files for validation ...")
         print("\(Date()) EXPORT: DB LOADING getAllExportedImages")
         let allExportedImagesStored = ModelStore.default.getAllExportedImages(includeHidden: false)
@@ -100,7 +100,7 @@ class ExportManager {
                 }else{
                     if photo.exportedMD5 == nil {
                         self.printMessage("Updating MD5 of exported file ... ( \(k) / \(total) )")
-                        let md5 = fileSystemHandler.md5(pathOfFile: photo.path)
+                        let md5 = ComputerFileManager.default.md5(pathOfFile: photo.path)
                         ModelStore.default.storeImageExportedMD5(path: photo.path, md5: md5)
                         
                     }
@@ -111,42 +111,114 @@ class ExportManager {
         print("\(Date()) EXPORT: CHECKING IF MARKED EXPORTED ARE REALLY EXPORTED: DONE")
     }
     
-    func export(after date:Date) {
-        guard self.nonStop() && !self.working else {return}
-        
+    private func prepareExportDestination(path: String) -> Bool {
         if PreferencesController.exportDirectory() == "" {
-            DispatchQueue.main.async {
-                Alert.invalidExportPath()
-            }
-            return
+            return false
         }
-        //print("exporting")
-        working = true
-        print("  ")
-        print("!! ExportManager start working at \(Date())")
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM月dd日HH点mm分ss"
-        
-        let sourceFileSystemHandler = ComputerFileManager()
-        let targetFileSystemHandler = ComputerFileManager()
-        
-        //var filepaths:[String] = []
-        
         let fm:FileManager = FileManager.default
-        if !fm.fileExists(atPath: PreferencesController.exportDirectory()) {
+        if !fm.fileExists(atPath: path) {
             do {
                 try fm.createDirectory(atPath: PreferencesController.exportDirectory(), withIntermediateDirectories: true, attributes: nil)
             }catch{
                 print("Cannot location or create destination directory for exporting photos: \(PreferencesController.exportDirectory())")
                 print(error)
-                return
+                return false
             }
         }
+        return true
+    }
+    
+    private func patchImageDescription(image photo:Image) -> (Bool, String) {
+        let originalImageDescription = Naming.Export.getOriginalDescription(image: photo)
+        let generatedImageDescription = Naming.Export.getNewDescription(image: photo)
+        if originalImageDescription != generatedImageDescription {
+            print("\(Date()) Change ImageDescription for \(photo.path)")
+            ExifTool.helper.patchImageDescription(description: generatedImageDescription, url: URL(fileURLWithPath: photo.path))
+            if generatedImageDescription != photo.longDescription {
+                ModelStore.default.storeImageDescription(path: photo.path, shortDescription: nil, longDescription: generatedImageDescription)
+            }
+            return (true, generatedImageDescription)
+            print("\(Date()) Change ImageDescription for \(photo.path) : DONE")
+        }
+        return (false, generatedImageDescription)
+    }
+    
+    private func exists(image photo:Image, targetPath path:String, targetFilename filename:String,
+                        imageDescription:String,
+                        fileState:(isSamePath: Bool, existAtPath: FileExistState, filename:String, md5:String)) -> Bool {
+        
+        if fileState.existAtPath == .existAtPathWithSameMD5 {
+            if fileState.isSamePath {
+                if photo.exportTime == nil {
+                    ModelStore.default.storeImageExportedTime(path: path, date: Date())
+                }
+            }else{
+                ModelStore.default.storeImageExportSuccess(path: photo.path, date: Date(),
+                                                           exportToPath: path,
+                                                           exportedFilename: filename,
+                                                           exportedMD5: fileState.md5,
+                                                           exportedLongDescription: imageDescription)
+            }
+            if photo.exportedMD5 == nil {
+                ModelStore.default.storeImageExportedMD5(path: photo.path, md5: fileState.md5)
+            }
+            return true
+        }
+        return false
+    }
+    
+    private func exportFile(image photo:Image, path:String, filename:String, imageDescription:String, md5:String) -> Bool {
+        print("\(Date()) Copy file \(photo.path)")
+        var copied = false
+        var errorMessage = ""
+        autoreleasepool { () -> Void in
+            do {
+                try FileManager.default.copyItem(atPath: photo.path, toPath: "\(path)/\(filename)")
+                copied = true
+            }catch {
+                print("Cannot copy from: \(photo.path) to: \(path)/\(filename) ")
+                print(error)
+                copied = false
+                errorMessage = error.localizedDescription
+            }
+        }
+        if !copied {
+            ModelStore.default.storeImageExportFail(path: photo.path, date: Date(), message: "ERROR: \(errorMessage)")
+            
+            return false
+        }else{
+            print("\(Date()) Copy file \(photo.path) : DONE")
+            
+            ModelStore.default.storeImageExportSuccess(path: photo.path, date: Date(),
+                                                       exportToPath: path,
+                                                       exportedFilename: filename,
+                                                       exportedMD5: md5,
+                                                       exportedLongDescription: imageDescription)
+            return true
+        }
+    }
+    
+    
+    func export(profile:ExportProfile, after date:Date, housekeep:Bool) -> (Bool, String) {
+        guard self.nonStop() && !self.working else {return (false, "PREVENTED")}
+        
+        guard self.prepareExportDestination(path: profile.directory) else {
+            return (false, "INACCESSIBLE DIRECTORY")
+        }
+        
+        
+        //print("exporting")
+        working = true
+        print("  ")
+        print("!! ExportManager start working at \(Date())")
+        
+        
+        //var filepaths:[String] = []
         
         // check exported
         self.printMessage("Validating ...")
         
-        self.checkIfExportedFilesExist(fileSystemHandler: targetFileSystemHandler)
+        self.checkIfExportedFilesExist()
         
         // check updates and which not exported
         self.printMessage("Searching for updates ...")
@@ -175,7 +247,7 @@ class ExportManager {
             }
             
             for photo in photos {
-                guard self.nonStop() else {return}
+                guard self.nonStop() else {return (false, "FORCED STOP")}
                 
                 i += 1
                 self.printMessage("EXPORT Processing ... ( \(i) / \(total) )")
@@ -203,92 +275,40 @@ class ExportManager {
                 }
                 
                 var fileChanged = false
-                
-                // patch image description into original image file, md5 will change
-                let originalImageDescription = photo.exportedLongDescription ?? ExifTool.helper.getImageDescription(url: pathUrl)
-                let generatedImageDescription = photo.longDescription ?? self.getImageBrief(photo: photo)
-                if originalImageDescription != generatedImageDescription {
-                    print("\(Date()) Change ImageDescription for \(photo.path)")
-                    ExifTool.helper.patchImageDescription(description: generatedImageDescription, url: pathUrl)
-                    if generatedImageDescription != photo.longDescription {
-                        ModelStore.default.storeImageDescription(path: photo.path, shortDescription: nil, longDescription: generatedImageDescription)
-                    }
-                    fileChanged = true
-                    print("\(Date()) Change ImageDescription for \(photo.path) : DONE")
-                }
+                var generatedImageDescription = ""
+                (fileChanged, generatedImageDescription) = self.patchImageDescription(image: photo)
                 
                 // generate path and filename
-                let path = getOrCreateFolder(photo: photo, fm: targetFileSystemHandler)
-                let fileState = getOrCreateFilename(photo: photo,
+                let path = Naming.Export.buildFolder(photo: photo)
+                let fileState = Naming.Export.buildFilename(photo: photo,
                                                     toPath: path,
-                                                    dateFormat: dateFormatter,
-                                                    targetFileManager: targetFileSystemHandler,
-                                                    sourceFileManager: sourceFileSystemHandler,
                                                     forceGenerateMD5: fileChanged)
                 
                 let filename = fileState.filename
                 
                 // check if exist and duplicate
-                if fileState.existAtPath == .existAtPathWithSameMD5 {
-                    if fileState.isSamePath {
-                        if photo.exportTime == nil {
-                            ModelStore.default.storeImageExportedTime(path: photo.path, date: Date())
-                        }
-                    }else{
-                        ModelStore.default.storeImageExportSuccess(path: photo.path, date: Date(),
-                                                                  exportToPath: path,
-                                                                  exportedFilename: filename,
-                                                                  exportedMD5: fileState.md5,
-                                                                  exportedLongDescription: generatedImageDescription)
-                    }
-                    if photo.exportedMD5 == nil {
-                        ModelStore.default.storeImageExportedMD5(path: photo.path, md5: fileState.md5)
-                    }
+                
+                if self.exists(image: photo, targetPath: path, targetFilename: filename, imageDescription: generatedImageDescription, fileState: fileState) {
                     continue
                 }
                 
                 // not exist at path
                 self.printMessage("EXPORT Copying ... ( \(i) / \(total) )")
                 
-                print("\(Date()) Copy file \(photo.path)")
-                var copied = false
-                var errorMessage = ""
-                autoreleasepool { () -> Void in
-                    do {
-                        try fm.copyItem(atPath: photo.path, toPath: "\(path)/\(filename)")
-                        copied = true
-                    }catch {
-                        print("Cannot copy from: \(photo.path) to: \(path)/\(filename) ")
-                        print(error)
-                        copied = false
-                        errorMessage = error.localizedDescription
-                    }
-                }
-                if !copied {
-                    ModelStore.default.storeImageExportFail(path: photo.path, date: Date(), message: "ERROR: \(errorMessage)")
-                    
-                    continue
-                }else{
-                    print("\(Date()) Copy file \(photo.path) : DONE")
-                    
-                    ModelStore.default.storeImageExportSuccess(path: photo.path, date: Date(),
-                                                              exportToPath: path,
-                                                              exportedFilename: filename,
-                                                              exportedMD5: fileState.md5,
-                                                              exportedLongDescription: generatedImageDescription)
-                }
+                let _ = self.exportFile(image: photo, path: path, filename: filename, imageDescription: generatedImageDescription, md5: fileState.md5)
             }
         } // end of while loop
         self.printMessage("")
         
         print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED: DONE")
         
-        guard self.nonStop() else {return}
-        
-        self.housekeep()
+        if housekeep {
+            self.housekeep()
+        }
         
         self.working = false
         
+        return (true, "COMPLETED")
     }
     
     fileprivate func housekeep() {
@@ -377,153 +397,5 @@ class ExportManager {
         print("\(Date()) EXPORT: HOUSE KEEP: DONE")
     }
     
-    fileprivate func getOrCreateFolder(photo:Image, fm: FileSystemHandler) -> String{
-        var pathComponents:[String] = []
-        pathComponents.append(PreferencesController.exportDirectory())
-        pathComponents.append("\(photo.photoTakenYear ?? 0)年")
-        //let year:String = "\(photo.photoTakenYear)"
-        let month:String = photo.photoTakenMonth! < 10 ? "0\(photo.photoTakenMonth ?? 0)" : "\(photo.photoTakenMonth ?? 0)"
-        //let day:String = photo.photoTakenDay < 10 ? "0\(photo.photoTakenDay)" : "\(photo.photoTakenDay)"
-        let event:String = photo.event == nil || photo.event == "" ? "" : " \(photo.event ?? "")"
-        pathComponents.append("\(month)月\(event)")
-        let path:String = pathComponents.joined(separator: "/")
-        
-        if fm.createDirectory(atPath: path) {
-            return path
-        }else{
-            return ""
-        }
-    }
-    
-    func getImageBrief(photo:Image) -> String {
-        var eventAndPlace = ""
-        if photo.shortDescription != nil && photo.shortDescription != "" {
-            eventAndPlace = "\(photo.shortDescription!)"
-        }
-        if photo.event != nil && photo.event != "" {
-            if eventAndPlace == "" {
-                eventAndPlace = "\(photo.event!)"
-            }else{
-                eventAndPlace = "\(eventAndPlace) - \(photo.event!)"
-            }
-        }
-        if photo.place != nil && photo.place != "" {
-            eventAndPlace = "\(eventAndPlace) 在 \(photo.place!)"
-        }
-        return eventAndPlace
-    }
-    
-    /// - deprecated
-    func getOrCreateFilename(photo:Image, toPath path:String, dateFormat dateFormatter:DateFormatter,
-                                    targetFileManager fm:FileSystemHandler,
-                                    sourceFileManager:FileSystemHandler,
-                                    ignoreDiffPathChecking:Bool = false,
-                                    forceGenerateMD5:Bool = false) -> (isSamePath: Bool, existAtPath: FileExistState, filename:String, md5:String) {
-        
-        var filenameComponents:[String] = []
-        
-        // Date
-        var photoDateFormatted = ""
-        if photo.photoTakenDate != nil {
-            photoDateFormatted = dateFormatter.string(from: photo.photoTakenDate!)
-            filenameComponents.append(photoDateFormatted)
-        }
-        
-        // Event & Place
-        let eventAndPlace = getImageBrief(photo: photo)
-        if eventAndPlace != "" {
-            filenameComponents.append(eventAndPlace)
-        }
-        
-        // Image Source
-        if (photo.filename.starts(with: "mmexport")) {
-            filenameComponents.append(" (来自微信)")
-        }
-        
-        if (photo.filename.starts(with: "QQ空间视频_")) {
-            filenameComponents.append(" (来自QQ)")
-        }
-        
-        if (photo.filename.starts(with: "Screenshot_")) {
-            filenameComponents.append(" (手机截屏)")
-        }
-        
-        // Combine
-        let fileExt:String = (photo.filename.split(separator: Character(".")).last?.lowercased())!
-        filenameComponents.append(".")
-        filenameComponents.append(fileExt)
-        
-        // export as this name
-        var filename:String = filenameComponents.joined()
-        
-        // START: check duplicates, adjust filename if duplicates at target path
-        
-        // export to this path
-        var targetPath:String = "\(path)/\(filename)"
-        
-        var previousTargetPath = "\(photo.exportToPath ?? "")/\(photo.exportAsFilename ?? "")"
-        if previousTargetPath == "/" {
-            previousTargetPath = ""
-        }
-        
-        let isSamePath:Bool = ignoreDiffPathChecking ? true : ( previousTargetPath == targetPath )
-        
-        // detect duplicates
-        let md5OfSourceFile = forceGenerateMD5 ? sourceFileManager.md5(pathOfFile: photo.path) : ( photo.exportedMD5 ?? sourceFileManager.md5(pathOfFile: photo.path) )
-        
-        var state = fm.fileExists(atPath: targetPath, md5: md5OfSourceFile)
-        
-        if state == .notExistAtPath {
-            return (isSamePath: isSamePath, existAtPath: .notExistAtPath, filename: filename, md5: md5OfSourceFile)
-        }
-        
-        if state == .existAtPathWithSameMD5 {
-            return (isSamePath: isSamePath, existAtPath: .existAtPathWithSameMD5, filename: filename, md5: md5OfSourceFile)
-        }
-        
-        // if another photo occupied the filename at targetPath, with different md5, change filename
-        if state == .existAtPathWithDifferentMD5 {
-            
-            // add camera model to suffix
-//            filenameComponents.removeLast()
-//            filenameComponents.removeLast()
-//            if photo.cameraMaker != nil && photo.cameraMaker != "" {
-//                filenameComponents.append(" (\(photo.cameraMaker!)")
-//
-//                if photo.cameraModel != nil && photo.cameraModel != "" {
-//                    filenameComponents.append(" \(photo.cameraModel!)")
-//                }
-//                filenameComponents.append(")")
-//            }
-//            filenameComponents.append(".")
-//            filenameComponents.append(fileExt)
-//            filename = filenameComponents.joined()
-//            targetPath = "\(path)/\(filename)"
-            
-            // add number to suffix
-            for i in 1...9999 {
-                let suffix = i < 10 ? "0\(i)" : "\(i)"
-                
-                state = fm.fileExists(atPath: targetPath, md5: md5OfSourceFile)
-                if state == .existAtPathWithDifferentMD5 {
-                    filenameComponents.removeLast() // fileExt
-                    filenameComponents.removeLast() // .
-                    if i > 1 {
-                        filenameComponents.removeLast() // suffix
-                    }
-                    filenameComponents.append(" \(suffix)")
-                    filenameComponents.append(".")
-                    filenameComponents.append(fileExt)
-                    filename = filenameComponents.joined()
-                    targetPath = "\(path)/\(filename)"
-                }else{
-                    print("break for-loop")
-                    break
-                }
-            } // state will become .notExistAtPath or .existAtPathWithSameMD5
-        }
-        // only returns: .notExistAtPath or .existAtPathWithSameMD5
-        return (isSamePath: isSamePath, existAtPath: state, filename: filename, md5:md5OfSourceFile)
-    }
 }
 

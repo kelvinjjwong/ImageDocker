@@ -526,5 +526,169 @@ struct PlaceRecognizer {
 
 struct NamingForExporting {
     
+    let dateFormatter = DateFormatter()
+    
+    let sourceFileSystemHandler = ComputerFileManager()
+    let targetFileSystemHandler = ComputerFileManager()
+    
+    init() {
+        self.dateFormatter.dateFormat = "MM月dd日HH点mm分ss"
+    }
+    
+    func getOriginalDescription(image photo:Image) -> String{
+        return photo.exportedLongDescription ?? ExifTool.helper.getImageDescription(url: URL(fileURLWithPath: photo.path))
+    }
+    
+    func getNewDescription(image photo:Image) -> String{
+        return photo.longDescription ?? Naming.Export.getImageBrief(image: photo)
+    }
+    
+    func getImageBrief(image photo:Image) -> String {
+        var eventAndPlace = ""
+        if photo.shortDescription != nil && photo.shortDescription != "" {
+            eventAndPlace = "\(photo.shortDescription!)"
+        }
+        if photo.event != nil && photo.event != "" {
+            if eventAndPlace == "" {
+                eventAndPlace = "\(photo.event!)"
+            }else{
+                eventAndPlace = "\(eventAndPlace) - \(photo.event!)"
+            }
+        }
+        if photo.place != nil && photo.place != "" {
+            eventAndPlace = "\(eventAndPlace) 在 \(photo.place!)"
+        }
+        return eventAndPlace
+    }
+    
+    func buildFilename(photo:Image, toPath path:String, 
+                             ignoreDiffPathChecking:Bool = false,
+                             forceGenerateMD5:Bool = false) -> (isSamePath: Bool, existAtPath: FileExistState, filename:String, md5:String) {
+        
+        var filenameComponents:[String] = []
+        
+        // Date
+        var photoDateFormatted = ""
+        if photo.photoTakenDate != nil {
+            photoDateFormatted = dateFormatter.string(from: photo.photoTakenDate!)
+            filenameComponents.append(photoDateFormatted)
+        }
+        
+        // Event & Place
+        let eventAndPlace = Naming.Export.getImageBrief(image: photo)
+        if eventAndPlace != "" {
+            filenameComponents.append(eventAndPlace)
+        }
+        
+        // Image Source
+        if (photo.filename.starts(with: "mmexport")) {
+            filenameComponents.append(" (来自微信)")
+        }
+        
+        if (photo.filename.starts(with: "QQ空间视频_")) {
+            filenameComponents.append(" (来自QQ)")
+        }
+        
+        if (photo.filename.starts(with: "Screenshot_")) {
+            filenameComponents.append(" (手机截屏)")
+        }
+        
+        // Combine
+        let fileExt:String = (photo.filename.split(separator: Character(".")).last?.lowercased())!
+        filenameComponents.append(".")
+        filenameComponents.append(fileExt)
+        
+        // export as this name
+        var filename:String = filenameComponents.joined()
+        
+        // START: check duplicates, adjust filename if duplicates at target path
+        
+        // export to this path
+        var targetPath:String = "\(path)/\(filename)"
+        
+        var previousTargetPath = "\(photo.exportToPath ?? "")/\(photo.exportAsFilename ?? "")"
+        if previousTargetPath == "/" {
+            previousTargetPath = ""
+        }
+        
+        let isSamePath:Bool = ignoreDiffPathChecking ? true : ( previousTargetPath == targetPath )
+        
+        // detect duplicates
+        let md5OfSourceFile = forceGenerateMD5 ? self.sourceFileSystemHandler.md5(pathOfFile: photo.path) : ( photo.exportedMD5 ?? self.sourceFileSystemHandler.md5(pathOfFile: photo.path) )
+        
+        var state = self.targetFileSystemHandler.fileExists(atPath: targetPath, md5: md5OfSourceFile)
+        
+        if state == .notExistAtPath {
+            return (isSamePath: isSamePath, existAtPath: .notExistAtPath, filename: filename, md5: md5OfSourceFile)
+        }
+        
+        if state == .existAtPathWithSameMD5 {
+            return (isSamePath: isSamePath, existAtPath: .existAtPathWithSameMD5, filename: filename, md5: md5OfSourceFile)
+        }
+        
+        // if another photo occupied the filename at targetPath, with different md5, change filename
+        if state == .existAtPathWithDifferentMD5 {
+            
+            // add camera model to suffix
+            //            filenameComponents.removeLast()
+            //            filenameComponents.removeLast()
+            //            if photo.cameraMaker != nil && photo.cameraMaker != "" {
+            //                filenameComponents.append(" (\(photo.cameraMaker!)")
+            //
+            //                if photo.cameraModel != nil && photo.cameraModel != "" {
+            //                    filenameComponents.append(" \(photo.cameraModel!)")
+            //                }
+            //                filenameComponents.append(")")
+            //            }
+            //            filenameComponents.append(".")
+            //            filenameComponents.append(fileExt)
+            //            filename = filenameComponents.joined()
+            //            targetPath = "\(path)/\(filename)"
+            
+            // add number to suffix
+            for i in 1...9999 {
+                let suffix = i < 10 ? "0\(i)" : "\(i)"
+                
+                state = self.targetFileSystemHandler.fileExists(atPath: targetPath, md5: md5OfSourceFile)
+                if state == .existAtPathWithDifferentMD5 {
+                    filenameComponents.removeLast() // fileExt
+                    filenameComponents.removeLast() // .
+                    if i > 1 {
+                        filenameComponents.removeLast() // suffix
+                    }
+                    filenameComponents.append(" \(suffix)")
+                    filenameComponents.append(".")
+                    filenameComponents.append(fileExt)
+                    filename = filenameComponents.joined()
+                    targetPath = "\(path)/\(filename)"
+                }else{
+                    print("break for-loop")
+                    break
+                }
+            } // state will become .notExistAtPath or .existAtPathWithSameMD5
+        }
+        // only returns: .notExistAtPath or .existAtPathWithSameMD5
+        return (isSamePath: isSamePath, existAtPath: state, filename: filename, md5:md5OfSourceFile)
+    }
+    
+    
+    
+    func buildFolder(photo:Image) -> String{
+        var pathComponents:[String] = []
+        pathComponents.append(PreferencesController.exportDirectory())
+        pathComponents.append("\(photo.photoTakenYear ?? 0)年")
+        //let year:String = "\(photo.photoTakenYear)"
+        let month:String = photo.photoTakenMonth! < 10 ? "0\(photo.photoTakenMonth ?? 0)" : "\(photo.photoTakenMonth ?? 0)"
+        //let day:String = photo.photoTakenDay < 10 ? "0\(photo.photoTakenDay)" : "\(photo.photoTakenDay)"
+        let event:String = photo.event == nil || photo.event == "" ? "" : " \(photo.event ?? "")"
+        pathComponents.append("\(month)月\(event)")
+        let path:String = pathComponents.joined(separator: "/")
+        
+        if self.targetFileSystemHandler.createDirectory(atPath: path) {
+            return path
+        }else{
+            return ""
+        }
+    }
     
 }
