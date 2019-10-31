@@ -46,6 +46,7 @@ let Software = kCGImagePropertyTIFFSoftware as String
 let SoftwareDateTime = kCGImagePropertyTIFFDateTime as String
 let ColorModel = kCGImagePropertyColorModel as String
 let ColorModelProfile = kCGImagePropertyProfileName as String
+let CameraOrientation = kCGImagePropertyOrientation as String
 
 
 class MetaInfoHolder: MetaInfoStoreDelegate {

@@ -11,7 +11,7 @@ import Cocoa
 struct UIHelper {
     
     static func windowSize() -> (width:CGFloat, height:CGFloat, widthMax:CGFloat, heightMax:CGFloat, originPoint:CGPoint, isSmallScreen:Bool) {
-        let dockerHeight = 80
+        let dockerHeight = 40
         let menubarHeight = 20
         
         let screenWidth = NSScreen.main?.frame.width
