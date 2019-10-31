@@ -59,11 +59,11 @@ extension ViewController {
         self.exportPhotosTimers = Timer.scheduledTimer(withTimeInterval: 600, repeats: true, block:{_ in
             print("\(Date()) TRYING TO EXPORT \(self.suppressedExport) \(ExportManager.default.suppressed) \(ExportManager.default.working)")
             guard !self.suppressedExport && !ExportManager.default.suppressed && !ExportManager.default.working else {return}
-            print("\(Date()) EXPORTING")
-            DispatchQueue.global().async {
-                ExportManager.default.export(after: self.lastExportPhotos!)
-                self.lastExportPhotos = Date()
-            }
+            print("\(Date()) EXPORT FUNCTION WAITING FOR UPDATE")
+//            DispatchQueue.global().async {
+////                ExportManager.default.export(after: self.lastExportPhotos!)
+////                self.lastExportPhotos = Date()
+//            }
         })
         
         //        self.scanRepositoriesTimer = Timer.scheduledTimer(withTimeInterval: 180, repeats: true, block:{_ in

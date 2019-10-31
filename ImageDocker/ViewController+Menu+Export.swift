@@ -60,10 +60,11 @@ extension ViewController {
                 
                 // start exporting immediatetly
                 if !ExportManager.default.working {
-                    DispatchQueue.global().async {
-                        ExportManager.default.export(after: self.lastExportPhotos!)
-                        self.lastExportPhotos = Date()
-                    }
+                    // TODO: change export function
+//                    DispatchQueue.global().async {
+//                        ExportManager.default.export(after: self.lastExportPhotos!)
+//                        self.lastExportPhotos = Date()
+//                    }
                 }
             }else if menuItem.title == "Stop exporting images" {
                 menuItem.title = "Export Now"

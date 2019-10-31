@@ -379,7 +379,7 @@ class TheaterViewController: NSViewController {
         self.preview.addSubview(previewView!)
         
         if let data = image.imageData {
-            self.lblBrief.stringValue = ExportManager.default.getImageBrief(photo: data)
+            self.lblBrief.stringValue = Naming.Export.getImageBrief(image: data)
             self.lblDescription.stringValue = data.longDescription ?? ""
         }
         

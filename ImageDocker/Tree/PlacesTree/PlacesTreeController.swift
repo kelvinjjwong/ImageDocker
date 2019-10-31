@@ -180,7 +180,8 @@ extension ViewController {
         // for children to find parent
         self.parentsOfMomentsTreeGroupByPlace["\(place.gov)-\(place.place)"] = item
         
-        self.treeIdItems[place.id] = item
+        // TODO: debug and fix EXEC_BAD_ACCESS error
+        self.treeIdItems["\(place.id)"] = item
     }
     
     fileprivate func addPlacesTreeYearEntry(year:Moment){

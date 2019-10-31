@@ -171,6 +171,8 @@
 		8EBA9DE52173CC7F00DACAAD /* TheaterQuickLookItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA9DE42173CC7F00DACAAD /* TheaterQuickLookItem.swift */; };
 		8EBA9DE7217477D900DACAAD /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA9DE6217477D900DACAAD /* UIHelper.swift */; };
 		8EBA9DE921766EAB00DACAAD /* TheaterCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA9DE821766EAB00DACAAD /* TheaterCollectionViewController.swift */; };
+		8EBC0182236B072F00FB6E2F /* TwoColumnTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBC0180236B072F00FB6E2F /* TwoColumnTableViewController.swift */; };
+		8EBC0183236B072F00FB6E2F /* TwoColumnTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EBC0181236B072F00FB6E2F /* TwoColumnTableViewController.xib */; };
 		8EC20B302281B4C0000F4819 /* TaskHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC20B2F2281B4C0000F4819 /* TaskHelper.swift */; };
 		8EC20B322281C0B8000F4819 /* FaceTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC20B312281C0B8000F4819 /* FaceTask.swift */; };
 		8EC5BA2E21775571001510AF /* TheaterCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC5BA2C21775571001510AF /* TheaterCollectionViewItem.swift */; };
@@ -409,6 +411,8 @@
 		8EBA9DE42173CC7F00DACAAD /* TheaterQuickLookItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheaterQuickLookItem.swift; sourceTree = "<group>"; };
 		8EBA9DE6217477D900DACAAD /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
 		8EBA9DE821766EAB00DACAAD /* TheaterCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheaterCollectionViewController.swift; sourceTree = "<group>"; };
+		8EBC0180236B072F00FB6E2F /* TwoColumnTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoColumnTableViewController.swift; sourceTree = "<group>"; };
+		8EBC0181236B072F00FB6E2F /* TwoColumnTableViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TwoColumnTableViewController.xib; sourceTree = "<group>"; };
 		8EC20B2F2281B4C0000F4819 /* TaskHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskHelper.swift; sourceTree = "<group>"; };
 		8EC20B312281C0B8000F4819 /* FaceTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTask.swift; sourceTree = "<group>"; };
 		8EC5BA2C21775571001510AF /* TheaterCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheaterCollectionViewItem.swift; sourceTree = "<group>"; };
@@ -983,6 +987,8 @@
 				8E8D47242236733B0091E9C3 /* OneColumnTableViewController.swift */,
 				8E8D47252236733B0091E9C3 /* OneColumnTableViewController.xib */,
 				8E8D47282236F63C0091E9C3 /* MenuPopover.swift */,
+				8EBC0180236B072F00FB6E2F /* TwoColumnTableViewController.swift */,
+				8EBC0181236B072F00FB6E2F /* TwoColumnTableViewController.xib */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -1144,6 +1150,7 @@
 				8E8D4716222991230091E9C3 /* FaceCollectionViewItem.xib in Resources */,
 				8E0AFA41208BDEA100CE8B68 /* Assets.xcassets in Resources */,
 				8E3FA91D235310AA00B677A3 /* MemoriesViews.storyboard in Resources */,
+				8EBC0183236B072F00FB6E2F /* TwoColumnTableViewController.xib in Resources */,
 				8E9D8039234884040062692A /* EditRepositoryViewController.xib in Resources */,
 				8E98B8F120D0EE3300771280 /* PlaceListViewController.xib in Resources */,
 				8EEF071F225FCF8E000520B7 /* ContainerDetailViewController.xib in Resources */,
@@ -1317,6 +1324,7 @@
 				8EB271852340E9C6003BF3AF /* ViewController+SelectionArea+ReplacePlace.swift in Sources */,
 				8EFE763C2094AF6B00B7CFCA /* TreeController.swift in Sources */,
 				8E3EC3B5214DB1B8004B6125 /* LunarCalendarView.swift in Sources */,
+				8EBC0182236B072F00FB6E2F /* TwoColumnTableViewController.swift in Sources */,
 				8EC20B302281B4C0000F4819 /* TaskHelper.swift in Sources */,
 				8E31C37F2120A22600002546 /* DeviceShell.swift in Sources */,
 				8EC82EAE21283ED000FC0899 /* DirectoryViewDelegate.swift in Sources */,

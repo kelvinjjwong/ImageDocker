@@ -61,11 +61,16 @@ class EditRepositoryViewController: NSViewController {
     @IBOutlet weak var boxRepository: NSBox!
     @IBOutlet weak var boxFaces: NSBox!
     @IBOutlet weak var boxDevice: NSBox!
-    @IBOutlet weak var chkFirstFolderAsEvent: NSButton!
     @IBOutlet weak var btnUpdateEmptyEvent: NSButton!
+    @IBOutlet weak var chkFolderAsEvent: NSButton!
+    @IBOutlet weak var lstEventFolderLevel: NSPopUpButton!
+    @IBOutlet weak var btnPreviewEventFolders: NSButton!
+    @IBOutlet weak var btnUpdateAllEvents: NSButton!
     
     
     private var window:NSWindow? = nil
+    
+    var eventFoldersPreviewPopover : TwoColumnMenuPopover!
     
     private var accumulator:Accumulator? = nil
     
@@ -88,6 +93,10 @@ class EditRepositoryViewController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.eventFoldersPreviewPopover = TwoColumnMenuPopover(width: 600, height: 200) { id, name, action in
+            // do nothing
+        }
     }
     
     fileprivate func toggleButtons(_ show:Bool){
@@ -128,6 +137,7 @@ class EditRepositoryViewController: NSViewController {
             self.txtRepository.isEnabled = show
             self.txtStoragePath.isEnabled = show
             self.btnUpdateEmptyEvent.isEnabled = show
+            self.btnUpdateAllEvents.isEnabled = show
         }
         
     }
@@ -194,6 +204,8 @@ class EditRepositoryViewController: NSViewController {
         
         self.lblDeviceId.stringValue = ""
         self.lblDeviceName.stringValue = ""
+        
+        self.lstEventFolderLevel.selectItem(at: 0)
     }
     
     func initNew(window:NSWindow, onOK: (() -> Void)? = nil) {
@@ -267,6 +279,9 @@ class EditRepositoryViewController: NSViewController {
             if container.deviceId != "" {
                 self.displayDeviceInfo(deviceId: container.deviceId)
             }
+            
+            self.lstEventFolderLevel.selectItem(at: container.eventFolderLevel - 1)
+            self.chkFolderAsEvent.state = container.folderAsEvent ? .on : .off
             
         }else{
             self.originalContainer = nil
@@ -384,8 +399,9 @@ class EditRepositoryViewController: NSViewController {
         
         if let repository = imagefolder.containerFolder {
             var repo = repository
-            if self.chkFirstFolderAsEvent.state == .on {
+            if self.chkFolderAsEvent.state == .on {
                 repo.folderAsEvent = true
+                repo.eventFolderLevel = (self.lstEventFolderLevel.indexOfSelectedItem + 1)
                 ModelStore.default.saveImageContainer(container: repo)
             }
         }
@@ -411,7 +427,8 @@ class EditRepositoryViewController: NSViewController {
             var origin = container
             origin.name = name
             origin.homePath = homePath
-            origin.folderAsEvent = self.chkFirstFolderAsEvent.state == .on
+            origin.folderAsEvent = self.chkFolderAsEvent.state == .on
+            origin.eventFolderLevel = (self.lstEventFolderLevel.indexOfSelectedItem + 1)
             ModelStore.default.saveImageContainer(container: origin)
             self.lblMessage.stringValue = "General info updated."
             
@@ -1639,6 +1656,74 @@ class EditRepositoryViewController: NSViewController {
     
     @IBAction func onUpdateEmptyEventClicked(_ sender: NSButton) {
         // TODO: update event with images' container's first level folder name if event is not set
+    }
+    
+    @IBAction func onUpdateAllEventsClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onPreviewEventFolders(_ sender: NSButton) {
+        let amount = 30
+        let level = self.lstEventFolderLevel.indexOfSelectedItem
+        var array:[String] = []
+        if let container = self.originalContainer {
+            var folders:Set<String> = []
+            let paths = ModelStore.default.getAllContainerPaths(rootPath: container.repositoryPath)
+            for path in paths {
+                if path == container.repositoryPath {continue}
+                let p = path.replacingFirstOccurrence(of: container.repositoryPath.withStash(), with: "")
+                if p == "" {continue}
+                let parts = p.components(separatedBy: "/")
+                
+                if level < parts.count {
+                    var join = ""
+                    for i in 0...level {
+                        join += parts[i]
+                        join += "/"
+                    }
+                    folders.insert(join)
+                }
+            }
+            array = folders.sorted()
+        }else{
+            var folders:Set<String> = []
+            let path = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            if path != "" {
+                let paths = LocalDirectory.bridge.folders(in: path, unlimitedDepth: true)
+                for p in paths {
+                    let parts = p.components(separatedBy: "/")
+                    
+                    if level < parts.count {
+                        var join = ""
+                        for i in 0...level {
+                            join += parts[i]
+                            join += "/"
+                        }
+                        folders.insert(join)
+                    }
+                }
+            }
+            array = folders.sorted()
+        }
+        var names:[String] = []
+        if array.count > amount {
+            for i in 0...(amount-1) {
+                let v = array[i]
+                names.append(v)
+            }
+        }else{
+            names = array
+        }
+        if names.count > 0 {
+            var mapping:[(String, String)] = []
+            for name in names {
+                let parts = name.components(separatedBy: "/")
+                let n = parts[level]
+                mapping.append((n, name))
+            }
+            self.eventFoldersPreviewPopover.load(mapping)
+            self.eventFoldersPreviewPopover.show(sender)
+        }
+        
     }
     
     

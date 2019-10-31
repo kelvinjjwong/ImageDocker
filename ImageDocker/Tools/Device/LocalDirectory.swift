@@ -82,7 +82,7 @@ struct LocalDirectory {
     
     
     
-    func folders(in path: String) -> [String] {
+    func folders(in path: String, unlimitedDepth:Bool = false) -> [String] {
         print("getting folders from \(path)")
         var result:[String] = []
         let pipe = Pipe()
@@ -92,7 +92,11 @@ struct LocalDirectory {
             command.standardError = pipe
             command.currentDirectoryPath = path
             command.launchPath = "/usr/bin/find"
-            command.arguments = [".", "-type", "d","-maxdepth", "1"]
+            if unlimitedDepth {
+                command.arguments = [".", "-type", "d"]
+            }else{
+                command.arguments = [".", "-type", "d","-maxdepth", "1"]
+            }
             do {
                 try command.run()
             }catch{

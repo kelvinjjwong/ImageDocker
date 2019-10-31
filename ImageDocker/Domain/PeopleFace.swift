@@ -93,7 +93,7 @@ class PeopleFace {
     fileprivate func loadSourceImage() -> NSImage? {
         if let sourceImage = ModelStore.default.getImage(id: self.data.imageId) {
             let url = URL(fileURLWithPath: sourceImage.path)
-            self.sourceDescription = ExportManager.default.getImageBrief(photo: sourceImage)
+            self.sourceDescription = Naming.Export.getImageBrief(image: sourceImage)
             return self.loadImage(url, size: PeopleFace.SourceImageSize)
         }
         self.sourceDescription = ""
