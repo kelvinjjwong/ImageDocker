@@ -66,11 +66,17 @@ class EditRepositoryViewController: NSViewController {
     @IBOutlet weak var lstEventFolderLevel: NSPopUpButton!
     @IBOutlet weak var btnPreviewEventFolders: NSButton!
     @IBOutlet weak var btnUpdateAllEvents: NSButton!
+    @IBOutlet weak var chkFolderAsBrief: NSButton!
+    @IBOutlet weak var lstBriefFolderLevel: NSPopUpButton!
+    @IBOutlet weak var btnPreviewBriefFolders: NSButton!
+    @IBOutlet weak var btnUpdateEmptyBrief: NSButton!
+    @IBOutlet weak var btnUpdateAllBrief: NSButton!
     
     
     private var window:NSWindow? = nil
     
     var eventFoldersPreviewPopover : TwoColumnTablePopover!
+    var briefFoldersPreviewPopover : TwoColumnTablePopover!
     
     private var accumulator:Accumulator? = nil
     
@@ -94,7 +100,10 @@ class EditRepositoryViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.eventFoldersPreviewPopover = TwoColumnTablePopover(width: 600, height: 200) { id, name, action in
+        self.eventFoldersPreviewPopover = TwoColumnTablePopover(width: 600, height: 500) { id, name, action in
+            // do nothing
+        }
+        self.briefFoldersPreviewPopover = TwoColumnTablePopover(width: 600, height: 500) { id, name, action in
             // do nothing
         }
     }
@@ -138,6 +147,8 @@ class EditRepositoryViewController: NSViewController {
             self.txtStoragePath.isEnabled = show
             self.btnUpdateEmptyEvent.isEnabled = show
             self.btnUpdateAllEvents.isEnabled = show
+            self.btnUpdateEmptyBrief.isEnabled = show
+            self.btnUpdateAllBrief.isEnabled = show
         }
         
     }
@@ -206,6 +217,7 @@ class EditRepositoryViewController: NSViewController {
         self.lblDeviceName.stringValue = ""
         
         self.lstEventFolderLevel.selectItem(at: 0)
+        self.lstBriefFolderLevel.selectItem(at: 0)
     }
     
     func initNew(window:NSWindow, onOK: (() -> Void)? = nil) {
@@ -282,6 +294,9 @@ class EditRepositoryViewController: NSViewController {
             
             self.lstEventFolderLevel.selectItem(at: container.eventFolderLevel - 1)
             self.chkFolderAsEvent.state = container.folderAsEvent ? .on : .off
+            self.chkFolderAsBrief.state = container.folderAsBrief ? .on : .off
+            
+            self.setBriefFolderLevelSelection(container.briefFolderLevel)
             
         }else{
             self.originalContainer = nil
@@ -399,11 +414,11 @@ class EditRepositoryViewController: NSViewController {
         
         if let repository = imagefolder.containerFolder {
             var repo = repository
-            if self.chkFolderAsEvent.state == .on {
-                repo.folderAsEvent = true
-                repo.eventFolderLevel = (self.lstEventFolderLevel.indexOfSelectedItem + 1)
-                ModelStore.default.saveImageContainer(container: repo)
-            }
+            repo.folderAsEvent = (self.chkFolderAsEvent.state == .on)
+            repo.eventFolderLevel = (self.lstEventFolderLevel.indexOfSelectedItem + 1)
+            repo.folderAsBrief = (self.chkFolderAsBrief.state == .on)
+            repo.briefFolderLevel = self.getBriefFolderLevelFromSelection()
+            ModelStore.default.saveImageContainer(container: repo)
         }
     }
     
@@ -429,6 +444,8 @@ class EditRepositoryViewController: NSViewController {
             origin.homePath = homePath
             origin.folderAsEvent = self.chkFolderAsEvent.state == .on
             origin.eventFolderLevel = (self.lstEventFolderLevel.indexOfSelectedItem + 1)
+            origin.folderAsBrief = (self.chkFolderAsBrief.state == .on)
+            origin.briefFolderLevel = self.getBriefFolderLevelFromSelection()
             ModelStore.default.saveImageContainer(container: origin)
             self.lblMessage.stringValue = "General info updated."
             
@@ -1546,7 +1563,7 @@ class EditRepositoryViewController: NSViewController {
                     print(">>> GETTING IMAGE index \(i), TOTAL \(images.count)")
                     let image = images[i]
                     
-                    if image.path.hasSuffix(".mp4") || image.path.hasSuffix(".mov") || image.path.hasSuffix(".mpeg") || image.path.hasSuffix(".mpg") || image.path.hasSuffix(".ts") || image.path.hasSuffix(".MP4") || image.path.hasSuffix(".MOV") || image.path.hasSuffix(".MPEG") || image.path.hasSuffix(".MPG") || image.path.hasSuffix(".TS") {
+                    if Naming.FileType.recognize(from: image.filename) != .photo {
                         print("It's VIDEO")
                         DispatchQueue.main.async {
                             let _ = self.accumulator?.add("Finding faces from images ...")
@@ -1652,6 +1669,118 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    @IBAction func onUpdateEmptyBriefClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onUpdateAllBriefClicked(_ sender: NSButton) {
+    }
+    
+    private func getBriefFolderLevelFromSelection() -> Int {
+        var lv = -1
+        let selectedLevel = self.lstBriefFolderLevel.indexOfSelectedItem
+        if selectedLevel == 0 {
+            lv = -1
+        }else if selectedLevel == 1 {
+            lv = -2
+        }else if selectedLevel == 2 {
+            lv = 1
+        }else if selectedLevel == 3 {
+            lv = 2
+        }else{
+            lv = -1
+        }
+        return lv
+    }
+    
+    private func setBriefFolderLevelSelection(_ value:Int) {
+        if value == -1 {
+            self.lstBriefFolderLevel.selectItem(at: 0)
+        }else if value == -2 {
+            self.lstBriefFolderLevel.selectItem(at: 1)
+        }else if value == 1 {
+            self.lstBriefFolderLevel.selectItem(at: 2)
+        }else if value == 2 {
+            self.lstBriefFolderLevel.selectItem(at: 3)
+        }else{
+            
+            self.lstBriefFolderLevel.selectItem(at: 0)
+        }
+    }
+    
+    @IBAction func onPreviewBriefFolders(_ sender: NSButton) {
+        let amount = 100
+        let lv = self.getBriefFolderLevelFromSelection()
+        var array:[String] = []
+        if let container = self.originalContainer {
+            var folders:Set<String> = []
+            let paths = ModelStore.default.getAllContainerPathsOfImages(rootPath: container.repositoryPath)
+            for path in paths {
+                if path == container.repositoryPath {continue}
+                let p = path.replacingFirstOccurrence(of: container.repositoryPath.withStash(), with: "")
+                if p == "" {continue}
+                let parts = p.components(separatedBy: "/")
+                
+                var level = lv - 1
+                if lv < 0 {
+                    level = parts.count - 1 + lv
+                }
+                if level < 0 {level = 0}
+                if level < parts.count {
+                    var join = ""
+                    for i in 0...level {
+                        join += parts[i]
+                        join += "/"
+                    }
+                    folders.insert(join)
+                }
+            }
+            array = folders.sorted()
+        }else{
+            var folders:Set<String> = []
+            let path = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            if path != "" {
+                let paths = LocalDirectory.bridge.folders(in: path, unlimitedDepth: true)
+                for p in paths {
+                    let parts = p.components(separatedBy: "/")
+                    
+                    var level = lv - 1
+                    if lv < 0 {
+                        level = parts.count - 1 + lv
+                    }
+                    if level < 0 {level = 0}
+                    if level < parts.count {
+                        var join = ""
+                        for i in 0...level {
+                            join += parts[i]
+                            join += "/"
+                        }
+                        folders.insert(join)
+                    }
+                }
+            }
+            array = folders.sorted()
+        }
+        var names:[String] = []
+        if array.count > amount {
+            for i in 0...(amount-1) {
+                let v = array[i]
+                names.append(v)
+            }
+        }else{
+            names = array
+        }
+        if names.count > 0 {
+            var mapping:[(String, String)] = []
+            for name in names {
+                let n = Naming.Image.getBriefFromFolderName(subPath: name, folderLevel: lv)
+                mapping.append((n, name))
+            }
+            self.briefFoldersPreviewPopover.load(mapping)
+            self.briefFoldersPreviewPopover.show(sender)
+        }
+    }
+    
+    
     // MARK: - UPDATE EVENT
     
     @IBAction func onUpdateEmptyEventClicked(_ sender: NSButton) {
@@ -1662,12 +1791,12 @@ class EditRepositoryViewController: NSViewController {
     }
     
     @IBAction func onPreviewEventFolders(_ sender: NSButton) {
-        let amount = 30
+        let amount = 50
         let level = self.lstEventFolderLevel.indexOfSelectedItem
         var array:[String] = []
         if let container = self.originalContainer {
             var folders:Set<String> = []
-            let paths = ModelStore.default.getAllContainerPaths(rootPath: container.repositoryPath)
+            let paths = ModelStore.default.getAllContainerPathsOfImages(rootPath: container.repositoryPath)
             for path in paths {
                 if path == container.repositoryPath {continue}
                 let p = path.replacingFirstOccurrence(of: container.repositoryPath.withStash(), with: "")
@@ -1716,8 +1845,7 @@ class EditRepositoryViewController: NSViewController {
         if names.count > 0 {
             var mapping:[(String, String)] = []
             for name in names {
-                let parts = name.components(separatedBy: "/")
-                let n = parts[level]
+                let n = Naming.Image.getEventFromFolderName(subPath: name, folderLevel: level + 1)
                 mapping.append((n, name))
             }
             self.eventFoldersPreviewPopover.load(mapping)

@@ -456,6 +456,13 @@ extension ModelStore {
             })
         }
         
+        migrator.registerMigration("v31") { db in
+            try db.alter(table: "ImageContainer", body: { t in
+                t.add(column: "folderAsBrief", .boolean).defaults(to: false)
+                t.add(column: "briefFolderLevel", .integer).defaults(to: -1)
+            })
+        }
+        
         
         do {
             let dbQueue = try DatabaseQueue(path: dbfile)

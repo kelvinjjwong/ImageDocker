@@ -29,6 +29,8 @@ struct ImageContainer: Codable {
     var hideByParent: Bool
     var folderAsEvent: Bool
     var eventFolderLevel: Int
+    var folderAsBrief: Bool
+    var briefFolderLevel: Int
 }
 
 extension ImageContainer: FetchableRecord, MutablePersistableRecord, TableRecord {

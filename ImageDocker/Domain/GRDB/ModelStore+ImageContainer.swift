@@ -50,7 +50,9 @@ extension ModelStore {
                                                manyChildren: manyChildren,
                                                hideByParent: hideByParent,
                                                folderAsEvent: false,
-                                               eventFolderLevel: 2
+                                               eventFolderLevel: 1,
+                                               folderAsBrief: false,
+                                               briefFolderLevel: -1
                     )
                     try container?.save(db)
                 }
@@ -161,6 +163,35 @@ extension ModelStore {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
                 result = try ImageContainer.filter(Column("path").like("\(rootPath.withStash())%")).fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func getAllContainerPathsOfImages(rootPath:String? = nil) -> Set<String> {
+        var result:Set<String> = []
+        do {
+            let db = ModelStore.sharedDBPool()
+            try db.read { db in
+                if let root = rootPath {
+                    let sql = "select distinct containerpath from image where repositoryPath = ? order by containerpath"
+                    let cursor = try Row.fetchCursor(db, sql, arguments:[root])
+                    while let container = try cursor.next() {
+                        if let path = container["containerpath"] {
+                            result.insert("\(path)")
+                        }
+                    }
+                }else{
+                    let sql = "select distinct containerpath from image order by containerpath"
+                    let cursor = try Row.fetchCursor(db, sql)
+                    while let container = try cursor.next() {
+                        if let path = container["containerpath"] {
+                            result.insert("\(path)")
+                        }
+                    }
+                }
             }
         }catch{
             print(error)

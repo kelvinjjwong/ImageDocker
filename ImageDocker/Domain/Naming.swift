@@ -16,12 +16,63 @@ enum ImageType : Int {
 
 struct Naming {
     static let Camera = CameraModelRecognizer()
+    static let Image = ImagePropertyRules()
     static let Source = ImageSourceRecognizer()
     static let DateTime = DateTimeRecognizer()
     static let Place = PlaceRecognizer()
     static let FileType = FileTypeRecognizer()
     static let Event = EventRecognizer()
     static let Export = NamingForExporting()
+}
+
+struct ImagePropertyRules {
+    
+    /// Get event from folder name in the path
+    /// - parameter image: Image record
+    /// - parameter folderLevel: start from 1
+    func getEventFromFolderName(image:Image, folderLevel:Int) -> String {
+        return self.getEventFromFolderName(subPath: image.subPath, folderLevel: folderLevel)
+    }
+    
+    /// Get event from folder name in the path
+    /// - parameter subPath: /path/to/filename/without/repository/path, such as DCIM/IMG_12345.jpg
+    /// - parameter folderLevel: start from 1
+    func getEventFromFolderName(subPath:String, folderLevel lv:Int) -> String {
+        let level = lv - 1
+        let parts = subPath.components(separatedBy: "/")
+        let n = parts[level]
+        return n
+    }
+    
+    /// Get brief from folder name in the path
+    /// - parameter image: Image record
+    /// - parameter folderLevel: start from 1 or -1, -1 means the last one
+    func getBriefFromFolderName(image:Image, folderLevel:Int) -> String {
+        return self.getBriefFromFolderName(subPath: image.subPath, folderLevel: folderLevel)
+    }
+    
+    /// Get brief from folder name in the path
+    /// - parameter subPath: /path/to/filename/without/repository/path, such as DCIM/IMG_12345.jpg
+    /// - parameter folderLevel: start from 1 or -1, -1 means the last one
+    func getBriefFromFolderName(subPath:String, folderLevel lv:Int) -> String {
+        var level = lv - 1
+        
+        let parts = subPath.components(separatedBy: "/")
+        var x = 0
+        
+        // filter
+        let lastPart = parts[parts.count - 2] // presume the very last part is filename
+        if lastPart == "DCIM" { x = 1 }
+        if let _ = Int(lastPart) { x = 1 } // numeric
+        
+        if lv < 0 {
+            level = parts.count - 1 + lv - x
+        }
+        if level < 0 {level = 0}
+        let n = parts[level]
+        return n
+    }
+    
 }
 
 // MARK: - FILE TYPE
