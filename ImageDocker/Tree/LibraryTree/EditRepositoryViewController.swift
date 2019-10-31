@@ -70,7 +70,7 @@ class EditRepositoryViewController: NSViewController {
     
     private var window:NSWindow? = nil
     
-    var eventFoldersPreviewPopover : TwoColumnMenuPopover!
+    var eventFoldersPreviewPopover : TwoColumnTablePopover!
     
     private var accumulator:Accumulator? = nil
     
@@ -94,7 +94,7 @@ class EditRepositoryViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.eventFoldersPreviewPopover = TwoColumnMenuPopover(width: 600, height: 200) { id, name, action in
+        self.eventFoldersPreviewPopover = TwoColumnTablePopover(width: 600, height: 200) { id, name, action in
             // do nothing
         }
     }

@@ -53,9 +53,9 @@ class ExportConfigurationViewController: NSViewController {
     
     @IBOutlet weak var stackView: NSStackView!
     
-    var peopleOptions : MenuPopover!
-    var eventsOptions : MenuPopover!
-    var repositoryOptions : MenuPopover!
+    var peopleOptions : OneColumnTablePopover!
+    var eventsOptions : OneColumnTablePopover!
+    var repositoryOptions : OneColumnTablePopover!
     
     var repoNames:[String:String] = [:]
     
@@ -91,7 +91,7 @@ class ExportConfigurationViewController: NSViewController {
 //        self.txtRepository.isEditable = false
 //        self.txtDirectory.isEditable = false
         
-        self.peopleOptions = MenuPopover(width: 100, height: 200, onClick: { (name, _, _) in
+        self.peopleOptions = OneColumnTablePopover(width: 100, height: 200, onClick: { (name, _, _) in
             // on click people name
             print("selected \(name)")
             var selected = self.txtPeople.stringValue.components(separatedBy: ",")
@@ -105,7 +105,7 @@ class ExportConfigurationViewController: NSViewController {
             }
         })
         
-        self.eventsOptions = MenuPopover(width: 300, height: 200, onClick: { (name, _, _) in
+        self.eventsOptions = OneColumnTablePopover(width: 300, height: 200, onClick: { (name, _, _) in
             // on click event name
             print("selected \(name)")
             var selected = self.txtEvents.stringValue.components(separatedBy: ",")
@@ -119,7 +119,7 @@ class ExportConfigurationViewController: NSViewController {
             }
         })
         
-        self.repositoryOptions = MenuPopover(width: 150, height: 200, onClick: { (path, name, _) in
+        self.repositoryOptions = OneColumnTablePopover(width: 150, height: 200, onClick: { (path, name, _) in
             // on click repo path
             print("selected \(name)")
             let selected = self.txtRepository.stringValue

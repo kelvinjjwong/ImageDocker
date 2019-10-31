@@ -70,7 +70,7 @@
 		8E8D47222233DCD30091E9C3 /* DictionaryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D47212233DCD30091E9C3 /* DictionaryTableViewController.swift */; };
 		8E8D47262236733B0091E9C3 /* OneColumnTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D47242236733B0091E9C3 /* OneColumnTableViewController.swift */; };
 		8E8D47272236733B0091E9C3 /* OneColumnTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E8D47252236733B0091E9C3 /* OneColumnTableViewController.xib */; };
-		8E8D47292236F63C0091E9C3 /* MenuPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D47282236F63C0091E9C3 /* MenuPopover.swift */; };
+		8E8D47292236F63C0091E9C3 /* TablePopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D47282236F63C0091E9C3 /* TablePopover.swift */; };
 		8E95739A20EBEBD7003BD651 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E95739820EBEBD7003BD651 /* FilterViewController.swift */; };
 		8E95739B20EBEBD7003BD651 /* FilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E95739920EBEBD7003BD651 /* FilterViewController.xib */; };
 		8E98B8F020D0EE3300771280 /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E98B8EE20D0EE3300771280 /* PlaceListViewController.swift */; };
@@ -310,7 +310,7 @@
 		8E8D47212233DCD30091E9C3 /* DictionaryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryTableViewController.swift; sourceTree = "<group>"; };
 		8E8D47242236733B0091E9C3 /* OneColumnTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneColumnTableViewController.swift; sourceTree = "<group>"; };
 		8E8D47252236733B0091E9C3 /* OneColumnTableViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OneColumnTableViewController.xib; sourceTree = "<group>"; };
-		8E8D47282236F63C0091E9C3 /* MenuPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuPopover.swift; sourceTree = "<group>"; };
+		8E8D47282236F63C0091E9C3 /* TablePopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TablePopover.swift; sourceTree = "<group>"; };
 		8E95739820EBEBD7003BD651 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
 		8E95739920EBEBD7003BD651 /* FilterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FilterViewController.xib; sourceTree = "<group>"; };
 		8E98B8EE20D0EE3300771280 /* PlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
@@ -986,7 +986,7 @@
 				8E8D47212233DCD30091E9C3 /* DictionaryTableViewController.swift */,
 				8E8D47242236733B0091E9C3 /* OneColumnTableViewController.swift */,
 				8E8D47252236733B0091E9C3 /* OneColumnTableViewController.xib */,
-				8E8D47282236F63C0091E9C3 /* MenuPopover.swift */,
+				8E8D47282236F63C0091E9C3 /* TablePopover.swift */,
 				8EBC0180236B072F00FB6E2F /* TwoColumnTableViewController.swift */,
 				8EBC0181236B072F00FB6E2F /* TwoColumnTableViewController.xib */,
 			);
@@ -1269,7 +1269,7 @@
 				8EF4CE5521D77BAB00C53AFF /* People.swift in Sources */,
 				8E8D471222279AA80091E9C3 /* FaceCollectionViewItemsLoader.swift in Sources */,
 				8E95739A20EBEBD7003BD651 /* FilterViewController.swift in Sources */,
-				8E8D47292236F63C0091E9C3 /* MenuPopover.swift in Sources */,
+				8E8D47292236F63C0091E9C3 /* TablePopover.swift in Sources */,
 				8E0EAE9A209D2623008C377F /* ImageFolderTreeScanner.swift in Sources */,
 				8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */,
 				8EAD03B523372C0100AAC7C6 /* ModelStore+ImageEvent.swift in Sources */,

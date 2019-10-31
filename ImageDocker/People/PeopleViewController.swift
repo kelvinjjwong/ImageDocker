@@ -74,8 +74,8 @@ class PeopleViewController: NSViewController {
     var familyTypesListController : TextListViewPopupController!
     var familyTableController : DictionaryTableViewController!
     
-    var menuPopover : MenuPopover!
-    var menuRecognizeUnknown : MenuPopover!
+    var menuPopover : OneColumnTablePopover!
+    var menuRecognizeUnknown : OneColumnTablePopover!
     
     // MARK: INIT
     
@@ -187,11 +187,11 @@ class PeopleViewController: NSViewController {
         
         self.lblFamilyMessage.stringValue = ""
         
-        self.menuPopover = MenuPopover() { id, name, action in
+        self.menuPopover = OneColumnTablePopover() { id, name, action in
             self.onDifferentPersonClicked(id: id, name: name)
         }
         
-        self.menuRecognizeUnknown = MenuPopover(width: 230, height: 150) { id, name, action in
+        self.menuRecognizeUnknown = OneColumnTablePopover(width: 230, height: 150) { id, name, action in
             self.onRecognizeUnknownClicked(id: id)
         }
     }

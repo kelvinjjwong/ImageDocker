@@ -8,9 +8,9 @@
 
 import Cocoa
 
-/// Popover + TableView + Clickable, support up to 3 table-columns
+/// Popover + TableView + Clickable
 /// Steps (1) init with onClick (2) load (3) show
-class MenuPopover : NSObject, NSPopoverDelegate {
+class OneColumnTablePopover : NSObject, NSPopoverDelegate {
     
     fileprivate var popover:NSPopover!
     fileprivate var viewController:OneColumnTableViewController!
@@ -52,7 +52,9 @@ class MenuPopover : NSObject, NSPopoverDelegate {
     }
 }
 
-class TwoColumnMenuPopover : NSObject, NSPopoverDelegate {
+/// Popover + TableView + Clickable
+/// Steps (1) init with onClick (2) load (3) show
+class TwoColumnTablePopover : NSObject, NSPopoverDelegate {
     
     fileprivate var popover:NSPopover!
     fileprivate var viewController:TwoColumnTableViewController!
