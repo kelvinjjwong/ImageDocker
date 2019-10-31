@@ -1670,9 +1670,70 @@ class EditRepositoryViewController: NSViewController {
     }
     
     @IBAction func onUpdateEmptyBriefClicked(_ sender: NSButton) {
+        self.lblMessage.stringValue = "Updating images..."
+        self.btnUpdateEmptyBrief.isEnabled = false
+        self.btnUpdateAllBrief.isEnabled = false
+        self.btnUpdateEmptyEvent.isEnabled = false
+        self.btnUpdateAllEvents.isEnabled = false
+        DispatchQueue.global().async {
+            if let container = self.originalContainer {
+                let images = ModelStore.default.getImages(repositoryPath: container.repositoryPath)
+                let level = self.getBriefFolderLevelFromSelection()
+                let total = images.count
+                var i = 0
+                for image in images {
+                    if image.shortDescription != nil && image.shortDescription != "" {
+                        continue
+                    }
+                    var img = image
+                    i += 1
+                    img.shortDescription = Naming.Image.getBriefFromFolderName(image: image, folderLevel: level)
+                    let _ = ModelStore.default.saveImage(image: img)
+                    DispatchQueue.main.async {
+                        self.lblMessage.stringValue = "Updating images... (\(i)/\(total))"
+                    }
+                }
+                DispatchQueue.main.async {
+                    self.lblMessage.stringValue = "Updated (\(i)/\(total)) images."
+                    self.btnUpdateEmptyBrief.isEnabled = true
+                    self.btnUpdateAllBrief.isEnabled = true
+                    self.btnUpdateEmptyEvent.isEnabled = true
+                    self.btnUpdateAllEvents.isEnabled = true
+                }
+            }
+        }
     }
     
     @IBAction func onUpdateAllBriefClicked(_ sender: NSButton) {
+        self.lblMessage.stringValue = "Updating images..."
+        self.btnUpdateEmptyBrief.isEnabled = false
+        self.btnUpdateAllBrief.isEnabled = false
+        self.btnUpdateEmptyEvent.isEnabled = false
+        self.btnUpdateAllEvents.isEnabled = false
+        DispatchQueue.global().async {
+            if let container = self.originalContainer {
+                let images = ModelStore.default.getImages(repositoryPath: container.repositoryPath)
+                let level = self.getBriefFolderLevelFromSelection()
+                let total = images.count
+                var i = 0
+                for image in images {
+                    var img = image
+                    i += 1
+                    img.shortDescription = Naming.Image.getBriefFromFolderName(image: image, folderLevel: level)
+                    let _ = ModelStore.default.saveImage(image: img)
+                    DispatchQueue.main.async {
+                        self.lblMessage.stringValue = "Updating images... (\(i)/\(total))"
+                    }
+                }
+                DispatchQueue.main.async {
+                    self.lblMessage.stringValue = "Updated (\(i)/\(total)) images."
+                    self.btnUpdateEmptyBrief.isEnabled = true
+                    self.btnUpdateAllBrief.isEnabled = true
+                    self.btnUpdateEmptyEvent.isEnabled = true
+                    self.btnUpdateAllEvents.isEnabled = true
+                }
+            }
+        }
     }
     
     private func getBriefFolderLevelFromSelection() -> Int {
@@ -1784,10 +1845,70 @@ class EditRepositoryViewController: NSViewController {
     // MARK: - UPDATE EVENT
     
     @IBAction func onUpdateEmptyEventClicked(_ sender: NSButton) {
-        // TODO: update event with images' container's first level folder name if event is not set
+        self.lblMessage.stringValue = "Updating images..."
+        self.btnUpdateEmptyBrief.isEnabled = false
+        self.btnUpdateAllBrief.isEnabled = false
+        self.btnUpdateEmptyEvent.isEnabled = false
+        self.btnUpdateAllEvents.isEnabled = false
+        DispatchQueue.global().async {
+            if let container = self.originalContainer {
+                let images = ModelStore.default.getImages(repositoryPath: container.repositoryPath)
+                let level = self.lstEventFolderLevel.indexOfSelectedItem + 1
+                let total = images.count
+                var i = 0
+                for image in images {
+                    if image.event != nil && image.event != "" {
+                        continue
+                    }
+                    var img = image
+                    i += 1
+                    img.event = Naming.Image.getEventFromFolderName(image: image, folderLevel: level)
+                    let _ = ModelStore.default.saveImage(image: img)
+                    DispatchQueue.main.async {
+                        self.lblMessage.stringValue = "Updating images... (\(i)/\(total))"
+                    }
+                }
+                DispatchQueue.main.async {
+                    self.lblMessage.stringValue = "Updated (\(i)/\(total)) images."
+                    self.btnUpdateEmptyBrief.isEnabled = true
+                    self.btnUpdateAllBrief.isEnabled = true
+                    self.btnUpdateEmptyEvent.isEnabled = true
+                    self.btnUpdateAllEvents.isEnabled = true
+                }
+            }
+        }
     }
     
     @IBAction func onUpdateAllEventsClicked(_ sender: NSButton) {
+        self.lblMessage.stringValue = "Updating images..."
+        self.btnUpdateEmptyBrief.isEnabled = false
+        self.btnUpdateAllBrief.isEnabled = false
+        self.btnUpdateEmptyEvent.isEnabled = false
+        self.btnUpdateAllEvents.isEnabled = false
+        DispatchQueue.global().async {
+            if let container = self.originalContainer {
+                let images = ModelStore.default.getImages(repositoryPath: container.repositoryPath)
+                let level = self.lstEventFolderLevel.indexOfSelectedItem + 1
+                let total = images.count
+                var i = 0
+                for image in images {
+                    var img = image
+                    i += 1
+                    img.event = Naming.Image.getEventFromFolderName(image: image, folderLevel: level)
+                    let _ = ModelStore.default.saveImage(image: img)
+                    DispatchQueue.main.async {
+                        self.lblMessage.stringValue = "Updating images... (\(i)/\(total))"
+                    }
+                }
+                DispatchQueue.main.async {
+                    self.lblMessage.stringValue = "Updated (\(i)/\(total)) images."
+                    self.btnUpdateEmptyBrief.isEnabled = true
+                    self.btnUpdateAllBrief.isEnabled = true
+                    self.btnUpdateEmptyEvent.isEnabled = true
+                    self.btnUpdateAllEvents.isEnabled = true
+                }
+            }
+        }
     }
     
     @IBAction func onPreviewEventFolders(_ sender: NSButton) {
