@@ -230,6 +230,7 @@ extension ViewController {
                                            indicator:self.collectionLoadingIndicator,
                                            pageSize: pageSize, pageNumber: pageNumber)
                     self.refreshCollectionView()
+                    TaskManager.loadingImagesCollection = false
                 })
             }else{
                 self.imagesLoader.load(year: collection.year, month: collection.month, day: collection.day,
@@ -239,6 +240,7 @@ extension ViewController {
                                        indicator:self.collectionLoadingIndicator,
                                        pageSize: pageSize, pageNumber: pageNumber)
                 self.refreshCollectionView()
+                TaskManager.loadingImagesCollection = false
             }
             
         }

@@ -40,10 +40,12 @@ extension ViewController {
                     self.imagesLoader.cancel(onCancelled: {
                         self.imagesLoader.search(conditions: condition, indicator: self.collectionLoadingIndicator, pageSize: 200, pageNumber: 1)
                         self.refreshCollectionView()
+                        TaskManager.loadingImagesCollection = false
                     })
                 }else{
                     self.imagesLoader.search(conditions: condition, indicator: self.collectionLoadingIndicator, pageSize: 200, pageNumber: 1)
                     self.refreshCollectionView()
+                    TaskManager.loadingImagesCollection = false
                 }
                 self.runningSearch = false
                 

@@ -245,10 +245,12 @@ extension ViewController {
                 self.imagesLoader.cancel(onCancelled: {
                     self.imagesLoader.load(year: year, month: month, day: day, place: nil, filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel, indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber)
                     self.refreshCollectionView()
+                    TaskManager.loadingImagesCollection = false
                 })
             }else{
                 self.imagesLoader.load(year: year, month: month, day: day, place: nil, filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel,  indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber)
                 self.refreshCollectionView()
+                TaskManager.loadingImagesCollection = false
             }
             
         }

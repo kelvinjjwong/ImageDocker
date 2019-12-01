@@ -25,6 +25,9 @@ extension ViewController {
             type: .library,
             source: .device )
         collection.photoCount = 0
+        collection.buttonAction = { sender in
+            // do nothing
+        }
         
         let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: phoneIcon)
         
@@ -44,6 +47,9 @@ extension ViewController {
                                                          source: .device )
         collection.photoCount = 0
         collection.deviceConnected = connected
+        collection.buttonAction = { sender in
+            // do nothing
+        }
         
         if let exist = self.treeIdItems[device.deviceId] {
             if device.type == .Android {
@@ -118,6 +124,8 @@ extension ViewController {
         }
         if collection.identifier == "device_type_Android" {
             // list all devices, tag the connected ones
+            self.hideTreeNodeButton(collection: collection)
+            
             let devices:[String] = Android.bridge.devices()
             print("android device count: \(devices.count)")
             self.cleanCachedDeviceIds(type: .Android)
@@ -167,6 +175,8 @@ extension ViewController {
                 Alert.invalidIOSMountPoint()
                 return
             }
+            
+            self.hideTreeNodeButton(collection: collection)
             
             if !IPHONE.bridge.validCommands() {
                 self.showTreeNodeButton(collection: collection, image: NSImage(named: .caution))

@@ -14,9 +14,9 @@ extension ViewController {
         switch(number){
         case 1:
             if enabled {
-                return "Scan libraries now"
+                return "Scan & Import from repositories"
             }else{
-                return "Stop scanning libraries"
+                return "Stop scanning repositories"
             }
         case 2:
             return "Scan & Extract EXIF from images"

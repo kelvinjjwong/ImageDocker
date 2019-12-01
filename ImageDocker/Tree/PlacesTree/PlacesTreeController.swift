@@ -350,6 +350,7 @@ extension ViewController {
                         filterCameraModel: self.filterCameraModel,
                         indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber)
                     self.refreshCollectionView()
+                    TaskManager.loadingImagesCollection = false
                 })
             }else{
                 self.imagesLoader.load(
@@ -365,6 +366,7 @@ extension ViewController {
                     filterCameraModel: self.filterCameraModel,
                     indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber)
                 self.refreshCollectionView()
+                TaskManager.loadingImagesCollection = false
             }
             
         }

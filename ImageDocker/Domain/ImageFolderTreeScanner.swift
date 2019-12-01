@@ -278,6 +278,12 @@ class ImageFolderTreeScanner {
             }
             return
         }
+        
+        if indicator != nil {
+            DispatchQueue.main.async {
+                let _ = indicator?.add("[EXIF Scan] Loading images ...")
+            }
+        }
         let excludedContainerPaths = ModelStore.default.getExcludedImportedContainerPaths(withStash: true)
 
         let photos = ModelStore.default.getPhotoFilesWithoutExif()
@@ -308,7 +314,7 @@ class ImageFolderTreeScanner {
                 }else{
                     if indicator != nil {
                         DispatchQueue.main.async {
-                            let _ = indicator?.add("Searching images ...")
+                            let _ = indicator?.add("[EXIF Scan] Loading images ...")
                         }
                     }
                 }
@@ -661,7 +667,7 @@ class ImageFolderTreeScanner {
         
         print("\(Date()) CHECK REPO: CHECK TO BE ADDED AND REMOVED")
         if indicator != nil {
-            indicator?.display(message: "Checking differences .....")
+            indicator?.display(message: "[FileSys Scan] Checking differences .....")
         }
         
         let dbUrls = ModelStore.default.getAllPhotoPaths(sharedDB: ModelStore.sharedDBPool())
@@ -677,13 +683,13 @@ class ImageFolderTreeScanner {
         
         if indicator != nil {
             if dbUrls.count == filesysUrls.count {
-                indicator?.display(message: "Images have no difference btw FileSys and DB.")
+                indicator?.display(message: "[FileSys Scan] Images have no difference btw FileSys and DB.")
             }else if dbUrls.count < filesysUrls.count {
                 let gap = dbUrls.count - filesysUrls.count
-                indicator?.display(message: "Images in DB[\(dbUrls.count)] less (\(gap)) than in FileSys[\(filesysUrls.count)].")
+                indicator?.display(message: "[FileSys Scan] Images in DB[\(dbUrls.count)] less (\(gap)) than in FileSys[\(filesysUrls.count)].")
             }else if dbUrls.count > filesysUrls.count {
                 let gap = dbUrls.count - filesysUrls.count
-                indicator?.display(message: "Images in DB[\(dbUrls.count)] more (+\(gap) than in FileSys[\(filesysUrls.count)].")
+                indicator?.display(message: "[FileSys Scan] Images in DB[\(dbUrls.count)] more (+\(gap) than in FileSys[\(filesysUrls.count)].")
             }
         }
         
@@ -841,7 +847,7 @@ class ImageFolderTreeScanner {
         
         print("\(Date()) TRIGGER ON DATA CHANGED EVENT AFTER FINISHED SCANNING REPOSITORIES")
         if indicator != nil {
-            indicator?.display(message: "Repositories scan done.")
+            indicator?.display(message: "[FileSys Scan] Repositories scan done.")
             indicator?.dataChanged()
         }
         if onCompleted != nil {

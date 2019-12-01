@@ -25,8 +25,10 @@ class TaskManager {
     static func allowRefreshTrees() -> Bool {
         printStatus()
         if loadingImagesCollection || refreshingTrees {
+            print("DISALLOW REFRESH TREE")
             return false
         }else{
+            print("ALLOW REFRESH TREE")
             return true
         }
     }
@@ -34,8 +36,10 @@ class TaskManager {
     static func allowScanFileSystem() -> Bool {
         printStatus()
         if scanningFileSystem || readingImagesExif || refreshingTrees || exporting {
+            print("DISALLOW SCAN FILESYS")
             return false
         }else{
+            print("ALLOW SCAN FILESYS")
             return true
         }
     }
@@ -43,8 +47,10 @@ class TaskManager {
     static func allowReadImagesExif() -> Bool {
         printStatus()
         if scanningFileSystem || readingImagesExif || refreshingTrees || exporting {
+            print("DISALLOW READ EXIF")
             return false
         }else{
+            print("ALLOW READ EXIF")
             return true
         }
     }
@@ -52,8 +58,10 @@ class TaskManager {
     static func allowExport() ->Bool {
         printStatus()
         if scanningFileSystem || readingImagesExif || refreshingTrees || exporting {
+            print("DISALLOW EXPORT")
             return false
         }else{
+            print("ALLOW EXPORT")
             return true
         }
     }
@@ -61,8 +69,10 @@ class TaskManager {
     static func allowApplySelectionModifies() -> Bool {
         printStatus()
         if applyingSelectionModifies {
+            print("DISALLOW APPLY SELECTION MODIFIES")
             return false
         }else{
+            print("ALLOW APPLY SELECTION MODIFIES")
             return true
         }
     }

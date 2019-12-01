@@ -222,11 +222,13 @@ extension ViewController {
                 self.imagesLoader.cancel(onCancelled: {
                     self.imagesLoader.load(from: url, indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
                     self.refreshCollectionView()
+                    TaskManager.loadingImagesCollection = false
                 })
             }else{
                 print("LOADING from library entry \(name)")
                 self.imagesLoader.load(from: url, indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
                 self.refreshCollectionView()
+                TaskManager.loadingImagesCollection = false
             }
         }
     }

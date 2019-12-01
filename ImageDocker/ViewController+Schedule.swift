@@ -11,50 +11,50 @@ import Cocoa
 extension ViewController {
     
     internal func startSchedules() {
-        self.scanLocationChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
-            guard TaskManager.allowRefreshTrees() else {return}
-            print("\(Date()) SCANING LOCATION CHANGE")
-            if self.lastCheckLocationChange != nil {
-                let photoFiles:[Image] = ModelStore.default.getPhotoFiles(after: self.lastCheckLocationChange!)
-                if photoFiles.count > 0 {
-                    self.saveTreeItemsExpandState()
-                    self.refreshLocationTree()
-                    self.restoreTreeItemsExpandState()
-                    self.restoreTreeSelection()
-                    self.lastCheckLocationChange = Date()
-                }
-            }
-        })
+//        self.scanLocationChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
+//            guard TaskManager.allowRefreshTrees() else {return}
+//            print("\(Date()) SCANING LOCATION CHANGE")
+//            if self.lastCheckLocationChange != nil {
+//                let photoFiles:[Image] = ModelStore.default.getPhotoFiles(after: self.lastCheckLocationChange!)
+//                if photoFiles.count > 0 {
+//                    self.saveTreeItemsExpandState()
+//                    self.refreshLocationTree()
+//                    self.restoreTreeItemsExpandState()
+//                    self.restoreTreeSelection()
+//                    self.lastCheckLocationChange = Date()
+//                }
+//            }
+//        })
         
-        self.scanPhotoTakenDateChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
-            guard TaskManager.allowRefreshTrees() else {return}
-            print("\(Date()) SCANING DATE CHANGE")
-            if self.lastCheckPhotoTakenDateChange != nil {
-                let photoFiles:[Image] = ModelStore.default.getPhotoFiles(after: self.lastCheckPhotoTakenDateChange!)
-                if photoFiles.count > 0 {
-                    self.saveTreeItemsExpandState()
-                    self.refreshMomentTree()
-                    self.restoreTreeItemsExpandState()
-                    self.restoreTreeSelection()
-                    self.lastCheckPhotoTakenDateChange = Date()
-                }
-            }
-        })
+//        self.scanPhotoTakenDateChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
+//            guard TaskManager.allowRefreshTrees() else {return}
+//            print("\(Date()) SCANING DATE CHANGE")
+//            if self.lastCheckPhotoTakenDateChange != nil {
+//                let photoFiles:[Image] = ModelStore.default.getPhotoFiles(after: self.lastCheckPhotoTakenDateChange!)
+//                if photoFiles.count > 0 {
+//                    self.saveTreeItemsExpandState()
+//                    self.refreshMomentTree()
+//                    self.restoreTreeItemsExpandState()
+//                    self.restoreTreeSelection()
+//                    self.lastCheckPhotoTakenDateChange = Date()
+//                }
+//            }
+//        })
         
-        self.scanEventChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
-            guard TaskManager.allowRefreshTrees() else {return}
-            print("\(Date()) SCANING EVENT CHANGE")
-            if self.lastCheckEventChange != nil {
-                let photoFiles:[Image] = ModelStore.default.getPhotoFiles(after: self.lastCheckEventChange!)
-                if photoFiles.count > 0 {
-                    self.saveTreeItemsExpandState()
-                    self.refreshEventTree()
-                    self.restoreTreeItemsExpandState()
-                    self.restoreTreeSelection()
-                    self.lastCheckEventChange = Date()
-                }
-            }
-        })
+//        self.scanEventChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
+//            guard TaskManager.allowRefreshTrees() else {return}
+//            print("\(Date()) SCANING EVENT CHANGE")
+//            if self.lastCheckEventChange != nil {
+//                let photoFiles:[Image] = ModelStore.default.getPhotoFiles(after: self.lastCheckEventChange!)
+//                if photoFiles.count > 0 {
+//                    self.saveTreeItemsExpandState()
+//                    self.refreshEventTree()
+//                    self.restoreTreeItemsExpandState()
+//                    self.restoreTreeSelection()
+//                    self.lastCheckEventChange = Date()
+//                }
+//            }
+//        })
         
         self.exportPhotosTimers = Timer.scheduledTimer(withTimeInterval: 600, repeats: true, block:{_ in
             print("\(Date()) TRYING TO EXPORT \(self.suppressedExport)")

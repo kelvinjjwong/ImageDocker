@@ -73,10 +73,12 @@ extension ViewController {
                 self.imagesLoader.cancel(onCancelled: {
                     self.imagesLoader.reload()
                     self.refreshCollectionView()
+                    TaskManager.loadingImagesCollection = false
                 })
             }else{
                 self.imagesLoader.reload()
                 self.refreshCollectionView()
+                TaskManager.loadingImagesCollection = false
             }
             
         }
