@@ -12,7 +12,7 @@ class ExportManager {
     
     static let `default` = ExportManager()
     
-    var working:Bool = false
+    //var working:Bool = false
     var suppressed:Bool = false
     var messageBox:NSTextField? = nil
     
@@ -42,7 +42,7 @@ class ExportManager {
     fileprivate func nonStop() -> Bool {
         if self.suppressed {
             print("ExportManager is suppressed.")
-            self.working = false
+            TaskManager.exporting = false
             DispatchQueue.main.async {
                 self.messageBox?.stringValue = ""
             }
@@ -200,7 +200,7 @@ class ExportManager {
     
     
     func export(profile:ExportProfile, after date:Date, housekeep:Bool) -> (Bool, String) {
-        guard self.nonStop() && !self.working else {return (false, "PREVENTED")}
+        guard self.nonStop() && !TaskManager.exporting else {return (false, "PREVENTED")}
         
         guard self.prepareExportDestination(path: profile.directory) else {
             return (false, "INACCESSIBLE DIRECTORY")
@@ -208,7 +208,7 @@ class ExportManager {
         
         
         //print("exporting")
-        working = true
+        TaskManager.exporting = true
         print("  ")
         print("!! ExportManager start working at \(Date())")
         
@@ -306,7 +306,7 @@ class ExportManager {
             self.housekeep()
         }
         
-        self.working = false
+        TaskManager.exporting = false
         
         return (true, "COMPLETED")
     }

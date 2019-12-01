@@ -337,6 +337,15 @@ struct DateTimeRecognizer {
         }
         
         if date == "" {
+            date = self.recognizeDateTimeFromFilename(filename: filename, patterns: [
+                
+                // face_u app
+                "faceu_([0-9]+)_([0-9]{4})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})\\.([A-Za-z0-9]{3}+)"
+                
+                ], startIndex: 1)
+        }
+        
+        if date == "" {
             date = self.recognizeUnixTimeFromFilename(filename: filename, patterns: [
                 
                 // huawei honor6 video
@@ -392,9 +401,9 @@ struct DateTimeRecognizer {
     
     
     
-    internal func recognizeDateTimeFromFilename(filename: String, patterns:[String]) -> String {
+    internal func recognizeDateTimeFromFilename(filename: String, patterns:[String], startIndex:Int = 0) -> String {
         for pattern in patterns {
-            let dateString = self.recognizeDateTimeFromFilename(filename: filename, pattern)
+            let dateString = self.recognizeDateTimeFromFilename(filename: filename, pattern, startIndex)
             if dateString != "" {
                 return dateString
             }
@@ -402,11 +411,11 @@ struct DateTimeRecognizer {
         return ""
     }
     
-    internal func recognizeDateTimeFromFilename(filename: String, _ pattern:String) -> String{
+    internal func recognizeDateTimeFromFilename(filename: String, _ pattern:String, _ startIndex:Int = 0) -> String{
         
         let parts:[String] = filename.matches(for: pattern)
         if parts.count > 0 {
-            return "\(parts[1]):\(parts[2]):\(parts[3]) \(parts[4]):\(parts[5]):\(parts[6])"
+            return "\(parts[startIndex+1]):\(parts[startIndex+2]):\(parts[startIndex+3]) \(parts[startIndex+4]):\(parts[startIndex+5]):\(parts[startIndex+6])"
         }
         return ""
     }

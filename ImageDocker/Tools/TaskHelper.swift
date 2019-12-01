@@ -8,6 +8,67 @@
 
 import Foundation
 
+class TaskManager {
+    
+    static var loadingImagesCollection = false
+    static var scanningFileSystem = false
+    static var readingImagesExif = false
+    static var applyingSelectionModifies = false
+    static var refreshingTrees = false
+    static var refreshingRepositoryTree = false
+    static var exporting = false
+    
+    static func printStatus() {
+        print("loading collection: \(loadingImagesCollection), scanning filesys: \(scanningFileSystem), reading exif: \(readingImagesExif), refreshing trees: \(refreshingTrees), exporting: \(exporting), applying selection modifies: \(applyingSelectionModifies)")
+    }
+    
+    static func allowRefreshTrees() -> Bool {
+        printStatus()
+        if loadingImagesCollection || refreshingTrees {
+            return false
+        }else{
+            return true
+        }
+    }
+    
+    static func allowScanFileSystem() -> Bool {
+        printStatus()
+        if scanningFileSystem || readingImagesExif || refreshingTrees || exporting {
+            return false
+        }else{
+            return true
+        }
+    }
+    
+    static func allowReadImagesExif() -> Bool {
+        printStatus()
+        if scanningFileSystem || readingImagesExif || refreshingTrees || exporting {
+            return false
+        }else{
+            return true
+        }
+    }
+    
+    static func allowExport() ->Bool {
+        printStatus()
+        if scanningFileSystem || readingImagesExif || refreshingTrees || exporting {
+            return false
+        }else{
+            return true
+        }
+    }
+    
+    static func allowApplySelectionModifies() -> Bool {
+        printStatus()
+        if applyingSelectionModifies {
+            return false
+        }else{
+            return true
+        }
+    }
+    
+}
+
 class Tasklet {
     
     var id = ""

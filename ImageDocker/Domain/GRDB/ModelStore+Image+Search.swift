@@ -331,7 +331,7 @@ select DATE('now', 'localtime')  date
         do {
             let db = ModelStore.sharedDBPool()
             try db.read { db in
-                result = try Image.filter(sql: "hidden != 1 AND (updateExifDate is null OR photoTakenYear is null OR photoTakenYear = 0 OR (latitude <> '0.0' AND latitudeBD = '0.0') OR (latitudeBD <> '0.0' AND COUNTRY = ''))").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+                result = try Image.filter(sql: "hidden != 1 AND cameraMaker is null and (lastTimeExtractExif = 0 or updateExifDate is null OR photoTakenYear is null OR photoTakenYear = 0 OR (latitude <> '0.0' AND latitudeBD = '0.0') OR (latitudeBD <> '0.0' AND COUNTRY = ''))").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
             }
         }catch{
             print(error)

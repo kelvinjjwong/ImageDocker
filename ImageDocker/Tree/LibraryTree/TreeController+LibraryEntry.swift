@@ -203,7 +203,7 @@ extension ViewController {
     }
     
     internal func loadCollectionByContainer(name:String, url:URL, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){
-        self.scaningRepositories = true
+        TaskManager.loadingImagesCollection = true
         
         self.imagesLoader.clean()
         collectionView.reloadData()
@@ -212,7 +212,7 @@ extension ViewController {
         
         DispatchQueue.global().async {
             self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: { data in
-                    self.scaningRepositories = false
+                    TaskManager.loadingImagesCollection = false
                 }
             )
             if self.imagesLoader.isLoading() {

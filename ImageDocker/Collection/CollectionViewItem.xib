@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -100,13 +100,13 @@
                     </constraints>
                     <popUpButtonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" autoenablesItems="NO" id="x4F-Td-KzV">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="menu"/>
+                        <font key="font" metaFont="system"/>
                         <menu key="menu" autoenablesItems="NO" id="tEK-js-g3a">
                             <items>
                                 <menuItem state="on" image="more_horizontal" hidden="YES" id="fyA-MO-0B9"/>
                                 <menuItem title="Reveal in Finder" id="Fee-pt-Seh"/>
                                 <menuItem isSeparatorItem="YES" id="Lfr-qp-zvR"/>
-                                <menuItem title="Preivew (editable version)" id="zFL-FL-qGO">
+                                <menuItem title="Preview (editable version)" id="zFL-FL-qGO">
                                     <modifierMask key="keyEquivalentModifierMask"/>
                                 </menuItem>
                                 <menuItem title="Preview (backup version)" id="1Ki-Mg-RCo">

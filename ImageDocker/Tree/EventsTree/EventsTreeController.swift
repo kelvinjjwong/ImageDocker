@@ -95,7 +95,7 @@ extension ViewController {
         collection.year = event.year
         collection.month = event.month
         collection.day = event.day
-        self.showTreeNodeButton(collection: collection, image: NSImage(named: .slideshowTemplate))
+        self.showTreeNodeButton(collection: collection, image: moreHorizontalIcon)
         collection.buttonAction = { sender in 
             self.onTreeItemQuickLook(collection: collection, event: event.event)
         }
@@ -123,7 +123,7 @@ extension ViewController {
         collection.event = month.event
         collection.year = month.year
         collection.month = month.month
-        self.showTreeNodeButton(collection: collection, image: NSImage(named: .slideshowTemplate))
+        self.showTreeNodeButton(collection: collection, image: moreHorizontalIcon)
         collection.buttonAction = { sender in
             self.onTreeItemQuickLook(collection: collection, event: month.event)
         }
@@ -156,7 +156,7 @@ extension ViewController {
         collection.month = day.month
         collection.day = day.day
         collection.place = day.place
-        self.showTreeNodeButton(collection: collection, image: NSImage(named: .slideshowTemplate))
+        self.showTreeNodeButton(collection: collection, image: moreHorizontalIcon)
         collection.buttonAction = { sender in 
             self.onTreeItemQuickLook(collection: collection, event: day.event)
         }
@@ -203,7 +203,7 @@ extension ViewController {
     func selectEvent(_ collection:PhotoCollection, pageSize:Int = 0, pageNumber:Int = 0) {
         //guard !self.scaningRepositories && !self.creatingRepository else {return}
         self.selectedCollection = collection
-        self.scaningRepositories = true
+        TaskManager.loadingImagesCollection = true
         
         self.imagesLoader.clean()
         collectionView.reloadData()
@@ -212,7 +212,7 @@ extension ViewController {
         
         DispatchQueue.global().async {
             self.collectionLoadingIndicator = Accumulator(target: collection.photoCount, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {data in
-                self.scaningRepositories = false
+                TaskManager.loadingImagesCollection = false
                 //                let total:Int = data["total"] ?? 0
                 //                let hidden:Int = data["hidden"] ?? 0
                 //                let message:String = "\(total) images, \(hidden) hidden"

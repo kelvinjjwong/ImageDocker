@@ -117,7 +117,7 @@ extension ViewController {
         collection.year = year.year
         collection.month = year.month
         collection.day = year.day
-        self.showTreeNodeButton(collection: collection, image: NSImage(named: .slideshowTemplate))
+        self.showTreeNodeButton(collection: collection, image: moreHorizontalIcon)
         collection.buttonAction = { sender in
             self.onTreeItemQuickLook(collection: collection)
         }
@@ -144,7 +144,7 @@ extension ViewController {
         collection.photoCount = month.photoCount
         collection.year = month.year
         collection.month = month.month
-        self.showTreeNodeButton(collection: collection, image: NSImage(named: .slideshowTemplate))
+        self.showTreeNodeButton(collection: collection, image: moreHorizontalIcon)
         collection.buttonAction = { sender in
             self.onTreeItemQuickLook(collection: collection)
         }
@@ -173,7 +173,7 @@ extension ViewController {
         collection.year = day.year
         collection.month = day.month
         collection.day = day.day
-        self.showTreeNodeButton(collection: collection, image: NSImage(named: .slideshowTemplate))
+        self.showTreeNodeButton(collection: collection, image: moreHorizontalIcon)
         collection.buttonAction = { sender in 
             self.onTreeItemQuickLook(collection: collection)
         }
@@ -222,7 +222,7 @@ extension ViewController {
         //guard !self.scaningRepositories && !self.creatingRepository else {return}
         print("select \(year) \(month) \(day)")
         
-        self.scaningRepositories = true
+        TaskManager.loadingImagesCollection = true
         
         self.imagesLoader.clean()
         collectionView.reloadData()
@@ -231,7 +231,7 @@ extension ViewController {
         
         DispatchQueue.global().async {
             self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {data in
-                self.scaningRepositories = false
+                TaskManager.loadingImagesCollection = false
                 //                let total:Int = data["total"] ?? 0
                 //                let hidden:Int = data["hidden"] ?? 0
                 //                let message:String = "\(total) images, \(hidden) hidden"

@@ -23,7 +23,7 @@ class MenuAction {
 class LCSourceListHeaderView : PXSourceListTableCellView {
     
     @IBOutlet weak var btnMore: NSButton!
-    var buttonShouldShow = false
+    var buttonShouldShow = true
     
     var buttonAction: ((_ sender:NSButton) -> Void)? = nil
     
@@ -35,7 +35,7 @@ class LCSourceListHeaderView : PXSourceListTableCellView {
     
     override func layout(){
         super.layout()
-        setUpTrackingArea()
+        //setUpTrackingArea()
     }
     
     override func viewWillDraw() {
@@ -48,15 +48,15 @@ class LCSourceListHeaderView : PXSourceListTableCellView {
     }
     
     override func mouseEntered(with: NSEvent) {
-        if self.buttonShouldShow {
-            self.btnMore.isHidden = false
-        }
+//        if self.buttonShouldShow {
+//            self.btnMore.isHidden = false
+//        }
     }
     
     override func mouseExited(with: NSEvent) {
-        if self.buttonShouldShow {
-            self.btnMore.isHidden = true
-        }
+//        if self.buttonShouldShow {
+//            self.btnMore.isHidden = true
+//        }
     }
     
     

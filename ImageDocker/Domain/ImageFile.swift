@@ -210,6 +210,15 @@ class ImageFile {
             
         }
         
+        if self.imageData?.cameraMaker == nil {
+            autoreleasepool { () -> Void in
+                self.loadMetaInfoFromOSX()
+                self.loadMetaInfoFromExif()
+                
+                needSave = true
+            }
+        }
+        
         if self.isNeedLoadLocation() {
             needSave = true
             autoreleasepool { () -> Void in

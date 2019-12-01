@@ -172,6 +172,7 @@ extension ViewController : PXSourceListDelegate {
                         
                         if title == "EVENTS" {
                             cv.buttonShouldShow = true
+                            cv.btnMore.isHidden = false
                             cv.buttonAction = { sender in
                                 DispatchQueue.main.async {
                                     self.refreshEventTree()
@@ -179,6 +180,7 @@ extension ViewController : PXSourceListDelegate {
                             }
                         }else if title == "PLACES" {
                             cv.buttonShouldShow = true
+                            cv.btnMore.isHidden = false
                             cv.buttonAction = { sender in
                                 DispatchQueue.main.async {
                                     self.refreshLocationTree()
@@ -186,6 +188,7 @@ extension ViewController : PXSourceListDelegate {
                             }
                         }else if title == "MOMENTS" {
                             cv.buttonShouldShow = true
+                            cv.btnMore.isHidden = false
                             cv.buttonAction = { sender in
                                 DispatchQueue.main.async {
                                     self.refreshMomentTree()
@@ -193,6 +196,8 @@ extension ViewController : PXSourceListDelegate {
                             }
                         }else if title == "LIBRARY" {
                             cv.buttonShouldShow = true
+                            cv.btnMore.isHidden = false
+
                             cv.buttonAction = { sender in
                                 self.createLibrariesViewPopover()
                                 
@@ -200,6 +205,7 @@ extension ViewController : PXSourceListDelegate {
                                 self.librariesViewPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxX)
                             }
                         }else{
+                            cv.btnMore.isHidden = true
                             cv.buttonShouldShow = false
                         }
                     }
@@ -264,6 +270,7 @@ extension ViewController : PXSourceListDelegate {
                     
                     if collection.enableMoreButton {
                         cv.btnMore.isEnabled = true
+                        cv.btnMore.isHidden = false
                         if let img = collection.imageOfMoreButton {
                             cv.btnMore.image = img
                         }
@@ -275,6 +282,7 @@ extension ViewController : PXSourceListDelegate {
                         }
                         cv.buttonShouldShow = true
                     }else{
+                        cv.btnMore.isHidden = true
                         cv.btnMore.isEnabled = false
                         cv.buttonShouldShow = false
                     }

@@ -316,7 +316,7 @@ extension ViewController {
         
         self.selectedCollection = collection
         //guard !self.scaningRepositories && !self.creatingRepository else {return}
-        self.scaningRepositories = true
+        TaskManager.loadingImagesCollection = true
         
         self.imagesLoader.clean()
         collectionView.reloadData()
@@ -325,7 +325,7 @@ extension ViewController {
         
         DispatchQueue.global().async {
             self.collectionLoadingIndicator = Accumulator(target: collection.photoCount, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {data in
-                self.scaningRepositories = false
+                TaskManager.loadingImagesCollection = false
                 //                let total:Int = data["total"] ?? 0
                 //                let hidden:Int = data["hidden"] ?? 0
                 //                let message:String = "\(total) images, \(hidden) hidden"

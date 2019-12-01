@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		211CCB1CC9D5DDCDB077A2DC /* Pods_ImageDocker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82AE2A4F2692BE8252178D24 /* Pods_ImageDocker.framework */; };
+		8E00BB8E2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E00BB8D2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift */; };
 		8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015120208F7D23009C2549 /* StackedImageViewController.swift */; };
 		8E015123208F7D34009C2549 /* StackedVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015122208F7D34009C2549 /* StackedVideoViewController.swift */; };
 		8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E06AAFB20EEFFAD000A40C9 /* GoogleLocation.swift */; };
@@ -240,6 +241,7 @@
 		5D91C952D851F04098CE50A9 /* Pods-ImageDocker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ImageDocker/Pods-ImageDocker.debug.xcconfig"; sourceTree = "<group>"; };
 		735F25C54C2D63CAD538E860 /* Pods-ImageDocker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.release.xcconfig"; path = "Pods/Target Support Files/Pods-ImageDocker/Pods-ImageDocker.release.xcconfig"; sourceTree = "<group>"; };
 		82AE2A4F2692BE8252178D24 /* Pods_ImageDocker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImageDocker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E00BB8D2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Menu+ImageOptions.swift"; sourceTree = "<group>"; };
 		8E015120208F7D23009C2549 /* StackedImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedImageViewController.swift; sourceTree = "<group>"; };
 		8E015122208F7D34009C2549 /* StackedVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedVideoViewController.swift; sourceTree = "<group>"; };
 		8E06AAFB20EEFFAD000A40C9 /* GoogleLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLocation.swift; sourceTree = "<group>"; };
@@ -565,6 +567,7 @@
 				8EB271742340D7B0003BF3AF /* ViewController+Menu+Face.swift */,
 				8EB2719E23412FE8003BF3AF /* ViewController+Menu+Export.swift */,
 				8EB2719C23412FD5003BF3AF /* ViewController+Menu+Scan.swift */,
+				8E00BB8D2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift */,
 				8EF4CE6021E56CF700C53AFF /* ViewController+Notification.swift */,
 				8E0AFA42208BDEA100CE8B68 /* Main.storyboard */,
 				8EA643F4208D6E5100C7D695 /* PreferencesController.swift */,
@@ -1248,6 +1251,7 @@
 				8EB2715D23384401003BF3AF /* ImageFile+PhotoTakenDate.swift in Sources */,
 				8E85B7D220B91ED1005A9845 /* SelectionCollectionViewController.swift in Sources */,
 				8EB2718F2340EE95003BF3AF /* ViewController+TreeArea+Scan.swift in Sources */,
+				8E00BB8E2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift in Sources */,
 				8EF4CE5E21D8026800C53AFF /* EditRepositoryViewController.swift in Sources */,
 				8EB2715F23384469003BF3AF /* ImageFile+Meta.swift in Sources */,
 				8E85B7DA20BE2515005A9845 /* LocationTextDelegate.swift in Sources */,

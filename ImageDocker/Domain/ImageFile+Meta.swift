@@ -183,6 +183,10 @@ extension ImageFile {
             }
         }
         
+        
+        let orientation = url.getImageOrientation()
+        print("======== photo orientation = \(orientation)")
+        
         if let tiffData = imgProps[TIFFDictionary] as? [String: AnyObject] {
             let cameraMake = tiffData[CameraMake] as? String ?? ""
             if cameraMake != "" {
@@ -356,8 +360,8 @@ extension ImageFile {
         //print("LOCATION LOADED")
     }
     
-    public func loadMetaInfoFromExif() {
-        guard !(isStandalone && isLoadedExif) else {return}
+    public func loadMetaInfoFromExif(_ force:Bool = false) {
+        guard !(force || isStandalone || isLoadedExif) else {return}
         
         let now = Date()
         let nowToSeconds = Int(now.timeIntervalSince1970)

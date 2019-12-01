@@ -230,7 +230,7 @@ extension ViewController {
     
     
     internal func updateLibraryTree() {
-        self.creatingRepository = true
+        //self.creatingRepository = true
         print("\(Date()) UPDATING CONTAINERS")
         DispatchQueue.global().async {
             ImageFolderTreeScanner.default.updateContainers(onCompleted: {
@@ -245,7 +245,7 @@ extension ViewController {
                     self.restoreTreeSelection()
                     print("\(Date()) UPDATING LIBRARY TREE: DONE")
                     
-                    self.creatingRepository = false
+                    //self.creatingRepository = false
                     
                     //                    if self.startingUp {
                     //                        self.splashController.message("Preparing UI ...", progress: 6)

@@ -67,6 +67,7 @@ extension ViewController {
             // show image
             stackedImageViewController.imageDisplayer.image = url.loadImage(maxDimension: 512)
             
+            self.btnImageOptions.isEnabled = true
         } else {
             
             // switch to video view
@@ -77,6 +78,7 @@ extension ViewController {
             stackedVideoViewController.videoDisplayer.player = AVPlayer(url: url)
             stackedVideoViewController.videoDisplayer.player?.play()
             
+            self.btnImageOptions.isEnabled = false
         }
     }
     
@@ -98,6 +100,7 @@ extension ViewController {
             // show image
             stackedImageViewController.imageDisplayer.image = image.image
             
+            self.btnImageOptions.isEnabled = true
         } else {
             
             // switch to video view
@@ -108,6 +111,7 @@ extension ViewController {
             stackedVideoViewController.videoDisplayer.player = AVPlayer(url: image.url)
             stackedVideoViewController.videoDisplayer.player?.play()
             
+            self.btnImageOptions.isEnabled = false
         }
     }
     
@@ -121,13 +125,17 @@ extension ViewController {
         self.previewImage(image: img)
         
         //img.loadMetaInfoFromExif()
-        img.loadMetaInfoFromDatabase()
-        img.loadMetaInfoFromExif()
-        img.metaInfoHolder.sort(by: MetaCategorySequence)
-        self.metaInfoTableView.reloadData()
+        self.loadImageExif()
         img.loadLocation()
         self.loadBaiduMap()
         self.loadImageDescription(img)
+    }
+    
+    internal func loadImageExif(_ force:Bool = false) {
+        img.loadMetaInfoFromDatabase()
+        img.loadMetaInfoFromExif(force)
+        img.metaInfoHolder.sort(by: MetaCategorySequence)
+        self.metaInfoTableView.reloadData()
     }
     
     internal func loadImageDescription(_ img:ImageFile){

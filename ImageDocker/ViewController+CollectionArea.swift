@@ -63,7 +63,7 @@ extension ViewController {
     internal func switchShowHideState() {
         self.imagesLoader.showHidden = self.chbShowHidden.state == .on
         
-        self.scaningRepositories = true
+        TaskManager.loadingImagesCollection = true
         
         self.imagesLoader.clean()
         collectionView.reloadData()

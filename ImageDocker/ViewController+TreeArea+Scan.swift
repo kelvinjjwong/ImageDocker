@@ -13,7 +13,7 @@ extension ViewController {
     internal func startScanRepositories(){
         DispatchQueue.global().async {
             ExportManager.default.disable()
-            self.creatingRepository = true
+            TaskManager.scanningFileSystem = true
             DispatchQueue.main.async {
                 self.btnScanState.image = NSImage(named: NSImage.Name.statusAvailable)
             }
@@ -23,7 +23,7 @@ extension ViewController {
                                                     onCompleted: {data in
                                                         print("COMPLETE SCAN REPO")
                                                         ExportManager.default.enable()
-                                                        self.creatingRepository = false
+                                                        TaskManager.scanningFileSystem = false
                                                         DispatchQueue.main.async {
                                                             self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
                                                         }
@@ -36,6 +36,7 @@ extension ViewController {
                 ImageFolderTreeScanner.default.scanRepositories(indicator: self.treeLoadingIndicator, onCompleted: {
                     //                    self.chbScan.state = .off
                     //                    self.onScanDisabled()
+                    TaskManager.scanningFileSystem = false
                 })
             })
             
@@ -64,11 +65,11 @@ extension ViewController {
     }
     
     internal func startScanRepositoriesToLoadExif(){
-        if !ExportManager.default.working && !self.scaningRepositories && !self.creatingRepository {
+        if TaskManager.allowReadImagesExif() {
             DispatchQueue.global().async {
                 
                 ExportManager.default.suppressed = true
-                self.scaningRepositories = true
+                TaskManager.readingImagesExif = true
                 
                 print("EXTRACTING EXIF")
                 DispatchQueue.main.async {
@@ -81,7 +82,7 @@ extension ViewController {
                                                             print("COMPLETE SCAN PHOTOS TO LOAD EXIF")
                                                             
                                                             ExportManager.default.suppressed = false
-                                                            self.scaningRepositories = false
+                                                            TaskManager.readingImagesExif = false
                                                             DispatchQueue.main.async {
                                                                 self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
                                                                 self.lblProgressMessage.stringValue = ""

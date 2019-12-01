@@ -133,6 +133,8 @@ public extension NSImage {
         
         return rotatedImage
     }
+    
+    
 }
 
 public extension URL {
@@ -160,6 +162,14 @@ public extension URL {
             return image
         }
         let imgRef = imgSrc!
+        
+        if let imgProps = CGImageSourceCopyPropertiesAtIndex(imgRef, 0, nil) as NSDictionary?, let orientation = imgProps[kCGImagePropertyOrientation as String]  {
+            print("==== photo orientation = \(orientation)")
+            if let ori = orientation as? CGImagePropertyOrientation {
+                print(ori)
+            }
+            
+        }
         
         // Create a "preview" of the image. If the image is larger than
         // 512x512 constrain the preview to that size.  512x512 is an
@@ -196,5 +206,35 @@ public extension URL {
             checkSize = false
         } while checkSize
         return image
+    }
+    
+    func getImageOrientation() -> String {
+        if let imageSource = CGImageSourceCreateWithURL(self as CFURL, nil) {
+            guard CGImageSourceGetType(imageSource) != nil else { return "" }
+            if let imgProps = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as NSDictionary?, let orientation = imgProps[kCGImagePropertyOrientation as String]  {
+                if let ori = orientation as? CGImagePropertyOrientation {
+                    let o = "\(ori)"
+                    if o == "1" {
+                        return "UP"
+                    }else if o == "3" {
+                        return "DOWN"
+                    }else if o == "8" {
+                        return "LEFT"
+                    }else if o == "6" {
+                        return "RIGHT"
+                    }else if o == "2" {
+                        return "UP_MIRRORED"
+                    }else if o == "4" {
+                        return "DOWN_MIRRORED"
+                    }else if o == "7" {
+                        return "RIGHT_MIRRORED"
+                    }else if o == "5" {
+                        return "LEFT_MIRRORED"
+                    }
+                }
+                
+            }
+        }
+        return ""
     }
 }

@@ -39,7 +39,7 @@ extension ViewController {
         self.calendarPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
         self.calendarViewController.loadFrom(images: self.selectionViewController.imagesLoader.getItems(),
                                              onBeforeChanges: {
-                                                self.selectionEditing = true
+                                                TaskManager.applyingSelectionModifies = true
                                                 
         },
                                              onApplyChanges: {
@@ -47,7 +47,7 @@ extension ViewController {
                                                 self.selectionViewController.imagesLoader.reorganizeItems()
                                                 self.selectionCollectionView.reloadData()
                                                 
-                                                self.selectionEditing = false
+                                                TaskManager.applyingSelectionModifies = false
         },
                                              onClose: {
                                                 self.calendarPopover?.close()

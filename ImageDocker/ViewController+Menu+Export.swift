@@ -59,7 +59,7 @@ extension ViewController {
                 ExportManager.default.suppressed = false
                 
                 // start exporting immediatetly
-                if !ExportManager.default.working {
+                if TaskManager.allowExport() {
                     // TODO: change export function
 //                    DispatchQueue.global().async {
 //                        ExportManager.default.export(after: self.lastExportPhotos!)

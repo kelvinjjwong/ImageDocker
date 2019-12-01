@@ -30,6 +30,44 @@ extension ImageFile {
         return result
     }
     
+    internal func earliestDate() -> Date?{
+        let now = Date()
+        var result = now
+        if let image = self.imageData {
+            if let dt = image.filesysCreateDate, dt < result {
+                result = dt
+            }
+            if let dt = image.exifCreateDate, dt < result {
+                result = dt
+            }
+            if let dt = image.exifModifyDate, dt < result {
+                result = dt
+            }
+            if let dt = image.exifDateTimeOriginal, dt < result {
+                result = dt
+            }
+            if let dt = image.videoCreateDate, dt < result {
+                result = dt
+            }
+            if let dt = image.videoModifyDate, dt < result {
+                result = dt
+            }
+            if let dts = image.dateTimeFromFilename {
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
+                if let dt = dateFormatter.date(from: dts), dt < result {
+                    result = dt
+                }
+            }
+        }
+        if result != now {
+            return result
+        }else{
+            return nil
+        }
+        
+    }
+    
     internal func storePhotoTakenDate(dateTime:String?) {
         if let dt = dateTime {
             let dateFormatter = DateFormatter()

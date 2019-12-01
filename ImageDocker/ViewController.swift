@@ -32,7 +32,8 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var txtSearch: NSSearchField!
     
-    @IBOutlet weak var btnTask: NSButton!
+    @IBOutlet weak var btnImageOptions: NSPopUpButton!
+    
     
     @IBOutlet weak var btnMemories: NSButton!
     
@@ -162,7 +163,7 @@ class ViewController: NSViewController {
     var collectionLoadingIndicator:Accumulator?
     
     // MARK: - SELECTION VIEW
-    var selectionEditing = false
+    //var selectionEditing = false
     var selectionViewController : SelectionCollectionViewController!
     
     @IBOutlet weak var selectionCollectionView: NSCollectionView!
@@ -238,8 +239,8 @@ class ViewController: NSViewController {
     
     // MARK: Concurrency Indicators
     
-    var scaningRepositories:Bool = false
-    var creatingRepository:Bool = false
+    //var scaningRepositories:Bool = false
+    //var creatingRepository:Bool = false
     var suppressedExport:Bool = false
     var suppressedScan:Bool = false
     
@@ -275,6 +276,7 @@ class ViewController: NSViewController {
         self.setupFacesMenu()
         self.setupScanMenu()
         self.setupExportMenu()
+        self.setupPreviewMenu()
         
         print("\(Date()) Loading view - configure tree")
         configureTree()
@@ -330,6 +332,7 @@ class ViewController: NSViewController {
         self.btnCombineDuplicates.toolTip = "Combine duplicated images to the 1st image"
         
         self.splashController = SplashViewController(onStartup: {
+            self.splashController.view.frame = self.view.bounds
             self.doStartWork()
         }, onCompleted: {
             self.didStartWork()
@@ -337,6 +340,9 @@ class ViewController: NSViewController {
         //splashController.view.frame = self.view.frame
         self.view.addSubview(splashController.view)
         self.addChildViewController(splashController)
+        splashController.view.frame = self.view.bounds
+        
+        self.btnImageOptions.isEnabled = false
         
         print("\(Date()) Loading view")
         

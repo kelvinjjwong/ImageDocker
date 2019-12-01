@@ -26,6 +26,8 @@ extension ViewController {
         self.view.window?.minSize = windowMinSize
         self.view.window?.setFrame(windowFrame!, display: true)
         
+        splashController.view.frame = self.view.bounds
+        
         smallScreen = size.isSmallScreen
         
         if size.isSmallScreen {
@@ -48,9 +50,6 @@ extension ViewController {
             
             self.splitviewPreview.setPosition(size.height - CGFloat(670) - CGFloat(40) - CGFloat(30), ofDividerAt: 0)
         }
-        
-        
-        splashController.view.frame = self.view.bounds
         
         windowInitial = true
     }
