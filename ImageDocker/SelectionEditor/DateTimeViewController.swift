@@ -89,6 +89,10 @@ class DateTimeViewController: NSViewController {
     @IBOutlet weak var chkEXIFModifyDate: NSButton!
     @IBOutlet weak var chkEXIFDateTimeOriginal: NSButton!
     @IBOutlet weak var chkFileCreateDate: NSButton!
+    @IBOutlet weak var chkPhotoTakenDate: NSButton!
+    
+    
+    @IBOutlet weak var chkEarliestDate: NSButton!
     
     // Progress
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
@@ -108,6 +112,71 @@ class DateTimeViewController: NSViewController {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
+    
+    private func toggleCalendarAdjustment(_ enable:Bool) {
+        self.chkSelectedDate.isEnabled = enable
+        self.txtSelectedYear.isEnabled = enable
+        self.stpSelectedYear.isEnabled = enable
+        self.txtSelectedMonth.isEnabled = enable
+        self.stpSelectedMonth.isEnabled = enable
+        self.txtSelectedDay.isEnabled = enable
+        self.stpSelectedDay.isEnabled = enable
+        self.chkSelectedTime.isEnabled = enable
+        self.txtSelectedHour.isEnabled = enable
+        self.stpSelectedHour.isEnabled = enable
+        self.txtSelectedMinute.isEnabled = enable
+        self.stpSelectedMinute.isEnabled = enable
+        self.txtSelectedSecond.isEnabled = enable
+        self.stpSelectedSecond.isEnabled = enable
+        
+        self.btnPlusMinusDate.isEnabled = enable
+        self.chkAdjustYear.isEnabled = enable
+        self.txtAdjustYear.isEnabled = enable
+        self.stpAdjustYear.isEnabled = enable
+        self.chkAdjustMonth.isEnabled = enable
+        self.txtAdjustMonth.isEnabled = enable
+        self.stpAdjustMonth.isEnabled = enable
+        self.chkAdjustDay.isEnabled = enable
+        self.txtAdjustDay.isEnabled = enable
+        self.stpAdjustDay.isEnabled = enable
+        self.btnPlusMinusTime.isEnabled = enable
+        self.chkAdjustHour.isEnabled = enable
+        self.txtAdjustHour.isEnabled = enable
+        self.stpAdjustHour.isEnabled = enable
+        self.chkAdjustMinute.isEnabled = enable
+        self.txtAdjustMinute.isEnabled = enable
+        self.stpAdjustMinute.isEnabled = enable
+        self.chkAdjustSecond.isEnabled = enable
+        self.txtAdjustSecond.isEnabled = enable
+        self.stpAdjustSecond.isEnabled = enable
+
+    }
+    
+    private func addMonth(_ date:Date, adjust:Int) -> Date {
+        let year = Calendar.current.component(.year, from: date)
+        let month = Calendar.current.component(.month, from: date)
+        let day = Calendar.current.component(.day, from: date)
+        
+        let hour = Calendar.current.component(.hour, from: date)
+        let minute = Calendar.current.component(.minute, from: date)
+        let second = Calendar.current.component(.second, from: date)
+        
+        var merged = DateComponents()
+        merged.year = year
+        merged.month = month + adjust
+        merged.day = day
+        merged.hour = hour
+        merged.minute = minute
+        merged.second = second
+        
+        var newday = date
+        if let result = Calendar.current.date(from: merged) {
+            newday = result
+        }else{
+            newday = date
+        }
+        return newday
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,10 +189,13 @@ class DateTimeViewController: NSViewController {
         self.calendarView = LunarCalendarView()
         self.calendarView.delegate = self
         let now = Date()
+//        let today = self.addMonth(now, adjust: 1)
+        
         self.calendarView.date = now
         self.calendarView.selectedDate = now;
         
         self.calendarViewContainer.addSubview(self.calendarView.view)
+        //self.calendarView.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
         self.table.dataSource = self
         self.table.delegate = self
@@ -156,6 +228,12 @@ class DateTimeViewController: NSViewController {
             }
         }
         self.table.reloadData()
+        
+        self.lblMessage.stringValue = ""
+        
+        self.chkEarliestDate.state = .on
+        self.toggleCalendarAdjustment(false)
+        self.applyToTable(applyCalendar: false)
     }
     
     private func reinitNumbers() {
@@ -563,15 +641,21 @@ class DateTimeViewController: NSViewController {
         self.applyToTable()
     }
     
-    fileprivate func applyToTable() {
+    fileprivate func applyToTable(applyCalendar:Bool = true) {
         for image in self.images {
-            image.valueDate = self.adjustDateTimeOfImage(image: image)
+            if self.chkEarliestDate.state == .on {
+                image.valueDate = self.getEarliestDate(image)
+            }else{
+                image.valueDate = self.adjustDateTimeOfImage(image: image)
+            }
         }
         self.table.reloadData()
-        if let first = self.images[self.lastSelectedRow ?? 0].valueDate {
-            self.calendarView.date = first
-            self.calendarView.selectedDate = first
-            self.calendarView.originDate = self.images[self.lastSelectedRow ?? 0].photoTakenDate!
+        if applyCalendar {
+            if let first = self.images[self.lastSelectedRow ?? 0].valueDate {
+                self.calendarView.date = first
+                self.calendarView.selectedDate = first
+                self.calendarView.originDate = self.images[self.lastSelectedRow ?? 0].photoTakenDate!
+            }
         }
         
     }
@@ -664,14 +748,81 @@ class DateTimeViewController: NSViewController {
         return nil
     }
     
+    // MARK: - EARLIEST DATE
+    
+    private func getEarliestDate(_ image:ImageTimestamp) -> Date {
+        let now = Date()
+        var result = now
+        if let dt = image.dateTimeOriginal, dt < result {
+            result = dt
+        }
+        if let dt = image.exifCreateDate, dt < result {
+            result = dt
+        }
+        if let dt = image.exifModifyDate, dt < result {
+            result = dt
+        }
+        if let dt = image.fileCreateDate, dt < result {
+            result = dt
+        }
+        if let dt = image.fileModifyDate, dt < result {
+            result = dt
+        }
+        if let dt = image.softwareModifyDate, dt < result {
+            result = dt
+        }
+        if let dt = image.trackCreateDate, dt < result {
+            result = dt
+        }
+        if let dt = image.trackModifyDate, dt < result {
+            result = dt
+        }
+        if let dt = image.videoCreateDate, dt < result {
+            result = dt
+        }
+        if let dt = image.videoModifyDate, dt < result {
+            result = dt
+        }
+        let dts = image.filenameDate
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
+        if let dt = dateFormatter.date(from: dts), dt < result {
+            result = dt
+        }
+        return result
+    }
+    
+    @IBAction func onChkEarliestDateClicked(_ sender: NSButton) {
+        if sender.state == .on {
+            self.toggleCalendarAdjustment(false)
+            self.applyToTable(applyCalendar: false)
+        }else{
+            self.toggleCalendarAdjustment(true)
+        }
+    }
+    
+    @IBAction func onReExtractDateFromFilenameClicked(_ sender: NSButton) {
+        for image in self.images {
+            let dateString = Naming.DateTime.recognize(url: URL(fileURLWithPath: image.path))
+            image.filenameDate = dateString
+        }
+        self.applyToTable(applyCalendar: false)
+    }
+    
+    
     // MARK: - OK
     
     
     fileprivate var accumulator:Accumulator?
     
     @IBAction func onOKClicked(_ sender: NSButton) {
-        guard self.chkEXIFCreateDate.state == .on || self.chkEXIFModifyDate.state == .on || self.chkEXIFDateTimeOriginal.state == .on || self.chkFileCreateDate.state == .on else {
-            Alert.noOptionSelected(message: "NO [APPLY TO] SELECTED")
+        guard  self.chkPhotoTakenDate.state == .on
+            || self.chkEXIFCreateDate.state == .on
+            || self.chkEXIFModifyDate.state == .on
+            || self.chkEXIFDateTimeOriginal.state == .on
+            || self.chkFileCreateDate.state == .on
+            else {
+            Alert.noOptionSelected(message: "NO [DATE FIELD] SELECTED")
             return
         }
         self.btnOK.isEnabled = false
@@ -684,6 +835,9 @@ class DateTimeViewController: NSViewController {
         }
         
         var tags:Set<String> = []
+        if self.chkPhotoTakenDate.state == .on {
+            tags.insert("PhotoTakenDate")
+        }
         if self.chkEXIFCreateDate.state == .on {
             tags.insert("CreateDate")
         }
@@ -696,14 +850,21 @@ class DateTimeViewController: NSViewController {
         if self.chkFileCreateDate.state == .on {
             tags.insert("FileCreateDate")
         }
-        self.accumulator = Accumulator(target: self.images.count, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage)
+        var count = 0
+        self.accumulator = Accumulator(target: self.images.count, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage, onCompleted: {_ in
+            
+            self.lblMessage.stringValue = "Updated \(count) images."
+        })
         
         DispatchQueue.global().async {
             for image in self.images {
                 
-                ExifTool.helper.patchDateForPhoto(date: image.valueDate!, url: URL(fileURLWithPath: image.path), tags: tags)
-                ModelStore.default.updateImageDates(path: image.path, date: image.valueDate!, fields: tags)
+                //ExifTool.helper.patchDateForPhoto(date: image.valueDate!, url: URL(fileURLWithPath: image.path), tags: tags)
+                let state = ModelStore.default.updateImageDates(path: image.path, date: image.valueDate!, fields: tags)
                 self.updateImageDates(image: image, date: image.valueDate!, fields: tags)
+                if state == .OK {
+                    count += 1
+                }
                 
                 DispatchQueue.main.async {
                     let _ = self.accumulator?.add("")
@@ -874,6 +1035,8 @@ extension DateTimeViewController: NSTableViewDelegate {
                 }else{
                     value = self.tableDateTimeFormatter.string(from: image.trackModifyDate!)
                 }
+            case NSUserInterfaceItemIdentifier("dateInFilename"):
+                value = image.filenameDate
                 
             default:
                 break
@@ -976,6 +1139,7 @@ class ImageTimestamp {
     
     var path:String = ""
     var filename:String = ""
+    var filenameDate:String = ""
     var folderPath:String = ""
     var valueDate:Date?
     var photoTakenDate:Date?
@@ -1007,6 +1171,7 @@ class ImageTimestamp {
         self.trackCreateDate = image.trackCreateDate
         self.trackModifyDate = image.trackModifyDate
         self.event = image.event ?? ""
+        self.filenameDate = image.dateTimeFromFilename ?? ""
     }
 }
 

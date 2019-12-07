@@ -95,11 +95,11 @@ class LunarCalendarView:NSViewController{
     }
     
     func commonInit(){
-        self.backgroundColor = NSColor.white
-        self.textColor = NSColor.black
+        self.backgroundColor = NSColor.black
+        self.textColor = NSColor.white
         self.selectionColor = NSColor.red
         self.todayMarkerColor = NSColor.green
-        self.dayMakerColor = NSColor.darkGray
+        self.dayMakerColor = NSColor.black
         
         self.date = Date()
     }

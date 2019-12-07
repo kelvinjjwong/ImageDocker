@@ -15,13 +15,13 @@ extension ViewController {
         var myPopover = self.calendarPopover
         if(myPopover == nil){
             
-            let frame = CGRect(origin: .zero, size: CGSize(width: 1200, height: 650))
+            let frame = CGRect(origin: .zero, size: CGSize(width: 1200, height: 700))
             self.calendarViewController = DateTimeViewController()
             self.calendarViewController.view.frame = frame
             
             myPopover = NSPopover()
             myPopover!.contentViewController = self.calendarViewController
-            myPopover!.appearance = NSAppearance(named: .aqua)!
+            myPopover!.appearance = NSAppearance(named: .vibrantDark)!
             myPopover!.delegate = self
             myPopover!.behavior = NSPopover.Behavior.applicationDefined
         }

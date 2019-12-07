@@ -168,7 +168,20 @@ extension ModelStore {
     func updateImageDates(path:String, date:Date, fields:Set<String>) -> ExecuteState{
         var arguments:[Any] = []
         var values:[String] = []
+        
         for field in fields {
+            if field == "PhotoTakenDate" {
+                
+                values.append("photoTakenDate = ?, photoTakenYear = ?, photoTakenMonth = ?, photoTakenDay = ?")
+                arguments.append(date)
+                let year = Calendar.current.component(.year, from: date)
+                let month = Calendar.current.component(.month, from: date)
+                let day = Calendar.current.component(.day, from: date)
+                arguments.append(year)
+                arguments.append(month)
+                arguments.append(day)
+                continue
+            }
             if field == "DateTimeOriginal" {
                 values.append("exifDateTimeOriginal = ?")
                 arguments.append(date)
@@ -190,14 +203,6 @@ extension ModelStore {
                 continue
             }
         }
-        values.append("photoTakenDate = ?, photoTakenYear = ?, photoTakenMonth = ?, photoTakenDay = ?")
-        arguments.append(date)
-        let year = Calendar.current.component(.year, from: date)
-        let month = Calendar.current.component(.month, from: date)
-        let day = Calendar.current.component(.day, from: date)
-        arguments.append(year)
-        arguments.append(month)
-        arguments.append(day)
         arguments.append(path)
         let valueSets = values.joined(separator: ",")
         

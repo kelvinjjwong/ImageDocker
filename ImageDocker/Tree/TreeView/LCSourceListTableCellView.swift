@@ -45,6 +45,7 @@ class LCSourceListTableCellView : PXSourceListTableCellView {
             badge?.textColor = NSColor(calibratedWhite: 0.9, alpha: 0.8) // badgeTextColor
             badge?.layer?.cornerRadius = CGFloat(6)
         }
+        self.btnMore.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
     }
     

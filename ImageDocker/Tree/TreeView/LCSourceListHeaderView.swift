@@ -39,6 +39,7 @@ class LCSourceListHeaderView : PXSourceListTableCellView {
     }
     
     override func viewWillDraw() {
+        self.btnMore.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
     }
     
     @IBAction func onMoreClicked(_ sender: NSButton) {

@@ -21,7 +21,7 @@ extension ViewController {
             
             myPopover = NSPopover()
             myPopover!.contentViewController = self.notesViewController
-            myPopover!.appearance = NSAppearance(named: .aqua)!
+            myPopover!.appearance = NSAppearance(named: .vibrantDark)!
             myPopover!.delegate = self
             myPopover!.behavior = NSPopover.Behavior.transient
         }
