@@ -186,7 +186,7 @@ struct IPHONE {
             command.standardOutput = pipe
             command.standardError = pipe
             command.launchPath = ideviceinfo.path
-            command.arguments = []
+            command.arguments = ["-s"]
             command.launch()
             command.waitUntilExit()
         }
