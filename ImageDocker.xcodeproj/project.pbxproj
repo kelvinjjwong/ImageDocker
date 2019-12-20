@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -18,6 +18,18 @@
 		8E0AFA50208BDEA100CE8B68 /* ImageDockerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0AFA4F208BDEA100CE8B68 /* ImageDockerTests.swift */; };
 		8E0AFA5B208BDEA100CE8B68 /* ImageDockerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0AFA5A208BDEA100CE8B68 /* ImageDockerUITests.swift */; };
 		8E0EAE9A209D2623008C377F /* ImageFolderTreeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0EAE99209D2623008C377F /* ImageFolderTreeScanner.swift */; };
+		8E15E73523AC74DC0094240A /* StackItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E15E72923AC74DB0094240A /* StackItem.swift */; };
+		8E15E73623AC74DC0094240A /* StackHeaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E15E72A23AC74DB0094240A /* StackHeaderViewController.swift */; };
+		8E15E73723AC74DC0094240A /* StackBodyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E15E72B23AC74DB0094240A /* StackBodyViewController.swift */; };
+		8E15E73823AC74DC0094240A /* NSView+BorderBounder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E15E72C23AC74DB0094240A /* NSView+BorderBounder.swift */; };
+		8E15E73923AC74DC0094240A /* StackHeaderViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E15E72D23AC74DB0094240A /* StackHeaderViewController.storyboard */; };
+		8E15E73A23AC74DC0094240A /* StackedTreeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E15E72F23AC74DB0094240A /* StackedTreeViewController.xib */; };
+		8E15E73B23AC74DC0094240A /* StackedTreeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E15E73023AC74DB0094240A /* StackedTreeViewController.swift */; };
+		8E15E73C23AC74DC0094240A /* TreeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E15E73123AC74DB0094240A /* TreeDataSource.swift */; };
+		8E15E73D23AC74DC0094240A /* TreeTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E15E73223AC74DB0094240A /* TreeTableCellView.swift */; };
+		8E15E73E23AC74DC0094240A /* TreeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E15E73323AC74DB0094240A /* TreeViewController.swift */; };
+		8E15E73F23AC74DC0094240A /* TreeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E15E73423AC74DB0094240A /* TreeViewController.xib */; };
+		8E15E74123AC7B310094240A /* Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E15E74023AC7B310094240A /* Icons.swift */; };
 		8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E174B6D208F851100FFE7C7 /* ExifTool.swift */; };
 		8E2CF37620AED6BA00A93375 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8E2CF37420AED6BA00A93375 /* Model.xcdatamodeld */; };
 		8E31C37F2120A22600002546 /* DeviceShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E31C37E2120A22600002546 /* DeviceShell.swift */; };
@@ -258,6 +270,18 @@
 		8E0AFA5A208BDEA100CE8B68 /* ImageDockerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDockerUITests.swift; sourceTree = "<group>"; };
 		8E0AFA5C208BDEA100CE8B68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8E0EAE99209D2623008C377F /* ImageFolderTreeScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFolderTreeScanner.swift; sourceTree = "<group>"; };
+		8E15E72923AC74DB0094240A /* StackItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StackItem.swift; sourceTree = "<group>"; };
+		8E15E72A23AC74DB0094240A /* StackHeaderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StackHeaderViewController.swift; sourceTree = "<group>"; };
+		8E15E72B23AC74DB0094240A /* StackBodyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StackBodyViewController.swift; sourceTree = "<group>"; };
+		8E15E72C23AC74DB0094240A /* NSView+BorderBounder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSView+BorderBounder.swift"; sourceTree = "<group>"; };
+		8E15E72D23AC74DB0094240A /* StackHeaderViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = StackHeaderViewController.storyboard; sourceTree = "<group>"; };
+		8E15E72F23AC74DB0094240A /* StackedTreeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StackedTreeViewController.xib; sourceTree = "<group>"; };
+		8E15E73023AC74DB0094240A /* StackedTreeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StackedTreeViewController.swift; sourceTree = "<group>"; };
+		8E15E73123AC74DB0094240A /* TreeDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeDataSource.swift; sourceTree = "<group>"; };
+		8E15E73223AC74DB0094240A /* TreeTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeTableCellView.swift; sourceTree = "<group>"; };
+		8E15E73323AC74DB0094240A /* TreeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeViewController.swift; sourceTree = "<group>"; };
+		8E15E73423AC74DB0094240A /* TreeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TreeViewController.xib; sourceTree = "<group>"; };
+		8E15E74023AC7B310094240A /* Icons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icons.swift; sourceTree = "<group>"; };
 		8E174B6D208F851100FFE7C7 /* ExifTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExifTool.swift; sourceTree = "<group>"; };
 		8E2CF36F20AED2FE00A93375 /* CollectionView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CollectionView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E2CF37520AED6BA00A93375 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -528,6 +552,8 @@
 		8E0AFA3B208BDEA000CE8B68 /* ImageDocker */ = {
 			isa = PBXGroup;
 			children = (
+				8E15E72823AC74DB0094240A /* StackView */,
+				8E15E72E23AC74DB0094240A /* TreeView */,
 				8E3FA91B2352904B00B677A3 /* Memories */,
 				8EEF0725226215C8000520B7 /* Splash */,
 				8EB986AE20B223BF0075B081 /* Domain */,
@@ -572,6 +598,7 @@
 				8E0AFA42208BDEA100CE8B68 /* Main.storyboard */,
 				8EA643F4208D6E5100C7D695 /* PreferencesController.swift */,
 				8E98B8F220D5C90600771280 /* WindowController.swift */,
+				8E15E74023AC7B310094240A /* Icons.swift */,
 			);
 			path = ImageDocker;
 			sourceTree = "<group>";
@@ -592,6 +619,31 @@
 				8E0AFA5C208BDEA100CE8B68 /* Info.plist */,
 			);
 			path = ImageDockerUITests;
+			sourceTree = "<group>";
+		};
+		8E15E72823AC74DB0094240A /* StackView */ = {
+			isa = PBXGroup;
+			children = (
+				8E15E72923AC74DB0094240A /* StackItem.swift */,
+				8E15E72A23AC74DB0094240A /* StackHeaderViewController.swift */,
+				8E15E72B23AC74DB0094240A /* StackBodyViewController.swift */,
+				8E15E72C23AC74DB0094240A /* NSView+BorderBounder.swift */,
+				8E15E72D23AC74DB0094240A /* StackHeaderViewController.storyboard */,
+			);
+			path = StackView;
+			sourceTree = "<group>";
+		};
+		8E15E72E23AC74DB0094240A /* TreeView */ = {
+			isa = PBXGroup;
+			children = (
+				8E15E72F23AC74DB0094240A /* StackedTreeViewController.xib */,
+				8E15E73023AC74DB0094240A /* StackedTreeViewController.swift */,
+				8E15E73123AC74DB0094240A /* TreeDataSource.swift */,
+				8E15E73223AC74DB0094240A /* TreeTableCellView.swift */,
+				8E15E73323AC74DB0094240A /* TreeViewController.swift */,
+				8E15E73423AC74DB0094240A /* TreeViewController.xib */,
+			);
+			path = TreeView;
 			sourceTree = "<group>";
 		};
 		8E3EC3B7214DB1E4004B6125 /* Calendar */ = {
@@ -1149,12 +1201,14 @@
 				8EB2716E233E0729003BF3AF /* LibrariesViewController.xib in Resources */,
 				8E3EC3B6214DB1B8004B6125 /* LunarCalendarView.xib in Resources */,
 				8EF32D122094CB2000511538 /* Icons.xcassets in Resources */,
+				8E15E73F23AC74DC0094240A /* TreeViewController.xib in Resources */,
 				8EC82EAC2121C5A200FC0899 /* AddLocalDirectoryViewController.xib in Resources */,
 				8E8D4716222991230091E9C3 /* FaceCollectionViewItem.xib in Resources */,
 				8E0AFA41208BDEA100CE8B68 /* Assets.xcassets in Resources */,
 				8E3FA91D235310AA00B677A3 /* MemoriesViews.storyboard in Resources */,
 				8EBC0183236B072F00FB6E2F /* TwoColumnTableViewController.xib in Resources */,
 				8E9D8039234884040062692A /* EditRepositoryViewController.xib in Resources */,
+				8E15E73A23AC74DC0094240A /* StackedTreeViewController.xib in Resources */,
 				8E98B8F120D0EE3300771280 /* PlaceListViewController.xib in Resources */,
 				8EEF071F225FCF8E000520B7 /* ContainerDetailViewController.xib in Resources */,
 				8EB271AD2346BE8A003BF3AF /* TaskProgressViewController.xib in Resources */,
@@ -1172,6 +1226,7 @@
 				8EEF07232260D0E1000520B7 /* CollectionPaginationViewController.xib in Resources */,
 				8E3FA9212353310600B677A3 /* MemoryCollectionViewItem.xib in Resources */,
 				8E3EC3BE214DE623004B6125 /* DateTimeViewController.xib in Resources */,
+				8E15E73923AC74DC0094240A /* StackHeaderViewController.storyboard in Resources */,
 				8EB271AF2346BEAA003BF3AF /* TaskProgressStackItem.storyboard in Resources */,
 				8EF125AA2214590000C423CA /* DeviceListViewController.xib in Resources */,
 				8EBA9DE0216F8BB100DACAAD /* NotesViewController.xib in Resources */,
@@ -1241,6 +1296,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */,
+				8E15E73D23AC74DC0094240A /* TreeTableCellView.swift in Sources */,
 				8EB2715D23384401003BF3AF /* ImageFile+PhotoTakenDate.swift in Sources */,
 				8E85B7D220B91ED1005A9845 /* SelectionCollectionViewController.swift in Sources */,
 				8EB2718F2340EE95003BF3AF /* ViewController+TreeArea+Scan.swift in Sources */,
@@ -1249,6 +1305,7 @@
 				8EB2715F23384469003BF3AF /* ImageFile+Meta.swift in Sources */,
 				8E85B7DA20BE2515005A9845 /* LocationTextDelegate.swift in Sources */,
 				8E85B7D620BD9FD9005A9845 /* Location.swift in Sources */,
+				8E15E73723AC74DC0094240A /* StackBodyViewController.swift in Sources */,
 				8E7F71022092053400410C45 /* MetaInfoDelegate.swift in Sources */,
 				8EF125A92214590000C423CA /* DeviceListViewController.swift in Sources */,
 				8E98B8F920D7950E00771280 /* ExportManager.swift in Sources */,
@@ -1260,11 +1317,13 @@
 				8EEF07222260D0E1000520B7 /* CollectionPaginationViewController.swift in Sources */,
 				8EFA7CFD211D72B300419777 /* ImageDeviceFile.swift in Sources */,
 				8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */,
+				8E15E73E23AC74DC0094240A /* TreeViewController.swift in Sources */,
 				8EFA7CFB211D713700419777 /* ImageDevice.swift in Sources */,
 				8E36B06C21792EDC00646EA5 /* CustomRowView.swift in Sources */,
 				8E4E5B6922195BFF00FE4B68 /* FaceRecognition.swift in Sources */,
 				8EF4CE5521D77BAB00C53AFF /* People.swift in Sources */,
 				8E8D471222279AA80091E9C3 /* FaceCollectionViewItemsLoader.swift in Sources */,
+				8E15E73C23AC74DC0094240A /* TreeDataSource.swift in Sources */,
 				8E95739A20EBEBD7003BD651 /* FilterViewController.swift in Sources */,
 				8E8D47292236F63C0091E9C3 /* TablePopover.swift in Sources */,
 				8E0EAE9A209D2623008C377F /* ImageFolderTreeScanner.swift in Sources */,
@@ -1292,9 +1351,11 @@
 				8EB271AC2346BE8A003BF3AF /* TaskProgressViewController.swift in Sources */,
 				8EB271752340D7B0003BF3AF /* ViewController+Menu+Face.swift in Sources */,
 				8EB271872340EA34003BF3AF /* ViewController+SelectionArea+ReplaceDate.swift in Sources */,
+				8E15E73823AC74DC0094240A /* NSView+BorderBounder.swift in Sources */,
 				8EA1A063208DFD92000C3B97 /* MetaInfo.swift in Sources */,
 				8EBA9DE52173CC7F00DACAAD /* TheaterQuickLookItem.swift in Sources */,
 				8EB27161233844C9003BF3AF /* ImageFile+Location.swift in Sources */,
+				8E15E73523AC74DC0094240A /* StackItem.swift in Sources */,
 				8EB986BD20B30C920075B081 /* CollectionViewItemsLoader.swift in Sources */,
 				8E8D472022338DAC0091E9C3 /* TextListViewController.swift in Sources */,
 				8E3FA91A2351769D00B677A3 /* ViewController+Memories.swift in Sources */,
@@ -1316,6 +1377,7 @@
 				8EB271552337B8BC003BF3AF /* ModelStore+Image+Update.swift in Sources */,
 				8EBA9DE32173C8F000DACAAD /* TheaterViewController.swift in Sources */,
 				8E4C38CD2117B5340089502C /* Phone.swift in Sources */,
+				8E15E74123AC7B310094240A /* Icons.swift in Sources */,
 				8EB27169233BB408003BF3AF /* RepositoryDetailViewController.swift in Sources */,
 				8EAD03B323372BC800AAC7C6 /* ModelStore+ImagePlace.swift in Sources */,
 				8EB271852340E9C6003BF3AF /* ViewController+SelectionArea+ReplacePlace.swift in Sources */,
@@ -1361,9 +1423,11 @@
 				8E99DBFB2284A18600654C03 /* SearchHelper.swift in Sources */,
 				8EB2718B2340EE18003BF3AF /* ViewController+SelectionArea+ExportSelected.swift in Sources */,
 				8EB271992340F22F003BF3AF /* ViewController+Search.swift in Sources */,
+				8E15E73623AC74DC0094240A /* StackHeaderViewController.swift in Sources */,
 				8E7B98E1214882080019ED87 /* Alert.swift in Sources */,
 				8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */,
 				8E4C38D3211828B00089502C /* EventsTreeController.swift in Sources */,
+				8E15E73B23AC74DC0094240A /* StackedTreeViewController.swift in Sources */,
 				8EF4CE6121E56CF700C53AFF /* ViewController+Notification.swift in Sources */,
 				8EFA7CFF211F012A00419777 /* PlacesTreeController.swift in Sources */,
 				8EB2715B23384364003BF3AF /* ImageFile+SourceFilename.swift in Sources */,

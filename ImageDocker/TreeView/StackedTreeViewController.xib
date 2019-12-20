@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="StackedTreeViewController" customModule="TreeView" customModuleProvider="target">
+            <connections>
+                <outlet property="stack" destination="xYf-gG-EMz" id="SB6-99-TUr"/>
+                <outlet property="view" destination="fIa-x8-sIw" id="PmO-wB-645"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="fIa-x8-sIw">
+            <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <clipView key="contentView" id="cj6-8Q-mIv">
+                <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                <subviews>
+                    <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xYf-gG-EMz" customClass="CustomStackView" customModule="TreeView" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="300" width="450" height="0.0"/>
+                    </stackView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="xYf-gG-EMz" firstAttribute="leading" secondItem="cj6-8Q-mIv" secondAttribute="leading" id="0py-SD-r1T"/>
+                    <constraint firstAttribute="trailing" secondItem="xYf-gG-EMz" secondAttribute="trailing" id="Z8v-3i-sZu"/>
+                    <constraint firstItem="xYf-gG-EMz" firstAttribute="top" secondItem="cj6-8Q-mIv" secondAttribute="top" id="nYn-Vt-2LO"/>
+                </constraints>
+            </clipView>
+            <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="hgE-7k-GF6">
+                <rect key="frame" x="0.0" y="285" width="435" height="15"/>
+                <autoresizingMask key="autoresizingMask"/>
+            </scroller>
+            <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="ERm-n7-mQ0">
+                <rect key="frame" x="435" y="0.0" width="15" height="285"/>
+                <autoresizingMask key="autoresizingMask"/>
+            </scroller>
+        </scrollView>
+    </objects>
+</document>

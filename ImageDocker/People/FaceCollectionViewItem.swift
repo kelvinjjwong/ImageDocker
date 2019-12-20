@@ -8,7 +8,6 @@
 
 import Cocoa
 
-let unknownFaceIcon:NSImage = NSImage(imageLiteralResourceName: "UnknownFace")
 
 class FaceCollectionViewItem: NSCollectionViewItem {
     

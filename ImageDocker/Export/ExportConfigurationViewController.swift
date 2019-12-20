@@ -557,8 +557,3 @@ class ExportConfigurationViewController: NSViewController {
     
     
 }
-
-class CustomStackView : NSStackView {
-    
-    override var isFlipped: Bool { return true }
-}
