@@ -31,7 +31,6 @@
 		8E15E73F23AC74DC0094240A /* TreeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E15E73423AC74DB0094240A /* TreeViewController.xib */; };
 		8E15E74123AC7B310094240A /* Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E15E74023AC7B310094240A /* Icons.swift */; };
 		8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E174B6D208F851100FFE7C7 /* ExifTool.swift */; };
-		8E2CF37620AED6BA00A93375 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8E2CF37420AED6BA00A93375 /* Model.xcdatamodeld */; };
 		8E31C37F2120A22600002546 /* DeviceShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E31C37E2120A22600002546 /* DeviceShell.swift */; };
 		8E36B067217920B400646EA5 /* MonthListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E36B066217920B400646EA5 /* MonthListController.swift */; };
 		8E36B069217920C000646EA5 /* DayListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E36B068217920C000646EA5 /* DayListController.swift */; };
@@ -56,6 +55,12 @@
 		8E4C38D5211828FF0089502C /* MomentsTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D4211828FF0089502C /* MomentsTreeController.swift */; };
 		8E4C38D72118291F0089502C /* TreeController+LibraryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D62118291F0089502C /* TreeController+LibraryEntry.swift */; };
 		8E4C38D9211829410089502C /* DeviceTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D8211829410089502C /* DeviceTreeController.swift */; };
+		8E4DECE023B3822F00F5538C /* ModelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4DECDF23B3822F00F5538C /* ModelStore.swift */; };
+		8E4DECE323B3881A00F5538C /* ImageDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4DECE223B3881A00F5538C /* ImageDao.swift */; };
+		8E4DECE823B38A7B00F5538C /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4DECE423B38A7A00F5538C /* Image.swift */; };
+		8E4DECE923B38A7B00F5538C /* ImageEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4DECE523B38A7A00F5538C /* ImageEvent.swift */; };
+		8E4DECEA23B38A7B00F5538C /* ImagePlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4DECE623B38A7B00F5538C /* ImagePlace.swift */; };
+		8E4DECEB23B38A7B00F5538C /* ImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4DECE723B38A7B00F5538C /* ImageContainer.swift */; };
 		8E4E5B672217349600FE4B68 /* FaceDetection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B662217349600FE4B68 /* FaceDetection.swift */; };
 		8E4E5B6922195BFF00FE4B68 /* FaceRecognition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B6822195BFF00FE4B68 /* FaceRecognition.swift */; };
 		8E4E5B762219624D00FE4B68 /* FaceRecognitionOpenCV in Resources */ = {isa = PBXBuildFile; fileRef = 8E4E5B752219624D00FE4B68 /* FaceRecognitionOpenCV */; };
@@ -93,7 +98,7 @@
 		8E98B8F920D7950E00771280 /* ExportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E98B8F820D7950E00771280 /* ExportManager.swift */; };
 		8E99DBFB2284A18600654C03 /* SearchHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E99DBFA2284A18600654C03 /* SearchHelper.swift */; };
 		8E9D8039234884040062692A /* EditRepositoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E9D8038234884040062692A /* EditRepositoryViewController.xib */; };
-		8E9D803B2348A9EE0062692A /* ModelStore+ExportProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9D803A2348A9EE0062692A /* ModelStore+ExportProfile.swift */; };
+		8E9D803B2348A9EE0062692A /* GRDB+ExportProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9D803A2348A9EE0062692A /* GRDB+ExportProfile.swift */; };
 		8E9D803D2348AA550062692A /* ExportProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9D803C2348AA550062692A /* ExportProfile.swift */; };
 		8E9D803F23495E9B0062692A /* TheaterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E9D803E23495E9B0062692A /* TheaterViewController.xib */; };
 		8E9D804123495F100062692A /* LargeViewItems.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E9D804023495F100062692A /* LargeViewItems.storyboard */; };
@@ -105,18 +110,18 @@
 		8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA643F4208D6E5100C7D695 /* PreferencesController.swift */; };
 		8EAC5F202144A60900E187E0 /* DeviceFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAC5F1E2144A60900E187E0 /* DeviceFolderViewController.swift */; };
 		8EAC5F212144A60900E187E0 /* DeviceFolderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EAC5F1F2144A60900E187E0 /* DeviceFolderViewController.xib */; };
-		8EAD03AF2337290E00AAC7C6 /* ModelStore+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03AE2337290E00AAC7C6 /* ModelStore+Image.swift */; };
-		8EAD03B12337299E00AAC7C6 /* ModelStore+ImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B02337299E00AAC7C6 /* ModelStore+ImageContainer.swift */; };
-		8EAD03B323372BC800AAC7C6 /* ModelStore+ImagePlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B223372BC800AAC7C6 /* ModelStore+ImagePlace.swift */; };
-		8EAD03B523372C0100AAC7C6 /* ModelStore+ImageEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B423372C0100AAC7C6 /* ModelStore+ImageEvent.swift */; };
-		8EAD03B723372C4600AAC7C6 /* ModelStore+ImageDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B623372C4600AAC7C6 /* ModelStore+ImageDevice.swift */; };
-		8EAD03B923372C8C00AAC7C6 /* ModelStore+FaceFamily.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B823372C8C00AAC7C6 /* ModelStore+FaceFamily.swift */; };
-		8EAD03BB23372CF100AAC7C6 /* ModelStore+VersionMigrate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03BA23372CF100AAC7C6 /* ModelStore+VersionMigrate.swift */; };
-		8EAD03BD23372D5E00AAC7C6 /* ModelStore+Image+Meta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03BC23372D5E00AAC7C6 /* ModelStore+Image+Meta.swift */; };
-		8EB271512337B6E4003BF3AF /* ModelStore+Image+Duplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271502337B6E4003BF3AF /* ModelStore+Image+Duplicate.swift */; };
-		8EB271532337B768003BF3AF /* ModelStore+Image+Statistic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271522337B768003BF3AF /* ModelStore+Image+Statistic.swift */; };
-		8EB271552337B8BC003BF3AF /* ModelStore+Image+Update.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271542337B8BC003BF3AF /* ModelStore+Image+Update.swift */; };
-		8EB271572337B9C3003BF3AF /* ModelStore+Image+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271562337B9C3003BF3AF /* ModelStore+Image+Search.swift */; };
+		8EAD03AF2337290E00AAC7C6 /* GRDB+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03AE2337290E00AAC7C6 /* GRDB+Image.swift */; };
+		8EAD03B12337299E00AAC7C6 /* GRDB+ImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B02337299E00AAC7C6 /* GRDB+ImageContainer.swift */; };
+		8EAD03B323372BC800AAC7C6 /* GRDB+ImagePlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B223372BC800AAC7C6 /* GRDB+ImagePlace.swift */; };
+		8EAD03B523372C0100AAC7C6 /* GRDB+ImageEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B423372C0100AAC7C6 /* GRDB+ImageEvent.swift */; };
+		8EAD03B723372C4600AAC7C6 /* GRDB+ImageDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B623372C4600AAC7C6 /* GRDB+ImageDevice.swift */; };
+		8EAD03B923372C8C00AAC7C6 /* GRDB+FaceFamily.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B823372C8C00AAC7C6 /* GRDB+FaceFamily.swift */; };
+		8EAD03BB23372CF100AAC7C6 /* GRDB+VersionMigrate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03BA23372CF100AAC7C6 /* GRDB+VersionMigrate.swift */; };
+		8EAD03BD23372D5E00AAC7C6 /* GRDB+Image+Meta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03BC23372D5E00AAC7C6 /* GRDB+Image+Meta.swift */; };
+		8EB271512337B6E4003BF3AF /* GRDB+Image+Duplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271502337B6E4003BF3AF /* GRDB+Image+Duplicate.swift */; };
+		8EB271532337B768003BF3AF /* GRDB+Image+Statistic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271522337B768003BF3AF /* GRDB+Image+Statistic.swift */; };
+		8EB271552337B8BC003BF3AF /* GRDB+Image+Update.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271542337B8BC003BF3AF /* GRDB+Image+Update.swift */; };
+		8EB271572337B9C3003BF3AF /* GRDB+Image+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271562337B9C3003BF3AF /* GRDB+Image+Search.swift */; };
 		8EB27159233842E4003BF3AF /* ImageFile+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB27158233842E4003BF3AF /* ImageFile+Preview.swift */; };
 		8EB2715B23384364003BF3AF /* ImageFile+SourceFilename.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2715A23384364003BF3AF /* ImageFile+SourceFilename.swift */; };
 		8EB2715D23384401003BF3AF /* ImageFile+PhotoTakenDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2715C23384401003BF3AF /* ImageFile+PhotoTakenDate.swift */; };
@@ -158,11 +163,7 @@
 		8EB271AF2346BEAA003BF3AF /* TaskProgressStackItem.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8EB271AE2346BEAA003BF3AF /* TaskProgressStackItem.storyboard */; };
 		8EB271B12346BEC3003BF3AF /* ProgresViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271B02346BEC3003BF3AF /* ProgresViewController.swift */; };
 		8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CC20FA42AB00D8C71D /* Duplicate.swift */; };
-		8EB321CF20FA42C700D8C71D /* ModelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CE20FA42C700D8C71D /* ModelStore.swift */; };
-		8EB321D420FA433500D8C71D /* ImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321D020FA433500D8C71D /* ImageContainer.swift */; };
-		8EB321D520FA433500D8C71D /* ImagePlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321D120FA433500D8C71D /* ImagePlace.swift */; };
-		8EB321D620FA433500D8C71D /* ImageEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321D220FA433500D8C71D /* ImageEvent.swift */; };
-		8EB321D720FA433500D8C71D /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321D320FA433500D8C71D /* Image.swift */; };
+		8EB321CF20FA42C700D8C71D /* ModelStoreGRDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CE20FA42C700D8C71D /* ModelStoreGRDB.swift */; };
 		8EB8D6FE22E456170096DD75 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EB8D6FD22E456160096DD75 /* WebKit.framework */; };
 		8EB986B020B225230075B081 /* DetailViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB986AF20B225230075B081 /* DetailViewDelegate.swift */; };
 		8EB986B920B30C920075B081 /* CollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB986B220B30C910075B081 /* CollectionViewItem.swift */; };
@@ -172,7 +173,6 @@
 		8EB986BD20B30C920075B081 /* CollectionViewItemsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB986B620B30C910075B081 /* CollectionViewItemsLoader.swift */; };
 		8EB986BE20B30C920075B081 /* CollectionViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EB986B720B30C920075B081 /* CollectionViewItem.xib */; };
 		8EB986BF20B30C920075B081 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB986B820B30C920075B081 /* HeaderView.swift */; };
-		8EB986C120B317E70075B081 /* ModelStoreCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB986C020B317E70075B081 /* ModelStoreCoreData.swift */; };
 		8EB986C620B6EBC40075B081 /* DarkTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB986C520B6EBC40075B081 /* DarkTableView.swift */; };
 		8EBA69252090C2AA00221131 /* ExifTool in Resources */ = {isa = PBXBuildFile; fileRef = 8EBA69242090C2AA00221131 /* ExifTool */; };
 		8EBA692A2090C87D00221131 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA69292090C87D00221131 /* Helper.swift */; };
@@ -284,7 +284,6 @@
 		8E15E74023AC7B310094240A /* Icons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icons.swift; sourceTree = "<group>"; };
 		8E174B6D208F851100FFE7C7 /* ExifTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExifTool.swift; sourceTree = "<group>"; };
 		8E2CF36F20AED2FE00A93375 /* CollectionView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CollectionView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8E2CF37520AED6BA00A93375 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		8E31C37E2120A22600002546 /* DeviceShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceShell.swift; sourceTree = "<group>"; };
 		8E36B066217920B400646EA5 /* MonthListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthListController.swift; sourceTree = "<group>"; };
 		8E36B068217920C000646EA5 /* DayListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayListController.swift; sourceTree = "<group>"; };
@@ -309,6 +308,12 @@
 		8E4C38D4211828FF0089502C /* MomentsTreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsTreeController.swift; sourceTree = "<group>"; };
 		8E4C38D62118291F0089502C /* TreeController+LibraryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TreeController+LibraryEntry.swift"; sourceTree = "<group>"; };
 		8E4C38D8211829410089502C /* DeviceTreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTreeController.swift; sourceTree = "<group>"; };
+		8E4DECDF23B3822F00F5538C /* ModelStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelStore.swift; sourceTree = "<group>"; };
+		8E4DECE223B3881A00F5538C /* ImageDao.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDao.swift; sourceTree = "<group>"; };
+		8E4DECE423B38A7A00F5538C /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
+		8E4DECE523B38A7A00F5538C /* ImageEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageEvent.swift; sourceTree = "<group>"; };
+		8E4DECE623B38A7B00F5538C /* ImagePlace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePlace.swift; sourceTree = "<group>"; };
+		8E4DECE723B38A7B00F5538C /* ImageContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageContainer.swift; sourceTree = "<group>"; };
 		8E4E5B662217349600FE4B68 /* FaceDetection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetection.swift; sourceTree = "<group>"; };
 		8E4E5B6822195BFF00FE4B68 /* FaceRecognition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceRecognition.swift; sourceTree = "<group>"; };
 		8E4E5B752219624D00FE4B68 /* FaceRecognitionOpenCV */ = {isa = PBXFileReference; lastKnownFileType = folder; path = FaceRecognitionOpenCV; sourceTree = "<group>"; };
@@ -346,7 +351,7 @@
 		8E98B8F820D7950E00771280 /* ExportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportManager.swift; sourceTree = "<group>"; };
 		8E99DBFA2284A18600654C03 /* SearchHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHelper.swift; sourceTree = "<group>"; };
 		8E9D8038234884040062692A /* EditRepositoryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditRepositoryViewController.xib; sourceTree = "<group>"; };
-		8E9D803A2348A9EE0062692A /* ModelStore+ExportProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+ExportProfile.swift"; sourceTree = "<group>"; };
+		8E9D803A2348A9EE0062692A /* GRDB+ExportProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+ExportProfile.swift"; sourceTree = "<group>"; };
 		8E9D803C2348AA550062692A /* ExportProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportProfile.swift; sourceTree = "<group>"; };
 		8E9D803E23495E9B0062692A /* TheaterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TheaterViewController.xib; sourceTree = "<group>"; };
 		8E9D804023495F100062692A /* LargeViewItems.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LargeViewItems.storyboard; sourceTree = "<group>"; };
@@ -358,18 +363,18 @@
 		8EA643F4208D6E5100C7D695 /* PreferencesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesController.swift; sourceTree = "<group>"; };
 		8EAC5F1E2144A60900E187E0 /* DeviceFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceFolderViewController.swift; sourceTree = "<group>"; };
 		8EAC5F1F2144A60900E187E0 /* DeviceFolderViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeviceFolderViewController.xib; sourceTree = "<group>"; };
-		8EAD03AE2337290E00AAC7C6 /* ModelStore+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+Image.swift"; sourceTree = "<group>"; };
-		8EAD03B02337299E00AAC7C6 /* ModelStore+ImageContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+ImageContainer.swift"; sourceTree = "<group>"; };
-		8EAD03B223372BC800AAC7C6 /* ModelStore+ImagePlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+ImagePlace.swift"; sourceTree = "<group>"; };
-		8EAD03B423372C0100AAC7C6 /* ModelStore+ImageEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+ImageEvent.swift"; sourceTree = "<group>"; };
-		8EAD03B623372C4600AAC7C6 /* ModelStore+ImageDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+ImageDevice.swift"; sourceTree = "<group>"; };
-		8EAD03B823372C8C00AAC7C6 /* ModelStore+FaceFamily.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+FaceFamily.swift"; sourceTree = "<group>"; };
-		8EAD03BA23372CF100AAC7C6 /* ModelStore+VersionMigrate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+VersionMigrate.swift"; sourceTree = "<group>"; };
-		8EAD03BC23372D5E00AAC7C6 /* ModelStore+Image+Meta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+Image+Meta.swift"; sourceTree = "<group>"; };
-		8EB271502337B6E4003BF3AF /* ModelStore+Image+Duplicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+Image+Duplicate.swift"; sourceTree = "<group>"; };
-		8EB271522337B768003BF3AF /* ModelStore+Image+Statistic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+Image+Statistic.swift"; sourceTree = "<group>"; };
-		8EB271542337B8BC003BF3AF /* ModelStore+Image+Update.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+Image+Update.swift"; sourceTree = "<group>"; };
-		8EB271562337B9C3003BF3AF /* ModelStore+Image+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelStore+Image+Search.swift"; sourceTree = "<group>"; };
+		8EAD03AE2337290E00AAC7C6 /* GRDB+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+Image.swift"; sourceTree = "<group>"; };
+		8EAD03B02337299E00AAC7C6 /* GRDB+ImageContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+ImageContainer.swift"; sourceTree = "<group>"; };
+		8EAD03B223372BC800AAC7C6 /* GRDB+ImagePlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+ImagePlace.swift"; sourceTree = "<group>"; };
+		8EAD03B423372C0100AAC7C6 /* GRDB+ImageEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+ImageEvent.swift"; sourceTree = "<group>"; };
+		8EAD03B623372C4600AAC7C6 /* GRDB+ImageDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+ImageDevice.swift"; sourceTree = "<group>"; };
+		8EAD03B823372C8C00AAC7C6 /* GRDB+FaceFamily.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+FaceFamily.swift"; sourceTree = "<group>"; };
+		8EAD03BA23372CF100AAC7C6 /* GRDB+VersionMigrate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+VersionMigrate.swift"; sourceTree = "<group>"; };
+		8EAD03BC23372D5E00AAC7C6 /* GRDB+Image+Meta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+Image+Meta.swift"; sourceTree = "<group>"; };
+		8EB271502337B6E4003BF3AF /* GRDB+Image+Duplicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+Image+Duplicate.swift"; sourceTree = "<group>"; };
+		8EB271522337B768003BF3AF /* GRDB+Image+Statistic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+Image+Statistic.swift"; sourceTree = "<group>"; };
+		8EB271542337B8BC003BF3AF /* GRDB+Image+Update.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+Image+Update.swift"; sourceTree = "<group>"; };
+		8EB271562337B9C3003BF3AF /* GRDB+Image+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+Image+Search.swift"; sourceTree = "<group>"; };
 		8EB27158233842E4003BF3AF /* ImageFile+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageFile+Preview.swift"; sourceTree = "<group>"; };
 		8EB2715A23384364003BF3AF /* ImageFile+SourceFilename.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageFile+SourceFilename.swift"; sourceTree = "<group>"; };
 		8EB2715C23384401003BF3AF /* ImageFile+PhotoTakenDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageFile+PhotoTakenDate.swift"; sourceTree = "<group>"; };
@@ -411,11 +416,7 @@
 		8EB271AE2346BEAA003BF3AF /* TaskProgressStackItem.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TaskProgressStackItem.storyboard; sourceTree = "<group>"; };
 		8EB271B02346BEC3003BF3AF /* ProgresViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgresViewController.swift; sourceTree = "<group>"; };
 		8EB321CC20FA42AB00D8C71D /* Duplicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Duplicate.swift; sourceTree = "<group>"; };
-		8EB321CE20FA42C700D8C71D /* ModelStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelStore.swift; sourceTree = "<group>"; };
-		8EB321D020FA433500D8C71D /* ImageContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageContainer.swift; path = ImageDocker/Domain/GRDB/ImageContainer.swift; sourceTree = SOURCE_ROOT; };
-		8EB321D120FA433500D8C71D /* ImagePlace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImagePlace.swift; path = ImageDocker/Domain/GRDB/ImagePlace.swift; sourceTree = SOURCE_ROOT; };
-		8EB321D220FA433500D8C71D /* ImageEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageEvent.swift; path = ImageDocker/Domain/GRDB/ImageEvent.swift; sourceTree = SOURCE_ROOT; };
-		8EB321D320FA433500D8C71D /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Image.swift; path = ImageDocker/Domain/GRDB/Image.swift; sourceTree = SOURCE_ROOT; };
+		8EB321CE20FA42C700D8C71D /* ModelStoreGRDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelStoreGRDB.swift; sourceTree = "<group>"; };
 		8EB8D6FD22E456160096DD75 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		8EB986AF20B225230075B081 /* DetailViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewDelegate.swift; sourceTree = "<group>"; };
 		8EB986B220B30C910075B081 /* CollectionViewItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewItem.swift; sourceTree = "<group>"; };
@@ -425,7 +426,6 @@
 		8EB986B620B30C910075B081 /* CollectionViewItemsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewItemsLoader.swift; sourceTree = "<group>"; };
 		8EB986B720B30C920075B081 /* CollectionViewItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CollectionViewItem.xib; sourceTree = "<group>"; };
 		8EB986B820B30C920075B081 /* HeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
-		8EB986C020B317E70075B081 /* ModelStoreCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelStoreCoreData.swift; sourceTree = "<group>"; };
 		8EB986C520B6EBC40075B081 /* DarkTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkTableView.swift; sourceTree = "<group>"; };
 		8EBA69242090C2AA00221131 /* ExifTool */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ExifTool; sourceTree = "<group>"; };
 		8EBA69292090C87D00221131 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
@@ -552,11 +552,11 @@
 		8E0AFA3B208BDEA000CE8B68 /* ImageDocker */ = {
 			isa = PBXGroup;
 			children = (
+				8E4DECED23B38D1B00F5538C /* Data */,
 				8E15E72823AC74DB0094240A /* StackView */,
 				8E15E72E23AC74DB0094240A /* TreeView */,
 				8E3FA91B2352904B00B677A3 /* Memories */,
 				8EEF0725226215C8000520B7 /* Splash */,
-				8EB986AE20B223BF0075B081 /* Domain */,
 				8EFA7CF7211A36C900419777 /* Device */,
 				8EBA9DE12173C7FC00DACAAD /* Theater */,
 				8E4E5B79221F3C0C00FE4B68 /* People */,
@@ -672,44 +672,23 @@
 			path = SelectionEditor;
 			sourceTree = "<group>";
 		};
-		8E3EC3B9214DC0FC004B6125 /* CoreData */ = {
-			isa = PBXGroup;
-			children = (
-				8E2CF37420AED6BA00A93375 /* Model.xcdatamodeld */,
-				8EB986C020B317E70075B081 /* ModelStoreCoreData.swift */,
-			);
-			path = CoreData;
-			sourceTree = "<group>";
-		};
 		8E3EC3BA214DC120004B6125 /* GRDB */ = {
 			isa = PBXGroup;
 			children = (
-				8EB321CE20FA42C700D8C71D /* ModelStore.swift */,
-				8EAD03AE2337290E00AAC7C6 /* ModelStore+Image.swift */,
-				8EB271562337B9C3003BF3AF /* ModelStore+Image+Search.swift */,
-				8EB271542337B8BC003BF3AF /* ModelStore+Image+Update.swift */,
-				8EB271522337B768003BF3AF /* ModelStore+Image+Statistic.swift */,
-				8EB271502337B6E4003BF3AF /* ModelStore+Image+Duplicate.swift */,
-				8EAD03BC23372D5E00AAC7C6 /* ModelStore+Image+Meta.swift */,
-				8EAD03B02337299E00AAC7C6 /* ModelStore+ImageContainer.swift */,
-				8EAD03B223372BC800AAC7C6 /* ModelStore+ImagePlace.swift */,
-				8EAD03B423372C0100AAC7C6 /* ModelStore+ImageEvent.swift */,
-				8EAD03B623372C4600AAC7C6 /* ModelStore+ImageDevice.swift */,
-				8EAD03B823372C8C00AAC7C6 /* ModelStore+FaceFamily.swift */,
-				8E9D803A2348A9EE0062692A /* ModelStore+ExportProfile.swift */,
-				8EAD03BA23372CF100AAC7C6 /* ModelStore+VersionMigrate.swift */,
-				8EB321D320FA433500D8C71D /* Image.swift */,
-				8EB321D020FA433500D8C71D /* ImageContainer.swift */,
-				8EFA7CFA211D713700419777 /* ImageDevice.swift */,
-				8EFA7CFC211D72B300419777 /* ImageDeviceFile.swift */,
-				8EF125A522140C0F00C423CA /* ImageDevicePath.swift */,
-				8EB321D220FA433500D8C71D /* ImageEvent.swift */,
-				8EB321D120FA433500D8C71D /* ImagePlace.swift */,
-				8EF4CE5421D77BAB00C53AFF /* People.swift */,
-				8EF4CE5621D77BD600C53AFF /* Family.swift */,
-				8EF4CE5821D77BEA00C53AFF /* ImagePeople.swift */,
-				8E4E5B77221985A400FE4B68 /* ImageFace.swift */,
-				8E9D803C2348AA550062692A /* ExportProfile.swift */,
+				8EB321CE20FA42C700D8C71D /* ModelStoreGRDB.swift */,
+				8EAD03AE2337290E00AAC7C6 /* GRDB+Image.swift */,
+				8EB271562337B9C3003BF3AF /* GRDB+Image+Search.swift */,
+				8EB271542337B8BC003BF3AF /* GRDB+Image+Update.swift */,
+				8EB271522337B768003BF3AF /* GRDB+Image+Statistic.swift */,
+				8EB271502337B6E4003BF3AF /* GRDB+Image+Duplicate.swift */,
+				8EAD03BC23372D5E00AAC7C6 /* GRDB+Image+Meta.swift */,
+				8EAD03B02337299E00AAC7C6 /* GRDB+ImageContainer.swift */,
+				8EAD03B223372BC800AAC7C6 /* GRDB+ImagePlace.swift */,
+				8EAD03B423372C0100AAC7C6 /* GRDB+ImageEvent.swift */,
+				8EAD03B623372C4600AAC7C6 /* GRDB+ImageDevice.swift */,
+				8EAD03B823372C8C00AAC7C6 /* GRDB+FaceFamily.swift */,
+				8E9D803A2348A9EE0062692A /* GRDB+ExportProfile.swift */,
+				8EAD03BA23372CF100AAC7C6 /* GRDB+VersionMigrate.swift */,
 			);
 			path = GRDB;
 			sourceTree = "<group>";
@@ -737,6 +716,50 @@
 				8E7B98DE2147E7880019ED87 /* FileSystemHandler.swift */,
 			);
 			path = Device;
+			sourceTree = "<group>";
+		};
+		8E4DECE123B3876700F5538C /* DAO */ = {
+			isa = PBXGroup;
+			children = (
+				8E4DECDF23B3822F00F5538C /* ModelStore.swift */,
+				8E4DECE223B3881A00F5538C /* ImageDao.swift */,
+				8E3EC3BA214DC120004B6125 /* GRDB */,
+			);
+			path = DAO;
+			sourceTree = "<group>";
+		};
+		8E4DECEC23B38C9F00F5538C /* DTO */ = {
+			isa = PBXGroup;
+			children = (
+				8EFAF1F920BFFC59007A7783 /* MetaInfo */,
+				8E0EAE99209D2623008C377F /* ImageFolderTreeScanner.swift */,
+				8EF500CC209A804100C9805F /* ImageFolder.swift */,
+				8EB986B320B30C910075B081 /* ImageFile.swift */,
+				8EB27162233845F0003BF3AF /* ImageFile+Event.swift */,
+				8EB27160233844C9003BF3AF /* ImageFile+Location.swift */,
+				8EB2715E23384469003BF3AF /* ImageFile+Meta.swift */,
+				8EB2715C23384401003BF3AF /* ImageFile+PhotoTakenDate.swift */,
+				8EB2715A23384364003BF3AF /* ImageFile+SourceFilename.swift */,
+				8EB27158233842E4003BF3AF /* ImageFile+Preview.swift */,
+				8E85B7D520BD9FD9005A9845 /* Location.swift */,
+				8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */,
+				8E85B7D920BE2515005A9845 /* LocationTextDelegate.swift */,
+				8E98B8F620D6044900771280 /* Event.swift */,
+				8EB321CC20FA42AB00D8C71D /* Duplicate.swift */,
+				8E8D470F22213A330091E9C3 /* PeopleFace.swift */,
+				8E8CF268235AA3860016932A /* Naming.swift */,
+			);
+			path = DTO;
+			sourceTree = "<group>";
+		};
+		8E4DECED23B38D1B00F5538C /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				8E4DECEC23B38C9F00F5538C /* DTO */,
+				8E4DECE123B3876700F5538C /* DAO */,
+				8EB986AE20B223BF0075B081 /* DBO */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 		8E4E5B79221F3C0C00FE4B68 /* People */ = {
@@ -908,30 +931,23 @@
 			path = Preview;
 			sourceTree = "<group>";
 		};
-		8EB986AE20B223BF0075B081 /* Domain */ = {
+		8EB986AE20B223BF0075B081 /* DBO */ = {
 			isa = PBXGroup;
 			children = (
-				8E3EC3BA214DC120004B6125 /* GRDB */,
-				8E3EC3B9214DC0FC004B6125 /* CoreData */,
-				8EFAF1F920BFFC59007A7783 /* MetaInfo */,
-				8E0EAE99209D2623008C377F /* ImageFolderTreeScanner.swift */,
-				8EF500CC209A804100C9805F /* ImageFolder.swift */,
-				8EB986B320B30C910075B081 /* ImageFile.swift */,
-				8EB27162233845F0003BF3AF /* ImageFile+Event.swift */,
-				8EB27160233844C9003BF3AF /* ImageFile+Location.swift */,
-				8EB2715E23384469003BF3AF /* ImageFile+Meta.swift */,
-				8EB2715C23384401003BF3AF /* ImageFile+PhotoTakenDate.swift */,
-				8EB2715A23384364003BF3AF /* ImageFile+SourceFilename.swift */,
-				8EB27158233842E4003BF3AF /* ImageFile+Preview.swift */,
-				8E85B7D520BD9FD9005A9845 /* Location.swift */,
-				8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */,
-				8E85B7D920BE2515005A9845 /* LocationTextDelegate.swift */,
-				8E98B8F620D6044900771280 /* Event.swift */,
-				8EB321CC20FA42AB00D8C71D /* Duplicate.swift */,
-				8E8D470F22213A330091E9C3 /* PeopleFace.swift */,
-				8E8CF268235AA3860016932A /* Naming.swift */,
+				8E4DECE423B38A7A00F5538C /* Image.swift */,
+				8E4DECE723B38A7B00F5538C /* ImageContainer.swift */,
+				8E4DECE523B38A7A00F5538C /* ImageEvent.swift */,
+				8E4DECE623B38A7B00F5538C /* ImagePlace.swift */,
+				8EFA7CFA211D713700419777 /* ImageDevice.swift */,
+				8EFA7CFC211D72B300419777 /* ImageDeviceFile.swift */,
+				8EF125A522140C0F00C423CA /* ImageDevicePath.swift */,
+				8EF4CE5421D77BAB00C53AFF /* People.swift */,
+				8EF4CE5621D77BD600C53AFF /* Family.swift */,
+				8EF4CE5821D77BEA00C53AFF /* ImagePeople.swift */,
+				8E4E5B77221985A400FE4B68 /* ImageFace.swift */,
+				8E9D803C2348AA550062692A /* ExportProfile.swift */,
 			);
-			path = Domain;
+			path = DBO;
 			sourceTree = "<group>";
 		};
 		8EB986B120B2255A0075B081 /* Detail */ = {
@@ -1308,9 +1324,11 @@
 				8E15E73723AC74DC0094240A /* StackBodyViewController.swift in Sources */,
 				8E7F71022092053400410C45 /* MetaInfoDelegate.swift in Sources */,
 				8EF125A92214590000C423CA /* DeviceListViewController.swift in Sources */,
+				8E4DECE823B38A7B00F5538C /* Image.swift in Sources */,
 				8E98B8F920D7950E00771280 /* ExportManager.swift in Sources */,
 				8EB271B12346BEC3003BF3AF /* ProgresViewController.swift in Sources */,
 				8E4E5B672217349600FE4B68 /* FaceDetection.swift in Sources */,
+				8E4DECEB23B38A7B00F5538C /* ImageContainer.swift in Sources */,
 				8EF32D142095355400511538 /* LCSourceListTableCellView.swift in Sources */,
 				8E3EC3BD214DE623004B6125 /* DateTimeViewController.swift in Sources */,
 				8EBA9DE921766EAB00DACAAD /* TheaterCollectionViewController.swift in Sources */,
@@ -1328,7 +1346,7 @@
 				8E8D47292236F63C0091E9C3 /* TablePopover.swift in Sources */,
 				8E0EAE9A209D2623008C377F /* ImageFolderTreeScanner.swift in Sources */,
 				8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */,
-				8EAD03B523372C0100AAC7C6 /* ModelStore+ImageEvent.swift in Sources */,
+				8EAD03B523372C0100AAC7C6 /* GRDB+ImageEvent.swift in Sources */,
 				8E3FA9252355047400B677A3 /* MemoriesCollectionViewController.swift in Sources */,
 				8E4C38D9211829410089502C /* DeviceTreeController.swift in Sources */,
 				8EB2719B2340F907003BF3AF /* ViewController+CollectionArea+CombineDuplicated.swift in Sources */,
@@ -1339,7 +1357,7 @@
 				8EB986B020B225230075B081 /* DetailViewDelegate.swift in Sources */,
 				8E7F71002091F14300410C45 /* BaiduLocation.swift in Sources */,
 				8E98B8F020D0EE3300771280 /* PlaceListViewController.swift in Sources */,
-				8EB321CF20FA42C700D8C71D /* ModelStore.swift in Sources */,
+				8EB321CF20FA42C700D8C71D /* ModelStoreGRDB.swift in Sources */,
 				8EF125A622140C0F00C423CA /* ImageDevicePath.swift in Sources */,
 				8EB271812340E578003BF3AF /* ViewController+Window.swift in Sources */,
 				8EF4CE5721D77BD600C53AFF /* Family.swift in Sources */,
@@ -1363,23 +1381,21 @@
 				8EFAF1FF20CAE422007A7783 /* Moment.swift in Sources */,
 				8EBA692C2090DB0300221131 /* DropPlaceCommons.swift in Sources */,
 				8E8D471A2229AC430091E9C3 /* FaceCollectionViewController.swift in Sources */,
-				8EB321D620FA433500D8C71D /* ImageEvent.swift in Sources */,
 				8EB27159233842E4003BF3AF /* ImageFile+Preview.swift in Sources */,
 				8E4E5B7F221F3D1800FE4B68 /* PeopleViewController.swift in Sources */,
 				8EB2719D23412FD5003BF3AF /* ViewController+Menu+Scan.swift in Sources */,
-				8EB321D420FA433500D8C71D /* ImageContainer.swift in Sources */,
 				8E36B067217920B400646EA5 /* MonthListController.swift in Sources */,
 				8E98B8F320D5C90600771280 /* WindowController.swift in Sources */,
 				8EBA692E2090DB4B00221131 /* VideoDropView.swift in Sources */,
 				8E8D47222233DCD30091E9C3 /* DictionaryTableViewController.swift in Sources */,
-				8EAD03BB23372CF100AAC7C6 /* ModelStore+VersionMigrate.swift in Sources */,
+				8EAD03BB23372CF100AAC7C6 /* GRDB+VersionMigrate.swift in Sources */,
 				8EFA7CF9211A36F700419777 /* DeviceCopyViewController.swift in Sources */,
-				8EB271552337B8BC003BF3AF /* ModelStore+Image+Update.swift in Sources */,
+				8EB271552337B8BC003BF3AF /* GRDB+Image+Update.swift in Sources */,
 				8EBA9DE32173C8F000DACAAD /* TheaterViewController.swift in Sources */,
 				8E4C38CD2117B5340089502C /* Phone.swift in Sources */,
 				8E15E74123AC7B310094240A /* Icons.swift in Sources */,
 				8EB27169233BB408003BF3AF /* RepositoryDetailViewController.swift in Sources */,
-				8EAD03B323372BC800AAC7C6 /* ModelStore+ImagePlace.swift in Sources */,
+				8EAD03B323372BC800AAC7C6 /* GRDB+ImagePlace.swift in Sources */,
 				8EB271852340E9C6003BF3AF /* ViewController+SelectionArea+ReplacePlace.swift in Sources */,
 				8EFE763C2094AF6B00B7CFCA /* TreeController.swift in Sources */,
 				8E3EC3B5214DB1B8004B6125 /* LunarCalendarView.swift in Sources */,
@@ -1395,27 +1411,26 @@
 				8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */,
 				8EB271912340EED2003BF3AF /* ViewController+TreeArea+Filter.swift in Sources */,
 				8EB271972340F1FF003BF3AF /* ViewController+TaskProgress.swift in Sources */,
-				8EB986C120B317E70075B081 /* ModelStoreCoreData.swift in Sources */,
 				8E7B98DF2147E7880019ED87 /* FileSystemHandler.swift in Sources */,
 				8E4E5B78221985A400FE4B68 /* ImageFace.swift in Sources */,
 				8E8D471022213A330091E9C3 /* PeopleFace.swift in Sources */,
+				8E4DECE923B38A7B00F5538C /* ImageEvent.swift in Sources */,
 				8E73E382223E494C00C14A90 /* ExecutionEnvironment.swift in Sources */,
 				8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */,
-				8EB271532337B768003BF3AF /* ModelStore+Image+Statistic.swift in Sources */,
+				8EB271532337B768003BF3AF /* GRDB+Image+Statistic.swift in Sources */,
 				8E98B8F720D6044900771280 /* Event.swift in Sources */,
 				8E3FA9202353310600B677A3 /* MemoryCollectionViewItem.swift in Sources */,
 				8E9D803D2348AA550062692A /* ExportProfile.swift in Sources */,
 				8E4C38D12117B56A0089502C /* IPHONE.swift in Sources */,
-				8EB321D520FA433500D8C71D /* ImagePlace.swift in Sources */,
-				8EAD03B723372C4600AAC7C6 /* ModelStore+ImageDevice.swift in Sources */,
+				8EAD03B723372C4600AAC7C6 /* GRDB+ImageDevice.swift in Sources */,
 				8E8D4715222991230091E9C3 /* FaceCollectionViewItem.swift in Sources */,
 				8EC82EAB2121C5A200FC0899 /* AddLocalDirectoryViewController.swift in Sources */,
 				8E4C38D72118291F0089502C /* TreeController+LibraryEntry.swift in Sources */,
 				8EAC5F202144A60900E187E0 /* DeviceFolderViewController.swift in Sources */,
 				8EE1AB3D20D05E49001C75B0 /* EventListViewController.swift in Sources */,
 				8EB986B920B30C920075B081 /* CollectionViewItem.swift in Sources */,
-				8EAD03BD23372D5E00AAC7C6 /* ModelStore+Image+Meta.swift in Sources */,
-				8E9D803B2348A9EE0062692A /* ModelStore+ExportProfile.swift in Sources */,
+				8EAD03BD23372D5E00AAC7C6 /* GRDB+Image+Meta.swift in Sources */,
+				8E9D803B2348A9EE0062692A /* GRDB+ExportProfile.swift in Sources */,
 				8EF4CE5921D77BEA00C53AFF /* ImagePeople.swift in Sources */,
 				8EB986BC20B30C920075B081 /* CollectionViewDelegate.swift in Sources */,
 				8EB2717F2340D989003BF3AF /* ViewController+Startup.swift in Sources */,
@@ -1424,6 +1439,7 @@
 				8EB2718B2340EE18003BF3AF /* ViewController+SelectionArea+ExportSelected.swift in Sources */,
 				8EB271992340F22F003BF3AF /* ViewController+Search.swift in Sources */,
 				8E15E73623AC74DC0094240A /* StackHeaderViewController.swift in Sources */,
+				8E4DECE323B3881A00F5538C /* ImageDao.swift in Sources */,
 				8E7B98E1214882080019ED87 /* Alert.swift in Sources */,
 				8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */,
 				8E4C38D3211828B00089502C /* EventsTreeController.swift in Sources */,
@@ -1431,8 +1447,9 @@
 				8EF4CE6121E56CF700C53AFF /* ViewController+Notification.swift in Sources */,
 				8EFA7CFF211F012A00419777 /* PlacesTreeController.swift in Sources */,
 				8EB2715B23384364003BF3AF /* ImageFile+SourceFilename.swift in Sources */,
-				8EAD03B12337299E00AAC7C6 /* ModelStore+ImageContainer.swift in Sources */,
-				8EAD03B923372C8C00AAC7C6 /* ModelStore+FaceFamily.swift in Sources */,
+				8EAD03B12337299E00AAC7C6 /* GRDB+ImageContainer.swift in Sources */,
+				8EAD03B923372C8C00AAC7C6 /* GRDB+FaceFamily.swift in Sources */,
+				8E4DECEA23B38A7B00F5538C /* ImagePlace.swift in Sources */,
 				8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */,
 				8E8D47262236733B0091E9C3 /* OneColumnTableViewController.swift in Sources */,
 				8EB2717D2340D8D5003BF3AF /* ViewController+TreeArea.swift in Sources */,
@@ -1455,22 +1472,21 @@
 				8EC20B322281C0B8000F4819 /* FaceTask.swift in Sources */,
 				8EB271A323413CE7003BF3AF /* ExportConfigurationViewController.swift in Sources */,
 				8E3EC3B4214DB1B8004B6125 /* LunarSolarConverter.swift in Sources */,
-				8EB271572337B9C3003BF3AF /* ModelStore+Image+Search.swift in Sources */,
+				8EB271572337B9C3003BF3AF /* GRDB+Image+Search.swift in Sources */,
 				8EB271A823418C68003BF3AF /* ExportProfileViewController.swift in Sources */,
 				8EB27170233E15B0003BF3AF /* TreeController+LibrarySectionMenu.swift in Sources */,
 				8EBA9DDF216F8BB100DACAAD /* NotesViewController.swift in Sources */,
 				8EEF0728226215E7000520B7 /* SplashViewController.swift in Sources */,
-				8E2CF37620AED6BA00A93375 /* Model.xcdatamodeld in Sources */,
 				8EC5BA2E21775571001510AF /* TheaterCollectionViewItem.swift in Sources */,
 				8EFAF1FB20BFFC8A007A7783 /* MetaInfoHolder.swift in Sources */,
-				8EB321D720FA433500D8C71D /* Image.swift in Sources */,
+				8E4DECE023B3822F00F5538C /* ModelStore.swift in Sources */,
 				8E8CF269235AA3860016932A /* Naming.swift in Sources */,
 				8EEF071A2256C9D9000520B7 /* DevicePathDetailViewController.swift in Sources */,
 				8E8D471C22315F540091E9C3 /* SingleColumnTableViewController.swift in Sources */,
 				8EB271932340EF6F003BF3AF /* ViewController+Schedule.swift in Sources */,
-				8EAD03AF2337290E00AAC7C6 /* ModelStore+Image.swift in Sources */,
+				8EAD03AF2337290E00AAC7C6 /* GRDB+Image.swift in Sources */,
 				8EB2719F23412FE8003BF3AF /* ViewController+Menu+Export.swift in Sources */,
-				8EB271512337B6E4003BF3AF /* ModelStore+Image+Duplicate.swift in Sources */,
+				8EB271512337B6E4003BF3AF /* GRDB+Image+Duplicate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1797,19 +1813,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		8E2CF37420AED6BA00A93375 /* Model.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				8E2CF37520AED6BA00A93375 /* Model.xcdatamodel */,
-			);
-			currentVersion = 8E2CF37520AED6BA00A93375 /* Model.xcdatamodel */;
-			path = Model.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 8E0AFA31208BDEA000CE8B68 /* Project object */;
 }

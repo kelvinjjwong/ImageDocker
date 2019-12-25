@@ -9,14 +9,14 @@
 import Foundation
 import GRDB
 
-extension ModelStore {
+extension ModelStoreGRDB {
 
     // MARK: - FAMILY
     
     func getFamilies() -> [Family] {
         var result:[Family] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 result = try Family.order(sql: "name asc").fetchAll(db)
             }
@@ -29,7 +29,7 @@ extension ModelStore {
     func getFamilies(peopleId:String) -> [String] {
         var result:[String] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, "SELECT familyId FROM FamilyMember WHERE peopleId='\(peopleId)'")
                 for row in rows {
@@ -46,7 +46,7 @@ extension ModelStore {
     
     func saveFamilyMember(peopleId:String, familyId:String) -> ExecuteState {
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 let rows = try Row.fetchAll(db, "SELECT familyId,peopleId FROM FamilyMember WHERE familyId='\(familyId)' AND peopleId='\(peopleId)'")
                 if rows.count == 0 {
@@ -54,19 +54,19 @@ extension ModelStore {
                 }
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func deleteFamilyMember(peopleId:String, familyId:String) -> ExecuteState {
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try db.execute("DELETE FROM FamilyMember WHERE familyId='\(familyId)' AND peopleId='\(peopleId)'")
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
@@ -74,7 +74,7 @@ extension ModelStore {
     func saveFamily(familyId:String?=nil, name:String, type:String) -> String? {
         var recordId:String? = ""
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 var needInsert = false
                 if let id = familyId {
@@ -102,7 +102,7 @@ extension ModelStore {
     
     func deleteFamily(id:String) -> ExecuteState {
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try db.execute("DELETE FROM FamilyMember WHERE familyId='\(id)'")
                 try db.execute("DELETE FROM FamilyJoint WHERE smallFamilyId='\(id)'")
@@ -110,7 +110,7 @@ extension ModelStore {
                 try db.execute("DELETE FROM Family WHERE id='\(id)'")
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
@@ -121,7 +121,7 @@ extension ModelStore {
         var value1 = ""
         var value2 = ""
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 let rows1 = try Row.fetchAll(db, "SELECT subject,object,callName FROM PeopleRelationship WHERE subject='\(primary)' AND object='\(secondary)'")
                 if rows1.count > 0, let callName = rows1[0]["callName"] {
@@ -142,7 +142,7 @@ extension ModelStore {
     func getRelationships(peopleId:String) -> [[String:String]] {
         var result:[[String:String]] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, "SELECT subject,object,callName FROM PeopleRelationship WHERE subject='\(peopleId)' OR object='\(peopleId)'")
                 for row in rows {
@@ -165,7 +165,7 @@ extension ModelStore {
     
     func saveRelationship(primary:String, secondary:String, callName:String) -> ExecuteState {
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 let rows = try Row.fetchAll(db, "SELECT subject,object,callName FROM PeopleRelationship WHERE subject='\(primary)' AND object='\(secondary)'")
                 if rows.count > 0 {
@@ -175,7 +175,7 @@ extension ModelStore {
                 }
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
@@ -183,7 +183,7 @@ extension ModelStore {
     func getRelationships() -> [PeopleRelationship] {
         var obj:[PeopleRelationship] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 obj = try PeopleRelationship.fetchAll(db)
             }
@@ -198,7 +198,7 @@ extension ModelStore {
     func getPeople() -> [People] {
         var obj:[People] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 obj = try People.order(sql: "name asc").fetchAll(db)
             }
@@ -211,7 +211,7 @@ extension ModelStore {
     func getPeople(except:String) -> [People] {
         var obj:[People] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 obj = try People.filter(sql: "id <> '\(except)'").order(sql: "name asc").fetchAll(db)
             }
@@ -224,7 +224,7 @@ extension ModelStore {
     func getPerson(id: String) -> People? {
         var obj:People?
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 obj = try People.fetchOne(db, key: id)
             }
@@ -238,12 +238,12 @@ extension ModelStore {
     func savePersonName(id:String, name:String, shortName:String) -> ExecuteState {
         var person = People.new(id: id, name: name, shortName: shortName)
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try person.save(db)
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
@@ -256,7 +256,7 @@ extension ModelStore {
             ps.iconSubPath = subPath
             ps.iconFilename = filename
             do {
-                let db = ModelStore.sharedDBPool()
+                let db = ModelStoreGRDB.sharedDBPool()
                 try db.write { db in
                     try ps.save(db)
                 }
@@ -272,13 +272,13 @@ extension ModelStore {
     
     func deletePerson(id:String) -> ExecuteState {
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try db.execute("update ImageFace set peopleId = '', peopleAge = 0 where peopleId = ?", arguments: [id])
                 try db.execute("delete from People where id = ?", arguments: [id])
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
@@ -288,7 +288,7 @@ extension ModelStore {
     func getFace(id: String) -> ImageFace? {
         var obj:ImageFace?
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 obj = try ImageFace.fetchOne(db, key: id)
             }
@@ -302,7 +302,7 @@ extension ModelStore {
     func getFaceCrops(imageId: String) -> [ImageFace] {
         var result:[ImageFace] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 result = try ImageFace.filter(sql: "imageId='\(imageId)'").order(sql: "cast(faceX as decimal)").fetchAll(db)
             }
@@ -315,7 +315,7 @@ extension ModelStore {
     func findFaceCrop(imageId: String, x:String, y:String, width:String, height:String) -> ImageFace? {
         var obj:ImageFace?
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 obj = try ImageFace.filter(sql: "imageId='\(imageId)' and faceX='\(x)' and faceY='\(y)' and faceWidth='\(width)' and faceHeight='\(height)'").fetchOne(db)
             }
@@ -330,7 +330,7 @@ extension ModelStore {
         let condition = peopleId == "Unknown" || peopleId == "" ? "peopleId is null or peopleId='' or peopleId='Unknown'" : "peopleId='\(peopleId)'"
         var results:[String] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, "SELECT DISTINCT imageYear FROM ImageFace WHERE \(condition)")
                 for row in rows {
@@ -349,7 +349,7 @@ extension ModelStore {
         let condition = peopleId == "Unknown" || peopleId == "" ? "(peopleId is null or peopleId='' or peopleId='Unknown')" : "peopleId='\(peopleId)'"
         var results:[String] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, "SELECT DISTINCT imageMonth FROM ImageFace WHERE imageYear=\(imageYear) and \(condition)")
                 for row in rows {
@@ -395,7 +395,7 @@ extension ModelStore {
         }
         var result:[ImageFace] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 result = try ImageFace.filter(sql: sql).fetchAll(db)
             }
@@ -408,12 +408,12 @@ extension ModelStore {
     func saveFaceCrop(_ face:ImageFace) -> ExecuteState {
         var f = face
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try f.save(db)
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
@@ -421,14 +421,14 @@ extension ModelStore {
     func updateFaceIconFlag(id:String, peopleId:String) -> ExecuteState {
         if let face = self.getFace(id: id) {
             do {
-                let db = ModelStore.sharedDBPool()
+                let db = ModelStoreGRDB.sharedDBPool()
                 try db.write { db in
                     try db.execute("update ImageFace set iconChoice = 0 where peopleId = ? and iconChoice = 1", arguments: [peopleId])
                     try db.execute("update ImageFace set iconChoice = 1 where peopleId = ? and id = ?", arguments: [peopleId, id])
                     try db.execute("update People set iconRepositoryPath = ?, iconCropPath = ?, iconSubPath = ?, iconFilename = ? WHERE id = ?", arguments: [face.repositoryPath, face.cropPath, face.subPath, face.filename, peopleId]);
                 }
             }catch{
-                return self.errorState(error)
+                return ModelStore.errorState(error)
             }
             return .OK
         }
@@ -437,61 +437,61 @@ extension ModelStore {
     
     func removeFaceIcon(peopleId:String) -> ExecuteState {
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try db.execute("update ImageFace set iconChoice = 0 where peopleId = ? and iconChoice = 1", arguments: [peopleId])
                 try db.execute("update People set iconRepositoryPath = '', iconCropPath = '', iconSubPath = '', iconFilename = '' WHERE id = ?", arguments: [peopleId]);
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func updateFaceSampleFlag(id:String, flag:Bool) -> ExecuteState {
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try db.execute("update ImageFace set sampleChoice = \(flag ? 1 : 0), sampleChangeDate = ? where id = ?", arguments: [Date(), id])
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func updateFaceTagFlag(id:String, flag:Bool) -> ExecuteState {
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try db.execute("update ImageFace set tagOnly = \(flag ? 1 : 0) where id = ?", arguments: [id])
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func updateFaceLockFlag(id:String, flag:Bool) -> ExecuteState {
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try db.execute("update ImageFace set locked = \(flag ? 1 : 0) where id = ?", arguments: [id])
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func updateFaceCropPaths(old:String, new:String) -> ExecuteState {
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try db.execute("update ImageFace set cropPath = ? where cropPath = ?", arguments: [new, old])
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }

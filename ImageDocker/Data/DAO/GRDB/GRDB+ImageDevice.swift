@@ -9,13 +9,13 @@
 import Foundation
 import GRDB
 
-extension ModelStore {
+extension ModelStoreGRDB {
     // MARK: - DEVICES
     
     func getDevices() -> [ImageDevice] {
         var result:[ImageDevice] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 result = try ImageDevice.order(Column("name").asc).fetchAll(db)
             }
@@ -28,7 +28,7 @@ extension ModelStore {
     func getOrCreateDevice(device:PhoneDevice) -> ImageDevice{
         var dev:ImageDevice?
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 dev = try ImageDevice.fetchOne(db, key: device.deviceId)
             }
@@ -52,7 +52,7 @@ extension ModelStore {
     func getDevice(deviceId:String) -> ImageDevice? {
         var dev:ImageDevice?
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 dev = try ImageDevice.fetchOne(db, key: deviceId)
             }
@@ -65,12 +65,12 @@ extension ModelStore {
     func saveDevice(device:ImageDevice) -> ExecuteState{
         var dev = device
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try dev.save(db)
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
@@ -81,7 +81,7 @@ extension ModelStore {
         var deviceFile:ImageDeviceFile?
         do {
             let key = "\(deviceId):\(file.path)"
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 deviceFile = try ImageDeviceFile.fetchOne(db, key: key)
             }
@@ -95,7 +95,7 @@ extension ModelStore {
         var deviceFile:ImageDeviceFile?
         do {
             let key = "\(deviceId):\(file.path)"
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 deviceFile = try ImageDeviceFile.fetchOne(db, key: key)
             }
@@ -121,24 +121,24 @@ extension ModelStore {
     func saveDeviceFile(file:ImageDeviceFile) -> ExecuteState{
         var f = file
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try f.save(db)
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func deleteDeviceFiles(deviceId:String) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try db.execute("delete from ImageDeviceFile where deviceId = ?", arguments: [deviceId])
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
@@ -146,7 +146,7 @@ extension ModelStore {
     func getDeviceFiles(deviceId:String) -> [ImageDeviceFile] {
         var result:[ImageDeviceFile] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 result = try ImageDeviceFile.filter(sql: "deviceId='\(deviceId)'").order(Column("importToPath").asc).fetchAll(db)
             }
@@ -159,7 +159,7 @@ extension ModelStore {
     func getDeviceFiles(deviceId:String, importToPath:String) -> [ImageDeviceFile] {
         var result:[ImageDeviceFile] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 result = try ImageDeviceFile.filter(sql: "deviceId='\(deviceId)' and importToPath='\(importToPath)'").order(Column("fileId").asc).fetchAll(db)
             }
@@ -175,7 +175,7 @@ extension ModelStore {
         var devicePath:ImageDevicePath?
         do {
             let key = "\(deviceId):\(path)"
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 devicePath = try ImageDevicePath.fetchOne(db, key: key)
             }
@@ -189,24 +189,24 @@ extension ModelStore {
     func saveDevicePath(file:ImageDevicePath) -> ExecuteState {
         var f = file
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try f.save(db)
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func deleteDevicePath(deviceId:String, path:String) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try db.execute("delete from ImageDevicePath where deviceId = ? and path = ?", arguments: [deviceId, path])
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
@@ -214,7 +214,7 @@ extension ModelStore {
     func getDevicePaths(deviceId:String, deviceType:MobileType = .Android) -> [ImageDevicePath] {
         var result:[ImageDevicePath] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 result = try ImageDevicePath.filter(sql: "deviceId='\(deviceId)'").order(Column("path").asc).fetchAll(db)
             }
@@ -252,7 +252,7 @@ where p.excludeimported=1
 """
         var results:Set<String> = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql)
                 for row in rows {
@@ -283,7 +283,7 @@ order by c.name
         var notScans:[(String,String,String?,String?)] = []
         var results:[String:String] = [:]
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql)
                 for row in rows {

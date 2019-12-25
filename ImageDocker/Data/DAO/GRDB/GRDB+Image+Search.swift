@@ -9,7 +9,7 @@
 import Foundation
 import GRDB
 
-extension ModelStore {
+extension ModelStoreGRDB {
     
     // MARK: - COLLECTION
     
@@ -25,7 +25,7 @@ extension ModelStore {
         var result:[Image] = []
         var hiddenCount:Int = 0
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 hiddenCount = try Image.filter(sql: stmtHidden, arguments:StatementArguments(sqlArgs)).fetchCount(db)
                 if pageNumber > 0 && pageSize > 0 {
@@ -58,7 +58,7 @@ extension ModelStore {
         var result:[Image] = []
         var hiddenCount:Int = 0
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 hiddenCount = try Image.filter(sql: stmtHidden, arguments:StatementArguments(sqlArgs)).fetchCount(db)
                 if pageNumber > 0 && pageSize > 0 {
@@ -92,7 +92,7 @@ extension ModelStore {
         var result:[Image] = []
         var hiddenCount:Int = 0
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 hiddenCount = try Image.filter(sql: stmtHidden).fetchCount(db)
                 if pageNumber > 0 && pageSize > 0 {
@@ -125,7 +125,7 @@ extension ModelStore {
         }
         var result:[Image] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.read { db in
                 result = try Image.filter(sql: sql).fetchAll(db)
             }
@@ -159,7 +159,7 @@ extension ModelStore {
         }
         var result:[Image] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.read { db in
                 result = try Image.filter(sql: sql).fetchAll(db)
             }
@@ -184,7 +184,7 @@ extension ModelStore {
         let hour = Calendar.current.component(.hour, from: photoTakenDate)
         var result:[Image] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.read { db in
                 result = try Image.filter(sql: "hidden=0 and photoTakenYear=\(year) and photoTakenMonth=\(month) and photoTakenDay=\(day) and photoTakenHour=\(hour)").fetchAll(db)
             }
@@ -199,7 +199,7 @@ extension ModelStore {
         
         var result:Int = 0
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql)
                 if rows.count > 0 {
@@ -217,7 +217,7 @@ extension ModelStore {
         
         var result:Int = 0
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql)
                 if rows.count > 0 {
@@ -252,7 +252,7 @@ extension ModelStore {
         
         var result:[Int] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql)
                 if rows.count > 0 {
@@ -277,7 +277,7 @@ select DATE('now', 'localtime')  date
 """
         var result:[String] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql)
                 if rows.count > 0 {
@@ -307,7 +307,7 @@ select DATE('now', 'localtime')  date
         
         var result:[String] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql)
                 if rows.count > 0 {
@@ -329,7 +329,7 @@ select DATE('now', 'localtime')  date
     func getPhotoFilesWithoutExif(limit:Int? = nil) -> [Image] {
         var result:[Image] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(sql: "hidden != 1 AND cameraMaker is null and (lastTimeExtractExif = 0 or updateExifDate is null OR photoTakenYear is null OR photoTakenYear = 0 OR (latitude <> '0.0' AND latitudeBD = '0.0') OR (latitudeBD <> '0.0' AND COUNTRY = ''))").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
             }
@@ -344,7 +344,7 @@ select DATE('now', 'localtime')  date
     func getPhotoFilesWithoutLocation() -> [Image] {
         var result:[Image] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(sql: "hidden != 1 AND updateLocationDate is null").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
             }
@@ -357,7 +357,7 @@ select DATE('now', 'localtime')  date
     func getPhotoFiles(after date:Date) -> [Image] {
         var result:[Image] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(sql: "updateLocationDate >= ?", arguments: StatementArguments([date])).fetchAll(db)
             }
@@ -374,7 +374,7 @@ select DATE('now', 'localtime')  date
         let root = repositoryRoot.withStash()
         let scannedCondition = includeScanned ? "" : " and scanedFace=0"
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(sql: "repositoryPath=? and hidden=0 \(scannedCondition) and id not in (select distinct imageid from imageface)", arguments:[root]).fetchAll(db)
             }
@@ -386,10 +386,10 @@ select DATE('now', 'localtime')  date
     
     // MARK: - PATH
     
-    func getAllPhotoPaths(includeHidden:Bool = true, sharedDB:DatabaseWriter? = nil) -> Set<String> {
+    func getAllPhotoPaths(includeHidden:Bool = true) -> Set<String> {
         var result:Set<String> = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 if includeHidden {
                     let cursor = try Image.order([Column("photoTakenDate").asc, Column("filename").asc]).fetchCursor(db)
@@ -412,7 +412,7 @@ select DATE('now', 'localtime')  date
     func getPhotoFilesWithoutSubPath(rootPath:String) -> [Image] {
         var result:[Image] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(Column("path").like("\(rootPath.withStash())%")).filter(Column("subPath") == "").fetchAll(db)
             }
@@ -437,7 +437,7 @@ select DATE('now', 'localtime')  date
         
         var result:[Image] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 if pageSize > 0 && pageNumber > 0 {
                     result = try Image.filter(sql: "\(condition) \(otherPredicate)", arguments: StatementArguments(key)).order([Column("photoTakenDate").asc, Column("path").asc]).limit(pageSize, offset: pageSize * (pageNumber - 1)).fetchAll(db)
@@ -454,7 +454,7 @@ select DATE('now', 'localtime')  date
     func getImages(repositoryPath:String) -> [Image] {
         var result:[Image] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(sql: "repositoryPath = ?", arguments:[repositoryPath]).order(sql: "path asc").fetchAll(db)
             }
@@ -467,7 +467,7 @@ select DATE('now', 'localtime')  date
     func getPhotoFiles(rootPath:String) -> [Image] {
         var result:[Image] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(Column("path").like("\(rootPath.withStash())%")).fetchAll(db)
             }
@@ -479,10 +479,10 @@ select DATE('now', 'localtime')  date
     
     // MARK: - EXPORT
     
-    func getAllExportedImages(includeHidden:Bool = true, sharedDB:DatabaseWriter? = nil) -> [Image] {
+    func getAllExportedImages(includeHidden:Bool = true) -> [Image] {
         var result:[Image] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 if includeHidden {
                     result = try Image.filter(sql: "exportToPath is not null and exportAsFilename is not null and exportToPath <> '' and exportAsFilename <> ''").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
@@ -496,10 +496,10 @@ select DATE('now', 'localtime')  date
         return result
     }
     
-    func getAllExportedPhotoFilenames(includeHidden:Bool = true, sharedDB:DatabaseWriter? = nil) -> Set<String> {
+    func getAllExportedPhotoFilenames(includeHidden:Bool = true) -> Set<String> {
         var result:Set<String> = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 if includeHidden {
                     let cursor = try Image.filter(sql: "exportToPath is not null and exportAsFilename is not null and exportToPath <> '' and exportAsFilename <> ''").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchCursor(db)
@@ -524,7 +524,7 @@ select DATE('now', 'localtime')  date
     func getAllPhotoFilesForExporting(after date:Date, limit:Int? = nil) -> [Image] {
         var result:[Image] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 var query = Image.filter(sql: "hidden != 1 AND photoTakenYear <> 0 AND photoTakenYear IS NOT NULL AND (updateDateTimeDate > ? OR updateExifDate > ? OR updateLocationDate > ? OR updateEventDate > ? OR exportTime is null)", arguments:StatementArguments([date, date, date, date]))
                     .order([Column("photoTakenDate").asc, Column("filename").asc])
@@ -542,7 +542,7 @@ select DATE('now', 'localtime')  date
     func getAllPhotoFilesMarkedExported() -> [Image] {
         var result:[Image] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 result = try Image.filter("hidden != 1 AND exportTime is not null)").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
             }

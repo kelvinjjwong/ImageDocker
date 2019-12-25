@@ -140,7 +140,7 @@ class ImageFolderTreeScanner {
                                                                           cropPath: container.cropPath,
                                                                           countOfImages: Int(container.imageCount),
                                                                           withContainer: true,
-                                                                          sharedDB: ModelStore.sharedDBPool())
+                                                                          sharedDB: ModelStoreGRDB.sharedDBPool())
                                 urlFolders[container.path] = imageFolder
                                 if fast { // fast
                                     if container.parentFolder != "" {
@@ -310,7 +310,7 @@ class ImageFolderTreeScanner {
                     }
                 }
                 if !exclude {
-                    let _ = ImageFile(photoFile: photo, indicator: indicator, sharedDB: ModelStore.sharedDBPool())
+                    let _ = ImageFile(photoFile: photo, indicator: indicator, sharedDB: ModelStoreGRDB.sharedDBPool())
                 }else{
                     if indicator != nil {
                         DispatchQueue.main.async {
@@ -485,7 +485,7 @@ class ImageFolderTreeScanner {
                                                           cropPath: "",
                                                           countOfImages: 0,
                                                           manyChildren: devicePath.manyChildren,
-                                                          sharedDB: ModelStore.sharedDBPool())
+                                                          sharedDB: ModelStoreGRDB.sharedDBPool())
                             
                             if let container = folder.containerFolder, container.parentFolder == "" {
                                 ModelStore.default.updateImageContainerParentFolder(path: path, parentFolder: repo.path)
@@ -670,7 +670,7 @@ class ImageFolderTreeScanner {
             indicator?.display(message: "[FileSys Scan] Checking differences .....")
         }
         
-        let dbUrls = ModelStore.default.getAllPhotoPaths(sharedDB: ModelStore.sharedDBPool())
+        let dbUrls = ModelStore.default.getAllPhotoPaths()
         print("EXISTING DB PHOTO COUNT = \(dbUrls.count)")
         print("EXISTING SYS PHOTO COUNT = \(filesysUrls.count)")
 //        var dbUrls:Set<String> = Set<String>()
@@ -863,7 +863,7 @@ class ImageFolderTreeScanner {
                                   repository: repo,
                                   indicator: indicator,
                                   quickCreate: true,
-                                  sharedDB: ModelStore.sharedDBPool())
+                                  sharedDB: ModelStoreGRDB.sharedDBPool())
             
             return image.save()
         }else{
@@ -886,7 +886,7 @@ class ImageFolderTreeScanner {
                                               facePath: exist.facePath,
                                               cropPath: exist.cropPath,
                                               countOfImages: Int(exist.imageCount),
-                                              sharedDB: ModelStore.sharedDBPool())
+                                              sharedDB: ModelStoreGRDB.sharedDBPool())
                 imageFolders.append(imageFolder)
                 
                 let count = ModelStore.default.countPhotoFiles(rootPath: "\(imageFolder.url.path)/")
@@ -922,7 +922,7 @@ class ImageFolderTreeScanner {
 //                let photoCount:Int = cont["photoCount"] as Int
 //
 //                let url:URL = URL(fileURLWithPath: path)
-//                let imageFolder = ImageFolder(url, name: exist.name, repositoryPath: exist.repositoryPath, smallSizePath: exist.smallSizePath, countOfImages: photoCount, sharedDB: ModelStore.sharedDBPool())
+//                let imageFolder = ImageFolder(url, name: exist.name, repositoryPath: exist.repositoryPath, smallSizePath: exist.smallSizePath, countOfImages: photoCount, sharedDB: ModelStoreGRDB.sharedDBPool())
 //                imageFolders.append(imageFolder)
 //                /--
 //                let photos = ModelStore.getPhotoFiles(rootPath: "\(imageFolder.url.path)/")

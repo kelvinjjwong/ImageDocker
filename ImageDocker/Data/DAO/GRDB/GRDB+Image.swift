@@ -9,20 +9,20 @@
 import Foundation
 import GRDB
 
-extension ModelStore {
+extension ModelStoreGRDB : ImageDao {
     
     
     // MARK: - CREATE
     
-    func getOrCreatePhoto(filename:String, path:String, parentPath:String, repositoryPath:String? = nil, sharedDB:DatabaseWriter? = nil) -> Image{
+    func getOrCreatePhoto(filename:String, path:String, parentPath:String, repositoryPath:String? = nil) -> Image{
         var image:Image?
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 image = try Image.fetchOne(db, key: path)
             }
             if image == nil {
-                let queue = try sharedDB ?? DatabaseQueue(path: dbfile)
+                let queue = try DatabaseQueue(path: ModelStore.localDBFile)
                 try queue.write { db in
                     image = Image.new(filename: filename, path: path, parentFolder: parentPath, repositoryPath: repositoryPath ?? "")
                     try image?.save(db)
@@ -40,7 +40,7 @@ extension ModelStore {
     func getImage(path:String) -> Image?{
         var image:Image?
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 image = try Image.fetchOne(db, key: path)
             }
@@ -53,7 +53,7 @@ extension ModelStore {
     func getImage(id:String) -> Image? {
         var image:Image?
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 image = try Image.filter(sql: "id='\(id)'").fetchOne(db)
             }
@@ -112,8 +112,8 @@ extension ModelStore {
         
         var sqlArgs:[Any] = []
         
-        self.inArray(field: "imageSource", array: imageSource, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
-        self.inArray(field: "cameraModel", array: cameraModel, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
+        ModelStore.inArray(field: "imageSource", array: imageSource, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
+        ModelStore.inArray(field: "cameraModel", array: cameraModel, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
         
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
         let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=1"
@@ -144,8 +144,8 @@ extension ModelStore {
         
         var sqlArgs:[Any] = []
         
-        self.inArray(field: "imageSource", array: imageSource, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
-        self.inArray(field: "cameraModel", array: cameraModel, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
+        ModelStore.inArray(field: "imageSource", array: imageSource, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
+        ModelStore.inArray(field: "cameraModel", array: cameraModel, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
         
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
         let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=1"
@@ -164,39 +164,39 @@ extension ModelStore {
         }
         let hiddenStatement = "AND (hidden=1 OR hiddenByRepository=1 OR hiddenByContainer=1)"
         
-        let yearStatement = self.joinArrayToStatementCondition(values: years, field: "photoTakenYear")
-        let monthStatement = self.joinArrayToStatementCondition(values: months, field: "photoTakenMonth")
-        let dayStatement = self.joinArrayToStatementCondition(values: days, field: "photoTakenDay")
+        let yearStatement = ModelStore.joinArrayToStatementCondition(values: years, field: "photoTakenYear")
+        let monthStatement = ModelStore.joinArrayToStatementCondition(values: months, field: "photoTakenMonth")
+        let dayStatement = ModelStore.joinArrayToStatementCondition(values: days, field: "photoTakenDay")
         
-        let dateStatement = self.joinStatementConditions(conditions: [yearStatement, monthStatement, dayStatement])
+        let dateStatement = ModelStore.joinStatementConditions(conditions: [yearStatement, monthStatement, dayStatement])
         
-        let peopleIdStatement = self.joinArrayToStatementCondition(values: peopleIds, field: "recognizedPeopleIds", like: true)
+        let peopleIdStatement = ModelStore.joinArrayToStatementCondition(values: peopleIds, field: "recognizedPeopleIds", like: true)
         
-        let eventStatement = self.joinArrayToStatementCondition(values: keywords, field: "event", like: true)
-        let longDescStatement = self.joinArrayToStatementCondition(values: keywords, field: "longDescription", like: true)
-        let shortDescStatement = self.joinArrayToStatementCondition(values: keywords, field: "shortDescription", like: true)
+        let eventStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "event", like: true)
+        let longDescStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "longDescription", like: true)
+        let shortDescStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "shortDescription", like: true)
         
-        let placeStatement = self.joinArrayToStatementCondition(values: keywords, field: "place", like: true)
-        let countryStatement = self.joinArrayToStatementCondition(values: keywords, field: "country", like: true)
-        let provinceStatement = self.joinArrayToStatementCondition(values: keywords, field: "province", like: true)
-        let cityStatement = self.joinArrayToStatementCondition(values: keywords, field: "city", like: true)
-        let districtStatement = self.joinArrayToStatementCondition(values: keywords, field: "district", like: true)
-        let businessCircleStatement = self.joinArrayToStatementCondition(values: keywords, field: "businessCircle", like: true)
-        let streetStatement = self.joinArrayToStatementCondition(values: keywords, field: "street", like: true)
-        let addressStatement = self.joinArrayToStatementCondition(values: keywords, field: "address", like: true)
-        let addressDescStatement = self.joinArrayToStatementCondition(values: keywords, field: "addressDescription", like: true)
+        let placeStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "place", like: true)
+        let countryStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "country", like: true)
+        let provinceStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "province", like: true)
+        let cityStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "city", like: true)
+        let districtStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "district", like: true)
+        let businessCircleStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "businessCircle", like: true)
+        let streetStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "street", like: true)
+        let addressStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "address", like: true)
+        let addressDescStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "addressDescription", like: true)
         
-        let assignPlaceStatement = self.joinArrayToStatementCondition(values: keywords, field: "assignPlace", like: true)
-        let assignCountryStatement = self.joinArrayToStatementCondition(values: keywords, field: "assignCountry", like: true)
-        let assignProvinceStatement = self.joinArrayToStatementCondition(values: keywords, field: "assignProvince", like: true)
-        let assignCityStatement = self.joinArrayToStatementCondition(values: keywords, field: "assignCity", like: true)
-        let assignDistrictStatement = self.joinArrayToStatementCondition(values: keywords, field: "assignDistrict", like: true)
-        let assignBusinessCircleStatement = self.joinArrayToStatementCondition(values: keywords, field: "assignBusinessCircle", like: true)
-        let assignStreetStatement = self.joinArrayToStatementCondition(values: keywords, field: "assignStreet", like: true)
-        let assignAddressStatement = self.joinArrayToStatementCondition(values: keywords, field: "assignAddress", like: true)
-        let assignAddressDescStatement = self.joinArrayToStatementCondition(values: keywords, field: "assignAddressDescription", like: true)
+        let assignPlaceStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "assignPlace", like: true)
+        let assignCountryStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "assignCountry", like: true)
+        let assignProvinceStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "assignProvince", like: true)
+        let assignCityStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "assignCity", like: true)
+        let assignDistrictStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "assignDistrict", like: true)
+        let assignBusinessCircleStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "assignBusinessCircle", like: true)
+        let assignStreetStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "assignStreet", like: true)
+        let assignAddressStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "assignAddress", like: true)
+        let assignAddressDescStatement = ModelStore.joinArrayToStatementCondition(values: keywords, field: "assignAddressDescription", like: true)
         
-        let keywordStatement = self.joinStatementConditions(conditions: [
+        let keywordStatement = ModelStore.joinStatementConditions(conditions: [
             eventStatement,
             shortDescStatement,
             longDescStatement,
@@ -223,7 +223,7 @@ extension ModelStore {
             
             ], or: true)
         
-        let stmtWithoutHiddenFlag = self.joinStatementConditions(conditions: [dateStatement, peopleIdStatement, keywordStatement])
+        let stmtWithoutHiddenFlag = ModelStore.joinStatementConditions(conditions: [dateStatement, peopleIdStatement, keywordStatement])
         
         let stmt = "\(stmtWithoutHiddenFlag) \(hiddenFlagStatement)"
         let stmtHidden = "\(stmtWithoutHiddenFlag) \(hiddenStatement)"

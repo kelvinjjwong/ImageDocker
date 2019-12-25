@@ -267,14 +267,12 @@ class ImageFile {
             self.imageData = ModelStore.default.getOrCreatePhoto(filename: fileName,
                                                              path: url.path,
                                                              parentPath: url.deletingLastPathComponent().path,
-                                                             repositoryPath: repo.repositoryPath.withStash(),
-                                                             sharedDB:sharedDB)
+                                                             repositoryPath: repo.repositoryPath.withStash())
         }else{
             self.imageData = ModelStore.default.getOrCreatePhoto(filename: fileName,
                                                                  path: url.path,
                                                                  parentPath: url.deletingLastPathComponent().path,
-                                                                 repositoryPath: nil,
-                                                                 sharedDB:sharedDB)
+                                                                 repositoryPath: nil)
         }
         
         if !quickCreate {

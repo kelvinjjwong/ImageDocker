@@ -9,7 +9,7 @@
 import Foundation
 import GRDB
 
-extension ModelStore {
+extension ModelStoreGRDB {
     // MARK: - SCHEMA VERSION MIGRATION
     
     internal func versionCheck(){
@@ -465,7 +465,7 @@ extension ModelStore {
         
         
         do {
-            let dbQueue = try DatabaseQueue(path: dbfile)
+            let dbQueue = try DatabaseQueue(path: ModelStore.localDBFile)
             try migrator.migrate(dbQueue)
         }catch{
             print(error)

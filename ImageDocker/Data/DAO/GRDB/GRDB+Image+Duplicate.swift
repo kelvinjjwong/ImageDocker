@@ -9,7 +9,7 @@
 import Foundation
 import GRDB
 
-extension ModelStore {
+extension ModelStoreGRDB {
     
     func reloadDuplicatePhotos() {
         print("\(Date()) Loading duplicate photos from db")
@@ -17,7 +17,7 @@ extension ModelStore {
         let duplicates:Duplicates = Duplicates()
         var dupDates:Set<Date> = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             // try DatabaseQueue(path: dbfile)
             try db.read { db in
                 let cursor = try Row.fetchCursor(db,
@@ -69,7 +69,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         var firstPhotoInPlaceAndDate:[String:String] = [:]
         print("\(Date()) Marking duplicate tag to photo files")
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 print("duplicated date count: \(dupDates.count)")
                 let marks = repeatElement("?", count: dupDates.count).joined(separator: ",")
@@ -132,7 +132,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func getDuplicatedImages(repositoryRoot:String, theOtherRepositoryRoot:String) -> [String:[Image]] {
         var result:[String:[Image]] = [:]
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.read { db in
                 let keyword = "\(repositoryRoot.withStash())%"
                 let otherKeyword = "\(theOtherRepositoryRoot.withStash())%"
@@ -160,7 +160,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func getChiefImageOfDuplicatedSet(duplicatesKey:String) -> Image?{
         var result:Image? = nil
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.read { db in
                 result = try Image.filter(sql: "hidden=0 and duplicatesKey='\(duplicatesKey)'").fetchOne(db)
             }
@@ -173,7 +173,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     func getFirstImageOfDuplicatedSet(duplicatesKey:String) -> Image?{
         var result:Image? = nil
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.read { db in
                 result = try Image.filter(sql: "duplicatesKey='\(duplicatesKey)'").order(Column("path").asc).fetchOne(db)
             }
@@ -185,7 +185,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
     
     func markImageDuplicated(path:String, duplicatesKey:String?, hide:Bool){
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update Image set duplicatesKey = ?, hidden = ? where path = ?", arguments: [duplicatesKey, hide, path])
             }

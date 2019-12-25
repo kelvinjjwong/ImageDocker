@@ -9,14 +9,14 @@
 import Foundation
 import GRDB
 
-extension ModelStore {
+extension ModelStoreGRDB {
     
     // MARK: - CREATE
     
     func getOrCreatePlace(name:String, location:Location) -> ImagePlace{
         var place:ImagePlace?
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 place = try ImagePlace.fetchOne(db, key: name)
             }
@@ -50,7 +50,7 @@ extension ModelStore {
     func getPlace(name:String) -> ImagePlace? {
         var place:ImagePlace?
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 place = try ImagePlace.fetchOne(db, key: name)
             }
@@ -66,7 +66,7 @@ extension ModelStore {
         var places:[ImagePlace] = []
         
         do {
-            let dbPool = ModelStore.sharedDBPool()
+            let dbPool = ModelStoreGRDB.sharedDBPool()
             try dbPool.read { db in
                 places = try ImagePlace.fetchAll(db)
             }
@@ -81,10 +81,10 @@ extension ModelStore {
         var stmt = ""
         if let names = names {
             let keys:[String] = names.components(separatedBy: " ")
-            stmt = self.likeArray(field: "name", array: keys)
+            stmt = ModelStore.likeArray(field: "name", array: keys)
         }
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 if stmt != "" {
                     result = try ImagePlace.filter(stmt).order(Column("name").asc).fetchAll(db)
@@ -104,7 +104,7 @@ extension ModelStore {
     func renamePlace(oldName:String, newName:String) -> ExecuteState{
         print("trying to rename place from \(oldName) to \(newName)")
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 if let _ = try ImagePlace.fetchOne(db, key: newName){ // already exists new name, just delete old one
                     //
@@ -118,14 +118,14 @@ extension ModelStore {
                 try ImagePlace.deleteOne(db, key: oldName)  // delete old one at last
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func updatePlace(name:String, location:Location) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 if var place = try ImagePlace.fetchOne(db, key: name) {
                     place.country = location.country
@@ -159,7 +159,7 @@ extension ModelStore {
                 }
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
@@ -168,12 +168,12 @@ extension ModelStore {
     
     func deletePlace(name:String) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 let _ = try ImagePlace.deleteOne(db, key: name)
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }

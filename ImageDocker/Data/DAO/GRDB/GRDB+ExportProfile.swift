@@ -9,7 +9,7 @@
 import Foundation
 import GRDB
 
-extension ModelStore {
+extension ModelStoreGRDB {
     
     // MARK: - CREATE
     
@@ -31,7 +31,7 @@ extension ModelStore {
                                   ) -> ExportProfile{
         var profile:ExportProfile?
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 profile = try ExportProfile.fetchOne(db, key: name)
             }
@@ -76,7 +76,7 @@ extension ModelStore {
                              events: String,
                              repositoryPath: String) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 if var profile = try ExportProfile.fetchOne(db, key: id) {
                     profile.name = name
@@ -93,14 +93,14 @@ extension ModelStore {
                 }
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func enableExportProfile(id:String) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 if var profile = try ExportProfile.fetchOne(db, key: id) {
                     profile.enabled = true
@@ -109,14 +109,14 @@ extension ModelStore {
                 }
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func disableExportProfile(id:String) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 if var profile = try ExportProfile.fetchOne(db, key: id) {
                     profile.enabled = false
@@ -125,14 +125,14 @@ extension ModelStore {
                 }
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func updateExportProfileLastExportTime(id:String) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 if var profile = try ExportProfile.fetchOne(db, key: id) {
                     profile.lastExportTime = Date()
@@ -141,7 +141,7 @@ extension ModelStore {
                 }
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
@@ -151,7 +151,7 @@ extension ModelStore {
     func getExportProfile(id:String) -> ExportProfile? {
         var profile:ExportProfile?
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 profile = try ExportProfile.fetchOne(db, key: id)
             }
@@ -167,7 +167,7 @@ extension ModelStore {
         var profiles:[ExportProfile] = []
         
         do {
-            let dbPool = ModelStore.sharedDBPool()
+            let dbPool = ModelStoreGRDB.sharedDBPool()
             try dbPool.read { db in
                 profiles = try ExportProfile.fetchAll(db)
             }
@@ -181,12 +181,12 @@ extension ModelStore {
     
     func deleteExportProfile(id:String) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 let _ = try ExportProfile.deleteOne(db, key: id)
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }

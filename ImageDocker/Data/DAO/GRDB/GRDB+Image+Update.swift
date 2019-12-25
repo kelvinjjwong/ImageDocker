@@ -9,20 +9,20 @@
 import Foundation
 import GRDB
 
-extension ModelStore {
+extension ModelStoreGRDB {
     
     // MARK: - BASIC
     
-    func saveImage(image: Image, sharedDB:DatabaseWriter? = nil) -> ExecuteState{
+    func saveImage(image: Image) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
                 var image = image
                 try image.save(db)
                 //print("saved image")
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
@@ -30,22 +30,22 @@ extension ModelStore {
     func deletePhoto(atPath path:String, updateFlag:Bool = true) -> ExecuteState{
         if updateFlag {
             do {
-                let db = ModelStore.sharedDBPool()
+                let db = ModelStoreGRDB.sharedDBPool()
                 let _ = try db.write { db in
                     try db.execute("update Image set delFlag = ?", arguments: [true])
                 }
             }catch{
-                return self.errorState(error)
+                return ModelStore.errorState(error)
             }
             return .OK
         }else{
             do {
-                let db = ModelStore.sharedDBPool()
+                let db = ModelStoreGRDB.sharedDBPool()
                 let _ = try db.write { db in
                     try Image.deleteOne(db, key: path)
                 }
             }catch{
-                return self.errorState(error)
+                return ModelStore.errorState(error)
             }
             return .OK
         }
@@ -55,84 +55,84 @@ extension ModelStore {
     
     func updateImagePaths(oldPath:String, newPath:String, repositoryPath:String, subPath:String, containerPath:String, id:String) -> ExecuteState {
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update Image set path = ?, repositoryPath = ?, subPath = ?, containerPath = ?, id = ? where path = ?", arguments: [newPath, repositoryPath, subPath, containerPath, id, oldPath])
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func updateImageRawBase(oldRawPath:String, newRawPath:String) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update Image set originPath = ? where originPath = ?", arguments: [newRawPath, oldRawPath])
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func updateImageRawBase(repositoryPath:String, rawPath:String) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update Image set originPath = ? where repositoryPath = ?", arguments: [rawPath, repositoryPath])
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func updateImageRawBase(pathStartsWith path:String, rawPath:String) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update Image set originPath = ? where path like ?", arguments: [rawPath, "\(path.withStash())%"])
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func updateImageRepositoryBase(pathStartsWith path:String, repositoryPath:String) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update Image set repositoryPath = ? where path like ?", arguments: [repositoryPath, "\(path.withStash())%"])
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func updateImageRepositoryBase(oldRepositoryPath:String, newRepository:String) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update Image set repositoryPath = ? where repositoryPath = ?", arguments: [newRepository, oldRepositoryPath])
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func updateImagePath(repositoryPath:String) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update Image set path = repositoryPath || subPath where repositoryPath = ? and subPath <> ''", arguments: [repositoryPath])
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
@@ -141,24 +141,24 @@ extension ModelStore {
     
     func updateImageScannedFace(imageId:String, facesCount:Int = 0) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update Image set scanedFace=1, facesCount=? where id=?", arguments: [facesCount, imageId])
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func updateImageRecognizedFace(imageId:String, recognizedPeopleIds:String = "") -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute("update Image set recognizedFace=1,recognizedPeopleIds=? where id=?", arguments: [recognizedPeopleIds,imageId])
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
@@ -207,12 +207,12 @@ extension ModelStore {
         let valueSets = values.joined(separator: ",")
         
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try db.execute("UPDATE Image set \(valueSets) WHERE path=?", arguments: StatementArguments(arguments))
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
@@ -221,7 +221,7 @@ extension ModelStore {
     
     func storeImageDescription(path:String, shortDescription:String?, longDescription:String?) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 if let brief = shortDescription, let detailed = longDescription {
                     try db.execute("UPDATE Image set shortDescription = ?, longDescription = ? WHERE path=?", arguments: StatementArguments([brief, detailed, path]))
@@ -232,7 +232,7 @@ extension ModelStore {
                 }
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
@@ -241,84 +241,84 @@ extension ModelStore {
     
     func cleanImageExportTime(path:String) -> ExecuteState {
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try db.execute("UPDATE Image set exportTime = null WHERE path='\(path)'")
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func storeImageOriginalMD5(path:String, md5:String) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try db.execute("UPDATE Image set originalMD5 = ? WHERE path=?", arguments: StatementArguments([md5, path]))
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func storeImageExportedMD5(path:String, md5:String) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try db.execute("UPDATE Image set exportedMD5 = ? WHERE path=?", arguments: StatementArguments([md5, path]))
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func storeImageExportSuccess(path:String, date:Date, exportToPath:String, exportedFilename:String, exportedMD5:String, exportedLongDescription:String) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try db.execute("UPDATE Image set exportTime = ?, exportToPath = ?, exportAsFilename = ?, exportedMD5 = ?, exportedLongDescription = ?, exportState = 'OK', exportFailMessage = '' WHERE path=?", arguments: StatementArguments([date, exportToPath, exportedFilename, exportedMD5, exportedLongDescription, path]))
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func storeImageExportedTime(path:String, date:Date) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try db.execute("UPDATE Image set exportTime = ? WHERE path=?", arguments: StatementArguments([date, path]))
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func storeImageExportFail(path:String, date:Date, message:String) -> ExecuteState{
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try db.execute("UPDATE Image set exportTime = ?, exportState = 'FAIL', exportFailMessage = ? WHERE path=?", arguments: StatementArguments([date, message, path]))
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
     }
     
     func cleanImageExportPath(path:String) -> ExecuteState {
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try db.execute("UPDATE Image set exportToPath = null, exportAsFilename = null, exportTime = null, exportState = null, exportFailMessage = '', exportedMD5 = null, WHERE path=?", arguments: StatementArguments([path]))
             }
         }catch{
-            return self.errorState(error)
+            return ModelStore.errorState(error)
         }
         return .OK
         

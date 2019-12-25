@@ -72,8 +72,7 @@ class ImageFolder : NSObject {
                                                                        facePath: facePath,
                                                                        cropPath: cropPath,
                                                                        subPath: subPath,
-                                                                       manyChildren: manyChildren,
-                                                                       sharedDB: sharedDB)
+                                                                       manyChildren: manyChildren)
         }
         //print("Got or Created container: \(path)")
         if self.containerFolder?.imageCount == nil {

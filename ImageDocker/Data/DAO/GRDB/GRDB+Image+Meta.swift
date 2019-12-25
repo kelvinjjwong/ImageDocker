@@ -9,14 +9,14 @@
 import Foundation
 import GRDB
 
-extension ModelStore {
+extension ModelStoreGRDB {
     
     // MARK: - Options
     
     func getImageSources() -> [String:Bool]{
         var results:[String:Bool] = [:]
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, "SELECT DISTINCT imageSource FROM Image")
                 for row in rows {
@@ -36,7 +36,7 @@ extension ModelStore {
     func getCameraModel() -> [String:Bool] {
         var results:[String:Bool] = [:]
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, "SELECT DISTINCT cameraMaker,cameraModel FROM Image")
                 for row in rows {
@@ -60,8 +60,8 @@ extension ModelStore {
         var sqlArgs:[Any] = []
         var imageSourceWhere = ""
         var cameraModelWhere = ""
-        inArray(field: "imageSource", array: imageSource, where: &imageSourceWhere, args: &sqlArgs)
-        inArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs)
+        ModelStore.inArray(field: "imageSource", array: imageSource, where: &imageSourceWhere, args: &sqlArgs)
+        ModelStore.inArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs)
         
         let sql = """
         SELECT photoTakenYear, photoTakenMonth, photoTakenDay, count(path) as photoCount FROM
@@ -71,7 +71,7 @@ extension ModelStore {
         print(sql)
         var result:[Row] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 result = try Row.fetchAll(db, sql, arguments:StatementArguments(sqlArgs))
             }
@@ -86,8 +86,8 @@ extension ModelStore {
         var sqlArgs:[Any] = []
         var imageSourceWhere = ""
         var cameraModelWhere = ""
-        inArray(field: "imageSource", array: imageSource, where: &imageSourceWhere, args: &sqlArgs)
-        inArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs)
+        ModelStore.inArray(field: "imageSource", array: imageSource, where: &imageSourceWhere, args: &sqlArgs)
+        ModelStore.inArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs)
         
         let sql = """
         SELECT country, province, city, place, photoTakenYear, photoTakenMonth, photoTakenDay, count(path) as photoCount FROM
@@ -103,7 +103,7 @@ extension ModelStore {
         print(sql)
         var result:[Row] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 result = try Row.fetchAll(db, sql, arguments:StatementArguments(sqlArgs))
             }
@@ -125,7 +125,7 @@ extension ModelStore {
         
         var result:[Int] = []
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql, arguments:StatementArguments(args))
                 for row in rows {
@@ -151,7 +151,7 @@ extension ModelStore {
         //print(sql)
         var result:[String:[String]] = [:]
         do {
-            let db = ModelStore.sharedDBPool()
+            let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql, arguments:StatementArguments(args))
                 for row in rows {

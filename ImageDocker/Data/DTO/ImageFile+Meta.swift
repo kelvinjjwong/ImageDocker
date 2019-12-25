@@ -353,7 +353,7 @@ extension ImageFile {
         
         if needSave {
             print("UPDATE COORD TO NON ZERO")
-            ModelStore.default.saveImage(image: photoFile, sharedDB: ModelStore.sharedDBPool())
+            ModelStore.default.saveImage(image: photoFile)
         }
         
         //print("COORD IS ZERO ? \(location.coordinate?.isZero) - \(fileName)")
