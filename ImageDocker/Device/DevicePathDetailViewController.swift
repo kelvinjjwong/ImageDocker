@@ -10,6 +10,9 @@ import Cocoa
 
 class DevicePathDetailViewController: NSViewController {
     
+    let deviceDao = DeviceDao()
+    let repositoryDao = RepositoryDao()
+    
     // MARK: CONTROLS
     @IBOutlet weak var lblPath: NSTextField!
     @IBOutlet weak var chkExclude: NSButton!
@@ -36,11 +39,11 @@ class DevicePathDetailViewController: NSViewController {
         var data = self.devicePath!
         let state = self.chkManyChildren.state == .on
         data.manyChildren = state
-        ModelStore.default.saveDevicePath(file: data)
+        self.deviceDao.saveDevicePath(file: data)
         
         let containerPath = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(self.devicePath.toSubFolder).path
         print("CONTAINER TO BE UPDATED: \(containerPath)")
-        ModelStore.default.updateImageContainerToggleManyChildren(path: containerPath, state: state)
+        self.repositoryDao.updateImageContainerToggleManyChildren(path: containerPath, state: state)
         print("Updated expandable state to \(state ? "ON" : "OFF").")
         
         self.lblMessage.stringValue = "Updated expandable state to \(state ? "ON" : "OFF")."

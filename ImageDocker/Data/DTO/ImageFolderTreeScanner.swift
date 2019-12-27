@@ -17,6 +17,12 @@ class DirectoryPaths : NSObject {
 
 class ImageFolderTreeScanner {
     
+    let repositoryDao = RepositoryDao()
+    let deviceDao = DeviceDao()
+    let imageSearchDao = ImageSearchDao()
+    let imageRecordDao = ImageRecordDao()
+    let imageCountDao = ImageCountDao()
+    
     static let `default` = ImageFolderTreeScanner()
     var suppressedScan:Bool = false
     
@@ -49,13 +55,13 @@ class ImageFolderTreeScanner {
     }
     
     func scanImageFolderFromDatabase(fast:Bool = true) -> [ImageFolder] {
-        let excludedContainerPaths = ModelStore.default.getExcludedImportedContainerPaths()
+        let excludedContainerPaths = self.deviceDao.getExcludedImportedContainerPaths()
         
         var imageFolders:[ImageFolder] = [ImageFolder]()
         
         print("\(Date()) Loading containers from db ")
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "FOLDERSETTER_BEGIN"), object: nil)
-        let containers = ModelStore.default.getAllContainers()
+        let containers = self.repositoryDao.getAllContainers()
         
         print("\(Date()) Setting up containers' parent ")
         
@@ -250,7 +256,7 @@ class ImageFolderTreeScanner {
                         continue;
                     }
                     
-                    let saveState = ModelStore.default.saveImageContainer(container: imageContainer)
+                    let saveState = self.repositoryDao.saveImageContainer(container: imageContainer)
                     if saveState == .OK {
                         print("Saved container into DB \(k)/\(kall): \(imageContainer.path)")
                     }else{
@@ -284,9 +290,9 @@ class ImageFolderTreeScanner {
                 let _ = indicator?.add("[EXIF Scan] Loading images ...")
             }
         }
-        let excludedContainerPaths = ModelStore.default.getExcludedImportedContainerPaths(withStash: true)
+        let excludedContainerPaths = self.deviceDao.getExcludedImportedContainerPaths(withStash: true)
 
-        let photos = ModelStore.default.getPhotoFilesWithoutExif()
+        let photos = self.imageSearchDao.getPhotoFilesWithoutExif()
         print("PHOTOS WITHOUT EXIF: \(photos.count)")
         if photos.count > 0 {
             print("\(Date()) UPDATING EXIF: \(photos.count)")
@@ -409,14 +415,14 @@ class ImageFolderTreeScanner {
             indicator?.display(message: "Loading repositories from database .....")
         }
         
-        let repositories = ModelStore.default.getRepositories()
+        let repositories = self.repositoryDao.getRepositories()
         print("REPO COUNT = \(repositories.count)")
         
         if indicator != nil {
             indicator?.display(message: "Scanning \(repositories.count) repositories .....")
         }
         
-        let excludedContainerPaths = ModelStore.default.getExcludedImportedContainerPaths()
+        let excludedContainerPaths = self.deviceDao.getExcludedImportedContainerPaths()
         
         var filesysUrls:Set<String> = Set<String>()
         var fileUrlToRepo:[String:ImageContainer] = [:]
@@ -450,7 +456,7 @@ class ImageFolderTreeScanner {
             
             if !repoExistInFileSys {
                 print("[Repository Scan] Repository does not exist in FileSys: [\(repo.path)]")
-                let deleteState = ModelStore.default.deleteContainer(path: repo.path, deleteImage: true)
+                let deleteState = self.repositoryDao.deleteContainer(path: repo.path, deleteImage: true)
                 if deleteState == .OK {
                     print("[Repository Scan] Deleted non-exist repository and related images in DB: [\(repo.path)]")
                 }else{
@@ -464,11 +470,11 @@ class ImageFolderTreeScanner {
                 continue
             }
             
-            var containers = ModelStore.default.getAllContainerPaths(repositoryPath: repositoryPath).sorted()
+            var containers = self.repositoryDao.getAllContainerPaths(repositoryPath: repositoryPath).sorted()
             
 //            var pathToDeviceSubFolder:[String:String] = [:]
             if repo.deviceId != "" {
-                let devicePaths = ModelStore.default.getDevicePaths(deviceId: repo.deviceId)
+                let devicePaths = self.deviceDao.getDevicePaths(deviceId: repo.deviceId)
                 if devicePaths.count > 0 {
                     for devicePath in devicePaths {
                         if !devicePath.exclude && !devicePath.excludeImported {
@@ -488,7 +494,7 @@ class ImageFolderTreeScanner {
                                                           sharedDB: ModelStoreGRDB.sharedDBPool())
                             
                             if let container = folder.containerFolder, container.parentFolder == "" {
-                                ModelStore.default.updateImageContainerParentFolder(path: path, parentFolder: repo.path)
+                                self.repositoryDao.updateImageContainerParentFolder(path: path, parentFolder: repo.path)
                             }
                             if !containers.contains(path) {
                                 containers.append(path)
@@ -527,7 +533,7 @@ class ImageFolderTreeScanner {
             
             autoreleasepool { () -> Void in
                 
-                let folderDBUrls = ModelStore.default.getAllContainerPaths(repositoryPath: repositoryPath)
+                let folderDBUrls = self.repositoryDao.getAllContainerPaths(repositoryPath: repositoryPath)
                 let folderUrlsToAdd:[String] = foldersysUrls.subtracting(folderDBUrls).sorted()
                 let folderUrlsToRemoved:Set<String> = folderDBUrls.subtracting(foldersysUrls)
                 
@@ -623,10 +629,10 @@ class ImageFolderTreeScanner {
                         if !exclude {
                             if let parentFolder = path.getNearestParent(from: containers) {
                                 print(">>> parent folder: \(parentFolder)")
-                                ModelStore.default.updateImageContainerParentFolder(path: path, parentFolder: parentFolder)
+                                self.repositoryDao.updateImageContainerParentFolder(path: path, parentFolder: parentFolder)
                                 
-                                if let parent = ModelStore.default.getContainer(path: parentFolder), parent.manyChildren == true {
-                                    ModelStore.default.updateImageContainerHideByParent(path: path, hideByParent: true)
+                                if let parent = self.repositoryDao.getContainer(path: parentFolder), parent.manyChildren == true {
+                                    self.repositoryDao.updateImageContainerHideByParent(path: path, hideByParent: true)
                                 }
                             }
                         } // end of not excluded
@@ -644,7 +650,7 @@ class ImageFolderTreeScanner {
                         k+=1
                         // REMOVE sub CONTAINER FROM DB
                         if !FileManager.default.fileExists(atPath: path) {
-                            let deleteState = ModelStore.default.deleteContainer(path: path, deleteImage: true)
+                            let deleteState = self.repositoryDao.deleteContainer(path: path, deleteImage: true)
                             
                             if indicator != nil {
                                 if deleteState == .OK {
@@ -670,7 +676,7 @@ class ImageFolderTreeScanner {
             indicator?.display(message: "[FileSys Scan] Checking differences .....")
         }
         
-        let dbUrls = ModelStore.default.getAllPhotoPaths()
+        let dbUrls = self.imageSearchDao.getAllPhotoPaths()
         print("EXISTING DB PHOTO COUNT = \(dbUrls.count)")
         print("EXISTING SYS PHOTO COUNT = \(filesysUrls.count)")
 //        var dbUrls:Set<String> = Set<String>()
@@ -821,7 +827,7 @@ class ImageFolderTreeScanner {
                 
                 
                 print("Deleting image from DB (delFlag): \(url)")
-                let deleteState = ModelStore.default.deletePhoto(atPath: url)
+                let deleteState = self.imageRecordDao.deletePhoto(atPath: url)
                 
                 if indicator != nil {
                     if deleteState == .OK {
@@ -874,7 +880,7 @@ class ImageFolderTreeScanner {
     // TODO: this procedure keep running in background for a long long time, keep getting and counting db records, need consider performance issue, or need change data structure
     func updateContainers(onCompleted: (() -> Void)? = nil , indicator:Accumulator? = nil) {
         var imageFolders:[ImageFolder] = []
-        let exists = ModelStore.default.getAllContainers()
+        let exists = self.repositoryDao.getAllContainers()
         if exists.count > 0 {
             for exist in exists{
                 //print("Updating image count of container: \(exist.path)")
@@ -889,7 +895,7 @@ class ImageFolderTreeScanner {
                                               sharedDB: ModelStoreGRDB.sharedDBPool())
                 imageFolders.append(imageFolder)
                 
-                let count = ModelStore.default.countPhotoFiles(rootPath: "\(imageFolder.url.path)/")
+                let count = self.imageCountDao.countPhotoFiles(rootPath: "\(imageFolder.url.path)/")
                 if var container = imageFolder.containerFolder {
                     if container.imageCount != count {
                         var countChange = ""
@@ -900,7 +906,7 @@ class ImageFolderTreeScanner {
                         }
                         print("= changing \(container.imageCount) to \(count)")  // don't delete this comment to avoid crash
                         container.imageCount = count
-                        let updateState = ModelStore.default.saveImageContainer(container: container)
+                        let updateState = self.repositoryDao.saveImageContainer(container: container)
                         if indicator != nil {
                             if updateState == .OK {
                                 print("Updated image count [\(container.name) \(countChange) (\(container.parentFolder))]")
@@ -915,27 +921,6 @@ class ImageFolderTreeScanner {
             }
             //ModelStore.save()
         }
-//        let containers:[Row] = ModelStore.default.getAllContainerPaths()
-//        if containers.count > 0 {
-//            for cont in containers {
-//                let path:String = cont["containerPath"] as! String
-//                let photoCount:Int = cont["photoCount"] as Int
-//
-//                let url:URL = URL(fileURLWithPath: path)
-//                let imageFolder = ImageFolder(url, name: exist.name, repositoryPath: exist.repositoryPath, smallSizePath: exist.smallSizePath, countOfImages: photoCount, sharedDB: ModelStoreGRDB.sharedDBPool())
-//                imageFolders.append(imageFolder)
-//                /--
-//                let photos = ModelStore.getPhotoFiles(rootPath: "\(imageFolder.url.path)/")
-//                let count = Int32(photos.count)
-//                if let container = imageFolder.containerFolder {
-//                    if imageFolder.containerFolder?.imageCount != count {
-//                        container.imageCount = count
-//                    }
-//                }
-//                --/
-//            }
-//            //ModelStore.save()
-//        }
         if onCompleted != nil {
             onCompleted!()
         }

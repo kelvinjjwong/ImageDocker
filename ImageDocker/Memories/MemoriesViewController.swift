@@ -12,6 +12,8 @@ import Carbon.HIToolbox
 
 class MemoriesViewController : NSViewController {
     
+    let imageSearchDao = ImageSearchDao()
+    
     @IBOutlet weak var lblToday: NSTextField!
     @IBOutlet weak var lblDescription: NSTextField!
     @IBOutlet weak var preview: NSView!
@@ -59,11 +61,11 @@ class MemoriesViewController : NSViewController {
         self.onLoadMainCollection = onLoadMainCollection
         
         // load available years
-        self.years = ModelStore.default.getYearsByTodayInPrevious()
+        self.years = self.imageSearchDao.getYearsByTodayInPrevious()
         guard self.years.count > 0 else {return}
         
         // load dates present on buttons
-        let aroundDates = ModelStore.default.getDatesAroundToday()
+        let aroundDates = self.imageSearchDao.getDatesAroundToday()
         self.btnDayMinusTwo.title = self.presentDate(aroundDates[0])
         self.btnDayMinusOne.title = self.presentDate(aroundDates[1])
         self.btnToday.title = self.presentDate(aroundDates[2])
@@ -177,7 +179,7 @@ class MemoriesViewController : NSViewController {
         self.btnDayMinusTwo.isEnabled = false
         self.btnToday.isEnabled = false
         
-        let pickedDates = ModelStore.default.getDatesByTodayInPrevious(year: year)
+        let pickedDates = self.imageSearchDao.getDatesByTodayInPrevious(year: year)
         self.dates.removeAll()
         
         // enable buttons if present
@@ -462,7 +464,7 @@ extension MemoriesViewController {
         DispatchQueue.global().async {
             
             self.collectionViewController.imagesLoader.clean()
-            let images = ModelStore.default.getImagesByDate(year: year, month:month, day:day)
+            let images = self.imageSearchDao.getImagesByDate(year: year, month:month, day:day)
             self.collectionViewController.imagesLoader.setupItems(photoFiles: images)
             self.collectionViewController.imagesLoader.reorganizeItems(considerPlaces: false)
             

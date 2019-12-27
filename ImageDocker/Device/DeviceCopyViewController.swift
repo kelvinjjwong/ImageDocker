@@ -53,12 +53,14 @@ struct DeviceCopyDestination {
     }
     
     static func from(deviceId: String, deviceType: MobileType = .Android) -> [DeviceCopyDestination] {
-        let devicePaths = ModelStore.default.getDevicePaths(deviceId: deviceId, deviceType: deviceType)
+        let devicePaths = DeviceDao().getDevicePaths(deviceId: deviceId, deviceType: deviceType)
         return DeviceCopyDestination.from(devicePaths)
     }
 }
 
 class DeviceCopyViewController: NSViewController {
+    
+    let deviceDao = DeviceDao()
     
     let dateFormatter = DateFormatter()
     
@@ -198,7 +200,7 @@ class DeviceCopyViewController: NSViewController {
                 marketDisplayName = " (\(marketName))"
             }
             
-            let imageDevice = ModelStore.default.getOrCreateDevice(device: device)
+            let imageDevice = self.deviceDao.getOrCreateDevice(device: device)
             
             self.lblModel.stringValue = "\(imageDevice.manufacture ?? "") \(imageDevice.model ?? "")\(marketDisplayName)"
             if imageDevice.name != nil && imageDevice.name != "" {
@@ -321,7 +323,7 @@ class DeviceCopyViewController: NSViewController {
                 let filepath:URL = URL(fileURLWithPath: file.onDevicePath).appendingPathComponent(file.folder)
                 let url:URL = URL(fileURLWithPath: pretendPath).appendingPathComponent(file.folder).appendingPathComponent(file.filename)
                 f.path = url.path
-                let importedFile:ImageDeviceFile? = ModelStore.default.getImportedFile(deviceId: self.device.deviceId, file: f)
+                let importedFile:ImageDeviceFile? = self.deviceDao.getImportedFile(deviceId: self.device.deviceId, file: f)
                 if let deviceFile = importedFile {
                     print("IMPORTED \(f.filename)")
                     f.storedMD5 = deviceFile.fileMD5 ?? ""
@@ -411,7 +413,7 @@ class DeviceCopyViewController: NSViewController {
             if shouldExclude {
                 continue
             }
-            let deviceFile = ModelStore.default.getOrCreateDeviceFile(deviceId: self.device.deviceId, file: file)
+            let deviceFile = self.deviceDao.getOrCreateDeviceFile(deviceId: self.device.deviceId, file: file)
             var f = file
             if deviceFile.importAsFilename != "" {
                 f.storedMD5 = deviceFile.fileMD5 ?? ""
@@ -718,10 +720,10 @@ class DeviceCopyViewController: NSViewController {
         
         DispatchQueue.global().async {
         
-            var imageDevice = ModelStore.default.getOrCreateDevice(device: self.device)
+            var imageDevice = self.deviceDao.getOrCreateDevice(device: self.device)
             
             if let oldStoragePath = imageDevice.storagePath, oldStoragePath != storagePath {
-                let deviceFiles = ModelStore.default.getDeviceFiles(deviceId: self.device.deviceId)
+                let deviceFiles = self.deviceDao.getDeviceFiles(deviceId: self.device.deviceId)
                 if deviceFiles.count > 0 {
                     
                     self.accumulator?.reset()
@@ -761,7 +763,7 @@ class DeviceCopyViewController: NSViewController {
                             var file = deviceFile
                             file.importToPath = newFolderPath.path
                             print("Update [\(localFilePath)] with new importToPath: \(newFolderPath.path)")
-                            ModelStore.default.saveDeviceFile(file: file)
+                            self.deviceDao.saveDeviceFile(file: file)
                         }
                         
                         DispatchQueue.main.async {
@@ -772,7 +774,7 @@ class DeviceCopyViewController: NSViewController {
             }
         
             if let oldRepositoryPath = imageDevice.repositoryPath, oldRepositoryPath != repositoryPath {
-                let deviceFiles = ModelStore.default.getDeviceFiles(deviceId: self.device.deviceId)
+                let deviceFiles = self.deviceDao.getDeviceFiles(deviceId: self.device.deviceId)
                 if deviceFiles.count > 0 {
                     
                     self.accumulator?.reset()
@@ -824,7 +826,7 @@ class DeviceCopyViewController: NSViewController {
             imageDevice.storagePath = storagePath
             imageDevice.repositoryPath = repositoryPath
             imageDevice.marketName = marketName
-            ModelStore.default.saveDevice(device: imageDevice)
+            self.deviceDao.saveDevice(device: imageDevice)
             
             DispatchQueue.main.async {
                 self.enableButtons()
@@ -839,7 +841,7 @@ class DeviceCopyViewController: NSViewController {
     
     @IBAction func onDeleteRecordsClicked(_ sender: NSButton) {
         self.lblMessage.stringValue = "Deleting records ..."
-        ModelStore.default.deleteDeviceFiles(deviceId: self.device.deviceId)
+        self.deviceDao.deleteDeviceFiles(deviceId: self.device.deviceId)
         self.lblMessage.stringValue = "Deleted records."
     }
     
@@ -1097,7 +1099,7 @@ class DeviceCopyViewController: NSViewController {
                                     deviceFile.importToPath = destinationPathForFile
                                     deviceFile.importAsFilename = file.filename
                                     deviceFile.importDate = date
-                                    ModelStore.default.saveDeviceFile(file: deviceFile)
+                                    self.deviceDao.saveDeviceFile(file: deviceFile)
                                     print("Updated \(file.path)")
                                 }
                             }else{
@@ -1118,7 +1120,7 @@ class DeviceCopyViewController: NSViewController {
                                     deviceFile.importToPath = destinationPathForFile
                                     deviceFile.importAsFilename = file.filename
                                     deviceFile.importDate = date
-                                    ModelStore.default.saveDeviceFile(file: deviceFile)
+                                    self.deviceDao.saveDeviceFile(file: deviceFile)
                                     print("Updated \(file.path)")
                                 }
                             }else{
@@ -1146,7 +1148,7 @@ class DeviceCopyViewController: NSViewController {
                             deviceFile.importToPath = destinationPathForFile
                             deviceFile.importAsFilename = file.filename
                             deviceFile.importDate = date
-                            ModelStore.default.saveDeviceFile(file: deviceFile)
+                            self.deviceDao.saveDeviceFile(file: deviceFile)
                             print("Updated \(file.path)")
                         }
                     }
@@ -1228,7 +1230,7 @@ class DeviceCopyViewController: NSViewController {
                 }
             }
             if needSave {
-                ModelStore.default.saveDeviceFile(file: file)
+                self.deviceDao.saveDeviceFile(file: file)
             }
         }
     }
@@ -1241,7 +1243,7 @@ class DeviceCopyViewController: NSViewController {
         
         self.disableButtons()
         
-        let deviceFiles = ModelStore.default.getDeviceFiles(deviceId: self.device.deviceId)
+        let deviceFiles = self.deviceDao.getDeviceFiles(deviceId: self.device.deviceId)
         if deviceFiles.count > 0 {
             self.accumulator = Accumulator(target: deviceFiles.count, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblProgressMessage)
             
@@ -1319,7 +1321,7 @@ class DeviceCopyViewController: NSViewController {
                     self.deviceFiles_filtered[selectedPath!.sourcePath] = nil
                 }
             }
-            ModelStore.default.deleteDevicePath(deviceId: self.device.deviceId, path: path.sourcePath)
+            self.deviceDao.deleteDevicePath(deviceId: self.device.deviceId, path: path.sourcePath)
             selectedPath = nil
             tblSourcePath.reloadData()
         }
@@ -1366,11 +1368,11 @@ class DeviceCopyViewController: NSViewController {
                     // SAVE DEVICE PATH TO DB
                     if isExclude {
                         let devicePath = ImageDevicePath.exclude(deviceId: self.device.deviceId, path: directory)
-                        ModelStore.default.saveDevicePath(file: devicePath)
+                        self.deviceDao.saveDevicePath(file: devicePath)
                         dest = DeviceCopyDestination.from(devicePath)
                     }else{
                         let devicePath = ImageDevicePath.include(deviceId: self.device.deviceId, path: directory, toSubFolder: toSubFolder, manyChildren: hasManyChildren)
-                        ModelStore.default.saveDevicePath(file: devicePath)
+                        self.deviceDao.saveDevicePath(file: devicePath)
                         dest = DeviceCopyDestination.from(devicePath)
                     }
                     self.paths.append(dest)

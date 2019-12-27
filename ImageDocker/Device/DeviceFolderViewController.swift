@@ -526,6 +526,8 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
 
 class DeviceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxDataSource, NSComboBoxDelegate {
     
+    let deviceDao = DeviceDao()
+    
     var deviceItems:[PhoneDevice] = []
     var combobox:NSComboBox?
     var working:Bool = false
@@ -543,7 +545,7 @@ class DeviceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBox
         if devices.count > 0 {
             for deviceId in devices {
                 if let device:PhoneDevice = Android.bridge.device(id: deviceId) {
-                    let imageDevice = ModelStore.default.getOrCreateDevice(device: device)
+                    let imageDevice = self.deviceDao.getOrCreateDevice(device: device)
                     
                     var dev:PhoneDevice = Android.bridge.memory(device: device)
                     if imageDevice.name != "" && imageDevice.name != imageDevice.deviceId {

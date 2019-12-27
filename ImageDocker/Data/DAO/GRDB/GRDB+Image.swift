@@ -9,7 +9,7 @@
 import Foundation
 import GRDB
 
-extension ModelStoreGRDB : ImageDao {
+extension ModelStoreGRDB {
     
     
     // MARK: - CREATE

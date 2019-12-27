@@ -8,152 +8,365 @@
 
 import Foundation
 
-protocol ImageDao : class {
+class ImageRecordDao {
     
-    func getOrCreatePhoto(filename:String, path:String, parentPath:String, repositoryPath:String?) -> Image
+    func getOrCreatePhoto(filename:String, path:String, parentPath:String, repositoryPath:String? = nil) -> Image {
+        return ModelStore.default.getOrCreatePhoto(filename: filename, path: path, parentPath: parentPath, repositoryPath: repositoryPath)
+    }
     
-    func getImage(path:String) -> Image?
+    func getImage(path:String) -> Image? {
+        return ModelStore.default.getImage(path: path)
+    }
     
-    func getImage(id:String) -> Image?
+    func getImage(id:String) -> Image? {
+        return ModelStore.default.getImage(id: id)
+    }
     
-    func getPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool, country:String, province:String, city:String, place:String?, includeHidden:Bool, imageSource:[String]?, cameraModel:[String]?, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)?, pageSize:Int, pageNumber:Int) -> [Image]
+    func saveImage(image: Image) -> ExecuteState {
+        return ModelStore.default.saveImage(image: image)
+    }
     
-    func getPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String, province:String, city:String, place:String, includeHidden:Bool, imageSource:[String]?, cameraModel:[String]?, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)?, pageSize:Int, pageNumber:Int) -> [Image]
+    func deletePhoto(atPath path:String, updateFlag:Bool = true) -> ExecuteState {
+        return ModelStore.default.deletePhoto(atPath: path, updateFlag: updateFlag)
+    }
     
-    func searchPhotoFiles(years:[Int], months:[Int], days:[Int], peopleIds:[String], keywords:[String], includeHidden:Bool, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)?, pageSize:Int, pageNumber:Int) -> [Image]
+    func updateImagePaths(oldPath:String, newPath:String, repositoryPath:String, subPath:String, containerPath:String, id:String) -> ExecuteState {
+        return ModelStore.default.updateImagePaths(oldPath: oldPath, newPath: newPath, repositoryPath: repositoryPath, subPath: subPath, containerPath: containerPath, id: id)
+    }
     
-    func getImagesByDate(year:Int, month:Int, day:Int, event:String?) -> [Image]
+    func updateImageRawBase(oldRawPath:String, newRawPath:String) -> ExecuteState {
+        return ModelStore.default.updateImageRawBase(oldRawPath: oldRawPath, newRawPath: newRawPath)
+    }
     
-    func getImagesByYear(year:String?, scannedFace:Bool?, recognizedFace:Bool?) -> [Image]
+    func updateImageRawBase(repositoryPath:String, rawPath:String) -> ExecuteState {
+        return ModelStore.default.updateImageRawBase(repositoryPath: repositoryPath, rawPath: rawPath)
+    }
     
-    func getImagesByDate(photoTakenDate:Date, event:String?) -> [Image]
+    func updateImageRawBase(pathStartsWith path:String, rawPath:String) -> ExecuteState {
+        return ModelStore.default.updateImageRawBase(pathStartsWith: path, rawPath: rawPath)
+    }
     
-    func getImagesByHour(photoTakenDate:Date) -> [Image]
+    func updateImageRepositoryBase(pathStartsWith path:String, repositoryPath:String) -> ExecuteState {
+        return ModelStore.default.updateImageRepositoryBase(pathStartsWith: path, repositoryPath: repositoryPath)
+    }
     
-    func getYearsByTodayInPrevious() -> [Int]
+    func updateImageRepositoryBase(oldRepositoryPath:String, newRepository:String) -> ExecuteState {
+        return ModelStore.default.updateImageRepositoryBase(oldRepositoryPath: oldRepositoryPath, newRepository: newRepository)
+    }
     
-    func getDatesAroundToday() -> [String]
+    func updateImagePath(repositoryPath:String) -> ExecuteState {
+        return ModelStore.default.updateImagePath(repositoryPath: repositoryPath)
+    }
     
-    func getDatesByTodayInPrevious(year:Int) -> [String]
+    // MARK: - DATE
     
-    func getPhotoFilesWithoutExif(limit:Int?) -> [Image]
+    func updateImageDates(path:String, date:Date, fields:Set<String>) -> ExecuteState {
+        return ModelStore.default.updateImageDates(path: path, date: date, fields: fields)
+    }
     
-    func getPhotoFilesWithoutLocation() -> [Image]
+    // MARK: - DESCRIPTION
     
-    func getPhotoFiles(after date:Date) -> [Image]
+    func storeImageDescription(path:String, shortDescription:String?, longDescription:String?) -> ExecuteState {
+        return ModelStore.default.storeImageDescription(path: path, shortDescription: shortDescription, longDescription: longDescription)
+    }
     
-    func getImagesWithoutFace(repositoryRoot:String, includeScanned:Bool) -> [Image]
     
-    func getAllPhotoPaths(includeHidden:Bool) -> Set<String>
+}
+
+class ImageSearchDao {
     
-    func getPhotoFilesWithoutSubPath(rootPath:String) -> [Image]
     
-    func getPhotoFiles(parentPath:String, includeHidden:Bool, pageSize:Int, pageNumber:Int, subdirectories:Bool) -> [Image]
+    // MARK: - Options
     
-    func getImages(repositoryPath:String) -> [Image]
+    func getImageSources() -> [String:Bool]{
+        return ModelStore.default.getImageSources()
+    }
     
-    func getPhotoFiles(rootPath:String) -> [Image]
+    func getCameraModel() -> [String:Bool] {
+        return ModelStore.default.getCameraModel()
+    }
     
-    func getAllExportedImages(includeHidden:Bool) -> [Image]
+    // MARK: - MOMENTS
     
-    func getAllExportedPhotoFilenames(includeHidden:Bool) -> Set<String>
+    func getAllMoments(imageSource:[String]? = nil, cameraModel:[String]? = nil) -> [Moment] {
+        let result = ModelStore.default.getAllDates(imageSource: imageSource, cameraModel: cameraModel)
+        return Moments().readMoments(result)
+    }
     
-    func getAllPhotoFilesForExporting(after date:Date, limit:Int?) -> [Image]
+    // MARK: - PLACES
     
-    func getAllPhotoFilesMarkedExported() -> [Image]
+    func getAllPlacesWithDates(imageSource:[String]? = nil, cameraModel:[String]? = nil) -> [Moment] {
+        let result = ModelStore.default.getAllPlacesAndDates(imageSource: imageSource, cameraModel: cameraModel)
+        return Moments().readPlaces(result)
+    }
     
-    func saveImage(image: Image) -> ExecuteState
+    func getYears(event:String? = nil) -> [Int] {
+        return ModelStore.default.getYears(event: event)
+    }
     
-    func deletePhoto(atPath path:String, updateFlag:Bool) -> ExecuteState
+    func getDatesByYear(year:Int, event:String? = nil) -> [String:[String]] {
+        return ModelStore.default.getDatesByYear(year: year, event: event)
+    }
     
-    func updateImagePaths(oldPath:String, newPath:String, repositoryPath:String, subPath:String, containerPath:String, id:String) -> ExecuteState
+    // MARK: - COLLECTION
     
-    func updateImageRawBase(oldRawPath:String, newRawPath:String) -> ExecuteState
+    // get by date & place
+    func getPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil , pageSize:Int = 0, pageNumber:Int = 0) -> [Image] {
+        return ModelStore.default.getPhotoFiles(year: year, month: month, day: day, ignoreDate: ignoreDate, country: country, province: province, city: city, place: place, includeHidden: includeHidden, imageSource: imageSource, cameraModel: cameraModel, hiddenCountHandler: hiddenCountHandler, pageSize: pageSize, pageNumber: pageNumber)
+    }
     
-    func updateImageRawBase(repositoryPath:String, rawPath:String) -> ExecuteState
+    // get by date & event & place
+    func getPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil , pageSize:Int = 0, pageNumber:Int = 0) -> [Image] {
+        return ModelStore.default.getPhotoFiles(year: year, month: month, day: day, event: event, country: country, province: province, city: city, place: place, includeHidden: includeHidden, imageSource: imageSource, cameraModel: cameraModel, hiddenCountHandler: hiddenCountHandler, pageSize: pageSize, pageNumber: pageNumber)
+    }
     
-    func updateImageRawBase(pathStartsWith path:String, rawPath:String) -> ExecuteState
+    // MARK: - SEARCH
     
-    func updateImageRepositoryBase(pathStartsWith path:String, repositoryPath:String) -> ExecuteState
+    // search by date & people & any keywords
+    func searchPhotoFiles(years:[Int], months:[Int], days:[Int], peopleIds:[String], keywords:[String], includeHidden:Bool = true, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil , pageSize:Int = 0, pageNumber:Int = 0) -> [Image] {
+        return ModelStore.default.searchPhotoFiles(years: years, months: months, days: days, peopleIds: peopleIds, keywords: keywords, includeHidden: includeHidden, hiddenCountHandler: hiddenCountHandler, pageSize: pageSize, pageNumber: pageNumber)
+    }
     
-    func updateImageRepositoryBase(oldRepositoryPath:String, newRepository:String) -> ExecuteState
+    // MARK: - DATE
     
-    func updateImagePath(repositoryPath:String) -> ExecuteState
     
-    func updateImageScannedFace(imageId:String, facesCount:Int) -> ExecuteState
+    func getImagesByDate(year:Int, month:Int, day:Int, event:String? = nil) -> [Image] {
+        return ModelStore.default.getImagesByDate(year: year, month: month, day: day, event: event)
+    }
     
-    func updateImageRecognizedFace(imageId:String, recognizedPeopleIds:String) -> ExecuteState
+    func getImagesByYear(year:String? = nil, scannedFace:Bool? = nil, recognizedFace:Bool? = nil) -> [Image] {
+        return ModelStore.default.getImagesByYear(year: year, scannedFace: scannedFace, recognizedFace: recognizedFace)
+    }
     
-    func updateImageDates(path:String, date:Date, fields:Set<String>) -> ExecuteState
+    func getImagesByDate(photoTakenDate:Date, event:String? = nil) -> [Image] {
+        return ModelStore.default.getImagesByDate(photoTakenDate: photoTakenDate, event: event)
+    }
     
-    func storeImageDescription(path:String, shortDescription:String?, longDescription:String?) -> ExecuteState
+    func getImagesByHour(photoTakenDate:Date) -> [Image] {
+        return ModelStore.default.getImagesByHour(photoTakenDate: photoTakenDate)
+    }
     
-    func cleanImageExportTime(path:String) -> ExecuteState
+    func getYearsByTodayInPrevious() -> [Int] {
+        return ModelStore.default.getYearsByTodayInPrevious()
+    }
     
-    func storeImageOriginalMD5(path:String, md5:String) -> ExecuteState
+    func getDatesAroundToday() -> [String] {
+        return ModelStore.default.getDatesAroundToday()
+    }
     
-    func storeImageExportedMD5(path:String, md5:String) -> ExecuteState
+    func getDatesByTodayInPrevious(year:Int) -> [String] {
+        return ModelStore.default.getDatesByTodayInPrevious(year: year)
+    }
     
-    func storeImageExportSuccess(path:String, date:Date, exportToPath:String, exportedFilename:String, exportedMD5:String, exportedLongDescription:String) -> ExecuteState
+    // MARK: - EXIF
     
-    func storeImageExportedTime(path:String, date:Date) -> ExecuteState
+    func getPhotoFilesWithoutExif(limit:Int? = nil) -> [Image] {
+        return ModelStore.default.getPhotoFilesWithoutExif(limit: limit)
+    }
     
-    func storeImageExportFail(path:String, date:Date, message:String) -> ExecuteState
+    // MARK: - LOCATION
     
-    func cleanImageExportPath(path:String) -> ExecuteState
+    func getPhotoFilesWithoutLocation() -> [Image] {
+        return ModelStore.default.getPhotoFilesWithoutLocation()
+    }
     
-    func reloadDuplicatePhotos()
+    func getPhotoFiles(after date:Date) -> [Image] {
+        return ModelStore.default.getPhotoFiles(after: date)
+    }
     
-    func getDuplicatePhotos() -> Duplicates
+    // MARK: - FACE
     
-    func getDuplicatedImages(repositoryRoot:String, theOtherRepositoryRoot:String) -> [String:[Image]]
+    func getImagesWithoutFace(repositoryRoot:String, includeScanned:Bool = false) -> [Image] {
+        return ModelStore.default.getImagesWithoutFace(repositoryRoot: repositoryRoot, includeScanned: includeScanned)
+    }
     
-    func getChiefImageOfDuplicatedSet(duplicatesKey:String) -> Image?
+    // MARK: - PATH
     
-    func getFirstImageOfDuplicatedSet(duplicatesKey:String) -> Image?
+    func getAllPhotoPaths(includeHidden:Bool = true) -> Set<String> {
+        return ModelStore.default.getAllPhotoPaths(includeHidden: includeHidden)
+    }
     
-    func markImageDuplicated(path:String, duplicatesKey:String?, hide:Bool)
+    func getPhotoFilesWithoutSubPath(rootPath:String) -> [Image] {
+        return ModelStore.default.getPhotoFilesWithoutSubPath(rootPath: rootPath)
+    }
     
-    func countPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool, country:String, province:String, city:String, place:String?, includeHidden:Bool, imageSource:[String]?, cameraModel:[String]?) -> Int
+    func getPhotoFiles(parentPath:String, includeHidden:Bool = true, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false) -> [Image] {
+        return ModelStore.default.getPhotoFiles(parentPath: parentPath, includeHidden: includeHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
+    }
     
-    func countHiddenPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool, country:String, province:String, city:String, place:String?, includeHidden:Bool, imageSource:[String]?, cameraModel:[String]?) -> Int
+    func getImages(repositoryPath:String) -> [Image] {
+        return ModelStore.default.getImages(repositoryPath: repositoryPath)
+    }
     
-    func countPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String, province:String, city:String, place:String, includeHidden:Bool, imageSource:[String]?, cameraModel:[String]?) -> Int
+    func getPhotoFiles(rootPath:String) -> [Image] {
+        return ModelStore.default.getPhotoFiles(rootPath: rootPath)
+    }
     
-    func countHiddenPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String, province:String, city:String, place:String, includeHidden:Bool, imageSource:[String]?, cameraModel:[String]?) -> Int
+    // MARK: - EXPORT
     
-    func countImageWithoutFace(repositoryRoot:String) -> Int
+    func getAllExportedImages(includeHidden:Bool = true) -> [Image] {
+        return ModelStore.default.getAllExportedImages(includeHidden: includeHidden)
+    }
     
-    func countImageNotYetFacialDetection(repositoryRoot:String) -> Int
+    func getAllExportedPhotoFilenames(includeHidden:Bool = true) -> Set<String> {
+        return ModelStore.default.getAllExportedPhotoFilenames(includeHidden: includeHidden)
+    }
     
-    func countImageWithoutId(repositoryRoot:String) -> Int
+    func getAllPhotoFilesForExporting(after date:Date, limit:Int? = nil) -> [Image] {
+        return ModelStore.default.getAllPhotoFilesForExporting(after: date, limit: limit)
+    }
     
-    func countPhotoFiles(rootPath:String) -> Int
+    func getAllPhotoFilesMarkedExported() -> [Image] {
+        return ModelStore.default.getAllPhotoFilesMarkedExported()
+    }
+}
+
+class ImageCountDao {
     
-    func countImageWithoutRepositoryPath(repositoryRoot:String) -> Int
+    // count by date & place
+    func countPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> Int {
+        return ModelStore.default.countPhotoFiles(year: year, month: month, day: day, ignoreDate: ignoreDate, country: country, province: province, city: city, place: place, includeHidden: includeHidden, imageSource: imageSource, cameraModel: cameraModel)
+    }
     
-    func countImageWithoutSubPath(repositoryRoot:String) -> Int
+    // count by date & place
+    func countHiddenPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> Int {
+        return ModelStore.default.countHiddenPhotoFiles(year: year, month: month, day: day, ignoreDate: ignoreDate, country: country, province: province, city: city, place: place, includeHidden: includeHidden, imageSource: imageSource, cameraModel: cameraModel)
+    }
     
-    func countImageUnmatchedRepositoryRoot(repositoryRoot:String) -> Int
+    // count by date & event & place
+    func countPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> Int {
+        return ModelStore.default.countPhotoFiles(year: year, month: month, day: day, event: event, country: country, province: province, city: city, place: place, includeHidden: includeHidden, imageSource: imageSource, cameraModel: cameraModel)
+    }
     
-    func countImages(repositoryRoot:String) -> Int
+    // count by date & event & place
+    func countHiddenPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> Int {
+        return ModelStore.default.countHiddenPhotoFiles(year: year, month: month, day: day, event: event, country: country, province: province, city: city, place: place, includeHidden: includeHidden, imageSource: imageSource, cameraModel: cameraModel)
+    }
     
-    func countHiddenImages(repositoryRoot:String) -> Int
+    // MARK: - FACE
     
-    func countContainersWithoutRepositoryPath(repositoryRoot:String) -> Int
+    func countImageWithoutFace(repositoryRoot:String) -> Int {
+        return ModelStore.default.countImageWithoutFace(repositoryRoot: repositoryRoot)
+    }
     
-    func countContainersWithoutSubPath(repositoryRoot:String) -> Int
+    func countImageNotYetFacialDetection(repositoryRoot:String) -> Int {
+        return ModelStore.default.countImageNotYetFacialDetection(repositoryRoot: repositoryRoot)
+    }
     
-    func countAllPhotoFilesForExporting(after date:Date) -> Int
+    // MARK: - ID
     
-    func getLastPhotoTakenDateOfRepositories() -> [String:String]
+    func countImageWithoutId(repositoryRoot:String) -> Int {
+        return ModelStore.default.countImageWithoutId(repositoryRoot: repositoryRoot)
+    }
     
-    func getImageSources() -> [String:Bool]
+    // MARK: - PATH
     
-    func getCameraModel() -> [String:Bool]
+    // count by path~
+    func countPhotoFiles(rootPath:String) -> Int {
+        return ModelStore.default.countPhotoFiles(rootPath: rootPath)
+    }
     
-    func getYears(event:String?) -> [Int]
+    func countImageWithoutRepositoryPath(repositoryRoot:String) -> Int {
+        return ModelStore.default.countImageWithoutRepositoryPath(repositoryRoot: repositoryRoot)
+    }
     
-    func getDatesByYear(year:Int, event:String?) -> [String:[String]]
+    func countImageWithoutSubPath(repositoryRoot:String) -> Int {
+        return ModelStore.default.countImageWithoutSubPath(repositoryRoot: repositoryRoot)
+    }
     
+    func countImageUnmatchedRepositoryRoot(repositoryRoot:String) -> Int {
+        return ModelStore.default.countImageUnmatchedRepositoryRoot(repositoryRoot: repositoryRoot)
+    }
+    
+    func countImages(repositoryRoot:String) -> Int {
+        return ModelStore.default.countImages(repositoryRoot: repositoryRoot)
+    }
+    
+    func countHiddenImages(repositoryRoot:String) -> Int {
+        return ModelStore.default.countHiddenImages(repositoryRoot: repositoryRoot)
+    }
+    
+    func countContainersWithoutRepositoryPath(repositoryRoot:String) -> Int {
+        return ModelStore.default.countContainersWithoutRepositoryPath(repositoryRoot: repositoryRoot)
+    }
+    
+    func countContainersWithoutSubPath(repositoryRoot:String) -> Int {
+        return ModelStore.default.countContainersWithoutSubPath(repositoryRoot: repositoryRoot)
+    }
+    
+    // MARK: - EXPORT
+    
+    func countAllPhotoFilesForExporting(after date:Date) -> Int {
+        return ModelStore.default.countAllPhotoFilesForExporting(after: date)
+    }
+}
+
+class ImageDuplicationDao {
+    
+    func reloadDuplicatePhotos() {
+        return ModelStore.default.reloadDuplicatePhotos()
+    }
+    
+    func getDuplicatePhotos() -> Duplicates {
+        return ModelStore.default.getDuplicatePhotos()
+    }
+    
+    func getDuplicatedImages(repositoryRoot:String, theOtherRepositoryRoot:String) -> [String:[Image]] {
+        return ModelStore.default.getDuplicatedImages(repositoryRoot: repositoryRoot, theOtherRepositoryRoot: theOtherRepositoryRoot)
+    }
+    
+    func getChiefImageOfDuplicatedSet(duplicatesKey:String) -> Image? {
+        return ModelStore.default.getChiefImageOfDuplicatedSet(duplicatesKey: duplicatesKey)
+    }
+    
+    func getFirstImageOfDuplicatedSet(duplicatesKey:String) -> Image? {
+        return ModelStore.default.getFirstImageOfDuplicatedSet(duplicatesKey: duplicatesKey)
+    }
+    
+    func markImageDuplicated(path:String, duplicatesKey:String?, hide:Bool) {
+        return ModelStore.default.markImageDuplicated(path: path, duplicatesKey: duplicatesKey, hide: hide)
+    }
+}
+
+class ImageFaceDao {
+    
+    func updateImageScannedFace(imageId:String, facesCount:Int = 0) -> ExecuteState {
+        return ModelStore.default.updateImageScannedFace(imageId: imageId, facesCount: facesCount)
+    }
+    
+    func updateImageRecognizedFace(imageId:String, recognizedPeopleIds:String = "") -> ExecuteState {
+        return ModelStore.default.updateImageRecognizedFace(imageId: imageId, recognizedPeopleIds: recognizedPeopleIds)
+    }
+}
+
+class ImageExportDao {
+    
+    
+    func cleanImageExportTime(path:String) -> ExecuteState {
+        return ModelStore.default.cleanImageExportTime(path: path)
+    }
+    
+    func storeImageOriginalMD5(path:String, md5:String) -> ExecuteState {
+        return ModelStore.default.storeImageOriginalMD5(path: path, md5: md5)
+    }
+    
+    func storeImageExportedMD5(path:String, md5:String) -> ExecuteState {
+        return ModelStore.default.storeImageExportedMD5(path: path, md5: md5)
+    }
+    
+    func storeImageExportSuccess(path:String, date:Date, exportToPath:String, exportedFilename:String, exportedMD5:String, exportedLongDescription:String) -> ExecuteState {
+        return ModelStore.default.storeImageExportSuccess(path: path, date: date, exportToPath: exportToPath, exportedFilename: exportedFilename, exportedMD5: exportedMD5, exportedLongDescription: exportedLongDescription)
+    }
+    
+    func storeImageExportedTime(path:String, date:Date) -> ExecuteState {
+        return ModelStore.default.storeImageExportedTime(path: path, date: date)
+    }
+    
+    func storeImageExportFail(path:String, date:Date, message:String) -> ExecuteState {
+        return ModelStore.default.storeImageExportFail(path: path, date: date, message: message)
+    }
+    
+    func cleanImageExportPath(path:String) -> ExecuteState {
+        return ModelStore.default.cleanImageExportPath(path: path)
+    }
 }

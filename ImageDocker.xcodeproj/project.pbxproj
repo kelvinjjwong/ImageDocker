@@ -178,6 +178,17 @@
 		8EBA692A2090C87D00221131 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA69292090C87D00221131 /* Helper.swift */; };
 		8EBA692C2090DB0300221131 /* DropPlaceCommons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA692B2090DB0300221131 /* DropPlaceCommons.swift */; };
 		8EBA692E2090DB4B00221131 /* VideoDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA692D2090DB4B00221131 /* VideoDropView.swift */; };
+		8EBA758F23B55B7700548376 /* MomentsTreeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA758E23B55B7700548376 /* MomentsTreeDataSource.swift */; };
+		8EBA759123B55B8B00548376 /* PlacesTreeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA759023B55B8B00548376 /* PlacesTreeDataSource.swift */; };
+		8EBA759323B55B9900548376 /* EventsTreeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA759223B55B9900548376 /* EventsTreeDataSource.swift */; };
+		8EBA759523B55BAB00548376 /* DeviceTreeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA759423B55BAB00548376 /* DeviceTreeDataSource.swift */; };
+		8EBA759723B55BCA00548376 /* RepositoryTreeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA759623B55BCA00548376 /* RepositoryTreeDataSource.swift */; };
+		8EBA759923B5695900548376 /* RepositoryDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA759823B5695900548376 /* RepositoryDao.swift */; };
+		8EBA759B23B5CC5300548376 /* PlaceDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA759A23B5CC5300548376 /* PlaceDao.swift */; };
+		8EBA759D23B5CD6F00548376 /* EventDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA759C23B5CD6F00548376 /* EventDao.swift */; };
+		8EBA759F23B5CE7300548376 /* DeviceDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA759E23B5CE7300548376 /* DeviceDao.swift */; };
+		8EBA75A123B5D06900548376 /* FaceDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA75A023B5D06900548376 /* FaceDao.swift */; };
+		8EBA75A323B5D3B900548376 /* ExportDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA75A223B5D3B900548376 /* ExportDao.swift */; };
 		8EBA9DDF216F8BB100DACAAD /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA9DDD216F8BB100DACAAD /* NotesViewController.swift */; };
 		8EBA9DE0216F8BB100DACAAD /* NotesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EBA9DDE216F8BB100DACAAD /* NotesViewController.xib */; };
 		8EBA9DE32173C8F000DACAAD /* TheaterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA9DE22173C8F000DACAAD /* TheaterViewController.swift */; };
@@ -431,6 +442,17 @@
 		8EBA69292090C87D00221131 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		8EBA692B2090DB0300221131 /* DropPlaceCommons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropPlaceCommons.swift; sourceTree = "<group>"; };
 		8EBA692D2090DB4B00221131 /* VideoDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDropView.swift; sourceTree = "<group>"; };
+		8EBA758E23B55B7700548376 /* MomentsTreeDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsTreeDataSource.swift; sourceTree = "<group>"; };
+		8EBA759023B55B8B00548376 /* PlacesTreeDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesTreeDataSource.swift; sourceTree = "<group>"; };
+		8EBA759223B55B9900548376 /* EventsTreeDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsTreeDataSource.swift; sourceTree = "<group>"; };
+		8EBA759423B55BAB00548376 /* DeviceTreeDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTreeDataSource.swift; sourceTree = "<group>"; };
+		8EBA759623B55BCA00548376 /* RepositoryTreeDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryTreeDataSource.swift; sourceTree = "<group>"; };
+		8EBA759823B5695900548376 /* RepositoryDao.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryDao.swift; sourceTree = "<group>"; };
+		8EBA759A23B5CC5300548376 /* PlaceDao.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDao.swift; sourceTree = "<group>"; };
+		8EBA759C23B5CD6F00548376 /* EventDao.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDao.swift; sourceTree = "<group>"; };
+		8EBA759E23B5CE7300548376 /* DeviceDao.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDao.swift; sourceTree = "<group>"; };
+		8EBA75A023B5D06900548376 /* FaceDao.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDao.swift; sourceTree = "<group>"; };
+		8EBA75A223B5D3B900548376 /* ExportDao.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportDao.swift; sourceTree = "<group>"; };
 		8EBA9DDD216F8BB100DACAAD /* NotesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewController.swift; sourceTree = "<group>"; };
 		8EBA9DDE216F8BB100DACAAD /* NotesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotesViewController.xib; sourceTree = "<group>"; };
 		8EBA9DE22173C8F000DACAAD /* TheaterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheaterViewController.swift; sourceTree = "<group>"; };
@@ -723,6 +745,12 @@
 			children = (
 				8E4DECDF23B3822F00F5538C /* ModelStore.swift */,
 				8E4DECE223B3881A00F5538C /* ImageDao.swift */,
+				8EBA759823B5695900548376 /* RepositoryDao.swift */,
+				8EBA759A23B5CC5300548376 /* PlaceDao.swift */,
+				8EBA759C23B5CD6F00548376 /* EventDao.swift */,
+				8EBA759E23B5CE7300548376 /* DeviceDao.swift */,
+				8EBA75A023B5D06900548376 /* FaceDao.swift */,
+				8EBA75A223B5D3B900548376 /* ExportDao.swift */,
 				8E3EC3BA214DC120004B6125 /* GRDB */,
 			);
 			path = DAO;
@@ -798,6 +826,7 @@
 				8EB27168233BB408003BF3AF /* RepositoryDetailViewController.xib */,
 				8EB2716B233E0729003BF3AF /* LibrariesViewController.swift */,
 				8EB2716C233E0729003BF3AF /* LibrariesViewController.xib */,
+				8EBA759623B55BCA00548376 /* RepositoryTreeDataSource.swift */,
 			);
 			path = LibraryTree;
 			sourceTree = "<group>";
@@ -808,6 +837,7 @@
 				8E4C38D8211829410089502C /* DeviceTreeController.swift */,
 				8EF125A72214590000C423CA /* DeviceListViewController.swift */,
 				8EF125A82214590000C423CA /* DeviceListViewController.xib */,
+				8EBA759423B55BAB00548376 /* DeviceTreeDataSource.swift */,
 			);
 			path = DeviceTree;
 			sourceTree = "<group>";
@@ -825,6 +855,7 @@
 			isa = PBXGroup;
 			children = (
 				8E4C38D2211828B00089502C /* EventsTreeController.swift */,
+				8EBA759223B55B9900548376 /* EventsTreeDataSource.swift */,
 			);
 			path = EventsTree;
 			sourceTree = "<group>";
@@ -833,6 +864,7 @@
 			isa = PBXGroup;
 			children = (
 				8EFA7CFE211F012A00419777 /* PlacesTreeController.swift */,
+				8EBA759023B55B8B00548376 /* PlacesTreeDataSource.swift */,
 			);
 			path = PlacesTree;
 			sourceTree = "<group>";
@@ -841,6 +873,7 @@
 			isa = PBXGroup;
 			children = (
 				8E4C38D4211828FF0089502C /* MomentsTreeController.swift */,
+				8EBA758E23B55B7700548376 /* MomentsTreeDataSource.swift */,
 			);
 			path = MomentsTree;
 			sourceTree = "<group>";
@@ -1313,6 +1346,7 @@
 			files = (
 				8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */,
 				8E15E73D23AC74DC0094240A /* TreeTableCellView.swift in Sources */,
+				8EBA759123B55B8B00548376 /* PlacesTreeDataSource.swift in Sources */,
 				8EB2715D23384401003BF3AF /* ImageFile+PhotoTakenDate.swift in Sources */,
 				8E85B7D220B91ED1005A9845 /* SelectionCollectionViewController.swift in Sources */,
 				8EB2718F2340EE95003BF3AF /* ViewController+TreeArea+Scan.swift in Sources */,
@@ -1328,17 +1362,23 @@
 				8E98B8F920D7950E00771280 /* ExportManager.swift in Sources */,
 				8EB271B12346BEC3003BF3AF /* ProgresViewController.swift in Sources */,
 				8E4E5B672217349600FE4B68 /* FaceDetection.swift in Sources */,
+				8EBA759F23B5CE7300548376 /* DeviceDao.swift in Sources */,
 				8E4DECEB23B38A7B00F5538C /* ImageContainer.swift in Sources */,
 				8EF32D142095355400511538 /* LCSourceListTableCellView.swift in Sources */,
+				8EBA75A323B5D3B900548376 /* ExportDao.swift in Sources */,
 				8E3EC3BD214DE623004B6125 /* DateTimeViewController.swift in Sources */,
 				8EBA9DE921766EAB00DACAAD /* TheaterCollectionViewController.swift in Sources */,
 				8EEF07222260D0E1000520B7 /* CollectionPaginationViewController.swift in Sources */,
+				8EBA759323B55B9900548376 /* EventsTreeDataSource.swift in Sources */,
+				8EBA759523B55BAB00548376 /* DeviceTreeDataSource.swift in Sources */,
 				8EFA7CFD211D72B300419777 /* ImageDeviceFile.swift in Sources */,
+				8EBA75A123B5D06900548376 /* FaceDao.swift in Sources */,
 				8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */,
 				8E15E73E23AC74DC0094240A /* TreeViewController.swift in Sources */,
 				8EFA7CFB211D713700419777 /* ImageDevice.swift in Sources */,
 				8E36B06C21792EDC00646EA5 /* CustomRowView.swift in Sources */,
 				8E4E5B6922195BFF00FE4B68 /* FaceRecognition.swift in Sources */,
+				8EBA759D23B5CD6F00548376 /* EventDao.swift in Sources */,
 				8EF4CE5521D77BAB00C53AFF /* People.swift in Sources */,
 				8E8D471222279AA80091E9C3 /* FaceCollectionViewItemsLoader.swift in Sources */,
 				8E15E73C23AC74DC0094240A /* TreeDataSource.swift in Sources */,
@@ -1429,6 +1469,7 @@
 				8EAC5F202144A60900E187E0 /* DeviceFolderViewController.swift in Sources */,
 				8EE1AB3D20D05E49001C75B0 /* EventListViewController.swift in Sources */,
 				8EB986B920B30C920075B081 /* CollectionViewItem.swift in Sources */,
+				8EBA759B23B5CC5300548376 /* PlaceDao.swift in Sources */,
 				8EAD03BD23372D5E00AAC7C6 /* GRDB+Image+Meta.swift in Sources */,
 				8E9D803B2348A9EE0062692A /* GRDB+ExportProfile.swift in Sources */,
 				8EF4CE5921D77BEA00C53AFF /* ImagePeople.swift in Sources */,
@@ -1444,6 +1485,7 @@
 				8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */,
 				8E4C38D3211828B00089502C /* EventsTreeController.swift in Sources */,
 				8E15E73B23AC74DC0094240A /* StackedTreeViewController.swift in Sources */,
+				8EBA759923B5695900548376 /* RepositoryDao.swift in Sources */,
 				8EF4CE6121E56CF700C53AFF /* ViewController+Notification.swift in Sources */,
 				8EFA7CFF211F012A00419777 /* PlacesTreeController.swift in Sources */,
 				8EB2715B23384364003BF3AF /* ImageFile+SourceFilename.swift in Sources */,
@@ -1451,6 +1493,7 @@
 				8EAD03B923372C8C00AAC7C6 /* GRDB+FaceFamily.swift in Sources */,
 				8E4DECEA23B38A7B00F5538C /* ImagePlace.swift in Sources */,
 				8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */,
+				8EBA759723B55BCA00548376 /* RepositoryTreeDataSource.swift in Sources */,
 				8E8D47262236733B0091E9C3 /* OneColumnTableViewController.swift in Sources */,
 				8EB2717D2340D8D5003BF3AF /* ViewController+TreeArea.swift in Sources */,
 				8EB271892340EDC5003BF3AF /* ViewController+SelectionArea+AssignEvent.swift in Sources */,
@@ -1481,6 +1524,7 @@
 				8EFAF1FB20BFFC8A007A7783 /* MetaInfoHolder.swift in Sources */,
 				8E4DECE023B3822F00F5538C /* ModelStore.swift in Sources */,
 				8E8CF269235AA3860016932A /* Naming.swift in Sources */,
+				8EBA758F23B55B7700548376 /* MomentsTreeDataSource.swift in Sources */,
 				8EEF071A2256C9D9000520B7 /* DevicePathDetailViewController.swift in Sources */,
 				8E8D471C22315F540091E9C3 /* SingleColumnTableViewController.swift in Sources */,
 				8EB271932340EF6F003BF3AF /* ViewController+Schedule.swift in Sources */,

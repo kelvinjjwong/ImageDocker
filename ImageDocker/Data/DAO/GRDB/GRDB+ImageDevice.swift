@@ -237,7 +237,7 @@ extension ModelStoreGRDB {
                 ]
             }
             for devicePath in result {
-                let _ = ModelStore.default.saveDevicePath(file: devicePath)
+                let _ = self.saveDevicePath(file: devicePath)
             }
         }
         return result

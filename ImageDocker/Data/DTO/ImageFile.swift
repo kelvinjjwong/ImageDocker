@@ -16,6 +16,8 @@ import GRDB
 
 class ImageFile {
     
+    let imageRecordDao = ImageRecordDao()
+    let repositoryDao = RepositoryDao()
     
     // MARK: - URL
   
@@ -25,7 +27,7 @@ class ImageFile {
     func getBackupUrl() -> URL? {
         if let img = self.imageData {
             let pathOfRepository = img.repositoryPath.withoutStash()
-            if let repo = ModelStore.default.getContainer(path: pathOfRepository) {
+            if let repo = self.repositoryDao.getContainer(path: pathOfRepository) {
                 print("backup url: \(repo.storagePath.withStash())\(img.subPath)")
                 return URL(fileURLWithPath: "\(repo.storagePath.withStash())\(img.subPath)")
             }
@@ -133,14 +135,14 @@ class ImageFile {
     func hide() {
         if imageData != nil {
             imageData?.hidden = true
-            ModelStore.default.saveImage(image: imageData!)
+            self.imageRecordDao.saveImage(image: imageData!)
         }
     }
     
     func show() {
         if imageData != nil {
             imageData?.hidden = false
-            ModelStore.default.saveImage(image: imageData!)
+            self.imageRecordDao.saveImage(image: imageData!)
         }
     }
     
@@ -149,7 +151,7 @@ class ImageFile {
     
     func save() -> ExecuteState{
         if self.imageData != nil {
-            return ModelStore.default.saveImage(image: self.imageData!)
+            return self.imageRecordDao.saveImage(image: self.imageData!)
         }else{
             return .NO_RECORD
         }
@@ -264,12 +266,12 @@ class ImageFile {
         
         if let repo = repository {
         
-            self.imageData = ModelStore.default.getOrCreatePhoto(filename: fileName,
+            self.imageData = self.imageRecordDao.getOrCreatePhoto(filename: fileName,
                                                              path: url.path,
                                                              parentPath: url.deletingLastPathComponent().path,
                                                              repositoryPath: repo.repositoryPath.withStash())
         }else{
-            self.imageData = ModelStore.default.getOrCreatePhoto(filename: fileName,
+            self.imageData = self.imageRecordDao.getOrCreatePhoto(filename: fileName,
                                                                  path: url.path,
                                                                  parentPath: url.deletingLastPathComponent().path,
                                                                  repositoryPath: nil)
