@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15702" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15702"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="TreeViewController" customModule="TreeView" customModuleProvider="target">
+        <customObject id="-2" userLabel="File's Owner" customClass="TreeViewController" customModule="ImageDocker" customModuleProvider="target">
             <connections>
                 <outlet property="heightConstraint" destination="cBR-jE-Dpv" id="8ke-SC-Dsu"/>
                 <outlet property="outlineView" destination="WiW-0T-Kag" id="PfZ-6z-Nlf"/>
@@ -17,25 +18,25 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="150"/>
+            <rect key="frame" x="0.0" y="0.0" width="290" height="150"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <scrollView identifier="I" borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CxS-oM-NbD">
-                    <rect key="frame" x="0.0" y="0.0" width="480" height="150"/>
-                    <clipView key="contentView" id="nEr-oH-3oS">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="150"/>
+                    <rect key="frame" x="0.0" y="0.0" width="290" height="150"/>
+                    <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="nEr-oH-3oS">
+                        <rect key="frame" x="0.0" y="0.0" width="290" height="150"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" autoresizesOutlineColumn="YES" outlineTableColumn="QLk-ft-pMX" id="WiW-0T-Kag">
-                                <rect key="frame" x="0.0" y="0.0" width="480" height="150"/>
+                                <rect key="frame" x="0.0" y="0.0" width="290" height="150"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
-                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
                                     <tableColumn identifier="name" width="40" minWidth="40" maxWidth="1000" id="QLk-ft-pMX">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
-                                            <font key="font" metaFont="smallSystem"/>
+                                            <font key="font" metaFont="controlContent" size="11"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                         </tableHeaderCell>
@@ -46,7 +47,7 @@
                                         </textFieldCell>
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
-                                            <tableCellView identifier="name" id="Uaa-QD-Nvu" customClass="KSTableCellView" customModule="TreeView" customModuleProvider="target">
+                                            <tableCellView identifier="name" id="Uaa-QD-Nvu" customClass="KSTableCellView" customModule="ImageDocker" customModuleProvider="target">
                                                 <rect key="frame" x="1" y="1" width="40" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
@@ -74,7 +75,7 @@
                                     </tableColumn>
                                     <tableColumn identifier="value" width="55" minWidth="40" maxWidth="60" id="LGh-Tc-3Zh">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center">
-                                            <font key="font" metaFont="smallSystem"/>
+                                            <font key="font" metaFont="controlContent" size="11"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                         </tableHeaderCell>
@@ -107,7 +108,7 @@
                                     </tableColumn>
                                     <tableColumn identifier="button" width="30" minWidth="30" maxWidth="30" id="7dF-5X-aom">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                            <font key="font" metaFont="smallSystem"/>
+                                            <font key="font" metaFont="controlContent" size="11"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </tableHeaderCell>
@@ -118,7 +119,7 @@
                                         </textFieldCell>
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
-                                            <tableCellView id="fSh-m1-mLP" customClass="KSTableActionCellView" customModule="TreeView" customModuleProvider="target">
+                                            <tableCellView id="fSh-m1-mLP" customClass="KSTableActionCellView" customModule="ImageDocker" customModuleProvider="target">
                                                 <rect key="frame" x="102" y="1" width="30" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
@@ -149,10 +150,11 @@
                                 </tableColumns>
                             </outlineView>
                         </subviews>
+                        <nil key="backgroundColor"/>
                     </clipView>
                     <constraints>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="150" id="cBR-jE-Dpv"/>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="480" id="mQZ-nq-LNA"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="290" id="mQZ-nq-LNA"/>
                     </constraints>
                     <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="8zS-OV-0ic">
                         <rect key="frame" x="1" y="342" width="641" height="16"/>
@@ -170,6 +172,7 @@
                 <constraint firstItem="CxS-oM-NbD" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="cM1-vU-zCY"/>
                 <constraint firstAttribute="trailing" secondItem="CxS-oM-NbD" secondAttribute="trailing" id="n3K-yV-1jK"/>
             </constraints>
+            <point key="canvasLocation" x="140" y="154"/>
         </customView>
     </objects>
 </document>

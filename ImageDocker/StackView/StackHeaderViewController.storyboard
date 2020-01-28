@@ -11,22 +11,22 @@
             <objects>
                 <viewController storyboardIdentifier="HeaderTriangleViewController" id="pdi-cw-Syh" userLabel="HeaderTriangleController" customClass="StackHeaderViewController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="aNo-2X-RW3">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="36"/>
+                        <rect key="frame" x="0.0" y="0.0" width="290" height="36"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DlM-mi-Io7">
-                                <rect key="frame" x="28" y="10" width="124" height="18"/>
+                                <rect key="frame" x="22" y="10" width="69" height="21"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="4K1-Wv-kwA"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="65" id="4K1-Wv-kwA"/>
                                 </constraints>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" placeholderString="Heading Title" id="Hpc-od-fR9">
-                                    <font key="font" size="14" name="HelveticaNeue-Bold"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" placeholderString="Header" id="Hpc-od-fR9">
+                                    <font key="font" size="14" name="HelveticaNeue-Medium"/>
+                                    <color key="textColor" red="1" green="1" blue="1" alpha="0.75248355944490475" colorSpace="custom" customColorSpace="sRGB"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PXc-Rt-M8c">
-                                <rect key="frame" x="12" y="13" width="13" height="13"/>
+                                <rect key="frame" x="5" y="12" width="13" height="13"/>
                                 <buttonCell key="cell" type="disclosureTriangle" bezelStyle="disclosure" imagePosition="above" alignment="left" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="p5f-HA-pDe">
                                     <behavior key="behavior" pushIn="YES" changeBackground="YES" changeGray="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -36,9 +36,9 @@
                                 </connections>
                             </button>
                             <searchField wantsLayer="YES" focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xlY-no-zEZ">
-                                <rect key="frame" x="170" y="7" width="172" height="22"/>
+                                <rect key="frame" x="101" y="9" width="93" height="18"/>
                                 <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" focusRingType="none" usesSingleLineMode="YES" bezelStyle="round" id="dWw-r6-FWz">
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="system" size="11"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </searchFieldCell>
@@ -47,7 +47,7 @@
                                 </connections>
                             </searchField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WxK-wB-ai7">
-                                <rect key="frame" x="406" y="8" width="36" height="19"/>
+                                <rect key="frame" x="253" y="8" width="36" height="19"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="36" id="9Yo-eD-PBk"/>
                                 </constraints>
@@ -60,7 +60,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iXy-rO-DCJ">
-                                <rect key="frame" x="379" y="8" width="26" height="19"/>
+                                <rect key="frame" x="226" y="8" width="26" height="19"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="26" id="C8i-x5-zms"/>
                                 </constraints>
@@ -73,7 +73,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="k3W-2F-PD6">
-                                <rect key="frame" x="352" y="8" width="26" height="19"/>
+                                <rect key="frame" x="199" y="8" width="26" height="19"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="26" id="fWI-TR-O9y"/>
                                 </constraints>
@@ -87,25 +87,25 @@
                             </button>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="xlY-no-zEZ" firstAttribute="leading" secondItem="DlM-mi-Io7" secondAttribute="trailing" constant="20" id="4LT-xt-Aah"/>
-                            <constraint firstItem="xlY-no-zEZ" firstAttribute="top" secondItem="aNo-2X-RW3" secondAttribute="top" constant="7" id="5gd-bo-Rur"/>
+                            <constraint firstItem="xlY-no-zEZ" firstAttribute="leading" secondItem="DlM-mi-Io7" secondAttribute="trailing" constant="12" id="4LT-xt-Aah"/>
+                            <constraint firstItem="xlY-no-zEZ" firstAttribute="top" secondItem="aNo-2X-RW3" secondAttribute="top" constant="9" id="5gd-bo-Rur"/>
                             <constraint firstItem="WxK-wB-ai7" firstAttribute="leading" secondItem="iXy-rO-DCJ" secondAttribute="trailing" constant="1" id="AFu-4n-R0t"/>
                             <constraint firstItem="iXy-rO-DCJ" firstAttribute="top" secondItem="aNo-2X-RW3" secondAttribute="top" constant="9" id="HLh-QX-Dso"/>
                             <constraint firstAttribute="bottom" secondItem="WxK-wB-ai7" secondAttribute="bottom" constant="9" id="Lxf-fh-Gpj"/>
                             <constraint firstAttribute="bottom" secondItem="k3W-2F-PD6" secondAttribute="bottom" constant="9" id="MJd-lS-w4z"/>
                             <constraint firstItem="WxK-wB-ai7" firstAttribute="top" secondItem="aNo-2X-RW3" secondAttribute="top" constant="9" id="Nj6-G2-LFm"/>
-                            <constraint firstItem="PXc-Rt-M8c" firstAttribute="leading" secondItem="aNo-2X-RW3" secondAttribute="leading" constant="12" id="P0M-V5-hFb"/>
-                            <constraint firstItem="PXc-Rt-M8c" firstAttribute="top" secondItem="aNo-2X-RW3" secondAttribute="top" constant="10" id="SYx-KW-62K"/>
+                            <constraint firstItem="PXc-Rt-M8c" firstAttribute="leading" secondItem="aNo-2X-RW3" secondAttribute="leading" constant="5" id="P0M-V5-hFb"/>
+                            <constraint firstItem="PXc-Rt-M8c" firstAttribute="top" secondItem="aNo-2X-RW3" secondAttribute="top" constant="11" id="SYx-KW-62K"/>
                             <constraint firstAttribute="bottom" secondItem="DlM-mi-Io7" secondAttribute="bottom" constant="10" id="UUY-dI-jKg"/>
-                            <constraint firstItem="DlM-mi-Io7" firstAttribute="top" secondItem="aNo-2X-RW3" secondAttribute="top" constant="8" id="Y6f-zn-siR"/>
-                            <constraint firstAttribute="bottom" secondItem="xlY-no-zEZ" secondAttribute="bottom" constant="7" id="YA8-oS-FlT"/>
+                            <constraint firstItem="DlM-mi-Io7" firstAttribute="top" secondItem="aNo-2X-RW3" secondAttribute="top" constant="5" id="Y6f-zn-siR"/>
+                            <constraint firstAttribute="bottom" secondItem="xlY-no-zEZ" secondAttribute="bottom" constant="9" id="YA8-oS-FlT"/>
                             <constraint firstAttribute="bottom" secondItem="iXy-rO-DCJ" secondAttribute="bottom" constant="9" id="aTJ-B6-VFS"/>
-                            <constraint firstItem="DlM-mi-Io7" firstAttribute="leading" secondItem="aNo-2X-RW3" secondAttribute="leading" constant="30" id="b6E-dV-yFi"/>
-                            <constraint firstItem="k3W-2F-PD6" firstAttribute="leading" secondItem="xlY-no-zEZ" secondAttribute="trailing" constant="10" id="dd9-75-oXt"/>
+                            <constraint firstItem="DlM-mi-Io7" firstAttribute="leading" secondItem="aNo-2X-RW3" secondAttribute="leading" constant="24" id="b6E-dV-yFi"/>
+                            <constraint firstItem="k3W-2F-PD6" firstAttribute="leading" secondItem="xlY-no-zEZ" secondAttribute="trailing" constant="5" id="dd9-75-oXt"/>
                             <constraint firstItem="iXy-rO-DCJ" firstAttribute="leading" secondItem="k3W-2F-PD6" secondAttribute="trailing" constant="1" id="ffa-2G-C1W"/>
                             <constraint firstItem="WxK-wB-ai7" firstAttribute="leading" secondItem="iXy-rO-DCJ" secondAttribute="trailing" constant="1" id="fgV-Sa-I5Q"/>
                             <constraint firstItem="k3W-2F-PD6" firstAttribute="top" secondItem="aNo-2X-RW3" secondAttribute="top" constant="9" id="lgg-sg-xVE"/>
-                            <constraint firstAttribute="trailing" secondItem="WxK-wB-ai7" secondAttribute="trailing" constant="8" id="tWg-NE-gOl"/>
+                            <constraint firstAttribute="trailing" secondItem="WxK-wB-ai7" secondAttribute="trailing" constant="1" id="tWg-NE-gOl"/>
                         </constraints>
                     </view>
                     <connections>

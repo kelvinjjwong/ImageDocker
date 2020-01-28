@@ -28,7 +28,7 @@ class StackedTreeViewController: NSViewController, StackItemHost {
         stack.setHuggingPriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
     }
     
-    func addTreeView(title:String, dataSource:TreeDataSource, width:CGFloat = 480.0, height:CGFloat = 360.0,
+    func addTreeView(title:String, dataSource:TreeDataSource, width:CGFloat = 290.0, height:CGFloat = 360.0,
                      onNodeSelected:((TreeCollection) -> Void)? = nil,
                      moreActionOnHeader: (() -> ())? = nil,
                      moreActionOnNode:((TreeCollection, NSButton) -> Void)? = nil) {

@@ -15,7 +15,7 @@ class CustomStackView : NSStackView {
 
 class StackBodyViewController : NSViewController, StackItemBody {
     
-    static let StackItemBackgroundColor = NSColor(calibratedRed: 244/255, green:244/255, blue:244/255, alpha:1)
+    static let StackItemBackgroundColor = NSColor.darkGray // NSColor(calibratedRed: 244/255, green:244/255, blue:244/255, alpha:1)
     
     @IBOutlet var heightConstraint: NSLayoutConstraint!
     @IBOutlet var widthConstraint: NSLayoutConstraint!

@@ -23,16 +23,30 @@ extension ViewController {
         
         let TREEVIEW_WIDTH:CGFloat = 290
         
-        let stackedTreeView = StackedTreeViewController(divideTo: 2)
+        let stackedTreeView = StackedTreeViewController(divideTo: 5)
         self.stackedTreeCanvasView.addSubview(stackedTreeView.view)
 
-        stackedTreeView.view.boundToSuperView(superview: self.view)
+        stackedTreeView.view.boundToSuperView(superview: self.stackedTreeCanvasView)
         stackedTreeView.view.setWidth(TREEVIEW_WIDTH)
         
         let dataSource1 = SampleDataSource1()
+        
 
 
-        stackedTreeView.addTreeView(title:"MOMENTS",
+        stackedTreeView.addTreeView(title:"Devices",
+                                    dataSource: dataSource1,
+                                    width: TREEVIEW_WIDTH,
+                                    onNodeSelected: { collection in
+                                        print("action on \(collection.path)")
+        },
+                                    moreActionOnHeader: {
+                                        print("clicked devices more button")
+        },
+                                    moreActionOnNode: { collection, button in
+                                        print("more on devices \(collection.path)")
+        })
+
+        stackedTreeView.addTreeView(title:"Moments",
                                     dataSource: dataSource1,
                                     width: TREEVIEW_WIDTH,
                                     onNodeSelected: { collection in
@@ -44,7 +58,7 @@ extension ViewController {
                                     moreActionOnNode: { collection, button in
                                         print("more on moments \(collection.path)")
         })
-        stackedTreeView.addTreeView(title:"EVENTS",
+        stackedTreeView.addTreeView(title:"Events",
                                     dataSource: dataSource1,
                                     width: TREEVIEW_WIDTH,
                                     onNodeSelected: { collection in
@@ -55,6 +69,34 @@ extension ViewController {
         },
                                     moreActionOnNode: { collection, button in
                                         print("more on events \(collection.path)")
+        })
+
+
+        stackedTreeView.addTreeView(title:"Places",
+                                    dataSource: dataSource1,
+                                    width: TREEVIEW_WIDTH,
+                                    onNodeSelected: { collection in
+                                        print("action on \(collection.path)")
+        },
+                                    moreActionOnHeader: {
+                                        print("clicked places more button")
+        },
+                                    moreActionOnNode: { collection, button in
+                                        print("more on places \(collection.path)")
+        })
+
+
+        stackedTreeView.addTreeView(title:"Libraries",
+                                    dataSource: dataSource1,
+                                    width: TREEVIEW_WIDTH,
+                                    onNodeSelected: { collection in
+                                        print("action on \(collection.path)")
+        },
+                                    moreActionOnHeader: {
+                                        print("clicked libs more button")
+        },
+                                    moreActionOnNode: { collection, button in
+                                        print("more on libs \(collection.path)")
         })
         
         self.startupAggregateFlag = 0

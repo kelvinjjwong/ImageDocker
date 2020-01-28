@@ -207,6 +207,7 @@
 		8EC82EAE21283ED000FC0899 /* DirectoryViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC82EAD21283ED000FC0899 /* DirectoryViewDelegate.swift */; };
 		8EE1AB3D20D05E49001C75B0 /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */; };
 		8EE1AB3E20D05E49001C75B0 /* EventListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */; };
+		8EE382F823E02585003B7153 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE382F723E02585003B7153 /* Colors.swift */; };
 		8EEB88842090B44B00CDEC81 /* ImageDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEB88832090B44B00CDEC81 /* ImageDropView.swift */; };
 		8EEF071A2256C9D9000520B7 /* DevicePathDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEF07182256C9D9000520B7 /* DevicePathDetailViewController.swift */; };
 		8EEF071B2256C9D9000520B7 /* DevicePathDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EEF07192256C9D9000520B7 /* DevicePathDetailViewController.xib */; };
@@ -471,6 +472,7 @@
 		8EC82EAD21283ED000FC0899 /* DirectoryViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryViewDelegate.swift; sourceTree = "<group>"; };
 		8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListViewController.swift; sourceTree = "<group>"; };
 		8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventListViewController.xib; sourceTree = "<group>"; };
+		8EE382F723E02585003B7153 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		8EEB88832090B44B00CDEC81 /* ImageDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDropView.swift; sourceTree = "<group>"; };
 		8EEF07182256C9D9000520B7 /* DevicePathDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePathDetailViewController.swift; sourceTree = "<group>"; };
 		8EEF07192256C9D9000520B7 /* DevicePathDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DevicePathDetailViewController.xib; sourceTree = "<group>"; };
@@ -621,6 +623,7 @@
 				8EA643F4208D6E5100C7D695 /* PreferencesController.swift */,
 				8E98B8F220D5C90600771280 /* WindowController.swift */,
 				8E15E74023AC7B310094240A /* Icons.swift */,
+				8EE382F723E02585003B7153 /* Colors.swift */,
 			);
 			path = ImageDocker;
 			sourceTree = "<group>";
@@ -1401,6 +1404,7 @@
 				8EF125A622140C0F00C423CA /* ImageDevicePath.swift in Sources */,
 				8EB271812340E578003BF3AF /* ViewController+Window.swift in Sources */,
 				8EF4CE5721D77BD600C53AFF /* Family.swift in Sources */,
+				8EE382F823E02585003B7153 /* Colors.swift in Sources */,
 				8E015123208F7D34009C2549 /* StackedVideoViewController.swift in Sources */,
 				8EB986BA20B30C920075B081 /* ImageFile.swift in Sources */,
 				8EEB88842090B44B00CDEC81 /* ImageDropView.swift in Sources */,
