@@ -23,27 +23,29 @@ extension ViewController {
         self.startupAggregateFlag = 0
         DispatchQueue.global().async {
             
-            self.initTreeDataModel()
-            self.startupAggregateFlag += 1
-            print("\(Date()) Loading view - configure tree - loading path to tree from db")
-            self.loadPathToTreeFromDatabase(onCompleted: {
-                
-                self.startupAggregateFlag += 1
-            })
+//            self.initTreeDataModel()
+//            self.startupAggregateFlag += 1
+//            print("\(Date()) Loading view - configure tree - loading path to tree from db")
+//            self.loadPathToTreeFromDatabase(onCompleted: {
+//
+//                self.startupAggregateFlag += 1
+//            })
+//
+//            print("\(Date()) Loading view - configure tree - loading moments to tree from db")
+//            self.loadMomentsToTreeFromDatabase(onCompleted: {
+//                self.startupAggregateFlag += 1
+//            })
+//            print("\(Date()) Loading view - configure tree - loading places to tree from db")
+//            self.loadPlacesToTreeFromDatabase(onCompleted: {
+//
+//                self.startupAggregateFlag += 1
+//            })
+//            print("\(Date()) Loading view - configure tree - loading events to tree from db")
+//            self.loadEventsToTreeFromDatabase(onCompleted: {
+//                self.startupAggregateFlag += 1
+//            })
             
-            print("\(Date()) Loading view - configure tree - loading moments to tree from db")
-            self.loadMomentsToTreeFromDatabase(onCompleted: {
-                self.startupAggregateFlag += 1
-            })
-            print("\(Date()) Loading view - configure tree - loading places to tree from db")
-            self.loadPlacesToTreeFromDatabase(onCompleted: {
-                
-                self.startupAggregateFlag += 1
-            })
-            print("\(Date()) Loading view - configure tree - loading events to tree from db")
-            self.loadEventsToTreeFromDatabase(onCompleted: {
-                self.startupAggregateFlag += 1
-            })
+            self.startupAggregateFlag += 5
         }
     }
     

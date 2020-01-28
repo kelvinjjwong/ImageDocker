@@ -16,7 +16,7 @@ extension ViewController {
         self.startingUp = true
         
         DispatchQueue.global().async {
-            self.splashController.progressWillEnd(at: 6)
+            self.splashController.progressWillEnd(at: 5)
             self.splashController.message("Creating database backup ...", progress: 1)
             ExecutionEnvironment.default.createDataBackup(suffix: "-on-launch")
             IPHONE.bridge.unmountFuse()
@@ -95,17 +95,17 @@ extension ViewController {
     internal func loadTreeOnStartup() {
         DispatchQueue.main.async {
             
-            print("\(Date()) Loading view - configure tree - reloading tree view")
+            print("\(Date()) Loading view - configure tree - reloading source list view")
             
-            self.sortLibraryTreeRepositories()
-            self.sourceList.reloadData()
+//            self.sortLibraryTreeRepositories()
+//            self.sourceList.reloadData()
             self.treeIndicator.isEnabled = false
             self.treeIndicator.isHidden = true
             
-            self.showToolbarOfTree()
+//            self.showToolbarOfTree()
             self.showToolbarOfCollectionView()
             
-            print("\(Date()) Loading view - configure tree - reloading tree view: DONE")
+            print("\(Date()) Loading view - configure tree - reloading source list view: DONE")
             
             if self.startingUp {
                 self.splashController.message("Preparing UI ...", progress: 5)
