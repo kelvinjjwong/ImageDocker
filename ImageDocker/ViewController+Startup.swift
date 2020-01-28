@@ -99,8 +99,8 @@ extension ViewController {
             
 //            self.sortLibraryTreeRepositories()
 //            self.sourceList.reloadData()
-            self.treeIndicator.isEnabled = false
-            self.treeIndicator.isHidden = true
+//            self.treeIndicator.isEnabled = false
+//            self.treeIndicator.isHidden = true
             
 //            self.showToolbarOfTree()
             self.showToolbarOfCollectionView()

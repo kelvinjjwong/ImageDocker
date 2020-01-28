@@ -312,8 +312,8 @@ class ViewController: NSViewController {
         self.btnChoiceMapService.setImage(tick, forSegment: 1)
         
         self.suppressedScan = true
-        self.btnScanState.image = NSImage(named: NSImage.Name.statusNone)
-        self.btnScanState.isHidden = true
+//        self.btnScanState.image = NSImage(named: NSImage.Name.statusNone)
+//        self.btnScanState.isHidden = true
         
         ExportManager.default.messageBox = self.lblProgressMessage
         ExportManager.default.suppressed = true
@@ -378,12 +378,7 @@ class ViewController: NSViewController {
         self.btnCopyLocation.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnManageEvents.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnManagePlaces.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.btnAddRepository.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.btnRemoveSelection.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnReplaceLocation.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.btnRemoveRepository.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.btnRefreshRepository.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.btnFilterRepository.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnRefreshCollectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnCombineDuplicates.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
@@ -403,7 +398,6 @@ class ViewController: NSViewController {
         self.btnShow.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnHide.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
-        self.sourceList.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.metaInfoTableView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.collectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.selectionCollectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)

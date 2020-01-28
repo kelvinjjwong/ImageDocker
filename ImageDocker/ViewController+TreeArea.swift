@@ -13,13 +13,13 @@ extension ViewController {
     
     // init trees
     internal func configureTree(){
-        self.sourceList.backgroundColor = NSColor.darkGray
+        //self.sourceList.backgroundColor = NSColor.darkGray
         
         self.hideToolbarOfTree()
         self.hideToolbarOfCollectionView()
-        self.treeIndicator.isEnabled = false
-        self.treeIndicator.isHidden = true
-        self.treeIndicator.doubleValue = 0.0
+//        self.treeIndicator.isEnabled = false
+//        self.treeIndicator.isHidden = true
+//        self.treeIndicator.doubleValue = 0.0
         self.startupAggregateFlag = 0
         DispatchQueue.global().async {
             
@@ -50,17 +50,17 @@ extension ViewController {
     }
     
     internal func hideToolbarOfTree() {
-        self.btnAddRepository.isHidden = true
-        self.btnRemoveRepository.isHidden = true
-        self.btnRefreshRepository.isHidden = true
-        self.btnFilterRepository.isHidden = true
+//        self.btnAddRepository.isHidden = true
+//        self.btnRemoveRepository.isHidden = true
+//        self.btnRefreshRepository.isHidden = true
+//        self.btnFilterRepository.isHidden = true
     }
     
     internal func showToolbarOfTree() {
-        self.btnAddRepository.isHidden = false
-        self.btnRemoveRepository.isHidden = false
-        self.btnRefreshRepository.isHidden = false
-        self.btnFilterRepository.isHidden = false
+//        self.btnAddRepository.isHidden = false
+//        self.btnRemoveRepository.isHidden = false
+//        self.btnRefreshRepository.isHidden = false
+//        self.btnFilterRepository.isHidden = false
     }
     
     func showTreeNodeButton(collection: PhotoCollection, image: NSImage? = nil) {
