@@ -550,9 +550,9 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
                                             <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fHj-eQ-neO">
-                                                <rect key="frame" x="0.0" y="0.0" width="580" height="15"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="580" height="12"/>
                                                 <clipView key="contentView" id="eei-jG-19T">
-                                                    <rect key="frame" x="0.0" y="0.0" width="580" height="15"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="580" height="12"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" id="ECf-s9-RCm" customClass="DarkTableView" customModule="ImageDocker" customModuleProvider="target">
@@ -1148,6 +1148,7 @@
                         <outlet property="selectionCheckAllBox" destination="CaM-Tw-R04" id="CBY-PY-bPh"/>
                         <outlet property="selectionCollectionView" destination="ZyN-Zd-qQf" id="1QS-Hl-r3z"/>
                         <outlet property="splitviewPreview" destination="giR-in-kR4" id="kmu-km-TA6"/>
+                        <outlet property="stackedTreeCanvasView" destination="CKk-CL-9gu" id="fFJ-OQ-hgD"/>
                         <outlet property="txtSearch" destination="0O0-hl-4CA" id="sjr-zk-RrW"/>
                         <outlet property="webLocation" destination="A1f-6H-jB4" id="wMq-w7-Ou5"/>
                         <outlet property="webPossibleLocation" destination="JL6-YH-lBk" id="NEr-J7-0aQ"/>

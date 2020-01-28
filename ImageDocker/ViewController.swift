@@ -100,11 +100,15 @@ class ViewController: NSViewController {
     var coordinateAPI:LocationAPI = .baidu
     
     // MARK: - Tree
+    
+    @IBOutlet weak var stackedTreeCanvasView: NSView!
+    
+    
     //var modelObjects:NSMutableArray?
-    var sourceListItems:NSMutableArray?
-    var identifiersOfLibraryTree:[String : PXSourceListItem] = [String : PXSourceListItem] ()
-    var parentsOfMomentsTree : [String : PXSourceListItem] = [String : PXSourceListItem] ()
-    var momentToCollection : [String : PhotoCollection] = [String : PhotoCollection] ()
+    var sourceListItems:NSMutableArray? // deleted
+    var identifiersOfLibraryTree:[String : PXSourceListItem] = [String : PXSourceListItem] () // deleted
+    var parentsOfMomentsTree : [String : PXSourceListItem] = [String : PXSourceListItem] () // deleted
+    var momentToCollection : [String : PhotoCollection] = [String : PhotoCollection] () // deleted
     var treeIdItemsExpandState : [String : Bool] = [String : Bool] ()
     var treeLastSelectedIdentifier : String = ""
     var treeIdItems : [String : PXSourceListItem] = [String : PXSourceListItem] ()
@@ -118,13 +122,13 @@ class ViewController: NSViewController {
     var deviceToCollection : [String : PhotoCollection] = [String : PhotoCollection] ()
     var deviceIdToDevice : [String : PhoneDevice] = [String : PhoneDevice] ()
     
-    var deviceSectionOfTree : PXSourceListItem?
-    var librarySectionOfTree : PXSourceListItem?
-    var momentSectionOfTree : PXSourceListItem?
-    var placeSectionOfTree : PXSourceListItem?
-    var eventSectionOfTree : PXSourceListItem?
+    var deviceSectionOfTree : PXSourceListItem? // deleted
+    var librarySectionOfTree : PXSourceListItem? // deleted
+    var momentSectionOfTree : PXSourceListItem? // deleted
+    var placeSectionOfTree : PXSourceListItem? // deleted
+    var eventSectionOfTree : PXSourceListItem? // deleted
     
-    @IBOutlet weak var treeIndicator: NSLevelIndicator!
+    @IBOutlet weak var treeIndicator: NSLevelIndicator! // deleted
     
     var cachedTreeCollections:[PhotoCollection] = []
     
@@ -132,16 +136,16 @@ class ViewController: NSViewController {
     var selectedImageFolder:ImageFolder?
     var selectedImageFile:String = ""
     
-    @IBOutlet weak var btnScanState: NSButton!
-    @IBOutlet weak var sourceList: PXSourceList!
+    @IBOutlet weak var btnScanState: NSButton! // deleted
+    @IBOutlet weak var sourceList: PXSourceList! // deleted
     
-    var treeLoadingIndicator:Accumulator?
+    var treeLoadingIndicator:Accumulator? // deleted
     //@IBOutlet weak var progressIndicator: NSProgressIndicator!
     
-    @IBOutlet weak var btnAddRepository: NSButton!
-    @IBOutlet weak var btnRemoveRepository: NSButton!
-    @IBOutlet weak var btnRefreshRepository: NSButton!
-    @IBOutlet weak var btnFilterRepository: NSButton!
+    @IBOutlet weak var btnAddRepository: NSButton! // deleted
+    @IBOutlet weak var btnRemoveRepository: NSButton! // deleted
+    @IBOutlet weak var btnRefreshRepository: NSButton! // deleted
+    @IBOutlet weak var btnFilterRepository: NSButton! // deleted
     
     
     @IBOutlet weak var chbSelectAll: NSButton!
@@ -425,29 +429,8 @@ class ViewController: NSViewController {
     
     // MARK: - Tree Node Controls
     
-    @IBAction func onAddButtonClicked(_ sender: NSButton) {
-        self.openAddTreeNodeDialog()
-    }
-    
-    @IBAction func onDelButtonClicked(_ sender: Any) {
-        print("clicked delete button")
-        self.confirmDeleteTreeNode()
-    }
-    
-    @IBAction func onRefreshButtonClicked(_ sender: Any) {
-        print("clicked refresh button")
-        self.refreshTreeNodes()
-    }
-    
     var filterImageSource:[String] = []
     var filterCameraModel:[String] = []
-    
-    @IBAction func onFilterButtonClicked(_ sender: NSButton) {
-        self.createFilterPopover()
-        
-        let cellRect = sender.bounds
-        self.filterPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
-    }
     
     // MARK: - Collection View Controls
     

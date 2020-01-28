@@ -15,7 +15,7 @@ extension ViewController {
             ExportManager.default.disable()
             TaskManager.scanningFileSystem = true
             DispatchQueue.main.async {
-                self.btnScanState.image = NSImage(named: NSImage.Name.statusAvailable)
+//                self.btnScanState.image = NSImage(named: NSImage.Name.statusAvailable)
             }
             self.treeLoadingIndicator = Accumulator(target: 1000, indicator: self.progressIndicator, suspended: true,
                                                     lblMessage: self.lblProgressMessage,
@@ -24,9 +24,9 @@ extension ViewController {
                                                         print("COMPLETE SCAN REPO")
                                                         ExportManager.default.enable()
                                                         TaskManager.scanningFileSystem = false
-                                                        DispatchQueue.main.async {
-                                                            self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
-                                                        }
+//                                                        DispatchQueue.main.async {
+//                                                            self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
+//                                                        }
             },
                                                     onDataChanged: {
                                                         self.updateLibraryTree()
@@ -48,8 +48,8 @@ extension ViewController {
         self.suppressedScan = false
         ImageFolderTreeScanner.default.suppressedScan = false
         
-        self.btnScanState.isHidden = false
-        self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
+//        self.btnScanState.isHidden = false
+//        self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
         
         // start scaning immediatetly
         self.startScanRepositories()
@@ -60,8 +60,8 @@ extension ViewController {
         self.suppressedScan = true
         ImageFolderTreeScanner.default.suppressedScan = true
         
-        self.btnScanState.image = NSImage(named: NSImage.Name.statusNone)
-        self.btnScanState.isHidden = true
+//        self.btnScanState.image = NSImage(named: NSImage.Name.statusNone)
+//        self.btnScanState.isHidden = true
     }
     
     internal func startScanRepositoriesToLoadExif(){
@@ -73,7 +73,7 @@ extension ViewController {
                 
                 print("EXTRACTING EXIF")
                 DispatchQueue.main.async {
-                    self.btnScanState.image = NSImage(named: NSImage.Name.statusAvailable)
+//                    self.btnScanState.image = NSImage(named: NSImage.Name.statusAvailable)
                 }
                 self.treeLoadingIndicator = Accumulator(target: 1000, indicator: self.progressIndicator, suspended: true,
                                                         lblMessage: self.lblProgressMessage,
@@ -84,7 +84,7 @@ extension ViewController {
                                                             ExportManager.default.suppressed = false
                                                             TaskManager.readingImagesExif = false
                                                             DispatchQueue.main.async {
-                                                                self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
+//                                                                self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
                                                                 self.lblProgressMessage.stringValue = ""
                                                             }
                 }
