@@ -19,11 +19,15 @@ class StackHeaderViewController : NSViewController, StackItemHeader {
     
     var disclose: (() -> ())? // This state will be set by the item view controller.
     
-    var gotoAction: ((String) -> ())?
+    var beforeExpand: (() -> ())? // optional extendable method
     
-    var filterAction: ((String) -> ())?
+    var afterExpand: (() -> ())? // optional extendable method
     
-    var moreAction: (() -> ())?
+    var gotoAction: ((String) -> ())? // optional extendable method
+    
+    var filterAction: ((String) -> ())? // optional extendable method
+    
+    var moreAction: (() -> ())? // optional extendable method
     
     // MARK: - View Controller Lifecycle
     

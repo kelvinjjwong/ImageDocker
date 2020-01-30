@@ -12,6 +12,9 @@ class StackedTreeViewController: NSViewController, StackItemHost {
     
     @IBOutlet weak var stack: CustomStackView!
     
+    var trees:[TreeViewController] = []
+    var nameToTrees:[String:TreeViewController] = [:]
+    
     var devideCount = 0
     
     init(divideTo:Int = 0){
@@ -28,17 +31,26 @@ class StackedTreeViewController: NSViewController, StackItemHost {
         stack.setHuggingPriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
     }
     
-    func addTreeView(title:String, dataSource:TreeDataSource, width:CGFloat = 290.0, height:CGFloat = 360.0,
-                     onNodeSelected:((TreeCollection) -> Void)? = nil,
-                     moreActionOnHeader: (() -> ())? = nil,
-                     moreActionOnNode:((TreeCollection, NSButton) -> Void)? = nil) {
-        
-        var treeHeight = height
+    func calculateHeightOfTreeView(_ defaultHeight:CGFloat) -> CGFloat {
+        var treeHeight = defaultHeight
         if self.devideCount > 0 {
             if let outerHeight = self.view.superview?.frame.height {
                 treeHeight = outerHeight / CGFloat(self.devideCount) - 40
             }
         }
+        return treeHeight
+    }
+    
+    func calculateMaxHeightOfTreeView(maxExpandable:Int = 1) -> CGFloat {
+        return CGFloat( ( 700 - 36 * self.devideCount ) / maxExpandable )
+    }
+    
+    func addTreeView(title:String, dataSource:TreeDataSource, width:CGFloat = 400.0, height:CGFloat = 360.0,
+                     onNodeSelected:((TreeCollection) -> Void)? = nil,
+                     moreActionOnHeader: (() -> ())? = nil,
+                     moreActionOnNode:((TreeCollection, NSButton) -> Void)? = nil) {
+        
+        let treeHeight = self.calculateMaxHeightOfTreeView()
         
         let treeView = TreeViewController(title, width: width, height: treeHeight)
         
@@ -83,6 +95,13 @@ class StackedTreeViewController: NSViewController, StackItemHost {
         stackItem.header.gotoAction = { keyword in
             treeView.findNode(keyword: keyword)
         }
+        stackItem.header.beforeExpand = {
+            self.hideAllTrees()
+        }
+        stackItem.header.afterExpand = {
+            let (opened, closed) = self.countTreeStates()
+            print("opened: \(opened), closed: \(closed)")
+        }
         
         // Add the header view.
         stack.addArrangedSubview(stackItem.header.viewController.view)
@@ -96,30 +115,59 @@ class StackedTreeViewController: NSViewController, StackItemHost {
         addChildViewController(stackItem.body.viewController)
         addChildViewController(stackItem.header.viewController)
         
-        // Set the current disclosure state.
-        switch stackItem.state {
-        case .open: show(stackItem, animated: true)
-        case .closed: hide(stackItem, animated: true)
-        }
+        // collapse by default
+        hide(stackItem, animated: true)
         
-        
+        // load data
         treeView.show()
-        //treeView.expand(path: "root_3/leaf_3/grand_b")
         
-        // Check if we stored the disclosure state from a previous launch (default state is open).
-        if let defaultDisclosureState = UserDefaults().value(forKey: treeView.headerTitle()) {
-            if defaultDisclosureState as! Int != 0 {
-                treeView.disclosureState = .closed
+        self.trees.append(treeView)
+        self.nameToTrees[title] = treeView
+        
+    }
+    
+    func loadAllData() {
+        if self.trees.count > 0 {
+            for tree in self.trees {
+                tree.show()
             }
         }
-        
-//        treeView.view.boundXToSuperView(superview: self.stack)
-//        treeView.scrollView.boundXToSuperView(superview: self.stack)
-//        treeView.outlineView.boundXToSuperView(superview: treeView.scrollView)
-//
-//        treeView.outlineView.autoresizingMask = .width
-//        treeView.scrollView.autoresizesSubviews = true
-//        treeView.view.autoresizesSubviews = true
+    }
+    
+    func countTreeStates() -> (Int, Int) {
+        var opened = 0
+        var closed = 0
+        if self.trees.count > 0 {
+            for tree in self.trees {
+                if let stackItem = tree.stackItemContainer {
+                    if stackItem.state == .closed {
+                        closed += 1
+                    }else{
+                        opened += 1
+                    }
+                }
+            }
+        }
+        return (opened, closed)
+    }
+    
+    func hideAllTrees() {
+        if self.trees.count > 0 {
+            for tree in self.trees {
+                if let stackItem = tree.stackItemContainer {
+                    hide(stackItem, animated: true)
+                }
+            }
+        }
+    }
+    
+    func showTree(_ title:String){
+        // expand the specified tree
+        if let tree = self.nameToTrees[title] {
+            if let stackItem = tree.stackItemContainer {
+                show(stackItem, animated: true)
+            }
+        }
     }
     
     func findNode(_ path:String, tree treeView:TreeViewController) -> Bool{

@@ -22,6 +22,10 @@ protocol StackItemHeader : class {
     var viewController: NSViewController { get }
     var disclose: (() -> ())? { get set }
     
+    var beforeExpand: (() -> ())? { get set }
+    
+    var afterExpand: (() -> ())? { get set }
+    
     var gotoAction: ((String) -> ())? { get set }
     
     var filterAction: ((String) -> ())? { get set }
@@ -49,23 +53,30 @@ extension StackItemHost {
         switch stackItem.state {
         case .open:
             hide(stackItem, animated: true)
-            stackItem.state = .closed
             
         case .closed:
             show(stackItem, animated: true)
-            stackItem.state = .open
         }
-        
-        // Update the stackItem's header disclosure state.
-        stackItem.header.update(toDisclosureState: stackItem.state)
     }
     
     func show(_ stackItem: StackItemContainer, animated: Bool) {
+        
+        // TODO: close others first
+        
+        if stackItem.header.beforeExpand != nil {
+            stackItem.header.beforeExpand!()
+        }
+        
         // Show the stackItem's body content.
         stackItem.body.show(animated: animated)
         
         // Update the stackItem's header button state.
         stackItem.header.update(toDisclosureState: .open)
+        stackItem.state = .open
+        
+        if stackItem.header.afterExpand != nil {
+            stackItem.header.afterExpand!()
+        }
     }
     
     func hide(_ stackItem: StackItemContainer, animated: Bool) {
@@ -74,6 +85,7 @@ extension StackItemHost {
         
         // Update the stackItem's header button state.
         stackItem.header.update(toDisclosureState: .closed)
+        stackItem.state = .closed
     }
     
 }

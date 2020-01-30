@@ -32,6 +32,8 @@ class TreeViewController : StackBodyViewController {
         if let t = title {
             self.stackTitle = t
         }
+        
+        // initialize stack-view body's size, handled by parent class StackBodyViewController
         if height > 0 {
             self.initialHeight = height
         }

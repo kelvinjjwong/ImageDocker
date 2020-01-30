@@ -99,6 +99,8 @@ extension ViewController {
                                         print("more on libs \(collection.path)")
         })
         
+        stackedTreeView.showTree("Moments")
+        
         self.startupAggregateFlag = 0
         DispatchQueue.global().async {
             
