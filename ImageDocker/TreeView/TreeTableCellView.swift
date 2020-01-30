@@ -14,6 +14,17 @@ class KSTableCellView: NSTableCellView {
     
     @IBOutlet weak var imgView: NSImageView!
     @IBOutlet weak var txtField: NSTextField!
+    @IBOutlet weak var valueField: NSTextField!
+    @IBOutlet weak var button: NSButton!
+    
+    var collection:TreeCollection?
+    var buttonAction:((TreeCollection,NSButton) -> Void)?
+    
+    @IBAction func onClicked(_ sender: NSButton) {
+        if self.buttonAction != nil, let c = self.collection {
+            self.buttonAction!(c, sender)
+        }
+    }
 }
 
 class KSTableActionCellView: NSTableCellView {

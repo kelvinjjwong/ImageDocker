@@ -60,6 +60,9 @@ class StackBodyViewController : NSViewController, StackItemBody {
         return StackItemContainer(header: header, body: self, state: self.disclosureState)
     }()
     
+    func restoreInitialWidth() {
+        self.view.setWidth(self.initialWidth)
+    }
     
     func setWidth(_ value:CGFloat){
         self.view.setWidth(value)

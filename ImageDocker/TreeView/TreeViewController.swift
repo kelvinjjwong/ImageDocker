@@ -168,22 +168,7 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
     
     func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
         if let collection = item as? TreeCollection, let id = tableColumn?.identifier {
-            if id == NSUserInterfaceItemIdentifier("button") {
-                let colView:KSTableActionCellView = outlineView.makeView(withIdentifier: id, owner: self) as! KSTableActionCellView
-                if self.collectionActionIcon != nil {
-                    let icon = self.collectionActionIcon!(collection)
-                    colView.button.image = icon
-                    colView.collection = collection
-                    colView.toolTip = collection.path
-                    colView.buttonAction = { collection, button in
-                        if self.collectionAction != nil {
-                            self.collectionAction!(collection, button)
-                        }
-                    }
-                    collection.button = colView.button
-                }
-                return colView
-            }else if id == NSUserInterfaceItemIdentifier("name") {
+            if id == NSUserInterfaceItemIdentifier("name") {
                 let colView:KSTableCellView = outlineView.makeView(withIdentifier: id, owner: self) as! KSTableCellView
                 if self.collectionTitle != nil {
                     let (icon, title) = self.collectionTitle!(collection)
@@ -192,45 +177,52 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
                     colView.txtField.lineBreakMode = .byWordWrapping
                     colView.autoresizesSubviews = true
                     
-                    // auto adjust column width
-                    var width = self.view.frame.width - 120 // minus column width of value + button
-                    if width < self.minWidth {
-                        width = self.minWidth
+                    if self.collectionValue != nil {
+                        let value = self.collectionValue!(collection)
+                        colView.valueField?.stringValue = "\(value)"
+                        
+                        // rounded corner with background
+                        colView.valueField?.wantsLayer = true
+                        colView.valueField?.layer?.cornerRadius = 8
+                        colView.valueField?.layer?.masksToBounds = true
+                        colView.valueField?.alignment = .center
+                        colView.valueField?.backgroundColor = NSColor(calibratedWhite: 0.5, alpha: 0.7)
+                        colView.valueField?.textColor = NSColor(calibratedWhite: 0.9, alpha: 0.9)
+                        colView.valueField?.frame.origin.x = 2
+                        colView.valueField?.frame.size.width = 56 - 4
+                        colView.valueField?.frame.origin.y = 1
+                        colView.valueField?.frame.size.height = 17 - 2
                     }
-                    if let column = tableColumn {
-                        column.width = width
-                        //print("column width set to \(width)")
-                        colView.txtField.sizeToFit()
-                    }
-                }
-                return colView
-            }else{
-                // number badge
-                let colView = outlineView.makeView(withIdentifier: id, owner: self) as! NSTableCellView
-                if self.collectionValue != nil {
-                    let value = self.collectionValue!(collection)
-                    colView.textField?.stringValue = "\(value)"
+                    colView.valueField?.lineBreakMode = .byWordWrapping
                     
-                    // rounded corner with background
-                    colView.textField?.wantsLayer = true
-                    colView.textField?.layer?.cornerRadius = 8
-                    colView.textField?.layer?.masksToBounds = true
-                    colView.textField?.alignment = .center
-                    colView.textField?.backgroundColor = NSColor(calibratedWhite: 0.5, alpha: 0.7)
-                    colView.textField?.textColor = NSColor(calibratedWhite: 0.9, alpha: 0.9)
-                    colView.textField?.frame.origin.x = 2
-                    colView.textField?.frame.size.width = 56 - 4
-                    colView.textField?.frame.origin.y = 1
-                    colView.textField?.frame.size.height = 17 - 2
-                }
-                colView.textField?.lineBreakMode = .byWordWrapping
-                
-                // auto adjust column width
-                if let column = tableColumn {
-                    let textWidth = colView.textField?.bounds.width ?? 0
-                    if textWidth > column.width {
-                        column.width = textWidth + 10
+                    if self.collectionActionIcon != nil {
+                        let icon = self.collectionActionIcon!(collection)
+                        colView.button.image = icon
+                        colView.collection = collection
+                        colView.toolTip = collection.path
+                        colView.buttonAction = { collection, button in
+                            if self.collectionAction != nil {
+                                self.collectionAction!(collection, button)
+                            }
+                        }
+                        collection.button = colView.button
                     }
+                    
+                    
+                    
+//                    // auto adjust column width
+//                    var width = self.view.frame.width // - 93 minus column width of value + button
+//                    if width < self.minWidth {
+//                        width = self.minWidth
+//                    }
+//                    if let column = tableColumn {
+//                        print("setting column width to \(width)")
+//                        column.width = width
+//
+//                        print("colView width is \(colView.frame.width)")
+//                        colView.txtField.sizeToFit()
+//                        //print("column width set to \(width)")
+//                    }
                 }
                 return colView
             }
@@ -262,5 +254,4 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
             return false
         }
     }
-    
 }
