@@ -576,6 +576,7 @@
 		8E0AFA3B208BDEA000CE8B68 /* ImageDocker */ = {
 			isa = PBXGroup;
 			children = (
+				8ECA1FE623E325C500F56895 /* UI.Controls */,
 				8E4DECED23B38D1B00F5538C /* Data */,
 				8E15E72823AC74DB0094240A /* StackView */,
 				8E15E72E23AC74DB0094240A /* TreeView */,
@@ -1025,6 +1026,13 @@
 				8E9D804023495F100062692A /* LargeViewItems.storyboard */,
 			);
 			path = Theater;
+			sourceTree = "<group>";
+		};
+		8ECA1FE623E325C500F56895 /* UI.Controls */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UI.Controls;
 			sourceTree = "<group>";
 		};
 		8EE1AB3A20D05E0C001C75B0 /* Search */ = {

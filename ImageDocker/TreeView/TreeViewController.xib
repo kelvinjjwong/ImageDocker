@@ -56,7 +56,7 @@
                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageAlignment="left" imageScaling="proportionallyDown" id="55z-kh-Jxt"/>
                                                     </imageView>
                                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ItF-W0-esc">
-                                                        <rect key="frame" x="7" y="-1" width="232" height="16"/>
+                                                        <rect key="frame" x="7" y="1" width="232" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" title="Name" id="pKZ-er-AYK">
                                                             <font key="font" usesAppearanceFont="YES"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -64,9 +64,10 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="q98-DG-6hz">
-                                                        <rect key="frame" x="242" y="-1" width="50" height="16"/>
+                                                        <rect key="frame" x="242" y="0.0" width="50" height="15"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="50" id="8pk-OX-yiF"/>
+                                                            <constraint firstAttribute="height" constant="15" id="Lxc-Ou-hJw"/>
                                                         </constraints>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" drawsBackground="YES" id="F32-Ac-ylR">
                                                             <font key="font" metaFont="system"/>
@@ -89,7 +90,7 @@
                                                     </button>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstItem="ItF-W0-esc" firstAttribute="top" secondItem="Uaa-QD-Nvu" secondAttribute="top" constant="2" id="SZP-pb-8VC"/>
+                                                    <constraint firstItem="ItF-W0-esc" firstAttribute="top" secondItem="Uaa-QD-Nvu" secondAttribute="top" id="SZP-pb-8VC"/>
                                                     <constraint firstItem="4Ub-tA-dHh" firstAttribute="top" secondItem="Uaa-QD-Nvu" secondAttribute="top" constant="4" id="ffr-Rp-1Ab"/>
                                                     <constraint firstAttribute="bottom" secondItem="B3w-4o-dHr" secondAttribute="bottom" constant="2" id="fjH-Dr-KI5"/>
                                                     <constraint firstAttribute="trailing" secondItem="4Ub-tA-dHh" secondAttribute="trailing" id="h50-6X-e3v"/>

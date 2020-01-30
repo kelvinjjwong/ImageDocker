@@ -186,12 +186,10 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
                         colView.valueField?.layer?.cornerRadius = 8
                         colView.valueField?.layer?.masksToBounds = true
                         colView.valueField?.alignment = .center
-                        colView.valueField?.backgroundColor = NSColor(calibratedWhite: 0.5, alpha: 0.7)
-                        colView.valueField?.textColor = NSColor(calibratedWhite: 0.9, alpha: 0.9)
-                        colView.valueField?.frame.origin.x = 2
-                        colView.valueField?.frame.size.width = 56 - 4
-                        colView.valueField?.frame.origin.y = 1
-                        colView.valueField?.frame.size.height = 17 - 2
+                        colView.valueField?.backgroundColor = Colors.Tree_Badge_Background
+                        colView.valueField?.textColor = Colors.Tree_Badge_Text
+                        colView.valueField?.frame.size.width = 52
+                        colView.valueField?.frame.size.height = 15
                     }
                     colView.valueField?.lineBreakMode = .byWordWrapping
                     
@@ -207,22 +205,6 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
                         }
                         collection.button = colView.button
                     }
-                    
-                    
-                    
-//                    // auto adjust column width
-//                    var width = self.view.frame.width // - 93 minus column width of value + button
-//                    if width < self.minWidth {
-//                        width = self.minWidth
-//                    }
-//                    if let column = tableColumn {
-//                        print("setting column width to \(width)")
-//                        column.width = width
-//
-//                        print("colView width is \(colView.frame.width)")
-//                        colView.txtField.sizeToFit()
-//                        //print("column width set to \(width)")
-//                    }
                 }
                 return colView
             }
