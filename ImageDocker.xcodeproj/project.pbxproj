@@ -648,6 +648,7 @@
 		8E15E72E23AC74DB0094240A /* TreeView */ = {
 			isa = PBXGroup;
 			children = (
+				8ECA1FF423E3C1D700F56895 /* PXSourceList */,
 				8E15E72F23AC74DB0094240A /* StackedTreeViewController.xib */,
 				8E15E73023AC74DB0094240A /* StackedTreeViewController.swift */,
 				8E15E73123AC74DB0094240A /* TreeDataSource.swift */,
@@ -806,17 +807,9 @@
 		8EB27164233BB244003BF3AF /* LibraryTree */ = {
 			isa = PBXGroup;
 			children = (
+				8ECA1FF223E3C15F00F56895 /* ExtendView */,
 				8EB2716F233E15AF003BF3AF /* TreeController+LibrarySectionMenu.swift */,
 				8E4C38D62118291F0089502C /* TreeController+LibraryEntry.swift */,
-				8EF4CE5C21D8026800C53AFF /* EditRepositoryViewController.swift */,
-				8E9D8038234884040062692A /* EditRepositoryViewController.xib */,
-				8EF125AB2216ECC500C423CA /* ContainerViewController.swift */,
-				8EEF071C225FCF8E000520B7 /* ContainerDetailViewController.swift */,
-				8EEF071D225FCF8E000520B7 /* ContainerDetailViewController.xib */,
-				8EB27167233BB408003BF3AF /* RepositoryDetailViewController.swift */,
-				8EB27168233BB408003BF3AF /* RepositoryDetailViewController.xib */,
-				8EB2716B233E0729003BF3AF /* LibrariesViewController.swift */,
-				8EB2716C233E0729003BF3AF /* LibrariesViewController.xib */,
 				8EBA759623B55BCA00548376 /* RepositoryTreeDataSource.swift */,
 			);
 			path = LibraryTree;
@@ -825,9 +818,8 @@
 		8EB27165233BB274003BF3AF /* DeviceTree */ = {
 			isa = PBXGroup;
 			children = (
+				8ECA1FF323E3C19000F56895 /* ExtendView */,
 				8E4C38D8211829410089502C /* DeviceTreeController.swift */,
-				8EF125A72214590000C423CA /* DeviceListViewController.swift */,
-				8EF125A82214590000C423CA /* DeviceListViewController.xib */,
 				8EBA759423B55BAB00548376 /* DeviceTreeDataSource.swift */,
 			);
 			path = DeviceTree;
@@ -908,13 +900,12 @@
 		8EB986AA20B21D3E0075B081 /* Tree */ = {
 			isa = PBXGroup;
 			children = (
+				8EFA7D01211F93C000419777 /* DTO */,
 				8EB27173233E17AF003BF3AF /* MomentsTree */,
 				8EB27172233E17A3003BF3AF /* PlacesTree */,
 				8EB27171233E1796003BF3AF /* EventsTree */,
 				8EB27165233BB274003BF3AF /* DeviceTree */,
 				8EB27164233BB244003BF3AF /* LibraryTree */,
-				8EFA7D01211F93C000419777 /* Domain */,
-				8EFA7D00211F93B400419777 /* TreeView */,
 				8EE1AB3A20D05E0C001C75B0 /* Search */,
 				8EFE763B2094AF6B00B7CFCA /* TreeController.swift */,
 			);
@@ -1120,6 +1111,40 @@
 			path = Commons;
 			sourceTree = "<group>";
 		};
+		8ECA1FF223E3C15F00F56895 /* ExtendView */ = {
+			isa = PBXGroup;
+			children = (
+				8EF4CE5C21D8026800C53AFF /* EditRepositoryViewController.swift */,
+				8E9D8038234884040062692A /* EditRepositoryViewController.xib */,
+				8EF125AB2216ECC500C423CA /* ContainerViewController.swift */,
+				8EEF071C225FCF8E000520B7 /* ContainerDetailViewController.swift */,
+				8EEF071D225FCF8E000520B7 /* ContainerDetailViewController.xib */,
+				8EB27167233BB408003BF3AF /* RepositoryDetailViewController.swift */,
+				8EB27168233BB408003BF3AF /* RepositoryDetailViewController.xib */,
+				8EB2716B233E0729003BF3AF /* LibrariesViewController.swift */,
+				8EB2716C233E0729003BF3AF /* LibrariesViewController.xib */,
+			);
+			path = ExtendView;
+			sourceTree = "<group>";
+		};
+		8ECA1FF323E3C19000F56895 /* ExtendView */ = {
+			isa = PBXGroup;
+			children = (
+				8EF125A72214590000C423CA /* DeviceListViewController.swift */,
+				8EF125A82214590000C423CA /* DeviceListViewController.xib */,
+			);
+			path = ExtendView;
+			sourceTree = "<group>";
+		};
+		8ECA1FF423E3C1D700F56895 /* PXSourceList */ = {
+			isa = PBXGroup;
+			children = (
+				8EF32D132095355400511538 /* LCSourceListTableCellView.swift */,
+				8EF4CE6621E6F29100C53AFF /* LCSourceListHeaderView.swift */,
+			);
+			path = PXSourceList;
+			sourceTree = "<group>";
+		};
 		8EE1AB3A20D05E0C001C75B0 /* Search */ = {
 			isa = PBXGroup;
 			children = (
@@ -1154,22 +1179,13 @@
 			path = Device;
 			sourceTree = "<group>";
 		};
-		8EFA7D00211F93B400419777 /* TreeView */ = {
-			isa = PBXGroup;
-			children = (
-				8EF32D132095355400511538 /* LCSourceListTableCellView.swift */,
-				8EF4CE6621E6F29100C53AFF /* LCSourceListHeaderView.swift */,
-			);
-			path = TreeView;
-			sourceTree = "<group>";
-		};
-		8EFA7D01211F93C000419777 /* Domain */ = {
+		8EFA7D01211F93C000419777 /* DTO */ = {
 			isa = PBXGroup;
 			children = (
 				8EFAF1FE20CAE422007A7783 /* Moment.swift */,
 				8EFE76402094B98D00B7CFCA /* PhotoCollection.swift */,
 			);
-			path = Domain;
+			path = DTO;
 			sourceTree = "<group>";
 		};
 		8EFAF1F820BFFBA3007A7783 /* Location */ = {

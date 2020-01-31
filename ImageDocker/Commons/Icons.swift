@@ -37,3 +37,4 @@ let pauseIcon:NSImage = NSImage(imageLiteralResourceName: "pause")
 
 
 let unknownFaceIcon:NSImage = NSImage(imageLiteralResourceName: "UnknownFace")
+let faceIcon:NSImage = NSImage(imageLiteralResourceName: "face")
