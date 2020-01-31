@@ -322,12 +322,12 @@ class MemoriesViewController : NSViewController {
     }
     
     @IBAction func onPlayClicked(_ sender: NSButton) {
-        if self.btnPlay.image == playIcon {
-            self.btnPlay.image = pauseIcon
+        if self.btnPlay.image == Icons.play {
+            self.btnPlay.image = Icons.pause
             self.timerStarted = true
             self.startCollectionLoop()
         }else{
-            self.btnPlay.image = playIcon
+            self.btnPlay.image = Icons.play
             self.timerStarted = false
             self.stopCollectionLoop()
         }

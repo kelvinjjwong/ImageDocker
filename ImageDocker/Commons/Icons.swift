@@ -8,33 +8,36 @@
 
 import Cocoa
 
-let nodeIcon:NSImage = NSImage(imageLiteralResourceName: "photos")
-let moreIcon:NSImage = NSImage(imageLiteralResourceName: "more_horizontal")
+struct Icons {
+    static let node:NSImage = NSImage(imageLiteralResourceName: "photos")
+    static let more:NSImage = NSImage(imageLiteralResourceName: "more_horizontal")
 
-let filterIcon:NSImage = NSImage(imageLiteralResourceName: "filter")
-let gotoIcon:NSImage = NSImage(imageLiteralResourceName: "goto")
-
-
-let photosIcon:NSImage = NSImage(imageLiteralResourceName: "photos")
-let eventsIcon:NSImage = NSImage(imageLiteralResourceName: "airplane")
-let peopleIcon:NSImage = NSImage(imageLiteralResourceName: "people")
-let placesIcon:NSImage = NSImage(imageLiteralResourceName: "places")
-let albumIcon:NSImage = NSImage(imageLiteralResourceName: "album")
-let folderIcon:NSImage = NSImage(imageLiteralResourceName: "folderOpen")
-let folderAltIcon:NSImage = NSImage(imageLiteralResourceName: "folderOpenAlt")
-let calendarIcon:NSImage = NSImage(imageLiteralResourceName: "calendar")
-let clockIcon:NSImage = NSImage(imageLiteralResourceName: "clock")
-let flagIcon:NSImage = NSImage(imageLiteralResourceName: "flag")
-let anchorIcon:NSImage = NSImage(imageLiteralResourceName: "anchor")
-let phoneIcon:NSImage = NSImage(imageLiteralResourceName: "phone")
-let phoneConnectedIcon:NSImage = NSImage(imageLiteralResourceName: "phone_connected")
-let printIcon:NSImage = NSImage(imageLiteralResourceName: "print")
-let shareIcon:NSImage = NSImage(imageLiteralResourceName: "share")
-let moreVerticalIcon:NSImage = NSImage(imageLiteralResourceName: "more_vertical")
-let moreHorizontalIcon:NSImage = NSImage(imageLiteralResourceName: "more_horizontal")
-let playIcon:NSImage = NSImage(imageLiteralResourceName: "play")
-let pauseIcon:NSImage = NSImage(imageLiteralResourceName: "pause")
+    static let filter:NSImage = NSImage(imageLiteralResourceName: "filter")
+    static let goto:NSImage = NSImage(imageLiteralResourceName: "goto")
 
 
-let unknownFaceIcon:NSImage = NSImage(imageLiteralResourceName: "UnknownFace")
-let faceIcon:NSImage = NSImage(imageLiteralResourceName: "face")
+    static let photos:NSImage = NSImage(imageLiteralResourceName: "photos")
+    static let events:NSImage = NSImage(imageLiteralResourceName: "airplane")
+    static let people:NSImage = NSImage(imageLiteralResourceName: "people")
+    static let places:NSImage = NSImage(imageLiteralResourceName: "places")
+    static let album:NSImage = NSImage(imageLiteralResourceName: "album")
+    static let folder:NSImage = NSImage(imageLiteralResourceName: "folderOpen")
+    static let folderAlt:NSImage = NSImage(imageLiteralResourceName: "folderOpenAlt")
+    static let calendar:NSImage = NSImage(imageLiteralResourceName: "calendar")
+    static let clock:NSImage = NSImage(imageLiteralResourceName: "clock")
+    static let flag:NSImage = NSImage(imageLiteralResourceName: "flag")
+    static let anchor:NSImage = NSImage(imageLiteralResourceName: "anchor")
+    static let phone:NSImage = NSImage(imageLiteralResourceName: "phone")
+    static let phoneConnected:NSImage = NSImage(imageLiteralResourceName: "phone_connected")
+    static let print:NSImage = NSImage(imageLiteralResourceName: "print")
+    static let share:NSImage = NSImage(imageLiteralResourceName: "share")
+    static let moreVertical:NSImage = NSImage(imageLiteralResourceName: "more_vertical")
+    static let moreHorizontal:NSImage = NSImage(imageLiteralResourceName: "more_horizontal")
+    static let play:NSImage = NSImage(imageLiteralResourceName: "play")
+    static let pause:NSImage = NSImage(imageLiteralResourceName: "pause")
+
+
+    static let unknownFace:NSImage = NSImage(imageLiteralResourceName: "UnknownFace")
+    static let face:NSImage = NSImage(imageLiteralResourceName: "face")
+
+}

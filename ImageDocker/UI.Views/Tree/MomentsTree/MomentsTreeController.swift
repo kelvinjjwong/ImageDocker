@@ -117,12 +117,12 @@ extension ViewController {
         collection.year = year.year
         collection.month = year.month
         collection.day = year.day
-        self.showTreeNodeButton(collection: collection, image: moreHorizontalIcon)
+        self.showTreeNodeButton(collection: collection, image: Icons.moreHorizontal)
         collection.buttonAction = { sender in
             self.onTreeItemQuickLook(collection: collection)
         }
         
-        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: photosIcon)
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: Icons.photos)
         
         // add tree relationship
         self.momentItem().addChildItem(item)
@@ -144,12 +144,12 @@ extension ViewController {
         collection.photoCount = month.photoCount
         collection.year = month.year
         collection.month = month.month
-        self.showTreeNodeButton(collection: collection, image: moreHorizontalIcon)
+        self.showTreeNodeButton(collection: collection, image: Icons.moreHorizontal)
         collection.buttonAction = { sender in
             self.onTreeItemQuickLook(collection: collection)
         }
         
-        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: photosIcon)
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: Icons.photos)
         
         // add tree relationship
         self.parentsOfMomentsTree["\(month.year)"]?.addChildItem(item)
@@ -173,12 +173,12 @@ extension ViewController {
         collection.year = day.year
         collection.month = day.month
         collection.day = day.day
-        self.showTreeNodeButton(collection: collection, image: moreHorizontalIcon)
+        self.showTreeNodeButton(collection: collection, image: Icons.moreHorizontal)
         collection.buttonAction = { sender in 
             self.onTreeItemQuickLook(collection: collection)
         }
         
-        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: photosIcon)
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: Icons.photos)
         
         // add tree relationship
         self.parentsOfMomentsTree["\(day.year)-\(day.month)"]?.addChildItem(item)

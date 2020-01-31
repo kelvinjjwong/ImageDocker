@@ -49,7 +49,7 @@ extension ViewController {
         stackedTreeView.addTreeView(title:"Moments",
                                     dataSource: dataSource1,
                                     width: TREEVIEW_WIDTH,
-                                    itemIcon: photosIcon,
+                                    itemIcon: Icons.photos,
                                     onNodeSelected: { collection in
                                         print("action on \(collection.path)")
         },

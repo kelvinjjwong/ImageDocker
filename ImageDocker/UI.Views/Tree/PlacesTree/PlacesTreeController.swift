@@ -141,7 +141,7 @@ extension ViewController {
         collection.cityData = place.cityData
         collection.isDateEntry = false
         
-        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: placesIcon)
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: Icons.places)
         
         // add tree relationship
         self.placeItem().addChildItem(item)
@@ -169,7 +169,7 @@ extension ViewController {
         collection.placeData = place.placeData
         collection.isDateEntry = false
         
-        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: placesIcon)
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: Icons.places)
         
         // add tree relationship
         self.parentsOfMomentsTreeGroupByPlace["\(place.gov)"]?.addChildItem(item)
@@ -196,7 +196,7 @@ extension ViewController {
         collection.cityData = year.cityData
         collection.placeData = year.placeData
         
-        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: photosIcon)
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: Icons.photos)
         
         collection.place = year.place
         
@@ -225,7 +225,7 @@ extension ViewController {
         collection.cityData = month.cityData
         collection.placeData = month.placeData
         
-        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: photosIcon)
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: Icons.photos)
         
         collection.place = month.place
         //print(self.parentsOfMomentsTreeGroupByPlace["\(month.place)-\(month.year)"])
@@ -256,7 +256,7 @@ extension ViewController {
         collection.cityData = day.cityData
         collection.placeData = day.placeData
         
-        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: photosIcon)
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: Icons.photos)
         
         collection.place = day.place
         //print(self.parentsOfMomentsTreeGroupByPlace["\(day.place)-\(day.year)-\(day.month)"])

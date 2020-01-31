@@ -16,12 +16,12 @@ extension ViewController {
     // MARK: INIT
     
     func initTreeDataModel() {
-        placesIcon.isTemplate = true
-        peopleIcon.isTemplate = true
-        eventsIcon.isTemplate = true
-        photosIcon.isTemplate = true
-        albumIcon.isTemplate = true
-        phoneIcon.isTemplate = true
+        Icons.places.isTemplate = true
+        Icons.people.isTemplate = true
+        Icons.events.isTemplate = true
+        Icons.photos.isTemplate = true
+        Icons.album.isTemplate = true
+        Icons.phone.isTemplate = true
         
         self.sourceListItems = NSMutableArray(array:[])
         //self.modelObjects = NSMutableArray(array:[])

@@ -95,12 +95,12 @@ extension ViewController {
         collection.year = event.year
         collection.month = event.month
         collection.day = event.day
-        self.showTreeNodeButton(collection: collection, image: moreHorizontalIcon)
+        self.showTreeNodeButton(collection: collection, image: Icons.moreHorizontal)
         collection.buttonAction = { sender in 
             self.onTreeItemQuickLook(collection: collection, event: event.event)
         }
         
-        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: eventsIcon)
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: Icons.events)
         
         // add tree relationship
         self.eventItem().addChildItem(item)
@@ -123,12 +123,12 @@ extension ViewController {
         collection.event = month.event
         collection.year = month.year
         collection.month = month.month
-        self.showTreeNodeButton(collection: collection, image: moreHorizontalIcon)
+        self.showTreeNodeButton(collection: collection, image: Icons.moreHorizontal)
         collection.buttonAction = { sender in
             self.onTreeItemQuickLook(collection: collection, event: month.event)
         }
         
-        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: eventsIcon)
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: Icons.events)
         
         //print(self.parentsOfMomentsTreeGroupByPlace["\(month.place)-\(month.year)"])
         // add tree relationship
@@ -156,12 +156,12 @@ extension ViewController {
         collection.month = day.month
         collection.day = day.day
         collection.place = day.place
-        self.showTreeNodeButton(collection: collection, image: moreHorizontalIcon)
+        self.showTreeNodeButton(collection: collection, image: Icons.moreHorizontal)
         collection.buttonAction = { sender in 
             self.onTreeItemQuickLook(collection: collection, event: day.event)
         }
         
-        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: eventsIcon)
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: Icons.events)
         
         //print(self.parentsOfMomentsTreeGroupByPlace["\(day.place)-\(day.year)-\(day.month)"])
         // add tree relationship

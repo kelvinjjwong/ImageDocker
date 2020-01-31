@@ -23,7 +23,7 @@ class FaceCollectionViewItem: NSCollectionViewItem {
             if let face = face {
                 self.renderControls(face)
             } else {
-                imageView?.image = unknownFaceIcon
+                imageView?.image = Icons.unknownFace
                 textField?.stringValue = "Unknown"
             }
         }
@@ -39,7 +39,7 @@ class FaceCollectionViewItem: NSCollectionViewItem {
     
     fileprivate func renderControls(_ face:PeopleFace) {
         DispatchQueue.main.async {
-            self.imageView?.image = face.thumbnail ?? unknownFaceIcon
+            self.imageView?.image = face.thumbnail ?? Icons.unknownFace
             if self.enableNameLabel {
                 self.textField?.stringValue = face.personName
                 self.textField?.isHidden = false

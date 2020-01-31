@@ -61,13 +61,13 @@ class StackedTreeViewController: NSViewController, StackItemHost {
             return dataSource.loadChildren(collection)
         }
         treeView.collectionTitle = { collection in
-            return (itemIcon ?? photosIcon, collection.name)
+            return (itemIcon ?? Icons.photos, collection.name)
         }
         treeView.collectionValue = { collection in
             return collection.childrenCount
         }
         treeView.collectionActionIcon = { collection in
-            return moreIcon
+            return Icons.more
         }
         treeView.collectionSelected = onNodeSelected
 //        { collection in

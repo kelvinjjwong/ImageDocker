@@ -120,12 +120,12 @@ extension ViewController {
                                                          type: .library,
                                                          source: .library)
         collection.url = url
-        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: photosIcon)
+        let item:PXSourceListItem = PXSourceListItem(representedObject: collection, icon: Icons.photos)
         //self.modelObjects?.add(collection)
         _parent.addChildItem(item)
         collection.photoCount = imageCount
         
-        self.showTreeNodeButton(collection: collection, image: moreHorizontalIcon)
+        self.showTreeNodeButton(collection: collection, image: Icons.moreHorizontal)
         if parentPath == nil { // repository
             collection.buttonAction = { sender in
                 if let container = container { // show popover only if has container data
