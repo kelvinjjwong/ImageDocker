@@ -1113,6 +1113,8 @@
 		8ECA1FF223E3C15F00F56895 /* ExtendView */ = {
 			isa = PBXGroup;
 			children = (
+				8EF125A72214590000C423CA /* DeviceListViewController.swift */,
+				8EF125A82214590000C423CA /* DeviceListViewController.xib */,
 				8EF4CE5C21D8026800C53AFF /* EditRepositoryViewController.swift */,
 				8E9D8038234884040062692A /* EditRepositoryViewController.xib */,
 				8EF125AB2216ECC500C423CA /* ContainerViewController.swift */,
@@ -1138,8 +1140,6 @@
 				8EEF07182256C9D9000520B7 /* DevicePathDetailViewController.swift */,
 				8EEF07192256C9D9000520B7 /* DevicePathDetailViewController.xib */,
 				8E9D8044234990A00062692A /* DeviceCopyView.storyboard */,
-				8EF125A72214590000C423CA /* DeviceListViewController.swift */,
-				8EF125A82214590000C423CA /* DeviceListViewController.xib */,
 			);
 			path = ExtendView;
 			sourceTree = "<group>";
