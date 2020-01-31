@@ -670,7 +670,7 @@
 			path = "New Group";
 			sourceTree = "<group>";
 		};
-		8E3EC3B8214DB235004B6125 /* SelectionEditor */ = {
+		8E3EC3B8214DB235004B6125 /* Editors */ = {
 			isa = PBXGroup;
 			children = (
 				8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */,
@@ -682,7 +682,7 @@
 				8EBA9DDD216F8BB100DACAAD /* NotesViewController.swift */,
 				8EBA9DDE216F8BB100DACAAD /* NotesViewController.xib */,
 			);
-			path = SelectionEditor;
+			path = Editors;
 			sourceTree = "<group>";
 		};
 		8E3EC3BA214DC120004B6125 /* GRDB */ = {
@@ -782,7 +782,7 @@
 			path = Data;
 			sourceTree = "<group>";
 		};
-		8E4E5B79221F3C0C00FE4B68 /* People */ = {
+		8E4E5B79221F3C0C00FE4B68 /* Face */ = {
 			isa = PBXGroup;
 			children = (
 				8E4E5B7E221F3D1800FE4B68 /* PeopleViewController.swift */,
@@ -793,12 +793,13 @@
 				8E8D47192229AC430091E9C3 /* FaceCollectionViewController.swift */,
 				8E9D8042234988DD0062692A /* PeopleFaceViewItems.storyboard */,
 			);
-			path = People;
+			path = Face;
 			sourceTree = "<group>";
 		};
 		8E85B7D020B91E9E005A9845 /* Selection */ = {
 			isa = PBXGroup;
 			children = (
+				8E3EC3B8214DB235004B6125 /* Editors */,
 				8E85B7D120B91ED1005A9845 /* SelectionCollectionViewController.swift */,
 			);
 			path = Selection;
@@ -955,13 +956,13 @@
 			path = DBO;
 			sourceTree = "<group>";
 		};
-		8EB986B120B2255A0075B081 /* Detail */ = {
+		8EB986B120B2255A0075B081 /* PhotoDetailView */ = {
 			isa = PBXGroup;
 			children = (
 				8EB986AF20B225230075B081 /* DetailViewDelegate.swift */,
 				8EA1A05E208DFBB8000C3B97 /* MetaTableViewController.swift */,
 			);
-			path = Detail;
+			path = PhotoDetailView;
 			sourceTree = "<group>";
 		};
 		8EBA69262090C37B00221131 /* Supporting Files */ = {
@@ -979,7 +980,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		8EBA9DE12173C7FC00DACAAD /* Theater */ = {
+		8EBA9DE12173C7FC00DACAAD /* PhotoLargeView */ = {
 			isa = PBXGroup;
 			children = (
 				8EBA9DE22173C8F000DACAAD /* TheaterViewController.swift */,
@@ -992,7 +993,7 @@
 				8E36B068217920C000646EA5 /* DayListController.swift */,
 				8E9D804023495F100062692A /* LargeViewItems.storyboard */,
 			);
-			path = Theater;
+			path = PhotoLargeView;
 			sourceTree = "<group>";
 		};
 		8ECA1FE623E325C500F56895 /* UI.Controls */ = {
@@ -1050,16 +1051,14 @@
 		8ECA1FEA23E3275E00F56895 /* UI.Views */ = {
 			isa = PBXGroup;
 			children = (
-				8EB271A023413CB0003BF3AF /* Export */,
+				8EEF0725226215C8000520B7 /* Splash */,
 				8EB986AA20B21D3E0075B081 /* Tree */,
 				8E3FA91B2352904B00B677A3 /* Memories */,
-				8EEF0725226215C8000520B7 /* Splash */,
-				8EFA7CF7211A36C900419777 /* Device */,
-				8EBA9DE12173C7FC00DACAAD /* Theater */,
-				8E4E5B79221F3C0C00FE4B68 /* People */,
-				8EB986B120B2255A0075B081 /* Detail */,
+				8E4E5B79221F3C0C00FE4B68 /* Face */,
+				8EB986B120B2255A0075B081 /* PhotoDetailView */,
+				8EBA9DE12173C7FC00DACAAD /* PhotoLargeView */,
 				8E85B7D020B91E9E005A9845 /* Selection */,
-				8E3EC3B8214DB235004B6125 /* SelectionEditor */,
+				8EB271A023413CB0003BF3AF /* Export */,
 			);
 			path = UI.Views;
 			sourceTree = "<group>";
@@ -1130,6 +1129,15 @@
 		8ECA1FF323E3C19000F56895 /* ExtendView */ = {
 			isa = PBXGroup;
 			children = (
+				8EFA7CF8211A36F700419777 /* DeviceCopyViewController.swift */,
+				8EC82EA92121C5A200FC0899 /* AddLocalDirectoryViewController.swift */,
+				8EC82EAA2121C5A200FC0899 /* AddLocalDirectoryViewController.xib */,
+				8EC82EAD21283ED000FC0899 /* DirectoryViewDelegate.swift */,
+				8EAC5F1E2144A60900E187E0 /* DeviceFolderViewController.swift */,
+				8EAC5F1F2144A60900E187E0 /* DeviceFolderViewController.xib */,
+				8EEF07182256C9D9000520B7 /* DevicePathDetailViewController.swift */,
+				8EEF07192256C9D9000520B7 /* DevicePathDetailViewController.xib */,
+				8E9D8044234990A00062692A /* DeviceCopyView.storyboard */,
 				8EF125A72214590000C423CA /* DeviceListViewController.swift */,
 				8EF125A82214590000C423CA /* DeviceListViewController.xib */,
 			);
@@ -1161,22 +1169,6 @@
 				8EEF0727226215E7000520B7 /* SplashViewController.xib */,
 			);
 			path = Splash;
-			sourceTree = "<group>";
-		};
-		8EFA7CF7211A36C900419777 /* Device */ = {
-			isa = PBXGroup;
-			children = (
-				8EFA7CF8211A36F700419777 /* DeviceCopyViewController.swift */,
-				8EC82EA92121C5A200FC0899 /* AddLocalDirectoryViewController.swift */,
-				8EC82EAA2121C5A200FC0899 /* AddLocalDirectoryViewController.xib */,
-				8EC82EAD21283ED000FC0899 /* DirectoryViewDelegate.swift */,
-				8EAC5F1E2144A60900E187E0 /* DeviceFolderViewController.swift */,
-				8EAC5F1F2144A60900E187E0 /* DeviceFolderViewController.xib */,
-				8EEF07182256C9D9000520B7 /* DevicePathDetailViewController.swift */,
-				8EEF07192256C9D9000520B7 /* DevicePathDetailViewController.xib */,
-				8E9D8044234990A00062692A /* DeviceCopyView.storyboard */,
-			);
-			path = Device;
 			sourceTree = "<group>";
 		};
 		8EFA7D01211F93C000419777 /* DTO */ = {
