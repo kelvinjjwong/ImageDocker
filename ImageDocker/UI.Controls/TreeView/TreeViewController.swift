@@ -17,9 +17,9 @@ class TreeViewController : StackBodyViewController {
     @IBOutlet weak var outlineView: NSOutlineView!
     @IBOutlet weak var scrollView: NSScrollView!
     
-    var collectionLoader:((TreeCollection?) -> [TreeCollection])?
-    var actionIcon:NSImage?
-    var collectionTitle:((TreeCollection) -> (NSImage, String))?
+    var collectionLoader:((TreeCollection?) -> ([TreeCollection], String?))?
+    var collectionIcon:((TreeCollection) -> NSImage)?
+    var collectionTitle:((TreeCollection) -> String)?
     var collectionValue:((TreeCollection) -> Int)?
     var collectionActionIcon:((TreeCollection) -> NSImage)?
     var collectionAction:((TreeCollection, NSButton) -> Void)?
@@ -57,7 +57,9 @@ class TreeViewController : StackBodyViewController {
     func show() {
         DispatchQueue.global().async {
             if self.collectionLoader != nil {
-                self.trees = self.collectionLoader!(nil)
+                let (treeNodes, message) = self.collectionLoader!(nil)
+                self.trees = treeNodes
+                // TODO: handle message alert
             }
             DispatchQueue.main.async {
                 self.outlineView.reloadData()
@@ -105,7 +107,7 @@ class TreeViewController : StackBodyViewController {
         let paths = self.getPaths(path: path)
         for p in paths {
             if let node = self.find(path: p) {
-                self.outlineView.expandItem(node)
+                self.expandTreeNode(node)
             }
         }
     }
@@ -144,6 +146,7 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
     
     func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any {
         if let collection = item as? TreeCollection {
+            print("index: \(index), total: \(collection.children.count)")
             return collection.children[index]
         }
         
@@ -170,16 +173,27 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
         if let collection = item as? TreeCollection, let id = tableColumn?.identifier {
             if id == NSUserInterfaceItemIdentifier("name") {
                 let colView:KSTableCellView = outlineView.makeView(withIdentifier: id, owner: self) as! KSTableCellView
-                if self.collectionTitle != nil {
-                    let (icon, title) = self.collectionTitle!(collection)
+                if self.collectionIcon != nil {
+                    let icon = self.collectionIcon!(collection)
                     colView.imgView.image = icon
+                }else{
+                    colView.imgView.image = Icons.photos
+                }
+                
+                if self.collectionTitle != nil {
+                    let title = self.collectionTitle!(collection)
                     colView.txtField.stringValue = title
                     colView.txtField.lineBreakMode = .byWordWrapping
                     colView.autoresizesSubviews = true
-                    
-                    if self.collectionValue != nil {
-                        let value = self.collectionValue!(collection)
+                }
+                if self.collectionValue != nil {
+                    let value = self.collectionValue!(collection)
+                    if value == 0 {
+                        colView.valueField?.isHidden = true
+                    }else{
+                        colView.valueField?.isHidden = false
                         colView.valueField?.stringValue = "\(value)"
+                        colView.valueField?.lineBreakMode = .byWordWrapping
                         
                         // rounded corner with background
                         colView.valueField?.wantsLayer = true
@@ -191,46 +205,55 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
                         colView.valueField?.frame.size.width = 52
                         colView.valueField?.frame.size.height = 15
                     }
-                    colView.valueField?.lineBreakMode = .byWordWrapping
-                    
-                    if self.collectionActionIcon != nil {
-                        let icon = self.collectionActionIcon!(collection)
-                        colView.button.image = icon
-                        colView.collection = collection
-                        colView.toolTip = collection.path
-                        colView.buttonAction = { collection, button in
-                            if self.collectionAction != nil {
-                                self.collectionAction!(collection, button)
-                            }
-                        }
-                        collection.button = colView.button
-                    }
                 }
+                    
+                if self.collectionActionIcon != nil {
+                    let icon = self.collectionActionIcon!(collection)
+                    colView.button.image = icon
+                    colView.collection = collection
+                    colView.toolTip = collection.path
+                    colView.buttonAction = { collection, button in
+                        if self.collectionAction != nil {
+                            self.collectionAction!(collection, button)
+                        }
+                    }
+                    collection.button = colView.button
+                }
+                
                 return colView
             }
         }
         return nil
     }
     
-    func outlineView(_ outlineView: NSOutlineView, shouldExpandItem item: Any) -> Bool {
-        if let node = item as? TreeCollection {
-            
-            if node.childrenCount > 0  {
-                if node.children.count == 0 {
-                    DispatchQueue.global().async {
-                        if self.collectionLoader != nil {
-                            node.children = self.collectionLoader!(node)
-                            DispatchQueue.main.async {
-                                outlineView.expandItem(item)
-                            }
+    func expandTreeNode(_ item:TreeCollection){
+        DispatchQueue.global().async {
+            if self.collectionLoader != nil {
+                let (treeNodes, message) = self.collectionLoader!(item)
+                
+                if treeNodes.count > 0 {
+                    DispatchQueue.main.async {
+                        item.removeAllChildren()
+                        for node in treeNodes {
+                            item.addChild(collection: node)
                         }
+                        self.outlineView.reloadItem(item, reloadChildren: true)
+                        self.outlineView.expandItem(item)
                     }
-                    return false
-                }else{
-                    return true
                 }
-            }else{
+                // TODO: handle message alert
+            }
+        }
+    }
+    
+    func outlineView(_ outlineView: NSOutlineView, shouldExpandItem item: Any) -> Bool {
+        print("calling should expand item logic")
+        if let node = item as? TreeCollection {
+            if node.children.count == 0 {
+                self.expandTreeNode(node)
                 return false
+            }else{
+                return true
             }
         }else{
             return false

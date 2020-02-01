@@ -205,6 +205,7 @@
 		8EC82EAB2121C5A200FC0899 /* AddLocalDirectoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC82EA92121C5A200FC0899 /* AddLocalDirectoryViewController.swift */; };
 		8EC82EAC2121C5A200FC0899 /* AddLocalDirectoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EC82EAA2121C5A200FC0899 /* AddLocalDirectoryViewController.xib */; };
 		8EC82EAE21283ED000FC0899 /* DirectoryViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC82EAD21283ED000FC0899 /* DirectoryViewDelegate.swift */; };
+		8ECA1FF723E5252B00F56895 /* SampleTreeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA1FF623E5252B00F56895 /* SampleTreeDataSource.swift */; };
 		8EE1AB3D20D05E49001C75B0 /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */; };
 		8EE1AB3E20D05E49001C75B0 /* EventListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */; };
 		8EE382F823E02585003B7153 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE382F723E02585003B7153 /* Colors.swift */; };
@@ -470,6 +471,7 @@
 		8EC82EA92121C5A200FC0899 /* AddLocalDirectoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocalDirectoryViewController.swift; sourceTree = "<group>"; };
 		8EC82EAA2121C5A200FC0899 /* AddLocalDirectoryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddLocalDirectoryViewController.xib; sourceTree = "<group>"; };
 		8EC82EAD21283ED000FC0899 /* DirectoryViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryViewDelegate.swift; sourceTree = "<group>"; };
+		8ECA1FF623E5252B00F56895 /* SampleTreeDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleTreeDataSource.swift; sourceTree = "<group>"; };
 		8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListViewController.swift; sourceTree = "<group>"; };
 		8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventListViewController.xib; sourceTree = "<group>"; };
 		8EE382F723E02585003B7153 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -648,7 +650,6 @@
 		8E15E72E23AC74DB0094240A /* TreeView */ = {
 			isa = PBXGroup;
 			children = (
-				8ECA1FF423E3C1D700F56895 /* PXSourceList */,
 				8E15E72F23AC74DB0094240A /* StackedTreeViewController.xib */,
 				8E15E73023AC74DB0094240A /* StackedTreeViewController.swift */,
 				8E15E73123AC74DB0094240A /* TreeDataSource.swift */,
@@ -901,6 +902,7 @@
 		8EB986AA20B21D3E0075B081 /* Tree */ = {
 			isa = PBXGroup;
 			children = (
+				8ECA1FF523E5250200F56895 /* SampleTree */,
 				8EFA7D01211F93C000419777 /* DTO */,
 				8EB27173233E17AF003BF3AF /* MomentsTree */,
 				8EB27172233E17A3003BF3AF /* PlacesTree */,
@@ -999,6 +1001,7 @@
 		8ECA1FE623E325C500F56895 /* UI.Controls */ = {
 			isa = PBXGroup;
 			children = (
+				8ECA1FF423E3C1D700F56895 /* TreeView.PXSourceList */,
 				8EBA9DE6217477D900DACAAD /* UIHelper.swift */,
 				8ECA1FE923E3272000F56895 /* Alert */,
 				8ECA1FE823E326CF00F56895 /* DarkTheme */,
@@ -1144,13 +1147,21 @@
 			path = ExtendView;
 			sourceTree = "<group>";
 		};
-		8ECA1FF423E3C1D700F56895 /* PXSourceList */ = {
+		8ECA1FF423E3C1D700F56895 /* TreeView.PXSourceList */ = {
 			isa = PBXGroup;
 			children = (
 				8EF32D132095355400511538 /* LCSourceListTableCellView.swift */,
 				8EF4CE6621E6F29100C53AFF /* LCSourceListHeaderView.swift */,
 			);
-			path = PXSourceList;
+			path = TreeView.PXSourceList;
+			sourceTree = "<group>";
+		};
+		8ECA1FF523E5250200F56895 /* SampleTree */ = {
+			isa = PBXGroup;
+			children = (
+				8ECA1FF623E5252B00F56895 /* SampleTreeDataSource.swift */,
+			);
+			path = SampleTree;
 			sourceTree = "<group>";
 		};
 		8EE1AB3A20D05E0C001C75B0 /* Search */ = {
@@ -1505,6 +1516,7 @@
 				8EFAF1FF20CAE422007A7783 /* Moment.swift in Sources */,
 				8EBA692C2090DB0300221131 /* DropPlaceCommons.swift in Sources */,
 				8E8D471A2229AC430091E9C3 /* FaceCollectionViewController.swift in Sources */,
+				8ECA1FF723E5252B00F56895 /* SampleTreeDataSource.swift in Sources */,
 				8EB27159233842E4003BF3AF /* ImageFile+Preview.swift in Sources */,
 				8E4E5B7F221F3D1800FE4B68 /* PeopleViewController.swift in Sources */,
 				8EB2719D23412FD5003BF3AF /* ViewController+Menu+Scan.swift in Sources */,

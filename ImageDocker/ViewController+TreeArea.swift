@@ -30,14 +30,24 @@ extension ViewController {
         stackedTreeView.view.setWidth(TREEVIEW_WIDTH)
         
         let dataSource1 = SampleDataSource1()
-        
+        let deviceTreeDataSource = DeviceTreeDataSource()
 
 
         stackedTreeView.addTreeView(title:"Devices",
-                                    dataSource: dataSource1,
+                                    dataSource: deviceTreeDataSource,
                                     width: TREEVIEW_WIDTH,
+                                    nodeIcon: { collection in
+                                        if let state = collection.relatedObjectState {
+                                            return state == 1 ? Icons.phoneConnected : Icons.phone
+                                        }else{
+                                            return Icons.phone
+                                        }
+        },
                                     onNodeSelected: { collection in
                                         print("action on \(collection.path)")
+                                        if collection.path == "Android" || collection.path == "iPhone" {
+                                            stackedTreeView.expand(tree: "Devices", path: collection.path)
+                                        }
         },
                                     moreActionOnHeader: {
                                         print("clicked devices more button")
@@ -49,7 +59,6 @@ extension ViewController {
         stackedTreeView.addTreeView(title:"Moments",
                                     dataSource: dataSource1,
                                     width: TREEVIEW_WIDTH,
-                                    itemIcon: Icons.photos,
                                     onNodeSelected: { collection in
                                         print("action on \(collection.path)")
         },
@@ -238,34 +247,3 @@ extension ViewController {
     
 }
 
-
-class SampleDataSource1: StaticTreeDataSource {
-    
-    override init() {
-        super.init()
-        var tree_data:[TreeCollection] = []
-        for i in 1...3 {
-            let tree = TreeCollection("root_\(i)")
-            tree.addChild("leaf_1")
-            tree.addChild("leaf_2")
-            tree.addChild("leaf_3")
-            tree.getChild("leaf_1")!.addChild("grand_1")
-            tree.getChild("leaf_1")!.addChild("grand_2")
-            tree.getChild("leaf_1")!.addChild("grand_3")
-            tree.getChild("leaf_3")!.addChild("grand_a")
-            tree.getChild("leaf_3")!.addChild("grand_b")
-            tree.getChild("leaf_3")!.addChild("grand_c")
-            tree.getChild("leaf_3")!.addChild("grand_d_very_long_long_long_long_text_to_see_next_line")
-            tree_data.append(tree)
-        }
-        for data in tree_data {
-            flattable_all.append(data)
-            print("flatted: \(data.path)")
-            flattable_all.append(contentsOf: data.getUnlimitedDepthChildren())
-        }
-        print("total \(flattable_all.count) node")
-        self.filter(keyword: "")
-        self.convertFlatToTree()
-        
-    }
-}

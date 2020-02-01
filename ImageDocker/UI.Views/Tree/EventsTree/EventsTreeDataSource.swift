@@ -10,12 +10,8 @@ import Foundation
 
 class EventsTreeDataSource : TreeDataSource {
     
-    func convertFlatToTree() {
-        
-    }
-    
-    func loadChildren(_ collection: TreeCollection?) -> [TreeCollection] {
-        return []
+    func loadChildren(_ collection: TreeCollection?) -> ([TreeCollection], String?) {
+        return ([], nil)
     }
     
     func findNode(path: String) -> TreeCollection? {

@@ -114,7 +114,24 @@ extension ViewController {
     }
     
     func selectDeviceType(_ collection:PhotoCollection) {
-        self.hideTreeNodeButton(collection: collection)
+//        self.hideTreeNodeButton(collection: collection)
+        if collection.identifier == "device_type_Android" {
+            self.selectDeviceType(type: .Android)
+        }else if collection.identifier == "device_type_iPhone" {
+            self.selectDeviceType(type: .iPhone)
+        }
+    }
+    
+    func selectDeviceType(treeNode:TreeCollection) {
+        // self.hideTreeNodeButton(collection: collection)
+        if treeNode.name == "Android" {
+            self.selectDeviceType(type: .Android)
+        }else if treeNode.name == "iPhone" {
+            self.selectDeviceType(type: .iPhone)
+        }
+    }
+    
+    func selectDeviceType(type:MobileType) {
         var deviceIds:[String] = []
         let devs = ModelStore.default.getDevices()
         for device in devs {
@@ -122,9 +139,8 @@ extension ViewController {
                 deviceIds.append(id)
             }
         }
-        if collection.identifier == "device_type_Android" {
+        if type == .Android {
             // list all devices, tag the connected ones
-            self.hideTreeNodeButton(collection: collection)
             
             let devices:[String] = Android.bridge.devices()
             print("android device count: \(devices.count)")
@@ -163,23 +179,21 @@ extension ViewController {
                 let item = self.treeIdItems["device_type_Android"]
                 self.sourceList.expandItem(item)
             }else{
-                self.showTreeNodeButton(collection: collection, image: NSImage(named: .caution))
+//                self.showTreeNodeButton(collection: collection, image: NSImage(named: .caution))
                 
                 self.popNotification(message: "Enable [DEBUG MODE] in [Settings >> System >> Developer Options] if you've properly connected your phone via USB.")
                 
             }
             
-        }else if collection.identifier == "device_type_iPhone" {
+        }else if type == .iPhone {
             
             if PreferencesController.iosDeviceMountPoint() == "" {
                 Alert.invalidIOSMountPoint()
                 return
             }
             
-            self.hideTreeNodeButton(collection: collection)
-            
             if !IPHONE.bridge.validCommands() {
-                self.showTreeNodeButton(collection: collection, image: NSImage(named: .caution))
+//                self.showTreeNodeButton(collection: collection, image: NSImage(named: .caution))
                 
                 self.popNotification(message: "iFuse/iDevice is not installed. Please install it by command [brew cask install osxfuse] and then [brew install ifuse] in console. To install Homebrew as a prior condition, please access [https://brew.sh] for detail.")
             }
@@ -224,7 +238,7 @@ extension ViewController {
                 let item = self.treeIdItems["device_type_iPhone"]
                 self.sourceList.expandItem(item)
             }else{
-                self.showTreeNodeButton(collection: collection, image: NSImage(named: .caution))
+//                self.showTreeNodeButton(collection: collection, image: NSImage(named: .caution))
                 
                 self.popNotification(message: "No iOS devices found. Please connect your iPhone/iPad via USB.")
             }

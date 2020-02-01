@@ -25,6 +25,19 @@ extension ModelStoreGRDB {
         return result
     }
     
+    func getDevices(type:String) -> [ImageDevice] {
+        var result:[ImageDevice] = []
+        do {
+            let db = ModelStoreGRDB.sharedDBPool()
+            try db.read { db in
+                result = try ImageDevice.filter(sql: "type='\(type)'").order(Column("name").asc).fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
     func getOrCreateDevice(device:PhoneDevice) -> ImageDevice{
         var dev:ImageDevice?
         do {

@@ -17,11 +17,31 @@ class TreeCollection {
     var children:[TreeCollection] = []
     private var mapping:[String:TreeCollection] = [:]
     
+    var icon:NSImage?
+    var titleField:NSTextField?
+    var valueField:NSTextField?
     var button:NSButton?
+    
+    var relatedObject:Any?
+    var relatedObjectId:String?
+    var relatedObjectState:Int?
     
     init(_ name:String) {
         self.name = name
         self.path = name
+    }
+    
+    convenience init(_ name:String, id:String, object:Any){
+        self.init(name)
+        self.relatedObjectId = id
+        self.relatedObject = object
+    }
+    
+    convenience init(_ name:String, id:String, object:Any, state:Int){
+        self.init(name)
+        self.relatedObjectId = id
+        self.relatedObject = object
+        self.relatedObjectState = state
     }
     
     static func clone(from collection:TreeCollection) -> TreeCollection{
@@ -32,8 +52,10 @@ class TreeCollection {
     }
     
     func addChild(_ name:String){
+        // clone data
         let child = TreeCollection(name)
         child.path = "\(path)/\(name)"
+        
         self.children.append(child)
         self.mapping[name] = child
         self.childrenCount = self.children.count
@@ -41,8 +63,21 @@ class TreeCollection {
     }
     
     func addChild(collection:TreeCollection) {
-        self.children.append(collection)
-        self.mapping[collection.name] = collection
+        if let exist = self.mapping[collection.name] {
+            exist.relatedObjectId = collection.relatedObjectId
+            exist.relatedObject = collection.relatedObject
+            exist.relatedObjectState = collection.relatedObjectState
+        }else{
+            self.children.append(collection)
+            self.mapping[collection.name] = collection
+            self.childrenCount = self.children.count
+        }
+    }
+    
+    func removeAllChildren() {
+        self.children.removeAll()
+        self.mapping.removeAll()
+        self.childrenCount = 0
     }
     
     func getChild(_ name:String) -> TreeCollection? {
@@ -63,8 +98,7 @@ class TreeCollection {
 
 protocol TreeDataSource {
     
-    func convertFlatToTree()
-    func loadChildren(_ collection:TreeCollection?) -> [TreeCollection]
+    func loadChildren(_ collection:TreeCollection?) -> ([TreeCollection], String?)
     func findNode(path: String) -> TreeCollection?
     func filter(keyword: String)
     func findNode(keyword: String) -> TreeCollection?
@@ -120,7 +154,7 @@ class StaticTreeDataSource : TreeDataSource {
         return result
     }
     
-    func loadChildren(_ collection:TreeCollection?) -> [TreeCollection] {
+    func loadChildren(_ collection:TreeCollection?) -> ([TreeCollection], String?) {
         
         var resultDataset:[TreeCollection] = []
         var sourceDataset:[TreeCollection] = []
@@ -141,7 +175,7 @@ class StaticTreeDataSource : TreeDataSource {
             resultDataset.append(child)
         }
         print("loaded \(resultDataset.count) children")
-        return resultDataset
+        return (resultDataset, nil)
     }
     
     internal func findNode(path: String) -> TreeCollection? {
