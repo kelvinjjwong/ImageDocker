@@ -31,7 +31,7 @@ extension ViewController {
         window.setFrame(frame, display: false)
         window.makeKeyAndOrderFront(self)
         viewController.initView { (year, month, day) in
-            self.selectMomentsTreeEntry(year: year, month: month, day: day, pageSize: 0, pageNumber: 0)
+            self.loadCollectionByMoment(year: year, month: month, day: day, pageSize: 0, pageNumber: 0)
         }
     }
 

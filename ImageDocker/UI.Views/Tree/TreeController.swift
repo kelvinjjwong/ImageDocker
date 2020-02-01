@@ -304,28 +304,28 @@ extension ViewController : PXSourceListDelegate {
                     //print("selected moment \(collection.title)")
                     if PreferencesController.amountForPagination() > 0 && collection.photoCount > PreferencesController.amountForPagination() {
                         self.btnRefreshCollectionView.title = "Pages..."
-                        self.selectMomentsTreeEntry(collection, pageSize: 200, pageNumber: 1)
+                        self.loadCollectionByMoment(collection, pageSize: 200, pageNumber: 1)
                     }else{
                         self.btnRefreshCollectionView.title = "Reload"
-                        self.selectMomentsTreeEntry(collection)
+                        self.loadCollectionByMoment(collection)
                     }
                 }else if collection.source! == .place {
                     //print("selected place moment \(collection.title)")
                     if PreferencesController.amountForPagination() > 0 && collection.photoCount > PreferencesController.amountForPagination() {
                         self.btnRefreshCollectionView.title = "Pages..."
-                        self.selectPlacesTreeEntry(collection, pageSize: 200, pageNumber: 1)
+                        self.loadCollectionByPlace(collection, pageSize: 200, pageNumber: 1)
                     }else{
                         self.btnRefreshCollectionView.title = "Reload"
-                        self.selectPlacesTreeEntry(collection)
+                        self.loadCollectionByPlace(collection)
                     }
                 }else if collection.source! == .event {
                     //print("selected place moment \(collection.title)")
                     if PreferencesController.amountForPagination() > 0 && collection.photoCount > PreferencesController.amountForPagination() {
                         self.btnRefreshCollectionView.title = "Pages..."
-                        self.selectEvent(collection, pageSize: 200, pageNumber: 1)
+                        self.loadCollectionByEvent(collection, pageSize: 200, pageNumber: 1)
                     }else{
                         self.btnRefreshCollectionView.title = "Reload"
-                        self.selectEvent(collection)
+                        self.loadCollectionByEvent(collection)
                     }
                 }else if collection.source! == .device {
                     self.selectDeviceNode(collection)

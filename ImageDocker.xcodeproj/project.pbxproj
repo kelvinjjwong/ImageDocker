@@ -209,6 +209,9 @@
 		8ECA1FF923E5638800F56895 /* DeviceTree+ExtendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA1FF823E5638800F56895 /* DeviceTree+ExtendView.swift */; };
 		8ECA1FFB23E5751300F56895 /* LibraryTree+ExtendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA1FFA23E5751300F56895 /* LibraryTree+ExtendView.swift */; };
 		8ECA1FFD23E5784A00F56895 /* LibraryTree+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA1FFC23E5784A00F56895 /* LibraryTree+CollectionView.swift */; };
+		8ECA200223E5AF2700F56895 /* MomentsTree+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA200123E5AF2700F56895 /* MomentsTree+CollectionView.swift */; };
+		8ECA200623E5B09200F56895 /* PlacesTree+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA200523E5B09200F56895 /* PlacesTree+CollectionView.swift */; };
+		8ECA200823E5B0AA00F56895 /* EventsTree+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA200723E5B0AA00F56895 /* EventsTree+CollectionView.swift */; };
 		8EE1AB3D20D05E49001C75B0 /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */; };
 		8EE1AB3E20D05E49001C75B0 /* EventListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */; };
 		8EE382F823E02585003B7153 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE382F723E02585003B7153 /* Colors.swift */; };
@@ -478,6 +481,9 @@
 		8ECA1FF823E5638800F56895 /* DeviceTree+ExtendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeviceTree+ExtendView.swift"; sourceTree = "<group>"; };
 		8ECA1FFA23E5751300F56895 /* LibraryTree+ExtendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryTree+ExtendView.swift"; sourceTree = "<group>"; };
 		8ECA1FFC23E5784A00F56895 /* LibraryTree+CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryTree+CollectionView.swift"; sourceTree = "<group>"; };
+		8ECA200123E5AF2700F56895 /* MomentsTree+CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MomentsTree+CollectionView.swift"; sourceTree = "<group>"; };
+		8ECA200523E5B09200F56895 /* PlacesTree+CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlacesTree+CollectionView.swift"; sourceTree = "<group>"; };
+		8ECA200723E5B0AA00F56895 /* EventsTree+CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventsTree+CollectionView.swift"; sourceTree = "<group>"; };
 		8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListViewController.swift; sourceTree = "<group>"; };
 		8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventListViewController.xib; sourceTree = "<group>"; };
 		8EE382F723E02585003B7153 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -845,6 +851,7 @@
 		8EB27171233E1796003BF3AF /* EventsTree */ = {
 			isa = PBXGroup;
 			children = (
+				8ECA200423E5B07F00F56895 /* ExtendView */,
 				8E4C38D2211828B00089502C /* EventsTreeController.swift */,
 				8EBA759223B55B9900548376 /* EventsTreeDataSource.swift */,
 			);
@@ -854,6 +861,7 @@
 		8EB27172233E17A3003BF3AF /* PlacesTree */ = {
 			isa = PBXGroup;
 			children = (
+				8ECA200323E5B07700F56895 /* ExtendView */,
 				8EFA7CFE211F012A00419777 /* PlacesTreeController.swift */,
 				8EBA759023B55B8B00548376 /* PlacesTreeDataSource.swift */,
 			);
@@ -863,6 +871,7 @@
 		8EB27173233E17AF003BF3AF /* MomentsTree */ = {
 			isa = PBXGroup;
 			children = (
+				8ECA1FFE23E5AEA400F56895 /* ExtendView */,
 				8E4C38D4211828FF0089502C /* MomentsTreeController.swift */,
 				8EBA758E23B55B7700548376 /* MomentsTreeDataSource.swift */,
 			);
@@ -1173,6 +1182,30 @@
 			path = SampleTree;
 			sourceTree = "<group>";
 		};
+		8ECA1FFE23E5AEA400F56895 /* ExtendView */ = {
+			isa = PBXGroup;
+			children = (
+				8ECA200123E5AF2700F56895 /* MomentsTree+CollectionView.swift */,
+			);
+			path = ExtendView;
+			sourceTree = "<group>";
+		};
+		8ECA200323E5B07700F56895 /* ExtendView */ = {
+			isa = PBXGroup;
+			children = (
+				8ECA200523E5B09200F56895 /* PlacesTree+CollectionView.swift */,
+			);
+			path = ExtendView;
+			sourceTree = "<group>";
+		};
+		8ECA200423E5B07F00F56895 /* ExtendView */ = {
+			isa = PBXGroup;
+			children = (
+				8ECA200723E5B0AA00F56895 /* EventsTree+CollectionView.swift */,
+			);
+			path = ExtendView;
+			sourceTree = "<group>";
+		};
 		8EE1AB3A20D05E0C001C75B0 /* Search */ = {
 			isa = PBXGroup;
 			children = (
@@ -1473,6 +1506,7 @@
 				8EBA9DE921766EAB00DACAAD /* TheaterCollectionViewController.swift in Sources */,
 				8EEF07222260D0E1000520B7 /* CollectionPaginationViewController.swift in Sources */,
 				8EBA759323B55B9900548376 /* EventsTreeDataSource.swift in Sources */,
+				8ECA200223E5AF2700F56895 /* MomentsTree+CollectionView.swift in Sources */,
 				8EBA759523B55BAB00548376 /* DeviceTreeDataSource.swift in Sources */,
 				8EFA7CFD211D72B300419777 /* ImageDeviceFile.swift in Sources */,
 				8EBA75A123B5D06900548376 /* FaceDao.swift in Sources */,
@@ -1536,6 +1570,7 @@
 				8EBA692E2090DB4B00221131 /* VideoDropView.swift in Sources */,
 				8E8D47222233DCD30091E9C3 /* DictionaryTableViewController.swift in Sources */,
 				8EAD03BB23372CF100AAC7C6 /* GRDB+VersionMigrate.swift in Sources */,
+				8ECA200623E5B09200F56895 /* PlacesTree+CollectionView.swift in Sources */,
 				8EFA7CF9211A36F700419777 /* DeviceCopyViewController.swift in Sources */,
 				8EB271552337B8BC003BF3AF /* GRDB+Image+Update.swift in Sources */,
 				8EBA9DE32173C8F000DACAAD /* TheaterViewController.swift in Sources */,
@@ -1569,6 +1604,7 @@
 				8E98B8F720D6044900771280 /* Event.swift in Sources */,
 				8E3FA9202353310600B677A3 /* MemoryCollectionViewItem.swift in Sources */,
 				8E9D803D2348AA550062692A /* ExportProfile.swift in Sources */,
+				8ECA200823E5B0AA00F56895 /* EventsTree+CollectionView.swift in Sources */,
 				8E4C38D12117B56A0089502C /* IPHONE.swift in Sources */,
 				8EAD03B723372C4600AAC7C6 /* GRDB+ImageDevice.swift in Sources */,
 				8E8D4715222991230091E9C3 /* FaceCollectionViewItem.swift in Sources */,
