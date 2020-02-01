@@ -14,6 +14,10 @@ class DeviceDao {
         return ModelStore.default.getDevices()
     }
     
+    func getDevices(type:String) -> [ImageDevice] {
+        return ModelStore.default.getDevices(type: type)
+    }
+    
     func getOrCreateDevice(device:PhoneDevice) -> ImageDevice{
         return ModelStore.default.getOrCreateDevice(device: device)
     }

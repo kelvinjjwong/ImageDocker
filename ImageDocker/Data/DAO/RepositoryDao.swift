@@ -40,8 +40,16 @@ class RepositoryDao {
         return ModelStore.default.getRepository(repositoryPath: repositoryPath)
     }
     
-    func getRepositories() -> [ImageContainer] {
-        return ModelStore.default.getRepositories()
+    func getRepositories(orderBy:String = "path") -> [ImageContainer] {
+        return ModelStore.default.getRepositories(orderBy: orderBy)
+    }
+    
+    func getSubContainers(parent path:String) -> [ImageContainer] {
+        return ModelStore.default.getSubContainers(parent: path)
+    }
+    
+    func countSubContainers(parent path:String) -> Int {
+        return ModelStore.default.countSubContainers(parent: path)
     }
     
     func getAllContainers() -> [ImageContainer] {

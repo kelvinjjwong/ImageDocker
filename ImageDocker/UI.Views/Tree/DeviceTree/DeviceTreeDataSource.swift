@@ -10,6 +10,8 @@ import Foundation
 
 class DeviceTreeDataSource : TreeDataSource {
     
+    private var deviceDao = DeviceDao()
+    
     private var deviceIdToDevice : [String : PhoneDevice] = [String : PhoneDevice] ()
     
     func loadChildren(_ collection: TreeCollection?) -> ([TreeCollection], String?) {
@@ -47,7 +49,7 @@ class DeviceTreeDataSource : TreeDataSource {
     
     private func loadDevicesFromDatabase(type: String) -> ([ImageDevice], [String]) {
         var deviceIds:[String] = []
-        let devs = ModelStore.default.getDevices(type: type)
+        let devs = self.deviceDao.getDevices(type: type)
         for device in devs {
             if let id = device.deviceId {
                 deviceIds.append(id)
@@ -68,7 +70,7 @@ class DeviceTreeDataSource : TreeDataSource {
         if devices.count > 0 {
             for deviceId in devices {
                 if let device:PhoneDevice = Android.bridge.device(id: deviceId) {
-                    let imageDevice = ModelStore.default.getOrCreateDevice(device: device)
+                    let imageDevice = self.deviceDao.getOrCreateDevice(device: device)
                     var dev:PhoneDevice = Android.bridge.memory(device: device)
                     if imageDevice.name != "" {
                         dev.name = imageDevice.name ?? ""
@@ -127,7 +129,7 @@ class DeviceTreeDataSource : TreeDataSource {
         self.cleanCachedDeviceIds(type: .iPhone)
         if devices.count > 0 {
             if let device:PhoneDevice = IPHONE.bridge.device() {
-                let imageDevice = ModelStore.default.getOrCreateDevice(device: device)
+                let imageDevice = self.deviceDao.getOrCreateDevice(device: device)
                 print("connected ios device: \(imageDevice.deviceId ?? "")")
                 var dev = device
                 if imageDevice.name != "" {

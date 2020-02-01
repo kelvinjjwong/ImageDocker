@@ -31,7 +31,7 @@ extension ViewController {
         
         let dataSource1 = SampleDataSource1()
         let deviceTreeDataSource = DeviceTreeDataSource()
-
+        let repositoryTreeDataSource = RepositoryTreeDataSource()
 
         stackedTreeView.addTreeView(title:"Devices",
                                     dataSource: deviceTreeDataSource,
@@ -63,7 +63,7 @@ extension ViewController {
                                     onNodeSelected: { collection in
                                         print("action on \(collection.path)")
         },
-                                    moreActionOnHeader: {
+                                    moreActionOnHeader: { button in
                                         print("clicked moments more button")
         },
                                     moreActionOnNode: { collection, button in
@@ -75,7 +75,7 @@ extension ViewController {
                                     onNodeSelected: { collection in
                                         print("action on \(collection.path)")
         },
-                                    moreActionOnHeader: {
+                                    moreActionOnHeader: { button in
                                         print("clicked events more button")
         },
                                     moreActionOnNode: { collection, button in
@@ -89,7 +89,7 @@ extension ViewController {
                                     onNodeSelected: { collection in
                                         print("action on \(collection.path)")
         },
-                                    moreActionOnHeader: {
+                                    moreActionOnHeader: { button in
                                         print("clicked places more button")
         },
                                     moreActionOnNode: { collection, button in
@@ -98,16 +98,45 @@ extension ViewController {
 
 
         stackedTreeView.addTreeView(title:"Libraries",
-                                    dataSource: dataSource1,
+                                    dataSource: repositoryTreeDataSource,
                                     width: TREEVIEW_WIDTH,
+                                    nodeIcon: { collection in
+                                        return Icons.folder
+        },
                                     onNodeSelected: { collection in
                                         print("action on \(collection.path)")
+                                        if let container = collection.relatedObject as? ImageContainer {
+                                            if PreferencesController.amountForPagination() > 0 && container.imageCount > PreferencesController.amountForPagination() {
+                                                self.btnRefreshCollectionView.title = "Pages..."
+                                                if container.path != "/" {
+                                                    self.loadCollectionByContainer(name:container.name, url:URL(fileURLWithPath: container.path), pageSize: 200, pageNumber: 1, subdirectories: true)
+                                                }else{
+                                                    print("WARN: collection url is null")
+                                                }
+                                            }else{
+                                                self.btnRefreshCollectionView.title = "Reload"
+                                                self.loadCollectionByContainer(name:container.name, url:URL(fileURLWithPath: container.path))
+                                                //self.loadCollectionByContainer(collection.imageFolder!)
+                                            }
+                                        }
+                                        
         },
-                                    moreActionOnHeader: {
+                                    moreActionOnHeader: { button in
                                         print("clicked libs more button")
+                                        self.createLibrariesViewPopover()
+                                        
+                                        let cellRect = button.bounds
+                                        self.librariesViewPopover?.show(relativeTo: cellRect, of: button, preferredEdge: .maxX)
         },
                                     moreActionOnNode: { collection, button in
                                         print("more on libs \(collection.path)")
+                                        if let container = collection.relatedObject as? ImageContainer {
+                                            if container.parentFolder == "" {
+                                                self.openRepositoryDetail(container: container, url: URL(fileURLWithPath: container.path), sender: button)
+                                            }else{
+                                                self.openContainerDetail(container: container, url: URL(fileURLWithPath: container.path), title: container.name, sender: button)
+                                            }
+                                        }
         })
         
         stackedTreeView.showTree("Moments")

@@ -127,12 +127,12 @@ extension ModelStoreGRDB {
     
     // MARK: - SEARCH
     
-    func getRepositories() -> [ImageContainer] {
+    func getRepositories(orderBy:String = "path") -> [ImageContainer] {
         var result:[ImageContainer] = []
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                result = try ImageContainer.filter(sql: "parentFolder=''").order(Column("path").asc).fetchAll(db)
+                result = try ImageContainer.filter(sql: "parentFolder=''").order(Column(orderBy).asc).fetchAll(db)
                 print(result.count)
             }
         }catch{
@@ -140,6 +140,34 @@ extension ModelStoreGRDB {
         }
         return result
         
+    }
+    
+    func getSubContainers(parent path:String) -> [ImageContainer] {
+        var result:[ImageContainer] = []
+        do {
+            let db = ModelStoreGRDB.sharedDBPool()
+            try db.read { db in
+                result = try ImageContainer.filter(sql: "parentFolder=?", arguments: [path]).order(Column("path").asc).fetchAll(db)
+                print(result.count)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+        
+    }
+    
+    func countSubContainers(parent path:String) -> Int {
+        var result = 0
+        do {
+            let db = ModelStoreGRDB.sharedDBPool()
+            try db.read { db in
+                result = try ImageContainer.filter(sql: "parentFolder=?", arguments: [path]).fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
     }
     
     func getAllContainers() -> [ImageContainer] {

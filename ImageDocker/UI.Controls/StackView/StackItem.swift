@@ -30,7 +30,7 @@ protocol StackItemHeader : class {
     
     var filterAction: ((String) -> ())? { get set }
     
-    var moreAction: (() -> ())? { get set }
+    var moreAction: ((NSButton) -> ())? { get set }
     
     func update(toDisclosureState: StackItemContainer.DisclosureState)
 }

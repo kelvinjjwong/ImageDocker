@@ -49,7 +49,7 @@ class StackedTreeViewController: NSViewController, StackItemHost {
                      disableFilter: Bool = false,
                      nodeIcon:((TreeCollection) -> NSImage)? = nil,
                      onNodeSelected:((TreeCollection) -> Void)? = nil,
-                     moreActionOnHeader: (() -> ())? = nil,
+                     moreActionOnHeader: ((NSButton) -> ())? = nil,
                      moreActionOnNode:((TreeCollection, NSButton) -> Void)? = nil) {
         
         let treeHeight = self.calculateMaxHeightOfTreeView()

@@ -10,9 +10,47 @@ import Foundation
 
 class RepositoryTreeDataSource : TreeDataSource {
     
+    let repositoryDao = RepositoryDao()
+    
+    func convertToTreeNode(_ container:ImageContainer) -> TreeCollection {
+        let node = TreeCollection(container.name, id: container.path, object: container)
+        let childCount = self.repositoryDao.countSubContainers(parent: container.path)
+        node.childrenCount = childCount
+        return node
+    }
+    
     func loadChildren(_ collection: TreeCollection?) -> ([TreeCollection], String?) {
+        if collection == nil {
+            return (self.loadRepositories(), nil)
+        }else{
+            if let container = collection?.relatedObject as? ImageContainer {
+                return (self.loadSubContainers(parentPath: container.path), nil)
+            }
+        }
         return ([], nil)
     }
+    
+    func loadRepositories() -> [TreeCollection] {
+        var nodes:[TreeCollection] = []
+        let containers = self.repositoryDao.getRepositories(orderBy: "name")
+        for container in containers {
+            let node = self.convertToTreeNode(container)
+            nodes.append(node)
+        }
+        return nodes
+    }
+    
+    func loadSubContainers(parentPath: String) -> [TreeCollection] {
+        var nodes:[TreeCollection] = []
+        let containers = self.repositoryDao.getSubContainers(parent: parentPath)
+        for container in containers {
+            let node = self.convertToTreeNode(container)
+            nodes.append(node)
+        }
+        return nodes
+    }
+    
+    
     
     func findNode(path: String) -> TreeCollection? {
         return nil

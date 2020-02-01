@@ -27,7 +27,7 @@ class StackHeaderViewController : NSViewController, StackItemHeader {
     
     var filterAction: ((String) -> ())? // optional extendable method
     
-    var moreAction: (() -> ())? // optional extendable method
+    var moreAction: ((NSButton) -> ())? // optional extendable method
     
     // MARK: - View Controller Lifecycle
     
@@ -79,7 +79,7 @@ class StackHeaderViewController : NSViewController, StackItemHeader {
     }
     
     @IBAction func onMoreClicked(_ sender: NSButton) {
-        moreAction?()
+        moreAction?(sender)
     }
     
     @IBAction func onSearchAction(_ sender: NSSearchField) {

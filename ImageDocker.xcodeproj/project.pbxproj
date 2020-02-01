@@ -207,6 +207,8 @@
 		8EC82EAE21283ED000FC0899 /* DirectoryViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC82EAD21283ED000FC0899 /* DirectoryViewDelegate.swift */; };
 		8ECA1FF723E5252B00F56895 /* SampleTreeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA1FF623E5252B00F56895 /* SampleTreeDataSource.swift */; };
 		8ECA1FF923E5638800F56895 /* DeviceTree+ExtendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA1FF823E5638800F56895 /* DeviceTree+ExtendView.swift */; };
+		8ECA1FFB23E5751300F56895 /* LibraryTree+ExtendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA1FFA23E5751300F56895 /* LibraryTree+ExtendView.swift */; };
+		8ECA1FFD23E5784A00F56895 /* LibraryTree+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA1FFC23E5784A00F56895 /* LibraryTree+CollectionView.swift */; };
 		8EE1AB3D20D05E49001C75B0 /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */; };
 		8EE1AB3E20D05E49001C75B0 /* EventListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */; };
 		8EE382F823E02585003B7153 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE382F723E02585003B7153 /* Colors.swift */; };
@@ -474,6 +476,8 @@
 		8EC82EAD21283ED000FC0899 /* DirectoryViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryViewDelegate.swift; sourceTree = "<group>"; };
 		8ECA1FF623E5252B00F56895 /* SampleTreeDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleTreeDataSource.swift; sourceTree = "<group>"; };
 		8ECA1FF823E5638800F56895 /* DeviceTree+ExtendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeviceTree+ExtendView.swift"; sourceTree = "<group>"; };
+		8ECA1FFA23E5751300F56895 /* LibraryTree+ExtendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryTree+ExtendView.swift"; sourceTree = "<group>"; };
+		8ECA1FFC23E5784A00F56895 /* LibraryTree+CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryTree+CollectionView.swift"; sourceTree = "<group>"; };
 		8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListViewController.swift; sourceTree = "<group>"; };
 		8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventListViewController.xib; sourceTree = "<group>"; };
 		8EE382F723E02585003B7153 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -1118,6 +1122,8 @@
 		8ECA1FF223E3C15F00F56895 /* ExtendView */ = {
 			isa = PBXGroup;
 			children = (
+				8ECA1FFA23E5751300F56895 /* LibraryTree+ExtendView.swift */,
+				8ECA1FFC23E5784A00F56895 /* LibraryTree+CollectionView.swift */,
 				8EF125A72214590000C423CA /* DeviceListViewController.swift */,
 				8EF125A82214590000C423CA /* DeviceListViewController.xib */,
 				8EF4CE5C21D8026800C53AFF /* EditRepositoryViewController.swift */,
@@ -1479,6 +1485,7 @@
 				8EF4CE5521D77BAB00C53AFF /* People.swift in Sources */,
 				8E8D471222279AA80091E9C3 /* FaceCollectionViewItemsLoader.swift in Sources */,
 				8E15E73C23AC74DC0094240A /* TreeDataSource.swift in Sources */,
+				8ECA1FFB23E5751300F56895 /* LibraryTree+ExtendView.swift in Sources */,
 				8E95739A20EBEBD7003BD651 /* FilterViewController.swift in Sources */,
 				8E8D47292236F63C0091E9C3 /* TablePopover.swift in Sources */,
 				8E0EAE9A209D2623008C377F /* ImageFolderTreeScanner.swift in Sources */,
@@ -1540,6 +1547,7 @@
 				8EFE763C2094AF6B00B7CFCA /* TreeController.swift in Sources */,
 				8E3EC3B5214DB1B8004B6125 /* LunarCalendarView.swift in Sources */,
 				8EBC0182236B072F00FB6E2F /* TwoColumnTableViewController.swift in Sources */,
+				8ECA1FFD23E5784A00F56895 /* LibraryTree+CollectionView.swift in Sources */,
 				8EC20B302281B4C0000F4819 /* TaskHelper.swift in Sources */,
 				8E31C37F2120A22600002546 /* DeviceShell.swift in Sources */,
 				8EC82EAE21283ED000FC0899 /* DirectoryViewDelegate.swift in Sources */,
