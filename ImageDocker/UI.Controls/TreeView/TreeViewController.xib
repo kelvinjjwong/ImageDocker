@@ -21,22 +21,22 @@
             <rect key="frame" x="0.0" y="0.0" width="340" height="350"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <scrollView identifier="I" borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CxS-oM-NbD">
+                <scrollView identifier="I" borderType="none" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CxS-oM-NbD">
                     <rect key="frame" x="0.0" y="0.0" width="337" height="350"/>
                     <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="nEr-oH-3oS">
                         <rect key="frame" x="0.0" y="0.0" width="337" height="350"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" outlineTableColumn="QLk-ft-pMX" id="WiW-0T-Kag">
+                            <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="20" viewBased="YES" indentationPerLevel="16" outlineTableColumn="QLk-ft-pMX" id="WiW-0T-Kag">
                                 <rect key="frame" x="0.0" y="0.0" width="337" height="350"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <size key="intercellSpacing" width="3" height="2"/>
+                                <size key="intercellSpacing" width="3" height="4"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
                                     <tableColumn identifier="name" width="323" minWidth="40" maxWidth="1000" id="QLk-ft-pMX">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
-                                            <font key="font" metaFont="menu" size="11"/>
+                                            <font key="font" metaFont="message" size="11"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                         </tableHeaderCell>
@@ -48,7 +48,7 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView identifier="name" id="Uaa-QD-Nvu" customClass="KSTableCellView" customModule="ImageDocker" customModuleProvider="target">
-                                                <rect key="frame" x="1" y="1" width="323" height="17"/>
+                                                <rect key="frame" x="1" y="2" width="323" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="B3w-4o-dHr">
@@ -56,7 +56,7 @@
                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageAlignment="left" imageScaling="proportionallyDown" id="55z-kh-Jxt"/>
                                                     </imageView>
                                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ItF-W0-esc">
-                                                        <rect key="frame" x="7" y="1" width="232" height="16"/>
+                                                        <rect key="frame" x="9" y="0.0" width="230" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" title="Name" id="pKZ-er-AYK">
                                                             <font key="font" usesAppearanceFont="YES"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -90,11 +90,11 @@
                                                     </button>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstItem="ItF-W0-esc" firstAttribute="top" secondItem="Uaa-QD-Nvu" secondAttribute="top" id="SZP-pb-8VC"/>
+                                                    <constraint firstItem="ItF-W0-esc" firstAttribute="top" secondItem="Uaa-QD-Nvu" secondAttribute="top" constant="1" id="SZP-pb-8VC"/>
                                                     <constraint firstItem="4Ub-tA-dHh" firstAttribute="top" secondItem="Uaa-QD-Nvu" secondAttribute="top" constant="4" id="ffr-Rp-1Ab"/>
                                                     <constraint firstAttribute="bottom" secondItem="B3w-4o-dHr" secondAttribute="bottom" constant="2" id="fjH-Dr-KI5"/>
                                                     <constraint firstAttribute="trailing" secondItem="4Ub-tA-dHh" secondAttribute="trailing" id="h50-6X-e3v"/>
-                                                    <constraint firstItem="ItF-W0-esc" firstAttribute="leading" secondItem="B3w-4o-dHr" secondAttribute="trailing" constant="4" id="lKG-bb-XXw"/>
+                                                    <constraint firstItem="ItF-W0-esc" firstAttribute="leading" secondItem="B3w-4o-dHr" secondAttribute="trailing" constant="6" id="lKG-bb-XXw"/>
                                                     <constraint firstItem="q98-DG-6hz" firstAttribute="top" secondItem="Uaa-QD-Nvu" secondAttribute="top" constant="2" id="pkP-m5-oRh"/>
                                                     <constraint firstItem="q98-DG-6hz" firstAttribute="leading" secondItem="ItF-W0-esc" secondAttribute="trailing" constant="5" id="sAV-XN-U30"/>
                                                     <constraint firstItem="4Ub-tA-dHh" firstAttribute="leading" secondItem="q98-DG-6hz" secondAttribute="trailing" constant="5" id="tPU-az-o57"/>
