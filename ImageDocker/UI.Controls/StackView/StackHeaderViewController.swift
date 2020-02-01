@@ -41,6 +41,21 @@ class StackHeaderViewController : NSViewController, StackItemHeader {
         view.wantsLayer = true
         view.layer?.backgroundColor = NSColor.darkGray.cgColor // NSColor.windowBackgroundColor.cgColor
         
+        if self.moreAction == nil {
+            self.btnMore.isHidden = true
+        }else{
+            self.btnMore.isHidden = false
+        }
+        
+        if self.filterAction == nil {
+            self.searchField.isHidden = true
+            self.btnGoto.isHidden = true
+            self.btnFilter.isHidden = true
+        }else{
+            self.searchField.isHidden = false
+            self.btnGoto.isHidden = false
+            self.btnFilter.isHidden = false
+        }
     }
     
     // MARK: - Actions
@@ -68,7 +83,11 @@ class StackHeaderViewController : NSViewController, StackItemHeader {
     }
     
     @IBAction func onSearchAction(_ sender: NSSearchField) {
-//        print(sender.stringValue)
+        let text = self.searchField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        print("filter button clicked with \(text)")
+        if text != "" {
+            filterAction?(text)
+        }
     }
     
     // MARK: - StackItemHeader Procotol

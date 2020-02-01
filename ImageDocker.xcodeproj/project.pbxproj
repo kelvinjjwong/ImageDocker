@@ -206,6 +206,7 @@
 		8EC82EAC2121C5A200FC0899 /* AddLocalDirectoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EC82EAA2121C5A200FC0899 /* AddLocalDirectoryViewController.xib */; };
 		8EC82EAE21283ED000FC0899 /* DirectoryViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC82EAD21283ED000FC0899 /* DirectoryViewDelegate.swift */; };
 		8ECA1FF723E5252B00F56895 /* SampleTreeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA1FF623E5252B00F56895 /* SampleTreeDataSource.swift */; };
+		8ECA1FF923E5638800F56895 /* DeviceTree+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA1FF823E5638800F56895 /* DeviceTree+Extension.swift */; };
 		8EE1AB3D20D05E49001C75B0 /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */; };
 		8EE1AB3E20D05E49001C75B0 /* EventListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */; };
 		8EE382F823E02585003B7153 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE382F723E02585003B7153 /* Colors.swift */; };
@@ -472,6 +473,7 @@
 		8EC82EAA2121C5A200FC0899 /* AddLocalDirectoryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddLocalDirectoryViewController.xib; sourceTree = "<group>"; };
 		8EC82EAD21283ED000FC0899 /* DirectoryViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryViewDelegate.swift; sourceTree = "<group>"; };
 		8ECA1FF623E5252B00F56895 /* SampleTreeDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleTreeDataSource.swift; sourceTree = "<group>"; };
+		8ECA1FF823E5638800F56895 /* DeviceTree+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeviceTree+Extension.swift"; sourceTree = "<group>"; };
 		8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListViewController.swift; sourceTree = "<group>"; };
 		8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventListViewController.xib; sourceTree = "<group>"; };
 		8EE382F723E02585003B7153 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -1134,6 +1136,7 @@
 		8ECA1FF323E3C19000F56895 /* ExtendView */ = {
 			isa = PBXGroup;
 			children = (
+				8ECA1FF823E5638800F56895 /* DeviceTree+Extension.swift */,
 				8EFA7CF8211A36F700419777 /* DeviceCopyViewController.swift */,
 				8EC82EA92121C5A200FC0899 /* AddLocalDirectoryViewController.swift */,
 				8EC82EAA2121C5A200FC0899 /* AddLocalDirectoryViewController.xib */,
@@ -1492,6 +1495,7 @@
 				8E7F71002091F14300410C45 /* BaiduLocation.swift in Sources */,
 				8E98B8F020D0EE3300771280 /* PlaceListViewController.swift in Sources */,
 				8EB321CF20FA42C700D8C71D /* ModelStoreGRDB.swift in Sources */,
+				8ECA1FF923E5638800F56895 /* DeviceTree+Extension.swift in Sources */,
 				8EF125A622140C0F00C423CA /* ImageDevicePath.swift in Sources */,
 				8EB271812340E578003BF3AF /* ViewController+Window.swift in Sources */,
 				8EF4CE5721D77BD600C53AFF /* Family.swift in Sources */,

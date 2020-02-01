@@ -10,6 +10,9 @@ import Cocoa
 
 class TreeViewController : StackBodyViewController {
     
+    var notificationPopover:NSPopover?
+    var notificationViewController:NotificationViewController!
+    
     private var stackTitle = "Tree"
     
     override func headerTitle() -> String { return self.stackTitle }
@@ -54,12 +57,16 @@ class TreeViewController : StackBodyViewController {
     
     private var trees:[TreeCollection] = []
     
+    // show roots
     func show() {
         DispatchQueue.global().async {
             if self.collectionLoader != nil {
                 let (treeNodes, message) = self.collectionLoader!(nil)
                 self.trees = treeNodes
-                // TODO: handle message alert
+                
+                if let msg = message {
+                    self.popNotification(message: msg)
+                }
             }
             DispatchQueue.main.async {
                 self.outlineView.reloadData()
@@ -146,7 +153,6 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
     
     func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any {
         if let collection = item as? TreeCollection {
-            print("index: \(index), total: \(collection.children.count)")
             return collection.children[index]
         }
         
@@ -207,18 +213,24 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
                     }
                 }
                     
-                if self.collectionActionIcon != nil {
-                    let icon = self.collectionActionIcon!(collection)
-                    colView.button.image = icon
-                    colView.collection = collection
-                    colView.toolTip = collection.path
+                if self.collectionAction != nil {
+                    colView.button.isHidden = false
                     colView.buttonAction = { collection, button in
-                        if self.collectionAction != nil {
-                            self.collectionAction!(collection, button)
-                        }
+                        self.collectionAction!(collection, button)
+                    }
+                    if self.collectionActionIcon != nil {
+                        let icon = self.collectionActionIcon!(collection)
+                        colView.button.image = icon
+                    }else{
+                        colView.button.image = Icons.moreHorizontal
                     }
                     collection.button = colView.button
+                }else{
+                    colView.button.isHidden = true
                 }
+                
+                colView.collection = collection
+                colView.toolTip = collection.path
                 
                 return colView
             }
@@ -241,7 +253,9 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
                         self.outlineView.expandItem(item)
                     }
                 }
-                // TODO: handle message alert
+                if let msg = message {
+                    self.popNotification(message: msg)
+                }
             }
         }
     }
@@ -257,6 +271,45 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
             }
         }else{
             return false
+        }
+    }
+}
+
+extension TreeViewController : NSPopoverDelegate {
+    
+    private func createNotificationPopover(message:String){
+        var myPopover = self.notificationPopover
+        if(myPopover == nil){
+            
+            let frame = CGRect(origin: .zero, size: CGSize(width: 600, height: 150))
+            self.notificationViewController = NotificationViewController()
+            self.notificationViewController.view.frame = frame
+            
+            myPopover = NSPopover()
+            myPopover!.contentViewController = self.notificationViewController
+            myPopover!.appearance = NSAppearance(named: .aqua)!
+            myPopover!.delegate = self
+            myPopover!.behavior = NSPopover.Behavior.transient
+        }
+        self.notificationPopover = myPopover
+        self.notificationViewController.lblMessage.stringValue = message
+    }
+    
+    func popNotification(message:String){
+        DispatchQueue.main.async {
+            let currentMouseLocation = NSEvent.mouseLocation
+            let posX = currentMouseLocation.x
+            let posY = currentMouseLocation.y
+            
+            self.createNotificationPopover(message: message)
+            let invisibleWindow = NSWindow(contentRect: NSMakeRect(0, 0, 20, 5), styleMask: .borderless, backing: .buffered, defer: false)
+            invisibleWindow.backgroundColor = .red
+            invisibleWindow.alphaValue = 0
+            
+            invisibleWindow.setFrameOrigin(NSPoint(x: posX, y: posY))
+            invisibleWindow.makeKeyAndOrderFront(self)
+            
+            self.notificationPopover?.show(relativeTo: invisibleWindow.contentView!.frame, of: invisibleWindow.contentView!, preferredEdge: .maxY)
         }
     }
 }

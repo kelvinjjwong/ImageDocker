@@ -46,6 +46,7 @@ class StackedTreeViewController: NSViewController, StackItemHost {
     }
     
     func addTreeView(title:String, dataSource:TreeDataSource, width:CGFloat = 400.0, height:CGFloat = 360.0,
+                     disableFilter: Bool = false,
                      nodeIcon:((TreeCollection) -> NSImage)? = nil,
                      onNodeSelected:((TreeCollection) -> Void)? = nil,
                      moreActionOnHeader: (() -> ())? = nil,
@@ -97,11 +98,14 @@ class StackedTreeViewController: NSViewController, StackItemHost {
         }
         
         stackItem.header.moreAction = moreActionOnHeader
-        stackItem.header.filterAction = { keyword in
-            treeView.filter(keyword: keyword)
-        }
-        stackItem.header.gotoAction = { keyword in
-            treeView.findNode(keyword: keyword)
+        
+        if !disableFilter {
+            stackItem.header.filterAction = { keyword in
+                treeView.filter(keyword: keyword)
+            }
+            stackItem.header.gotoAction = { keyword in
+                treeView.findNode(keyword: keyword)
+            }
         }
         stackItem.header.beforeExpand = {
             self.hideAllTrees()

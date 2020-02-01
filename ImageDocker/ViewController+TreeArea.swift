@@ -36,6 +36,7 @@ extension ViewController {
         stackedTreeView.addTreeView(title:"Devices",
                                     dataSource: deviceTreeDataSource,
                                     width: TREEVIEW_WIDTH,
+                                    disableFilter: true,
                                     nodeIcon: { collection in
                                         if let state = collection.relatedObjectState {
                                             return state == 1 ? Icons.phoneConnected : Icons.phone
@@ -47,13 +48,13 @@ extension ViewController {
                                         print("action on \(collection.path)")
                                         if collection.path == "Android" || collection.path == "iPhone" {
                                             stackedTreeView.expand(tree: "Devices", path: collection.path)
+                                        }else{
+                                            if let id = collection.relatedObjectId,
+                                                let device = deviceTreeDataSource.getDeviceById(id),
+                                                let state = collection.relatedObjectState {
+                                                self.openDeviceCopyView(device: device, connected: state == 1)
+                                            }
                                         }
-        },
-                                    moreActionOnHeader: {
-                                        print("clicked devices more button")
-        },
-                                    moreActionOnNode: { collection, button in
-                                        print("more on devices \(collection.path)")
         })
 
         stackedTreeView.addTreeView(title:"Moments",

@@ -164,7 +164,7 @@ class DeviceTreeDataSource : TreeDataSource {
         if devices.count == 0 {
 //                self.showTreeNodeButton(collection: collection, image: NSImage(named: .caution))
             
-            message = "No iOS devices found. Please connect your iPhone/iPad via USB."
+            message = "No iOS devices found connected. Please connect your iPhone/iPad via USB."
         }
         print("loader loaded count \(nodes.count)")
         return (nodes, message)
