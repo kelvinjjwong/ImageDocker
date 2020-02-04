@@ -10,6 +10,6 @@ import Cocoa
 
 struct Colors {
     
-    static let Tree_Badge_Text = NSColor(calibratedWhite: 0.9, alpha: 0.9)
-    static let Tree_Badge_Background = NSColor(calibratedWhite: 0.5, alpha: 0.7)
+    static let Tree_Badge_Text = NSColor(calibratedWhite: 0.9, alpha: 0.8) // NSColor(calibratedWhite: 0.9, alpha: 0.9)
+    static let Tree_Badge_Background = NSColor(calibratedWhite: 0.1, alpha: 0.8) // NSColor(calibratedWhite: 0.5, alpha: 0.7)
 }

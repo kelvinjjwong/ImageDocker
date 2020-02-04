@@ -17,6 +17,8 @@ class TreeCollection {
     var children:[TreeCollection] = []
     private var mapping:[String:TreeCollection] = [:]
     
+    var expandable = false
+    
     var icon:NSImage?
     var titleField:NSTextField?
     var valueField:NSTextField?

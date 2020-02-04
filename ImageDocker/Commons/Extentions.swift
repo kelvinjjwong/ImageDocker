@@ -8,6 +8,19 @@
 
 import Cocoa
 
+extension Int {
+    
+    func paddingZero(_ digits:Int) -> String {
+        let str = "\(self)"
+        let length = str.count
+        if length < digits {
+            let gap = digits - length
+            return str.paddingLeft(gap, with: "0")
+        }
+        return str
+    }
+}
+
 extension String {
     
     func paddingLeft(_ width:Int, with:String = " ") -> String{

@@ -9,7 +9,23 @@
 import Foundation
 import GRDB
 
+enum MomentTree:Int {
+    case MOMENTS
+    case PLACES
+    case EVENTS
+}
+
+enum MomentCondition:Int {
+    case YEAR
+    case MONTH
+    case DAY
+    case PLACE
+    case EVENT
+}
+
 class Moment {
+    
+    var tree:MomentTree = .MOMENTS
     
     var gov:String = ""
     var place:String
@@ -34,6 +50,7 @@ class Moment {
         self.year = 0
         self.month = 0
         self.day = 0
+        self.groupByPlace = true
     }
     
     init(place:String, gov:String = "") {
@@ -42,6 +59,7 @@ class Moment {
         self.year = 0
         self.month = 0
         self.day = 0
+        self.groupByPlace = true
     }
     
     init(year:Int, place:String = "", gov:String = "") {
@@ -69,33 +87,47 @@ class Moment {
         self.gov = gov
     }
     
+    init(_ tree:MomentTree, imageCount:Int, year:Int, month:Int = 0, day:Int = 0, event:String = "", country:String = "", province:String = "", city:String = "", place:String = "") {
+        self.photoCount = imageCount
+        self.year = year
+        self.month = month
+        self.day = day
+        self.event = event
+        self.countryData = country
+        self.provinceData = province
+        self.cityData = city
+        self.placeData = place
+        self.place = place
+        self.tree = tree
+    }
+    
     // MARK: DISPLAY
     
     var represent:String {
         if year == 0 {
             if place == "" {
-                return "未识别"
+                return id //"未识别"
             }else{
                 return "\(place)"
             }
         }
         if month == 0 && day == 0 {
             if year == 0 {
-                return "未识别"
+                return id //"未识别"
             }else{
                 return "\(year) 年"
             }
         }
         if month != 0 && day == 0 {
             if year == 0 {
-                return "未识别"
+                return id // "未识别"
             }else{
                 return "\(month) 月"
             }
         }
-        if event != nil {
-            return event!
-        }
+//        if event != nil  {
+//            return event!
+//        }
         let monthString:String = month < 10 ? "0\(month)" : "\(month)"
         let dayString:String = day < 10 ? "0\(day)" : "\(day)"
         let alertString:String = (hasDuplicates && !groupByPlace) ? " !!" : ""
@@ -106,16 +138,7 @@ class Moment {
     
     var id:String {
         let tag = groupByPlace ? "place" : "moment"
-        if month == 0 && day == 0 {
-            return "\(tag)\(gov)\(place)\(year)0000"
-        }
-        if month != 0 && day == 0 {
-            let monthString:String = month < 10 ? "0\(month)" : "\(month)"
-            return "\(tag)\(gov)\(place)\(year)\(monthString)00"
-        }
-        let monthString:String = month < 10 ? "0\(month)" : "\(month)"
-        let dayString:String = day < 10 ? "0\(day)" : "\(day)"
-        return "\(tag)\(gov)\(place)\(year)\(monthString)\(dayString)"
+        return "\(tag)\(gov)\(place)_\(year.paddingZero(4))\(month.paddingZero(2))\(day.paddingZero(2))"
     }
 }
 

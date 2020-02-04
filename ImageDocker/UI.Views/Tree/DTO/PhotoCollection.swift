@@ -33,42 +33,52 @@ class Photo {
  */
 class PhotoCollection: NSObject {
     var title = ""
-    var url:URL = URL(fileURLWithPath: "/")
     var identifier = ""
     var photoCount:Int = 0
-    var photos = [Any]()
-    var type: PhotoCollectionType?
-    var imageFolder:ImageFolder? = nil
-    var source : PhotoCollectionSource?
     var year:Int = 0
     var month:Int = 0
     var day:Int = 0
     var place:String = ""
     var event:String = ""
     var gov:String = ""
-    var placeData:String = ""
-    var countryData:String = ""
-    var provinceData:String = ""
-    var cityData:String = ""
-    
-    var deviceConnected = false
-    
-    var isAwaitingEntry:Bool = false
     
     var hasDuplicates:Bool = false
-    var isDateEntry:Bool = true
     
-    var enableMoreButton = false
-    var imageOfMoreButton:NSImage? = nil
+    var placeData:String = "" // deprecated
+    var countryData:String = "" // deprecated
+    var provinceData:String = "" // deprecated
+    var cityData:String = "" // deprecated
     
-    var treeNodeView:LCSourceListTableCellView? = nil
-    var buttonAction: ((_ sender:NSButton) -> Void)? = nil
-    var buttonMenu:[MenuAction] = []
+    var isDateEntry:Bool = true // deprecated
+    var url:URL = URL(fileURLWithPath: "/") // deprecated
+    var isAwaitingEntry:Bool = false // deprecated
+    var photos = [Any]() // deprecated
+    var type: PhotoCollectionType? // deprecated
+    var imageFolder:ImageFolder? = nil // deprecated
+    var source : PhotoCollectionSource? // deprecated
+    var enableMoreButton = false // deprecated
+    var imageOfMoreButton:NSImage? = nil // deprecated
+    var treeNodeView:LCSourceListTableCellView? = nil // deprecated
+    var buttonAction: ((_ sender:NSButton) -> Void)? = nil // deprecated
+    var buttonMenu:[MenuAction] = [] // deprecated
+    var deviceConnected = false // deprecated
     
     override init(){
         super.init()
     }
     
+    convenience init(imageCount:Int, year:Int, month:Int = 0, day:Int = 0, event:String = "", gov:String = "", place:String = "") {
+        self.init()
+        self.photoCount = imageCount
+        self.year = year
+        self.month = month
+        self.day = day
+        self.event = event
+        self.gov = gov
+        self.place = place
+    }
+    
+    // deprecated
     convenience init(title: String, identifier: String, type: PhotoCollectionType, source: PhotoCollectionSource) {
         self.init()
         self.title = title

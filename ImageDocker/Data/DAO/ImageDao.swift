@@ -88,12 +88,20 @@ class ImageSearchDao {
     
     // MARK: - MOMENTS
     
+    func getMoments(_ condition:MomentCondition, year:Int = 0, month:Int = 0) -> [Moment] {
+        return ModelStore.default.getMoments(condition, year: year, month: month)
+    }
+    
     func getAllMoments(imageSource:[String]? = nil, cameraModel:[String]? = nil) -> [Moment] {
         let result = ModelStore.default.getAllDates(imageSource: imageSource, cameraModel: cameraModel)
         return Moments().readMoments(result)
     }
     
     // MARK: - PLACES
+    
+    func getMomentsByPlace(_ condition:MomentCondition, parent:Moment? = nil) -> [Moment] {
+        return ModelStore.default.getMomentsByPlace(condition, parent: parent)
+    }
     
     func getAllPlacesWithDates(imageSource:[String]? = nil, cameraModel:[String]? = nil) -> [Moment] {
         let result = ModelStore.default.getAllPlacesAndDates(imageSource: imageSource, cameraModel: cameraModel)

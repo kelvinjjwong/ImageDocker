@@ -32,6 +32,8 @@ extension ViewController {
         let dataSource1 = SampleDataSource1()
         let deviceTreeDataSource = DeviceTreeDataSource()
         let repositoryTreeDataSource = RepositoryTreeDataSource()
+        let momentsTreeDataSource = MomentsTreeDataSource()
+        let placesTreeDataSource = PlacesTreeDataSource()
 
         stackedTreeView.addTreeView(title:"Devices",
                                     dataSource: deviceTreeDataSource,
@@ -58,8 +60,15 @@ extension ViewController {
         })
 
         stackedTreeView.addTreeView(title:"Moments",
-                                    dataSource: dataSource1,
+                                    dataSource: momentsTreeDataSource,
                                     width: TREEVIEW_WIDTH,
+                                    nodeValue: { collection in
+                                        if let moment = collection.relatedObject as? Moment {
+                                            return moment.photoCount
+                                        }else{
+                                            return 0
+                                        }
+        },
                                     onNodeSelected: { collection in
                                         print("action on \(collection.path)")
         },
@@ -84,8 +93,16 @@ extension ViewController {
 
 
         stackedTreeView.addTreeView(title:"Places",
-                                    dataSource: dataSource1,
+                                    dataSource: placesTreeDataSource,
                                     width: TREEVIEW_WIDTH,
+                                    nodeValue: { collection in
+                                        if let moment = collection.relatedObject as? Moment {
+                                            print("moment \(moment.represent) -> \(moment.photoCount)")
+                                            return moment.photoCount
+                                        }else{
+                                            return 0
+                                        }
+        },
                                     onNodeSelected: { collection in
                                         print("action on \(collection.path)")
         },

@@ -161,7 +161,7 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
     
     func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool {
         if let collection = item as? TreeCollection {
-            return collection.childrenCount > 0 //collection.children.count > 0
+            return collection.expandable || collection.childrenCount > 0 //collection.children.count > 0
         }
         return self.trees.count > 0
     }
@@ -182,8 +182,12 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
                 if self.collectionIcon != nil {
                     let icon = self.collectionIcon!(collection)
                     colView.imgView.image = icon
+                    colView.imgView.wantsLayer = true
+                    colView.imgView.alphaValue = 0.6
                 }else{
                     colView.imgView.image = Icons.photos
+                    colView.imgView.wantsLayer = true
+                    colView.imgView.alphaValue = 0.6
                 }
                 
                 if self.collectionTitle != nil {
@@ -252,6 +256,8 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
                         self.outlineView.reloadItem(item, reloadChildren: true)
                         self.outlineView.expandItem(item)
                     }
+                }else{
+                    print("loaded 0 child nodes")
                 }
                 if let msg = message {
                     self.popNotification(message: msg)

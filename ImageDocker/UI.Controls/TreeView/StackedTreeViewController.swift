@@ -48,6 +48,7 @@ class StackedTreeViewController: NSViewController, StackItemHost {
     func addTreeView(title:String, dataSource:TreeDataSource, width:CGFloat = 400.0, height:CGFloat = 360.0,
                      disableFilter: Bool = false,
                      nodeIcon:((TreeCollection) -> NSImage)? = nil,
+                     nodeValue:((TreeCollection) -> Int)? = nil,
                      onNodeSelected:((TreeCollection) -> Void)? = nil,
                      moreActionOnHeader: ((NSButton) -> ())? = nil,
                      moreActionOnNode:((TreeCollection, NSButton) -> Void)? = nil) {
@@ -72,7 +73,11 @@ class StackedTreeViewController: NSViewController, StackItemHost {
             return collection.name
         }
         treeView.collectionValue = { collection in
-            return collection.childrenCount
+            if nodeValue != nil {
+                return nodeValue!(collection)
+            }else{
+                return collection.childrenCount
+            }
         }
         treeView.collectionActionIcon = { collection in
             return Icons.more

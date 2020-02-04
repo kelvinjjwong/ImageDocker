@@ -36,7 +36,7 @@
                                 <tableColumns>
                                     <tableColumn identifier="name" width="323" minWidth="40" maxWidth="1000" id="QLk-ft-pMX">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
-                                            <font key="font" metaFont="message" size="11"/>
+                                            <font key="font" metaFont="system" size="11"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                         </tableHeaderCell>
@@ -52,11 +52,14 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="B3w-4o-dHr">
-                                                        <rect key="frame" x="5" y="2" width="0.0" height="13"/>
+                                                        <rect key="frame" x="5" y="2" width="14" height="14"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="14" id="KEb-oh-oVc"/>
+                                                        </constraints>
                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageAlignment="left" imageScaling="proportionallyDown" id="55z-kh-Jxt"/>
                                                     </imageView>
                                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ItF-W0-esc">
-                                                        <rect key="frame" x="9" y="0.0" width="230" height="16"/>
+                                                        <rect key="frame" x="23" y="0.0" width="216" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" title="Name" id="pKZ-er-AYK">
                                                             <font key="font" usesAppearanceFont="YES"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -64,13 +67,13 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="q98-DG-6hz">
-                                                        <rect key="frame" x="242" y="0.0" width="50" height="15"/>
+                                                        <rect key="frame" x="242" y="-3" width="50" height="15"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="50" id="8pk-OX-yiF"/>
                                                             <constraint firstAttribute="height" constant="15" id="Lxc-Ou-hJw"/>
                                                         </constraints>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" drawsBackground="YES" id="F32-Ac-ylR">
-                                                            <font key="font" metaFont="system"/>
+                                                            <font key="font" metaFont="system" size="11"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -95,11 +98,11 @@
                                                     <constraint firstAttribute="bottom" secondItem="B3w-4o-dHr" secondAttribute="bottom" constant="2" id="fjH-Dr-KI5"/>
                                                     <constraint firstAttribute="trailing" secondItem="4Ub-tA-dHh" secondAttribute="trailing" id="h50-6X-e3v"/>
                                                     <constraint firstItem="ItF-W0-esc" firstAttribute="leading" secondItem="B3w-4o-dHr" secondAttribute="trailing" constant="6" id="lKG-bb-XXw"/>
-                                                    <constraint firstItem="q98-DG-6hz" firstAttribute="top" secondItem="Uaa-QD-Nvu" secondAttribute="top" constant="2" id="pkP-m5-oRh"/>
+                                                    <constraint firstItem="q98-DG-6hz" firstAttribute="top" secondItem="Uaa-QD-Nvu" secondAttribute="top" constant="5" id="pkP-m5-oRh"/>
                                                     <constraint firstItem="q98-DG-6hz" firstAttribute="leading" secondItem="ItF-W0-esc" secondAttribute="trailing" constant="5" id="sAV-XN-U30"/>
                                                     <constraint firstItem="4Ub-tA-dHh" firstAttribute="leading" secondItem="q98-DG-6hz" secondAttribute="trailing" constant="5" id="tPU-az-o57"/>
                                                     <constraint firstItem="B3w-4o-dHr" firstAttribute="leading" secondItem="Uaa-QD-Nvu" secondAttribute="leading" constant="5" id="tlm-3D-RPf"/>
-                                                    <constraint firstItem="B3w-4o-dHr" firstAttribute="top" secondItem="Uaa-QD-Nvu" secondAttribute="top" constant="2" id="uwG-36-W7c"/>
+                                                    <constraint firstItem="B3w-4o-dHr" firstAttribute="top" secondItem="Uaa-QD-Nvu" secondAttribute="top" constant="1" id="uwG-36-W7c"/>
                                                 </constraints>
                                                 <connections>
                                                     <outlet property="button" destination="4Ub-tA-dHh" id="ND1-jm-ewh"/>
