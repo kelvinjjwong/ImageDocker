@@ -463,6 +463,12 @@ extension ModelStoreGRDB {
             })
         }
         
+        migrator.registerMigration("v32") { db in
+            try db.alter(table: "ImageEvent", body: { t in
+                t.add(column: "category", .text).defaults(to: "")
+            })
+        }
+        
         
         do {
             let dbQueue = try DatabaseQueue(path: ModelStore.localDBFile)

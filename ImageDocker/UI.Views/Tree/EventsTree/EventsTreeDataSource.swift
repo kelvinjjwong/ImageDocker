@@ -10,7 +10,73 @@ import Foundation
 
 class EventsTreeDataSource : TreeDataSource {
     
+    let dao = ImageSearchDao()
+    
+    func convertEventsToTreeCollections(_ moments:[Moment]) -> [TreeCollection] {
+        var events:[TreeCollection] = []
+        for moment in moments {
+            let lv1data = moment.eventCategoryData
+            let lv2data = moment.eventData
+            var lv1 = lv1data
+            var lv2 = lv2data
+            
+            if lv1data == "" {
+                lv1 = "未分类"
+            }
+            if lv2data == "" {
+                lv2 = "未分类"
+            }
+            
+            moment.eventCategory = lv1
+            moment.event = lv2
+            
+            print("Got place \(lv1) -> \(lv2)")
+            
+            var lv1Entry:TreeCollection
+            var lv2Entry:TreeCollection
+            
+            if events.index(where: {$0.name == lv1}) == nil {
+                lv1Entry = TreeCollection(lv1, id: "cat_\(lv1)", object: Moment(eventCategory: lv1))
+                lv1Entry.expandable = true
+                events.append(lv1Entry)
+            }else{
+                lv1Entry = events.first(where: {$0.name == lv1})!
+            }
+            
+            if lv1Entry.children.index(where: {$0.name == lv2}) == nil {
+                lv2Entry = TreeCollection(lv2, id: "cat_\(lv1)_event_\(lv2)", object:moment)
+                lv2Entry.expandable = true
+                lv1Entry.addChild(collection: lv2Entry)
+            }else{
+                print("ERROR: duplicated event entry \(lv1) -> \(lv2)")
+            }
+        }
+        
+        // recount images from event-entries for each category
+        for category in events {
+            if let moment = category.relatedObject as? Moment {
+                var imageCount = 0
+                for event in category.children {
+                    if let m = event.relatedObject as? Moment {
+                        imageCount += m.photoCount
+                    }
+                }
+                moment.photoCount = imageCount
+                category.relatedObject = moment
+            }
+        }
+        
+        return events
+        
+    }
+    
     func loadChildren(_ collection: TreeCollection?) -> ([TreeCollection], String?) {
+        if collection == nil {
+            let moments = self.dao.getImageEvents()
+            return (self.convertEventsToTreeCollections(moments), nil)
+        }else{
+            // TODO like placeDS
+        }
         return ([], nil)
     }
     

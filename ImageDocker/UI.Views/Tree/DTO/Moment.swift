@@ -28,14 +28,17 @@ class Moment {
     var tree:MomentTree = .MOMENTS
     
     var gov:String = ""
-    var place:String
-    var year:Int
-    var month:Int
-    var day:Int
-    var event:String?
+    var place:String = ""
+    var year:Int = 0
+    var month:Int = 0
+    var day:Int = 0
+    var event:String = ""
+    var eventCategory:String = ""
     var photoCount:Int = 0
     var children:[Moment] = [Moment]()
+    
     var groupByPlace:Bool = false
+    var groupByEvent:Bool = false
     
     var hasDuplicates:Bool = false
     
@@ -43,6 +46,9 @@ class Moment {
     var provinceData:String = ""
     var cityData:String = ""
     var placeData:String = ""
+    
+    var eventData:String = ""
+    var eventCategoryData:String = ""
     
     init(gov:String) {
         self.gov = gov
@@ -62,6 +68,19 @@ class Moment {
         self.groupByPlace = true
     }
     
+    init(eventCategory:String){
+        self.eventCategory = eventCategory
+        self.eventCategoryData = eventCategory
+    }
+    
+    init(event:String, category:String, imageCount:Int = 0) {
+        self.eventData = event
+        self.event = event
+        self.eventCategoryData = category
+        self.eventCategory = category
+        self.photoCount = imageCount
+    }
+    
     init(year:Int, place:String = "", gov:String = "") {
         self.year = year
         self.month = 0
@@ -78,7 +97,7 @@ class Moment {
         self.gov = gov
     }
     
-    init(day:Int, ofMonth month:Int, ofYear year:Int, event:String? = nil, place:String = "", gov:String = ""){
+    init(day:Int, ofMonth month:Int, ofYear year:Int, event:String = "", place:String = "", gov:String = ""){
         self.year = year
         self.month = month
         self.day = day
@@ -105,11 +124,7 @@ class Moment {
     
     var represent:String {
         if year == 0 {
-            if place == "" {
-                return id //"未识别"
-            }else{
-                return "\(place)"
-            }
+            return id //"未识别"
         }
         if month == 0 && day == 0 {
             if year == 0 {
@@ -125,20 +140,20 @@ class Moment {
                 return "\(month) 月"
             }
         }
-//        if event != nil  {
-//            return event!
-//        }
-        let monthString:String = month < 10 ? "0\(month)" : "\(month)"
-        let dayString:String = day < 10 ? "0\(day)" : "\(day)"
-        let alertString:String = (hasDuplicates && !groupByPlace) ? " !!" : ""
-        return "\(year)年\(monthString)月\(dayString)日\(alertString)"
+        let alertString:String = (hasDuplicates && !groupByPlace && !groupByEvent) ? " !!" : ""
+        return "\(year.paddingZero(4))年\(month.paddingZero(2))月\(day.paddingZero(2))日\(alertString)"
     }
     
     // MARK: IDENTITY
     
     var id:String {
-        let tag = groupByPlace ? "place" : "moment"
-        return "\(tag)\(gov)\(place)_\(year.paddingZero(4))\(month.paddingZero(2))\(day.paddingZero(2))"
+        var prefix = "moment"
+        if self.groupByPlace {
+            prefix = "place_\(gov)\(place)"
+        }else if self.groupByEvent {
+            prefix = "event_\(eventCategory)\(event)"
+        }
+        return "\(prefix)_\(year.paddingZero(4))\(month.paddingZero(2))\(day.paddingZero(2))"
     }
 }
 

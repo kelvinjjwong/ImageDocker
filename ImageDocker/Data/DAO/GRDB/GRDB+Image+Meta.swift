@@ -295,6 +295,42 @@ extension ModelStoreGRDB {
         
     }
     
+    
+    
+    func getImageEvents() -> [Moment] {
+        var result:[Moment] = []
+        let sql = """
+        select t.cnt, ifnull(e.category,'') category, t.name from (
+        select name, sum(cnt) cnt from (
+        select name, 0 cnt from ImageEvent
+        union
+        select ifnull(event,'') as name, count(path) cnt from Image group by event
+        ) group by name) as t
+        left join ImageEvent e on e.name = t.name order by category, t.name
+        """
+        print(sql)
+        do {
+            let db = ModelStoreGRDB.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, sql)
+                if rows.count > 0 {
+                    for row in rows {
+                        let imageCount = Int("\(row[0] ?? 0)") ?? 0
+                        let category = "\(row[1] ?? "")"
+                        let event = "\(row[2] ?? "")"
+                        let moment = Moment(event: event, category: category, imageCount: imageCount)
+                        result.append(moment)
+                    }
+                }
+                
+            }
+        }catch{
+            print(error)
+        }
+        return result
+        
+    }
+    
     func getYears(event:String? = nil) -> [Int] {
         var condition = ""
         var args:[String] = []

@@ -108,6 +108,10 @@ class ImageSearchDao {
         return Moments().readPlaces(result)
     }
     
+    func getImageEvents() -> [Moment] {
+        return ModelStore.default.getImageEvents()
+    }
+    
     func getYears(event:String? = nil) -> [Int] {
         return ModelStore.default.getYears(event: event)
     }
