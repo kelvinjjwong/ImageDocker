@@ -331,6 +331,66 @@ extension ModelStoreGRDB {
         
     }
     
+    func getMomentsByEvent(event:String, category:String, year:Int = 0, month:Int = 0) -> [Moment] {
+        var whereStmt = "event=?"
+        var ev = event
+        if event == "未分配事件" {
+            ev = ""
+            whereStmt = "(event=? or event is null)"
+        }
+        var fields = ""
+        if year == 0 {
+            fields = "photoTakenYear"
+        }else if month == 0 {
+            fields = "photoTakenYear, photoTakenMonth"
+            whereStmt = "\(whereStmt) AND photoTakenYear=\(year)"
+        }else {
+            fields = "photoTakenYear, photoTakenMonth, photoTakenDay"
+            whereStmt = "\(whereStmt) AND photoTakenYear=\(year) AND photoTakenMonth=\(month)"
+        }
+        var result:[Moment] = []
+        let sql = """
+        select count(path) as cnt, ifnull(event, '') event, \(fields) from Image
+        where \(whereStmt)
+        group by event, \(fields) order by event, \(fields) DESC
+        """
+        print(sql)
+        print("SQL argument: \(ev)")
+        do {
+            let db = ModelStoreGRDB.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, sql, arguments:StatementArguments([ev]))
+                if rows.count > 0 {
+                    for row in rows {
+                        let imageCount = Int("\(row[0] ?? 0)") ?? 0
+                        var y = 0
+                        var m = 0
+                        var d = 0
+                        if row.count >= 3 {
+                            y = Int("\(row[2] ?? 0)") ?? 0
+                        }
+                        if row.count >= 4 {
+                            m = Int("\(row[3] ?? 0)") ?? 0
+                        }
+                        if row.count >= 5 {
+                            d = Int("\(row[4] ?? 0)") ?? 0
+                        }
+                        let moment = Moment(event: event, category: category, imageCount: imageCount)
+                        moment.year = y
+                        moment.month = m
+                        moment.day = d
+                        result.append(moment)
+                    }
+                }
+                
+            }
+        }catch{
+            print(error)
+        }
+        return result
+        
+    }
+    
     func getYears(event:String? = nil) -> [Int] {
         var condition = ""
         var args:[String] = []

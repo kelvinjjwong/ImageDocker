@@ -21,16 +21,16 @@ class EventsTreeDataSource : TreeDataSource {
             var lv2 = lv2data
             
             if lv1data == "" {
-                lv1 = "未分类"
+                lv1 = "未归类事件"
             }
             if lv2data == "" {
-                lv2 = "未分类"
+                lv2 = "未分配事件"
             }
             
             moment.eventCategory = lv1
             moment.event = lv2
             
-            print("Got place \(lv1) -> \(lv2)")
+            print("Got event \(lv1) -> \(lv2)")
             
             var lv1Entry:TreeCollection
             var lv2Entry:TreeCollection
@@ -70,12 +70,35 @@ class EventsTreeDataSource : TreeDataSource {
         
     }
     
+    func convertDateToTreeCollection(_ moment:Moment) -> TreeCollection {
+        let node = TreeCollection(moment.represent, id: moment.id, object: moment)
+        if moment.day == 0 {
+            node.expandable = true
+        }
+        return node
+    }
+    
     func loadChildren(_ collection: TreeCollection?) -> ([TreeCollection], String?) {
         if collection == nil {
             let moments = self.dao.getImageEvents()
             return (self.convertEventsToTreeCollections(moments), nil)
         }else{
-            // TODO like placeDS
+            if let parentNode = collection, let parent = parentNode.relatedObject as? Moment {
+                if parent.event != "" {
+                    var nodes:[TreeCollection] = []
+                    let moments:[Moment] = self.dao.getMomentsByEvent(event: parent.event, category: parent.eventCategory, year: parent.year, month: parent.month)
+                    for moment in moments {
+                        let node = self.convertDateToTreeCollection(moment)
+                        nodes.append(node)
+                    }
+                    return (nodes, nil)
+                }else{
+                    print("parent event is empty")
+                }
+                
+            }else{
+                print("EventsTreeDS: no related object")
+            }
         }
         return ([], nil)
     }
