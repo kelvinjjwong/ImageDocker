@@ -7,7 +7,7 @@ target 'ImageDocker' do
   use_frameworks!
 
   # Pods for ImageDocker
-  pod 'CryptoSwift', '1.0.0'
+  pod 'CryptoSwift', '1.3.0'
   pod 'SwiftyJSON'
   pod 'GRDB.swift', '4.9.0'
 end
