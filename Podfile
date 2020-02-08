@@ -9,6 +9,5 @@ target 'ImageDocker' do
   # Pods for ImageDocker
   pod 'CryptoSwift', '1.0.0'
   pod 'SwiftyJSON'
-  pod 'PXSourceList', '~> 2.0'
   pod 'GRDB.swift', '3.7.0'
 end
