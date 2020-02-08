@@ -18,7 +18,7 @@ class StackedTreeViewController: NSViewController, StackItemHost {
     var devideCount = 0
     
     init(divideTo:Int = 0){
-        super.init(nibName: NSNib.Name(rawValue: "StackedTreeViewController"), bundle: nil)
+        super.init(nibName: "StackedTreeViewController", bundle: nil)
         self.devideCount = divideTo
     }
     
@@ -129,8 +129,8 @@ class StackedTreeViewController: NSViewController, StackItemHost {
 //        stackItem.body.viewController.view.boundXToSuperView(superview: stack)
         
         // Make sure the appropriate view controllers are added as children of the current controller.
-        addChildViewController(stackItem.body.viewController)
-        addChildViewController(stackItem.header.viewController)
+        addChild(stackItem.body.viewController)
+        addChild(stackItem.header.viewController)
         
         // collapse by default
         hide(stackItem, animated: true)

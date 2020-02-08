@@ -14,11 +14,11 @@ extension ViewController {
     internal func configureSelectionView(){
         
         // init controller
-        selectionViewController = storyboard?.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "selectionView")) as! SelectionCollectionViewController
+        selectionViewController = storyboard?.instantiateController(withIdentifier: "selectionView") as! SelectionCollectionViewController
         selectionViewController.onItemClicked = { image in
             self.selectImageFile(image)
         }
-        self.addChildViewController(selectionViewController)
+        self.addChild(selectionViewController)
         
         // outlet
         self.selectionCollectionView.dataSource = selectionViewController
@@ -78,19 +78,19 @@ extension ViewController {
     
     internal func switchSelectionToolbar() {
         
-        if self.btnBatchEditorToolbarSwitcher.image == NSImage(named: NSImage.Name.goLeftTemplate) {
+        if self.btnBatchEditorToolbarSwitcher.image == NSImage(named: NSImage.goLeftTemplateName) {
             self.hideSelectionBatchEditors()
             if smallScreen {
                 self.showSelectionToolbar()
             }
-            self.btnBatchEditorToolbarSwitcher.image = NSImage(named: NSImage.Name.goRightTemplate)
+            self.btnBatchEditorToolbarSwitcher.image = NSImage(named: NSImage.goRightTemplateName)
             self.btnBatchEditorToolbarSwitcher.toolTip = "Show event/datetime selectors"
         } else {
             self.showSelectionBatchEditors()
             if smallScreen {
                 self.hideSelectionToolbar()
             }
-            self.btnBatchEditorToolbarSwitcher.image = NSImage(named: NSImage.Name.goLeftTemplate)
+            self.btnBatchEditorToolbarSwitcher.image = NSImage(named: NSImage.goLeftTemplateName)
             self.btnBatchEditorToolbarSwitcher.toolTip = "Hide event/datetime selectors"
         }
     }
@@ -154,7 +154,7 @@ extension ViewController {
         for item in self.collectionView.visibleItems() {
             let item = item as! CollectionViewItem
             
-            let i = images.index(where: { $0.url == item.imageFile?.url })
+            let i = images.firstIndex(where: { $0.url == item.imageFile?.url })
             if i != nil {
                 item.uncheck()
             }

@@ -16,7 +16,7 @@ class ProgressViewController : NSViewController {
     @IBOutlet weak var box: NSBox!
     
     init() {
-        super.init(nibName: NSNib.Name(rawValue: "ProgressViewController"), bundle: nil)
+        super.init(nibName: "ProgressViewController", bundle: nil)
     }
     
     required init?(coder: NSCoder) {

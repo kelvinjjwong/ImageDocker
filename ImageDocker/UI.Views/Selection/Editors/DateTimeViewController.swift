@@ -105,7 +105,7 @@ class DateTimeViewController: NSViewController {
     // MARK: - INIT
     
     init(){
-        super.init(nibName: NSNib.Name(rawValue: "DateTimeViewController"), bundle: nil)
+        super.init(nibName: "DateTimeViewController", bundle: nil)
     }
     
     
@@ -410,10 +410,10 @@ class DateTimeViewController: NSViewController {
     // MARK: ADJUST DATE
     
     @IBAction func onPlusMinusAdjustDateClicked(_ sender: NSButton) {
-        if self.btnPlusMinusDate.image == NSImage(named: .addTemplate) {
-            self.btnPlusMinusDate.image = NSImage(named: .removeTemplate)
-        }else if self.btnPlusMinusDate.image == NSImage(named: .removeTemplate) {
-            self.btnPlusMinusDate.image = NSImage(named: .addTemplate)
+        if self.btnPlusMinusDate.image == NSImage(named: NSImage.addTemplateName) {
+            self.btnPlusMinusDate.image = NSImage(named: NSImage.removeTemplateName)
+        }else if self.btnPlusMinusDate.image == NSImage(named: NSImage.removeTemplateName) {
+            self.btnPlusMinusDate.image = NSImage(named: NSImage.addTemplateName)
         }
         
         self.generateDate()
@@ -510,10 +510,10 @@ class DateTimeViewController: NSViewController {
     // MARK: ADJUST TIME
     
     @IBAction func onPlusMinusAdjustTimeClicked(_ sender: NSButton) {
-        if self.btnPlusMinusTime.image == NSImage(named: .addTemplate) {
-            self.btnPlusMinusTime.image = NSImage(named: .removeTemplate)
-        }else if self.btnPlusMinusTime.image == NSImage(named: .removeTemplate) {
-            self.btnPlusMinusTime.image = NSImage(named: .addTemplate)
+        if self.btnPlusMinusTime.image == NSImage(named: NSImage.addTemplateName) {
+            self.btnPlusMinusTime.image = NSImage(named: NSImage.removeTemplateName)
+        }else if self.btnPlusMinusTime.image == NSImage(named: NSImage.removeTemplateName) {
+            self.btnPlusMinusTime.image = NSImage(named: NSImage.addTemplateName)
         }
         self.generateTime()
     }
@@ -588,7 +588,7 @@ class DateTimeViewController: NSViewController {
     fileprivate func generateDate() {
         var result = ""
         var selectedDate = ""
-        var adjust = self.btnPlusMinusDate.image == NSImage(named: .addTemplate) ? "+" : "-"
+        var adjust = self.btnPlusMinusDate.image == NSImage(named: NSImage.addTemplateName) ? "+" : "-"
         var adjustYear = ""
         var adjustMonth = ""
         var adjustDay = ""
@@ -616,7 +616,7 @@ class DateTimeViewController: NSViewController {
     fileprivate func generateTime() {
         var result = ""
         var selectedTime = ""
-        var adjust = self.btnPlusMinusTime.image == NSImage(named: .addTemplate) ? "+" : "-"
+        var adjust = self.btnPlusMinusTime.image == NSImage(named: NSImage.addTemplateName) ? "+" : "-"
         var adjustHour = ""
         var adjustMinute = ""
         var adjustSecond = ""
@@ -682,8 +682,8 @@ class DateTimeViewController: NSViewController {
                 second = self.txtSelectedSecond.integerValue
             }
             
-            let plusDate = self.btnPlusMinusDate.image == NSImage(named: .addTemplate) ? true : false
-            let plusTime = self.btnPlusMinusTime.image == NSImage(named: .addTemplate) ? true : false
+            let plusDate = self.btnPlusMinusDate.image == NSImage(named: NSImage.addTemplateName) ? true : false
+            let plusTime = self.btnPlusMinusTime.image == NSImage(named: NSImage.addTemplateName) ? true : false
             
             if self.chkAdjustYear.state == .on {
                 if plusDate {

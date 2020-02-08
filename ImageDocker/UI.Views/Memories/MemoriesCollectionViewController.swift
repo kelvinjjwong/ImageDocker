@@ -60,7 +60,7 @@ extension MemoriesCollectionViewController : NSCollectionViewDataSource {
     
     /// unused
     func collectionView(_ collectionView: NSCollectionView, viewForSupplementaryElementOfKind kind: NSCollectionView.SupplementaryElementKind, at indexPath: IndexPath) -> NSView {
-        let view = collectionView.makeSupplementaryView(ofKind: NSCollectionView.SupplementaryElementKind.sectionHeader, withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "HeaderView"), for: indexPath as IndexPath) as! HeaderView
+        let view = collectionView.makeSupplementaryView(ofKind: NSCollectionView.elementKindSectionHeader, withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "HeaderView"), for: indexPath as IndexPath) as! HeaderView
         view.sectionTitle.stringValue = imagesLoader.titleOfSection(indexPath.section)
         let numberOfItemsInSection = imagesLoader.numberOfItems(in: indexPath.section)
         view.imageCount.stringValue = "\(numberOfItemsInSection) images"

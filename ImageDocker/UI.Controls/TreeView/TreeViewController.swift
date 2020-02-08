@@ -31,7 +31,7 @@ class TreeViewController : StackBodyViewController {
     var minWidth:CGFloat = 150
     
     init(_ title:String? = nil, width:CGFloat = 0.0, height:CGFloat = 0.0){
-        super.init(nibName: NSNib.Name(rawValue: "TreeViewController"), bundle: nil)
+        super.init(nibName: "TreeViewController", bundle: nil)
         if let t = title {
             self.stackTitle = t
         }

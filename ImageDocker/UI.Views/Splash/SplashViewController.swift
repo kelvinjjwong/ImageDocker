@@ -34,7 +34,7 @@ class SplashViewController: NSViewController {
     init(onStartup: @escaping (() -> Void), onCompleted: @escaping (() -> Void)) {
         self.onStartup = onStartup
         self.onCompleted = onCompleted
-        super.init(nibName: NSNib.Name(rawValue: "SplashViewController"), bundle: nil)
+        super.init(nibName: "SplashViewController", bundle: nil)
     }
 
     override func viewDidLoad() {

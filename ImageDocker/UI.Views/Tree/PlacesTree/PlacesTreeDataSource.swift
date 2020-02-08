@@ -60,7 +60,7 @@ class PlacesTreeDataSource : TreeDataSource {
             var govEntry:TreeCollection
             var placeEntry:TreeCollection
             
-            if govs.index(where: {$0.name == gov}) == nil {
+            if govs.firstIndex(where: {$0.name == gov}) == nil {
                 var momentGov:Moment
                 if country == "中国" {
                     momentGov = Moment(gov: country)
@@ -78,7 +78,7 @@ class PlacesTreeDataSource : TreeDataSource {
                 govEntry = govs.first(where: {$0.name == gov})!
             }
             
-            if govEntry.children.index(where: {$0.name == place}) == nil {
+            if govEntry.children.firstIndex(where: {$0.name == place}) == nil {
                 placeEntry = TreeCollection(place, id: "gov_\(gov)_place_\(place)", object:moment)
                 placeEntry.expandable = true
                 govEntry.addChild(collection: placeEntry)

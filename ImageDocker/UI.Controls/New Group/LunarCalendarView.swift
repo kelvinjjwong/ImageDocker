@@ -84,7 +84,7 @@ class LunarCalendarView:NSViewController{
     }
     
     init(){
-        super.init(nibName: NSNib.Name(rawValue: "LunarCalendarView"), bundle: nil)
+        super.init(nibName: "LunarCalendarView", bundle: nil)
         commonInit()
     }
     
@@ -487,10 +487,10 @@ class CalendarCell:NSButton
             //lunar
             if !self.selected {
                 let lunarFont = NSFont(name: self.font!.fontName, size: 8)!
-                let attrs:[NSAttributedStringKey : Any] = [
-                    NSAttributedStringKey.paragraphStyle: paragraphStyle,
-                    NSAttributedStringKey.font: lunarFont,
-                    NSAttributedStringKey.foregroundColor: NSColor.gray]
+                let attrs:[NSAttributedString.Key : Any] = [
+                    NSAttributedString.Key.paragraphStyle: paragraphStyle,
+                    NSAttributedString.Key.font: lunarFont,
+                    NSAttributedString.Key.foregroundColor: NSColor.gray]
                 let size = (self.lunarStr as NSString).size(withAttributes: attrs)
                 let r = NSMakeRect(bounds.origin.x,
                     bounds.origin.y + (bounds.size.height - size.height)/2.0 + 12,
@@ -511,10 +511,10 @@ class CalendarCell:NSButton
                 textColor = self.owner.textColor
                 self.isEnabled = true
             }
-            let attrs:[NSAttributedStringKey : Any] = [
-                NSAttributedStringKey.paragraphStyle: paragraphStyle,
-                NSAttributedStringKey.font: solarFont,
-                NSAttributedStringKey.foregroundColor: textColor]
+            let attrs:[NSAttributedString.Key : Any] = [
+                NSAttributedString.Key.paragraphStyle: paragraphStyle,
+                NSAttributedString.Key.font: solarFont,
+                NSAttributedString.Key.foregroundColor: textColor]
             let size = (self.solarStr as NSString).size(withAttributes: attrs)
             let r = NSMakeRect(bounds.origin.x,
                 bounds.origin.y + (bounds.size.height - size.height)/2.0-1,

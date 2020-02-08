@@ -92,7 +92,7 @@ extension SingleColumnTableViewController: NSTableViewDelegate {
             }
             let colView = tableView.makeView(withIdentifier: id, owner: nil) as! NSTableCellView
             colView.textField?.stringValue = value;
-            colView.textField?.lineBreakMode = NSParagraphStyle.LineBreakMode.byWordWrapping
+            colView.textField?.lineBreakMode = .byWordWrapping
             if row == tableView.selectedRow {
                 lastSelectedRow = row
                 colView.textField?.textColor = NSColor.yellow

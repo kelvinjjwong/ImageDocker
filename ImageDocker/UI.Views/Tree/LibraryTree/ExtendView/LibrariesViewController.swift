@@ -20,7 +20,7 @@ class LibrariesViewController: NSViewController {
     // MARK: INIT VIEW
     
     init(onReload: (() -> Void)? = nil) {
-        super.init(nibName: NSNib.Name(rawValue: "LibrariesViewController"), bundle: nil)
+        super.init(nibName: "LibrariesViewController", bundle: nil)
         self.onReload = onReload
     }
     
@@ -184,7 +184,7 @@ extension LibrariesViewController: NSTableViewDelegate {
             }
             let colView = tableView.makeView(withIdentifier: id, owner: nil) as! NSTableCellView
             colView.textField?.stringValue = value;
-            colView.textField?.lineBreakMode = NSParagraphStyle.LineBreakMode.byWordWrapping
+            colView.textField?.lineBreakMode = .byWordWrapping
             if row == tableView.selectedRow {
                 colView.textField?.textColor = NSColor.yellow
             } else {

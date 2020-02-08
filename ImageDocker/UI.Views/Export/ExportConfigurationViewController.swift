@@ -69,7 +69,7 @@ class ExportConfigurationViewController: NSViewController {
     // MARK: - INIT
     
     init() {
-        super.init(nibName: NSNib.Name(rawValue: "ExportConfigurationViewController"), bundle: nil)
+        super.init(nibName: "ExportConfigurationViewController", bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -248,8 +248,8 @@ class ExportConfigurationViewController: NSViewController {
     /// Used to add a particular view controller as an item to our stack view.
     func addProfileItem(profile:ExportProfile) {
         
-        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "ExportStackItems"), bundle: nil)
-        let viewController = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "ExportProfile")) as! ExportProfileViewController
+        let storyboard = NSStoryboard(name: "ExportStackItems", bundle: nil)
+        let viewController = storyboard.instantiateController(withIdentifier: "ExportProfile") as! ExportProfileViewController
         
         viewController.initView(profile: profile,
                                 onEdit: {

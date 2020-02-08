@@ -92,20 +92,9 @@ extension ViewController {
         NSApplication.shared.terminate(self)
     }
     
-    internal func loadTreeOnStartup() {
+    internal func prepareToolbarsOnStartup() {
         DispatchQueue.main.async {
-            
-            print("\(Date()) Loading view - configure tree - reloading source list view")
-            
-//            self.sortLibraryTreeRepositories()
-//            self.sourceList.reloadData()
-//            self.treeIndicator.isEnabled = false
-//            self.treeIndicator.isHidden = true
-            
-//            self.showToolbarOfTree()
             self.showToolbarOfCollectionView()
-            
-            print("\(Date()) Loading view - configure tree - reloading source list view: DONE")
             
             if self.startingUp {
                 self.splashController.message("Preparing UI ...", progress: 5)

@@ -59,7 +59,7 @@ class Location : NSObject {
     var info:[MetaInfo] = [MetaInfo]()
     
     fileprivate func setInfo(category:String, value:String){
-        let i = info.index(where: {$0.category == category} )
+        let i = info.firstIndex(where: {$0.category == category} )
         if i != nil {
             info.remove(at: i!)
         }

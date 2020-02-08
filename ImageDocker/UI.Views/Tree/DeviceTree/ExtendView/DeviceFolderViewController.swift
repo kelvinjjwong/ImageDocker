@@ -59,7 +59,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
         self.images = images
         self.currentPath = URL(fileURLWithPath: "/")
         self.directoryViewDelegate = LocalDirectoryViewDelegate()
-        super.init(nibName: NSNib.Name(rawValue: "DeviceFolderViewController"), bundle: nil)
+        super.init(nibName: "DeviceFolderViewController", bundle: nil)
         self.tblShortcutDelegate.gotoDelegate = self
         self.tblFoldersDelegate.gotoDelegate = self
         // do not set value for components here, do it in viewDidLoad()

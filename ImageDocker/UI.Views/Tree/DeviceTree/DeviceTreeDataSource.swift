@@ -79,7 +79,7 @@ class DeviceTreeDataSource : TreeDataSource {
                     let node = self.convertToTreeNode(device: dev, connected: true)
                     nodes.append(node)
                     
-                    if let id = imageDevice.deviceId, let i = deviceIds.index(of: id) {
+                    if let id = imageDevice.deviceId, let i = deviceIds.firstIndex(of: id) {
                         deviceIds.remove(at: i)
                     }
                 }
@@ -88,7 +88,7 @@ class DeviceTreeDataSource : TreeDataSource {
         // devices those not connected
         if deviceIds.count > 0 {
             for device in devs {
-                if let id = device.deviceId, let _ = deviceIds.index(of: id) {
+                if let id = device.deviceId, let _ = deviceIds.firstIndex(of: id) {
                     var dev:PhoneDevice = PhoneDevice(type: .Android, deviceId: id, manufacture: device.manufacture ?? "", model: device.model ?? "")
                     dev.name = device.name ?? ""
                     
@@ -140,7 +140,7 @@ class DeviceTreeDataSource : TreeDataSource {
                 let node = self.convertToTreeNode(device: dev, connected: true)
                 nodes.append(node)
                 
-                if let id = imageDevice.deviceId, let i = deviceIds.index(of: id) {
+                if let id = imageDevice.deviceId, let i = deviceIds.firstIndex(of: id) {
                     deviceIds.remove(at: i)
                 }
             }else{
@@ -151,7 +151,7 @@ class DeviceTreeDataSource : TreeDataSource {
         // devices those not connected
         if deviceIds.count > 0 {
             for device in devs {
-                if let id = device.deviceId, let _ = deviceIds.index(of: id), let t = device.type, t == "iPhone" {
+                if let id = device.deviceId, let _ = deviceIds.firstIndex(of: id), let t = device.type, t == "iPhone" {
                     var dev:PhoneDevice = PhoneDevice(type: .iPhone, deviceId: id, manufacture: device.manufacture ?? "", model: device.model ?? "")
                     dev.name = device.name ?? ""
                     

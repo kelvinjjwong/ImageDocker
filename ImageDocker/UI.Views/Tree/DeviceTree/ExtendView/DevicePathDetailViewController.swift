@@ -307,7 +307,7 @@ class DevicePathDetailViewController: NSViewController {
     }
     
     init() {
-        super.init(nibName: NSNib.Name(rawValue: "DevicePathDetailViewController"), bundle: nil)
+        super.init(nibName: "DevicePathDetailViewController", bundle: nil)
     }
     
     override func viewDidLoad() {

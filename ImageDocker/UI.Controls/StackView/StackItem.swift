@@ -109,7 +109,7 @@ extension StackItemBody where Self : NSViewController {
 
             if animated {
                 NSAnimationContext.runAnimationGroup({ (context) -> Void in
-                    context.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+                    context.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
                     constraint.animator().constant = heightValue
                     
                 }, completionHandler: { () -> Void in

@@ -84,7 +84,7 @@ class AddLocalDirectoryViewController: NSViewController, DirectoryViewGotoDelega
                 self.defaultToFolder = "/sdcard/DCIM/Camera/"
             }
         }
-        super.init(nibName: NSNib.Name(rawValue: "AddLocalDirectoryViewController"), bundle: nil)
+        super.init(nibName: "AddLocalDirectoryViewController", bundle: nil)
         self.tblShortcutDelegate.gotoDelegate = self
         self.tblFoldersDelegate.gotoDelegate = self
     }
@@ -257,7 +257,7 @@ extension DirectoryShortcutTableDelegate : NSTableViewDelegate {
             }
             let colView = tableView.makeView(withIdentifier: id, owner: nil) as! NSTableCellView
             colView.textField?.stringValue = value;
-            colView.textField?.lineBreakMode = NSParagraphStyle.LineBreakMode.byWordWrapping
+            colView.textField?.lineBreakMode = .byWordWrapping
 //            if row == tableView.selectedRow {
 //                lastSelectedRow = row
 //            } else {
@@ -344,7 +344,7 @@ extension DirectoryFolderTableDelegate : NSTableViewDelegate {
             }
             let colView = tableView.makeView(withIdentifier: id, owner: nil) as! NSTableCellView
             colView.textField?.stringValue = value;
-            colView.textField?.lineBreakMode = NSParagraphStyle.LineBreakMode.byWordWrapping
+            colView.textField?.lineBreakMode = .byWordWrapping
 //            if row == tableView.selectedRow {
 //                lastSelectedRow = row
 //            } else {
@@ -421,7 +421,7 @@ extension DirectoryFilesTableDelegate : NSTableViewDelegate {
             }
             let colView = tableView.makeView(withIdentifier: id, owner: nil) as! NSTableCellView
             colView.textField?.stringValue = value;
-            colView.textField?.lineBreakMode = NSParagraphStyle.LineBreakMode.byWordWrapping
+            colView.textField?.lineBreakMode = .byWordWrapping
 //            if row == tableView.selectedRow {
 //                lastSelectedRow = row
 //            } else {

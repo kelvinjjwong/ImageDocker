@@ -27,7 +27,7 @@ class ExportProfileViewController : NSViewController {
     var onDelete: (() -> Void)? = nil
     
     init() {
-        super.init(nibName: NSNib.Name(rawValue: "ExportProfileViewController"), bundle: nil)
+        super.init(nibName: "ExportProfileViewController", bundle: nil)
     }
     
     required init?(coder: NSCoder) {

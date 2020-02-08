@@ -782,14 +782,14 @@ class CollectionViewItemsLoader: NSObject {
     }
     
     func addItem(_ imageFile:ImageFile){
-        let i = items.index(where: { $0.url == imageFile.url })
+        let i = items.firstIndex(where: { $0.url == imageFile.url })
         if i == nil {
             items.append(imageFile)
         }
     }
     
     func removeItem(_ imageFile:ImageFile){
-        if let i = items.index(where: { $0.url == imageFile.url }) {
+        if let i = items.firstIndex(where: { $0.url == imageFile.url }) {
             items.remove(at: i)
         }
     }

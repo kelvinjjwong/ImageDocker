@@ -1265,6 +1265,8 @@
 			dependencies = (
 			);
 			name = ImageDocker;
+			packageProductDependencies = (
+			);
 			productName = ImageDocker;
 			productReference = 8E0AFA39208BDEA000CE8B68 /* ImageDocker.app */;
 			productType = "com.apple.product-type.application";
@@ -1317,7 +1319,7 @@
 				TargetAttributes = {
 					8E0AFA38208BDEA000CE8B68 = {
 						CreatedOnToolsVersion = 9.3;
-						LastSwiftMigration = 0930;
+						LastSwiftMigration = 1130;
 						SystemCapabilities = {
 							com.apple.Sandbox = {
 								enabled = 0;
@@ -1326,10 +1328,12 @@
 					};
 					8E0AFA4A208BDEA100CE8B68 = {
 						CreatedOnToolsVersion = 9.3;
+						LastSwiftMigration = 1130;
 						TestTargetID = 8E0AFA38208BDEA000CE8B68;
 					};
 					8E0AFA55208BDEA100CE8B68 = {
 						CreatedOnToolsVersion = 9.3;
+						LastSwiftMigration = 1130;
 						TestTargetID = 8E0AFA38208BDEA000CE8B68;
 					};
 				};
@@ -1343,6 +1347,8 @@
 				Base,
 			);
 			mainGroup = 8E0AFA30208BDEA000CE8B68;
+			packageReferences = (
+			);
 			productRefGroup = 8E0AFA3A208BDEA000CE8B68 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1758,7 +1764,7 @@
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1812,7 +1818,7 @@
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1834,7 +1840,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ImageDocker/ImageDocker-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1855,7 +1861,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.nonamecat.ImageDocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ImageDocker/ImageDocker-Bridging-Header.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1875,7 +1881,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.nonamecat.ImageDockerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ImageDocker.app/Contents/MacOS/ImageDocker";
 			};
 			name = Debug;
@@ -1896,7 +1902,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.nonamecat.ImageDockerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ImageDocker.app/Contents/MacOS/ImageDocker";
 			};
 			name = Release;
@@ -1916,7 +1922,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.nonamecat.ImageDockerUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = ImageDocker;
 			};
 			name = Debug;
@@ -1936,7 +1942,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.nonamecat.ImageDockerUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = ImageDocker;
 			};
 			name = Release;

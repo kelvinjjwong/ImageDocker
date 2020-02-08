@@ -136,7 +136,7 @@ class MemoriesViewController : NSViewController {
         let gap = thisYear - year
         self.lblToday.stringValue = "\(gap)年前(\(year)年)"
         
-        if let i = years.index(of: year) {
+        if let i = years.firstIndex(of: year) {
             if (i + 1) < years.count {
                 let nextYear = years[i+1]
                 self.btnNextYear.title = "\(nextYear)"
@@ -403,10 +403,10 @@ extension MemoriesViewController {
     
     private func configureCollectionView() {
         
-        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "MemoriesViews"), bundle: nil)
+        let storyboard = NSStoryboard(name: "MemoriesViews", bundle: nil)
         
-        collectionViewController = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "memoriesCollectionView")) as! MemoriesCollectionViewController
-        self.addChildViewController(collectionViewController)
+        collectionViewController = storyboard.instantiateController(withIdentifier: "memoriesCollectionView") as! MemoriesCollectionViewController
+        self.addChild(collectionViewController)
         
         // outlet
         collectionViewController.collectionView = self.collectionView

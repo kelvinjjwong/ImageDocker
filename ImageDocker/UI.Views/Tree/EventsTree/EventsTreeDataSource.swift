@@ -30,12 +30,12 @@ class EventsTreeDataSource : TreeDataSource {
             moment.eventCategory = lv1
             moment.event = lv2
             
-            print("Got event \(lv1) -> \(lv2)")
+            //print("Got event \(lv1) -> \(lv2)")
             
             var lv1Entry:TreeCollection
             var lv2Entry:TreeCollection
             
-            if events.index(where: {$0.name == lv1}) == nil {
+            if events.firstIndex(where: {$0.name == lv1}) == nil {
                 lv1Entry = TreeCollection(lv1, id: "cat_\(lv1)", object: Moment(eventCategory: lv1))
                 lv1Entry.expandable = true
                 events.append(lv1Entry)
@@ -43,7 +43,7 @@ class EventsTreeDataSource : TreeDataSource {
                 lv1Entry = events.first(where: {$0.name == lv1})!
             }
             
-            if lv1Entry.children.index(where: {$0.name == lv2}) == nil {
+            if lv1Entry.children.firstIndex(where: {$0.name == lv2}) == nil {
                 lv2Entry = TreeCollection(lv2, id: "cat_\(lv1)_event_\(lv2)", object:moment)
                 lv2Entry.expandable = true
                 lv1Entry.addChild(collection: lv2Entry)

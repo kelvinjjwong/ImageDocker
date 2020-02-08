@@ -22,7 +22,7 @@ protocol PlaceListRefreshDelegate {
 
 class PlaceListViewController: NSViewController {
     
-    let tick:NSImage = NSImage.init(named: NSImage.Name.menuOnStateTemplate)!
+    let tick:NSImage = NSImage.init(named: NSImage.menuOnStateTemplateName)!
     
     var refreshDelegate:PlaceListRefreshDelegate?
     
@@ -32,7 +32,7 @@ class PlaceListViewController: NSViewController {
     var coordinateAPI:LocationAPI = .baidu
     
     init(){
-        super.init(nibName: NSNib.Name(rawValue: "PlaceListViewController"), bundle: nil)
+        super.init(nibName: "PlaceListViewController", bundle: nil)
     }
     
     
@@ -331,7 +331,7 @@ extension PlaceListViewController: NSTableViewDelegate {
             }
             let colView = tableView.makeView(withIdentifier: id, owner: nil) as! NSTableCellView
             colView.textField?.stringValue = value;
-            colView.textField?.lineBreakMode = NSParagraphStyle.LineBreakMode.byWordWrapping
+            colView.textField?.lineBreakMode = .byWordWrapping
             if row == tableView.selectedRow {
                 lastSelectedRow = row
                 colView.textField?.textColor = NSColor.yellow

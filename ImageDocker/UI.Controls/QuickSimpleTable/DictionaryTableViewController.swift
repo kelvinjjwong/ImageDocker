@@ -112,7 +112,7 @@ extension DictionaryTableViewController: NSTableViewDelegate {
                 colView.addSubview(button)
             }else{
                 colView.textField?.stringValue = value;
-                colView.textField?.lineBreakMode = NSParagraphStyle.LineBreakMode.byClipping
+                colView.textField?.lineBreakMode = .byClipping
                 if row == tableView.selectedRow {
                     lastSelectedRow = row
                     colView.textField?.textColor = NSColor.yellow

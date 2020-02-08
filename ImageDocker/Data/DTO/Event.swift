@@ -105,7 +105,7 @@ class Events {
             var eventEntry:Event
             var monthEntry:Event
             
-            if events.index(where: {$0.event == event}) == nil {
+            if events.firstIndex(where: {$0.event == event}) == nil {
                 eventEntry = Event(event: event)
                 events.append(eventEntry)
             }else{
@@ -113,7 +113,7 @@ class Events {
             }
             eventEntry.photoCount += photoCount
             
-            if eventEntry.children.index(where: {$0.year == year && $0.month == month}) == nil {
+            if eventEntry.children.firstIndex(where: {$0.year == year && $0.month == month}) == nil {
                 monthEntry = Event(month: month, ofYear: year, event:event, place: place)
                 
                 eventEntry.children.append(monthEntry)

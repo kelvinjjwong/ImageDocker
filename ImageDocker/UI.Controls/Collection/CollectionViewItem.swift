@@ -81,7 +81,7 @@ class CollectionViewItem: NSCollectionViewItem {
         view.layer?.borderWidth = 0.0
         view.layer?.borderColor = NSColor(calibratedRed: 0.0, green: 0.5, blue: 1.0, alpha: 1.0).cgColor // Aqua
 
-        self.btnLook.image = NSImage(named: NSImage.Name.quickLookTemplate)
+        self.btnLook.image = NSImage(named: NSImage.quickLookTemplateName)
         self.btnCaution.isHidden = true
     }
     
@@ -115,10 +115,10 @@ class CollectionViewItem: NSCollectionViewItem {
         checkBox.state = NSButton.StateValue.off
         
         if imageFile.isHidden {
-            self.btnLook.image = NSImage(named: NSImage.Name.stopProgressTemplate)
+            self.btnLook.image = NSImage(named: NSImage.stopProgressTemplateName)
             self.btnLook.toolTip = "Hidden"
         }else {
-            self.btnLook.image = NSImage(named: NSImage.Name.quickLookTemplate)
+            self.btnLook.image = NSImage(named: NSImage.quickLookTemplateName)
             self.btnLook.toolTip = "Visible"
         }
         
@@ -194,11 +194,11 @@ class CollectionViewItem: NSCollectionViewItem {
         if let image = self.imageFile {
             if image.isHidden {
                 image.show()
-                self.btnLook.image = NSImage(named: NSImage.Name.quickLookTemplate)
+                self.btnLook.image = NSImage(named: NSImage.quickLookTemplateName)
                 self.btnLook.toolTip = "Visible"
             }else {
                 image.hide()
-                self.btnLook.image = NSImage(named: NSImage.Name.stopProgressTemplate)
+                self.btnLook.image = NSImage(named: NSImage.stopProgressTemplateName)
                 self.btnLook.toolTip = "Hidden"
             }
             //ModelStore.save()

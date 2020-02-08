@@ -24,14 +24,14 @@ extension ViewController {
         self.playerContainer.layer?.borderColor = NSColor.darkGray.cgColor
         
         // Do any additional setup after loading the view.
-        stackedImageViewController = storyboard?.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "imageView")) as! StackedImageViewController
-        stackedVideoViewController = storyboard?.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "videoView")) as! StackedVideoViewController
+        stackedImageViewController = storyboard?.instantiateController(withIdentifier: "imageView") as! StackedImageViewController
+        stackedVideoViewController = storyboard?.instantiateController(withIdentifier: "videoView") as! StackedVideoViewController
         
         stackedImageViewController.parentController = self
         stackedVideoViewController.parentController = self
         
-        self.addChildViewController(stackedImageViewController)
-        self.addChildViewController(stackedVideoViewController)
+        self.addChild(stackedImageViewController)
+        self.addChild(stackedVideoViewController)
         
         stackedImageViewController.view.frame = self.playerContainer.bounds
         self.playerContainer.addSubview(stackedImageViewController.view)

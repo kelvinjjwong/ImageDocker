@@ -35,7 +35,7 @@ class Duplicates {
     func updateMapping(key:String, path:String){
         if let oldKey = pathToKey[path] {
             if let _ = keyToPath[oldKey] {
-                let i = keyToPath[oldKey]?.index(of: path)
+                let i = keyToPath[oldKey]?.firstIndex(of: path)
                 keyToPath[oldKey]?.remove(at: i!)
             }
         }

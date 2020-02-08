@@ -15,8 +15,8 @@ extension ViewController {
         let years = ModelStore.default.getYearsByTodayInPrevious()
         guard years.count > 0 else {return}
         
-        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "MemoriesViews"), bundle: nil)
-        let viewController = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "MemoriesViewController")) as! MemoriesViewController
+        let storyboard = NSStoryboard(name: "MemoriesViews", bundle: nil)
+        let viewController = storyboard.instantiateController(withIdentifier: "MemoriesViewController") as! MemoriesViewController
         let window = NSWindow(contentViewController: viewController)
         
         let screenWidth = Int(NSScreen.main?.frame.width ?? 0)

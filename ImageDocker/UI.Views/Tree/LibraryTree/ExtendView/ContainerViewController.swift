@@ -24,7 +24,7 @@ class ContainerViewController: NSViewController {
     // MARK: INIT
     
     init(){
-        super.init(nibName: NSNib.Name(rawValue: "ContainerViewController"), bundle: nil)
+        super.init(nibName: "ContainerViewController", bundle: nil)
     }
     
     

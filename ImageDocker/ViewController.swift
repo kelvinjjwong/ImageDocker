@@ -17,7 +17,7 @@ import AVKit
 class ViewController: NSViewController {
     
     // MARK: Icon
-    let tick:NSImage = NSImage.init(named: NSImage.Name.menuOnStateTemplate)!
+    let tick:NSImage = NSImage.init(named: NSImage.menuOnStateTemplateName)!
     
     
     
@@ -321,7 +321,7 @@ class ViewController: NSViewController {
         })
         //splashController.view.frame = self.view.frame
         self.view.addSubview(splashController.view)
-        self.addChildViewController(splashController)
+        self.addChild(splashController)
         splashController.view.frame = self.view.bounds
         
         self.btnImageOptions.isEnabled = false
@@ -391,7 +391,7 @@ class ViewController: NSViewController {
     internal var startupAggregateFlag: Int = 0 {
         didSet {
             if startupAggregateFlag == 5 {
-                self.loadTreeOnStartup()
+                self.prepareToolbarsOnStartup()
             }
         }
     }

@@ -90,7 +90,7 @@ extension ViewController : NSCollectionViewDataSource {
     }
   
     func collectionView(_ collectionView: NSCollectionView, viewForSupplementaryElementOfKind kind: NSCollectionView.SupplementaryElementKind, at indexPath: IndexPath) -> NSView {
-        let view = collectionView.makeSupplementaryView(ofKind: NSCollectionView.SupplementaryElementKind.sectionHeader, withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "HeaderView"), for: indexPath as IndexPath) as! HeaderView
+        let view = collectionView.makeSupplementaryView(ofKind: NSCollectionView.elementKindSectionHeader, withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "HeaderView"), for: indexPath as IndexPath) as! HeaderView
         view.uncheck(ignoreDelegate: true)
         view.setCheckBoxDelegate(self)
         view.sectionIndex = indexPath.section
@@ -255,7 +255,7 @@ extension ViewController : CollectionViewItemCheckDelegate {
     
     func checkSectionIfAllItemsChecked(_ item: CollectionViewItem) {
         if let indexPath = collectionView.indexPath(for: item) {
-            let section = collectionView.supplementaryView(forElementKind: NSCollectionView.SupplementaryElementKind.sectionHeader, at: IndexPath(item: 0, section: indexPath.section))
+            let section = collectionView.supplementaryView(forElementKind: NSCollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: indexPath.section))
             
             if section != nil {
                 
@@ -284,7 +284,7 @@ extension ViewController : CollectionViewItemCheckDelegate {
     
     func uncheckSectionIfAllItemsUnchecked(_ item: CollectionViewItem) {
         if let indexPath = collectionView.indexPath(for: item) {
-            let section = collectionView.supplementaryView(forElementKind: NSCollectionView.SupplementaryElementKind.sectionHeader, at: IndexPath(item: 0, section: indexPath.section))
+            let section = collectionView.supplementaryView(forElementKind: NSCollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: indexPath.section))
             
             if section != nil {
                 

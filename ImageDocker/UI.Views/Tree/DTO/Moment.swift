@@ -177,7 +177,7 @@ class Moments {
             var monthEntry:Moment
             
             if year == 0 && month == 0 && day == 0 {
-                if years.index(where: {$0.place == "未能识别日期"}) == nil {
+                if years.firstIndex(where: {$0.place == "未能识别日期"}) == nil {
                     yearEntry = Moment(place: "未能识别日期")
                     years.append(yearEntry)
                 }else{
@@ -191,7 +191,7 @@ class Moments {
                 yearEntry.children.append(dayEntry)
             }else {
             
-                if years.index(where: {$0.year == year}) == nil {
+                if years.firstIndex(where: {$0.year == year}) == nil {
                     yearEntry = Moment(year: year)
                     years.append(yearEntry)
                 }else{
@@ -199,7 +199,7 @@ class Moments {
                 }
                 yearEntry.photoCount += photoCount
                 
-                if yearEntry.children.index(where: {$0.month == month}) == nil {
+                if yearEntry.children.firstIndex(where: {$0.month == month}) == nil {
                     monthEntry = Moment(month: month, ofYear: year, place: place)
                     yearEntry.children.append(monthEntry)
                 }else {
@@ -278,7 +278,7 @@ class Moments {
             var yearEntry:Moment
             var monthEntry:Moment
             
-            if places.index(where: {$0.gov == gov}) == nil {
+            if places.firstIndex(where: {$0.gov == gov}) == nil {
                 govEntry = Moment(gov: gov)
                 govEntry.groupByPlace = true
                 places.append(govEntry)
@@ -290,7 +290,7 @@ class Moments {
             govEntry.provinceData = data["province"] as? String ?? ""
             govEntry.cityData = data["city"] as? String ?? ""
             
-            if govEntry.children.index(where: {$0.place == place}) == nil {
+            if govEntry.children.firstIndex(where: {$0.place == place}) == nil {
                 placeEntry = Moment(place: place, gov: gov)
                 placeEntry.groupByPlace = true
                 govEntry.children.append(placeEntry)
@@ -303,7 +303,7 @@ class Moments {
             placeEntry.cityData = data["city"] as? String ?? ""
             placeEntry.placeData = data["place"] as? String ?? ""
             
-            if placeEntry.children.index(where: {$0.year == year}) == nil {
+            if placeEntry.children.firstIndex(where: {$0.year == year}) == nil {
                 yearEntry = Moment(year: year, place: place, gov: gov)
                 yearEntry.groupByPlace = true
                 placeEntry.children.append(yearEntry)
@@ -316,7 +316,7 @@ class Moments {
             yearEntry.cityData = data["city"] as? String ?? ""
             yearEntry.placeData = data["place"] as? String ?? ""
             
-            if yearEntry.children.index(where: {$0.month == month}) == nil {
+            if yearEntry.children.firstIndex(where: {$0.month == month}) == nil {
                 monthEntry = Moment(month: month, ofYear: year, place: place, gov: gov)
                 monthEntry.groupByPlace = true
                 yearEntry.children.append(monthEntry)

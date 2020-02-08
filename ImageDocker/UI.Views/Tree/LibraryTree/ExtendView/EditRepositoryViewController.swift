@@ -89,7 +89,7 @@ class EditRepositoryViewController: NSViewController {
     // MARK: - INIT
     
     init(){
-        super.init(nibName: NSNib.Name(rawValue: "EditRepositoryViewController"), bundle: nil)
+        super.init(nibName: "EditRepositoryViewController", bundle: nil)
     }
     
     

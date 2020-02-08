@@ -24,7 +24,7 @@ class NotesViewController: NSViewController {
     // MARK: INIT
     
     init(){
-        super.init(nibName: NSNib.Name(rawValue: "NotesViewController"), bundle: nil)
+        super.init(nibName: "NotesViewController", bundle: nil)
     }
     
     

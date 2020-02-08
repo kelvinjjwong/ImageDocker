@@ -31,7 +31,7 @@ class CollectionPaginationViewController: NSViewController {
     // MARK: INIT VIEW
     
     init() {
-        super.init(nibName: NSNib.Name(rawValue: "CollectionPaginationViewController"), bundle: nil)
+        super.init(nibName: "CollectionPaginationViewController", bundle: nil)
     }
     
     required init?(coder: NSCoder) {

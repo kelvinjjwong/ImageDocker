@@ -19,7 +19,7 @@ class FilterViewController: NSViewController {
     var onApply: ((_ imageSource:[String], _ cameraModel:[String]) -> Void)?
     
     init(onApply: ((_ imageSource:[String], _ cameraModel:[String]) -> Void)? = nil){
-        super.init(nibName: NSNib.Name(rawValue: "FilterViewController"), bundle: nil)
+        super.init(nibName: "FilterViewController", bundle: nil)
         self.onApply = onApply
     }
     
@@ -149,7 +149,7 @@ extension CheckTableViewController: NSTableViewDelegate {
                 
             }else if id == NSUserInterfaceItemIdentifier("name") {
                 colView.textField?.stringValue = name;
-                colView.textField?.lineBreakMode = NSParagraphStyle.LineBreakMode.byWordWrapping
+                colView.textField?.lineBreakMode = .byWordWrapping
             }
             return colView
         }

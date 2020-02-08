@@ -50,8 +50,8 @@ class StackBodyViewController : NSViewController, StackItemBody {
     
     lazy var stackItemContainer: StackItemContainer? = {
         
-        let storyboard = NSStoryboard(name: NSStoryboard.Name("StackHeaderViewController"), bundle: nil)
-        guard let header = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier("HeaderTriangleViewController")) as? StackHeaderViewController else {
+        let storyboard = NSStoryboard(name: "StackHeaderViewController", bundle: nil)
+        guard let header = storyboard.instantiateController(withIdentifier: "HeaderTriangleViewController") as? StackHeaderViewController else {
             return .none
         }
         header.title = self.headerTitle()

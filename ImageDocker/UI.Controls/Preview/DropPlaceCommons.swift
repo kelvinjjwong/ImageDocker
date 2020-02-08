@@ -42,7 +42,7 @@ class DropPlace {
     
     static func allow(_ draggingInfo: NSDraggingInfo) -> Bool {
         var canAccept = false
-        let pasteBoard = draggingInfo.draggingPasteboard()
+        let pasteBoard = draggingInfo.draggingPasteboard
         let filteringOptions = [NSPasteboard.ReadingOptionKey.urlReadingContentsConformToTypes : DropPlace.acceptTypes]
         if pasteBoard.canReadObject(forClasses: [NSURL.self], options: filteringOptions) {
             canAccept = true
@@ -51,7 +51,7 @@ class DropPlace {
     }
     
     static func read(_ draggingInfo: NSDraggingInfo) -> [URL] {
-        let pasteBoard = draggingInfo.draggingPasteboard()
+        let pasteBoard = draggingInfo.draggingPasteboard
         let filteringOptions = [NSPasteboard.ReadingOptionKey.urlReadingContentsConformToTypes: DropPlace.acceptTypes]
         
         if let urls = pasteBoard.readObjects(forClasses: [NSURL.self], options: filteringOptions) as? [URL], urls.count > 0 {

@@ -33,7 +33,7 @@ class ContainerDetailViewController: NSViewController {
     // MARK: INIT VIEW
     
     init() {
-        super.init(nibName: NSNib.Name(rawValue: "ContainerDetailViewController"), bundle: nil)
+        super.init(nibName: "ContainerDetailViewController", bundle: nil)
     }
     
     required init?(coder: NSCoder) {

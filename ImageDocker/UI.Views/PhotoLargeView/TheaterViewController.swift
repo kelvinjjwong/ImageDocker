@@ -52,7 +52,7 @@ class TheaterViewController: NSViewController {
     let dayController = DayListController()
     
     init() {
-        super.init(nibName: NSNib.Name(rawValue: "TheaterViewController"), bundle: nil)
+        super.init(nibName: "TheaterViewController", bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -331,14 +331,14 @@ class TheaterViewController: NSViewController {
     }
     
     private func selectMonth(month:Int){
-        if let monthIndex = self.monthController.months.index(of: "\(month)") {
+        if let monthIndex = self.monthController.months.firstIndex(of: "\(month)") {
             let index = self.monthController.months.distance(from: self.monthController.months.startIndex, to: monthIndex)
             self.lstMonth.selectRowIndexes(NSIndexSet(index: index) as IndexSet, byExtendingSelection: false)
         }
     }
     
     private func selectDay(day:Int){
-        if let dayIndex = self.dayController.days.index(of: "\(day)") {
+        if let dayIndex = self.dayController.days.firstIndex(of: "\(day)") {
             let index = self.dayController.days.distance(from: self.dayController.days.startIndex, to: dayIndex)
             self.lstDay.selectRowIndexes(NSIndexSet(index: index) as IndexSet, byExtendingSelection: false)
         }
@@ -394,10 +394,10 @@ extension TheaterViewController {
     
     private func configureCollectionView() {
         
-        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "LargeViewItems"), bundle: nil)
+        let storyboard = NSStoryboard(name: "LargeViewItems", bundle: nil)
         
-        collectionViewController = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "theaterCollectionView")) as! TheaterCollectionViewController
-        self.addChildViewController(collectionViewController)
+        collectionViewController = storyboard.instantiateController(withIdentifier: "theaterCollectionView") as! TheaterCollectionViewController
+        self.addChild(collectionViewController)
         
         // outlet
         collectionViewController.collectionView = self.collectionView

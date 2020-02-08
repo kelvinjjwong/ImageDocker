@@ -63,8 +63,8 @@ extension ViewController {
         print("manage action \(menuItem.title)")
         self.btnFaces.selectItem(at: 0)
         
-        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "PeopleFaceViewItems"), bundle: nil)
-        let viewController = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "PeopleViewController")) as! PeopleViewController
+        let storyboard = NSStoryboard(name: "PeopleFaceViewItems", bundle: nil)
+        let viewController = storyboard.instantiateController(withIdentifier: "PeopleViewController") as! PeopleViewController
         let window = NSWindow(contentViewController: viewController)
         
         let screenWidth = Int(NSScreen.main?.frame.width ?? 0)
@@ -119,8 +119,8 @@ extension ViewController {
     }
     
     internal func openFaceManager() {
-        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "PeopleFaceViewItems"), bundle: nil)
-        let viewController = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "PeopleViewController")) as! PeopleViewController
+        let storyboard = NSStoryboard(name: "PeopleFaceViewItems", bundle: nil)
+        let viewController = storyboard.instantiateController(withIdentifier: "PeopleViewController") as! PeopleViewController
         let window = NSWindow(contentViewController: viewController)
         
         let screenWidth = Int(NSScreen.main?.frame.width ?? 0)

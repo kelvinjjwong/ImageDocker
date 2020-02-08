@@ -13,7 +13,7 @@ class TaskProgressViewController: NSViewController {
     @IBOutlet weak var stackView: NSStackView!
     
     init() {
-        super.init(nibName: NSNib.Name(rawValue: "TaskProgressViewController"), bundle: nil)
+        super.init(nibName: "TaskProgressViewController", bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -38,8 +38,8 @@ class TaskProgressViewController: NSViewController {
     }
     
     func addNoTaskNotice() {
-        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "TaskProgressStackItem"), bundle: nil)
-        let viewController = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "TaskProgress")) as! ProgressViewController
+        let storyboard = NSStoryboard(name: "TaskProgressStackItem", bundle: nil)
+        let viewController = storyboard.instantiateController(withIdentifier: "TaskProgress") as! ProgressViewController
         viewController.noTask()
         stackView.addArrangedSubview(viewController.view)
         //addChildViewController(viewController)
@@ -53,8 +53,8 @@ class TaskProgressViewController: NSViewController {
             self.stackView.removeView(noTask)
         }
         
-        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "TaskProgressStackItem"), bundle: nil)
-        let viewController = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "TaskProgress")) as! ProgressViewController
+        let storyboard = NSStoryboard(name: "TaskProgressStackItem", bundle: nil)
+        let viewController = storyboard.instantiateController(withIdentifier: "TaskProgress") as! ProgressViewController
         
         viewController.initView(id: id, message: message,
                                 onStop: {

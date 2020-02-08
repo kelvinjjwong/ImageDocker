@@ -24,7 +24,7 @@ class RepositoryDetailViewController: NSViewController {
     // MARK: INIT VIEW
     
     init() {
-        super.init(nibName: NSNib.Name(rawValue: "RepositoryDetailViewController"), bundle: nil)
+        super.init(nibName: "RepositoryDetailViewController", bundle: nil)
     }
     
     required init?(coder: NSCoder) {

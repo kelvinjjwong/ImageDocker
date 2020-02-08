@@ -11,8 +11,8 @@ import Cocoa
 extension ViewController {
     
     func openDeviceCopyView(device: PhoneDevice, connected: Bool) {
-        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "DeviceCopyView"), bundle: nil)
-        let viewController = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "DeviceCopyViewController")) as! DeviceCopyViewController
+        let storyboard = NSStoryboard(name: "DeviceCopyView", bundle: nil)
+        let viewController = storyboard.instantiateController(withIdentifier: "DeviceCopyViewController") as! DeviceCopyViewController
         let window = NSWindow(contentViewController: viewController)
         
         let screenWidth = Int(NSScreen.main?.frame.width ?? 0)
