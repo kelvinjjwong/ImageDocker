@@ -21,7 +21,7 @@ extension ModelStoreGRDB {
             // try DatabaseQueue(path: dbfile)
             try db.read { db in
                 let cursor = try Row.fetchCursor(db,
-                                                 """
+                                                 sql: """
 SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCount FROM
 (
     SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,count(path) as photoCount FROM
@@ -75,7 +75,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 let marks = repeatElement("?", count: dupDates.count).joined(separator: ",")
                 let sql = "SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,path FROM Image WHERE photoTakenYear <> 0 AND photoTakenYear IS NOT NULL AND photoTakenDate in (\(marks))"
                 //print(sql)
-                let photosInSameDate = try Row.fetchCursor(db, sql, arguments:StatementArguments(dupDates))
+                let photosInSameDate = try Row.fetchCursor(db, sql: sql, arguments:StatementArguments(dupDates))
                 
                 while let photo = try photosInSameDate.next() {
                     if let date = photo["photoTakenDate"] as Date? {
@@ -187,7 +187,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update Image set duplicatesKey = ?, hidden = ? where path = ?", arguments: [duplicatesKey, hide, path])
+                try db.execute(sql: "update Image set duplicatesKey = ?, hidden = ? where path = ?", arguments: [duplicatesKey, hide, path])
             }
         }catch{
             print(error)

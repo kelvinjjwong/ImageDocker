@@ -69,12 +69,12 @@ extension ModelStoreGRDB {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 // delete container-self
-                try db.execute("DELETE FROM ImageContainer WHERE path='\(path)'")
+                try db.execute(sql: "DELETE FROM ImageContainer WHERE path='\(path)'")
                 // delete sub-containers
-                try db.execute("DELETE FROM ImageContainer WHERE path LIKE '\(path.withStash())%'")
+                try db.execute(sql: "DELETE FROM ImageContainer WHERE path LIKE '\(path.withStash())%'")
                 // delete images
                 if deleteImage {
-                    try db.execute("DELETE FROM Image WHERE path LIKE '\(path.withStash())%'")
+                    try db.execute(sql: "DELETE FROM Image WHERE path LIKE '\(path.withStash())%'")
                 }
             }
         }catch{
@@ -87,8 +87,8 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("delete from ImageContainer where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
-                try db.execute("delete from Image where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
+                try db.execute(sql: "delete from ImageContainer where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
+                try db.execute(sql: "delete from Image where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -204,7 +204,7 @@ extension ModelStoreGRDB {
             try db.read { db in
                 if let root = rootPath {
                     let sql = "select distinct containerpath from image where repositoryPath = ? order by containerpath"
-                    let cursor = try Row.fetchCursor(db, sql, arguments:[root])
+                    let cursor = try Row.fetchCursor(db, sql: sql, arguments:[root])
                     while let container = try cursor.next() {
                         if let path = container["containerpath"] {
                             result.insert("\(path)")
@@ -212,7 +212,7 @@ extension ModelStoreGRDB {
                     }
                 }else{
                     let sql = "select distinct containerpath from image order by containerpath"
-                    let cursor = try Row.fetchCursor(db, sql)
+                    let cursor = try Row.fetchCursor(db, sql: sql)
                     while let container = try cursor.next() {
                         if let path = container["containerpath"] {
                             result.insert("\(path)")
@@ -293,7 +293,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update ImageContainer set parentFolder = ? where path = ?", arguments: [parentFolder, path])
+                try db.execute(sql: "update ImageContainer set parentFolder = ? where path = ?", arguments: [parentFolder, path])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -305,7 +305,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update ImageContainer set hideByParent = \(hideByParent ? 1 : 0) where path = ?", arguments: [path])
+                try db.execute(sql: "update ImageContainer set hideByParent = \(hideByParent ? 1 : 0) where path = ?", arguments: [path])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -318,7 +318,7 @@ extension ModelStoreGRDB {
             let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
                 //print("UPDATE CONTAINER old path = \(oldPath) with new path = \(newPath)")
-                try db.execute("update ImageContainer set path = ?, repositoryPath = ?, parentFolder = ?, subPath = ? where path = ?", arguments: [newPath, repositoryPath, parentFolder, subPath, oldPath])
+                try db.execute(sql: "update ImageContainer set path = ?, repositoryPath = ?, parentFolder = ?, subPath = ? where path = ?", arguments: [newPath, repositoryPath, parentFolder, subPath, oldPath])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -330,7 +330,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update ImageContainer set path = ?, repositoryPath = ? where path = ?", arguments: [newPath, repositoryPath, oldPath])
+                try db.execute(sql: "update ImageContainer set path = ?, repositoryPath = ? where path = ?", arguments: [newPath, repositoryPath, oldPath])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -342,8 +342,8 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update ImageContainer set manyChildren = \(state ? 1 : 0) where path = ?", arguments: [path])
-                try db.execute("update ImageContainer set hideByParent = \(state ? 1 : 0) where path like ?", arguments: ["\(path.withStash())%"])
+                try db.execute(sql: "update ImageContainer set manyChildren = \(state ? 1 : 0) where path = ?", arguments: [path])
+                try db.execute(sql: "update ImageContainer set hideByParent = \(state ? 1 : 0) where path like ?", arguments: ["\(path.withStash())%"])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -357,9 +357,9 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update ImageContainer set hiddenByContainer = 1 where path = ?", arguments: [path])
-                try db.execute("update ImageContainer set hiddenByContainer = 1 where path like ?", arguments: ["\(path.withStash())%"])
-                try db.execute("update Image set hiddenByContainer = 1 where path like ?", arguments:["\(path.withStash())%"])
+                try db.execute(sql: "update ImageContainer set hiddenByContainer = 1 where path = ?", arguments: [path])
+                try db.execute(sql: "update ImageContainer set hiddenByContainer = 1 where path like ?", arguments: ["\(path.withStash())%"])
+                try db.execute(sql: "update Image set hiddenByContainer = 1 where path like ?", arguments:["\(path.withStash())%"])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -371,8 +371,8 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update ImageContainer set hiddenByContainer = 0 where path = ?", arguments: [path])
-                try db.execute("update Image set hiddenByContainer = 0 where path like ?", arguments:["\(path.withStash())%"])
+                try db.execute(sql: "update ImageContainer set hiddenByContainer = 0 where path = ?", arguments: [path])
+                try db.execute(sql: "update Image set hiddenByContainer = 0 where path like ?", arguments:["\(path.withStash())%"])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -384,10 +384,10 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update ImageContainer set hiddenByRepository = 1 where path like ?", arguments: ["\(repositoryRoot.withStash())%"])
-                try db.execute("update ImageContainer set hiddenByRepository = 1 where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
-                try db.execute("update Image set hiddenByRepository = 1 where path like ?", arguments: ["\(repositoryRoot.withStash())%"])
-                try db.execute("update Image set hiddenByRepository = 1 where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
+                try db.execute(sql: "update ImageContainer set hiddenByRepository = 1 where path like ?", arguments: ["\(repositoryRoot.withStash())%"])
+                try db.execute(sql: "update ImageContainer set hiddenByRepository = 1 where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
+                try db.execute(sql: "update Image set hiddenByRepository = 1 where path like ?", arguments: ["\(repositoryRoot.withStash())%"])
+                try db.execute(sql: "update Image set hiddenByRepository = 1 where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -399,10 +399,10 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update ImageContainer set hiddenByRepository = 0 where path like ?", arguments: ["\(repositoryRoot.withStash())%"])
-                try db.execute("update ImageContainer set hiddenByRepository = 0 where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
-                try db.execute("update Image set hiddenByRepository = 0 where path like ?", arguments: ["\(repositoryRoot.withStash())%"])
-                try db.execute("update Image set hiddenByRepository = 0 where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
+                try db.execute(sql: "update ImageContainer set hiddenByRepository = 0 where path like ?", arguments: ["\(repositoryRoot.withStash())%"])
+                try db.execute(sql: "update ImageContainer set hiddenByRepository = 0 where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
+                try db.execute(sql: "update Image set hiddenByRepository = 0 where path like ?", arguments: ["\(repositoryRoot.withStash())%"])
+                try db.execute(sql: "update Image set hiddenByRepository = 0 where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
             }
         }catch{
             return ModelStore.errorState(error)

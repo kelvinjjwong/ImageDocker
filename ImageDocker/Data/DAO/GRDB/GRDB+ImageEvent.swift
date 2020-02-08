@@ -83,7 +83,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                result = try Row.fetchAll(db, sql, arguments:StatementArguments(sqlArgs))
+                result = try Row.fetchAll(db, sql: sql, arguments:StatementArguments(sqlArgs) ?? [])
             }
         }catch{
             print(error)
@@ -107,7 +107,7 @@ extension ModelStoreGRDB {
                         try event.save(db)
                     }
                 }
-                try db.execute("UPDATE Image SET AssignPlace=? WHERE AssignPlace=?", arguments: StatementArguments([oldName, newName]))
+                try db.execute(sql: "UPDATE Image SET AssignPlace=? WHERE AssignPlace=?", arguments: StatementArguments([oldName, newName]))
             }
         }catch{
             return ModelStore.errorState(error)
@@ -122,7 +122,7 @@ extension ModelStoreGRDB {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 try ImageEvent.deleteOne(db, key: name)
-                try db.execute("UPDATE Image SET event='' WHERE event=?", arguments: StatementArguments([name]))
+                try db.execute(sql: "UPDATE Image SET event='' WHERE event=?", arguments: StatementArguments([name]))
             }
         }catch{
             return ModelStore.errorState(error)

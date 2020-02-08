@@ -21,7 +21,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs)).fetchCount(db)
+                result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs) ?? []).fetchCount(db)
             }
         }catch{
             print(error)
@@ -37,7 +37,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                result = try Image.filter(sql:stmtHidden, arguments:StatementArguments(sqlArgs)).fetchCount(db)
+                result = try Image.filter(sql:stmtHidden, arguments:StatementArguments(sqlArgs) ?? []).fetchCount(db)
             }
         }catch{
             print(error)
@@ -53,7 +53,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs)).fetchCount(db)
+                result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs) ?? []).fetchCount(db)
             }
         }catch{
             print(error)
@@ -69,7 +69,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                result = try Image.filter(sql:stmtHidden, arguments:StatementArguments(sqlArgs)).fetchCount(db)
+                result = try Image.filter(sql:stmtHidden, arguments:StatementArguments(sqlArgs) ?? []).fetchCount(db)
             }
         }catch{
             print(error)
@@ -282,7 +282,7 @@ order by name
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, sql)
+                let rows = try Row.fetchAll(db, sql: sql)
                 for row in rows {
                     if let name = row["name"] as String?, let date = row["lastPhotoTakenDate"] as String? {
                         results[name] = date

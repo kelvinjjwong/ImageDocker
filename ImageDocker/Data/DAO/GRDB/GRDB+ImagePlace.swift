@@ -114,7 +114,7 @@ extension ModelStoreGRDB {
                         try place.save(db)
                     }
                 }
-                try db.execute("UPDATE Image SET assignPlace=? WHERE assignPlace=?", arguments: StatementArguments([newName, oldName]))
+                try db.execute(sql: "UPDATE Image SET assignPlace=? WHERE assignPlace=?", arguments: StatementArguments([newName, oldName]))
                 try ImagePlace.deleteOne(db, key: oldName)  // delete old one at last
             }
         }catch{
@@ -141,7 +141,7 @@ extension ModelStoreGRDB {
                     place.latitudeBD = location.coordinateBD?.latitude.description ?? ""
                     place.longitudeBD = location.coordinateBD?.longitude.description ?? ""
                     try place.save(db)
-                    try db.execute("UPDATE Image SET AssignCountry=?,AssignProvince=?,AssignCity=?,AssignBusinessCircle=?,AssignDistrict=?,AssignStreet=?,AssignAddress=?,AssignAddressDescription=?,Latitude=?,longitude=?,latitudeBD=?,longitudeBD=? WHERE AssignPlace=?",
+                    try db.execute(sql: "UPDATE Image SET AssignCountry=?,AssignProvince=?,AssignCity=?,AssignBusinessCircle=?,AssignDistrict=?,AssignStreet=?,AssignAddress=?,AssignAddressDescription=?,Latitude=?,longitude=?,latitudeBD=?,longitudeBD=? WHERE AssignPlace=?",
                                    arguments: StatementArguments([
                                     location.country,
                                     location.province,

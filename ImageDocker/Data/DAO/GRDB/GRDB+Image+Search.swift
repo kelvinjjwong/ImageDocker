@@ -27,14 +27,14 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                hiddenCount = try Image.filter(sql: stmtHidden, arguments:StatementArguments(sqlArgs)).fetchCount(db)
+                hiddenCount = try Image.filter(sql: stmtHidden, arguments:StatementArguments(sqlArgs) ?? []).fetchCount(db)
                 if pageNumber > 0 && pageSize > 0 {
-                    result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs))
+                    result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs) ?? [])
                         .order([Column("photoTakenDate").asc, Column("filename").asc])
                         .limit(pageSize, offset: pageSize * (pageNumber - 1))
                         .fetchAll(db)
                 }else{
-                    result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs))
+                    result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs) ?? [])
                         .order([Column("photoTakenDate").asc, Column("filename").asc])
                         .fetchAll(db)
                 }
@@ -60,14 +60,14 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                hiddenCount = try Image.filter(sql: stmtHidden, arguments:StatementArguments(sqlArgs)).fetchCount(db)
+                hiddenCount = try Image.filter(sql: stmtHidden, arguments:StatementArguments(sqlArgs) ?? []).fetchCount(db)
                 if pageNumber > 0 && pageSize > 0 {
-                    result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs))
+                    result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs) ?? [])
                         .order([Column("photoTakenDate").asc, Column("filename").asc])
                         .limit(pageSize, offset: pageSize * (pageNumber - 1))
                         .fetchAll(db)
                 }else{
-                    result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs))
+                    result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs) ?? [])
                         .order([Column("photoTakenDate").asc, Column("filename").asc])
                         .fetchAll(db)
                 }
@@ -201,7 +201,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, sql)
+                let rows = try Row.fetchAll(db, sql: sql)
                 if rows.count > 0 {
                     result = rows[0]["photoTakenYear"] as Int? ?? 0
                 }
@@ -219,7 +219,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, sql)
+                let rows = try Row.fetchAll(db, sql: sql)
                 if rows.count > 0 {
                     result = rows[0]["photoTakenYear"] as Int? ?? 0
                 }
@@ -254,7 +254,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, sql)
+                let rows = try Row.fetchAll(db, sql: sql)
                 if rows.count > 0 {
                     for row in rows {
                         result.append(row["photoTakenYear"] as Int? ?? 0)
@@ -279,7 +279,7 @@ select DATE('now', 'localtime')  date
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, sql)
+                let rows = try Row.fetchAll(db, sql: sql)
                 if rows.count > 0 {
                     for row in rows {
                         if let date = row["date"] as String? {
@@ -309,7 +309,7 @@ select DATE('now', 'localtime')  date
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, sql)
+                let rows = try Row.fetchAll(db, sql: sql)
                 if rows.count > 0 {
                     for row in rows {
                         if let date = row["photoTakenDate"] as String? {

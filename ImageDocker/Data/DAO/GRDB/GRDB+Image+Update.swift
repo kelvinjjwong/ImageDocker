@@ -32,7 +32,7 @@ extension ModelStoreGRDB {
             do {
                 let db = ModelStoreGRDB.sharedDBPool()
                 let _ = try db.write { db in
-                    try db.execute("update Image set delFlag = ?", arguments: [true])
+                    try db.execute(sql: "update Image set delFlag = ?", arguments: [true])
                 }
             }catch{
                 return ModelStore.errorState(error)
@@ -57,7 +57,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update Image set path = ?, repositoryPath = ?, subPath = ?, containerPath = ?, id = ? where path = ?", arguments: [newPath, repositoryPath, subPath, containerPath, id, oldPath])
+                try db.execute(sql: "update Image set path = ?, repositoryPath = ?, subPath = ?, containerPath = ?, id = ? where path = ?", arguments: [newPath, repositoryPath, subPath, containerPath, id, oldPath])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -69,7 +69,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update Image set originPath = ? where originPath = ?", arguments: [newRawPath, oldRawPath])
+                try db.execute(sql: "update Image set originPath = ? where originPath = ?", arguments: [newRawPath, oldRawPath])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -81,7 +81,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update Image set originPath = ? where repositoryPath = ?", arguments: [rawPath, repositoryPath])
+                try db.execute(sql: "update Image set originPath = ? where repositoryPath = ?", arguments: [rawPath, repositoryPath])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -93,7 +93,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update Image set originPath = ? where path like ?", arguments: [rawPath, "\(path.withStash())%"])
+                try db.execute(sql: "update Image set originPath = ? where path like ?", arguments: [rawPath, "\(path.withStash())%"])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -105,7 +105,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update Image set repositoryPath = ? where path like ?", arguments: [repositoryPath, "\(path.withStash())%"])
+                try db.execute(sql: "update Image set repositoryPath = ? where path like ?", arguments: [repositoryPath, "\(path.withStash())%"])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -117,7 +117,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update Image set repositoryPath = ? where repositoryPath = ?", arguments: [newRepository, oldRepositoryPath])
+                try db.execute(sql: "update Image set repositoryPath = ? where repositoryPath = ?", arguments: [newRepository, oldRepositoryPath])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -129,7 +129,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update Image set path = repositoryPath || subPath where repositoryPath = ? and subPath <> ''", arguments: [repositoryPath])
+                try db.execute(sql: "update Image set path = repositoryPath || subPath where repositoryPath = ? and subPath <> ''", arguments: [repositoryPath])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -143,7 +143,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update Image set scanedFace=1, facesCount=? where id=?", arguments: [facesCount, imageId])
+                try db.execute(sql: "update Image set scanedFace=1, facesCount=? where id=?", arguments: [facesCount, imageId])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -155,7 +155,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute("update Image set recognizedFace=1,recognizedPeopleIds=? where id=?", arguments: [recognizedPeopleIds,imageId])
+                try db.execute(sql: "update Image set recognizedFace=1,recognizedPeopleIds=? where id=?", arguments: [recognizedPeopleIds,imageId])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -209,7 +209,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
-                try db.execute("UPDATE Image set \(valueSets) WHERE path=?", arguments: StatementArguments(arguments))
+                try db.execute(sql: "UPDATE Image set \(valueSets) WHERE path=?", arguments: StatementArguments(arguments) ?? [])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -224,11 +224,11 @@ extension ModelStoreGRDB {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
                 if let brief = shortDescription, let detailed = longDescription {
-                    try db.execute("UPDATE Image set shortDescription = ?, longDescription = ? WHERE path=?", arguments: StatementArguments([brief, detailed, path]))
+                    try db.execute(sql: "UPDATE Image set shortDescription = ?, longDescription = ? WHERE path=?", arguments: StatementArguments([brief, detailed, path]))
                 }else if let brief = shortDescription {
-                    try db.execute("UPDATE Image set shortDescription = ? WHERE path=?", arguments: StatementArguments([brief, path]))
+                    try db.execute(sql: "UPDATE Image set shortDescription = ? WHERE path=?", arguments: StatementArguments([brief, path]))
                 }else if let detailed = longDescription {
-                    try db.execute("UPDATE Image set longDescription = ? WHERE path=?", arguments: StatementArguments([detailed, path]))
+                    try db.execute(sql: "UPDATE Image set longDescription = ? WHERE path=?", arguments: StatementArguments([detailed, path]))
                 }
             }
         }catch{
@@ -243,7 +243,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
-                try db.execute("UPDATE Image set exportTime = null WHERE path='\(path)'")
+                try db.execute(sql: "UPDATE Image set exportTime = null WHERE path='\(path)'")
             }
         }catch{
             return ModelStore.errorState(error)
@@ -255,7 +255,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
-                try db.execute("UPDATE Image set originalMD5 = ? WHERE path=?", arguments: StatementArguments([md5, path]))
+                try db.execute(sql: "UPDATE Image set originalMD5 = ? WHERE path=?", arguments: StatementArguments([md5, path]))
             }
         }catch{
             return ModelStore.errorState(error)
@@ -267,7 +267,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
-                try db.execute("UPDATE Image set exportedMD5 = ? WHERE path=?", arguments: StatementArguments([md5, path]))
+                try db.execute(sql: "UPDATE Image set exportedMD5 = ? WHERE path=?", arguments: StatementArguments([md5, path]))
             }
         }catch{
             return ModelStore.errorState(error)
@@ -279,7 +279,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
-                try db.execute("UPDATE Image set exportTime = ?, exportToPath = ?, exportAsFilename = ?, exportedMD5 = ?, exportedLongDescription = ?, exportState = 'OK', exportFailMessage = '' WHERE path=?", arguments: StatementArguments([date, exportToPath, exportedFilename, exportedMD5, exportedLongDescription, path]))
+                try db.execute(sql: "UPDATE Image set exportTime = ?, exportToPath = ?, exportAsFilename = ?, exportedMD5 = ?, exportedLongDescription = ?, exportState = 'OK', exportFailMessage = '' WHERE path=?", arguments: StatementArguments([date, exportToPath, exportedFilename, exportedMD5, exportedLongDescription, path]) ?? [])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -291,7 +291,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
-                try db.execute("UPDATE Image set exportTime = ? WHERE path=?", arguments: StatementArguments([date, path]))
+                try db.execute(sql: "UPDATE Image set exportTime = ? WHERE path=?", arguments: StatementArguments([date, path]) ?? [])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -303,7 +303,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
-                try db.execute("UPDATE Image set exportTime = ?, exportState = 'FAIL', exportFailMessage = ? WHERE path=?", arguments: StatementArguments([date, message, path]))
+                try db.execute(sql: "UPDATE Image set exportTime = ?, exportState = 'FAIL', exportFailMessage = ? WHERE path=?", arguments: StatementArguments([date, message, path]) ?? [])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -315,7 +315,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
-                try db.execute("UPDATE Image set exportToPath = null, exportAsFilename = null, exportTime = null, exportState = null, exportFailMessage = '', exportedMD5 = null, WHERE path=?", arguments: StatementArguments([path]))
+                try db.execute(sql: "UPDATE Image set exportToPath = null, exportAsFilename = null, exportTime = null, exportState = null, exportFailMessage = '', exportedMD5 = null, WHERE path=?", arguments: StatementArguments([path]))
             }
         }catch{
             return ModelStore.errorState(error)

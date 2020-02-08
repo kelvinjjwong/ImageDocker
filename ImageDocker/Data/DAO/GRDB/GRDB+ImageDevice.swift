@@ -148,7 +148,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
-                try db.execute("delete from ImageDeviceFile where deviceId = ?", arguments: [deviceId])
+                try db.execute(sql: "delete from ImageDeviceFile where deviceId = ?", arguments: [deviceId])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -216,7 +216,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
-                try db.execute("delete from ImageDevicePath where deviceId = ? and path = ?", arguments: [deviceId, path])
+                try db.execute(sql: "delete from ImageDevicePath where deviceId = ? and path = ?", arguments: [deviceId, path])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -267,7 +267,7 @@ where p.excludeimported=1
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, sql)
+                let rows = try Row.fetchAll(db, sql: sql)
                 for row in rows {
                     if let path = row["path"] as String? {
                         if withStash {
@@ -298,7 +298,7 @@ order by c.name
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, sql)
+                let rows = try Row.fetchAll(db, sql: sql)
                 for row in rows {
                     if let name = row["name"] as String?, let date = row["lastImportDate"] as String?, let deviceName = row["deviceName"] as String? {
                         if name == "NOT_SCAN" {

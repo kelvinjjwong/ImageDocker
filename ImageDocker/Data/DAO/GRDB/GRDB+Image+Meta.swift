@@ -18,7 +18,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, "SELECT DISTINCT imageSource FROM Image")
+                let rows = try Row.fetchAll(db, sql: "SELECT DISTINCT imageSource FROM Image")
                 for row in rows {
                     let src = row["imageSource"] as String?
                     if let src = src, src != "" {
@@ -38,7 +38,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, "SELECT DISTINCT cameraMaker,cameraModel FROM Image")
+                let rows = try Row.fetchAll(db, sql: "SELECT DISTINCT cameraMaker,cameraModel FROM Image")
                 for row in rows {
                     let name1:String = row["cameraMaker"] ?? ""
                     let name2:String = row["cameraModel"] ?? ""
@@ -82,7 +82,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, sql)
+                let rows = try Row.fetchAll(db, sql: sql)
                 for row in rows {
                     
                     var yy = 0
@@ -130,7 +130,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                result = try Row.fetchAll(db, sql, arguments:StatementArguments(sqlArgs))
+                result = try Row.fetchAll(db, sql: sql, arguments:StatementArguments(sqlArgs) ?? [])
             }
         }catch{
             print(error)
@@ -212,7 +212,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, sql, arguments:StatementArguments(argumentValues))
+                let rows = try Row.fetchAll(db, sql: sql, arguments:StatementArguments(argumentValues))
                 for row in rows {
                     var country = ""
                     var province = ""
@@ -286,7 +286,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                result = try Row.fetchAll(db, sql, arguments:StatementArguments(sqlArgs))
+                result = try Row.fetchAll(db, sql: sql, arguments:StatementArguments(sqlArgs) ?? [])
             }
         }catch{
             print(error)
@@ -312,7 +312,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, sql)
+                let rows = try Row.fetchAll(db, sql: sql)
                 if rows.count > 0 {
                     for row in rows {
                         let imageCount = Int("\(row[0] ?? 0)") ?? 0
@@ -359,7 +359,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, sql, arguments:StatementArguments([ev]))
+                let rows = try Row.fetchAll(db, sql: sql, arguments:StatementArguments([ev]))
                 if rows.count > 0 {
                     for row in rows {
                         let imageCount = Int("\(row[0] ?? 0)") ?? 0
@@ -404,7 +404,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, sql, arguments:StatementArguments(args))
+                let rows = try Row.fetchAll(db, sql: sql, arguments:StatementArguments(args))
                 for row in rows {
                     let year = row["photoTakenYear"] as Int? ?? 0
                     result.append(year)
@@ -430,7 +430,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, sql, arguments:StatementArguments(args))
+                let rows = try Row.fetchAll(db, sql: sql, arguments:StatementArguments(args) ?? [])
                 for row in rows {
                     let month = row["photoTakenMonth"] as Int? ?? 0
                     let day = row["photoTakenDay"] as Int? ?? 0

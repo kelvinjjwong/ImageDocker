@@ -31,7 +31,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, "SELECT familyId FROM FamilyMember WHERE peopleId='\(peopleId)'")
+                let rows = try Row.fetchAll(db, sql: "SELECT familyId FROM FamilyMember WHERE peopleId='\(peopleId)'")
                 for row in rows {
                     if let id = row["familyId"] as String? {
                         result.append(id)
@@ -48,9 +48,9 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
-                let rows = try Row.fetchAll(db, "SELECT familyId,peopleId FROM FamilyMember WHERE familyId='\(familyId)' AND peopleId='\(peopleId)'")
+                let rows = try Row.fetchAll(db, sql: "SELECT familyId,peopleId FROM FamilyMember WHERE familyId='\(familyId)' AND peopleId='\(peopleId)'")
                 if rows.count == 0 {
-                    try db.execute("INSERT INTO FamilyMember (familyId, peopleId) VALUES ('\(familyId)','\(peopleId)')")
+                    try db.execute(sql: "INSERT INTO FamilyMember (familyId, peopleId) VALUES ('\(familyId)','\(peopleId)')")
                 }
             }
         }catch{
@@ -63,7 +63,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
-                try db.execute("DELETE FROM FamilyMember WHERE familyId='\(familyId)' AND peopleId='\(peopleId)'")
+                try db.execute(sql: "DELETE FROM FamilyMember WHERE familyId='\(familyId)' AND peopleId='\(peopleId)'")
             }
         }catch{
             return ModelStore.errorState(error)
@@ -78,10 +78,10 @@ extension ModelStoreGRDB {
             try db.write { db in
                 var needInsert = false
                 if let id = familyId {
-                    let rows = try Row.fetchAll(db, "SELECT id FROM Family WHERE id='\(id)'")
+                    let rows = try Row.fetchAll(db, sql: "SELECT id FROM Family WHERE id='\(id)'")
                     if rows.count > 0 {
                         recordId = id
-                        try db.execute("UPDATE Family SET name='\(name)',category='\(type)' WHERE id='\(id)'")
+                        try db.execute(sql: "UPDATE Family SET name='\(name)',category='\(type)' WHERE id='\(id)'")
                     }else{
                         needInsert = true
                     }
@@ -90,7 +90,7 @@ extension ModelStoreGRDB {
                 }
                 if needInsert {
                     recordId = UUID().uuidString
-                    try db.execute("INSERT INTO Family (id, name, category) VALUES ('\(recordId!)','\(name)','\(type)')")
+                    try db.execute(sql: "INSERT INTO Family (id, name, category) VALUES ('\(recordId!)','\(name)','\(type)')")
                 }
             }
         }catch{
@@ -104,10 +104,10 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
-                try db.execute("DELETE FROM FamilyMember WHERE familyId='\(id)'")
-                try db.execute("DELETE FROM FamilyJoint WHERE smallFamilyId='\(id)'")
-                try db.execute("DELETE FROM FamilyJoint WHERE bigFamilyId='\(id)'")
-                try db.execute("DELETE FROM Family WHERE id='\(id)'")
+                try db.execute(sql: "DELETE FROM FamilyMember WHERE familyId='\(id)'")
+                try db.execute(sql: "DELETE FROM FamilyJoint WHERE smallFamilyId='\(id)'")
+                try db.execute(sql: "DELETE FROM FamilyJoint WHERE bigFamilyId='\(id)'")
+                try db.execute(sql: "DELETE FROM Family WHERE id='\(id)'")
             }
         }catch{
             return ModelStore.errorState(error)
@@ -123,12 +123,12 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows1 = try Row.fetchAll(db, "SELECT subject,object,callName FROM PeopleRelationship WHERE subject='\(primary)' AND object='\(secondary)'")
+                let rows1 = try Row.fetchAll(db, sql: "SELECT subject,object,callName FROM PeopleRelationship WHERE subject='\(primary)' AND object='\(secondary)'")
                 if rows1.count > 0, let callName = rows1[0]["callName"] {
                     value1 = "\(callName)"
                 }
                 
-                let rows2 = try Row.fetchAll(db, "SELECT subject,object,callName FROM PeopleRelationship WHERE subject='\(secondary)' AND object='\(primary)'")
+                let rows2 = try Row.fetchAll(db, sql: "SELECT subject,object,callName FROM PeopleRelationship WHERE subject='\(secondary)' AND object='\(primary)'")
                 if rows2.count > 0, let callName = rows2[0]["callName"] {
                     value2 = "\(callName)"
                 }
@@ -144,7 +144,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, "SELECT subject,object,callName FROM PeopleRelationship WHERE subject='\(peopleId)' OR object='\(peopleId)'")
+                let rows = try Row.fetchAll(db, sql: "SELECT subject,object,callName FROM PeopleRelationship WHERE subject='\(peopleId)' OR object='\(peopleId)'")
                 for row in rows {
                     if let primary = row["subject"] as String?,
                         let secondary = row["object"] as String?,
@@ -167,11 +167,11 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
-                let rows = try Row.fetchAll(db, "SELECT subject,object,callName FROM PeopleRelationship WHERE subject='\(primary)' AND object='\(secondary)'")
+                let rows = try Row.fetchAll(db, sql: "SELECT subject,object,callName FROM PeopleRelationship WHERE subject='\(primary)' AND object='\(secondary)'")
                 if rows.count > 0 {
-                    try db.execute("UPDATE PeopleRelationship SET callName='\(callName)' WHERE subject='\(primary)' AND object='\(secondary)'")
+                    try db.execute(sql: "UPDATE PeopleRelationship SET callName='\(callName)' WHERE subject='\(primary)' AND object='\(secondary)'")
                 }else{
-                    try db.execute("INSERT INTO PeopleRelationship (subject, object, callName) VALUES ('\(primary)','\(secondary)','\(callName)')")
+                    try db.execute(sql: "INSERT INTO PeopleRelationship (subject, object, callName) VALUES ('\(primary)','\(secondary)','\(callName)')")
                 }
             }
         }catch{
@@ -274,8 +274,8 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
-                try db.execute("update ImageFace set peopleId = '', peopleAge = 0 where peopleId = ?", arguments: [id])
-                try db.execute("delete from People where id = ?", arguments: [id])
+                try db.execute(sql: "update ImageFace set peopleId = '', peopleAge = 0 where peopleId = ?", arguments: [id])
+                try db.execute(sql: "delete from People where id = ?", arguments: [id])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -332,7 +332,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, "SELECT DISTINCT imageYear FROM ImageFace WHERE \(condition)")
+                let rows = try Row.fetchAll(db, sql: "SELECT DISTINCT imageYear FROM ImageFace WHERE \(condition)")
                 for row in rows {
                     if let value = row["imageYear"] as Int? {
                         results.append("\(value)")
@@ -351,7 +351,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.read { db in
-                let rows = try Row.fetchAll(db, "SELECT DISTINCT imageMonth FROM ImageFace WHERE imageYear=\(imageYear) and \(condition)")
+                let rows = try Row.fetchAll(db, sql: "SELECT DISTINCT imageMonth FROM ImageFace WHERE imageYear=\(imageYear) and \(condition)")
                 for row in rows {
                     if let value = row["imageMonth"] as Int? {
                         if value < 10 {
@@ -423,9 +423,9 @@ extension ModelStoreGRDB {
             do {
                 let db = ModelStoreGRDB.sharedDBPool()
                 try db.write { db in
-                    try db.execute("update ImageFace set iconChoice = 0 where peopleId = ? and iconChoice = 1", arguments: [peopleId])
-                    try db.execute("update ImageFace set iconChoice = 1 where peopleId = ? and id = ?", arguments: [peopleId, id])
-                    try db.execute("update People set iconRepositoryPath = ?, iconCropPath = ?, iconSubPath = ?, iconFilename = ? WHERE id = ?", arguments: [face.repositoryPath, face.cropPath, face.subPath, face.filename, peopleId]);
+                    try db.execute(sql: "update ImageFace set iconChoice = 0 where peopleId = ? and iconChoice = 1", arguments: [peopleId])
+                    try db.execute(sql: "update ImageFace set iconChoice = 1 where peopleId = ? and id = ?", arguments: [peopleId, id])
+                    try db.execute(sql: "update People set iconRepositoryPath = ?, iconCropPath = ?, iconSubPath = ?, iconFilename = ? WHERE id = ?", arguments: [face.repositoryPath, face.cropPath, face.subPath, face.filename, peopleId]);
                 }
             }catch{
                 return ModelStore.errorState(error)
@@ -439,8 +439,8 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
-                try db.execute("update ImageFace set iconChoice = 0 where peopleId = ? and iconChoice = 1", arguments: [peopleId])
-                try db.execute("update People set iconRepositoryPath = '', iconCropPath = '', iconSubPath = '', iconFilename = '' WHERE id = ?", arguments: [peopleId]);
+                try db.execute(sql: "update ImageFace set iconChoice = 0 where peopleId = ? and iconChoice = 1", arguments: [peopleId])
+                try db.execute(sql: "update People set iconRepositoryPath = '', iconCropPath = '', iconSubPath = '', iconFilename = '' WHERE id = ?", arguments: [peopleId]);
             }
         }catch{
             return ModelStore.errorState(error)
@@ -452,7 +452,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
-                try db.execute("update ImageFace set sampleChoice = \(flag ? 1 : 0), sampleChangeDate = ? where id = ?", arguments: [Date(), id])
+                try db.execute(sql: "update ImageFace set sampleChoice = \(flag ? 1 : 0), sampleChangeDate = ? where id = ?", arguments: [Date(), id])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -464,7 +464,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
-                try db.execute("update ImageFace set tagOnly = \(flag ? 1 : 0) where id = ?", arguments: [id])
+                try db.execute(sql: "update ImageFace set tagOnly = \(flag ? 1 : 0) where id = ?", arguments: [id])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -476,7 +476,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
-                try db.execute("update ImageFace set locked = \(flag ? 1 : 0) where id = ?", arguments: [id])
+                try db.execute(sql: "update ImageFace set locked = \(flag ? 1 : 0) where id = ?", arguments: [id])
             }
         }catch{
             return ModelStore.errorState(error)
@@ -488,7 +488,7 @@ extension ModelStoreGRDB {
         do {
             let db = ModelStoreGRDB.sharedDBPool()
             try db.write { db in
-                try db.execute("update ImageFace set cropPath = ? where cropPath = ?", arguments: [new, old])
+                try db.execute(sql: "update ImageFace set cropPath = ? where cropPath = ?", arguments: [new, old])
             }
         }catch{
             return ModelStore.errorState(error)
