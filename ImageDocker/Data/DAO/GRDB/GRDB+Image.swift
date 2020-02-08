@@ -167,7 +167,11 @@ extension ModelStoreGRDB {
         if year == 0 {
             stmtWithoutHiddenWhere = "\(eventWhere) \(hiddenWhere)"
         } else if day == 0 {
-            stmtWithoutHiddenWhere = "\(eventWhere) and photoTakenYear = \(year) and photoTakenMonth = \(month) \(hiddenWhere)"
+            if month == 0 {
+                stmtWithoutHiddenWhere = "\(eventWhere) and photoTakenYear = \(year) \(hiddenWhere)"
+            }else{
+                stmtWithoutHiddenWhere = "\(eventWhere) and photoTakenYear = \(year) and photoTakenMonth = \(month) \(hiddenWhere)"
+            }
         } else {
             stmtWithoutHiddenWhere = "\(eventWhere) and photoTakenYear = \(year) and photoTakenMonth = \(month) and photoTakenDay = \(day) \(hiddenWhere)"
         }
