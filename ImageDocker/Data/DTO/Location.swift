@@ -48,7 +48,7 @@ class Location : NSObject {
     
     public func setCoordinateWithoutConvert(coord:Coord, coordBD:Coord){
         if coord.isZero || coordBD.isZero {
-            print("coord zero? \(coord.isZero) coordBD zero? \(coordBD.isZero)")
+            //print("coord zero? \(coord.isZero) coordBD zero? \(coordBD.isZero)")
         }
         self.convert = false
         self.coordinate = coord

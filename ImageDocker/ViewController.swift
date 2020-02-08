@@ -132,6 +132,7 @@ class ViewController: NSViewController {
     
     var cachedTreeCollections:[PhotoCollection] = []
     
+    var selectedMoment:Moment?
     var selectedCollection:PhotoCollection?
     var selectedImageFolder:ImageFolder?
     var selectedImageFile:String = ""

@@ -10,24 +10,29 @@ import Cocoa
 
 extension ViewController {
     
-    func reloadMomentCollection(sender:NSButton) {
-        if let collection = self.selectedCollection {
-            self.createCollectionPaginationPopover()
-            self.collectionPaginationViewController
-                .initView(self.imagesLoader.lastRequest,
-                          onCountTotal: {
-                            return ModelStore.default.countPhotoFiles(year: collection.year, month: collection.month, day: collection.day, place: nil, imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
-                },
-                          onCountHidden: {
-                            return ModelStore.default.countHiddenPhotoFiles(year: collection.year, month: collection.month, day: collection.day, place: nil, imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
-                },
-                          onLoad: { pageSize, pageNumber in
-                            self.loadCollectionByMoment(collection, pageSize: pageSize, pageNumber: pageNumber)
-                })
-            
-            let cellRect = sender.bounds
-            self.collectionPaginationPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .minY)
-        }
+    func reloadMomentCollection(moment:Moment, sender:NSButton) {
+        self.createCollectionPaginationPopover()
+        self.collectionPaginationViewController
+            .initView(self.imagesLoader.lastRequest,
+                      onCountTotal: {
+                        return ModelStore.default.countPhotoFiles(year: moment.year, month: moment.month, day: moment.day, place: nil, imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
+            },
+                      onCountHidden: {
+                        return ModelStore.default.countHiddenPhotoFiles(year: moment.year, month: moment.month, day: moment.day, place: nil, imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
+            },
+                      onLoad: { pageSize, pageNumber in
+                        self.loadCollectionByMoment(moment:moment, pageSize: pageSize, pageNumber: pageNumber)
+            })
+        
+        let cellRect = sender.bounds
+        self.collectionPaginationPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxX)
+    }
+    
+    
+    
+    func loadCollectionByMoment(moment:Moment, pageSize:Int = 0, pageNumber:Int = 0){
+        self.selectedMoment = moment
+        self.loadCollectionByMoment(year: moment.year, month: moment.month, day: moment.day, pageSize: pageSize, pageNumber: pageNumber)
     }
     
     func loadCollectionByMoment(_ collection:PhotoCollection, pageSize:Int = 0, pageNumber:Int = 0){

@@ -86,17 +86,17 @@ extension ViewController {
     
     internal func refreshCollection(_ sender: NSButton) {
         if self.imagesLoader.lastRequest.loadSource == .repository && self.imagesLoader.lastRequest.pageNumber > 0 && self.imagesLoader.lastRequest.pageSize > 0 {
-            self.reloadImageFolder(sender: sender)
+            //self.reloadImageFolder(sender: sender)
         }else if self.imagesLoader.lastRequest.loadSource == .moment && self.imagesLoader.lastRequest.pageNumber > 0 && self.imagesLoader.lastRequest.pageSize > 0 {
             if self.imagesLoader.lastRequest.place == nil {
-                self.reloadMomentCollection(sender: sender)
+                //self.reloadMomentCollection(sender: sender)
             }else{
-                self.reloadPlaceCollection(sender: sender)
+                //self.reloadPlaceCollection(sender: sender)
             }
         }else if self.imagesLoader.lastRequest.loadSource == .event && self.imagesLoader.lastRequest.pageNumber > 0 && self.imagesLoader.lastRequest.pageSize > 0 {
-            self.reloadEventCollection(sender: sender)
+            //self.reloadEventCollection(sender: sender)
         }else{
-            self.refreshCollection()
+            //self.refreshCollection()
         }
     }
     

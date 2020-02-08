@@ -185,7 +185,7 @@ extension ImageFile {
         
         
         let orientation = url.getImageOrientation()
-        print("======== photo orientation = \(orientation)")
+        //print("======== photo orientation = \(orientation)")
         
         if let tiffData = imgProps[TIFFDictionary] as? [String: AnyObject] {
             let cameraMake = tiffData[CameraMake] as? String ?? ""

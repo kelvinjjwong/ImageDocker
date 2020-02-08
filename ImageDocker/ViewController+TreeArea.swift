@@ -72,12 +72,18 @@ extension ViewController {
         },
                                     onNodeSelected: { collection in
                                         print("action on \(collection.path)")
+                                        if let moment = collection.relatedObject as? Moment {
+                                            self.loadCollectionByMoment(moment:moment, pageSize: 200, pageNumber: 1)
+                                        }
         },
                                     moreActionOnHeader: { button in
                                         print("clicked moments more button")
         },
                                     moreActionOnNode: { collection, button in
                                         print("more on moments \(collection.path)")
+                                        if let moment = collection.relatedObject as? Moment {
+                                            self.reloadMomentCollection(moment:moment, sender:button)
+                                        }
         })
         stackedTreeView.addTreeView(title:"Events",
                                     dataSource: eventsTreeDataSource,
@@ -91,12 +97,18 @@ extension ViewController {
         },
                                     onNodeSelected: { collection in
                                         print("action on \(collection.path)")
+                                        if let moment = collection.relatedObject as? Moment {
+                                            self.loadCollectionByEvent(moment:moment, pageSize: 200, pageNumber: 1)
+                                        }
         },
                                     moreActionOnHeader: { button in
                                         print("clicked events more button")
         },
                                     moreActionOnNode: { collection, button in
                                         print("more on events \(collection.path)")
+                                        if let moment = collection.relatedObject as? Moment {
+                                            self.reloadEventCollection(moment:moment, sender:button)
+                                        }
         })
 
 
@@ -112,12 +124,18 @@ extension ViewController {
         },
                                     onNodeSelected: { collection in
                                         print("action on \(collection.path)")
+                                        if let moment = collection.relatedObject as? Moment {
+                                            self.loadCollectionByPlace(moment:moment, pageSize: 200, pageNumber: 1)
+                                        }
         },
                                     moreActionOnHeader: { button in
                                         print("clicked places more button")
         },
                                     moreActionOnNode: { collection, button in
                                         print("more on places \(collection.path)")
+                                        if let moment = collection.relatedObject as? Moment {
+                                            self.reloadPlaceCollection(moment:moment, sender:button)
+                                        }
         })
 
 

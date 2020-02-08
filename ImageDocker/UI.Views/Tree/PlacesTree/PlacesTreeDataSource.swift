@@ -55,13 +55,23 @@ class PlacesTreeDataSource : TreeDataSource {
             moment.gov = gov
             moment.place = place
             
-            print("Got place \(gov) -> \(place)")
+            //print("Got place \(gov) -> \(place)")
             
             var govEntry:TreeCollection
             var placeEntry:TreeCollection
             
             if govs.index(where: {$0.name == gov}) == nil {
-                govEntry = TreeCollection(gov, id: "gov_\(gov)", object: Moment(gov: gov))
+                var momentGov:Moment
+                if country == "中国" {
+                    momentGov = Moment(gov: country)
+                    momentGov.countryData = moment.countryData
+                    momentGov.provinceData = moment.provinceData
+                    momentGov.cityData = moment.cityData
+                    momentGov.placeData = ""
+                }else{
+                    momentGov = Moment(gov: country)
+                }
+                govEntry = TreeCollection(gov, id: "gov_\(gov)", object: momentGov)
                 govEntry.expandable = true
                 govs.append(govEntry)
             }else{

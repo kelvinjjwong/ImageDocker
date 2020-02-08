@@ -206,7 +206,7 @@ class CameraModelRecognizer {
         guard maker != "" && model != "" else {return model}
         for m in models.keys {
             if maker == m {
-                print("Recognized maker \(m), trying to get name of model \(model)")
+                //print("Recognized maker \(m), trying to get name of model \(model)")
                 for mm in models[m]! {
                     if model.starts(with: mm.key) {
                         return mm.value + " (" + model + ")"
@@ -222,10 +222,10 @@ class CameraModelRecognizer {
         guard maker != "" && model != "" else {return model}
         for m in models.keys {
             if maker == m {
-                print("Recognized maker \(m), trying to get market name of model \(model)")
+                //print("Recognized maker \(m), trying to get market name of model \(model)")
                 for mm in models[m]! {
                     if model.starts(with: mm.key) {
-                        print("Got market name [\(mm.value)] of [\(m) \(model)]")
+                        //print("Got market name [\(mm.value)] of [\(m) \(model)]")
                         return mm.value
                     }
                 }

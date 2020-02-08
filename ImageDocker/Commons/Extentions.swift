@@ -179,7 +179,7 @@ public extension URL {
         if let imgProps = CGImageSourceCopyPropertiesAtIndex(imgRef, 0, nil) as NSDictionary?, let orientation = imgProps[kCGImagePropertyOrientation as String]  {
             print("==== photo orientation = \(orientation)")
             if let ori = orientation as? CGImagePropertyOrientation {
-                print(ori)
+                //print(ori)
             }
             
         }
