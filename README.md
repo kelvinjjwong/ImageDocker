@@ -40,15 +40,16 @@ v0.9.3
 ## Dependencies
 
 - [GRDB](https://github.com/groue/GRDB.swift): to manage data in a SQLite database ([The MIT License](https://github.com/groue/GRDB.swift/blob/master/LICENSE))
-- [ExifTool](https://www.sno.phy.queensu.ca/~phil/exiftool/): to load EXIF info from images ([Perl License](https://www.sno.phy.queensu.ca/~phil/exiftool/#license))
-- [Baidu Map API](http://lbsyun.baidu.com): to recognize geolocation inside China, and to display maps ([License](http://lbsyun.baidu.com/index.php?title=open/law))
-- [Google Map API](https://developers.google.com/maps/documentation/): to recognize geolocation outside China ([License](https://developers.google.com/terms/site-policies))
-- [Android Debug Bridge](https://developer.android.com/studio/command-line/adb): to detect and access Android devices ([License](https://developer.android.com/license))
-- [libimobiledevice](https://github.com/libimobiledevice/libimobiledevice): to detect and pair iOS devices ([LGPL License](https://github.com/libimobiledevice/libimobiledevice/blob/master/COPYING))
-- [ifuse](https://github.com/libimobiledevice/ifuse): to access iOS devices ([LGPL License](https://github.com/libimobiledevice/ifuse/blob/master/COPYING))
-- [PXSourceList](https://github.com/Perspx/PXSourceList): tree view ([The New BSD License](https://github.com/Perspx/PXSourceList/blob/master/LICENSE))
 - [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) ([The MIT License](https://github.com/SwiftyJSON/SwiftyJSON/blob/master/LICENSE))
 - [CryptoSwift](https://github.com/krzyzanowskim/CryptoSwift) ([License](https://github.com/krzyzanowskim/CryptoSwift/blob/master/LICENSE))
+- [ExifTool](https://www.sno.phy.queensu.ca/~phil/exiftool/): to load EXIF info from images ([Perl License](https://www.sno.phy.queensu.ca/~phil/exiftool/#license))
+- [Android Debug Bridge](https://developer.android.com/studio/command-line/adb): to detect and access Android devices ([License](https://developer.android.com/license))
+- [dlib](https://github.com/davisking/dlib): to help recognize faces
+- [face_recognition](https://github.com/ageitgey/face_recognition): to help recognize faces ([The MIT License](https://github.com/ageitgey/face_recognition/blob/master/LICENSE))
+- [libimobiledevice](https://github.com/libimobiledevice/libimobiledevice): to detect and pair iOS devices ([LGPL License](https://github.com/libimobiledevice/libimobiledevice/blob/master/COPYING))
+- [ifuse](https://github.com/libimobiledevice/ifuse): to access iOS devices ([LGPL License](https://github.com/libimobiledevice/ifuse/blob/master/COPYING))
+- [Baidu Map API](http://lbsyun.baidu.com): to recognize geolocation inside China, and to display maps ([License](http://lbsyun.baidu.com/index.php?title=open/law))
+- [Google Map API](https://developers.google.com/maps/documentation/): to recognize geolocation outside China ([License](https://developers.google.com/terms/site-policies))
 
 ## Prerequisite
 
