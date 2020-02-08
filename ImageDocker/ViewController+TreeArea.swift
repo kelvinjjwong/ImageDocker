@@ -7,7 +7,6 @@
 //
 
 import Cocoa
-import PXSourceList
 
 extension ViewController {
     
@@ -29,7 +28,6 @@ extension ViewController {
         stackedTreeView.view.boundToSuperView(superview: self.stackedTreeCanvasView)
         stackedTreeView.view.setWidth(TREEVIEW_WIDTH)
         
-        let dataSource1 = SampleDataSource1()
         let deviceTreeDataSource = DeviceTreeDataSource()
         let repositoryTreeDataSource = RepositoryTreeDataSource()
         let momentsTreeDataSource = MomentsTreeDataSource()
@@ -185,104 +183,8 @@ extension ViewController {
         
         self.startupAggregateFlag = 0
         DispatchQueue.global().async {
-            
-//            self.initTreeDataModel()
-//            self.startupAggregateFlag += 1
-//            print("\(Date()) Loading view - configure tree - loading path to tree from db")
-//            self.loadPathToTreeFromDatabase(onCompleted: {
-//
-//                self.startupAggregateFlag += 1
-//            })
-//
-//            print("\(Date()) Loading view - configure tree - loading moments to tree from db")
-//            self.loadMomentsToTreeFromDatabase(onCompleted: {
-//                self.startupAggregateFlag += 1
-//            })
-//            print("\(Date()) Loading view - configure tree - loading places to tree from db")
-//            self.loadPlacesToTreeFromDatabase(onCompleted: {
-//
-//                self.startupAggregateFlag += 1
-//            })
-//            print("\(Date()) Loading view - configure tree - loading events to tree from db")
-//            self.loadEventsToTreeFromDatabase(onCompleted: {
-//                self.startupAggregateFlag += 1
-//            })
-            
             self.startupAggregateFlag += 5
         }
-    }
-    
-    internal func hideToolbarOfTree() {
-//        self.btnAddRepository.isHidden = true
-//        self.btnRemoveRepository.isHidden = true
-//        self.btnRefreshRepository.isHidden = true
-//        self.btnFilterRepository.isHidden = true
-    }
-    
-    internal func showToolbarOfTree() {
-//        self.btnAddRepository.isHidden = false
-//        self.btnRemoveRepository.isHidden = false
-//        self.btnRefreshRepository.isHidden = false
-//        self.btnFilterRepository.isHidden = false
-    }
-    
-    func showTreeNodeButton(collection: PhotoCollection, image: NSImage? = nil) {
-//        collection.enableMoreButton = true
-//        if let img = image {
-//            collection.treeNodeView?.btnMore.image = img
-//            collection.imageOfMoreButton = img
-//        }
-    }
-    
-    func hideTreeNodeButton(collection: PhotoCollection){
-//        collection.enableMoreButton = false
-    }
-    
-    internal func refreshTree(fast:Bool = true) {
-        
-//        DispatchQueue.main.async {
-//            self.hideToolbarOfTree()
-//            self.hideToolbarOfCollectionView()
-//
-//            self.treeIndicator.doubleValue = 0.0
-//            self.treeIndicator.isHidden = false
-//            self.treeIndicator.isEnabled = true
-//        }
-//        DispatchQueue.global().async {
-//
-//            self.saveTreeItemsExpandState()
-//            DispatchQueue.main.async {
-//                self.treeIndicator.doubleValue = 1.0
-//            }
-//
-//            self.refreshLibraryTree(fast: fast)
-//            DispatchQueue.main.async {
-//                self.treeIndicator.doubleValue = 2.0
-//            }
-//            self.refreshMomentTree()
-//            DispatchQueue.main.async {
-//                self.treeIndicator.doubleValue = 3.0
-//            }
-//            self.refreshLocationTree()
-//            DispatchQueue.main.async {
-//                self.treeIndicator.doubleValue = 4.0
-//            }
-//            self.refreshEventTree()
-//            DispatchQueue.main.async {
-//                self.treeIndicator.doubleValue = 5.0
-//            }
-//
-//            DispatchQueue.main.async {
-//                self.restoreTreeItemsExpandState()
-//                self.restoreTreeSelection()
-//
-//                self.treeIndicator.isHidden = true
-//                self.treeIndicator.isEnabled = false
-//
-//                self.showToolbarOfTree()
-//                self.showToolbarOfCollectionView()
-//            }
-//        }
     }
     
     

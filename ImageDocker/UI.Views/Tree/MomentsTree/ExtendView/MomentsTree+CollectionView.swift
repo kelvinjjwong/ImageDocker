@@ -35,11 +35,6 @@ extension ViewController {
         self.loadCollectionByMoment(year: moment.year, month: moment.month, day: moment.day, pageSize: pageSize, pageNumber: pageNumber)
     }
     
-    func loadCollectionByMoment(_ collection:PhotoCollection, pageSize:Int = 0, pageNumber:Int = 0){
-        self.selectedCollection = collection
-        self.loadCollectionByMoment(year: collection.year, month: collection.month, day: collection.day, pageSize: pageSize, pageNumber: pageNumber)
-    }
-    
     func loadCollectionByMoment(year:Int, month:Int, day:Int, pageSize:Int = 0, pageNumber:Int = 0){
         //guard !self.scaningRepositories && !self.creatingRepository else {return}
         print("select \(year) \(month) \(day)")

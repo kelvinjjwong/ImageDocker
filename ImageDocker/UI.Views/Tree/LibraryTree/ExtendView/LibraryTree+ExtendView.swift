@@ -19,7 +19,9 @@ extension ViewController {
             let frame = CGRect(origin: .zero, size: CGSize(width: 810, height: 390))
             self.librariesViewController = LibrariesViewController(onReload: {
                 DispatchQueue.main.async {
-                    self.refreshLibraryTree()
+                    //self.refreshLibraryTree()
+                    // TO DO FUNCTION
+                    print("TO DO FUNCTION")
                 }
             })
             self.librariesViewController.view.frame = frame

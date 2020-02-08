@@ -189,7 +189,7 @@ extension ViewController : CollectionViewItemQuickLookDelegate {
 //        }
     }
     
-    func onTreeItemQuickLook(collection: PhotoCollection, event:String? = nil){
+    func onTreeItemQuickLook(collection: Moment, event:String? = nil){
         let viewController = TheaterViewController()
         let window = NSWindow(contentViewController: viewController)
         

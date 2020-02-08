@@ -19,7 +19,10 @@ extension ViewController {
             self.filterViewController = FilterViewController(onApply: { (imageSources, cameraModels) in
                 self.filterImageSource = imageSources
                 self.filterCameraModel = cameraModels
-                self.refreshTree()
+                
+                //TODO TO DO FUNCTION
+                //self.refreshTree()
+                print("TO DO FUNCTION")
             })
             self.filterViewController.view.frame = frame
             //self.filterViewController.refreshDelegate = self

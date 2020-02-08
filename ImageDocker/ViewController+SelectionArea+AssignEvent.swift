@@ -42,7 +42,9 @@ extension ViewController {
             self.imagesLoader.reorganizeItems(considerPlaces: true)
             self.collectionView.reloadData()
             
-            self.refreshTree()
+            //TODO TO DO FUNCTION
+            //self.refreshTree()
+            print("TO DO FUNCTION")
         })
         accumulator.reset()
         

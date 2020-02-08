@@ -13,7 +13,6 @@ import SwiftyJSON
 import WebKit
 import AVFoundation
 import AVKit
-import PXSourceList
 
 class ViewController: NSViewController {
     
@@ -104,41 +103,19 @@ class ViewController: NSViewController {
     @IBOutlet weak var stackedTreeCanvasView: NSView!
     
     
-    //var modelObjects:NSMutableArray?
-    var sourceListItems:NSMutableArray? // deleted
-    var identifiersOfLibraryTree:[String : PXSourceListItem] = [String : PXSourceListItem] () // deleted
-    var parentsOfMomentsTree : [String : PXSourceListItem] = [String : PXSourceListItem] () // deleted
-    var momentToCollection : [String : PhotoCollection] = [String : PhotoCollection] () // deleted
-    var treeIdItemsExpandState : [String : Bool] = [String : Bool] ()
     var treeLastSelectedIdentifier : String = ""
-    var treeIdItems : [String : PXSourceListItem] = [String : PXSourceListItem] ()
-    var momentToCollectionGroupByPlace : [String : PhotoCollection] = [String : PhotoCollection] ()
-    var parentsOfMomentsTreeGroupByPlace : [String : PXSourceListItem] = [String : PXSourceListItem] ()
     var treeRefreshing:Bool = false
     
-    var parentsOfEventsTree : [String : PXSourceListItem] = [String : PXSourceListItem] ()
-    var eventToCollection : [String : PhotoCollection] = [String : PhotoCollection] ()
-    
-    var deviceToCollection : [String : PhotoCollection] = [String : PhotoCollection] ()
     var deviceIdToDevice : [String : PhoneDevice] = [String : PhoneDevice] ()
-    
-    var deviceSectionOfTree : PXSourceListItem? // deleted
-    var librarySectionOfTree : PXSourceListItem? // deleted
-    var momentSectionOfTree : PXSourceListItem? // deleted
-    var placeSectionOfTree : PXSourceListItem? // deleted
-    var eventSectionOfTree : PXSourceListItem? // deleted
     
     @IBOutlet weak var treeIndicator: NSLevelIndicator! // deleted
     
-    var cachedTreeCollections:[PhotoCollection] = []
     
     var selectedMoment:Moment?
-    var selectedCollection:PhotoCollection?
     var selectedImageFolder:ImageFolder?
     var selectedImageFile:String = ""
     
     @IBOutlet weak var btnScanState: NSButton! // deleted
-    @IBOutlet weak var sourceList: PXSourceList! // deleted
     
     var treeLoadingIndicator:Accumulator? // deleted
     //@IBOutlet weak var progressIndicator: NSProgressIndicator!

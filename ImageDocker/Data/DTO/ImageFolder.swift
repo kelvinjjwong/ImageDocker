@@ -16,7 +16,6 @@ class ImageFolder : NSObject {
     var children:[ImageFolder] = []
     var sumOfImages:Int = 0
     var parent:ImageFolder? = nil
-    var photoCollection:PhotoCollection? = nil
     var containerFolder:ImageContainer? = nil
     var name:String = ""
     
