@@ -10,7 +10,7 @@ import Foundation
 
 class EventsTreeDataSource : TreeDataSource {
     
-    let dao = ImageSearchDao()
+    let dao = ImageSearchDao.default
     
     func convertEventsToTreeCollections(_ moments:[Moment]) -> [TreeCollection] {
         var events:[TreeCollection] = []

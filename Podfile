@@ -10,4 +10,5 @@ target 'ImageDocker' do
   pod 'CryptoSwift', '1.3.0'
   pod 'SwiftyJSON'
   pod 'GRDB.swift', '4.9.0'
+  pod 'PostgresClientKit', '~> 1.0'
 end

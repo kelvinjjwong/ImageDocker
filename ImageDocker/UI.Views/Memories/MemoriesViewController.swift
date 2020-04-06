@@ -12,7 +12,7 @@ import Carbon.HIToolbox
 
 class MemoriesViewController : NSViewController {
     
-    let imageSearchDao = ImageSearchDao()
+    let imageSearchDao = ImageSearchDao.default
     
     @IBOutlet weak var lblToday: NSTextField!
     @IBOutlet weak var lblDescription: NSTextField!

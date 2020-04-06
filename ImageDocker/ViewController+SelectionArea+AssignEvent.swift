@@ -99,7 +99,7 @@ class EventListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
     var events:[ImageEvent] = []
     
     func loadEvents() {
-        self.events = ModelStore.default.getEvents()
+        self.events = EventDao.default.getEvents()
     }
     
     func comboBox(_ comboBox: NSComboBox, completedString string: String) -> String? {

@@ -27,7 +27,7 @@ extension ViewController {
         let menuForceRecognize = NSMenuItem(title: "Force Re-Recognize all pictures", action: nil, keyEquivalent: "")
         let subMenuForceRecognize = NSMenu()
         
-        let years = ModelStore.default.getYears()
+        let years = ImageSearchDao.default.getYears()
         subMenuScan.addItem(withTitle: "Pictures in collection", action: #selector(faceMenuScanAction(_:)), keyEquivalent: "")
         subMenuRecognize.addItem(withTitle: "Pictures in collection", action: #selector(faceMenuRecognizeAction(_:)), keyEquivalent: "")
         subMenuForceScan.addItem(withTitle: "Pictures in collection", action: #selector(faceMenuForceScanAction(_:)), keyEquivalent: "")
@@ -216,11 +216,11 @@ extension ViewController {
                     
                     var images:[Image] = []
                     if action == "Scan" {
-                        images = ModelStore.default.getImagesByYear(year: area, scannedFace: false)
+                        images = ImageSearchDao.default.getImagesByYear(year: area, scannedFace: false)
                     }else if action == "Recognize" {
-                        images = ModelStore.default.getImagesByYear(year: area, recognizedFace: false)
+                        images = ImageSearchDao.default.getImagesByYear(year: area, recognizedFace: false)
                     }else if action == "Force-Scan" || action == "Force-Recognize" {
-                        images = ModelStore.default.getImagesByYear(year: area)
+                        images = ImageSearchDao.default.getImagesByYear(year: area)
                     }
                     if images.count > 0 {
                         tasklet.total = images.count

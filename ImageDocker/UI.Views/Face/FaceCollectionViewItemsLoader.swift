@@ -30,7 +30,7 @@ class FaceCollectionViewItemsLoader: NSObject {
     func loadIcons() {
         self.items = []
         self.items.append(PeopleFace(person: People.unknown()))
-        let people = ModelStore.default.getPeople()
+        let people = FaceDao.default.getPeople()
         if people.count > 0 {
             for person in people {
                 let icon = PeopleFace(person: person)
@@ -60,7 +60,7 @@ class FaceCollectionViewItemsLoader: NSObject {
     
     func loadFaces(peopleId:String, year:Int?=nil, month:Int?=nil, sample:Bool?=nil, icon:Bool?=nil, tag:Bool?=nil) {
         self.items = []
-        let faces = ModelStore.default.getFaceCrops(peopleId: peopleId, year: year, month: month, sample: sample, icon: icon, tag: tag)
+        let faces = FaceDao.default.getFaceCrops(peopleId: peopleId, year: year, month: month, sample: sample, icon: icon, tag: tag)
         if faces.count > 0 {
             for face in faces {
                 let f = PeopleFace(face)

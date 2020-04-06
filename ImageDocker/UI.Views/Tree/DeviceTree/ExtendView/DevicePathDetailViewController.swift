@@ -10,8 +10,8 @@ import Cocoa
 
 class DevicePathDetailViewController: NSViewController {
     
-    let deviceDao = DeviceDao()
-    let repositoryDao = RepositoryDao()
+    let deviceDao = DeviceDao.default
+    let repositoryDao = RepositoryDao.default
     
     // MARK: CONTROLS
     @IBOutlet weak var lblPath: NSTextField!
@@ -64,7 +64,7 @@ class DevicePathDetailViewController: NSViewController {
                         self.lblMessage.stringValue = "Restoring images from backup ..."
                     }
                     let localPath = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(subfolder).path
-                    if let repository = ModelStore.default.getContainer(path: self.repositoryPath.withoutStash()) {
+                    if let repository = RepositoryDao.default.getContainer(path: self.repositoryPath.withoutStash()) {
                         let storagePath = URL(fileURLWithPath: repository.storagePath).appendingPathComponent(subfolder).path
                         
                         do {
@@ -116,7 +116,7 @@ class DevicePathDetailViewController: NSViewController {
             
             if data.toSubFolder == oldLocalFolder {
                 // subfolder unchanged
-                ModelStore.default.saveDevicePath(file: data)
+                DeviceDao.default.saveDevicePath(file: data)
                 DispatchQueue.main.async {
                     self.lblMessage.stringValue = "Saved toggles."
                 }
@@ -207,7 +207,7 @@ class DevicePathDetailViewController: NSViewController {
                         DispatchQueue.main.async {
                             self.lblMessage.stringValue = "Updating imported files..."
                         }
-                        let importedRecords = ModelStore.default.getDeviceFiles(deviceId: data.deviceId, importToPath: oldLocalPath)
+                        let importedRecords = DeviceDao.default.getDeviceFiles(deviceId: data.deviceId, importToPath: oldLocalPath)
                         if importedRecords.count > 0 {
                             DispatchQueue.main.async {
                                 self.lblMessage.stringValue = "Updating imported files records...\(importedRecords.count)"
@@ -215,7 +215,7 @@ class DevicePathDetailViewController: NSViewController {
                             for record in importedRecords {
                                 var rec = record
                                 rec.importToPath = newLocalPath
-                                ModelStore.default.saveDeviceFile(file: rec)
+                                DeviceDao.default.saveDeviceFile(file: rec)
                             }
                         }
                         DispatchQueue.main.async {
@@ -227,13 +227,13 @@ class DevicePathDetailViewController: NSViewController {
                         DispatchQueue.main.async {
                             self.lblMessage.stringValue = "Updating related containers..."
                         }
-                        if let container = ModelStore.default.getContainer(path: oldLocalPath) {
+                        if let container = RepositoryDao.default.getContainer(path: oldLocalPath) {
                             var cont = container
                             cont.path = newLocalPath
                             cont.name = data.toSubFolder
                             cont.subPath = data.toSubFolder
                             
-                            let subContainers = ModelStore.default.getContainers(rootPath: oldLocalPath)
+                            let subContainers = RepositoryDao.default.getContainers(rootPath: oldLocalPath)
                             if subContainers.count > 0 {
                                 DispatchQueue.main.async {
                                     self.lblMessage.stringValue = "Updating related containers...\(subContainers.count+1)"
@@ -243,10 +243,10 @@ class DevicePathDetailViewController: NSViewController {
                                     sub.path = sub.path.replacingFirstOccurrence(of: oldLocalPath.withStash(), with: newLocalPath.withStash())
                                     sub.parentFolder = newLocalPath
                                     sub.subPath = sub.subPath.replacingFirstOccurrence(of: oldLocalFolder.withStash(), with: data.toSubFolder.withStash())
-                                    ModelStore.default.saveImageContainer(container: sub)
+                                    RepositoryDao.default.saveImageContainer(container: sub)
                                 }
                             }
-                            ModelStore.default.saveImageContainer(container: cont)
+                            RepositoryDao.default.saveImageContainer(container: cont)
                         }
                         DispatchQueue.main.async {
                             self.lblMessage.stringValue = "Updated related containers."
@@ -259,7 +259,7 @@ class DevicePathDetailViewController: NSViewController {
                             self.lblMessage.stringValue = "Updating imported images in repository..."
                         }
                         
-                        let images = ModelStore.default.getPhotoFiles(rootPath: oldLocalPath)
+                        let images = ImageSearchDao.default.getPhotoFiles(rootPath: oldLocalPath)
                         if images.count > 0 {
                             DispatchQueue.main.async {
                                 self.lblMessage.stringValue = "Updating imported images in repository...\(images.count)"
@@ -284,7 +284,7 @@ class DevicePathDetailViewController: NSViewController {
                         }
                         
                         
-                        ModelStore.default.saveDevicePath(file: data)
+                        DeviceDao.default.saveDevicePath(file: data)
                         DispatchQueue.main.async {
                             self.lblMessage.stringValue = "Updated local folder."
                         }
@@ -319,7 +319,7 @@ class DevicePathDetailViewController: NSViewController {
     
     func initView(_ devicePath:ImageDevicePath, _ repositoryPath:String) {
         self.repositoryPath = repositoryPath
-        if let devPath = ModelStore.default.getDevicePath(deviceId: devicePath.deviceId, path: devicePath.path) {
+        if let devPath = DeviceDao.default.getDevicePath(deviceId: devicePath.deviceId, path: devicePath.path) {
             self.lblMessage.stringValue = ""
             self.lblMessage.isHidden = false
             self.progressIndicator.isHidden = true

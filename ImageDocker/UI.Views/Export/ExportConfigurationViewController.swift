@@ -129,7 +129,7 @@ class ExportConfigurationViewController: NSViewController {
         })
         
         var repoPaths:[(String, String)] = []
-        let repos = ModelStore.default.getRepositories()
+        let repos = RepositoryDao.default.getRepositories()
         for repo in repos {
             repoPaths.append((repo.path, repo.name))
             repoNames[repo.name] = repo.path
@@ -137,14 +137,14 @@ class ExportConfigurationViewController: NSViewController {
         self.repositoryOptions.load(repoPaths)
         
         var eventNames:[String] = []
-        let events = ModelStore.default.getEvents()
+        let events = EventDao.default.getEvents()
         for event in events {
             eventNames.append(event.name)
         }
         self.eventsOptions.load(eventNames)
         
         var peopleNames:[(String, String)] = []
-        let people = ModelStore.default.getPeople()
+        let people = FaceDao.default.getPeople()
         for person in people {
             peopleNames.append((person.name, person.shortName ?? ""))
         }
@@ -156,7 +156,7 @@ class ExportConfigurationViewController: NSViewController {
     
     private func loadStackItems() {
         
-        let profiles = ModelStore.default.getAllExportProfiles()
+        let profiles = ExportDao.default.getAllExportProfiles()
         for profile in profiles {
             self.addProfileItem(profile: profile)
         }
@@ -219,7 +219,7 @@ class ExportConfigurationViewController: NSViewController {
         let fileDuplicated = self.getFilenameDuplicatedStrategy()
         let subfolder = self.getSubFolderStrategy()
         
-        let profile = ModelStore.default.getOrCreateExportProfile(id: self.editingId,
+        let profile = ExportDao.default.getOrCreateExportProfile(id: self.editingId,
                                                     name: name,
                                                     directory: path,
                                                     repositoryPath: repos,
@@ -257,7 +257,7 @@ class ExportConfigurationViewController: NSViewController {
         }, onDelete: {
             if Alert.dialogOKCancel(question: "DELETE PROFILE", text: "Do you confirm to delete profile [\(profile.name)] ?") {
                 print("proceed delete")
-                let state = ModelStore.default.deleteExportProfile(id: profile.id)
+                let state = ExportDao.default.deleteExportProfile(id: profile.id)
                 if state == .OK {
                     NSLayoutConstraint.deactivate(viewController.view.constraints)
                     //self.stackView.removeArrangedSubview(viewController.view)

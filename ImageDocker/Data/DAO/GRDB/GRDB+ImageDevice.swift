@@ -9,7 +9,7 @@
 import Foundation
 import GRDB
 
-extension ModelStoreGRDB {
+class DeviceDaoGRDB : DeviceDaoInterface {
     // MARK: - DEVICES
     
     func getDevices() -> [ImageDevice] {
@@ -83,7 +83,7 @@ extension ModelStoreGRDB {
                 try dev.save(db)
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -139,7 +139,7 @@ extension ModelStoreGRDB {
                 try f.save(db)
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -151,7 +151,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "delete from ImageDeviceFile where deviceId = ?", arguments: [deviceId])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -207,7 +207,7 @@ extension ModelStoreGRDB {
                 try f.save(db)
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -219,7 +219,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "delete from ImageDevicePath where deviceId = ? and path = ?", arguments: [deviceId, path])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }

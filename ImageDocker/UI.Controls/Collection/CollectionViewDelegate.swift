@@ -228,10 +228,10 @@ protocol CollectionViewItemShowDuplicatesDelegate {
 
 extension ViewController : CollectionViewItemShowDuplicatesDelegate {
     func onCollectionViewItemShowDuplicate(_ duplicatesKey: String) {
-        if let paths = ModelStore.default.getDuplicatePhotos().keyToPath[duplicatesKey] {
+        if let paths = ImageDuplicationDao.default.getDuplicatePhotos().keyToPath[duplicatesKey] {
             self.selectionViewController.imagesLoader.clean()
             for path in paths {
-                if let image = ModelStore.default.getImage(path: path) {
+                if let image = ImageRecordDao.default.getImage(path: path) {
                     let imageFile = ImageFile(photoFile: image)
                     self.selectionViewController.imagesLoader.addItem(imageFile)
                 }

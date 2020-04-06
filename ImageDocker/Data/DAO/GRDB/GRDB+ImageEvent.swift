@@ -9,7 +9,8 @@
 import Foundation
 import GRDB
 
-extension ModelStoreGRDB {
+class EventDaoGRDB : EventDaoInterface {
+    
     
     // MARK: - CREATE
     
@@ -53,7 +54,7 @@ extension ModelStoreGRDB {
         var stmt = ""
         if let names = names {
             let keys:[String] = names.components(separatedBy: " ")
-            stmt = ModelStore.likeArray(field: "name", array: keys)
+            stmt = SQLHelper.likeArray(field: "name", array: keys)
         }
         do {
             let db = ModelStoreGRDB.sharedDBPool()
@@ -70,12 +71,12 @@ extension ModelStoreGRDB {
         return result
     }
     
-    func getAllEvents(imageSource:[String]? = nil, cameraModel:[String]? = nil) -> [Row] {
+    func getAllEvents(imageSource:[String]?, cameraModel:[String]?) -> [Event] {
         var sqlArgs:[Any] = []
         var imageSourceWhere = ""
         var cameraModelWhere = ""
-        ModelStore.inArray(field: "imageSource", array: imageSource, where: &imageSourceWhere, args: &sqlArgs)
-        ModelStore.inArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs)
+        SQLHelper.inArray(field: "imageSource", array: imageSource, where: &imageSourceWhere, args: &sqlArgs)
+        SQLHelper.inArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs)
         
         let sql = "SELECT event, photoTakenYear, photoTakenMonth, photoTakenDay, place, count(path) as photoCount FROM Image WHERE 1=1 \(imageSourceWhere) \(cameraModelWhere) GROUP BY event, photoTakenYear,photoTakenMonth,photoTakenDay,place ORDER BY event DESC,photoTakenYear DESC,photoTakenMonth DESC,photoTakenDay DESC,place"
         print(sql)
@@ -88,7 +89,8 @@ extension ModelStoreGRDB {
         }catch{
             print(error)
         }
-        return result
+        
+        return Events().read(result)
         
     }
     
@@ -110,7 +112,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "UPDATE Image SET AssignPlace=? WHERE AssignPlace=?", arguments: StatementArguments([oldName, newName]))
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -125,7 +127,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "UPDATE Image SET event='' WHERE event=?", arguments: StatementArguments([name]))
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }

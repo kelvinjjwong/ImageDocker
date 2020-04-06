@@ -55,7 +55,7 @@ class EventListViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        self.events = ModelStore.default.getEvents()
+        self.events = EventDao.default.getEvents()
         eventTable.delegate = self
         eventTable.dataSource = self
         eventTable.reloadData()
@@ -64,9 +64,9 @@ class EventListViewController: NSViewController {
     @IBAction func onEventSearcherAction(_ sender: Any) {
         let keyword:String = eventSearcher.stringValue
         if keyword == "" {
-            self.events = ModelStore.default.getEvents()
+            self.events = EventDao.default.getEvents()
         }else{
-            self.events = ModelStore.default.getEvents(byName: keyword)
+            self.events = EventDao.default.getEvents(byName: keyword)
         }
         eventTable.reloadData()
     }
@@ -74,10 +74,10 @@ class EventListViewController: NSViewController {
     @IBAction func onButtonCreateClicked(_ sender: Any) {
         let name:String = eventName.stringValue
         if name == "" {return}
-        let _ = ModelStore.default.getOrCreateEvent(name: name)
+        let _ = EventDao.default.getOrCreateEvent(name: name)
         //ModelStore.save()
         
-        self.events = ModelStore.default.getEvents()
+        self.events = EventDao.default.getEvents()
         eventTable.reloadData()
         
         if self.refreshDelegate != nil {
@@ -91,10 +91,10 @@ class EventListViewController: NSViewController {
         
         if Alert.dialogOKCancel(question: "Disconnect photos with this event ?", text: name) {
             
-            ModelStore.default.deleteEvent(name: name)
+            EventDao.default.deleteEvent(name: name)
             //ModelStore.save()
             
-            self.events = ModelStore.default.getEvents()
+            self.events = EventDao.default.getEvents()
             eventTable.reloadData()
             
             if self.refreshDelegate != nil {
@@ -107,10 +107,10 @@ class EventListViewController: NSViewController {
         let name:String = eventName.stringValue
         guard name != "" && selectedEventName != "" && name != selectedEventName else {return}
         
-        ModelStore.default.renameEvent(oldName: selectedEventName, newName: name)
+        EventDao.default.renameEvent(oldName: selectedEventName, newName: name)
         //ModelStore.save()
         
-        self.events = ModelStore.default.getEvents()
+        self.events = EventDao.default.getEvents()
         eventTable.reloadData()
         
         if self.refreshDelegate != nil {
@@ -122,9 +122,9 @@ class EventListViewController: NSViewController {
     @IBAction func onButtonReloadClicked(_ sender: Any) {
         let keyword:String = eventSearcher.stringValue
         if keyword == "" {
-            self.events = ModelStore.default.getEvents()
+            self.events = EventDao.default.getEvents()
         }else{
-            self.events = ModelStore.default.getEvents(byName: keyword)
+            self.events = EventDao.default.getEvents(byName: keyword)
         }
         eventTable.reloadData()
     }

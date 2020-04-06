@@ -37,7 +37,7 @@ class ContainerViewController: NSViewController {
     }
     
     func initContainer(path:String){
-        if let container = ModelStore.default.getContainer(path: path) {
+        if let container = RepositoryDao.default.getContainer(path: path) {
             self.container = container
             self.lblPath.stringValue = path
             if container.hiddenByContainer {
@@ -71,11 +71,11 @@ class ContainerViewController: NSViewController {
     @IBAction func onShowHideClicked(_ sender: NSButton) {
         if let container = self.container {
             if container.hiddenByContainer {
-                ModelStore.default.showContainer(path: container.path)
+                RepositoryDao.default.showContainer(path: container.path)
                 self.container?.hiddenByContainer = false
                 self.btnShowHide.title = "Hide Images"
             }else{
-                ModelStore.default.hideContainer(path: container.path)
+                RepositoryDao.default.hideContainer(path: container.path)
                 self.container?.hiddenByContainer = true
                 self.btnShowHide.title = "Show Images"
             }

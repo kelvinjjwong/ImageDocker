@@ -9,7 +9,9 @@
 import Foundation
 import GRDB
 
-extension ModelStoreGRDB {
+class ImageSearchDaoGRDB : ImageSearchDaoInterface {
+    
+    
     
     // MARK: - COLLECTION
     
@@ -17,7 +19,7 @@ extension ModelStoreGRDB {
     func getPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil , pageSize:Int = 0, pageNumber:Int = 0) -> [Image] {
         
         print("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
-        let (stmt, stmtHidden, sqlArgs) = self.generateSQLStatementForPhotoFiles(year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
+        let (stmt, stmtHidden, sqlArgs) = SQLHelper.generateSQLStatementForPhotoFiles(year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
         
         print(stmt)
         print(stmtHidden)
@@ -53,7 +55,7 @@ extension ModelStoreGRDB {
     func getPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil , pageSize:Int = 0, pageNumber:Int = 0) -> [Image] {
         
         print("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
-        let (stmt, stmtHidden, sqlArgs) = self.generateSQLStatementForPhotoFiles(year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
+        let (stmt, stmtHidden, sqlArgs) = SQLHelper.generateSQLStatementForPhotoFiles(year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
         
         var result:[Image] = []
         var hiddenCount:Int = 0
@@ -87,7 +89,7 @@ extension ModelStoreGRDB {
     func searchPhotoFiles(years:[Int], months:[Int], days:[Int], peopleIds:[String], keywords:[String], includeHidden:Bool = true, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil , pageSize:Int = 0, pageNumber:Int = 0) -> [Image] {
         
         print("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
-        let (stmt, stmtHidden) = self.generateSQLStatementForSearchingPhotoFiles(years: years, months: months, days: days, peopleIds: peopleIds, keywords: keywords, includeHidden:includeHidden)
+        let (stmt, stmtHidden) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(years: years, months: months, days: days, peopleIds: peopleIds, keywords: keywords, includeHidden:includeHidden)
         
         var result:[Image] = []
         var hiddenCount:Int = 0
@@ -194,7 +196,7 @@ extension ModelStoreGRDB {
         return result
     }
     
-    private func getMaxPhotoTakenYear() -> Int {
+    func getMaxPhotoTakenYear() -> Int {
         let sql = "select distinct max(photoTakenYear) photoTakenYear from image where hidden=0"
         
         var result:Int = 0
@@ -212,7 +214,7 @@ extension ModelStoreGRDB {
         return result
     }
     
-    private func getMinPhotoTakenYear() -> Int {
+    func getMinPhotoTakenYear() -> Int {
         let sql = "select distinct min(photoTakenYear) photoTakenYear from image where hidden=0"
         
         var result:Int = 0
@@ -230,7 +232,7 @@ extension ModelStoreGRDB {
         return result
     }
     
-    private func getSqlByTodayInPrevious() -> String {
+    func getSqlByTodayInPrevious() -> String {
         let max = self.getMaxPhotoTakenYear()
         let min = self.getMinPhotoTakenYear()
         var sql = ""

@@ -10,31 +10,39 @@ import Foundation
 
 class PlaceDao {
     
+    private let impl:PlaceDaoInterface
+    
+    init(_ impl:PlaceDaoInterface){
+        self.impl = impl
+    }
+    
+    static let `default` = PlaceDao(PlaceDaoGRDB())
+    
     func getOrCreatePlace(name:String, location:Location) -> ImagePlace{
-        return ModelStore.default.getOrCreatePlace(name: name, location: location)
+        return self.impl.getOrCreatePlace(name: name, location: location)
     }
     
     func getPlace(name:String) -> ImagePlace? {
-        return ModelStore.default.getPlace(name: name)
+        return self.impl.getPlace(name: name)
     }
     
     func getAllPlaces() -> [ImagePlace] {
-        return ModelStore.default.getAllPlaces()
+        return self.impl.getAllPlaces()
     }
     
     func getPlaces(byName names:String? = nil) -> [ImagePlace] {
-        return ModelStore.default.getPlaces(byName: names)
+        return self.impl.getPlaces(byName: names)
     }
     
     func renamePlace(oldName:String, newName:String) -> ExecuteState{
-        return ModelStore.default.renamePlace(oldName: oldName, newName: newName)
+        return self.impl.renamePlace(oldName: oldName, newName: newName)
     }
     
     func updatePlace(name:String, location:Location) -> ExecuteState{
-        return ModelStore.default.updatePlace(name: name, location: location)
+        return self.impl.updatePlace(name: name, location: location)
     }
     
     func deletePlace(name:String) -> ExecuteState{
-        return ModelStore.default.deletePlace(name: name)
+        return self.impl.deletePlace(name: name)
     }
 }

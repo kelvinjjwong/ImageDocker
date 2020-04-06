@@ -10,7 +10,7 @@ import Foundation
 
 class RepositoryTreeDataSource : TreeDataSource {
     
-    let repositoryDao = RepositoryDao()
+    let repositoryDao = RepositoryDao.default
     
     func convertToTreeNode(_ container:ImageContainer) -> TreeCollection {
         let node = TreeCollection(container.name, id: container.path, object: container)

@@ -12,7 +12,6 @@ import GRDB
 class ModelStoreGRDB {
     
     
-    var _duplicates:Duplicates? = nil
     
     init(){
         self.checkDatabase()
@@ -29,7 +28,8 @@ class ModelStoreGRDB {
                 //var config = Configuration()
                 //config.trace = { print($0) }     // Prints all SQL statements
                 
-                _sharedDBPool = try DatabasePool(path: ModelStore.localDBFile                                                //, configuration: config
+                _sharedDBPool = try DatabasePool(path: SQLiteDataSource.default.getDataSource()
+                    //, configuration: config
                                                 )
             }catch{
                 print(error) //SQLite error 5: database is locked
@@ -48,7 +48,7 @@ class ModelStoreGRDB {
                     //var config = Configuration()
                     //config.trace = { print($0) }     // Prints all SQL statements
                     
-                    ModelStoreGRDB._sharedDBPool = try DatabasePool(path: ModelStore.localDBFile
+                    ModelStoreGRDB._sharedDBPool = try DatabasePool(path: SQLiteDataSource.default.getDataSource()
                         //, configuration: config
                         )
                 }catch{
@@ -69,7 +69,7 @@ class ModelStoreGRDB {
     }
     
     func checkDatabase() {
-        let dbpath = URL(fileURLWithPath: ModelStore.localDBFile).deletingLastPathComponent().path
+        let dbpath = URL(fileURLWithPath: SQLiteDataSource.default.getDataSource()).deletingLastPathComponent().path
         if !FileManager.default.fileExists(atPath: dbpath) {
             do {
                 try FileManager.default.createDirectory(atPath: dbpath, withIntermediateDirectories: true, attributes: nil)

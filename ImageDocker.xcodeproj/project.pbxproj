@@ -55,7 +55,6 @@
 		8E4C38D5211828FF0089502C /* MomentsTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D4211828FF0089502C /* MomentsTreeController.swift */; };
 		8E4C38D72118291F0089502C /* TreeController+LibraryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D62118291F0089502C /* TreeController+LibraryEntry.swift */; };
 		8E4C38D9211829410089502C /* DeviceTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38D8211829410089502C /* DeviceTreeController.swift */; };
-		8E4DECE023B3822F00F5538C /* ModelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4DECDF23B3822F00F5538C /* ModelStore.swift */; };
 		8E4DECE323B3881A00F5538C /* ImageDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4DECE223B3881A00F5538C /* ImageDao.swift */; };
 		8E4DECE823B38A7B00F5538C /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4DECE423B38A7A00F5538C /* Image.swift */; };
 		8E4DECE923B38A7B00F5538C /* ImageEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4DECE523B38A7A00F5538C /* ImageEvent.swift */; };
@@ -67,6 +66,13 @@
 		8E4E5B78221985A400FE4B68 /* ImageFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B77221985A400FE4B68 /* ImageFace.swift */; };
 		8E4E5B7F221F3D1800FE4B68 /* PeopleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B7E221F3D1800FE4B68 /* PeopleViewController.swift */; };
 		8E73E382223E494C00C14A90 /* ExecutionEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E73E381223E494C00C14A90 /* ExecutionEnvironment.swift */; };
+		8E7419442422526F002BAAAE /* ImageDaoInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7419432422526F002BAAAE /* ImageDaoInterface.swift */; };
+		8E741946242256E2002BAAAE /* RepositoryDaoInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E741945242256E2002BAAAE /* RepositoryDaoInterface.swift */; };
+		8E741948242256F0002BAAAE /* PlaceDaoInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E741947242256F0002BAAAE /* PlaceDaoInterface.swift */; };
+		8E74194A242256FE002BAAAE /* EventDaoInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E741949242256FE002BAAAE /* EventDaoInterface.swift */; };
+		8E74194C2422570A002BAAAE /* DeviceDaoInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E74194B2422570A002BAAAE /* DeviceDaoInterface.swift */; };
+		8E74194E24225719002BAAAE /* FaceDaoInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E74194D24225719002BAAAE /* FaceDaoInterface.swift */; };
+		8E74195024225728002BAAAE /* ExportDaoInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E74194F24225728002BAAAE /* ExportDaoInterface.swift */; };
 		8E7B98DF2147E7880019ED87 /* FileSystemHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7B98DE2147E7880019ED87 /* FileSystemHandler.swift */; };
 		8E7B98E1214882080019ED87 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7B98E0214882080019ED87 /* Alert.swift */; };
 		8E7F71002091F14300410C45 /* BaiduLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F70FF2091F14200410C45 /* BaiduLocation.swift */; };
@@ -230,6 +236,9 @@
 		8EF125AA2214590000C423CA /* DeviceListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EF125A82214590000C423CA /* DeviceListViewController.xib */; };
 		8EF125AC2216ECC500C423CA /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF125AB2216ECC500C423CA /* ContainerViewController.swift */; };
 		8EF32D122094CB2000511538 /* Icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8EF32D112094CB2000511538 /* Icons.xcassets */; };
+		8EF3FEE724231C0400AF83BB /* ImageSQLHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF3FEE624231C0400AF83BB /* ImageSQLHelper.swift */; };
+		8EF3FEEA2423509E00AF83BB /* DBEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF3FEE92423509E00AF83BB /* DBEngine.swift */; };
+		8EF3FEEC24235B0C00AF83BB /* DBEngine+GRDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF3FEEB24235B0C00AF83BB /* DBEngine+GRDB.swift */; };
 		8EF4CE5521D77BAB00C53AFF /* People.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE5421D77BAB00C53AFF /* People.swift */; };
 		8EF4CE5721D77BD600C53AFF /* Family.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE5621D77BD600C53AFF /* Family.swift */; };
 		8EF4CE5921D77BEA00C53AFF /* ImagePeople.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE5821D77BEA00C53AFF /* ImagePeople.swift */; };
@@ -324,7 +333,6 @@
 		8E4C38D4211828FF0089502C /* MomentsTreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsTreeController.swift; sourceTree = "<group>"; };
 		8E4C38D62118291F0089502C /* TreeController+LibraryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TreeController+LibraryEntry.swift"; sourceTree = "<group>"; };
 		8E4C38D8211829410089502C /* DeviceTreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTreeController.swift; sourceTree = "<group>"; };
-		8E4DECDF23B3822F00F5538C /* ModelStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelStore.swift; sourceTree = "<group>"; };
 		8E4DECE223B3881A00F5538C /* ImageDao.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDao.swift; sourceTree = "<group>"; };
 		8E4DECE423B38A7A00F5538C /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		8E4DECE523B38A7A00F5538C /* ImageEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageEvent.swift; sourceTree = "<group>"; };
@@ -336,6 +344,13 @@
 		8E4E5B77221985A400FE4B68 /* ImageFace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFace.swift; sourceTree = "<group>"; };
 		8E4E5B7E221F3D1800FE4B68 /* PeopleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleViewController.swift; sourceTree = "<group>"; };
 		8E73E381223E494C00C14A90 /* ExecutionEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutionEnvironment.swift; sourceTree = "<group>"; };
+		8E7419432422526F002BAAAE /* ImageDaoInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDaoInterface.swift; sourceTree = "<group>"; };
+		8E741945242256E2002BAAAE /* RepositoryDaoInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryDaoInterface.swift; sourceTree = "<group>"; };
+		8E741947242256F0002BAAAE /* PlaceDaoInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDaoInterface.swift; sourceTree = "<group>"; };
+		8E741949242256FE002BAAAE /* EventDaoInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDaoInterface.swift; sourceTree = "<group>"; };
+		8E74194B2422570A002BAAAE /* DeviceDaoInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDaoInterface.swift; sourceTree = "<group>"; };
+		8E74194D24225719002BAAAE /* FaceDaoInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDaoInterface.swift; sourceTree = "<group>"; };
+		8E74194F24225728002BAAAE /* ExportDaoInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportDaoInterface.swift; sourceTree = "<group>"; };
 		8E7B98DE2147E7880019ED87 /* FileSystemHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemHandler.swift; sourceTree = "<group>"; };
 		8E7B98E0214882080019ED87 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		8E7F70FF2091F14200410C45 /* BaiduLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaiduLocation.swift; sourceTree = "<group>"; };
@@ -499,6 +514,9 @@
 		8EF125A82214590000C423CA /* DeviceListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeviceListViewController.xib; sourceTree = "<group>"; };
 		8EF125AB2216ECC500C423CA /* ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
 		8EF32D112094CB2000511538 /* Icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icons.xcassets; sourceTree = "<group>"; };
+		8EF3FEE624231C0400AF83BB /* ImageSQLHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSQLHelper.swift; sourceTree = "<group>"; };
+		8EF3FEE92423509E00AF83BB /* DBEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBEngine.swift; sourceTree = "<group>"; };
+		8EF3FEEB24235B0C00AF83BB /* DBEngine+GRDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DBEngine+GRDB.swift"; sourceTree = "<group>"; };
 		8EF4CE5421D77BAB00C53AFF /* People.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = People.swift; sourceTree = "<group>"; };
 		8EF4CE5621D77BD600C53AFF /* Family.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Family.swift; sourceTree = "<group>"; };
 		8EF4CE5821D77BEA00C53AFF /* ImagePeople.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePeople.swift; sourceTree = "<group>"; };
@@ -741,7 +759,8 @@
 		8E4DECE123B3876700F5538C /* DAO */ = {
 			isa = PBXGroup;
 			children = (
-				8E4DECDF23B3822F00F5538C /* ModelStore.swift */,
+				8EF3FEE82423506000AF83BB /* DBEngine */,
+				8E741942242251BA002BAAAE /* Interface */,
 				8E4DECE223B3881A00F5538C /* ImageDao.swift */,
 				8EBA759823B5695900548376 /* RepositoryDao.swift */,
 				8EBA759A23B5CC5300548376 /* PlaceDao.swift */,
@@ -749,6 +768,8 @@
 				8EBA759E23B5CE7300548376 /* DeviceDao.swift */,
 				8EBA75A023B5D06900548376 /* FaceDao.swift */,
 				8EBA75A223B5D3B900548376 /* ExportDao.swift */,
+				8EF3FEE624231C0400AF83BB /* ImageSQLHelper.swift */,
+				8E97ECFA243B2C980013EFD3 /* PostgresClientKit */,
 				8E3EC3BA214DC120004B6125 /* GRDB */,
 			);
 			path = DAO;
@@ -803,6 +824,20 @@
 			path = Face;
 			sourceTree = "<group>";
 		};
+		8E741942242251BA002BAAAE /* Interface */ = {
+			isa = PBXGroup;
+			children = (
+				8E7419432422526F002BAAAE /* ImageDaoInterface.swift */,
+				8E741945242256E2002BAAAE /* RepositoryDaoInterface.swift */,
+				8E741947242256F0002BAAAE /* PlaceDaoInterface.swift */,
+				8E741949242256FE002BAAAE /* EventDaoInterface.swift */,
+				8E74194B2422570A002BAAAE /* DeviceDaoInterface.swift */,
+				8E74194D24225719002BAAAE /* FaceDaoInterface.swift */,
+				8E74194F24225728002BAAAE /* ExportDaoInterface.swift */,
+			);
+			path = Interface;
+			sourceTree = "<group>";
+		};
 		8E85B7D020B91E9E005A9845 /* Selection */ = {
 			isa = PBXGroup;
 			children = (
@@ -810,6 +845,13 @@
 				8E85B7D120B91ED1005A9845 /* SelectionCollectionViewController.swift */,
 			);
 			path = Selection;
+			sourceTree = "<group>";
+		};
+		8E97ECFA243B2C980013EFD3 /* PostgresClientKit */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = PostgresClientKit;
 			sourceTree = "<group>";
 		};
 		8EB27164233BB244003BF3AF /* LibraryTree */ = {
@@ -1208,6 +1250,15 @@
 			path = Splash;
 			sourceTree = "<group>";
 		};
+		8EF3FEE82423506000AF83BB /* DBEngine */ = {
+			isa = PBXGroup;
+			children = (
+				8EF3FEE92423509E00AF83BB /* DBEngine.swift */,
+				8EF3FEEB24235B0C00AF83BB /* DBEngine+GRDB.swift */,
+			);
+			path = DBEngine;
+			sourceTree = "<group>";
+		};
 		8EFA7D01211F93C000419777 /* DTO */ = {
 			isa = PBXGroup;
 			children = (
@@ -1474,6 +1525,7 @@
 				8EBA759123B55B8B00548376 /* PlacesTreeDataSource.swift in Sources */,
 				8EB2715D23384401003BF3AF /* ImageFile+PhotoTakenDate.swift in Sources */,
 				8E85B7D220B91ED1005A9845 /* SelectionCollectionViewController.swift in Sources */,
+				8E7419442422526F002BAAAE /* ImageDaoInterface.swift in Sources */,
 				8EB2718F2340EE95003BF3AF /* ViewController+TreeArea+Scan.swift in Sources */,
 				8E00BB8E2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift in Sources */,
 				8EF4CE5E21D8026800C53AFF /* EditRepositoryViewController.swift in Sources */,
@@ -1486,6 +1538,7 @@
 				8E4DECE823B38A7B00F5538C /* Image.swift in Sources */,
 				8E98B8F920D7950E00771280 /* ExportManager.swift in Sources */,
 				8EB271B12346BEC3003BF3AF /* ProgresViewController.swift in Sources */,
+				8E74194C2422570A002BAAAE /* DeviceDaoInterface.swift in Sources */,
 				8E4E5B672217349600FE4B68 /* FaceDetection.swift in Sources */,
 				8EBA759F23B5CE7300548376 /* DeviceDao.swift in Sources */,
 				8E4DECEB23B38A7B00F5538C /* ImageContainer.swift in Sources */,
@@ -1504,16 +1557,19 @@
 				8E36B06C21792EDC00646EA5 /* CustomRowView.swift in Sources */,
 				8E4E5B6922195BFF00FE4B68 /* FaceRecognition.swift in Sources */,
 				8EBA759D23B5CD6F00548376 /* EventDao.swift in Sources */,
+				8EF3FEEA2423509E00AF83BB /* DBEngine.swift in Sources */,
 				8EF4CE5521D77BAB00C53AFF /* People.swift in Sources */,
 				8E8D471222279AA80091E9C3 /* FaceCollectionViewItemsLoader.swift in Sources */,
 				8E15E73C23AC74DC0094240A /* TreeDataSource.swift in Sources */,
 				8ECA1FFB23E5751300F56895 /* LibraryTree+ExtendView.swift in Sources */,
 				8E95739A20EBEBD7003BD651 /* FilterViewController.swift in Sources */,
+				8EF3FEE724231C0400AF83BB /* ImageSQLHelper.swift in Sources */,
 				8E8D47292236F63C0091E9C3 /* TablePopover.swift in Sources */,
 				8E0EAE9A209D2623008C377F /* ImageFolderTreeScanner.swift in Sources */,
 				8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */,
 				8EAD03B523372C0100AAC7C6 /* GRDB+ImageEvent.swift in Sources */,
 				8E3FA9252355047400B677A3 /* MemoriesCollectionViewController.swift in Sources */,
+				8E74194E24225719002BAAAE /* FaceDaoInterface.swift in Sources */,
 				8E4C38D9211829410089502C /* DeviceTreeController.swift in Sources */,
 				8EB2719B2340F907003BF3AF /* ViewController+CollectionArea+CombineDuplicated.swift in Sources */,
 				8EB271832340E98B003BF3AF /* ViewController+SelectionArea+CombineDuplicated.swift in Sources */,
@@ -1565,6 +1621,7 @@
 				8E4C38CD2117B5340089502C /* Phone.swift in Sources */,
 				8E15E74123AC7B310094240A /* Icons.swift in Sources */,
 				8EB27169233BB408003BF3AF /* RepositoryDetailViewController.swift in Sources */,
+				8E74195024225728002BAAAE /* ExportDaoInterface.swift in Sources */,
 				8EAD03B323372BC800AAC7C6 /* GRDB+ImagePlace.swift in Sources */,
 				8EB271852340E9C6003BF3AF /* ViewController+SelectionArea+ReplacePlace.swift in Sources */,
 				8EFE763C2094AF6B00B7CFCA /* TreeController.swift in Sources */,
@@ -1588,6 +1645,7 @@
 				8E4DECE923B38A7B00F5538C /* ImageEvent.swift in Sources */,
 				8E73E382223E494C00C14A90 /* ExecutionEnvironment.swift in Sources */,
 				8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */,
+				8E741946242256E2002BAAAE /* RepositoryDaoInterface.swift in Sources */,
 				8EB271532337B768003BF3AF /* GRDB+Image+Statistic.swift in Sources */,
 				8E98B8F720D6044900771280 /* Event.swift in Sources */,
 				8E3FA9202353310600B677A3 /* MemoryCollectionViewItem.swift in Sources */,
@@ -1609,6 +1667,7 @@
 				8EB2717F2340D989003BF3AF /* ViewController+Startup.swift in Sources */,
 				8E4B7C1920929EFA00DDD9E0 /* LocationConsumer.swift in Sources */,
 				8E99DBFB2284A18600654C03 /* SearchCondition.swift in Sources */,
+				8E741948242256F0002BAAAE /* PlaceDaoInterface.swift in Sources */,
 				8EB2718B2340EE18003BF3AF /* ViewController+SelectionArea+ExportSelected.swift in Sources */,
 				8EB271992340F22F003BF3AF /* ViewController+Search.swift in Sources */,
 				8E15E73623AC74DC0094240A /* StackHeaderViewController.swift in Sources */,
@@ -1631,7 +1690,9 @@
 				8EB271892340EDC5003BF3AF /* ViewController+SelectionArea+AssignEvent.swift in Sources */,
 				8E3FA92323535C5800B677A3 /* MemoriesViewController.swift in Sources */,
 				8EB986C620B6EBC40075B081 /* DarkTableView.swift in Sources */,
+				8E74194A242256FE002BAAAE /* EventDaoInterface.swift in Sources */,
 				8EB2716D233E0729003BF3AF /* LibrariesViewController.swift in Sources */,
+				8EF3FEEC24235B0C00AF83BB /* DBEngine+GRDB.swift in Sources */,
 				8E4C38CF2117B54D0089502C /* Android.swift in Sources */,
 				8EB2718D2340EE4C003BF3AF /* ViewController+SelectionArea+WriteNote.swift in Sources */,
 				8E8D47182229AC220091E9C3 /* FaceIconCollectionViewController.swift in Sources */,
@@ -1652,7 +1713,6 @@
 				8EEF0728226215E7000520B7 /* SplashViewController.swift in Sources */,
 				8EC5BA2E21775571001510AF /* TheaterCollectionViewItem.swift in Sources */,
 				8EFAF1FB20BFFC8A007A7783 /* MetaInfoHolder.swift in Sources */,
-				8E4DECE023B3822F00F5538C /* ModelStore.swift in Sources */,
 				8E8CF269235AA3860016932A /* Naming.swift in Sources */,
 				8EBA758F23B55B7700548376 /* MomentsTreeDataSource.swift in Sources */,
 				8EEF071A2256C9D9000520B7 /* DevicePathDetailViewController.swift in Sources */,

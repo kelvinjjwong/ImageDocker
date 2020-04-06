@@ -53,14 +53,14 @@ struct DeviceCopyDestination {
     }
     
     static func from(deviceId: String, deviceType: MobileType = .Android) -> [DeviceCopyDestination] {
-        let devicePaths = DeviceDao().getDevicePaths(deviceId: deviceId, deviceType: deviceType)
+        let devicePaths = DeviceDao.default.getDevicePaths(deviceId: deviceId, deviceType: deviceType)
         return DeviceCopyDestination.from(devicePaths)
     }
 }
 
 class DeviceCopyViewController: NSViewController {
     
-    let deviceDao = DeviceDao()
+    let deviceDao = DeviceDao.default
     
     let dateFormatter = DateFormatter()
     

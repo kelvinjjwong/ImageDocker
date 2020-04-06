@@ -56,7 +56,7 @@ class RepositoryDetailViewController: NSViewController {
         self.lblCropFree.stringValue = "0M / 0T"
         self.lblTotalSize.stringValue = "0 GB"
         DispatchQueue.global().async {
-            if let repository = ModelStore.default.getRepository(repositoryPath: path) {
+            if let repository = RepositoryDao.default.getRepository(repositoryPath: path) {
                 
                 let (repoSize, _, _, repoDetail) = LocalDirectory.bridge.getDiskSpace(path: repository.repositoryPath, lblDiskFree: self.lblRepoFree, lblDiskOccupied: self.lblEditableStorageSpace)
                 self.repoSpace = repoDetail

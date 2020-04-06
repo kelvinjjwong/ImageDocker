@@ -10,7 +10,7 @@ import Foundation
 
 class MomentsTreeDataSource : TreeDataSource {
     
-    let dao = ImageSearchDao()
+    let dao = ImageSearchDao.default
     
     func convertToTreeCollection(_ data:Moment) -> TreeCollection {
         let collection = TreeCollection(data.represent, id: data.id, object: data)

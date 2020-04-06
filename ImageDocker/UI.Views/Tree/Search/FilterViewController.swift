@@ -31,12 +31,12 @@ class FilterViewController: NSViewController {
     override func viewDidLoad() {
         self.imageSourceTableController = CheckTableViewController()
         self.imageSourceTableController?.checkAction = #selector(FilterViewController.onCheckImageSource(sender:))
-        self.imageSourceTableController?.dataSet = ModelStore.default.getImageSources()
+        self.imageSourceTableController?.dataSet = ImageSearchDao.default.getImageSources()
         self.imageSourceTable.delegate = self.imageSourceTableController
         self.imageSourceTable.dataSource = self.imageSourceTableController
         self.cameraModelTableController = CheckTableViewController()
         self.cameraModelTableController?.checkAction = #selector(FilterViewController.onCheckCameraModel(sender:))
-        self.cameraModelTableController?.dataSet = ModelStore.default.getCameraModel()
+        self.cameraModelTableController?.dataSet = ImageSearchDao.default.getCameraModel()
         self.cameraModelTable.delegate = self.cameraModelTableController
         self.cameraModelTable.dataSource = self.cameraModelTableController
         self.imageSourceTable.reloadData()

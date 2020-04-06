@@ -10,6 +10,14 @@ import Foundation
 
 class ExportDao {
     
+    private let impl:ExportDaoInterface
+    
+    init(_ impl:ExportDaoInterface){
+        self.impl = impl
+    }
+    
+    static let `default` = ExportDao(ExportDaoGRDB())
+    
     func getOrCreateExportProfile(id:String,
                                   name:String,
                                   directory: String,
@@ -26,7 +34,7 @@ class ExportDao {
                                   patchDateTime:Bool,
                                   patchGeolocation:Bool
                                   ) -> ExportProfile{
-        return ModelStore.default.getOrCreateExportProfile(id: id, name: name, directory: directory, repositoryPath: repositoryPath, specifyPeople: specifyPeople, specifyEvent: specifyEvent, specifyRepository: specifyRepository, people: people, events: events, duplicateStrategy: duplicateStrategy, fileNaming: fileNaming, subFolder: subFolder, patchImageDescription: patchImageDescription, patchDateTime: patchDateTime, patchGeolocation: patchGeolocation)
+        return self.impl.getOrCreateExportProfile(id: id, name: name, directory: directory, repositoryPath: repositoryPath, specifyPeople: specifyPeople, specifyEvent: specifyEvent, specifyRepository: specifyRepository, people: people, events: events, duplicateStrategy: duplicateStrategy, fileNaming: fileNaming, subFolder: subFolder, patchImageDescription: patchImageDescription, patchDateTime: patchDateTime, patchGeolocation: patchGeolocation)
     }
     
     func updateExportProfile(id:String,
@@ -39,30 +47,30 @@ class ExportDao {
                              people: String,
                              events: String,
                              repositoryPath: String) -> ExecuteState{
-        return ModelStore.default.updateExportProfile(id: id, name: name, directory: directory, duplicateStrategy: duplicateStrategy, specifyPeople: specifyPeople, specifyEvent: specifyEvent, specifyRepository: specifyRepository, people: people, events: events, repositoryPath: repositoryPath)
+        return self.impl.updateExportProfile(id: id, name: name, directory: directory, duplicateStrategy: duplicateStrategy, specifyPeople: specifyPeople, specifyEvent: specifyEvent, specifyRepository: specifyRepository, people: people, events: events, repositoryPath: repositoryPath)
     }
     
     func enableExportProfile(id:String) -> ExecuteState{
-        return ModelStore.default.enableExportProfile(id: id)
+        return self.impl.enableExportProfile(id: id)
     }
     
     func disableExportProfile(id:String) -> ExecuteState{
-        return ModelStore.default.disableExportProfile(id: id)
+        return self.impl.disableExportProfile(id: id)
     }
     
     func updateExportProfileLastExportTime(id:String) -> ExecuteState{
-        return ModelStore.default.updateExportProfileLastExportTime(id: id)
+        return self.impl.updateExportProfileLastExportTime(id: id)
     }
     
     func getExportProfile(id:String) -> ExportProfile? {
-        return ModelStore.default.getExportProfile(id: id)
+        return self.impl.getExportProfile(id: id)
     }
     
     func getAllExportProfiles() -> [ExportProfile] {
-        return ModelStore.default.getAllExportProfiles()
+        return self.impl.getAllExportProfiles()
     }
     
     func deleteExportProfile(id:String) -> ExecuteState{
-        return ModelStore.default.deleteExportProfile(id: id)
+        return self.impl.deleteExportProfile(id: id)
     }
 }

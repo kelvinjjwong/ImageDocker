@@ -10,28 +10,35 @@ import Foundation
 
 class EventDao {
     
+    private let impl:EventDaoInterface
+    
+    init(_ impl:EventDaoInterface){
+        self.impl = impl
+    }
+    
+    static let `default` = EventDao(EventDaoGRDB())
+    
     func getOrCreateEvent(name:String) -> ImageEvent{
-        return ModelStore.default.getOrCreateEvent(name: name)
+        return self.impl.getOrCreateEvent(name: name)
     }
     
     func getAllEvents() -> [ImageEvent] {
-        return ModelStore.default.getAllEvents()
+        return self.impl.getAllEvents()
     }
     
     func getEvents(byName names:String? = nil) -> [ImageEvent] {
-        return ModelStore.default.getEvents(byName: names)
+        return self.impl.getEvents(byName: names)
     }
     
     func getAllEvents(imageSource:[String]? = nil, cameraModel:[String]? = nil) -> [Event] {
-        let result = ModelStore.default.getAllEvents(imageSource: imageSource, cameraModel: cameraModel)
-        return Events().read(result)
+        return self.impl.getAllEvents(imageSource: imageSource, cameraModel: cameraModel)
     }
     
     func renameEvent(oldName:String, newName:String) -> ExecuteState{
-        return ModelStore.default.renameEvent(oldName: oldName, newName: newName)
+        return self.impl.renameEvent(oldName: oldName, newName: newName)
     }
     
     func deleteEvent(name:String) -> ExecuteState{
-        return ModelStore.default.deleteEvent(name: name)
+        return self.impl.deleteEvent(name: name)
     }
 }

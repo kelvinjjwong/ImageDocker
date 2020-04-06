@@ -10,8 +10,8 @@ import Cocoa
 
 class PeopleFace {
     
-    let faceDao = FaceDao()
-    let imageRecordDao = ImageRecordDao()
+    let faceDao = FaceDao.default
+    let imageRecordDao = ImageRecordDao.default
     
     // MARK: SIZE
     

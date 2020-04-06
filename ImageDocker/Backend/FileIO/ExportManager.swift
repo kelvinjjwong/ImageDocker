@@ -60,7 +60,7 @@ class ExportManager {
     }
     
     fileprivate func getExportedFilenames() -> Set<String> {
-        let allExportedImagesStored = ModelStore.default.getAllExportedImages(includeHidden: false)
+        let allExportedImagesStored = ImageSearchDao.default.getAllExportedImages(includeHidden: false)
         var allExportedFilenames:Set<String> = []
         for image in allExportedImagesStored {
             let path = "\(image.exportToPath ?? "")/\(image.exportAsFilename ?? "")"
@@ -68,7 +68,7 @@ class ExportManager {
             let resolvedPath = fileUrl.resolvingSymlinksInPath().path
             if !FileManager.default.fileExists(atPath: fileUrl.path) {
                 // no longer exists exported file, clean exported fields in database
-                ModelStore.default.cleanImageExportPath(path: image.path)
+                ImageExportDao.default.cleanImageExportPath(path: image.path)
             }else{
                 allExportedFilenames.insert(resolvedPath) // transform to non symbol link physical path
             }
@@ -79,7 +79,7 @@ class ExportManager {
     fileprivate func checkIfExportedFilesExist() {
         self.printMessage("Loading exported files for validation ...")
         print("\(Date()) EXPORT: DB LOADING getAllExportedImages")
-        let allExportedImagesStored = ModelStore.default.getAllExportedImages(includeHidden: false)
+        let allExportedImagesStored = ImageSearchDao.default.getAllExportedImages(includeHidden: false)
         print("\(Date()) EXPORT: DB LOADING getAllExportedImages : DONE")
         let total = allExportedImagesStored.count
         var k:Int = 0
@@ -96,12 +96,12 @@ class ExportManager {
             if photo.exportToPath != nil && photo.exportAsFilename != nil {
                 let fullpath:String = "\(photo.exportToPath ?? "")/\(photo.exportAsFilename ?? "")"
                 if !FileManager.default.fileExists(atPath: fullpath){
-                    ModelStore.default.cleanImageExportPath(path: photo.path)
+                    ImageExportDao.default.cleanImageExportPath(path: photo.path)
                 }else{
                     if photo.exportedMD5 == nil {
                         self.printMessage("Updating MD5 of exported file ... ( \(k) / \(total) )")
                         let md5 = ComputerFileManager.default.md5(pathOfFile: photo.path)
-                        ModelStore.default.storeImageExportedMD5(path: photo.path, md5: md5)
+                        ImageExportDao.default.storeImageExportedMD5(path: photo.path, md5: md5)
                         
                     }
                 }
@@ -135,7 +135,7 @@ class ExportManager {
             print("\(Date()) Change ImageDescription for \(photo.path)")
             ExifTool.helper.patchImageDescription(description: generatedImageDescription, url: URL(fileURLWithPath: photo.path))
             if generatedImageDescription != photo.longDescription {
-                ModelStore.default.storeImageDescription(path: photo.path, shortDescription: nil, longDescription: generatedImageDescription)
+                ImageRecordDao.default.storeImageDescription(path: photo.path, shortDescription: nil, longDescription: generatedImageDescription)
             }
             return (true, generatedImageDescription)
             print("\(Date()) Change ImageDescription for \(photo.path) : DONE")
@@ -150,17 +150,17 @@ class ExportManager {
         if fileState.existAtPath == .existAtPathWithSameMD5 {
             if fileState.isSamePath {
                 if photo.exportTime == nil {
-                    ModelStore.default.storeImageExportedTime(path: path, date: Date())
+                    ImageExportDao.default.storeImageExportedTime(path: path, date: Date())
                 }
             }else{
-                ModelStore.default.storeImageExportSuccess(path: photo.path, date: Date(),
+                ImageExportDao.default.storeImageExportSuccess(path: photo.path, date: Date(),
                                                            exportToPath: path,
                                                            exportedFilename: filename,
                                                            exportedMD5: fileState.md5,
                                                            exportedLongDescription: imageDescription)
             }
             if photo.exportedMD5 == nil {
-                ModelStore.default.storeImageExportedMD5(path: photo.path, md5: fileState.md5)
+                ImageExportDao.default.storeImageExportedMD5(path: photo.path, md5: fileState.md5)
             }
             return true
         }
@@ -183,13 +183,13 @@ class ExportManager {
             }
         }
         if !copied {
-            ModelStore.default.storeImageExportFail(path: photo.path, date: Date(), message: "ERROR: \(errorMessage)")
+            ImageExportDao.default.storeImageExportFail(path: photo.path, date: Date(), message: "ERROR: \(errorMessage)")
             
             return false
         }else{
             print("\(Date()) Copy file \(photo.path) : DONE")
             
-            ModelStore.default.storeImageExportSuccess(path: photo.path, date: Date(),
+            ImageExportDao.default.storeImageExportSuccess(path: photo.path, date: Date(),
                                                        exportToPath: path,
                                                        exportedFilename: filename,
                                                        exportedMD5: md5,
@@ -225,7 +225,7 @@ class ExportManager {
         
         print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
         
-        let total = ModelStore.default.countAllPhotoFilesForExporting(after: date)
+        let total = ImageCountDao.default.countAllPhotoFilesForExporting(after: date)
         
         var batchTotal = 1
         let batchLimit = 500
@@ -238,7 +238,7 @@ class ExportManager {
             
             print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
         
-            let photos:[Image] = ModelStore.default.getAllPhotoFilesForExporting(after: date, limit: batchLimit)
+            let photos:[Image] = ImageSearchDao.default.getAllPhotoFilesForExporting(after: date, limit: batchLimit)
             
             batchTotal = photos.count
             
@@ -264,13 +264,13 @@ class ExportManager {
                 
                 // invalid file-ext
                 if !Naming.FileType.allowed.contains(pathExt){
-                    ModelStore.default.storeImageExportFail(path: photo.path, date: Date(), message: "FILE EXT DISALLOWED")
+                    ImageExportDao.default.storeImageExportFail(path: photo.path, date: Date(), message: "FILE EXT DISALLOWED")
                     continue
                 }
                 
                 // invalid source file
                 if !FileManager.default.fileExists(atPath: photo.path) {
-                    ModelStore.default.storeImageExportFail(path: photo.path, date: Date(), message: "SOURCE FILE NOT FOUND")
+                    ImageExportDao.default.storeImageExportFail(path: photo.path, date: Date(), message: "SOURCE FILE NOT FOUND")
                     continue
                 }
                 

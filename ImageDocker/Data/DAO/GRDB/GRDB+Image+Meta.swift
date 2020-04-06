@@ -9,7 +9,7 @@
 import Foundation
 import GRDB
 
-extension ModelStoreGRDB {
+extension ImageSearchDaoGRDB {
     
     // MARK: - Options
     
@@ -58,7 +58,7 @@ extension ModelStoreGRDB {
     
     
     
-    func getMoments(_ condition:MomentCondition, year:Int = 0, month:Int = 0) -> [Moment] {
+    func getMoments(_ condition:MomentCondition, year:Int, month:Int) -> [Moment] {
         var fields = ""
         var arguments = ""
         
@@ -113,12 +113,12 @@ extension ModelStoreGRDB {
         
     }
     
-    func getAllDates(imageSource:[String]? = nil, cameraModel:[String]? = nil) -> [Row] {
+    func getAllMoments(imageSource:[String]?, cameraModel:[String]?) -> [Moment] {
         var sqlArgs:[Any] = []
         var imageSourceWhere = ""
         var cameraModelWhere = ""
-        ModelStore.inArray(field: "imageSource", array: imageSource, where: &imageSourceWhere, args: &sqlArgs)
-        ModelStore.inArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs)
+        SQLHelper.inArray(field: "imageSource", array: imageSource, where: &imageSourceWhere, args: &sqlArgs)
+        SQLHelper.inArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs)
         
         let sql = """
         SELECT photoTakenYear, photoTakenMonth, photoTakenDay, count(path) as photoCount FROM
@@ -135,7 +135,7 @@ extension ModelStoreGRDB {
         }catch{
             print(error)
         }
-        return result
+        return Moments().readMoments(result)
         
     }
     
@@ -156,7 +156,7 @@ extension ModelStoreGRDB {
         }
     }
     
-    func getMomentsByPlace(_ condition:MomentCondition, parent:Moment? = nil) -> [Moment] {
+    func getMomentsByPlace(_ condition:MomentCondition, parent:Moment?) -> [Moment] {
         var fields = ""
         var whereStmt = ""
         var order = ""
@@ -263,12 +263,12 @@ extension ModelStoreGRDB {
         
     }
     
-    func getAllPlacesAndDates(imageSource:[String]? = nil, cameraModel:[String]? = nil) -> [Row] {
+    func getAllPlacesAndDates(imageSource:[String]?, cameraModel:[String]?) -> [Moment] {
         var sqlArgs:[Any] = []
         var imageSourceWhere = ""
         var cameraModelWhere = ""
-        ModelStore.inArray(field: "imageSource", array: imageSource, where: &imageSourceWhere, args: &sqlArgs)
-        ModelStore.inArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs)
+        SQLHelper.inArray(field: "imageSource", array: imageSource, where: &imageSourceWhere, args: &sqlArgs)
+        SQLHelper.inArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs)
         
         let sql = """
         SELECT country, province, city, place, photoTakenYear, photoTakenMonth, photoTakenDay, count(path) as photoCount FROM
@@ -291,7 +291,7 @@ extension ModelStoreGRDB {
         }catch{
             print(error)
         }
-        return result
+        return Moments().readPlaces(result)
         
     }
     
@@ -331,7 +331,7 @@ extension ModelStoreGRDB {
         
     }
     
-    func getMomentsByEvent(event:String, category:String, year:Int = 0, month:Int = 0) -> [Moment] {
+    func getMomentsByEvent(event:String, category:String, year:Int = 0, month:Int) -> [Moment] {
         var whereStmt = "event=?"
         var ev = event
         if event == "未分配事件" {
@@ -391,7 +391,7 @@ extension ModelStoreGRDB {
         
     }
     
-    func getYears(event:String? = nil) -> [Int] {
+    func getYears(event:String?) -> [Int] {
         var condition = ""
         var args:[String] = []
         if let ev = event {
@@ -416,7 +416,7 @@ extension ModelStoreGRDB {
         return result
     }
     
-    func getDatesByYear(year:Int, event:String? = nil) -> [String:[String]] {
+    func getDatesByYear(year:Int, event:String?) -> [String:[String]] {
         var sql = "select distinct photoTakenMonth,photoTakenDay from image where photoTakenYear=? order by photoTakenMonth,photoTakenDay"
         var args:[Any] = [year]
         

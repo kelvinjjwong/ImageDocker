@@ -16,8 +16,8 @@ import GRDB
 
 class ImageFile {
     
-    let imageRecordDao = ImageRecordDao()
-    let repositoryDao = RepositoryDao()
+    let imageRecordDao = ImageRecordDao.default
+    let repositoryDao = RepositoryDao.default
     
     // MARK: - URL
   

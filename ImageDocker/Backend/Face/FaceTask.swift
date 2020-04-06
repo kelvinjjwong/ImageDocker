@@ -38,8 +38,8 @@ class FaceTask {
     
     func reloadPeople() {
         self.peopleName = [:]
-        let people = ModelStore.default.getPeople()
-        let relationships = ModelStore.default.getRelationships()
+        let people = FaceDao.default.getPeople()
+        let relationships = FaceDao.default.getRelationships()
         var ids:[String:String] = [:]
         for person in people {
             peopleName[person.id] = person.shortName ?? person.name
@@ -69,7 +69,7 @@ class FaceTask {
         if Naming.FileType.recognize(from: image.filename) != .photo  {
             return false
         }
-        if image.repositoryPath != "", let repository = ModelStore.default.getRepository(repositoryPath: image.repositoryPath) {
+        if image.repositoryPath != "", let repository = RepositoryDao.default.getRepository(repositoryPath: image.repositoryPath) {
             if repository.cropPath != "" {
                 // ensure base crop path exists
                 var isDir:ObjCBool = false
@@ -100,7 +100,7 @@ class FaceTask {
                 var img = image
                 if img.id == nil {
                     img.id = UUID().uuidString
-                    ModelStore.default.saveImage(image: img)
+                    ImageRecordDao.default.saveImage(image: img)
                 }
                 let imageId = img.id!
                 
@@ -109,7 +109,7 @@ class FaceTask {
                 FaceDetection.default.findFace(from: url, into: cropPath, onCompleted: {faces in
                     for face in faces {
                         print("Found face: \(face.filename) at (\(face.x), \(face.y), \(face.width), \(face.height))")
-                        let exist = ModelStore.default.findFaceCrop(imageId: imageId,
+                        let exist = FaceDao.default.findFaceCrop(imageId: imageId,
                                                                     x: face.x.databaseValue.description,
                                                                     y: face.y.databaseValue.description,
                                                                     width: face.width.databaseValue.description,
@@ -134,7 +134,7 @@ class FaceTask {
                                                           year: image.photoTakenYear ?? 0,
                                                           month: image.photoTakenMonth ?? 0,
                                                           day: image.photoTakenDay ?? 0)
-                            ModelStore.default.saveFaceCrop(imageFace)
+                            FaceDao.default.saveFaceCrop(imageFace)
                             print("Face crop \(imageFace.id) saved.")
                         }else{
                             print("Face already in DB")
@@ -144,7 +144,7 @@ class FaceTask {
                     print("Face detection done in \(cropPath.path)")
                     
                     img.scanedFace = true
-                    ModelStore.default.updateImageScannedFace(imageId: imageId, facesCount: faces.count)
+                    ImageFaceDao.default.updateImageScannedFace(imageId: imageId, facesCount: faces.count)
                 }) // another thread
                 
             }else{
@@ -159,7 +159,7 @@ class FaceTask {
     }
     
     func findFaces(path:String) -> Bool {
-        if let image = ModelStore.default.getImage(path: path) {
+        if let image = ImageRecordDao.default.getImage(path: path) {
             return self.findFaces(image: image)
         }else{
             print("ERROR: Cannot find image record: \(path)")
@@ -178,7 +178,7 @@ class FaceTask {
         }
         if let imageId = image.id {
             var recognizedPeopleIds = ","
-            let crops = ModelStore.default.getFaceCrops(imageId: imageId)
+            let crops = FaceDao.default.getFaceCrops(imageId: imageId)
             if crops.count > 0 {
                 for crop in crops {
                     let path = URL(fileURLWithPath: crop.cropPath).appendingPathComponent(crop.subPath).appendingPathComponent(crop.filename)
@@ -200,17 +200,17 @@ class FaceTask {
                             version += 1
                             c.recognizeVersion = "\(version)"
                         }
-                        ModelStore.default.saveFaceCrop(c)
+                        FaceDao.default.saveFaceCrop(c)
                         print("Face crop \(crop.id) updated into DB.")
                     }else{
                         print("No face recognized for image [\(imageId)].")
                     }
                 }
                 
-                ModelStore.default.updateImageRecognizedFace(imageId: imageId, recognizedPeopleIds: recognizedPeopleIds)
+                ImageFaceDao.default.updateImageRecognizedFace(imageId: imageId, recognizedPeopleIds: recognizedPeopleIds)
             }else{
                 print("No crops for this image.")
-                ModelStore.default.updateImageRecognizedFace(imageId: imageId)
+                ImageFaceDao.default.updateImageRecognizedFace(imageId: imageId)
                 return false
             }
             
@@ -224,7 +224,7 @@ class FaceTask {
     }
     
     func recognizeFaces(path:String) -> Bool {
-        if let image = ModelStore.default.getImage(path: path) {
+        if let image = ImageRecordDao.default.getImage(path: path) {
             return self.recognizeFaces(image: image)
         }else{
             print("ERROR: Cannot find image record: \(path)")

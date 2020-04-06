@@ -10,7 +10,7 @@ import Foundation
 
 class DeviceTreeDataSource : TreeDataSource {
     
-    private var deviceDao = DeviceDao()
+    private var deviceDao = DeviceDao.default
     
     private var deviceIdToDevice : [String : PhoneDevice] = [String : PhoneDevice] ()
     

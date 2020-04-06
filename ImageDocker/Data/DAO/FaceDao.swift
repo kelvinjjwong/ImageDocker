@@ -10,125 +10,133 @@ import Foundation
 
 class FaceDao {
     
+    private let impl:FaceDaoInterface
+    
+    init(_ impl:FaceDaoInterface){
+        self.impl = impl
+    }
+    
+    static let `default` = FaceDao(FaceDaoGRDB())
+    
     func getFamilies() -> [Family] {
-        return ModelStore.default.getFamilies()
+        return self.impl.getFamilies()
     }
     
     func getFamilies(peopleId:String) -> [String] {
-        return ModelStore.default.getFamilies(peopleId: peopleId)
+        return self.impl.getFamilies(peopleId: peopleId)
     }
     
     func saveFamilyMember(peopleId:String, familyId:String) -> ExecuteState {
-        return ModelStore.default.saveFamilyMember(peopleId: peopleId, familyId: familyId)
+        return self.impl.saveFamilyMember(peopleId: peopleId, familyId: familyId)
     }
     
     func deleteFamilyMember(peopleId:String, familyId:String) -> ExecuteState {
-        return ModelStore.default.deleteFamilyMember(peopleId: peopleId, familyId: familyId)
+        return self.impl.deleteFamilyMember(peopleId: peopleId, familyId: familyId)
     }
     
     func saveFamily(familyId:String?=nil, name:String, type:String) -> String? {
-        return ModelStore.default.saveFamily(familyId: familyId, name: name, type: type)
+        return self.impl.saveFamily(familyId: familyId, name: name, type: type)
     }
     
     func deleteFamily(id:String) -> ExecuteState {
-        return ModelStore.default.deleteFamily(id: id)
+        return self.impl.deleteFamily(id: id)
     }
     
     // MARK: - RELATIONSHIP
     
     func getRelationship(primary:String, secondary:String) -> (String, String) {
-        return ModelStore.default.getRelationship(primary: primary, secondary: secondary)
+        return self.impl.getRelationship(primary: primary, secondary: secondary)
     }
     
     func getRelationships(peopleId:String) -> [[String:String]] {
-        return ModelStore.default.getRelationships(peopleId: peopleId)
+        return self.impl.getRelationships(peopleId: peopleId)
     }
     
     func saveRelationship(primary:String, secondary:String, callName:String) -> ExecuteState {
-        return ModelStore.default.saveRelationship(primary: primary, secondary: secondary, callName: callName)
+        return self.impl.saveRelationship(primary: primary, secondary: secondary, callName: callName)
     }
     
     func getRelationships() -> [PeopleRelationship] {
-        return ModelStore.default.getRelationships()
+        return self.impl.getRelationships()
     }
     
     // MARK: - PEOPLE
     
     func getPeople() -> [People] {
-        return ModelStore.default.getPeople()
+        return self.impl.getPeople()
     }
     
     func getPeople(except:String) -> [People] {
-        return ModelStore.default.getPeople(except: except)
+        return self.impl.getPeople(except: except)
     }
     
     func getPerson(id: String) -> People? {
-        return ModelStore.default.getPerson(id: id)
+        return self.impl.getPerson(id: id)
     }
     
     func savePersonName(id:String, name:String, shortName:String) -> ExecuteState {
-        return ModelStore.default.savePersonName(id: id, name: name, shortName: shortName)
+        return self.impl.savePersonName(id: id, name: name, shortName: shortName)
     }
     
     func updatePersonIconImage(id:String, repositoryPath:String, cropPath:String, subPath:String, filename:String) -> Bool{
-        return ModelStore.default.updatePersonIconImage(id: id, repositoryPath: repositoryPath, cropPath: cropPath, subPath: subPath, filename: filename)
+        return self.impl.updatePersonIconImage(id: id, repositoryPath: repositoryPath, cropPath: cropPath, subPath: subPath, filename: filename)
     }
     
     func deletePerson(id:String) -> ExecuteState {
-        return ModelStore.default.deletePerson(id: id)
+        return self.impl.deletePerson(id: id)
     }
     
     // MARK: - FACE
     
     func getFace(id: String) -> ImageFace? {
-        return ModelStore.default.getFace(id: id)
+        return self.impl.getFace(id: id)
     }
     
     func getFaceCrops(imageId: String) -> [ImageFace] {
-        return ModelStore.default.getFaceCrops(imageId: imageId)
+        return self.impl.getFaceCrops(imageId: imageId)
     }
     
     func findFaceCrop(imageId: String, x:String, y:String, width:String, height:String) -> ImageFace? {
-        return ModelStore.default.findFaceCrop(imageId: imageId, x: x, y: y, width: width, height: height)
+        return self.impl.findFaceCrop(imageId: imageId, x: x, y: y, width: width, height: height)
     }
     
     func getYearsOfFaceCrops(peopleId:String) -> [String]{
-        return ModelStore.default.getYearsOfFaceCrops(peopleId: peopleId)
+        return self.impl.getYearsOfFaceCrops(peopleId: peopleId)
     }
     
     func getMonthsOfFaceCrops(peopleId:String, imageYear:String) -> [String]{
-        return ModelStore.default.getMonthsOfFaceCrops(peopleId: peopleId, imageYear: imageYear)
+        return self.impl.getMonthsOfFaceCrops(peopleId: peopleId, imageYear: imageYear)
     }
     
     func getFaceCrops(peopleId:String, year:Int? = nil, month:Int? = nil, sample:Bool? = nil, icon:Bool? = nil, tag:Bool? = nil, locked:Bool? = nil) -> [ImageFace]{
-        return ModelStore.default.getFaceCrops(peopleId: peopleId, year: year, month: month, sample: sample, icon: icon, tag: tag, locked: locked)
+        return self.impl.getFaceCrops(peopleId: peopleId, year: year, month: month, sample: sample, icon: icon, tag: tag, locked: locked)
     }
     
     func saveFaceCrop(_ face:ImageFace) -> ExecuteState {
-        return ModelStore.default.saveFaceCrop(face)
+        return self.impl.saveFaceCrop(face)
     }
     
     func updateFaceIconFlag(id:String, peopleId:String) -> ExecuteState {
-        return ModelStore.default.updateFaceIconFlag(id: id, peopleId: peopleId)
+        return self.impl.updateFaceIconFlag(id: id, peopleId: peopleId)
     }
     
     func removeFaceIcon(peopleId:String) -> ExecuteState {
-        return ModelStore.default.removeFaceIcon(peopleId: peopleId)
+        return self.impl.removeFaceIcon(peopleId: peopleId)
     }
     
     func updateFaceSampleFlag(id:String, flag:Bool) -> ExecuteState {
-        return ModelStore.default.updateFaceSampleFlag(id: id, flag: flag)
+        return self.impl.updateFaceSampleFlag(id: id, flag: flag)
     }
     
     func updateFaceTagFlag(id:String, flag:Bool) -> ExecuteState {
-        return ModelStore.default.updateFaceTagFlag(id: id, flag: flag)
+        return self.impl.updateFaceTagFlag(id: id, flag: flag)
     }
     
     func updateFaceLockFlag(id:String, flag:Bool) -> ExecuteState {
-        return ModelStore.default.updateFaceLockFlag(id: id, flag: flag)
+        return self.impl.updateFaceLockFlag(id: id, flag: flag)
     }
     
     func updateFaceCropPaths(old:String, new:String) -> ExecuteState {
-        return ModelStore.default.updateFaceCropPaths(old: old, new: new)
+        return self.impl.updateFaceCropPaths(old: old, new: new)
     }
 }

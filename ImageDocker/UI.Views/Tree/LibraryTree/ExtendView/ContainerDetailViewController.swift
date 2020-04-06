@@ -75,10 +75,10 @@ class ContainerDetailViewController: NSViewController {
     
     @IBAction func onShowHideClicked(_ sender: NSButton) {
         if container.hiddenByContainer {
-            ModelStore.default.showContainer(path: container.path)
+            RepositoryDao.default.showContainer(path: container.path)
             container.hiddenByContainer = false
         }else{
-            ModelStore.default.hideContainer(path: container.path)
+            RepositoryDao.default.hideContainer(path: container.path)
             container.hiddenByContainer = true
         }
         self.updateShowHideState()
@@ -107,8 +107,8 @@ class ContainerDetailViewController: NSViewController {
     }
     
     fileprivate func countImages() {
-        self.total = ModelStore.default.countImages(repositoryRoot: container.path.withStash())
-        let hiddenCount = ModelStore.default.countHiddenImages(repositoryRoot: container.path.withStash())
+        self.total = ImageCountDao.default.countImages(repositoryRoot: container.path.withStash())
+        let hiddenCount = ImageCountDao.default.countHiddenImages(repositoryRoot: container.path.withStash())
         self.lblTotalItems.stringValue = "\(self.total) (\(hiddenCount) hidden)"
     }
     

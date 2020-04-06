@@ -9,7 +9,7 @@
 import Foundation
 import GRDB
 
-extension ModelStoreGRDB {
+class PlaceDaoGRDB : PlaceDaoInterface {
     
     // MARK: - CREATE
     
@@ -81,7 +81,7 @@ extension ModelStoreGRDB {
         var stmt = ""
         if let names = names {
             let keys:[String] = names.components(separatedBy: " ")
-            stmt = ModelStore.likeArray(field: "name", array: keys)
+            stmt = SQLHelper.likeArray(field: "name", array: keys)
         }
         do {
             let db = ModelStoreGRDB.sharedDBPool()
@@ -118,7 +118,7 @@ extension ModelStoreGRDB {
                 try ImagePlace.deleteOne(db, key: oldName)  // delete old one at last
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -159,7 +159,7 @@ extension ModelStoreGRDB {
                 }
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -173,7 +173,7 @@ extension ModelStoreGRDB {
                 let _ = try ImagePlace.deleteOne(db, key: name)
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }

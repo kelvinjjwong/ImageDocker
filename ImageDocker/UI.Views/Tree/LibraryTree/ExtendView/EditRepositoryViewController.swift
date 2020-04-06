@@ -233,7 +233,7 @@ class EditRepositoryViewController: NSViewController {
         self.emptyStorageTextFields()
         self.emptyFaceTextFields()
         self.lblMessage.stringValue = ""
-        if let container = ModelStore.default.getContainer(path: path) {
+        if let container = RepositoryDao.default.getContainer(path: path) {
             self.originalContainer = container
             self.txtName.stringValue = container.name
             self.txtHomePath.stringValue = container.homePath
@@ -311,15 +311,15 @@ class EditRepositoryViewController: NSViewController {
             let path = container.path
             self.toggleButtons(false)
             DispatchQueue.global().async {
-                let imagesTotal = ModelStore.default.countImages(repositoryRoot: path)
-                let imagesWithoutRepoPath = ModelStore.default.countImageWithoutRepositoryPath(repositoryRoot: path)
-                let imagesWithoutSubPath = ModelStore.default.countImageWithoutSubPath(repositoryRoot: path)
-                let imagesWithoutId = ModelStore.default.countImageWithoutId(repositoryRoot: path)
-                let imagesUnmatchedRepoPath = ModelStore.default.countImageUnmatchedRepositoryRoot(repositoryRoot: path)
-                let containersWithoutRepoPath = ModelStore.default.countContainersWithoutRepositoryPath(repositoryRoot: path)
-                let containersWithoutSubPath = ModelStore.default.countContainersWithoutSubPath(repositoryRoot: path)
-                let imageWithoutFace = ModelStore.default.countImageWithoutFace(repositoryRoot: path)
-                let imageNotYetFacialDetection = ModelStore.default.countImageNotYetFacialDetection(repositoryRoot: path)
+                let imagesTotal = ImageCountDao.default.countImages(repositoryRoot: path)
+                let imagesWithoutRepoPath = ImageCountDao.default.countImageWithoutRepositoryPath(repositoryRoot: path)
+                let imagesWithoutSubPath = ImageCountDao.default.countImageWithoutSubPath(repositoryRoot: path)
+                let imagesWithoutId = ImageCountDao.default.countImageWithoutId(repositoryRoot: path)
+                let imagesUnmatchedRepoPath = ImageCountDao.default.countImageUnmatchedRepositoryRoot(repositoryRoot: path)
+                let containersWithoutRepoPath = ImageCountDao.default.countContainersWithoutRepositoryPath(repositoryRoot: path)
+                let containersWithoutSubPath = ImageCountDao.default.countContainersWithoutSubPath(repositoryRoot: path)
+                let imageWithoutFace = ImageCountDao.default.countImageWithoutFace(repositoryRoot: path)
+                let imageNotYetFacialDetection = ImageCountDao.default.countImageNotYetFacialDetection(repositoryRoot: path)
                 
                 let msg = "Hidden:\(container.hiddenByRepository), Total:\(imagesTotal), No-repo:\(imagesWithoutRepoPath), No-sub:\(imagesWithoutSubPath), No-id:\(imagesWithoutId), Unmatch-repo:\(imagesUnmatchedRepoPath), container-no-repo:\(containersWithoutRepoPath), container-no-sub:\(containersWithoutSubPath), No-face:\(imageWithoutFace), Not-yet-scan:\(imageNotYetFacialDetection)"
                 
@@ -418,7 +418,7 @@ class EditRepositoryViewController: NSViewController {
             repo.eventFolderLevel = (self.lstEventFolderLevel.indexOfSelectedItem + 1)
             repo.folderAsBrief = (self.chkFolderAsBrief.state == .on)
             repo.briefFolderLevel = self.getBriefFolderLevelFromSelection()
-            ModelStore.default.saveImageContainer(container: repo)
+            RepositoryDao.default.saveImageContainer(container: repo)
         }
     }
     
@@ -446,7 +446,7 @@ class EditRepositoryViewController: NSViewController {
             origin.eventFolderLevel = (self.lstEventFolderLevel.indexOfSelectedItem + 1)
             origin.folderAsBrief = (self.chkFolderAsBrief.state == .on)
             origin.briefFolderLevel = self.getBriefFolderLevelFromSelection()
-            ModelStore.default.saveImageContainer(container: origin)
+            RepositoryDao.default.saveImageContainer(container: origin)
             self.lblMessage.stringValue = "General info updated."
             
         }else{ // new
@@ -600,7 +600,7 @@ class EditRepositoryViewController: NSViewController {
             }
             
             DispatchQueue.global().async {
-                let images = ModelStore.default.getImages(repositoryPath: container.repositoryPath)
+                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)
                 
                 if images.count == 0 {
                     DispatchQueue.main.async {
@@ -885,14 +885,14 @@ class EditRepositoryViewController: NSViewController {
                 }
                 
                 // TODO: should be demised in future to improve performance
-                ModelStore.default.updateImageRawBase(pathStartsWith: originalRawPath, rawPath: newRawPath)
+                ImageRecordDao.default.updateImageRawBase(pathStartsWith: originalRawPath, rawPath: newRawPath)
                 
-                ModelStore.default.updateImageRawBase(oldRawPath: originalRawPath, newRawPath: newRawPath)
+                ImageRecordDao.default.updateImageRawBase(oldRawPath: originalRawPath, newRawPath: newRawPath)
                 
                 // save repo's path
                 var repo = repoContainer
                 repo.storagePath = newRawPath
-                ModelStore.default.saveImageContainer(container: repo)
+                RepositoryDao.default.saveImageContainer(container: repo)
                 self.originalContainer = repo
                 
                 DispatchQueue.main.async {
@@ -924,13 +924,13 @@ class EditRepositoryViewController: NSViewController {
             self.lblMessage.stringValue = "Checking for update ..."
             
             if newRepoPath == originalRepoPath {
-                let imagesWithoutRepoPath = ModelStore.default.countImageWithoutRepositoryPath(repositoryRoot: originalRepoPath)
-                let imagesWithoutSubPath = ModelStore.default.countImageWithoutSubPath(repositoryRoot: originalRepoPath)
-                let imagesWithoutId = ModelStore.default.countImageWithoutId(repositoryRoot: originalRepoPath)
-                let imagesUnmatchedRepoPath = ModelStore.default.countImageUnmatchedRepositoryRoot(repositoryRoot: originalRepoPath)
+                let imagesWithoutRepoPath = ImageCountDao.default.countImageWithoutRepositoryPath(repositoryRoot: originalRepoPath)
+                let imagesWithoutSubPath = ImageCountDao.default.countImageWithoutSubPath(repositoryRoot: originalRepoPath)
+                let imagesWithoutId = ImageCountDao.default.countImageWithoutId(repositoryRoot: originalRepoPath)
+                let imagesUnmatchedRepoPath = ImageCountDao.default.countImageUnmatchedRepositoryRoot(repositoryRoot: originalRepoPath)
                 
-                let containersWithoutRepoPath = ModelStore.default.countContainersWithoutRepositoryPath(repositoryRoot: originalRepoPath)
-                let containersWithoutSubPath = ModelStore.default.countContainersWithoutSubPath(repositoryRoot: originalRepoPath)
+                let containersWithoutRepoPath = ImageCountDao.default.countContainersWithoutRepositoryPath(repositoryRoot: originalRepoPath)
+                let containersWithoutSubPath = ImageCountDao.default.countContainersWithoutSubPath(repositoryRoot: originalRepoPath)
                 
                 print("No-repo:\(imagesWithoutRepoPath) No-sub:\(imagesWithoutSubPath) No-id:\(imagesWithoutId) Unmatch-repo:\(imagesUnmatchedRepoPath) container-no-repo:\(containersWithoutRepoPath) container-no-sub:\(containersWithoutSubPath)")
                 print("continue if one of above larger than zero")
@@ -961,7 +961,7 @@ class EditRepositoryViewController: NSViewController {
             DispatchQueue.global().async {
             
                 // save images' path, save images' repository path to new repository path (base path)
-                let images = ModelStore.default.getPhotoFiles(rootPath: originalRepoPath)
+                let images = ImageSearchDao.default.getPhotoFiles(rootPath: originalRepoPath)
                 
                 if images.count > 0 {
                     
@@ -1012,7 +1012,7 @@ class EditRepositoryViewController: NSViewController {
                         // fix empty id
                         let id = image.id ?? UUID().uuidString
                         
-                        ModelStore.default.updateImagePaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath, subPath: subPath, containerPath: containerPath, id: id)
+                        ImageRecordDao.default.updateImagePaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath, subPath: subPath, containerPath: containerPath, id: id)
                     }
                 }
                 
@@ -1022,7 +1022,7 @@ class EditRepositoryViewController: NSViewController {
                     self.lblMessage.stringValue = "Loading sub-folders ..."
                 }
                 
-                let subContainers = ModelStore.default.getContainers(rootPath: originalRepoPath)
+                let subContainers = RepositoryDao.default.getContainers(rootPath: originalRepoPath)
                 
                 let total = subContainers.count
                 
@@ -1047,7 +1047,7 @@ class EditRepositoryViewController: NSViewController {
                     sub.repositoryPath = newRepoPath
                     sub.parentFolder = sub.parentFolder.replacingFirstOccurrence(of: repoContainer.path, with: newRepoPathNoStash) // without stash
                     sub.path = sub.path.replacingFirstOccurrence(of: originalRepoPath, with: newRepoPath)
-                    ModelStore.default.updateImageContainerPaths(oldPath: oldPath, newPath: sub.path, repositoryPath: sub.repositoryPath, parentFolder: sub.parentFolder, subPath: sub.subPath)
+                    RepositoryDao.default.updateImageContainerPaths(oldPath: oldPath, newPath: sub.path, repositoryPath: sub.repositoryPath, parentFolder: sub.parentFolder, subPath: sub.subPath)
                 }
                 
                 // save repo's path
@@ -1055,7 +1055,7 @@ class EditRepositoryViewController: NSViewController {
                 let oldPath = repo.path
                 let newPath = newRepoPathNoStash
                 repo.repositoryPath = newRepoPath
-                ModelStore.default.updateImageContainerRepositoryPaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath)
+                RepositoryDao.default.updateImageContainerRepositoryPaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath)
                 self.originalContainer = repo
                 
                 DispatchQueue.main.async {
@@ -1139,7 +1139,7 @@ class EditRepositoryViewController: NSViewController {
                 // save repo's path
                 var repo = repoContainer
                 repo.facePath = newFacePath
-                ModelStore.default.saveImageContainer(container: repo)
+                RepositoryDao.default.saveImageContainer(container: repo)
                 self.originalContainer = repo
                 
                 DispatchQueue.main.async {
@@ -1216,12 +1216,12 @@ class EditRepositoryViewController: NSViewController {
                 }
                 
                 // update crop-image records
-                ModelStore.default.updateFaceCropPaths(old: originalCropPath, new: newCropPath)
+                FaceDao.default.updateFaceCropPaths(old: originalCropPath, new: newCropPath)
                 
                 // save repo's path
                 var repo = repoContainer
                 repo.cropPath = newCropPath
-                ModelStore.default.saveImageContainer(container: repo)
+                RepositoryDao.default.saveImageContainer(container: repo)
                 self.originalContainer = repo
                 
                 DispatchQueue.main.async {
@@ -1269,7 +1269,7 @@ class EditRepositoryViewController: NSViewController {
         DispatchQueue.global().async {
             print("loading duplicates from database")
             
-            let duplicates = ModelStore.default.getDuplicatedImages(repositoryRoot: repo, theOtherRepositoryRoot: raw)
+            let duplicates = ImageDuplicationDao.default.getDuplicatedImages(repositoryRoot: repo, theOtherRepositoryRoot: raw)
             print("loaded duplicates \(duplicates.count)")
             
             count = duplicates.count
@@ -1315,14 +1315,14 @@ class EditRepositoryViewController: NSViewController {
                                 // hide raw image if not hidden
                                 var img = image
                                 img.hidden = true
-                                ModelStore.default.saveImage(image: img)
+                                ImageRecordDao.default.saveImage(image: img)
                                 updateCount += 1
                             }
                             if !doneShowRepoImage && needShowRepoImage && image.path.starts(with: repo) {
                                 // show the 1st repo image
                                 var img = image
                                 img.hidden = false
-                                ModelStore.default.saveImage(image: img)
+                                ImageRecordDao.default.saveImage(image: img)
                                 updateCount += 1
                                 // only do once
                                 doneShowRepoImage = true
@@ -1349,7 +1349,7 @@ class EditRepositoryViewController: NSViewController {
                 
                 self.toggleButtons(false)
                 DispatchQueue.global().async {
-                    ModelStore.default.deleteRepository(repositoryRoot: container.path)
+                    RepositoryDao.default.deleteRepository(repositoryRoot: container.path)
                     
                     DispatchQueue.main.async {
                         
@@ -1377,7 +1377,7 @@ class EditRepositoryViewController: NSViewController {
     @IBAction func onCompareDevicePathClicked(_ sender: NSButton) {
         let deviceId = self.lblDeviceId.stringValue
         if deviceId != "" {
-            if let device = ModelStore.default.getDevice(deviceId: deviceId) {
+            if let device = DeviceDao.default.getDevice(deviceId: deviceId) {
                 let homePath = device.homePath ?? ""
                 let repoPath = device.repositoryPath ?? ""
                 let rawPath = device.storagePath ?? ""
@@ -1405,7 +1405,7 @@ class EditRepositoryViewController: NSViewController {
         if let container = self.originalContainer {
             var repo = container
             repo.deviceId = deviceId
-            let state = ModelStore.default.saveImageContainer(container: repo)
+            let state = RepositoryDao.default.saveImageContainer(container: repo)
             if state != .OK {
                 self.lblMessage.stringValue = "\(state) - Unable to link repository with device in database."
             }else{
@@ -1420,9 +1420,9 @@ class EditRepositoryViewController: NSViewController {
         if let container = self.originalContainer {
             if container.hiddenByRepository {
                 DispatchQueue.global().async {
-                    ModelStore.default.showRepository(repositoryRoot: container.path.withStash())
+                    RepositoryDao.default.showRepository(repositoryRoot: container.path.withStash())
                     self.originalContainer?.hiddenByRepository = false
-                    ModelStore.default.saveImageContainer(container: self.originalContainer!)
+                    RepositoryDao.default.saveImageContainer(container: self.originalContainer!)
                     
                     DispatchQueue.main.async {
                         self.lblMessage.stringValue = "Updated images as enabled"
@@ -1433,9 +1433,9 @@ class EditRepositoryViewController: NSViewController {
                 }
             }else{
                 DispatchQueue.global().async {
-                    ModelStore.default.hideRepository(repositoryRoot: container.path.withStash())
+                    RepositoryDao.default.hideRepository(repositoryRoot: container.path.withStash())
                     self.originalContainer?.hiddenByRepository = true
-                    ModelStore.default.saveImageContainer(container: self.originalContainer!)
+                    RepositoryDao.default.saveImageContainer(container: self.originalContainer!)
                     DispatchQueue.main.async {
                         self.lblMessage.stringValue = "Updated images as disabled"
                         self.btnShowHide.title = "Enable Repository"
@@ -1450,7 +1450,7 @@ class EditRepositoryViewController: NSViewController {
     @IBAction func onFollowDevicePathsClicked(_ sender: NSButton) {
         let deviceId = self.lblDeviceId.stringValue
         if deviceId != "" {
-            if let device = ModelStore.default.getDevice(deviceId: deviceId) {
+            if let device = DeviceDao.default.getDevice(deviceId: deviceId) {
                 self.txtHomePath.stringValue = device.homePath ?? ""
                 self.txtRepository.stringValue = device.repositoryPath ?? ""
                 self.txtStoragePath.stringValue = device.storagePath ?? ""
@@ -1522,7 +1522,7 @@ class EditRepositoryViewController: NSViewController {
                 self.continousWorking = true
                 self.continousWorkingAttempt = 0
                 
-                let images = ModelStore.default.getImagesWithoutFace(repositoryRoot: repository.path.withStash())
+                let images = ImageSearchDao.default.getImagesWithoutFace(repositoryRoot: repository.path.withStash())
                 
                 self.accumulator?.cleanData()
                 
@@ -1600,7 +1600,7 @@ class EditRepositoryViewController: NSViewController {
                     var img = image
                     if img.id == nil {
                         img.id = UUID().uuidString
-                        ModelStore.default.saveImage(image: img)
+                        ImageRecordDao.default.saveImage(image: img)
                     }
                     let imageId = img.id!
                     
@@ -1616,7 +1616,7 @@ class EditRepositoryViewController: NSViewController {
                             self.accumulator?.increaseData(key: "detectedCount")
                             for face in faces {
                                 print("Found face: \(face.filename) at (\(face.x), \(face.y), \(face.width), \(face.height))")
-                                let exist = ModelStore.default.findFaceCrop(imageId: imageId,
+                                let exist = FaceDao.default.findFaceCrop(imageId: imageId,
                                                                             x: face.x.databaseValue.description,
                                                                             y: face.y.databaseValue.description,
                                                                             width: face.width.databaseValue.description,
@@ -1642,7 +1642,7 @@ class EditRepositoryViewController: NSViewController {
                                                                       year: image.photoTakenYear ?? 0,
                                                                       month: image.photoTakenMonth ?? 0,
                                                                       day: image.photoTakenDay ?? 0)
-                                        ModelStore.default.saveFaceCrop(imageFace)
+                                        FaceDao.default.saveFaceCrop(imageFace)
                                         print("Face crop \(imageFace.id) saved.")
                                     })
                                     
@@ -1657,7 +1657,7 @@ class EditRepositoryViewController: NSViewController {
                     
                     if img.scanedFace != true {
                         img.scanedFace = true
-                        ModelStore.default.saveImage(image: img)
+                        ImageRecordDao.default.saveImage(image: img)
                     }
                     
                     DispatchQueue.main.async {
@@ -1677,7 +1677,7 @@ class EditRepositoryViewController: NSViewController {
         self.btnUpdateAllEvents.isEnabled = false
         DispatchQueue.global().async {
             if let container = self.originalContainer {
-                let images = ModelStore.default.getImages(repositoryPath: container.repositoryPath)
+                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)
                 let level = self.getBriefFolderLevelFromSelection()
                 let total = images.count
                 var i = 0
@@ -1688,7 +1688,7 @@ class EditRepositoryViewController: NSViewController {
                     var img = image
                     i += 1
                     img.shortDescription = Naming.Image.getBriefFromFolderName(image: image, folderLevel: level)
-                    let _ = ModelStore.default.saveImage(image: img)
+                    let _ = ImageRecordDao.default.saveImage(image: img)
                     DispatchQueue.main.async {
                         self.lblMessage.stringValue = "Updating images... (\(i)/\(total))"
                     }
@@ -1712,7 +1712,7 @@ class EditRepositoryViewController: NSViewController {
         self.btnUpdateAllEvents.isEnabled = false
         DispatchQueue.global().async {
             if let container = self.originalContainer {
-                let images = ModelStore.default.getImages(repositoryPath: container.repositoryPath)
+                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)
                 let level = self.getBriefFolderLevelFromSelection()
                 let total = images.count
                 var i = 0
@@ -1720,7 +1720,7 @@ class EditRepositoryViewController: NSViewController {
                     var img = image
                     i += 1
                     img.shortDescription = Naming.Image.getBriefFromFolderName(image: image, folderLevel: level)
-                    let _ = ModelStore.default.saveImage(image: img)
+                    let _ = ImageRecordDao.default.saveImage(image: img)
                     DispatchQueue.main.async {
                         self.lblMessage.stringValue = "Updating images... (\(i)/\(total))"
                     }
@@ -1774,7 +1774,7 @@ class EditRepositoryViewController: NSViewController {
         var array:[String] = []
         if let container = self.originalContainer {
             var folders:Set<String> = []
-            let paths = ModelStore.default.getAllContainerPathsOfImages(rootPath: container.repositoryPath)
+            let paths = RepositoryDao.default.getAllContainerPathsOfImages(rootPath: container.repositoryPath)
             for path in paths {
                 if path == container.repositoryPath {continue}
                 let p = path.replacingFirstOccurrence(of: container.repositoryPath.withStash(), with: "")
@@ -1852,7 +1852,7 @@ class EditRepositoryViewController: NSViewController {
         self.btnUpdateAllEvents.isEnabled = false
         DispatchQueue.global().async {
             if let container = self.originalContainer {
-                let images = ModelStore.default.getImages(repositoryPath: container.repositoryPath)
+                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)
                 let level = self.lstEventFolderLevel.indexOfSelectedItem + 1
                 let total = images.count
                 var i = 0
@@ -1863,7 +1863,7 @@ class EditRepositoryViewController: NSViewController {
                     var img = image
                     i += 1
                     img.event = Naming.Image.getEventFromFolderName(image: image, folderLevel: level)
-                    let _ = ModelStore.default.saveImage(image: img)
+                    let _ = ImageRecordDao.default.saveImage(image: img)
                     DispatchQueue.main.async {
                         self.lblMessage.stringValue = "Updating images... (\(i)/\(total))"
                     }
@@ -1887,7 +1887,7 @@ class EditRepositoryViewController: NSViewController {
         self.btnUpdateAllEvents.isEnabled = false
         DispatchQueue.global().async {
             if let container = self.originalContainer {
-                let images = ModelStore.default.getImages(repositoryPath: container.repositoryPath)
+                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)
                 let level = self.lstEventFolderLevel.indexOfSelectedItem + 1
                 let total = images.count
                 var i = 0
@@ -1895,7 +1895,7 @@ class EditRepositoryViewController: NSViewController {
                     var img = image
                     i += 1
                     img.event = Naming.Image.getEventFromFolderName(image: image, folderLevel: level)
-                    let _ = ModelStore.default.saveImage(image: img)
+                    let _ = ImageRecordDao.default.saveImage(image: img)
                     DispatchQueue.main.async {
                         self.lblMessage.stringValue = "Updating images... (\(i)/\(total))"
                     }
@@ -1917,7 +1917,7 @@ class EditRepositoryViewController: NSViewController {
         var array:[String] = []
         if let container = self.originalContainer {
             var folders:Set<String> = []
-            let paths = ModelStore.default.getAllContainerPathsOfImages(rootPath: container.repositoryPath)
+            let paths = RepositoryDao.default.getAllContainerPathsOfImages(rootPath: container.repositoryPath)
             for path in paths {
                 if path == container.repositoryPath {continue}
                 let p = path.replacingFirstOccurrence(of: container.repositoryPath.withStash(), with: "")
@@ -2005,7 +2005,7 @@ extension EditRepositoryViewController : DeviceListDelegate {
     
     fileprivate func displayDeviceInfo(deviceId: String, updateDB:Bool = false) {
         
-        if let device = ModelStore.default.getDevice(deviceId: deviceId) {
+        if let device = DeviceDao.default.getDevice(deviceId: deviceId) {
             self.lblDeviceId.stringValue = device.deviceId ?? ""
             var name = device.name ?? ""
             if name == "" {

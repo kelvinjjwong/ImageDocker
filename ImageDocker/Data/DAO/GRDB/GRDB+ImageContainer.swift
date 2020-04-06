@@ -9,7 +9,8 @@
 import Foundation
 import GRDB
 
-extension ModelStoreGRDB {
+class RepositoryDaoGRDB : RepositoryDaoInterface {
+    
     // MARK: - CREATE
     
     func getOrCreateContainer(name:String,
@@ -25,12 +26,12 @@ extension ModelStoreGRDB {
                               hideByParent:Bool = false) -> ImageContainer {
         var container:ImageContainer?
         do {
-            let db = try DatabaseQueue(path: ModelStore.localDBFile)
+            let db = try DatabaseQueue(path: SQLiteDataSource.default.getDataSource())
             try db.read { db in
                 container = try ImageContainer.fetchOne(db, key: path)
             }
             if container == nil {
-                let queue = try DatabaseQueue(path: ModelStore.localDBFile)
+                let queue = try DatabaseQueue(path: SQLiteDataSource.default.getDataSource())
                 try queue.write { db in
                     container = ImageContainer(name: name,
                                                parentFolder: parentFolder,
@@ -78,7 +79,7 @@ extension ModelStoreGRDB {
                 }
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -91,7 +92,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "delete from Image where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -282,7 +283,7 @@ extension ModelStoreGRDB {
                 try container.save(db)
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -296,7 +297,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update ImageContainer set parentFolder = ? where path = ?", arguments: [parentFolder, path])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -308,7 +309,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update ImageContainer set hideByParent = \(hideByParent ? 1 : 0) where path = ?", arguments: [path])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -321,7 +322,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update ImageContainer set path = ?, repositoryPath = ?, parentFolder = ?, subPath = ? where path = ?", arguments: [newPath, repositoryPath, parentFolder, subPath, oldPath])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -333,7 +334,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update ImageContainer set path = ?, repositoryPath = ? where path = ?", arguments: [newPath, repositoryPath, oldPath])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -346,7 +347,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update ImageContainer set hideByParent = \(state ? 1 : 0) where path like ?", arguments: ["\(path.withStash())%"])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -362,7 +363,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update Image set hiddenByContainer = 1 where path like ?", arguments:["\(path.withStash())%"])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -375,7 +376,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update Image set hiddenByContainer = 0 where path like ?", arguments:["\(path.withStash())%"])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -390,7 +391,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update Image set hiddenByRepository = 1 where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -405,8 +406,35 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update Image set hiddenByRepository = 0 where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
+    }
+        
+    // MARK: - DATE
+    
+    func getLastPhotoTakenDateOfRepositories() -> [String:String] {
+        let sql = """
+select name,lastPhotoTakenDate from
+(select name,(path || '/') repositoryPath from imageContainer where parentfolder='') c left join (
+select max(photoTakenDate) lastPhotoTakenDate,repositoryPath from image group by repositoryPath) i on c.repositoryPath = i.repositoryPath
+order by name
+"""
+        var results:[String:String] = [:]
+        do {
+            let db = ModelStoreGRDB.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, sql: sql)
+                for row in rows {
+                    if let name = row["name"] as String?, let date = row["lastPhotoTakenDate"] as String? {
+                        results[name] = date
+                    }
+                }
+            }
+        }catch{
+            print(error)
+        }
+        
+        return results
     }
 }

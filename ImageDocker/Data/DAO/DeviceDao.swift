@@ -10,76 +10,84 @@ import Foundation
 
 class DeviceDao {
     
+    private let impl:DeviceDaoInterface
+    
+    init(_ impl:DeviceDaoInterface){
+        self.impl = impl
+    }
+    
+    static let `default` = DeviceDao(DeviceDaoGRDB())
+    
     func getDevices() -> [ImageDevice] {
-        return ModelStore.default.getDevices()
+        return self.impl.getDevices()
     }
     
     func getDevices(type:String) -> [ImageDevice] {
-        return ModelStore.default.getDevices(type: type)
+        return self.impl.getDevices(type: type)
     }
     
     func getOrCreateDevice(device:PhoneDevice) -> ImageDevice{
-        return ModelStore.default.getOrCreateDevice(device: device)
+        return self.impl.getOrCreateDevice(device: device)
     }
     
     func getDevice(deviceId:String) -> ImageDevice? {
-        return ModelStore.default.getDevice(deviceId: deviceId)
+        return self.impl.getDevice(deviceId: deviceId)
     }
     
     func saveDevice(device:ImageDevice) -> ExecuteState{
-        return ModelStore.default.saveDevice(device: device)
+        return self.impl.saveDevice(device: device)
     }
     
     // MARK: - FILES ON DEVICE
     
     func getImportedFile(deviceId:String, file:PhoneFile) -> ImageDeviceFile? {
-        return ModelStore.default.getImportedFile(deviceId: deviceId, file: file)
+        return self.impl.getImportedFile(deviceId: deviceId, file: file)
     }
     
     func getOrCreateDeviceFile(deviceId:String, file:PhoneFile) -> ImageDeviceFile{
-        return ModelStore.default.getOrCreateDeviceFile(deviceId: deviceId, file: file)
+        return self.impl.getOrCreateDeviceFile(deviceId: deviceId, file: file)
     }
     
     func saveDeviceFile(file:ImageDeviceFile) -> ExecuteState{
-        return ModelStore.default.saveDeviceFile(file: file)
+        return self.impl.saveDeviceFile(file: file)
     }
     
     func deleteDeviceFiles(deviceId:String) -> ExecuteState{
-        return ModelStore.default.deleteDeviceFiles(deviceId: deviceId)
+        return self.impl.deleteDeviceFiles(deviceId: deviceId)
     }
     
     func getDeviceFiles(deviceId:String) -> [ImageDeviceFile] {
-        return ModelStore.default.getDeviceFiles(deviceId: deviceId)
+        return self.impl.getDeviceFiles(deviceId: deviceId)
     }
     
     func getDeviceFiles(deviceId:String, importToPath:String) -> [ImageDeviceFile] {
-        return ModelStore.default.getDeviceFiles(deviceId: deviceId, importToPath: importToPath)
+        return self.impl.getDeviceFiles(deviceId: deviceId, importToPath: importToPath)
     }
     
     // MARK: - PATHS ON DEVICE
     
     func getDevicePath(deviceId:String, path:String) -> ImageDevicePath? {
-        return ModelStore.default.getDevicePath(deviceId: deviceId, path: path)
+        return self.impl.getDevicePath(deviceId: deviceId, path: path)
     }
     
     func saveDevicePath(file:ImageDevicePath) -> ExecuteState {
-        return ModelStore.default.saveDevicePath(file: file)
+        return self.impl.saveDevicePath(file: file)
     }
     
     func deleteDevicePath(deviceId:String, path:String) -> ExecuteState{
-        return ModelStore.default.deleteDevicePath(deviceId: deviceId, path: path)
+        return self.impl.deleteDevicePath(deviceId: deviceId, path: path)
     }
     
     func getDevicePaths(deviceId:String, deviceType:MobileType = .Android) -> [ImageDevicePath] {
-        return ModelStore.default.getDevicePaths(deviceId: deviceId, deviceType: deviceType)
+        return self.impl.getDevicePaths(deviceId: deviceId, deviceType: deviceType)
     }
     
     func getExcludedImportedContainerPaths(withStash:Bool = false) -> Set<String>{
-        return ModelStore.default.getExcludedImportedContainerPaths(withStash: withStash)
+        return self.impl.getExcludedImportedContainerPaths(withStash: withStash)
     }
     
     func getLastImportDateOfDevices() -> ([String:String], [(String,String,String?,String?)]) {
-        return ModelStore.default.getLastImportDateOfDevices()
+        return self.impl.getLastImportDateOfDevices()
     }
     
     

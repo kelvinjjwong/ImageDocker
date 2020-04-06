@@ -9,7 +9,9 @@
 import Foundation
 import GRDB
 
-extension ModelStoreGRDB {
+class ImageDuplicateDaoGRDB : ImageDuplicationDaoInterface {
+    
+    var _duplicates:Duplicates? = nil
     
     func reloadDuplicatePhotos() {
         print("\(Date()) Loading duplicate photos from db")

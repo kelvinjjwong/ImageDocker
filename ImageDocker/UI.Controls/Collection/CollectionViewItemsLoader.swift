@@ -131,7 +131,7 @@ class CollectionViewItemsLoader: NSObject {
         
         //var urls: [URL] = []
         print("\(Date()) Loading photo files from db")
-        let photoFiles = ModelStore.default.getPhotoFiles(year: year, month: month, day: day, ignoreDate: ignoreDate,
+        let photoFiles = ImageSearchDao.default.getPhotoFiles(year: year, month: month, day: day, ignoreDate: ignoreDate,
                                                           country: country, province: province, city: city, place: place,
                                                           includeHidden: showHidden,
                                                           imageSource: filterImageSource, cameraModel: filterCameraModel,
@@ -174,7 +174,7 @@ class CollectionViewItemsLoader: NSObject {
         self.indicator = indicator
         
         //var urls: [URL] = []
-        let photoFiles = ModelStore.default.getPhotoFiles(year: year, month: month, day: day,
+        let photoFiles = ImageSearchDao.default.getPhotoFiles(year: year, month: month, day: day,
                                                           event: event,
                                                           country: country, province: province, city: city, place:place,
                                                           includeHidden: showHidden,
@@ -213,7 +213,7 @@ class CollectionViewItemsLoader: NSObject {
         self.indicator = indicator
         
         //var urls: [URL] = []
-        let photoFiles = ModelStore.default.searchPhotoFiles(years: conditions.years,
+        let photoFiles = ImageSearchDao.default.searchPhotoFiles(years: conditions.years,
                                                              months: conditions.months,
                                                              days: conditions.days,
                                                              peopleIds: conditions.peopleIds,
@@ -233,7 +233,7 @@ class CollectionViewItemsLoader: NSObject {
         var images:[Image] = []
         for imageFile in self.items {
             if let oldImage = imageFile.imageData {
-                if let image = ModelStore.default.getImage(path: oldImage.path) {
+                if let image = ImageRecordDao.default.getImage(path: oldImage.path) {
                     images.append(image)
                 }
             }
@@ -589,7 +589,7 @@ class CollectionViewItemsLoader: NSObject {
             items.removeAll()
         }
         print("\(Date()) Loading duplicate photos from db")
-        let duplicates:Duplicates = ModelStore.default.getDuplicatePhotos()
+        let duplicates:Duplicates = ImageDuplicationDao.default.getDuplicatePhotos()
         print("Found duplicates: \(duplicates.paths.count)")
         print("\(Date()) Loading duplicate photos from db: DONE")
         
@@ -633,7 +633,7 @@ class CollectionViewItemsLoader: NSObject {
         }
         
         print("\(Date()) Loading duplicate photos from db")
-        let duplicates:Duplicates = ModelStore.default.getDuplicatePhotos()
+        let duplicates:Duplicates = ImageDuplicationDao.default.getDuplicatePhotos()
         print("Found duplicates: \(duplicates.paths.count)")
         print(lastRequest)
 //        if duplicates.paths.count > 0 {
@@ -677,7 +677,7 @@ class CollectionViewItemsLoader: NSObject {
         }
         
         var urls: [URL] = []
-        for photoFile in ModelStore.default.getPhotoFiles(parentPath: startingURL.path, includeHidden: includeHidden) {
+        for photoFile in ImageSearchDao.default.getPhotoFiles(parentPath: startingURL.path, includeHidden: includeHidden) {
             
             if self.cancelling {
                 return nil
@@ -694,7 +694,7 @@ class CollectionViewItemsLoader: NSObject {
             return nil
         }
         
-        return ModelStore.default.getPhotoFiles(parentPath: startingURL.path, includeHidden: includeHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
+        return ImageSearchDao.default.getPhotoFiles(parentPath: startingURL.path, includeHidden: includeHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
     }
   
     private func walkthruDirectoryForFileUrls(startingURL: URL) -> [URL]? {

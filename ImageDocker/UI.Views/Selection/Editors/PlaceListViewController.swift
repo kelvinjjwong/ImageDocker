@@ -128,7 +128,7 @@ class PlaceListViewController: NSViewController {
         self.choiceService.setImage(nil, forSegment: 0)
         self.choiceService.setImage(tick, forSegment: 1)
         
-        self.places = ModelStore.default.getPlaces()
+        self.places = PlaceDao.default.getPlaces()
         placeTable.delegate = self
         placeTable.dataSource = self
         placeTable.reloadData()
@@ -137,9 +137,9 @@ class PlaceListViewController: NSViewController {
     @IBAction func onPlaceSearcherAction(_ sender: Any) {
         let keyword:String = placeSearcher.stringValue
         if keyword == "" {
-            self.places = ModelStore.default.getPlaces()
+            self.places = PlaceDao.default.getPlaces()
         }else{
-            self.places = ModelStore.default.getPlaces(byName: keyword)
+            self.places = PlaceDao.default.getPlaces(byName: keyword)
         }
         placeTable.reloadData()
     }
@@ -176,10 +176,10 @@ class PlaceListViewController: NSViewController {
         if name == "" {return}
         collectLocationFromForm()
         
-        let _ = ModelStore.default.getOrCreatePlace(name: name, location: location!)
+        let _ = PlaceDao.default.getOrCreatePlace(name: name, location: location!)
         //ModelStore.save()
         
-        self.places = ModelStore.default.getPlaces()
+        self.places = PlaceDao.default.getPlaces()
         placeTable.reloadData()
         
         if self.refreshDelegate != nil {
@@ -191,10 +191,10 @@ class PlaceListViewController: NSViewController {
         let name:String = placeName.stringValue
         guard name != "" && selectedPlaceName != nil && selectedPlaceName != "" else {return}
         
-        ModelStore.default.renamePlace(oldName: selectedPlaceName!, newName: name)
+        PlaceDao.default.renamePlace(oldName: selectedPlaceName!, newName: name)
         //ModelStore.save()
         
-        self.places = ModelStore.default.getPlaces()
+        self.places = PlaceDao.default.getPlaces()
         placeTable.reloadData()
         
         if self.refreshDelegate != nil {
@@ -209,10 +209,10 @@ class PlaceListViewController: NSViewController {
         if name == "" {return}
         collectLocationFromForm()
         
-        ModelStore.default.updatePlace(name: name, location: location!)
+        PlaceDao.default.updatePlace(name: name, location: location!)
         //ModelStore.save()
         
-        self.places = ModelStore.default.getPlaces()
+        self.places = PlaceDao.default.getPlaces()
         placeTable.reloadData()
         
         if self.refreshDelegate != nil {
@@ -227,10 +227,10 @@ class PlaceListViewController: NSViewController {
         
         if Alert.dialogOKCancel(question: "Disconnect photos with this place ?", text: name) {
             
-            ModelStore.default.deletePlace(name: name)
+            PlaceDao.default.deletePlace(name: name)
             //ModelStore.save()
             
-            self.places = ModelStore.default.getPlaces()
+            self.places = PlaceDao.default.getPlaces()
             placeTable.reloadData()
             
             if self.refreshDelegate != nil {

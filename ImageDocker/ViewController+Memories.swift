@@ -12,7 +12,7 @@ extension ViewController {
 
     /// open a window to display pictures taken in last years
     internal func showMemories() {
-        let years = ModelStore.default.getYearsByTodayInPrevious()
+        let years = ImageSearchDao.default.getYearsByTodayInPrevious()
         guard years.count > 0 else {return}
         
         let storyboard = NSStoryboard(name: "MemoriesViews", bundle: nil)

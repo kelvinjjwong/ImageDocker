@@ -63,7 +63,7 @@ class ImageFolder : NSObject {
         let subPath = url.path.replacingFirstOccurrence(of: repoPath, with: "")
         //print("LOAD FOLDER 2 \(name) \(path)")
         if withContainer {
-            self.containerFolder = RepositoryDao().getOrCreateContainer(name: folderName,
+            self.containerFolder = RepositoryDao.default.getOrCreateContainer(name: folderName,
                                                                        path: path,
                                                                        repositoryPath: repositoryPath,
                                                                        homePath: homePath,

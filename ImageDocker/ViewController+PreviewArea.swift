@@ -142,7 +142,7 @@ extension ViewController {
         if let image = self.img.imageData {
             var people = ""
             if let id = image.id {
-                let faces = ModelStore.default.getFaceCrops(imageId: id)
+                let faces = FaceDao.default.getFaceCrops(imageId: id)
                 for face in faces {
                     if let peopleId = face.peopleId, peopleId != "" {
                         var name = FaceTask.default.people(id: peopleId)

@@ -32,13 +32,13 @@ extension ViewController {
             
             for image in self.imagesLoader.getItems() {
                 if image.hasDuplicates {
-                    if let list = ModelStore.default.getDuplicatePhotos().keyToPath[image.duplicatesKey] {
+                    if let list = ImageDuplicationDao.default.getDuplicatePhotos().keyToPath[image.duplicatesKey] {
                         if image.url.path == list[0] {
                             //print("\(image.duplicatesKey) MAJOR \(image.url.path)")
-                            ModelStore.default.markImageDuplicated(path: image.url.path, duplicatesKey: image.duplicatesKey, hide: false)
+                            ImageDuplicationDao.default.markImageDuplicated(path: image.url.path, duplicatesKey: image.duplicatesKey, hide: false)
                         }else{
                             //print("\(image.duplicatesKey) SLAVE \(image.url.path)")
-                            ModelStore.default.markImageDuplicated(path: image.url.path, duplicatesKey: image.duplicatesKey, hide: true)
+                            ImageDuplicationDao.default.markImageDuplicated(path: image.url.path, duplicatesKey: image.duplicatesKey, hide: true)
                         }
                     }
                     
@@ -61,19 +61,19 @@ extension ViewController {
     internal func combineDuplicatesInAllLibraries() {
         self.disableCollectionViewControls()
         
-        let accumulator:Accumulator = Accumulator(target: ModelStore.default.getDuplicatePhotos().keyToPath.keys.count, indicator: self.collectionProgressIndicator, suspended: false, lblMessage: self.indicatorMessage)
+        let accumulator:Accumulator = Accumulator(target: ImageDuplicationDao.default.getDuplicatePhotos().keyToPath.keys.count, indicator: self.collectionProgressIndicator, suspended: false, lblMessage: self.indicatorMessage)
         
         DispatchQueue.global().async {
             
-            for key in ModelStore.default.getDuplicatePhotos().keyToPath.keys {
-                if let list = ModelStore.default.getDuplicatePhotos().keyToPath[key] {
+            for key in ImageDuplicationDao.default.getDuplicatePhotos().keyToPath.keys {
+                if let list = ImageDuplicationDao.default.getDuplicatePhotos().keyToPath[key] {
                     
                     for i in 0..<list.count {
                         let path = list[i]
                         if i == 0 {
-                            ModelStore.default.markImageDuplicated(path: path, duplicatesKey: key, hide: false)
+                            ImageDuplicationDao.default.markImageDuplicated(path: path, duplicatesKey: key, hide: false)
                         }else{
-                            ModelStore.default.markImageDuplicated(path: path, duplicatesKey: key, hide: true)
+                            ImageDuplicationDao.default.markImageDuplicated(path: path, duplicatesKey: key, hide: true)
                         }
                     }
                 }

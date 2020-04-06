@@ -90,10 +90,10 @@ extension ViewController {
             self.collectionPaginationViewController
                 .initView(self.imagesLoader.lastRequest,
                           onCountTotal: {
-                            return ModelStore.default.countImages(repositoryRoot: container.path.withStash())
+                            return ImageCountDao.default.countImages(repositoryRoot: container.path.withStash())
                 },
                           onCountHidden: {
-                            return ModelStore.default.countHiddenImages(repositoryRoot: container.path.withStash())
+                            return ImageCountDao.default.countHiddenImages(repositoryRoot: container.path.withStash())
                 },
                           onLoad: { pageSize, pageNumber in
                             print("CALLED ONLOAD \(pageSize) \(pageNumber)")

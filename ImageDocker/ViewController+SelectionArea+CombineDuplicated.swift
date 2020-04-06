@@ -58,11 +58,11 @@ extension ViewController {
             let key = "\(place)_\(year)_\(month)_\(day)_\(hour)_\(minute)_\(second)_\(now)"
             for imageFile in items {
                 if imageFile.url.path == major.url.path {
-                    ModelStore.default.markImageDuplicated(path: imageFile.url.path, duplicatesKey: key, hide: false)
+                    ImageDuplicationDao.default.markImageDuplicated(path: imageFile.url.path, duplicatesKey: key, hide: false)
                 }else{
-                    ModelStore.default.markImageDuplicated(path: imageFile.url.path, duplicatesKey: key, hide: true)
+                    ImageDuplicationDao.default.markImageDuplicated(path: imageFile.url.path, duplicatesKey: key, hide: true)
                 }
-                ModelStore.default.getDuplicatePhotos().updateMapping(key: key, path: imageFile.url.path)
+                ImageDuplicationDao.default.getDuplicatePhotos().updateMapping(key: key, path: imageFile.url.path)
             }
             self.selectionViewController.imagesLoader.reload()
             self.selectionViewController.imagesLoader.reorganizeItems()
@@ -88,15 +88,15 @@ extension ViewController {
             return
         }
         let imageFile = checked[0]
-        if let image = ModelStore.default.getImage(path: imageFile.url.path), let duplicatesKey = image.duplicatesKey {
-            if let paths = ModelStore.default.getDuplicatePhotos().keyToPath[duplicatesKey] {
+        if let image = ImageRecordDao.default.getImage(path: imageFile.url.path), let duplicatesKey = image.duplicatesKey {
+            if let paths = ImageDuplicationDao.default.getDuplicatePhotos().keyToPath[duplicatesKey] {
                 for path in paths {
                     if path == imageFile.url.path {
                         print("to be changed: show - \(path)")
-                        ModelStore.default.markImageDuplicated(path: path, duplicatesKey: duplicatesKey, hide: false)
+                        ImageDuplicationDao.default.markImageDuplicated(path: path, duplicatesKey: duplicatesKey, hide: false)
                     }else{
                         print("to be changed: hide - \(path)")
-                        ModelStore.default.markImageDuplicated(path: path, duplicatesKey: duplicatesKey, hide: true)
+                        ImageDuplicationDao.default.markImageDuplicated(path: path, duplicatesKey: duplicatesKey, hide: true)
                     }
                 }
                 self.selectionViewController.imagesLoader.reload()
@@ -122,7 +122,7 @@ extension ViewController {
             return
         }
         for imageFile in checked {
-            ModelStore.default.markImageDuplicated(path: imageFile.url.path, duplicatesKey: nil, hide: false)
+            ImageDuplicationDao.default.markImageDuplicated(path: imageFile.url.path, duplicatesKey: nil, hide: false)
         }
         self.selectionViewController.imagesLoader.reload()
         self.selectionViewController.imagesLoader.reorganizeItems()
@@ -146,7 +146,7 @@ extension ViewController {
         }
         let first = checked[0]
         
-        if let image = ModelStore.default.getImage(path: first.url.path), let date = image.photoTakenDate {
+        if let image = ImageRecordDao.default.getImage(path: first.url.path), let date = image.photoTakenDate {
             let oldKey = image.duplicatesKey ?? ""
             
             // generate new key
@@ -167,19 +167,19 @@ extension ViewController {
             // update images
             for imageFile in checked {
                 if imageFile.url.path == first.url.path {
-                    ModelStore.default.markImageDuplicated(path: imageFile.url.path, duplicatesKey: key, hide: false)
+                    ImageDuplicationDao.default.markImageDuplicated(path: imageFile.url.path, duplicatesKey: key, hide: false)
                 }else{
-                    ModelStore.default.markImageDuplicated(path: imageFile.url.path, duplicatesKey: key, hide: true)
+                    ImageDuplicationDao.default.markImageDuplicated(path: imageFile.url.path, duplicatesKey: key, hide: true)
                 }
-                ModelStore.default.getDuplicatePhotos().updateMapping(key: key, path: imageFile.url.path)
+                ImageDuplicationDao.default.getDuplicatePhotos().updateMapping(key: key, path: imageFile.url.path)
             }
             
             // health check for the original duplicated set (if exists)
             if oldKey != "" {
-                let chiefOfOldKey = ModelStore.default.getChiefImageOfDuplicatedSet(duplicatesKey: oldKey)
+                let chiefOfOldKey = ImageDuplicationDao.default.getChiefImageOfDuplicatedSet(duplicatesKey: oldKey)
                 if chiefOfOldKey == nil {
-                    if let firstOfOldKey = ModelStore.default.getFirstImageOfDuplicatedSet(duplicatesKey: oldKey) {
-                        ModelStore.default.markImageDuplicated(path: firstOfOldKey.path, duplicatesKey: oldKey, hide: false)
+                    if let firstOfOldKey = ImageDuplicationDao.default.getFirstImageOfDuplicatedSet(duplicatesKey: oldKey) {
+                        ImageDuplicationDao.default.markImageDuplicated(path: firstOfOldKey.path, duplicatesKey: oldKey, hide: false)
                     }
                 }
             }

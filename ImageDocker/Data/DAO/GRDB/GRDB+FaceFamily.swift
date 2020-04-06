@@ -9,7 +9,7 @@
 import Foundation
 import GRDB
 
-extension ModelStoreGRDB {
+class FaceDaoGRDB : FaceDaoInterface {
 
     // MARK: - FAMILY
     
@@ -54,7 +54,7 @@ extension ModelStoreGRDB {
                 }
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -66,7 +66,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "DELETE FROM FamilyMember WHERE familyId='\(familyId)' AND peopleId='\(peopleId)'")
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -110,7 +110,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "DELETE FROM Family WHERE id='\(id)'")
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -175,7 +175,7 @@ extension ModelStoreGRDB {
                 }
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -243,7 +243,7 @@ extension ModelStoreGRDB {
                 try person.save(db)
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -278,7 +278,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "delete from People where id = ?", arguments: [id])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -413,7 +413,7 @@ extension ModelStoreGRDB {
                 try f.save(db)
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -428,7 +428,7 @@ extension ModelStoreGRDB {
                     try db.execute(sql: "update People set iconRepositoryPath = ?, iconCropPath = ?, iconSubPath = ?, iconFilename = ? WHERE id = ?", arguments: [face.repositoryPath, face.cropPath, face.subPath, face.filename, peopleId]);
                 }
             }catch{
-                return ModelStore.errorState(error)
+                return SQLHelper.errorState(error)
             }
             return .OK
         }
@@ -443,7 +443,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update People set iconRepositoryPath = '', iconCropPath = '', iconSubPath = '', iconFilename = '' WHERE id = ?", arguments: [peopleId]);
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -455,7 +455,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update ImageFace set sampleChoice = \(flag ? 1 : 0), sampleChangeDate = ? where id = ?", arguments: [Date(), id])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -467,7 +467,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update ImageFace set tagOnly = \(flag ? 1 : 0) where id = ?", arguments: [id])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -479,7 +479,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update ImageFace set locked = \(flag ? 1 : 0) where id = ?", arguments: [id])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -491,7 +491,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update ImageFace set cropPath = ? where cropPath = ?", arguments: [new, old])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }

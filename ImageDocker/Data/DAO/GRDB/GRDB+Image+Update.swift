@@ -9,7 +9,7 @@
 import Foundation
 import GRDB
 
-extension ModelStoreGRDB {
+extension ImageRecordDaoGRDB {
     
     // MARK: - BASIC
     
@@ -22,7 +22,7 @@ extension ModelStoreGRDB {
                 //print("saved image")
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -35,7 +35,7 @@ extension ModelStoreGRDB {
                     try db.execute(sql: "update Image set delFlag = ?", arguments: [true])
                 }
             }catch{
-                return ModelStore.errorState(error)
+                return SQLHelper.errorState(error)
             }
             return .OK
         }else{
@@ -45,7 +45,7 @@ extension ModelStoreGRDB {
                     try Image.deleteOne(db, key: path)
                 }
             }catch{
-                return ModelStore.errorState(error)
+                return SQLHelper.errorState(error)
             }
             return .OK
         }
@@ -60,7 +60,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update Image set path = ?, repositoryPath = ?, subPath = ?, containerPath = ?, id = ? where path = ?", arguments: [newPath, repositoryPath, subPath, containerPath, id, oldPath])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -72,7 +72,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update Image set originPath = ? where originPath = ?", arguments: [newRawPath, oldRawPath])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -84,7 +84,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update Image set originPath = ? where repositoryPath = ?", arguments: [rawPath, repositoryPath])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -96,7 +96,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update Image set originPath = ? where path like ?", arguments: [rawPath, "\(path.withStash())%"])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -108,7 +108,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update Image set repositoryPath = ? where path like ?", arguments: [repositoryPath, "\(path.withStash())%"])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -120,7 +120,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update Image set repositoryPath = ? where repositoryPath = ?", arguments: [newRepository, oldRepositoryPath])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -132,36 +132,12 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "update Image set path = repositoryPath || subPath where repositoryPath = ? and subPath <> ''", arguments: [repositoryPath])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
     
-    // MARK: - FACE
     
-    func updateImageScannedFace(imageId:String, facesCount:Int = 0) -> ExecuteState{
-        do {
-            let db = ModelStoreGRDB.sharedDBPool()
-            let _ = try db.write { db in
-                try db.execute(sql: "update Image set scanedFace=1, facesCount=? where id=?", arguments: [facesCount, imageId])
-            }
-        }catch{
-            return ModelStore.errorState(error)
-        }
-        return .OK
-    }
-    
-    func updateImageRecognizedFace(imageId:String, recognizedPeopleIds:String = "") -> ExecuteState{
-        do {
-            let db = ModelStoreGRDB.sharedDBPool()
-            let _ = try db.write { db in
-                try db.execute(sql: "update Image set recognizedFace=1,recognizedPeopleIds=? where id=?", arguments: [recognizedPeopleIds,imageId])
-            }
-        }catch{
-            return ModelStore.errorState(error)
-        }
-        return .OK
-    }
     
     // MARK: - DATE
     
@@ -212,7 +188,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "UPDATE Image set \(valueSets) WHERE path=?", arguments: StatementArguments(arguments) ?? [])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -232,10 +208,44 @@ extension ModelStoreGRDB {
                 }
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
+    
+    
+}
+
+class ImageFaceDaoGRDB : ImageFaceDaoInterface {
+    
+    // MARK: - FACE
+    
+    func updateImageScannedFace(imageId:String, facesCount:Int) -> ExecuteState{
+        do {
+            let db = ModelStoreGRDB.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute(sql: "update Image set scanedFace=1, facesCount=? where id=?", arguments: [facesCount, imageId])
+            }
+        }catch{
+            return SQLHelper.errorState(error)
+        }
+        return .OK
+    }
+    
+    func updateImageRecognizedFace(imageId:String, recognizedPeopleIds:String) -> ExecuteState{
+        do {
+            let db = ModelStoreGRDB.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute(sql: "update Image set recognizedFace=1,recognizedPeopleIds=? where id=?", arguments: [recognizedPeopleIds,imageId])
+            }
+        }catch{
+            return SQLHelper.errorState(error)
+        }
+        return .OK
+    }
+}
+
+class ImageExportDaoGRDB : ImageExportDaoInterface {
     
     // MARK: - EXPORT
     
@@ -246,7 +256,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "UPDATE Image set exportTime = null WHERE path='\(path)'")
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -258,7 +268,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "UPDATE Image set originalMD5 = ? WHERE path=?", arguments: StatementArguments([md5, path]))
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -270,7 +280,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "UPDATE Image set exportedMD5 = ? WHERE path=?", arguments: StatementArguments([md5, path]))
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -282,7 +292,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "UPDATE Image set exportTime = ?, exportToPath = ?, exportAsFilename = ?, exportedMD5 = ?, exportedLongDescription = ?, exportState = 'OK', exportFailMessage = '' WHERE path=?", arguments: StatementArguments([date, exportToPath, exportedFilename, exportedMD5, exportedLongDescription, path]) ?? [])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -294,7 +304,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "UPDATE Image set exportTime = ? WHERE path=?", arguments: StatementArguments([date, path]) ?? [])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -306,7 +316,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "UPDATE Image set exportTime = ?, exportState = 'FAIL', exportFailMessage = ? WHERE path=?", arguments: StatementArguments([date, message, path]) ?? [])
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -318,7 +328,7 @@ extension ModelStoreGRDB {
                 try db.execute(sql: "UPDATE Image set exportToPath = null, exportAsFilename = null, exportTime = null, exportState = null, exportFailMessage = '', exportedMD5 = null, WHERE path=?", arguments: StatementArguments([path]))
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
         

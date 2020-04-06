@@ -471,7 +471,7 @@ extension ModelStoreGRDB {
         
         
         do {
-            let dbQueue = try DatabaseQueue(path: ModelStore.localDBFile)
+            let dbQueue = try DatabaseQueue(path: SQLiteDataSource.default.getDataSource())
             try migrator.migrate(dbQueue)
         }catch{
             print(error)

@@ -49,10 +49,10 @@ class LibrariesViewController: NSViewController {
         self.btnCalculate.isEnabled = false
         DispatchQueue.global().async {
             self.records.removeAll()
-            let (lastImportDates, notyetScanDevices) = ModelStore.default.getLastImportDateOfDevices()
-            let lastPhotoTakenDates = ModelStore.default.getLastPhotoTakenDateOfRepositories()
+            let (lastImportDates, notyetScanDevices) = DeviceDao.default.getLastImportDateOfDevices()
+            let lastPhotoTakenDates = RepositoryDao.default.getLastPhotoTakenDateOfRepositories()
             
-            let repos = ModelStore.default.getRepositories().sorted(by: { (left, right) -> Bool in
+            let repos = RepositoryDao.default.getRepositories().sorted(by: { (left, right) -> Bool in
                 return left.name < right.name
             })
             var totalTotal = 0.0

@@ -10,7 +10,7 @@ import Foundation
 
 class PlacesTreeDataSource : TreeDataSource {
     
-    let dao = ImageSearchDao()
+    let dao = ImageSearchDao.default
     
     func convertPlacesToTreeCollections(_ moments:[Moment]) -> [TreeCollection] {
         var govs:[TreeCollection] = []

@@ -9,13 +9,13 @@
 import Foundation
 import GRDB
 
-extension ModelStoreGRDB {
+class ImageCountDaoGRDB : ImageCountDaoInterface {
     
     // MARK: - COLLECTION
 
     // count by date & place
     func countPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> Int {
-        let (stmt, _, sqlArgs) = self.generateSQLStatementForPhotoFiles(year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
+        let (stmt, _, sqlArgs) = SQLHelper.generateSQLStatementForPhotoFiles(year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
         
         var result = 0
         do {
@@ -31,7 +31,7 @@ extension ModelStoreGRDB {
     
     // count by date & place
     func countHiddenPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> Int {
-        let (_, stmtHidden, sqlArgs) = self.generateSQLStatementForPhotoFiles(year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
+        let (_, stmtHidden, sqlArgs) = SQLHelper.generateSQLStatementForPhotoFiles(year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
         
         var result = 0
         do {
@@ -47,7 +47,7 @@ extension ModelStoreGRDB {
     
     // count by date & event & place
     func countPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> Int {
-        let (stmt, _, sqlArgs) = self.generateSQLStatementForPhotoFiles(year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
+        let (stmt, _, sqlArgs) = SQLHelper.generateSQLStatementForPhotoFiles(year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
         
         var result = 0
         do {
@@ -63,7 +63,7 @@ extension ModelStoreGRDB {
     
     // count by date & event & place
     func countHiddenPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> Int {
-        let (_, stmtHidden, sqlArgs) = self.generateSQLStatementForPhotoFiles(year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
+        let (_, stmtHidden, sqlArgs) = SQLHelper.generateSQLStatementForPhotoFiles(year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
         
         var result = 0
         do {
@@ -267,32 +267,5 @@ extension ModelStoreGRDB {
             print(error)
         }
         return result
-    }
-    
-    // MARK: - DATE
-    
-    func getLastPhotoTakenDateOfRepositories() -> [String:String] {
-        let sql = """
-select name,lastPhotoTakenDate from
-(select name,(path || '/') repositoryPath from imageContainer where parentfolder='') c left join (
-select max(photoTakenDate) lastPhotoTakenDate,repositoryPath from image group by repositoryPath) i on c.repositoryPath = i.repositoryPath
-order by name
-"""
-        var results:[String:String] = [:]
-        do {
-            let db = ModelStoreGRDB.sharedDBPool()
-            try db.read { db in
-                let rows = try Row.fetchAll(db, sql: sql)
-                for row in rows {
-                    if let name = row["name"] as String?, let date = row["lastPhotoTakenDate"] as String? {
-                        results[name] = date
-                    }
-                }
-            }
-        }catch{
-            print(error)
-        }
-        
-        return results
     }
 }

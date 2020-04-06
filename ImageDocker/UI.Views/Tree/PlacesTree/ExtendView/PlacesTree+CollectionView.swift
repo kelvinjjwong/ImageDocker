@@ -15,7 +15,7 @@ extension ViewController {
         self.collectionPaginationViewController
             .initView(self.imagesLoader.lastRequest,
                       onCountTotal: {
-                        return ModelStore.default.countPhotoFiles(year: moment.year, month: moment.month, day: moment.day,
+                        return ImageCountDao.default.countPhotoFiles(year: moment.year, month: moment.month, day: moment.day,
                                                                   ignoreDate: (moment.year == 0),
                                                                   country: moment.countryData == "" ? (moment.gov == "未知国家" ? "" : moment.gov) : moment.countryData,
                                                                   province: moment.provinceData,
@@ -24,7 +24,7 @@ extension ViewController {
                                                                   imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
             },
                       onCountHidden: {
-                        return ModelStore.default.countHiddenPhotoFiles(year: moment.year, month: moment.month, day: moment.day,
+                        return ImageCountDao.default.countHiddenPhotoFiles(year: moment.year, month: moment.month, day: moment.day,
                                                                         ignoreDate: (moment.year == 0),
                                                                         country: moment.countryData == "" ? (moment.gov == "未知国家" ? "" : moment.gov) : moment.countryData,
                                                                         province: moment.provinceData,

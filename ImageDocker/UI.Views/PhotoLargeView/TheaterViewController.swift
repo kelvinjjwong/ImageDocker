@@ -230,7 +230,7 @@ class TheaterViewController: NSViewController {
             
             if let ev = event {
                 self.event = ev
-                years = ModelStore.default.getYears(event: ev)
+                years = ImageSearchDao.default.getYears(event: ev)
                 self.years.append(contentsOf: years)
                 if year == 0 && years.count > 0 {
                     selectedYear = years[0]
@@ -246,9 +246,9 @@ class TheaterViewController: NSViewController {
     func changeYear(year: Int, month:Int, day:Int, event:String? = nil) {
         let selectedYear = year
         if let ev = event {
-            self.datesOfYear = ModelStore.default.getDatesByYear(year: selectedYear, event: ev)
+            self.datesOfYear = ImageSearchDao.default.getDatesByYear(year: selectedYear, event: ev)
         }else{
-            self.datesOfYear = ModelStore.default.getDatesByYear(year: year)
+            self.datesOfYear = ImageSearchDao.default.getDatesByYear(year: year)
         }
         self.monthController.months = self.datesOfYear.keys.sorted(by: {$0 < $1})
         
@@ -304,14 +304,14 @@ class TheaterViewController: NSViewController {
             if byEvent {
                 self.event = image.event
                 self.years.removeAll()
-                let years = ModelStore.default.getYears(event: image.event)
+                let years = ImageSearchDao.default.getYears(event: image.event)
                 self.years.append(contentsOf: years)
-                datesOfYear = ModelStore.default.getDatesByYear(year: year, event: image.event)
+                datesOfYear = ImageSearchDao.default.getDatesByYear(year: year, event: image.event)
             }else{
                 self.event = nil
                 self.years.removeAll()
                 self.years.append(year)
-                datesOfYear = ModelStore.default.getDatesByYear(year: year)
+                datesOfYear = ImageSearchDao.default.getDatesByYear(year: year)
             }
             self.monthController.months = datesOfYear.keys.sorted(by: {$0 < $1})
             self.dayController.days = datesOfYear["\(month)"] ?? []
@@ -440,7 +440,7 @@ extension TheaterViewController {
     private func reloadCollectionView(year:Int, month:Int, day:Int){
         print("reload collection view with y:\(year) m:\(month) d:\(day) ev:\(event ?? "nil")")
         self.collectionViewController.imagesLoader.clean()
-        let images = ModelStore.default.getImagesByDate(year: year, month:month, day:day, event: self.event)
+        let images = ImageSearchDao.default.getImagesByDate(year: year, month:month, day:day, event: self.event)
         self.collectionViewController.imagesLoader.setupItems(photoFiles: images)
         self.collectionViewController.imagesLoader.reorganizeItems(considerPlaces: false)
         
@@ -459,7 +459,7 @@ extension TheaterViewController {
     private func reloadCollectionView() {
         self.collectionViewController.imagesLoader.clean()
         if let date = self.photoTakenDate {
-            let images = ModelStore.default.getImagesByDate(photoTakenDate: date, event: self.event)
+            let images = ImageSearchDao.default.getImagesByDate(photoTakenDate: date, event: self.event)
             self.collectionViewController.imagesLoader.setupItems(photoFiles: images)
             self.collectionViewController.imagesLoader.reorganizeItems(considerPlaces: false)
         }else{

@@ -17,11 +17,11 @@ class DirectoryPaths : NSObject {
 
 class ImageFolderTreeScanner {
     
-    let repositoryDao = RepositoryDao()
-    let deviceDao = DeviceDao()
-    let imageSearchDao = ImageSearchDao()
-    let imageRecordDao = ImageRecordDao()
-    let imageCountDao = ImageCountDao()
+    let repositoryDao = RepositoryDao.default
+    let deviceDao = DeviceDao.default
+    let imageSearchDao = ImageSearchDao.default
+    let imageRecordDao = ImageRecordDao.default
+    let imageCountDao = ImageCountDao.default
     
     static let `default` = ImageFolderTreeScanner()
     var suppressedScan:Bool = false

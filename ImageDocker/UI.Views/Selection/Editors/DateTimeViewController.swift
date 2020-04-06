@@ -860,7 +860,7 @@ class DateTimeViewController: NSViewController {
             for image in self.images {
                 
                 //ExifTool.helper.patchDateForPhoto(date: image.valueDate!, url: URL(fileURLWithPath: image.path), tags: tags)
-                let state = ModelStore.default.updateImageDates(path: image.path, date: image.valueDate!, fields: tags)
+                let state = ImageRecordDao.default.updateImageDates(path: image.path, date: image.valueDate!, fields: tags)
                 self.updateImageDates(image: image, date: image.valueDate!, fields: tags)
                 if state == .OK {
                     count += 1

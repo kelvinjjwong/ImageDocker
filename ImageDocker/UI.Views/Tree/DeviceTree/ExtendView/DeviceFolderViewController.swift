@@ -526,7 +526,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
 
 class DeviceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxDataSource, NSComboBoxDelegate {
     
-    let deviceDao = DeviceDao()
+    let deviceDao = DeviceDao.default
     
     var deviceItems:[PhoneDevice] = []
     var combobox:NSComboBox?

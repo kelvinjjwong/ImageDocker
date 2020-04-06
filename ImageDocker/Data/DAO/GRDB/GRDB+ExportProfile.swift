@@ -9,7 +9,7 @@
 import Foundation
 import GRDB
 
-extension ModelStoreGRDB {
+class ExportDaoGRDB : ExportDaoInterface {
     
     // MARK: - CREATE
     
@@ -93,7 +93,7 @@ extension ModelStoreGRDB {
                 }
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -109,7 +109,7 @@ extension ModelStoreGRDB {
                 }
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -125,7 +125,7 @@ extension ModelStoreGRDB {
                 }
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -141,7 +141,7 @@ extension ModelStoreGRDB {
                 }
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }
@@ -186,7 +186,7 @@ extension ModelStoreGRDB {
                 let _ = try ExportProfile.deleteOne(db, key: id)
             }
         }catch{
-            return ModelStore.errorState(error)
+            return SQLHelper.errorState(error)
         }
         return .OK
     }

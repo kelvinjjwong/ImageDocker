@@ -31,7 +31,7 @@ class DeviceListViewController: NSViewController {
     
     func initView() {
         lastSelectedRow = nil
-        self.devices = ModelStore.default.getDevices()
+        self.devices = DeviceDao.default.getDevices()
         print(devices.count)
         self.tblDevices.reloadData()
     }

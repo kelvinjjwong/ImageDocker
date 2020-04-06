@@ -68,7 +68,7 @@ class PlaceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
     var working:Bool = false
     
     func loadPlaces() {
-        self.places = ModelStore.default.getPlaces()
+        self.places = PlaceDao.default.getPlaces()
     }
     
     func comboBox(_ comboBox: NSComboBox, completedString string: String) -> String? {
@@ -94,7 +94,7 @@ class PlaceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
         if combobox == nil || working {return}
         if combobox!.indexOfSelectedItem < 0 || combobox!.indexOfSelectedItem >= places.count {return}
         let name = places[combobox!.indexOfSelectedItem].name
-        let place:ImagePlace? = ModelStore.default.getPlace(name: name)
+        let place:ImagePlace? = PlaceDao.default.getPlace(name: name)
         if place != nil {
             let location = Location()
             location.country = place?.country ?? ""

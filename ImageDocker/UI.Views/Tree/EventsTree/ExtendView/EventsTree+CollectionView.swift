@@ -15,12 +15,12 @@ extension ViewController {
         self.collectionPaginationViewController
             .initView(self.imagesLoader.lastRequest,
                       onCountTotal: {
-                        return ModelStore.default.countPhotoFiles(year: moment.year, month: moment.month, day: moment.day,
+                        return ImageCountDao.default.countPhotoFiles(year: moment.year, month: moment.month, day: moment.day,
                                                                   event: moment.event, place: moment.place,
                                                                   imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
             },
                       onCountHidden: {
-                        return ModelStore.default.countHiddenPhotoFiles(year: moment.year, month: moment.month, day: moment.day,
+                        return ImageCountDao.default.countHiddenPhotoFiles(year: moment.year, month: moment.month, day: moment.day,
                                                                         event: moment.event, place: moment.place,
                                                                         imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
             },

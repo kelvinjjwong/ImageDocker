@@ -338,7 +338,7 @@ class PeopleViewController: NSViewController {
             self.faceCollectionViewController.imagesLoader.loadFaces(peopleId: self.selectedPeopleId, sample:true)
             self.faceCollectionView.reloadData()
             
-            self.peopleList = ModelStore.default.getPeople(except: self.selectedPeopleId)
+            self.peopleList = FaceDao.default.getPeople(except: self.selectedPeopleId)
             var names:[String] = []
             if self.peopleList.count > 0 {
                 for person in self.peopleList {
@@ -352,14 +352,14 @@ class PeopleViewController: NSViewController {
         }
         
         var categories:[String] = self.selectedPeopleId == "" ? [] : ["Samples"]
-        categories.append(contentsOf: ModelStore.default.getYearsOfFaceCrops(peopleId: self.selectedPeopleId))
+        categories.append(contentsOf: FaceDao.default.getYearsOfFaceCrops(peopleId: self.selectedPeopleId))
         self.faceCategoryController.load(categories)
         self.faceSubCategoryController.clean()
         
     }
     
     fileprivate func loadRelationships() {
-        let relationships = ModelStore.default.getRelationships(peopleId: self.selectedPeopleId)
+        let relationships = FaceDao.default.getRelationships(peopleId: self.selectedPeopleId)
         var calls:[String:String] = [:]
         var becalls:[String:String] = [:]
         if relationships.count > 0 {
@@ -395,8 +395,8 @@ class PeopleViewController: NSViewController {
     
     fileprivate func loadFamilies() {
         var myFamilies:[[String:String]] = []
-        let families = ModelStore.default.getFamilies()
-        let choices = ModelStore.default.getFamilies(peopleId: self.selectedPeopleId)
+        let families = FaceDao.default.getFamilies()
+        let choices = FaceDao.default.getFamilies(peopleId: self.selectedPeopleId)
         if families.count > 0 {
             for family in families {
                 var myFamily:[String:String] = [:]
@@ -480,7 +480,7 @@ class PeopleViewController: NSViewController {
             self.faceCollectionView.reloadData()
         }else{
             self.adjustButtonsForKnownFace(preview: false)
-            let subCategories = ModelStore.default.getMonthsOfFaceCrops(peopleId: self.selectedPeopleId, imageYear: value)
+            let subCategories = FaceDao.default.getMonthsOfFaceCrops(peopleId: self.selectedPeopleId, imageYear: value)
             self.faceSubCategoryController.load(subCategories)
         }
     }
@@ -527,9 +527,9 @@ class PeopleViewController: NSViewController {
     
     fileprivate func onFamilyCheck(id:String, checked:Bool){
         if checked {
-            ModelStore.default.saveFamilyMember(peopleId: self.selectedPeopleId, familyId: id)
+            FaceDao.default.saveFamilyMember(peopleId: self.selectedPeopleId, familyId: id)
         }else{
-            ModelStore.default.deleteFamilyMember(peopleId: self.selectedPeopleId, familyId: id)
+            FaceDao.default.deleteFamilyMember(peopleId: self.selectedPeopleId, familyId: id)
         }
     }
     
@@ -539,7 +539,7 @@ class PeopleViewController: NSViewController {
         
         if self.faceCollectionViewController.selectedFaceIds.count > 0 {
             for selectedFaceId in self.faceCollectionViewController.selectedFaceIds {
-                if let crop = ModelStore.default.getFace(id: selectedFaceId) {
+                if let crop = FaceDao.default.getFace(id: selectedFaceId) {
                     var c = crop
                     c.peopleId = id
                     c.recognizeBy = "UserAssign"
@@ -554,10 +554,10 @@ class PeopleViewController: NSViewController {
 //                    if name != "Unknown" {
                         c.locked = true
 //                    }
-                    ModelStore.default.saveFaceCrop(c)
+                    FaceDao.default.saveFaceCrop(c)
                     print("Face crop \(crop.id) assigned as [\(name)], updated into DB.")
                     
-                    if let person = ModelStore.default.getPerson(id: id) {
+                    if let person = FaceDao.default.getPerson(id: id) {
                         DispatchQueue.main.async {
                             self.lblFaceDescription.stringValue = person.shortName ?? person.name
                         }
@@ -576,18 +576,18 @@ class PeopleViewController: NSViewController {
         self.lblProgressMessage.stringValue = "Recognizing..."
         var faces:[ImageFace] = []
         if id == "all" {
-            faces = ModelStore.default.getFaceCrops(peopleId: "", year: nil, month: nil, sample: false, icon: nil, tag: nil, locked: false)
+            faces = FaceDao.default.getFaceCrops(peopleId: "", year: nil, month: nil, sample: false, icon: nil, tag: nil, locked: false)
         }else if id == "selected" {
             if self.tblFaceYear.numberOfSelectedRows > 0 && self.tblFaceMonth.numberOfSelectedRows > 0 && self.selectedCategory != "Unknown" {
                 print("selection at \(self.selectedCategory),\(self.selectedSubCategory)")
-                faces = ModelStore.default.getFaceCrops(peopleId: "", year: Int(self.selectedCategory), month: Int(selectedSubCategory), sample: false, icon: nil, tag: nil, locked: false)
+                faces = FaceDao.default.getFaceCrops(peopleId: "", year: Int(self.selectedCategory), month: Int(selectedSubCategory), sample: false, icon: nil, tag: nil, locked: false)
             }else{
                 print("no selection")
                 self.lblProgressMessage.stringValue = "No category is selected."
                 return
             }
         }else{
-            faces = ModelStore.default.getFaceCrops(peopleId: "", year: Int(id), month: nil, sample: false, icon: nil, tag: nil, locked: false)
+            faces = FaceDao.default.getFaceCrops(peopleId: "", year: Int(id), month: nil, sample: false, icon: nil, tag: nil, locked: false)
         }
         if faces.count == 0 {
             self.lblProgressMessage.stringValue = "No face need to be recognized."
@@ -595,7 +595,7 @@ class PeopleViewController: NSViewController {
             return
         }
         var peopleName:[String:String] = [:]
-        let people = ModelStore.default.getPeople()
+        let people = FaceDao.default.getPeople()
         for person in people {
             peopleName[person.id] = person.shortName ?? person.name
         }
@@ -621,7 +621,7 @@ class PeopleViewController: NSViewController {
                             version += 1
                             c.recognizeVersion = "\(version)"
                         }
-                        ModelStore.default.saveFaceCrop(c)
+                        FaceDao.default.saveFaceCrop(c)
                         print("Face crop \(face.id) recognized as [\(name)], updated into DB.")
                         k += 1
                         DispatchQueue.main.async {
@@ -649,7 +649,7 @@ class PeopleViewController: NSViewController {
         let name = self.txtPeopleName.stringValue
         let shortName = self.txtPeopleNickName.stringValue
         if id != "" && name != "" && shortName != "" {
-            ModelStore.default.savePersonName(id: id, name: name, shortName: shortName)
+            FaceDao.default.savePersonName(id: id, name: name, shortName: shortName)
             self.lblIdentityMessasge.stringValue = "Saved."
             FaceTask.default.reloadPeople()
             self.loadIcons()
@@ -661,11 +661,11 @@ class PeopleViewController: NSViewController {
     @IBAction func onChkIconClicked(_ sender: NSButton) {
         if self.selectedFaceId != "" && self.selectedPeopleId != "" {
             if sender.state == .on {
-                ModelStore.default.updateFaceIconFlag(id: self.selectedFaceId, peopleId: self.selectedPeopleId)
+                FaceDao.default.updateFaceIconFlag(id: self.selectedFaceId, peopleId: self.selectedPeopleId)
                 self.loadIcons()
                 self.iconCollectionViewController.restoreHighlightedItems()
             }else{
-                ModelStore.default.removeFaceIcon(peopleId: self.selectedPeopleId)
+                FaceDao.default.removeFaceIcon(peopleId: self.selectedPeopleId)
                 self.loadIcons()
                 self.iconCollectionViewController.restoreHighlightedItems()
             }
@@ -673,7 +673,7 @@ class PeopleViewController: NSViewController {
     }
     
     @IBAction func onDifferentPersonClicked(_ sender: NSButton) {
-        let people = ModelStore.default.getPeople(except: self.selectedPeopleId)
+        let people = FaceDao.default.getPeople(except: self.selectedPeopleId)
         var menu:[(String, String)] = []
         menu.append(("", "Unknown"))
         for person in people {
@@ -690,8 +690,8 @@ class PeopleViewController: NSViewController {
             let callAs = self.txtCallAs.stringValue
             let beCalledAs = self.txtBeCalledAs.stringValue
             if callAs != "" && beCalledAs != "" {
-                ModelStore.default.saveRelationship(primary: self.selectedPeopleId, secondary: person.id, callName: callAs)
-                ModelStore.default.saveRelationship(primary: person.id, secondary: self.selectedPeopleId, callName: beCalledAs)
+                FaceDao.default.saveRelationship(primary: self.selectedPeopleId, secondary: person.id, callName: callAs)
+                FaceDao.default.saveRelationship(primary: person.id, secondary: self.selectedPeopleId, callName: beCalledAs)
                 self.lblRelationshipMessage.stringValue = "Saved."
                 self.loadRelationships()
             }else{
@@ -737,9 +737,9 @@ class PeopleViewController: NSViewController {
     @IBAction func onChkSampleClicked(_ sender: NSButton) {
         if self.faceCollectionViewController.selectedFaceIds.count > 0 {
             for selectedFaceId in self.faceCollectionViewController.selectedFaceIds {
-                ModelStore.default.updateFaceSampleFlag(id: selectedFaceId, flag: (sender.state == .on) )
+                FaceDao.default.updateFaceSampleFlag(id: selectedFaceId, flag: (sender.state == .on) )
                 // copy or remove face crop to/from recognition sample directory
-                if let face = ModelStore.default.getFace(id: selectedFaceId) {
+                if let face = FaceDao.default.getFace(id: selectedFaceId) {
                     let targetFolder = URL(fileURLWithPath: FaceRecognition.trainingSamplePath).appendingPathComponent(selectedPeopleId)
                     let target = targetFolder.appendingPathComponent("\(selectedFaceId).jpg")
                     if sender.state == .on {
@@ -778,7 +778,7 @@ class PeopleViewController: NSViewController {
             var msg = "BEFORE: \(self.selectedFamilyName) [\(self.selectedFamilyType)]\n"
             msg +=    "AFTER : \(name) [\(type)]"
             if Alert.dialogOKCancel(question: "Change this organization ?", text: msg, width: 350) {
-                if let _ = ModelStore.default.saveFamily(familyId: self.selectedFamilyId, name: name, type: type) {
+                if let _ = FaceDao.default.saveFamily(familyId: self.selectedFamilyId, name: name, type: type) {
                     self.lblFamilyMessage.stringValue = "Updated."
                     self.loadFamilies()
                 }else{
@@ -795,7 +795,7 @@ class PeopleViewController: NSViewController {
         if self.selectedFamilyId != "" {
             let msg = "\(self.selectedFamilyName) [\(self.selectedFamilyType)]"
             if Alert.dialogOKCancel(question: "DELETE this organization and all memberships ?", text: msg, width: 350) {
-                ModelStore.default.deleteFamily(id: self.selectedFamilyId)
+                FaceDao.default.deleteFamily(id: self.selectedFamilyId)
                 self.lblFamilyMessage.stringValue = "Deleted."
                 self.selectedFamilyId = ""
                 self.loadFamilies()
@@ -808,7 +808,7 @@ class PeopleViewController: NSViewController {
         let name = self.txtFamilyName.stringValue
         let type = self.lstFamilyType.titleOfSelectedItem ?? ""
         if name != "" && type != "" {
-            if let _ = ModelStore.default.saveFamily(name: name, type: type) {
+            if let _ = FaceDao.default.saveFamily(name: name, type: type) {
                 self.lblFamilyMessage.stringValue = "Created."
                 self.loadFamilies()
             }else{
@@ -830,7 +830,7 @@ class PeopleViewController: NSViewController {
     @IBAction func onRecognizeClicked(_ sender: NSButton) {
         self.lblFaceDescription.stringValue = ""
         if self.selectedFaceId != "" {
-            if let crop = ModelStore.default.getFace(id: self.selectedFaceId) {
+            if let crop = FaceDao.default.getFace(id: self.selectedFaceId) {
                 let path = URL(fileURLWithPath: crop.cropPath).appendingPathComponent(crop.subPath).appendingPathComponent(crop.filename)
                 self.btnRecognize.isEnabled = false
                 self.btnDifferentPerson.isEnabled = false
@@ -855,10 +855,10 @@ class PeopleViewController: NSViewController {
                                 version += 1
                                 c.recognizeVersion = "\(version)"
                             }
-                            ModelStore.default.saveFaceCrop(c)
+                            FaceDao.default.saveFaceCrop(c)
                             print("Face crop \(crop.id) recognized as [\(name)], updated into DB.")
                             
-                            if let person = ModelStore.default.getPerson(id: name) {
+                            if let person = FaceDao.default.getPerson(id: name) {
                                 DispatchQueue.main.async {
                                     self.lblFaceDescription.stringValue = person.shortName ?? person.name
                                 }
@@ -927,7 +927,7 @@ class PeopleViewController: NSViewController {
     }
     
     @IBAction func onRecognizeAllClicked(_ sender: NSButton) {
-        let years = ModelStore.default.getYearsOfFaceCrops(peopleId: "")
+        let years = FaceDao.default.getYearsOfFaceCrops(peopleId: "")
         var menu:[(String, String)] = []
         menu.append(("all", "All Unknown Faces"))
         menu.append(("selected", "Unknown faces in selected month"))
@@ -945,9 +945,9 @@ class PeopleViewController: NSViewController {
         if self.faceCollectionViewController.selectedFaceIds.count > 0 {
             for selectedFaceId in self.faceCollectionViewController.selectedFaceIds {
                 if sender.state == .on {
-                    ModelStore.default.updateFaceLockFlag(id: selectedFaceId, flag: true)
+                    FaceDao.default.updateFaceLockFlag(id: selectedFaceId, flag: true)
                 }else{
-                    ModelStore.default.updateFaceLockFlag(id: selectedFaceId, flag: false)
+                    FaceDao.default.updateFaceLockFlag(id: selectedFaceId, flag: false)
                 }
             }
         }
