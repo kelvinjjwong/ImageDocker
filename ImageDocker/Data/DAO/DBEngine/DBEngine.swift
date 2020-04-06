@@ -14,7 +14,11 @@ public final class ImageDB {
     
     let dataSource:ImageDBDataSource
     
-    static let LocalSQLite = ImageDB(impl: SQLiteGRDB.default, dataSource: SQLiteDataSource.default)
+    static let LocalSQLite = ImageDB(impl: SQLiteConnectionGRDB.default, dataSource: SQLiteDataSource.default)
+    
+    static func current() -> ImageDB{
+        return LocalSQLite
+    }
     
     private init(impl:ImageDBInterface, dataSource:ImageDBDataSource) {
         self.impl = impl
@@ -23,6 +27,10 @@ public final class ImageDB {
     
     func testDatabase() -> (Bool, Error?) {
         return self.impl.testDatabase()
+    }
+    
+    func versionCheck() {
+        self.impl.versionCheck()
     }
     
     func checkDatabase() -> (Bool, Error?) {
@@ -34,6 +42,8 @@ public final class ImageDB {
 protocol ImageDBInterface {
     
     func testDatabase() -> (Bool, Error?)
+    
+    func versionCheck()
     
 }
 

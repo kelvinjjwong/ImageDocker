@@ -169,7 +169,6 @@
 		8EB271AF2346BEAA003BF3AF /* TaskProgressStackItem.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8EB271AE2346BEAA003BF3AF /* TaskProgressStackItem.storyboard */; };
 		8EB271B12346BEC3003BF3AF /* ProgresViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271B02346BEC3003BF3AF /* ProgresViewController.swift */; };
 		8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CC20FA42AB00D8C71D /* Duplicate.swift */; };
-		8EB321CF20FA42C700D8C71D /* ModelStoreGRDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB321CE20FA42C700D8C71D /* ModelStoreGRDB.swift */; };
 		8EB8D6FE22E456170096DD75 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EB8D6FD22E456160096DD75 /* WebKit.framework */; };
 		8EB986B020B225230075B081 /* DetailViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB986AF20B225230075B081 /* DetailViewDelegate.swift */; };
 		8EB986B920B30C920075B081 /* CollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB986B220B30C910075B081 /* CollectionViewItem.swift */; };
@@ -238,7 +237,7 @@
 		8EF32D122094CB2000511538 /* Icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8EF32D112094CB2000511538 /* Icons.xcassets */; };
 		8EF3FEE724231C0400AF83BB /* ImageSQLHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF3FEE624231C0400AF83BB /* ImageSQLHelper.swift */; };
 		8EF3FEEA2423509E00AF83BB /* DBEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF3FEE92423509E00AF83BB /* DBEngine.swift */; };
-		8EF3FEEC24235B0C00AF83BB /* DBEngine+GRDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF3FEEB24235B0C00AF83BB /* DBEngine+GRDB.swift */; };
+		8EF3FEEC24235B0C00AF83BB /* DBEngine+SQLiteConnection+GRDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF3FEEB24235B0C00AF83BB /* DBEngine+SQLiteConnection+GRDB.swift */; };
 		8EF4CE5521D77BAB00C53AFF /* People.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE5421D77BAB00C53AFF /* People.swift */; };
 		8EF4CE5721D77BD600C53AFF /* Family.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE5621D77BD600C53AFF /* Family.swift */; };
 		8EF4CE5921D77BEA00C53AFF /* ImagePeople.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE5821D77BEA00C53AFF /* ImagePeople.swift */; };
@@ -447,7 +446,6 @@
 		8EB271AE2346BEAA003BF3AF /* TaskProgressStackItem.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TaskProgressStackItem.storyboard; sourceTree = "<group>"; };
 		8EB271B02346BEC3003BF3AF /* ProgresViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgresViewController.swift; sourceTree = "<group>"; };
 		8EB321CC20FA42AB00D8C71D /* Duplicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Duplicate.swift; sourceTree = "<group>"; };
-		8EB321CE20FA42C700D8C71D /* ModelStoreGRDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelStoreGRDB.swift; sourceTree = "<group>"; };
 		8EB8D6FD22E456160096DD75 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		8EB986AF20B225230075B081 /* DetailViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewDelegate.swift; sourceTree = "<group>"; };
 		8EB986B220B30C910075B081 /* CollectionViewItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewItem.swift; sourceTree = "<group>"; };
@@ -516,7 +514,7 @@
 		8EF32D112094CB2000511538 /* Icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icons.xcassets; sourceTree = "<group>"; };
 		8EF3FEE624231C0400AF83BB /* ImageSQLHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSQLHelper.swift; sourceTree = "<group>"; };
 		8EF3FEE92423509E00AF83BB /* DBEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBEngine.swift; sourceTree = "<group>"; };
-		8EF3FEEB24235B0C00AF83BB /* DBEngine+GRDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DBEngine+GRDB.swift"; sourceTree = "<group>"; };
+		8EF3FEEB24235B0C00AF83BB /* DBEngine+SQLiteConnection+GRDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DBEngine+SQLiteConnection+GRDB.swift"; sourceTree = "<group>"; };
 		8EF4CE5421D77BAB00C53AFF /* People.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = People.swift; sourceTree = "<group>"; };
 		8EF4CE5621D77BD600C53AFF /* Family.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Family.swift; sourceTree = "<group>"; };
 		8EF4CE5821D77BEA00C53AFF /* ImagePeople.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePeople.swift; sourceTree = "<group>"; };
@@ -713,7 +711,7 @@
 		8E3EC3BA214DC120004B6125 /* GRDB */ = {
 			isa = PBXGroup;
 			children = (
-				8EB321CE20FA42C700D8C71D /* ModelStoreGRDB.swift */,
+				8EF3FEEB24235B0C00AF83BB /* DBEngine+SQLiteConnection+GRDB.swift */,
 				8EAD03AE2337290E00AAC7C6 /* GRDB+Image.swift */,
 				8EB271562337B9C3003BF3AF /* GRDB+Image+Search.swift */,
 				8EB271542337B8BC003BF3AF /* GRDB+Image+Update.swift */,
@@ -1254,7 +1252,6 @@
 			isa = PBXGroup;
 			children = (
 				8EF3FEE92423509E00AF83BB /* DBEngine.swift */,
-				8EF3FEEB24235B0C00AF83BB /* DBEngine+GRDB.swift */,
 			);
 			path = DBEngine;
 			sourceTree = "<group>";
@@ -1579,7 +1576,6 @@
 				8EB986B020B225230075B081 /* DetailViewDelegate.swift in Sources */,
 				8E7F71002091F14300410C45 /* BaiduLocation.swift in Sources */,
 				8E98B8F020D0EE3300771280 /* PlaceListViewController.swift in Sources */,
-				8EB321CF20FA42C700D8C71D /* ModelStoreGRDB.swift in Sources */,
 				8ECA1FF923E5638800F56895 /* DeviceTree+ExtendView.swift in Sources */,
 				8EF125A622140C0F00C423CA /* ImageDevicePath.swift in Sources */,
 				8EB271812340E578003BF3AF /* ViewController+Window.swift in Sources */,
@@ -1692,7 +1688,7 @@
 				8EB986C620B6EBC40075B081 /* DarkTableView.swift in Sources */,
 				8E74194A242256FE002BAAAE /* EventDaoInterface.swift in Sources */,
 				8EB2716D233E0729003BF3AF /* LibrariesViewController.swift in Sources */,
-				8EF3FEEC24235B0C00AF83BB /* DBEngine+GRDB.swift in Sources */,
+				8EF3FEEC24235B0C00AF83BB /* DBEngine+SQLiteConnection+GRDB.swift in Sources */,
 				8E4C38CF2117B54D0089502C /* Android.swift in Sources */,
 				8EB2718D2340EE4C003BF3AF /* ViewController+SelectionArea+WriteNote.swift in Sources */,
 				8E8D47182229AC220091E9C3 /* FaceIconCollectionViewController.swift in Sources */,

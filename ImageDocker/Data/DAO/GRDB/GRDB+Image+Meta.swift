@@ -16,7 +16,7 @@ extension ImageSearchDaoGRDB {
     func getImageSources() -> [String:Bool]{
         var results:[String:Bool] = [:]
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql: "SELECT DISTINCT imageSource FROM Image")
                 for row in rows {
@@ -36,7 +36,7 @@ extension ImageSearchDaoGRDB {
     func getCameraModel() -> [String:Bool] {
         var results:[String:Bool] = [:]
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql: "SELECT DISTINCT cameraMaker,cameraModel FROM Image")
                 for row in rows {
@@ -80,7 +80,7 @@ extension ImageSearchDaoGRDB {
         print(sql)
         var result:[Moment] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql: sql)
                 for row in rows {
@@ -128,7 +128,7 @@ extension ImageSearchDaoGRDB {
         print(sql)
         var result:[Row] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try Row.fetchAll(db, sql: sql, arguments:StatementArguments(sqlArgs) ?? [])
             }
@@ -210,7 +210,7 @@ extension ImageSearchDaoGRDB {
         print("SQL values: \(argumentValues)")
         var result:[Moment] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql: sql, arguments:StatementArguments(argumentValues))
                 for row in rows {
@@ -284,7 +284,7 @@ extension ImageSearchDaoGRDB {
         print(sql)
         var result:[Row] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try Row.fetchAll(db, sql: sql, arguments:StatementArguments(sqlArgs) ?? [])
             }
@@ -310,7 +310,7 @@ extension ImageSearchDaoGRDB {
         """
         print(sql)
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql: sql)
                 if rows.count > 0 {
@@ -357,7 +357,7 @@ extension ImageSearchDaoGRDB {
         print(sql)
         print("SQL argument: \(ev)")
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql: sql, arguments:StatementArguments([ev]))
                 if rows.count > 0 {
@@ -402,7 +402,7 @@ extension ImageSearchDaoGRDB {
         
         var result:[Int] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql: sql, arguments:StatementArguments(args))
                 for row in rows {
@@ -428,7 +428,7 @@ extension ImageSearchDaoGRDB {
         //print(sql)
         var result:[String:[String]] = [:]
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql: sql, arguments:StatementArguments(args) ?? [])
                 for row in rows {

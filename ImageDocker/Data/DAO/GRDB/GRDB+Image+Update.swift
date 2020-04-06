@@ -15,7 +15,7 @@ extension ImageRecordDaoGRDB {
     
     func saveImage(image: Image) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 var image = image
                 try image.save(db)
@@ -30,7 +30,7 @@ extension ImageRecordDaoGRDB {
     func deletePhoto(atPath path:String, updateFlag:Bool = true) -> ExecuteState{
         if updateFlag {
             do {
-                let db = ModelStoreGRDB.sharedDBPool()
+                let db = try SQLiteConnectionGRDB.default.sharedDBPool()
                 let _ = try db.write { db in
                     try db.execute(sql: "update Image set delFlag = ?", arguments: [true])
                 }
@@ -40,7 +40,7 @@ extension ImageRecordDaoGRDB {
             return .OK
         }else{
             do {
-                let db = ModelStoreGRDB.sharedDBPool()
+                let db = try SQLiteConnectionGRDB.default.sharedDBPool()
                 let _ = try db.write { db in
                     try Image.deleteOne(db, key: path)
                 }
@@ -55,7 +55,7 @@ extension ImageRecordDaoGRDB {
     
     func updateImagePaths(oldPath:String, newPath:String, repositoryPath:String, subPath:String, containerPath:String, id:String) -> ExecuteState {
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute(sql: "update Image set path = ?, repositoryPath = ?, subPath = ?, containerPath = ?, id = ? where path = ?", arguments: [newPath, repositoryPath, subPath, containerPath, id, oldPath])
             }
@@ -67,7 +67,7 @@ extension ImageRecordDaoGRDB {
     
     func updateImageRawBase(oldRawPath:String, newRawPath:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute(sql: "update Image set originPath = ? where originPath = ?", arguments: [newRawPath, oldRawPath])
             }
@@ -79,7 +79,7 @@ extension ImageRecordDaoGRDB {
     
     func updateImageRawBase(repositoryPath:String, rawPath:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute(sql: "update Image set originPath = ? where repositoryPath = ?", arguments: [rawPath, repositoryPath])
             }
@@ -91,7 +91,7 @@ extension ImageRecordDaoGRDB {
     
     func updateImageRawBase(pathStartsWith path:String, rawPath:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute(sql: "update Image set originPath = ? where path like ?", arguments: [rawPath, "\(path.withStash())%"])
             }
@@ -103,7 +103,7 @@ extension ImageRecordDaoGRDB {
     
     func updateImageRepositoryBase(pathStartsWith path:String, repositoryPath:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute(sql: "update Image set repositoryPath = ? where path like ?", arguments: [repositoryPath, "\(path.withStash())%"])
             }
@@ -115,7 +115,7 @@ extension ImageRecordDaoGRDB {
     
     func updateImageRepositoryBase(oldRepositoryPath:String, newRepository:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute(sql: "update Image set repositoryPath = ? where repositoryPath = ?", arguments: [newRepository, oldRepositoryPath])
             }
@@ -127,7 +127,7 @@ extension ImageRecordDaoGRDB {
     
     func updateImagePath(repositoryPath:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute(sql: "update Image set path = repositoryPath || subPath where repositoryPath = ? and subPath <> ''", arguments: [repositoryPath])
             }
@@ -183,7 +183,7 @@ extension ImageRecordDaoGRDB {
         let valueSets = values.joined(separator: ",")
         
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try db.execute(sql: "UPDATE Image set \(valueSets) WHERE path=?", arguments: StatementArguments(arguments) ?? [])
             }
@@ -197,7 +197,7 @@ extension ImageRecordDaoGRDB {
     
     func storeImageDescription(path:String, shortDescription:String?, longDescription:String?) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 if let brief = shortDescription, let detailed = longDescription {
                     try db.execute(sql: "UPDATE Image set shortDescription = ?, longDescription = ? WHERE path=?", arguments: StatementArguments([brief, detailed, path]))
@@ -222,7 +222,7 @@ class ImageFaceDaoGRDB : ImageFaceDaoInterface {
     
     func updateImageScannedFace(imageId:String, facesCount:Int) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute(sql: "update Image set scanedFace=1, facesCount=? where id=?", arguments: [facesCount, imageId])
             }
@@ -234,7 +234,7 @@ class ImageFaceDaoGRDB : ImageFaceDaoInterface {
     
     func updateImageRecognizedFace(imageId:String, recognizedPeopleIds:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute(sql: "update Image set recognizedFace=1,recognizedPeopleIds=? where id=?", arguments: [recognizedPeopleIds,imageId])
             }
@@ -251,7 +251,7 @@ class ImageExportDaoGRDB : ImageExportDaoInterface {
     
     func cleanImageExportTime(path:String) -> ExecuteState {
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try db.execute(sql: "UPDATE Image set exportTime = null WHERE path='\(path)'")
             }
@@ -263,7 +263,7 @@ class ImageExportDaoGRDB : ImageExportDaoInterface {
     
     func storeImageOriginalMD5(path:String, md5:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try db.execute(sql: "UPDATE Image set originalMD5 = ? WHERE path=?", arguments: StatementArguments([md5, path]))
             }
@@ -275,7 +275,7 @@ class ImageExportDaoGRDB : ImageExportDaoInterface {
     
     func storeImageExportedMD5(path:String, md5:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try db.execute(sql: "UPDATE Image set exportedMD5 = ? WHERE path=?", arguments: StatementArguments([md5, path]))
             }
@@ -287,7 +287,7 @@ class ImageExportDaoGRDB : ImageExportDaoInterface {
     
     func storeImageExportSuccess(path:String, date:Date, exportToPath:String, exportedFilename:String, exportedMD5:String, exportedLongDescription:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try db.execute(sql: "UPDATE Image set exportTime = ?, exportToPath = ?, exportAsFilename = ?, exportedMD5 = ?, exportedLongDescription = ?, exportState = 'OK', exportFailMessage = '' WHERE path=?", arguments: StatementArguments([date, exportToPath, exportedFilename, exportedMD5, exportedLongDescription, path]) ?? [])
             }
@@ -299,7 +299,7 @@ class ImageExportDaoGRDB : ImageExportDaoInterface {
     
     func storeImageExportedTime(path:String, date:Date) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try db.execute(sql: "UPDATE Image set exportTime = ? WHERE path=?", arguments: StatementArguments([date, path]) ?? [])
             }
@@ -311,7 +311,7 @@ class ImageExportDaoGRDB : ImageExportDaoInterface {
     
     func storeImageExportFail(path:String, date:Date, message:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try db.execute(sql: "UPDATE Image set exportTime = ?, exportState = 'FAIL', exportFailMessage = ? WHERE path=?", arguments: StatementArguments([date, message, path]) ?? [])
             }
@@ -323,7 +323,7 @@ class ImageExportDaoGRDB : ImageExportDaoInterface {
     
     func cleanImageExportPath(path:String) -> ExecuteState {
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try db.execute(sql: "UPDATE Image set exportToPath = null, exportAsFilename = null, exportTime = null, exportState = null, exportFailMessage = '', exportedMD5 = null, WHERE path=?", arguments: StatementArguments([path]))
             }

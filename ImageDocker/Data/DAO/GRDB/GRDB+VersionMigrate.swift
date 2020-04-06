@@ -9,10 +9,10 @@
 import Foundation
 import GRDB
 
-extension ModelStoreGRDB {
+extension SQLiteConnectionGRDB {
     // MARK: - SCHEMA VERSION MIGRATION
     
-    internal func versionCheck(){
+    func versionCheck(){
         var migrator = DatabaseMigrator()
         
         migrator.registerMigration("v1") { db in

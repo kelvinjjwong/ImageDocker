@@ -16,7 +16,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     func getFamilies() -> [Family] {
         var result:[Family] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try Family.order(sql: "name asc").fetchAll(db)
             }
@@ -29,7 +29,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     func getFamilies(peopleId:String) -> [String] {
         var result:[String] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql: "SELECT familyId FROM FamilyMember WHERE peopleId='\(peopleId)'")
                 for row in rows {
@@ -46,7 +46,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     
     func saveFamilyMember(peopleId:String, familyId:String) -> ExecuteState {
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 let rows = try Row.fetchAll(db, sql: "SELECT familyId,peopleId FROM FamilyMember WHERE familyId='\(familyId)' AND peopleId='\(peopleId)'")
                 if rows.count == 0 {
@@ -61,7 +61,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     
     func deleteFamilyMember(peopleId:String, familyId:String) -> ExecuteState {
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try db.execute(sql: "DELETE FROM FamilyMember WHERE familyId='\(familyId)' AND peopleId='\(peopleId)'")
             }
@@ -74,7 +74,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     func saveFamily(familyId:String?=nil, name:String, type:String) -> String? {
         var recordId:String? = ""
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 var needInsert = false
                 if let id = familyId {
@@ -102,7 +102,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     
     func deleteFamily(id:String) -> ExecuteState {
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try db.execute(sql: "DELETE FROM FamilyMember WHERE familyId='\(id)'")
                 try db.execute(sql: "DELETE FROM FamilyJoint WHERE smallFamilyId='\(id)'")
@@ -121,7 +121,7 @@ class FaceDaoGRDB : FaceDaoInterface {
         var value1 = ""
         var value2 = ""
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let rows1 = try Row.fetchAll(db, sql: "SELECT subject,object,callName FROM PeopleRelationship WHERE subject='\(primary)' AND object='\(secondary)'")
                 if rows1.count > 0, let callName = rows1[0]["callName"] {
@@ -142,7 +142,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     func getRelationships(peopleId:String) -> [[String:String]] {
         var result:[[String:String]] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql: "SELECT subject,object,callName FROM PeopleRelationship WHERE subject='\(peopleId)' OR object='\(peopleId)'")
                 for row in rows {
@@ -165,7 +165,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     
     func saveRelationship(primary:String, secondary:String, callName:String) -> ExecuteState {
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 let rows = try Row.fetchAll(db, sql: "SELECT subject,object,callName FROM PeopleRelationship WHERE subject='\(primary)' AND object='\(secondary)'")
                 if rows.count > 0 {
@@ -183,7 +183,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     func getRelationships() -> [PeopleRelationship] {
         var obj:[PeopleRelationship] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 obj = try PeopleRelationship.fetchAll(db)
             }
@@ -198,7 +198,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     func getPeople() -> [People] {
         var obj:[People] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 obj = try People.order(sql: "name asc").fetchAll(db)
             }
@@ -211,7 +211,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     func getPeople(except:String) -> [People] {
         var obj:[People] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 obj = try People.filter(sql: "id <> '\(except)'").order(sql: "name asc").fetchAll(db)
             }
@@ -224,7 +224,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     func getPerson(id: String) -> People? {
         var obj:People?
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 obj = try People.fetchOne(db, key: id)
             }
@@ -238,7 +238,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     func savePersonName(id:String, name:String, shortName:String) -> ExecuteState {
         var person = People.new(id: id, name: name, shortName: shortName)
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try person.save(db)
             }
@@ -256,7 +256,7 @@ class FaceDaoGRDB : FaceDaoInterface {
             ps.iconSubPath = subPath
             ps.iconFilename = filename
             do {
-                let db = ModelStoreGRDB.sharedDBPool()
+                let db = try SQLiteConnectionGRDB.default.sharedDBPool()
                 try db.write { db in
                     try ps.save(db)
                 }
@@ -272,7 +272,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     
     func deletePerson(id:String) -> ExecuteState {
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try db.execute(sql: "update ImageFace set peopleId = '', peopleAge = 0 where peopleId = ?", arguments: [id])
                 try db.execute(sql: "delete from People where id = ?", arguments: [id])
@@ -288,7 +288,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     func getFace(id: String) -> ImageFace? {
         var obj:ImageFace?
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 obj = try ImageFace.fetchOne(db, key: id)
             }
@@ -302,7 +302,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     func getFaceCrops(imageId: String) -> [ImageFace] {
         var result:[ImageFace] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try ImageFace.filter(sql: "imageId='\(imageId)'").order(sql: "cast(faceX as decimal)").fetchAll(db)
             }
@@ -315,7 +315,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     func findFaceCrop(imageId: String, x:String, y:String, width:String, height:String) -> ImageFace? {
         var obj:ImageFace?
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 obj = try ImageFace.filter(sql: "imageId='\(imageId)' and faceX='\(x)' and faceY='\(y)' and faceWidth='\(width)' and faceHeight='\(height)'").fetchOne(db)
             }
@@ -330,7 +330,7 @@ class FaceDaoGRDB : FaceDaoInterface {
         let condition = peopleId == "Unknown" || peopleId == "" ? "peopleId is null or peopleId='' or peopleId='Unknown'" : "peopleId='\(peopleId)'"
         var results:[String] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql: "SELECT DISTINCT imageYear FROM ImageFace WHERE \(condition)")
                 for row in rows {
@@ -349,7 +349,7 @@ class FaceDaoGRDB : FaceDaoInterface {
         let condition = peopleId == "Unknown" || peopleId == "" ? "(peopleId is null or peopleId='' or peopleId='Unknown')" : "peopleId='\(peopleId)'"
         var results:[String] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql: "SELECT DISTINCT imageMonth FROM ImageFace WHERE imageYear=\(imageYear) and \(condition)")
                 for row in rows {
@@ -395,7 +395,7 @@ class FaceDaoGRDB : FaceDaoInterface {
         }
         var result:[ImageFace] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try ImageFace.filter(sql: sql).fetchAll(db)
             }
@@ -408,7 +408,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     func saveFaceCrop(_ face:ImageFace) -> ExecuteState {
         var f = face
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try f.save(db)
             }
@@ -421,7 +421,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     func updateFaceIconFlag(id:String, peopleId:String) -> ExecuteState {
         if let face = self.getFace(id: id) {
             do {
-                let db = ModelStoreGRDB.sharedDBPool()
+                let db = try SQLiteConnectionGRDB.default.sharedDBPool()
                 try db.write { db in
                     try db.execute(sql: "update ImageFace set iconChoice = 0 where peopleId = ? and iconChoice = 1", arguments: [peopleId])
                     try db.execute(sql: "update ImageFace set iconChoice = 1 where peopleId = ? and id = ?", arguments: [peopleId, id])
@@ -437,7 +437,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     
     func removeFaceIcon(peopleId:String) -> ExecuteState {
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try db.execute(sql: "update ImageFace set iconChoice = 0 where peopleId = ? and iconChoice = 1", arguments: [peopleId])
                 try db.execute(sql: "update People set iconRepositoryPath = '', iconCropPath = '', iconSubPath = '', iconFilename = '' WHERE id = ?", arguments: [peopleId]);
@@ -450,7 +450,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     
     func updateFaceSampleFlag(id:String, flag:Bool) -> ExecuteState {
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try db.execute(sql: "update ImageFace set sampleChoice = \(flag ? 1 : 0), sampleChangeDate = ? where id = ?", arguments: [Date(), id])
             }
@@ -462,7 +462,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     
     func updateFaceTagFlag(id:String, flag:Bool) -> ExecuteState {
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try db.execute(sql: "update ImageFace set tagOnly = \(flag ? 1 : 0) where id = ?", arguments: [id])
             }
@@ -474,7 +474,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     
     func updateFaceLockFlag(id:String, flag:Bool) -> ExecuteState {
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try db.execute(sql: "update ImageFace set locked = \(flag ? 1 : 0) where id = ?", arguments: [id])
             }
@@ -486,7 +486,7 @@ class FaceDaoGRDB : FaceDaoInterface {
     
     func updateFaceCropPaths(old:String, new:String) -> ExecuteState {
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try db.execute(sql: "update ImageFace set cropPath = ? where cropPath = ?", arguments: [new, old])
             }

@@ -599,7 +599,7 @@ class CollectionViewItemsLoader: NSObject {
                 return
             }
             
-            let imageFile = ImageFile(url: url, indicator: self.indicator, sharedDB:ModelStoreGRDB.sharedDBPool())
+            let imageFile = ImageFile(url: url, indicator: self.indicator)
             
             print("\(Date()) Checking duplicate for a photo")
 
@@ -652,7 +652,7 @@ class CollectionViewItemsLoader: NSObject {
                 return
             }
             
-            let imageFile = ImageFile(photoFile: photoFile, indicator: self.indicator, sharedDB:ModelStoreGRDB.sharedDBPool())
+            let imageFile = ImageFile(photoFile: photoFile, indicator: self.indicator)
             
             if duplicates.paths.contains(photoFile.path) {
                 imageFile.hasDuplicates = true

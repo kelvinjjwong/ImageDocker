@@ -67,7 +67,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     
     func deleteContainer(path: String, deleteImage:Bool = false) -> ExecuteState {
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 // delete container-self
                 try db.execute(sql: "DELETE FROM ImageContainer WHERE path='\(path)'")
@@ -86,7 +86,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     
     func deleteRepository(repositoryRoot:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute(sql: "delete from ImageContainer where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
                 try db.execute(sql: "delete from Image where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
@@ -102,7 +102,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     func getContainer(path:String) -> ImageContainer? {
         var result:ImageContainer?
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try ImageContainer.filter(sql: "path=?", arguments: StatementArguments([path])).fetchOne(db)
             }
@@ -115,7 +115,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     func getRepository(repositoryPath:String) -> ImageContainer? {
         var result:ImageContainer? = nil
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try ImageContainer.filter(sql: "(repositoryPath = ? or repositoryPath = ?) and parentFolder=''", arguments: [repositoryPath.withoutStash(), repositoryPath.withStash()]).fetchOne(db)
             }
@@ -131,7 +131,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     func getRepositories(orderBy:String = "path") -> [ImageContainer] {
         var result:[ImageContainer] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try ImageContainer.filter(sql: "parentFolder=''").order(Column(orderBy).asc).fetchAll(db)
                 print(result.count)
@@ -146,7 +146,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     func getSubContainers(parent path:String) -> [ImageContainer] {
         var result:[ImageContainer] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try ImageContainer.filter(sql: "parentFolder=?", arguments: [path]).order(Column("path").asc).fetchAll(db)
                 print(result.count)
@@ -161,7 +161,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     func countSubContainers(parent path:String) -> Int {
         var result = 0
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try ImageContainer.filter(sql: "parentFolder=?", arguments: [path]).fetchCount(db)
             }
@@ -175,7 +175,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
         var containers:[ImageContainer] = []
         
         do {
-            let dbPool = ModelStoreGRDB.sharedDBPool()
+            let dbPool = try SQLiteConnectionGRDB.default.sharedDBPool()
             try dbPool.read { db in
                 containers = try ImageContainer.order(Column("path").asc).fetchAll(db)
             }
@@ -188,7 +188,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     func getContainers(rootPath:String) -> [ImageContainer] {
         var result:[ImageContainer] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try ImageContainer.filter(Column("path").like("\(rootPath.withStash())%")).fetchAll(db)
             }
@@ -201,7 +201,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     func getAllContainerPathsOfImages(rootPath:String? = nil) -> Set<String> {
         var result:Set<String> = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 if let root = rootPath {
                     let sql = "select distinct containerpath from image where repositoryPath = ? order by containerpath"
@@ -230,7 +230,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     func getAllContainerPaths(rootPath:String? = nil) -> Set<String> {
         var result:Set<String> = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 if let root = rootPath {
                     let cursor = try ImageContainer.filter(Column("path").like("\(root)%")).order(sql: "path").fetchCursor(db)
@@ -253,7 +253,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     func getAllContainerPaths(repositoryPath:String? = nil) -> Set<String> {
         var result:Set<String> = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 if let repoPath = repositoryPath {
                     let cursor = try ImageContainer.filter(sql: "repositoryPath = ?", arguments: [repoPath]).order(sql: "path").fetchCursor(db)
@@ -278,7 +278,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     func saveImageContainer(container:ImageContainer) -> ExecuteState{
         var container = container
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try container.save(db)
             }
@@ -292,7 +292,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     
     func updateImageContainerParentFolder(path:String, parentFolder:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute(sql: "update ImageContainer set parentFolder = ? where path = ?", arguments: [parentFolder, path])
             }
@@ -304,7 +304,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     
     func updateImageContainerHideByParent(path:String, hideByParent:Bool) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute(sql: "update ImageContainer set hideByParent = \(hideByParent ? 1 : 0) where path = ?", arguments: [path])
             }
@@ -316,7 +316,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     
     func updateImageContainerPaths(oldPath:String, newPath:String, repositoryPath:String, parentFolder:String, subPath:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 //print("UPDATE CONTAINER old path = \(oldPath) with new path = \(newPath)")
                 try db.execute(sql: "update ImageContainer set path = ?, repositoryPath = ?, parentFolder = ?, subPath = ? where path = ?", arguments: [newPath, repositoryPath, parentFolder, subPath, oldPath])
@@ -329,7 +329,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     
     func updateImageContainerRepositoryPaths(oldPath:String, newPath:String, repositoryPath:String) -> ExecuteState {
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute(sql: "update ImageContainer set path = ?, repositoryPath = ? where path = ?", arguments: [newPath, repositoryPath, oldPath])
             }
@@ -341,7 +341,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     
     func updateImageContainerToggleManyChildren(path:String, state:Bool) -> ExecuteState {
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute(sql: "update ImageContainer set manyChildren = \(state ? 1 : 0) where path = ?", arguments: [path])
                 try db.execute(sql: "update ImageContainer set hideByParent = \(state ? 1 : 0) where path like ?", arguments: ["\(path.withStash())%"])
@@ -356,7 +356,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     
     func hideContainer(path:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute(sql: "update ImageContainer set hiddenByContainer = 1 where path = ?", arguments: [path])
                 try db.execute(sql: "update ImageContainer set hiddenByContainer = 1 where path like ?", arguments: ["\(path.withStash())%"])
@@ -370,7 +370,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     
     func showContainer(path:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute(sql: "update ImageContainer set hiddenByContainer = 0 where path = ?", arguments: [path])
                 try db.execute(sql: "update Image set hiddenByContainer = 0 where path like ?", arguments:["\(path.withStash())%"])
@@ -383,7 +383,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     
     func hideRepository(repositoryRoot:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute(sql: "update ImageContainer set hiddenByRepository = 1 where path like ?", arguments: ["\(repositoryRoot.withStash())%"])
                 try db.execute(sql: "update ImageContainer set hiddenByRepository = 1 where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
@@ -398,7 +398,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     
     func showRepository(repositoryRoot:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute(sql: "update ImageContainer set hiddenByRepository = 0 where path like ?", arguments: ["\(repositoryRoot.withStash())%"])
                 try db.execute(sql: "update ImageContainer set hiddenByRepository = 0 where repositoryPath = ?", arguments: ["\(repositoryRoot.withStash())"])
@@ -422,7 +422,7 @@ order by name
 """
         var results:[String:String] = [:]
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql: sql)
                 for row in rows {

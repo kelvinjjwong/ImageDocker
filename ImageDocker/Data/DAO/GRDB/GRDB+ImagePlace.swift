@@ -16,7 +16,7 @@ class PlaceDaoGRDB : PlaceDaoInterface {
     func getOrCreatePlace(name:String, location:Location) -> ImagePlace{
         var place:ImagePlace?
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 place = try ImagePlace.fetchOne(db, key: name)
             }
@@ -50,7 +50,7 @@ class PlaceDaoGRDB : PlaceDaoInterface {
     func getPlace(name:String) -> ImagePlace? {
         var place:ImagePlace?
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 place = try ImagePlace.fetchOne(db, key: name)
             }
@@ -66,7 +66,7 @@ class PlaceDaoGRDB : PlaceDaoInterface {
         var places:[ImagePlace] = []
         
         do {
-            let dbPool = ModelStoreGRDB.sharedDBPool()
+            let dbPool = try SQLiteConnectionGRDB.default.sharedDBPool()
             try dbPool.read { db in
                 places = try ImagePlace.fetchAll(db)
             }
@@ -84,7 +84,7 @@ class PlaceDaoGRDB : PlaceDaoInterface {
             stmt = SQLHelper.likeArray(field: "name", array: keys)
         }
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 if stmt != "" {
                     result = try ImagePlace.filter(stmt).order(Column("name").asc).fetchAll(db)
@@ -104,7 +104,7 @@ class PlaceDaoGRDB : PlaceDaoInterface {
     func renamePlace(oldName:String, newName:String) -> ExecuteState{
         print("trying to rename place from \(oldName) to \(newName)")
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 if let _ = try ImagePlace.fetchOne(db, key: newName){ // already exists new name, just delete old one
                     //
@@ -125,7 +125,7 @@ class PlaceDaoGRDB : PlaceDaoInterface {
     
     func updatePlace(name:String, location:Location) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 if var place = try ImagePlace.fetchOne(db, key: name) {
                     place.country = location.country
@@ -168,7 +168,7 @@ class PlaceDaoGRDB : PlaceDaoInterface {
     
     func deletePlace(name:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 let _ = try ImagePlace.deleteOne(db, key: name)
             }

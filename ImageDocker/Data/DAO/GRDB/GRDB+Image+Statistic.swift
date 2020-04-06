@@ -19,7 +19,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
         
         var result = 0
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs) ?? []).fetchCount(db)
             }
@@ -35,7 +35,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
         
         var result = 0
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(sql:stmtHidden, arguments:StatementArguments(sqlArgs) ?? []).fetchCount(db)
             }
@@ -51,7 +51,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
         
         var result = 0
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs) ?? []).fetchCount(db)
             }
@@ -67,7 +67,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
         
         var result = 0
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(sql:stmtHidden, arguments:StatementArguments(sqlArgs) ?? []).fetchCount(db)
             }
@@ -83,7 +83,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
         var result = 0
         let root = repositoryRoot.withStash()
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(sql: "repositoryPath=? and hidden=0 and id not in (select distinct imageid from imageface)", arguments:[root]).fetchCount(db)
             }
@@ -97,7 +97,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
         var result = 0
         let root = repositoryRoot.withStash()
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(sql: "repositoryPath=? and hidden=0 and scanedFace<>1 and id not in (select distinct imageid from imageface)", arguments:[root]).fetchCount(db)
             }
@@ -113,7 +113,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
         var result = 0
         let root = repositoryRoot.withStash()
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let keyword = "\(root)%"
                 result = try Image.filter(sql: "id is null and path like ?", arguments:[keyword]).fetchCount(db)
@@ -131,7 +131,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
     func countPhotoFiles(rootPath:String) -> Int {
         var result:Int = 0
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(Column("path").like("\(rootPath)%")).fetchCount(db)
             }
@@ -146,7 +146,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
         var result = 0
         let root = repositoryRoot.withStash()
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let keyword = "\(root)%"
                 result = try Image.filter(sql: "repositoryPath='' and path like ?", arguments:[keyword]).fetchCount(db)
@@ -162,7 +162,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
         var result = 0
         let root = repositoryRoot.withStash()
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let keyword = "\(root)%"
                 result = try Image.filter(sql: "subPath='' and path like ?", arguments:[keyword]).fetchCount(db)
@@ -178,7 +178,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
         var result = 0
         let root = repositoryRoot.withStash()
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let keyword = "\(root)%"
                 result = try Image.filter(sql: "repositoryPath = ? and path not like ?", arguments: [root, keyword]).fetchCount(db)
@@ -194,7 +194,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
         var result = 0
         let root = repositoryRoot.withStash()
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let keyword = "\(root)%"
                 result = try Image.filter(sql: "path like ?", arguments: [keyword]).fetchCount(db)
@@ -210,7 +210,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
         var result = 0
         let root = repositoryRoot.withStash()
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let keyword = "\(root)%"
                 result = try Image.filter(sql: "path like ? and hidden = 1", arguments: [keyword]).fetchCount(db)
@@ -226,7 +226,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
         var result = 0
         let root = repositoryRoot.withStash()
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let keyword = "\(root)%"
                 result = try ImageContainer.filter(sql: "repositoryPath = '' and path like ?", arguments: [keyword]).fetchCount(db)
@@ -242,7 +242,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
         var result = 0
         let root = repositoryRoot.withStash()
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let keyword = "\(root)%"
                 result = try ImageContainer.filter(sql: "subPath = '' and path like ?", arguments: [keyword]).fetchCount(db)
@@ -259,7 +259,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
     func countAllPhotoFilesForExporting(after date:Date) -> Int {
         var result = 0
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try Image.filter(sql: "hidden != 1 AND photoTakenYear <> 0 AND photoTakenYear IS NOT NULL AND (updateDateTimeDate > ? OR updateExifDate > ? OR updateLocationDate > ? OR updateEventDate > ? OR exportTime is null)", arguments:StatementArguments([date, date, date, date])).fetchCount(db)
             }

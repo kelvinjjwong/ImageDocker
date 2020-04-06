@@ -17,7 +17,7 @@ class EventDaoGRDB : EventDaoInterface {
     func getOrCreateEvent(name:String) -> ImageEvent{
         var event:ImageEvent?
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 event = try ImageEvent.fetchOne(db, key: name)
             }
@@ -39,7 +39,7 @@ class EventDaoGRDB : EventDaoInterface {
         var events:[ImageEvent] = []
         
         do {
-            let dbPool = ModelStoreGRDB.sharedDBPool()
+            let dbPool = try SQLiteConnectionGRDB.default.sharedDBPool()
             try dbPool.read { db in
                 events = try ImageEvent.order([Column("country").asc, Column("province").asc, Column("city").asc, Column("name").asc]).fetchAll(db)
             }
@@ -57,7 +57,7 @@ class EventDaoGRDB : EventDaoInterface {
             stmt = SQLHelper.likeArray(field: "name", array: keys)
         }
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 if stmt != "" {
                     result = try ImageEvent.filter(stmt).order(Column("name").asc).fetchAll(db)
@@ -82,7 +82,7 @@ class EventDaoGRDB : EventDaoInterface {
         print(sql)
         var result:[Row] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try Row.fetchAll(db, sql: sql, arguments:StatementArguments(sqlArgs) ?? [])
             }
@@ -99,7 +99,7 @@ class EventDaoGRDB : EventDaoInterface {
     func renameEvent(oldName:String, newName:String) -> ExecuteState{
         print("RENAME EVENT \(oldName) to \(newName)")
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 if let _ = try ImageEvent.fetchOne(db, key: newName){
                     try ImageEvent.deleteOne(db, key: oldName)
@@ -121,7 +121,7 @@ class EventDaoGRDB : EventDaoInterface {
     
     func deleteEvent(name:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try ImageEvent.deleteOne(db, key: name)
                 try db.execute(sql: "UPDATE Image SET event='' WHERE event=?", arguments: StatementArguments([name]))

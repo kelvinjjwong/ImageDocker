@@ -119,7 +119,7 @@ extension ViewController {
         
         // init meta data
         //self.metaInfo = [MetaInfo]()
-        self.img = ImageFile(url: url, sharedDB:ModelStoreGRDB.sharedDBPool() )
+        self.img = ImageFile(url: url )
         
         guard img.isPhoto || img.isVideo else {return}
         self.previewImage(image: img)

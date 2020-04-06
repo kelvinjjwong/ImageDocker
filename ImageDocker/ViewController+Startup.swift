@@ -49,7 +49,7 @@ extension ViewController {
                 if self.splashController.decideQuit {
                     break
                 }
-                let (connected, error) = ModelStore.default.testDatabase()
+                let (connected, error) = ImageDB.current().checkDatabase()
                 if !connected {
                     
                     retry += 1
@@ -60,6 +60,7 @@ extension ViewController {
                     }
                     
                 }else{
+                    ImageDB.current().versionCheck()
                     self.splashController.hideRetry()
                 }
                 dbConnected = connected

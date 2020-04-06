@@ -145,8 +145,7 @@ class ImageFolderTreeScanner {
                                                                           facePath: container.facePath,
                                                                           cropPath: container.cropPath,
                                                                           countOfImages: Int(container.imageCount),
-                                                                          withContainer: true,
-                                                                          sharedDB: ModelStoreGRDB.sharedDBPool())
+                                                                          withContainer: true)
                                 urlFolders[container.path] = imageFolder
                                 if fast { // fast
                                     if container.parentFolder != "" {
@@ -316,7 +315,7 @@ class ImageFolderTreeScanner {
                     }
                 }
                 if !exclude {
-                    let _ = ImageFile(photoFile: photo, indicator: indicator, sharedDB: ModelStoreGRDB.sharedDBPool())
+                    let _ = ImageFile(photoFile: photo, indicator: indicator)
                 }else{
                     if indicator != nil {
                         DispatchQueue.main.async {
@@ -490,8 +489,8 @@ class ImageFolderTreeScanner {
                                                           facePath: "",
                                                           cropPath: "",
                                                           countOfImages: 0,
-                                                          manyChildren: devicePath.manyChildren,
-                                                          sharedDB: ModelStoreGRDB.sharedDBPool())
+                                                          manyChildren: devicePath.manyChildren
+                            )
                             
                             if let container = folder.containerFolder, container.parentFolder == "" {
                                 self.repositoryDao.updateImageContainerParentFolder(path: path, parentFolder: repo.path)
@@ -868,8 +867,8 @@ class ImageFolderTreeScanner {
             let image = ImageFile(url: URL(fileURLWithPath: url),
                                   repository: repo,
                                   indicator: indicator,
-                                  quickCreate: true,
-                                  sharedDB: ModelStoreGRDB.sharedDBPool())
+                                  quickCreate: true
+            )
             
             return image.save()
         }else{
@@ -891,8 +890,8 @@ class ImageFolderTreeScanner {
                                               storagePath: exist.storagePath,
                                               facePath: exist.facePath,
                                               cropPath: exist.cropPath,
-                                              countOfImages: Int(exist.imageCount),
-                                              sharedDB: ModelStoreGRDB.sharedDBPool())
+                                              countOfImages: Int(exist.imageCount)
+                )
                 imageFolders.append(imageFolder)
                 
                 let count = self.imageCountDao.countPhotoFiles(rootPath: "\(imageFolder.url.path)/")

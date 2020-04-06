@@ -31,7 +31,7 @@ class ExportDaoGRDB : ExportDaoInterface {
                                   ) -> ExportProfile{
         var profile:ExportProfile?
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 profile = try ExportProfile.fetchOne(db, key: name)
             }
@@ -76,7 +76,7 @@ class ExportDaoGRDB : ExportDaoInterface {
                              events: String,
                              repositoryPath: String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 if var profile = try ExportProfile.fetchOne(db, key: id) {
                     profile.name = name
@@ -100,7 +100,7 @@ class ExportDaoGRDB : ExportDaoInterface {
     
     func enableExportProfile(id:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 if var profile = try ExportProfile.fetchOne(db, key: id) {
                     profile.enabled = true
@@ -116,7 +116,7 @@ class ExportDaoGRDB : ExportDaoInterface {
     
     func disableExportProfile(id:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 if var profile = try ExportProfile.fetchOne(db, key: id) {
                     profile.enabled = false
@@ -132,7 +132,7 @@ class ExportDaoGRDB : ExportDaoInterface {
     
     func updateExportProfileLastExportTime(id:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 if var profile = try ExportProfile.fetchOne(db, key: id) {
                     profile.lastExportTime = Date()
@@ -151,7 +151,7 @@ class ExportDaoGRDB : ExportDaoInterface {
     func getExportProfile(id:String) -> ExportProfile? {
         var profile:ExportProfile?
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 profile = try ExportProfile.fetchOne(db, key: id)
             }
@@ -167,7 +167,7 @@ class ExportDaoGRDB : ExportDaoInterface {
         var profiles:[ExportProfile] = []
         
         do {
-            let dbPool = ModelStoreGRDB.sharedDBPool()
+            let dbPool = try SQLiteConnectionGRDB.default.sharedDBPool()
             try dbPool.read { db in
                 profiles = try ExportProfile.fetchAll(db)
             }
@@ -181,7 +181,7 @@ class ExportDaoGRDB : ExportDaoInterface {
     
     func deleteExportProfile(id:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 let _ = try ExportProfile.deleteOne(db, key: id)
             }

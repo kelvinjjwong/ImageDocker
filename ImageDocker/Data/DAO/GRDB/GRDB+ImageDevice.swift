@@ -15,7 +15,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
     func getDevices() -> [ImageDevice] {
         var result:[ImageDevice] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try ImageDevice.order(Column("name").asc).fetchAll(db)
             }
@@ -28,7 +28,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
     func getDevices(type:String) -> [ImageDevice] {
         var result:[ImageDevice] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try ImageDevice.filter(sql: "type='\(type)'").order(Column("name").asc).fetchAll(db)
             }
@@ -41,7 +41,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
     func getOrCreateDevice(device:PhoneDevice) -> ImageDevice{
         var dev:ImageDevice?
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 dev = try ImageDevice.fetchOne(db, key: device.deviceId)
             }
@@ -65,7 +65,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
     func getDevice(deviceId:String) -> ImageDevice? {
         var dev:ImageDevice?
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 dev = try ImageDevice.fetchOne(db, key: deviceId)
             }
@@ -78,7 +78,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
     func saveDevice(device:ImageDevice) -> ExecuteState{
         var dev = device
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try dev.save(db)
             }
@@ -94,7 +94,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
         var deviceFile:ImageDeviceFile?
         do {
             let key = "\(deviceId):\(file.path)"
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 deviceFile = try ImageDeviceFile.fetchOne(db, key: key)
             }
@@ -108,7 +108,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
         var deviceFile:ImageDeviceFile?
         do {
             let key = "\(deviceId):\(file.path)"
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 deviceFile = try ImageDeviceFile.fetchOne(db, key: key)
             }
@@ -134,7 +134,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
     func saveDeviceFile(file:ImageDeviceFile) -> ExecuteState{
         var f = file
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try f.save(db)
             }
@@ -146,7 +146,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
     
     func deleteDeviceFiles(deviceId:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try db.execute(sql: "delete from ImageDeviceFile where deviceId = ?", arguments: [deviceId])
             }
@@ -159,7 +159,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
     func getDeviceFiles(deviceId:String) -> [ImageDeviceFile] {
         var result:[ImageDeviceFile] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try ImageDeviceFile.filter(sql: "deviceId='\(deviceId)'").order(Column("importToPath").asc).fetchAll(db)
             }
@@ -172,7 +172,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
     func getDeviceFiles(deviceId:String, importToPath:String) -> [ImageDeviceFile] {
         var result:[ImageDeviceFile] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try ImageDeviceFile.filter(sql: "deviceId='\(deviceId)' and importToPath='\(importToPath)'").order(Column("fileId").asc).fetchAll(db)
             }
@@ -188,7 +188,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
         var devicePath:ImageDevicePath?
         do {
             let key = "\(deviceId):\(path)"
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 devicePath = try ImageDevicePath.fetchOne(db, key: key)
             }
@@ -202,7 +202,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
     func saveDevicePath(file:ImageDevicePath) -> ExecuteState {
         var f = file
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try f.save(db)
             }
@@ -214,7 +214,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
     
     func deleteDevicePath(deviceId:String, path:String) -> ExecuteState{
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
                 try db.execute(sql: "delete from ImageDevicePath where deviceId = ? and path = ?", arguments: [deviceId, path])
             }
@@ -227,7 +227,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
     func getDevicePaths(deviceId:String, deviceType:MobileType = .Android) -> [ImageDevicePath] {
         var result:[ImageDevicePath] = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try ImageDevicePath.filter(sql: "deviceId='\(deviceId)'").order(Column("path").asc).fetchAll(db)
             }
@@ -265,7 +265,7 @@ where p.excludeimported=1
 """
         var results:Set<String> = []
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql: sql)
                 for row in rows {
@@ -296,7 +296,7 @@ order by c.name
         var notScans:[(String,String,String?,String?)] = []
         var results:[String:String] = [:]
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 let rows = try Row.fetchAll(db, sql: sql)
                 for row in rows {

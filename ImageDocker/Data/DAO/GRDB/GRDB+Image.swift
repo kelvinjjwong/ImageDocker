@@ -17,7 +17,7 @@ class ImageRecordDaoGRDB : ImageRecordDaoInterface {
     func getOrCreatePhoto(filename:String, path:String, parentPath:String, repositoryPath:String? = nil) -> Image{
         var image:Image?
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 image = try Image.fetchOne(db, key: path)
             }
@@ -40,7 +40,7 @@ class ImageRecordDaoGRDB : ImageRecordDaoInterface {
     func getImage(path:String) -> Image?{
         var image:Image?
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 image = try Image.fetchOne(db, key: path)
             }
@@ -53,7 +53,7 @@ class ImageRecordDaoGRDB : ImageRecordDaoInterface {
     func getImage(id:String) -> Image? {
         var image:Image?
         do {
-            let db = ModelStoreGRDB.sharedDBPool()
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 image = try Image.filter(sql: "id='\(id)'").fetchOne(db)
             }
