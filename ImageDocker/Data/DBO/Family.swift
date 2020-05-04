@@ -9,42 +9,82 @@
 import Foundation
 import GRDB
 
-struct Family : Codable {
+public final class Family : Codable {
     //var id: Int64?      // <- the row id
-    var id: String
-    var name: String
+    var id: String = ""
+    var name: String = ""
     var category: String?
+    
+    public init() {
+        
+    }
 }
 
 extension Family: FetchableRecord, MutablePersistableRecord, TableRecord {
-    mutating func didInsert(with rowID: Int64, for column: String?) {
-        // Update id after insertion
-        //id = rowID
-    }
+    
 }
 
-struct FamilyMember : Codable {
+extension Family : PostgresRecord {
+    public func postgresTable() -> String {
+        return "Family"
+    }
+    
+    public func primaryKeys() -> [String] {
+        return ["id"]
+    }
+    
+    
+}
+
+public final class FamilyMember : Codable {
     //var id: Int64?      // <- the row id
-    var familyId: String
-    var peopleId: String
+    var familyId: String = ""
+    var peopleId: String = ""
+    
+    public init() {
+        
+    }
 }
 
 extension FamilyMember: FetchableRecord, MutablePersistableRecord, TableRecord {
-    mutating func didInsert(with rowID: Int64, for column: String?) {
-        // Update id after insertion
-        //id = rowID
-    }
+
 }
 
-struct FamilyJoint : Codable {
+extension FamilyMember : PostgresRecord {
+    public func postgresTable() -> String {
+        return "FamilyMember"
+    }
+    
+    public func primaryKeys() -> [String] {
+        return ["familyId", "peopleId"]
+    }
+    
+    
+}
+
+public final class FamilyJoint : Codable {
     //var id: Int64?      // <- the row id
-    var bigFamilyId: String
-    var smallFamilyId: String
+    var bigFamilyId: String = ""
+    var smallFamilyId: String = ""
+    
+    public init() {
+        
+    }
 }
 
 extension FamilyJoint: FetchableRecord, MutablePersistableRecord, TableRecord {
-    mutating func didInsert(with rowID: Int64, for column: String?) {
-        // Update id after insertion
-        //id = rowID
+
+}
+
+
+extension FamilyJoint : PostgresRecord {
+    public func postgresTable() -> String {
+        return "FamilyJoint"
     }
+    
+    public func primaryKeys() -> [String] {
+        return ["bigFamilyId", "smallFamilyid"]
+    }
+    
+    
 }

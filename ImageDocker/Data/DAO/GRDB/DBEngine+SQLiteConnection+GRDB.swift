@@ -12,6 +12,7 @@ import GRDB
 public final class SQLiteConnectionGRDB : ImageDBInterface {
     
     
+    
     static let `default` = SQLiteConnectionGRDB()
     
     internal var _sharedDBPool:DatabaseWriter?
@@ -31,6 +32,17 @@ public final class SQLiteConnectionGRDB : ImageDBInterface {
         }catch{
             return (false, error)
         }
+        
+    }
+    
+    func execute(sql: String) throws {
+        let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+        let _ = try db.write { db in
+            try db.execute(sql: sql)
+        }
+    }
+    
+    func execute(definition: DatabaseTableDefinition) throws {
         
     }
 }

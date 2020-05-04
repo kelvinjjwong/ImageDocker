@@ -245,7 +245,38 @@
 		8EF4CE6121E56CF700C53AFF /* ViewController+Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE6021E56CF700C53AFF /* ViewController+Notification.swift */; };
 		8EF4CE6421E56DC100C53AFF /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE6221E56DC100C53AFF /* NotificationViewController.swift */; };
 		8EF4CE6521E56DC100C53AFF /* NotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EF4CE6321E56DC100C53AFF /* NotificationViewController.xib */; };
+		8EF4E1EC2453C05800999DD1 /* EncodableDBRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4E1D42453C05800999DD1 /* EncodableDBRecord.swift */; };
+		8EF4E1ED2453C05800999DD1 /* PostgresDBValueContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4E1D52453C05800999DD1 /* PostgresDBValueContainer.swift */; };
+		8EF4E1EE2453C05800999DD1 /* OrderedDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4E1D62453C05800999DD1 /* OrderedDictionary.swift */; };
+		8EF4E1EF2453C05800999DD1 /* PostgreSQLStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4E1D82453C05800999DD1 /* PostgreSQLStatement.swift */; };
+		8EF4E1F02453C05800999DD1 /* PostgresSchemaInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4E1DA2453C05800999DD1 /* PostgresSchemaInfo.swift */; };
+		8EF4E1F12453C05800999DD1 /* PostgresRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4E1DC2453C05800999DD1 /* PostgresRow.swift */; };
+		8EF4E1F22453C05800999DD1 /* PostgresDBRowValueConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4E1DD2453C05800999DD1 /* PostgresDBRowValueConversion.swift */; };
+		8EF4E1F32453C05800999DD1 /* PostgresRowDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4E1DE2453C05800999DD1 /* PostgresRowDecoder.swift */; };
+		8EF4E1F42453C05800999DD1 /* PostgresDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4E1DF2453C05800999DD1 /* PostgresDB.swift */; };
+		8EF4E1F52453C05800999DD1 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4E1E12453C05800999DD1 /* Error.swift */; };
+		8EF4E1F62453C05800999DD1 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4E1E22453C05800999DD1 /* String.swift */; };
+		8EF4E1F72453C05800999DD1 /* SchemaVersionMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4E1E42453C05800999DD1 /* SchemaVersionMigration.swift */; };
+		8EF4E1F82453C05800999DD1 /* DatabaseDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4E1E52453C05800999DD1 /* DatabaseDefinition.swift */; };
+		8EF4E1F92453C05800999DD1 /* Stub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4E1E62453C05800999DD1 /* Stub.swift */; };
+		8EF4E1FA2453C05800999DD1 /* DatabaseColumnMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4E1E72453C05800999DD1 /* DatabaseColumnMapping.swift */; };
+		8EF4E1FB2453C05800999DD1 /* PostgresSchemaGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4E1EA2453C05800999DD1 /* PostgresSchemaGenerator.swift */; };
+		8EF4E1FC2453C05800999DD1 /* CRUDStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4E1EB2453C05800999DD1 /* CRUDStatement.swift */; };
 		8EF500CD209A804100C9805F /* ImageFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF500CC209A804100C9805F /* ImageFolder.swift */; };
+		8EF92DF024558BB500B55046 /* PostgresRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF92DEF24558BB500B55046 /* PostgresRecord.swift */; };
+		8EF92DF42460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF92DF32460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift */; };
+		8EFA02DB243B3E1A00D7C355 /* PostgresClientKit+Image+Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA02DA243B3E1A00D7C355 /* PostgresClientKit+Image+Record.swift */; };
+		8EFA02DD243B3E2D00D7C355 /* PostgresClientKit+Image+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA02DC243B3E2D00D7C355 /* PostgresClientKit+Image+Search.swift */; };
+		8EFA02E1243B3E5200D7C355 /* PostgresClientKit+Image+Statistic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA02E0243B3E5200D7C355 /* PostgresClientKit+Image+Statistic.swift */; };
+		8EFA02E3243B3E6400D7C355 /* PostgresClientKit+Image+Duplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA02E2243B3E6400D7C355 /* PostgresClientKit+Image+Duplicate.swift */; };
+		8EFA02E7243B3E8700D7C355 /* PostgresClientKit+ImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA02E6243B3E8700D7C355 /* PostgresClientKit+ImageContainer.swift */; };
+		8EFA02E9243B3E9B00D7C355 /* PostgresClientKit+ImagePlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA02E8243B3E9B00D7C355 /* PostgresClientKit+ImagePlace.swift */; };
+		8EFA02EB243B3EA900D7C355 /* PostgresClientKit+ImageEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA02EA243B3EA900D7C355 /* PostgresClientKit+ImageEvent.swift */; };
+		8EFA02ED243B3EB800D7C355 /* PostgresClientKit+ImageDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA02EC243B3EB800D7C355 /* PostgresClientKit+ImageDevice.swift */; };
+		8EFA02EF243B3ECE00D7C355 /* PostgresClientKit+FaceFamily.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA02EE243B3ECE00D7C355 /* PostgresClientKit+FaceFamily.swift */; };
+		8EFA02F1243B3EDF00D7C355 /* PostgresClientKit+ExportProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA02F0243B3EDF00D7C355 /* PostgresClientKit+ExportProfile.swift */; };
+		8EFA02F3243B3EF500D7C355 /* PostgresClientKit+VersionMigrate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA02F2243B3EF500D7C355 /* PostgresClientKit+VersionMigrate.swift */; };
+		8EFA02F5243B3F0C00D7C355 /* DBEngine+PostgresConnection+PostgresClientKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA02F4243B3F0C00D7C355 /* DBEngine+PostgresConnection+PostgresClientKit.swift */; };
 		8EFA7CF9211A36F700419777 /* DeviceCopyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA7CF8211A36F700419777 /* DeviceCopyViewController.swift */; };
 		8EFA7CFB211D713700419777 /* ImageDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA7CFA211D713700419777 /* ImageDevice.swift */; };
 		8EFA7CFD211D72B300419777 /* ImageDeviceFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA7CFC211D72B300419777 /* ImageDeviceFile.swift */; };
@@ -522,7 +553,38 @@
 		8EF4CE6021E56CF700C53AFF /* ViewController+Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Notification.swift"; sourceTree = "<group>"; };
 		8EF4CE6221E56DC100C53AFF /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		8EF4CE6321E56DC100C53AFF /* NotificationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotificationViewController.xib; sourceTree = "<group>"; };
+		8EF4E1D42453C05800999DD1 /* EncodableDBRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncodableDBRecord.swift; sourceTree = "<group>"; };
+		8EF4E1D52453C05800999DD1 /* PostgresDBValueContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostgresDBValueContainer.swift; sourceTree = "<group>"; };
+		8EF4E1D62453C05800999DD1 /* OrderedDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderedDictionary.swift; sourceTree = "<group>"; };
+		8EF4E1D82453C05800999DD1 /* PostgreSQLStatement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostgreSQLStatement.swift; sourceTree = "<group>"; };
+		8EF4E1DA2453C05800999DD1 /* PostgresSchemaInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostgresSchemaInfo.swift; sourceTree = "<group>"; };
+		8EF4E1DC2453C05800999DD1 /* PostgresRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostgresRow.swift; sourceTree = "<group>"; };
+		8EF4E1DD2453C05800999DD1 /* PostgresDBRowValueConversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostgresDBRowValueConversion.swift; sourceTree = "<group>"; };
+		8EF4E1DE2453C05800999DD1 /* PostgresRowDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostgresRowDecoder.swift; sourceTree = "<group>"; };
+		8EF4E1DF2453C05800999DD1 /* PostgresDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostgresDB.swift; sourceTree = "<group>"; };
+		8EF4E1E12453C05800999DD1 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		8EF4E1E22453C05800999DD1 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		8EF4E1E42453C05800999DD1 /* SchemaVersionMigration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaVersionMigration.swift; sourceTree = "<group>"; };
+		8EF4E1E52453C05800999DD1 /* DatabaseDefinition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseDefinition.swift; sourceTree = "<group>"; };
+		8EF4E1E62453C05800999DD1 /* Stub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stub.swift; sourceTree = "<group>"; };
+		8EF4E1E72453C05800999DD1 /* DatabaseColumnMapping.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseColumnMapping.swift; sourceTree = "<group>"; };
+		8EF4E1EA2453C05800999DD1 /* PostgresSchemaGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostgresSchemaGenerator.swift; sourceTree = "<group>"; };
+		8EF4E1EB2453C05800999DD1 /* CRUDStatement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRUDStatement.swift; sourceTree = "<group>"; };
 		8EF500CC209A804100C9805F /* ImageFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFolder.swift; sourceTree = "<group>"; };
+		8EF92DEF24558BB500B55046 /* PostgresRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostgresRecord.swift; sourceTree = "<group>"; };
+		8EF92DF32460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageSQLHelper+PostgresClientKit.swift"; sourceTree = "<group>"; };
+		8EFA02DA243B3E1A00D7C355 /* PostgresClientKit+Image+Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostgresClientKit+Image+Record.swift"; sourceTree = "<group>"; };
+		8EFA02DC243B3E2D00D7C355 /* PostgresClientKit+Image+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostgresClientKit+Image+Search.swift"; sourceTree = "<group>"; };
+		8EFA02E0243B3E5200D7C355 /* PostgresClientKit+Image+Statistic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostgresClientKit+Image+Statistic.swift"; sourceTree = "<group>"; };
+		8EFA02E2243B3E6400D7C355 /* PostgresClientKit+Image+Duplicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostgresClientKit+Image+Duplicate.swift"; sourceTree = "<group>"; };
+		8EFA02E6243B3E8700D7C355 /* PostgresClientKit+ImageContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostgresClientKit+ImageContainer.swift"; sourceTree = "<group>"; };
+		8EFA02E8243B3E9B00D7C355 /* PostgresClientKit+ImagePlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostgresClientKit+ImagePlace.swift"; sourceTree = "<group>"; };
+		8EFA02EA243B3EA900D7C355 /* PostgresClientKit+ImageEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostgresClientKit+ImageEvent.swift"; sourceTree = "<group>"; };
+		8EFA02EC243B3EB800D7C355 /* PostgresClientKit+ImageDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostgresClientKit+ImageDevice.swift"; sourceTree = "<group>"; };
+		8EFA02EE243B3ECE00D7C355 /* PostgresClientKit+FaceFamily.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostgresClientKit+FaceFamily.swift"; sourceTree = "<group>"; };
+		8EFA02F0243B3EDF00D7C355 /* PostgresClientKit+ExportProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostgresClientKit+ExportProfile.swift"; sourceTree = "<group>"; };
+		8EFA02F2243B3EF500D7C355 /* PostgresClientKit+VersionMigrate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostgresClientKit+VersionMigrate.swift"; sourceTree = "<group>"; };
+		8EFA02F4243B3F0C00D7C355 /* DBEngine+PostgresConnection+PostgresClientKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DBEngine+PostgresConnection+PostgresClientKit.swift"; sourceTree = "<group>"; };
 		8EFA7CF8211A36F700419777 /* DeviceCopyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCopyViewController.swift; sourceTree = "<group>"; };
 		8EFA7CFA211D713700419777 /* ImageDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDevice.swift; sourceTree = "<group>"; };
 		8EFA7CFC211D72B300419777 /* ImageDeviceFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDeviceFile.swift; sourceTree = "<group>"; };
@@ -573,6 +635,14 @@
 				E1C548BE0FF4031E723C91D3 /* Pods-ImageDocker.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		8E03FD4E2455892F0092C5C7 /* CommonEntity */ = {
+			isa = PBXGroup;
+			children = (
+				8EF4E1DA2453C05800999DD1 /* PostgresSchemaInfo.swift */,
+			);
+			path = CommonEntity;
 			sourceTree = "<group>";
 		};
 		8E0AFA30208BDEA000CE8B68 = {
@@ -757,6 +827,8 @@
 		8E4DECE123B3876700F5538C /* DAO */ = {
 			isa = PBXGroup;
 			children = (
+				8EF4E1D12453C05800999DD1 /* CodableDBDialect */,
+				8EF4E1E32453C05800999DD1 /* VersionControl */,
 				8EF3FEE82423506000AF83BB /* DBEngine */,
 				8E741942242251BA002BAAAE /* Interface */,
 				8E4DECE223B3881A00F5538C /* ImageDao.swift */,
@@ -767,6 +839,7 @@
 				8EBA75A023B5D06900548376 /* FaceDao.swift */,
 				8EBA75A223B5D3B900548376 /* ExportDao.swift */,
 				8EF3FEE624231C0400AF83BB /* ImageSQLHelper.swift */,
+				8EF92DF32460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift */,
 				8E97ECFA243B2C980013EFD3 /* PostgresClientKit */,
 				8E3EC3BA214DC120004B6125 /* GRDB */,
 			);
@@ -848,6 +921,18 @@
 		8E97ECFA243B2C980013EFD3 /* PostgresClientKit */ = {
 			isa = PBXGroup;
 			children = (
+				8EFA02F4243B3F0C00D7C355 /* DBEngine+PostgresConnection+PostgresClientKit.swift */,
+				8EFA02DA243B3E1A00D7C355 /* PostgresClientKit+Image+Record.swift */,
+				8EFA02DC243B3E2D00D7C355 /* PostgresClientKit+Image+Search.swift */,
+				8EFA02E0243B3E5200D7C355 /* PostgresClientKit+Image+Statistic.swift */,
+				8EFA02E2243B3E6400D7C355 /* PostgresClientKit+Image+Duplicate.swift */,
+				8EFA02E6243B3E8700D7C355 /* PostgresClientKit+ImageContainer.swift */,
+				8EFA02E8243B3E9B00D7C355 /* PostgresClientKit+ImagePlace.swift */,
+				8EFA02EA243B3EA900D7C355 /* PostgresClientKit+ImageEvent.swift */,
+				8EFA02EC243B3EB800D7C355 /* PostgresClientKit+ImageDevice.swift */,
+				8EFA02EE243B3ECE00D7C355 /* PostgresClientKit+FaceFamily.swift */,
+				8EFA02F0243B3EDF00D7C355 /* PostgresClientKit+ExportProfile.swift */,
+				8EFA02F2243B3EF500D7C355 /* PostgresClientKit+VersionMigrate.swift */,
 			);
 			path = PostgresClientKit;
 			sourceTree = "<group>";
@@ -1256,6 +1341,78 @@
 			path = DBEngine;
 			sourceTree = "<group>";
 		};
+		8EF4E1D12453C05800999DD1 /* CodableDBDialect */ = {
+			isa = PBXGroup;
+			children = (
+				8EF4E1E02453C05800999DD1 /* Utilities */,
+				8EF4E1D22453C05800999DD1 /* PostgresDB */,
+			);
+			path = CodableDBDialect;
+			sourceTree = "<group>";
+		};
+		8EF4E1D22453C05800999DD1 /* PostgresDB */ = {
+			isa = PBXGroup;
+			children = (
+				8EF4E1DF2453C05800999DD1 /* PostgresDB.swift */,
+				8EF92DEF24558BB500B55046 /* PostgresRecord.swift */,
+				8EF4E1E12453C05800999DD1 /* Error.swift */,
+				8E03FD4E2455892F0092C5C7 /* CommonEntity */,
+				8EF4E1D32453C05800999DD1 /* RecordWriter */,
+				8EF4E1D72453C05800999DD1 /* SQLStatement */,
+				8EF4E1DB2453C05800999DD1 /* RecordReader */,
+			);
+			path = PostgresDB;
+			sourceTree = "<group>";
+		};
+		8EF4E1D32453C05800999DD1 /* RecordWriter */ = {
+			isa = PBXGroup;
+			children = (
+				8EF4E1D42453C05800999DD1 /* EncodableDBRecord.swift */,
+				8EF4E1D52453C05800999DD1 /* PostgresDBValueContainer.swift */,
+			);
+			path = RecordWriter;
+			sourceTree = "<group>";
+		};
+		8EF4E1D72453C05800999DD1 /* SQLStatement */ = {
+			isa = PBXGroup;
+			children = (
+				8EF4E1EA2453C05800999DD1 /* PostgresSchemaGenerator.swift */,
+				8EF4E1D82453C05800999DD1 /* PostgreSQLStatement.swift */,
+				8EF4E1EB2453C05800999DD1 /* CRUDStatement.swift */,
+			);
+			path = SQLStatement;
+			sourceTree = "<group>";
+		};
+		8EF4E1DB2453C05800999DD1 /* RecordReader */ = {
+			isa = PBXGroup;
+			children = (
+				8EF4E1DC2453C05800999DD1 /* PostgresRow.swift */,
+				8EF4E1DD2453C05800999DD1 /* PostgresDBRowValueConversion.swift */,
+				8EF4E1DE2453C05800999DD1 /* PostgresRowDecoder.swift */,
+			);
+			path = RecordReader;
+			sourceTree = "<group>";
+		};
+		8EF4E1E02453C05800999DD1 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				8EF4E1D62453C05800999DD1 /* OrderedDictionary.swift */,
+				8EF4E1E22453C05800999DD1 /* String.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		8EF4E1E32453C05800999DD1 /* VersionControl */ = {
+			isa = PBXGroup;
+			children = (
+				8EF4E1E42453C05800999DD1 /* SchemaVersionMigration.swift */,
+				8EF4E1E52453C05800999DD1 /* DatabaseDefinition.swift */,
+				8EF4E1E62453C05800999DD1 /* Stub.swift */,
+				8EF4E1E72453C05800999DD1 /* DatabaseColumnMapping.swift */,
+			);
+			path = VersionControl;
+			sourceTree = "<group>";
+		};
 		8EFA7D01211F93C000419777 /* DTO */ = {
 			isa = PBXGroup;
 			children = (
@@ -1540,6 +1697,7 @@
 				8EBA759F23B5CE7300548376 /* DeviceDao.swift in Sources */,
 				8E4DECEB23B38A7B00F5538C /* ImageContainer.swift in Sources */,
 				8EBA75A323B5D3B900548376 /* ExportDao.swift in Sources */,
+				8EF92DF024558BB500B55046 /* PostgresRecord.swift in Sources */,
 				8E3EC3BD214DE623004B6125 /* DateTimeViewController.swift in Sources */,
 				8EBA9DE921766EAB00DACAAD /* TheaterCollectionViewController.swift in Sources */,
 				8EEF07222260D0E1000520B7 /* CollectionPaginationViewController.swift in Sources */,
@@ -1549,6 +1707,7 @@
 				8EFA7CFD211D72B300419777 /* ImageDeviceFile.swift in Sources */,
 				8EBA75A123B5D06900548376 /* FaceDao.swift in Sources */,
 				8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */,
+				8EF4E1F42453C05800999DD1 /* PostgresDB.swift in Sources */,
 				8E15E73E23AC74DC0094240A /* TreeViewController.swift in Sources */,
 				8EFA7CFB211D713700419777 /* ImageDevice.swift in Sources */,
 				8E36B06C21792EDC00646EA5 /* CustomRowView.swift in Sources */,
@@ -1558,39 +1717,49 @@
 				8EF4CE5521D77BAB00C53AFF /* People.swift in Sources */,
 				8E8D471222279AA80091E9C3 /* FaceCollectionViewItemsLoader.swift in Sources */,
 				8E15E73C23AC74DC0094240A /* TreeDataSource.swift in Sources */,
+				8EFA02E1243B3E5200D7C355 /* PostgresClientKit+Image+Statistic.swift in Sources */,
 				8ECA1FFB23E5751300F56895 /* LibraryTree+ExtendView.swift in Sources */,
 				8E95739A20EBEBD7003BD651 /* FilterViewController.swift in Sources */,
 				8EF3FEE724231C0400AF83BB /* ImageSQLHelper.swift in Sources */,
 				8E8D47292236F63C0091E9C3 /* TablePopover.swift in Sources */,
+				8EFA02DB243B3E1A00D7C355 /* PostgresClientKit+Image+Record.swift in Sources */,
 				8E0EAE9A209D2623008C377F /* ImageFolderTreeScanner.swift in Sources */,
 				8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */,
 				8EAD03B523372C0100AAC7C6 /* GRDB+ImageEvent.swift in Sources */,
 				8E3FA9252355047400B677A3 /* MemoriesCollectionViewController.swift in Sources */,
 				8E74194E24225719002BAAAE /* FaceDaoInterface.swift in Sources */,
+				8EF4E1F12453C05800999DD1 /* PostgresRow.swift in Sources */,
 				8E4C38D9211829410089502C /* DeviceTreeController.swift in Sources */,
 				8EB2719B2340F907003BF3AF /* ViewController+CollectionArea+CombineDuplicated.swift in Sources */,
 				8EB271832340E98B003BF3AF /* ViewController+SelectionArea+CombineDuplicated.swift in Sources */,
+				8EFA02E3243B3E6400D7C355 /* PostgresClientKit+Image+Duplicate.swift in Sources */,
 				8E85B7CF20B8786C005A9845 /* Accumulator.swift in Sources */,
+				8EFA02ED243B3EB800D7C355 /* PostgresClientKit+ImageDevice.swift in Sources */,
 				8EB271792340D8A3003BF3AF /* ViewController+PreviewArea.swift in Sources */,
 				8EB2717B2340D8BC003BF3AF /* ViewController+SelectionArea.swift in Sources */,
 				8EB986B020B225230075B081 /* DetailViewDelegate.swift in Sources */,
 				8E7F71002091F14300410C45 /* BaiduLocation.swift in Sources */,
 				8E98B8F020D0EE3300771280 /* PlaceListViewController.swift in Sources */,
 				8ECA1FF923E5638800F56895 /* DeviceTree+ExtendView.swift in Sources */,
+				8EF4E1F32453C05800999DD1 /* PostgresRowDecoder.swift in Sources */,
 				8EF125A622140C0F00C423CA /* ImageDevicePath.swift in Sources */,
 				8EB271812340E578003BF3AF /* ViewController+Window.swift in Sources */,
 				8EF4CE5721D77BD600C53AFF /* Family.swift in Sources */,
 				8EE382F823E02585003B7153 /* Colors.swift in Sources */,
 				8E015123208F7D34009C2549 /* StackedVideoViewController.swift in Sources */,
 				8EB986BA20B30C920075B081 /* ImageFile.swift in Sources */,
+				8EFA02F5243B3F0C00D7C355 /* DBEngine+PostgresConnection+PostgresClientKit.swift in Sources */,
+				8EFA02E9243B3E9B00D7C355 /* PostgresClientKit+ImagePlace.swift in Sources */,
 				8EEB88842090B44B00CDEC81 /* ImageDropView.swift in Sources */,
 				8EBA9DE7217477D900DACAAD /* UIHelper.swift in Sources */,
 				8EC82EA42121C10A00FC0899 /* LocalDirectory.swift in Sources */,
+				8EF4E1F52453C05800999DD1 /* Error.swift in Sources */,
 				8EB271AC2346BE8A003BF3AF /* TaskProgressViewController.swift in Sources */,
 				8EB271752340D7B0003BF3AF /* ViewController+Menu+Face.swift in Sources */,
 				8EB271872340EA34003BF3AF /* ViewController+SelectionArea+ReplaceDate.swift in Sources */,
 				8E15E73823AC74DC0094240A /* NSView+BorderBounder.swift in Sources */,
 				8EA1A063208DFD92000C3B97 /* MetaInfo.swift in Sources */,
+				8EF4E1FB2453C05800999DD1 /* PostgresSchemaGenerator.swift in Sources */,
 				8EBA9DE52173CC7F00DACAAD /* TheaterQuickLookItem.swift in Sources */,
 				8EB27161233844C9003BF3AF /* ImageFile+Location.swift in Sources */,
 				8E15E73523AC74DC0094240A /* StackItem.swift in Sources */,
@@ -1604,29 +1773,36 @@
 				8ECA1FF723E5252B00F56895 /* SampleTreeDataSource.swift in Sources */,
 				8EB27159233842E4003BF3AF /* ImageFile+Preview.swift in Sources */,
 				8E4E5B7F221F3D1800FE4B68 /* PeopleViewController.swift in Sources */,
+				8EF4E1ED2453C05800999DD1 /* PostgresDBValueContainer.swift in Sources */,
 				8EB2719D23412FD5003BF3AF /* ViewController+Menu+Scan.swift in Sources */,
 				8E36B067217920B400646EA5 /* MonthListController.swift in Sources */,
+				8EFA02F1243B3EDF00D7C355 /* PostgresClientKit+ExportProfile.swift in Sources */,
 				8E98B8F320D5C90600771280 /* WindowController.swift in Sources */,
 				8EBA692E2090DB4B00221131 /* VideoDropView.swift in Sources */,
 				8E8D47222233DCD30091E9C3 /* DictionaryTableViewController.swift in Sources */,
 				8EAD03BB23372CF100AAC7C6 /* GRDB+VersionMigrate.swift in Sources */,
+				8EF4E1F02453C05800999DD1 /* PostgresSchemaInfo.swift in Sources */,
 				8ECA200623E5B09200F56895 /* PlacesTree+CollectionView.swift in Sources */,
 				8EFA7CF9211A36F700419777 /* DeviceCopyViewController.swift in Sources */,
 				8EB271552337B8BC003BF3AF /* GRDB+Image+Update.swift in Sources */,
 				8EBA9DE32173C8F000DACAAD /* TheaterViewController.swift in Sources */,
 				8E4C38CD2117B5340089502C /* Phone.swift in Sources */,
 				8E15E74123AC7B310094240A /* Icons.swift in Sources */,
+				8EF4E1F22453C05800999DD1 /* PostgresDBRowValueConversion.swift in Sources */,
 				8EB27169233BB408003BF3AF /* RepositoryDetailViewController.swift in Sources */,
 				8E74195024225728002BAAAE /* ExportDaoInterface.swift in Sources */,
 				8EAD03B323372BC800AAC7C6 /* GRDB+ImagePlace.swift in Sources */,
 				8EB271852340E9C6003BF3AF /* ViewController+SelectionArea+ReplacePlace.swift in Sources */,
 				8EFE763C2094AF6B00B7CFCA /* TreeController.swift in Sources */,
+				8EF4E1EC2453C05800999DD1 /* EncodableDBRecord.swift in Sources */,
 				8E3EC3B5214DB1B8004B6125 /* LunarCalendarView.swift in Sources */,
 				8EBC0182236B072F00FB6E2F /* TwoColumnTableViewController.swift in Sources */,
 				8ECA1FFD23E5784A00F56895 /* LibraryTree+CollectionView.swift in Sources */,
+				8EF4E1EF2453C05800999DD1 /* PostgreSQLStatement.swift in Sources */,
 				8EC20B302281B4C0000F4819 /* TaskHelper.swift in Sources */,
 				8E31C37F2120A22600002546 /* DeviceShell.swift in Sources */,
 				8EC82EAE21283ED000FC0899 /* DirectoryViewDelegate.swift in Sources */,
+				8EF4E1F82453C05800999DD1 /* DatabaseDefinition.swift in Sources */,
 				8EF4CE6421E56DC100C53AFF /* NotificationViewController.swift in Sources */,
 				8EB986BF20B30C920075B081 /* HeaderView.swift in Sources */,
 				8EF125AC2216ECC500C423CA /* ContainerViewController.swift in Sources */,
@@ -1637,12 +1813,15 @@
 				8EB271972340F1FF003BF3AF /* ViewController+TaskProgress.swift in Sources */,
 				8E7B98DF2147E7880019ED87 /* FileSystemHandler.swift in Sources */,
 				8E4E5B78221985A400FE4B68 /* ImageFace.swift in Sources */,
+				8EF4E1F92453C05800999DD1 /* Stub.swift in Sources */,
 				8E8D471022213A330091E9C3 /* PeopleFace.swift in Sources */,
+				8EF4E1F72453C05800999DD1 /* SchemaVersionMigration.swift in Sources */,
 				8E4DECE923B38A7B00F5538C /* ImageEvent.swift in Sources */,
 				8E73E382223E494C00C14A90 /* ExecutionEnvironment.swift in Sources */,
 				8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */,
 				8E741946242256E2002BAAAE /* RepositoryDaoInterface.swift in Sources */,
 				8EB271532337B768003BF3AF /* GRDB+Image+Statistic.swift in Sources */,
+				8EF92DF42460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift in Sources */,
 				8E98B8F720D6044900771280 /* Event.swift in Sources */,
 				8E3FA9202353310600B677A3 /* MemoryCollectionViewItem.swift in Sources */,
 				8E9D803D2348AA550062692A /* ExportProfile.swift in Sources */,
@@ -1656,7 +1835,9 @@
 				8EE1AB3D20D05E49001C75B0 /* EventListViewController.swift in Sources */,
 				8EB986B920B30C920075B081 /* CollectionViewItem.swift in Sources */,
 				8EBA759B23B5CC5300548376 /* PlaceDao.swift in Sources */,
+				8EFA02DD243B3E2D00D7C355 /* PostgresClientKit+Image+Search.swift in Sources */,
 				8EAD03BD23372D5E00AAC7C6 /* GRDB+Image+Meta.swift in Sources */,
+				8EF4E1F62453C05800999DD1 /* String.swift in Sources */,
 				8E9D803B2348A9EE0062692A /* GRDB+ExportProfile.swift in Sources */,
 				8EF4CE5921D77BEA00C53AFF /* ImagePeople.swift in Sources */,
 				8EB986BC20B30C920075B081 /* CollectionViewDelegate.swift in Sources */,
@@ -1682,17 +1863,24 @@
 				8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */,
 				8EBA759723B55BCA00548376 /* RepositoryTreeDataSource.swift in Sources */,
 				8E8D47262236733B0091E9C3 /* OneColumnTableViewController.swift in Sources */,
+				8EFA02F3243B3EF500D7C355 /* PostgresClientKit+VersionMigrate.swift in Sources */,
 				8EB2717D2340D8D5003BF3AF /* ViewController+TreeArea.swift in Sources */,
 				8EB271892340EDC5003BF3AF /* ViewController+SelectionArea+AssignEvent.swift in Sources */,
 				8E3FA92323535C5800B677A3 /* MemoriesViewController.swift in Sources */,
+				8EFA02EB243B3EA900D7C355 /* PostgresClientKit+ImageEvent.swift in Sources */,
 				8EB986C620B6EBC40075B081 /* DarkTableView.swift in Sources */,
+				8EF4E1FA2453C05800999DD1 /* DatabaseColumnMapping.swift in Sources */,
 				8E74194A242256FE002BAAAE /* EventDaoInterface.swift in Sources */,
 				8EB2716D233E0729003BF3AF /* LibrariesViewController.swift in Sources */,
+				8EFA02EF243B3ECE00D7C355 /* PostgresClientKit+FaceFamily.swift in Sources */,
 				8EF3FEEC24235B0C00AF83BB /* DBEngine+SQLiteConnection+GRDB.swift in Sources */,
 				8E4C38CF2117B54D0089502C /* Android.swift in Sources */,
 				8EB2718D2340EE4C003BF3AF /* ViewController+SelectionArea+WriteNote.swift in Sources */,
 				8E8D47182229AC220091E9C3 /* FaceIconCollectionViewController.swift in Sources */,
+				8EF4E1EE2453C05800999DD1 /* OrderedDictionary.swift in Sources */,
+				8EF4E1FC2453C05800999DD1 /* CRUDStatement.swift in Sources */,
 				8EEF071E225FCF8E000520B7 /* ContainerDetailViewController.swift in Sources */,
+				8EFA02E7243B3E8700D7C355 /* PostgresClientKit+ImageContainer.swift in Sources */,
 				8E0AFA3D208BDEA000CE8B68 /* AppDelegate.swift in Sources */,
 				8EB27163233845F0003BF3AF /* ImageFile+Event.swift in Sources */,
 				8EBA692A2090C87D00221131 /* Extentions.swift in Sources */,

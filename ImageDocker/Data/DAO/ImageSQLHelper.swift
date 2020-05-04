@@ -18,6 +18,23 @@ enum ExecuteState : Int {
 
 struct SQLHelper {
     
+    static func appendSqlTextCondition(_ column:String, value:String?, where statement:inout String, args arguments:inout [String]) {
+        if value == nil || value == "" {
+            statement = "\(statement) AND (\(column)='' OR \(column) IS NULL)"
+        }else{
+            statement = "\(statement) AND \(column)=?"
+            arguments.append(value!)
+        }
+    }
+    
+    static func appendSqlIntegerCondition(_ column:String, value:Int?, where statement:inout String) {
+        if value == nil || value == 0 {
+            statement = "\(statement) AND (\(column)=0 OR \(column) IS NULL)"
+        }else{
+            statement = "\(statement) AND \(column)=\(value ?? 0)"
+        }
+    }
+    
     static func errorState(_ error:Error) -> ExecuteState {
         print(error)
         if error.localizedDescription.starts(with: "SQLite error") {
@@ -29,12 +46,22 @@ struct SQLHelper {
         return .NON_SQL_ERROR
     }
     
-    static func inArray(field:String, array:[Any]?, where whereStmt:inout String, args sqlArgs:inout [Any]){
+    static func inArray(field:String, array:[Any]?, where whereStmt:inout String, args sqlArgs:inout [Any], numericPlaceholders:Bool = false){
         if let array = array {
             if array.count > 0 {
-                let marks = repeatElement("?", count: array.count).joined(separator: ",")
-                whereStmt = "AND \(field) in (\(marks))"
-                sqlArgs.append(contentsOf: array)
+                if numericPlaceholders {
+                    var placeholders:[String] = []
+                    for i in 1...array.count {
+                        placeholders.append("$\(i)")
+                    }
+                    let marks = placeholders.joined(separator: ",")
+                    whereStmt = "AND \(field) in (\(marks))"
+                    sqlArgs.append(contentsOf: array)
+                }else{
+                    let marks = repeatElement("?", count: array.count).joined(separator: ",")
+                    whereStmt = "AND \(field) in (\(marks))"
+                    sqlArgs.append(contentsOf: array)
+                }
             }
         }
     }
@@ -108,8 +135,7 @@ struct SQLHelper {
         return statement
     }
     
-    // sql by date & place
-    static func generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String, String, [Any]) {
+    internal static func _generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String,String) {
         
         print("SQL conditions: year=\(year) | month=\(month) | day=\(day) | ignoreDate:\(ignoreDate) | country=\(country) | province=\(province) | city=\(city) | place=\(place) | includeHidden=\(includeHidden)")
         
@@ -169,6 +195,14 @@ struct SQLHelper {
             }
         }
         
+        return (stmtWithoutHiddenWhere, hiddenWhere)
+    }
+    
+    // sql by date & place
+    static func generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String, String, [Any]) {
+        
+        var (stmtWithoutHiddenWhere, hiddenWhere) = _generateSQLStatementForPhotoFiles(year: year, month: month, day: day, ignoreDate: ignoreDate, country: country, province: province, city: city, place: place, includeHidden: includeHidden, imageSource: imageSource, cameraModel: cameraModel)
+        
         var sqlArgs:[Any] = []
         
         SQLHelper.inArray(field: "imageSource", array: imageSource, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
@@ -177,28 +211,28 @@ struct SQLHelper {
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
         let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=1"
         
+        print("SQL args: \(sqlArgs)")
+        
         print("[GRDB Image] Generated SQL statement for all:")
         print(stmt)
         print("[GRDB Image] Generated SQL statement for hidden:")
         print(stmtHidden)
-        print("SQL args: \(sqlArgs)")
         
         return (stmt, stmtHidden, sqlArgs)
     }
     
-    // sql by date & event & place
-    static func generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String, String, [Any]) {
+    internal static func _generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String, String, Bool) {
         
         print("SQL conditions: year=\(year) | month=\(month) | day=\(day) | event=\(event) | country=\(country) | province=\(province) | city=\(city) | place=\(place) | includeHidden=\(includeHidden)")
         
-        var sqlArgs:[Any] = []
+        var hasEvent = false
         
         var eventWhere = ""
         if event == "" || event == "未分配事件" {
             eventWhere = "(event='' OR event is null)"
         }else{
             eventWhere = "event = ?"
-            sqlArgs.append(event)
+            hasEvent = true
         }
         
         var hiddenWhere = ""
@@ -217,6 +251,18 @@ struct SQLHelper {
             }
         } else {
             stmtWithoutHiddenWhere = "\(eventWhere) and photoTakenYear = \(year) and photoTakenMonth = \(month) and photoTakenDay = \(day) \(hiddenWhere)"
+        }
+        return (stmtWithoutHiddenWhere, hiddenWhere, hasEvent)
+    }
+    
+    // sql by date & event & place
+    static func generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String, String, [Any]) {
+        
+        var (stmtWithoutHiddenWhere, hiddenWhere, hasEvent) = _generateSQLStatementForPhotoFiles(year: year, month: month, day: day, event: event, country: country, province: province, city: city, place: place, includeHidden: includeHidden, imageSource: imageSource, cameraModel: cameraModel)
+        
+        var sqlArgs:[Any] = []
+        if hasEvent {
+            sqlArgs.append(event)
         }
         
         SQLHelper.inArray(field: "imageSource", array: imageSource, where: &stmtWithoutHiddenWhere, args: &sqlArgs)

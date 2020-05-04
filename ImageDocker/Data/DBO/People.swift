@@ -9,44 +9,77 @@
 import Foundation
 import GRDB
 
-struct People : Codable {
+public final class People : Codable {
     //var id: Int64?      // <- the row id
-    var id: String
-    var name: String
-    var shortName: String?
-    var iconRepositoryPath:String
-    var iconCropPath:String
-    var iconSubPath:String
-    var iconFilename:String
+    var id: String = ""
+    var name: String = ""
+    var shortName: String? = nil
+    var iconRepositoryPath:String = ""
+    var iconCropPath:String = ""
+    var iconSubPath:String = ""
+    var iconFilename:String = ""
+    
+    public init() {
+        
+    }
     
     static func new(id:String, name:String, shortName:String) -> People{
-        return People(id: id, name: name, shortName: shortName,
-                      iconRepositoryPath: "", iconCropPath: "", iconSubPath: "", iconFilename: "")
+        let people = People()
+        people.id = id
+        people.name = name
+        people.shortName = shortName
+        return people
     }
     
     static func unknown() -> People {
-        return People(id: "", name: "Unknown", shortName: "Unknown",
-                      iconRepositoryPath: "", iconCropPath: "", iconSubPath: "", iconFilename: "")
+        let people = People()
+        people.name = "Unknown"
+        people.shortName = "Unknown"
+        return people
     }
 }
 
 extension People: FetchableRecord, MutablePersistableRecord, TableRecord {
-    mutating func didInsert(with rowID: Int64, for column: String?) {
-        // Update id after insertion
-        //id = rowID
-    }
+    
 }
 
-struct PeopleRelationship : Codable {
+extension People : PostgresRecord {
+    
+    public func postgresTable() -> String {
+        return "People"
+    }
+    
+    public func primaryKeys() -> [String] {
+        return ["id"]
+    }
+    
+    
+}
+
+public final class PeopleRelationship : Codable {
     //var id: Int64?      // <- the row id
-    var subject: String
-    var object: String
-    var callName: String
+    var subject: String = ""
+    var object: String = ""
+    var callName: String = ""
+    
+    public init() {
+        
+    }
 }
 
 extension PeopleRelationship: FetchableRecord, MutablePersistableRecord, TableRecord {
-    mutating func didInsert(with rowID: Int64, for column: String?) {
-        // Update id after insertion
-        //id = rowID
+
+}
+
+
+extension PeopleRelationship : PostgresRecord {
+    public func postgresTable() -> String {
+        return "PeopleRelationship"
     }
+    
+    public func primaryKeys() -> [String] {
+        return ["subject", "object"]
+    }
+    
+    
 }

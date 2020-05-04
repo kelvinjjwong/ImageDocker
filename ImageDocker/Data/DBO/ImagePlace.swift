@@ -9,9 +9,9 @@
 import Foundation
 import GRDB
 
-struct ImagePlace : Codable {
+public final class ImagePlace : Codable {
     //var id: Int64?      // <- the row id
-    var name: String
+    var name: String = ""
     var country: String?
     var province: String?
     var city: String?
@@ -24,11 +24,53 @@ struct ImagePlace : Codable {
     var latitudeBD:String?
     var longitude:String?
     var longitudeBD:String?
+    
+    public init() {
+        
+    }
+    
+    public init(name:String,
+                country:String?,
+                province:String?,
+                city:String?,
+                district:String?,
+                businessCircle:String?,
+                street:String?,
+                address:String?,
+                addressDescription:String?,
+                latitude:String?,
+                latitudeBD:String?,
+                longitude:String?,
+                longitudeBD:String?) {
+        self.name = name
+        self.country = country
+        self.province = province
+        self.city = city
+        self.district = district
+        self.businessCircle = businessCircle
+        self.street = street
+        self.address = address
+        self.addressDescription = addressDescription
+        self.latitude = latitude
+        self.latitudeBD = latitudeBD
+        self.longitude = longitude
+        self.longitudeBD = longitudeBD
+    }
 }
 
 extension ImagePlace: FetchableRecord, MutablePersistableRecord, TableRecord {
-    mutating func didInsert(with rowID: Int64, for column: String?) {
-        // Update id after insertion
-        //id = rowID
+
+}
+
+
+extension ImagePlace : PostgresRecord {
+    public func postgresTable() -> String {
+        return "ImagePlace"
     }
+    
+    public func primaryKeys() -> [String] {
+        return ["name"]
+    }
+    
+    
 }

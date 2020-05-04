@@ -9,16 +9,30 @@
 import Foundation
 import GRDB
 
-struct ImagePeople : Codable {
+public final class ImagePeople : Codable {
     //var id: Int64?      // <- the row id
-    var imageId: String
-    var peopleId: String
+    var imageId: String = ""
+    var peopleId: String = ""
     var position: String?
+    
+    public init() {
+        
+    }
 }
 
 extension ImagePeople: FetchableRecord, MutablePersistableRecord, TableRecord {
-    mutating func didInsert(with rowID: Int64, for column: String?) {
-        // Update id after insertion
-        //id = rowID
+
+}
+
+
+extension ImagePeople : PostgresRecord {
+    public func postgresTable() -> String {
+        return "ImagePeople"
     }
+    
+    public func primaryKeys() -> [String] {
+        return ["imageId", "peopleId"]
+    }
+    
+    
 }

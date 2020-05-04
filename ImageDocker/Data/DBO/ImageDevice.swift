@@ -47,3 +47,17 @@ extension ImageDevice: FetchableRecord, MutablePersistableRecord, TableRecord {
         //id = rowID
     }
 }
+
+
+
+extension ImageDevice : PostgresRecord {
+    func postgresTable() -> String {
+        return "ImageDevice"
+    }
+    
+    func primaryKeys() -> [String] {
+        return ["deviceId"]
+    }
+    
+    
+}

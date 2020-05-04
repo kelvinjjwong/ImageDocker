@@ -9,7 +9,7 @@
 import Foundation
 import GRDB
 
-struct Image : Codable {
+public final class Image : Codable {
     //var id: Int64?      // <- the row id
     var addDate:Date?
     var address:String?
@@ -48,12 +48,12 @@ struct Image : Codable {
     var exportTime:Date?
     var exportToPath:String?
     var exposureTime:String?
-    var filename:String
+    var filename:String = ""
     var filenameDate:String?
     var fileSize:String?
     var filesysCreateDate:Date?
     var gpsDate:String?
-    var hidden:Bool
+    var hidden:Bool = false
     var hideForSourceFilename:String?
     var imageHeight:Int?
     var imageSource:String?
@@ -63,7 +63,7 @@ struct Image : Codable {
     var latitudeBD:String?
     var longitude:String?
     var longitudeBD:String?
-    var path:String
+    var path:String = ""
     var photoDescription:String?
     var photoTakenDate:Date?
     var photoTakenDay:Int?
@@ -101,129 +101,48 @@ struct Image : Codable {
     var originPath:String?
     var facesPath:String?
     var id:String?
-    var repositoryPath:String
-    var subPath:String
-    var hiddenByRepository:Bool
-    var hiddenByContainer:Bool
-    var scanedFace:Bool
-    var recognizedFace:Bool
-    var facesCount:Int
-    var recognizedPeopleIds:String
+    var repositoryPath:String = ""
+    var subPath:String = ""
+    var hiddenByRepository:Bool = false
+    var hiddenByContainer:Bool = false
+    var scanedFace:Bool = false
+    var recognizedFace:Bool = false
+    var facesCount:Int = 0
+    var recognizedPeopleIds:String = ""
     var lastTimeExtractExif:Int?
-    var noneExif:Bool
+    var noneExif:Bool = false
+    
+    public init() {
+        
+    }
     
     
     static func new(filename: String, path: String, parentFolder: String, repositoryPath: String) -> Image {
-        return Image(
-            //id: nil,
-            addDate: nil,
-            address: nil,
-            addressDescription: nil,
-            aperture: nil,
-            assignAddress: nil,
-            assignAddressDescription: nil,
-            assignBusinessCircle: nil,
-            assignCity: nil,
-            assignCountry: nil,
-            assignDateTime: nil,
-            assignDistrict: nil,
-            assignLatitude: nil,
-            assignLatitudeBD: nil,
-            assignLongitude: nil,
-            assignLongitudeBD: nil,
-            assignPlace: nil,
-            assignProvince: nil,
-            assignStreet: nil,
-            audioBits: nil,
-            audioChannels: nil,
-            audioRate: nil,
-            businessCircle: nil,
-            cameraMaker: nil,
-            cameraModel: nil,
-            city: nil,
-            containerPath: parentFolder,
-            country: nil,
-            dateTimeFromFilename: nil,
-            district: nil,
-            event: nil,
-            exifCreateDate: nil,
-            exifDateTimeOriginal: nil,
-            exifModifyDate: nil,
-            exportAsFilename: nil,
-            exportTime: nil,
-            exportToPath: nil,
-            exposureTime: nil,
-            filename: filename,
-            filenameDate: nil,
-            fileSize: nil,
-            filesysCreateDate: nil,
-            gpsDate: nil,
-            hidden: false,
-            hideForSourceFilename: nil,
-            imageHeight: nil,
-            imageSource: nil,
-            imageWidth: nil,
-            iso: nil,
-            latitude: nil,
-            latitudeBD: nil,
-            longitude: nil,
-            longitudeBD: nil,
-            path: path,
-            photoDescription: nil,
-            photoTakenDate: nil,
-            photoTakenDay: nil,
-            photoTakenHour: nil,
-            photoTakenMonth: nil,
-            photoTakenYear: nil,
-            place: nil,
-            province: nil,
-            rotation: nil,
-            softwareModifiedTime: nil,
-            softwareName: nil,
-            street: nil,
-            suggestPlace: nil,
-            trackCreateDate: nil,
-            trackModifyDate: nil,
-            updateDateTimeDate: nil,
-            updateEventDate: nil,
-            updateExifDate: nil,
-            updateLocationDate: nil,
-            updatePhotoTakenDate: nil,
-            videoBitRate: nil,
-            videoCreateDate: nil,
-            videoDuration: nil,
-            videoFormat: nil,
-            videoFrameRate: nil,
-            videoModifyDate: nil,
-            shortDescription: nil,
-            longDescription: nil,
-            originalMD5: nil,
-            exportedMD5: nil,
-            exportedLongDescription: nil,
-            exportState: nil,
-            exportFailMessage: nil,
-            duplicatesKey: nil,
-            originPath: nil,
-            facesPath: nil,
-            id: UUID().uuidString,
-            repositoryPath: repositoryPath.withStash(),
-            subPath: path.replacingFirstOccurrence(of: repositoryPath.withStash(), with: ""),
-            hiddenByRepository: false,
-            hiddenByContainer: false,
-            scanedFace:false,
-            recognizedFace:false,
-            facesCount:0,
-            recognizedPeopleIds:"",
-            lastTimeExtractExif: 0,
-            noneExif: false
-        )
+        let obj = Image()
+        obj.id = UUID().uuidString
+        obj.filename = filename
+        obj.path = path
+        obj.containerPath = parentFolder
+        obj.repositoryPath = repositoryPath.withStash()
+        obj.subPath = path.replacingFirstOccurrence(of: repositoryPath.withStash(), with: "")
+        return obj
     }
     
 }
 
 extension Image: FetchableRecord, MutablePersistableRecord, TableRecord {
-    mutating func didInsert(with rowID: Int64, for column: String?) {
-        // Update id after insertion
-        //id = rowID
-    }
+
 }
+
+extension Image : PostgresRecord {
+    public func postgresTable() -> String {
+        return "Image"
+    }
+    
+    public func primaryKeys() -> [String] {
+        return ["path"]
+    }
+    
+    
+}
+

@@ -9,47 +9,60 @@
 import Foundation
 import GRDB
 
-struct ImageDevicePath : Codable {
+public final class ImageDevicePath : Codable {
     //var id: Int64?      // <- the row id
-    var id: String
-    var deviceId: String
-    var path: String
-    var toSubFolder: String
-    var exclude: Bool
-    var manyChildren: Bool
-    var excludeImported: Bool
+    var id: String = ""
+    var deviceId: String = ""
+    var path: String = ""
+    var toSubFolder: String = ""
+    var exclude: Bool = false
+    var manyChildren: Bool = false
+    var excludeImported: Bool = false
     
+    public init(){
+        
+    }
     
     static func include(deviceId: String, path:String, toSubFolder:String, manyChildren:Bool = false) -> ImageDevicePath {
         let key = "\(deviceId):\(path)"
-        return ImageDevicePath(
-            id: key,
-            deviceId: deviceId,
-            path: path,
-            toSubFolder: toSubFolder,
-            exclude: false,
-            manyChildren: manyChildren,
-            excludeImported: false
-        )
+        let obj = ImageDevicePath()
+        obj.id = key
+        obj.deviceId = deviceId
+        obj.path = path
+        obj.toSubFolder = toSubFolder
+        obj.exclude = false
+        obj.manyChildren = manyChildren
+        obj.excludeImported = false
+        return obj
     }
     
     static func exclude(deviceId: String, path:String) -> ImageDevicePath {
         let key = "\(deviceId):\(path)"
-        return ImageDevicePath(
-            id: key,
-            deviceId: deviceId,
-            path: path,
-            toSubFolder: "",
-            exclude: true,
-            manyChildren: false,
-            excludeImported: false
-        )
+        let obj = ImageDevicePath()
+        obj.id = key
+        obj.deviceId = deviceId
+        obj.path = path
+        obj.toSubFolder = ""
+        obj.exclude = true
+        obj.manyChildren = false
+        obj.excludeImported = false
+        return obj
     }
 }
 
 extension ImageDevicePath: FetchableRecord, MutablePersistableRecord, TableRecord {
-    mutating func didInsert(with rowID: Int64, for column: String?) {
-        // Update id after insertion
-        //id = rowID
+
+}
+
+
+extension ImageDevicePath : PostgresRecord {
+    public func postgresTable() -> String {
+        return "ImageDevicePath"
     }
+    
+    public func primaryKeys() -> [String] {
+        return ["id"]
+    }
+    
+    
 }

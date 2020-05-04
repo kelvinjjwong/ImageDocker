@@ -9,10 +9,10 @@
 import Foundation
 import GRDB
 
-struct ImageEvent : Codable {
+public final class ImageEvent : Codable {
     //var id: Int64?      // <- the row id
-    var name: String
-    var category: String
+    var name: String = ""
+    var category: String = ""
     var startDate: Date?
     var startYear: Int?
     var startMonth: Int?
@@ -22,26 +22,28 @@ struct ImageEvent : Codable {
     var endMonth: Int?
     var endDay: Int?
     
-    init(name:String, category:String = "", startDate:Date? = nil, startYear:Int? = nil, startMonth:Int? = nil, startDay:Int? = nil,
-         endDate:Date? = nil, endYear:Int? = nil, endMonth:Int? = nil, endDay:Int? = nil){
-        //self.id = id
-        self.name = name
-        self.category = category
-        self.startDate = startDate
-        self.startYear = startYear
-        self.startMonth = startMonth
-        self.startDay = startDay
-        self.endDate = endDate
-        self.endYear = endYear
-        self.endMonth = endMonth
-        self.endDay = endDay
+    public init() {
         
+    }
+    
+    public init(name:String) {
+        self.name = name
     }
 }
 
 extension ImageEvent: FetchableRecord, MutablePersistableRecord, TableRecord {
-    mutating func didInsert(with rowID: Int64, for column: String?) {
-        // Update id after insertion
-        //id = rowID
+
+}
+
+
+extension ImageEvent : PostgresRecord {
+    public func postgresTable() -> String {
+        return "ImageEvent"
     }
+    
+    public func primaryKeys() -> [String] {
+        return ["category", "name"]
+    }
+    
+    
 }
