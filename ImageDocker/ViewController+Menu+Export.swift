@@ -45,11 +45,6 @@ extension ViewController {
         print("clicked export menu export now")
         self.btnExport.selectItem(at: 0)
         
-        if PreferencesController.exportDirectory() == "" {
-            Alert.invalidExportPath()
-            return
-        }
-        
         if let menuItem = self.btnScan.menu?.item(at: 4) {
             if menuItem.title == "Export Now" {
                 menuItem.title = "Stop exporting images"

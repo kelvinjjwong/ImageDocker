@@ -734,9 +734,9 @@ struct NamingForExporting {
     
     
     
-    func buildFolder(photo:Image) -> String{
+    func buildFolder(photo:Image, exportToPath:String) -> String{
         var pathComponents:[String] = []
-        pathComponents.append(PreferencesController.exportDirectory())
+        pathComponents.append(exportToPath)
         pathComponents.append("\(photo.photoTakenYear ?? 0)年")
         //let year:String = "\(photo.photoTakenYear)"
         let month:String = photo.photoTakenMonth! < 10 ? "0\(photo.photoTakenMonth ?? 0)" : "\(photo.photoTakenMonth ?? 0)"

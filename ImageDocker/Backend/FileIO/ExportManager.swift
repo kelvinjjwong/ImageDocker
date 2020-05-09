@@ -112,15 +112,12 @@ class ExportManager {
     }
     
     private func prepareExportDestination(path: String) -> Bool {
-        if PreferencesController.exportDirectory() == "" {
-            return false
-        }
         let fm:FileManager = FileManager.default
         if !fm.fileExists(atPath: path) {
             do {
-                try fm.createDirectory(atPath: PreferencesController.exportDirectory(), withIntermediateDirectories: true, attributes: nil)
+                try fm.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
             }catch{
-                print("Cannot location or create destination directory for exporting photos: \(PreferencesController.exportDirectory())")
+                print("Cannot location or create destination directory for exporting photos: \(path)")
                 print(error)
                 return false
             }
@@ -279,7 +276,7 @@ class ExportManager {
                 (fileChanged, generatedImageDescription) = self.patchImageDescription(image: photo)
                 
                 // generate path and filename
-                let path = Naming.Export.buildFolder(photo: photo)
+                let path = Naming.Export.buildFolder(photo: photo, exportToPath: profile.directory)
                 let fileState = Naming.Export.buildFilename(photo: photo,
                                                     toPath: path,
                                                     forceGenerateMD5: fileChanged)
@@ -303,7 +300,7 @@ class ExportManager {
         print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED: DONE")
         
         if housekeep {
-            self.housekeep()
+            self.housekeep(path: profile.directory)
         }
         
         TaskManager.exporting = false
@@ -311,14 +308,14 @@ class ExportManager {
         return (true, "COMPLETED")
     }
     
-    fileprivate func housekeep() {
+    fileprivate func housekeep(path:String) {
         print("\(Date()) EXPORT: HOUSE KEEP")
         
         self.printMessage("Checking invalid exported files ...")
         
         let allExportedFilenames:Set<String> = self.getExportedFilenames()
         
-        let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: PreferencesController.exportDirectory()),
+        let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: path),
                                                         includingPropertiesForKeys: [.isDirectoryKey, .isReadableKey, .isWritableKey ],
                                                         options: [.skipsHiddenFiles], errorHandler: { (url, error) -> Bool in
                                                             print("directoryEnumerator error at \(url): ", error)

@@ -13,6 +13,8 @@ public class PostgresDB : DBExecutor {
     
     private let postgresConfig: ConnectionConfiguration
     
+    var schema:String = "public"
+    
     public init(database:String, host:String = "127.0.0.1", port:Int = 5432, user:String = "postgres", password:String? = nil, ssl:Bool = false) {
         var configuration = PostgresClientKit.ConnectionConfiguration()
         configuration.host = host

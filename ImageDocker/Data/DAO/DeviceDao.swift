@@ -16,7 +16,14 @@ class DeviceDao {
         self.impl = impl
     }
     
-    static let `default` = DeviceDao(DeviceDaoGRDB())
+    static var `default`:DeviceDao {
+        let location = PreferencesController.databaseLocation()
+        if location == "local" {
+            return DeviceDao(DeviceDaoGRDB())
+        }else{
+            return DeviceDao(DeviceDaoPostgresCK())
+        }
+    }
     
     func getDevices() -> [ImageDevice] {
         return self.impl.getDevices()

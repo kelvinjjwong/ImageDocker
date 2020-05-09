@@ -16,7 +16,14 @@ class RepositoryDao {
         self.impl = impl
     }
     
-    static let `default` = RepositoryDao(RepositoryDaoGRDB())
+    static var `default`:RepositoryDao {
+        let location = PreferencesController.databaseLocation()
+        if location == "local" {
+            return RepositoryDao(RepositoryDaoGRDB())
+        }else{
+            return RepositoryDao(RepositoryDaoPostgresCK())
+        }
+    }
     
     func getOrCreateContainer(name:String,
                               path:String,

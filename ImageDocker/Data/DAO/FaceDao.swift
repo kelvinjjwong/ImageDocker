@@ -16,7 +16,14 @@ class FaceDao {
         self.impl = impl
     }
     
-    static let `default` = FaceDao(FaceDaoGRDB())
+    static var `default`:FaceDao {
+        let location = PreferencesController.databaseLocation()
+        if location == "local" {
+            return FaceDao(FaceDaoGRDB())
+        }else{
+            return FaceDao(FaceDaoPostgresCK())
+        }
+    }
     
     func getFamilies() -> [Family] {
         return self.impl.getFamilies()

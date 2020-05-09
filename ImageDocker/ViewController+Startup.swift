@@ -49,7 +49,7 @@ extension ViewController {
                 if self.splashController.decideQuit {
                     break
                 }
-                let (connected, error) = ImageDB.current().checkDatabase()
+                let (connected, error) = ImageDB.current().testDatabase()
                 if !connected {
                     
                     retry += 1

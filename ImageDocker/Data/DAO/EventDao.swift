@@ -16,7 +16,14 @@ class EventDao {
         self.impl = impl
     }
     
-    static let `default` = EventDao(EventDaoGRDB())
+    static var `default`:EventDao {
+        let location = PreferencesController.databaseLocation()
+        if location == "local" {
+            return EventDao(EventDaoGRDB())
+        }else{
+            return EventDao(EventDaoPostgresCK())
+        }
+    }
     
     func getOrCreateEvent(name:String) -> ImageEvent{
         return self.impl.getOrCreateEvent(name: name)

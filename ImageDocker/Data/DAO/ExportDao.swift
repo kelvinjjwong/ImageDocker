@@ -16,7 +16,14 @@ class ExportDao {
         self.impl = impl
     }
     
-    static let `default` = ExportDao(ExportDaoGRDB())
+    static var `default`:ExportDao {
+        let location = PreferencesController.databaseLocation()
+        if location == "local" {
+            return ExportDao(ExportDaoGRDB())
+        }else{
+            return ExportDao(ExportDaoPostgresCK())
+        }
+    }
     
     func getOrCreateExportProfile(id:String,
                                   name:String,

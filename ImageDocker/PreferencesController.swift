@@ -10,38 +10,77 @@ import Cocoa
 
 final class PreferencesController: NSViewController {
     
+    // MARK: - KEYS
+    
+    // MARK: GEOLOCATION API
     fileprivate static let baiduAKKey = "BaiduAKKey"
     fileprivate static let baiduSKKey = "BaiduSKKey"
     fileprivate static let googleAKKey = "GoogleAPIKey"
-    fileprivate static let exportPathKey = "ExportPath"
-    fileprivate static let exportToAndroidPathKey = "ExportToAndroidPath"
+    
+    // MARK: DATABASE
     fileprivate static let databasePathKey = "DatabasePathKey"
+    fileprivate static let databaseLocationKey = "DatabaseLocationKey"
+    fileprivate static let remoteDBServerKey = "RemoteDBServer"
+    fileprivate static let remoteDBPortKey = "RemoteDBPort"
+    fileprivate static let remoteDBUsernameKey = "RemoteDBUsername"
+    fileprivate static let remoteDBPasswordKey = "RemoteDBPassword"
+    fileprivate static let remoteDBSchemaKey = "RemoteDBSchema"
+    fileprivate static let remoteDBDatabaseKey = "RemoteDBDatabase"
+    fileprivate static let remoteDBNoPasswordKey = "RemoteDBNoPassword"
+    
+    // MARK: MOBILE DEVICE
+    fileprivate static let exportToAndroidPathKey = "ExportToAndroidPath"
     fileprivate static let iosMountPointKey = "IOSMountPointKey"
+    fileprivate static let ifuseKey = "ifuseKey"
+    fileprivate static let ideviceidKey = "ideviceidKey"
+    fileprivate static let ideviceinfoKey = "ideviceinfoKey"
+    
+    // MARK: FACE RECOGNITION
     fileprivate static let homebrewKey = "HomebrewKey"
     fileprivate static let pythonKey = "PythonKey"
     fileprivate static let faceRecognitionModelKey = "FaceRecognitionModelKey"
     fileprivate static let alternativeFaceModelPathKey = "AlternativeFaceModelPathKey"
-    fileprivate static let ifuseKey = "ifuseKey"
-    fileprivate static let ideviceidKey = "ideviceidKey"
-    fileprivate static let ideviceinfoKey = "ideviceinfoKey"
+    
+    // MARK: PERFORMANCE
     fileprivate static let memoryPeakKey = "memoryPeakKey"
     fileprivate static let amountForPaginationKey = "amountForPaginationKey"
     
+    // MARK: - UI FIELDS
+    @IBOutlet weak var tabs: NSTabView!
     
-    fileprivate static let storageLocationKey = "storageLocationKey"
-    fileprivate static let networkDatabaseLocationKey = "networkDatabaseLocationKey"
-    fileprivate static let networkStoragePrefixKey = "networkStoragePrefixKey"
-    
-    // MARK: Properties
+    // MARK: GEOLOCATION API
     @IBOutlet weak var txtBaiduAK: NSTextField!
     @IBOutlet weak var txtBaiduSK: NSTextField!
-    @IBOutlet weak var txtExportPath: NSTextField!
     @IBOutlet weak var txtGoogleAPIKey: NSTextField!
-    @IBOutlet weak var tabs: NSTabView!
+    
+    // MARK: DATABASE
     @IBOutlet weak var txtDatabasePath: NSTextField!
     @IBOutlet weak var txtIOSMountPoint: NSTextField!
+    @IBOutlet weak var lblDatabaseBackupPath: NSTextField!
+    @IBOutlet weak var chkLocalLocation: NSButton!
+    @IBOutlet weak var chkNetworkLocation: NSButton!
+    
+    // MARK: MOBILE DEVICE
     @IBOutlet weak var txtExportToAndroidPath: NSTextField!
     @IBOutlet weak var txtHomebrewPath: NSTextField!
+    @IBOutlet weak var txtIfusePath: NSTextField!
+    @IBOutlet weak var txtIdeviceIdPath: NSTextField!
+    @IBOutlet weak var txtIdeviceInfoPath: NSTextField!
+    @IBOutlet weak var lblIOSMountPointMessage: NSTextField!
+    @IBOutlet weak var lblIfuseMessage: NSTextField!
+    @IBOutlet weak var lblIdeviceIdMessage: NSTextField!
+    @IBOutlet weak var lblIdeviceInfoMessage: NSTextField!
+    @IBOutlet weak var lblNetworkVerifyMessage: NSTextField!
+    @IBOutlet weak var txtRemoteDBServer: NSTextField!
+    @IBOutlet weak var txtRemoteDBPort: NSTextField!
+    @IBOutlet weak var txtRemoteDBUser: NSTextField!
+    @IBOutlet weak var txtRemoteDBPassword: NSSecureTextField!
+    @IBOutlet weak var txtRemoteDBSchema: NSTextField!
+    @IBOutlet weak var txtRemoteDBDatabase: NSTextField!
+    @IBOutlet weak var chkRemoteDBNoPassword: NSButton!
+    @IBOutlet weak var btnRemoteDBTest: NSButton!
+    
+    // MARK: FACE RECOGNITION
     @IBOutlet weak var txtPythonPath: NSTextField!
     @IBOutlet weak var lblHomebrewMessage: NSTextField!
     @IBOutlet weak var lblPythonMessage: NSTextField!
@@ -51,15 +90,9 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var lblMajorFaceModelPath: NSTextField!
     @IBOutlet weak var txtAlternativeFaceModelPath: NSTextField!
     @IBOutlet weak var btnCheckFaceComponents: NSButton!
-    @IBOutlet weak var txtIfusePath: NSTextField!
-    @IBOutlet weak var txtIdeviceIdPath: NSTextField!
-    @IBOutlet weak var txtIdeviceInfoPath: NSTextField!
-    @IBOutlet weak var lblDatabaseBackupPath: NSTextField!
     @IBOutlet var lblComponentsInstruction: NSTextView!
-    @IBOutlet weak var lblIOSMountPointMessage: NSTextField!
-    @IBOutlet weak var lblIfuseMessage: NSTextField!
-    @IBOutlet weak var lblIdeviceIdMessage: NSTextField!
-    @IBOutlet weak var lblIdeviceInfoMessage: NSTextField!
+    
+    // MARK: PERFORMANCE
     @IBOutlet weak var memorySlider: NSSlider!
     @IBOutlet weak var lblMinMemory: NSTextField!
     @IBOutlet weak var lblMidMemory: NSTextField!
@@ -69,50 +102,28 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var lblMid2Memory: NSTextField!
     @IBOutlet weak var lstAmountForPagination: NSPopUpButton!
     
-    @IBOutlet weak var txtNetworkDatabaseLocation: NSTextField!
-    @IBOutlet weak var lblNetworkDBBackupLocation: NSTextField!
-    @IBOutlet weak var txtNetworkStoragePrefix: NSTextField!
-    @IBOutlet weak var btnBrowseNetworkDatabaseLocation: NSButton!
-    @IBOutlet weak var btnGotoNetworkDatabaseLocation: NSButton!
-    @IBOutlet weak var btnGotoNetworkDBBackupLocation: NSButton!
-    @IBOutlet weak var btnVerifyNetworkRepo: NSButton!
-    @IBOutlet weak var lblNetworkVerifyMessage: NSTextField!
-    @IBOutlet weak var chkLocalLocation: NSButton!
-    @IBOutlet weak var chkNetworkLocation: NSButton!
-    
-    
-    
     
     fileprivate var selectedFaceModel = "major"
     
     
-    // MARK: ACTION BUTTONS
+    // MARK: - SAVE BUTTON
     @IBAction func onButtonApplyClick(_ sender: NSButton) {
         self.savePreferences()
         self.dismiss(sender)
     }
     
-    // MARK: -
-    // MARK: ACTION BUTTONS FOR DATA LOCATION
+    // MARK: - ACTION FOR PERFORMANCE SECTION
     
-    @IBAction func onButtonBrowseClicked(_ sender: Any) {
-        //let window = NSApplication.shared.windows.first!
-        
-        let openPanel = NSOpenPanel()
-        openPanel.canChooseDirectories  = true
-        openPanel.canChooseFiles        = false
-        openPanel.showsHiddenFiles      = false
-        openPanel.canCreateDirectories  = true
-        
-        openPanel.beginSheetModal(for: self.view.window!) { (response) -> Void in
-            guard response == NSApplication.ModalResponse.OK else {return}
-            if let path = openPanel.url?.path {
-                DispatchQueue.main.async {
-                    self.txtExportPath.stringValue = path
-                }
-            }
+    @IBAction func onMemorySliderClicked(_ sender: NSSlider) {
+        let value = self.memorySlider.intValue
+        if value > 0 {
+            self.lblSelectedMemory.stringValue = "Selected \(value) GB as Peak"
+        }else{
+            self.lblSelectedMemory.stringValue = "Selected Unlimited"
         }
     }
+    
+    // MARK: - ACTION FOR DATABASE SECTION
     
     @IBAction func onBrowseDatabasePathClicked(_ sender: Any) {
         let openPanel = NSOpenPanel()
@@ -131,71 +142,50 @@ final class PreferencesController: NSViewController {
         }
     }
     
-    @IBAction func onBrowseNetworkDatabaseLocationClicked(_ sender: NSButton) {
-        let openPanel = NSOpenPanel()
-        openPanel.canChooseDirectories  = true
-        openPanel.canChooseFiles        = false
-        openPanel.showsHiddenFiles      = false
-        openPanel.canCreateDirectories  = true
-        
-        openPanel.beginSheetModal(for: self.view.window!) { (response) -> Void in
-            guard response == NSApplication.ModalResponse.OK else {return}
-            if let path = openPanel.url?.path {
-                DispatchQueue.main.async {
-                    self.txtNetworkDatabaseLocation.stringValue = path
-                }
-            }
-        }
+    @IBAction func onFindDatabaseBackupClicked(_ sender: NSButton) {
+        NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: self.lblDatabaseBackupPath.stringValue)])
     }
     
-    @IBAction func onGotoNetworkDatabaseLocationClicked(_ sender: NSButton) {
-        NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: self.txtNetworkDatabaseLocation.stringValue)])
-    }
-    
-    @IBAction func onGotoNetworkDBBackupLocationClicked(_ sender: NSButton) {
-        NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: self.lblNetworkDBBackupLocation.stringValue)])
-    }
-    
-    private var selectedStorageLocation = "local"
+    private var selectedDatabaseLocation = "local"
     
     @IBAction func onCheckLocalLocationClicked(_ sender: NSButton) {
-        if sender.state == .on {
+        if selectedDatabaseLocation == "local" {
             self.chkLocalLocation.state = .off
-            self.selectedStorageLocation = "network"
+            self.chkNetworkLocation.state = .on
+            self.selectedDatabaseLocation = "network"
         }else{
+            self.chkNetworkLocation.state = .off
             self.chkLocalLocation.state = .on
-            self.selectedStorageLocation = "local"
+            self.selectedDatabaseLocation = "local"
         }
     }
     
     @IBAction func onCheckNetworkLocationClicked(_ sender: NSButton) {
-        if sender.state == .on {
+        if selectedDatabaseLocation == "network" {
+            self.chkLocalLocation.state = .on
             self.chkNetworkLocation.state = .off
-            self.selectedStorageLocation = "local"
+            self.selectedDatabaseLocation = "local"
         }else{
+            self.chkLocalLocation.state = .off
             self.chkNetworkLocation.state = .on
-            self.selectedStorageLocation = "network"
+            self.selectedDatabaseLocation = "network"
         }
     }
     
-    // MARK: -
-    
-    @IBAction func onBrowseIOSMountPointClicked(_ sender: Any) {
-        let openPanel = NSOpenPanel()
-        openPanel.canChooseDirectories  = true
-        openPanel.canChooseFiles        = false
-        openPanel.showsHiddenFiles      = false
-        openPanel.canCreateDirectories  = true
-        
-        openPanel.beginSheetModal(for: self.view.window!) { (response) -> Void in
-            guard response == NSApplication.ModalResponse.OK else {return}
-            if let path = openPanel.url?.path {
-                DispatchQueue.main.async {
-                    self.txtIOSMountPoint.stringValue = path
-                }
-            }
+    @IBAction func onCheckRemoteNopasswordClicked(_ sender: NSButton) {
+        if sender.state == .on {
+            self.txtRemoteDBPassword.isEditable = false
+        }else{
+            self.txtRemoteDBPassword.isEditable = true
         }
     }
+    
+    
+    @IBAction func onRemoteDBTestClicked(_ sender: NSButton) {
+    }
+    
+    
+    // MARK: - ACTION FOR FACE RECOGNITION SECTION
     
     @IBAction func onLocateHomebrewClicked(_ sender: NSButton) {
         let path = ExecutionEnvironment.default.locate("brew")
@@ -294,6 +284,8 @@ final class PreferencesController: NSViewController {
         }
     }
     
+    // MARK: - ACTION FOR GEOLOCATION API SECTION
+    
     @IBAction func onBaiduLinkClicked(_ sender: Any) {
         if let url = URL(string: "http://lbsyun.baidu.com"),
             NSWorkspace.shared.open(url) {
@@ -305,6 +297,25 @@ final class PreferencesController: NSViewController {
         if let url = URL(string: "https://developers.google.com/maps/documentation/maps-static/intro"),
             NSWorkspace.shared.open(url) {
             print("triggered link \(url)")
+        }
+    }
+    
+    // MARK: - ACTION FOR MOBILE DEVICE SECTION
+    
+    @IBAction func onBrowseIOSMountPointClicked(_ sender: Any) {
+        let openPanel = NSOpenPanel()
+        openPanel.canChooseDirectories  = true
+        openPanel.canChooseFiles        = false
+        openPanel.showsHiddenFiles      = false
+        openPanel.canCreateDirectories  = true
+        
+        openPanel.beginSheetModal(for: self.view.window!) { (response) -> Void in
+            guard response == NSApplication.ModalResponse.OK else {return}
+            if let path = openPanel.url?.path {
+                DispatchQueue.main.async {
+                    self.txtIOSMountPoint.stringValue = path
+                }
+            }
         }
     }
     
@@ -341,19 +352,15 @@ final class PreferencesController: NSViewController {
         }
     }
     
-    @IBAction func onFindDatabaseBackupClicked(_ sender: NSButton) {
-        NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: self.lblDatabaseBackupPath.stringValue)])
-    }
+    // MARK: - READ SETTINGS
     
-    // MARK: PAGINATION
+    // MARK: PERFORMANCE
     
     class func amountForPagination() -> Int {
         let defaults = UserDefaults.standard
         let value = defaults.integer(forKey: amountForPaginationKey)
         return value
     }
-    
-    // MARK: MEMORY USAGE
     
     class func peakMemory() -> Int {
         
@@ -395,7 +402,7 @@ final class PreferencesController: NSViewController {
         return txt
     }
     
-    // MARK: BAIDU
+    // MARK: GEOLOCATION API
     
     
     class func baiduAK() -> String {
@@ -410,35 +417,10 @@ final class PreferencesController: NSViewController {
         return txt
     }
     
-    // MARK: GOOGLE
-    
     class func googleAPIKey() -> String {
         let defaults = UserDefaults.standard
         guard let txt = defaults.string(forKey: googleAKKey) else {return ""}
         return txt
-    }
-    
-    // MARK: EXPORT
-    
-    class func exportToAndroidDirectory() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: exportToAndroidPathKey) else {return ""}
-        return txt
-    }
-    
-    class func exportDirectory() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: exportPathKey) else {return ""}
-        var isDir : ObjCBool = false
-        if FileManager.default.fileExists(atPath: txt, isDirectory: &isDir) {
-            if isDir.boolValue {
-                return txt
-            }else{
-                return ""
-            }
-        }else{
-            return ""
-        }
     }
     
     // MARK: DATABASE
@@ -465,22 +447,68 @@ final class PreferencesController: NSViewController {
         return url.path
     }
     
-    class func networkDatabaseLocation() -> String {
+    class func databaseLocation() -> String {
         let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: networkDatabaseLocationKey) else {return ""}
+        guard let txt = defaults.string(forKey: databaseLocationKey) else {return "local"}
         return txt
     }
     
-    class func networkStoragePrefix() -> String {
+    
+    
+    class func remoteDBServer() -> String {
         let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: networkStoragePrefixKey) else {return ""}
+        guard let txt = defaults.string(forKey: remoteDBServerKey) else {return "127.0.0.1"}
         return txt
     }
     
-    class func storageLocationSelection() -> String {
+    
+    class func remoteDBPort() -> Int {
         let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: storageLocationKey) else {return ""}
+        guard let txt = defaults.string(forKey: remoteDBPortKey) else {return 5432}
+        if let value = Int(txt) {
+            return value
+        }else{
+            return 5432
+        }
+    }
+    
+    
+    class func remoteDBUsername() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: remoteDBUsernameKey) else {return ""}
         return txt
+    }
+    
+    
+    class func remoteDBPassword() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: remoteDBPasswordKey) else {return ""}
+        return txt
+    }
+    
+    
+    class func remoteDBSchema() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: remoteDBSchemaKey) else {return "public"}
+        return txt
+    }
+    
+    
+    class func remoteDBDatabase() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: remoteDBDatabaseKey) else {return ""}
+        return txt
+    }
+    
+    
+    class func remoteDBNoPassword() -> Bool {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: remoteDBNoPasswordKey) else {return true}
+        if txt == "true"  {
+            return true
+        }else{
+            return false
+        }
     }
     
     // MARK: IPHONE
@@ -529,36 +557,27 @@ final class PreferencesController: NSViewController {
         return txt
     }
     
-    // MARK: SAVE SETTINGS
+    // MARK: ANDROID
     
-    func savePreferences() {
+    class func exportToAndroidDirectory() -> String {
         let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: exportToAndroidPathKey) else {return ""}
+        return txt
+    }
+    
+    // MARK: - SAVE SETTINGS
+    
+    func saveGeolocationAPISection(_ defaults:UserDefaults) {
+        
+        defaults.set(txtGoogleAPIKey.stringValue,
+                     forKey: PreferencesController.googleAKKey)
         defaults.set(txtBaiduAK.stringValue,
                      forKey: PreferencesController.baiduAKKey)
         defaults.set(txtBaiduSK.stringValue,
                      forKey: PreferencesController.baiduSKKey)
-        defaults.set(txtExportPath.stringValue,
-                     forKey: PreferencesController.exportPathKey)
-        defaults.set(txtExportToAndroidPath.stringValue,
-                     forKey: PreferencesController.exportToAndroidPathKey)
-        defaults.set(txtGoogleAPIKey.stringValue,
-                     forKey: PreferencesController.googleAKKey)
-        defaults.set(txtDatabasePath.stringValue,
-                     forKey: PreferencesController.databasePathKey)
-        defaults.set(txtNetworkDatabaseLocation.stringValue,
-                     forKey: PreferencesController.networkDatabaseLocationKey)
-        defaults.set(txtNetworkStoragePrefix.stringValue,
-                     forKey: PreferencesController.networkStoragePrefixKey)
-        defaults.set(self.selectedStorageLocation,
-                     forKey: PreferencesController.storageLocationKey)
-        defaults.set(txtIOSMountPoint.stringValue,
-                     forKey: PreferencesController.iosMountPointKey)
-        defaults.set(txtIfusePath.stringValue,
-                     forKey: PreferencesController.ifuseKey)
-        defaults.set(txtIdeviceIdPath.stringValue,
-                     forKey: PreferencesController.ideviceidKey)
-        defaults.set(txtIdeviceInfoPath.stringValue,
-                     forKey: PreferencesController.ideviceinfoKey)
+    }
+    
+    func saveFaceRecognitionSection(_ defaults:UserDefaults) {
         defaults.set(txtHomebrewPath.stringValue,
                      forKey: PreferencesController.homebrewKey)
         defaults.set(txtPythonPath.stringValue,
@@ -567,6 +586,58 @@ final class PreferencesController: NSViewController {
                      forKey: PreferencesController.alternativeFaceModelPathKey)
         defaults.set(self.selectedFaceModel,
                      forKey: PreferencesController.faceRecognitionModelKey)
+    }
+    
+    func saveMobileSection(_ defaults:UserDefaults) {
+        
+        defaults.set(txtIOSMountPoint.stringValue,
+                     forKey: PreferencesController.iosMountPointKey)
+        defaults.set(txtIfusePath.stringValue,
+                     forKey: PreferencesController.ifuseKey)
+        defaults.set(txtIdeviceIdPath.stringValue,
+                     forKey: PreferencesController.ideviceidKey)
+        defaults.set(txtIdeviceInfoPath.stringValue,
+                     forKey: PreferencesController.ideviceinfoKey)
+        defaults.set(txtExportToAndroidPath.stringValue,
+                     forKey: PreferencesController.exportToAndroidPathKey)
+    }
+    
+    func saveDatabaseSection(_ defaults:UserDefaults) {
+        
+        defaults.set(self.selectedDatabaseLocation,
+                     forKey: PreferencesController.databaseLocationKey)
+        
+        defaults.set(txtDatabasePath.stringValue,
+                     forKey: PreferencesController.databasePathKey)
+        
+        defaults.set(txtRemoteDBServer.stringValue,
+                     forKey: PreferencesController.remoteDBServerKey)
+        
+        if let _ = Int(txtRemoteDBPort.stringValue) {
+            defaults.set(txtRemoteDBPort.stringValue,
+                         forKey: PreferencesController.remoteDBPortKey)
+        }else{
+            defaults.set("5432",
+                         forKey: PreferencesController.remoteDBPortKey)
+        }
+        
+        defaults.set(txtRemoteDBUser.stringValue,
+                     forKey: PreferencesController.remoteDBUsernameKey)
+        
+        defaults.set(txtRemoteDBPassword.stringValue,
+                     forKey: PreferencesController.remoteDBPasswordKey)
+        
+        defaults.set(txtRemoteDBSchema.stringValue,
+                     forKey: PreferencesController.remoteDBSchemaKey)
+        
+        defaults.set(txtRemoteDBDatabase.stringValue,
+                     forKey: PreferencesController.remoteDBDatabaseKey)
+        
+        defaults.set(chkRemoteDBNoPassword.state == .on ? "true" : "false",
+                     forKey: PreferencesController.remoteDBNoPasswordKey)
+    }
+    
+    func savePerformanceSection(_ defaults:UserDefaults) {
         defaults.set(Int(self.memorySlider.intValue),
                      forKey: PreferencesController.memoryPeakKey)
         
@@ -577,33 +648,35 @@ final class PreferencesController: NSViewController {
         print("SET AMOUNT FOR PAGINATION AS \(paginationAmount)")
         defaults.set(paginationAmount,
                      forKey: PreferencesController.amountForPaginationKey)
-
     }
     
-    // MARK: HEALTH CHECK
+    func savePreferences() {
+        let defaults = UserDefaults.standard
+        
+        self.savePerformanceSection(defaults)
+        self.saveDatabaseSection(defaults)
+        self.saveMobileSection(defaults)
+        self.saveFaceRecognitionSection(defaults)
+        self.saveGeolocationAPISection(defaults)
+    }
+    
+    // MARK: - HEALTH CHECK
     
     class func healthCheck() {
         
         if baiduAK() == "" || baiduSK() == "" {
+            // TODO: notify user when geolocation API missing
             //Alert.invalidBaiduMapAK()
             return
         }
     }
     
+    // MARK: - INIT SECTIONS
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.title = "Setting"
-        // Do any additional setup after loading the view.
-        txtBaiduAK.stringValue = PreferencesController.baiduAK()
-        txtBaiduSK.stringValue = PreferencesController.baiduSK()
-        txtGoogleAPIKey.stringValue = PreferencesController.googleAPIKey()
-        txtExportPath.stringValue = PreferencesController.exportDirectory()
-        txtDatabasePath.stringValue = PreferencesController.databasePath()
-        txtNetworkDatabaseLocation.stringValue = PreferencesController.networkDatabaseLocation()
-        txtNetworkStoragePrefix.stringValue = PreferencesController.networkStoragePrefix()
-        self.selectedStorageLocation = PreferencesController.storageLocationSelection()
-        if self.selectedStorageLocation == "local" {
+    func initDatabaseSection() {
+        
+        self.selectedDatabaseLocation = PreferencesController.databaseLocation()
+        if self.selectedDatabaseLocation == "local" {
             self.chkLocalLocation.state = .on
             self.chkNetworkLocation.state = .off
         }else{
@@ -611,11 +684,36 @@ final class PreferencesController: NSViewController {
             self.chkNetworkLocation.state = .on
         }
         
+        txtDatabasePath.stringValue = PreferencesController.databasePath()
+        self.lblDatabaseBackupPath.stringValue = URL(fileURLWithPath: PreferencesController.databasePath()).appendingPathComponent("DataBackup").path
+        
+        txtRemoteDBServer.stringValue = PreferencesController.remoteDBServer()
+        txtRemoteDBPort.stringValue = "\(PreferencesController.remoteDBPort())"
+        txtRemoteDBUser.stringValue = PreferencesController.remoteDBUsername()
+        txtRemoteDBPassword.stringValue = PreferencesController.remoteDBPassword()
+        txtRemoteDBSchema.stringValue = PreferencesController.remoteDBSchema()
+        txtRemoteDBDatabase.stringValue = PreferencesController.remoteDBDatabase()
+        
+        let remoteDBNoPassword = PreferencesController.remoteDBNoPassword()
+        if remoteDBNoPassword {
+            self.chkRemoteDBNoPassword.state = .on
+            self.txtRemoteDBPassword.isEditable = false
+        }else{
+            self.chkRemoteDBNoPassword.state = .off
+            self.txtRemoteDBPassword.isEditable = true
+        }
+    }
+    
+    func initMobileSection() {
+        
         txtIOSMountPoint.stringValue = PreferencesController.iosDeviceMountPoint()
         txtIfusePath.stringValue = PreferencesController.ifusePath()
         txtIdeviceIdPath.stringValue = PreferencesController.ideviceidPath()
         txtIdeviceInfoPath.stringValue = PreferencesController.ideviceinfoPath()
         txtExportToAndroidPath.stringValue = PreferencesController.exportToAndroidDirectory()
+    }
+    
+    func initFaceRecognitionSection() {
         txtHomebrewPath.stringValue = PreferencesController.homebrewPath()
         txtPythonPath.stringValue = PreferencesController.pythonPath()
         lblMajorFaceModelPath.stringValue = FaceRecognition.defaultModelPath
@@ -647,11 +745,17 @@ final class PreferencesController: NSViewController {
             }
         }
         self.lblComponentsStatus.stringValue = result
-        self.lblDatabaseBackupPath.stringValue = URL(fileURLWithPath: PreferencesController.databasePath()).appendingPathComponent("DataBackup").path
+    }
+    
+    func initGeolocationAPISection() {
+        
+        txtBaiduAK.stringValue = PreferencesController.baiduAK()
+        txtBaiduSK.stringValue = PreferencesController.baiduSK()
+        txtGoogleAPIKey.stringValue = PreferencesController.googleAPIKey()
+    }
+    
+    func initPerformanceSection() {
         self.setupMemorySlider()
-        if PreferencesController.networkDatabaseLocation() != "" {
-            self.lblNetworkDBBackupLocation.stringValue = URL(fileURLWithPath: PreferencesController.networkDatabaseLocation()).appendingPathComponent("DataBackup").path
-        }
         let paginationAmount = PreferencesController.amountForPagination()
         print("GOT AMOUNT FOR PAGINATION \(paginationAmount)")
         if paginationAmount == 0 {
@@ -659,6 +763,17 @@ final class PreferencesController: NSViewController {
         }else{
             self.lstAmountForPagination.selectItem(withTitle: "\(paginationAmount)")
         }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.title = "Setting"
+        // Do any additional setup after loading the view.
+        self.initPerformanceSection()
+        self.initDatabaseSection()
+        self.initMobileSection()
+        self.initFaceRecognitionSection()
+        self.initGeolocationAPISection()
     }
     
     fileprivate func setupMemorySlider() {
@@ -682,15 +797,6 @@ final class PreferencesController: NSViewController {
             self.lblSelectedMemory.stringValue = "Selected Unlimited"
         }
         
-    }
-    
-    @IBAction func onMemorySliderClicked(_ sender: NSSlider) {
-        let value = self.memorySlider.intValue
-        if value > 0 {
-            self.lblSelectedMemory.stringValue = "Selected \(value) GB as Peak"
-        }else{
-            self.lblSelectedMemory.stringValue = "Selected Unlimited"
-        }
     }
     
     

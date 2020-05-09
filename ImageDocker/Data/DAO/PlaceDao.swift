@@ -16,7 +16,14 @@ class PlaceDao {
         self.impl = impl
     }
     
-    static let `default` = PlaceDao(PlaceDaoGRDB())
+    static var `default`:PlaceDao {
+        let location = PreferencesController.databaseLocation()
+        if location == "local" {
+            return PlaceDao(PlaceDaoGRDB())
+        }else{
+            return PlaceDao(PlaceDaoPostgresCK())
+        }
+    }
     
     func getOrCreatePlace(name:String, location:Location) -> ImagePlace{
         return self.impl.getOrCreatePlace(name: name, location: location)

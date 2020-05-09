@@ -16,7 +16,14 @@ public final class ImageRecordDao {
         self.impl = impl
     }
     
-    static let `default` = ImageRecordDao(ImageRecordDaoGRDB())
+    static var `default`:ImageRecordDao {
+        let location = PreferencesController.databaseLocation()
+        if location == "local" {
+            return ImageRecordDao(ImageRecordDaoGRDB())
+        }else{
+            return ImageRecordDao(ImageRecordDaoPostgresCK())
+        }
+    }
     
     func getOrCreatePhoto(filename:String, path:String, parentPath:String, repositoryPath:String? = nil) -> Image {
         return self.impl.getOrCreatePhoto(filename: filename, path: path, parentPath: parentPath, repositoryPath: repositoryPath)
