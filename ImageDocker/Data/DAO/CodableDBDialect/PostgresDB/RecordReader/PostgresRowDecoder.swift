@@ -107,6 +107,7 @@ private struct _RowDecoder<R: Decodable>: Decoder {
         func decode(_ type: Float.Type,  forKey key: Key) throws -> Float  { return decoder.row[key.stringValue] }
         func decode(_ type: Double.Type, forKey key: Key) throws -> Double { return decoder.row[key.stringValue] }
         func decode(_ type: String.Type, forKey key: Key) throws -> String { return decoder.row[key.stringValue] }
+        func decode(_ type: Date.Type,   forKey key: Key) throws -> Date   { return decoder.row[key.stringValue] }
         // swiftlint:enable comma
         
         func decodeIfPresent<T>(_ type: T.Type, forKey key: Key) throws -> T? where T: Decodable {
@@ -302,6 +303,7 @@ extension PostgresColumnDecoder: SingleValueDecodingContainer {
     func decode(_ type: Float.Type ) throws -> Float  { return row[columnIndex] }
     func decode(_ type: Double.Type) throws -> Double { return row[columnIndex] }
     func decode(_ type: String.Type) throws -> String { return row[columnIndex] }
+    func decode(_ type: Date.Type)   throws -> Date   { return row[columnIndex] }
     
     func decode<T>(_ type: T.Type) throws -> T where T: Decodable {
         // Prefer DatabaseValueConvertible decoding over Decodable.

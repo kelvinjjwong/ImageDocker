@@ -346,8 +346,22 @@ extension UInt64 : PostgresRowValueConvertible {
 
 extension Date : PostgresRowValueConvertible {
     
+    public static var postgresTimeZone : TimeZone {
+        return TimeZone(identifier: "UTC") ?? .current
+    }
+    
+    public static var localTimeZone : TimeZone {
+        return TimeZone.current
+    }
+    
     public var postgresValue: PostgresValue {
         return PostgresValue(String(describing: self))
+    }
+    
+    public func timezone(from: TimeZone, to: TimeZone) -> Date {
+        let fromOffset =  Double(from.secondsFromGMT())
+        let toOffset = Double(to.secondsFromGMT())
+        return Date(timeIntervalSince1970: self.timeIntervalSince1970 - fromOffset + toOffset)
     }
     
     
@@ -356,9 +370,17 @@ extension Date : PostgresRowValueConvertible {
             return nil
         }else{
             do {
-                return try value.date().date(in: .current)
+                return try value.date().date(in: Date.postgresTimeZone)
             }catch{
-                return nil
+                do {
+                    return try value.timestamp().date(in: Date.postgresTimeZone)
+                }catch{
+                    do {
+                        return try value.timestampWithTimeZone().date
+                    }catch{
+                        return nil
+                    }
+                }
             }
         }
     }

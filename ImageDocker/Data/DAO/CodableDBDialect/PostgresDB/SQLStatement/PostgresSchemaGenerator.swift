@@ -20,13 +20,13 @@ public final class PostgresSchemaSQLGenerator : SchemaSQLGenerator {
         if let type = type {
             switch type {
             case .text:
-                return "VARCHAR"
+                return "TEXT"
             case .blob:
                 return "TEXT"
             case .boolean:
                 return "BOOL"
             case .date:
-                return "DATE"
+                return "timestamp"
             case .datetime:
                 return "timestamp"
             case .double:
@@ -38,7 +38,7 @@ public final class PostgresSchemaSQLGenerator : SchemaSQLGenerator {
             case .text:
                 return "TEXT"
             default:
-                return "VARCHAR"
+                return "TEXT"
             }
         }else {
             return ""

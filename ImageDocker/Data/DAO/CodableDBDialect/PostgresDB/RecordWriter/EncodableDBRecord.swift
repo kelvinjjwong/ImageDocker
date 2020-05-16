@@ -217,6 +217,7 @@ private class RecordEncoder<Record: EncodableDBRecord>: Encoder {
         func encode(_ value: Float,  forKey key: Key) throws { recordEncoder.persist(Double(value), forKey: key) }
         func encode(_ value: Double, forKey key: Key) throws { recordEncoder.persist(value, forKey: key) }
         func encode(_ value: String, forKey key: Key) throws { recordEncoder.persist(value, forKey: key) }
+        func encode(_ value: Date,   forKey key: Key) throws { recordEncoder.persist(value, forKey: key) }
         // swiftlint:enable comma
         
         func encode<T>(_ value: T, forKey key: Key) throws where T: Encodable {
@@ -240,6 +241,7 @@ private class RecordEncoder<Record: EncodableDBRecord>: Encoder {
         func encodeIfPresent(_ value: Float?,  forKey key: Key) throws { recordEncoder.persist(value == nil ? nil : (Double(value!)), forKey: key) }
         func encodeIfPresent(_ value: Double?, forKey key: Key) throws { recordEncoder.persist(value, forKey: key) }
         func encodeIfPresent(_ value: String?, forKey key: Key) throws { recordEncoder.persist(value, forKey: key) }
+        func encodeIfPresent(_ value: Date?,   forKey key: Key) throws { recordEncoder.persist(value, forKey: key) }
         // swiftlint:disable comma
         
         func encodeIfPresent<T>(_ value: T?, forKey key: Key) throws where T: Encodable {
@@ -280,7 +282,7 @@ private class RecordEncoder<Record: EncodableDBRecord>: Encoder {
     @inline(__always)
     fileprivate func encode<T>(_ value: T, forKey key: CodingKey) throws where T: Encodable {
         if let date = value as? Date {
-            persist(date.postgresDate(in: TimeZone.current), forKey: key)
+            persist(date.postgresTimestampWithTimeZone, forKey: key)
         } else if let value = value as? PostgresValueConvertible {
             // Prefer DatabaseValueConvertible encoding over Decodable.
             persist(value.postgresValue, forKey: key)
@@ -367,6 +369,7 @@ extension DBColumnEncoder: SingleValueEncodingContainer {
     func encode(_ value: Float ) throws { recordEncoder.persist(Double(value), forKey: key) }
     func encode(_ value: Double) throws { recordEncoder.persist(value, forKey: key) }
     func encode(_ value: String) throws { recordEncoder.persist(value, forKey: key) }
+    func encode(_ value: Date)   throws { recordEncoder.persist(value, forKey: key) }
     
     func encode<T>(_ value: T) throws where T: Encodable {
         try recordEncoder.encode(value, forKey: key)
@@ -417,6 +420,7 @@ private struct JSONRequiredEncoder<Record: EncodableDBRecord>: Encoder {
         func encode(_ value: Float,  forKey key: KeyType) throws { throw JSONRequiredError() }
         func encode(_ value: Double, forKey key: KeyType) throws { throw JSONRequiredError() }
         func encode(_ value: String, forKey key: KeyType) throws { throw JSONRequiredError() }
+        func encode(_ value: Date,   forKey key: KeyType) throws { throw JSONRequiredError() }
         func encode<T>(_ value: T, forKey key: KeyType) throws where T: Encodable { throw JSONRequiredError() }
         
         func nestedContainer<NestedKey>(
@@ -459,6 +463,7 @@ extension JSONRequiredEncoder: SingleValueEncodingContainer {
     func encode(_ value: Float ) throws { throw JSONRequiredError() }
     func encode(_ value: Double) throws { throw JSONRequiredError() }
     func encode(_ value: String) throws { throw JSONRequiredError() }
+    func encode(_ value: Date)   throws { throw JSONRequiredError() }
     func encode<T>(_ value: T) throws where T: Encodable { throw JSONRequiredError() }
 }
 
