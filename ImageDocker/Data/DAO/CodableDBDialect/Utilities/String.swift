@@ -28,3 +28,14 @@ func add(_ value: inout Int) -> String {
     value += 1
     return "$\(value)"
 }
+
+extension Array {
+    
+    @inlinable public func joinedQuoted(separator: String) -> String {
+        var values:[String] = []
+        for value in self {
+            values.append("\(value)".quotedDatabaseIdentifier)
+        }
+        return values.joined(separator: separator)
+    }
+}

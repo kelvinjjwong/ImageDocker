@@ -180,11 +180,11 @@ public final class PostgresSchemaSQLGenerator : SchemaSQLGenerator {
             if dropBeforeCreate {
                 cols.append("DROP INDEX IF EXISTS \(name.quotedDatabaseIdentifier)")
             }
-            let index = "CREATE INDEX \(name.quotedDatabaseIdentifier) ON \(definition.getName().quotedDatabaseIdentifier) (\(columns.joined(separator: ", ")))"
+            let index = "CREATE INDEX \(name.quotedDatabaseIdentifier) ON \(definition.getName().quotedDatabaseIdentifier) (\(columns.joinedQuoted(separator: ", ")))"
             cols.append(index)
         }
         for (name, columns) in constraintColumns {
-            let unique = "ALTER TABLE \(definition.getName().quotedDatabaseIdentifier) ADD CONSTRAINT \(name.quotedDatabaseIdentifier) UNIQUE (\(columns.joined(separator: ", ")))"
+            let unique = "ALTER TABLE \(definition.getName().quotedDatabaseIdentifier) ADD CONSTRAINT \(name.quotedDatabaseIdentifier) UNIQUE (\(columns.joinedQuoted(separator: ", ")))"
             cols.append(unique)
         }
         return cols

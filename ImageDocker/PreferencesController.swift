@@ -54,13 +54,36 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var txtGoogleAPIKey: NSTextField!
     
     // MARK: DATABASE
-    @IBOutlet weak var txtDatabasePath: NSTextField!
-    @IBOutlet weak var txtIOSMountPoint: NSTextField!
-    @IBOutlet weak var lblDatabaseBackupPath: NSTextField!
     @IBOutlet weak var chkLocalLocation: NSButton!
     @IBOutlet weak var chkNetworkLocation: NSButton!
     
+    @IBOutlet weak var txtDatabasePath: NSTextField!
+    @IBOutlet weak var lblDatabaseBackupPath: NSTextField!
+    @IBOutlet weak var lblLocalSchemaVersion: NSTextField!
+    
+    
+    @IBOutlet weak var txtRemoteDBServer: NSTextField!
+    @IBOutlet weak var txtRemoteDBPort: NSTextField!
+    @IBOutlet weak var txtRemoteDBUser: NSTextField!
+    @IBOutlet weak var txtRemoteDBPassword: NSSecureTextField!
+    @IBOutlet weak var txtRemoteDBSchema: NSTextField!
+    @IBOutlet weak var txtRemoteDBDatabase: NSTextField!
+    @IBOutlet weak var chkRemoteDBNoPassword: NSButton!
+    @IBOutlet weak var btnRemoteDBTest: NSButton!
+    @IBOutlet weak var lblNetworkVerifyMessage: NSTextField!
+    @IBOutlet weak var lblRemoteSchemaVersion: NSTextField!
+    
+    
+    @IBOutlet weak var btnCloneLocalToRemote: NSButton!
+    @IBOutlet weak var btnCloneRemoteToLocal: NSButton!
+    @IBOutlet weak var btnBackupLocal: NSButton!
+    @IBOutlet weak var btnBackupRemote: NSButton!
+    @IBOutlet weak var lblDataCloneMessage: NSTextField!
+    @IBOutlet weak var chkDeleteAllBeforeClone: NSButton!
+    
+    
     // MARK: MOBILE DEVICE
+    @IBOutlet weak var txtIOSMountPoint: NSTextField!
     @IBOutlet weak var txtExportToAndroidPath: NSTextField!
     @IBOutlet weak var txtHomebrewPath: NSTextField!
     @IBOutlet weak var txtIfusePath: NSTextField!
@@ -70,15 +93,6 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var lblIfuseMessage: NSTextField!
     @IBOutlet weak var lblIdeviceIdMessage: NSTextField!
     @IBOutlet weak var lblIdeviceInfoMessage: NSTextField!
-    @IBOutlet weak var lblNetworkVerifyMessage: NSTextField!
-    @IBOutlet weak var txtRemoteDBServer: NSTextField!
-    @IBOutlet weak var txtRemoteDBPort: NSTextField!
-    @IBOutlet weak var txtRemoteDBUser: NSTextField!
-    @IBOutlet weak var txtRemoteDBPassword: NSSecureTextField!
-    @IBOutlet weak var txtRemoteDBSchema: NSTextField!
-    @IBOutlet weak var txtRemoteDBDatabase: NSTextField!
-    @IBOutlet weak var chkRemoteDBNoPassword: NSButton!
-    @IBOutlet weak var btnRemoteDBTest: NSButton!
     
     // MARK: FACE RECOGNITION
     @IBOutlet weak var txtPythonPath: NSTextField!
@@ -182,6 +196,243 @@ final class PreferencesController: NSViewController {
     
     
     @IBAction func onRemoteDBTestClicked(_ sender: NSButton) {
+        self.lblDataCloneMessage.stringValue = "TODO function."
+    }
+    
+    private func toggleDatabaseClonerButtons(state: Bool) {
+        self.btnBackupLocal.isEnabled = state
+        self.btnBackupRemote.isEnabled = state
+        self.btnCloneLocalToRemote.isEnabled = state
+        self.btnCloneRemoteToLocal.isEnabled = state
+        self.chkDeleteAllBeforeClone.isEnabled = state
+    }
+    
+    @IBAction func onCloneLocalToRemoteClicked(_ sender: NSButton) {
+        let dropBeforeCreate = self.chkDeleteAllBeforeClone.state == .on
+        self.toggleDatabaseClonerButtons(state: false)
+        DispatchQueue.global().async {
+            
+            DispatchQueue.main.async {
+                self.lblDataCloneMessage.stringValue = "Updating schema ..."
+            }
+            PostgresConnection.default.versionCheck(dropBeforeCreate: dropBeforeCreate)
+
+            
+            final class Version : PostgresCustomRecord {
+                var ver:Int = 0
+                public init() {}
+            }
+            
+            if let version = Version.fetchOne(PostgresConnection.database(), sql: "select substring(ver, '\\d+')::int versions from version_migrations order by versions desc") {
+                DispatchQueue.main.async {
+                    self.lblRemoteSchemaVersion.stringValue = "v\(version.ver)"
+                    self.lblDataCloneMessage.stringValue = "Remote DB schema version is v\(version.ver) now."
+                }
+                var containers:[ImageContainer] = []
+                var images:[Image] = []
+                var places:[ImagePlace] = []
+                var events:[ImageEvent] = []
+                var devices:[ImageDevice] = []
+                var deviceFiles:[ImageDeviceFile] = []
+                var devicePaths:[ImageDevicePath] = []
+                var people:[People] = []
+                var relationships:[PeopleRelationship] = []
+                var imagePeople:[ImagePeople] = []
+                var imageFaces:[ImageFace] = []
+                var exportProfiles:[ExportProfile] = []
+                var families:[Family] = []
+                var familyMembers:[FamilyMember] = []
+                var familyJoints:[FamilyJoint] = []
+                do {
+                    let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+                    try db.read { localdb in
+                        DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Loading repositories data from local database..." }
+                        containers = try ImageContainer.fetchAll(localdb)
+                        
+                        DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Loading images data from local database..." }
+                        images = try Image.fetchAll(localdb)
+                        
+                        DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Loading places data from local database..." }
+                        places = try ImagePlace.fetchAll(localdb)
+                        
+                        DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Loading events data from local database..." }
+                        events = try ImageEvent.fetchAll(localdb)
+                        
+                        DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Loading devices data from local database..." }
+                        devices = try ImageDevice.fetchAll(localdb)
+                        deviceFiles = try ImageDeviceFile.fetchAll(localdb)
+                        devicePaths = try ImageDevicePath.fetchAll(localdb)
+                        
+                        DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Loading face data from local database..." }
+                        people = try People.fetchAll(localdb)
+                        relationships = try PeopleRelationship.fetchAll(localdb)
+                        imagePeople = try ImagePeople.fetchAll(localdb)
+                        imageFaces = try ImageFace.fetchAll(localdb)
+                        families = try Family.fetchAll(localdb)
+                        familyMembers = try FamilyMember.fetchAll(localdb)
+                        familyJoints = try FamilyJoint.fetchAll(localdb)
+                        
+                        DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Loading profile data from local database..." }
+                        exportProfiles = try ExportProfile.fetchAll(localdb)
+                    }
+
+                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Loaded all data from local database..." }
+                }catch{
+                    print(error)
+
+                    DispatchQueue.main.async { self.toggleDatabaseClonerButtons(state: true) }
+                    return
+                }
+                
+                let remotedb = PostgresConnection.database()
+                var count = 0
+                var i = 0
+                count = containers.count
+                DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning repositories data to remote database..." }
+                for record in containers {
+                    record.save(remotedb)
+                    i += 1
+                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning repositories data to remote database... \(i) / \(count)" }
+                }
+                
+                count = images.count
+                i = 0
+                DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning images data to remote database..." }
+                for record in images {
+                    record.save(remotedb)
+                    i += 1
+                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning images data to remote database... \(i) / \(count)" }
+                }
+                
+                count = places.count
+                i = 0
+                DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning places data to remote database..." }
+                for record in places {
+                    record.save(remotedb)
+                    i += 1
+                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning places data to remote database... \(i) / \(count)" }
+                }
+                count = events.count
+                i = 0
+                DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning events data to remote database..." }
+                for record in events {
+                    record.save(remotedb)
+                    i += 1
+                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning events data to remote database... \(i) / \(count)" }
+                }
+                count = devices.count + deviceFiles.count + devicePaths.count
+                i = 0
+                DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning devices data to remote database..." }
+                for record in devices {
+                    record.save(remotedb)
+                    i += 1
+                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning devices data to remote database... \(i) / \(count)" }
+                }
+                for record in deviceFiles {
+                    record.save(remotedb)
+                    i += 1
+                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning devices data to remote database... \(i) / \(count)" }
+                }
+                for record in devicePaths {
+                    record.save(remotedb)
+                    i += 1
+                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning devices data to remote database... \(i) / \(count)" }
+                }
+                count = people.count + relationships.count + imagePeople.count + imageFaces.count + families.count + familyMembers.count + familyJoints.count
+                i = 0
+                DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning faces data to remote database..." }
+                for record in people {
+                    record.save(remotedb)
+                    i += 1
+                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning faces data to remote database... \(i) / \(count)" }
+                }
+                for record in relationships {
+                    record.save(remotedb)
+                    i += 1
+                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning faces data to remote database... \(i) / \(count)" }
+                }
+                for record in imagePeople {
+                    record.save(remotedb)
+                    i += 1
+                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning faces data to remote database... \(i) / \(count)" }
+                }
+                for record in imageFaces {
+                    record.save(remotedb)
+                    i += 1
+                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning faces data to remote database... \(i) / \(count)" }
+                }
+                for record in families {
+                    record.save(remotedb)
+                    i += 1
+                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning faces data to remote database... \(i) / \(count)" }
+                }
+                for record in familyMembers {
+                    record.save(remotedb)
+                    i += 1
+                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning faces data to remote database... \(i) / \(count)" }
+                }
+                for record in familyJoints {
+                    record.save(remotedb)
+                    i += 1
+                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning faces data to remote database... \(i) / \(count)" }
+                }
+                count = exportProfiles.count
+                i = 0
+                DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning export profiles data to remote database..." }
+                for record in exportProfiles {
+                    record.save(remotedb)
+                    i += 1
+                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning export profiles data to remote database... \(i) / \(count)" }
+                }
+                DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloned all data to remote database." }
+                
+                DispatchQueue.main.async { self.toggleDatabaseClonerButtons(state: true) }
+                return
+            }else{
+                DispatchQueue.main.async {
+                    self.lblRemoteSchemaVersion.stringValue = "No schema"
+                    self.lblDataCloneMessage.stringValue = "Something wrong happened. Please check console output."
+                }
+                DispatchQueue.main.async { self.toggleDatabaseClonerButtons(state: true) }
+                return
+            }
+        }
+        
+    }
+    
+    @IBAction func onCloneRemoteToLocalClicked(_ sender: NSButton) {
+        self.lblDataCloneMessage.stringValue = "TODO function."
+    }
+    
+    @IBAction func onBackupLocalClicked(_ sender: NSButton) {
+        self.lblDataCloneMessage.stringValue = "TODO function."
+    }
+    
+    @IBAction func onBackupRemoteClicked(_ sender: NSButton) {
+        self.lblDataCloneMessage.stringValue = "TODO function."
+    }
+    
+    @IBAction func onLocalSchemaVersionClicked(_ sender: NSButton) {
+        self.lblDataCloneMessage.stringValue = "TODO function."
+    }
+    
+    @IBAction func onRemoteSchemaVersionClicked(_ sender: NSButton) {
+        DispatchQueue.global().async {
+            final class Version : PostgresCustomRecord {
+                var ver:Int = 0
+                public init() {}
+            }
+            
+            if let version = Version.fetchOne(PostgresConnection.database(), sql: "select substring(ver, '\\d+')::int versions from version_migrations order by versions desc") {
+                DispatchQueue.main.async {
+                    self.lblRemoteSchemaVersion.stringValue = "v\(version.ver)"
+                }
+            }else{
+                DispatchQueue.main.async {
+                    self.lblRemoteSchemaVersion.stringValue = "No schema"
+                }
+            }
+        }
     }
     
     

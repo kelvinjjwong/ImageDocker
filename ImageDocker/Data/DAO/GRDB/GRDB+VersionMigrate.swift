@@ -12,6 +12,10 @@ import GRDB
 extension SQLiteConnectionGRDB {
     // MARK: - SCHEMA VERSION MIGRATION
     
+    func versionCheck(dropBeforeCreate: Bool) {
+        self.versionCheck()
+    }
+    
     func versionCheck(){
         var migrator = DatabaseMigrator()
         

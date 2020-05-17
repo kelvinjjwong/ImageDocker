@@ -12,6 +12,8 @@ protocol ImageDBInterface {
     
     func testDatabase() -> (Bool, Error?)
     
+    
     func versionCheck()
     
+    func versionCheck(dropBeforeCreate:Bool)
 }

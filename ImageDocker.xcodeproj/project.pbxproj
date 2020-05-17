@@ -65,6 +65,7 @@
 		8E4E5B762219624D00FE4B68 /* FaceRecognitionOpenCV in Resources */ = {isa = PBXBuildFile; fileRef = 8E4E5B752219624D00FE4B68 /* FaceRecognitionOpenCV */; };
 		8E4E5B78221985A400FE4B68 /* ImageFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B77221985A400FE4B68 /* ImageFace.swift */; };
 		8E4E5B7F221F3D1800FE4B68 /* PeopleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B7E221F3D1800FE4B68 /* PeopleViewController.swift */; };
+		8E5E2A8C24713DF9001C336B /* DataCloner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5E2A8B24713DF9001C336B /* DataCloner.swift */; };
 		8E73E382223E494C00C14A90 /* ExecutionEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E73E381223E494C00C14A90 /* ExecutionEnvironment.swift */; };
 		8E7419442422526F002BAAAE /* ImageDaoInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7419432422526F002BAAAE /* ImageDaoInterface.swift */; };
 		8E741946242256E2002BAAAE /* RepositoryDaoInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E741945242256E2002BAAAE /* RepositoryDaoInterface.swift */; };
@@ -375,6 +376,7 @@
 		8E4E5B752219624D00FE4B68 /* FaceRecognitionOpenCV */ = {isa = PBXFileReference; lastKnownFileType = folder; path = FaceRecognitionOpenCV; sourceTree = "<group>"; };
 		8E4E5B77221985A400FE4B68 /* ImageFace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFace.swift; sourceTree = "<group>"; };
 		8E4E5B7E221F3D1800FE4B68 /* PeopleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleViewController.swift; sourceTree = "<group>"; };
+		8E5E2A8B24713DF9001C336B /* DataCloner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCloner.swift; sourceTree = "<group>"; };
 		8E73E381223E494C00C14A90 /* ExecutionEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutionEnvironment.swift; sourceTree = "<group>"; };
 		8E7419432422526F002BAAAE /* ImageDaoInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDaoInterface.swift; sourceTree = "<group>"; };
 		8E741945242256E2002BAAAE /* RepositoryDaoInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryDaoInterface.swift; sourceTree = "<group>"; };
@@ -845,6 +847,7 @@
 				8EF3FEE624231C0400AF83BB /* ImageSQLHelper.swift */,
 				8EF92DF32460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift */,
 				8EEE584F2465471A007219AB /* SQLiteDataSource.swift */,
+				8E5E2A8B24713DF9001C336B /* DataCloner.swift */,
 				8E97ECFA243B2C980013EFD3 /* PostgresClientKit */,
 				8E3EC3BA214DC120004B6125 /* GRDB */,
 			);
@@ -1904,6 +1907,7 @@
 				8EAD03AF2337290E00AAC7C6 /* GRDB+Image.swift in Sources */,
 				8EB2719F23412FE8003BF3AF /* ViewController+Menu+Export.swift in Sources */,
 				8EB271512337B6E4003BF3AF /* GRDB+Image+Duplicate.swift in Sources */,
+				8E5E2A8C24713DF9001C336B /* DataCloner.swift in Sources */,
 				8EEE585224654760007219AB /* ImageDBInterface.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
