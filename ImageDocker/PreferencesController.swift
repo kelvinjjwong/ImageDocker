@@ -204,7 +204,6 @@ final class PreferencesController: NSViewController {
         self.btnBackupRemote.isEnabled = state
         self.btnCloneLocalToRemote.isEnabled = state
         self.btnCloneRemoteToLocal.isEnabled = state
-        self.chkDeleteAllBeforeClone.isEnabled = state
     }
     
     @IBAction func onCloneLocalToRemoteClicked(_ sender: NSButton) {
@@ -953,6 +952,9 @@ final class PreferencesController: NSViewController {
             self.chkRemoteDBNoPassword.state = .off
             self.txtRemoteDBPassword.isEditable = true
         }
+        
+        self.chkDeleteAllBeforeClone.state = .on
+        self.chkDeleteAllBeforeClone.isEnabled = false
     }
     
     func initMobileSection() {
@@ -1025,6 +1027,7 @@ final class PreferencesController: NSViewController {
         self.initMobileSection()
         self.initFaceRecognitionSection()
         self.initGeolocationAPISection()
+        
     }
     
     fileprivate func setupMemorySlider() {
