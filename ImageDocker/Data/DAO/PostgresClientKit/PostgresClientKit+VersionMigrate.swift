@@ -107,7 +107,7 @@ extension PostgresConnection {
                 t.column("city", .text).indexed()
                 t.column("containerPath", .text).indexed()
                 t.column("country", .text).indexed()
-                t.column("datetimeFromFilename", .text)
+                t.column("dateTimeFromFilename", .text)
                 t.column("district", .text)
                 t.column("event", .text).indexed()
                 t.column("exportAsFilename", .text)

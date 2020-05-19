@@ -86,7 +86,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
     func getRepositories(orderBy: String) -> [ImageContainer] {
         let db = PostgresConnection.database()
-        return ImageContainer.fetchAll(db, where: "parentFolder=''", orderBy: orderBy)
+        return ImageContainer.fetchAll(db, parameters: ["parentFolder" : ""], orderBy: orderBy)
     }
     
     func getSubContainers(parent path: String) -> [ImageContainer] {
@@ -311,7 +311,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         
         let sql = """
         select name,lastPhotoTakenDate from
-        (select name,(path || '/') repositoryPath from imageContainer where parentfolder='') c left join (
+        (select name,(path || '/') repositoryPath from imageContainer where parentFolder='') c left join (
         select max(photoTakenDate) lastPhotoTakenDate,repositoryPath from image group by repositoryPath) i on c.repositoryPath = i.repositoryPath
         order by name
         """

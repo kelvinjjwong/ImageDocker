@@ -11,6 +11,8 @@ import PostgresClientKit
 
 public class PostgresDB : DBExecutor {
     
+    static let showSQL = false
+    
     private let postgresConfig: ConnectionConfiguration
     
     var schema:String = "public"
@@ -30,13 +32,13 @@ public class PostgresDB : DBExecutor {
         self.postgresConfig = configuration
     }
     public func execute(sql: String) throws {
-        print(" >>> execute sql: \(sql)")
+        if(PostgresDB.showSQL) {print(" >>> execute sql: \(sql)")}
         let statement = SQLStatement(sql: sql)
         try self.execute(statement: statement)
     }
     
     public func execute(sql: String, parameterValues:[PostgresValueConvertible?]) throws {
-        print(" >>> execute sql: \(sql)")
+        if(PostgresDB.showSQL) {print(" >>> execute sql: \(sql)")}
         let statement = SQLStatement(sql: sql)
         statement.arguments = parameterValues
         try self.execute(statement: statement)
@@ -64,7 +66,7 @@ public class PostgresDB : DBExecutor {
             
             let generator = PostgreSQLStatementGenerator(table: table, record: object)
             let statement = generator.deleteStatement(keyColumns: primaryKeys)
-            print(" >>> execute sql: \(statement.sql)")
+            if(PostgresDB.showSQL) {print(" >>> execute sql: \(statement.sql)")}
             try self.execute(statement: statement)
         }catch{
             print(error)
@@ -78,7 +80,7 @@ public class PostgresDB : DBExecutor {
             
             let generator = PostgreSQLStatementGenerator(table: table, record: object)
             let existsStatement = generator.existsStatement(keyColumns: primaryKeys)
-            print(" >>> execute sql: \(existsStatement.sql)")
+            if(PostgresDB.showSQL) {print(" >>> execute sql: \(existsStatement.sql)")}
             let existsStmt = try connection.prepareStatement(text: existsStatement.sql)
             defer { existsStmt.close() }
             
@@ -97,14 +99,14 @@ public class PostgresDB : DBExecutor {
             if exists {
             
                 let statement = generator.updateStatement(keyColumns: primaryKeys)
-                print(" >>> execute sql: \(statement.sql)")
+                if(PostgresDB.showSQL) {print(" >>> execute sql: \(statement.sql)")}
                 let stmt = try connection.prepareStatement(text: statement.sql)
                 defer { stmt.close() }
                 
                 let _ = try stmt.execute(parameterValues: statement.arguments)
             } else {
                 let statement = generator.insertStatement()
-                print(" >>> execute sql: \(statement.sql)")
+                if(PostgresDB.showSQL) {print(" >>> execute sql: \(statement.sql)")}
                 let stmt = try connection.prepareStatement(text: statement.sql)
                 defer { stmt.close() }
                 
@@ -131,7 +133,7 @@ public class PostgresDB : DBExecutor {
                 
             }
             
-            print(" >>> query sql: \(sql) \(pagination)")
+            if(PostgresDB.showSQL) {print(" >>> query sql: \(sql) \(pagination)")}
             
             let stmt = try connection.prepareStatement(text: "\(sql) \(pagination)")
             defer { stmt.close() }
@@ -169,7 +171,7 @@ public class PostgresDB : DBExecutor {
                 
             }
             
-            print(" >>> query sql: \(statement.sql) \(pagination)")
+            if(PostgresDB.showSQL) {print(" >>> query sql: \(statement.sql) \(pagination)")}
             
             let stmt = try connection.prepareStatement(text: "\(statement.sql) \(pagination)")
             defer { stmt.close() }
@@ -204,7 +206,7 @@ public class PostgresDB : DBExecutor {
             let statement = generator.selectStatement(keyColumns: keyColumns, orderBy: orderBy)
             let columnNames = generator.persistenceContainer.columns
             
-            print(" >>> query sql: \(statement.sql)")
+            if(PostgresDB.showSQL) {print(" >>> query sql: \(statement.sql)")}
             
             let stmt = try connection.prepareStatement(text: statement.sql)
             defer { stmt.close() }
@@ -259,7 +261,7 @@ public class PostgresDB : DBExecutor {
     }
     
     public func count(sql:String, parameterValues: [PostgresValueConvertible?]) -> Int {
-        print(" >>> count sql: \(sql)")
+        if(PostgresDB.showSQL) {print(" >>> count sql: \(sql)")}
         do {
             let connection = try PostgresClientKit.Connection(configuration: self.postgresConfig)
             defer { connection.close() }

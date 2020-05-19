@@ -12,7 +12,6 @@ import GRDB
 public final class ImageEvent : Codable {
     //var id: Int64?      // <- the row id
     var name: String = ""
-    var category: String = ""
     var startDate: Date?
     var startYear: Int?
     var startMonth: Int?
@@ -21,6 +20,7 @@ public final class ImageEvent : Codable {
     var endYear: Int?
     var endMonth: Int?
     var endDay: Int?
+    var category: String = ""
     
     public init() {
         

@@ -11,9 +11,9 @@ import GRDB
 
 public final class ImageContainer: Codable {
     //var id: Int64?      // <- the row id
+    var path: String = ""
     var name: String = ""
     var parentFolder: String = ""
-    var path: String = ""
     var imageCount: Int = 0
     var repositoryPath: String = ""
     var homePath: String = ""
@@ -27,6 +27,7 @@ public final class ImageContainer: Codable {
     var deviceId: String = ""
     var manyChildren: Bool = false
     var hideByParent: Bool = false
+    var useFirstFolderAsEvent: Bool = false
     var folderAsEvent: Bool = false
     var eventFolderLevel: Int = 0
     var folderAsBrief: Bool = false

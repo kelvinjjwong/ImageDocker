@@ -416,7 +416,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     func getLastPhotoTakenDateOfRepositories() -> [String:String] {
         let sql = """
 select name,lastPhotoTakenDate from
-(select name,(path || '/') repositoryPath from imageContainer where parentfolder='') c left join (
+(select name,(path || '/') repositoryPath from imageContainer where parentFolder='') c left join (
 select max(photoTakenDate) lastPhotoTakenDate,repositoryPath from image group by repositoryPath) i on c.repositoryPath = i.repositoryPath
 order by name
 """

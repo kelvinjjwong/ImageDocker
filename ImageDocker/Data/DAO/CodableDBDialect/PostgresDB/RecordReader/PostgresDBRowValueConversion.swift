@@ -21,8 +21,13 @@ extension PostgresRowValueProtocol {
     static func decode(from row: PostgresRow, atUncheckedIndex index: Int) -> Self {
         let dbValue = row.values[index].postgresValue
         if let value = fromPostgresValue(dbValue) {
+//            print("decoding column: \(row.columnNames[index])")
+//            print("value to be decoded: \(dbValue.rawValue ?? "nil")")
+//            print("value decoded: \(value)")
             return value
         } else {
+            print("decoding column: \(row.columnNames[index])")
+            print("value to be decoded: \(dbValue.rawValue ?? "nil")")
             fatalConversionError(to: Self.self, from: dbValue)
         }
     }

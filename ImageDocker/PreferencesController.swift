@@ -401,6 +401,33 @@ final class PreferencesController: NSViewController {
     
     @IBAction func onCloneRemoteToLocalClicked(_ sender: NSButton) {
         self.lblDataCloneMessage.stringValue = "TODO function."
+        DispatchQueue.global().async {
+            DispatchQueue.main.async {
+                self.lblDataCloneMessage.stringValue = "Updating schema ..."
+            }
+            PostgresConnection.default.versionCheck(dropBeforeCreate: true)
+
+            
+            final class Version : PostgresCustomRecord {
+                var ver:Int = 0
+                public init() {}
+            }
+            
+            if let version = Version.fetchOne(PostgresConnection.database(), sql: "select substring(ver, '\\d+')::int versions from version_migrations order by versions desc") {
+                DispatchQueue.main.async {
+                    self.lblRemoteSchemaVersion.stringValue = "v\(version.ver)"
+                    self.lblDataCloneMessage.stringValue = "Remote DB schema version is v\(version.ver) now."
+                }
+            }
+            let path = "/Volumes/Mac Drive/MacStorage/photo.export.photos/2010年05月01日/DSC_0896.JPG"
+            if let image = ImageRecordDaoGRDB().getImage(path: path) {
+                print("found image")
+                image.save(PostgresConnection.database())
+                print("saved to postgres")
+            }else{
+                print("not found image")
+            }
+        }
     }
     
     @IBAction func onBackupLocalClicked(_ sender: NSButton) {

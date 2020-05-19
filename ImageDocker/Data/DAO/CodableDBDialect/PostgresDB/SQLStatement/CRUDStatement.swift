@@ -175,6 +175,6 @@ extension CountQuery {
             }
             whereStmt = placeholders.joined(separator: " AND ")
         }
-        return "SELECT count(1) FROM \(schema.quotedDatabaseIdentifier)\(tableName.quotedDatabaseIdentifier) WHERE \(whereStmt)".trimmingCharacters(in: .whitespacesAndNewlines)
+        return "SELECT count(1) FROM \(schema.quotedDatabaseIdentifier).\(tableName.quotedDatabaseIdentifier) WHERE \(whereStmt)".trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }
