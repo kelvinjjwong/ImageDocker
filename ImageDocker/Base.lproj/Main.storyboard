@@ -1162,7 +1162,7 @@
             <objects>
                 <viewController id="UOy-CF-cGN" customClass="PreferencesController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="NhD-ZI-Nhm">
-                        <rect key="frame" x="0.0" y="0.0" width="750" height="550"/>
+                        <rect key="frame" x="0.0" y="0.0" width="750" height="666"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="m5h-vp-VBe">
@@ -1176,16 +1176,16 @@
                                 </connections>
                             </button>
                             <tabView initialItem="yk8-pT-h14" translatesAutoresizingMaskIntoConstraints="NO" id="2L9-ci-i6l">
-                                <rect key="frame" x="-7" y="51" width="764" height="495"/>
+                                <rect key="frame" x="-7" y="51" width="764" height="611"/>
                                 <font key="font" metaFont="system"/>
                                 <tabViewItems>
                                     <tabViewItem label="Performance" identifier="" id="yk8-pT-h14">
                                         <view key="view" id="HmM-lu-hoA">
-                                            <rect key="frame" x="10" y="33" width="744" height="449"/>
+                                            <rect key="frame" x="10" y="33" width="744" height="600"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <box fixedFrame="YES" title="System Memory Limit" translatesAutoresizingMaskIntoConstraints="NO" id="vkS-WK-XSD">
-                                                    <rect key="frame" x="28" y="236" width="683" height="189"/>
+                                                    <rect key="frame" x="28" y="387" width="683" height="189"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="Zl5-xd-uV7">
                                                         <rect key="frame" x="3" y="3" width="677" height="171"/>
@@ -1267,7 +1267,7 @@
                                                     </view>
                                                 </box>
                                                 <box fixedFrame="YES" title="Pagination" translatesAutoresizingMaskIntoConstraints="NO" id="CjS-97-1Ra">
-                                                    <rect key="frame" x="28" y="119" width="683" height="96"/>
+                                                    <rect key="frame" x="28" y="270" width="683" height="96"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="euX-Pn-GMJ">
                                                         <rect key="frame" x="3" y="3" width="677" height="78"/>
@@ -1317,11 +1317,11 @@
                                     </tabViewItem>
                                     <tabViewItem label="Database" identifier="" id="6Rp-DL-tiJ">
                                         <view key="view" id="q79-Dt-jlX">
-                                            <rect key="frame" x="10" y="33" width="744" height="449"/>
+                                            <rect key="frame" x="10" y="33" width="744" height="565"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <box fixedFrame="YES" title="Local Database (SQLite)" translatesAutoresizingMaskIntoConstraints="NO" id="zPw-Us-MkP">
-                                                    <rect key="frame" x="49" y="296" width="672" height="100"/>
+                                                    <rect key="frame" x="49" y="442" width="672" height="100"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="Ywl-0Z-569">
                                                         <rect key="frame" x="3" y="3" width="666" height="82"/>
@@ -1364,19 +1364,10 @@
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GSZ-Ge-g8Q">
-                                                                <rect key="frame" x="416" y="39" width="98" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" id="O9Q-z9-Wdq">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
                                                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fbK-i4-wvg">
-                                                                <rect key="frame" x="514" y="7" width="138" height="32"/>
+                                                                <rect key="frame" x="534" y="7" width="118" height="32"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Schema Version" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Qxw-sy-q9U">
+                                                                <buttonCell key="cell" type="push" title="Test Schema" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Qxw-sy-q9U">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
@@ -1385,9 +1376,9 @@
                                                                 </connections>
                                                             </button>
                                                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pEj-lB-BQS">
-                                                                <rect key="frame" x="14" y="7" width="130" height="32"/>
+                                                                <rect key="frame" x="14" y="7" width="116" height="32"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Backup SQLite" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8i4-ex-puh">
+                                                                <buttonCell key="cell" type="push" title="Backup Now" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8i4-ex-puh">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
@@ -1395,18 +1386,36 @@
                                                                     <action selector="onBackupLocalClicked:" target="UOy-CF-cGN" id="gWJ-E9-pKz"/>
                                                                 </connections>
                                                             </button>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GSZ-Ge-g8Q">
+                                                                <rect key="frame" x="436" y="17" width="98" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" id="O9Q-z9-Wdq">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iy1-vx-3sc">
+                                                                <rect key="frame" x="139" y="17" width="265" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" id="EEE-WM-1No">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
                                                         </subviews>
                                                     </view>
                                                 </box>
                                                 <box fixedFrame="YES" title="Network Shared Database (PostgreSQL)" translatesAutoresizingMaskIntoConstraints="NO" id="5hi-6b-6UQ">
-                                                    <rect key="frame" x="49" y="122" width="672" height="158"/>
+                                                    <rect key="frame" x="49" y="12" width="672" height="162"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="f1A-dw-6uD">
-                                                        <rect key="frame" x="3" y="3" width="666" height="140"/>
+                                                        <rect key="frame" x="3" y="3" width="666" height="144"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Af5-uU-FOD">
-                                                                <rect key="frame" x="40" y="107" width="51" height="17"/>
+                                                                <rect key="frame" x="20" y="101" width="71" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Server:" id="3HH-12-Vn3">
                                                                     <font key="font" usesAppearanceFont="YES"/>
@@ -1415,7 +1424,7 @@
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yLl-X4-YVv">
-                                                                <rect key="frame" x="18" y="79" width="73" height="17"/>
+                                                                <rect key="frame" x="19" y="65" width="73" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Username:" id="t1B-eN-Yu6">
                                                                     <font key="font" metaFont="system"/>
@@ -1424,7 +1433,7 @@
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OTa-Wi-Dbz">
-                                                                <rect key="frame" x="292" y="106" width="97" height="22"/>
+                                                                <rect key="frame" x="292" y="100" width="97" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="1tx-ud-02a">
                                                                     <font key="font" metaFont="system"/>
@@ -1432,17 +1441,8 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eTh-Ux-n5k">
-                                                                <rect key="frame" x="20" y="11" width="628" height="17"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" id="TqA-mN-I4D">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
                                                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PCX-Bi-QGL">
-                                                                <rect key="frame" x="97" y="106" width="96" height="22"/>
+                                                                <rect key="frame" x="97" y="100" width="96" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="64V-p3-MZp">
                                                                     <font key="font" metaFont="system"/>
@@ -1451,7 +1451,7 @@
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bWA-V1-8U4">
-                                                                <rect key="frame" x="97" y="76" width="96" height="21"/>
+                                                                <rect key="frame" x="97" y="63" width="96" height="21"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="e7y-fx-Qse">
                                                                     <font key="font" metaFont="system"/>
@@ -1460,7 +1460,7 @@
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GMu-IZ-0aN">
-                                                                <rect key="frame" x="212" y="82" width="74" height="16"/>
+                                                                <rect key="frame" x="212" y="66" width="74" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Password:" id="DwD-Rg-zKp">
                                                                     <font key="font" metaFont="system"/>
@@ -1469,7 +1469,7 @@
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q8h-pK-BrM">
-                                                                <rect key="frame" x="242" y="111" width="44" height="17"/>
+                                                                <rect key="frame" x="242" y="101" width="44" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Port:" id="Aut-sg-fJe">
                                                                     <font key="font" metaFont="system"/>
@@ -1477,8 +1477,75 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I56-Oq-6rU">
+                                                                <rect key="frame" x="30" y="30" width="61" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Schema:" id="J2O-mn-rZw">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oHL-Dg-LGe">
+                                                                <rect key="frame" x="212" y="30" width="74" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Database:" id="lu8-2G-eUp">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sdh-Ux-aFj">
+                                                                <rect key="frame" x="97" y="25" width="96" height="21"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="9x6-Tc-BlI">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="miT-fl-gzk">
+                                                                <rect key="frame" x="292" y="25" width="97" height="21"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="POT-Da-XOC">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VXW-zK-b3U">
+                                                                <rect key="frame" x="534" y="96" width="118" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" title="Test Schema" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qqB-uZ-bJl">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onRemoteDBTestClicked:" target="UOy-CF-cGN" id="6fs-Di-6g5"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7A8-P2-mx9">
+                                                                <rect key="frame" x="404" y="66" width="101" height="18"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="check" title="No password" bezelStyle="regularSquare" imagePosition="left" inset="2" id="LmP-aZ-LIx">
+                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onCheckRemoteNopasswordClicked:" target="UOy-CF-cGN" id="6rx-fB-hWj"/>
+                                                                </connections>
+                                                            </button>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7hD-4T-IZL">
+                                                                <rect key="frame" x="437" y="103" width="97" height="21"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" id="sye-oZ-y1Z">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
                                                             <secureTextField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LdL-lc-njC">
-                                                                <rect key="frame" x="292" y="77" width="97" height="21"/>
+                                                                <rect key="frame" x="292" y="63" width="97" height="21"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="4rM-UT-7zh">
                                                                     <font key="font" metaFont="system"/>
@@ -1489,189 +1556,11 @@
                                                                     </allowedInputSourceLocales>
                                                                 </secureTextFieldCell>
                                                             </secureTextField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I56-Oq-6rU">
-                                                                <rect key="frame" x="30" y="48" width="61" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Schema:" id="J2O-mn-rZw">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oHL-Dg-LGe">
-                                                                <rect key="frame" x="212" y="51" width="74" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Database:" id="lu8-2G-eUp">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sdh-Ux-aFj">
-                                                                <rect key="frame" x="97" y="45" width="96" height="21"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="9x6-Tc-BlI">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="miT-fl-gzk">
-                                                                <rect key="frame" x="292" y="48" width="97" height="21"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="POT-Da-XOC">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VXW-zK-b3U">
-                                                                <rect key="frame" x="513" y="98" width="139" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Test Connection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qqB-uZ-bJl">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onRemoteDBTestClicked:" target="UOy-CF-cGN" id="6fs-Di-6g5"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="irf-8b-k5C">
-                                                                <rect key="frame" x="514" y="4" width="138" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Schema Version" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dsF-Au-rNV">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onRemoteSchemaVersionClicked:" target="UOy-CF-cGN" id="MxG-3R-7Kz"/>
-                                                                </connections>
-                                                            </button>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7hD-4T-IZL">
-                                                                <rect key="frame" x="408" y="14" width="106" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" id="sye-oZ-y1Z">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2KI-hG-mkf">
-                                                                <rect key="frame" x="16" y="4" width="161" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Backup PostgreSQL" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nIZ-9x-tVo">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onBackupRemoteClicked:" target="UOy-CF-cGN" id="KBN-ur-Cqa"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7A8-P2-mx9">
-                                                                <rect key="frame" x="402" y="80" width="101" height="18"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="check" title="No password" bezelStyle="regularSquare" imagePosition="left" inset="2" id="LmP-aZ-LIx">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onCheckRemoteNopasswordClicked:" target="UOy-CF-cGN" id="6rx-fB-hWj"/>
-                                                                </connections>
-                                                            </button>
                                                         </subviews>
                                                     </view>
                                                 </box>
-                                                <box fixedFrame="YES" title="Data Clone" translatesAutoresizingMaskIntoConstraints="NO" id="JzN-CN-wVF">
-                                                    <rect key="frame" x="49" y="10" width="672" height="99"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <view key="contentView" id="QCB-Ph-azC">
-                                                        <rect key="frame" x="3" y="3" width="666" height="81"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                        <subviews>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="03W-ch-EnL">
-                                                                <rect key="frame" x="14" y="34" width="175" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="SQLite -&gt; PostgreSQL" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jvS-Bn-Fqn">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onCloneLocalToRemoteClicked:" target="UOy-CF-cGN" id="eLd-8f-j9L"/>
-                                                                </connections>
-                                                            </button>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Co-8D-Jlt">
-                                                                <rect key="frame" x="20" y="17" width="628" height="16"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" id="Z0J-Sj-HB8">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lz8-Iv-wir">
-                                                                <rect key="frame" x="491" y="43" width="157" height="18"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="check" title="Delete all original data" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Qb2-ie-G7k">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                            </button>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ywp-zw-9pq">
-                                                                <rect key="frame" x="218" y="33" width="175" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="PostgreSQL -&gt; SQLite" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ge8-pg-NnS">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onCloneRemoteToLocalClicked:" target="UOy-CF-cGN" id="Y5F-EY-o62"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                    </view>
-                                                </box>
-                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eOo-Ia-9B7">
-                                                    <rect key="frame" x="24" y="265" width="22" height="18"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="qab-tN-gvN">
-                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                        <font key="font" metaFont="system"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <action selector="onCheckNetworkLocationClicked:" target="UOy-CF-cGN" id="e5A-HW-dmK"/>
-                                                    </connections>
-                                                </button>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="62y-AY-elg">
-                                                    <rect key="frame" x="50" y="413" width="166" height="17"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Database Backup Location" id="Esv-Bh-TKN">
-                                                        <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zo7-4b-cBE">
-                                                    <rect key="frame" x="221" y="412" width="408" height="17"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <textFieldCell key="cell" lineBreakMode="clipping" selectable="YES" id="yXY-kT-swX">
-                                                        <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gEm-Oh-tRP">
-                                                    <rect key="frame" x="629" y="401" width="70" height="32"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="push" title="Goto" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5pr-DZ-ZG7">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="system"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <action selector="onFindDatabaseBackupClicked:" target="UOy-CF-cGN" id="XZv-Gi-rfD"/>
-                                                    </connections>
-                                                </button>
                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wbu-dq-6U6">
-                                                    <rect key="frame" x="24" y="381" width="22" height="18"/>
+                                                    <rect key="frame" x="24" y="526" width="22" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Aok-AN-zCi">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1681,16 +1570,654 @@
                                                         <action selector="onCheckLocalLocationClicked:" target="UOy-CF-cGN" id="iTL-Ml-xxU"/>
                                                     </connections>
                                                 </button>
+                                                <box fixedFrame="YES" title="Local Database (PostgreSQL)" translatesAutoresizingMaskIntoConstraints="NO" id="iaF-m6-tZL">
+                                                    <rect key="frame" x="49" y="194" width="672" height="232"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <view key="contentView" id="xRO-36-ukf">
+                                                        <rect key="frame" x="3" y="3" width="666" height="214"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n4f-zg-LUt">
+                                                                <rect key="frame" x="33" y="178" width="55" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Server:" id="Bk3-hW-zUk">
+                                                                    <font key="font" usesAppearanceFont="YES"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aTO-fu-fGY">
+                                                                <rect key="frame" x="94" y="173" width="96" height="21"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="h5T-W5-HDo">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VVz-Wv-QyU">
+                                                                <rect key="frame" x="245" y="178" width="34" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Port:" id="XlU-WG-yN4">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7T8-t6-KHC">
+                                                                <rect key="frame" x="18" y="141" width="70" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Username:" id="bHF-Pe-CTL">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qlc-Zm-2XR">
+                                                                <rect key="frame" x="22" y="104" width="66" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Schema:" id="o0O-Te-7XL">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UaQ-Nz-2z0">
+                                                                <rect key="frame" x="17" y="63" width="71" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Bin Path:" id="lZ3-0f-5O1">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FFU-mO-C5q">
+                                                                <rect key="frame" x="94" y="58" width="404" height="21"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Zwf-py-AvH">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cG0-0Q-viB">
+                                                                <rect key="frame" x="504" y="60" width="140" height="18"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="check" title="Inside PostgresApp" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="4zP-KS-0rL">
+                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onCheckLocalDBBinInsideApp:" target="UOy-CF-cGN" id="RXt-MB-HO3"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2KI-hG-mkf">
+                                                                <rect key="frame" x="14" y="13" width="116" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" title="Backup Now" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nIZ-9x-tVo">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onBackupRemoteClicked:" target="UOy-CF-cGN" id="KBN-ur-Cqa"/>
+                                                                </connections>
+                                                            </button>
+                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="90e-ho-bbB">
+                                                                <rect key="frame" x="94" y="136" width="96" height="21"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="z2S-yP-Mty">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Ix-zL-X5r">
+                                                                <rect key="frame" x="94" y="98" width="96" height="21"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="bec-NF-CUT">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jyh-59-R6d">
+                                                                <rect key="frame" x="207" y="140" width="73" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Password:" id="Hgi-LK-VUw">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ept-D8-1M3">
+                                                                <rect key="frame" x="286" y="98" width="96" height="21"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="q4X-Cj-rWz">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tmB-6s-hox">
+                                                                <rect key="frame" x="286" y="173" width="96" height="21"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="cc2-3N-o8f">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <secureTextField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5qR-iR-3Oa">
+                                                                <rect key="frame" x="286" y="136" width="96" height="21"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="RQl-SY-mzn">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                    <allowedInputSourceLocales>
+                                                                        <string>NSAllRomanInputSourcesLocaleIdentifier</string>
+                                                                    </allowedInputSourceLocales>
+                                                                </secureTextFieldCell>
+                                                            </secureTextField>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qhR-AQ-OPB">
+                                                                <rect key="frame" x="214" y="103" width="66" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Database:" id="lb0-oV-hZI">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6ys-8N-Za5">
+                                                                <rect key="frame" x="534" y="166" width="118" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" title="Test Schema" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Xxm-e6-Gmh">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onLocalDBServerTestClicked:" target="UOy-CF-cGN" id="AvT-ip-42O"/>
+                                                                </connections>
+                                                            </button>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="djE-KO-ic9">
+                                                                <rect key="frame" x="431" y="177" width="103" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" id="GZh-VY-wzW">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eTh-Ux-n5k">
+                                                                <rect key="frame" x="130" y="22" width="516" height="17"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" id="TqA-mN-I4D">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xrn-Oi-M29">
+                                                                <rect key="frame" x="399" y="138" width="101" height="18"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="check" title="No password" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Aoc-k7-z4P">
+                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onCheckLocalNoPasswordClicked:" target="UOy-CF-cGN" id="NdN-6n-HiV"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                    </view>
+                                                </box>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EU7-Wy-yj1">
+                                                    <rect key="frame" x="24" y="411" width="22" height="18"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="9pg-Vb-UXN">
+                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="onCheckLocalDBServerClicked:" target="UOy-CF-cGN" id="shV-O2-IV6"/>
+                                                    </connections>
+                                                </button>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eOo-Ia-9B7">
+                                                    <rect key="frame" x="24" y="158" width="22" height="18"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="qab-tN-gvN">
+                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="onCheckNetworkLocationClicked:" target="UOy-CF-cGN" id="e5A-HW-dmK"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </view>
+                                    </tabViewItem>
+                                    <tabViewItem label="Backup" identifier="" id="Q4N-7J-kMv">
+                                        <view key="view" id="Mh7-BL-mLO">
+                                            <rect key="frame" x="10" y="33" width="744" height="565"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <box fixedFrame="YES" title="General" translatesAutoresizingMaskIntoConstraints="NO" id="p4p-jw-KBM">
+                                                    <rect key="frame" x="36" y="463" width="672" height="92"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <view key="contentView" id="mo6-Z1-9Vo">
+                                                        <rect key="frame" x="3" y="3" width="666" height="74"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zo7-4b-cBE">
+                                                                <rect key="frame" x="156" y="46" width="426" height="17"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" selectable="YES" id="yXY-kT-swX">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gEm-Oh-tRP">
+                                                                <rect key="frame" x="590" y="37" width="70" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" title="Goto" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5pr-DZ-ZG7">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onFindDatabaseBackupClicked:" target="UOy-CF-cGN" id="XZv-Gi-rfD"/>
+                                                                </connections>
+                                                            </button>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="t9s-If-LGk">
+                                                                <rect key="frame" x="11" y="14" width="467" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" id="iZY-qs-Do0">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fco-kT-TcE">
+                                                                <rect key="frame" x="487" y="4" width="173" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" title="Calc Used Dsik Space" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jTH-LM-foZ">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onCalcBackupUsedSpace:" target="UOy-CF-cGN" id="6Fw-fi-vKR"/>
+                                                                </connections>
+                                                            </button>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="62y-AY-elg">
+                                                                <rect key="frame" x="23" y="44" width="117" height="17"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Backup Location:" id="Esv-Bh-TKN">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                        </subviews>
+                                                    </view>
+                                                </box>
+                                                <box fixedFrame="YES" title="Data Clone" translatesAutoresizingMaskIntoConstraints="NO" id="JzN-CN-wVF">
+                                                    <rect key="frame" x="36" y="270" width="672" height="182"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <view key="contentView" id="QCB-Ph-azC">
+                                                        <rect key="frame" x="3" y="3" width="666" height="164"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Co-8D-Jlt">
+                                                                <rect key="frame" x="32" y="11" width="616" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" id="Z0J-Sj-HB8">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lz8-Iv-wir">
+                                                                <rect key="frame" x="491" y="134" width="157" height="18"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="check" title="Delete all original data" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Qb2-ie-G7k">
+                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="03W-ch-EnL">
+                                                                <rect key="frame" x="546" y="80" width="106" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" title="Clone Now" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jvS-Bn-Fqn">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onCloneLocalToRemoteClicked:" target="UOy-CF-cGN" id="eLd-8f-j9L"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D6b-Cv-w3d">
+                                                                <rect key="frame" x="32" y="104" width="99" height="18"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="check" title="Local SQLite" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="uxD-2U-7nx">
+                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onCheckFromLocalDBFile:" target="UOy-CF-cGN" id="QUc-Tl-Fje"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zxP-TM-bHe">
+                                                                <rect key="frame" x="32" y="74" width="130" height="18"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="check" title="Local PostgreSQL" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="zWf-9E-MHR">
+                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onCheckFromLocalDBServer:" target="UOy-CF-cGN" id="imr-h9-uRn"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S9R-0W-8mn">
+                                                                <rect key="frame" x="32" y="42" width="145" height="18"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="check" title="Remote PostgreSQL" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="P5b-2h-K4P">
+                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onCheckFromRemoteDBServer:" target="UOy-CF-cGN" id="x8y-Jb-Q0w"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F7N-4y-L4j">
+                                                                <rect key="frame" x="235" y="104" width="99" height="18"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="check" title="Local SQLite" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="gI9-hB-oSs">
+                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onCheckToLocalDBFile:" target="UOy-CF-cGN" id="921-2M-Xi2"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k84-pX-HAh">
+                                                                <rect key="frame" x="235" y="74" width="130" height="18"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="check" title="Local PostgreSQL" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="5qh-Dd-AD3">
+                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onCheckToLocalDBServer:" target="UOy-CF-cGN" id="T0G-Rx-W5W"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h5v-lB-Cdr">
+                                                                <rect key="frame" x="235" y="42" width="145" height="18"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="check" title="Remote PostgreSQL" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="u52-Vp-ukf">
+                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onCheckToRemoteDBServer:" target="UOy-CF-cGN" id="y5p-iJ-opX"/>
+                                                                </connections>
+                                                            </button>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aop-eI-TsK">
+                                                                <rect key="frame" x="79" y="139" width="42" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="FROM" id="iq6-nM-JFu">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kie-SS-qGq">
+                                                                <rect key="frame" x="274" y="139" width="22" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="TO" id="X9C-kM-wbY">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="yyf-XC-elF">
+                                                                <rect key="frame" x="205" y="41" width="5" height="114"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            </box>
+                                                            <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="rPJ-U3-WQh">
+                                                                <rect key="frame" x="34" y="134" width="363" height="5"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            </box>
+                                                        </subviews>
+                                                    </view>
+                                                </box>
+                                                <box fixedFrame="YES" title="Restore Archives" translatesAutoresizingMaskIntoConstraints="NO" id="XUw-Yu-lFh">
+                                                    <rect key="frame" x="36" y="23" width="672" height="225"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <view key="contentView" id="2Xl-tW-VBO">
+                                                        <rect key="frame" x="3" y="3" width="666" height="207"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fRD-SJ-Ld7">
+                                                                <rect key="frame" x="20" y="20" width="275" height="167"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <clipView key="contentView" ambiguous="YES" id="D2k-1f-peO">
+                                                                    <rect key="frame" x="1" y="0.0" width="273" height="166"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <subviews>
+                                                                        <tableView verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="Ach-a0-h7S" viewBased="YES" id="kXx-S6-VDX">
+                                                                            <rect key="frame" x="0.0" y="0.0" width="273" height="141"/>
+                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                            <size key="intercellSpacing" width="3" height="2"/>
+                                                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                            <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                                                            <tableColumns>
+                                                                                <tableColumn width="116" minWidth="40" maxWidth="1000" id="gmb-3T-aKz">
+                                                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
+                                                                                        <font key="font" metaFont="message" size="11"/>
+                                                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                                                        <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                                                                    </tableHeaderCell>
+                                                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="fAi-e7-NLz">
+                                                                                        <font key="font" metaFont="system"/>
+                                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                    </textFieldCell>
+                                                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                                                                    <prototypeCellViews>
+                                                                                        <tableCellView id="Plg-WP-gV8">
+                                                                                            <rect key="frame" x="1" y="1" width="116" height="17"/>
+                                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                                            <subviews>
+                                                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="asm-w8-ng7">
+                                                                                                    <rect key="frame" x="0.0" y="0.0" width="116" height="17"/>
+                                                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" id="td5-Wh-Qqy">
+                                                                                                        <font key="font" metaFont="system"/>
+                                                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                                                    </textFieldCell>
+                                                                                                </textField>
+                                                                                            </subviews>
+                                                                                            <connections>
+                                                                                                <outlet property="textField" destination="asm-w8-ng7" id="aRC-aH-Gs8"/>
+                                                                                            </connections>
+                                                                                        </tableCellView>
+                                                                                    </prototypeCellViews>
+                                                                                </tableColumn>
+                                                                                <tableColumn width="151" minWidth="40" maxWidth="1000" id="aob-62-jrl">
+                                                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
+                                                                                        <font key="font" metaFont="message" size="11"/>
+                                                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                                                        <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                                                                    </tableHeaderCell>
+                                                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="361-cC-nKl">
+                                                                                        <font key="font" metaFont="system"/>
+                                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                    </textFieldCell>
+                                                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                                                                    <prototypeCellViews>
+                                                                                        <tableCellView id="DvH-RD-1fy">
+                                                                                            <rect key="frame" x="120" y="1" width="151" height="17"/>
+                                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                                            <subviews>
+                                                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oKs-lK-rlC">
+                                                                                                    <rect key="frame" x="0.0" y="0.0" width="151" height="17"/>
+                                                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" id="vMR-9O-xR3">
+                                                                                                        <font key="font" metaFont="system"/>
+                                                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                                                    </textFieldCell>
+                                                                                                </textField>
+                                                                                            </subviews>
+                                                                                            <connections>
+                                                                                                <outlet property="textField" destination="oKs-lK-rlC" id="Qiu-Yo-jPp"/>
+                                                                                            </connections>
+                                                                                        </tableCellView>
+                                                                                    </prototypeCellViews>
+                                                                                </tableColumn>
+                                                                            </tableColumns>
+                                                                        </tableView>
+                                                                    </subviews>
+                                                                </clipView>
+                                                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="5J2-jr-2kG">
+                                                                    <rect key="frame" x="1" y="119" width="223" height="15"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                </scroller>
+                                                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="OpC-4i-XUI">
+                                                                    <rect key="frame" x="224" y="17" width="15" height="102"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                </scroller>
+                                                                <tableHeaderView key="headerView" id="Ach-a0-h7S">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="273" height="25"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                </tableHeaderView>
+                                                            </scrollView>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VK8-Fe-jPV">
+                                                                <rect key="frame" x="313" y="162" width="117" height="18"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="check" title="To Local SQLite" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="XRd-a0-vyW">
+                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onCheckToLocalDBFileClicked:" target="UOy-CF-cGN" id="VcP-NR-zOO"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u1u-TK-gck">
+                                                                <rect key="frame" x="313" y="132" width="148" height="18"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="check" title="To Local PostgreSQL" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="3He-CR-VNz">
+                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onCheckToLocalDBServerClicked:" target="UOy-CF-cGN" id="9ss-4a-vSM"/>
+                                                                </connections>
+                                                            </button>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R8P-ap-UyP">
+                                                                <rect key="frame" x="309" y="64" width="118" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="To database name:" id="7BH-ix-8Fd">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B6b-oV-TAa">
+                                                                <rect key="frame" x="436" y="61" width="142" height="21"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Icg-w7-5Ik">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JXG-qY-k6B">
+                                                                <rect key="frame" x="316" y="33" width="111" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Selected Archive:" id="GR9-SH-9bU">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qg3-Vx-f56">
+                                                                <rect key="frame" x="434" y="33" width="223" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" id="jEW-RP-Zgx">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6pF-3b-WDY">
+                                                                <rect key="frame" x="519" y="120" width="142" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" title="Restore Now" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="I0N-Yf-d6G">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onRestoreDBArchiveClicked:" target="UOy-CF-cGN" id="UlA-RN-pau"/>
+                                                                </connections>
+                                                            </button>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kfZ-gz-d7C">
+                                                                <rect key="frame" x="311" y="9" width="337" height="16"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" id="UQh-9n-T5b">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VwV-SA-o5J">
+                                                                <rect key="frame" x="519" y="153" width="142" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" title="Reload Archives" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fsU-Y9-TXR">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onReloadDBArchivesClicked:" target="UOy-CF-cGN" id="ZoX-bq-EMv"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GG7-tH-ddH">
+                                                                <rect key="frame" x="519" y="87" width="142" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" title="Delete Archives" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="slA-af-DHf">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onDeleteDBArchivesClicked:" target="UOy-CF-cGN" id="60w-Up-0Z5"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EfB-0R-qs3">
+                                                                <rect key="frame" x="580" y="54" width="81" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" title="Create" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="XgP-yd-L2P">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onCreateDatabaseClicked:" target="UOy-CF-cGN" id="jfe-ua-nDU"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                    </view>
+                                                </box>
                                             </subviews>
                                         </view>
                                     </tabViewItem>
                                     <tabViewItem label="Mobile Device" identifier="" id="izW-fJ-2f0">
                                         <view key="view" id="Qaf-Fi-1GF">
-                                            <rect key="frame" x="10" y="33" width="744" height="449"/>
+                                            <rect key="frame" x="10" y="33" width="744" height="600"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <box fixedFrame="YES" title="iOS Device" translatesAutoresizingMaskIntoConstraints="NO" id="B7a-R9-AeF">
-                                                    <rect key="frame" x="23" y="10" width="699" height="269"/>
+                                                    <rect key="frame" x="23" y="161" width="699" height="269"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="DjH-St-qKB">
                                                         <rect key="frame" x="3" y="3" width="693" height="251"/>
@@ -1875,7 +2402,7 @@ brew install ifuse</string>
                                                     </view>
                                                 </box>
                                                 <box fixedFrame="YES" title="Android Device" translatesAutoresizingMaskIntoConstraints="NO" id="XZN-Cv-RAI">
-                                                    <rect key="frame" x="23" y="305" width="699" height="125"/>
+                                                    <rect key="frame" x="23" y="456" width="699" height="125"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="kAY-qe-d85">
                                                         <rect key="frame" x="3" y="3" width="693" height="107"/>
@@ -1916,11 +2443,11 @@ brew install ifuse</string>
                                     </tabViewItem>
                                     <tabViewItem label="Face Recognition" identifier="" id="aLE-h6-zdO">
                                         <view key="view" id="62z-YH-nL3">
-                                            <rect key="frame" x="10" y="33" width="744" height="449"/>
+                                            <rect key="frame" x="10" y="33" width="744" height="600"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <box fixedFrame="YES" title="Recognition Engine" translatesAutoresizingMaskIntoConstraints="NO" id="SU6-IS-Mpk">
-                                                    <rect key="frame" x="16" y="2" width="714" height="289"/>
+                                                    <rect key="frame" x="16" y="153" width="714" height="289"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="PjB-bq-Iim">
                                                         <rect key="frame" x="3" y="3" width="708" height="271"/>
@@ -2027,7 +2554,7 @@ brew install ifuse</string>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <clipView key="contentView" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" id="UBo-bc-TBt">
                                                                     <rect key="frame" x="0.0" y="0.0" width="374" height="132"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textView ambiguous="YES" editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="Xti-RX-E8d">
                                                                             <rect key="frame" x="0.0" y="0.0" width="374" height="132"/>
@@ -2052,7 +2579,7 @@ brew install ifuse</string>
                                                     </view>
                                                 </box>
                                                 <box fixedFrame="YES" title="Recognition Model" translatesAutoresizingMaskIntoConstraints="NO" id="7Pu-4H-y6B">
-                                                    <rect key="frame" x="16" y="311" width="714" height="114"/>
+                                                    <rect key="frame" x="16" y="462" width="714" height="114"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="u0u-CL-tbL">
                                                         <rect key="frame" x="3" y="3" width="708" height="96"/>
@@ -2117,11 +2644,11 @@ brew install ifuse</string>
                                     </tabViewItem>
                                     <tabViewItem label="Geo Location API" identifier="" id="ube-eX-1ug">
                                         <view key="view" id="k0Y-fA-V35">
-                                            <rect key="frame" x="10" y="33" width="744" height="449"/>
+                                            <rect key="frame" x="10" y="33" width="744" height="600"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <box fixedFrame="YES" title="Baidu Map" translatesAutoresizingMaskIntoConstraints="NO" id="IBB-wV-2jb">
-                                                    <rect key="frame" x="26" y="248" width="692" height="182"/>
+                                                    <rect key="frame" x="26" y="399" width="692" height="182"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="aEx-q0-Cee">
                                                         <rect key="frame" x="3" y="3" width="686" height="164"/>
@@ -2187,7 +2714,7 @@ brew install ifuse</string>
                                                     </view>
                                                 </box>
                                                 <box fixedFrame="YES" title="Google Map" translatesAutoresizingMaskIntoConstraints="NO" id="92R-d1-t0E">
-                                                    <rect key="frame" x="26" y="52" width="692" height="175"/>
+                                                    <rect key="frame" x="26" y="203" width="692" height="175"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="P7K-6N-7gs">
                                                         <rect key="frame" x="3" y="3" width="686" height="157"/>
@@ -2250,20 +2777,38 @@ brew install ifuse</string>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="btnBackupLocal" destination="pEj-lB-BQS" id="ieQ-pR-72R"/>
-                        <outlet property="btnBackupRemote" destination="2KI-hG-mkf" id="Ecd-g2-LyI"/>
+                        <outlet property="btnApply" destination="m5h-vp-VBe" id="M0j-7o-2P9"/>
                         <outlet property="btnCheckFaceComponents" destination="iRl-j7-nwG" id="BqI-f1-Eom"/>
                         <outlet property="btnCloneLocalToRemote" destination="03W-ch-EnL" id="Ld2-0y-ts9"/>
-                        <outlet property="btnCloneRemoteToLocal" destination="Ywp-zw-9pq" id="zyv-Fp-Udk"/>
+                        <outlet property="btnCreateDatabase" destination="EfB-0R-qs3" id="Xme-nd-o9W"/>
+                        <outlet property="btnDeleteDBArchives" destination="GG7-tH-ddH" id="aa3-J1-KiY"/>
+                        <outlet property="btnLocalDBFileBackup" destination="pEj-lB-BQS" id="Jj2-Wm-eZU"/>
+                        <outlet property="btnLocalDBFileTest" destination="fbK-i4-wvg" id="qaq-bn-IWa"/>
+                        <outlet property="btnLocalDBServerBackup" destination="2KI-hG-mkf" id="RQV-DF-bhU"/>
+                        <outlet property="btnLocalDBServerTest" destination="6ys-8N-Za5" id="WnB-cW-Ibj"/>
+                        <outlet property="btnReloadDBArchives" destination="VwV-SA-o5J" id="A3P-Jz-bHm"/>
                         <outlet property="btnRemoteDBTest" destination="VXW-zK-b3U" id="If7-kP-P5K"/>
+                        <outlet property="btnRestoreDBArchive" destination="6pF-3b-WDY" id="ZEP-1b-Ax6"/>
                         <outlet property="chkAlternativeFaceRecognitionModel" destination="riS-QC-UQ3" id="eap-cX-3Lm"/>
                         <outlet property="chkDeleteAllBeforeClone" destination="Lz8-Iv-wir" id="ubE-M2-1ID"/>
+                        <outlet property="chkFromLocalDBFile" destination="D6b-Cv-w3d" id="ddq-mj-S7u"/>
+                        <outlet property="chkFromLocalDBServer" destination="zxP-TM-bHe" id="KAL-Ur-yLI"/>
+                        <outlet property="chkFromRemoteDBServer" destination="S9R-0W-8mn" id="61Y-Q1-8NS"/>
+                        <outlet property="chkLocalDBBinInsideApp" destination="cG0-0Q-viB" id="mDi-zg-NTV"/>
+                        <outlet property="chkLocalDBNoPassword" destination="xrn-Oi-M29" id="hTi-3i-ox7"/>
+                        <outlet property="chkLocalDBServer" destination="EU7-Wy-yj1" id="GeM-dR-06Z"/>
                         <outlet property="chkLocalLocation" destination="Wbu-dq-6U6" id="9Hb-eF-ss8"/>
                         <outlet property="chkMajorFaceRecognitionModel" destination="du1-qf-YN1" id="sFo-8w-vQi"/>
                         <outlet property="chkNetworkLocation" destination="eOo-Ia-9B7" id="pLm-Tt-FWX"/>
                         <outlet property="chkRemoteDBNoPassword" destination="7A8-P2-mx9" id="Sdc-od-GDL"/>
+                        <outlet property="chkRestoreToLocalDBFile" destination="VK8-Fe-jPV" id="AWY-cs-H3w"/>
+                        <outlet property="chkRestoreToLocalDBServer" destination="u1u-TK-gck" id="5MT-ni-0Ac"/>
+                        <outlet property="chkToLocalDBFile" destination="F7N-4y-L4j" id="b5u-EU-Zri"/>
+                        <outlet property="chkToLocalDBServer" destination="k84-pX-HAh" id="pfG-4r-7I9"/>
+                        <outlet property="chkToRemoteDBServer" destination="h5v-lB-Cdr" id="SSo-3p-jC8"/>
                         <outlet property="lblComponentsInstruction" destination="Xti-RX-E8d" id="yNI-pX-rgs"/>
                         <outlet property="lblComponentsStatus" destination="gFM-D0-rYX" id="i6z-xD-o7m"/>
+                        <outlet property="lblDBBackupUsedSpace" destination="t9s-If-LGk" id="S9K-Y0-yMm"/>
                         <outlet property="lblDataCloneMessage" destination="0Co-8D-Jlt" id="puh-Qz-lD6"/>
                         <outlet property="lblDatabaseBackupPath" destination="zo7-4b-cBE" id="M07-UV-HsL"/>
                         <outlet property="lblHomebrewMessage" destination="Ckg-bl-dWF" id="tBM-4y-wsW"/>
@@ -2271,24 +2816,29 @@ brew install ifuse</string>
                         <outlet property="lblIdeviceIdMessage" destination="4iT-vh-aLf" id="kJA-98-5qk"/>
                         <outlet property="lblIdeviceInfoMessage" destination="rml-oG-jEK" id="nkt-Qk-tNh"/>
                         <outlet property="lblIfuseMessage" destination="hn7-Vf-Mhz" id="vka-0u-NiZ"/>
-                        <outlet property="lblLocalSchemaVersion" destination="GSZ-Ge-g8Q" id="8QZ-94-6HE"/>
+                        <outlet property="lblLocalDBFileMessage" destination="iy1-vx-3sc" id="tRb-Mh-9lH"/>
+                        <outlet property="lblLocalDBFileSchemaVersion" destination="GSZ-Ge-g8Q" id="5OO-5z-HLG"/>
+                        <outlet property="lblLocalDBServerMessage" destination="eTh-Ux-n5k" id="Y9l-24-apD"/>
+                        <outlet property="lblLocalDBServerSchemaVersion" destination="djE-KO-ic9" id="yVP-Jt-pU3"/>
                         <outlet property="lblMajorFaceModelPath" destination="oGj-ct-Bre" id="4p6-eR-Kxf"/>
                         <outlet property="lblMaxMemory" destination="Q4a-Zz-phj" id="ZNL-RY-DQg"/>
                         <outlet property="lblMid2Memory" destination="Lw1-9W-HTq" id="9xM-Il-Cn1"/>
                         <outlet property="lblMidMemory" destination="JCj-jl-yXE" id="QOb-w1-G2k"/>
                         <outlet property="lblMin2Memory" destination="yQ0-ej-WKv" id="hlQ-2D-Fde"/>
                         <outlet property="lblMinMemory" destination="MKU-CI-l5p" id="xPZ-Se-00A"/>
-                        <outlet property="lblNetworkVerifyMessage" destination="eTh-Ux-n5k" id="71L-Hk-ixJ"/>
                         <outlet property="lblPythonMessage" destination="b3e-eh-klZ" id="7Pa-Oi-gxm"/>
                         <outlet property="lblRemoteSchemaVersion" destination="7hD-4T-IZL" id="2da-nP-FGc"/>
+                        <outlet property="lblRestoreDatabaseMessage" destination="kfZ-gz-d7C" id="4zr-Ai-DAH"/>
+                        <outlet property="lblRestoreToDatabaseName" destination="R8P-ap-UyP" id="qki-NM-8Xa"/>
+                        <outlet property="lblSelectedDBArchive" destination="qg3-Vx-f56" id="lE6-IV-ge7"/>
                         <outlet property="lblSelectedMemory" destination="Cby-mt-lNm" id="fpb-gO-p3b"/>
                         <outlet property="lstAmountForPagination" destination="C0h-yv-KP9" id="nbL-kr-yMt"/>
                         <outlet property="memorySlider" destination="vjx-6i-AGL" id="mvi-kn-bhT"/>
                         <outlet property="tabs" destination="2L9-ci-i6l" id="i7B-53-DnW"/>
+                        <outlet property="tblDatabaseArchives" destination="kXx-S6-VDX" id="cMa-8y-5Be"/>
                         <outlet property="txtAlternativeFaceModelPath" destination="9ka-nL-Bsc" id="wOu-Qq-b0U"/>
                         <outlet property="txtBaiduAK" destination="7ip-IX-oLK" id="Bnn-li-aIV"/>
                         <outlet property="txtBaiduSK" destination="OA4-S5-YiR" id="ylE-e0-HDl"/>
-                        <outlet property="txtDatabasePath" destination="RiT-bF-Pll" id="sXb-W3-37B"/>
                         <outlet property="txtExportToAndroidPath" destination="d2m-gP-3Vb" id="2lx-Rg-ovJ"/>
                         <outlet property="txtGoogleAPIKey" destination="Bxo-8g-hxj" id="WN0-Aj-Zj6"/>
                         <outlet property="txtHomebrewPath" destination="8ys-RO-oHt" id="ek3-Gf-CNg"/>
@@ -2296,6 +2846,14 @@ brew install ifuse</string>
                         <outlet property="txtIdeviceIdPath" destination="LIl-72-Jz9" id="2DM-pt-S4s"/>
                         <outlet property="txtIdeviceInfoPath" destination="fte-ni-XRm" id="gHU-ki-z0j"/>
                         <outlet property="txtIfusePath" destination="Ggs-Yj-dLL" id="KYs-vD-Ifb"/>
+                        <outlet property="txtLocalDBBinPath" destination="FFU-mO-C5q" id="eQc-69-Q8e"/>
+                        <outlet property="txtLocalDBDatabase" destination="ept-D8-1M3" id="o5z-ap-3h8"/>
+                        <outlet property="txtLocalDBFilePath" destination="RiT-bF-Pll" id="OHI-2W-6QN"/>
+                        <outlet property="txtLocalDBPassword" destination="5qR-iR-3Oa" id="I5n-k6-3pi"/>
+                        <outlet property="txtLocalDBPort" destination="tmB-6s-hox" id="mtL-sB-jmr"/>
+                        <outlet property="txtLocalDBSchema" destination="3Ix-zL-X5r" id="JUI-T8-S5l"/>
+                        <outlet property="txtLocalDBServer" destination="aTO-fu-fGY" id="Ixn-WC-YaC"/>
+                        <outlet property="txtLocalDBUser" destination="90e-ho-bbB" id="ri0-uL-MJn"/>
                         <outlet property="txtPythonPath" destination="ItT-Mo-G49" id="xnC-GK-Kzb"/>
                         <outlet property="txtRemoteDBDatabase" destination="miT-fl-gzk" id="jaj-RN-bqj"/>
                         <outlet property="txtRemoteDBPassword" destination="LdL-lc-njC" id="rbC-6g-XN6"/>
@@ -2303,11 +2861,12 @@ brew install ifuse</string>
                         <outlet property="txtRemoteDBSchema" destination="sdh-Ux-aFj" id="CdU-5v-VPL"/>
                         <outlet property="txtRemoteDBServer" destination="PCX-Bi-QGL" id="FNn-Fz-z7t"/>
                         <outlet property="txtRemoteDBUser" destination="bWA-V1-8U4" id="RgW-cZ-wFb"/>
+                        <outlet property="txtRestoreToDatabaseName" destination="B6b-oV-TAa" id="s4b-hp-7XX"/>
                     </connections>
                 </viewController>
                 <customObject id="VgO-wr-HZa" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1577" y="-352"/>
+            <point key="canvasLocation" x="1577" y="-294"/>
         </scene>
         <!--Stacked Video View Controller-->
         <scene sceneID="5qv-yD-6bp">
