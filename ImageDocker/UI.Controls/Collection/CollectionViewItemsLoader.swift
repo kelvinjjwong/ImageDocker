@@ -589,7 +589,8 @@ class CollectionViewItemsLoader: NSObject {
             items.removeAll()
         }
         print("\(Date()) Loading duplicate photos from db")
-        let duplicates:Duplicates = ImageDuplicationDao.default.getDuplicatePhotos()
+        // TODO: narrow the range of searching duplicate photos
+        let duplicates:Duplicates = Duplicates() //ImageDuplicationDao.default.getDuplicatePhotos()
         print("Found duplicates: \(duplicates.paths.count)")
         print("\(Date()) Loading duplicate photos from db: DONE")
         
@@ -633,7 +634,8 @@ class CollectionViewItemsLoader: NSObject {
         }
         
         print("\(Date()) Loading duplicate photos from db")
-        let duplicates:Duplicates = ImageDuplicationDao.default.getDuplicatePhotos()
+        // TODO: narrow the range of searching duplicate photos
+        let duplicates:Duplicates = Duplicates() //ImageDuplicationDao.default.getDuplicatePhotos()
         print("Found duplicates: \(duplicates.paths.count)")
         print(lastRequest)
 //        if duplicates.paths.count > 0 {

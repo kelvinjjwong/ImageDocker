@@ -19,6 +19,12 @@ class PostgresRowDecoder {
         let decoder = _RowDecoder<T>(row: row, codingPath: [])
         return try T(from: decoder)
     }
+    
+    func decodeIfPresent<T: Decodable>(_ type: T.Type = T.self, from row: PostgresRow) throws -> T? {
+        let decoder = _RowDecoder<T>(row: row, codingPath: [])
+        //print("debug 0")
+        return try T(from: decoder)
+    }
 }
 
 
@@ -89,7 +95,11 @@ private struct _RowDecoder<R: Decodable>: Decoder {
         
         func decodeNil(forKey key: Key) throws -> Bool {
             let row = decoder.row
-            return row.hasNull(atColumn: key.stringValue)
+            if contains(key) {
+                return row.hasNull(atColumn: key.stringValue)
+            }else{
+                return true
+            }
         }
         
         // swiftlint:disable comma
@@ -117,9 +127,13 @@ private struct _RowDecoder<R: Decodable>: Decoder {
             // Column?
             if let index = row.index(ofColumn: keyName) {
                 // Prefer PostgresRowValueConvertible decoding over Decodable.
-                if let type = T.self as? PostgresRowValueConvertible.Type {
+                if row.hasNull(atIndex: index) {
+                    return nil
+                }else if let type = T.self as? PostgresRowValueConvertible.Type {
+                    //print("debug 2, rowIndex: \(index), is null? \(row.hasNull(atIndex: index))")
                     return type.decodeIfPresent(from: row, atUncheckedIndex: index) as! T?
                 } else {
+                    //print("debug 3")
                     return try decode(type, fromRow: row, columnAtIndex: index, key: key)
                 }
             }
@@ -136,8 +150,10 @@ private struct _RowDecoder<R: Decodable>: Decoder {
             if let index = row.index(ofColumn: keyName) {
                 // Prefer PostgresRowValueConvertible decoding over Decodable.
                 if let type = T.self as? PostgresRowValueConvertible.Type {
+                    //print("debug 4")
                     return type.decode(from: row, atUncheckedIndex: index) as! T
                 } else {
+                    //print("debug 5")
                     return try decode(type, fromRow: row, columnAtIndex: index, key: key)
                 }
             }
@@ -178,6 +194,7 @@ private struct _RowDecoder<R: Decodable>: Decoder {
                     debugDescription: "No such key: \(decodedRootKey.stringValue)")) // TODO: better error message
             }
             decodedRootKey = key
+            //print("debug 6")
             return try decode(type, fromRow: row, codingPath: codingPath + [key])
         }
         
@@ -216,6 +233,7 @@ private struct _RowDecoder<R: Decodable>: Decoder {
                 let decoder = _RowDecoder(row: row, codingPath: codingPath)
                 return try T(from: decoder)
             } catch {
+                print("Error at PostgresRowDecoder.decoe<T>(type:fromRoww:codingPath) throws -> T")
                 print(error)
                 // Support for DatabaseValueConversionErrorTests.testDecodableFetchableRecord2
                 fatalConversionError(
@@ -244,7 +262,9 @@ private struct _RowDecoder<R: Decodable>: Decoder {
                     codingPath: codingPath + [key])
                 return try T(from: columnDecoder)
             } catch {
+                print("Error at PostgresRowDecoder.decoe<T>(type:fromRoww:columnAtIndex:key) throws -> T")
                 print(error)
+                //print("debug 10, columnIndex:\(index), isNull? \(row.hasNull(atIndex: index))")
                 guard let data = Data.decodeIfPresent(from: row, atUncheckedIndex: index) else{
                     fatalConversionError(
                         to: T.self,
@@ -254,6 +274,7 @@ private struct _RowDecoder<R: Decodable>: Decoder {
                 decoder.dataDecodingStrategy = .base64
                 decoder.dateDecodingStrategy = .millisecondsSince1970
                 decoder.nonConformingFloatDecodingStrategy = .throw
+                //print("debug 7")
                 return try decoder.decode(type.self, from: data)
             }
         }

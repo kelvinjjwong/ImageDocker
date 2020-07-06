@@ -12,7 +12,9 @@ class ImageFaceDaoPostgresCK : ImageFaceDaoInterface {
     func updateImageScannedFace(imageId: String, facesCount: Int) -> ExecuteState {
         let db = PostgresConnection.database()
         do {
-            try db.execute(sql: "update Image set scanedFace=1, facesCount=$1 where id=$2", parameterValues: [facesCount, imageId])
+            try db.execute(sql: """
+            update "Image" set "scanedFace"=true, "facesCount"=$1 where id=$2
+            """, parameterValues: [facesCount, imageId])
         }catch{
             print(error)
             return .ERROR
@@ -23,7 +25,9 @@ class ImageFaceDaoPostgresCK : ImageFaceDaoInterface {
     func updateImageRecognizedFace(imageId: String, recognizedPeopleIds: String) -> ExecuteState {
         let db = PostgresConnection.database()
         do {
-            try db.execute(sql: "update Image set recognizedFace=1,recognizedPeopleIds=$1 where id=$2", parameterValues: [recognizedPeopleIds,imageId])
+            try db.execute(sql: """
+            update "Image" set "recognizedFace"=true,"recognizedPeopleIds"=$1 where id=$2
+            """, parameterValues: [recognizedPeopleIds,imageId])
         }catch{
             print(error)
             return .ERROR
@@ -47,7 +51,9 @@ class FaceDaoPostgresCK : FaceDaoInterface {
             var familyId:String = ""
             public init() {}
         }
-        let records = TempRecord.fetchAll(db, sql: "SELECT familyId FROM FamilyMember WHERE peopleId='\(peopleId)'")
+        let records = TempRecord.fetchAll(db, sql: """
+        SELECT "familyId" FROM "FamilyMember" WHERE "peopleId"='\(peopleId)'
+        """)
         var result:[String] = []
         for row in records {
             result.append(row.familyId)
@@ -63,7 +69,9 @@ class FaceDaoPostgresCK : FaceDaoInterface {
             var peopleId:String = ""
             public init() {}
         }
-        let records = TempRecord.fetchAll(db, sql: "SELECT familyId,peopleId FROM FamilyMember WHERE familyId='\(familyId)' AND peopleId='\(peopleId)'")
+        let records = TempRecord.fetchAll(db, sql: """
+        SELECT "familyId","peopleId" FROM "FamilyMember" WHERE "familyId"='\(familyId)' AND "peopleId"='\(peopleId)'
+        """)
         if records.count == 0 {
             let record = FamilyMember()
             record.familyId = familyId
@@ -93,10 +101,10 @@ class FaceDaoPostgresCK : FaceDaoInterface {
                     var id:String = ""
                     public init() {}
                 }
-                let rows = TempRecord.fetchAll(db, sql: "SELECT id FROM Family WHERE id='\(id)'")
+                let rows = TempRecord.fetchAll(db, sql: "SELECT id FROM \"Family\" WHERE id='\(id)'")
                 if rows.count > 0 {
                     recordId = id
-                    try db.execute(sql: "UPDATE Family SET name='\(name)',category='\(type)' WHERE id='\(id)'")
+                    try db.execute(sql: "UPDATE \"Family\" SET name='\(name)',category='\(type)' WHERE id='\(id)'")
                 }else{
                     needInsert = true
                 }
@@ -105,7 +113,7 @@ class FaceDaoPostgresCK : FaceDaoInterface {
             }
             if needInsert {
                 recordId = UUID().uuidString
-                try db.execute(sql: "INSERT INTO Family (id, name, category) VALUES ('\(recordId!)','\(name)','\(type)')")
+                try db.execute(sql: "INSERT INTO \"Family\" (id, name, category) VALUES ('\(recordId!)','\(name)','\(type)')")
             }
         }catch{
             print(error)
@@ -117,10 +125,10 @@ class FaceDaoPostgresCK : FaceDaoInterface {
     func deleteFamily(id: String) -> ExecuteState {
         let db = PostgresConnection.database()
         do {
-            try db.execute(sql: "DELETE FROM FamilyMember WHERE familyId='\(id)'")
-            try db.execute(sql: "DELETE FROM FamilyJoint WHERE smallFamilyId='\(id)'")
-            try db.execute(sql: "DELETE FROM FamilyJoint WHERE bigFamilyId='\(id)'")
-            try db.execute(sql: "DELETE FROM Family WHERE id='\(id)'")
+            try db.execute(sql: "DELETE FROM \"FamilyMember\" WHERE \"familyId\"='\(id)'")
+            try db.execute(sql: "DELETE FROM \"FamilyJoint\" WHERE \"smallFamilyId\"='\(id)'")
+            try db.execute(sql: "DELETE FROM \"FamilyJoint\" WHERE \"bigFamilyId\"='\(id)'")
+            try db.execute(sql: "DELETE FROM \"Family\" WHERE id='\(id)'")
         }catch{
             print(error)
             return .ERROR
@@ -161,11 +169,11 @@ class FaceDaoPostgresCK : FaceDaoInterface {
     func saveRelationship(primary: String, secondary: String, callName: String) -> ExecuteState {
         let db = PostgresConnection.database()
         do {
-            let rows = PeopleRelationship.fetchAll(db, sql: "SELECT subject,object,callName FROM PeopleRelationship WHERE subject='\(primary)' AND object='\(secondary)'")
+            let rows = PeopleRelationship.fetchAll(db, sql: "SELECT subject,object,\"callName\" FROM \"PeopleRelationship\" WHERE subject='\(primary)' AND object='\(secondary)'")
             if rows.count > 0 {
-                try db.execute(sql: "UPDATE PeopleRelationship SET callName='\(callName)' WHERE subject='\(primary)' AND object='\(secondary)'")
+                try db.execute(sql: "UPDATE \"PeopleRelationship\" SET \"callName\"='\(callName)' WHERE subject='\(primary)' AND object='\(secondary)'")
             }else{
-                try db.execute(sql: "INSERT INTO PeopleRelationship (subject, object, callName) VALUES ('\(primary)','\(secondary)','\(callName)')")
+                try db.execute(sql: "INSERT INTO \"PeopleRelationship\" (subject, object, \"callName\") VALUES ('\(primary)','\(secondary)','\(callName)')")
             }
         }catch{
             print(error)
@@ -221,8 +229,8 @@ class FaceDaoPostgresCK : FaceDaoInterface {
     func deletePerson(id: String) -> ExecuteState {
         let db = PostgresConnection.database()
         do {
-            try db.execute(sql: "update ImageFace set peopleId = '', peopleAge = 0 where peopleId = $1", parameterValues: [id])
-            try db.execute(sql: "delete from People where id = $1", parameterValues: [id])
+            try db.execute(sql: "update \"ImageFace\" set \"peopleId\" = '', \"peopleAge\" = 0 where \"peopleId\" = $1", parameterValues: [id])
+            try db.execute(sql: "delete from \"People\" where id = $1", parameterValues: [id])
         }catch{
             print(error)
             return .ERROR
@@ -237,7 +245,7 @@ class FaceDaoPostgresCK : FaceDaoInterface {
     
     func getFaceCrops(imageId: String) -> [ImageFace] {
         let db = PostgresConnection.database()
-        return ImageFace.fetchAll(db, where: "imageId='\(imageId)'", orderBy: "faceX")
+        return ImageFace.fetchAll(db, where: "\"imageId\"='\(imageId)'", orderBy: "faceX".quotedDatabaseIdentifier)
     }
     
     func findFaceCrop(imageId: String, x: String, y: String, width: String, height: String) -> ImageFace? {
@@ -247,13 +255,13 @@ class FaceDaoPostgresCK : FaceDaoInterface {
     
     func getYearsOfFaceCrops(peopleId: String) -> [String] {
         var results:[String] = []
-        let condition = peopleId == "Unknown" || peopleId == "" ? "peopleId is null or peopleId='' or peopleId='Unknown'" : "peopleId='\(peopleId)'"
+        let condition = peopleId == "Unknown" || peopleId == "" ? "\"peopleId\" is null or \"peopleId\"='' or \"peopleId\"='Unknown'" : "\"peopleId\"='\(peopleId)'"
         let db = PostgresConnection.database()
         final class TempRecord : PostgresCustomRecord {
             var imageYear:Int = 0
             public init() {}
         }
-        let rows = TempRecord.fetchAll(db, sql: "SELECT DISTINCT imageYear FROM ImageFace WHERE \(condition)")
+        let rows = TempRecord.fetchAll(db, sql: "SELECT DISTINCT \"imageYear\" FROM \"ImageFace\" WHERE \(condition) ORDER BY \"imageYear\" DESC")
         for row in rows {
             results.append("\(row.imageYear)")
         }
@@ -263,12 +271,12 @@ class FaceDaoPostgresCK : FaceDaoInterface {
     func getMonthsOfFaceCrops(peopleId: String, imageYear: String) -> [String] {
         var results:[String] = []
         let db = PostgresConnection.database()
-        let condition = peopleId == "Unknown" || peopleId == "" ? "(peopleId is null or peopleId='' or peopleId='Unknown')" : "peopleId='\(peopleId)'"
+        let condition = peopleId == "Unknown" || peopleId == "" ? "(\"peopleId\" is null or \"peopleId\"='' or \"peopleId\"='Unknown')" : "\"peopleId\"='\(peopleId)'"
         final class TempRecord : PostgresCustomRecord {
             var imageMonth:Int = 0
             public init() {}
         }
-        let rows = TempRecord.fetchAll(db, sql: "SELECT DISTINCT imageMonth FROM ImageFace WHERE imageYear=\(imageYear) and \(condition)")
+        let rows = TempRecord.fetchAll(db, sql: "SELECT DISTINCT \"imageMonth\" FROM \"ImageFace\" WHERE \"imageYear\"=\(imageYear) and \(condition) ORDER BY \"imageMonth\" DESC")
         for row in rows {
             if row.imageMonth < 10 {
                 results.append("0\(row.imageMonth)")
@@ -283,27 +291,27 @@ class FaceDaoPostgresCK : FaceDaoInterface {
         let db = PostgresConnection.database()
         var sql = ""
         if peopleId != "" && peopleId != "Unknown" {
-            sql = "peopleId='\(peopleId)'"
+            sql = "\"peopleId\"='\(peopleId)'"
         }else{
-            sql = "(peopleId is null or peopleId='Unknown' or peopleId='')"
+            sql = "(\"peopleId\" is null or \"peopleId\"='Unknown' or \"peopleId\"='')"
         }
         if let year = year {
-            sql = "\(sql) and imageYear=\(year)"
+            sql = "\(sql) and \"imageYear\"=\(year)"
         }
         if let month = month {
-            sql = "\(sql) and imageMonth=\(month)"
+            sql = "\(sql) and \"imageMonth\"=\(month)"
         }
         if let sample = sample {
-            sql = "\(sql) and sampleChoice=\(sample ? 1 : 0)"
+            sql = "\(sql) and \"sampleChoice\"=\(sample ? "true" : "false")"
         }
         if let icon = icon {
-            sql = "\(sql) and iconChoice=\(icon ? 1 : 0)"
+            sql = "\(sql) and \"iconChoice\"=\(icon ? "true" : "false")"
         }
         if let tag = tag {
-            sql = "\(sql) and tagOnly=\(tag ? 1 : 0)"
+            sql = "\(sql) and \"tagOnly\"=\(tag ? "true" : "false")"
         }
         if let locked = locked {
-            sql = "\(sql) and locked=\(locked ? 1 : 0)"
+            sql = "\(sql) and locked=\(locked ? "true" : "false")"
         }
         return ImageFace.fetchAll(db, where: sql)
     }
@@ -318,9 +326,15 @@ class FaceDaoPostgresCK : FaceDaoInterface {
         let db = PostgresConnection.database()
         if let face = self.getFace(id: id) {
             do {
-                try db.execute(sql: "update ImageFace set iconChoice = 0 where peopleId = $1 and iconChoice = 1", parameterValues: [peopleId])
-                try db.execute(sql: "update ImageFace set iconChoice = 1 where peopleId = $1 and id = $2", parameterValues: [peopleId, id])
-                try db.execute(sql: "update People set iconRepositoryPath = $1, iconCropPath = $2, iconSubPath = $3, iconFilename = $4 WHERE id = $5", parameterValues: [face.repositoryPath, face.cropPath, face.subPath, face.filename, peopleId]);
+                try db.execute(sql: """
+                update "ImageFace" set "iconChoice" = false where "peopleId" = $1 and "iconChoice" = true
+                """, parameterValues: [peopleId])
+                try db.execute(sql: """
+                update "ImageFace" set "iconChoice" = true where "peopleId" = $1 and id = $2
+                """, parameterValues: [peopleId, id])
+                try db.execute(sql: """
+                update "People" set "iconRepositoryPath" = $1, "iconCropPath" = $2, "iconSubPath" = $3, "iconFilename" = $4 WHERE id = $5
+                """, parameterValues: [face.repositoryPath, face.cropPath, face.subPath, face.filename, peopleId]);
             }catch{
                 return .ERROR
             }
@@ -333,8 +347,12 @@ class FaceDaoPostgresCK : FaceDaoInterface {
         let db = PostgresConnection.database()
         
         do {
-            try db.execute(sql: "update ImageFace set iconChoice = 0 where peopleId = $1 and iconChoice = 1", parameterValues: [peopleId])
-            try db.execute(sql: "update People set iconRepositoryPath = '', iconCropPath = '', iconSubPath = '', iconFilename = '' WHERE id = $1", parameterValues: [peopleId]);
+            try db.execute(sql: """
+            update "ImageFace" set "iconChoice" = false where "peopleId" = $1 and "iconChoice" = true
+            """, parameterValues: [peopleId])
+            try db.execute(sql: """
+            update "People" set "iconRepositoryPath" = '', "iconCropPath" = '', "iconSubPath" = '', "iconFilename" = '' WHERE id = $1
+            """, parameterValues: [peopleId]);
         }catch{
             return .ERROR
         }
@@ -344,7 +362,9 @@ class FaceDaoPostgresCK : FaceDaoInterface {
     func updateFaceSampleFlag(id: String, flag: Bool) -> ExecuteState {
         let db = PostgresConnection.database()
         do {
-            try db.execute(sql: "update ImageFace set sampleChoice = \(flag ? 1 : 0), sampleChangeDate = $1 where id = $1", parameterValues: [Date(), id])
+            try db.execute(sql: """
+            update "ImageFace" set "sampleChoice" = \(flag ? "true" : "false"), "sampleChangeDate" = $1 where id = $1
+            """, parameterValues: [Date(), id])
         }catch{
             return .ERROR
         }
@@ -354,7 +374,9 @@ class FaceDaoPostgresCK : FaceDaoInterface {
     func updateFaceTagFlag(id: String, flag: Bool) -> ExecuteState {
         let db = PostgresConnection.database()
         do {
-            try db.execute(sql: "update ImageFace set tagOnly = \(flag ? 1 : 0) where id = $1", parameterValues: [id])
+            try db.execute(sql: """
+            update "ImageFace" set "tagOnly" = \(flag ? "true" : "false") where id = $1
+            """, parameterValues: [id])
         }catch{
             return .ERROR
         }
@@ -364,7 +386,9 @@ class FaceDaoPostgresCK : FaceDaoInterface {
     func updateFaceLockFlag(id: String, flag: Bool) -> ExecuteState {
         let db = PostgresConnection.database()
         do {
-            try db.execute(sql: "update ImageFace set locked = \(flag ? 1 : 0) where id = $1", parameterValues: [id])
+            try db.execute(sql: """
+            update "ImageFace" set locked = \(flag ? "true" : "false") where id = $1
+            """, parameterValues: [id])
         }catch{
             return .ERROR
         }
@@ -374,7 +398,9 @@ class FaceDaoPostgresCK : FaceDaoInterface {
     func updateFaceCropPaths(old: String, new: String) -> ExecuteState {
         let db = PostgresConnection.database()
         do {
-            try db.execute(sql: "update ImageFace set cropPath = $1 where cropPath = $2", parameterValues: [new, old])
+            try db.execute(sql: """
+            update "ImageFace" set "cropPath" = $1 where "cropPath" = $2
+            """, parameterValues: [new, old])
         }catch{
             return .ERROR
         }

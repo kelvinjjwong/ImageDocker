@@ -124,18 +124,18 @@ class Moment {
     
     var represent:String {
         if year == 0 {
-            return id //"未识别"
+            return "未识别日期"
         }
         if month == 0 && day == 0 {
             if year == 0 {
-                return id //"未识别"
+                return "未识别日期"
             }else{
                 return "\(year) 年"
             }
         }
         if month != 0 && day == 0 {
             if year == 0 {
-                return id // "未识别"
+                return "未识别日期"
             }else{
                 return "\(month) 月"
             }

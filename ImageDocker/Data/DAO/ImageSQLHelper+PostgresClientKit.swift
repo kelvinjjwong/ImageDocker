@@ -21,11 +21,11 @@ extension SQLHelper {
                         placeholders.append("$\(i)")
                     }
                     let marks = placeholders.joined(separator: ",")
-                    whereStmt = "AND \(field) in (\(marks))"
+                    whereStmt = "AND \(field.quotedDatabaseIdentifier) in (\(marks))"
                     sqlArgs.append(contentsOf: array)
                 }else{
                     let marks = repeatElement("?", count: array.count).joined(separator: ",")
-                    whereStmt = "AND \(field) in (\(marks))"
+                    whereStmt = "AND \(field.quotedDatabaseIdentifier) in (\(marks))"
                     sqlArgs.append(contentsOf: array)
                 }
             }
@@ -43,7 +43,7 @@ extension SQLHelper {
         SQLHelper.inPostgresArray(field: "cameraModel", array: cameraModel, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
         
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
-        let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=1"
+        let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=true"
         
         print("SQL args: \(sqlArgs)")
         
@@ -69,7 +69,7 @@ extension SQLHelper {
         SQLHelper.inPostgresArray(field: "cameraModel", array: cameraModel, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
         
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
-        let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=1"
+        let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=true"
         
         print("[Postgres Image -> Searching] Generated SQL statement for all:")
         print(stmt)

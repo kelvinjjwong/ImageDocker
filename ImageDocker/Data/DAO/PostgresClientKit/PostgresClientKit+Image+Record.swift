@@ -13,6 +13,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
     
     func getOrCreatePhoto(filename: String, path: String, parentPath: String, repositoryPath: String?) -> Image {
         let db = PostgresConnection.database()
+        print("trying to get image with path: \(path)")
         if let image = Image.fetchOne(db, parameters: ["path" : path]) {
             return image
         }else{
@@ -42,7 +43,9 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         let db = PostgresConnection.database()
         if updateFlag {
             do {
-                try db.execute(sql: "update Image set delFlag = $1", parameterValues: [true])
+                try db.execute(sql: """
+                update "Image" set "delFlag" = $1
+                """, parameterValues: [true])
             }catch{
                 print(error)
                 return .ERROR
@@ -59,7 +62,9 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
     func updateImagePaths(oldPath: String, newPath: String, repositoryPath: String, subPath: String, containerPath: String, id: String) -> ExecuteState {
         let db = PostgresConnection.database()
         do {
-            try db.execute(sql: "update Image set path = $1, repositoryPath = $2, subPath = $3, containerPath = $4, id = $5 where path = $6", parameterValues: [newPath, repositoryPath, subPath, containerPath, id, oldPath])
+            try db.execute(sql: """
+            update "Image" set path = $1, "repositoryPath" = $2, subPath = $3, "containerPath" = $4, id = $5 where path = $6
+            """, parameterValues: [newPath, repositoryPath, subPath, containerPath, id, oldPath])
         }catch{
             print(error)
             return .ERROR
@@ -71,7 +76,9 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         let db = PostgresConnection.database()
         
         do {
-            try db.execute(sql: "update Image set originPath = $1 where originPath = $2", parameterValues: [newRawPath, oldRawPath])
+            try db.execute(sql: """
+            update "Image" set "originPath" = $1 where "originPath" = $2
+            """, parameterValues: [newRawPath, oldRawPath])
         }catch{
             print(error)
             return .ERROR
@@ -83,7 +90,9 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         let db = PostgresConnection.database()
         
         do {
-            try db.execute(sql: "update Image set originPath = $1 where repositoryPath = $2", parameterValues: [rawPath, repositoryPath])
+            try db.execute(sql: """
+            update "Image" set "originPath" = $1 where "repositoryPath" = $2
+            """, parameterValues: [rawPath, repositoryPath])
         }catch{
             print(error)
             return .ERROR
@@ -95,7 +104,9 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         let db = PostgresConnection.database()
         
         do {
-            try db.execute(sql: "update Image set originPath = $1 where path like $2", parameterValues: [rawPath, "\(path.withStash())%"])
+            try db.execute(sql: """
+            update "Image" set "originPath" = $1 where path like $2
+            """, parameterValues: [rawPath, "\(path.withStash())%"])
         }catch{
             print(error)
             return .ERROR
@@ -107,7 +118,9 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         let db = PostgresConnection.database()
         
         do {
-            try db.execute(sql: "update Image set repositoryPath = $1 where path like $2", parameterValues: [repositoryPath, "\(path.withStash())%"])
+            try db.execute(sql: """
+            update "Image" set "repositoryPath" = $1 where path like $2
+            """, parameterValues: [repositoryPath, "\(path.withStash())%"])
         }catch{
             print(error)
             return .ERROR
@@ -119,7 +132,9 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         let db = PostgresConnection.database()
         
         do {
-            try db.execute(sql: "update Image set repositoryPath = $1 where repositoryPath = $2", parameterValues: [newRepository, oldRepositoryPath])
+            try db.execute(sql: """
+            update "Image" set "repositoryPath" = $1 where "repositoryPath" = $2
+            """, parameterValues: [newRepository, oldRepositoryPath])
         }catch{
             print(error)
             return .ERROR
@@ -131,7 +146,9 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         let db = PostgresConnection.database()
         
         do {
-            try db.execute(sql: "update Image set path = repositoryPath || subPath where repositoryPath = $1 and subPath <> ''", parameterValues: [repositoryPath])
+            try db.execute(sql: """
+            update "Image" set path = "repositoryPath" || "subPath" where "repositoryPath" = $1 and "subPath" <> ''
+            """, parameterValues: [repositoryPath])
         }catch{
             print(error)
             return .ERROR
@@ -148,7 +165,9 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         for field in fields {
             if field == "PhotoTakenDate" {
                 
-                values.append("photoTakenDate = $\(placeholders+=1), photoTakenYear = \(add(&placeholders)), photoTakenMonth = \(add(&placeholders)), photoTakenDay = \(add(&placeholders))")
+                values.append("""
+                    "photoTakenDate" = $\(placeholders+=1), "photoTakenYear" = \(add(&placeholders)), "photoTakenMonth" = \(add(&placeholders)), "photoTakenDay" = \(add(&placeholders))
+                    """)
                 arguments.append(date)
                 let year = Calendar.current.component(.year, from: date)
                 let month = Calendar.current.component(.month, from: date)
@@ -159,22 +178,22 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
                 continue
             }
             if field == "DateTimeOriginal" {
-                values.append("exifDateTimeOriginal = \(add(&placeholders))")
+                values.append("\"exifDateTimeOriginal\" = \(add(&placeholders))")
                 arguments.append(date)
                 continue
             }
             if field == "CreateDate" {
-                values.append("exifCreateDate = \(add(&placeholders))")
+                values.append("\"exifCreateDate\" = \(add(&placeholders))")
                 arguments.append(date)
                 continue
             }
             if field == "ModifyDate" {
-                values.append("exifModifyDate = \(add(&placeholders))")
+                values.append("\"exifModifyDate\" = \(add(&placeholders))")
                 arguments.append(date)
                 continue
             }
             if field == "FileCreateDate" {
-                values.append("filesysCreateDate = \(add(&placeholders))")
+                values.append("\"filesysCreateDate\" = \(add(&placeholders))")
                 arguments.append(date)
                 continue
             }
@@ -182,7 +201,9 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         arguments.append(path)
         let valueSets = values.joined(separator: ",")
         do {
-            try db.execute(sql: "UPDATE Image set \(valueSets) WHERE path=\(add(&placeholders))", parameterValues: arguments)
+            try db.execute(sql: """
+            UPDATE "Image" set \(valueSets) WHERE path=\(add(&placeholders))
+            """, parameterValues: arguments)
         }catch{
             print(error)
             return .ERROR
@@ -195,11 +216,17 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         
         do {
             if let brief = shortDescription, let detailed = longDescription {
-                try db.execute(sql: "UPDATE Image set shortDescription = $1, longDescription = $2 WHERE path=$3", parameterValues: [brief, detailed, path])
+                try db.execute(sql: """
+                UPDATE "Image" set "shortDescription" = $1, "longDescription" = $2 WHERE path=$3
+                """, parameterValues: [brief, detailed, path])
             }else if let brief = shortDescription {
-                try db.execute(sql: "UPDATE Image set shortDescription = $1 WHERE path=$2", parameterValues: [brief, path])
+                try db.execute(sql: """
+                UPDATE "Image" set "shortDescription" = $1 WHERE path=$2
+                """, parameterValues: [brief, path])
             }else if let detailed = longDescription {
-                try db.execute(sql: "UPDATE Image set longDescription = $1 WHERE path=$2", parameterValues: [detailed, path])
+                try db.execute(sql: """
+                UPDATE "Image" set "longDescription" = $1 WHERE path=$2
+                """, parameterValues: [detailed, path])
             }
         }catch{
             print(error)

@@ -88,12 +88,12 @@ class DeviceDaoPostgresCK : DeviceDaoInterface {
     
     func getDeviceFiles(deviceId: String) -> [ImageDeviceFile] {
         let db = PostgresConnection.database()
-        return ImageDeviceFile.fetchAll(db, parameters: ["deviceId" : deviceId], orderBy: "importToPath")
+        return ImageDeviceFile.fetchAll(db, parameters: ["deviceId" : deviceId], orderBy: "importToPath".quotedDatabaseIdentifier)
     }
     
     func getDeviceFiles(deviceId: String, importToPath: String) -> [ImageDeviceFile] {
         let db = PostgresConnection.database()
-        return ImageDeviceFile.fetchAll(db, parameters: ["deviceId" : deviceId, "importToPath": importToPath], orderBy: "fileId")
+        return ImageDeviceFile.fetchAll(db, parameters: ["deviceId" : deviceId, "importToPath": importToPath], orderBy: "fileId".quotedDatabaseIdentifier)
     }
     
     func getDevicePath(deviceId: String, path: String) -> ImageDevicePath? {
@@ -144,10 +144,10 @@ class DeviceDaoPostgresCK : DeviceDaoInterface {
     func getExcludedImportedContainerPaths(withStash: Bool) -> Set<String> {
         let db = PostgresConnection.database()
         let sql = """
-        select distinct (d.repositoryPath || '/' || p.tosubfolder) path from imagedevicepath p
-        left join (select deviceid,repositorypath from imagedevice where repositorypath is not null) d
-        on p.deviceId=d.deviceId
-        where p.excludeimported=1
+        select distinct (d."repositoryPath" || '/' || p."toSubFolder") path from "ImageDevicePath" p
+        left join (select "deviceId","repositoryPath" from "ImageDevice" where "repositoryPath" is not null) d
+        on p."deviceId"=d."deviceId"
+        where p."excludeImported"=true
         """
         
         final class TempRecord : PostgresCustomRecord{
@@ -172,11 +172,11 @@ class DeviceDaoPostgresCK : DeviceDaoInterface {
     func getLastImportDateOfDevices() -> ([String : String], [(String, String, String?, String?)]) {
         let db = PostgresConnection.database()
         let sql = """
-        select (CASE WHEN c.name IS NULL THEN 'NOT_SCAN' ELSE c.name END) name,d.deviceid, d.name deviceName, f.lastImportDate,d.repositoryPath,d.storagePath from imageDevice d left join (
-        select max(importDate) lastImportDate,deviceId from imagedevicefile group by deviceId ) f on d.deviceId=f.deviceId
+        select (CASE WHEN c."name" IS NULL THEN 'NOT_SCAN' ELSE c."name" END) as name,d."deviceId", d."name" as "deviceName", f."lastimportdate",d."repositoryPath",d."storagePath" from "ImageDevice" d left join (
+        select max("importDate") as "lastImportDate","deviceId" from "ImageDeviceFile" group by "deviceId" ) f on d."deviceId"=f."deviceId"
         left join
-        (select name,deviceid from imageContainer where parentFolder='') c on d.deviceId=c.deviceId
-        order by c.name
+        (select "name","deviceId" from "ImageContainer" where "parentFolder"='') c on d."deviceId"=c."deviceId"
+        order by c."name"
         """
         
         final class TempRecord : PostgresCustomRecord {

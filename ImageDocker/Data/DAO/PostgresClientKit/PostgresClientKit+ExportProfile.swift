@@ -13,7 +13,9 @@ class ImageExportDaoPostgresCK : ImageExportDaoInterface {
     func cleanImageExportTime(path: String) -> ExecuteState {
         let db = PostgresConnection.database()
         do {
-            try db.execute(sql: "UPDATE Image set exportTime = null WHERE path='\(path)'")
+            try db.execute(sql: """
+            UPDATE "Image" set "exportTime" = null WHERE path='\(path)'
+            """)
         }catch{
             return .ERROR
         }
@@ -24,7 +26,9 @@ class ImageExportDaoPostgresCK : ImageExportDaoInterface {
         let db = PostgresConnection.database()
         
         do {
-            try db.execute(sql: "UPDATE Image set originalMD5 = $1 WHERE path=$2", parameterValues: [md5, path])
+            try db.execute(sql: """
+            UPDATE "Image" set "originalMD5" = $1 WHERE path=$2
+            """, parameterValues: [md5, path])
         }catch{
             return .ERROR
         }
@@ -35,7 +39,9 @@ class ImageExportDaoPostgresCK : ImageExportDaoInterface {
         let db = PostgresConnection.database()
         
         do {
-            try db.execute(sql: "UPDATE Image set exportedMD5 = $1 WHERE path=$2", parameterValues: [md5, path])
+            try db.execute(sql: """
+            UPDATE "Image" set "exportedMD5" = $1 WHERE path=$2
+            """, parameterValues: [md5, path])
         }catch{
             return .ERROR
         }
@@ -46,7 +52,9 @@ class ImageExportDaoPostgresCK : ImageExportDaoInterface {
         let db = PostgresConnection.database()
         
         do {
-            try db.execute(sql: "UPDATE Image set exportTime = $1, exportToPath = $2, exportAsFilename = $3, exportedMD5 = $4, exportedLongDescription = $5, exportState = 'OK', exportFailMessage = '' WHERE path=$6", parameterValues: [date, exportToPath, exportedFilename, exportedMD5, exportedLongDescription, path])
+            try db.execute(sql: """
+            UPDATE "Image" set "exportTime" = $1, "exportToPath" = $2, "exportAsFilename" = $3, "exportedMD5" = $4, "exportedLongDescription" = $5, "exportState" = 'OK', "exportFailMessage" = '' WHERE path=$6
+            """, parameterValues: [date, exportToPath, exportedFilename, exportedMD5, exportedLongDescription, path])
         }catch{
             return .ERROR
         }
@@ -57,7 +65,9 @@ class ImageExportDaoPostgresCK : ImageExportDaoInterface {
         let db = PostgresConnection.database()
         
         do {
-            try db.execute(sql: "UPDATE Image set exportTime = $1 WHERE path=$2", parameterValues: [date, path])
+            try db.execute(sql: """
+            UPDATE "Image" set "exportTime" = $1 WHERE path=$2
+            """, parameterValues: [date, path])
         }catch{
             return .ERROR
         }
@@ -68,7 +78,9 @@ class ImageExportDaoPostgresCK : ImageExportDaoInterface {
         let db = PostgresConnection.database()
         
         do {
-            try db.execute(sql: "UPDATE Image set exportTime = $1, exportState = 'FAIL', exportFailMessage = $2 WHERE path=$3", parameterValues: [date, message, path])
+            try db.execute(sql: """
+            UPDATE "Image" set "exportTime" = $1, "exportState" = 'FAIL', "exportFailMessage" = $2 WHERE path=$3
+            """, parameterValues: [date, message, path])
         }catch{
             return .ERROR
         }
@@ -79,7 +91,9 @@ class ImageExportDaoPostgresCK : ImageExportDaoInterface {
         let db = PostgresConnection.database()
         
         do {
-            try db.execute(sql: "UPDATE Image set exportToPath = null, exportAsFilename = null, exportTime = null, exportState = null, exportFailMessage = '', exportedMD5 = null, WHERE path=$1", parameterValues: [path])
+            try db.execute(sql: """
+            UPDATE "Image" set "exportToPath" = null, "exportAsFilename" = null, "exportTime" = null, "exportState" = null, "exportFailMessage" = '', "exportedMD5" = null, WHERE path=$1
+            """, parameterValues: [path])
         }catch{
             return .ERROR
         }

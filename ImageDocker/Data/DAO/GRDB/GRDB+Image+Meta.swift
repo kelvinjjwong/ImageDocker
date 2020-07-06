@@ -77,6 +77,7 @@ extension ImageSearchDaoGRDB {
         (SELECT IFNULL(photoTakenYear,0) AS photoTakenYear, IFNULL(photoTakenMonth,0) AS photoTakenMonth, IFNULL(photoTakenDay,0) AS photoTakenDay, path, imageSource, cameraModel from Image)
         WHERE 1=1 \(arguments) GROUP BY \(fields) ORDER BY \(fields) DESC
         """
+        print(">> GRDB SQL of loading moments treeview")
         print(sql)
         var result:[Moment] = []
         do {

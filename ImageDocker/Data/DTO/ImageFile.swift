@@ -265,12 +265,13 @@ class ImageFile {
         self.metaInfoHolder = metaInfoStore ?? MetaInfoHolder()
         
         if let repo = repository {
-        
+            print("repo has value, getOrCreatePhoto")
             self.imageData = self.imageRecordDao.getOrCreatePhoto(filename: fileName,
                                                              path: url.path,
                                                              parentPath: url.deletingLastPathComponent().path,
                                                              repositoryPath: repo.repositoryPath.withStash())
         }else{
+            print("repo is null, getOrCreatePhoto")
             self.imageData = self.imageRecordDao.getOrCreatePhoto(filename: fileName,
                                                                  path: url.path,
                                                                  parentPath: url.deletingLastPathComponent().path,

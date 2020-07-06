@@ -40,6 +40,7 @@ public final class PostgresConnection : ImageDBInterface {
             try PostgresConnection.database().execute(sql: "SELECT NOW()")
             return (true, nil)
         }catch{
+            print("Error at testDatabase()")
             print(error)
             return (false, error)
         }

@@ -14,7 +14,9 @@ class MomentsTreeDataSource : TreeDataSource {
     
     func convertToTreeCollection(_ data:Moment) -> TreeCollection {
         let collection = TreeCollection(data.represent, id: data.id, object: data)
-        if data.day == 0 {
+        if data.year == 0 && data.month == 0 && data.day == 0 {
+            collection.expandable = false
+        }else if data.day == 0 {
             collection.expandable = true
         }
         return collection

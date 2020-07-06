@@ -12,6 +12,8 @@ import Foundation
 
 class PostgresRow : CustomStringConvertible {
     
+    public var table:String = ""
+    
     /// The values of the columns for this `Row`.
     public var values: [PostgresRowValueConvertible]
     public var columnNames: [String]
@@ -39,7 +41,7 @@ class PostgresRow : CustomStringConvertible {
     }
     
     public func hasNull(atIndex index:Int) -> Bool {
-        guard index >= 0 || index < values.count else {
+        guard index >= 0 && index < values.count else {
             return true
         }
         return values[index].postgresValue.isNull
@@ -95,6 +97,7 @@ class PostgresRow : CustomStringConvertible {
         guard let index = index(ofColumn: columnName) else {
             fatalError("Unable to convert value of column \(columnName)")
         }
+        //print("debug 11")
         return Value.decode(from: self, atUncheckedIndex: index)
     }
     
@@ -103,6 +106,7 @@ class PostgresRow : CustomStringConvertible {
         guard let index = index(ofColumn: columnName) else {
             return nil
         }
+        //print("debug 8")
         return Value.decodeIfPresent(from: self, atUncheckedIndex: index)
     }
     
@@ -122,6 +126,7 @@ class PostgresRow : CustomStringConvertible {
     }
     
     public subscript<Value:PostgresRowValueConvertible>(_ index: Int) -> Value {
+        //print("debug 12")
         return Value.decode(from: self, atUncheckedIndex: index)
     }
     
@@ -130,6 +135,7 @@ class PostgresRow : CustomStringConvertible {
         guard index >= 0 || index < values.count else {
             return nil
         }
+        //print("debug 9")
         return Value.decodeIfPresent(from: self, atUncheckedIndex: index)
     }
     

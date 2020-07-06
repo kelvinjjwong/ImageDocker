@@ -27,6 +27,16 @@ struct SQLHelper {
         }
     }
     
+    static func appendSqlTextCondition(_ column:String, value:String?, where statement:inout String, args arguments:inout [String], numericPlaceholder:inout Int) {
+        if value == nil || value == "" {
+            statement = "\(statement) AND (\(column)='' OR \(column) IS NULL)"
+        }else{
+            numericPlaceholder += 1
+            statement = "\(statement) AND \(column)=$\(numericPlaceholder)"
+            arguments.append(value!)
+        }
+    }
+    
     static func appendSqlIntegerCondition(_ column:String, value:Int?, where statement:inout String) {
         if value == nil || value == 0 {
             statement = "\(statement) AND (\(column)=0 OR \(column) IS NULL)"
@@ -141,35 +151,35 @@ struct SQLHelper {
         
         var hiddenWhere = ""
         if !includeHidden {
-            hiddenWhere = "AND hidden=0"
+            hiddenWhere = "AND hidden=false"
         }
         var placeWhere = ""
         if country != "" {
-            placeWhere += " AND (country = '\(country)' OR assignCountry = '\(country)')"
+            placeWhere += " AND (country = '\(country)' OR \"assignCountry\" = '\(country)')"
         }
         if province != "" {
-            placeWhere += " AND (province = '\(province)' OR assignProvince = '\(province)')"
+            placeWhere += " AND (province = '\(province)' OR \"assignProvince\" = '\(province)')"
         }
         if city != "" {
-            placeWhere += " AND (city = '\(city)' OR assignCity = '\(city)')"
+            placeWhere += " AND (city = '\(city)' OR \"assignCity\" = '\(city)')"
         }
         // FIXME
         if (place == nil || place == ""){
             
             if country == "" && province == "" && city == "" {
-                placeWhere += " AND (place = '' OR place is null OR assignPlace = '' OR assignPlace is null)"
+                placeWhere += " AND (place = '' OR place is null OR \"assignPlace\" = '' OR \"assignPlace\" is null)"
             }else{
                 //
                 // ignore place
             }
         }else {
             if country == "" && province == "" && city == "" {
-                placeWhere = "AND (place = '\(place ?? "")' OR assignPlace = '\(place ?? "")' OR province = '\(place ?? "")' OR assignProvince = '\(place ?? "")' OR city = '\(place ?? "")' OR assignCity = '\(place ?? "")') "
+                placeWhere = "AND (place = '\(place ?? "")' OR \"assignPlace\" = '\(place ?? "")' OR province = '\(place ?? "")' OR \"assignProvince\" = '\(place ?? "")' OR city = '\(place ?? "")' OR \"assignCity\" = '\(place ?? "")') "
             }else{
                 if country == "中国" {
-                    placeWhere += " AND (place = '\(place ?? "")' OR assignPlace = '\(place ?? "")') "
+                    placeWhere += " AND (place = '\(place ?? "")' OR \"assignPlace\" = '\(place ?? "")') "
                 }else{
-                    placeWhere += " OR (place = '\(place ?? "")' OR assignPlace = '\(place ?? "")') "
+                    placeWhere += " OR (place = '\(place ?? "")' OR \"assignPlace\" = '\(place ?? "")') "
                 }
             }
         }
@@ -181,17 +191,17 @@ struct SQLHelper {
             if ignoreDate {
                 stmtWithoutHiddenWhere = "1=1 \(placeWhere)"
             }else{
-                stmtWithoutHiddenWhere = "( (photoTakenYear = 0 and photoTakenMonth = 0 and photoTakenDay = 0) OR (photoTakenYear is null and photoTakenMonth is null and photoTakenDay is null) ) \(placeWhere)"
+                stmtWithoutHiddenWhere = "( (\"photoTakenYear\" = 0 and \"photoTakenMonth\" = 0 and \"photoTakenDay\" = 0) OR (\"photoTakenYear\" is null and \"photoTakenMonth\" is null and \"photoTakenDay\" is null) ) \(placeWhere)"
             }
         }else{
             if year == 0 {
                 // no condition
             } else if month == 0 {
-                stmtWithoutHiddenWhere = "photoTakenYear = \(year) \(placeWhere) \(hiddenWhere)"
+                stmtWithoutHiddenWhere = "\"photoTakenYear\" = \(year) \(placeWhere) \(hiddenWhere)"
             } else if day == 0 {
-                stmtWithoutHiddenWhere = "photoTakenYear = \(year) and photoTakenMonth = \(month) \(placeWhere)"
+                stmtWithoutHiddenWhere = "\"photoTakenYear\" = \(year) and \"photoTakenMonth\" = \(month) \(placeWhere)"
             } else {
-                stmtWithoutHiddenWhere = "photoTakenYear = \(year) and photoTakenMonth = \(month) and photoTakenDay = \(day) \(placeWhere)"
+                stmtWithoutHiddenWhere = "\"photoTakenYear\" = \(year) and \"photoTakenMonth\" = \(month) and \"photoTakenDay\" = \(day) \(placeWhere)"
             }
         }
         
@@ -209,7 +219,7 @@ struct SQLHelper {
         SQLHelper.inArray(field: "cameraModel", array: cameraModel, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
         
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
-        let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=1"
+        let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=true"
         
         print("SQL args: \(sqlArgs)")
         
@@ -231,13 +241,13 @@ struct SQLHelper {
         if event == "" || event == "未分配事件" {
             eventWhere = "(event='' OR event is null)"
         }else{
-            eventWhere = "event = ?"
+            eventWhere = "event = $1"
             hasEvent = true
         }
         
         var hiddenWhere = ""
         if !includeHidden {
-            hiddenWhere = "AND hidden=0"
+            hiddenWhere = "AND hidden=false"
         }
         var stmtWithoutHiddenWhere = ""
         
@@ -245,12 +255,12 @@ struct SQLHelper {
             stmtWithoutHiddenWhere = "\(eventWhere) \(hiddenWhere)"
         } else if day == 0 {
             if month == 0 {
-                stmtWithoutHiddenWhere = "\(eventWhere) and photoTakenYear = \(year) \(hiddenWhere)"
+                stmtWithoutHiddenWhere = "\(eventWhere) and \"photoTakenYear\" = \(year) \(hiddenWhere)"
             }else{
-                stmtWithoutHiddenWhere = "\(eventWhere) and photoTakenYear = \(year) and photoTakenMonth = \(month) \(hiddenWhere)"
+                stmtWithoutHiddenWhere = "\(eventWhere) and \"photoTakenYear\" = \(year) and \"photoTakenMonth\" = \(month) \(hiddenWhere)"
             }
         } else {
-            stmtWithoutHiddenWhere = "\(eventWhere) and photoTakenYear = \(year) and photoTakenMonth = \(month) and photoTakenDay = \(day) \(hiddenWhere)"
+            stmtWithoutHiddenWhere = "\(eventWhere) and \"photoTakenYear\" = \(year) and \"photoTakenMonth\" = \(month) and \"photoTakenDay\" = \(day) \(hiddenWhere)"
         }
         return (stmtWithoutHiddenWhere, hiddenWhere, hasEvent)
     }
@@ -269,7 +279,7 @@ struct SQLHelper {
         SQLHelper.inArray(field: "cameraModel", array: cameraModel, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
         
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
-        let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=1"
+        let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=true"
         
         print("[GRDB Image -> Searching] Generated SQL statement for all:")
         print(stmt)
@@ -285,41 +295,41 @@ struct SQLHelper {
         
         var hiddenFlagStatement = ""
         if !includeHidden {
-            hiddenFlagStatement = "AND hidden=0 AND hiddenByRepository=0 AND hiddenByContainer=0"
+            hiddenFlagStatement = "AND hidden=false AND \"hiddenByRepository\"=false AND \"hiddenByContainer\"=false"
         }
-        let hiddenStatement = "AND (hidden=1 OR hiddenByRepository=1 OR hiddenByContainer=1)"
+        let hiddenStatement = "AND (hidden=true OR \"hiddenByRepository\"=true OR \"hiddenByContainer\"=true)"
         
-        let yearStatement = SQLHelper.joinArrayToStatementCondition(values: years, field: "photoTakenYear")
-        let monthStatement = SQLHelper.joinArrayToStatementCondition(values: months, field: "photoTakenMonth")
-        let dayStatement = SQLHelper.joinArrayToStatementCondition(values: days, field: "photoTakenDay")
+        let yearStatement = SQLHelper.joinArrayToStatementCondition(values: years, field: "photoTakenYear".quotedDatabaseIdentifier)
+        let monthStatement = SQLHelper.joinArrayToStatementCondition(values: months, field: "photoTakenMonth".quotedDatabaseIdentifier)
+        let dayStatement = SQLHelper.joinArrayToStatementCondition(values: days, field: "photoTakenDay".quotedDatabaseIdentifier)
         
         let dateStatement = SQLHelper.joinStatementConditions(conditions: [yearStatement, monthStatement, dayStatement])
         
-        let peopleIdStatement = SQLHelper.joinArrayToStatementCondition(values: peopleIds, field: "recognizedPeopleIds", like: true)
+        let peopleIdStatement = SQLHelper.joinArrayToStatementCondition(values: peopleIds, field: "recognizedPeopleIds".quotedDatabaseIdentifier, like: true)
         
-        let eventStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "event", like: true)
-        let longDescStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "longDescription", like: true)
-        let shortDescStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "shortDescription", like: true)
+        let eventStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "event".quotedDatabaseIdentifier, like: true)
+        let longDescStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "longDescription".quotedDatabaseIdentifier, like: true)
+        let shortDescStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "shortDescription".quotedDatabaseIdentifier, like: true)
         
-        let placeStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "place", like: true)
-        let countryStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "country", like: true)
-        let provinceStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "province", like: true)
-        let cityStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "city", like: true)
-        let districtStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "district", like: true)
-        let businessCircleStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "businessCircle", like: true)
-        let streetStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "street", like: true)
-        let addressStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "address", like: true)
-        let addressDescStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "addressDescription", like: true)
+        let placeStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "place".quotedDatabaseIdentifier, like: true)
+        let countryStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "country".quotedDatabaseIdentifier, like: true)
+        let provinceStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "province".quotedDatabaseIdentifier, like: true)
+        let cityStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "city".quotedDatabaseIdentifier, like: true)
+        let districtStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "district".quotedDatabaseIdentifier, like: true)
+        let businessCircleStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "businessCircle".quotedDatabaseIdentifier, like: true)
+        let streetStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "street".quotedDatabaseIdentifier, like: true)
+        let addressStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "address".quotedDatabaseIdentifier, like: true)
+        let addressDescStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "addressDescription".quotedDatabaseIdentifier, like: true)
         
-        let assignPlaceStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "assignPlace", like: true)
-        let assignCountryStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "assignCountry", like: true)
-        let assignProvinceStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "assignProvince", like: true)
-        let assignCityStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "assignCity", like: true)
-        let assignDistrictStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "assignDistrict", like: true)
-        let assignBusinessCircleStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "assignBusinessCircle", like: true)
-        let assignStreetStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "assignStreet", like: true)
-        let assignAddressStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "assignAddress", like: true)
-        let assignAddressDescStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "assignAddressDescription", like: true)
+        let assignPlaceStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "assignPlace".quotedDatabaseIdentifier, like: true)
+        let assignCountryStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "assignCountry".quotedDatabaseIdentifier, like: true)
+        let assignProvinceStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "assignProvince".quotedDatabaseIdentifier, like: true)
+        let assignCityStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "assignCity".quotedDatabaseIdentifier, like: true)
+        let assignDistrictStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "assignDistrict".quotedDatabaseIdentifier, like: true)
+        let assignBusinessCircleStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "assignBusinessCircle".quotedDatabaseIdentifier, like: true)
+        let assignStreetStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "assignStreet".quotedDatabaseIdentifier, like: true)
+        let assignAddressStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "assignAddress".quotedDatabaseIdentifier, like: true)
+        let assignAddressDescStatement = SQLHelper.joinArrayToStatementCondition(values: keywords, field: "assignAddressDescription".quotedDatabaseIdentifier, like: true)
         
         let keywordStatement = SQLHelper.joinStatementConditions(conditions: [
             eventStatement,

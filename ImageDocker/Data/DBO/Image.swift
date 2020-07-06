@@ -11,7 +11,38 @@ import GRDB
 
 public final class Image : Codable {
     //var id: Int64?      // <- the row id
+    var audioBits:Int?
+    var audioChannels:Int?
+    var audioRate:Int?
+    var hidden:Bool = false
+    var imageHeight:Int?
+    var imageWidth:Int?
+    var photoTakenDay:Int?
+    var photoTakenMonth:Int?
+    var photoTakenYear:Int?
+    var photoTakenHour:Int?
+    var rotation:Int?
     var addDate:Date?
+    var assignDateTime:Date?
+    var exifCreateDate:Date?
+    var exifDateTimeOriginal:Date?
+    var exifModifyDate:Date?
+    var exportTime:Date?
+    var filenameDate:String?
+    var filesysCreateDate:Date?
+    var photoTakenDate:Date?
+    var softwareModifiedTime:Date?
+    var trackCreateDate:Date?
+    var trackModifyDate:Date?
+    var updateDateTimeDate:Date?
+    var updateEventDate:Date?
+    var updateExifDate:Date?
+    var updateLocationDate:Date?
+    var updatePhotoTakenDate:Date?
+    var videoCreateDate:Date?
+    var videoFrameRate:Double?
+    var videoModifyDate:Date?
+    
     var address:String?
     var addressDescription:String?
     var aperture:String?
@@ -20,7 +51,6 @@ public final class Image : Codable {
     var assignBusinessCircle:String?
     var assignCity:String?
     var assignCountry:String?
-    var assignDateTime:Date?
     var assignDistrict:String?
     var assignLatitude:String?
     var assignLatitudeBD:String?
@@ -29,9 +59,6 @@ public final class Image : Codable {
     var assignPlace:String?
     var assignProvince:String?
     var assignStreet:String?
-    var audioBits:Int?
-    var audioChannels:Int?
-    var audioRate:Int?
     var businessCircle:String?
     var cameraMaker:String?
     var cameraModel:String?
@@ -41,23 +68,14 @@ public final class Image : Codable {
     var dateTimeFromFilename:String?
     var district:String?
     var event:String?
-    var exifCreateDate:Date?
-    var exifDateTimeOriginal:Date?
-    var exifModifyDate:Date?
     var exportAsFilename:String?
-    var exportTime:Date?
     var exportToPath:String?
     var exposureTime:String?
-    var filename:String = ""
-    var filenameDate:String?
     var fileSize:String?
-    var filesysCreateDate:Date?
+    var filename:String = ""
     var gpsDate:String?
-    var hidden:Bool = false
     var hideForSourceFilename:String?
-    var imageHeight:Int?
     var imageSource:String?
-    var imageWidth:Int?
     var iso:String?
     var latitude:String?
     var latitudeBD:String?
@@ -65,31 +83,14 @@ public final class Image : Codable {
     var longitudeBD:String?
     var path:String = ""
     var photoDescription:String?
-    var photoTakenDate:Date?
-    var photoTakenDay:Int?
-    var photoTakenHour:Int?
-    var photoTakenMonth:Int?
-    var photoTakenYear:Int?
     var place:String?
     var province:String?
-    var rotation:Int?
-    var softwareModifiedTime:Date?
     var softwareName:String?
     var street:String?
     var suggestPlace:String?
-    var trackCreateDate:Date?
-    var trackModifyDate:Date?
-    var updateDateTimeDate:Date?
-    var updateEventDate:Date?
-    var updateExifDate:Date?
-    var updateLocationDate:Date?
-    var updatePhotoTakenDate:Date?
     var videoBitRate:String?
-    var videoCreateDate:Date?
     var videoDuration:String?
     var videoFormat:String?
-    var videoFrameRate:Double?
-    var videoModifyDate:Date?
     var shortDescription:String?
     var longDescription:String?
     var originalMD5:String?
@@ -97,14 +98,15 @@ public final class Image : Codable {
     var exportedLongDescription:String?
     var exportState:String?
     var exportFailMessage:String?
+    var delFlag:Bool?
     var duplicatesKey:String?
     var originPath:String?
     var facesPath:String?
     var id:String?
-    var repositoryPath:String = ""
     var subPath:String = ""
     var hiddenByRepository:Bool = false
     var hiddenByContainer:Bool = false
+    var repositoryPath:String = ""
     var scanedFace:Bool = false
     var recognizedFace:Bool = false
     var facesCount:Int = 0

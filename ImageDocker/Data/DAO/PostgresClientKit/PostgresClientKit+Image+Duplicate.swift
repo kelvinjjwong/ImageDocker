@@ -21,34 +21,33 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
         var dupDates:Set<Date> = []
         
         let sql = """
-        SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCount FROM
+        SELECT "photoTakenYear","photoTakenMonth","photoTakenDay","photoTakenDate",place,"photoCount" FROM
         (
-            SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,count(path) as photoCount FROM
+            SELECT "photoTakenYear","photoTakenMonth","photoTakenDay","photoTakenDate",place,count(path) as "photoCount" FROM
             (
-                SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,path FROM IMAGE
-                WHERE photoTakenDate LIKE '%.000'
+                SELECT "photoTakenYear","photoTakenMonth","photoTakenDay","photoTakenDate",place,path FROM "Image"
                 UNION
-                SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate || '.000' ,place,path FROM IMAGE
-                WHERE photoTakenDate IS NOT NULL AND photoTakenDate NOT LIKE '%.000'
-            )
-            GROUP BY photoTakenDate, place, photoTakenDay, photoTakenMonth, photoTakenYear
-        ) WHERE photoCount > 1 ORDER BY photoTakenDate
+                SELECT "photoTakenYear","photoTakenMonth","photoTakenDay","photoTakenDate",place,path FROM "Image"
+                WHERE "photoTakenDate" IS NOT NULL
+            ) t1
+            GROUP BY "photoTakenDate", place, "photoTakenDay", "photoTakenMonth", "photoTakenYear"
+        ) t2 WHERE "photoCount" > 1 ORDER BY "photoTakenDate"
         """
         final class TempRecord : PostgresCustomRecord {
-            var photoTakenYear: Int = 0
-            var photoTakenMonth: Int = 0
-            var photoTakenDay: Int = 0
-            var photoTakenDate: Date = Date()
-            var place:String = ""
+            var photoTakenYear: Int? = 0
+            var photoTakenMonth: Int? = 0
+            var photoTakenDay: Int? = 0
+            var photoTakenDate: Date? = Date()
+            var place:String? = ""
             var photoCount:Int = 0
             public init() {}
         }
         let records = TempRecord.fetchAll(db, sql: sql)
         for row in records {
-            let year = row.photoTakenYear
-            let month = row.photoTakenMonth
-            let day = row.photoTakenDay
-            let date = row.photoTakenDate
+            let year = row.photoTakenYear ?? 0
+            let month = row.photoTakenMonth ?? 0
+            let day = row.photoTakenDay ?? 0
+            let date = row.photoTakenDate ?? Date()
             //let place = row["place"] as! String? ?? ""
             //dup.event = row["event"] as! String? ?? ""
             //duplicates.duplicates.append(dup)
@@ -75,14 +74,16 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
         for i in 1...dupDates.count {
             marks.append("$\(i)")
         }
-        let sql2 = "SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,path FROM Image WHERE photoTakenYear <> 0 AND photoTakenYear IS NOT NULL AND photoTakenDate in (\(marks.joined(separator: ",")))"
+        let sql2 = """
+        SELECT "photoTakenYear","photoTakenMonth","photoTakenDay","photoTakenDate",place,path FROM "Image" WHERE "photoTakenYear" <> 0 AND "photoTakenYear" IS NOT NULL AND "photoTakenDate" in (\(marks.joined(separator: ",")))
+        """
         
         final class TempRecord2 : PostgresCustomRecord {
-            var photoTakenYear: Int = 0
-            var photoTakenMonth: Int = 0
-            var photoTakenDay: Int = 0
+            var photoTakenYear: Int? = 0
+            var photoTakenMonth: Int? = 0
+            var photoTakenDay: Int? = 0
             var photoTakenDate: Date? = nil
-            var place:String = ""
+            var place:String? = ""
             var path:String = ""
             public init() {}
         }
@@ -137,7 +138,9 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
         var result:[String:[Image]] = [:]
         let keyword = "\(repositoryRoot.withStash())%"
         let otherKeyword = "\(theOtherRepositoryRoot.withStash())%"
-        let records = Image.fetchAll(db, where: "(path like $1 or path like $2) and duplicatesKey is not null and duplicatesKey != '' ", orderBy: "duplicatesKey asc, path asc", values: [keyword, otherKeyword])
+        let records = Image.fetchAll(db, where: """
+            (path like $1 or path like $2) and "duplicatesKey" is not null and "duplicatesKey" != ''
+            """, orderBy: "\"duplicatesKey\" asc, path asc", values: [keyword, otherKeyword])
         for image in records {
             if let key = image.duplicatesKey, key != "" {
                 //print("found \(key) - \(image.path)")
@@ -153,19 +156,20 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
     
     func getChiefImageOfDuplicatedSet(duplicatesKey: String) -> Image? {
         let db = PostgresConnection.database()
-        return Image.fetchOne(db, where: "hidden=0 and duplicatesKey='\(duplicatesKey)'")
+        return Image.fetchOne(db, where: "hidden=false and \"duplicatesKey\"='\(duplicatesKey)'")
     }
     
     func getFirstImageOfDuplicatedSet(duplicatesKey: String) -> Image? {
         let db = PostgresConnection.database()
-        return Image.fetchOne(db, where: "duplicatesKey='\(duplicatesKey)'", orderBy: "path")
+        return Image.fetchOne(db, where: "\"duplicatesKey\"='\(duplicatesKey)'", orderBy: "path")
     }
     
     func markImageDuplicated(path: String, duplicatesKey: String?, hide: Bool) {
         let db = PostgresConnection.database()
         do{
-            try db.execute(sql: "update Image set duplicatesKey = $1, hidden = $2 where path = $3", parameterValues: [duplicatesKey, hide, path])
+            try db.execute(sql: "update \"Image\" set \"duplicatesKey\" = $1, hidden = $2 where path = $3", parameterValues: [duplicatesKey, hide, path])
         }catch{
+            print("Error at markImageDuplicated")
             print(error)
         }
     }

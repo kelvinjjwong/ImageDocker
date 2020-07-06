@@ -48,7 +48,7 @@ class EventsTreeDataSource : TreeDataSource {
                 lv2Entry.expandable = true
                 lv1Entry.addChild(collection: lv2Entry)
             }else{
-                print("ERROR: duplicated event entry \(lv1) -> \(lv2)")
+                //print("ERROR: duplicated event entry \(lv1) -> \(lv2)")
             }
         }
         
@@ -72,7 +72,9 @@ class EventsTreeDataSource : TreeDataSource {
     
     func convertDateToTreeCollection(_ moment:Moment) -> TreeCollection {
         let node = TreeCollection(moment.represent, id: moment.id, object: moment)
-        if moment.day == 0 {
+        if moment.year == 0 && moment.month == 0 && moment.day == 0 {
+            node.expandable = false
+        }else if moment.day == 0 {
             node.expandable = true
         }
         return node

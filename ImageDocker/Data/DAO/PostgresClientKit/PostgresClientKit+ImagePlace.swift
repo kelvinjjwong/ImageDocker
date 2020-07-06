@@ -63,7 +63,7 @@ class PlaceDaoPostgresCK : PlaceDaoInterface {
             }
         }
         do {
-            try db.execute(sql: "UPDATE Image SET assignPlace=$1 WHERE assignPlace=$2", parameterValues: [newName, oldName])
+            try db.execute(sql: "UPDATE \"Image\" SET \"assignPlace\"=$1 WHERE \"assignPlace\"=$2", parameterValues: [newName, oldName])
             let oldPlace = ImagePlace()
             oldPlace.name = oldName
             oldPlace.delete(db)

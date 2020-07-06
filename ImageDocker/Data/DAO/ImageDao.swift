@@ -96,7 +96,14 @@ class ImageSearchDao {
         self.impl = impl
     }
     
-    static let `default` = ImageSearchDao(ImageSearchDaoGRDB())
+    static var `default`:ImageSearchDao {
+        let location = PreferencesController.databaseLocation()
+        if location == "local" {
+            return ImageSearchDao(ImageSearchDaoGRDB())
+        }else{
+            return ImageSearchDao(ImageSearchDaoPostgresCK())
+        }
+    }
     
     // MARK: - Options
     
@@ -275,7 +282,14 @@ class ImageCountDao {
         self.impl = impl
     }
     
-    static let `default` = ImageCountDao(ImageCountDaoGRDB())
+    static var `default`:ImageCountDao {
+        let location = PreferencesController.databaseLocation()
+        if location == "local" {
+            return ImageCountDao(ImageCountDaoGRDB())
+        }else{
+            return ImageCountDao(ImageCountDaoPostgresCK())
+        }
+    }
     
     // count by date & place
     func countPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> Int {
@@ -363,7 +377,14 @@ class ImageDuplicationDao {
         self.impl = impl
     }
     
-    static let `default` = ImageDuplicationDao(ImageDuplicateDaoGRDB())
+    static var `default`:ImageDuplicationDao {
+        let location = PreferencesController.databaseLocation()
+        if location == "local" {
+            return ImageDuplicationDao(ImageDuplicateDaoGRDB())
+        }else{
+            return ImageDuplicationDao(ImageDuplicateDaoPostgresCK())
+        }
+    }
     
     func reloadDuplicatePhotos() {
         return self.impl.reloadDuplicatePhotos()
@@ -398,7 +419,14 @@ class ImageFaceDao {
         self.impl = impl
     }
     
-    static let `default` = ImageFaceDao(ImageFaceDaoGRDB())
+    static var `default`:ImageFaceDao {
+        let location = PreferencesController.databaseLocation()
+        if location == "local" {
+            return ImageFaceDao(ImageFaceDaoGRDB())
+        }else{
+            return ImageFaceDao(ImageFaceDaoPostgresCK())
+        }
+    }
     
     func updateImageScannedFace(imageId:String, facesCount:Int = 0) -> ExecuteState {
         return self.impl.updateImageScannedFace(imageId: imageId, facesCount: facesCount)
@@ -417,7 +445,14 @@ class ImageExportDao {
         self.impl = impl
     }
     
-    static let `default` = ImageExportDao(ImageExportDaoGRDB())
+    static var `default`:ImageExportDao {
+        let location = PreferencesController.databaseLocation()
+        if location == "local" {
+            return ImageExportDao(ImageExportDaoGRDB())
+        }else{
+            return ImageExportDao(ImageExportDaoPostgresCK())
+        }
+    }
     
     
     func cleanImageExportTime(path:String) -> ExecuteState {

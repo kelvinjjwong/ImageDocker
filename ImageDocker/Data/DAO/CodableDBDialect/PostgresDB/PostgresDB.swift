@@ -145,11 +145,14 @@ public class PostgresDB : DBExecutor {
             for row in cursor {
                 let columns = try row.get().columns
                 let row = PostgresRow(columnNames: columnNames, values: columns)
-                let obj:T = try PostgresRowDecoder().decode(from: row)
-                result.append(obj)
+                row.table = table
+                if let obj:T = try PostgresRowDecoder().decodeIfPresent(from: row) {
+                    result.append(obj)
+                }
             }
             return result
         } catch {
+            print("Error at PostgresDB.query(object:table:sql:values:offset:limit) -> [T]")
             print(error) // better error handling goes here
 
             return []
@@ -183,11 +186,14 @@ public class PostgresDB : DBExecutor {
             for row in cursor {
                 let columns = try row.get().columns
                 let row = PostgresRow(columnNames: columnNames, values: columns)
-                let obj:T = try PostgresRowDecoder().decode(from: row)
-                result.append(obj)
+                row.table = table
+                if let obj:T = try PostgresRowDecoder().decodeIfPresent(from: row) {
+                    result.append(obj)
+                }
             }
             return result
         } catch {
+            print("Error at PostgresDB.query(object:table:where:orderBy:values:offset:limit) -> [T]")
             print(error) // better error handling goes here
 
             return []
@@ -218,11 +224,14 @@ public class PostgresDB : DBExecutor {
             for row in cursor {
                 let columns = try row.get().columns
                 let row = PostgresRow(columnNames: columnNames, values: columns)
-                let obj:T = try PostgresRowDecoder().decode(from: row)
-                result.append(obj)
+                row.table = table
+                if let obj:T = try PostgresRowDecoder().decodeIfPresent(from: row) {
+                    result.append(obj)
+                }
             }
             return result
         } catch {
+            print("Error at PostgresDB.query(object:table:parameters:orderBy) -> [T]")
             print(error) // better error handling goes here
 
             return []
@@ -265,6 +274,8 @@ public class PostgresDB : DBExecutor {
         do {
             let connection = try PostgresClientKit.Connection(configuration: self.postgresConfig)
             defer { connection.close() }
+            
+            //print(">> count sql: \(sql)")
             let stmt = try connection.prepareStatement(text: sql)
             defer { stmt.close() }
 
@@ -278,6 +289,8 @@ public class PostgresDB : DBExecutor {
             }
             return result
         } catch {
+            print("Error at PostgresDB.count(sql:parameterValues)")
+            print("Error sql: \(sql)")
             print(error) // better error handling goes here
 
             return -1
@@ -294,8 +307,9 @@ public class PostgresDB : DBExecutor {
             
             let generator = PostgreSQLStatementGenerator(table: table, record: object)
             let statement = generator.countStatement(keyColumns: keyColumns)
-            let columnNames = generator.persistenceContainer.columns
+            //let columnNames = generator.persistenceContainer.columns
             
+            //print(">> count sql: \(statement.sql)")
             let stmt = try connection.prepareStatement(text: statement.sql)
             defer { stmt.close() }
 
@@ -309,6 +323,7 @@ public class PostgresDB : DBExecutor {
             }
             return result
         } catch {
+            print("Error at PostgresDB.count(object:table:parameters)")
             print(error) // better error handling goes here
 
             return -1
@@ -324,6 +339,7 @@ public class PostgresDB : DBExecutor {
             let statement = generator.countStatement(where: whereSQL, values: values)
             let columnNames = generator.persistenceContainer.columns
             
+            //print(">> count sql: \(statement.sql)")
             let stmt = try connection.prepareStatement(text: statement.sql)
             defer { stmt.close() }
 
@@ -337,6 +353,7 @@ public class PostgresDB : DBExecutor {
             }
             return result
         } catch {
+            print("Error at PostgresDB.count(object:table:where:values)")
             print(error) // better error handling goes here
 
             return -1
@@ -365,12 +382,15 @@ public class PostgresDB : DBExecutor {
             for row in cursor {
                 let columns = try row.get().columns
                 let row = PostgresRow(columnNames: columnNames, values: columns)
-                let col:PostgresColumnInfo = try PostgresRowDecoder().decode(from: row)
-                tableInfo.add(column: col)
+                row.table = table
+                if let col:PostgresColumnInfo = try PostgresRowDecoder().decodeIfPresent(from: row) {
+                    tableInfo.add(column: col)
+                }
             }
             
             return tableInfo
         } catch {
+            print("Error at PostgresDB.queryTableInfo")
             print(error) // better error handling goes here
             return TableInfo(table)
         }
@@ -413,8 +433,10 @@ public class PostgresDB : DBExecutor {
                 for row in cursor {
                     let columns = try row.get().columns
                     let row = PostgresRow(columnNames: columnNames, values: columns)
-                    let col:PostgresColumnInfo = try PostgresRowDecoder().decode(from: row)
-                    table.add(column: col)
+                    row.table = table.name
+                    if let col:PostgresColumnInfo = try PostgresRowDecoder().decodeIfPresent(from: row) {
+                        table.add(column: col)
+                    }
                 }
             }
             

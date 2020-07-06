@@ -83,7 +83,7 @@ class PlacesTreeDataSource : TreeDataSource {
                 placeEntry.expandable = true
                 govEntry.addChild(collection: placeEntry)
             }else{
-                print("ERROR: duplicated place entry \(gov) -> \(place)")
+                //print("ERROR: duplicated place entry \(gov) -> \(place)")
             }
         }
         
@@ -107,7 +107,9 @@ class PlacesTreeDataSource : TreeDataSource {
     
     func convertDateToTreeCollection(_ moment:Moment) -> TreeCollection {
         let node = TreeCollection(moment.represent, id: moment.id, object: moment)
-        if moment.day == 0 {
+        if moment.year == 0 && moment.month == 0 && moment.day == 0 {
+            node.expandable = false
+        }else if moment.day == 0 {
             node.expandable = true
         }
         return node

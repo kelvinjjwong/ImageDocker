@@ -45,7 +45,9 @@ class EventDaoPostgresCK : EventDaoInterface {
         SQLHelper.inArray(field: "imageSource", array: imageSource, where: &imageSourceWhere, args: &sqlArgs, numericPlaceholders: true)
         SQLHelper.inArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs, numericPlaceholders: true)
         
-        let sql = "SELECT event, photoTakenYear, photoTakenMonth, photoTakenDay, place, count(path) as photoCount FROM Image WHERE 1=1 \(imageSourceWhere) \(cameraModelWhere) GROUP BY event, photoTakenYear,photoTakenMonth,photoTakenDay,place ORDER BY event DESC,photoTakenYear DESC,photoTakenMonth DESC,photoTakenDay DESC,place"
+        let sql = """
+        SELECT event, "photoTakenYear", "photoTakenMonth", "photoTakenDay", place, count(path) as "photoCount" FROM "Image" WHERE 1=1 \(imageSourceWhere) \(cameraModelWhere) GROUP BY event, "photoTakenYear","photoTakenMonth","photoTakenDay",place ORDER BY event DESC,"p"hotoTakenYear" DESC,"photoTakenMonth" DESC,"photoTakenDay" DESC,place
+        """
         
         final class TempRecord : PostgresCustomRecord {
             
@@ -117,7 +119,9 @@ class EventDaoPostgresCK : EventDaoInterface {
             }
         }
         do {
-            try db.execute(sql: "UPDATE Image SET AssignPlace=$1 WHERE AssignPlace=$2", parameterValues: [newName, oldName])
+            try db.execute(sql: """
+            UPDATE "Image" SET "assignPlace"=$1 WHERE "assignPlace"=$2
+            """, parameterValues: [newName, oldName])
             let event = ImageEvent()
             event.name = oldName
             event.delete(db)

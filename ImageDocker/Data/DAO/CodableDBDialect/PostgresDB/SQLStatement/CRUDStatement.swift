@@ -173,8 +173,8 @@ extension CountQuery {
                 i += 1
                 placeholders.append("\(column.quotedDatabaseIdentifier)=$\(i)")
             }
-            whereStmt = placeholders.joined(separator: " AND ")
+            whereStmt = "WHERE \(placeholders.joined(separator: " AND "))"
         }
-        return "SELECT count(1) FROM \(schema.quotedDatabaseIdentifier).\(tableName.quotedDatabaseIdentifier) WHERE \(whereStmt)".trimmingCharacters(in: .whitespacesAndNewlines)
+        return "SELECT count(1) FROM \(schema.quotedDatabaseIdentifier).\(tableName.quotedDatabaseIdentifier) \(whereStmt)".trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }
