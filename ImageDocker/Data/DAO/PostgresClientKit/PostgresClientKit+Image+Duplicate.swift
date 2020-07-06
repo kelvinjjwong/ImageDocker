@@ -10,7 +10,7 @@ import Foundation
 
 class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
     
-    var _duplicates:Duplicates? = nil
+    static var _duplicates:Duplicates? = nil
     
     func reloadDuplicatePhotos() {
         let db = PostgresConnection.database()
@@ -25,8 +25,6 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
         (
             SELECT "photoTakenYear","photoTakenMonth","photoTakenDay","photoTakenDate",place,count(path) as "photoCount" FROM
             (
-                SELECT "photoTakenYear","photoTakenMonth","photoTakenDay","photoTakenDate",place,path FROM "Image"
-                UNION
                 SELECT "photoTakenYear","photoTakenMonth","photoTakenDay","photoTakenDate",place,path FROM "Image"
                 WHERE "photoTakenDate" IS NOT NULL
             ) t1
@@ -100,7 +98,7 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
                 let hour = Calendar.current.component(.hour, from: date)
                 let minute = Calendar.current.component(.minute, from: date)
                 let second = Calendar.current.component(.second, from: date)
-                let key = "\(photo.place)_\(year)_\(month)_\(day)_\(hour)_\(minute)_\(second)"
+                let key = "\(photo.place ?? "")_\(year)_\(month)_\(day)_\(hour)_\(minute)_\(second)"
                 //print("duplicated record: \(key)")
                 let path = photo.path
                 if let first = firstPhotoInPlaceAndDate[key] {
@@ -122,15 +120,21 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
         }
         print("\(Date()) Marking duplicate tag to photo files: DONE")
         
-        _duplicates = duplicates
+        ImageDuplicateDaoPostgresCK._duplicates = duplicates
         print("\(Date()) Loading duplicate photos from db: DONE")
     }
     
     func getDuplicatePhotos() -> Duplicates {
-        if _duplicates == nil {
-            reloadDuplicatePhotos()
+        if ImageDuplicateDaoPostgresCK._duplicates == nil {
+            DispatchQueue.global().async {
+                self.reloadDuplicatePhotos()
+            }
         }
-        return _duplicates!
+        if ImageDuplicateDaoPostgresCK._duplicates == nil {
+            return Duplicates()
+        }else{
+            return ImageDuplicateDaoPostgresCK._duplicates!
+        }
     }
     
     func getDuplicatedImages(repositoryRoot: String, theOtherRepositoryRoot: String) -> [String : [Image]] {
