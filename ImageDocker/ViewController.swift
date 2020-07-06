@@ -209,6 +209,11 @@ class ViewController: NSViewController {
     var librariesViewPopover:NSPopover?
     var librariesViewController:LibrariesViewController!
     
+    var momentsTreeCategory = "MOMENTS"
+    
+    var momentsTreeHeaderMoreViewPopover:NSPopover?
+    var momentsTreeHeaderMoreViewController:MomentsTreeHeaderMoreViewController!
+    
     var containerDetailPopover:NSPopover?
     var containerDetailViewController:ContainerDetailViewController!
     
@@ -218,6 +223,14 @@ class ViewController: NSViewController {
     
     var collectionPaginationPopover:NSPopover?
     var collectionPaginationViewController:CollectionPaginationViewController!
+    
+    var stackedTreeView:StackedTreeViewController!
+    
+    let deviceTreeDataSource = DeviceTreeDataSource()
+    let repositoryTreeDataSource = RepositoryTreeDataSource()
+    let momentsTreeDataSource = MomentsTreeDataSource()
+    let placesTreeDataSource = PlacesTreeDataSource()
+    let eventsTreeDataSource = EventsTreeDataSource()
     
     // MARK: Concurrency Indicators
     

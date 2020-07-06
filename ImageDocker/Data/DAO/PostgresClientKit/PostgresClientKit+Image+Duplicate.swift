@@ -125,7 +125,11 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
     }
     
     func getDuplicatePhotos() -> Duplicates {
-        if ImageDuplicateDaoPostgresCK._duplicates == nil {
+        return self.getDuplicatePhotos(forceReload: false)
+    }
+    
+    func getDuplicatePhotos(forceReload:Bool) -> Duplicates {
+        if forceReload || ImageDuplicateDaoPostgresCK._duplicates == nil {
             DispatchQueue.global().async {
                 self.reloadDuplicatePhotos()
             }

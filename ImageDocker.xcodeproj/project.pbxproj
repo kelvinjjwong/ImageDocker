@@ -66,6 +66,9 @@
 		8E4E5B78221985A400FE4B68 /* ImageFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B77221985A400FE4B68 /* ImageFace.swift */; };
 		8E4E5B7F221F3D1800FE4B68 /* PeopleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B7E221F3D1800FE4B68 /* PeopleViewController.swift */; };
 		8E5E2A8C24713DF9001C336B /* DataCloner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5E2A8B24713DF9001C336B /* DataCloner.swift */; };
+		8E69D53624B331AD0075A05D /* MomentsTreeHeaderMoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E69D53424B331AD0075A05D /* MomentsTreeHeaderMoreViewController.swift */; };
+		8E69D53724B331AD0075A05D /* MomentsTreeHeaderMoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E69D53524B331AD0075A05D /* MomentsTreeHeaderMoreViewController.xib */; };
+		8E69D53924B333510075A05D /* MomentsTree+ExtendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E69D53824B333510075A05D /* MomentsTree+ExtendView.swift */; };
 		8E73E382223E494C00C14A90 /* ExecutionEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E73E381223E494C00C14A90 /* ExecutionEnvironment.swift */; };
 		8E7419442422526F002BAAAE /* ImageDaoInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7419432422526F002BAAAE /* ImageDaoInterface.swift */; };
 		8E741946242256E2002BAAAE /* RepositoryDaoInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E741945242256E2002BAAAE /* RepositoryDaoInterface.swift */; };
@@ -377,6 +380,9 @@
 		8E4E5B77221985A400FE4B68 /* ImageFace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFace.swift; sourceTree = "<group>"; };
 		8E4E5B7E221F3D1800FE4B68 /* PeopleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleViewController.swift; sourceTree = "<group>"; };
 		8E5E2A8B24713DF9001C336B /* DataCloner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCloner.swift; sourceTree = "<group>"; };
+		8E69D53424B331AD0075A05D /* MomentsTreeHeaderMoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsTreeHeaderMoreViewController.swift; sourceTree = "<group>"; };
+		8E69D53524B331AD0075A05D /* MomentsTreeHeaderMoreViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MomentsTreeHeaderMoreViewController.xib; sourceTree = "<group>"; };
+		8E69D53824B333510075A05D /* MomentsTree+ExtendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MomentsTree+ExtendView.swift"; sourceTree = "<group>"; };
 		8E73E381223E494C00C14A90 /* ExecutionEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutionEnvironment.swift; sourceTree = "<group>"; };
 		8E7419432422526F002BAAAE /* ImageDaoInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDaoInterface.swift; sourceTree = "<group>"; };
 		8E741945242256E2002BAAAE /* RepositoryDaoInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryDaoInterface.swift; sourceTree = "<group>"; };
@@ -1304,6 +1310,9 @@
 			isa = PBXGroup;
 			children = (
 				8ECA200123E5AF2700F56895 /* MomentsTree+CollectionView.swift */,
+				8E69D53424B331AD0075A05D /* MomentsTreeHeaderMoreViewController.swift */,
+				8E69D53524B331AD0075A05D /* MomentsTreeHeaderMoreViewController.xib */,
+				8E69D53824B333510075A05D /* MomentsTree+ExtendView.swift */,
 			);
 			path = ExtendView;
 			sourceTree = "<group>";
@@ -1577,6 +1586,7 @@
 				8E8D47272236733B0091E9C3 /* OneColumnTableViewController.xib in Resources */,
 				8EBA69252090C2AA00221131 /* ExifTool in Resources */,
 				8EAC5F212144A60900E187E0 /* DeviceFolderViewController.xib in Resources */,
+				8E69D53724B331AD0075A05D /* MomentsTreeHeaderMoreViewController.xib in Resources */,
 				8EB986BB20B30C920075B081 /* HeaderView.xib in Resources */,
 				8EB2716E233E0729003BF3AF /* LibrariesViewController.xib in Resources */,
 				8E3EC3B6214DB1B8004B6125 /* LunarCalendarView.xib in Resources */,
@@ -1711,6 +1721,7 @@
 				8EF4E1F42453C05800999DD1 /* PostgresDB.swift in Sources */,
 				8E15E73E23AC74DC0094240A /* TreeViewController.swift in Sources */,
 				8EFA7CFB211D713700419777 /* ImageDevice.swift in Sources */,
+				8E69D53624B331AD0075A05D /* MomentsTreeHeaderMoreViewController.swift in Sources */,
 				8E36B06C21792EDC00646EA5 /* CustomRowView.swift in Sources */,
 				8E4E5B6922195BFF00FE4B68 /* FaceRecognition.swift in Sources */,
 				8EBA759D23B5CD6F00548376 /* EventDao.swift in Sources */,
@@ -1770,6 +1781,7 @@
 				8EB271772340D867003BF3AF /* ViewController+CollectionArea.swift in Sources */,
 				8EFAF1FF20CAE422007A7783 /* Moment.swift in Sources */,
 				8EBA692C2090DB0300221131 /* DropPlaceCommons.swift in Sources */,
+				8E69D53924B333510075A05D /* MomentsTree+ExtendView.swift in Sources */,
 				8E8D471A2229AC430091E9C3 /* FaceCollectionViewController.swift in Sources */,
 				8ECA1FF723E5252B00F56895 /* SampleTreeDataSource.swift in Sources */,
 				8EB27159233842E4003BF3AF /* ImageFile+Preview.swift in Sources */,

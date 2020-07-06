@@ -22,20 +22,14 @@ extension ViewController {
         
         let TREEVIEW_WIDTH:CGFloat = 290
         
-        let stackedTreeView = StackedTreeViewController(divideTo: 5)
+        self.stackedTreeView = StackedTreeViewController(divideTo: 5)
         self.stackedTreeCanvasView.addSubview(stackedTreeView.view)
 
         stackedTreeView.view.boundToSuperView(superview: self.stackedTreeCanvasView)
         stackedTreeView.view.setWidth(TREEVIEW_WIDTH)
-        
-        let deviceTreeDataSource = DeviceTreeDataSource()
-        let repositoryTreeDataSource = RepositoryTreeDataSource()
-        let momentsTreeDataSource = MomentsTreeDataSource()
-        let placesTreeDataSource = PlacesTreeDataSource()
-        let eventsTreeDataSource = EventsTreeDataSource()
 
         stackedTreeView.addTreeView(title:"Devices",
-                                    dataSource: deviceTreeDataSource,
+                                    dataSource: self.deviceTreeDataSource,
                                     width: TREEVIEW_WIDTH,
                                     disableFilter: true,
                                     nodeIcon: { collection in
@@ -48,10 +42,10 @@ extension ViewController {
                                     onNodeSelected: { collection in
                                         print("action on \(collection.path)")
                                         if collection.path == "Android" || collection.path == "iPhone" {
-                                            stackedTreeView.expand(tree: "Devices", path: collection.path)
+                                            self.stackedTreeView.expand(tree: "Devices", path: collection.path)
                                         }else{
                                             if let id = collection.relatedObjectId,
-                                                let device = deviceTreeDataSource.getDeviceById(id),
+                                                let device = self.deviceTreeDataSource.getDeviceById(id),
                                                 let state = collection.relatedObjectState {
                                                 self.openDeviceCopyView(device: device, connected: state == 1)
                                             }
@@ -59,7 +53,7 @@ extension ViewController {
         })
 
         stackedTreeView.addTreeView(title:"Moments",
-                                    dataSource: momentsTreeDataSource,
+                                    dataSource: self.momentsTreeDataSource,
                                     width: TREEVIEW_WIDTH,
                                     nodeValue: { collection in
                                         if let moment = collection.relatedObject as? Moment {
@@ -76,6 +70,8 @@ extension ViewController {
         },
                                     moreActionOnHeader: { button in
                                         print("clicked moments more button")
+                                        self.momentsTreeCategory = "MOMENTS"
+                                        self.openMomentsTreeHeaderExtendView(sender: button)
         },
                                     moreActionOnNode: { collection, button in
                                         print("more on moments \(collection.path)")
@@ -84,7 +80,7 @@ extension ViewController {
                                         }
         })
         stackedTreeView.addTreeView(title:"Events",
-                                    dataSource: eventsTreeDataSource,
+                                    dataSource: self.eventsTreeDataSource,
                                     width: TREEVIEW_WIDTH,
                                     nodeValue: { collection in
                                         if let moment = collection.relatedObject as? Moment {
@@ -101,6 +97,8 @@ extension ViewController {
         },
                                     moreActionOnHeader: { button in
                                         print("clicked events more button")
+                                        self.momentsTreeCategory = "EVENTS"
+                                        self.openMomentsTreeHeaderExtendView(sender: button)
         },
                                     moreActionOnNode: { collection, button in
                                         print("more on events \(collection.path)")
@@ -111,7 +109,7 @@ extension ViewController {
 
 
         stackedTreeView.addTreeView(title:"Places",
-                                    dataSource: placesTreeDataSource,
+                                    dataSource: self.placesTreeDataSource,
                                     width: TREEVIEW_WIDTH,
                                     nodeValue: { collection in
                                         if let moment = collection.relatedObject as? Moment {
@@ -128,6 +126,8 @@ extension ViewController {
         },
                                     moreActionOnHeader: { button in
                                         print("clicked places more button")
+                                        self.momentsTreeCategory = "PLACES"
+                                        self.openMomentsTreeHeaderExtendView(sender: button)
         },
                                     moreActionOnNode: { collection, button in
                                         print("more on places \(collection.path)")
@@ -138,7 +138,7 @@ extension ViewController {
 
 
         stackedTreeView.addTreeView(title:"Libraries",
-                                    dataSource: repositoryTreeDataSource,
+                                    dataSource: self.repositoryTreeDataSource,
                                     width: TREEVIEW_WIDTH,
                                     nodeIcon: { collection in
                                         return Icons.folder

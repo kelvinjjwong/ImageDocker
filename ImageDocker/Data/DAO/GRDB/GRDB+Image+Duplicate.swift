@@ -11,7 +11,7 @@ import GRDB
 
 class ImageDuplicateDaoGRDB : ImageDuplicationDaoInterface {
     
-    var _duplicates:Duplicates? = nil
+    static var _duplicates:Duplicates? = nil
     
     func reloadDuplicatePhotos() {
         print("\(Date()) Loading duplicate photos from db")
@@ -120,15 +120,19 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
         print("\(Date()) Marking duplicate tag to photo files: DONE")
         
-        _duplicates = duplicates
+        ImageDuplicateDaoGRDB._duplicates = duplicates
         print("\(Date()) Loading duplicate photos from db: DONE")
     }
     
-    func getDuplicatePhotos() -> Duplicates {
-        if _duplicates == nil {
+    func getDuplicatePhotos(forceReload: Bool) -> Duplicates {
+        if forceReload || ImageDuplicateDaoGRDB._duplicates == nil {
             reloadDuplicatePhotos()
         }
-        return _duplicates!
+        return ImageDuplicateDaoGRDB._duplicates!
+    }
+    
+    func getDuplicatePhotos() -> Duplicates {
+        return self.getDuplicatePhotos(forceReload: false)
     }
     
     func getDuplicatedImages(repositoryRoot:String, theOtherRepositoryRoot:String) -> [String:[Image]] {

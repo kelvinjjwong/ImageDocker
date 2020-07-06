@@ -200,6 +200,8 @@ protocol ImageDuplicationDaoInterface {
     
     func getDuplicatePhotos() -> Duplicates
     
+    func getDuplicatePhotos(forceReload:Bool) -> Duplicates
+    
     func getDuplicatedImages(repositoryRoot:String, theOtherRepositoryRoot:String) -> [String:[Image]]
     
     func getChiefImageOfDuplicatedSet(duplicatesKey:String) -> Image?
