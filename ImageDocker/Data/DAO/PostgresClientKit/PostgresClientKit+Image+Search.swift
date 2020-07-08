@@ -706,11 +706,11 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         let db = PostgresConnection.database()
         let sql = "select distinct max(\"photoTakenYear\") \"photoTakenYear\" from \"Image\" where hidden=false"
         final class TempRecord : PostgresCustomRecord {
-            var photoTakenYear: Int = 0
+            var photoTakenYear: Int? = 0
             public init() {}
         }
         if let record = TempRecord.fetchOne(db, sql: sql) {
-            return record.photoTakenYear
+            return record.photoTakenYear ?? 0
         }else{
             return 0
         }
@@ -720,11 +720,11 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         let db = PostgresConnection.database()
         let sql = "select distinct min(\"photoTakenYear\") \"photoTakenYear\" from \"Image\" where hidden=false"
         final class TempRecord : PostgresCustomRecord {
-            var photoTakenYear: Int = 0
+            var photoTakenYear: Int? = 0
             public init() {}
         }
         if let record = TempRecord.fetchOne(db, sql: sql) {
-            return record.photoTakenYear
+            return record.photoTakenYear ?? 0
         }else{
             return 0
         }
@@ -753,9 +753,11 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
     
     func getYearsByTodayInPrevious() -> [Int] {
         let db = PostgresConnection.database()
-        var sql = "select distinct \"photoTakenYear\" from \"Image\" where hidden=false and DATE(\"photoTakenDate\") IN ("
-        sql += self.getSqlByTodayInPrevious()
-        sql += ") order by \"photoTakenYear\" desc"
+        let sql = """
+        select distinct "photoTakenYear" from "Image" where hidden=false and DATE("photoTakenDate" + INTERVAL '\(PreferencesController.postgresTimestampTimezoneOffset)h') IN (
+        \(self.getSqlByTodayInPrevious())
+        ) order by "photoTakenYear" desc
+        """
         
         final class TempRecord : PostgresCustomRecord {
             var photoTakenYear: Int = 0
@@ -773,15 +775,17 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
     func getDatesAroundToday() -> [String] {
         let db = PostgresConnection.database()
         let sql = """
-select DATE 'today'-1 as "date"
+select DATE("date") as date FROM (
+select DATE 'today' + INTERVAL '-1 day' as "date"
 union
-select DATE 'today'-2 as "date"
+select DATE 'today' + INTERVAL '-2 day' as "date"
 union
-select DATE 'today'+1 as "date"
+select DATE 'today' + INTERVAL '+1 day' as "date"
 union
-select DATE 'today'+2 as "date"
+select DATE 'today' + INTERVAL '+2 day' as "date"
 union
-select DATE 'today' as  "date"
+select DATE 'today' as  "date" ) t
+order by "date"
 """
         var result:[String] = []
         
@@ -806,14 +810,14 @@ select DATE 'today' as  "date"
         let k = currentYear - year
         
         let sql = """
-        select distinct DATE("photoTakenDate") as "photoTakenDate" from "Image" where hidden=false and
-        DATE("photoTakenDate") IN (
+        select distinct DATE("photoTakenDate" + INTERVAL '\(PreferencesController.postgresTimestampTimezoneOffset)h') as "photoTakenDate" from "Image" where hidden=false and
+        DATE("photoTakenDate" + INTERVAL '\(PreferencesController.postgresTimestampTimezoneOffset)h') IN (
         DATE 'today' - INTERVAL '\(k) year',
         DATE 'today' - INTERVAL '\(k) year' - INTERVAL '1 day',
         DATE 'today' - INTERVAL '\(k) year' - INTERVAL '2 day',
         DATE 'today' - INTERVAL '\(k) year' + INTERVAL '1 day',
         DATE 'today' - INTERVAL '\(k) year' + INTERVAL '2 day'
-        ) order by DATE("photoTakenDate") desc
+        ) order by DATE("photoTakenDate" + INTERVAL '\(PreferencesController.postgresTimestampTimezoneOffset)h') desc
         """
         print(sql)
         

@@ -10,6 +10,9 @@ import Cocoa
 
 final class PreferencesController: NSViewController {
     
+    // Postgres DB date timezone offset (hours)
+    static let postgresTimestampTimezoneOffset = "+8"
+    
     // MARK: - KEYS
     
     // MARK: GEOLOCATION API
@@ -27,6 +30,13 @@ final class PreferencesController: NSViewController {
     fileprivate static let remoteDBSchemaKey = "RemoteDBSchema"
     fileprivate static let remoteDBDatabaseKey = "RemoteDBDatabase"
     fileprivate static let remoteDBNoPasswordKey = "RemoteDBNoPassword"
+    fileprivate static let localDBServerKey = "LocalDBServer"
+    fileprivate static let localDBPortKey = "LocalDBPort"
+    fileprivate static let localDBUsernameKey = "LocalDBUsername"
+    fileprivate static let localDBPasswordKey = "LocalDBPassword"
+    fileprivate static let localDBSchemaKey = "LocalDBSchema"
+    fileprivate static let localDBDatabaseKey = "LocalDBDatabase"
+    fileprivate static let localDBNoPasswordKey = "LocalDBNoPassword"
     
     // MARK: MOBILE DEVICE
     fileprivate static let exportToAndroidPathKey = "ExportToAndroidPath"
@@ -300,19 +310,28 @@ final class PreferencesController: NSViewController {
     }
     
     @IBAction func onCalcBackupUsedSpace(_ sender: NSButton) {
-        self.lblDBBackupUsedSpace.stringValue = "TODO."
+        let path = lblDatabaseBackupPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        if path != "" {
+            DispatchQueue.global().async {
+                let (sizeGB, spaceFree, _, _) = LocalDirectory.bridge.getDiskSpace(path: path)
+                DispatchQueue.main.async {
+                    self.lblDBBackupUsedSpace.stringValue = "Used: \(sizeGB) , Free: \(spaceFree)"
+                }
+            }
+        }
     }
     
     
     @IBAction func onCloneLocalToRemoteClicked(_ sender: NSButton) {
         let dropBeforeCreate = self.chkDeleteAllBeforeClone.state == .on
         self.toggleDatabaseClonerButtons(state: false)
+        
         DispatchQueue.global().async {
             
             DispatchQueue.main.async {
-                self.lblDataCloneMessage.stringValue = "Updating schema ..."
+                self.lblDataCloneMessage.stringValue = "Re-initializing schema ..."
             }
-            PostgresConnection.default.versionCheck(dropBeforeCreate: dropBeforeCreate)
+            PostgresConnection.default.versionCheck(dropBeforeCreate: dropBeforeCreate, location: .remoteDBServer)
 
             
             final class Version : PostgresCustomRecord {
@@ -320,7 +339,7 @@ final class PreferencesController: NSViewController {
                 public init() {}
             }
             
-            if let version = Version.fetchOne(PostgresConnection.database(), sql: "select substring(ver, '\\d+')::int versions from version_migrations order by versions desc") {
+            if let version = Version.fetchOne(PostgresConnection.database(.remoteDBServer), sql: "select substring(ver, '\\d+')::int versions from version_migrations order by versions desc") {
                 DispatchQueue.main.async {
                     self.lblRemoteSchemaVersion.stringValue = "v\(version.ver)"
                     self.lblDataCloneMessage.stringValue = "Remote DB schema version is v\(version.ver) now."
@@ -381,7 +400,7 @@ final class PreferencesController: NSViewController {
                     return
                 }
                 
-                let remotedb = PostgresConnection.database()
+                let remotedb = PostgresConnection.database(.remoteDBServer)
                 var count = 0
                 var i = 0
                 count = containers.count
@@ -936,6 +955,62 @@ final class PreferencesController: NSViewController {
         }
     }
     
+    class func localDBServer() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: localDBServerKey) else {return "127.0.0.1"}
+        return txt
+    }
+    
+    
+    class func localDBPort() -> Int {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: localDBPortKey) else {return 5432}
+        if let value = Int(txt) {
+            return value
+        }else{
+            return 5432
+        }
+    }
+    
+    
+    class func localDBUsername() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: localDBUsernameKey) else {return ""}
+        return txt
+    }
+    
+    
+    class func localDBPassword() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: localDBPasswordKey) else {return ""}
+        return txt
+    }
+    
+    
+    class func localDBSchema() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: localDBSchemaKey) else {return "public"}
+        return txt
+    }
+    
+    
+    class func localDBDatabase() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: localDBDatabaseKey) else {return ""}
+        return txt
+    }
+    
+    
+    class func localDBNoPassword() -> Bool {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: localDBNoPasswordKey) else {return true}
+        if txt == "true"  {
+            return true
+        }else{
+            return false
+        }
+    }
+    
     // MARK: IPHONE
     
     class func iosDeviceMountPoint() -> String {
@@ -1060,6 +1135,34 @@ final class PreferencesController: NSViewController {
         
         defaults.set(chkRemoteDBNoPassword.state == .on ? "true" : "false",
                      forKey: PreferencesController.remoteDBNoPasswordKey)
+        
+        
+        
+        defaults.set(txtLocalDBServer.stringValue,
+                     forKey: PreferencesController.localDBServerKey)
+        
+        if let _ = Int(txtLocalDBPort.stringValue) {
+            defaults.set(txtLocalDBPort.stringValue,
+                         forKey: PreferencesController.localDBPortKey)
+        }else{
+            defaults.set("5432",
+                         forKey: PreferencesController.localDBPortKey)
+        }
+        
+        defaults.set(txtLocalDBUser.stringValue,
+                     forKey: PreferencesController.localDBUsernameKey)
+        
+        defaults.set(txtLocalDBPassword.stringValue,
+                     forKey: PreferencesController.localDBPasswordKey)
+        
+        defaults.set(txtLocalDBSchema.stringValue,
+                     forKey: PreferencesController.localDBSchemaKey)
+        
+        defaults.set(txtLocalDBDatabase.stringValue,
+                     forKey: PreferencesController.localDBDatabaseKey)
+        
+        defaults.set(chkLocalDBNoPassword.state == .on ? "true" : "false",
+                     forKey: PreferencesController.localDBNoPasswordKey)
     }
     
     func saveBackupSection(_ defaults:UserDefaults) {
@@ -1174,6 +1277,14 @@ final class PreferencesController: NSViewController {
         self.selectedDatabaseLocation = PreferencesController.databaseLocation()
         self.toggleDBLocations()
         
+        self.selectedCloneFromDBLocation = "remoteDBServer"
+        self.selectedCloneToDBLocation = "localDBServer"
+        self.toggleCloneFromDBLocations()
+        self.toggleCloneToDBLocations()
+        
+        self.selectedRestoreToDBLocation = "localDBServer"
+        self.toggleRestoreToDBLocations()
+        
         
         txtLocalDBFilePath.stringValue = PreferencesController.databasePath()
         
@@ -1191,6 +1302,22 @@ final class PreferencesController: NSViewController {
         }else{
             self.chkRemoteDBNoPassword.state = .off
             self.txtRemoteDBPassword.isEditable = true
+        }
+        
+        txtLocalDBServer.stringValue = PreferencesController.localDBServer()
+        txtLocalDBPort.stringValue = "\(PreferencesController.localDBPort())"
+        txtLocalDBUser.stringValue = PreferencesController.localDBUsername()
+        txtLocalDBPassword.stringValue = PreferencesController.localDBPassword()
+        txtLocalDBSchema.stringValue = PreferencesController.localDBSchema()
+        txtLocalDBDatabase.stringValue = PreferencesController.localDBDatabase()
+        
+        let localDBNoPassword = PreferencesController.localDBNoPassword()
+        if localDBNoPassword {
+            self.chkLocalDBNoPassword.state = .on
+            self.txtLocalDBPassword.isEditable = false
+        }else{
+            self.chkLocalDBNoPassword.state = .off
+            self.txtLocalDBPassword.isEditable = true
         }
     }
     

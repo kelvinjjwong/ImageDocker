@@ -60,15 +60,19 @@ public class PostgresDB : DBExecutor {
     }
     
     public func delete<T:Codable & EncodableDBRecord>(object:T, table:String, primaryKeys:[String]) {
+        var _sql = ""
         do {
             let connection = try PostgresClientKit.Connection(configuration: self.postgresConfig)
             defer { connection.close() }
             
             let generator = PostgreSQLStatementGenerator(table: table, record: object)
             let statement = generator.deleteStatement(keyColumns: primaryKeys)
-            if(PostgresDB.showSQL) {print(" >>> execute sql: \(statement.sql)")}
+            _sql = statement.sql
+            if(PostgresDB.showSQL) {print(" >>> execute sql: \(_sql)")}
             try self.execute(statement: statement)
         }catch{
+            print("Error at PostgresDB.delete(object:table:primaryKeys)")
+            print("Error at sql: \(_sql)")
             print(error)
         }
     }
@@ -114,12 +118,15 @@ public class PostgresDB : DBExecutor {
             }
 
         } catch {
+            print("Error at PostgresDB.save(object:table:primaryKeys)")
             print(error) // better error handling goes here
         }
         
     }
     
     public func query<T:Codable & EncodableDBRecord>(object:T, table:String, sql:String, values:[PostgresValueConvertible?] = [], offset:Int? = nil, limit:Int? = nil) -> [T] {
+        
+        var _sql = ""
         do {
             let connection = try PostgresClientKit.Connection(configuration: self.postgresConfig)
             defer { connection.close() }
@@ -132,10 +139,11 @@ public class PostgresDB : DBExecutor {
                 pagination = "OFFSET \(offset) LIMIT \(limit)"
                 
             }
+            _sql = "\(sql) \(pagination)"
             
-            if(PostgresDB.showSQL) {print(" >>> query sql: \(sql) \(pagination)")}
+            if(PostgresDB.showSQL) {print(" >>> query sql: \(_sql)")}
             
-            let stmt = try connection.prepareStatement(text: "\(sql) \(pagination)")
+            let stmt = try connection.prepareStatement(text: "\(_sql)")
             defer { stmt.close() }
 
             let cursor = try stmt.execute(parameterValues: values)
@@ -153,6 +161,7 @@ public class PostgresDB : DBExecutor {
             return result
         } catch {
             print("Error at PostgresDB.query(object:table:sql:values:offset:limit) -> [T]")
+            print("Error at sql: \(_sql)")
             print(error) // better error handling goes here
 
             return []
@@ -160,6 +169,7 @@ public class PostgresDB : DBExecutor {
     }
     
     public func query<T:Codable & EncodableDBRecord>(object:T, table:String, where whereSQL:String, orderBy:String = "", values:[PostgresValueConvertible?] = [], offset:Int? = nil, limit:Int? = nil) -> [T] {
+        var _sql = ""
         do {
             let connection = try PostgresClientKit.Connection(configuration: self.postgresConfig)
             defer { connection.close() }
@@ -174,9 +184,11 @@ public class PostgresDB : DBExecutor {
                 
             }
             
-            if(PostgresDB.showSQL) {print(" >>> query sql: \(statement.sql) \(pagination)")}
+            _sql = "\(statement.sql) \(pagination)"
             
-            let stmt = try connection.prepareStatement(text: "\(statement.sql) \(pagination)")
+            if(PostgresDB.showSQL) {print(" >>> query sql: \(_sql)")}
+            
+            let stmt = try connection.prepareStatement(text: "\(_sql)")
             defer { stmt.close() }
 
             let cursor = try stmt.execute(parameterValues: values)
@@ -194,6 +206,7 @@ public class PostgresDB : DBExecutor {
             return result
         } catch {
             print("Error at PostgresDB.query(object:table:where:orderBy:values:offset:limit) -> [T]")
+            print("Error at sql: \(_sql)")
             print(error) // better error handling goes here
 
             return []
@@ -201,6 +214,7 @@ public class PostgresDB : DBExecutor {
     }
     
     public func query<T:Codable & EncodableDBRecord>(object:T, table:String, parameters:[String:PostgresValueConvertible?] = [:], orderBy:String = "") -> [T] {
+        var _sql = ""
         do {
             let connection = try PostgresClientKit.Connection(configuration: self.postgresConfig)
             defer { connection.close() }
@@ -212,9 +226,11 @@ public class PostgresDB : DBExecutor {
             let statement = generator.selectStatement(keyColumns: keyColumns, orderBy: orderBy)
             let columnNames = generator.persistenceContainer.columns
             
-            if(PostgresDB.showSQL) {print(" >>> query sql: \(statement.sql)")}
+            _sql = statement.sql
             
-            let stmt = try connection.prepareStatement(text: statement.sql)
+            if(PostgresDB.showSQL) {print(" >>> query sql: \(_sql)")}
+            
+            let stmt = try connection.prepareStatement(text: _sql)
             defer { stmt.close() }
 
             let cursor = try stmt.execute(parameterValues: values)
@@ -232,6 +248,7 @@ public class PostgresDB : DBExecutor {
             return result
         } catch {
             print("Error at PostgresDB.query(object:table:parameters:orderBy) -> [T]")
+            print("Error at sql: \(_sql)")
             print(error) // better error handling goes here
 
             return []
@@ -298,6 +315,7 @@ public class PostgresDB : DBExecutor {
     }
     
     public func count<T:Codable & EncodableDBRecord>(object:T, table:String, parameters:[String:PostgresValueConvertible?] = [:]) -> Int {
+        var _sql = ""
         do {
             let connection = try PostgresClientKit.Connection(configuration: self.postgresConfig)
             defer { connection.close() }
@@ -311,6 +329,7 @@ public class PostgresDB : DBExecutor {
             
             //print(">> count sql: \(statement.sql)")
             let stmt = try connection.prepareStatement(text: statement.sql)
+            _sql = statement.sql
             defer { stmt.close() }
 
             let cursor = try stmt.execute(parameterValues: values)
@@ -324,6 +343,7 @@ public class PostgresDB : DBExecutor {
             return result
         } catch {
             print("Error at PostgresDB.count(object:table:parameters)")
+            print("Error at sql: \(_sql)")
             print(error) // better error handling goes here
 
             return -1
@@ -331,14 +351,16 @@ public class PostgresDB : DBExecutor {
     }
     
     public func count<T:Codable & EncodableDBRecord>(object:T, table:String, where whereSQL:String, values:[PostgresValueConvertible?] = []) -> Int {
+        var _sql = ""
         do {
             let connection = try PostgresClientKit.Connection(configuration: self.postgresConfig)
             defer { connection.close() }
             
             let generator = PostgreSQLStatementGenerator(table: table, record: object)
             let statement = generator.countStatement(where: whereSQL, values: values)
-            let columnNames = generator.persistenceContainer.columns
+            //let columnNames = generator.persistenceContainer.columns
             
+            _sql = statement.sql
             //print(">> count sql: \(statement.sql)")
             let stmt = try connection.prepareStatement(text: statement.sql)
             defer { stmt.close() }
@@ -354,6 +376,7 @@ public class PostgresDB : DBExecutor {
             return result
         } catch {
             print("Error at PostgresDB.count(object:table:where:values)")
+            print("Error at sql: \(_sql)")
             print(error) // better error handling goes here
 
             return -1

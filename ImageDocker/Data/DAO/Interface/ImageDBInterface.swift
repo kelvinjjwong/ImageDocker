@@ -8,6 +8,13 @@
 
 import Foundation
 
+public enum ImageDBLocation {
+    case localFile
+    case localDBServer
+    case remoteDBServer
+    case fromSetting
+}
+
 protocol ImageDBInterface {
     
     func testDatabase() -> (Bool, Error?)
@@ -16,4 +23,6 @@ protocol ImageDBInterface {
     func versionCheck()
     
     func versionCheck(dropBeforeCreate:Bool)
+    
+    func versionCheck(dropBeforeCreate:Bool, location:ImageDBLocation)
 }

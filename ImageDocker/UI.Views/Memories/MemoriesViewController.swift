@@ -227,6 +227,7 @@ class MemoriesViewController : NSViewController {
     /// reload collection with images taken on specific date
     private func reloadCollection(date:String) {
         //print("reload collection on \(date)")
+        self.lblDescription.stringValue = "Loading images on \(date) ..."
         let parts = date.components(separatedBy: "-")
         let year = Int(parts[0]) ?? 0
         let month = Int(parts[1]) ?? 0
@@ -461,6 +462,7 @@ extension MemoriesViewController {
         if self.timerStarted {
             self.stopCollectionLoop()
         }
+        print(">>> start load memory collection on \(year)-\(month)-\(day)")
         DispatchQueue.global().async {
             
             self.collectionViewController.imagesLoader.clean()
@@ -470,6 +472,8 @@ extension MemoriesViewController {
             
             DispatchQueue.main.async {
                 self.collectionViewController.collectionView.reloadData()
+                print(">>> finished load memory collection on \(year)-\(month)-\(day), result: \(self.collectionViewController.imagesLoader.getItems().count)")
+                self.lblDescription.stringValue = "\(self.collectionViewController.imagesLoader.getItems().count) images on \(year)-\(month)-\(day)"
                 self.selectItem(at: focusIndex)
                 
                 

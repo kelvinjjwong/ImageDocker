@@ -13,7 +13,7 @@ class RepositoryTreeDataSource : TreeDataSource {
     let repositoryDao = RepositoryDao.default
     
     func convertToTreeNode(_ container:ImageContainer) -> TreeCollection {
-        print("repo node name \(container.name)")
+        //print("repo node name \(container.name)")
         let node = TreeCollection(container.name, id: container.path, object: container)
         let childCount = self.repositoryDao.countSubContainers(parent: container.path)
         node.childrenCount = childCount
