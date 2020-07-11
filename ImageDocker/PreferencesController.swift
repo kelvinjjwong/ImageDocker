@@ -75,7 +75,6 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var btnLocalDBFileTest: NSButton!
     @IBOutlet weak var btnLocalDBFileBackup: NSButton!
     @IBOutlet weak var lblLocalDBFileMessage: NSTextField!
-    @IBOutlet weak var lblLocalDBFileSchemaVersion: NSTextField!
     
     
     @IBOutlet weak var txtLocalDBServer: NSTextField!
@@ -85,13 +84,10 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var txtLocalDBSchema: NSTextField!
     @IBOutlet weak var txtLocalDBDatabase: NSTextField!
     @IBOutlet weak var txtLocalDBBinPath: NSTextField!
-    @IBOutlet weak var chkLocalDBBinInsideApp: NSButton!
     @IBOutlet weak var btnLocalDBServerTest: NSButton!
-    @IBOutlet weak var lblLocalDBServerSchemaVersion: NSTextField!
     @IBOutlet weak var chkLocalDBNoPassword: NSButton!
     @IBOutlet weak var btnLocalDBServerBackup: NSButton!
     @IBOutlet weak var lblLocalDBServerMessage: NSTextField!
-    
     
     @IBOutlet weak var txtRemoteDBServer: NSTextField!
     @IBOutlet weak var txtRemoteDBPort: NSTextField!
@@ -101,16 +97,21 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var txtRemoteDBDatabase: NSTextField!
     @IBOutlet weak var chkRemoteDBNoPassword: NSButton!
     @IBOutlet weak var btnRemoteDBTest: NSButton!
-    @IBOutlet weak var lblRemoteSchemaVersion: NSTextField!
+    @IBOutlet weak var btnRemoteDBServerBackup: NSButton!
+    @IBOutlet weak var lblRemoteDBServerMessage: NSTextField!
+    
     
     // MARK: BACKUP
     @IBOutlet weak var lblDatabaseBackupPath: NSTextField!
     @IBOutlet weak var lblDBBackupUsedSpace: NSTextField!
+    @IBOutlet weak var btnBackupNow: NSButton!
     
     @IBOutlet weak var chkDeleteAllBeforeClone: NSButton!
     @IBOutlet weak var chkFromLocalDBFile: NSButton!
     @IBOutlet weak var chkFromLocalDBServer: NSButton!
     @IBOutlet weak var chkFromRemoteDBServer: NSButton!
+    @IBOutlet weak var chkFromBackupArchive: NSButton!
+    
     @IBOutlet weak var chkToLocalDBFile: NSButton!
     @IBOutlet weak var chkToLocalDBServer: NSButton!
     @IBOutlet weak var chkToRemoteDBServer: NSButton!
@@ -118,16 +119,16 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var lblDataCloneMessage: NSTextField!
     
     @IBOutlet weak var tblDatabaseArchives: NSTableView!
-    @IBOutlet weak var chkRestoreToLocalDBFile: NSButton!
-    @IBOutlet weak var chkRestoreToLocalDBServer: NSButton!
     @IBOutlet weak var txtRestoreToDatabaseName: NSTextField!
     @IBOutlet weak var lblRestoreToDatabaseName: NSTextField!
+    
     @IBOutlet weak var btnCreateDatabase: NSButton!
-    @IBOutlet weak var lblSelectedDBArchive: NSTextField!
-    @IBOutlet weak var lblRestoreDatabaseMessage: NSTextField!
     @IBOutlet weak var btnReloadDBArchives: NSButton!
-    @IBOutlet weak var btnRestoreDBArchive: NSButton!
     @IBOutlet weak var btnDeleteDBArchives: NSButton!
+    
+    @IBOutlet weak var chkPostgresInApp: NSButton!
+    @IBOutlet weak var chkPostgresByBrew: NSButton!
+    
     
     // MARK: MOBILE DEVICE
     @IBOutlet weak var txtIOSMountPoint: NSTextField!
@@ -164,7 +165,6 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var lstAmountForPagination: NSPopUpButton!
     
     
-    fileprivate var selectedFaceModel = "major"
     
     
     // MARK: - SAVE BUTTON
@@ -207,38 +207,25 @@ final class PreferencesController: NSViewController {
         NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: self.lblDatabaseBackupPath.stringValue)])
     }
     
+    // MARK: TOGGLE GROUP - DB LOCATION
+
+    private var toggleGroup_DBLocation:[String:NSButton] = [:]
+    private var selectedDatabaseLocation = "local"
+    
     @IBAction func onCheckLocalLocationClicked(_ sender: NSButton) {
-        if sender.state == .on {
-            selectedDatabaseLocation = "local"
-            self.toggleDBLocations()
-        }else{
-            if self.chkLocalLocation.state == .off && self.chkNetworkLocation.state == .off && self.chkLocalDBServer.state == .off {
-                sender.state = .on
-            }
-        }
+        selectedDatabaseLocation = "local"
+        self.toggleGroup(selected: self.selectedDatabaseLocation, toggles: self.toggleGroup_DBLocation)
     }
     
     @IBAction func onCheckLocalDBServerClicked(_ sender: NSButton) {
-        if sender.state == .on {
-            selectedDatabaseLocation = "localServer"
-            self.toggleDBLocations()
-        }else{
-            if self.chkLocalLocation.state == .off && self.chkNetworkLocation.state == .off && self.chkLocalDBServer.state == .off {
-                sender.state = .on
-            }
-        }
+        selectedDatabaseLocation = "localServer"
+        self.toggleGroup(selected: self.selectedDatabaseLocation, toggles: self.toggleGroup_DBLocation)
     }
     
     
     @IBAction func onCheckNetworkLocationClicked(_ sender: NSButton) {
-        if sender.state == .on {
-            selectedDatabaseLocation = "network"
-            self.toggleDBLocations()
-        }else{
-            if self.chkLocalLocation.state == .off && self.chkNetworkLocation.state == .off && self.chkLocalDBServer.state == .off {
-                sender.state = .on
-            }
-        }
+        selectedDatabaseLocation = "network"
+        self.toggleGroup(selected: self.selectedDatabaseLocation, toggles: self.toggleGroup_DBLocation)
     }
     
     private func toggleLocalNoPassword() {
@@ -266,42 +253,54 @@ final class PreferencesController: NSViewController {
         self.toggleRemoteNoPassword()
     }
     
-    private func toggleLocalDBBinPathInsideApp() {
-        if self.chkLocalDBBinInsideApp.state == .on {
-            self.txtLocalDBBinPath.stringValue = "/Applications/Postgres.app/Contents/Versions/latest/bin"
-            self.txtLocalDBBinPath.isEditable = false
-        }else{
-            self.txtLocalDBBinPath.isEditable = true
-        }
+    // MARK: LOCAL DB FILE
+    
+    @IBAction func onBackupLocalClicked(_ sender: NSButton) {
+        self.lblLocalDBFileMessage.stringValue = "TODO function."
     }
     
-    @IBAction func onCheckLocalDBBinInsideApp(_ sender: NSButton) {
-        self.toggleLocalDBBinPathInsideApp()
+    @IBAction func onLocalSchemaVersionClicked(_ sender: NSButton) {
+        self.lblLocalDBFileMessage.stringValue = "TODO."
+    }
+    
+    // MARK: LOCAL DB SERVER
+    
+    @IBAction func onBackupLocalServerClicked(_ sender: NSButton) {
+        self.lblLocalDBServerMessage.stringValue = "TODO function."
     }
     
     @IBAction func onLocalDBServerTestClicked(_ sender: NSButton) {
-        self.lblLocalDBServerSchemaVersion.stringValue = "TODO."
-    }
-    
-    
-    @IBAction func onRemoteDBTestClicked(_ sender: NSButton) {
+        self.lblLocalDBServerMessage.stringValue = "TODO."
+        
         DispatchQueue.global().async {
             final class Version : PostgresCustomRecord {
                 var ver:Int = 0
                 public init() {}
             }
             
-            if let version = Version.fetchOne(PostgresConnection.database(), sql: "select substring(ver, '\\d+')::int versions from version_migrations order by versions desc") {
+            if let version = Version.fetchOne(PostgresConnection.database(.localDBServer), sql: "select substring(ver, '\\d+')::int versions from version_migrations order by versions desc") {
                 DispatchQueue.main.async {
-                    self.lblRemoteSchemaVersion.stringValue = "v\(version.ver)"
+                    self.lblLocalDBServerMessage.stringValue = "v\(version.ver)"
                 }
             }else{
                 DispatchQueue.main.async {
-                    self.lblRemoteSchemaVersion.stringValue = "No schema"
+                    self.lblLocalDBServerMessage.stringValue = "No schema"
                 }
             }
         }
     }
+    
+    // MARK: REMOTE DB SERVER
+    
+    @IBAction func onBackupRemoteServerClicked(_ sender: NSButton) {
+        self.lblRemoteDBServerMessage.stringValue = "TODO function."
+    }
+    
+    @IBAction func onRemoteDBServerTestClicked(_ sender: NSButton) {
+    }
+    
+    
+    // MARK: - ACTION FOR BACKUP SECTION
     
     private func toggleDatabaseClonerButtons(state: Bool) {
         self.btnLocalDBFileBackup.isEnabled = state
@@ -315,11 +314,34 @@ final class PreferencesController: NSViewController {
             DispatchQueue.global().async {
                 let (sizeGB, spaceFree, _, _) = LocalDirectory.bridge.getDiskSpace(path: path)
                 DispatchQueue.main.async {
-                    self.lblDBBackupUsedSpace.stringValue = "Used: \(sizeGB) , Free: \(spaceFree)"
+                    self.lblDBBackupUsedSpace.stringValue = "Used: \(Int(sizeGB)) GB , Free: \(spaceFree)"
                 }
             }
         }
     }
+    
+    @IBAction func onBackupNowClicked(_ sender: NSButton) {
+        if PreferencesController.databaseLocation() == "local" {
+            self.btnBackupNow.isEnabled = false
+            self.lblDBBackupUsedSpace.stringValue = "Creating backup ..."
+            DispatchQueue.global().async {
+                let (backupFolder, hasError, error) = ExecutionEnvironment.default.createLocalDatabaseFileBackup(suffix:"-on-runtime")
+                DispatchQueue.main.async {
+                    self.btnBackupNow.isEnabled = true
+                    if hasError {
+                        self.lblDBBackupUsedSpace.stringValue = "Error: \(error.debugDescription)"
+                    }else{
+                        self.lblDBBackupUsedSpace.stringValue = "Created \(backupFolder)"
+                    }
+                }
+            }
+        }else if PreferencesController.databaseLocation() == "localServer" {
+            self.lblDBBackupUsedSpace.stringValue = "TODO ..."
+        }else if PreferencesController.databaseLocation() == "network" {
+            self.lblDBBackupUsedSpace.stringValue = "TODO ..."
+        }
+    }
+    
     
     
     @IBAction func onCloneLocalToRemoteClicked(_ sender: NSButton) {
@@ -327,6 +349,8 @@ final class PreferencesController: NSViewController {
         self.toggleDatabaseClonerButtons(state: false)
         
         DispatchQueue.global().async {
+            
+            // TODO: backup database
             
             DispatchQueue.main.async {
                 self.lblDataCloneMessage.stringValue = "Re-initializing schema ..."
@@ -341,7 +365,6 @@ final class PreferencesController: NSViewController {
             
             if let version = Version.fetchOne(PostgresConnection.database(.remoteDBServer), sql: "select substring(ver, '\\d+')::int versions from version_migrations order by versions desc") {
                 DispatchQueue.main.async {
-                    self.lblRemoteSchemaVersion.stringValue = "v\(version.ver)"
                     self.lblDataCloneMessage.stringValue = "Remote DB schema version is v\(version.ver) now."
                 }
                 var containers:[ImageContainer] = []
@@ -506,7 +529,7 @@ final class PreferencesController: NSViewController {
                 return
             }else{
                 DispatchQueue.main.async {
-                    self.lblRemoteSchemaVersion.stringValue = "No schema"
+                    self.lblRemoteDBServerMessage.stringValue = "No schema"
                     self.lblDataCloneMessage.stringValue = "Something wrong happened. Please check console output."
                 }
                 DispatchQueue.main.async { self.toggleDatabaseClonerButtons(state: true) }
@@ -516,22 +539,7 @@ final class PreferencesController: NSViewController {
         
     }
     
-    @IBAction func onBackupLocalClicked(_ sender: NSButton) {
-        self.lblLocalDBFileMessage.stringValue = "TODO function."
-    }
-    
-    @IBAction func onBackupRemoteClicked(_ sender: NSButton) {
-        self.lblLocalDBServerMessage.stringValue = "TODO function."
-    }
-    
-    @IBAction func onLocalSchemaVersionClicked(_ sender: NSButton) {
-        self.lblLocalDBFileSchemaVersion.stringValue = "TODO."
-    }
-    
     @IBAction func onReloadDBArchivesClicked(_ sender: NSButton) {
-    }
-    
-    @IBAction func onRestoreDBArchiveClicked(_ sender: NSButton) {
     }
     
     @IBAction func onDeleteDBArchivesClicked(_ sender: NSButton) {
@@ -540,94 +548,84 @@ final class PreferencesController: NSViewController {
     @IBAction func onCreateDatabaseClicked(_ sender: NSButton) {
     }
     
-    @IBAction func onCheckToLocalDBFileClicked(_ sender: NSButton) {
-        if sender.state == .on {
-            self.selectedRestoreToDBLocation = "localDBFile"
-            self.toggleRestoreToDBLocations()
-        }else{
-            if self.chkRestoreToLocalDBFile.state == .off && self.chkRestoreToLocalDBServer.state == .off {
-                sender.state = .on
-            }
-        }
-    }
+    // MARK: TOGGLE GROUP - CLONE FROM DB
     
-    @IBAction func onCheckToLocalDBServerClicked(_ sender: NSButton) {
-        if sender.state == .on {
-            self.selectedRestoreToDBLocation = "localDBServer"
-            self.toggleRestoreToDBLocations()
-        }else{
-            if self.chkRestoreToLocalDBFile.state == .off && self.chkRestoreToLocalDBServer.state == .off {
-                sender.state = .on
-            }
-        }
-    }
+    var toggleGroup_CloneFromDBLocation:[String:NSButton] = [:]
+    private var selectedCloneFromDBLocation = ""
     
     @IBAction func onCheckFromLocalDBFile(_ sender: NSButton) {
-        if sender.state == .on {
-            self.selectedCloneFromDBLocation = "localDBFile"
-            self.toggleCloneFromDBLocations()
-        }else{
-            if self.chkFromLocalDBFile.state == .off && self.chkFromLocalDBServer.state == .off && self.chkFromRemoteDBServer.state == .off {
-                sender.state = .on
-            }
-        }
+        self.selectedCloneFromDBLocation = "localDBFile"
+        self.toggleGroup(selected: self.selectedCloneFromDBLocation, toggles: self.toggleGroup_CloneFromDBLocation)
     }
     
     @IBAction func onCheckFromLocalDBServer(_ sender: NSButton) {
-        if sender.state == .on {
-            self.selectedCloneFromDBLocation = "localDBServer"
-            self.toggleCloneFromDBLocations()
-        }else{
-            if self.chkFromLocalDBFile.state == .off && self.chkFromLocalDBServer.state == .off && self.chkFromRemoteDBServer.state == .off {
-                sender.state = .on
-            }
-        }
+        self.selectedCloneFromDBLocation = "localDBServer"
+        self.toggleGroup(selected: self.selectedCloneFromDBLocation, toggles: self.toggleGroup_CloneFromDBLocation)
     }
     
     @IBAction func onCheckFromRemoteDBServer(_ sender: NSButton) {
-        if sender.state == .on {
-            self.selectedCloneFromDBLocation = "remoteDBServer"
-            self.toggleCloneFromDBLocations()
-        }else{
-            if self.chkFromLocalDBFile.state == .off && self.chkFromLocalDBServer.state == .off && self.chkFromRemoteDBServer.state == .off {
-                sender.state = .on
-            }
-        }
+        self.selectedCloneFromDBLocation = "remoteDBServer"
+        self.toggleGroup(selected: self.selectedCloneFromDBLocation, toggles: self.toggleGroup_CloneFromDBLocation)
     }
     
+    // MARK: TOGGLE GROUP - CLONE TO DB
+    
+    var toggleGroup_CloneToDBLocation:[String:NSButton] = [:]
+    private var selectedCloneToDBLocation = ""
+    
     @IBAction func onCheckToLocalDBFile(_ sender: NSButton) {
-        if sender.state == .on {
-            self.selectedCloneToDBLocation = "localDBFile"
-            self.toggleCloneToDBLocations()
-        }else{
-            if self.chkToLocalDBFile.state == .off && self.chkToLocalDBServer.state == .off && self.chkToRemoteDBServer.state == .off {
-                sender.state = .on
-            }
-        }
+        self.selectedCloneToDBLocation = "localDBFile"
+        self.toggleGroup(selected: self.selectedCloneToDBLocation, toggles: self.toggleGroup_CloneToDBLocation)
+        self.toggleCreatePostgresDatabase(state: false)
     }
     
     @IBAction func onCheckToLocalDBServer(_ sender: NSButton) {
-        if sender.state == .on {
-            self.selectedCloneToDBLocation = "localDBServer"
-            self.toggleCloneToDBLocations()
-        }else{
-            if self.chkToLocalDBFile.state == .off && self.chkToLocalDBServer.state == .off && self.chkToRemoteDBServer.state == .off {
-                sender.state = .on
-            }
-        }
+        self.selectedCloneToDBLocation = "localDBServer"
+        self.toggleGroup(selected: self.selectedCloneToDBLocation, toggles: self.toggleGroup_CloneToDBLocation)
+        self.toggleCreatePostgresDatabase(state: true)
     }
     
     @IBAction func onCheckToRemoteDBServer(_ sender: NSButton) {
-        if sender.state == .on {
-            self.selectedCloneToDBLocation = "RemoteDBServer"
-            self.toggleCloneToDBLocations()
-        }else{
-            if self.chkToLocalDBFile.state == .off && self.chkToLocalDBServer.state == .off && self.chkToRemoteDBServer.state == .off {
-                sender.state = .on
-            }
-        }
+        self.selectedCloneToDBLocation = "remoteDBServer"
+        self.toggleGroup(selected: self.selectedCloneToDBLocation, toggles: self.toggleGroup_CloneToDBLocation)
+        self.toggleCreatePostgresDatabase(state: true)
     }
     
+    private func toggleCreatePostgresDatabase(state: Bool) {
+        self.lblRestoreToDatabaseName.isHidden = !state
+        self.txtRestoreToDatabaseName.isHidden = !state
+        self.btnCreateDatabase.isHidden = !state
+    }
+    
+    // MARK: TOGGLE GROUP - Postgres Command Path
+    
+    var toggleGroup_InstalledPostgres:[String:NSButton] = [:]
+    var installedPostgresCommandPath = "/Applications/Postgres.app/Contents/Versions/latest/bin"
+    
+    @IBAction func onCheckInstallPostgresByBrew(_ sender: NSButton) {
+        let path = "/usr/local/bin"
+        if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: [path]) {
+            self.installedPostgresCommandPath = postgresCommandPath
+            self.toggleGroup(selected: self.installedPostgresCommandPath, toggles: self.toggleGroup_InstalledPostgres)
+            self.txtLocalDBBinPath.stringValue = self.installedPostgresCommandPath
+        }else{
+            self.lblDataCloneMessage.stringValue = "ERROR: Unable to find PostgreSQL from Homebrew \(path)"
+            sender.state = .off
+        }
+       
+    }
+    
+    @IBAction func onCheckInstallPostgresInApp(_ sender: NSButton) {
+        let path = "/Applications/Postgres.app/Contents/Versions/latest/bin"
+        if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: [path]) {
+            self.installedPostgresCommandPath = postgresCommandPath
+            self.toggleGroup(selected: self.installedPostgresCommandPath, toggles: self.toggleGroup_InstalledPostgres)
+            self.txtLocalDBBinPath.stringValue = self.installedPostgresCommandPath
+        }else{
+            self.lblDataCloneMessage.stringValue = "ERROR: Unable to find PostgreSQL from PostgresApp \(path)"
+            sender.state = .off
+        }
+    }
     
     // MARK: - ACTION FOR FACE RECOGNITION SECTION
     
@@ -689,24 +687,19 @@ final class PreferencesController: NSViewController {
         return true
     }
     
+    // MARK: TOGGLE GROUP - FACE MODEL
+    
+    private var toggleGroup_FaceModel:[String:NSButton] = [:]
+    fileprivate var selectedFaceModel = "major"
+    
     @IBAction func onMajorFaceModelClicked(_ sender: NSButton) {
-        if sender.state == .on {
-            self.chkAlternativeFaceRecognitionModel.state = .off
-            self.selectedFaceModel = "major"
-        }else{
-            self.chkAlternativeFaceRecognitionModel.state = .on
-            self.selectedFaceModel = "alternative"
-        }
+        self.selectedFaceModel = "major"
+        self.toggleGroup(selected: self.selectedFaceModel, toggles: self.toggleGroup_FaceModel)
     }
     
     @IBAction func onAlternativeFaceModelClicked(_ sender: NSButton) {
-        if sender.state == .on {
-            self.chkMajorFaceRecognitionModel.state = .off
-            self.selectedFaceModel = "alternative"
-        }else{
-            self.chkMajorFaceRecognitionModel.state = .on
-            self.selectedFaceModel = "major"
-        }
+        self.selectedFaceModel = "alternative"
+        self.toggleGroup(selected: self.selectedFaceModel, toggles: self.toggleGroup_FaceModel)
     }
     
     @IBAction func onBrowseAlternativeFaceModelClicked(_ sender: NSButton) {
@@ -1205,87 +1198,31 @@ final class PreferencesController: NSViewController {
     }
     
     // MARK: - INIT SECTIONS
-
-    private var selectedDatabaseLocation = "local"
     
-    private func toggleDBLocations() {
-        if self.selectedDatabaseLocation == "local" {
-            self.chkLocalLocation.state = .on
-            self.chkLocalDBServer.state = .off
-            self.chkNetworkLocation.state = .off
-        }else if self.selectedDatabaseLocation == "network"{
-            self.chkLocalLocation.state = .off
-            self.chkLocalDBServer.state = .off
-            self.chkNetworkLocation.state = .on
-        }else {
-            self.chkLocalLocation.state = .off
-            self.chkLocalDBServer.state = .on
-            self.chkNetworkLocation.state = .off
+    // common helper
+    
+    private func toggleGroup(selected:String, toggles:[String:NSButton]) {
+        for (_, button) in toggles {
+            button.state = .off
+        }
+        for (key, button) in toggles {
+            if key == selected {
+                button.state = .on
+                break
+            }
         }
     }
     
-    private var selectedRestoreToDBLocation = ""
-    
-    private func toggleRestoreToDBLocations() {
-        if self.selectedRestoreToDBLocation == "localDBFile" {
-            self.chkRestoreToLocalDBFile.state = .on
-            self.chkRestoreToLocalDBServer.state = .off
-        }else{
-            self.chkRestoreToLocalDBFile.state = .off
-            self.chkRestoreToLocalDBServer.state = .on
+    private func keys(of toggles:[String:NSButton]) -> [String]{
+        var keys:[String] = []
+        for (key, _) in toggles {
+            keys.append(key)
         }
+        return keys
     }
     
-    private var selectedCloneFromDBLocation = ""
-    
-    private func toggleCloneFromDBLocations() {
-        if self.selectedCloneFromDBLocation == "localDBFile" {
-            self.chkFromLocalDBFile.state = .on
-            self.chkFromLocalDBServer.state = .off
-            self.chkFromRemoteDBServer.state = .off
-        }else if self.selectedCloneFromDBLocation == "localDBServer" {
-            self.chkFromLocalDBFile.state = .off
-            self.chkFromLocalDBServer.state = .on
-            self.chkFromRemoteDBServer.state = .off
-        }else{
-            self.chkFromLocalDBFile.state = .off
-            self.chkFromLocalDBServer.state = .off
-            self.chkFromRemoteDBServer.state = .on
-        }
-    }
-    
-    private var selectedCloneToDBLocation = ""
-    
-    private func toggleCloneToDBLocations() {
-        if self.selectedCloneToDBLocation == "localDBFile" {
-            self.chkToLocalDBFile.state = .on
-            self.chkToLocalDBServer.state = .off
-            self.chkToRemoteDBServer.state = .off
-        }else if self.selectedCloneToDBLocation == "localDBServer" {
-            self.chkToLocalDBFile.state = .off
-            self.chkToLocalDBServer.state = .on
-            self.chkToRemoteDBServer.state = .off
-        }else{
-            self.chkToLocalDBFile.state = .off
-            self.chkToLocalDBServer.state = .off
-            self.chkToRemoteDBServer.state = .on
-        }
-    }
     
     func initDatabaseSection() {
-        
-        self.selectedDatabaseLocation = PreferencesController.databaseLocation()
-        self.toggleDBLocations()
-        
-        self.selectedCloneFromDBLocation = "remoteDBServer"
-        self.selectedCloneToDBLocation = "localDBServer"
-        self.toggleCloneFromDBLocations()
-        self.toggleCloneToDBLocations()
-        
-        self.selectedRestoreToDBLocation = "localDBServer"
-        self.toggleRestoreToDBLocations()
-        
-        
         txtLocalDBFilePath.stringValue = PreferencesController.databasePath()
         
         txtRemoteDBServer.stringValue = PreferencesController.remoteDBServer()
@@ -1327,6 +1264,48 @@ final class PreferencesController: NSViewController {
         self.chkDeleteAllBeforeClone.state = .on
         self.chkDeleteAllBeforeClone.isEnabled = false
         
+        self.txtLocalDBBinPath.isEditable = false
+        
+        self.toggleGroup_InstalledPostgres = [
+            "/Applications/Postgres.app/Contents/Versions/latest/bin" : self.chkPostgresInApp,
+            "/usr/local/bin"                                          : self.chkPostgresByBrew
+        ]
+        
+        self.toggleGroup_DBLocation = [
+            "local"       : self.chkLocalLocation,
+            "localServer" : self.chkLocalDBServer,
+            "network"     : self.chkNetworkLocation
+        ]
+        
+        self.toggleGroup_CloneFromDBLocation = [
+            "localDBFile"   :self.chkFromLocalDBFile,
+            "localDBServer" :self.chkFromLocalDBServer,
+            "remoteDBServer":self.chkFromRemoteDBServer,
+            "backupArchive" :self.chkFromBackupArchive
+        ]
+        
+        self.toggleGroup_CloneToDBLocation = [
+            "localDBFile"   :self.chkToLocalDBFile,
+            "localDBServer" :self.chkToLocalDBServer,
+            "remoteDBServer":self.chkToRemoteDBServer
+        ]
+        
+        self.selectedDatabaseLocation = PreferencesController.databaseLocation()
+        self.toggleGroup(selected: self.selectedDatabaseLocation, toggles: self.toggleGroup_DBLocation)
+        
+        self.selectedCloneFromDBLocation = "remoteDBServer"
+        self.selectedCloneToDBLocation = "localDBServer"
+        self.toggleGroup(selected: self.selectedCloneFromDBLocation, toggles: self.toggleGroup_CloneFromDBLocation)
+        self.toggleGroup(selected: self.selectedCloneToDBLocation, toggles: self.toggleGroup_CloneToDBLocation)
+        
+        if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: self.keys(of: self.toggleGroup_InstalledPostgres)) {
+            self.installedPostgresCommandPath = postgresCommandPath
+            self.toggleGroup(selected: self.installedPostgresCommandPath, toggles: self.toggleGroup_InstalledPostgres)
+            self.txtLocalDBBinPath.stringValue = self.installedPostgresCommandPath
+        }else{
+            self.lblDataCloneMessage.stringValue = "ERROR: Unable to find PostgreSQL from either Homebrew or PostgresApp. Please install first."
+        }
+        
     }
     
     func initMobileSection() {
@@ -1339,18 +1318,17 @@ final class PreferencesController: NSViewController {
     }
     
     func initFaceRecognitionSection() {
+        self.toggleGroup_FaceModel = [
+            "major"       : self.chkMajorFaceRecognitionModel,
+            "alternative" : self.chkAlternativeFaceRecognitionModel
+        ]
         txtHomebrewPath.stringValue = PreferencesController.homebrewPath()
         txtPythonPath.stringValue = PreferencesController.pythonPath()
         lblMajorFaceModelPath.stringValue = FaceRecognition.defaultModelPath
         txtAlternativeFaceModelPath.stringValue = PreferencesController.alternativeFaceModel()
+        
         self.selectedFaceModel = PreferencesController.faceRecognitionModel()
-        if self.selectedFaceModel == "major" {
-            self.chkMajorFaceRecognitionModel.state = .on
-            self.chkAlternativeFaceRecognitionModel.state = .off
-        }else{
-            self.chkMajorFaceRecognitionModel.state = .off
-            self.chkAlternativeFaceRecognitionModel.state = .on
-        }
+        self.toggleGroup(selected: self.selectedFaceModel, toggles: self.toggleGroup_FaceModel)
         
         self.btnCheckFaceComponents.isEnabled = false
         var result = ""

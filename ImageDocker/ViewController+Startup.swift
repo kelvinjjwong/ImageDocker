@@ -18,7 +18,7 @@ extension ViewController {
         DispatchQueue.global().async {
             self.splashController.progressWillEnd(at: 5)
             self.splashController.message("Creating database backup ...", progress: 1)
-            ExecutionEnvironment.default.createDataBackup(suffix: "-on-launch")
+            let _ = ExecutionEnvironment.default.createLocalDatabaseFileBackup(suffix: "-on-launch")
             IPHONE.bridge.unmountFuse()
             
             

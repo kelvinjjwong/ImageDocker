@@ -201,6 +201,18 @@ struct ExecutionEnvironment {
         return result
     }
     
+    func findPostgresCommand(from paths:[String]) -> String? {
+        for path in paths {
+            if FileManager.default.fileExists(atPath: URL(fileURLWithPath: path).appendingPathComponent("psql").path)
+                && FileManager.default.fileExists(atPath: URL(fileURLWithPath: path).appendingPathComponent("pg_dump").path)
+                && FileManager.default.fileExists(atPath: URL(fileURLWithPath: path).appendingPathComponent("createdb").path)
+            {
+                return path
+            }
+        }
+        return nil
+    }
+    
     static let instructionForDlibFaceRecognition = """
 How to install:
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"
@@ -221,8 +233,9 @@ pip3 install face_recognition
     static let componentsForDlibFaceRecognition:[String] = ["boost-python", "numpy", "dlib", "imutils", "opencv-python", "face-recognition"]
 
     
-    func createDataBackup(suffix:String){
+    func createLocalDatabaseFileBackup(suffix:String) -> (String, Bool, Error?){
         print("\(Date()) Start to create db backup")
+        var backupFolder = ""
         let dbUrl = URL(fileURLWithPath: PreferencesController.databasePath())
         let dbFile = dbUrl.appendingPathComponent("ImageDocker.sqlite")
         let dbFileSHM = dbUrl.appendingPathComponent("ImageDocker.sqlite-shm")
@@ -231,8 +244,8 @@ pip3 install face_recognition
         if fileManager.fileExists(atPath: dbFile.path) {
             let dateFormat = DateFormatter()
             dateFormat.dateFormat = "yyyyMMdd_HHmmss"
-            let backupFolder = "DataBackup/DataBackup-\(dateFormat.string(from: Date()))\(suffix)"
-            let backupUrl = dbUrl.appendingPathComponent(backupFolder)
+            backupFolder = "DataBackup-\(dateFormat.string(from: Date()))\(suffix)"
+            let backupUrl = dbUrl.appendingPathComponent("DataBackup").appendingPathComponent(backupFolder)
             do{
                 try fileManager.createDirectory(at: backupUrl, withIntermediateDirectories: true, attributes: nil)
                 
@@ -246,10 +259,11 @@ pip3 install face_recognition
                 }
             }catch{
                 print(error)
-                return
+                return (backupFolder, true, error)
             }
         }
         print("\(Date()) Finish create db backup")
+        return (backupFolder, false, nil)
     }
 
 }
