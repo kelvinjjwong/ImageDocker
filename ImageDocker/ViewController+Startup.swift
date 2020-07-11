@@ -15,10 +15,13 @@ extension ViewController {
     internal func doStartWork() {
         self.startingUp = true
         
+        let _ = PreferencesController.predefinedLocalDBFilePath // must do in main thread
+        
         DispatchQueue.global().async {
             self.splashController.progressWillEnd(at: 5)
             self.splashController.message("Creating database backup ...", progress: 1)
             let _ = ExecutionEnvironment.default.createLocalDatabaseFileBackup(suffix: "-on-launch")
+
             IPHONE.bridge.unmountFuse()
             
             

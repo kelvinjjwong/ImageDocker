@@ -862,20 +862,22 @@ final class PreferencesController: NSViewController {
     
     // MARK: DATABASE
     
+    static let predefinedLocalDBFilePath = AppDelegate.current.applicationDocumentsDirectory.path
+    
     class func databasePath() -> String {
         let defaults = UserDefaults.standard
         guard let txt = defaults.string(forKey: databasePathKey) else {
-            return AppDelegate.current.applicationDocumentsDirectory.path
+            return predefinedLocalDBFilePath
         }
         var isDir : ObjCBool = false
         if FileManager.default.fileExists(atPath: txt, isDirectory: &isDir) {
             if isDir.boolValue {
                 return txt
             }else{
-                return AppDelegate.current.applicationDocumentsDirectory.path
+                return predefinedLocalDBFilePath
             }
         }else{
-            return AppDelegate.current.applicationDocumentsDirectory.path
+            return predefinedLocalDBFilePath
         }
     }
     
