@@ -232,6 +232,16 @@ pip3 install face_recognition
     
     static let componentsForDlibFaceRecognition:[String] = ["boost-python", "numpy", "dlib", "imutils", "opencv-python", "face-recognition"]
 
+    func getBackupFolderName(suffix:String, database:String="") -> String {
+        let dateFormat = DateFormatter()
+        dateFormat.dateFormat = "yyyyMMdd_HHmmss"
+        var db = ""
+        if database != "" {
+            db = "-\(database)"
+        }
+        let backupFolder = "DataBackup-\(dateFormat.string(from: Date()))\(db)\(suffix)"
+        return backupFolder
+    }
     
     func createLocalDatabaseFileBackup(suffix:String) -> (String, Bool, Error?){
         print("\(Date()) Start to create db backup")
@@ -242,9 +252,7 @@ pip3 install face_recognition
         let dbFileWAL = dbUrl.appendingPathComponent("ImageDocker.sqlite-wal")
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: dbFile.path) {
-            let dateFormat = DateFormatter()
-            dateFormat.dateFormat = "yyyyMMdd_HHmmss"
-            backupFolder = "DataBackup-\(dateFormat.string(from: Date()))\(suffix)"
+            backupFolder = self.getBackupFolderName(suffix: suffix)
             let backupUrl = dbUrl.appendingPathComponent("DataBackup").appendingPathComponent(backupFolder)
             do{
                 try fileManager.createDirectory(at: backupUrl, withIntermediateDirectories: true, attributes: nil)

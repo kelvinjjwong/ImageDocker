@@ -209,23 +209,19 @@ final class PreferencesController: NSViewController {
     
     // MARK: TOGGLE GROUP - DB LOCATION
 
-    private var toggleGroup_DBLocation:[String:NSButton] = [:]
-    private var selectedDatabaseLocation = "local"
+    private var toggleGroup_DBLocation:ToggleGroup!
     
     @IBAction func onCheckLocalLocationClicked(_ sender: NSButton) {
-        selectedDatabaseLocation = "local"
-        self.toggleGroup(selected: self.selectedDatabaseLocation, toggles: self.toggleGroup_DBLocation)
+        self.toggleGroup_DBLocation.selected = "local"
     }
     
     @IBAction func onCheckLocalDBServerClicked(_ sender: NSButton) {
-        selectedDatabaseLocation = "localServer"
-        self.toggleGroup(selected: self.selectedDatabaseLocation, toggles: self.toggleGroup_DBLocation)
+        self.toggleGroup_DBLocation.selected = "localServer"
     }
     
     
     @IBAction func onCheckNetworkLocationClicked(_ sender: NSButton) {
-        selectedDatabaseLocation = "network"
-        self.toggleGroup(selected: self.selectedDatabaseLocation, toggles: self.toggleGroup_DBLocation)
+        self.toggleGroup_DBLocation.selected = "network"
     }
     
     private func toggleLocalNoPassword() {
@@ -336,9 +332,71 @@ final class PreferencesController: NSViewController {
                 }
             }
         }else if PreferencesController.databaseLocation() == "localServer" {
-            self.lblDBBackupUsedSpace.stringValue = "TODO ..."
+            
+            let cmd = self.toggleGroup_InstalledPostgres.selected
+            let backupPath = self.lblDatabaseBackupPath.stringValue
+            let host = PreferencesController.localDBServer()
+            let port = PreferencesController.localDBPort()
+            let user = PreferencesController.localDBUsername()
+            let database = PreferencesController.localDBDatabase()
+
+            self.lblDBBackupUsedSpace.stringValue = "Creating backup file ..."
+            self.btnBackupNow.isEnabled = false
+            DispatchQueue.global().async {
+                let (status, error) = PostgresConnection.default.backupDatabase(commandPath: cmd, database: database, host: host, port: port, user: user, backupPath: backupPath)
+                if status == true {
+                    DispatchQueue.main.async {
+                        self.lblDBBackupUsedSpace.stringValue = "Backup completed."
+                        self.btnBackupNow.isEnabled = true
+                    }
+                }else{
+                    if let err = error {
+                        DispatchQueue.main.async {
+                            self.lblDBBackupUsedSpace.stringValue = "Backup failed: \(err)"
+                            self.btnBackupNow.isEnabled = true
+                        }
+                        print("pg backup failed: \(err)")
+                    }else{
+                        DispatchQueue.main.async {
+                            self.lblDBBackupUsedSpace.stringValue = "Backup failed with unknown error"
+                            self.btnBackupNow.isEnabled = true
+                        }
+                    }
+                }
+            }
         }else if PreferencesController.databaseLocation() == "network" {
-            self.lblDBBackupUsedSpace.stringValue = "TODO ..."
+            
+            let cmd = self.toggleGroup_InstalledPostgres.selected
+            let backupPath = self.lblDatabaseBackupPath.stringValue
+            let host = PreferencesController.remoteDBServer()
+            let port = PreferencesController.remoteDBPort()
+            let user = PreferencesController.remoteDBUsername()
+            let database = PreferencesController.remoteDBDatabase()
+
+            self.lblDBBackupUsedSpace.stringValue = "Creating backup file ..."
+            self.btnBackupNow.isEnabled = false
+            DispatchQueue.global().async {
+                let (status, error) = PostgresConnection.default.backupDatabase(commandPath: cmd, database: database, host: host, port: port, user: user, backupPath: backupPath)
+                if status == true {
+                    DispatchQueue.main.async {
+                        self.lblDBBackupUsedSpace.stringValue = "Backup completed."
+                        self.btnBackupNow.isEnabled = true
+                    }
+                }else{
+                    if let err = error {
+                        DispatchQueue.main.async {
+                            self.lblDBBackupUsedSpace.stringValue = "Backup failed: \(err)"
+                            self.btnBackupNow.isEnabled = true
+                        }
+                        print("pg backup failed: \(err)")
+                    }else{
+                        DispatchQueue.main.async {
+                            self.lblDBBackupUsedSpace.stringValue = "Backup failed with unknown error"
+                            self.btnBackupNow.isEnabled = true
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -349,192 +407,16 @@ final class PreferencesController: NSViewController {
         self.toggleDatabaseClonerButtons(state: false)
         
         DispatchQueue.global().async {
-            
-            // TODO: backup database
-            
-            DispatchQueue.main.async {
-                self.lblDataCloneMessage.stringValue = "Re-initializing schema ..."
-            }
-            PostgresConnection.default.versionCheck(dropBeforeCreate: dropBeforeCreate, location: .remoteDBServer)
-
-            
-            final class Version : PostgresCustomRecord {
-                var ver:Int = 0
-                public init() {}
-            }
-            
-            if let version = Version.fetchOne(PostgresConnection.database(.remoteDBServer), sql: "select substring(ver, '\\d+')::int versions from version_migrations order by versions desc") {
+            ImageDBCloner.default.fromLocalSQLiteToPostgreSQL(dropBeforeCreate: dropBeforeCreate,
+                postgresDB: { () -> PostgresDB in
+                    return PostgresConnection.database(.remoteDBServer)
+            }, message: { msg in
                 DispatchQueue.main.async {
-                    self.lblDataCloneMessage.stringValue = "Remote DB schema version is v\(version.ver) now."
+                    self.lblDataCloneMessage.stringValue = msg
                 }
-                var containers:[ImageContainer] = []
-                var images:[Image] = []
-                var places:[ImagePlace] = []
-                var events:[ImageEvent] = []
-                var devices:[ImageDevice] = []
-                var deviceFiles:[ImageDeviceFile] = []
-                var devicePaths:[ImageDevicePath] = []
-                var people:[People] = []
-                var relationships:[PeopleRelationship] = []
-                var imagePeople:[ImagePeople] = []
-                var imageFaces:[ImageFace] = []
-                var exportProfiles:[ExportProfile] = []
-                var families:[Family] = []
-                var familyMembers:[FamilyMember] = []
-                var familyJoints:[FamilyJoint] = []
-                do {
-                    let db = try SQLiteConnectionGRDB.default.sharedDBPool()
-                    try db.read { localdb in
-                        DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Loading repositories data from local database..." }
-                        containers = try ImageContainer.fetchAll(localdb)
-                        
-                        DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Loading images data from local database..." }
-                        images = try Image.fetchAll(localdb)
-                        
-                        DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Loading places data from local database..." }
-                        places = try ImagePlace.fetchAll(localdb)
-                        
-                        DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Loading events data from local database..." }
-                        events = try ImageEvent.fetchAll(localdb)
-                        
-                        DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Loading devices data from local database..." }
-                        devices = try ImageDevice.fetchAll(localdb)
-                        deviceFiles = try ImageDeviceFile.fetchAll(localdb)
-                        devicePaths = try ImageDevicePath.fetchAll(localdb)
-                        
-                        DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Loading face data from local database..." }
-                        people = try People.fetchAll(localdb)
-                        relationships = try PeopleRelationship.fetchAll(localdb)
-                        imagePeople = try ImagePeople.fetchAll(localdb)
-                        imageFaces = try ImageFace.fetchAll(localdb)
-                        families = try Family.fetchAll(localdb)
-                        familyMembers = try FamilyMember.fetchAll(localdb)
-                        familyJoints = try FamilyJoint.fetchAll(localdb)
-                        
-                        DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Loading profile data from local database..." }
-                        exportProfiles = try ExportProfile.fetchAll(localdb)
-                    }
-
-                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Loaded all data from local database..." }
-                }catch{
-                    print(error)
-
-                    DispatchQueue.main.async { self.toggleDatabaseClonerButtons(state: true) }
-                    return
-                }
-                
-                let remotedb = PostgresConnection.database(.remoteDBServer)
-                var count = 0
-                var i = 0
-                count = containers.count
-                DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning repositories data to remote database..." }
-                for record in containers {
-                    record.save(remotedb)
-                    i += 1
-                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning repositories data to remote database... \(i) / \(count)" }
-                }
-                
-                count = images.count
-                i = 0
-                DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning images data to remote database..." }
-                for record in images {
-                    record.save(remotedb)
-                    i += 1
-                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning images data to remote database... \(i) / \(count)" }
-                }
-                
-                count = places.count
-                i = 0
-                DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning places data to remote database..." }
-                for record in places {
-                    record.save(remotedb)
-                    i += 1
-                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning places data to remote database... \(i) / \(count)" }
-                }
-                count = events.count
-                i = 0
-                DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning events data to remote database..." }
-                for record in events {
-                    record.save(remotedb)
-                    i += 1
-                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning events data to remote database... \(i) / \(count)" }
-                }
-                count = devices.count + deviceFiles.count + devicePaths.count
-                i = 0
-                DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning devices data to remote database..." }
-                for record in devices {
-                    record.save(remotedb)
-                    i += 1
-                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning devices data to remote database... \(i) / \(count)" }
-                }
-                for record in deviceFiles {
-                    record.save(remotedb)
-                    i += 1
-                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning devices data to remote database... \(i) / \(count)" }
-                }
-                for record in devicePaths {
-                    record.save(remotedb)
-                    i += 1
-                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning devices data to remote database... \(i) / \(count)" }
-                }
-                count = people.count + relationships.count + imagePeople.count + imageFaces.count + families.count + familyMembers.count + familyJoints.count
-                i = 0
-                DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning faces data to remote database..." }
-                for record in people {
-                    record.save(remotedb)
-                    i += 1
-                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning faces data to remote database... \(i) / \(count)" }
-                }
-                for record in relationships {
-                    record.save(remotedb)
-                    i += 1
-                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning faces data to remote database... \(i) / \(count)" }
-                }
-                for record in imagePeople {
-                    record.save(remotedb)
-                    i += 1
-                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning faces data to remote database... \(i) / \(count)" }
-                }
-                for record in imageFaces {
-                    record.save(remotedb)
-                    i += 1
-                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning faces data to remote database... \(i) / \(count)" }
-                }
-                for record in families {
-                    record.save(remotedb)
-                    i += 1
-                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning faces data to remote database... \(i) / \(count)" }
-                }
-                for record in familyMembers {
-                    record.save(remotedb)
-                    i += 1
-                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning faces data to remote database... \(i) / \(count)" }
-                }
-                for record in familyJoints {
-                    record.save(remotedb)
-                    i += 1
-                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning faces data to remote database... \(i) / \(count)" }
-                }
-                count = exportProfiles.count
-                i = 0
-                DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning export profiles data to remote database..." }
-                for record in exportProfiles {
-                    record.save(remotedb)
-                    i += 1
-                    DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloning export profiles data to remote database... \(i) / \(count)" }
-                }
-                DispatchQueue.main.async { self.lblDataCloneMessage.stringValue = "Cloned all data to remote database." }
-                
+            }, onComplete: {
                 DispatchQueue.main.async { self.toggleDatabaseClonerButtons(state: true) }
-                return
-            }else{
-                DispatchQueue.main.async {
-                    self.lblRemoteDBServerMessage.stringValue = "No schema"
-                    self.lblDataCloneMessage.stringValue = "Something wrong happened. Please check console output."
-                }
-                DispatchQueue.main.async { self.toggleDatabaseClonerButtons(state: true) }
-                return
-            }
+            })
         }
         
     }
@@ -550,44 +432,41 @@ final class PreferencesController: NSViewController {
     
     // MARK: TOGGLE GROUP - CLONE FROM DB
     
-    var toggleGroup_CloneFromDBLocation:[String:NSButton] = [:]
-    private var selectedCloneFromDBLocation = ""
+    var toggleGroup_CloneFromDBLocation:ToggleGroup!
     
     @IBAction func onCheckFromLocalDBFile(_ sender: NSButton) {
-        self.selectedCloneFromDBLocation = "localDBFile"
-        self.toggleGroup(selected: self.selectedCloneFromDBLocation, toggles: self.toggleGroup_CloneFromDBLocation)
+        self.toggleGroup_CloneFromDBLocation.selected = "localDBFile"
     }
     
     @IBAction func onCheckFromLocalDBServer(_ sender: NSButton) {
-        self.selectedCloneFromDBLocation = "localDBServer"
-        self.toggleGroup(selected: self.selectedCloneFromDBLocation, toggles: self.toggleGroup_CloneFromDBLocation)
+        self.toggleGroup_CloneFromDBLocation.selected = "localDBServer"
     }
     
     @IBAction func onCheckFromRemoteDBServer(_ sender: NSButton) {
-        self.selectedCloneFromDBLocation = "remoteDBServer"
-        self.toggleGroup(selected: self.selectedCloneFromDBLocation, toggles: self.toggleGroup_CloneFromDBLocation)
+        self.toggleGroup_CloneFromDBLocation.selected = "remoteDBServer"
     }
+    
+    @IBAction func onCheckFromBackupArchive(_ sender: NSButton) {
+        self.toggleGroup_CloneFromDBLocation.selected = "backupArchive"
+    }
+    
     
     // MARK: TOGGLE GROUP - CLONE TO DB
     
-    var toggleGroup_CloneToDBLocation:[String:NSButton] = [:]
-    private var selectedCloneToDBLocation = ""
+    var toggleGroup_CloneToDBLocation:ToggleGroup!
     
     @IBAction func onCheckToLocalDBFile(_ sender: NSButton) {
-        self.selectedCloneToDBLocation = "localDBFile"
-        self.toggleGroup(selected: self.selectedCloneToDBLocation, toggles: self.toggleGroup_CloneToDBLocation)
+        self.toggleGroup_CloneToDBLocation.selected = "localDBFile"
         self.toggleCreatePostgresDatabase(state: false)
     }
     
     @IBAction func onCheckToLocalDBServer(_ sender: NSButton) {
-        self.selectedCloneToDBLocation = "localDBServer"
-        self.toggleGroup(selected: self.selectedCloneToDBLocation, toggles: self.toggleGroup_CloneToDBLocation)
+        self.toggleGroup_CloneToDBLocation.selected = "localDBServer"
         self.toggleCreatePostgresDatabase(state: true)
     }
     
     @IBAction func onCheckToRemoteDBServer(_ sender: NSButton) {
-        self.selectedCloneToDBLocation = "remoteDBServer"
-        self.toggleGroup(selected: self.selectedCloneToDBLocation, toggles: self.toggleGroup_CloneToDBLocation)
+        self.toggleGroup_CloneToDBLocation.selected = "remoteDBServer"
         self.toggleCreatePostgresDatabase(state: true)
     }
     
@@ -599,15 +478,13 @@ final class PreferencesController: NSViewController {
     
     // MARK: TOGGLE GROUP - Postgres Command Path
     
-    var toggleGroup_InstalledPostgres:[String:NSButton] = [:]
-    var installedPostgresCommandPath = "/Applications/Postgres.app/Contents/Versions/latest/bin"
+    var toggleGroup_InstalledPostgres:ToggleGroup!
     
     @IBAction func onCheckInstallPostgresByBrew(_ sender: NSButton) {
         let path = "/usr/local/bin"
         if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: [path]) {
-            self.installedPostgresCommandPath = postgresCommandPath
-            self.toggleGroup(selected: self.installedPostgresCommandPath, toggles: self.toggleGroup_InstalledPostgres)
-            self.txtLocalDBBinPath.stringValue = self.installedPostgresCommandPath
+            self.toggleGroup_InstalledPostgres.selected = postgresCommandPath
+            self.txtLocalDBBinPath.stringValue = postgresCommandPath
         }else{
             self.lblDataCloneMessage.stringValue = "ERROR: Unable to find PostgreSQL from Homebrew \(path)"
             sender.state = .off
@@ -618,9 +495,8 @@ final class PreferencesController: NSViewController {
     @IBAction func onCheckInstallPostgresInApp(_ sender: NSButton) {
         let path = "/Applications/Postgres.app/Contents/Versions/latest/bin"
         if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: [path]) {
-            self.installedPostgresCommandPath = postgresCommandPath
-            self.toggleGroup(selected: self.installedPostgresCommandPath, toggles: self.toggleGroup_InstalledPostgres)
-            self.txtLocalDBBinPath.stringValue = self.installedPostgresCommandPath
+            self.toggleGroup_InstalledPostgres.selected = postgresCommandPath
+            self.txtLocalDBBinPath.stringValue = postgresCommandPath
         }else{
             self.lblDataCloneMessage.stringValue = "ERROR: Unable to find PostgreSQL from PostgresApp \(path)"
             sender.state = .off
@@ -689,17 +565,14 @@ final class PreferencesController: NSViewController {
     
     // MARK: TOGGLE GROUP - FACE MODEL
     
-    private var toggleGroup_FaceModel:[String:NSButton] = [:]
-    fileprivate var selectedFaceModel = "major"
+    private var toggleGroup_FaceModel:ToggleGroup!
     
     @IBAction func onMajorFaceModelClicked(_ sender: NSButton) {
-        self.selectedFaceModel = "major"
-        self.toggleGroup(selected: self.selectedFaceModel, toggles: self.toggleGroup_FaceModel)
+        self.toggleGroup_FaceModel.selected = "major"
     }
     
     @IBAction func onAlternativeFaceModelClicked(_ sender: NSButton) {
-        self.selectedFaceModel = "alternative"
-        self.toggleGroup(selected: self.selectedFaceModel, toggles: self.toggleGroup_FaceModel)
+        self.toggleGroup_FaceModel.selected = "alternative"
     }
     
     @IBAction func onBrowseAlternativeFaceModelClicked(_ sender: NSButton) {
@@ -1079,7 +952,7 @@ final class PreferencesController: NSViewController {
                      forKey: PreferencesController.pythonKey)
         defaults.set(txtAlternativeFaceModelPath.stringValue,
                      forKey: PreferencesController.alternativeFaceModelPathKey)
-        defaults.set(self.selectedFaceModel,
+        defaults.set(self.toggleGroup_FaceModel.selected,
                      forKey: PreferencesController.faceRecognitionModelKey)
     }
     
@@ -1099,7 +972,7 @@ final class PreferencesController: NSViewController {
     
     func saveDatabaseSection(_ defaults:UserDefaults) {
         
-        defaults.set(self.selectedDatabaseLocation,
+        defaults.set(self.toggleGroup_DBLocation.selected,
                      forKey: PreferencesController.databaseLocationKey)
         
         defaults.set(txtLocalDBFilePath.stringValue,
@@ -1201,28 +1074,6 @@ final class PreferencesController: NSViewController {
     
     // MARK: - INIT SECTIONS
     
-    // common helper
-    
-    private func toggleGroup(selected:String, toggles:[String:NSButton]) {
-        for (_, button) in toggles {
-            button.state = .off
-        }
-        for (key, button) in toggles {
-            if key == selected {
-                button.state = .on
-                break
-            }
-        }
-    }
-    
-    private func keys(of toggles:[String:NSButton]) -> [String]{
-        var keys:[String] = []
-        for (key, _) in toggles {
-            keys.append(key)
-        }
-        return keys
-    }
-    
     
     func initDatabaseSection() {
         txtLocalDBFilePath.stringValue = PreferencesController.databasePath()
@@ -1260,6 +1111,10 @@ final class PreferencesController: NSViewController {
         }
     }
     
+    func reloadArchives() {
+        self.lblDataCloneMessage.stringValue = "TODO - load backup archives"
+    }
+    
     func initBackupSection() {
         self.lblDatabaseBackupPath.stringValue = URL(fileURLWithPath: PreferencesController.databasePath()).appendingPathComponent("DataBackup").path
         
@@ -1268,42 +1123,47 @@ final class PreferencesController: NSViewController {
         
         self.txtLocalDBBinPath.isEditable = false
         
-        self.toggleGroup_InstalledPostgres = [
+        self.toggleGroup_InstalledPostgres = ToggleGroup([
             "/Applications/Postgres.app/Contents/Versions/latest/bin" : self.chkPostgresInApp,
             "/usr/local/bin"                                          : self.chkPostgresByBrew
-        ]
+        ])
         
-        self.toggleGroup_DBLocation = [
+        self.toggleGroup_DBLocation = ToggleGroup([
             "local"       : self.chkLocalLocation,
             "localServer" : self.chkLocalDBServer,
             "network"     : self.chkNetworkLocation
-        ]
+        ])
         
-        self.toggleGroup_CloneFromDBLocation = [
+        self.toggleGroup_CloneFromDBLocation = ToggleGroup([
             "localDBFile"   :self.chkFromLocalDBFile,
             "localDBServer" :self.chkFromLocalDBServer,
             "remoteDBServer":self.chkFromRemoteDBServer,
             "backupArchive" :self.chkFromBackupArchive
-        ]
+            ], onSelect: { option in
+                if option == "backupArchive" {
+                    self.reloadArchives()
+                }
+        })
         
-        self.toggleGroup_CloneToDBLocation = [
+        self.toggleGroup_CloneToDBLocation = ToggleGroup([
             "localDBFile"   :self.chkToLocalDBFile,
             "localDBServer" :self.chkToLocalDBServer,
             "remoteDBServer":self.chkToRemoteDBServer
-        ]
+            ], onSelect: { option in
+                if option == "localDBServer" {
+                    self.txtRestoreToDatabaseName.stringValue = PreferencesController.localDBDatabase()
+                }else if option == "remoteDBServer" {
+                    self.txtRestoreToDatabaseName.stringValue = PreferencesController.remoteDBDatabase()
+                }
+        })
         
-        self.selectedDatabaseLocation = PreferencesController.databaseLocation()
-        self.toggleGroup(selected: self.selectedDatabaseLocation, toggles: self.toggleGroup_DBLocation)
+        self.toggleGroup_DBLocation.selected = PreferencesController.databaseLocation()
+        self.toggleGroup_CloneFromDBLocation.selected = "localDBFile"
+        self.toggleGroup_CloneToDBLocation.selected = "localDBServer"
         
-        self.selectedCloneFromDBLocation = "remoteDBServer"
-        self.selectedCloneToDBLocation = "localDBServer"
-        self.toggleGroup(selected: self.selectedCloneFromDBLocation, toggles: self.toggleGroup_CloneFromDBLocation)
-        self.toggleGroup(selected: self.selectedCloneToDBLocation, toggles: self.toggleGroup_CloneToDBLocation)
-        
-        if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: self.keys(of: self.toggleGroup_InstalledPostgres)) {
-            self.installedPostgresCommandPath = postgresCommandPath
-            self.toggleGroup(selected: self.installedPostgresCommandPath, toggles: self.toggleGroup_InstalledPostgres)
-            self.txtLocalDBBinPath.stringValue = self.installedPostgresCommandPath
+        if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: self.toggleGroup_InstalledPostgres.keys) {
+            self.toggleGroup_InstalledPostgres.selected = postgresCommandPath
+            self.txtLocalDBBinPath.stringValue = postgresCommandPath
         }else{
             self.lblDataCloneMessage.stringValue = "ERROR: Unable to find PostgreSQL from either Homebrew or PostgresApp. Please install first."
         }
@@ -1320,17 +1180,17 @@ final class PreferencesController: NSViewController {
     }
     
     func initFaceRecognitionSection() {
-        self.toggleGroup_FaceModel = [
-            "major"       : self.chkMajorFaceRecognitionModel,
-            "alternative" : self.chkAlternativeFaceRecognitionModel
-        ]
         txtHomebrewPath.stringValue = PreferencesController.homebrewPath()
         txtPythonPath.stringValue = PreferencesController.pythonPath()
         lblMajorFaceModelPath.stringValue = FaceRecognition.defaultModelPath
         txtAlternativeFaceModelPath.stringValue = PreferencesController.alternativeFaceModel()
         
-        self.selectedFaceModel = PreferencesController.faceRecognitionModel()
-        self.toggleGroup(selected: self.selectedFaceModel, toggles: self.toggleGroup_FaceModel)
+        
+        self.toggleGroup_FaceModel = ToggleGroup([
+            "major"       : self.chkMajorFaceRecognitionModel,
+            "alternative" : self.chkAlternativeFaceRecognitionModel
+        ])
+        self.toggleGroup_FaceModel.selected = PreferencesController.faceRecognitionModel()
         
         self.btnCheckFaceComponents.isEnabled = false
         var result = ""
