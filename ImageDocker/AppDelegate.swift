@@ -27,7 +27,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
-        ExecutionEnvironment.default.createLocalDatabaseFileBackup(suffix:"-on-exit")
+        DispatchQueue.global().async {
+            let _ = ExecutionEnvironment.default.createDatabaseBackup(suffix:"-on-exit")
+        }
         IPHONE.bridge.unmountFuse()
     }
     

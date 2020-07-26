@@ -252,7 +252,19 @@ final class PreferencesController: NSViewController {
     // MARK: LOCAL DB FILE
     
     @IBAction func onBackupLocalClicked(_ sender: NSButton) {
-        self.lblLocalDBFileMessage.stringValue = "TODO function."
+        self.btnLocalDBFileBackup.isEnabled = false
+        self.lblLocalDBFileMessage.stringValue = "Creating backup ..."
+        DispatchQueue.global().async {
+            let (backupFolder, status, error) = ExecutionEnvironment.default.createDatabaseBackup(.localFile, suffix: "-on-runtime")
+            DispatchQueue.main.async {
+                self.btnLocalDBFileBackup.isEnabled = true
+                if status == false {
+                    self.lblLocalDBFileMessage.stringValue = "Backup failed: \(error.debugDescription)"
+                }else{
+                    self.lblLocalDBFileMessage.stringValue = "Created \(backupFolder)"
+                }
+            }
+        }
     }
     
     @IBAction func onLocalSchemaVersionClicked(_ sender: NSButton) {
@@ -262,7 +274,19 @@ final class PreferencesController: NSViewController {
     // MARK: LOCAL DB SERVER
     
     @IBAction func onBackupLocalServerClicked(_ sender: NSButton) {
-        self.lblLocalDBServerMessage.stringValue = "TODO function."
+        self.btnLocalDBServerBackup.isEnabled = false
+        self.lblLocalDBServerMessage.stringValue = "Creating backup ..."
+        DispatchQueue.global().async {
+            let (backupFolder, status, error) = ExecutionEnvironment.default.createDatabaseBackup(.localDBServer, suffix: "-on-runtime")
+            DispatchQueue.main.async {
+                self.btnLocalDBServerBackup.isEnabled = true
+                if status == false {
+                    self.lblLocalDBServerMessage.stringValue = "Backup failed: \(error.debugDescription)"
+                }else{
+                    self.lblLocalDBServerMessage.stringValue = "Created \(backupFolder)"
+                }
+            }
+        }
     }
     
     @IBAction func onLocalDBServerTestClicked(_ sender: NSButton) {
@@ -289,10 +313,23 @@ final class PreferencesController: NSViewController {
     // MARK: REMOTE DB SERVER
     
     @IBAction func onBackupRemoteServerClicked(_ sender: NSButton) {
-        self.lblRemoteDBServerMessage.stringValue = "TODO function."
+        self.btnRemoteDBServerBackup.isEnabled = false
+        self.lblRemoteDBServerMessage.stringValue = "Creating backup ..."
+        DispatchQueue.global().async {
+            let (backupFolder, status, error) = ExecutionEnvironment.default.createDatabaseBackup(.remoteDBServer, suffix: "-on-runtime")
+            DispatchQueue.main.async {
+                self.btnRemoteDBServerBackup.isEnabled = true
+                if status == false {
+                    self.lblRemoteDBServerMessage.stringValue = "Backup failed: \(error.debugDescription)"
+                }else{
+                    self.lblRemoteDBServerMessage.stringValue = "Created \(backupFolder)"
+                }
+            }
+        }
     }
     
     @IBAction func onRemoteDBServerTestClicked(_ sender: NSButton) {
+        self.lblRemoteDBServerMessage.stringValue = "TODO version test"
     }
     
     
@@ -317,84 +354,17 @@ final class PreferencesController: NSViewController {
     }
     
     @IBAction func onBackupNowClicked(_ sender: NSButton) {
-        if PreferencesController.databaseLocation() == "local" {
-            self.btnBackupNow.isEnabled = false
-            self.lblDBBackupUsedSpace.stringValue = "Creating backup ..."
-            DispatchQueue.global().async {
-                let (backupFolder, hasError, error) = ExecutionEnvironment.default.createLocalDatabaseFileBackup(suffix:"-on-runtime")
-                DispatchQueue.main.async {
-                    self.btnBackupNow.isEnabled = true
-                    if hasError {
-                        self.lblDBBackupUsedSpace.stringValue = "Error: \(error.debugDescription)"
-                    }else{
-                        self.lblDBBackupUsedSpace.stringValue = "Created \(backupFolder)"
-                    }
-                }
-            }
-        }else if PreferencesController.databaseLocation() == "localServer" {
-            
-            let cmd = self.toggleGroup_InstalledPostgres.selected
-            let backupPath = self.lblDatabaseBackupPath.stringValue
-            let host = PreferencesController.localDBServer()
-            let port = PreferencesController.localDBPort()
-            let user = PreferencesController.localDBUsername()
-            let database = PreferencesController.localDBDatabase()
-
-            self.lblDBBackupUsedSpace.stringValue = "Creating backup file ..."
-            self.btnBackupNow.isEnabled = false
-            DispatchQueue.global().async {
-                let (status, error) = PostgresConnection.default.backupDatabase(commandPath: cmd, database: database, host: host, port: port, user: user, backupPath: backupPath)
-                if status == true {
-                    DispatchQueue.main.async {
-                        self.lblDBBackupUsedSpace.stringValue = "Backup completed."
-                        self.btnBackupNow.isEnabled = true
-                    }
+        // TODO: SAVE ALL FIELDS BEFORE START BACKUP
+        self.btnBackupNow.isEnabled = false
+        self.lblDBBackupUsedSpace.stringValue = "Creating backup ..."
+        DispatchQueue.global().async {
+            let (backupFolder, status, error) = ExecutionEnvironment.default.createDatabaseBackup(suffix: "-on-runtime")
+            DispatchQueue.main.async {
+                self.btnBackupNow.isEnabled = true
+                if status == false {
+                    self.lblDBBackupUsedSpace.stringValue = "Backup failed: \(error.debugDescription)"
                 }else{
-                    if let err = error {
-                        DispatchQueue.main.async {
-                            self.lblDBBackupUsedSpace.stringValue = "Backup failed: \(err)"
-                            self.btnBackupNow.isEnabled = true
-                        }
-                        print("pg backup failed: \(err)")
-                    }else{
-                        DispatchQueue.main.async {
-                            self.lblDBBackupUsedSpace.stringValue = "Backup failed with unknown error"
-                            self.btnBackupNow.isEnabled = true
-                        }
-                    }
-                }
-            }
-        }else if PreferencesController.databaseLocation() == "network" {
-            
-            let cmd = self.toggleGroup_InstalledPostgres.selected
-            let backupPath = self.lblDatabaseBackupPath.stringValue
-            let host = PreferencesController.remoteDBServer()
-            let port = PreferencesController.remoteDBPort()
-            let user = PreferencesController.remoteDBUsername()
-            let database = PreferencesController.remoteDBDatabase()
-
-            self.lblDBBackupUsedSpace.stringValue = "Creating backup file ..."
-            self.btnBackupNow.isEnabled = false
-            DispatchQueue.global().async {
-                let (status, error) = PostgresConnection.default.backupDatabase(commandPath: cmd, database: database, host: host, port: port, user: user, backupPath: backupPath)
-                if status == true {
-                    DispatchQueue.main.async {
-                        self.lblDBBackupUsedSpace.stringValue = "Backup completed."
-                        self.btnBackupNow.isEnabled = true
-                    }
-                }else{
-                    if let err = error {
-                        DispatchQueue.main.async {
-                            self.lblDBBackupUsedSpace.stringValue = "Backup failed: \(err)"
-                            self.btnBackupNow.isEnabled = true
-                        }
-                        print("pg backup failed: \(err)")
-                    }else{
-                        DispatchQueue.main.async {
-                            self.lblDBBackupUsedSpace.stringValue = "Backup failed with unknown error"
-                            self.btnBackupNow.isEnabled = true
-                        }
-                    }
+                    self.lblDBBackupUsedSpace.stringValue = "Created \(backupFolder)"
                 }
             }
         }
@@ -403,31 +373,107 @@ final class PreferencesController: NSViewController {
     
     
     @IBAction func onCloneLocalToRemoteClicked(_ sender: NSButton) {
+        // TODO: SAVE ALL FIELDS BEFORE START CLONE
         let dropBeforeCreate = self.chkDeleteAllBeforeClone.state == .on
         self.toggleDatabaseClonerButtons(state: false)
         
-        DispatchQueue.global().async {
-            ImageDBCloner.default.fromLocalSQLiteToPostgreSQL(dropBeforeCreate: dropBeforeCreate,
-                postgresDB: { () -> PostgresDB in
-                    return PostgresConnection.database(.remoteDBServer)
-            }, message: { msg in
-                DispatchQueue.main.async {
-                    self.lblDataCloneMessage.stringValue = msg
-                }
-            }, onComplete: {
-                DispatchQueue.main.async { self.toggleDatabaseClonerButtons(state: true) }
-            })
+         // TODO: avoid select both from-sqlite and to-sqlite
+        if  self.toggleGroup_CloneFromDBLocation.selected == "localDBFile" &&
+            self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
+            DispatchQueue.global().async {
+                ImageDBCloner.default.fromLocalSQLiteToPostgreSQL(dropBeforeCreate: dropBeforeCreate,
+                    postgresDB: { () -> PostgresDB in
+                        return PostgresConnection.database(.remoteDBServer)
+                }, message: { msg in
+                    DispatchQueue.main.async {
+                        self.lblDataCloneMessage.stringValue = msg
+                    }
+                }, onComplete: {
+                    DispatchQueue.main.async { self.toggleDatabaseClonerButtons(state: true) }
+                })
+            }
+        }else if self.toggleGroup_CloneFromDBLocation.selected == "localDBFile" &&
+                 self.toggleGroup_CloneToDBLocation.selected == "localDBServer" {
+            DispatchQueue.global().async {
+                ImageDBCloner.default.fromLocalSQLiteToPostgreSQL(dropBeforeCreate: dropBeforeCreate,
+                    postgresDB: { () -> PostgresDB in
+                        return PostgresConnection.database(.localDBServer)
+                }, message: { msg in
+                    DispatchQueue.main.async {
+                        self.lblDataCloneMessage.stringValue = msg
+                    }
+                }, onComplete: {
+                    DispatchQueue.main.async { self.toggleDatabaseClonerButtons(state: true) }
+                })
+            }
+        }else{
+            print("TODO clone from to database")
         }
         
     }
     
     @IBAction func onReloadDBArchivesClicked(_ sender: NSButton) {
+        DispatchQueue.global().async {
+            let files = ExecutionEnvironment.default.listDatabaseBackup()
+            for file in files {
+                print(file)
+            }
+        }
     }
     
     @IBAction func onDeleteDBArchivesClicked(_ sender: NSButton) {
+        print("TODO delete multiple db archives")
     }
     
     @IBAction func onCreateDatabaseClicked(_ sender: NSButton) {
+        let databaseName = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard databaseName != "" else {
+            print("Error: database name is empty")
+            return
+        }
+        guard let cmd = PreferencesController.getPostgresCommandPath() else {
+            print("\(Date()) Unable to locate pg_dump command in macOS, createdb aborted.")
+            return
+        }
+        var host = ""
+        var port = 5432
+        var user = ""
+        if self.toggleGroup_CloneToDBLocation.selected == "localDBServer" {
+            host = PreferencesController.localDBServer()
+            port = PreferencesController.localDBPort()
+            user = PreferencesController.localDBUsername()
+        }else if self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
+            host = PreferencesController.remoteDBServer()
+            port = PreferencesController.remoteDBPort()
+            user = PreferencesController.remoteDBUsername()
+        }else{
+            print("Selected to-database is not postgres. createdb aborted.")
+            return
+        }
+        
+        self.btnCreateDatabase.isEnabled = false
+        
+        // TODO: SAVE ALL FIELDS BEFORE START CREATEDB
+        DispatchQueue.global().async {
+            
+            let (status, result, pgError, err) = PostgresConnection.default.createDatabase(commandPath: cmd, database: databaseName, host: host, port: port, user: user)
+            
+            if status == true {
+                print("created database \(databaseName) on \(user)@\(host):\(port)")
+                DispatchQueue.main.async {
+                    self.btnCreateDatabase.isEnabled = true
+                    self.lblDataCloneMessage.stringValue = "Created database in \(user)@\(host):\(port)"
+                }
+            }else{
+                print("Unable to create database \(databaseName) on \(user)@\(host):\(port)")
+                print(pgError)
+                print(err)
+                DispatchQueue.main.async {
+                    self.btnCreateDatabase.isEnabled = false
+                    self.lblDataCloneMessage.stringValue = "Failed to createdb in \(user)@\(host):\(port), \(pgError)"
+                }
+            }
+        }
     }
     
     // MARK: TOGGLE GROUP - CLONE FROM DB
@@ -1113,6 +1159,18 @@ final class PreferencesController: NSViewController {
     
     func reloadArchives() {
         self.lblDataCloneMessage.stringValue = "TODO - load backup archives"
+    }
+    
+    class func getPostgresCommandPath() -> String? {
+        let keys:[String] = [
+            "/Applications/Postgres.app/Contents/Versions/latest/bin",
+            "/usr/local/bin"
+        ]
+        if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: keys) {
+            return postgresCommandPath
+        }else{
+            return nil
+        }
     }
     
     func initBackupSection() {

@@ -34,14 +34,8 @@ struct Android {
             command.standardError = FileHandle.nullDevice
             command.launchPath = adb.path
             command.arguments = ["devices", "-l"]
-            defer {
-                command.terminate()
-            }
-            do {
-                try command.run()
-            }catch{
-                print(error)
-            }
+            command.launch()
+            command.waitUntilExit()
         }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
@@ -72,9 +66,6 @@ struct Android {
             command.standardError = FileHandle.nullDevice
             command.launchPath = adb.path
             command.arguments = ["-s", id, "shell", "getprop"]
-            defer {
-                command.terminate()
-            }
             command.launch()
             command.waitUntilExit()
         }
@@ -138,9 +129,6 @@ struct Android {
             command.standardError = FileHandle.nullDevice
             command.launchPath = adb.path
             command.arguments = ["-s", device.deviceId, "shell", "df -h /storage/emulated"]
-            defer {
-                command.terminate()
-            }
             command.launch()
             command.waitUntilExit()
         }
@@ -184,9 +172,6 @@ struct Android {
             command.standardError = pipe
             command.launchPath = adb.path
             command.arguments = ["-s", id, "shell", "ls '\(path)'"]
-            defer {
-                command.terminate()
-            }
             //command.launch()
             //print(command.isRunning)
             do {
@@ -215,9 +200,6 @@ struct Android {
             command.standardError = pipe
             command.launchPath = adb.path
             command.arguments = ["-s", id, "shell", "cd '\(path)'"]
-            defer {
-                command.terminate()
-            }
             //command.launch()
             //print(command.isRunning)
             do {
@@ -247,9 +229,6 @@ struct Android {
             command.standardError = pipe
             command.launchPath = adb.path
             command.arguments = ["-s", id, "shell", "cd '\(path)'; ls -gotR"]
-            defer {
-                command.terminate()
-            }
             //command.launch()
             //print(command.isRunning)
             do {
@@ -289,9 +268,6 @@ struct Android {
             command.standardError = pipe
             command.launchPath = adb.path
             command.arguments = ["-s", id, "shell", "md5sum '\(fileWithPath)'"]
-            defer {
-                command.terminate()
-            }
             command.launch()
             command.waitUntilExit()
         }
@@ -316,9 +292,6 @@ struct Android {
             command.standardError = pipe
             command.launchPath = adb.path
             command.arguments = ["-s", id, "shell", "cd '\(path)'; md5sum '\(filename)'"]
-            defer {
-                command.terminate()
-            }
             command.launch()
             command.waitUntilExit()
         }
@@ -343,9 +316,6 @@ struct Android {
             command.standardError = pipe
             command.launchPath = adb.path
             command.arguments = ["-s", id, "pull", folderPath, targetPath]
-            defer {
-                command.terminate()
-            }
             do {
                 try command.run()
             }catch{
@@ -369,9 +339,6 @@ struct Android {
             command.standardError = pipe
             command.launchPath = adb.path
             command.arguments = ["-s", id, "pull", filePath, targetPath]
-            defer {
-                command.terminate()
-            }
             do {
                 try command.run()
             }catch{
@@ -398,9 +365,6 @@ struct Android {
             command.standardError = pipe
             command.launchPath = adb.path
             command.arguments = ["-s", id, "push", filePath, remoteFolder]
-            defer {
-                command.terminate()
-            }
             do {
                 try command.run()
             }catch{
@@ -427,9 +391,6 @@ struct Android {
             command.standardError = FileHandle.nullDevice
             command.launchPath = adb.path
             command.arguments = ["-s", id, "shell", "mkdir -p '\(path)'"]
-            defer {
-                command.terminate()
-            }
             do {
                 try command.run()
             }catch{
@@ -451,9 +412,6 @@ struct Android {
             command.standardError = pipe
             command.launchPath = adb.path
             command.arguments = ["-s", id, "shell", "cd '\(path)'; find . -type d -maxdepth 1"]
-            defer {
-                command.terminate()
-            }
             do {
                 try command.run()
             }catch{
@@ -480,9 +438,6 @@ struct Android {
             command.standardError = pipe
             command.launchPath = adb.path
             command.arguments = ["-s", id, "shell", "cd '\(path)'; ls\(param)"]
-            defer {
-                command.terminate()
-            }
             do {
                 try command.run()
             }catch{
@@ -533,9 +488,6 @@ struct Android {
             command.standardError = pipe
             command.launchPath = adb.path
             command.arguments = ["-s", id, "shell", "cd '\(path)'; ls -go"]
-            defer {
-                command.terminate()
-            }
             do {
                 try command.run()
             }catch{
@@ -567,9 +519,6 @@ struct Android {
             command.standardError = FileHandle.nullDevice
             command.launchPath = adb.path
             command.arguments = ["-s", id, "shell", "rm '\(path)'"]
-            defer {
-                command.terminate()
-            }
             do {
                 try command.run()
             }catch{

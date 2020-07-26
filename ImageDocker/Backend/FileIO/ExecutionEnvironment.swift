@@ -244,7 +244,7 @@ pip3 install face_recognition
     }
     
     func createLocalDatabaseFileBackup(suffix:String) -> (String, Bool, Error?){
-        print("\(Date()) Start to create db backup")
+        print("\(Date()) Start to create sqlite db backup")
         var backupFolder = ""
         let dbUrl = URL(fileURLWithPath: PreferencesController.databasePath())
         let dbFile = dbUrl.appendingPathComponent("ImageDocker.sqlite")
@@ -267,11 +267,86 @@ pip3 install face_recognition
                 }
             }catch{
                 print(error)
-                return (backupFolder, true, error)
+                return (backupFolder, false, error)
             }
         }
         print("\(Date()) Finish create db backup")
-        return (backupFolder, false, nil)
+        return (backupFolder, true, nil)
+    }
+    
+    func createPostgresDatabaseBackup(suffix:String) -> (String, Bool, Error?) {
+        guard let cmd = PreferencesController.getPostgresCommandPath() else {
+            print("\(Date()) Unable to locate pg_dump command in macOS, backup aborted.")
+            return ("", false, nil)
+        }
+        print("\(Date()) Start to create postgres db backup")
+        
+        let backupPath = URL(fileURLWithPath: PreferencesController.databasePath()).appendingPathComponent("DataBackup").path
+        var host = ""
+        var port = 5432
+        var user = ""
+        var database = ""
+        
+        if PreferencesController.databaseLocation() == "localServer" {
+            host = PreferencesController.localDBServer()
+            port = PreferencesController.localDBPort()
+            user = PreferencesController.localDBUsername()
+            database = PreferencesController.localDBDatabase()
+        }else if PreferencesController.databaseLocation() == "network" {
+            host = PreferencesController.remoteDBServer()
+            port = PreferencesController.remoteDBPort()
+            user = PreferencesController.remoteDBUsername()
+            database = PreferencesController.remoteDBDatabase()
+            
+        }else{
+            print("Database is not Postgres. backup aborted.")
+            return ("", false, nil)
+        }
+        return PostgresConnection.default.backupDatabase(commandPath: cmd, database: database, host: host, port: port, user: user, backupPath: backupPath, suffix: suffix)
+    }
+    
+    func createDatabaseBackup(_ location:ImageDBLocation = .fromSetting, suffix:String) -> (String, Bool, Error?) {
+        if (location == .fromSetting && PreferencesController.databaseLocation() == "local") || location == .localFile {
+            return self.createLocalDatabaseFileBackup(suffix: suffix)
+        }else if (location == .fromSetting && PreferencesController.databaseLocation() == "localServer") || location == .localDBServer {
+            return self.createPostgresDatabaseBackup(suffix: suffix)
+        }else if (location == .fromSetting && PreferencesController.databaseLocation() == "network") || location == .remoteDBServer {
+            return self.createPostgresDatabaseBackup(suffix: suffix)
+        }else{
+            print("Database location error. backup aborted.")
+            return ("", false, nil)
+        }
+    }
+    
+    func listDatabaseBackup() -> [String] {
+        let backupPath = URL(fileURLWithPath: PreferencesController.databasePath()).appendingPathComponent("DataBackup").path
+        let cmdline = "cd \(backupPath); ls -l | grep -v total | awk -F' ' '{print $NF}' | sort -r"
+        let pipe = Pipe()
+        var result:[String] = []
+        
+        autoreleasepool { () -> Void in
+            let cmd = Process()
+            cmd.standardOutput = pipe
+            cmd.standardError = pipe
+            cmd.launchPath = "/bin/bash"
+            cmd.arguments = ["-c", cmdline]
+            defer {
+                cmd.terminate()
+            }
+            cmd.launch()
+            cmd.waitUntilExit()
+            
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            let string = String(data: data, encoding: String.Encoding.utf8)!
+            pipe.fileHandleForReading.closeFile()
+            
+            let lines = string.components(separatedBy: "\n")
+            
+            for line in lines {
+                result.append(line)
+            }
+        }
+        return result
     }
 
 }

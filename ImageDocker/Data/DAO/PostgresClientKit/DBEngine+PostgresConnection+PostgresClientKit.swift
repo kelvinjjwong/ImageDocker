@@ -110,10 +110,6 @@ public final class PostgresConnection : ImageDBInterface {
             cmd.standardError = pipe
             cmd.launchPath = path
             cmd.arguments = ["-h", host, "-p", "\(port)", "-U", user, "-w", database]
-            
-            defer {
-                cmd.terminate()
-            }
             do {
                 try cmd.run()
                 status = true
@@ -145,16 +141,27 @@ public final class PostgresConnection : ImageDBInterface {
         return (status, result, pgError, err)
     }
     
-    func transferDatabase() {
+    func cloneDatabase(commandPath:String, srcDatabase:String, srcHost:String, srcPort:Int, srcUser:String, destDatabase:String, destHost:String, destPort:Int, destUser:String) -> (Bool, Error?) {
         
-        // pg_dump -h 192.168.2.45 ImageDocker | psql -h localhost ImageDocker2
+        let pgdump_path = URL(fileURLWithPath: commandPath).appendingPathComponent("pg_dump").path
+        let psql_path = URL(fileURLWithPath: commandPath).appendingPathComponent("psql").path
+        
+        let cmd = "\(pgdump_path) -h \(srcHost) \(srcDatabase) | \(psql_path) -h \(destHost) \(destDatabase)"
+        print(cmd)
+        let pgdump = Process("/bin/bash", ["-c", cmd])
+        
+        print("doing pgdump clone")
+        pgdump.launch()
+        pgdump.waitUntilExit()
+        print("end of pgdump clone")
+        return (true, nil)
     }
     
-    func backupDatabase(commandPath:String, database:String, host:String, port:Int, user:String, backupPath:String) -> (Bool, Error?) {
+    func backupDatabase(commandPath:String, database:String, host:String, port:Int, user:String, backupPath:String, suffix:String = "-on-runtime") -> (String, Bool, Error?) {
         
         let pgdump_path = URL(fileURLWithPath: commandPath).appendingPathComponent("pg_dump").path
         
-        let folder = ExecutionEnvironment.default.getBackupFolderName(suffix: "-on-runtime", database: "pgsql")
+        let folder = ExecutionEnvironment.default.getBackupFolderName(suffix: suffix, database: "pgsql")
         let filename = "ImageDocker.backup.gz"
         let backupfolder = URL(fileURLWithPath: backupPath).appendingPathComponent(folder)
         
@@ -163,7 +170,7 @@ public final class PostgresConnection : ImageDBInterface {
         }catch{
             print("Unable to create backup folder \(backupfolder.path)")
             print(error)
-            return (false, error)
+            return (folder, false, error)
         }
         let filepath = backupfolder.appendingPathComponent(filename)
         
@@ -174,8 +181,8 @@ public final class PostgresConnection : ImageDBInterface {
         print("doing pgdump backup")
         pgdump.launch()
         pgdump.waitUntilExit()
-        print("end of pgdump")
-        return (true, nil)
+        print("end of pgdump backup")
+        return (folder, true, nil)
     }
     
     
