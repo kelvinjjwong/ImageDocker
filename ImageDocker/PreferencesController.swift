@@ -121,6 +121,9 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var tblDatabaseArchives: NSTableView!
     @IBOutlet weak var txtRestoreToDatabaseName: NSTextField!
     @IBOutlet weak var lblRestoreToDatabaseName: NSTextField!
+    @IBOutlet weak var btnCheckDatabaseName: NSButton!
+    @IBOutlet weak var lblCheckDatabaseName: NSTextField!
+    
     
     @IBOutlet weak var btnCreateDatabase: NSButton!
     @IBOutlet weak var btnReloadDBArchives: NSButton!
@@ -341,14 +344,18 @@ final class PreferencesController: NSViewController {
         self.btnCloneLocalToRemote.isEnabled = state
     }
     
+    func calculateBackupUsedSpace(path:String) {
+        let (sizeGB, spaceFree, _, _) = LocalDirectory.bridge.getDiskSpace(path: path)
+        DispatchQueue.main.async {
+            self.lblDBBackupUsedSpace.stringValue = "Used: \(Double(sizeGB).rounded(toPlaces: 2)) GB , Free: \(spaceFree)"
+        }
+    }
+    
     @IBAction func onCalcBackupUsedSpace(_ sender: NSButton) {
         let path = lblDatabaseBackupPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         if path != "" {
             DispatchQueue.global().async {
-                let (sizeGB, spaceFree, _, _) = LocalDirectory.bridge.getDiskSpace(path: path)
-                DispatchQueue.main.async {
-                    self.lblDBBackupUsedSpace.stringValue = "Used: \(Int(sizeGB)) GB , Free: \(spaceFree)"
-                }
+                self.calculateBackupUsedSpace(path: path)
             }
         }
     }
@@ -413,17 +420,90 @@ final class PreferencesController: NSViewController {
     }
     
     @IBAction func onReloadDBArchivesClicked(_ sender: NSButton) {
-        DispatchQueue.global().async {
-            let files = ExecutionEnvironment.default.listDatabaseBackup()
-            for file in files {
-                print(file)
-            }
+        if self.toggleGroup_CloneToDBLocation.selected == "localDBFile" {
+            self.loadBackupArchives(postgres: false)
+        }else{
+            self.loadBackupArchives(postgres: true)
         }
     }
     
     @IBAction func onDeleteDBArchivesClicked(_ sender: NSButton) {
-        print("TODO delete multiple db archives")
+        var selected:[String] = []
+        if self.tblDatabaseArchives.numberOfSelectedRows > 0 {
+            for i in 0..<self.backupArchives.count {
+                if self.tblDatabaseArchives.isRowSelected(i) {
+                    let (_, _, _, folder) = self.backupArchives[i]
+                    selected.append(folder)
+                }
+            }
+        }
+        let backupPath = URL(fileURLWithPath: PreferencesController.databasePath()).appendingPathComponent("DataBackup")
+        DispatchQueue.global().async {
+            for folder in selected {
+                let url = backupPath.appendingPathComponent(folder)
+                
+                print("delete backup folder \(folder)")
+                do{
+                    try FileManager.default.removeItem(at: url)
+                }catch{
+                    print("Unable to delete backup archive: \(url.path)")
+                    print(error)
+                }
+            }
+            self.loadBackupArchives()
+            self.calculateBackupUsedSpace(path: backupPath.path)
+        }
     }
+    
+    @IBAction func onCheckBackupToDatabaseName(_ sender: NSButton) {
+        guard let cmd = PreferencesController.getPostgresCommandPath() else {
+            print("\(Date()) Unable to locate psql command in macOS, check db exist aborted.")
+            return
+        }
+        var host = ""
+        var port = 5432
+        var user = ""
+        if self.toggleGroup_CloneToDBLocation.selected == "localDBServer" {
+            host = PreferencesController.localDBServer()
+            port = PreferencesController.localDBPort()
+            user = PreferencesController.localDBUsername()
+        }else if self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
+            host = PreferencesController.remoteDBServer()
+            port = PreferencesController.remoteDBPort()
+            user = PreferencesController.remoteDBUsername()
+        }else{
+            print("Selected to-database is not postgres. createdb aborted.")
+            return
+        }
+        let targetDatabase = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard targetDatabase != "" else {
+            self.lblCheckDatabaseName.stringValue = "Error: empty."
+            self.btnCreateDatabase.isHidden = true
+            return
+        }
+        DispatchQueue.global().async {
+            let databases = PostgresConnection.default.getExistDatabases(commandPath: cmd, host: host, port: port)
+            var exists = false
+            for database in databases {
+                if database == targetDatabase {
+                    exists = true
+                    break
+                }
+            }
+            if exists {
+                DispatchQueue.main.async {
+                    self.lblCheckDatabaseName.stringValue = "Exists."
+                    self.btnCreateDatabase.isHidden = true
+                }
+            }else{
+                DispatchQueue.main.async {
+                    self.lblCheckDatabaseName.stringValue = "Not exists."
+                    self.btnCreateDatabase.isHidden = false
+                }
+            }
+        }
+    }
+    
     
     @IBAction func onCreateDatabaseClicked(_ sender: NSButton) {
         let databaseName = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -482,18 +562,23 @@ final class PreferencesController: NSViewController {
     
     @IBAction func onCheckFromLocalDBFile(_ sender: NSButton) {
         self.toggleGroup_CloneFromDBLocation.selected = "localDBFile"
+        self.tblDatabaseArchives.allowsMultipleSelection = true
     }
     
     @IBAction func onCheckFromLocalDBServer(_ sender: NSButton) {
         self.toggleGroup_CloneFromDBLocation.selected = "localDBServer"
+        self.tblDatabaseArchives.allowsMultipleSelection = true
     }
     
     @IBAction func onCheckFromRemoteDBServer(_ sender: NSButton) {
         self.toggleGroup_CloneFromDBLocation.selected = "remoteDBServer"
+        self.tblDatabaseArchives.allowsMultipleSelection = true
     }
     
     @IBAction func onCheckFromBackupArchive(_ sender: NSButton) {
         self.toggleGroup_CloneFromDBLocation.selected = "backupArchive"
+        self.tblDatabaseArchives.allowsMultipleSelection = false
+        self.loadBackupArchives()
     }
     
     
@@ -504,22 +589,27 @@ final class PreferencesController: NSViewController {
     @IBAction func onCheckToLocalDBFile(_ sender: NSButton) {
         self.toggleGroup_CloneToDBLocation.selected = "localDBFile"
         self.toggleCreatePostgresDatabase(state: false)
+        self.loadBackupArchives(postgres: false)
     }
     
     @IBAction func onCheckToLocalDBServer(_ sender: NSButton) {
         self.toggleGroup_CloneToDBLocation.selected = "localDBServer"
         self.toggleCreatePostgresDatabase(state: true)
+        self.loadBackupArchives(postgres: true)
     }
     
     @IBAction func onCheckToRemoteDBServer(_ sender: NSButton) {
         self.toggleGroup_CloneToDBLocation.selected = "remoteDBServer"
         self.toggleCreatePostgresDatabase(state: true)
+        self.loadBackupArchives(postgres: true)
     }
     
     private func toggleCreatePostgresDatabase(state: Bool) {
         self.lblRestoreToDatabaseName.isHidden = !state
         self.txtRestoreToDatabaseName.isHidden = !state
         self.btnCreateDatabase.isHidden = !state
+        self.btnCheckDatabaseName.isHidden = !state
+        self.lblCheckDatabaseName.isHidden = !state
     }
     
     // MARK: TOGGLE GROUP - Postgres Command Path
@@ -1174,6 +1264,14 @@ final class PreferencesController: NSViewController {
     }
     
     func initBackupSection() {
+        
+        self.tblDatabaseArchives.backgroundColor = NSColor.black
+        self.tblDatabaseArchives.delegate = self
+        self.tblDatabaseArchives.dataSource = self
+        self.tblDatabaseArchives.allowsMultipleSelection = true
+        
+        self.btnCreateDatabase.isHidden = true
+        
         self.lblDatabaseBackupPath.stringValue = URL(fileURLWithPath: PreferencesController.databasePath()).appendingPathComponent("DataBackup").path
         
         self.chkDeleteAllBeforeClone.state = .on
@@ -1218,6 +1316,8 @@ final class PreferencesController: NSViewController {
         self.toggleGroup_DBLocation.selected = PreferencesController.databaseLocation()
         self.toggleGroup_CloneFromDBLocation.selected = "localDBFile"
         self.toggleGroup_CloneToDBLocation.selected = "localDBServer"
+        
+        self.loadBackupArchives(postgres: true)
         
         if let postgresCommandPath = ExecutionEnvironment.default.findPostgresCommand(from: self.toggleGroup_InstalledPostgres.keys) {
             self.toggleGroup_InstalledPostgres.selected = postgresCommandPath
@@ -1329,5 +1429,100 @@ final class PreferencesController: NSViewController {
         didSet {
             // Update the view, if already loaded.
         }
+    }
+    
+    
+    var backupArchives:[(String, String, String, String)] = []
+    
+    var shouldLoadPostgresBackupArchives = true
+}
+
+// MARK: - BACKUP ARCHIVE TABLE VIEW
+
+extension PreferencesController : NSTableViewDelegate, NSTableViewDataSource{
+    
+    func loadBackupArchives() {
+        self.loadBackupArchives(postgres: self.shouldLoadPostgresBackupArchives)
+    }
+    
+    func loadBackupArchives(postgres:Bool) {
+        self.shouldLoadPostgresBackupArchives = postgres
+        DispatchQueue.global().async {
+            var list:[(String, String, String, String)] = []
+            let files = ExecutionEnvironment.default.listDatabaseBackup()
+            for file in files {
+                let parts = file.components(separatedBy: "-")
+                if parts.count == 5 && parts[3] == "on" {
+                    if parts[2] == "sqlite" {
+                        if postgres == false {
+                            list.append((parts[1], parts[2], parts[4], file))
+                        }
+                    }else{
+                        if postgres == true {
+                            list.append((parts[1], parts[2], parts[4], file))
+                        }
+                    }
+                }else if parts.count == 4 && parts[2] == "on" && postgres == false {
+                    list.append((parts[1], "sqlite", parts[3], file))
+                }
+            }
+            self.backupArchives = list
+            
+            DispatchQueue.main.async {
+                self.tblDatabaseArchives.reloadData()
+            }
+        }
+    }
+    
+    // return view for requested column.
+    func tableView(_ tableView: NSTableView,
+                   viewFor tableColumn: NSTableColumn?,
+                   row: Int) -> NSView? {
+        if row > (self.backupArchives.count - 1) {
+            return nil
+        }
+        let item = self.backupArchives[row]
+        var value = ""
+        //var tip: String? = nil
+        if let id = tableColumn?.identifier {
+            switch id {
+            case NSUserInterfaceItemIdentifier("value1"):
+                value = item.0
+            case NSUserInterfaceItemIdentifier("value2"):
+                value = item.2
+                
+            default:
+                break
+            }
+            let colView = tableView.makeView(withIdentifier: id, owner: nil) as! NSTableCellView
+            colView.textField?.stringValue = value;
+            colView.textField?.lineBreakMode = .byWordWrapping
+            if row == tableView.selectedRow {
+                colView.textField?.textColor = NSColor.yellow
+            } else {
+                colView.textField?.textColor = nil
+            }
+            return colView
+        }
+        return nil
+    }
+    
+    func tableView(_ tableView: NSTableView, didAdd rowView: NSTableRowView, forRow row: Int) {
+        rowView.backgroundColor = NSColor.darkGray
+    }
+    
+    func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
+        return true
+    }
+    
+    /// table size is one row per image in the images array
+    func numberOfRows(in tableView: NSTableView) -> Int {
+        return self.backupArchives.count
+    }
+    
+    // table sorting by column contents
+    func tableView(_ tableView: NSTableView,
+                   sortDescriptorsDidChange oldDescriptors: [NSSortDescriptor]) {
+        // do nothing
     }
 }

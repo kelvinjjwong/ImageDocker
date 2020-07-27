@@ -141,6 +141,32 @@ public final class PostgresConnection : ImageDBInterface {
         return (status, result, pgError, err)
     }
     
+    func getExistDatabases(commandPath:String, host:String, port:Int) -> [String] {
+        
+        var result:[String] = []
+        
+        let psql_path = URL(fileURLWithPath: commandPath).appendingPathComponent("psql").path
+        let cmdline = "\(psql_path) -h \(host) -lt --csv | awk -F',' '{print $1}' | grep -v '='"
+        
+        let pipe = Pipe()
+        let cmd = Process()
+        cmd.standardOutput = pipe
+        cmd.standardError = pipe
+        cmd.launchPath = "/bin/bash"
+        cmd.arguments = ["-c", cmdline]
+        
+        cmd.launch()
+        cmd.waitUntilExit()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
+        let lines = string.components(separatedBy: "\n")
+        for line in lines {
+            result.append(line)
+        }
+        return result
+    }
+    
     func cloneDatabase(commandPath:String, srcDatabase:String, srcHost:String, srcPort:Int, srcUser:String, destDatabase:String, destHost:String, destPort:Int, destUser:String) -> (Bool, Error?) {
         
         let pgdump_path = URL(fileURLWithPath: commandPath).appendingPathComponent("pg_dump").path
