@@ -83,6 +83,10 @@ class ExportConfigurationViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.chkEvents.state = .off
+        self.chkPeople.state = .off
+        self.chkRepository.state = .off
+        
         view.wantsLayer = true
         stackView.setHuggingPriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
         
@@ -152,6 +156,12 @@ class ExportConfigurationViewController: NSViewController {
         
         self.cleanFields()
         self.loadStackItems()
+        
+        
+        
+        // TODO remove if not debug
+        self.txtName.stringValue = "Auto Profile - \(Date())"
+        self.txtDirectory.stringValue = "/Volumes/PhotoStorage/Images.export/"
     }
     
     private func loadStackItems() {
