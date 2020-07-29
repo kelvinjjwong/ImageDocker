@@ -63,13 +63,26 @@ public final class PostgresConnection : ImageDBInterface {
             }
             database = PreferencesController.remoteDBDatabase()
         }
+        
+        return PostgresConnection.database(host: host, port: port, user: user, database: database, schema: schema, password: psw, nopsw: nopsw)
+    }
+    
+    public static func database(host:String, port:Int, user:String, database:String, schema:String, password:String, nopsw:Bool) -> PostgresDB {
         if nopsw {
             let db = PostgresDB(database: database, host: host, port: port, user: user, password: nil, ssl: false)
-            db.schema = schema
+            if schema == "" {
+                db.schema = "public"
+            }else{
+                db.schema = schema
+            }
             return db
         }else{
-            let db = PostgresDB(database: database, host: host, port: port, user: user, password: psw, ssl: false)
-            db.schema = schema
+            let db = PostgresDB(database: database, host: host, port: port, user: user, password: password, ssl: false)
+            if schema == "" {
+                db.schema = "public"
+            }else{
+                db.schema = schema
+            }
             return db
         }
     }
@@ -211,6 +224,21 @@ public final class PostgresConnection : ImageDBInterface {
         return (folder, true, nil)
     }
     
+    func restoreDatabase(commandPath:String, database:String, host:String, port:Int, user:String, backupFolder:String) -> (Bool, Error?) {
+        let psql_path = URL(fileURLWithPath: commandPath).appendingPathComponent("psql").path
+        
+        let backupPath = URL(fileURLWithPath: PreferencesController.databasePath()).appendingPathComponent("DataBackup").appendingPathComponent(backupFolder).appendingPathComponent("ImageDocker.backup.gz").path
+        
+        let cmd = "/usr/bin/gunzip -c \(backupPath) | \(psql_path) -h \(host) \(database)"
+        print(cmd)
+        let pgdump = Process("/bin/bash", ["-c", cmd])
+        
+        print("doing psql restore")
+        pgdump.launch()
+        pgdump.waitUntilExit()
+        print("end of psql restore")
+        return (true, nil)
+    }
     
     
 }

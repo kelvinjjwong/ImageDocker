@@ -118,6 +118,8 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var btnCloneLocalToRemote: NSButton!
     @IBOutlet weak var lblDataCloneMessage: NSTextField!
     
+    
+    @IBOutlet weak var scrDatabaseArchives: NSScrollView!
     @IBOutlet weak var tblDatabaseArchives: NSTableView!
     @IBOutlet weak var txtRestoreToDatabaseName: NSTextField!
     @IBOutlet weak var lblRestoreToDatabaseName: NSTextField!
@@ -342,6 +344,26 @@ final class PreferencesController: NSViewController {
         self.btnLocalDBFileBackup.isEnabled = state
         self.btnLocalDBServerBackup.isEnabled = state
         self.btnCloneLocalToRemote.isEnabled = state
+        self.tblDatabaseArchives.isEnabled = state
+        self.btnDeleteDBArchives.isEnabled = state
+        self.btnReloadDBArchives.isEnabled = state
+        self.btnCreateDatabase.isEnabled = state
+        self.btnCheckDatabaseName.isEnabled = state
+        self.txtRestoreToDatabaseName.isEnabled = state
+        if state == true {
+            self.toggleGroup_CloneFromDBLocation.enable()
+            self.toggleGroup_CloneToDBLocation.enable()
+            if self.toggleGroup_CloneFromDBLocation.selected == "localDBFile" {
+                self.toggleGroup_CloneToDBLocation.disable(key: "localDBFile", onComplete: { nextKey in
+                    if nextKey == "localDBServer" || nextKey == "remoteDBServer" {
+                        self.loadBackupArchives(postgres: true)
+                    }
+                })
+            }
+        }else{
+            self.toggleGroup_CloneFromDBLocation.disable()
+            self.toggleGroup_CloneToDBLocation.disable()
+        }
     }
     
     func calculateBackupUsedSpace(path:String) {
@@ -382,39 +404,238 @@ final class PreferencesController: NSViewController {
     @IBAction func onCloneLocalToRemoteClicked(_ sender: NSButton) {
         // TODO: SAVE ALL FIELDS BEFORE START CLONE
         let dropBeforeCreate = self.chkDeleteAllBeforeClone.state == .on
-        self.toggleDatabaseClonerButtons(state: false)
+        
+        self.scrDatabaseArchives.layer?.borderColor = NSColor.clear.cgColor
+        self.scrDatabaseArchives.layer?.borderWidth = 0.0
+        
+        self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.clear.cgColor
+        self.txtRestoreToDatabaseName.layer?.borderWidth = 0.0
+        
+        self.lblDataCloneMessage.stringValue = ""
         
          // TODO: avoid select both from-sqlite and to-sqlite
-        if  self.toggleGroup_CloneFromDBLocation.selected == "localDBFile" &&
-            self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
+        if self.toggleGroup_CloneFromDBLocation.selected == "backupArchive" {
+            guard self.tblDatabaseArchives.numberOfSelectedRows == 1 else {
+                self.scrDatabaseArchives.layer?.borderColor = NSColor.red.cgColor
+                self.scrDatabaseArchives.layer?.borderWidth = 1.0
+                self.lblDataCloneMessage.stringValue = "One row should be selected in archive table"
+                return
+            }
+            guard let cmd = PreferencesController.getPostgresCommandPath() else {
+                self.lblDataCloneMessage.stringValue = "Unable to locate psql command in macOS, restore aborted."
+                return
+            }
+            let database = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            let checkDatabase = self.lblCheckDatabaseName.stringValue
+            guard database != "" else{
+                self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
+                self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
+                self.lblCheckDatabaseName.stringValue = "Error: empty."
+                return
+            }
+            guard (checkDatabase == "Not exists." || checkDatabase == "Created.") else{
+                self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
+                self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
+                self.lblDataCloneMessage.stringValue = "Please check if target database exists first"
+                return
+            }
+            let row = self.tblDatabaseArchives.selectedRow
+            let timestamp = self.backupArchives[row].0
+            let folder = self.backupArchives[row].3
+            print("restore from \(folder)")
+            
+            var host = ""
+            var port = 5432
+            var user = ""
+            var message = ""
+            if self.toggleGroup_CloneToDBLocation.selected == "localDBServer" {
+                host = PreferencesController.localDBServer()
+                port = PreferencesController.localDBPort()
+                user = PreferencesController.localDBUsername()
+                message = "Restoring archive [\(timestamp)] to local postgres database [\(database)] ..."
+            }else if self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
+                host = PreferencesController.remoteDBServer()
+                port = PreferencesController.remoteDBPort()
+                user = PreferencesController.remoteDBUsername()
+                message = "Restoring archive [\(timestamp)] to remote postgres database [\(database)] ..."
+            }else{
+                self.lblDataCloneMessage.stringValue = "TODO: from backup archive to sqlite"
+                return
+            }
+            self.toggleDatabaseClonerButtons(state: false)
+            self.lblDataCloneMessage.stringValue = message
+            DispatchQueue.global().async {
+                let (_, _) = PostgresConnection.default.restoreDatabase(commandPath: cmd, database: database, host: host, port: port, user: user, backupFolder: folder)
+                DispatchQueue.main.async {
+                    self.toggleDatabaseClonerButtons(state: true)
+                    self.lblDataCloneMessage.stringValue = "Restore archive [\(timestamp)] to [\(database)] completed."
+                }
+            }
+            
+        }
+        else if  self.toggleGroup_CloneFromDBLocation.selected == "localDBFile" {
+            var host = ""
+            var port = 5432
+            var user = ""
+            var database = ""
+            var message = ""
+            var schema = ""
+            var psw = ""
+            var nopsw = false
+            if       self.toggleGroup_CloneToDBLocation.selected == "localDBServer" {
+                host = PreferencesController.localDBServer()
+                port = PreferencesController.localDBPort()
+                user = PreferencesController.localDBUsername()
+                database = PreferencesController.localDBDatabase()
+                psw = PreferencesController.localDBPassword()
+                nopsw = PreferencesController.localDBNoPassword()
+                schema = PreferencesController.localDBSchema()
+                message = "Clone from SQLite to local postgres database ..."
+            }else if self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
+                host = PreferencesController.remoteDBServer()
+                port = PreferencesController.remoteDBPort()
+                user = PreferencesController.remoteDBUsername()
+                database = PreferencesController.remoteDBDatabase()
+                psw = PreferencesController.remoteDBPassword()
+                nopsw = PreferencesController.remoteDBNoPassword()
+                schema = PreferencesController.remoteDBSchema()
+                message = "Clone from SQLite to remote postgres database ..."
+            }else{
+                // more options?
+                return
+            }
+            if self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines) != "" && self.lblCheckDatabaseName.stringValue == "Created" {
+                database = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+            self.toggleDatabaseClonerButtons(state: false)
+            self.lblDataCloneMessage.stringValue = message
             DispatchQueue.global().async {
                 ImageDBCloner.default.fromLocalSQLiteToPostgreSQL(dropBeforeCreate: dropBeforeCreate,
                     postgresDB: { () -> PostgresDB in
-                        return PostgresConnection.database(.remoteDBServer)
+                        return PostgresConnection.database(host: host, port: port, user: user, database: database, schema: schema, password: psw, nopsw: nopsw)
                 }, message: { msg in
                     DispatchQueue.main.async {
                         self.lblDataCloneMessage.stringValue = msg
                     }
                 }, onComplete: {
-                    DispatchQueue.main.async { self.toggleDatabaseClonerButtons(state: true) }
+                    DispatchQueue.main.async {
+                        self.toggleDatabaseClonerButtons(state: true)
+                        self.lblDataCloneMessage.stringValue = "Database clone completed."
+                    }
                 })
             }
-        }else if self.toggleGroup_CloneFromDBLocation.selected == "localDBFile" &&
-                 self.toggleGroup_CloneToDBLocation.selected == "localDBServer" {
+        }else if self.toggleGroup_CloneFromDBLocation.selected == "localDBServer" {
+            
+            guard let cmd = PreferencesController.getPostgresCommandPath() else {
+                self.lblDataCloneMessage.stringValue = "Unable to locate psql command in macOS, restore aborted."
+                return
+            }
+            let database = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            let checkDatabase = self.lblCheckDatabaseName.stringValue
+            guard database != "" else{
+                self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
+                self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
+                self.lblCheckDatabaseName.stringValue = "Error: empty."
+                return
+            }
+            guard (checkDatabase == "Not exists." || checkDatabase == "Created.") else{
+                self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
+                self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
+                self.lblDataCloneMessage.stringValue = "Please check if target database exists first"
+                return
+            }
+            var host = ""
+            var port = 5432
+            var user = ""
+            var message = ""
+            if       self.toggleGroup_CloneToDBLocation.selected == "localDBServer" {
+                host = PreferencesController.localDBServer()
+                port = PreferencesController.localDBPort()
+                user = PreferencesController.localDBUsername()
+                message = "Clone from local postgres to local postgres database ..."
+            }else if self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
+                host = PreferencesController.remoteDBServer()
+                port = PreferencesController.remoteDBPort()
+                user = PreferencesController.remoteDBUsername()
+                message = "Clone from local postgres to remote postgres database ..."
+            }else{
+                self.lblDataCloneMessage.stringValue = "TODO from local postgres to sqlite"
+                return
+            }
+            self.toggleDatabaseClonerButtons(state: false)
+            self.lblDataCloneMessage.stringValue = message
             DispatchQueue.global().async {
-                ImageDBCloner.default.fromLocalSQLiteToPostgreSQL(dropBeforeCreate: dropBeforeCreate,
-                    postgresDB: { () -> PostgresDB in
-                        return PostgresConnection.database(.localDBServer)
-                }, message: { msg in
-                    DispatchQueue.main.async {
-                        self.lblDataCloneMessage.stringValue = msg
-                    }
-                }, onComplete: {
-                    DispatchQueue.main.async { self.toggleDatabaseClonerButtons(state: true) }
-                })
+                let (_, _) = PostgresConnection.default.cloneDatabase(commandPath: cmd,
+                                                                      srcDatabase: PreferencesController.localDBDatabase(),
+                                                                      srcHost: PreferencesController.localDBServer(),
+                                                                      srcPort: PreferencesController.localDBPort(),
+                                                                      srcUser: PreferencesController.localDBUsername(),
+                                                                      destDatabase: database,
+                                                                      destHost: host,
+                                                                      destPort: port,
+                                                                      destUser: user)
+                DispatchQueue.main.async {
+                    self.toggleDatabaseClonerButtons(state: true)
+                    self.lblDataCloneMessage.stringValue = "Clone from local postgres to [\(database)] completed."
+                }
+            }
+        }else if self.toggleGroup_CloneFromDBLocation.selected == "remoteDBServer" {
+            
+            guard let cmd = PreferencesController.getPostgresCommandPath() else {
+                self.lblDataCloneMessage.stringValue = "Unable to locate psql command in macOS, restore aborted."
+                return
+            }
+            let database = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            let checkDatabase = self.lblCheckDatabaseName.stringValue
+            guard database != "" else{
+                self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
+                self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
+                self.lblCheckDatabaseName.stringValue = "Error: empty."
+                return
+            }
+            guard (checkDatabase == "Not exists." || checkDatabase == "Created.") else{
+                self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
+                self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
+                self.lblDataCloneMessage.stringValue = "Please check if target database exists first"
+                return
+            }
+            var host = ""
+            var port = 5432
+            var user = ""
+            var message = ""
+            if       self.toggleGroup_CloneToDBLocation.selected == "localDBServer" {
+                host = PreferencesController.localDBServer()
+                port = PreferencesController.localDBPort()
+                user = PreferencesController.localDBUsername()
+                message = "Clone from remote postgres to local postgres database ..."
+            }else if self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
+                host = PreferencesController.remoteDBServer()
+                port = PreferencesController.remoteDBPort()
+                user = PreferencesController.remoteDBUsername()
+                message = "Clone from remote postgres to remote postgres database ..."
+            }else{
+                self.lblDataCloneMessage.stringValue = "TODO from remote postgres to sqlite"
+                return
+            }
+            self.toggleDatabaseClonerButtons(state: false)
+            self.lblDataCloneMessage.stringValue = message
+            DispatchQueue.global().async {
+                let (_, _) = PostgresConnection.default.cloneDatabase(commandPath: cmd,
+                                                                      srcDatabase: PreferencesController.remoteDBDatabase(),
+                                                                      srcHost: PreferencesController.remoteDBServer(),
+                                                                      srcPort: PreferencesController.remoteDBPort(),
+                                                                      srcUser: PreferencesController.remoteDBUsername(),
+                                                                      destDatabase: database,
+                                                                      destHost: host,
+                                                                      destPort: port,
+                                                                      destUser: user)
+                DispatchQueue.main.async {
+                    self.toggleDatabaseClonerButtons(state: true)
+                    self.lblDataCloneMessage.stringValue = "Clone from remote postgres to [\(database)] completed."
+                }
             }
         }else{
-            print("TODO clone from to database")
+            // more options?
         }
         
     }
@@ -472,7 +693,7 @@ final class PreferencesController: NSViewController {
             port = PreferencesController.remoteDBPort()
             user = PreferencesController.remoteDBUsername()
         }else{
-            print("Selected to-database is not postgres. createdb aborted.")
+            print("Selected to-database is not postgres. check db exist aborted.")
             return
         }
         let targetDatabase = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -536,21 +757,23 @@ final class PreferencesController: NSViewController {
         // TODO: SAVE ALL FIELDS BEFORE START CREATEDB
         DispatchQueue.global().async {
             
-            let (status, result, pgError, err) = PostgresConnection.default.createDatabase(commandPath: cmd, database: databaseName, host: host, port: port, user: user)
+            let (status, _, pgError, err) = PostgresConnection.default.createDatabase(commandPath: cmd, database: databaseName, host: host, port: port, user: user)
             
             if status == true {
                 print("created database \(databaseName) on \(user)@\(host):\(port)")
                 DispatchQueue.main.async {
                     self.btnCreateDatabase.isEnabled = true
-                    self.lblDataCloneMessage.stringValue = "Created database in \(user)@\(host):\(port)"
+                    self.lblCheckDatabaseName.stringValue = "Created."
                 }
             }else{
                 print("Unable to create database \(databaseName) on \(user)@\(host):\(port)")
                 print(pgError)
-                print(err)
+                if let error = err {
+                    print(error)
+                }
                 DispatchQueue.main.async {
-                    self.btnCreateDatabase.isEnabled = false
-                    self.lblDataCloneMessage.stringValue = "Failed to createdb in \(user)@\(host):\(port), \(pgError)"
+                    self.btnCreateDatabase.isEnabled = true
+                    self.lblCheckDatabaseName.stringValue = "Failed createdb."
                 }
             }
         }
@@ -563,21 +786,29 @@ final class PreferencesController: NSViewController {
     @IBAction func onCheckFromLocalDBFile(_ sender: NSButton) {
         self.toggleGroup_CloneFromDBLocation.selected = "localDBFile"
         self.tblDatabaseArchives.allowsMultipleSelection = true
+        self.toggleGroup_CloneToDBLocation.disable(key: "localDBFile", onComplete: { nextKey in
+            if nextKey == "localDBServer" || nextKey == "remoteDBServer" {
+                self.loadBackupArchives(postgres: true)
+            }
+        })
     }
     
     @IBAction func onCheckFromLocalDBServer(_ sender: NSButton) {
         self.toggleGroup_CloneFromDBLocation.selected = "localDBServer"
         self.tblDatabaseArchives.allowsMultipleSelection = true
+        self.toggleGroup_CloneToDBLocation.enable()
     }
     
     @IBAction func onCheckFromRemoteDBServer(_ sender: NSButton) {
         self.toggleGroup_CloneFromDBLocation.selected = "remoteDBServer"
         self.tblDatabaseArchives.allowsMultipleSelection = true
+        self.toggleGroup_CloneToDBLocation.enable()
     }
     
     @IBAction func onCheckFromBackupArchive(_ sender: NSButton) {
         self.toggleGroup_CloneFromDBLocation.selected = "backupArchive"
         self.tblDatabaseArchives.allowsMultipleSelection = false
+        self.toggleGroup_CloneToDBLocation.enable()
         self.loadBackupArchives()
     }
     
@@ -607,9 +838,10 @@ final class PreferencesController: NSViewController {
     private func toggleCreatePostgresDatabase(state: Bool) {
         self.lblRestoreToDatabaseName.isHidden = !state
         self.txtRestoreToDatabaseName.isHidden = !state
-        self.btnCreateDatabase.isHidden = !state
-        self.btnCheckDatabaseName.isHidden = !state
         self.lblCheckDatabaseName.isHidden = !state
+        self.btnCheckDatabaseName.isHidden = !state
+        self.btnCreateDatabase.isHidden = true
+        self.lblCheckDatabaseName.stringValue = ""
     }
     
     // MARK: TOGGLE GROUP - Postgres Command Path
@@ -1247,10 +1479,6 @@ final class PreferencesController: NSViewController {
         }
     }
     
-    func reloadArchives() {
-        self.lblDataCloneMessage.stringValue = "TODO - load backup archives"
-    }
-    
     class func getPostgresCommandPath() -> String? {
         let keys:[String] = [
             "/Applications/Postgres.app/Contents/Versions/latest/bin",
@@ -1282,30 +1510,30 @@ final class PreferencesController: NSViewController {
         self.toggleGroup_InstalledPostgres = ToggleGroup([
             "/Applications/Postgres.app/Contents/Versions/latest/bin" : self.chkPostgresInApp,
             "/usr/local/bin"                                          : self.chkPostgresByBrew
-        ])
+        ], keysOrderred: [
+            "/Applications/Postgres.app/Contents/Versions/latest/bin",
+            "/usr/local/bin"
+            ])
         
         self.toggleGroup_DBLocation = ToggleGroup([
             "local"       : self.chkLocalLocation,
             "localServer" : self.chkLocalDBServer,
             "network"     : self.chkNetworkLocation
-        ])
+        ], keysOrderred: ["local", "localServer", "network"])
         
         self.toggleGroup_CloneFromDBLocation = ToggleGroup([
             "localDBFile"   :self.chkFromLocalDBFile,
             "localDBServer" :self.chkFromLocalDBServer,
             "remoteDBServer":self.chkFromRemoteDBServer,
             "backupArchive" :self.chkFromBackupArchive
-            ], onSelect: { option in
-                if option == "backupArchive" {
-                    self.reloadArchives()
-                }
-        })
+            ], keysOrderred: ["localDBFile", "localDBServer", "remoteDBServer", "backupArchive"])
         
         self.toggleGroup_CloneToDBLocation = ToggleGroup([
             "localDBFile"   :self.chkToLocalDBFile,
             "localDBServer" :self.chkToLocalDBServer,
             "remoteDBServer":self.chkToRemoteDBServer
-            ], onSelect: { option in
+            ], keysOrderred: ["localDBFile", "localDBServer", "remoteDBServer"],
+               onSelect: { option in
                 if option == "localDBServer" {
                     self.txtRestoreToDatabaseName.stringValue = PreferencesController.localDBDatabase()
                 }else if option == "remoteDBServer" {
@@ -1315,7 +1543,13 @@ final class PreferencesController: NSViewController {
         
         self.toggleGroup_DBLocation.selected = PreferencesController.databaseLocation()
         self.toggleGroup_CloneFromDBLocation.selected = "localDBFile"
+        self.toggleGroup_CloneToDBLocation.disable(key: "localDBFile", onComplete: { nextKey in
+            if nextKey == "localDBServer" || nextKey == "remoteDBServer" {
+                self.loadBackupArchives(postgres: true)
+            }
+        })
         self.toggleGroup_CloneToDBLocation.selected = "localDBServer"
+        self.toggleCreatePostgresDatabase(state: true)
         
         self.loadBackupArchives(postgres: true)
         

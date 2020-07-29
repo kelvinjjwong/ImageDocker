@@ -2828,6 +2828,7 @@ brew install ifuse</string>
                         <outlet property="lblSelectedMemory" destination="Cby-mt-lNm" id="fpb-gO-p3b"/>
                         <outlet property="lstAmountForPagination" destination="C0h-yv-KP9" id="nbL-kr-yMt"/>
                         <outlet property="memorySlider" destination="vjx-6i-AGL" id="mvi-kn-bhT"/>
+                        <outlet property="scrDatabaseArchives" destination="fRD-SJ-Ld7" id="BaS-xL-T9h"/>
                         <outlet property="tabs" destination="2L9-ci-i6l" id="i7B-53-DnW"/>
                         <outlet property="tblDatabaseArchives" destination="kXx-S6-VDX" id="cMa-8y-5Be"/>
                         <outlet property="txtAlternativeFaceModelPath" destination="9ka-nL-Bsc" id="wOu-Qq-b0U"/>
