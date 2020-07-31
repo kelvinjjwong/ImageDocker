@@ -12,29 +12,46 @@ class ExportConfigurationViewController: NSViewController {
     
     // MARK: - CONTROLS
     
-    @IBOutlet weak var chkPeople: NSButton!
-    @IBOutlet weak var chkEvents: NSButton!
-    
     @IBOutlet weak var txtName: NSTextField!
     @IBOutlet weak var txtDirectory: NSTextField!
-    
-    @IBOutlet weak var txtPeople: NSTextField!
-    @IBOutlet weak var txtEvents: NSTextField!
     
     @IBOutlet weak var btnClean: NSButton!
     @IBOutlet weak var btnSave: NSButton!
     @IBOutlet weak var btnAssign: NSButton!
     @IBOutlet weak var btnGoto: NSButton!
-    @IBOutlet weak var btnSelectPeople: NSButton!
-    @IBOutlet weak var btnSelectEvent: NSButton!
+    
+    @IBOutlet weak var chkRepository: NSButton!
+    @IBOutlet weak var chkIncludeRepository: NSButton!
+    @IBOutlet weak var chkExcludeRepository: NSButton!
+    @IBOutlet weak var tblRepository: NSTableView!
+    
+    var repositoryTableController : DictionaryTableViewController!
+    
+    @IBOutlet weak var chkEvents: NSButton!
+    @IBOutlet weak var chkIncludeEvent: NSButton!
+    @IBOutlet weak var chkExcludeEvent: NSButton!
+    @IBOutlet weak var tblEvent: NSTableView!
+    
+    var eventTableController : DictionaryTableViewController!
+    
+    @IBOutlet weak var chkPeople: NSButton!
+    @IBOutlet weak var chkIncludePeople: NSButton!
+    @IBOutlet weak var chkExcludePeople: NSButton!
+    @IBOutlet weak var tblPeople: NSTableView!
+    
+    var peopleTableController : DictionaryTableViewController!
+    
+    @IBOutlet weak var chkFamilies: NSButton!
+    @IBOutlet weak var chkIncludeFamily: NSButton!
+    @IBOutlet weak var chkExcludeFamily: NSButton!
+    @IBOutlet weak var tblFamily: NSTableView!
+    
+    var familyTableController : DictionaryTableViewController!
     
     @IBOutlet weak var chkOverwriteDuplicate: NSButton!
     @IBOutlet weak var chkDeviceNameSuffix: NSButton!
     @IBOutlet weak var chkDeviceModelSuffix: NSButton!
     @IBOutlet weak var chkNumberSuffix: NSButton!
-    @IBOutlet weak var chkRepository: NSButton!
-    @IBOutlet weak var txtRepository: NSTextField!
-    @IBOutlet weak var btnSelectRepository: NSButton!
     
     @IBOutlet weak var chkPatchImageDescription: NSButton!
     @IBOutlet weak var chkPatchDateTime: NSButton!
@@ -53,10 +70,6 @@ class ExportConfigurationViewController: NSViewController {
     
     @IBOutlet weak var stackView: NSStackView!
     
-    var peopleOptions : OneColumnTablePopover!
-    var eventsOptions : OneColumnTablePopover!
-    var repositoryOptions : OneColumnTablePopover!
-    
     var repoNames:[String:String] = [:]
     
     var profileStackItems:[String:ExportProfileViewController] = [:]
@@ -66,7 +79,7 @@ class ExportConfigurationViewController: NSViewController {
     fileprivate var editingId = ""
     private var window:NSWindow? = nil
     
-    // MARK: - INIT
+    // MARK: - INIT VIEW
     
     init() {
         super.init(nibName: "ExportConfigurationViewController", bundle: nil)
@@ -80,83 +93,116 @@ class ExportConfigurationViewController: NSViewController {
         self.window = window
     }
     
+    private var toggleGroup_Repository:ToggleGroup!
+    private var toggleGroup_Event:ToggleGroup!
+    private var toggleGroup_People:ToggleGroup!
+    private var toggleGroup_Family:ToggleGroup!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.chkEvents.state = .off
-        self.chkPeople.state = .off
-        self.chkRepository.state = .off
+        
+        self.toggleGroup_Repository = ToggleGroup([
+            "include" : self.chkIncludeRepository,
+            "exclude" : self.chkExcludeRepository
+        ], keysOrderred: ["include", "exclude"])
+        
+        self.toggleGroup_Repository.selected = "include"
+        
+        self.toggleGroup_Event = ToggleGroup([
+            "include" : self.chkIncludeEvent,
+            "exclude" : self.chkExcludeEvent
+        ], keysOrderred: ["include", "exclude"])
+        
+        self.toggleGroup_Event.selected = "include"
+        
+        self.toggleGroup_People = ToggleGroup([
+            "include" : self.chkIncludePeople,
+            "exclude" : self.chkExcludePeople
+        ], keysOrderred: ["include", "exclude"])
+        
+        self.toggleGroup_People.selected = "include"
+        
+        self.toggleGroup_Family = ToggleGroup([
+            "include" : self.chkIncludeFamily,
+            "exclude" : self.chkExcludeFamily
+        ], keysOrderred: ["include", "exclude"])
+        
+        self.toggleGroup_Family.selected = "include"
+        
         
         view.wantsLayer = true
         stackView.setHuggingPriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
         
-//        self.txtEvents.isEditable = false
-//        self.txtPeople.isEditable = false
-//        self.txtRepository.isEditable = false
-//        self.txtDirectory.isEditable = false
+        self.chkRepository.state = .off
+        self.repositoryTableController = DictionaryTableViewController(self.tblRepository)
         
-        self.peopleOptions = OneColumnTablePopover(width: 100, height: 200, onClick: { (name, _, _) in
-            // on click people name
-            print("selected \(name)")
-            var selected = self.txtPeople.stringValue.components(separatedBy: ",")
-            if !selected.contains(name) {
-                if selected[0] == "" {
-                    selected.remove(at: 0)
-                }
-                selected.append(name)
-                selected.sort()
-                self.txtPeople.stringValue = selected.joined(separator: ",")
-            }
-        })
-        
-        self.eventsOptions = OneColumnTablePopover(width: 300, height: 200, onClick: { (name, _, _) in
-            // on click event name
-            print("selected \(name)")
-            var selected = self.txtEvents.stringValue.components(separatedBy: ",")
-            if !selected.contains(name) {
-                if selected[0] == "" {
-                    selected.remove(at: 0)
-                }
-                selected.append(name)
-                selected.sort()
-                self.txtEvents.stringValue = selected.joined(separator: ",")
-            }
-        })
-        
-        self.repositoryOptions = OneColumnTablePopover(width: 150, height: 200, onClick: { (path, name, _) in
-            // on click repo path
-            print("selected \(name)")
-            let selected = self.txtRepository.stringValue
-            if selected != name {
-                self.txtRepository.stringValue = name
-            }
-        })
-        
-        var repoPaths:[(String, String)] = []
+        var repoPaths:[[String:String]] = []
         let repos = RepositoryDao.default.getRepositories()
         for repo in repos {
-            repoPaths.append((repo.path, repo.name))
-            repoNames[repo.name] = repo.path
+            var item:[String:String] = [:]
+            item["check"] = "false"
+            item["name"] = repo.name
+            item["path"] = repo.path
+            item["id"] = repo.path
+            repoPaths.append(item)
         }
-        self.repositoryOptions.load(repoPaths)
+        self.repositoryTableController.load(repoPaths)
+        self.tblRepository.isEnabled = false
         
-        var eventNames:[String] = []
+        self.chkEvents.state = .off
+        self.eventTableController = DictionaryTableViewController(self.tblEvent)
+        
+        var eventNames:[[String:String]] = []
         let events = EventDao.default.getEvents()
         for event in events {
-            eventNames.append(event.name)
+            var item:[String:String] = [:]
+            item["check"] = "false"
+            item["name"] = event.name
+            item["id"] = event.name
+            eventNames.append(item)
         }
-        self.eventsOptions.load(eventNames)
+        self.eventTableController.load(eventNames)
+        self.tblEvent.isEnabled = false
         
-        var peopleNames:[(String, String)] = []
+        self.chkPeople.state = .off
+        self.peopleTableController = DictionaryTableViewController(self.tblPeople)
+        
+        var peopleNames:[[String:String]] = []
         let people = FaceDao.default.getPeople()
         for person in people {
-            peopleNames.append((person.name, person.shortName ?? ""))
+            var item:[String:String] = [:]
+            item["check"] = "false"
+            item["name"] = person.name
+            item["shortName"] = person.shortName ?? person.name
+            item["id"] = person.id
+            peopleNames.append(item)
         }
-        self.peopleOptions.load(peopleNames)
+        self.peopleTableController.load(peopleNames)
+        self.tblPeople.isEnabled = false
+        
+        self.chkFamilies.state = .off
+        self.familyTableController = DictionaryTableViewController(self.tblFamily)
+        
+        var familyNames:[[String:String]] = []
+        let families = FaceDao.default.getFamilies()
+        for family in families {
+            var item:[String:String] = [:]
+            item["check"] = "false"
+            item["name"] = family.name
+            item["id"] = family.id
+            familyNames.append(item)
+        }
+        self.familyTableController.load(familyNames)
+        self.tblFamily.isEnabled = false
         
         self.cleanFields()
         self.loadStackItems()
         
+        self.toggleRepository(false)
+        self.toggleEvent(false)
+        self.togglePeople(false)
+        self.toggleFamily(false)
         
         
         // TODO remove if not debug
@@ -172,9 +218,12 @@ class ExportConfigurationViewController: NSViewController {
         }
     }
     
+    private var isNewRecord = true
+    
     // MARK: - CLEAN FIELDS
     
     private func cleanFields() {
+        self.isNewRecord = true
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = NSTimeZone.local
         dateFormatter.dateFormat = "yyyyMMddHHmmss"
@@ -182,33 +231,125 @@ class ExportConfigurationViewController: NSViewController {
         self.editingId = dateFormatter.string(from: Date())
         self.txtName.stringValue = ""
         self.txtDirectory.stringValue = ""
-        self.txtRepository.stringValue = ""
-        self.txtPeople.stringValue = ""
-        self.txtEvents.stringValue = ""
         self.setFileNamingStrategy("DATETIME_BRIEF")
         self.setSubFolderStrategy("DATE_EVENT")
         self.setFilenameDuplicatedStrategy("OVERWRITE")
         self.chkPatchDateTime.state = .off
         self.chkPatchGeolocation.state = .off
         self.chkPatchImageDescription.state = .off
+        
+        self.chkRepository.state = .off
+        self.repositoryTableController.uncheckAll()
+        self.repositoryTableController.disableCheckboxes()
+        
+        self.chkEvents.state = .off
+        self.eventTableController.uncheckAll()
+        self.eventTableController.disableCheckboxes()
+        
+        self.chkPeople.state = .off
+        self.peopleTableController.uncheckAll()
+        self.peopleTableController.disableCheckboxes()
+        
+        self.chkFamilies.state = .off
+        self.familyTableController.uncheckAll()
+        self.familyTableController.disableCheckboxes()
     }
     
     private func fillFields(profile:ExportProfile) {
+        self.isNewRecord = false
         self.editingId = profile.id
         self.txtName.stringValue = profile.name
         self.txtDirectory.stringValue = profile.directory
-        self.txtRepository.stringValue = profile.repositoryPath
-        self.txtPeople.stringValue = profile.people
-        self.txtEvents.stringValue = profile.events
-        self.chkRepository.state = profile.specifyRepository ? .on : .off
-        self.chkPeople.state = profile.specifyPeople ? .on : .off
-        self.chkEvents.state = profile.specifyEvent ? .on : .off
         self.chkPatchImageDescription.state = profile.patchImageDescription ? .on : .off
         self.chkPatchGeolocation.state = profile.patchGeolocation ? .on : .off
         self.chkPatchDateTime.state = profile.patchDateTime ? .on : .off
         self.setFileNamingStrategy(profile.fileNaming)
         self.setSubFolderStrategy(profile.subFolder)
         self.setFilenameDuplicatedStrategy(profile.duplicateStrategy)
+        
+        self.chkRepository.state = profile.specifyRepository ? .on : .off
+        let repos = profile.repositoryPath
+        if repos.hasPrefix("include:") {
+            self.toggleGroup_Repository.enable()
+            self.toggleGroup_Repository.selected = "include"
+            let value = repos.replacingFirstOccurrence(of: "include:", with: "")
+            print("repo: \(value)")
+            self.repositoryTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
+            self.repositoryTableController.enableCheckboxes()
+        }else if repos.hasPrefix("exclude:") {
+            self.toggleGroup_Repository.enable()
+            self.toggleGroup_Repository.selected = "exclude"
+            let value = repos.replacingFirstOccurrence(of: "exclude:", with: "")
+            print("repo: \(value)")
+            self.repositoryTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
+            self.repositoryTableController.enableCheckboxes()
+        }
+        if !profile.specifyRepository {
+            self.repositoryTableController.disableCheckboxes()
+        }
+        
+        self.chkEvents.state = profile.specifyEvent ? .on : .off
+        let events = profile.events
+        if events.hasPrefix("include:") {
+            self.toggleGroup_Event.enable()
+            self.toggleGroup_Event.selected = "include"
+            let value = events.replacingFirstOccurrence(of: "include:", with: "")
+            print("event: \(value)")
+            self.eventTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
+            self.eventTableController.enableCheckboxes()
+        }else if events.hasPrefix("exclude:") {
+            self.toggleGroup_Event.enable()
+            self.toggleGroup_Event.selected = "exclude"
+            let value = events.replacingFirstOccurrence(of: "exclude:", with: "")
+            print("event: \(value)")
+            self.eventTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
+            self.eventTableController.enableCheckboxes()
+        }
+        if !profile.specifyEvent {
+            self.eventTableController.disableCheckboxes()
+        }
+        
+        self.chkPeople.state = profile.specifyPeople ? .on : .off
+        let people = profile.people
+        if people.hasPrefix("include:") {
+            self.toggleGroup_People.enable()
+            self.toggleGroup_People.selected = "include"
+            let value = people.replacingFirstOccurrence(of: "include:", with: "")
+            print("people: \(value)")
+            self.peopleTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
+            self.peopleTableController.enableCheckboxes()
+        }else if people.hasPrefix("exclude:") {
+            self.toggleGroup_People.enable()
+            self.toggleGroup_People.selected = "exclude"
+            let value = people.replacingFirstOccurrence(of: "exclude:", with: "")
+            print("people: \(value)")
+            self.peopleTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
+            self.peopleTableController.enableCheckboxes()
+        }
+        if !profile.specifyPeople {
+            self.peopleTableController.disableCheckboxes()
+        }
+        
+        self.chkFamilies.state = profile.specifyFamily ? .on : .off
+        let family = profile.family
+        if family.hasPrefix("include:") {
+            self.toggleGroup_Family.enable()
+            self.toggleGroup_Family.selected = "include"
+            let value = family.replacingFirstOccurrence(of: "include:", with: "")
+            print("family: \(value)")
+            self.familyTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
+            self.familyTableController.enableCheckboxes()
+        }else if family.hasPrefix("exclude:") {
+            self.toggleGroup_Family.enable()
+            self.toggleGroup_Family.selected = "exclude"
+            let value = family.replacingFirstOccurrence(of: "exclude:", with: "")
+            print("family: \(value)")
+            self.familyTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
+            self.familyTableController.enableCheckboxes()
+        }
+        if !profile.specifyFamily {
+            self.familyTableController.disableCheckboxes()
+        }
         
     }
     
@@ -222,31 +363,124 @@ class ExportConfigurationViewController: NSViewController {
     @IBAction func onSaveClicked(_ sender: NSButton) {
         let name = self.txtName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         let path = self.txtDirectory.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        let repos = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        let people = self.txtPeople.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        let events = self.txtEvents.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         let fileNaming = self.getFileNamingStrategy()
         let fileDuplicated = self.getFilenameDuplicatedStrategy()
         let subfolder = self.getSubFolderStrategy()
         
-        let profile = ExportDao.default.getOrCreateExportProfile(id: self.editingId,
-                                                    name: name,
-                                                    directory: path,
-                                                    repositoryPath: repos,
-                                                    specifyPeople: self.chkPeople.state == .on,
-                                                    specifyEvent: self.chkEvents.state == .on,
-                                                    specifyRepository: self.chkRepository.state == .on,
-                                                    people: people,
-                                                    events: events,
-                                                    duplicateStrategy: fileDuplicated,
-                                                    fileNaming: fileNaming,
-                                                    subFolder: subfolder,
-                                                    patchImageDescription: self.chkPatchImageDescription.state == .on,
-                                                    patchDateTime: self.chkPatchDateTime.state == .on,
-                                                    patchGeolocation: self.chkPatchGeolocation.state == .on
-                                                    )
+        // TODO convert checkboxes to string
+        var people = ""
+        var events = ""
+        var repos = ""
+        var family = ""
         
+        if self.chkRepository.state == .on {
+            let checked = self.repositoryTableController.getCheckedItemAsQuotedString(column: "name", separator: ",")
+            if checked != "" {
+                if self.chkIncludeRepository.state == .on {
+                    repos = "include:\(checked)"
+                }else if self.chkExcludeRepository.state == .on {
+                    repos = "exclude:\(checked)"
+                }
+            }
+        }
+        
+        if self.chkEvents.state == .on {
+            let checked = self.eventTableController.getCheckedItemAsQuotedString(column: "name", separator: ",")
+            if checked != "" {
+                if self.chkIncludeEvent.state == .on {
+                    events = "include:\(checked)"
+                }else if self.chkExcludeEvent.state == .on {
+                    events = "exclude:\(checked)"
+                }
+            }
+        }
+        
+        if self.chkPeople.state == .on {
+            let checked = self.peopleTableController.getCheckedItemAsQuotedString(column: "name", separator: ",")
+            if checked != "" {
+                if self.chkIncludePeople.state == .on {
+                    people = "include:\(checked)"
+                }else if self.chkExcludePeople.state == .on {
+                    people = "exclude:\(checked)"
+                }
+            }
+        }
+        
+        if self.chkFamilies.state == .on {
+            let checked = self.familyTableController.getCheckedItemAsQuotedString(column: "name", separator: ",")
+            if checked != "" {
+                if self.chkIncludeFamily.state == .on {
+                    family = "include:\(checked)"
+                }else if self.chkExcludeFamily.state == .on {
+                    family = "exclude:\(checked)"
+                }
+            }
+        }
+        
+        var profile = ExportDao.default.getOrCreateExportProfile(id: self.editingId,
+                                                                name: name,
+                                                                directory: path,
+                                                                repositoryPath: repos,
+                                                                specifyPeople: self.chkPeople.state == .on,
+                                                                specifyEvent: self.chkEvents.state == .on,
+                                                                specifyRepository: self.chkRepository.state == .on,
+                                                                people: people,
+                                                                events: events,
+                                                                duplicateStrategy: fileDuplicated,
+                                                                fileNaming: fileNaming,
+                                                                subFolder: subfolder,
+                                                                patchImageDescription: self.chkPatchImageDescription.state == .on,
+                                                                patchDateTime: self.chkPatchDateTime.state == .on,
+                                                                patchGeolocation: self.chkPatchGeolocation.state == .on,
+                                                                specifyFamily: self.chkFamilies.state == .on,
+                                                                family: family
+                                                                )
+        if !self.isNewRecord {
+            let status = ExportDao.default.updateExportProfile(id: self.editingId,
+                                                               name: name,
+                                                               directory: path,
+                                                               duplicateStrategy: fileDuplicated,
+                                                               specifyPeople: self.chkPeople.state == .on,
+                                                               specifyEvent: self.chkEvents.state == .on,
+                                                               specifyRepository: self.chkRepository.state == .on,
+                                                               specifyFamily: self.chkFamilies.state == .on,
+                                                               people: people,
+                                                               events: events,
+                                                               repositoryPath: repos,
+                                                               family: family,
+                                                               patchImageDescription: self.chkPatchImageDescription.state == .on,
+                                                               patchDateTime: self.chkPatchDateTime.state == .on,
+                                                               patchGeolocation: self.chkPatchGeolocation.state == .on,
+                                                               fileNaming: fileNaming,
+                                                               subFolder: subfolder)
+            
+            if status != .OK {
+                print(status)
+                print("Unable to update export profile id=\(self.editingId)")
+                return
+            }else{
+                profile.name = name
+                profile.directory = path
+                profile.duplicateStrategy = fileDuplicated
+                profile.specifyPeople = self.chkPeople.state == .on
+                profile.specifyEvent = self.chkEvents.state == .on
+                profile.specifyRepository = self.chkRepository.state == .on
+                profile.specifyFamily = self.chkFamilies.state == .on
+                profile.people = people
+                profile.events = events
+                profile.repositoryPath = repos
+                profile.family = family
+                profile.patchImageDescription = self.chkPatchImageDescription.state == .on
+                profile.patchDateTime = self.chkPatchDateTime.state == .on
+                profile.patchGeolocation = self.chkPatchGeolocation.state == .on
+                profile.fileNaming = fileNaming
+                profile.subFolder = subfolder
+            }
+        }
+        
+        print("profile id \(profile.id)")
         if let vc = self.profileStackItems[profile.id] {
+            print("going to update view \(profile.id)")
             vc.updateView(profile: profile)
         }else{
             self.addProfileItem(profile: profile)
@@ -263,6 +497,7 @@ class ExportConfigurationViewController: NSViewController {
         
         viewController.initView(profile: profile,
                                 onEdit: {
+                                    self.cleanFields()
                                     self.fillFields(profile: profile)
         }, onDelete: {
             if Alert.dialogOKCancel(question: "DELETE PROFILE", text: "Do you confirm to delete profile [\(profile.name)] ?") {
@@ -316,30 +551,96 @@ class ExportConfigurationViewController: NSViewController {
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     
-    // MARK: - PEOPLE, EVENTS
+    // MARK: - TOGGLES
     
-    @IBAction func onSelectPeopleClicked(_ sender: NSButton) {
-        self.peopleOptions.show(sender)
+    func toggleRepository(_ state:Bool) {
+        if state == true {
+            self.toggleGroup_Repository.enable()
+            self.repositoryTableController.enableCheckboxes()
+        }else{
+            self.toggleGroup_Repository.disable()
+            self.repositoryTableController.disableCheckboxes()
+        }
     }
     
-    @IBAction func onSelectEventClicked(_ sender: NSButton) {
-        self.eventsOptions.show(sender)
+    @IBAction func onCheckRepository(_ sender: NSButton) {
+        self.toggleRepository(sender.state == .on)
     }
     
-    @IBAction func onCheckPeopleClicked(_ sender: NSButton) {
+    func toggleEvent(_ state:Bool) {
+        if state == true {
+            self.toggleGroup_Event.enable()
+            self.eventTableController.enableCheckboxes()
+        }else{
+            self.toggleGroup_Event.disable()
+            self.eventTableController.disableCheckboxes()
+        }
     }
     
     @IBAction func onCheckEventsClicked(_ sender: NSButton) {
+        self.toggleEvent(sender.state == .on)
     }
     
-    // MARK: - FROM REPOSITORY
-    
-    @IBAction func onCheckRepository(_ sender: NSButton) {
+    func togglePeople(_ state:Bool) {
+        if state == true {
+            self.toggleGroup_People.enable()
+            self.peopleTableController.enableCheckboxes()
+        }else{
+            self.toggleGroup_People.disable()
+            self.peopleTableController.disableCheckboxes()
+        }
     }
     
-    @IBAction func onSelectRepository(_ sender: NSButton) {
-        self.repositoryOptions.show(sender)
+    @IBAction func onCheckPeopleClicked(_ sender: NSButton) {
+        self.togglePeople(sender.state == .on)
     }
+    
+    func toggleFamily(_ state:Bool) {
+        if state == true {
+            self.toggleGroup_Family.enable()
+            self.familyTableController.enableCheckboxes()
+        }else{
+            self.toggleGroup_Family.disable()
+            self.familyTableController.disableCheckboxes()
+        }
+    }
+    
+    @IBAction func onCheckFamilyClicked(_ sender: NSButton) {
+        self.toggleFamily(sender.state == .on)
+    }
+    
+    @IBAction func onIncludeRepositoryClicked(_ sender: NSButton) {
+        self.toggleGroup_Repository.selected = "include"
+    }
+    
+    @IBAction func onExcludeRepositoryClicked(_ sender: NSButton) {
+        self.toggleGroup_Repository.selected = "exclude"
+    }
+    
+    @IBAction func onIncludeEventClicked(_ sender: NSButton) {
+        self.toggleGroup_Event.selected = "include"
+    }
+    
+    @IBAction func onExcludeEventClicked(_ sender: NSButton) {
+        self.toggleGroup_Event.selected = "exclude"
+    }
+    
+    @IBAction func onIncludePeopleClicked(_ sender: NSButton) {
+        self.toggleGroup_People.selected = "include"
+    }
+    
+    @IBAction func onExcludePeopleClicked(_ sender: NSButton) {
+        self.toggleGroup_People.selected = "exclude"
+    }
+    
+    @IBAction func onIncludeFamilyClicked(_ sender: NSButton) {
+        self.toggleGroup_Family.selected = "include"
+    }
+    
+    @IBAction func onExcludeFamilyClicked(_ sender: NSButton) {
+        self.toggleGroup_Family.selected = "exclude"
+    }
+    
     
     // MARK: - SUB FOLDER STRATEGY
     

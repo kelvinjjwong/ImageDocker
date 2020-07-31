@@ -24,7 +24,9 @@ protocol ExportDaoInterface {
                                   subFolder: String,
                                   patchImageDescription:Bool,
                                   patchDateTime:Bool,
-                                  patchGeolocation:Bool
+                                  patchGeolocation:Bool,
+                                  specifyFamily:Bool,
+                                  family:String
                                   ) -> ExportProfile
     
     func updateExportProfile(id:String,
@@ -34,9 +36,16 @@ protocol ExportDaoInterface {
                              specifyPeople: Bool,
                              specifyEvent: Bool,
                              specifyRepository: Bool,
+                             specifyFamily: Bool,
                              people: String,
                              events: String,
-                             repositoryPath: String) -> ExecuteState
+                             repositoryPath: String,
+                             family: String,
+                             patchImageDescription:Bool,
+                             patchDateTime:Bool,
+                             patchGeolocation:Bool,
+                             fileNaming: String,
+                             subFolder: String) -> ExecuteState
     
     func enableExportProfile(id:String) -> ExecuteState
     

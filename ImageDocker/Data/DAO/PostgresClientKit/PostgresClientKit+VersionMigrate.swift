@@ -479,6 +479,13 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v33") { db in
+            try db.alter(table: "ExportProfile", body: { t in
+                t.add("specifyFamily", .boolean).defaults(to: false)
+                t.add("family", .text).defaults(to: "")
+            })
+        }
+        
         do {
             try migrator.migrate(cleanVersions: dropBeforeCreate)
         }catch{

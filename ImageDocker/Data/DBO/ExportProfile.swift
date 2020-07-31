@@ -13,20 +13,22 @@ public final class ExportProfile : Codable {
     var id: String = ""
     var name: String = ""
     var directory: String = ""
-    var repositoryPath: String = ""
+    var duplicateStrategy: String = ""
     var specifyPeople: Bool = false
     var specifyEvent: Bool = false
     var specifyRepository: Bool = false
     var people: String = ""
     var events: String = ""
-    var duplicateStrategy: String = ""
-    var fileNaming:String = ""
-    var subFolder:String = ""
+    var repositoryPath: String = ""
+    var enabled: Bool = false
+    var lastExportTime: Date?
     var patchImageDescription:Bool = false
     var patchDateTime:Bool = false
     var patchGeolocation:Bool = false
-    var enabled: Bool = false
-    var lastExportTime: Date?
+    var fileNaming:String = ""
+    var subFolder:String = ""
+    var specifyFamily: Bool = false
+    var family: String = ""
     
     public init() {
         
@@ -48,7 +50,9 @@ public final class ExportProfile : Codable {
                 patchDateTime:Bool,
                 patchGeolocation:Bool,
                 enabled:Bool,
-                lastExportTime:Date?) {
+                lastExportTime:Date?,
+                specifyFamily:Bool,
+                family:String) {
         self.id = id
         self.name = name
         self.directory = directory
@@ -66,6 +70,8 @@ public final class ExportProfile : Codable {
         self.patchGeolocation = patchGeolocation
         self.enabled = enabled
         self.lastExportTime = lastExportTime
+        self.specifyFamily = specifyFamily
+        self.family = family
     }
 }
 

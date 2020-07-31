@@ -105,7 +105,7 @@ class ImageExportDaoPostgresCK : ImageExportDaoInterface {
 
 class ExportDaoPostgresCK : ExportDaoInterface {
     
-    func getOrCreateExportProfile(id: String, name: String, directory: String, repositoryPath: String, specifyPeople: Bool, specifyEvent: Bool, specifyRepository: Bool, people: String, events: String, duplicateStrategy: String, fileNaming: String, subFolder: String, patchImageDescription: Bool, patchDateTime: Bool, patchGeolocation: Bool) -> ExportProfile {
+    func getOrCreateExportProfile(id: String, name: String, directory: String, repositoryPath: String, specifyPeople: Bool, specifyEvent: Bool, specifyRepository: Bool, people: String, events: String, duplicateStrategy: String, fileNaming: String, subFolder: String, patchImageDescription: Bool, patchDateTime: Bool, patchGeolocation: Bool, specifyFamily:Bool, family:String) -> ExportProfile {
         let db = PostgresConnection.database()
         if let profile = ExportProfile.fetchOne(db, parameters: ["id" : id]) {
             return profile
@@ -127,14 +127,32 @@ class ExportDaoPostgresCK : ExportDaoInterface {
                 patchDateTime: patchDateTime,
                 patchGeolocation: patchGeolocation,
                 enabled: true,
-                lastExportTime: nil
+                lastExportTime: nil,
+                specifyFamily: specifyFamily,
+                family: family
             )
             profile.save(db)
             return profile
         }
     }
     
-    func updateExportProfile(id: String, name: String, directory: String, duplicateStrategy: String, specifyPeople: Bool, specifyEvent: Bool, specifyRepository: Bool, people: String, events: String, repositoryPath: String) -> ExecuteState {
+    func updateExportProfile(id: String,
+                             name: String,
+                             directory: String,
+                             duplicateStrategy: String,
+                             specifyPeople: Bool,
+                             specifyEvent: Bool,
+                             specifyRepository: Bool,
+                             specifyFamily: Bool,
+                             people: String,
+                             events: String,
+                             repositoryPath: String,
+                             family: String,
+                             patchImageDescription:Bool,
+                             patchDateTime:Bool,
+                             patchGeolocation:Bool,
+                             fileNaming: String,
+                             subFolder: String) -> ExecuteState {
         let db = PostgresConnection.database()
         if var profile = ExportProfile.fetchOne(db, parameters: ["id" : id]) {
             profile.name = name
@@ -143,9 +161,16 @@ class ExportDaoPostgresCK : ExportDaoInterface {
             profile.specifyRepository = specifyRepository
             profile.specifyEvent = specifyEvent
             profile.specifyPeople = specifyPeople
+            profile.specifyFamily = specifyFamily
             profile.people = people
             profile.events = events
             profile.repositoryPath = repositoryPath
+            profile.family = family
+            profile.patchImageDescription = patchImageDescription
+            profile.patchDateTime = patchDateTime
+            profile.patchGeolocation = patchGeolocation
+            profile.fileNaming = fileNaming
+            profile.subFolder = subFolder
             profile.save(db)
             return .OK
         }else{

@@ -79,7 +79,13 @@ class ExportProfileViewController : NSViewController {
             }else{
                 events = profile.events
             }
-            self.lblDescription.stringValue = "People: \(people) ; Event: \(events)"
+            var family = ""
+            if !profile.specifyFamily || profile.family == "" {
+                family = "Any family"
+            }else{
+                family = profile.family
+            }
+            self.lblDescription.stringValue = "People: \(people) ; Event: \(events) ; Family: \(family)"
         }
     }
     

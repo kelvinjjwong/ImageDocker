@@ -27,7 +27,9 @@ class ExportDaoGRDB : ExportDaoInterface {
                                   subFolder: String,
                                   patchImageDescription:Bool,
                                   patchDateTime:Bool,
-                                  patchGeolocation:Bool
+                                  patchGeolocation:Bool,
+                                  specifyFamily:Bool,
+                                  family:String
                                   ) -> ExportProfile{
         var profile:ExportProfile?
         do {
@@ -54,7 +56,9 @@ class ExportDaoGRDB : ExportDaoInterface {
                         patchDateTime: patchDateTime,
                         patchGeolocation: patchGeolocation,
                         enabled: true,
-                        lastExportTime: nil
+                        lastExportTime: nil,
+                        specifyFamily: specifyFamily,
+                        family: family
                     )
                     try profile?.save(db)
                 }
@@ -72,9 +76,16 @@ class ExportDaoGRDB : ExportDaoInterface {
                              specifyPeople: Bool,
                              specifyEvent: Bool,
                              specifyRepository: Bool,
+                             specifyFamily: Bool,
                              people: String,
                              events: String,
-                             repositoryPath: String) -> ExecuteState{
+                             repositoryPath: String,
+                             family: String,
+                             patchImageDescription:Bool,
+                             patchDateTime:Bool,
+                             patchGeolocation:Bool,
+                             fileNaming: String,
+                             subFolder: String) -> ExecuteState{
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
@@ -85,9 +96,16 @@ class ExportDaoGRDB : ExportDaoInterface {
                     profile.specifyRepository = specifyRepository
                     profile.specifyEvent = specifyEvent
                     profile.specifyPeople = specifyPeople
+                    profile.specifyFamily = specifyFamily
                     profile.people = people
                     profile.events = events
                     profile.repositoryPath = repositoryPath
+                    profile.family = family
+                    profile.patchImageDescription = patchImageDescription
+                    profile.patchDateTime = patchDateTime
+                    profile.patchGeolocation = patchGeolocation
+                    profile.fileNaming = fileNaming
+                    profile.subFolder = subFolder
                     
                     try profile.save(db)
                 }
