@@ -15,7 +15,26 @@ extension ViewController {
         self.btnExport.menu?.addItem(NSMenuItem.separator())
         self.btnExport.menu?.addItem(withTitle: "Configuration", action: #selector(exportMenuConfigAction(_:)), keyEquivalent: "")
         self.btnExport.menu?.addItem(NSMenuItem.separator())
-        self.btnExport.menu?.addItem(withTitle: "Export Now", action: #selector(exportMenuExportAction(_:)), keyEquivalent: "")
+        self.btnExport.menu?.addItem(withTitle: "Export Now", action: #selector(exportMenuDummyAction(_:)), keyEquivalent: "")
+    }
+    
+    internal func updateExportMenu() {
+        if let menu = self.btnExport.menu?.item(withTitle: "Export Now") {
+            if menu.hasSubmenu {
+                menu.submenu?.removeAllItems()
+            }else{
+                menu.submenu = NSMenu()
+            }
+            
+            menu.submenu?.addItem(withTitle: "All Profiles", action: #selector(exportMenuExportAllAction(_:)), keyEquivalent: "")
+            menu.submenu?.addItem(NSMenuItem.separator())
+            let profiles = ExportDao.default.getAllExportProfiles()
+            for profile in profiles {
+                if profile.enabled {
+                    menu.submenu?.addItem(withTitle: profile.name, action: #selector(exportMenuExportProfileAction(_:)), keyEquivalent: "")
+                }
+            }
+        }
     }
     
     @objc func exportMenuConfigAction(_ menuItem:NSMenuItem) {
@@ -41,6 +60,22 @@ extension ViewController {
         
     }
     
+    @objc func exportMenuDummyAction(_ menuItem:NSMenuItem) {
+        // do nothing
+    }
+    
+    @objc func exportMenuExportAllAction(_ menuItem:NSMenuItem) {
+        // TODO export all profiles
+        print("TODO export all profiles")
+    }
+    
+    
+    @objc func exportMenuExportProfileAction(_ menuItem:NSMenuItem) {
+        // TODO export single profile
+        let title = menuItem.title
+        print("TODO export single profile \(title)")
+    }
+ 
     @objc func exportMenuExportAction(_ menuItem:NSMenuItem) {
         print("clicked export menu export now")
         self.btnExport.selectItem(at: 0)

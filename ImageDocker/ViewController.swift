@@ -273,6 +273,8 @@ class ViewController: NSViewController {
         self.setupExportMenu()
         self.setupPreviewMenu()
         
+        self.updateExportMenu()
+        
         print("\(Date()) Loading view - configure tree")
         configureTree()
         print("\(Date()) Loading view - configure collection view")
