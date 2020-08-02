@@ -121,12 +121,5 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         return Image.count(db, where: "\"subPath\" = '' and path like $1", parameters:[keyword])
     }
     
-    func countAllPhotoFilesForExporting(after date: Date) -> Int {
-        let db = PostgresConnection.database()
-        return Image.count(db, where: """
-        hidden != true AND "photoTakenYear" <> 0 AND "photoTakenYear" IS NOT NULL AND ("updateDateTimeDate" > $1 OR "updateExifDate" > $2 OR "updateLocationDate" > $3 OR "updateEventDate" > $4 OR "exportTime" is null)
-        """, parameters:[date, date, date, date])
-    }
-    
 
 }

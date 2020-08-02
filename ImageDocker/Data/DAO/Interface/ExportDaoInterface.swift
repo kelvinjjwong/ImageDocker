@@ -58,4 +58,32 @@ protocol ExportDaoInterface {
     func getAllExportProfiles() -> [ExportProfile]
     
     func deleteExportProfile(id:String) -> ExecuteState
+    
+    // MARK: - EXPORT
+    
+    func getAllExportedImages(includeHidden:Bool) -> [Image]
+    
+    func getAllExportedPhotoFilenames(includeHidden:Bool) -> Set<String>
+    
+    func getAllPhotoFilesForExporting(after date:Date, limit:Int?) -> [Image]
+    
+    func getAllPhotoFilesMarkedExported() -> [Image]
+    
+    // MARK: - EXPORT
+    
+    func countAllPhotoFilesForExporting(after date:Date) -> Int
+    
+    func cleanImageExportTime(path:String) -> ExecuteState
+    
+    func storeImageOriginalMD5(path:String, md5:String) -> ExecuteState
+    
+    func storeImageExportedMD5(path:String, md5:String) -> ExecuteState
+    
+    func storeImageExportSuccess(path:String, date:Date, exportToPath:String, exportedFilename:String, exportedMD5:String, exportedLongDescription:String) -> ExecuteState
+    
+    func storeImageExportedTime(path:String, date:Date) -> ExecuteState
+    
+    func storeImageExportFail(path:String, date:Date, message:String) -> ExecuteState
+    
+    func cleanImageExportPath(path:String) -> ExecuteState
 }

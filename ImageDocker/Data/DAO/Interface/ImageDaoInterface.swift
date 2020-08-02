@@ -134,16 +134,6 @@ protocol ImageSearchDaoInterface {
     func getImages(repositoryPath:String) -> [Image]
     
     func getPhotoFiles(rootPath:String) -> [Image]
-    
-    // MARK: - EXPORT
-    
-    func getAllExportedImages(includeHidden:Bool) -> [Image]
-    
-    func getAllExportedPhotoFilenames(includeHidden:Bool) -> Set<String>
-    
-    func getAllPhotoFilesForExporting(after date:Date, limit:Int?) -> [Image]
-    
-    func getAllPhotoFilesMarkedExported() -> [Image]
 }
 
 protocol ImageCountDaoInterface {
@@ -188,10 +178,6 @@ protocol ImageCountDaoInterface {
     func countContainersWithoutRepositoryPath(repositoryRoot:String) -> Int
     
     func countContainersWithoutSubPath(repositoryRoot:String) -> Int
-    
-    // MARK: - EXPORT
-    
-    func countAllPhotoFilesForExporting(after date:Date) -> Int
 }
 
 protocol ImageDuplicationDaoInterface {
@@ -220,17 +206,4 @@ protocol ImageFaceDaoInterface {
 
 protocol ImageExportDaoInterface {
     
-    func cleanImageExportTime(path:String) -> ExecuteState
-    
-    func storeImageOriginalMD5(path:String, md5:String) -> ExecuteState
-    
-    func storeImageExportedMD5(path:String, md5:String) -> ExecuteState
-    
-    func storeImageExportSuccess(path:String, date:Date, exportToPath:String, exportedFilename:String, exportedMD5:String, exportedLongDescription:String) -> ExecuteState
-    
-    func storeImageExportedTime(path:String, date:Date) -> ExecuteState
-    
-    func storeImageExportFail(path:String, date:Date, message:String) -> ExecuteState
-    
-    func cleanImageExportPath(path:String) -> ExecuteState 
 }

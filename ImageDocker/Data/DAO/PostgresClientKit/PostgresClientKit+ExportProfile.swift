@@ -10,96 +10,6 @@ import Foundation
 
 class ImageExportDaoPostgresCK : ImageExportDaoInterface {
     
-    func cleanImageExportTime(path: String) -> ExecuteState {
-        let db = PostgresConnection.database()
-        do {
-            try db.execute(sql: """
-            UPDATE "Image" set "exportTime" = null WHERE path='\(path)'
-            """)
-        }catch{
-            return .ERROR
-        }
-        return .OK
-    }
-    
-    func storeImageOriginalMD5(path: String, md5: String) -> ExecuteState {
-        let db = PostgresConnection.database()
-        
-        do {
-            try db.execute(sql: """
-            UPDATE "Image" set "originalMD5" = $1 WHERE path=$2
-            """, parameterValues: [md5, path])
-        }catch{
-            return .ERROR
-        }
-        return .OK
-    }
-    
-    func storeImageExportedMD5(path: String, md5: String) -> ExecuteState {
-        let db = PostgresConnection.database()
-        
-        do {
-            try db.execute(sql: """
-            UPDATE "Image" set "exportedMD5" = $1 WHERE path=$2
-            """, parameterValues: [md5, path])
-        }catch{
-            return .ERROR
-        }
-        return .OK
-    }
-    
-    func storeImageExportSuccess(path: String, date: Date, exportToPath: String, exportedFilename: String, exportedMD5: String, exportedLongDescription: String) -> ExecuteState {
-        let db = PostgresConnection.database()
-        
-        do {
-            try db.execute(sql: """
-            UPDATE "Image" set "exportTime" = $1, "exportToPath" = $2, "exportAsFilename" = $3, "exportedMD5" = $4, "exportedLongDescription" = $5, "exportState" = 'OK', "exportFailMessage" = '' WHERE path=$6
-            """, parameterValues: [date, exportToPath, exportedFilename, exportedMD5, exportedLongDescription, path])
-        }catch{
-            return .ERROR
-        }
-        return .OK
-    }
-    
-    func storeImageExportedTime(path: String, date: Date) -> ExecuteState {
-        let db = PostgresConnection.database()
-        
-        do {
-            try db.execute(sql: """
-            UPDATE "Image" set "exportTime" = $1 WHERE path=$2
-            """, parameterValues: [date, path])
-        }catch{
-            return .ERROR
-        }
-        return .OK
-    }
-    
-    func storeImageExportFail(path: String, date: Date, message: String) -> ExecuteState {
-        let db = PostgresConnection.database()
-        
-        do {
-            try db.execute(sql: """
-            UPDATE "Image" set "exportTime" = $1, "exportState" = 'FAIL', "exportFailMessage" = $2 WHERE path=$3
-            """, parameterValues: [date, message, path])
-        }catch{
-            return .ERROR
-        }
-        return .OK
-    }
-    
-    func cleanImageExportPath(path: String) -> ExecuteState {
-        let db = PostgresConnection.database()
-        
-        do {
-            try db.execute(sql: """
-            UPDATE "Image" set "exportToPath" = null, "exportAsFilename" = null, "exportTime" = null, "exportState" = null, "exportFailMessage" = '', "exportedMD5" = null, WHERE path=$1
-            """, parameterValues: [path])
-        }catch{
-            return .ERROR
-        }
-        return .OK
-    }
-    
 
 }
 
@@ -227,6 +137,143 @@ class ExportDaoPostgresCK : ExportDaoInterface {
         let profile = ExportProfile()
         profile.id = id
         profile.delete(db)
+        return .OK
+    }
+    
+    func getAllExportedImages(includeHidden: Bool) -> [Image] {
+        let db = PostgresConnection.database()
+        if includeHidden {
+            return Image.fetchAll(db, where: """
+                "exportToPath" is not null and "exportAsFilename" is not null and "exportToPath" <> '' and "exportAsFilename" <> ''
+                """, orderBy: """
+                "photoTakenDate", filename
+                """)
+        }else{
+            return Image.fetchAll(db, where: """
+                hidden = false and exportToPath is not null and exportAsFilename is not null and exportToPath <> '' and exportAsFilename <> ''
+                """, orderBy: """
+                "photoTakenDate", filename
+                """)
+        }
+    }
+    
+    func getAllExportedPhotoFilenames(includeHidden: Bool) -> Set<String> {
+        let db = PostgresConnection.database()
+        var result:Set<String> = []
+        let records:[Image] = self.getAllExportedImages(includeHidden: includeHidden)
+        for row in records {
+            let path = "\(row.exportToPath ?? "")/\(row.exportAsFilename ?? "")"
+            result.insert(path)
+        }
+        return result
+    }
+    
+    func getAllPhotoFilesForExporting(after date: Date, limit: Int?) -> [Image] {
+        let db = PostgresConnection.database()
+        return Image.fetchAll(db, where: """
+        hidden != true AND "photoTakenYear" <> 0 AND "photoTakenYear" IS NOT NULL AND ("updateDateTimeDate" > ? OR "updateExifDate" > ? OR "updateLocationDate" > ? OR "updateEventDate" > ? OR "exportTime" is null)
+        """, orderBy: "\"photoTakenDate\", filename", offset: 0, limit: limit)
+    }
+    
+    func getAllPhotoFilesMarkedExported() -> [Image] {
+        let db = PostgresConnection.database()
+        return Image.fetchAll(db, where: "hidden != true AND \"exportTime\" is not null)", orderBy: "\"photoTakenDate\", filename")
+    }
+    
+    func countAllPhotoFilesForExporting(after date: Date) -> Int {
+        let db = PostgresConnection.database()
+        return Image.count(db, where: """
+        hidden != true AND "photoTakenYear" <> 0 AND "photoTakenYear" IS NOT NULL AND ("updateDateTimeDate" > $1 OR "updateExifDate" > $2 OR "updateLocationDate" > $3 OR "updateEventDate" > $4 OR "exportTime" is null)
+        """, parameters:[date, date, date, date])
+    }
+    
+    func cleanImageExportTime(path: String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+            UPDATE "Image" set "exportTime" = null WHERE path='\(path)'
+            """)
+        }catch{
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    func storeImageOriginalMD5(path: String, md5: String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        
+        do {
+            try db.execute(sql: """
+            UPDATE "Image" set "originalMD5" = $1 WHERE path=$2
+            """, parameterValues: [md5, path])
+        }catch{
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    func storeImageExportedMD5(path: String, md5: String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        
+        do {
+            try db.execute(sql: """
+            UPDATE "Image" set "exportedMD5" = $1 WHERE path=$2
+            """, parameterValues: [md5, path])
+        }catch{
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    func storeImageExportSuccess(path: String, date: Date, exportToPath: String, exportedFilename: String, exportedMD5: String, exportedLongDescription: String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        
+        do {
+            try db.execute(sql: """
+            UPDATE "Image" set "exportTime" = $1, "exportToPath" = $2, "exportAsFilename" = $3, "exportedMD5" = $4, "exportedLongDescription" = $5, "exportState" = 'OK', "exportFailMessage" = '' WHERE path=$6
+            """, parameterValues: [date, exportToPath, exportedFilename, exportedMD5, exportedLongDescription, path])
+        }catch{
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    func storeImageExportedTime(path: String, date: Date) -> ExecuteState {
+        let db = PostgresConnection.database()
+        
+        do {
+            try db.execute(sql: """
+            UPDATE "Image" set "exportTime" = $1 WHERE path=$2
+            """, parameterValues: [date, path])
+        }catch{
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    func storeImageExportFail(path: String, date: Date, message: String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        
+        do {
+            try db.execute(sql: """
+            UPDATE "Image" set "exportTime" = $1, "exportState" = 'FAIL', "exportFailMessage" = $2 WHERE path=$3
+            """, parameterValues: [date, message, path])
+        }catch{
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    func cleanImageExportPath(path: String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        
+        do {
+            try db.execute(sql: """
+            UPDATE "Image" set "exportToPath" = null, "exportAsFilename" = null, "exportTime" = null, "exportState" = null, "exportFailMessage" = '', "exportedMD5" = null, WHERE path=$1
+            """, parameterValues: [path])
+        }catch{
+            return .ERROR
+        }
         return .OK
     }
     

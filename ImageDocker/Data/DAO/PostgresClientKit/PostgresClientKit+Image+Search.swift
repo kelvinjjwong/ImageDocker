@@ -922,45 +922,5 @@ order by "date"
         return Image.fetchAll(db, where: "path like $1", values: ["\(rootPath.withStash())%"])
     }
     
-    func getAllExportedImages(includeHidden: Bool) -> [Image] {
-        let db = PostgresConnection.database()
-        if includeHidden {
-            return Image.fetchAll(db, where: """
-                "exportToPath" is not null and "exportAsFilename" is not null and "exportToPath" <> '' and "exportAsFilename" <> ''
-                """, orderBy: """
-                "photoTakenDate", filename
-                """)
-        }else{
-            return Image.fetchAll(db, where: """
-                hidden = false and exportToPath is not null and exportAsFilename is not null and exportToPath <> '' and exportAsFilename <> ''
-                """, orderBy: """
-                "photoTakenDate", filename
-                """)
-        }
-    }
-    
-    func getAllExportedPhotoFilenames(includeHidden: Bool) -> Set<String> {
-        let db = PostgresConnection.database()
-        var result:Set<String> = []
-        let records:[Image] = self.getAllExportedImages(includeHidden: includeHidden)
-        for row in records {
-            let path = "\(row.exportToPath ?? "")/\(row.exportAsFilename ?? "")"
-            result.insert(path)
-        }
-        return result
-    }
-    
-    func getAllPhotoFilesForExporting(after date: Date, limit: Int?) -> [Image] {
-        let db = PostgresConnection.database()
-        return Image.fetchAll(db, where: """
-        hidden != true AND "photoTakenYear" <> 0 AND "photoTakenYear" IS NOT NULL AND ("updateDateTimeDate" > ? OR "updateExifDate" > ? OR "updateLocationDate" > ? OR "updateEventDate" > ? OR "exportTime" is null)
-        """, orderBy: "\"photoTakenDate\", filename", offset: 0, limit: limit)
-    }
-    
-    func getAllPhotoFilesMarkedExported() -> [Image] {
-        let db = PostgresConnection.database()
-        return Image.fetchAll(db, where: "hidden != true AND \"exportTime\" is not null)", orderBy: "\"photoTakenDate\", filename")
-    }
-    
 
 }

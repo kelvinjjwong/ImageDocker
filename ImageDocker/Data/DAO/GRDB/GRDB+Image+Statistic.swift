@@ -253,19 +253,4 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
         return result
         
     }
-    
-    // MARK: - EXPORT
-    
-    func countAllPhotoFilesForExporting(after date:Date) -> Int {
-        var result = 0
-        do {
-            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
-            try db.read { db in
-                result = try Image.filter(sql: "hidden != 1 AND photoTakenYear <> 0 AND photoTakenYear IS NOT NULL AND (updateDateTimeDate > ? OR updateExifDate > ? OR updateLocationDate > ? OR updateEventDate > ? OR exportTime is null)", arguments:StatementArguments([date, date, date, date])).fetchCount(db)
-            }
-        }catch{
-            print(error)
-        }
-        return result
-    }
 }

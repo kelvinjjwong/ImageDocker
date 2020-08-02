@@ -89,4 +89,57 @@ class ExportDao {
     func deleteExportProfile(id:String) -> ExecuteState{
         return self.impl.deleteExportProfile(id: id)
     }
+    
+    // MARK: - EXPORT
+    
+    func getAllExportedImages(includeHidden:Bool = true) -> [Image] {
+        return self.impl.getAllExportedImages(includeHidden: includeHidden)
+    }
+    
+    func getAllExportedPhotoFilenames(includeHidden:Bool = true) -> Set<String> {
+        return self.impl.getAllExportedPhotoFilenames(includeHidden: includeHidden)
+    }
+    
+    func getAllPhotoFilesForExporting(after date:Date, limit:Int? = nil) -> [Image] {
+        return self.impl.getAllPhotoFilesForExporting(after: date, limit: limit)
+    }
+    
+    func getAllPhotoFilesMarkedExported() -> [Image] {
+        return self.impl.getAllPhotoFilesMarkedExported()
+    }
+    
+    // MARK: - EXPORT
+    
+    func countAllPhotoFilesForExporting(after date:Date) -> Int {
+        return self.impl.countAllPhotoFilesForExporting(after: date)
+    }
+    
+    
+    func cleanImageExportTime(path:String) -> ExecuteState {
+        return self.impl.cleanImageExportTime(path: path)
+    }
+    
+    func storeImageOriginalMD5(path:String, md5:String) -> ExecuteState {
+        return self.impl.storeImageOriginalMD5(path: path, md5: md5)
+    }
+    
+    func storeImageExportedMD5(path:String, md5:String) -> ExecuteState {
+        return self.impl.storeImageExportedMD5(path: path, md5: md5)
+    }
+    
+    func storeImageExportSuccess(path:String, date:Date, exportToPath:String, exportedFilename:String, exportedMD5:String, exportedLongDescription:String) -> ExecuteState {
+        return self.impl.storeImageExportSuccess(path: path, date: date, exportToPath: exportToPath, exportedFilename: exportedFilename, exportedMD5: exportedMD5, exportedLongDescription: exportedLongDescription)
+    }
+    
+    func storeImageExportedTime(path:String, date:Date) -> ExecuteState {
+        return self.impl.storeImageExportedTime(path: path, date: date)
+    }
+    
+    func storeImageExportFail(path:String, date:Date, message:String) -> ExecuteState {
+        return self.impl.storeImageExportFail(path: path, date: date, message: message)
+    }
+    
+    func cleanImageExportPath(path:String) -> ExecuteState {
+        return self.impl.cleanImageExportPath(path: path)
+    }
 }
