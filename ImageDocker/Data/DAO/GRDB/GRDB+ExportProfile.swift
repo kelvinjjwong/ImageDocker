@@ -11,7 +11,7 @@ import GRDB
 
 class ExportDaoGRDB : ExportDaoInterface {
     
-    // MARK: - CREATE
+    // MARK: - PROFILE CRUD
     
     func getOrCreateExportProfile(id:String,
                                   name:String,
@@ -164,8 +164,6 @@ class ExportDaoGRDB : ExportDaoInterface {
         return .OK
     }
     
-    // MARK: - GETTER
-    
     func getExportProfile(id:String) -> ExportProfile? {
         var profile:ExportProfile?
         do {
@@ -178,8 +176,6 @@ class ExportDaoGRDB : ExportDaoInterface {
         }
         return profile
     }
-    
-    // MARK: - SEARCH
     
     func getAllExportProfiles() -> [ExportProfile] {
         var profiles:[ExportProfile] = []
@@ -195,8 +191,6 @@ class ExportDaoGRDB : ExportDaoInterface {
         return profiles
     }
     
-    // MARK: - DELETE
-    
     func deleteExportProfile(id:String) -> ExecuteState{
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
@@ -209,7 +203,7 @@ class ExportDaoGRDB : ExportDaoInterface {
         return .OK
     }
     
-    // MARK: - EXPORT
+    // MARK: - SEARCH FOR IMAGES
     
     func getAllExportedImages(includeHidden:Bool = true) -> [Image] {
         var result:[Image] = []
@@ -284,8 +278,6 @@ class ExportDaoGRDB : ExportDaoInterface {
         return result
     }
     
-    // MARK: - EXPORT
-    
     func countAllPhotoFilesForExporting(after date:Date) -> Int {
         var result = 0
         do {
@@ -300,7 +292,7 @@ class ExportDaoGRDB : ExportDaoInterface {
     }
     
     
-    // MARK: - EXPORT
+    // MARK: - EXPORT RECORD LOG
     
     func cleanImageExportTime(path:String) -> ExecuteState {
         do {

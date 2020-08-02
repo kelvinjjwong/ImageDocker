@@ -8,12 +8,9 @@
 
 import Foundation
 
-class ImageExportDaoPostgresCK : ImageExportDaoInterface {
-    
-
-}
-
 class ExportDaoPostgresCK : ExportDaoInterface {
+    
+    // MARK: - PROFILE CRUD
     
     func getOrCreateExportProfile(id: String, name: String, directory: String, repositoryPath: String, specifyPeople: Bool, specifyEvent: Bool, specifyRepository: Bool, people: String, events: String, duplicateStrategy: String, fileNaming: String, subFolder: String, patchImageDescription: Bool, patchDateTime: Bool, patchGeolocation: Bool, specifyFamily:Bool, family:String) -> ExportProfile {
         let db = PostgresConnection.database()
@@ -140,6 +137,8 @@ class ExportDaoPostgresCK : ExportDaoInterface {
         return .OK
     }
     
+    // MARK: - SEARCH FOR IMAGES
+    
     func getAllExportedImages(includeHidden: Bool) -> [Image] {
         let db = PostgresConnection.database()
         if includeHidden {
@@ -186,6 +185,8 @@ class ExportDaoPostgresCK : ExportDaoInterface {
         hidden != true AND "photoTakenYear" <> 0 AND "photoTakenYear" IS NOT NULL AND ("updateDateTimeDate" > $1 OR "updateExifDate" > $2 OR "updateLocationDate" > $3 OR "updateEventDate" > $4 OR "exportTime" is null)
         """, parameters:[date, date, date, date])
     }
+    
+    // MARK: - EXPORT RECORD LOG
     
     func cleanImageExportTime(path: String) -> ExecuteState {
         let db = PostgresConnection.database()

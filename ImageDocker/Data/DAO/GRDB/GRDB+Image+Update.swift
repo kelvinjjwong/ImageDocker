@@ -245,5 +245,3 @@ class ImageFaceDaoGRDB : ImageFaceDaoInterface {
     }
 }
 
-class ImageExportDaoGRDB : ImageExportDaoInterface {
-}

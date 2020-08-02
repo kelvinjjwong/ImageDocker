@@ -25,6 +25,8 @@ class ExportDao {
         }
     }
     
+    // MARK: - PROFILE CRUD
+    
     func getOrCreateExportProfile(id:String,
                                   name:String,
                                   directory: String,
@@ -90,7 +92,7 @@ class ExportDao {
         return self.impl.deleteExportProfile(id: id)
     }
     
-    // MARK: - EXPORT
+    // MARK: - SEARCH FOR IMAGES
     
     func getAllExportedImages(includeHidden:Bool = true) -> [Image] {
         return self.impl.getAllExportedImages(includeHidden: includeHidden)
@@ -108,12 +110,11 @@ class ExportDao {
         return self.impl.getAllPhotoFilesMarkedExported()
     }
     
-    // MARK: - EXPORT
-    
     func countAllPhotoFilesForExporting(after date:Date) -> Int {
         return self.impl.countAllPhotoFilesForExporting(after: date)
     }
     
+    // MARK: - EXPORT RECORD LOG
     
     func cleanImageExportTime(path:String) -> ExecuteState {
         return self.impl.cleanImageExportTime(path: path)

@@ -10,6 +10,8 @@ import Foundation
 
 protocol ExportDaoInterface {
     
+    // MARK: - PROFILE CRUD
+    
     func getOrCreateExportProfile(id:String,
                                   name:String,
                                   directory: String,
@@ -59,7 +61,7 @@ protocol ExportDaoInterface {
     
     func deleteExportProfile(id:String) -> ExecuteState
     
-    // MARK: - EXPORT
+    // MARK: - SEARCH FOR IMAGES
     
     func getAllExportedImages(includeHidden:Bool) -> [Image]
     
@@ -69,9 +71,9 @@ protocol ExportDaoInterface {
     
     func getAllPhotoFilesMarkedExported() -> [Image]
     
-    // MARK: - EXPORT
-    
     func countAllPhotoFilesForExporting(after date:Date) -> Int
+    
+    // MARK: - EXPORT RECORD LOG
     
     func cleanImageExportTime(path:String) -> ExecuteState
     

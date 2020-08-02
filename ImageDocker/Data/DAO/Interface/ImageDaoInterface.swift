@@ -203,7 +203,3 @@ protocol ImageFaceDaoInterface {
     
     func updateImageRecognizedFace(imageId:String, recognizedPeopleIds:String) -> ExecuteState
 }
-
-protocol ImageExportDaoInterface {
-    
-}

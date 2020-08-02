@@ -412,21 +412,3 @@ class ImageFaceDao {
         return self.impl.updateImageRecognizedFace(imageId: imageId, recognizedPeopleIds: recognizedPeopleIds)
     }
 }
-
-class ImageExportDao {
-    
-    private let impl:ImageExportDaoInterface
-    
-    init(_ impl:ImageExportDaoInterface){
-        self.impl = impl
-    }
-    
-    static var `default`:ImageExportDao {
-        let location = PreferencesController.databaseLocation()
-        if location == "local" {
-            return ImageExportDao(ImageExportDaoGRDB())
-        }else{
-            return ImageExportDao(ImageExportDaoPostgresCK())
-        }
-    }
-}
