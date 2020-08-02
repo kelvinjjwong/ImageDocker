@@ -98,16 +98,8 @@ class ExportDao {
         return self.impl.getAllExportedImages(includeHidden: includeHidden)
     }
     
-    func getAllExportedPhotoFilenames(includeHidden:Bool = true) -> Set<String> {
-        return self.impl.getAllExportedPhotoFilenames(includeHidden: includeHidden)
-    }
-    
     func getAllPhotoFilesForExporting(after date:Date, limit:Int? = nil) -> [Image] {
         return self.impl.getAllPhotoFilesForExporting(after: date, limit: limit)
-    }
-    
-    func getAllPhotoFilesMarkedExported() -> [Image] {
-        return self.impl.getAllPhotoFilesMarkedExported()
     }
     
     func countAllPhotoFilesForExporting(after date:Date) -> Int {
@@ -115,10 +107,6 @@ class ExportDao {
     }
     
     // MARK: - EXPORT RECORD LOG
-    
-    func cleanImageExportTime(path:String) -> ExecuteState {
-        return self.impl.cleanImageExportTime(path: path)
-    }
     
     func storeImageOriginalMD5(path:String, md5:String) -> ExecuteState {
         return self.impl.storeImageOriginalMD5(path: path, md5: md5)

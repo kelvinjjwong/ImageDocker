@@ -156,27 +156,11 @@ class ExportDaoPostgresCK : ExportDaoInterface {
         }
     }
     
-    func getAllExportedPhotoFilenames(includeHidden: Bool) -> Set<String> {
-        let db = PostgresConnection.database()
-        var result:Set<String> = []
-        let records:[Image] = self.getAllExportedImages(includeHidden: includeHidden)
-        for row in records {
-            let path = "\(row.exportToPath ?? "")/\(row.exportAsFilename ?? "")"
-            result.insert(path)
-        }
-        return result
-    }
-    
     func getAllPhotoFilesForExporting(after date: Date, limit: Int?) -> [Image] {
         let db = PostgresConnection.database()
         return Image.fetchAll(db, where: """
         hidden != true AND "photoTakenYear" <> 0 AND "photoTakenYear" IS NOT NULL AND ("updateDateTimeDate" > ? OR "updateExifDate" > ? OR "updateLocationDate" > ? OR "updateEventDate" > ? OR "exportTime" is null)
         """, orderBy: "\"photoTakenDate\", filename", offset: 0, limit: limit)
-    }
-    
-    func getAllPhotoFilesMarkedExported() -> [Image] {
-        let db = PostgresConnection.database()
-        return Image.fetchAll(db, where: "hidden != true AND \"exportTime\" is not null)", orderBy: "\"photoTakenDate\", filename")
     }
     
     func countAllPhotoFilesForExporting(after date: Date) -> Int {
@@ -187,18 +171,6 @@ class ExportDaoPostgresCK : ExportDaoInterface {
     }
     
     // MARK: - EXPORT RECORD LOG
-    
-    func cleanImageExportTime(path: String) -> ExecuteState {
-        let db = PostgresConnection.database()
-        do {
-            try db.execute(sql: """
-            UPDATE "Image" set "exportTime" = null WHERE path='\(path)'
-            """)
-        }catch{
-            return .ERROR
-        }
-        return .OK
-    }
     
     func storeImageOriginalMD5(path: String, md5: String) -> ExecuteState {
         let db = PostgresConnection.database()

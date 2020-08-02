@@ -222,31 +222,6 @@ class ExportDaoGRDB : ExportDaoInterface {
         return result
     }
     
-    func getAllExportedPhotoFilenames(includeHidden:Bool = true) -> Set<String> {
-        var result:Set<String> = []
-        do {
-            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
-            try db.read { db in
-                if includeHidden {
-                    let cursor = try Image.filter(sql: "exportToPath is not null and exportAsFilename is not null and exportToPath <> '' and exportAsFilename <> ''").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchCursor(db)
-                    while let photo = try cursor.next() {
-                        let path = "\(photo.exportToPath ?? "")/\(photo.exportAsFilename ?? "")"
-                        result.insert(path)
-                    }
-                }else{
-                    let cursor = try Image.filter(sql: "hidden = 0 and exportToPath is not null and exportAsFilename is not null and exportToPath <> '' and exportAsFilename <> ''").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchCursor(db)
-                    while let photo = try cursor.next() {
-                        let path = "\(photo.exportToPath ?? "")/\(photo.exportAsFilename ?? "")"
-                        result.insert(path)
-                    }
-                }
-            }
-        }catch{
-            print(error)
-        }
-        return result
-    }
-    
     func getAllPhotoFilesForExporting(after date:Date, limit:Int? = nil) -> [Image] {
         var result:[Image] = []
         do {
@@ -258,19 +233,6 @@ class ExportDaoGRDB : ExportDaoInterface {
                     query = query.limit(lim)
                 }
                 result = try query.fetchAll(db)
-            }
-        }catch{
-            print(error)
-        }
-        return result
-    }
-    
-    func getAllPhotoFilesMarkedExported() -> [Image] {
-        var result:[Image] = []
-        do {
-            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
-            try db.read { db in
-                result = try Image.filter("hidden != 1 AND exportTime is not null)").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
             }
         }catch{
             print(error)
@@ -293,18 +255,6 @@ class ExportDaoGRDB : ExportDaoInterface {
     
     
     // MARK: - EXPORT RECORD LOG
-    
-    func cleanImageExportTime(path:String) -> ExecuteState {
-        do {
-            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
-            try db.write { db in
-                try db.execute(sql: "UPDATE Image set exportTime = null WHERE path='\(path)'")
-            }
-        }catch{
-            return SQLHelper.errorState(error)
-        }
-        return .OK
-    }
     
     func storeImageOriginalMD5(path:String, md5:String) -> ExecuteState{
         do {

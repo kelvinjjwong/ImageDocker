@@ -65,17 +65,11 @@ protocol ExportDaoInterface {
     
     func getAllExportedImages(includeHidden:Bool) -> [Image]
     
-    func getAllExportedPhotoFilenames(includeHidden:Bool) -> Set<String>
-    
     func getAllPhotoFilesForExporting(after date:Date, limit:Int?) -> [Image]
-    
-    func getAllPhotoFilesMarkedExported() -> [Image]
     
     func countAllPhotoFilesForExporting(after date:Date) -> Int
     
     // MARK: - EXPORT RECORD LOG
-    
-    func cleanImageExportTime(path:String) -> ExecuteState
     
     func storeImageOriginalMD5(path:String, md5:String) -> ExecuteState
     
