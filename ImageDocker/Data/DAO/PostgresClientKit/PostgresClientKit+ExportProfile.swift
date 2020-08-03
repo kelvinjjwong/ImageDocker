@@ -156,6 +156,26 @@ class ExportDaoPostgresCK : ExportDaoInterface {
         }
     }
     
+    func getImagesForExport(profile:ExportProfile, limit:Int? = nil) -> [Image] {
+        let db = PostgresConnection.database()
+        let repos = profile.repositoryPath
+        let events = profile.events
+        let people = profile.people
+        
+        var sql = """
+select i.*
+from "Image" i
+left join "ImageContainer" c on i."repositoryPath" = c."repositoryPath"
+where i.hidden = 'f' and i."hiddenByContainer" = 'f' and i."hiddenByRepository" = 'f'
+and i."photoTakenYear" > 0
+and c."name" in ('Who''s iphone6', 'Who''s iPhone8')
+and i.event in ('boating','swimming')
+and "recognizedPeopleIds" similar to '%(,someone,|,anotherone,)%'
+"""
+        return []
+    }
+    
+    
     func getAllPhotoFilesForExporting(after date: Date, limit: Int?) -> [Image] {
         let db = PostgresConnection.database()
         return Image.fetchAll(db, where: """
