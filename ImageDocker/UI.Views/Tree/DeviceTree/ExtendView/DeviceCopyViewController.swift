@@ -279,13 +279,16 @@ class DeviceCopyViewController: NSViewController {
         print("GET FULL LIST FROM \(path)")
         if self.deviceFiles_fulllist[path.sourcePath] == nil {
             print("nil, return empty")
+            self.deviceFiles_fulllist[path.sourcePath] = []
             return []
+        }else{
+            if self.deviceFiles_fulllist[path.sourcePath]!.count == 0 {
+                print("not nil but zero count, load from path")
+                let excludePaths:[String] = self.getExcludedPaths()
+                self.loadFromPath(path: path, reloadFileList:reloadFileList, excludePaths: excludePaths)
+            }
         }
-        if self.deviceFiles_fulllist[path.sourcePath] != nil && self.deviceFiles_fulllist[path.sourcePath]!.count == 0 {
-            print("not nil but zero count, load from path")
-            let excludePaths:[String] = self.getExcludedPaths()
-            self.loadFromPath(path: path, reloadFileList:reloadFileList, excludePaths: excludePaths)
-        }
+        // not nil and has count
         return self.deviceFiles_fulllist[path.sourcePath]!
     }
     
