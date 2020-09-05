@@ -14,6 +14,7 @@ class ExportManager {
     
     //var working:Bool = false
     var suppressed:Bool = false
+    var tasks:[String:Bool] = [:]
     var messageBox:NSTextField? = nil
     
     // MARK: - PROCESS HANDLING
@@ -25,34 +26,45 @@ class ExportManager {
     
     @objc func enable() {
         self.suppressed = false
-        
-        if self.messageBox != nil {
-            DispatchQueue.main.async {
-                self.messageBox?.stringValue = ""
-            }
-        }
+        self.printMessage("")
     }
     
     @objc func disable() {
         self.suppressed = true
-        if self.messageBox != nil {
-            DispatchQueue.main.async {
-                self.messageBox?.stringValue = ""
-            }
+        self.stopAllTasks()
+    }
+    
+    @objc func stopTask(profileId:String) {
+        self.tasks[profileId] = false
+        self.printMessage("Task \(profileId) stopped.")
+    }
+    
+    private func stopAllTasks() {
+        for (key, _) in self.tasks {
+            self.stopTask(profileId: key)
         }
+        self.printMessage("All tasks stopped.")
+    }
+    
+    private func startTask(profileId:String) {
+        self.tasks[profileId] = true
     }
     
     /**
      If suppressed from outside, stop immediately
      */
-    fileprivate func nonStop() -> Bool {
+    fileprivate func nonStop(profileId:String) -> Bool {
         if self.suppressed {
             print("ExportManager is suppressed.")
             TaskManager.exporting = false
-            DispatchQueue.main.async {
-                self.messageBox?.stringValue = ""
-            }
+            self.stopAllTasks()
             return false
+        }else{
+            if let state = self.tasks[profileId] {
+                if state == false {
+                    return false
+                }
+            }
         }
         return true
     }
@@ -91,7 +103,7 @@ class ExportManager {
     // MARK: - EXPORT PROFILE NOW
     
     func export(profile:ExportProfile, rehearsal:Bool = false, limit:Int? = nil) -> (Bool, String) {
-        guard self.nonStop() && !TaskManager.exporting else {return (false, "PREVENTED")}
+        guard self.nonStop(profileId: profile.id) && !TaskManager.exporting else {return (false, "PREVENTED")}
         
         var isDir:ObjCBool = false
         if FileManager.default.fileExists(atPath: profile.directory, isDirectory: &isDir) {
@@ -110,14 +122,7 @@ class ExportManager {
         print("  ")
         print("!! ExportManager start working at \(Date())")
         
-        
-        //var filepaths:[String] = []
-        
-        // check exported
-        self.printMessage("Validating ...")
-        
-        // check updates and which not exported
-        self.printMessage("Searching for updates ...")
+        self.startTask(profileId: profile.id)
         
         print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
         
@@ -142,7 +147,7 @@ class ExportManager {
         var i:Int = 0
         for pageNumber in 1...pageCount {
             
-            guard self.nonStop() else {return (false, "FORCED STOP")}
+            guard self.nonStop(profileId: profile.id) else {return (false, "FORCED STOP")}
             
             self.printMessage("Searching images in page \(pageNumber) / \(pageCount)...")
             
@@ -157,7 +162,7 @@ class ExportManager {
                 
                 for n in 1...imagesToExport {
 
-                    guard self.nonStop() else {return (false, "FORCED STOP")}
+                    guard self.nonStop(profileId: profile.id) else {return (false, "FORCED STOP")}
                     
                     i += 1
                     
@@ -299,7 +304,7 @@ class ExportManager {
         var allExportedDirectories:Set<String> = []
         var uselessFiles:Set<String> = []
         for case let file as URL in enumerator {
-            guard self.nonStop() else {return}
+            guard self.nonStop(profileId: profile.id) else {return}
             do {
                 
                 // if suppressed from outside, stop immediately
@@ -332,7 +337,7 @@ class ExportManager {
             for uselessFile in uselessFiles {
                 
                 // if suppressed from outside, stop immediately
-                guard self.nonStop() else {return}
+                guard self.nonStop(profileId: profile.id) else {return}
                 
                 i += 1
                 self.printMessage("Deleting invalid exported file ... ( \(i) / \(total) )")
@@ -351,7 +356,7 @@ class ExportManager {
         self.printMessage("Checking empty exported folders ...")
         
         for folder in allExportedDirectories {
-            guard self.nonStop() else {return}
+            guard self.nonStop(profileId: profile.id) else {return}
             do {
                 let contents = try FileManager.default.contentsOfDirectory(atPath: folder)
                 if contents.count == 0 {
