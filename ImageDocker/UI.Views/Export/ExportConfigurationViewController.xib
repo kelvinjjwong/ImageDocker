@@ -42,6 +42,7 @@
                 <outlet property="chkPeople" destination="E81-GP-ppk" id="X4n-97-CBp"/>
                 <outlet property="chkRepository" destination="ebe-RW-NOI" id="9hb-5j-vPC"/>
                 <outlet property="lblCalculate" destination="wC2-0l-112" id="ePe-b3-Vea"/>
+                <outlet property="lstRehearsalAmount" destination="DV0-my-FgX" id="qPq-EB-dgx"/>
                 <outlet property="stackView" destination="Bfq-zr-1HI" id="jDm-gU-rvK"/>
                 <outlet property="tblEvent" destination="7bd-83-30L" id="wC3-IF-NSU"/>
                 <outlet property="tblFamily" destination="2zS-ML-Clv" id="32H-tO-0Bc"/>
@@ -877,6 +878,24 @@
                                     <action selector="onRehearsalClicked:" target="-2" id="Acq-BB-dPY"/>
                                 </connections>
                             </button>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DV0-my-FgX">
+                                <rect key="frame" x="770" y="20" width="137" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <popUpButtonCell key="cell" type="push" title="10 images" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="W7V-RU-0J4" id="l4B-dw-EvG">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <menu key="menu" id="7iW-Qg-E3E">
+                                        <items>
+                                            <menuItem title="10 images" state="on" id="W7V-RU-0J4"/>
+                                            <menuItem title="100 images" id="xem-Zx-qaQ"/>
+                                            <menuItem title="500 images" id="F4X-w5-zia"/>
+                                            <menuItem title="ALL images" id="9av-LY-pUY">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                            </popUpButton>
                         </subviews>
                     </view>
                 </box>

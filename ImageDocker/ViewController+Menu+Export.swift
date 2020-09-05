@@ -77,7 +77,7 @@ extension ViewController {
         DispatchQueue.global().async {
             if let profile = ExportDao.default.getExportProfile(name: title) {
                 print("Got export profile id \(profile.id)")
-                let images = ExportDao.default.getImagesForExport(profile: profile, limit: nil)
+                let images = ExportDao.default.getImagesForExport(profile: profile, pageSize: nil, pageNumber: nil)
                 print("loaded images: \(images.count)")
             }
         }

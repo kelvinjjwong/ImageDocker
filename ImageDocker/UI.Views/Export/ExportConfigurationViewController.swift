@@ -69,11 +69,13 @@ class ExportConfigurationViewController: NSViewController {
     
     
     @IBOutlet weak var btnCalculate: NSButton!
+    @IBOutlet weak var lstRehearsalAmount: NSPopUpButton!
     
     @IBOutlet weak var stackView: NSStackView!
     @IBOutlet weak var lblCalculate: NSTextField!
     @IBOutlet weak var btnCopySQLToClipboard: NSButton!
     @IBOutlet weak var btnRehearsal: NSButton!
+    
     
     var repoNames:[String:String] = [:]
     
@@ -570,6 +572,37 @@ class ExportConfigurationViewController: NSViewController {
     
     @IBAction func onRehearsalClicked(_ sender: NSButton) {
         // TODO rehearsal export (query from db, no file i/o)
+        
+        var profile:ExportProfile
+        if let pf = ExportDao.default.getExportProfile(id: self.editingId) {
+            profile = pf
+        }else{
+            let pf = self.fillProfileFromForm(profile: ExportProfile())
+            profile = pf
+        }
+
+        var amount:Int? = nil
+        if let selection = self.lstRehearsalAmount.titleOfSelectedItem {
+            let number = selection.components(separatedBy: " ")[0]
+            if number == "10" {
+                amount = 10
+            }else if number == "100" {
+                amount = 100
+            }else if number == "500" {
+                amount = 500
+            }
+        }
+        DispatchQueue.global().async {
+            let (state, message) = ExportManager.default.withMessageBox(self.lblCalculate).export(profile: profile, rehearsal: true, limit: amount)
+            DispatchQueue.main.async {
+
+                if state == true {
+                    self.lblCalculate.stringValue = message
+                }else{
+                    self.lblCalculate.stringValue = "ERROR: \(message)"
+                }
+            }
+        }
     }
     
     @IBAction func onCopySQLClicked(_ sender: NSButton) {
@@ -596,8 +629,14 @@ class ExportConfigurationViewController: NSViewController {
             let pf = self.fillProfileFromForm(profile: ExportProfile())
             profile = pf
         }
-        let count = ExportDao.default.countImagesForExport(profile: profile)
-        self.lblCalculate.stringValue = "Profile affects \(count) images."
+        
+        DispatchQueue.global().async {
+            let count = ExportDao.default.countImagesForExport(profile: profile)
+            let exported = ExportDao.default.countExportedImages(profile: profile)
+            DispatchQueue.main.async {
+                self.lblCalculate.stringValue = "Profile affects \(count) images. Exported \(exported) images."
+            }
+        }
     }
     
     

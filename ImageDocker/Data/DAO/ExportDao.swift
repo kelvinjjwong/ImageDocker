@@ -106,8 +106,8 @@ class ExportDao {
     
     // MARK: - SEARCH FOR IMAGES
     
-    func getImagesForExport(profile:ExportProfile, limit:Int? = nil) -> [Image] {
-        return self.impl.getImagesForExport(profile: profile, limit: limit)
+    func getImagesForExport(profile:ExportProfile, pageSize:Int? = nil, pageNumber:Int? = nil) -> [Image] {
+        return self.impl.getImagesForExport(profile: profile, pageSize: pageSize, pageNumber: pageNumber)
     }
     
     func countImagesForExport(profile:ExportProfile) -> Int {
@@ -123,6 +123,10 @@ class ExportDao {
     }
     
     // MARK: - EXPORT RECORD LOG
+    
+    func countExportedImages(profile:ExportProfile) -> Int {
+        return self.impl.countExportedImages(profile: profile)
+    }
     
     func storeImageOriginalMD5(path:String, md5:String) -> ExecuteState {
         return self.impl.storeImageOriginalMD5(path: path, md5: md5)

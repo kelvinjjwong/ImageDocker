@@ -279,9 +279,17 @@ class ExportDaoGRDB : ExportDaoInterface {
         return SQL
     }
     
-    func generateImageQuerySQL(isCount:Bool, profile:ExportProfile, limit:Int?) -> String {
+    func generateImageQuerySQL(isCount:Bool, profile:ExportProfile, pageSize:Int?, pageNumber:Int?) -> String {
         let repoSQL = self.generateImageQuerySQLPart(tableAlias: "c", tableColumn: "name", profileSetting: profile.repositoryPath)
         let eventSQL = self.generateImageQuerySQLPart(tableAlias: "i", tableColumn: "event", profileSetting: profile.events)
+        
+        var pagination = ""
+        if !isCount {
+            if let limit = pageSize, let pageNumber = pageNumber {
+                let offset = (pageNumber - 1) * limit
+                pagination = "LIMIT \(limit) OFFSET \(offset)"
+            }
+        }
         
         let columns = isCount ? "count(1) as recordCount" : "i.*"
         
@@ -304,6 +312,7 @@ class ExportDaoGRDB : ExportDaoInterface {
         \(repoSQL)
         \(eventSQL)
         order by i.photoTakenYear desc, i.photoTakenMonth desc, i.photoTakenDay desc
+        \(pagination)
         """
         
         // TODO: after profile.lastExportEndTime
@@ -314,8 +323,8 @@ class ExportDaoGRDB : ExportDaoInterface {
         return sql
     }
     
-    func getImagesForExport(profile:ExportProfile, limit:Int?) -> [Image] {
-        let sql = self.generateImageQuerySQL(isCount: false, profile: profile, limit: limit)
+    func getImagesForExport(profile:ExportProfile, pageSize:Int?, pageNumber:Int?) -> [Image] {
+        let sql = self.generateImageQuerySQL(isCount: false, profile: profile, pageSize: pageSize, pageNumber: pageNumber)
         var result:[Image] = []
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
@@ -330,7 +339,7 @@ class ExportDaoGRDB : ExportDaoInterface {
     
     func countImagesForExport(profile:ExportProfile) -> Int {
         var result = 0
-        let sql = self.generateImageQuerySQL(isCount: true, profile: profile, limit: nil)
+        let sql = self.generateImageQuerySQL(isCount: true, profile: profile, pageSize: nil, pageNumber: nil)
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
@@ -371,11 +380,30 @@ class ExportDaoGRDB : ExportDaoInterface {
     }
     
     func getSQLForImageExport(profile:ExportProfile) -> String {
-        return self.generateImageQuerySQL(isCount: false, profile: profile, limit: nil)
+        return self.generateImageQuerySQL(isCount: false, profile: profile, pageSize: nil, pageNumber: nil)
     }
     
     
     // MARK: - EXPORT RECORD LOG
+    
+    func countExportedImages(profile:ExportProfile) -> Int {
+        var result = 0
+        let sql = """
+        select count(1) as recordCount from ExportLog where profileId='\(profile.id)'
+"""
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, sql: sql)
+                if rows.count > 0 {
+                    result = rows[0]["recordCount"] as Int? ?? 0
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
     
     func storeImageOriginalMD5(path:String, md5:String) -> ExecuteState{
         do {

@@ -193,9 +193,17 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
         return SQL
     }
     
-    func generateImageQuerySQL(isCount:Bool, profile:ExportProfile, limit:Int?) -> String {
+    func generateImageQuerySQL(isCount:Bool, profile:ExportProfile, pageSize:Int?, pageNumber:Int?) -> String {
         let repoSQL = self.generateImageQuerySQLPart(tableAlias: "c", tableColumn: "name", profileSetting: profile.repositoryPath)
         let eventSQL = self.generateImageQuerySQLPart(tableAlias: "i", tableColumn: "event", profileSetting: profile.events)
+        
+        var pagination = ""
+        if !isCount {
+            if let limit = pageSize, let pageNumber = pageNumber {
+                let offset = (pageNumber - 1) * limit
+                pagination = "LIMIT \(limit) OFFSET \(offset)"
+            }
+        }
         
         let columns = isCount ? "count(1)" : "i.*"
         
@@ -218,6 +226,7 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
         \(repoSQL)
         \(eventSQL)
         order by i."photoTakenYear" desc, i."photoTakenMonth" desc, i."photoTakenDay" desc
+        \(pagination)
         """
         
         // TODO: after profile.lastExportEndTime
@@ -229,13 +238,13 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
     }
     
     func getSQLForImageExport(profile:ExportProfile) -> String {
-        return self.generateImageQuerySQL(isCount: false, profile: profile, limit: nil)
+        return self.generateImageQuerySQL(isCount: false, profile: profile, pageSize: nil, pageNumber: nil)
     }
     
-    func getImagesForExport(profile:ExportProfile, limit:Int?) -> [Image] {
+    func getImagesForExport(profile:ExportProfile, pageSize:Int?, pageNumber:Int?) -> [Image] {
         let db = PostgresConnection.database()
         
-        let sql = self.generateImageQuerySQL(isCount: false, profile: profile, limit: limit)
+        let sql = self.generateImageQuerySQL(isCount: false, profile: profile, pageSize: pageSize, pageNumber: pageNumber)
         let images = Image.fetchAll(db, sql: sql)
         
         return images
@@ -244,7 +253,7 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
     func countImagesForExport(profile:ExportProfile) -> Int {
         let db = PostgresConnection.database()
         
-        let sql = self.generateImageQuerySQL(isCount: true, profile: profile, limit: nil)
+        let sql = self.generateImageQuerySQL(isCount: true, profile: profile, pageSize: nil, pageNumber: nil)
         return db.count(sql: sql)
     }
     
@@ -275,6 +284,15 @@ select "imageId", "subfolder", "filename" from "ExportLog" where "profileId" = '
     }
     
     // MARK: - EXPORT RECORD LOG
+    
+    func countExportedImages(profile:ExportProfile) -> Int {
+        let db = PostgresConnection.database()
+        
+        let sql = """
+select count(1) from "ExportLog" where "profileId"='\(profile.id)'
+"""
+        return db.count(sql: sql)
+    }
     
     func storeImageOriginalMD5(path: String, md5: String) -> ExecuteState {
         let db = PostgresConnection.database()

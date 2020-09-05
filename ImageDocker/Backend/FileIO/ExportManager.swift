@@ -18,6 +18,11 @@ class ExportManager {
     
     // MARK: - PROCESS HANDLING
     
+    func withMessageBox(_ box:NSTextField) -> ExportManager {
+        self.messageBox = box
+        return self
+    }
+    
     @objc func enable() {
         self.suppressed = false
         
@@ -85,7 +90,7 @@ class ExportManager {
     
     // MARK: - EXPORT PROFILE NOW
     
-    func export(profile:ExportProfile) -> (Bool, String) {
+    func export(profile:ExportProfile, rehearsal:Bool = false, limit:Int? = nil) -> (Bool, String) {
         guard self.nonStop() && !TaskManager.exporting else {return (false, "PREVENTED")}
         
         var isDir:ObjCBool = false
@@ -116,40 +121,55 @@ class ExportManager {
         
         print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
         
-        let images = ExportDao.default.getImagesForExport(profile: profile)
+        let totalImagesInDb = ExportDao.default.countImagesForExport(profile: profile)
         
-        let total = images.count
+        var total:Int = totalImagesInDb
+        let pageSizeMax = 100
+        var pageSize:Int = totalImagesInDb
+        var pageCount:Int = 1
         
-        var batchTotal = 1
-        let batchLimit = 500
+        var lastPageImages = 0
+        if let limit = limit {
+            total = min(totalImagesInDb, limit)
+            pageSize = min(pageSizeMax, limit)
+            pageCount = total / pageSize
+            if (pageCount * pageSize) < total {
+                lastPageImages = total - (pageCount * pageSize)
+                pageCount += 1
+            }
+        }
         
         var i:Int = 0
-        while(batchTotal > 0) {
+        for pageNumber in 1...pageCount {
             
-            // check updates and which not exported
-            self.printMessage("EXPORT Searching for updates ...")
+            guard self.nonStop() else {return (false, "FORCED STOP")}
             
-            print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
+            self.printMessage("Searching images in page \(pageNumber) / \(pageCount)...")
             
-            batchTotal = images.count
+            let images = ExportDao.default.getImagesForExport(profile: profile, pageSize: pageSize, pageNumber: pageNumber)
             
-            if batchTotal == 0 {
-                break
+            if images.count > 0 {
+                var imagesToExport = pageSize
+                if pageNumber == pageCount {
+                    // last page
+                    imagesToExport = lastPageImages
+                }
+                
+                for n in 1...imagesToExport {
+
+                    guard self.nonStop() else {return (false, "FORCED STOP")}
+                    
+                    i += 1
+                    
+                    self.printMessage("Exporting image ( \(i) / \(total) ) ...")
+                    
+                    let image = images[n]
+                    
+                    let _ = self.exportFile(profile: profile, image: image, triggerTime: triggerTime, rehearsal: rehearsal)
+                    
+                }
             }
             
-            for image in images {
-                guard self.nonStop() else {return (false, "FORCED STOP")}
-                
-                i += 1
-                self.printMessage("EXPORT Processing ... ( \(i) / \(total) )")
-                
-                print("EXPORT Processing \(i) : \(image.path)")
-                
-                // not exist at path
-                self.printMessage("EXPORT Copying ... ( \(i) / \(total) )")
-                
-                let _ = self.exportFile(profile: profile, image: image, triggerTime: triggerTime)
-            }
         } // end of while loop
         self.printMessage("Export DONE: \(profile.name)")
         
@@ -160,7 +180,7 @@ class ExportManager {
     
     // MARK: - EXPORT SINGLE FILE
     
-    private func exportFile(profile:ExportProfile, image:Image, triggerTime:Date) -> Bool {
+    private func exportFile(profile:ExportProfile, image:Image, triggerTime:Date, rehearsal:Bool = false) -> Bool {
         // invalid date
         if image.photoTakenYear == 0 {
             return false
@@ -189,6 +209,10 @@ class ExportManager {
         let fullTargetFilePath = fullTargetPath.appendingPathComponent(targetFilename)
         
         print("\(Date()) Copy file [\(image.path)] to [\(fullTargetFilePath)]")
+        
+        if rehearsal {
+            return true
+        }
         
         // copy file
         
