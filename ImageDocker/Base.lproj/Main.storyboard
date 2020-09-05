@@ -39,6 +39,39 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="Edit" id="HGh-zg-hsg">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Edit" id="MTv-9K-ulD">
+                                    <items>
+                                        <menuItem title="Cut" keyEquivalent="x" id="MzF-FJ-OWg">
+                                            <connections>
+                                                <action selector="cut:" target="Ady-hI-5gd" id="qP9-ky-Fr2"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Copy" keyEquivalent="c" id="Ns7-xE-zAm">
+                                            <connections>
+                                                <action selector="copy:" target="Ady-hI-5gd" id="ptg-tn-fut"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Paste" keyEquivalent="v" id="ncA-Q9-C0m">
+                                            <connections>
+                                                <action selector="paste:" target="Ady-hI-5gd" id="MCC-hT-G3z"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Delete" id="YwU-Nt-Bor">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="delete:" target="Ady-hI-5gd" id="xwV-k1-WaV"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Select All" keyEquivalent="a" id="qY8-LJ-EqX">
+                                            <connections>
+                                                <action selector="selectAll:" target="Ady-hI-5gd" id="n75-tD-UFX"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
                             <menuItem title="Window" id="DeL-uA-4HL">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Window" systemMenu="window" id="W3V-fT-vb7">
