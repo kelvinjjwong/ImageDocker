@@ -118,6 +118,10 @@ class ExportDao {
         return self.impl.getExportedImages(profileId: profileId)
     }
     
+    func getSQLForImageExport(profile:ExportProfile) -> String {
+        return self.impl.getSQLForImageExport(profile: profile)
+    }
+    
     // MARK: - EXPORT RECORD LOG
     
     func storeImageOriginalMD5(path:String, md5:String) -> ExecuteState {

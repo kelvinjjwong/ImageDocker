@@ -370,6 +370,10 @@ class ExportDaoGRDB : ExportDaoInterface {
         return result
     }
     
+    func getSQLForImageExport(profile:ExportProfile) -> String {
+        return self.generateImageQuerySQL(isCount: false, profile: profile, limit: nil)
+    }
+    
     
     // MARK: - EXPORT RECORD LOG
     

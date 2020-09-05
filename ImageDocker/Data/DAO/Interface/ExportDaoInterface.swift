@@ -75,6 +75,8 @@ protocol ExportDaoInterface {
     
     func getExportedImages(profileId:String) -> [(String, String, String)]
     
+    func getSQLForImageExport(profile:ExportProfile) -> String
+    
     // MARK: - EXPORT RECORD LOG
     
     func storeImageOriginalMD5(path:String, md5:String) -> ExecuteState

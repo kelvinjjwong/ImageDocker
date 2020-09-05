@@ -68,7 +68,12 @@ class ExportConfigurationViewController: NSViewController {
     @IBOutlet weak var chkDateTimeBriefFilename: NSButton!
     
     
+    @IBOutlet weak var btnCalculate: NSButton!
+    
     @IBOutlet weak var stackView: NSStackView!
+    @IBOutlet weak var lblCalculate: NSTextField!
+    @IBOutlet weak var btnCopySQLToClipboard: NSButton!
+    @IBOutlet weak var btnRehearsal: NSButton!
     
     var repoNames:[String:String] = [:]
     
@@ -360,14 +365,14 @@ class ExportConfigurationViewController: NSViewController {
     
     // MARK: - SAVE ACTION
     
-    @IBAction func onSaveClicked(_ sender: NSButton) {
+    private func fillProfileFromForm(profile:ExportProfile) -> ExportProfile {
         let name = self.txtName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         let path = self.txtDirectory.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         let fileNaming = self.getFileNamingStrategy()
         let fileDuplicated = self.getFilenameDuplicatedStrategy()
         let subfolder = self.getSubFolderStrategy()
         
-        // TODO convert checkboxes to string
+        // convert checkboxes to string
         var people = ""
         var events = ""
         var repos = ""
@@ -417,64 +422,74 @@ class ExportConfigurationViewController: NSViewController {
             }
         }
         
+        profile.name = name
+        profile.directory = path
+        profile.duplicateStrategy = fileDuplicated
+        profile.specifyPeople = self.chkPeople.state == .on
+        profile.specifyEvent = self.chkEvents.state == .on
+        profile.specifyRepository = self.chkRepository.state == .on
+        profile.specifyFamily = self.chkFamilies.state == .on
+        profile.people = people
+        profile.events = events
+        profile.repositoryPath = repos
+        profile.family = family
+        profile.patchImageDescription = self.chkPatchImageDescription.state == .on
+        profile.patchDateTime = self.chkPatchDateTime.state == .on
+        profile.patchGeolocation = self.chkPatchGeolocation.state == .on
+        profile.fileNaming = fileNaming
+        profile.subFolder = subfolder
+        
+        return profile
+    }
+    
+    @IBAction func onSaveClicked(_ sender: NSButton) {
+        
+        let form = self.fillProfileFromForm(profile: ExportProfile())
+        
         var profile = ExportDao.default.getOrCreateExportProfile(id: self.editingId,
-                                                                name: name,
-                                                                directory: path,
-                                                                repositoryPath: repos,
-                                                                specifyPeople: self.chkPeople.state == .on,
-                                                                specifyEvent: self.chkEvents.state == .on,
-                                                                specifyRepository: self.chkRepository.state == .on,
-                                                                people: people,
-                                                                events: events,
-                                                                duplicateStrategy: fileDuplicated,
-                                                                fileNaming: fileNaming,
-                                                                subFolder: subfolder,
-                                                                patchImageDescription: self.chkPatchImageDescription.state == .on,
-                                                                patchDateTime: self.chkPatchDateTime.state == .on,
-                                                                patchGeolocation: self.chkPatchGeolocation.state == .on,
-                                                                specifyFamily: self.chkFamilies.state == .on,
-                                                                family: family
+                                                                 name: form.name,
+                                                                 directory: form.directory,
+                                                                 repositoryPath: form.repositoryPath,
+                                                                 specifyPeople: form.specifyPeople,
+                                                                 specifyEvent: form.specifyEvent,
+                                                                 specifyRepository: form.specifyRepository,
+                                                                 people: form.people,
+                                                                 events: form.events,
+                                                                 duplicateStrategy: form.duplicateStrategy,
+                                                                 fileNaming: form.fileNaming,
+                                                                 subFolder: form.subFolder,
+                                                                 patchImageDescription: form.patchImageDescription,
+                                                                 patchDateTime: form.patchDateTime,
+                                                                 patchGeolocation: form.patchGeolocation,
+                                                                 specifyFamily: form.specifyFamily,
+                                                                 family: form.family
                                                                 )
         if !self.isNewRecord {
             let status = ExportDao.default.updateExportProfile(id: self.editingId,
-                                                               name: name,
-                                                               directory: path,
-                                                               duplicateStrategy: fileDuplicated,
-                                                               specifyPeople: self.chkPeople.state == .on,
-                                                               specifyEvent: self.chkEvents.state == .on,
-                                                               specifyRepository: self.chkRepository.state == .on,
-                                                               specifyFamily: self.chkFamilies.state == .on,
-                                                               people: people,
-                                                               events: events,
-                                                               repositoryPath: repos,
-                                                               family: family,
-                                                               patchImageDescription: self.chkPatchImageDescription.state == .on,
-                                                               patchDateTime: self.chkPatchDateTime.state == .on,
-                                                               patchGeolocation: self.chkPatchGeolocation.state == .on,
-                                                               fileNaming: fileNaming,
-                                                               subFolder: subfolder)
+                                                               name: form.name,
+                                                               directory: form.directory,
+                                                               duplicateStrategy: form.duplicateStrategy,
+                                                               specifyPeople: form.specifyPeople,
+                                                               specifyEvent: form.specifyEvent,
+                                                               specifyRepository: form.specifyRepository,
+                                                               specifyFamily: form.specifyFamily,
+                                                               people: form.people,
+                                                               events: form.events,
+                                                               repositoryPath: form.repositoryPath,
+                                                               family: form.family,
+                                                               patchImageDescription: form.patchImageDescription,
+                                                               patchDateTime: form.patchDateTime,
+                                                               patchGeolocation: form.patchGeolocation,
+                                                               fileNaming: form.fileNaming,
+                                                               subFolder: form.subFolder)
             
             if status != .OK {
                 print(status)
                 print("Unable to update export profile id=\(self.editingId)")
                 return
             }else{
-                profile.name = name
-                profile.directory = path
-                profile.duplicateStrategy = fileDuplicated
-                profile.specifyPeople = self.chkPeople.state == .on
-                profile.specifyEvent = self.chkEvents.state == .on
-                profile.specifyRepository = self.chkRepository.state == .on
-                profile.specifyFamily = self.chkFamilies.state == .on
-                profile.people = people
-                profile.events = events
-                profile.repositoryPath = repos
-                profile.family = family
-                profile.patchImageDescription = self.chkPatchImageDescription.state == .on
-                profile.patchDateTime = self.chkPatchDateTime.state == .on
-                profile.patchGeolocation = self.chkPatchGeolocation.state == .on
-                profile.fileNaming = fileNaming
-                profile.subFolder = subfolder
+                profile = form
+                profile.id = self.editingId
             }
         }
         
@@ -550,6 +565,41 @@ class ExportConfigurationViewController: NSViewController {
         let url = URL(fileURLWithPath: self.txtDirectory.stringValue)
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
+    
+    // MARK: - CALCULATE & REHEARSAL
+    
+    @IBAction func onRehearsalClicked(_ sender: NSButton) {
+        // TODO rehearsal export (query from db, no file i/o)
+    }
+    
+    @IBAction func onCopySQLClicked(_ sender: NSButton) {
+        var profile:ExportProfile
+        if let pf = ExportDao.default.getExportProfile(id: self.editingId) {
+            profile = pf
+        }else{
+            let pf = self.fillProfileFromForm(profile: ExportProfile())
+            profile = pf
+        }
+        let sql = ExportDao.default.getSQLForImageExport(profile: profile)
+        print(sql)
+        self.lblCalculate.stringValue = "Copied SQL to clipboard."
+        let pasteboard = NSPasteboard.general
+        pasteboard.declareTypes([.string], owner: nil)
+        pasteboard.setString(sql, forType: .string)
+    }
+    
+    @IBAction func onCalculateClicked(_ sender: NSButton) {
+        var profile:ExportProfile
+        if let pf = ExportDao.default.getExportProfile(id: self.editingId) {
+            profile = pf
+        }else{
+            let pf = self.fillProfileFromForm(profile: ExportProfile())
+            profile = pf
+        }
+        let count = ExportDao.default.countImagesForExport(profile: profile)
+        self.lblCalculate.stringValue = "Profile affects \(count) images."
+    }
+    
     
     // MARK: - TOGGLES
     

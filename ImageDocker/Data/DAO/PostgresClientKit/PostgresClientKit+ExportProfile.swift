@@ -228,6 +228,10 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
         return sql
     }
     
+    func getSQLForImageExport(profile:ExportProfile) -> String {
+        return self.generateImageQuerySQL(isCount: false, profile: profile, limit: nil)
+    }
+    
     func getImagesForExport(profile:ExportProfile, limit:Int?) -> [Image] {
         let db = PostgresConnection.database()
         

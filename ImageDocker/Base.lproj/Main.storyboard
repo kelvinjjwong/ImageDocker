@@ -550,13 +550,13 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
                                             <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fHj-eQ-neO">
-                                                <rect key="frame" x="0.0" y="0.0" width="580" height="197"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="580" height="195"/>
                                                 <clipView key="contentView" id="eei-jG-19T">
-                                                    <rect key="frame" x="0.0" y="0.0" width="580" height="197"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="580" height="195"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" id="ECf-s9-RCm" customClass="DarkTableView" customModule="ImageDocker" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="1317" height="197"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="1317" height="195"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <size key="intercellSpacing" width="3" height="2"/>
                                                             <color key="backgroundColor" name="controlShadowColor" catalog="System" colorSpace="catalog"/>
@@ -2012,11 +2012,11 @@
                                                                 <rect key="frame" x="34" y="83" width="230" height="170"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="D2k-1f-peO">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="230" height="170"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="230" height="155"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="Ach-a0-h7S" viewBased="YES" id="kXx-S6-VDX">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="257" height="145"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="257" height="130"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <size key="intercellSpacing" width="3" height="2"/>
                                                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2092,7 +2092,7 @@
                                                                     <nil key="backgroundColor"/>
                                                                 </clipView>
                                                                 <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="5J2-jr-2kG">
-                                                                    <rect key="frame" x="0.0" y="154" width="230" height="16"/>
+                                                                    <rect key="frame" x="0.0" y="155" width="230" height="15"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="OpC-4i-XUI">
@@ -2548,14 +2548,14 @@ brew install ifuse</string>
                                                                 <rect key="frame" x="20" y="20" width="374" height="132"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <clipView key="contentView" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" id="UBo-bc-TBt">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="374" height="132"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="359" height="132"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <textView ambiguous="YES" editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="Xti-RX-E8d">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="374" height="132"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="359" height="132"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            <size key="minSize" width="374" height="132"/>
+                                                                            <size key="minSize" width="359" height="132"/>
                                                                             <size key="maxSize" width="390" height="10000000"/>
                                                                             <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                         </textView>
