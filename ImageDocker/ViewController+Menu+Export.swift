@@ -74,6 +74,13 @@ extension ViewController {
         // TODO export single profile
         let title = menuItem.title
         print("TODO export single profile \(title)")
+        DispatchQueue.global().async {
+            if let profile = ExportDao.default.getExportProfile(name: title) {
+                print("Got export profile id \(profile.id)")
+                let images = ExportDao.default.getImagesForExport(profile: profile, limit: nil)
+                print("loaded images: \(images.count)")
+            }
+        }
     }
  
     @objc func exportMenuExportAction(_ menuItem:NSMenuItem) {

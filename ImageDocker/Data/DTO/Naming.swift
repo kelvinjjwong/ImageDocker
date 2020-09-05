@@ -622,134 +622,164 @@ struct NamingForExporting {
         return eventAndPlace
     }
     
-    func buildFilename(photo:Image, toPath path:String, 
-                             ignoreDiffPathChecking:Bool = false,
-                             forceGenerateMD5:Bool = false) -> (isSamePath: Bool, existAtPath: FileExistState, filename:String, md5:String) {
-        
-        var filenameComponents:[String] = []
-        
-        // Date
-        var photoDateFormatted = ""
-        if photo.photoTakenDate != nil {
-            photoDateFormatted = dateFormatter.string(from: photo.photoTakenDate!)
-            filenameComponents.append(photoDateFormatted)
-        }
-        
-        // Event & Place
-        let eventAndPlace = Naming.Export.getImageBrief(image: photo)
-        if eventAndPlace != "" {
-            filenameComponents.append(eventAndPlace)
-        }
-        
-        // Image Source
-        if (photo.filename.starts(with: "mmexport")) {
-            filenameComponents.append(" (来自微信)")
-        }
-        
-        if (photo.filename.starts(with: "QQ空间视频_")) {
-            filenameComponents.append(" (来自QQ)")
-        }
-        
-        if (photo.filename.starts(with: "Screenshot_")) {
-            filenameComponents.append(" (手机截屏)")
-        }
-        
-        // Combine
-        let fileExt:String = (photo.filename.split(separator: Character(".")).last?.lowercased())!
-        filenameComponents.append(".")
-        filenameComponents.append(fileExt)
-        
-        // export as this name
-        var filename:String = filenameComponents.joined()
-        
-        // START: check duplicates, adjust filename if duplicates at target path
-        
-        // export to this path
-        var targetPath:String = "\(path)/\(filename)"
-        
-        var previousTargetPath = "\(photo.exportToPath ?? "")/\(photo.exportAsFilename ?? "")"
-        if previousTargetPath == "/" {
-            previousTargetPath = ""
-        }
-        
-        let isSamePath:Bool = ignoreDiffPathChecking ? true : ( previousTargetPath == targetPath )
-        
-        // detect duplicates
-        let md5OfSourceFile = forceGenerateMD5 ? self.sourceFileSystemHandler.md5(pathOfFile: photo.path) : ( photo.exportedMD5 ?? self.sourceFileSystemHandler.md5(pathOfFile: photo.path) )
-        
-        var state = self.targetFileSystemHandler.fileExists(atPath: targetPath, md5: md5OfSourceFile)
-        
-        if state == .notExistAtPath {
-            return (isSamePath: isSamePath, existAtPath: .notExistAtPath, filename: filename, md5: md5OfSourceFile)
-        }
-        
-        if state == .existAtPathWithSameMD5 {
-            return (isSamePath: isSamePath, existAtPath: .existAtPathWithSameMD5, filename: filename, md5: md5OfSourceFile)
-        }
-        
-        // if another photo occupied the filename at targetPath, with different md5, change filename
-        if state == .existAtPathWithDifferentMD5 {
+    private func addNumberToFilename(basePath:String, filename:String) -> String {
+        for i in 1...9999 {
+            let suffix = i < 10 ? "0\(i)" : "\(i)"
             
-            // add camera model to suffix
-            //            filenameComponents.removeLast()
-            //            filenameComponents.removeLast()
-            //            if photo.cameraMaker != nil && photo.cameraMaker != "" {
-            //                filenameComponents.append(" (\(photo.cameraMaker!)")
-            //
-            //                if photo.cameraModel != nil && photo.cameraModel != "" {
-            //                    filenameComponents.append(" \(photo.cameraModel!)")
-            //                }
-            //                filenameComponents.append(")")
-            //            }
-            //            filenameComponents.append(".")
-            //            filenameComponents.append(fileExt)
-            //            filename = filenameComponents.joined()
-            //            targetPath = "\(path)/\(filename)"
+            let finalFilename = self.addSuffixToFilename(filename: filename, suffix: suffix)
             
-            // add number to suffix
-            for i in 1...9999 {
-                let suffix = i < 10 ? "0\(i)" : "\(i)"
-                
-                state = self.targetFileSystemHandler.fileExists(atPath: targetPath, md5: md5OfSourceFile)
-                if state == .existAtPathWithDifferentMD5 {
-                    filenameComponents.removeLast() // fileExt
-                    filenameComponents.removeLast() // .
-                    if i > 1 {
-                        filenameComponents.removeLast() // suffix
-                    }
-                    filenameComponents.append(" \(suffix)")
-                    filenameComponents.append(".")
-                    filenameComponents.append(fileExt)
-                    filename = filenameComponents.joined()
-                    targetPath = "\(path)/\(filename)"
-                }else{
-                    print("break for-loop")
-                    break
-                }
-            } // state will become .notExistAtPath or .existAtPathWithSameMD5
+            let path = URL(fileURLWithPath: basePath).appendingPathComponent(finalFilename)
+            
+            if !FileManager.default.fileExists(atPath: path.path) {
+                return finalFilename
+            }
         }
-        // only returns: .notExistAtPath or .existAtPathWithSameMD5
-        return (isSamePath: isSamePath, existAtPath: state, filename: filename, md5:md5OfSourceFile)
+        return filename
     }
     
+    private func addSuffixToFilename(filename:String, suffix:String) -> String {
+        let fileExt = filename.split(separator: Character(".")).last ?? ""
+        var fileName = filename.replacingFirstOccurrence(of: ".\(fileExt)", with: "")
+        fileName += "_\(suffix)"
+        let finalFilename = "\(fileName).\(fileExt)"
+        return finalFilename
+    }
     
-    
-    func buildFolder(photo:Image, exportToPath:String) -> String{
-        var pathComponents:[String] = []
-        pathComponents.append(exportToPath)
-        pathComponents.append("\(photo.photoTakenYear ?? 0)年")
-        //let year:String = "\(photo.photoTakenYear)"
-        let month:String = photo.photoTakenMonth! < 10 ? "0\(photo.photoTakenMonth ?? 0)" : "\(photo.photoTakenMonth ?? 0)"
-        //let day:String = photo.photoTakenDay < 10 ? "0\(photo.photoTakenDay)" : "\(photo.photoTakenDay)"
-        let event:String = photo.event == nil || photo.event == "" ? "" : " \(photo.event ?? "")"
-        pathComponents.append("\(month)月\(event)")
-        let path:String = pathComponents.joined(separator: "/")
-        
-        if self.targetFileSystemHandler.createDirectory(atPath: path) {
-            return path
-        }else{
-            return ""
+    private func avoidDuplicateFile(basePath:String, filename:String) -> String {
+        let path = URL(fileURLWithPath: basePath).appendingPathComponent(filename)
+        if FileManager.default.fileExists(atPath: path.path) {
+            return self.addNumberToFilename(basePath: basePath, filename: filename)
         }
+        return filename
+    }
+    
+    func buildExportFilenameWhenDuplicated(image:Image, profile:ExportProfile, basePath:String, filename:String) -> String {
+        var changedFilename = filename
+        if profile.duplicateStrategy == "OVERWRITE" {
+            return filename
+        }else if profile.duplicateStrategy == "NUMBER" {
+            return self.avoidDuplicateFile(basePath: basePath, filename: filename)
+        }else if profile.duplicateStrategy == "DEVICE_NAME" {
+            
+            if let repository = RepositoryDao.default.getContainer(path: image.repositoryPath) {
+                if repository.deviceId != "" {
+                    if let device = DeviceDao.default.getDevice(deviceId: repository.deviceId) {
+                        let deviceName = device.name ?? device.model ?? ""
+                        if deviceName != "" {
+                            changedFilename = self.addSuffixToFilename(filename: filename, suffix: deviceName)
+                        }
+                    }
+                }
+            }
+        }else if profile.duplicateStrategy == "DEVICE_MODEL" {
+            
+            if let cameraMaker = image.cameraMaker, let cameraModel = image.cameraModel {
+                let camera = "\(cameraMaker) \(cameraModel)".trimmingCharacters(in: .whitespacesAndNewlines)
+                changedFilename = self.addSuffixToFilename(filename: filename, suffix: camera)
+            }
+            
+        }
+        return self.avoidDuplicateFile(basePath: basePath, filename: changedFilename)
+        
+    }
+    
+    func buildExportFilename(image:Image, profile:ExportProfile, subfolder:String) -> String {
+        
+        if profile.fileNaming == "ORIGIN" {
+            return image.filename
+            
+        }else if profile.fileNaming == "DATETIME" {
+            
+            var filenameComponents:[String] = []
+            var photoDateFormatted = ""
+            if let photoTakenDate = image.photoTakenDate {
+                photoDateFormatted = dateFormatter.string(from: photoTakenDate)
+                filenameComponents.append(photoDateFormatted)
+            }
+            
+            if filenameComponents.count == 0 {
+                return image.filename
+            }else{
+                return filenameComponents.joined()
+            }
+            
+        }else if profile.fileNaming == "DATETIME_BRIEF" {
+            
+            var filenameComponents:[String] = []
+            var photoDateFormatted = ""
+            if let photoTakenDate = image.photoTakenDate {
+                photoDateFormatted = dateFormatter.string(from: photoTakenDate)
+                filenameComponents.append(photoDateFormatted)
+            }
+            let eventAndPlace = Naming.Export.getImageBrief(image: image)
+            if eventAndPlace != "" {
+                filenameComponents.append(eventAndPlace)
+            }
+            
+            if filenameComponents.count == 0 {
+                return image.filename
+            }else{
+                return filenameComponents.joined()
+            }
+        }
+        return image.filename
+    }
+    
+    private func createDirectoryIfNotExist(basePath: String, subfolder: String) -> (String, String) {
+        let path = URL(fileURLWithPath: basePath).appendingPathComponent(subfolder).path
+        if self.targetFileSystemHandler.createDirectory(atPath: path) {
+            return (path, subfolder)
+        }else{
+            return (basePath, "")
+        }
+    }
+    
+    func buildExportSubFolder(image:Image, profile:ExportProfile, triggerTime:Date) -> (String, String){
+        let exportToPath = profile.directory
+        
+        if profile.subFolder == "NONE" {
+            return (exportToPath, "")
+        }else if profile.subFolder == "EVENT" {
+            
+            let (_, createdSubfolder) = self.createDirectoryIfNotExist(basePath: exportToPath, subfolder: image.event ?? "")
+            return (exportToPath, createdSubfolder)
+            
+        }else if profile.subFolder == "EXPORT_TIME" {
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.timeZone = TimeZone.current
+            dateFormatter.locale = Locale.current
+            dateFormatter.calendar = Calendar(identifier: .gregorian)
+            dateFormatter.dateFormat = "yyyy-MM-dd_HHmmss"
+            let subfolder = dateFormatter.string(from: triggerTime)
+            let (_, createdSubfolder) = self.createDirectoryIfNotExist(basePath: exportToPath, subfolder: subfolder)
+            return (exportToPath, createdSubfolder)
+            
+        }else if profile.subFolder == "DATE_EVENT" {
+            
+            var subfolder = ""
+            var datepart = ""
+            var eventpart = ""
+            if let _ = image.photoTakenDate {
+                let year = "\(image.photoTakenYear ?? 0)"
+                let month = image.photoTakenMonth! < 10 ? "0\(image.photoTakenMonth ?? 0)" : "\(image.photoTakenMonth ?? 0)"
+                datepart = "\(year)年/\(month)月"
+                if let event = image.event {
+                    eventpart = " (\(event))"
+                }
+            }else{
+                datepart = "NODATE"
+                if let event = image.event {
+                    eventpart = " (\(event))"
+                }
+            }
+            subfolder = "\(datepart)\(eventpart)"
+            
+            let (_, createdSubfolder) = self.createDirectoryIfNotExist(basePath: exportToPath, subfolder: subfolder)
+            return (exportToPath, createdSubfolder)
+            
+        }
+        return (exportToPath, "")
     }
     
 }

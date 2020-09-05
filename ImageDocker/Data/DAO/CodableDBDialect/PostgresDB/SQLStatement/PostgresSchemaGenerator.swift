@@ -132,15 +132,23 @@ public final class PostgresSchemaSQLGenerator : SchemaSQLGenerator {
                 }
                 if let defaultValue = column.getDefaultExpression(), let columnType = column.getDefaultValueType() {
                     var sql = "ALTER TABLE \(definition.getName().quotedDatabaseIdentifier) ALTER COLUMN \(column.getName().quotedDatabaseIdentifier) SET DEFAULT "
+                    var bulkUpdateSql = "UPDATE \(definition.getName().quotedDatabaseIdentifier) SET \(column.getName().quotedDatabaseIdentifier) = "
                     let sqlType = self.sqlType(of: columnType)
                     if sqlType == "TEXT" || sqlType == "VARCHAR" {
                         sql += defaultValue.quotedDatabaseValueIdentifier
+                        bulkUpdateSql += defaultValue.quotedDatabaseValueIdentifier
                     }else if sqlType == "BOOL" {
                         sql += defaultValue.quotedDatabaseValueIdentifier
+                        bulkUpdateSql += defaultValue.quotedDatabaseValueIdentifier
                     }else{
                         sql += defaultValue
+                        bulkUpdateSql += defaultValue
                     }
+                    bulkUpdateSql += " WHERE \(column.getName().quotedDatabaseIdentifier) IS NULL"
                     cols.append(sql)
+                    cols.append(bulkUpdateSql)
+                    
+                    // TODO: add UPDATE TABLE SQL for the new column with default value
                 }
                 if let primaryKey = column.isPrimaryKey() {
                     let name = self.getConstraintName(type: "pk", table: definition.getName(), column: column.getName())

@@ -164,12 +164,72 @@ class ExportDaoGRDB : ExportDaoInterface {
         return .OK
     }
     
+    func getLastExportTime(profile:ExportProfile) -> Date? {
+        // query ExportLog to get max export time
+        let sql = "select max(lastExportTime) as lastExportTime from ExportLog where profileId = '\(profile.id)'"
+        var date:Date? = nil
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, sql: sql)
+                if rows.count > 0 {
+                    for row in rows {
+                        let str = "\(row[0] ?? "")"
+                        date = dateFormatter.date(from: str)
+                    }
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return date
+    }
+    
+    func getExportedFilename(imageId:String, profileId:String) -> (String?, String?) {
+        let sql = """
+        select subfolder, filename from ExportLog where imageId = '\(imageId)' and profileId = '\(profileId)'
+        """
+        var subfolder:String? = nil
+        var filename:String? = nil
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, sql: sql)
+                if rows.count > 0 {
+                    let row = rows[0]
+                    subfolder = row[0]
+                    filename = row[1]
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return (subfolder, filename)
+    }
+    
     func getExportProfile(id:String) -> ExportProfile? {
         var profile:ExportProfile?
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 profile = try ExportProfile.fetchOne(db, key: id)
+            }
+        }catch{
+            print(error)
+        }
+        return profile
+    }
+    
+    func getExportProfile(name:String) -> ExportProfile? {
+        var profile:ExportProfile?
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.read { db in
+                profile = try ExportProfile.fetchOne(db, key: ["name" : name])
             }
         }catch{
             print(error)
@@ -205,16 +265,62 @@ class ExportDaoGRDB : ExportDaoInterface {
     
     // MARK: - SEARCH FOR IMAGES
     
-    func getAllExportedImages(includeHidden:Bool = true) -> [Image] {
+    func generateImageQuerySQLPart(tableAlias:String, tableColumn:String, profileSetting:String) -> String {
+        var SQL = ""
+        if profileSetting.starts(with: "include:") {
+            SQL = """
+            and \(tableAlias).\(tableColumn) in (\(profileSetting.replacingFirstOccurrence(of: "include:", with: "").replacingOccurrences(of: "'", with: "''").replacingOccurrences(of: "\"", with: "'")))
+            """
+        }else if profileSetting.starts(with: "exclude:"){
+            SQL = """
+            and \(tableAlias).\(tableColumn) not in (\(profileSetting.replacingFirstOccurrence(of: "exclude:", with: "").replacingOccurrences(of: "'", with: "''").replacingOccurrences(of: "\"", with: "'")))
+            """
+        }
+        return SQL
+    }
+    
+    func generateImageQuerySQL(isCount:Bool, profile:ExportProfile, limit:Int?) -> String {
+        let repoSQL = self.generateImageQuerySQLPart(tableAlias: "c", tableColumn: "name", profileSetting: profile.repositoryPath)
+        let eventSQL = self.generateImageQuerySQLPart(tableAlias: "i", tableColumn: "event", profileSetting: profile.events)
+        
+        let columns = isCount ? "count(1) as recordCount" : "i.*"
+        
+        let _ = """
+        select i.*
+        from Image i
+        left join ImageContainer c on i.repositoryPath = c.repositoryPath
+        where i.hidden = 0 and i.hiddenByContainer = 0 and i.hiddenByRepository = 0
+        and i.photoTakenYear > 0
+        and c.name in ('Who''s iphone6', 'Who''s iPhone8')
+        and i.event in ('boating','swimming')
+        and recognizedPeopleIds similar to '%(,someone,|,anotherone,)%'
+        """
+        let sql = """
+        select \(columns)
+        from Image i
+        left join ImageContainer c on i.repositoryPath = c.repositoryPath
+        where i.hidden = 0 and i.hiddenByContainer = 0 and i.hiddenByRepository = 0
+        and i.photoTakenYear > 0
+        \(repoSQL)
+        \(eventSQL)
+        order by i.photoTakenYear desc, i.photoTakenMonth desc, i.photoTakenDay desc
+        """
+        
+        // TODO: after profile.lastExportEndTime
+        
+        print("sql for export images:")
+        print(sql)
+        
+        return sql
+    }
+    
+    func getImagesForExport(profile:ExportProfile, limit:Int?) -> [Image] {
+        let sql = self.generateImageQuerySQL(isCount: false, profile: profile, limit: limit)
         var result:[Image] = []
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
-                if includeHidden {
-                    result = try Image.filter(sql: "exportToPath is not null and exportAsFilename is not null and exportToPath <> '' and exportAsFilename <> ''").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
-                }else{
-                    result = try Image.filter(sql: "hidden = 0 and exportToPath is not null and exportAsFilename is not null and exportToPath <> '' and exportAsFilename <> ''").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
-                }
+                result = try Image.fetchAll(db, sql: sql)
             }
         }catch{
             print(error)
@@ -222,30 +328,41 @@ class ExportDaoGRDB : ExportDaoInterface {
         return result
     }
     
-    func getAllPhotoFilesForExporting(after date:Date, limit:Int? = nil) -> [Image] {
-        var result:[Image] = []
-        do {
-            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
-            try db.read { db in
-                var query = Image.filter(sql: "hidden != 1 AND photoTakenYear <> 0 AND photoTakenYear IS NOT NULL AND (updateDateTimeDate > ? OR updateExifDate > ? OR updateLocationDate > ? OR updateEventDate > ? OR exportTime is null)", arguments:StatementArguments([date, date, date, date]))
-                    .order([Column("photoTakenDate").asc, Column("filename").asc])
-                if let lim = limit {
-                    query = query.limit(lim)
-                }
-                result = try query.fetchAll(db)
-            }
-        }catch{
-            print(error)
-        }
-        return result
-    }
-    
-    func countAllPhotoFilesForExporting(after date:Date) -> Int {
+    func countImagesForExport(profile:ExportProfile) -> Int {
         var result = 0
+        let sql = self.generateImageQuerySQL(isCount: true, profile: profile, limit: nil)
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
-                result = try Image.filter(sql: "hidden != 1 AND photoTakenYear <> 0 AND photoTakenYear IS NOT NULL AND (updateDateTimeDate > ? OR updateExifDate > ? OR updateLocationDate > ? OR updateEventDate > ? OR exportTime is null)", arguments:StatementArguments([date, date, date, date])).fetchCount(db)
+                let rows = try Row.fetchAll(db, sql: sql)
+                if rows.count > 0 {
+                    result = rows[0]["recordCount"] as Int? ?? 0
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func getExportedImages(profileId:String) -> [(String, String, String)] {
+        // TODO add function for GRDB
+        let sql = """
+        select imageId, subfolder, filename from ExportLog where profileId = '\(profileId)' order by lastExportTime
+        """
+        var result:[(String, String, String)] = []
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, sql: sql)
+                if rows.count > 0 {
+                    for row in rows {
+                        let imageId = "\(row[0] ?? "")"
+                        let subfolder = "\(row[1] ?? "")"
+                        let filename = "\(row[2] ?? "")"
+                        result.append((imageId, subfolder, filename))
+                    }
+                }
             }
         }catch{
             print(error)
@@ -268,64 +385,93 @@ class ExportDaoGRDB : ExportDaoInterface {
         return .OK
     }
     
-    func storeImageExportedMD5(path:String, md5:String) -> ExecuteState{
+    func storeImageExportSuccess(imageId:String, profileId:String, repositoryPath:String, subfolder:String, filename: String, exportedMD5: String) -> ExecuteState{
+        var recordExists = false
+        let sql = """
+        select count(1) from ExportLog where imageId='\(imageId)' and profileId='\(profileId)'
+        """
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
-            try db.write { db in
-                try db.execute(sql: "UPDATE Image set exportedMD5 = ? WHERE path=?", arguments: StatementArguments([md5, path]))
+            try db.read { db in
+                let rows = try Row.fetchAll(db, sql: sql)
+                if rows.count > 0 {
+                    for row in rows {
+                        let imageCount = Int("\(row[0] ?? 0)") ?? 0
+                        if imageCount > 0 {
+                            recordExists = true
+                        }
+                    }
+                }
             }
         }catch{
-            return SQLHelper.errorState(error)
+            print(error)
         }
-        return .OK
-    }
-    
-    func storeImageExportSuccess(path:String, date:Date, exportToPath:String, exportedFilename:String, exportedMD5:String, exportedLongDescription:String) -> ExecuteState{
-        do {
-            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
-            try db.write { db in
-                try db.execute(sql: "UPDATE Image set exportTime = ?, exportToPath = ?, exportAsFilename = ?, exportedMD5 = ?, exportedLongDescription = ?, exportState = 'OK', exportFailMessage = '' WHERE path=?", arguments: StatementArguments([date, exportToPath, exportedFilename, exportedMD5, exportedLongDescription, path]) ?? [])
-            }
-        }catch{
-            return SQLHelper.errorState(error)
-        }
-        return .OK
-    }
-    
-    func storeImageExportedTime(path:String, date:Date) -> ExecuteState{
-        do {
-            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
-            try db.write { db in
-                try db.execute(sql: "UPDATE Image set exportTime = ? WHERE path=?", arguments: StatementArguments([date, path]) ?? [])
-            }
-        }catch{
-            return SQLHelper.errorState(error)
-        }
-        return .OK
-    }
-    
-    func storeImageExportFail(path:String, date:Date, message:String) -> ExecuteState{
-        do {
-            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
-            try db.write { db in
-                try db.execute(sql: "UPDATE Image set exportTime = ?, exportState = 'FAIL', exportFailMessage = ? WHERE path=?", arguments: StatementArguments([date, message, path]) ?? [])
-            }
-        }catch{
-            return SQLHelper.errorState(error)
-        }
-        return .OK
-    }
-    
-    func cleanImageExportPath(path:String) -> ExecuteState {
-        do {
-            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
-            try db.write { db in
-                try db.execute(sql: "UPDATE Image set exportToPath = null, exportAsFilename = null, exportTime = null, exportState = null, exportFailMessage = '', exportedMD5 = null, WHERE path=?", arguments: StatementArguments([path]))
-            }
-        }catch{
-            return SQLHelper.errorState(error)
-        }
-        return .OK
         
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            
+            try db.write { db in
+                
+                if !recordExists {
+                    try db.execute(sql: "INSERT ExportLog (imageId,profileid,lastExportTime,repositoryPath,subfolder,filename,exportedMD5,state,failMessage) VALUES (?, ?, CURRENT_TIMESTAMP, ?, ? , ?, ?, 'OK', '')", arguments: StatementArguments([imageId, profileId, repositoryPath, subfolder, filename, exportedMD5]) ?? [])
+                }else{
+
+                    try db.execute(sql: "UPDATE ExportLog set lastExportTime = CURRENT_TIMESTAMP, repositoryPath = ?, subfolder = ?, filename = ?, exportedMD5 = ?, state = 'OK', failMessage = '' WHERE imageId=? and profileId=?", arguments: StatementArguments([repositoryPath, subfolder, filename, exportedMD5, imageId, profileId]) ?? [])
+                }
+                
+            }
+        }catch{
+            return SQLHelper.errorState(error)
+        }
+        return .OK
+    }
+    
+    func storeImageExportFail(imageId:String, profileId:String, repositoryPath:String, subfolder:String, filename: String, failMessage:String) -> ExecuteState{
+        var recordExists = false
+        let sql = """
+        select count(1) from ExportLog where imageId='\(imageId)' and profileId='\(profileId)'
+        """
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.read { db in
+                let rows = try Row.fetchAll(db, sql: sql)
+                if rows.count > 0 {
+                    for row in rows {
+                        let imageCount = Int("\(row[0] ?? 0)") ?? 0
+                        if imageCount > 0 {
+                            recordExists = true
+                        }
+                    }
+                }
+            }
+        }catch{
+            print(error)
+        }
+        
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.write { db in
+                if !recordExists {
+                    try db.execute(sql: "INSERT ExportLog (imageId,profileid,repositoryPath,subfolder,filename,state,failMessage) VALUES (?, ?, ?, ? , ?, ?, 'ERROR', ?)", arguments: StatementArguments([imageId, profileId, repositoryPath, subfolder, filename, failMessage]) ?? [])
+                }else{
+                    try db.execute(sql: "UPDATE ExportLog set repositoryPath = ?, subfolder = ?, filename = ?, state = 'ERROR', failMessage = ? WHERE imageId=? and profileId=?", arguments: StatementArguments([repositoryPath, subfolder, filename, failMessage, imageId, profileId]) ?? [])
+                }
+            }
+        }catch{
+            return SQLHelper.errorState(error)
+        }
+        return .OK
+    }
+    
+    func deleteExportLog(imageId:String, profileId:String) -> ExecuteState {
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.write { db in
+                try db.execute(sql: "DELETE FROM ExportLog WHERE imageId='\(imageId)' and profileId='\(profileId)'")
+            }
+        }catch{
+            return SQLHelper.errorState(error)
+        }
+        return .OK
     }
 }

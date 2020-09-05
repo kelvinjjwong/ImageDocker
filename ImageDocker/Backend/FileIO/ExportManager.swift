@@ -16,6 +16,8 @@ class ExportManager {
     var suppressed:Bool = false
     var messageBox:NSTextField? = nil
     
+    // MARK: - PROCESS HANDLING
+    
     @objc func enable() {
         self.suppressed = false
         
@@ -34,7 +36,6 @@ class ExportManager {
             }
         }
     }
-    
     
     /**
      If suppressed from outside, stop immediately
@@ -59,149 +60,44 @@ class ExportManager {
         }
     }
     
-    fileprivate func getExportedFilenames() -> Set<String> {
-        let allExportedImagesStored = ExportDao.default.getAllExportedImages(includeHidden: false)
-        var allExportedFilenames:Set<String> = []
-        for image in allExportedImagesStored {
-            let path = "\(image.exportToPath ?? "")/\(image.exportAsFilename ?? "")"
-            let fileUrl = URL(fileURLWithPath: path) // maybe contains symbol links
-            let resolvedPath = fileUrl.resolvingSymlinksInPath().path
-            if !FileManager.default.fileExists(atPath: fileUrl.path) {
-                // no longer exists exported file, clean exported fields in database
-                ExportDao.default.cleanImageExportPath(path: image.path)
-            }else{
-                allExportedFilenames.insert(resolvedPath) // transform to non symbol link physical path
-            }
-        }
-        return allExportedFilenames
+    
+    
+    // MARK: - EXIF PATCH
+    private func patchImageDescription(targetFullFilePath:String, image:Image) {
+        let generatedImageDescription = Naming.Export.getNewDescription(image: image)
+        ExifTool.helper.patchImageDescription(description: generatedImageDescription, url: URL(fileURLWithPath: targetFullFilePath))
+
+        print("\(Date()) Change ImageDescription for \(image.path) : DONE")
     }
     
-    fileprivate func checkIfExportedFilesExist() {
-        self.printMessage("Loading exported files for validation ...")
-        print("\(Date()) EXPORT: DB LOADING getAllExportedImages")
-        let allExportedImagesStored = ExportDao.default.getAllExportedImages(includeHidden: false)
-        print("\(Date()) EXPORT: DB LOADING getAllExportedImages : DONE")
-        let total = allExportedImagesStored.count
-        var k:Int = 0
-        
-        print("\(Date()) EXPORT: CHECKING IF MARKED EXPORTED ARE REALLY EXPORTED")
-        for photo in allExportedImagesStored {
-            
-            // if suppressed from outside, stop immediately
-            guard self.nonStop() else {return}
-            
-            k += 1
-            self.printMessage("Validating exported files ... ( \(k) / \(total) )")
-            
-            if photo.exportToPath != nil && photo.exportAsFilename != nil {
-                let fullpath:String = "\(photo.exportToPath ?? "")/\(photo.exportAsFilename ?? "")"
-                if !FileManager.default.fileExists(atPath: fullpath){
-                    ExportDao.default.cleanImageExportPath(path: photo.path)
-                }else{
-                    if photo.exportedMD5 == nil {
-                        self.printMessage("Updating MD5 of exported file ... ( \(k) / \(total) )")
-                        let md5 = ComputerFileManager.default.md5(pathOfFile: photo.path)
-                        ExportDao.default.storeImageExportedMD5(path: photo.path, md5: md5)
-                        
-                    }
-                }
-            }
-        }
-        
-        print("\(Date()) EXPORT: CHECKING IF MARKED EXPORTED ARE REALLY EXPORTED: DONE")
+    private func patchImageDateTime(image:Image, profile:ExportProfile, targetFilePath:String) {
+        // TODO: patch EXIF DATETIME
     }
     
-    private func prepareExportDestination(path: String) -> Bool {
-        let fm:FileManager = FileManager.default
-        if !fm.fileExists(atPath: path) {
-            do {
-                try fm.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
-            }catch{
-                print("Cannot location or create destination directory for exporting photos: \(path)")
-                print(error)
-                return false
-            }
-        }
-        return true
+    private func patchImageGeolocation(image:Image, profile:ExportProfile, targetFilePath:String) {
+        // TODO: patch EXIF GEOLOCATION
     }
     
-    private func patchImageDescription(image photo:Image) -> (Bool, String) {
-        let originalImageDescription = Naming.Export.getOriginalDescription(image: photo)
-        let generatedImageDescription = Naming.Export.getNewDescription(image: photo)
-        if originalImageDescription != generatedImageDescription {
-            print("\(Date()) Change ImageDescription for \(photo.path)")
-            ExifTool.helper.patchImageDescription(description: generatedImageDescription, url: URL(fileURLWithPath: photo.path))
-            if generatedImageDescription != photo.longDescription {
-                ImageRecordDao.default.storeImageDescription(path: photo.path, shortDescription: nil, longDescription: generatedImageDescription)
-            }
-            return (true, generatedImageDescription)
-            print("\(Date()) Change ImageDescription for \(photo.path) : DONE")
-        }
-        return (false, generatedImageDescription)
+    private func generateImageMD5(path:String) -> String {
+        let md5 = ComputerFileManager.default.md5(pathOfFile: path)
+        return md5
     }
     
-    private func exists(image photo:Image, targetPath path:String, targetFilename filename:String,
-                        imageDescription:String,
-                        fileState:(isSamePath: Bool, existAtPath: FileExistState, filename:String, md5:String)) -> Bool {
-        
-        if fileState.existAtPath == .existAtPathWithSameMD5 {
-            if fileState.isSamePath {
-                if photo.exportTime == nil {
-                    ExportDao.default.storeImageExportedTime(path: path, date: Date())
-                }
-            }else{
-                ExportDao.default.storeImageExportSuccess(path: photo.path, date: Date(),
-                                                           exportToPath: path,
-                                                           exportedFilename: filename,
-                                                           exportedMD5: fileState.md5,
-                                                           exportedLongDescription: imageDescription)
-            }
-            if photo.exportedMD5 == nil {
-                ExportDao.default.storeImageExportedMD5(path: photo.path, md5: fileState.md5)
-            }
-            return true
-        }
-        return false
-    }
+    // MARK: - EXPORT PROFILE NOW
     
-    private func exportFile(image photo:Image, path:String, filename:String, imageDescription:String, md5:String) -> Bool {
-        print("\(Date()) Copy file \(photo.path)")
-        var copied = false
-        var errorMessage = ""
-        autoreleasepool { () -> Void in
-            do {
-                try FileManager.default.copyItem(atPath: photo.path, toPath: "\(path)/\(filename)")
-                copied = true
-            }catch {
-                print("Cannot copy from: \(photo.path) to: \(path)/\(filename) ")
-                print(error)
-                copied = false
-                errorMessage = error.localizedDescription
-            }
-        }
-        if !copied {
-            ExportDao.default.storeImageExportFail(path: photo.path, date: Date(), message: "ERROR: \(errorMessage)")
-            
-            return false
-        }else{
-            print("\(Date()) Copy file \(photo.path) : DONE")
-            
-            ExportDao.default.storeImageExportSuccess(path: photo.path, date: Date(),
-                                                       exportToPath: path,
-                                                       exportedFilename: filename,
-                                                       exportedMD5: md5,
-                                                       exportedLongDescription: imageDescription)
-            return true
-        }
-    }
-    
-    
-    func export(profile:ExportProfile, after date:Date, housekeep:Bool) -> (Bool, String) {
+    func export(profile:ExportProfile) -> (Bool, String) {
         guard self.nonStop() && !TaskManager.exporting else {return (false, "PREVENTED")}
         
-        guard self.prepareExportDestination(path: profile.directory) else {
+        var isDir:ObjCBool = false
+        if FileManager.default.fileExists(atPath: profile.directory, isDirectory: &isDir) {
+            if isDir.boolValue == false {
+                return (false, "INACCESSIBLE DIRECTORY")
+            }
+        }else{
             return (false, "INACCESSIBLE DIRECTORY")
         }
+        
+        let triggerTime = Date()
         
         
         //print("exporting")
@@ -215,14 +111,14 @@ class ExportManager {
         // check exported
         self.printMessage("Validating ...")
         
-        self.checkIfExportedFilesExist()
-        
         // check updates and which not exported
         self.printMessage("Searching for updates ...")
         
         print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
         
-        let total = ExportDao.default.countAllPhotoFilesForExporting(after: date)
+        let images = ExportDao.default.getImagesForExport(profile: profile)
+        
+        let total = images.count
         
         var batchTotal = 1
         let batchLimit = 500
@@ -234,88 +130,142 @@ class ExportManager {
             self.printMessage("EXPORT Searching for updates ...")
             
             print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
-        
-            let photos:[Image] = ExportDao.default.getAllPhotoFilesForExporting(after: date, limit: batchLimit)
             
-            batchTotal = photos.count
+            batchTotal = images.count
             
             if batchTotal == 0 {
                 break
             }
             
-            for photo in photos {
+            for image in images {
                 guard self.nonStop() else {return (false, "FORCED STOP")}
                 
                 i += 1
                 self.printMessage("EXPORT Processing ... ( \(i) / \(total) )")
                 
-                print("EXPORT Processing \(i) : \(photo.path)")
-                
-                // invalid date
-                if photo.photoTakenYear == 0 {
-                    continue
-                }
-                
-                let pathUrl = URL(fileURLWithPath: photo.path)
-                let pathExt = pathUrl.pathExtension.lowercased()
-                
-                // invalid file-ext
-                if !Naming.FileType.allowed.contains(pathExt){
-                    ExportDao.default.storeImageExportFail(path: photo.path, date: Date(), message: "FILE EXT DISALLOWED")
-                    continue
-                }
-                
-                // invalid source file
-                if !FileManager.default.fileExists(atPath: photo.path) {
-                    ExportDao.default.storeImageExportFail(path: photo.path, date: Date(), message: "SOURCE FILE NOT FOUND")
-                    continue
-                }
-                
-                var fileChanged = false
-                var generatedImageDescription = ""
-                (fileChanged, generatedImageDescription) = self.patchImageDescription(image: photo)
-                
-                // generate path and filename
-                let path = Naming.Export.buildFolder(photo: photo, exportToPath: profile.directory)
-                let fileState = Naming.Export.buildFilename(photo: photo,
-                                                    toPath: path,
-                                                    forceGenerateMD5: fileChanged)
-                
-                let filename = fileState.filename
-                
-                // check if exist and duplicate
-                
-                if self.exists(image: photo, targetPath: path, targetFilename: filename, imageDescription: generatedImageDescription, fileState: fileState) {
-                    continue
-                }
+                print("EXPORT Processing \(i) : \(image.path)")
                 
                 // not exist at path
                 self.printMessage("EXPORT Copying ... ( \(i) / \(total) )")
                 
-                let _ = self.exportFile(image: photo, path: path, filename: filename, imageDescription: generatedImageDescription, md5: fileState.md5)
+                let _ = self.exportFile(profile: profile, image: image, triggerTime: triggerTime)
             }
         } // end of while loop
-        self.printMessage("")
-        
-        print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED: DONE")
-        
-        if housekeep {
-            self.housekeep(path: profile.directory)
-        }
+        self.printMessage("Export DONE: \(profile.name)")
         
         TaskManager.exporting = false
         
         return (true, "COMPLETED")
     }
     
-    fileprivate func housekeep(path:String) {
+    // MARK: - EXPORT SINGLE FILE
+    
+    private func exportFile(profile:ExportProfile, image:Image, triggerTime:Date) -> Bool {
+        // invalid date
+        if image.photoTakenYear == 0 {
+            return false
+        }
+        
+        let pathUrl = URL(fileURLWithPath: image.path)
+        let fileExt = pathUrl.pathExtension.lowercased()
+        
+        // invalid file-ext
+        if !Naming.FileType.allowed.contains(fileExt){
+            return false
+        }
+        
+        // invalid source file
+        if !FileManager.default.fileExists(atPath: image.path) {
+            print("Source image not found in file system: \(image.path)")
+            return false
+        }
+        
+        // generate target path and filename
+        
+        let (basePath, subfolder) = Naming.Export.buildExportSubFolder(image: image, profile: profile, triggerTime: triggerTime)
+        let targetFilename = Naming.Export.buildExportFilename(image: image, profile: profile, subfolder: subfolder)
+        
+        let fullTargetPath = URL(fileURLWithPath: basePath).appendingPathComponent(subfolder)
+        let fullTargetFilePath = fullTargetPath.appendingPathComponent(targetFilename)
+        
+        print("\(Date()) Copy file [\(image.path)] to [\(fullTargetFilePath)]")
+        
+        // copy file
+        
+        var copied = false
+        var errorMessage = ""
+        autoreleasepool { () -> Void in
+            if let imageId = image.id {
+                let (exportedSubfolder, exportedFilename) = ExportDao.default.getExportedFilename(imageId: imageId, profileId: profile.id)
+                if let exportedSubfolder = exportedSubfolder, let exportedFilename = exportedFilename {
+                    
+                    let exportedPath = URL(fileURLWithPath: profile.directory).appendingPathComponent(exportedSubfolder).appendingPathComponent(exportedFilename)
+                    if FileManager.default.fileExists(atPath: exportedPath.path) {
+                        do {
+                            try FileManager.default.removeItem(atPath: exportedPath.path)
+                        }catch{
+                            print("WARN: Unable to delete previous exported file: \(exportedPath.path)")
+                            print(error)
+                        }
+                    }
+                }
+            }
+            do {
+                try FileManager.default.copyItem(atPath: image.path, toPath: "\(fullTargetFilePath)")
+                copied = true
+            }catch {
+                print("Unable to copy from: [\(image.path)] to: [\(fullTargetFilePath)] ")
+                print(error)
+                copied = false
+                errorMessage = error.localizedDescription
+            }
+        }
+        
+        if copied {
+            // patch EXIF
+            if profile.patchDateTime {
+                self.patchImageDateTime(image: image, profile: profile, targetFilePath: fullTargetFilePath.path)
+            }
+            
+            if profile.patchGeolocation {
+                self.patchImageGeolocation(image: image, profile: profile, targetFilePath: fullTargetFilePath.path)
+            }
+            
+            if profile.patchImageDescription {
+                self.patchImageDescription(targetFullFilePath: fullTargetFilePath.path, image: image)
+            }
+            
+            // generate MD5
+            let md5 = self.generateImageMD5(path: fullTargetFilePath.path)
+            
+            print("\(Date()) Copy file [\(image.path)] to [\(fullTargetFilePath)] DONE.")
+            
+            let _ = ExportDao.default.storeImageExportSuccess(imageId: image.id ?? image.path, profileId: profile.id, repositoryPath: image.repositoryPath, subfolder: subfolder, filename: targetFilename, exportedMD5: md5)
+            // TODO handle db interrupt error
+            return true
+        }else{
+            let _ = ExportDao.default.storeImageExportFail(imageId: image.id ?? image.path, profileId: profile.id, repositoryPath: image.repositoryPath, subfolder: subfolder, filename: targetFilename, failMessage: errorMessage)
+            // TODO handle db interrupt error
+            
+            return false
+        }
+    }
+    
+    // MARK: - HOUSE KEEP
+    func housekeepFilesNotInExportLog(profile:ExportProfile) {
         print("\(Date()) EXPORT: HOUSE KEEP")
         
         self.printMessage("Checking invalid exported files ...")
         
-        let allExportedFilenames:Set<String> = self.getExportedFilenames()
+        let exportedFileInfos = ExportDao.default.getExportedImages(profileId: profile.id)
         
-        let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: path),
+        var fileRecords:Set<String> = []
+        for info in exportedFileInfos {
+            let path = URL(fileURLWithPath: profile.directory).appendingPathComponent(info.1).appendingPathComponent(info.2)
+            fileRecords.insert(path.path)
+        }
+        
+        let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: profile.directory),
                                                         includingPropertiesForKeys: [.isDirectoryKey, .isReadableKey, .isWritableKey ],
                                                         options: [.skipsHiddenFiles], errorHandler: { (url, error) -> Bool in
                                                             print("directoryEnumerator error at \(url): ", error)
@@ -333,8 +283,8 @@ class ExportManager {
                 let url = try file.resourceValues(forKeys: [.isDirectoryKey, .isReadableKey, .isWritableKey])
                 if url.isWritable! {
                     if !url.isDirectory! {
-                        if !allExportedFilenames.contains(file.path) {
-                            print("found useless file \(file.path), mark to delete")
+                        if !fileRecords.contains(file.path) {
+                            print("found file not in record: \(file.path) , mark to delete")
                             uselessFiles.insert(file.path)
                         }
                     }else {
@@ -392,6 +342,49 @@ class ExportManager {
         self.printMessage("")
         
         print("\(Date()) EXPORT: HOUSE KEEP: DONE")
+    }
+    
+    
+    // check if exported file record should not be exported to file system
+    func housekeepNewHiddenImages(profile:ExportProfile) {
+        let exportedImages = ExportDao.default.getExportedImages(profileId: profile.id)
+        for (imageId, subfolder, filename) in exportedImages {
+            var shouldDelete = false
+            var shouldDeleteFile = false
+            
+            // check hidden
+            if let image = ImageRecordDao.default.getImage(id: imageId) {
+                if image.hidden || image.hiddenByContainer || image.hiddenByRepository {
+                    shouldDelete = true
+                    shouldDeleteFile = true
+                }
+            }
+
+            let path = URL(fileURLWithPath: profile.directory).appendingPathComponent(subfolder).appendingPathComponent(filename)
+            // check not exist in file system
+            if !shouldDelete {
+                if !FileManager.default.fileExists(atPath: path.path) {
+                    shouldDelete = true
+                    shouldDeleteFile = false
+                }
+            }
+            
+            // TODO check not in criteria, should delete file and record
+            
+            // delete ExportLog record
+            if shouldDelete {
+                let _ = ExportDao.default.deleteExportLog(imageId: imageId, profileId: profile.id)
+            }
+            
+            if shouldDeleteFile {
+                do {
+                    try FileManager.default.removeItem(atPath: path.path)
+                }catch {
+                    print("Unable to delete invalid exported file \(path.path)")
+                    print(error)
+                }
+            }
+        }
     }
     
 }

@@ -492,6 +492,12 @@ extension SQLiteConnectionGRDB {
             })
         }
         
+        migrator.registerMigration("v35") { db in
+            try db.alter(table: "ExportLog", body: { t in
+                t.add(column: "shouldDelete", .boolean).defaults(to: false)
+            })
+        }
+        
         
         do {
             let dbQueue = try DatabaseQueue(path: SQLiteDataSource.default.getDataSource())

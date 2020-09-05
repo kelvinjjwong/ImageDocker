@@ -80,8 +80,20 @@ class ExportDao {
         return self.impl.updateExportProfileLastExportTime(id: id)
     }
     
+    func getLastExportTime(profile:ExportProfile) -> Date? {
+        return self.impl.getLastExportTime(profile: profile)
+    }
+    
+    func getExportedFilename(imageId:String, profileId:String) -> (String?, String?) {
+        return self.impl.getExportedFilename(imageId: imageId, profileId: profileId)
+    }
+    
     func getExportProfile(id:String) -> ExportProfile? {
         return self.impl.getExportProfile(id: id)
+    }
+    
+    func getExportProfile(name:String) -> ExportProfile? {
+        return self.impl.getExportProfile(name: name)
     }
     
     func getAllExportProfiles() -> [ExportProfile] {
@@ -94,16 +106,16 @@ class ExportDao {
     
     // MARK: - SEARCH FOR IMAGES
     
-    func getAllExportedImages(includeHidden:Bool = true) -> [Image] {
-        return self.impl.getAllExportedImages(includeHidden: includeHidden)
+    func getImagesForExport(profile:ExportProfile, limit:Int? = nil) -> [Image] {
+        return self.impl.getImagesForExport(profile: profile, limit: limit)
     }
     
-    func getAllPhotoFilesForExporting(after date:Date, limit:Int? = nil) -> [Image] {
-        return self.impl.getAllPhotoFilesForExporting(after: date, limit: limit)
+    func countImagesForExport(profile:ExportProfile) -> Int {
+        return self.impl.countImagesForExport(profile: profile)
     }
     
-    func countAllPhotoFilesForExporting(after date:Date) -> Int {
-        return self.impl.countAllPhotoFilesForExporting(after: date)
+    func getExportedImages(profileId:String) -> [(String, String, String)] {
+        return self.impl.getExportedImages(profileId: profileId)
     }
     
     // MARK: - EXPORT RECORD LOG
@@ -112,23 +124,15 @@ class ExportDao {
         return self.impl.storeImageOriginalMD5(path: path, md5: md5)
     }
     
-    func storeImageExportedMD5(path:String, md5:String) -> ExecuteState {
-        return self.impl.storeImageExportedMD5(path: path, md5: md5)
+    func storeImageExportSuccess(imageId:String, profileId:String, repositoryPath:String, subfolder:String, filename: String, exportedMD5: String) -> ExecuteState {
+        return self.impl.storeImageExportSuccess(imageId: imageId, profileId: profileId, repositoryPath: repositoryPath, subfolder: subfolder, filename: filename, exportedMD5: exportedMD5)
     }
     
-    func storeImageExportSuccess(path:String, date:Date, exportToPath:String, exportedFilename:String, exportedMD5:String, exportedLongDescription:String) -> ExecuteState {
-        return self.impl.storeImageExportSuccess(path: path, date: date, exportToPath: exportToPath, exportedFilename: exportedFilename, exportedMD5: exportedMD5, exportedLongDescription: exportedLongDescription)
+    func storeImageExportFail(imageId:String, profileId:String, repositoryPath:String, subfolder:String, filename: String, failMessage:String) -> ExecuteState {
+        return self.impl.storeImageExportFail(imageId: imageId, profileId: profileId, repositoryPath: repositoryPath, subfolder: subfolder, filename: filename, failMessage: failMessage)
     }
     
-    func storeImageExportedTime(path:String, date:Date) -> ExecuteState {
-        return self.impl.storeImageExportedTime(path: path, date: date)
-    }
-    
-    func storeImageExportFail(path:String, date:Date, message:String) -> ExecuteState {
-        return self.impl.storeImageExportFail(path: path, date: date, message: message)
-    }
-    
-    func cleanImageExportPath(path:String) -> ExecuteState {
-        return self.impl.cleanImageExportPath(path: path)
+    func deleteExportLog(imageId:String, profileId:String) -> ExecuteState {
+        return self.impl.deleteExportLog(imageId: imageId, profileId: profileId)
     }
 }

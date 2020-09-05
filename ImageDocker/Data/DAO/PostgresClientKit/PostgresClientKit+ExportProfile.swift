@@ -61,7 +61,7 @@ class ExportDaoPostgresCK : ExportDaoInterface {
                              fileNaming: String,
                              subFolder: String) -> ExecuteState {
         let db = PostgresConnection.database()
-        if var profile = ExportProfile.fetchOne(db, parameters: ["id" : id]) {
+        if let profile = ExportProfile.fetchOne(db, parameters: ["id" : id]) {
             profile.name = name
             profile.directory = directory
             profile.duplicateStrategy = duplicateStrategy
@@ -88,7 +88,7 @@ class ExportDaoPostgresCK : ExportDaoInterface {
     
     func enableExportProfile(id: String) -> ExecuteState {
         let db = PostgresConnection.database()
-        if var profile = ExportProfile.fetchOne(db, parameters: ["id" : id]) {
+        if let profile = ExportProfile.fetchOne(db, parameters: ["id" : id]) {
             profile.enabled = true
             profile.save(db)
             return .OK
@@ -99,7 +99,7 @@ class ExportDaoPostgresCK : ExportDaoInterface {
     
     func disableExportProfile(id: String) -> ExecuteState {
         let db = PostgresConnection.database()
-        if var profile = ExportProfile.fetchOne(db, parameters: ["id" : id]) {
+        if let profile = ExportProfile.fetchOne(db, parameters: ["id" : id]) {
             profile.enabled = false
             profile.save(db)
             return .OK
@@ -110,7 +110,7 @@ class ExportDaoPostgresCK : ExportDaoInterface {
     
     func updateExportProfileLastExportTime(id: String) -> ExecuteState {
         let db = PostgresConnection.database()
-        if var profile = ExportProfile.fetchOne(db, parameters: ["id" : id]) {
+        if let profile = ExportProfile.fetchOne(db, parameters: ["id" : id]) {
             profile.lastExportTime = Date()
             profile.save(db)
             return .OK
@@ -119,9 +119,49 @@ class ExportDaoPostgresCK : ExportDaoInterface {
         }
     }
     
+    func getLastExportTime(profile:ExportProfile) -> Date? {
+        // query ExportLog to get max export time
+        let sql = """
+        select max("lastExportTime") as "lastExportTime" from "ExportLog" where "profileId" = '\(profile.id)'
+"""
+        final class TempRecord : PostgresCustomRecord {
+            var lastExportTime:Date?
+            public init() {}
+        }
+        
+        let db = PostgresConnection.database()
+        if let record = TempRecord.fetchOne(db, sql: sql) {
+            return record.lastExportTime
+        }
+        
+        return nil
+    }
+    
+    func getExportedFilename(imageId:String, profileId:String) -> (String?, String?) {
+        final class TempRecord : PostgresCustomRecord {
+            var subfolder:String? = nil
+            var filename:String? = nil
+            public init() {}
+        }
+        
+        let sql = """
+select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' and "profileId" = '\(profileId)'
+"""
+        let db = PostgresConnection.database()
+        if let record = TempRecord.fetchOne(db, sql: sql) {
+            return (record.subfolder, record.filename)
+        }
+        return (nil, nil)
+    }
+    
     func getExportProfile(id: String) -> ExportProfile? {
         let db = PostgresConnection.database()
         return ExportProfile.fetchOne(db, parameters: ["id" : id])
+    }
+    
+    func getExportProfile(name:String) -> ExportProfile? {
+        let db = PostgresConnection.database()
+        return ExportProfile.fetchOne(db, parameters: ["name" : name])
     }
     
     func getAllExportProfiles() -> [ExportProfile] {
@@ -139,55 +179,95 @@ class ExportDaoPostgresCK : ExportDaoInterface {
     
     // MARK: - SEARCH FOR IMAGES
     
-    func getAllExportedImages(includeHidden: Bool) -> [Image] {
-        let db = PostgresConnection.database()
-        if includeHidden {
-            return Image.fetchAll(db, where: """
-                "exportToPath" is not null and "exportAsFilename" is not null and "exportToPath" <> '' and "exportAsFilename" <> ''
-                """, orderBy: """
-                "photoTakenDate", filename
-                """)
-        }else{
-            return Image.fetchAll(db, where: """
-                hidden = false and exportToPath is not null and exportAsFilename is not null and exportToPath <> '' and exportAsFilename <> ''
-                """, orderBy: """
-                "photoTakenDate", filename
-                """)
+    func generateImageQuerySQLPart(tableAlias:String, tableColumn:String, profileSetting:String) -> String {
+        var SQL = ""
+        if profileSetting.starts(with: "include:") {
+            SQL = """
+            and \(tableAlias)."\(tableColumn)" in (\(profileSetting.replacingFirstOccurrence(of: "include:", with: "").replacingOccurrences(of: "'", with: "''").replacingOccurrences(of: "\"", with: "'")))
+            """
+        }else if profileSetting.starts(with: "exclude:"){
+            SQL = """
+            and \(tableAlias)."\(tableColumn)" not in (\(profileSetting.replacingFirstOccurrence(of: "exclude:", with: "").replacingOccurrences(of: "'", with: "''").replacingOccurrences(of: "\"", with: "'")))
+            """
         }
+        return SQL
     }
     
-    func getImagesForExport(profile:ExportProfile, limit:Int? = nil) -> [Image] {
-        let db = PostgresConnection.database()
-        let repos = profile.repositoryPath
-        let events = profile.events
-        let people = profile.people
+    func generateImageQuerySQL(isCount:Bool, profile:ExportProfile, limit:Int?) -> String {
+        let repoSQL = self.generateImageQuerySQLPart(tableAlias: "c", tableColumn: "name", profileSetting: profile.repositoryPath)
+        let eventSQL = self.generateImageQuerySQLPart(tableAlias: "i", tableColumn: "event", profileSetting: profile.events)
         
-        var sql = """
-select i.*
-from "Image" i
-left join "ImageContainer" c on i."repositoryPath" = c."repositoryPath"
-where i.hidden = 'f' and i."hiddenByContainer" = 'f' and i."hiddenByRepository" = 'f'
-and i."photoTakenYear" > 0
-and c."name" in ('Who''s iphone6', 'Who''s iPhone8')
-and i.event in ('boating','swimming')
-and "recognizedPeopleIds" similar to '%(,someone,|,anotherone,)%'
+        let columns = isCount ? "count(1)" : "i.*"
+        
+        let _ = """
+        select i.*
+        from "Image" i
+        left join "ImageContainer" c on i."repositoryPath" = c."repositoryPath"
+        where i.hidden = 'f' and i."hiddenByContainer" = 'f' and i."hiddenByRepository" = 'f'
+        and i."photoTakenYear" > 0
+        and c."name" in ('Who''s iphone6', 'Who''s iPhone8')
+        and i.event in ('boating','swimming')
+        and "recognizedPeopleIds" similar to '%(,someone,|,anotherone,)%'
+        """
+        let sql = """
+        select \(columns)
+        from "Image" i
+        left join "ImageContainer" c on i."repositoryPath" = c."repositoryPath"
+        where i.hidden = 'f' and i."hiddenByContainer" = 'f' and i."hiddenByRepository" = 'f'
+        and i."photoTakenYear" > 0
+        \(repoSQL)
+        \(eventSQL)
+        order by i."photoTakenYear" desc, i."photoTakenMonth" desc, i."photoTakenDay" desc
+        """
+        
+        // TODO: after profile.lastExportEndTime
+        
+        print("sql for export images:")
+        print(sql)
+        
+        return sql
+    }
+    
+    func getImagesForExport(profile:ExportProfile, limit:Int?) -> [Image] {
+        let db = PostgresConnection.database()
+        
+        let sql = self.generateImageQuerySQL(isCount: false, profile: profile, limit: limit)
+        let images = Image.fetchAll(db, sql: sql)
+        
+        return images
+    }
+    
+    func countImagesForExport(profile:ExportProfile) -> Int {
+        let db = PostgresConnection.database()
+        
+        let sql = self.generateImageQuerySQL(isCount: true, profile: profile, limit: nil)
+        return db.count(sql: sql)
+    }
+    
+    func getExportedImages(profileId:String) -> [(String, String, String)] {
+        
+        let sql = """
+select "imageId", "subfolder", "filename" from "ExportLog" where "profileId" = '\(profileId)' and "shouldDelete" = 'f' order by "lastExportTime"
 """
-        return []
-    }
-    
-    
-    func getAllPhotoFilesForExporting(after date: Date, limit: Int?) -> [Image] {
+        final class TempRecord : PostgresCustomRecord {
+            var imageId:String = ""
+            var subfolder:String? = nil
+            var filename:String? = nil
+            public init() {}
+        }
+        
+        var array:[(String, String, String)] = []
+        
         let db = PostgresConnection.database()
-        return Image.fetchAll(db, where: """
-        hidden != true AND "photoTakenYear" <> 0 AND "photoTakenYear" IS NOT NULL AND ("updateDateTimeDate" > ? OR "updateExifDate" > ? OR "updateLocationDate" > ? OR "updateEventDate" > ? OR "exportTime" is null)
-        """, orderBy: "\"photoTakenDate\", filename", offset: 0, limit: limit)
-    }
-    
-    func countAllPhotoFilesForExporting(after date: Date) -> Int {
-        let db = PostgresConnection.database()
-        return Image.count(db, where: """
-        hidden != true AND "photoTakenYear" <> 0 AND "photoTakenYear" IS NOT NULL AND ("updateDateTimeDate" > $1 OR "updateExifDate" > $2 OR "updateLocationDate" > $3 OR "updateEventDate" > $4 OR "exportTime" is null)
-        """, parameters:[date, date, date, date])
+        let records = TempRecord.fetchAll(db, sql: sql)
+        for record in records {
+            let imageId = record.imageId
+            let subfolder = record.subfolder ?? ""
+            let filename = record.filename ?? ""
+            array.append((imageId, subfolder, filename))
+        }
+        return array
+        
     }
     
     // MARK: - EXPORT RECORD LOG
@@ -205,70 +285,66 @@ and "recognizedPeopleIds" similar to '%(,someone,|,anotherone,)%'
         return .OK
     }
     
-    func storeImageExportedMD5(path: String, md5: String) -> ExecuteState {
+    func storeImageExportSuccess(imageId:String, profileId:String, repositoryPath:String, subfolder:String, filename: String, exportedMD5: String) -> ExecuteState {
         let db = PostgresConnection.database()
         
-        do {
+        let count = db.count(sql: """
+        SELECT "ExportLog" where "imageId" = '\(imageId)' and "profileId" = '\(profileId)'
+        """)
+        if count < 1 {
+            do {
+                try db.execute(sql: """
+                INSERT "ExportLog" ("imageId", "profileId", "lastExportTime", "repositoryPath", "subfolder", "filename", "exportedMD5", "state", "failMessage") VALUES ($1, $2, now(), $3, $4, $5, $6, 'OK', '')
+                """, parameterValues: [imageId, profileId, repositoryPath, subfolder, filename, exportedMD5])
+            }catch{
+                return .ERROR
+            }
+        }else{
+            do {
+                try db.execute(sql: """
+                UPDATE "ExportLog" set "lastExportTime" = now(), "repositoryPath" = $1, "subfolder" = $2, "filename" = $3, "exportedMD5" = $4, "state" = 'OK', "failMessage" = '' WHERE "imageId"=$5 and "profileId"=$6
+                """, parameterValues: [repositoryPath, subfolder, filename, exportedMD5, imageId, profileId])
+            }catch{
+                return .ERROR
+            }
+        }
+        return .OK
+    }
+    
+    func storeImageExportFail(imageId:String, profileId:String, repositoryPath:String, subfolder:String, filename: String, failMessage:String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        let count = db.count(sql: """
+        SELECT "ExportLog" where "imageId" = '\(imageId)' and "profileId" = '\(profileId)'
+        """)
+        if count < 1 {
+            do {
+                try db.execute(sql: """
+                INSERT "ExportLog" ("imageId", "profileId", "repositoryPath", "subfolder", "filename", "state", "failMessage") VALUES ($1, $2, $3, $4, $5, 'ERROR', $6)
+                """, parameterValues: [imageId, profileId, repositoryPath, subfolder, filename, failMessage])
+            }catch{
+                return .ERROR
+            }
+        }else{
+            do {
+                try db.execute(sql: """
+                UPDATE "ExportLog" set "repositoryPath" = $1, "subfolder" = $2, "filename" = $3, "state" = 'ERROR', "failMessage" = $4 WHERE "imageId"=$5 and "profileId"=$6
+                """, parameterValues: [repositoryPath, subfolder, filename, failMessage, imageId, profileId])
+            }catch{
+                return .ERROR
+            }
+        }
+        return .OK
+    }
+    
+    func deleteExportLog(imageId:String, profileId:String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do{
             try db.execute(sql: """
-            UPDATE "Image" set "exportedMD5" = $1 WHERE path=$2
-            """, parameterValues: [md5, path])
+delete from "ExportLog" where "imageId" = '\(imageId)' and "profileId" = '\(profileId)'
+""")
         }catch{
             return .ERROR
         }
         return .OK
     }
-    
-    func storeImageExportSuccess(path: String, date: Date, exportToPath: String, exportedFilename: String, exportedMD5: String, exportedLongDescription: String) -> ExecuteState {
-        let db = PostgresConnection.database()
-        
-        do {
-            try db.execute(sql: """
-            UPDATE "Image" set "exportTime" = $1, "exportToPath" = $2, "exportAsFilename" = $3, "exportedMD5" = $4, "exportedLongDescription" = $5, "exportState" = 'OK', "exportFailMessage" = '' WHERE path=$6
-            """, parameterValues: [date, exportToPath, exportedFilename, exportedMD5, exportedLongDescription, path])
-        }catch{
-            return .ERROR
-        }
-        return .OK
-    }
-    
-    func storeImageExportedTime(path: String, date: Date) -> ExecuteState {
-        let db = PostgresConnection.database()
-        
-        do {
-            try db.execute(sql: """
-            UPDATE "Image" set "exportTime" = $1 WHERE path=$2
-            """, parameterValues: [date, path])
-        }catch{
-            return .ERROR
-        }
-        return .OK
-    }
-    
-    func storeImageExportFail(path: String, date: Date, message: String) -> ExecuteState {
-        let db = PostgresConnection.database()
-        
-        do {
-            try db.execute(sql: """
-            UPDATE "Image" set "exportTime" = $1, "exportState" = 'FAIL', "exportFailMessage" = $2 WHERE path=$3
-            """, parameterValues: [date, message, path])
-        }catch{
-            return .ERROR
-        }
-        return .OK
-    }
-    
-    func cleanImageExportPath(path: String) -> ExecuteState {
-        let db = PostgresConnection.database()
-        
-        do {
-            try db.execute(sql: """
-            UPDATE "Image" set "exportToPath" = null, "exportAsFilename" = null, "exportTime" = null, "exportState" = null, "exportFailMessage" = '', "exportedMD5" = null, WHERE path=$1
-            """, parameterValues: [path])
-        }catch{
-            return .ERROR
-        }
-        return .OK
-    }
-    
-
 }

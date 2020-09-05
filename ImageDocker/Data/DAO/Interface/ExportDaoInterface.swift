@@ -55,7 +55,13 @@ protocol ExportDaoInterface {
     
     func updateExportProfileLastExportTime(id:String) -> ExecuteState
     
+    func getLastExportTime(profile:ExportProfile) -> Date?
+    
+    func getExportedFilename(imageId:String, profileId:String) -> (String?, String?)
+    
     func getExportProfile(id:String) -> ExportProfile?
+    
+    func getExportProfile(name:String) -> ExportProfile?
     
     func getAllExportProfiles() -> [ExportProfile]
     
@@ -63,23 +69,19 @@ protocol ExportDaoInterface {
     
     // MARK: - SEARCH FOR IMAGES
     
-    func getAllExportedImages(includeHidden:Bool) -> [Image]
+    func getImagesForExport(profile:ExportProfile, limit:Int?) -> [Image]
     
-    func getAllPhotoFilesForExporting(after date:Date, limit:Int?) -> [Image]
+    func countImagesForExport(profile:ExportProfile) -> Int
     
-    func countAllPhotoFilesForExporting(after date:Date) -> Int
+    func getExportedImages(profileId:String) -> [(String, String, String)]
     
     // MARK: - EXPORT RECORD LOG
     
     func storeImageOriginalMD5(path:String, md5:String) -> ExecuteState
     
-    func storeImageExportedMD5(path:String, md5:String) -> ExecuteState
+    func storeImageExportSuccess(imageId:String, profileId:String, repositoryPath:String, subfolder:String, filename: String, exportedMD5: String) -> ExecuteState
     
-    func storeImageExportSuccess(path:String, date:Date, exportToPath:String, exportedFilename:String, exportedMD5:String, exportedLongDescription:String) -> ExecuteState
+    func storeImageExportFail(imageId:String, profileId:String, repositoryPath:String, subfolder:String, filename: String, failMessage:String) -> ExecuteState
     
-    func storeImageExportedTime(path:String, date:Date) -> ExecuteState
-    
-    func storeImageExportFail(path:String, date:Date, message:String) -> ExecuteState
-    
-    func cleanImageExportPath(path:String) -> ExecuteState
+    func deleteExportLog(imageId:String, profileId:String) -> ExecuteState
 }

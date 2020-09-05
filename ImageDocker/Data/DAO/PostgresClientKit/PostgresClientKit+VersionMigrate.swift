@@ -494,6 +494,12 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v35") { db in
+            try db.alter(table: "ExportLog", body: { t in
+                t.add("shouldDelete", .boolean).defaults(to: false)
+            })
+        }
+        
         do {
             try migrator.migrate(cleanVersions: dropBeforeCreate)
         }catch{
