@@ -164,7 +164,7 @@ extension ViewController {
                     tasklet.total = self.imagesLoader.getItems().count
                     tasklet.progress = 0
                     tasklet.running = true
-                    tasklet.addObserver(self, selector: #selector(taskletObserver(notification:)))
+                    tasklet.changeListener(selector: #selector(taskletObserver(notification:)))
                     self.runningFaceTask = true
                     self.stopFacesTask = false
                     self.btnStop.isHidden = false
@@ -181,7 +181,7 @@ extension ViewController {
                                 }
                                 self.runningFaceTask = false
                                 self.stopFacesTask = false
-                                tasklet.removeObserver(self)
+                                tasklet.removeListener()
                                 break
                             }
                             let url = imageFile.url
@@ -202,7 +202,7 @@ extension ViewController {
                 tasklet.total = 1
                 tasklet.progress = 0
                 tasklet.running = true
-                tasklet.addObserver(self, selector: #selector(taskletObserver(notification:)))
+                tasklet.changeListener(selector: #selector(taskletObserver(notification:)))
                 self.runningFaceTask = true
                 self.stopFacesTask = false
                 self.btnStop.isHidden = false
@@ -241,7 +241,7 @@ extension ViewController {
                                 }
                                 self.runningFaceTask = false
                                 self.stopFacesTask = false
-                                tasklet.removeObserver(self)
+                                tasklet.removeListener()
                                 break
                             }
                             
@@ -291,7 +291,7 @@ extension ViewController {
                         self.btnStop.isHidden = true
                         self.runningFaceTask = false
                         self.stopFacesTask = false
-                        tasklet.removeObserver(self)
+                        tasklet.removeListener()
                     }
                 }
             }

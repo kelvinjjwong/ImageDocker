@@ -583,13 +583,13 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
                                             <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fHj-eQ-neO">
-                                                <rect key="frame" x="0.0" y="0.0" width="580" height="195"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="580" height="170"/>
                                                 <clipView key="contentView" id="eei-jG-19T">
-                                                    <rect key="frame" x="0.0" y="0.0" width="580" height="195"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="580" height="170"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" id="ECf-s9-RCm" customClass="DarkTableView" customModule="ImageDocker" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="1317" height="195"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="1317" height="170"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <size key="intercellSpacing" width="3" height="2"/>
                                                             <color key="backgroundColor" name="controlShadowColor" catalog="System" colorSpace="catalog"/>
@@ -993,7 +993,7 @@
                                         </popUpButtonCell>
                                     </popUpButton>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kL0-v4-mKZ">
-                                        <rect key="frame" x="941" y="11" width="717" height="16"/>
+                                        <rect key="frame" x="941" y="11" width="427" height="16"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" id="oon-EU-u89">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1001,7 +1001,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="L5J-oA-BUH">
-                                        <rect key="frame" x="1666" y="8" width="83" height="19"/>
+                                        <rect key="frame" x="1376" y="8" width="83" height="19"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="83" id="heg-4p-CzH"/>
                                         </constraints>
@@ -1058,7 +1058,7 @@
                                         </popUpButtonCell>
                                     </popUpButton>
                                     <progressIndicator wantsLayer="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="5p8-Qa-YiE">
-                                        <rect key="frame" x="953" y="-1" width="683" height="20"/>
+                                        <rect key="frame" x="953" y="-1" width="393" height="20"/>
                                     </progressIndicator>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zJa-km-Rrl">
                                         <rect key="frame" x="812" y="8" width="111" height="19"/>
@@ -1088,14 +1088,36 @@
                                             </menu>
                                         </popUpButtonCell>
                                     </popUpButton>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gOm-AZ-hpi">
+                                        <rect key="frame" x="1465" y="10" width="207" height="16"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" id="44c-vE-lWn">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="csF-Eh-wOF">
+                                        <rect key="frame" x="1678" y="10" width="73" height="19"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="73" id="Eea-sW-tDh"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="recessed" title="Tasks" bezelStyle="recessed" image="NSPathTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="DRn-xF-xnG">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="systemBold" size="12"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onTasksClicked:" target="XfG-lQ-9wD" id="cQk-qU-CXh"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="kCb-sM-PKJ" secondAttribute="bottom" constant="9" id="1Fo-1G-pWg"/>
+                                    <constraint firstItem="csF-Eh-wOF" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="8" id="4V4-7l-U19"/>
                                     <constraint firstItem="wQ3-4F-bW7" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="11" id="Cpz-BF-ZaT"/>
                                     <constraint firstItem="L5J-oA-BUH" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="Cxp-QY-2oQ"/>
                                     <constraint firstItem="5p8-Qa-YiE" firstAttribute="leading" secondItem="zJa-km-Rrl" secondAttribute="trailing" constant="30" id="Dot-9P-yhK"/>
                                     <constraint firstItem="kCb-sM-PKJ" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="EaW-Ms-XCk"/>
-                                    <constraint firstItem="Bwo-eW-DeK" firstAttribute="leading" secondItem="L5J-oA-BUH" secondAttribute="trailing" constant="10" id="Eat-XB-HBC"/>
+                                    <constraint firstItem="Bwo-eW-DeK" firstAttribute="leading" secondItem="L5J-oA-BUH" secondAttribute="trailing" constant="300" id="Eat-XB-HBC"/>
                                     <constraint firstAttribute="bottom" secondItem="jTT-pc-Bka" secondAttribute="bottom" constant="7" id="HDa-DN-CyL"/>
                                     <constraint firstItem="jTT-pc-Bka" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="9" id="I3l-uY-J4e"/>
                                     <constraint firstItem="L5J-oA-BUH" firstAttribute="leading" secondItem="5p8-Qa-YiE" secondAttribute="trailing" constant="30" id="IQx-m3-adV"/>
@@ -1105,13 +1127,18 @@
                                     <constraint firstItem="kL0-v4-mKZ" firstAttribute="leading" secondItem="zJa-km-Rrl" secondAttribute="trailing" constant="20" id="OfP-oA-Uwj"/>
                                     <constraint firstItem="zJa-km-Rrl" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="Px4-S5-6va"/>
                                     <constraint firstItem="0O0-hl-4CA" firstAttribute="leading" secondItem="kCb-sM-PKJ" secondAttribute="trailing" constant="50" id="Q2S-K9-ata"/>
+                                    <constraint firstItem="gOm-AZ-hpi" firstAttribute="leading" secondItem="L5J-oA-BUH" secondAttribute="trailing" constant="8" id="RsP-n0-Kb2"/>
                                     <constraint firstItem="zJa-km-Rrl" firstAttribute="leading" secondItem="0O0-hl-4CA" secondAttribute="trailing" constant="20" id="Uu8-K1-0KD"/>
+                                    <constraint firstItem="csF-Eh-wOF" firstAttribute="leading" secondItem="gOm-AZ-hpi" secondAttribute="trailing" constant="8" id="YBE-b5-TnN"/>
+                                    <constraint firstItem="gOm-AZ-hpi" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="11" id="bDk-DS-YP2"/>
                                     <constraint firstItem="kCb-sM-PKJ" firstAttribute="leading" secondItem="jTT-pc-Bka" secondAttribute="trailing" constant="10" id="bcj-Hn-PnS"/>
+                                    <constraint firstItem="csF-Eh-wOF" firstAttribute="leading" secondItem="gOm-AZ-hpi" secondAttribute="trailing" constant="8" id="gHl-gd-erC"/>
                                     <constraint firstItem="jTT-pc-Bka" firstAttribute="leading" secondItem="wQ3-4F-bW7" secondAttribute="trailing" constant="10" id="hnC-Sn-lZ6"/>
                                     <constraint firstItem="Bwo-eW-DeK" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="9" id="l7J-fy-SVL"/>
                                     <constraint firstItem="L5J-oA-BUH" firstAttribute="leading" secondItem="kL0-v4-mKZ" secondAttribute="trailing" constant="10" id="ovv-6i-2iA"/>
                                     <constraint firstAttribute="trailing" secondItem="Bwo-eW-DeK" secondAttribute="trailing" constant="10" id="req-3Z-Qx1"/>
                                     <constraint firstItem="wQ3-4F-bW7" firstAttribute="leading" secondItem="gVf-na-PZy" secondAttribute="leading" constant="10" id="vrS-mp-TFb"/>
+                                    <constraint firstItem="Bwo-eW-DeK" firstAttribute="leading" secondItem="csF-Eh-wOF" secondAttribute="trailing" constant="8" id="xVg-45-KlZ"/>
                                 </constraints>
                             </customView>
                         </subviews>
@@ -1156,6 +1183,7 @@
                         <outlet property="btnShare" destination="0by-PK-DjP" id="b9S-z4-3RB"/>
                         <outlet property="btnShow" destination="W0U-Cw-aB7" id="rYg-OY-AwZ"/>
                         <outlet property="btnStop" destination="L5J-oA-BUH" id="MPI-iS-1bF"/>
+                        <outlet property="btnTasks" destination="csF-Eh-wOF" id="6h3-Vs-dhx"/>
                         <outlet property="chbSelectAll" destination="eaf-Jq-heG" id="LF3-04-nwk"/>
                         <outlet property="chbShowHidden" destination="y2t-Ke-hIj" id="VwI-t7-yiN"/>
                         <outlet property="collectionProgressIndicator" destination="Sab-MP-Qfo" id="tTT-fa-2Dw"/>
@@ -1166,6 +1194,7 @@
                         <outlet property="indicatorMessage" destination="kAZ-Sm-Ax7" id="QkM-9I-20Z"/>
                         <outlet property="lblImageDescription" destination="q9K-Bh-dED" id="6j0-7g-FlX"/>
                         <outlet property="lblProgressMessage" destination="kL0-v4-mKZ" id="5kj-yC-kdM"/>
+                        <outlet property="lblTaskMessage" destination="gOm-AZ-hpi" id="DcM-AE-4vV"/>
                         <outlet property="mapZoomSlider" destination="eId-m8-eKf" id="zoE-94-C0F"/>
                         <outlet property="metaInfoTableView" destination="ECf-s9-RCm" id="GLo-W4-I6C"/>
                         <outlet property="playerContainer" destination="73d-nT-eRs" id="WGK-6c-bD3"/>
@@ -2970,6 +2999,7 @@ brew install ifuse</string>
         <image name="NSGoLeftTemplate" width="9" height="12"/>
         <image name="NSIconViewTemplate" width="14" height="10"/>
         <image name="NSListViewTemplate" width="14" height="10"/>
+        <image name="NSPathTemplate" width="16" height="10"/>
         <image name="NSRevealFreestandingTemplate" width="14" height="14"/>
         <image name="NSShareTemplate" width="11" height="16"/>
         <image name="NSStopProgressFreestandingTemplate" width="14" height="14"/>

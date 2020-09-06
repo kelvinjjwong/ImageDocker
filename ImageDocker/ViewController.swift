@@ -50,12 +50,18 @@ class ViewController: NSViewController {
     var lastScanRepositories:Date?
     var scanPhotosToLoadExifTimer:Timer!
     
+    var testTimer:Timer!
+    
     @IBOutlet weak var splitviewPreview: DarkSplitView!
     @IBOutlet weak var scrollviewMetaInfoTable: NSScrollView!
     
     var notificationPopover:NSPopover?
     var notificationViewController:NotificationViewController!
     
+    // MARK: - TASK
+    
+    @IBOutlet weak var lblTaskMessage: NSTextField!
+    @IBOutlet weak var btnTasks: NSButton!
     var taskProgressPopover:NSPopover?
     var taskProgressViewController:TaskProgressViewController!
     
@@ -108,22 +114,12 @@ class ViewController: NSViewController {
     
     var deviceIdToDevice : [String : PhoneDevice] = [String : PhoneDevice] ()
     
-    @IBOutlet weak var treeIndicator: NSLevelIndicator! // deleted
-    
     
     var selectedMoment:Moment?
     var selectedImageFolder:ImageFolder?
     var selectedImageFile:String = ""
     
-    @IBOutlet weak var btnScanState: NSButton! // deleted
-    
-    var treeLoadingIndicator:Accumulator? // deleted
-    //@IBOutlet weak var progressIndicator: NSProgressIndicator!
-    
-    @IBOutlet weak var btnAddRepository: NSButton! // deleted
-    @IBOutlet weak var btnRemoveRepository: NSButton! // deleted
-    @IBOutlet weak var btnRefreshRepository: NSButton! // deleted
-    @IBOutlet weak var btnFilterRepository: NSButton! // deleted
+    var treeLoadingIndicator:Accumulator?
     
     
     @IBOutlet weak var chbSelectAll: NSButton!
@@ -570,10 +566,6 @@ class ViewController: NSViewController {
     
     // MARK: - FACE
     
-    @IBAction func onPeopleClicked(_ sender: NSButton) {
-        self.openFaceManager()
-    }
-    
     var runningFaceTask = false
     
     var stopFacesTask = false
@@ -591,14 +583,16 @@ class ViewController: NSViewController {
         self.search(sender.stringValue)
     }
     
-    
-    @IBAction func onTaskClicked(_ sender: NSButton) {
-        self.popTasks(sender)
-    }
-    
     @IBAction func onMemoriesClicked(_ sender: NSButton) {
         self.showMemories()
     }
+    
+    // MARK: - TASK
+    
+    @IBAction func onTasksClicked(_ sender: NSButton) {
+        self.popTasks(sender)
+    }
+    
     
     
 }

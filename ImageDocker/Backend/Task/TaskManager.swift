@@ -84,7 +84,7 @@ class Tasklet {
     var type = "task"
     var id = ""
     var name = ""
-    var description = ""
+    var message = ""
     var running = false
     var forceStop = false
     var forceStopped = false
@@ -105,12 +105,23 @@ class Tasklet {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: taskid), object: self)
     }
     
-    func addObserver(_ observer:Any, selector:Selector){
-        NotificationCenter.default.addObserver(observer, selector: selector, name: NSNotification.Name(rawValue: taskid), object: nil)
+    @objc func onTaskChanged(notification: NSNotification) {
+        TaskletManager.default.onTaskChanged(notification: notification)
     }
     
-    func removeObserver(_ observer:Any) {
-        NotificationCenter.default.removeObserver(observer, name: NSNotification.Name(rawValue: taskid), object: nil)
+    func changeListener(selector:Selector){
+        NotificationCenter.default.addObserver(self, selector: selector, name: NSNotification.Name(rawValue: taskid), object: nil)
+    }
+    
+    func removeListener() {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: taskid), object: nil)
+    }
+    
+    func toString() -> String {
+        let str = """
+{type:\(type), id:\(id), taskid:\(taskid), name:"\(name)", message:"\(message)", total:\(total), progress:\(progress), begin:\(beginTime)}
+"""
+        return str.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }
 
@@ -118,9 +129,16 @@ class TaskletManager {
     
     static let `default` = TaskletManager()
     
+    var viewManager:TaskProgressViewController? = nil
+    
     var tasks:[Tasklet] = []
     
-    func task(type:String, name:String) -> Tasklet {
+    func bindToView(view:TaskProgressViewController) -> TaskletManager {
+        self.viewManager = view
+        return self
+    }
+    
+    private func getTask(type:String, name:String) -> Tasklet? {
         var t:Tasklet? = nil
         for task in tasks {
             if task.name == name && task.type == type {
@@ -128,21 +146,121 @@ class TaskletManager {
                 break
             }
         }
-        if t == nil {
-            t = Tasklet(type:type, name:name)
-            tasks.append(t!)
-        }
-        return t!
+        return t
     }
     
-    func running() -> [Tasklet] {
-        var result:[Tasklet] = []
+    private func getTask(id:String) -> Tasklet? {
+        var t:Tasklet? = nil
         for task in tasks {
-            if task.running {
-                result.append(task)
+            if task.id == id {
+                t = task
+                break
             }
         }
-        return result
+        return t
+    }
+    
+    func task(type:String, name:String) -> Tasklet {
+        if let task = self.getTask(type: type, name: name) {
+            return task
+        }else {
+            let task = Tasklet(type:type, name:name)
+            task.message = "Ready to start"
+            task.changeListener(selector: #selector(self.onTaskChanged))
+            tasks.append(task)
+            if let view = self.viewManager {
+                view.addTask(task: task)
+            }
+            return task
+        }
+    }
+    
+    @objc func onTaskChanged(notification: NSNotification) {
+        for task in tasks {
+            if task.taskid == notification.name.rawValue {
+                if let view = viewManager {
+                    view.updateTask(task: task)
+                }
+                break
+            }
+        }
+    }
+    
+    func setTotal(type:String, name:String, total:Int) {
+        if let task = self.getTask(type: type, name: name) {
+            task.total = total
+            if let view = self.viewManager {
+                view.setTotal(task: task, total: total)
+            }
+            task.notifyChange()
+        }
+    }
+    
+    func setTotal(id:String, total:Int) {
+        if let task = self.getTask(id: id) {
+            task.total = total
+            if let view = self.viewManager {
+                view.setTotal(task: task, total: total)
+            }
+            task.notifyChange()
+        }
+    }
+    
+    func updateMessage(type:String, name:String, message:String) {
+        if let task = self.getTask(type: type, name: name) {
+            task.message = message
+            task.notifyChange()
+        }
+    }
+    
+    func updateMessage(id:String, message:String) {
+        if let task = self.getTask(id: id) {
+            task.message = message
+            task.notifyChange()
+        }
+    }
+    
+    func increase(type:String, name:String, progress:Int = 1) {
+        if let task = self.getTask(type: type, name: name) {
+            task.progress += progress
+            task.notifyChange()
+        }
+    }
+    
+    func increase(id:String, progress:Int = 1) {
+        if let task = self.getTask(id: id) {
+            task.progress += progress
+            task.notifyChange()
+        }
+    }
+    
+    func rehearsal() {
+        print("\(Date()) task manager rehearsal")
+        self.updateMessage(type: "TEST", name: "test1234", message: "\(Date()) 1 changing")
+        self.updateMessage(type: "TEST", name: "test2234", message: "\(Date()) 2 changing")
+        self.updateMessage(type: "TEST", name: "test3234", message: "\(Date()) 3 changing")
+        self.printAll()
+    }
+    
+    func loadTasks() {
+        self.fakeInit()
+    }
+    
+    func fakeInit() {
+        self.task(type: "TEST", name: "test1234")
+        self.task(type: "TEST", name: "test2234")
+        self.task(type: "TEST", name: "test3234")
+        
+        self.setTotal(type: "TEST", name: "test2234", total: 10)
+    }
+    
+    func printAll() {
+        print("===================================")
+        print("Listing all tasks ...")
+        for task in tasks {
+            print(task.toString())
+        }
+        print("===================================")
     }
     
 }

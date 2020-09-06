@@ -23,7 +23,7 @@ extension ViewController {
                     }
                     self.runningFaceTask = false
                     self.stopFacesTask = false
-                    tasklet.removeObserver(self)
+                    tasklet.removeListener()
                 }
             }
             

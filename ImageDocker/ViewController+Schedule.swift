@@ -79,5 +79,9 @@ extension ViewController {
             print("\(Date()) SCANING PHOTOS TO LOAD EXIF")
             self.startScanRepositoriesToLoadExif()
         })
+        
+        self.testTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { _ in
+            TaskletManager.default.rehearsal()
+        })
     }
 }
