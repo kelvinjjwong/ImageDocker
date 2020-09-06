@@ -93,6 +93,10 @@ class Tasklet {
     var beginTime:Date
     var taskid = ""
     
+    var taskCode: ((Tasklet) -> Void)? = nil
+    
+    var stopTaskCode: ((Tasklet) -> Void)? = nil
+    
     init(type:String, name:String) {
         self.id = UUID().uuidString
         self.taskid = "TASKLET_\(id)"
@@ -122,6 +126,23 @@ class Tasklet {
 {type:\(type), id:\(id), taskid:\(taskid), name:"\(name)", message:"\(message)", total:\(total), progress:\(progress), begin:\(beginTime)}
 """
         return str.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+    func setExecution(_ exec:@escaping ((Tasklet) -> Void), stop:@escaping ((Tasklet) -> Void)) {
+        self.taskCode = exec
+        self.stopTaskCode = stop
+    }
+    
+    func startExecution() {
+        if let exec = self.taskCode {
+            exec(self)
+        }
+    }
+    
+    func stopExecution() {
+        if let stop = self.stopTaskCode {
+            stop(self)
+        }
     }
 }
 
@@ -246,12 +267,78 @@ class TaskletManager {
         self.fakeInit()
     }
     
+    var fakeTasks:[String:Timer] = [:]
+    
     func fakeInit() {
         self.task(type: "TEST", name: "test1234")
         self.task(type: "TEST", name: "test2234")
         self.task(type: "TEST", name: "test3234")
         
         self.setTotal(type: "TEST", name: "test2234", total: 10)
+        
+        self.setExecution(type: "TEST", name: "test1234", exec: { task in
+            let timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { _ in
+                self.updateMessage(type: "TEST", name: "test1234", message: "\(Date()) 1 changing")
+            })
+            self.fakeTasks[task.id] = timer
+        }, stop: {task in
+            if let timer = self.fakeTasks[task.id] {
+                timer.invalidate()
+            }
+        })
+        
+        self.setExecution(type: "TEST", name: "test2234", exec: { task in
+            let timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { _ in
+                self.updateMessage(type: "TEST", name: "test2234", message: "\(Date()) 2 changing")
+            })
+            self.fakeTasks[task.id] = timer
+        }, stop: {task in
+            if let timer = self.fakeTasks[task.id] {
+                timer.invalidate()
+            }
+        })
+        
+        self.setExecution(type: "TEST", name: "test3234", exec: { task in
+            let timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { _ in
+                self.updateMessage(type: "TEST", name: "test3234", message: "\(Date()) 3 changing")
+            })
+            self.fakeTasks[task.id] = timer
+        }, stop: {task in
+            if let timer = self.fakeTasks[task.id] {
+                timer.invalidate()
+            }
+        })
+        
+        self.startExecution(type: "TEST", name: "test1234")
+        self.startExecution(type: "TEST", name: "test2234")
+        self.startExecution(type: "TEST", name: "test3234")
+        
+        
+        
+    }
+    
+    func setExecution(type:String, name:String, exec:@escaping ((Tasklet) -> Void), stop:@escaping ((Tasklet) -> Void)) {
+        if let task = self.getTask(type: type, name: name) {
+            task.setExecution(exec, stop: stop)
+        }
+    }
+    
+    func setExecution(id:String, exec:@escaping ((Tasklet) -> Void), stop:@escaping ((Tasklet) -> Void)) {
+        if let task = self.getTask(id: id) {
+            task.setExecution(exec, stop: stop)
+        }
+    }
+    
+    func startExecution(type:String, name:String) {
+        if let task = self.getTask(type: type, name: name) {
+            task.startExecution()
+        }
+    }
+    
+    func startExecution(id:String){
+        if let task = self.getTask(id: id) {
+            task.startExecution()
+        }
     }
     
     func printAll() {

@@ -80,6 +80,7 @@ class TaskProgressViewController: NSViewController {
     }
     
     func stopTask(task:Tasklet) {
+        task.stopExecution()
         if let viewController = self.tasksView[task.id] {
             viewController.btnStop.title = "RESTART"
             viewController.btnStop.image = Icons.play
@@ -97,8 +98,7 @@ class TaskProgressViewController: NSViewController {
         }
         self.tasksState[task.id] = "READY"
         print("TaskProgressViewController: task \(task.id) restarted")
-        
-        // TODO call original task code
+        task.startExecution()
     }
     
     func removeTask(task:Tasklet) {

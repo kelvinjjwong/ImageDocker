@@ -80,8 +80,8 @@ extension ViewController {
             self.startScanRepositoriesToLoadExif()
         })
         
-        self.testTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { _ in
-            TaskletManager.default.rehearsal()
-        })
+//        self.testTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { _ in
+//            TaskletManager.default.rehearsal()
+//        })
     }
 }
