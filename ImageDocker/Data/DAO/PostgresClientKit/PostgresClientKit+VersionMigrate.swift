@@ -488,7 +488,7 @@ extension PostgresConnection {
         
         migrator.version("v34") { db in
             try db.alter(table: "ExportLog", body: { t in
-                t.add("exportedMd5", .boolean).defaults(to: false)
+                t.add("exportedMd5", .text).defaults(to: "")
                 t.add("state", .boolean).defaults(to: false)
                 t.add("failMessage", .text).defaults(to: "")
             })

@@ -206,6 +206,12 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
         }
         
         let columns = isCount ? "count(1)" : "i.*"
+        var orderSQL = ""
+        if !isCount {
+            orderSQL = """
+            order by i."photoTakenYear" desc, i."photoTakenMonth" desc, i."photoTakenDay" desc
+            """
+        }
         
         let _ = """
         select i.*
@@ -225,7 +231,7 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
         and i."photoTakenYear" > 0
         \(repoSQL)
         \(eventSQL)
-        order by i."photoTakenYear" desc, i."photoTakenMonth" desc, i."photoTakenDay" desc
+        \(orderSQL)
         \(pagination)
         """
         
@@ -311,22 +317,26 @@ select count(1) from "ExportLog" where "profileId"='\(profile.id)'
         let db = PostgresConnection.database()
         
         let count = db.count(sql: """
-        SELECT "ExportLog" where "imageId" = '\(imageId)' and "profileId" = '\(profileId)'
+        SELECT count(1) from "ExportLog" where "imageId" = '\(imageId)' and "profileId" = '\(profileId)'
         """)
         if count < 1 {
+            print("insert log \(imageId) \(profileId)")
             do {
                 try db.execute(sql: """
-                INSERT "ExportLog" ("imageId", "profileId", "lastExportTime", "repositoryPath", "subfolder", "filename", "exportedMD5", "state", "failMessage") VALUES ($1, $2, now(), $3, $4, $5, $6, 'OK', '')
+                INSERT INTO "ExportLog" ("imageId", "profileId", "lastExportTime", "repositoryPath", "subfolder", "filename", "exportedMd5", "state", "failMessage") VALUES ($1, $2, now(), $3, $4, $5, $6, 't', '')
                 """, parameterValues: [imageId, profileId, repositoryPath, subfolder, filename, exportedMD5])
             }catch{
+                print(error)
                 return .ERROR
             }
         }else{
+            print("update log \(imageId) \(profileId)")
             do {
                 try db.execute(sql: """
-                UPDATE "ExportLog" set "lastExportTime" = now(), "repositoryPath" = $1, "subfolder" = $2, "filename" = $3, "exportedMD5" = $4, "state" = 'OK', "failMessage" = '' WHERE "imageId"=$5 and "profileId"=$6
+                UPDATE "ExportLog" set "lastExportTime" = now(), "repositoryPath" = $1, "subfolder" = $2, "filename" = $3, "exportedMd5" = $4, "state" = 't', "failMessage" = '' WHERE "imageId"=$5 and "profileId"=$6
                 """, parameterValues: [repositoryPath, subfolder, filename, exportedMD5, imageId, profileId])
             }catch{
+                print(error)
                 return .ERROR
             }
         }
@@ -336,12 +346,12 @@ select count(1) from "ExportLog" where "profileId"='\(profile.id)'
     func storeImageExportFail(imageId:String, profileId:String, repositoryPath:String, subfolder:String, filename: String, failMessage:String) -> ExecuteState {
         let db = PostgresConnection.database()
         let count = db.count(sql: """
-        SELECT "ExportLog" where "imageId" = '\(imageId)' and "profileId" = '\(profileId)'
+        SELECT count(1) from "ExportLog" where "imageId" = '\(imageId)' and "profileId" = '\(profileId)'
         """)
         if count < 1 {
             do {
                 try db.execute(sql: """
-                INSERT "ExportLog" ("imageId", "profileId", "repositoryPath", "subfolder", "filename", "state", "failMessage") VALUES ($1, $2, $3, $4, $5, 'ERROR', $6)
+                INSERT INTO "ExportLog" ("imageId", "profileId", "repositoryPath", "subfolder", "filename", "state", "failMessage") VALUES ($1, $2, $3, $4, $5, 'f', $6)
                 """, parameterValues: [imageId, profileId, repositoryPath, subfolder, filename, failMessage])
             }catch{
                 return .ERROR
@@ -349,7 +359,7 @@ select count(1) from "ExportLog" where "profileId"='\(profile.id)'
         }else{
             do {
                 try db.execute(sql: """
-                UPDATE "ExportLog" set "repositoryPath" = $1, "subfolder" = $2, "filename" = $3, "state" = 'ERROR', "failMessage" = $4 WHERE "imageId"=$5 and "profileId"=$6
+                UPDATE "ExportLog" set "repositoryPath" = $1, "subfolder" = $2, "filename" = $3, "state" = 'f', "failMessage" = $4 WHERE "imageId"=$5 and "profileId"=$6
                 """, parameterValues: [repositoryPath, subfolder, filename, failMessage, imageId, profileId])
             }catch{
                 return .ERROR

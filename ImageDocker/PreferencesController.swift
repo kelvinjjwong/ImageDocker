@@ -1133,7 +1133,13 @@ final class PreferencesController: NSViewController {
         return txt
     }
     
-    
+    class func isSQLite() -> Bool {
+        if databaseLocation() == "local" {
+            return true
+        }else{
+            return false
+        }
+    }
     
     class func remoteDBServer() -> String {
         let defaults = UserDefaults.standard

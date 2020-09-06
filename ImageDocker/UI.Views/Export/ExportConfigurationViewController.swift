@@ -75,6 +75,7 @@ class ExportConfigurationViewController: NSViewController {
     @IBOutlet weak var lblCalculate: NSTextField!
     @IBOutlet weak var btnCopySQLToClipboard: NSButton!
     @IBOutlet weak var btnRehearsal: NSButton!
+    @IBOutlet weak var btnExport: NSButton!
     
     
     var repoNames:[String:String] = [:]
@@ -570,17 +571,7 @@ class ExportConfigurationViewController: NSViewController {
     
     // MARK: - CALCULATE & REHEARSAL
     
-    @IBAction func onRehearsalClicked(_ sender: NSButton) {
-        // TODO rehearsal export (query from db, no file i/o)
-        
-        var profile:ExportProfile
-        if let pf = ExportDao.default.getExportProfile(id: self.editingId) {
-            profile = pf
-        }else{
-            let pf = self.fillProfileFromForm(profile: ExportProfile())
-            profile = pf
-        }
-
+    private func getRehearsalAmount() -> Int? {
         var amount:Int? = nil
         if let selection = self.lstRehearsalAmount.titleOfSelectedItem {
             let number = selection.components(separatedBy: " ")[0]
@@ -592,6 +583,47 @@ class ExportConfigurationViewController: NSViewController {
                 amount = 500
             }
         }
+        return amount
+        
+    }
+    
+    private func getProfile() -> ExportProfile {
+        var profile:ExportProfile
+        if let pf = ExportDao.default.getExportProfile(id: self.editingId) {
+            profile = pf
+        }else{
+            let pf = self.fillProfileFromForm(profile: ExportProfile())
+            profile = pf
+        }
+        return profile
+    }
+    
+    @IBAction func onExportClicked(_ sender: NSButton) {
+        // real export with file i/o and amount limitation
+        
+        let profile = self.getProfile()
+        let amount = self.getRehearsalAmount()
+        
+        DispatchQueue.global().async {
+            let (state, message) = ExportManager.default.withMessageBox(self.lblCalculate).export(profile: profile, rehearsal: false, limit: amount)
+            DispatchQueue.main.async {
+
+                if state == true {
+                    self.lblCalculate.stringValue = message
+                }else{
+                    self.lblCalculate.stringValue = "ERROR: \(message)"
+                }
+            }
+        }
+    }
+    
+    
+    @IBAction func onRehearsalClicked(_ sender: NSButton) {
+        // rehearsal export (query from db, no file i/o)
+        
+        let profile = self.getProfile()
+        let amount = self.getRehearsalAmount()
+        
         DispatchQueue.global().async {
             let (state, message) = ExportManager.default.withMessageBox(self.lblCalculate).export(profile: profile, rehearsal: true, limit: amount)
             DispatchQueue.main.async {
@@ -622,6 +654,7 @@ class ExportConfigurationViewController: NSViewController {
     }
     
     @IBAction func onCalculateClicked(_ sender: NSButton) {
+        self.lblCalculate.stringValue = "Calculating affected images ..."
         var profile:ExportProfile
         if let pf = ExportDao.default.getExportProfile(id: self.editingId) {
             profile = pf

@@ -293,6 +293,8 @@ class ExportDaoGRDB : ExportDaoInterface {
         
         let columns = isCount ? "count(1) as recordCount" : "i.*"
         
+        let orderSQL = isCount ? "" : "order by i.photoTakenYear desc, i.photoTakenMonth desc, i.photoTakenDay desc"
+        
         let _ = """
         select i.*
         from Image i
@@ -311,7 +313,7 @@ class ExportDaoGRDB : ExportDaoInterface {
         and i.photoTakenYear > 0
         \(repoSQL)
         \(eventSQL)
-        order by i.photoTakenYear desc, i.photoTakenMonth desc, i.photoTakenDay desc
+        \(orderSQL)
         \(pagination)
         """
         

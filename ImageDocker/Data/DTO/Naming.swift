@@ -683,12 +683,22 @@ struct NamingForExporting {
         
     }
     
+    private func getExtName(filename:String) -> String {
+        var fileExt = (filename.split(separator: Character(".")).last?.lowercased()) ?? ""
+        if fileExt != "" {
+            fileExt = ".\(fileExt)"
+        }
+        return fileExt
+    }
+    
     func buildExportFilename(image:Image, profile:ExportProfile, subfolder:String) -> String {
         
         if profile.fileNaming == "ORIGIN" {
             return image.filename
             
         }else if profile.fileNaming == "DATETIME" {
+            
+            let fileExt = self.getExtName(filename: image.filename)
             
             var filenameComponents:[String] = []
             var photoDateFormatted = ""
@@ -700,10 +710,14 @@ struct NamingForExporting {
             if filenameComponents.count == 0 {
                 return image.filename
             }else{
+                
+                filenameComponents.append(fileExt)
                 return filenameComponents.joined()
             }
             
         }else if profile.fileNaming == "DATETIME_BRIEF" {
+            
+            let fileExt = self.getExtName(filename: image.filename)
             
             var filenameComponents:[String] = []
             var photoDateFormatted = ""
@@ -719,6 +733,8 @@ struct NamingForExporting {
             if filenameComponents.count == 0 {
                 return image.filename
             }else{
+                
+                filenameComponents.append(fileExt)
                 return filenameComponents.joined()
             }
         }

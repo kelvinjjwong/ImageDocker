@@ -54,7 +54,8 @@ class ExportManager {
      If suppressed from outside, stop immediately
      */
     fileprivate func nonStop(profileId:String) -> Bool {
-        if self.suppressed {
+        
+        if PreferencesController.isSQLite() && self.suppressed {
             print("ExportManager is suppressed.")
             TaskManager.exporting = false
             self.stopAllTasks()
@@ -102,16 +103,35 @@ class ExportManager {
     
     // MARK: - EXPORT PROFILE NOW
     
-    func export(profile:ExportProfile, rehearsal:Bool = false, limit:Int? = nil) -> (Bool, String) {
-        guard self.nonStop(profileId: profile.id) && !TaskManager.exporting else {return (false, "PREVENTED")}
-        
+    private func createDirectory(profile:ExportProfile) -> (Bool, String) {
         var isDir:ObjCBool = false
         if FileManager.default.fileExists(atPath: profile.directory, isDirectory: &isDir) {
             if isDir.boolValue == false {
-                return (false, "INACCESSIBLE DIRECTORY")
+                return (false, "INACCESSIBLE DIRECTORY \(profile.directory)")
             }
         }else{
-            return (false, "INACCESSIBLE DIRECTORY")
+            do {
+                try FileManager.default.createDirectory(atPath: profile.directory, withIntermediateDirectories: true, attributes: nil)
+            }catch{
+                return (false, "UNABLE TO CREATE DIRECTORY \(profile.directory)")
+            }
+            if FileManager.default.fileExists(atPath: profile.directory, isDirectory: &isDir) {
+                if isDir.boolValue == false {
+                    return (false, "UNABLE TO CREATE DIRECTORY \(profile.directory)")
+                }
+            }else{
+                return (false, "UNABLE TO CREATE DIRECTORY \(profile.directory)")
+            }
+        }
+        return (true, "")
+    }
+    
+    func export(profile:ExportProfile, rehearsal:Bool = false, limit:Int? = nil) -> (Bool, String) {
+        guard self.nonStop(profileId: profile.id) && !TaskManager.exporting else {return (false, "PREVENTED")}
+        
+        let (dirReady, msg) = self.createDirectory(profile: profile)
+        if !dirReady {
+            return (dirReady, msg)
         }
         
         let triggerTime = Date()
@@ -145,6 +165,7 @@ class ExportManager {
         }
         
         var i:Int = 0
+        var failed:Int = 0
         for pageNumber in 1...pageCount {
             
             guard self.nonStop(profileId: profile.id) else {return (false, "FORCED STOP")}
@@ -155,7 +176,7 @@ class ExportManager {
             
             if images.count > 0 {
                 var imagesToExport = pageSize
-                if pageNumber == pageCount {
+                if pageNumber == pageCount && lastPageImages > 0 {
                     // last page
                     imagesToExport = lastPageImages
                 }
@@ -168,9 +189,13 @@ class ExportManager {
                     
                     self.printMessage("Exporting image ( \(i) / \(total) ) ...")
                     
-                    let image = images[n]
+                    let image = images[n-1]
                     
-                    let _ = self.exportFile(profile: profile, image: image, triggerTime: triggerTime, rehearsal: rehearsal)
+                    let exportOK = self.exportFile(profile: profile, image: image, triggerTime: triggerTime, rehearsal: rehearsal)
+                    
+                    if !exportOK {
+                        failed += 1
+                    }
                     
                 }
             }
@@ -180,7 +205,7 @@ class ExportManager {
         
         TaskManager.exporting = false
         
-        return (true, "COMPLETED")
+        return (true, "COMPLETED with \(failed) error.")
     }
     
     // MARK: - EXPORT SINGLE FILE
@@ -239,11 +264,19 @@ class ExportManager {
                     }
                 }
             }
+            if FileManager.default.fileExists(atPath: "\(fullTargetFilePath.path)") {
+                do {
+                    try FileManager.default.removeItem(atPath: "\(fullTargetFilePath.path)")
+                }catch{
+                    print("WARN: Unable to delete previous exported file: \(fullTargetFilePath.path)")
+                    print(error)
+                }
+            }
             do {
-                try FileManager.default.copyItem(atPath: image.path, toPath: "\(fullTargetFilePath)")
+                try FileManager.default.copyItem(atPath: image.path, toPath: "\(fullTargetFilePath.path)")
                 copied = true
             }catch {
-                print("Unable to copy from: [\(image.path)] to: [\(fullTargetFilePath)] ")
+                print("Unable to copy from: [\(image.path)] to: [\(fullTargetFilePath.path)] ")
                 print(error)
                 copied = false
                 errorMessage = error.localizedDescription
@@ -267,7 +300,7 @@ class ExportManager {
             // generate MD5
             let md5 = self.generateImageMD5(path: fullTargetFilePath.path)
             
-            print("\(Date()) Copy file [\(image.path)] to [\(fullTargetFilePath)] DONE.")
+            print("\(Date()) Copy file [\(image.path)] to [\(fullTargetFilePath.path)] DONE.")
             
             let _ = ExportDao.default.storeImageExportSuccess(imageId: image.id ?? image.path, profileId: profile.id, repositoryPath: image.repositoryPath, subfolder: subfolder, filename: targetFilename, exportedMD5: md5)
             // TODO handle db interrupt error

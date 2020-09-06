@@ -486,7 +486,7 @@ extension SQLiteConnectionGRDB {
         
         migrator.registerMigration("v34") { db in
             try db.alter(table: "ExportLog", body: { t in
-                t.add(column: "exportedMd5", .boolean).defaults(to: false)
+                t.add(column: "exportedMd5", .text).defaults(to: "")
                 t.add(column: "state", .boolean).defaults(to: false)
                 t.add(column: "failMessage", .text).defaults(to: "")
             })

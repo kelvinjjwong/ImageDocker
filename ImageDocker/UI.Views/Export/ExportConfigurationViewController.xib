@@ -12,6 +12,7 @@
                 <outlet property="btnCalculate" destination="379-yu-9KB" id="HQt-uG-IoT"/>
                 <outlet property="btnClean" destination="lG5-iQ-i7b" id="qe4-I4-zj6"/>
                 <outlet property="btnCopySQLToClipboard" destination="jIu-gh-Rz0" id="op9-Gq-icd"/>
+                <outlet property="btnExport" destination="aRg-nu-KNC" id="5hP-yl-SIh"/>
                 <outlet property="btnGoto" destination="GJa-qz-wH4" id="SEM-Qk-cYZ"/>
                 <outlet property="btnRehearsal" destination="CRY-eq-UaW" id="pJZ-Je-605"/>
                 <outlet property="btnSave" destination="Btt-76-DEE" id="Fpe-Oo-Np6"/>
@@ -836,17 +837,6 @@
                                     <action selector="onCheckFamilyClicked:" target="-2" id="sty-ff-8br"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jIu-gh-Rz0">
-                                <rect key="frame" x="480" y="16" width="179" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Copy SQL to Clipboard" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LFJ-kO-xNn">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="onCopySQLClicked:" target="-2" id="jeF-U9-O3c"/>
-                                </connections>
-                            </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="379-yu-9KB">
                                 <rect key="frame" x="14" y="16" width="144" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -859,7 +849,7 @@
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wC2-0l-112">
-                                <rect key="frame" x="160" y="26" width="317" height="16"/>
+                                <rect key="frame" x="160" y="26" width="495" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" id="PRx-cL-Mf2">
                                     <font key="font" metaFont="system"/>
@@ -868,7 +858,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CRY-eq-UaW">
-                                <rect key="frame" x="670" y="16" width="100" height="32"/>
+                                <rect key="frame" x="914" y="19" width="100" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Rehearsal" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="MVZ-Gm-waG">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -879,7 +869,7 @@
                                 </connections>
                             </button>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DV0-my-FgX">
-                                <rect key="frame" x="770" y="20" width="137" height="25"/>
+                                <rect key="frame" x="1014" y="23" width="137" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="10 images" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="W7V-RU-0J4" id="l4B-dw-EvG">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -896,6 +886,28 @@
                                     </menu>
                                 </popUpButtonCell>
                             </popUpButton>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aRg-nu-KNC">
+                                <rect key="frame" x="834" y="19" width="80" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Export" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="PNe-yQ-ET0">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onExportClicked:" target="-2" id="qTI-kp-8xa"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jIu-gh-Rz0">
+                                <rect key="frame" x="655" y="19" width="179" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Copy SQL to Clipboard" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LFJ-kO-xNn">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onCopySQLClicked:" target="-2" id="jeF-U9-O3c"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                 </box>
