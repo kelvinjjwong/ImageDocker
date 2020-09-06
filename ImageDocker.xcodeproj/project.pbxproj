@@ -108,6 +108,10 @@
 		8E98B8F720D6044900771280 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E98B8F620D6044900771280 /* Event.swift */; };
 		8E98B8F920D7950E00771280 /* ExportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E98B8F820D7950E00771280 /* ExportManager.swift */; };
 		8E99DBFB2284A18600654C03 /* SearchCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E99DBFA2284A18600654C03 /* SearchCondition.swift */; };
+		8E9BEA612504C76E008F6A5A /* TaskStackItems.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E9BEA602504C76E008F6A5A /* TaskStackItems.storyboard */; };
+		8E9BEA632504C820008F6A5A /* TaskItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9BEA622504C820008F6A5A /* TaskItemViewController.swift */; };
+		8E9BEA662504C9FF008F6A5A /* TaskListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9BEA642504C9FF008F6A5A /* TaskListViewController.swift */; };
+		8E9BEA672504C9FF008F6A5A /* TaskListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E9BEA652504C9FF008F6A5A /* TaskListViewController.xib */; };
 		8E9D8039234884040062692A /* EditRepositoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E9D8038234884040062692A /* EditRepositoryViewController.xib */; };
 		8E9D803B2348A9EE0062692A /* GRDB+ExportProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9D803A2348A9EE0062692A /* GRDB+ExportProfile.swift */; };
 		8E9D803D2348AA550062692A /* ExportProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9D803C2348AA550062692A /* ExportProfile.swift */; };
@@ -207,7 +211,7 @@
 		8EBA9DE921766EAB00DACAAD /* TheaterCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA9DE821766EAB00DACAAD /* TheaterCollectionViewController.swift */; };
 		8EBC0182236B072F00FB6E2F /* TwoColumnTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBC0180236B072F00FB6E2F /* TwoColumnTableViewController.swift */; };
 		8EBC0183236B072F00FB6E2F /* TwoColumnTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EBC0181236B072F00FB6E2F /* TwoColumnTableViewController.xib */; };
-		8EC20B302281B4C0000F4819 /* TaskHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC20B2F2281B4C0000F4819 /* TaskHelper.swift */; };
+		8EC20B302281B4C0000F4819 /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC20B2F2281B4C0000F4819 /* TaskManager.swift */; };
 		8EC20B322281C0B8000F4819 /* FaceTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC20B312281C0B8000F4819 /* FaceTask.swift */; };
 		8EC5BA2E21775571001510AF /* TheaterCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC5BA2C21775571001510AF /* TheaterCollectionViewItem.swift */; };
 		8EC5BA2F21775571001510AF /* TheaterCollectionViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EC5BA2D21775571001510AF /* TheaterCollectionViewItem.xib */; };
@@ -423,6 +427,10 @@
 		8E98B8F620D6044900771280 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		8E98B8F820D7950E00771280 /* ExportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportManager.swift; sourceTree = "<group>"; };
 		8E99DBFA2284A18600654C03 /* SearchCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCondition.swift; sourceTree = "<group>"; };
+		8E9BEA602504C76E008F6A5A /* TaskStackItems.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TaskStackItems.storyboard; sourceTree = "<group>"; };
+		8E9BEA622504C820008F6A5A /* TaskItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItemViewController.swift; sourceTree = "<group>"; };
+		8E9BEA642504C9FF008F6A5A /* TaskListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListViewController.swift; sourceTree = "<group>"; };
+		8E9BEA652504C9FF008F6A5A /* TaskListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskListViewController.xib; sourceTree = "<group>"; };
 		8E9D8038234884040062692A /* EditRepositoryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditRepositoryViewController.xib; sourceTree = "<group>"; };
 		8E9D803A2348A9EE0062692A /* GRDB+ExportProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+ExportProfile.swift"; sourceTree = "<group>"; };
 		8E9D803C2348AA550062692A /* ExportProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportProfile.swift; sourceTree = "<group>"; };
@@ -522,7 +530,7 @@
 		8EBA9DE821766EAB00DACAAD /* TheaterCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheaterCollectionViewController.swift; sourceTree = "<group>"; };
 		8EBC0180236B072F00FB6E2F /* TwoColumnTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoColumnTableViewController.swift; sourceTree = "<group>"; };
 		8EBC0181236B072F00FB6E2F /* TwoColumnTableViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TwoColumnTableViewController.xib; sourceTree = "<group>"; };
-		8EC20B2F2281B4C0000F4819 /* TaskHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskHelper.swift; sourceTree = "<group>"; };
+		8EC20B2F2281B4C0000F4819 /* TaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
 		8EC20B312281C0B8000F4819 /* FaceTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTask.swift; sourceTree = "<group>"; };
 		8EC5BA2C21775571001510AF /* TheaterCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheaterCollectionViewItem.swift; sourceTree = "<group>"; };
 		8EC5BA2D21775571001510AF /* TheaterCollectionViewItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TheaterCollectionViewItem.xib; sourceTree = "<group>"; };
@@ -954,6 +962,17 @@
 			path = PostgresClientKit;
 			sourceTree = "<group>";
 		};
+		8E9BEA5F2504C577008F6A5A /* Task */ = {
+			isa = PBXGroup;
+			children = (
+				8E9BEA602504C76E008F6A5A /* TaskStackItems.storyboard */,
+				8E9BEA622504C820008F6A5A /* TaskItemViewController.swift */,
+				8E9BEA642504C9FF008F6A5A /* TaskListViewController.swift */,
+				8E9BEA652504C9FF008F6A5A /* TaskListViewController.xib */,
+			);
+			path = Task;
+			sourceTree = "<group>";
+		};
 		8EB27164233BB244003BF3AF /* LibraryTree */ = {
 			isa = PBXGroup;
 			children = (
@@ -1205,6 +1224,7 @@
 		8ECA1FEA23E3275E00F56895 /* UI.Views */ = {
 			isa = PBXGroup;
 			children = (
+				8E9BEA5F2504C577008F6A5A /* Task */,
 				8EEF0725226215C8000520B7 /* Splash */,
 				8EB986AA20B21D3E0075B081 /* Tree */,
 				8E3FA91B2352904B00B677A3 /* Memories */,
@@ -1221,7 +1241,7 @@
 			isa = PBXGroup;
 			children = (
 				8E85B7CE20B8786C005A9845 /* Accumulator.swift */,
-				8EC20B2F2281B4C0000F4819 /* TaskHelper.swift */,
+				8EC20B2F2281B4C0000F4819 /* TaskManager.swift */,
 			);
 			path = Task;
 			sourceTree = "<group>";
@@ -1587,6 +1607,7 @@
 				8E4C38CA211776300089502C /* Mobile in Resources */,
 				8EC5BA2F21775571001510AF /* TheaterCollectionViewItem.xib in Resources */,
 				8E8D47272236733B0091E9C3 /* OneColumnTableViewController.xib in Resources */,
+				8E9BEA672504C9FF008F6A5A /* TaskListViewController.xib in Resources */,
 				8EBA69252090C2AA00221131 /* ExifTool in Resources */,
 				8EAC5F212144A60900E187E0 /* DeviceFolderViewController.xib in Resources */,
 				8E69D53724B331AD0075A05D /* MomentsTreeHeaderMoreViewController.xib in Resources */,
@@ -1606,6 +1627,7 @@
 				8EEF071F225FCF8E000520B7 /* ContainerDetailViewController.xib in Resources */,
 				8EB271AD2346BE8A003BF3AF /* TaskProgressViewController.xib in Resources */,
 				8EE1AB3E20D05E49001C75B0 /* EventListViewController.xib in Resources */,
+				8E9BEA612504C76E008F6A5A /* TaskStackItems.storyboard in Resources */,
 				8E0AFA44208BDEA100CE8B68 /* Main.storyboard in Resources */,
 				8E95739B20EBEBD7003BD651 /* FilterViewController.xib in Resources */,
 				8E4E5B762219624D00FE4B68 /* FaceRecognitionOpenCV in Resources */,
@@ -1754,6 +1776,7 @@
 				8EB2717B2340D8BC003BF3AF /* ViewController+SelectionArea.swift in Sources */,
 				8EB986B020B225230075B081 /* DetailViewDelegate.swift in Sources */,
 				8E7F71002091F14300410C45 /* BaiduLocation.swift in Sources */,
+				8E9BEA632504C820008F6A5A /* TaskItemViewController.swift in Sources */,
 				8E98B8F020D0EE3300771280 /* PlaceListViewController.swift in Sources */,
 				8ECA1FF923E5638800F56895 /* DeviceTree+ExtendView.swift in Sources */,
 				8EF4E1F32453C05800999DD1 /* PostgresRowDecoder.swift in Sources */,
@@ -1763,6 +1786,7 @@
 				8EE382F823E02585003B7153 /* Colors.swift in Sources */,
 				8E015123208F7D34009C2549 /* StackedVideoViewController.swift in Sources */,
 				8EB986BA20B30C920075B081 /* ImageFile.swift in Sources */,
+				8E9BEA662504C9FF008F6A5A /* TaskListViewController.swift in Sources */,
 				8EFA02F5243B3F0C00D7C355 /* DBEngine+PostgresConnection+PostgresClientKit.swift in Sources */,
 				8EFA02E9243B3E9B00D7C355 /* PostgresClientKit+ImagePlace.swift in Sources */,
 				8EEB88842090B44B00CDEC81 /* ImageDropView.swift in Sources */,
@@ -1817,7 +1841,7 @@
 				8EBC0182236B072F00FB6E2F /* TwoColumnTableViewController.swift in Sources */,
 				8ECA1FFD23E5784A00F56895 /* LibraryTree+CollectionView.swift in Sources */,
 				8EF4E1EF2453C05800999DD1 /* PostgreSQLStatement.swift in Sources */,
-				8EC20B302281B4C0000F4819 /* TaskHelper.swift in Sources */,
+				8EC20B302281B4C0000F4819 /* TaskManager.swift in Sources */,
 				8E31C37F2120A22600002546 /* DeviceShell.swift in Sources */,
 				8EC82EAE21283ED000FC0899 /* DirectoryViewDelegate.swift in Sources */,
 				8EF4E1F82453C05800999DD1 /* DatabaseDefinition.swift in Sources */,

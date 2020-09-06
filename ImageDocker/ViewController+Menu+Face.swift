@@ -160,7 +160,7 @@ extension ViewController {
             print("\(action) \(area)")
             if area == "collection" {
                 if self.imagesLoader.getItems().count > 0 {
-                    let tasklet = TaskletManager.default.task(name: "\(action) faces in collection")
+                    let tasklet = TaskletManager.default.task(type: "face", name: "\(action) faces in collection")
                     tasklet.total = self.imagesLoader.getItems().count
                     tasklet.progress = 0
                     tasklet.running = true
@@ -198,7 +198,7 @@ extension ViewController {
                     print("no item in collection")
                 }
             }else{
-                let tasklet = TaskletManager.default.task(name: "\(action) faces in \(area)")
+                let tasklet = TaskletManager.default.task(type: "face", name: "\(action) faces in \(area)")
                 tasklet.total = 1
                 tasklet.progress = 0
                 tasklet.running = true
