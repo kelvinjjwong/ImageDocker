@@ -11,6 +11,9 @@ import Cocoa
 class TaskProgressViewController: NSViewController {
     
     @IBOutlet weak var stackView: NSStackView!
+    @IBOutlet weak var btnStopAll: NSButton!
+    @IBOutlet weak var btnRemoveAll: NSButton!
+    @IBOutlet weak var btnRemoveCompleted: NSButton!
     
     init() {
         super.init(nibName: "TaskProgressViewController", bundle: nil)
@@ -121,6 +124,9 @@ class TaskProgressViewController: NSViewController {
         if self.tasks.count == 0 {
             self.addNoTaskNotice()
         }
+        
+        self.tasksView.removeValue(forKey: task.id)
+        self.tasksState.removeValue(forKey: task.id)
     }
     
     func updateTask(task:Tasklet) {
@@ -136,11 +142,7 @@ class TaskProgressViewController: NSViewController {
                     if task.total > 0 {
                         viewController.progress.increment(by: 1)
                         if viewController.progress.doubleValue == viewController.progress.maxValue {
-                            viewController.btnStop.title = "COMPLETED"
-                            viewController.btnStop.image = nil
-                            viewController.btnStop.isEnabled = false
-
-                            self.tasksState[task.id] = "COMPLETED"
+                            self.setTaskComplete(task: task, viewController: viewController)
                         }
                     }
                 }else if state == "READY" {
@@ -150,6 +152,20 @@ class TaskProgressViewController: NSViewController {
             
         }
         
+    }
+    
+    func setComplete(task:Tasklet) {
+        if let viewController = self.tasksView[task.id] {
+            self.setTaskComplete(task: task, viewController: viewController)
+        }
+    }
+    
+    private func setTaskComplete(task:Tasklet, viewController:ProgressViewController) {
+        viewController.btnStop.title = "COMPLETED"
+        viewController.btnStop.image = nil
+        viewController.btnStop.isEnabled = false
+
+        self.tasksState[task.id] = "COMPLETED"
     }
     
     func setTotal(task:Tasklet, total:Int) {
@@ -173,5 +189,18 @@ class TaskProgressViewController: NSViewController {
             self.tasksState[task.id] = "IN_PROGRESS"
         }
     }
+    
+    @IBAction func onRemoveCompletedClicked(_ sender: NSButton) {
+        TaskletManager.default.removeCompletedTasks()
+    }
+    
+    @IBAction func onRemoveAllClicked(_ sender: NSButton) {
+        TaskletManager.default.removeAllTasks()
+    }
+    
+    @IBAction func onStopAllClicked(_ sender: NSButton) {
+        TaskletManager.default.stopAllTasks()
+    }
+    
     
 }

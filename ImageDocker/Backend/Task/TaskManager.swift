@@ -183,6 +183,8 @@ class TaskletManager {
         return t
     }
     
+    // MARK: - CREATE
+    
     func task(type:String, name:String) -> Tasklet {
         if let task = self.getTask(type: type, name: name) {
             return task
@@ -192,11 +194,28 @@ class TaskletManager {
             task.changeListener(selector: #selector(self.onTaskChanged))
             tasks.append(task)
             if let view = self.viewManager {
-                view.addTask(task: task)
+                let _ = view.addTask(task: task)
             }
             return task
         }
     }
+    
+    // MARK: - CHANGE LISTENER
+    
+    @objc func onTaskChanged(notification: NSNotification) {
+        for task in tasks {
+            if task.taskid == notification.name.rawValue {
+                if let view = viewManager {
+                    DispatchQueue.main.async {
+                        view.updateTask(task: task)
+                    }
+                }
+                break
+            }
+        }
+    }
+    
+    // MARK: - TASK STATE
     
     func isTaskStopped(type:String, name:String) -> Bool {
         if let task = self.getTask(type: type, name: name) {
@@ -242,23 +261,14 @@ class TaskletManager {
         self.tasks.removeAll { (obj) -> Bool in
             return task.id == obj.id
         }
+        self.tasksStartStopState.removeValue(forKey: task.id)
+        
         if let view = self.viewManager {
             view.removeTask(task: task)
         }
     }
     
-    @objc func onTaskChanged(notification: NSNotification) {
-        for task in tasks {
-            if task.taskid == notification.name.rawValue {
-                if let view = viewManager {
-                    DispatchQueue.main.async {
-                        view.updateTask(task: task)
-                    }
-                }
-                break
-            }
-        }
-    }
+    // MARK: - SET MESSAGE OR PROGRESS
     
     func setTotal(type:String, name:String, total:Int) {
         if let task = self.getTask(type: type, name: name) {
@@ -317,19 +327,6 @@ class TaskletManager {
         }
     }
     
-    func loadTasks() {
-        if let view = self.viewManager {
-            for task in self.tasks {
-                if view.addTask(task: task) {
-                    view.setTotal(task: task, total: task.total)
-                    if task.total > 0 {
-                        view.setProgressValue(task: task, progressValue: task.progress)
-                    }
-                }
-            }
-        }
-    }
-    
     func setExecution(type:String, name:String, exec:@escaping ((Tasklet) -> Void), stop:@escaping ((Tasklet) -> Void)) {
         if let task = self.getTask(type: type, name: name) {
             task.setExecution(exec, stop: stop)
@@ -356,14 +353,7 @@ class TaskletManager {
         }
     }
     
-    func printAll() {
-        print("===================================")
-        print("Listing all tasks ...")
-        for task in tasks {
-            print(task.toString())
-        }
-        print("===================================")
-    }
+    // MARK: - CREATE AND EXECUTE
     
     func createAndStartTask(type:String, name:String, total:Int = 0, exec:@escaping ((Tasklet) -> Void), stop:@escaping ((Tasklet) -> Void)) -> Tasklet {
         let task = self.task(type: type, name: name)
@@ -373,6 +363,66 @@ class TaskletManager {
         self.setExecution(id: task.id, exec: exec, stop: stop)
         self.startExecution(id: task.id)
         return task
+    }
+    
+    // MARK: - FOR ALL TASKS
+    
+    func loadTasks() {
+        if let view = self.viewManager {
+            for task in self.tasks {
+                if view.addTask(task: task) {
+                    view.setTotal(task: task, total: task.total)
+                    if task.total > 0 {
+                        view.setProgressValue(task: task, progressValue: task.progress)
+                        if task.progress == task.total {
+                            view.setComplete(task: task)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func stopAllTasks() {
+        if let view = self.viewManager {
+            for task in self.tasks {
+                if let state = view.tasksState[task.id] {
+                    if state != "COMPLETED" {
+                        view.stopTask(task: task)
+                    }
+                }
+            }
+        }
+    }
+    
+    func removeCompletedTasks() {
+        if let view = self.viewManager {
+            for task in self.tasks {
+                if let state = view.tasksState[task.id] {
+                    if state == "COMPLETED" {
+                        self.removeTask(task: task)
+                    }
+                }
+            }
+        }
+    }
+    
+    func removeAllTasks() {
+        if let view = self.viewManager {
+            for task in self.tasks {
+                view.stopTask(task: task)
+                self.removeTask(task: task)
+            }
+        }
+    }
+    
+    func printAll() {
+        print("===================================")
+        print("Listing all tasks ...")
+        for task in tasks {
+            print(task.toString())
+        }
+        print("===================================")
     }
     
 }

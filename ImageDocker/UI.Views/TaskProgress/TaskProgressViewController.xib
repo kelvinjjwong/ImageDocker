@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="TaskProgressViewController" customModule="ImageDocker" customModuleProvider="target">
             <connections>
+                <outlet property="btnRemoveAll" destination="zSt-lJ-vPB" id="KNZ-Yv-3QD"/>
+                <outlet property="btnRemoveCompleted" destination="aoJ-ky-WbA" id="Dz3-TO-c2B"/>
+                <outlet property="btnStopAll" destination="UtA-Mg-ywW" id="rM5-e7-ccu"/>
                 <outlet property="stackView" destination="yWK-6q-rW8" id="uZd-u1-sPg"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
@@ -19,13 +22,13 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Zj-Ys-Zn7">
-                    <rect key="frame" x="0.0" y="0.0" width="650" height="200"/>
+                    <rect key="frame" x="0.0" y="0.0" width="650" height="160"/>
                     <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="3wX-gb-JUD">
-                        <rect key="frame" x="1" y="1" width="648" height="198"/>
+                        <rect key="frame" x="1" y="1" width="633" height="143"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yWK-6q-rW8">
-                                <rect key="frame" x="0.0" y="0.0" width="648" height="198"/>
+                                <rect key="frame" x="0.0" y="0.0" width="633" height="143"/>
                             </stackView>
                         </subviews>
                         <constraints>
@@ -36,21 +39,71 @@
                         </constraints>
                     </clipView>
                     <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="1wP-4E-a6g">
-                        <rect key="frame" x="1" y="183" width="648" height="16"/>
+                        <rect key="frame" x="1" y="144" width="633" height="15"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
-                    <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="fbI-Cf-erv">
-                        <rect key="frame" x="633" y="1" width="16" height="198"/>
+                    <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="fbI-Cf-erv">
+                        <rect key="frame" x="634" y="1" width="15" height="143"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                 </scrollView>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UtA-Mg-ywW">
+                    <rect key="frame" x="1" y="164" width="116" height="32"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="104" id="uQe-x1-QNl"/>
+                    </constraints>
+                    <buttonCell key="cell" type="push" title="STOP ALL" bezelStyle="rounded" image="NSStopProgressFreestandingTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TJf-df-gG2">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="onStopAllClicked:" target="-2" id="PB0-AU-FRH"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aoJ-ky-WbA">
+                    <rect key="frame" x="438" y="164" width="198" height="32"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="186" id="IGK-DL-KGN"/>
+                    </constraints>
+                    <buttonCell key="cell" type="push" title="REMOVE COMPLETED" bezelStyle="rounded" image="broom" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5eV-E1-92Q">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="onRemoveCompletedClicked:" target="-2" id="Rcz-tJ-QK7"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zSt-lJ-vPB">
+                    <rect key="frame" x="296" y="164" width="132" height="32"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="120" id="4S7-Vr-633"/>
+                    </constraints>
+                    <buttonCell key="cell" type="push" title="REMOVE ALL" bezelStyle="rounded" image="broom" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xaN-Zt-wKS">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="onRemoveAllClicked:" target="-2" id="FV0-r9-h7K"/>
+                    </connections>
+                </button>
             </subviews>
             <constraints>
-                <constraint firstItem="2Zj-Ys-Zn7" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="J09-5t-see"/>
+                <constraint firstItem="zSt-lJ-vPB" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="8" id="7Fj-Mr-Y4q"/>
+                <constraint firstItem="aoJ-ky-WbA" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="8" id="7dE-Ih-pvD"/>
+                <constraint firstAttribute="trailing" secondItem="aoJ-ky-WbA" secondAttribute="trailing" constant="20" id="9FW-4d-9o0"/>
+                <constraint firstItem="2Zj-Ys-Zn7" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="40" id="J09-5t-see"/>
+                <constraint firstItem="UtA-Mg-ywW" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="8" id="Jiu-N4-8ZN"/>
                 <constraint firstAttribute="bottom" secondItem="2Zj-Ys-Zn7" secondAttribute="bottom" id="b99-t5-8Fu"/>
                 <constraint firstAttribute="trailing" secondItem="2Zj-Ys-Zn7" secondAttribute="trailing" id="bjS-AG-DQ8"/>
+                <constraint firstItem="UtA-Mg-ywW" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="7" id="cZV-Vj-ZRD"/>
                 <constraint firstItem="2Zj-Ys-Zn7" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="sK8-WS-Vof"/>
+                <constraint firstItem="aoJ-ky-WbA" firstAttribute="leading" secondItem="zSt-lJ-vPB" secondAttribute="trailing" constant="22" id="zIh-S6-COV"/>
             </constraints>
+            <point key="canvasLocation" x="140" y="154"/>
         </customView>
     </objects>
+    <resources>
+        <image name="NSStopProgressFreestandingTemplate" width="14" height="14"/>
+        <image name="broom" width="16" height="16"/>
+    </resources>
 </document>
