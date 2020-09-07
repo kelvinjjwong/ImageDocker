@@ -282,16 +282,22 @@ class TaskletManager {
         task.notifyChange()
     }
     
-    func updateMessage(type:String, name:String, message:String) {
+    func updateMessage(type:String, name:String, message:String, increase:Bool = false) {
         if let task = self.getTask(type: type, name: name) {
             task.message = message
+            if increase {
+                task.progress += 1
+            }
             task.notifyChange()
         }
     }
     
-    func updateMessage(id:String, message:String) {
+    func updateMessage(id:String, message:String, increase:Bool = false) {
         if let task = self.getTask(id: id) {
             task.message = message
+            if increase {
+                task.progress += 1
+            }
             task.notifyChange()
         }
     }
@@ -312,10 +318,17 @@ class TaskletManager {
     }
     
     func loadTasks() {
-        FakeTaskletManager.default.loadTasks()
+        if let view = self.viewManager {
+            for task in self.tasks {
+                if view.addTask(task: task) {
+                    view.setTotal(task: task, total: task.total)
+                    if task.total > 0 {
+                        view.setProgressValue(task: task, progressValue: task.progress)
+                    }
+                }
+            }
+        }
     }
-    
-    
     
     func setExecution(type:String, name:String, exec:@escaping ((Tasklet) -> Void), stop:@escaping ((Tasklet) -> Void)) {
         if let task = self.getTask(type: type, name: name) {
@@ -352,70 +365,22 @@ class TaskletManager {
         print("===================================")
     }
     
+    func createAndStartTask(type:String, name:String, total:Int = 0, exec:@escaping ((Tasklet) -> Void), stop:@escaping ((Tasklet) -> Void)) -> Tasklet {
+        let task = self.task(type: type, name: name)
+        if total > 0 {
+            self.setTotal(id: task.id, total: total)
+        }
+        self.setExecution(id: task.id, exec: exec, stop: stop)
+        self.startExecution(id: task.id)
+        return task
+    }
+    
 }
 
 class FakeTaskletManager {
     static let `default` = FakeTaskletManager()
     
     var fakeTasks:[String:Timer] = [:]
-    
-    func loadTasks() {
-        TaskletManager.default.task(type: "TEST", name: "test1234")
-        TaskletManager.default.task(type: "TEST", name: "test2234")
-        TaskletManager.default.task(type: "TEST", name: "test3234")
-        TaskletManager.default.task(type: "TEST", name: "test4234")
-        
-        TaskletManager.default.setTotal(type: "TEST", name: "test2234", total: 10)
-        
-        TaskletManager.default.setExecution(type: "TEST", name: "test1234", exec: { task in
-            let timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { _ in
-                TaskletManager.default.updateMessage(type: "TEST", name: "test1234", message: "\(Date()) 1 changing")
-            })
-            self.fakeTasks[task.id] = timer
-        }, stop: {task in
-            if let timer = self.fakeTasks[task.id] {
-                timer.invalidate()
-            }
-        })
-        
-        TaskletManager.default.setExecution(type: "TEST", name: "test2234", exec: { task in
-            let timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { _ in
-                TaskletManager.default.updateMessage(type: "TEST", name: "test2234", message: "\(Date()) 2 changing")
-            })
-            self.fakeTasks[task.id] = timer
-        }, stop: {task in
-            if let timer = self.fakeTasks[task.id] {
-                timer.invalidate()
-            }
-        })
-        
-        TaskletManager.default.setExecution(type: "TEST", name: "test3234", exec: { task in
-            let timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { _ in
-                TaskletManager.default.updateMessage(type: "TEST", name: "test3234", message: "\(Date()) 3 changing")
-            })
-            self.fakeTasks[task.id] = timer
-        }, stop: {task in
-            if let timer = self.fakeTasks[task.id] {
-                timer.invalidate()
-            }
-        })
-        
-        TaskletManager.default.setExecution(type: "TEST", name: "test4234", exec: { task in
-            DispatchQueue.global().async {
-                self.stubJob(taskId: task.id)
-            }
-        }, stop: {task in
-            
-        })
-        
-        TaskletManager.default.startExecution(type: "TEST", name: "test1234")
-        TaskletManager.default.startExecution(type: "TEST", name: "test2234")
-        TaskletManager.default.startExecution(type: "TEST", name: "test3234")
-        TaskletManager.default.startExecution(type: "TEST", name: "test4234")
-        
-        
-        
-    }
     
     func stubJob(taskId:String) {
         var n = 1
@@ -428,18 +393,54 @@ class FakeTaskletManager {
             }
             sleep(3)
             print("doing step \(n)")
-            TaskletManager.default.updateMessage(id: taskId, message: "Doing step \(n)")
+            TaskletManager.default.updateMessage(id: taskId, message: "Doing step \(n)", increase: true)
             
             n += 1
         }
     }
     
-    // deprecated
     func rehearsal() {
         print("\(Date()) task manager rehearsal")
-        TaskletManager.default.updateMessage(type: "TEST", name: "test1234", message: "\(Date()) 1 changing")
-        TaskletManager.default.updateMessage(type: "TEST", name: "test2234", message: "\(Date()) 2 changing")
-        TaskletManager.default.updateMessage(type: "TEST", name: "test3234", message: "\(Date()) 3 changing")
-        TaskletManager.default.printAll()
+        
+        let _ = TaskletManager.default.createAndStartTask(type: "TEST", name: "test4234", exec: { task in
+            DispatchQueue.global().async {
+                self.stubJob(taskId: task.id)
+            }
+        }, stop: {task in
+            
+        })
+        
+        let _ = TaskletManager.default.createAndStartTask(type: "TEST", name: "test1234", exec: { task in
+            let timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { _ in
+                TaskletManager.default.updateMessage(type: "TEST", name: "test1234", message: "\(Date()) 1 changing")
+            })
+            self.fakeTasks[task.id] = timer
+        }, stop: {task in
+            if let timer = self.fakeTasks[task.id] {
+                timer.invalidate()
+            }
+        })
+        
+        let _ = TaskletManager.default.createAndStartTask(type: "TEST", name: "test2234", total: 10, exec: { task in
+            let timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { _ in
+                TaskletManager.default.updateMessage(type: "TEST", name: "test2234", message: "\(Date()) 2 changing", increase: true)
+            })
+            self.fakeTasks[task.id] = timer
+        }, stop: {task in
+            if let timer = self.fakeTasks[task.id] {
+                timer.invalidate()
+            }
+        })
+        
+        let _ = TaskletManager.default.createAndStartTask(type: "TEST", name: "test3234", exec: { task in
+            let timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { _ in
+                TaskletManager.default.updateMessage(type: "TEST", name: "test3234", message: "\(Date()) 3 changing")
+            })
+            self.fakeTasks[task.id] = timer
+        }, stop: {task in
+            if let timer = self.fakeTasks[task.id] {
+                timer.invalidate()
+            }
+        })
     }
 }

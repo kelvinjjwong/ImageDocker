@@ -45,7 +45,11 @@ class TaskProgressViewController: NSViewController {
     }
     
     /// Used to add a particular view controller as an item to our stack view.
-    func addTask(task:Tasklet) {
+    func addTask(task:Tasklet) -> Bool {
+        
+        if let _ = self.tasksView[task.id] {
+            return false
+        }
         
         if self.tasks.count == 0 && self.stackView.views.count > 0 {
             let noTask = self.stackView.views[0]
@@ -72,6 +76,8 @@ class TaskProgressViewController: NSViewController {
         self.tasksState[task.id] = "READY"
         stackView.addArrangedSubview(viewController.view)
         //addChildViewController(viewController)
+        viewController.progress.isHidden = true
+        return true
     }
     
     func onTaskComplete(task:Tasklet) {
@@ -151,8 +157,21 @@ class TaskProgressViewController: NSViewController {
             viewController.progress.maxValue = Double(total)
             viewController.progress.minValue = 0
             viewController.progress.doubleValue = 0
+            
+            if total > 0 {
+                viewController.progress.isHidden = false
+            }
         }
         self.tasksState[task.id] = "READY"
+    }
+    
+    func setProgressValue(task:Tasklet, progressValue:Int) {
+        if let viewController = self.tasksView[task.id] {
+            viewController.progress.doubleValue = Double(progressValue)
+        }
+        if progressValue > 0 {
+            self.tasksState[task.id] = "IN_PROGRESS"
+        }
     }
     
 }

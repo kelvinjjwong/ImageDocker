@@ -83,5 +83,7 @@ extension ViewController {
 //        self.testTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { _ in
 //            TaskletManager.default.rehearsal()
 //        })
+        
+        FakeTaskletManager.default.rehearsal()
     }
 }
