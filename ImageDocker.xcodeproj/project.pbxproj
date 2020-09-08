@@ -184,6 +184,7 @@
 		8EB986BE20B30C920075B081 /* CollectionViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EB986B720B30C920075B081 /* CollectionViewItem.xib */; };
 		8EB986BF20B30C920075B081 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB986B820B30C920075B081 /* HeaderView.swift */; };
 		8EB986C620B6EBC40075B081 /* DarkTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB986C520B6EBC40075B081 /* DarkTableView.swift */; };
+		8EB9C0112507736000507CA7 /* DataStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB9C0102507735F00507CA7 /* DataStructures.swift */; };
 		8EBA69252090C2AA00221131 /* ExifTool in Resources */ = {isa = PBXBuildFile; fileRef = 8EBA69242090C2AA00221131 /* ExifTool */; };
 		8EBA692A2090C87D00221131 /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA69292090C87D00221131 /* Extentions.swift */; };
 		8EBA692C2090DB0300221131 /* DropPlaceCommons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA692B2090DB0300221131 /* DropPlaceCommons.swift */; };
@@ -499,6 +500,7 @@
 		8EB986B720B30C920075B081 /* CollectionViewItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CollectionViewItem.xib; sourceTree = "<group>"; };
 		8EB986B820B30C920075B081 /* HeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		8EB986C520B6EBC40075B081 /* DarkTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkTableView.swift; sourceTree = "<group>"; };
+		8EB9C0102507735F00507CA7 /* DataStructures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStructures.swift; sourceTree = "<group>"; };
 		8EBA69242090C2AA00221131 /* ExifTool */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ExifTool; sourceTree = "<group>"; };
 		8EBA69292090C87D00221131 /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
 		8EBA692B2090DB0300221131 /* DropPlaceCommons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropPlaceCommons.swift; sourceTree = "<group>"; };
@@ -1260,6 +1262,7 @@
 				8E15E74023AC7B310094240A /* Icons.swift */,
 				8EE382F723E02585003B7153 /* Colors.swift */,
 				8EBA69292090C87D00221131 /* Extentions.swift */,
+				8EB9C0102507735F00507CA7 /* DataStructures.swift */,
 			);
 			path = Commons;
 			sourceTree = "<group>";
@@ -1863,6 +1866,7 @@
 				8E4B7C1920929EFA00DDD9E0 /* LocationConsumer.swift in Sources */,
 				8E99DBFB2284A18600654C03 /* SearchCondition.swift in Sources */,
 				8E741948242256F0002BAAAE /* PlaceDaoInterface.swift in Sources */,
+				8EB9C0112507736000507CA7 /* DataStructures.swift in Sources */,
 				8EB2718B2340EE18003BF3AF /* ViewController+SelectionArea+ExportSelected.swift in Sources */,
 				8EB271992340F22F003BF3AF /* ViewController+Search.swift in Sources */,
 				8E15E73623AC74DC0094240A /* StackHeaderViewController.swift in Sources */,

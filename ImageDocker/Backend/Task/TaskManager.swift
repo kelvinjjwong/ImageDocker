@@ -93,8 +93,11 @@ class Tasklet {
     var beginTime:Date
     var taskid = ""
     var state = ""
+    
     var isFixedDelayJob = false
     var fixedDelayInterval:Int = 0
+    var timesOfRun = 0
+    var timeOfNextRun = 0
     
     var taskCode: ((Tasklet) -> Void)? = nil
     
@@ -164,10 +167,10 @@ class Tasklet {
             DispatchQueue.global().async {
                 while(true) {
                     if TaskletManager.default.isTaskStopped(id: self.id) {
-                        print("stopped fixed delay job !!!!!!!!")
+//                        print("stopped fixed delay job !!!!!!!!")
                         return
                     }
-                    print("\(Date()) fixed delay execution - \(self.name) - \(self.state)")
+                    //print("\(Date()) fixed delay execution - \(self.name) - \(self.state)")
                     
                     if self.state == "COMPLETED" || self.state == "READY" {
                         self.state = "IN_PROGRESS"
@@ -176,29 +179,34 @@ class Tasklet {
                     
                     if self.state == "COMPLETED" || self.state == "READY" {
                         
-                        print("\(Date()) waiting \(intervalInSecond) sec for next fixedDelay run")
+//                        print("\(Date()) waiting \(intervalInSecond) sec for next fixedDelay run")
                         
-                        var n = 0
-                        while(n < intervalInSecond) {
-                            if TaskletManager.default.isTaskStopped(id: self.id) {
-                                print("stopped fixed delay job !!!!!!!!")
-                                return
+                        if !TaskletManager.default.isSingleMode() {
+                            var n = 0
+                            while(n < intervalInSecond) {
+                                if TaskletManager.default.isTaskStopped(id: self.id) {
+    //                                print("stopped fixed delay job !!!!!!!!")
+                                    return
+                                }
+                                
+                                if let view = TaskletManager.default.viewManager {
+                                    self.message = "Waiting for next run: \(self.getRemainingTime(timeInSecond: (intervalInSecond - n)))"
+                                    view.updateMessage(task: self)
+                                }
+                                sleep(1)
+                                n += 1
                             }
+
+                            self.progress = 0
                             
                             if let view = TaskletManager.default.viewManager {
-                                self.message = "Waiting for next run: \(self.getRemainingTime(timeInSecond: (intervalInSecond - n)))"
-                                view.updateMessage(task: self)
+                                view.updatePanelForRestartTask(task: self)
                             }
-                            sleep(1)
-                            n += 1
-                        }
-                        self.progress = 0
-                        
-                        if let view = TaskletManager.default.viewManager {
-                            view.updatePanelForRestartTask(task: self)
+                        }else{
+                            break // if single mode, exit while loop. TaskletManager will push it to end of queue again.
                         }
                     }else{
-                        sleep(5)
+                        sleep(1) // continue in progress
                     }
                 }
             }
@@ -218,14 +226,138 @@ class TaskletManager {
     
     var viewManager:TaskProgressViewController? = nil
     
-    var tasks:[Tasklet] = []
-    
-    var tasksStartStopState:[String:Bool] = [:]
-    
     func bindToView(view:TaskProgressViewController) -> TaskletManager {
         self.viewManager = view
         return self
     }
+    
+    var tasks:[Tasklet] = []
+    
+    var tasksStartStopState:[String:Bool] = [:]
+    
+    // MARK: - QUEUE for SINGLE MODE
+    
+    private var queue = Queue<Tasklet>()
+    
+    private var queueTimer:Timer? = nil
+    
+    public init() {
+        self.startQueueTimer()
+    }
+    
+    func isSingleMode() -> Bool {
+        return PreferencesController.isSQLite() // || true
+    }
+    
+    func printQueuedTasks() {
+        print("==========================")
+        for task in self.queue.list {
+            if task.isFixedDelayJob {
+                print("\(task.name) - \(task.state) - ran \(task.timesOfRun) times - next run: \(task.timeOfNextRun)")
+            }else{
+                print("\(task.name) - \(task.state)")
+            }
+        }
+        print("==========================")
+    }
+    
+    func startQueueTimer() {
+        self.queueTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
+            if self.isSingleMode() {
+                print("===== single thread mode ======")
+                self.printQueuedTasks()
+                if !self.queue.isEmpty {
+                    if let task = self.queue.peek() {
+                        if task.state == "READY" {
+                            var shouldTrigger = false
+                            if let state = self.tasksStartStopState[task.id] {
+                                if state == false {
+                                    shouldTrigger = true
+                                }
+                            }else{
+                                shouldTrigger = true
+                            }
+                            
+                            if shouldTrigger {
+                                self.tasksStartStopState[task.id] = true
+                                if task.isFixedDelayJob {
+                                    if task.timesOfRun > 0 {
+                                        let now = Int(Date().timeIntervalSince1970)
+                                        if now < task.timeOfNextRun {
+                                            // at next run, wait for remaining fixed delay interval if the time has not arrived
+                                            let interval = task.timeOfNextRun - now
+                                            sleep(UInt32(interval))
+                                        }
+                                        if let view = self.viewManager {
+                                            view.setProgressValue(task: task, progressValue: 0)
+                                        }
+                                    }
+                                    self.startFixedDelayExecution(task: task)
+                                }else{
+                                    self.startExecution(task: task)
+                                }
+                            }
+                            
+                        }else if task.state == "STOPPED" {
+                            let _ = self.queue.dequeue()
+                        }else if task.state == "COMPLETED" {
+                            let _ = self.queue.dequeue()
+                            if task.isFixedDelayJob { // queue for next run
+                                // increase task timesOfRun,
+                                task.timesOfRun += 1
+                                // calculate/set the time of next run (in seconds)
+                                // at next run, wait for remaining fixed delay interval if the time has not arrived
+                                task.timeOfNextRun = Int(Date().timeIntervalSince1970) + task.fixedDelayInterval
+                                task.state = "READY"
+                                task.progress = 0
+                                task.message = "Waiting for next run ..."
+                                self.tasksStartStopState[task.id] = false
+                                if let view = self.viewManager {
+                                    view.updateMessage(task: task)
+                                }
+                                self.pushTaskToQueue(task: task)
+                                
+                                // TODO: change button to "JUMP" so that another task can come up if this task need too much time for next time
+                            }
+                        }
+                    }
+                }
+            }else{
+                print("===== multi thread mode ======")
+                // when suddenly changed from single thread mode to multi thread mode
+                // clean the queue and execute all queued tasks
+                let queuedTasks = self.queue.dequeueAll()
+                if queuedTasks.count > 0 {
+                    for task in queuedTasks {
+                        if task.isFixedDelayJob {
+                            self.startFixedDelayExecution(task: task)
+                        }else{
+                            self.startExecution(task: task)
+                        }
+                    }
+                }
+            }
+            
+        })
+    }
+    
+    private func pushTaskToQueue(task:Tasklet) {
+        self.queue.enqueue(task)
+    }
+    
+    private func isTaskAtQueuePeek(task:Tasklet) -> Bool {
+        if self.queue.isEmpty {
+            return false
+        }
+        if let peek = self.queue.peek() {
+            if peek.id == task.id {
+                return true
+            }
+        }
+        return false
+    }
+    
+    // MARK: - GET TASK
     
     private func getTask(type:String, name:String) -> Tasklet? {
         var t:Tasklet? = nil
@@ -249,7 +381,7 @@ class TaskletManager {
         return t
     }
     
-    // MARK: - CREATE
+    // MARK: - CREATE TASK
     
     func task(type:String, name:String) -> Tasklet {
         if let task = self.getTask(type: type, name: name) {
@@ -268,7 +400,7 @@ class TaskletManager {
         }
     }
     
-    // MARK: - CHANGE LISTENER
+    // MARK: - TASK's CHANGE LISTENER
     
     @objc func onTaskChanged(notification: NSNotification) {
         for task in tasks {
@@ -283,7 +415,7 @@ class TaskletManager {
         }
     }
     
-    // MARK: - TASK STATE
+    // MARK: - TASK's RUNNING STATE
     
     func isTaskStopped(type:String, name:String) -> Bool {
         if let task = self.getTask(type: type, name: name) {
@@ -348,7 +480,7 @@ class TaskletManager {
         }
     }
     
-    // MARK: - SET MESSAGE OR PROGRESS
+    // MARK: - TASK's PROPERTIES
     
     func setTotal(type:String, name:String, total:Int) {
         if let task = self.getTask(type: type, name: name) {
@@ -373,6 +505,20 @@ class TaskletManager {
         task.notifyChange()
     }
     
+    func setExecution(type:String, name:String, exec:@escaping ((Tasklet) -> Void), stop:@escaping ((Tasklet) -> Void)) {
+        if let task = self.getTask(type: type, name: name) {
+            task.setExecution(exec, stop: stop)
+        }
+    }
+    
+    func setExecution(id:String, exec:@escaping ((Tasklet) -> Void), stop:@escaping ((Tasklet) -> Void)) {
+        if let task = self.getTask(id: id) {
+            task.setExecution(exec, stop: stop)
+        }
+    }
+    
+    // MARK: - UPDATE TASK PROGRESS
+    
     func updateProgress(type:String, name:String, message:String, increase:Bool = false) {
         if let task = self.getTask(type: type, name: name) {
             self.updateProgress(task: task, message: message, increase: increase)
@@ -390,40 +536,45 @@ class TaskletManager {
         
         if task.state != "STOPPED" && task.state != "COMPLETED" {
             task.state = "IN_PROGRESS"
-            print("\(task.name) in progress")
+//            print("\(task.name) in progress")
         }
-        if increase {
+        if increase && task.state == "IN_PROGRESS" {
             task.progress += 1
             
             if task.progress == task.total {
                 task.state = "COMPLETED"
-                print("\(task.name) completed")
+                if self.isSingleMode() {
+                    self.tasksStartStopState[task.id] = false
+                }else{
+                    if !task.isFixedDelayJob {
+                        self.tasksStartStopState[task.id] = false
+                    }
+                }
+//                print("\(task.name) completed")
             }
         }
         task.notifyChange()
     }
     
-    func setExecution(type:String, name:String, exec:@escaping ((Tasklet) -> Void), stop:@escaping ((Tasklet) -> Void)) {
-        if let task = self.getTask(type: type, name: name) {
-            task.setExecution(exec, stop: stop)
-        }
-    }
-    
-    func setExecution(id:String, exec:@escaping ((Tasklet) -> Void), stop:@escaping ((Tasklet) -> Void)) {
-        if let task = self.getTask(id: id) {
-            task.setExecution(exec, stop: stop)
-        }
-    }
+    // MARK: - START TASK EXECUTION
     
     func startExecution(type:String, name:String) {
         if let task = self.getTask(type: type, name: name) {
-            self.startExecution(task: task)
+            if self.isSingleMode() {
+                self.pushTaskToQueue(task: task)
+            }else{
+                self.startExecution(task: task)
+            }
         }
     }
     
     func startExecution(id:String){
         if let task = self.getTask(id: id) {
-            self.startExecution(task: task)
+            if self.isSingleMode() {
+                self.pushTaskToQueue(task: task)
+            }else{
+                self.startExecution(task: task)
+            }
         }
     }
     
@@ -432,28 +583,38 @@ class TaskletManager {
         task.progress = 0
         self.tasksStartStopState[task.id] = true
         task.startExecution()
+        
+        // TODO: in single mode, dequeue and start next task
     }
     
-    func startFixedDelayExecution(type:String, name:String, intervalInSecond:Int) {
+    func startFixedDelayExecution(type:String, name:String) {
         if let task = self.getTask(type: type, name: name) {
-            self.startFixedDelayExecution(task: task, intervalInSecond: intervalInSecond)
+            if self.isSingleMode() {
+                self.pushTaskToQueue(task: task)
+            }else{
+                self.startFixedDelayExecution(task: task)
+            }
         }
     }
     
-    func startFixedDelayExecution(id:String, intervalInSecond:Int) {
+    func startFixedDelayExecution(id:String) {
         if let task = self.getTask(id: id) {
-            self.startFixedDelayExecution(task: task, intervalInSecond: intervalInSecond)
+            if self.isSingleMode() {
+                self.pushTaskToQueue(task: task)
+            }else{
+                self.startFixedDelayExecution(task: task)
+            }
         }
     }
     
-    private func startFixedDelayExecution(task:Tasklet, intervalInSecond:Int) {
+    private func startFixedDelayExecution(task:Tasklet) {
         task.state = "READY"
         task.progress = 0
         self.tasksStartStopState[task.id] = true
-        task.startFixedDelayExecution(intervalInSecond: intervalInSecond)
+        task.startFixedDelayExecution(intervalInSecond: task.fixedDelayInterval) // TODO : in single mode, before each run, check if no other task is running
     }
     
-    // MARK: - CREATE AND EXECUTE
+    // MARK: - CREATE AND EXECUTE TASK
     
     func createAndStartTask(type:String, name:String, total:Int = 0, exec:@escaping ((Tasklet) -> Void), stop:@escaping ((Tasklet) -> Void)) -> Tasklet {
         let task = self.task(type: type, name: name)
@@ -473,7 +634,7 @@ class TaskletManager {
         self.setExecution(id: task.id, exec: exec, stop: stop)
         task.isFixedDelayJob = true
         task.fixedDelayInterval = intervalInSecond
-        self.startFixedDelayExecution(id: task.id, intervalInSecond: intervalInSecond)
+        self.startFixedDelayExecution(id: task.id)
         return task
         
     }
@@ -532,6 +693,8 @@ class TaskletManager {
     
 }
 
+// MARK: - MOCK UP FOR TESTING
+
 class FakeTaskletManager {
     static let `default` = FakeTaskletManager()
     
@@ -554,6 +717,46 @@ class FakeTaskletManager {
         }
     }
     
+    func stubFixedDelayJob(task:Tasklet) {
+        print(">>>>> start fixed delay body - \(task.name) - \(task.state)")
+        
+        var n = 0
+        while(n < 10){
+            
+            if TaskletManager.default.isTaskStopped(id: task.id) {
+                print("stopped fixed delay job body !!!!")
+                return
+            }
+            
+            print("running fixed delay body - \(task.name) - \(task.state)")
+            TaskletManager.default.updateProgress(type: "TEST", name: "test5234", message: "\(Date()) running fixed delay body step \(n+1)", increase: true)
+            
+            sleep(5)
+            
+            n += 1
+        }
+    }
+    
+    func stubFixedDelayJob1(task:Tasklet) {
+        print(">>>>> start fixed delay body - \(task.name) - \(task.state)")
+        
+        var n = 0
+        while(n < 10){
+            
+            if TaskletManager.default.isTaskStopped(id: task.id) {
+                print("stopped fixed delay job body !!!!")
+                return
+            }
+            
+            print("running fixed delay body - \(task.name) - \(task.state)")
+            TaskletManager.default.updateProgress(type: "TEST", name: "test1234", message: "\(Date()) running fixed delay body step \(n+1)", increase: true)
+            
+            sleep(5)
+            
+            n += 1
+        }
+    }
+    
     func rehearsal() {
         print("\(Date()) task manager rehearsal")
         
@@ -565,19 +768,25 @@ class FakeTaskletManager {
             
         })
         
-        let _ = TaskletManager.default.createAndStartTask(type: "TEST", name: "test1234", exec: { task in
-            let timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { _ in
-                TaskletManager.default.updateProgress(type: "TEST", name: "test1234", message: "\(Date()) 1 changing")
-            })
-            self.fakeTasks[task.id] = timer
+        let _ = TaskletManager.default.createAndStartFixedDelayTask(type: "TEST", name: "test5234", total: 10, intervalInSecond: 5, exec: { task in
+            self.stubFixedDelayJob(task: task)
+            
         }, stop: {task in
-            if let timer = self.fakeTasks[task.id] {
-                timer.invalidate()
-            }
+            
+        })
+        
+        let _ = TaskletManager.default.createAndStartFixedDelayTask(type: "TEST", name: "test1234", total: 10, intervalInSecond: 5, exec: { task in
+            self.stubFixedDelayJob1(task: task)
+            
+        }, stop: {task in
+            
         })
         
         let _ = TaskletManager.default.createAndStartTask(type: "TEST", name: "test2234", total: 10, exec: { task in
             let timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { _ in
+                if TaskletManager.default.isTaskStopped(id: task.id) {
+                    return
+                }
                 TaskletManager.default.updateProgress(type: "TEST", name: "test2234", message: "\(Date()) 2 changing", increase: true)
             })
             self.fakeTasks[task.id] = timer
@@ -585,43 +794,6 @@ class FakeTaskletManager {
             if let timer = self.fakeTasks[task.id] {
                 timer.invalidate()
             }
-        })
-        
-        let _ = TaskletManager.default.createAndStartTask(type: "TEST", name: "test3234", exec: { task in
-            let timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { _ in
-                TaskletManager.default.updateProgress(type: "TEST", name: "test3234", message: "\(Date()) 3 changing")
-            })
-            self.fakeTasks[task.id] = timer
-        }, stop: {task in
-            if let timer = self.fakeTasks[task.id] {
-                timer.invalidate()
-            }
-        })
-        
-        let _ = TaskletManager.default.createAndStartFixedDelayTask(type: "TEST", name: "test5234", total: 10, intervalInSecond: 5, exec: { task in
-            
-            print(">>>>> start fixed delay body - \(task.name) - \(task.state)")
-            
-            var n = 0
-            while(n < 10){
-                
-                if TaskletManager.default.isTaskStopped(id: task.id) {
-                    print("stopped fixed delay job body !!!!")
-                    return
-                }
-                
-                print("running fixed delay body - \(task.name) - \(task.state)")
-                TaskletManager.default.updateProgress(type: "TEST", name: "test5234", message: "\(Date()) running fixed delay body step \(n+1)", increase: true)
-                
-                sleep(5)
-                
-                n += 1
-            }
-        }, stop: {task in
-            if let timer = self.fakeTasks[task.id] {
-                timer.invalidate()
-            }
-            
         })
     }
 }

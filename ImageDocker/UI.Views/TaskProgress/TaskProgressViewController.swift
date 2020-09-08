@@ -114,7 +114,7 @@ class TaskProgressViewController: NSViewController {
         self.updatePanelForRestartTask(task: task)
         print("TaskProgressViewController: task \(task.id) restarted")
         if task.isFixedDelayJob {
-            TaskletManager.default.startFixedDelayExecution(id: task.id, intervalInSecond: task.fixedDelayInterval)
+            TaskletManager.default.startFixedDelayExecution(id: task.id)
         }else{
             TaskletManager.default.startExecution(id: task.id)
         }
