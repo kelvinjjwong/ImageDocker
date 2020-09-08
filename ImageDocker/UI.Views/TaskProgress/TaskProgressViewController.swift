@@ -25,7 +25,6 @@ class TaskProgressViewController: NSViewController {
     
     var tasks:[Tasklet] = []
     var tasksView:[String:ProgressViewController] = [:]
-    var tasksState:[String:String] = [:]
     
     // run only once
     override func viewDidLoad() {
@@ -64,11 +63,9 @@ class TaskProgressViewController: NSViewController {
         
         viewController.initView(task: task,
                                 onStop: {
-                                    if let state = self.tasksState[task.id] {
-                                        if state == "STOPPED" {
-                                            self.restartTask(task: task)
-                                            return
-                                        }
+                                    if task.state == "STOPPED" {
+                                        self.restartTask(task: task)
+                                        return
                                     }
                                     self.stopTask(task: task)
                                 }, onComplete: {
@@ -76,7 +73,7 @@ class TaskProgressViewController: NSViewController {
                                 })
         self.tasks.append(task)
         self.tasksView[task.id] = viewController
-        self.tasksState[task.id] = "READY"
+        //task.state = "READY"
         stackView.addArrangedSubview(viewController.view)
         //addChildViewController(viewController)
         viewController.progress.isHidden = true
@@ -84,18 +81,17 @@ class TaskProgressViewController: NSViewController {
     }
     
     func onTaskComplete(task:Tasklet) {
-        self.tasksState[task.id] = "COMPLETED"
+        //task.state = "COMPLETED"
         print("TaskProgressViewController: task \(task.id) completed")
     }
     
     func stopTask(task:Tasklet) {
-        TaskletManager.default.stopTask(id: task.id)
-        task.stopExecution()
         if let viewController = self.tasksView[task.id] {
             viewController.btnStop.title = "RESTART"
             viewController.btnStop.image = Icons.play
         }
-        self.tasksState[task.id] = "STOPPED"
+        //task.state = "STOPPED"
+        TaskletManager.default.stopTask(id: task.id, fromUI: true)
         print("TaskProgressViewController: task \(task.id) stopped")
     }
     
@@ -105,8 +101,9 @@ class TaskProgressViewController: NSViewController {
             viewController.btnStop.image = NSImage(named: NSImage.stopProgressFreestandingTemplateName)
             
             viewController.progress.doubleValue = 0
+            
+            viewController.lblMessage.stringValue = "Restarting ..."
         }
-        self.tasksState[task.id] = "IN_PROGRESS"
         print("TaskProgressViewController: task \(task.id) restarted")
         TaskletManager.default.startExecution(id: task.id)
     }
@@ -126,30 +123,29 @@ class TaskProgressViewController: NSViewController {
         }
         
         self.tasksView.removeValue(forKey: task.id)
-        self.tasksState.removeValue(forKey: task.id)
     }
     
     func updateTask(task:Tasklet) {
-        if let state = self.tasksState[task.id] {
-            if state == "COMPLETED" || state == "STOPPED" {
-                return
-            }
+        if task.state == "STOPPED" {
+            return
+        }
+        
+        if let viewController = self.tasksView[task.id] {
             
-            if let viewController = self.tasksView[task.id] {
-                viewController.lblMessage.stringValue = task.message
-                
-                if state == "IN_PROGRESS" {
-                    if task.total > 0 {
-                        viewController.progress.increment(by: 1)
-                        if viewController.progress.doubleValue == viewController.progress.maxValue {
-                            self.setTaskComplete(task: task, viewController: viewController)
-                        }
-                    }
-                }else if state == "READY" {
-                    self.tasksState[task.id]  = "IN_PROGRESS"
+            viewController.lblMessage.stringValue = task.message
+            viewController.box.title = "\(task.type): \(task.name) - \(task.state)"
+            
+
+            if task.state == "COMPLETED" {
+                if viewController.progress.doubleValue != viewController.progress.maxValue {
+                    viewController.progress.increment(by: 1)
+                }
+                self.setTaskComplete(task: task, viewController: viewController)
+            }else if task.state == "IN_PROGRESS" {
+                if task.total > 0 {
+                    viewController.progress.increment(by: 1)
                 }
             }
-            
         }
         
     }
@@ -164,8 +160,6 @@ class TaskProgressViewController: NSViewController {
         viewController.btnStop.title = "COMPLETED"
         viewController.btnStop.image = nil
         viewController.btnStop.isEnabled = false
-
-        self.tasksState[task.id] = "COMPLETED"
     }
     
     func setTotal(task:Tasklet, total:Int) {
@@ -178,15 +172,11 @@ class TaskProgressViewController: NSViewController {
                 viewController.progress.isHidden = false
             }
         }
-        self.tasksState[task.id] = "READY"
     }
     
     func setProgressValue(task:Tasklet, progressValue:Int) {
         if let viewController = self.tasksView[task.id] {
             viewController.progress.doubleValue = Double(progressValue)
-        }
-        if progressValue > 0 {
-            self.tasksState[task.id] = "IN_PROGRESS"
         }
     }
     
