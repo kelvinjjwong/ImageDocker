@@ -95,17 +95,29 @@ class TaskProgressViewController: NSViewController {
         print("TaskProgressViewController: task \(task.id) stopped")
     }
     
-    func restartTask(task:Tasklet) {
+    func updatePanelForRestartTask(task:Tasklet) {
         if let viewController = self.tasksView[task.id] {
-            viewController.btnStop.title = "STOP"
-            viewController.btnStop.image = NSImage(named: NSImage.stopProgressFreestandingTemplateName)
-            
-            viewController.progress.doubleValue = 0
-            
-            viewController.lblMessage.stringValue = "Restarting ..."
+            DispatchQueue.main.async {
+
+                viewController.btnStop.title = "STOP"
+                viewController.btnStop.image = NSImage(named: NSImage.stopProgressFreestandingTemplateName)
+                viewController.btnStop.isEnabled = true
+                
+                viewController.progress.doubleValue = 0
+                
+                viewController.lblMessage.stringValue = "Restarting ..."
+            }
         }
+    }
+    
+    func restartTask(task:Tasklet) {
+        self.updatePanelForRestartTask(task: task)
         print("TaskProgressViewController: task \(task.id) restarted")
-        TaskletManager.default.startExecution(id: task.id)
+        if task.isFixedDelayJob {
+            TaskletManager.default.startFixedDelayExecution(id: task.id, intervalInSecond: task.fixedDelayInterval)
+        }else{
+            TaskletManager.default.startExecution(id: task.id)
+        }
     }
     
     func removeTask(task:Tasklet) {
@@ -125,6 +137,14 @@ class TaskProgressViewController: NSViewController {
         self.tasksView.removeValue(forKey: task.id)
     }
     
+    func updateMessage(task:Tasklet) {
+        if let viewController = self.tasksView[task.id] {
+            DispatchQueue.main.async {
+                viewController.lblMessage.stringValue = task.message
+            }
+        }
+    }
+    
     func updateTask(task:Tasklet) {
         if task.state == "STOPPED" {
             return
@@ -140,7 +160,9 @@ class TaskProgressViewController: NSViewController {
                 if viewController.progress.doubleValue != viewController.progress.maxValue {
                     viewController.progress.increment(by: 1)
                 }
-                self.setTaskComplete(task: task, viewController: viewController)
+                if !task.isFixedDelayJob {
+                    self.updatePanelForCompletedTask(task: task, viewController: viewController)
+                }
             }else if task.state == "IN_PROGRESS" {
                 if task.total > 0 {
                     viewController.progress.increment(by: 1)
@@ -151,12 +173,14 @@ class TaskProgressViewController: NSViewController {
     }
     
     func setComplete(task:Tasklet) {
-        if let viewController = self.tasksView[task.id] {
-            self.setTaskComplete(task: task, viewController: viewController)
+        if !task.isFixedDelayJob {
+            if let viewController = self.tasksView[task.id] {
+                self.updatePanelForCompletedTask(task: task, viewController: viewController)
+            }
         }
     }
     
-    private func setTaskComplete(task:Tasklet, viewController:ProgressViewController) {
+    private func updatePanelForCompletedTask(task:Tasklet, viewController:ProgressViewController) {
         viewController.btnStop.title = "COMPLETED"
         viewController.btnStop.image = nil
         viewController.btnStop.isEnabled = false
