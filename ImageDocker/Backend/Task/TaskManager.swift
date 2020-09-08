@@ -142,6 +142,22 @@ class Tasklet {
         }
     }
     
+    private func getRemainingTime(timeInSecond:Int) -> String {
+        if timeInSecond < 60 {
+            return "\(timeInSecond) sec"
+        }else if timeInSecond < 3600 {
+            let minutes = timeInSecond / 60
+            let seconds = timeInSecond - minutes * 60
+            return "\(minutes) min \(seconds) sec"
+        }else {
+            let hours = timeInSecond / 3600
+            let mins = timeInSecond - hours * 3600
+            let minutes = mins / 60
+            let seconds = mins - minutes * 60
+            return "\(hours) hours \(minutes) min \(seconds) sec"
+        }
+    }
+    
     func startFixedDelayExecution(intervalInSecond:Int) {
         print("\(Date()) fixed delay execution - \(self.name) - \(self.state)")
         if let exec = self.taskCode {
@@ -170,7 +186,7 @@ class Tasklet {
                             }
                             
                             if let view = TaskletManager.default.viewManager {
-                                self.message = "Waiting for next run: \(intervalInSecond - n) sec"
+                                self.message = "Waiting for next run: \(self.getRemainingTime(timeInSecond: (intervalInSecond - n)))"
                                 view.updateMessage(task: self)
                             }
                             sleep(1)
