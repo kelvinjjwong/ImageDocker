@@ -61,9 +61,10 @@ v0.9.3
 
 ## PLEASE NOTE
 
-- This software supports screen resolution not less than 1920 x 1080 .
-- Any pre-release versions of this software is applied to author/developer only.
-- Please backup source pictures and videos before using any versions of this software.
+- This software supports screen resolution equal or larger than 1920 x 1080 . It would probably behave ugly on smaller screens, such as Macbook Air non-retina models.
+- This software does not need Internet as soon as you don't need to know about where the pictures were taken, as it would need API from Google Map or Baidu Map. Only latitude and longitude of the pictures would be transfered thru Internet.
+- Remember to backup pictures and videos before using any versions of this software.
+- Any pre-release versions of this software is applied to author/developer for testing / debugging only.
 
 ## License
 
