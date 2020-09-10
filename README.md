@@ -57,6 +57,7 @@ v0.9.3
 
 - Personal AP key of Baidu Map API is required for displaying maps and recognizing geolocations inside China
 - Personal AP key of Google Map API is required for recognizing geolocations outside China
+- Android device needs to enable USB debug mode before connecting to computer via USB, so that Android Debug Bridge can access the files in the device. It would be better install [HandShaker](https://formulae.brew.sh/cask/handshaker) for easier transfer images from Android device to computer, although this application has been discontinued.
 
 ## PLEASE NOTE
 
