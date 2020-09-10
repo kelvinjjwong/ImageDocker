@@ -248,7 +248,7 @@ class TaskletManager {
     // MARK: - SINGLE THREAD MODE QUEUE TIMER
     
     func isSingleMode() -> Bool {
-        return PreferencesController.isSQLite() || true
+        return PreferencesController.isSQLite()
     }
     
     func startQueueTimer() {
@@ -606,6 +606,7 @@ class TaskletManager {
     
     func startFixedDelayExecution(type:String, name:String) {
         if let task = self.getTask(type: type, name: name) {
+            //print("===== arrange start fixed delay task: \(task.name) - \(task.state) - \(self.tasksStartStopState[task.id])")
             if self.isSingleMode() {
                 if self.isInQueue(task: task) {
                     task.state = "READY"
@@ -621,6 +622,7 @@ class TaskletManager {
     
     func startFixedDelayExecution(id:String) {
         if let task = self.getTask(id: id) {
+            //print("===== arrange start fixed delay task: \(task.name) - \(task.state) - \(self.tasksStartStopState[task.id])")
             if self.isSingleMode() {
                 if self.isInQueue(task: task) {
                     task.state = "READY"
