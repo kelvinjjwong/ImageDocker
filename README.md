@@ -2,7 +2,8 @@
 
 A desktop application help organize pictures and videos between cameras/mobile devices and Plex Media Server.
 
-![Platform](https://img.shields.io/badge/platforms-macOS%2010.13+-ff7711.svg) ![language](https://img.shields.io/static/v1?label=Swift&message=5&color=orange)
+![Platform](https://img.shields.io/badge/platforms-macOS%2010.13+-ff7711.svg) 
+![swift](https://img.shields.io/badge/swift-5-orange)![python](https://img.shields.io/badge/python-3.6%20%7C%203.7-blue)![perl](https://img.shields.io/badge/perl-5.18-blue)![xcode](https://img.shields.io/badge/Xcode-11-blue)
 
 ## Major objectives
 
