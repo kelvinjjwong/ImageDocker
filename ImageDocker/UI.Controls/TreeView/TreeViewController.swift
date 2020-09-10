@@ -204,6 +204,7 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
                         colView.valueField?.isHidden = false
                         colView.valueField?.stringValue = "\(value)"
                         colView.valueField?.lineBreakMode = .byWordWrapping
+                        colView.valueField?.isEditable = false
                         
                         // rounded corner with background
                         colView.valueField?.wantsLayer = true
