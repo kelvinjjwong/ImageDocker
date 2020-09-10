@@ -245,29 +245,19 @@ class TaskletManager {
         self.startQueueTimer()
     }
     
-    func isSingleMode() -> Bool {
-        return PreferencesController.isSQLite() // || true
-    }
+    // MARK: - SINGLE THREAD MODE QUEUE TIMER
     
-    func printQueuedTasks() {
-        print("==========================")
-        for task in self.queue.list {
-            if task.isFixedDelayJob {
-                print("\(task.name) - \(task.state) - ran \(task.timesOfRun) times - next run: \(task.timeOfNextRun)")
-            }else{
-                print("\(task.name) - \(task.state)")
-            }
-        }
-        print("==========================")
+    func isSingleMode() -> Bool {
+        return PreferencesController.isSQLite() || true
     }
     
     func startQueueTimer() {
         self.queueTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
             if self.isSingleMode() {
-                print("===== single thread mode ======")
+                //print("===== single thread mode ======")
                 self.printQueuedTasks()
                 if !self.queue.isEmpty {
-                    if let task = self.queue.peek() {
+                    if let task = self.getPeakTaskFromQueue() {
                         if task.state == "READY" {
                             var shouldTrigger = false
                             if let state = self.tasksStartStopState[task.id] {
@@ -315,15 +305,14 @@ class TaskletManager {
                                 if let view = self.viewManager {
                                     view.updateMessage(task: task)
                                 }
-                                self.pushTaskToQueue(task: task)
-                                
-                                // TODO: change button to "JUMP" so that another task can come up if this task need too much time for next time
+                                self.pushTaskToQueue(task: task, toEnd: true)
                             }
                         }
                     }
                 }
+                // end if single thread mode
             }else{
-                print("===== multi thread mode ======")
+                //print("===== multi thread mode ======")
                 // when suddenly changed from single thread mode to multi thread mode
                 // clean the queue and execute all queued tasks
                 let queuedTasks = self.queue.dequeueAll()
@@ -341,20 +330,50 @@ class TaskletManager {
         })
     }
     
-    private func pushTaskToQueue(task:Tasklet) {
-        self.queue.enqueue(task)
-    }
-    
-    private func isTaskAtQueuePeek(task:Tasklet) -> Bool {
-        if self.queue.isEmpty {
-            return false
-        }
-        if let peek = self.queue.peek() {
-            if peek.id == task.id {
-                return true
+    func printQueuedTasks() {
+        print("==========================")
+        print("Queued tasks: \(self.queue.list.count)")
+        for task in self.queue.list {
+            if task.isFixedDelayJob {
+                print("\(task.name) - \(task.state) - ran \(task.timesOfRun) times - next run: \(task.timeOfNextRun) - startStopState: \(self.tasksStartStopState[task.id])")
+            }else{
+                print("\(task.name) - \(task.state)")
             }
         }
-        return false
+        print("==========================")
+    }
+    
+    func getPeakTaskFromQueue() -> Tasklet? {
+        for task in self.queue.list {
+            if task.isFixedDelayJob && task.state == "STOPPED" {
+                continue
+            }
+            return task
+        }
+        return nil
+    }
+    
+    private func pushTaskToQueue(task:Tasklet, toEnd:Bool = false) {
+        if toEnd {
+            self.queue.list.removeAll { (obj) -> Bool in
+                return obj.id == task.id
+            }
+            self.queue.enqueue(task)
+        }else{
+            if !self.isInQueue(task: task) {
+                self.queue.enqueue(task)
+            }
+        }
+    }
+    
+    private func isInQueue(task:Tasklet) -> Bool {
+        if self.queue.isEmpty {
+            return false
+        }else{
+            return self.queue.list.contains(where: { obj -> Bool in
+                return obj.id == task.id
+            })
+        }
     }
     
     // MARK: - GET TASK
@@ -583,14 +602,17 @@ class TaskletManager {
         task.progress = 0
         self.tasksStartStopState[task.id] = true
         task.startExecution()
-        
-        // TODO: in single mode, dequeue and start next task
     }
     
     func startFixedDelayExecution(type:String, name:String) {
         if let task = self.getTask(type: type, name: name) {
             if self.isSingleMode() {
-                self.pushTaskToQueue(task: task)
+                if self.isInQueue(task: task) {
+                    task.state = "READY"
+                }else{
+                    task.state = "READY"
+                    self.pushTaskToQueue(task: task)
+                }
             }else{
                 self.startFixedDelayExecution(task: task)
             }
@@ -600,7 +622,13 @@ class TaskletManager {
     func startFixedDelayExecution(id:String) {
         if let task = self.getTask(id: id) {
             if self.isSingleMode() {
-                self.pushTaskToQueue(task: task)
+                if self.isInQueue(task: task) {
+                    task.state = "READY"
+                }else{
+                    print("push to queue - \(task.name)")
+                    task.state = "READY"
+                    self.pushTaskToQueue(task: task)
+                }
             }else{
                 self.startFixedDelayExecution(task: task)
             }

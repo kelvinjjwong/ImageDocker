@@ -23,7 +23,7 @@ struct Queue<T> {
          }
     }
     
-    func peek() -> T? {
+    func peak() -> T? {
          if !list.isEmpty {
               return list[0]
          } else {

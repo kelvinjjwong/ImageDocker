@@ -63,6 +63,7 @@ class TaskProgressViewController: NSViewController {
         
         viewController.initView(task: task,
                                 onStop: {
+                                    print("onStop - \(task.name) - \(task.state) - \(task.isFixedDelayJob)")
                                     if task.state == "STOPPED" {
                                         self.restartTask(task: task)
                                         return
@@ -98,15 +99,16 @@ class TaskProgressViewController: NSViewController {
     func updatePanelForRestartTask(task:Tasklet) {
         if let viewController = self.tasksView[task.id] {
             DispatchQueue.main.async {
-
+                
                 viewController.btnStop.title = "STOP"
                 viewController.btnStop.image = NSImage(named: NSImage.stopProgressFreestandingTemplateName)
                 viewController.btnStop.isEnabled = true
                 
                 viewController.progress.doubleValue = 0
                 
-                viewController.lblMessage.stringValue = "Restarting ..."
-            }
+                if !TaskletManager.default.isSingleMode() {
+                    viewController.lblMessage.stringValue = "Restarting ..."
+                }            }
         }
     }
     
