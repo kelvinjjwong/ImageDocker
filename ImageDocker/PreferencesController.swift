@@ -433,10 +433,11 @@ final class PreferencesController: NSViewController {
                 self.lblCheckDatabaseName.stringValue = "Error: empty."
                 return
             }
-            guard (checkDatabase == "Not exists." || checkDatabase == "Created.") else{
+            print(checkDatabase)
+            guard (checkDatabase == "Not exists." || checkDatabase == "Created." || checkDatabase == "Empty DB.") else{
                 self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
                 self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
-                self.lblDataCloneMessage.stringValue = "Please check if target database exists first"
+                self.lblDataCloneMessage.stringValue = "Please check if target database exists and empty first"
                 return
             }
             let row = self.tblDatabaseArchives.selectedRow
@@ -538,10 +539,11 @@ final class PreferencesController: NSViewController {
                 self.lblCheckDatabaseName.stringValue = "Error: empty."
                 return
             }
-            guard (checkDatabase == "Not exists." || checkDatabase == "Created.") else{
+            print(checkDatabase)
+            guard (checkDatabase == "Not exists." || checkDatabase == "Created." || checkDatabase == "Empty DB.") else{
                 self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
                 self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
-                self.lblDataCloneMessage.stringValue = "Please check if target database exists first"
+                self.lblDataCloneMessage.stringValue = "Please check if target database exists and empty first"
                 return
             }
             var host = ""
@@ -593,10 +595,11 @@ final class PreferencesController: NSViewController {
                 self.lblCheckDatabaseName.stringValue = "Error: empty."
                 return
             }
-            guard (checkDatabase == "Not exists." || checkDatabase == "Created.") else{
+            print(checkDatabase)
+            guard (checkDatabase == "Not exists." || checkDatabase == "Created." || checkDatabase == "Empty DB.") else{
                 self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
                 self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
-                self.lblDataCloneMessage.stringValue = "Please check if target database exists first"
+                self.lblDataCloneMessage.stringValue = "Please check if target database exists and empty first"
                 return
             }
             var host = ""
@@ -712,9 +715,18 @@ final class PreferencesController: NSViewController {
                 }
             }
             if exists {
-                DispatchQueue.main.async {
-                    self.lblCheckDatabaseName.stringValue = "Exists."
-                    self.btnCreateDatabase.isHidden = true
+                let remotedb = PostgresConnection.database(host: host, port: port, user: user, database: targetDatabase, schema: "public", password: "", nopsw: true)
+                let tables = remotedb.queryTableInfos()
+                if tables.count == 0 {
+                    DispatchQueue.main.async {
+                        self.lblCheckDatabaseName.stringValue = "Empty DB."
+                        self.btnCreateDatabase.isHidden = true
+                    }
+                }else{
+                    DispatchQueue.main.async {
+                        self.lblCheckDatabaseName.stringValue = "Non-Empty DB."
+                        self.btnCreateDatabase.isHidden = true
+                    }
                 }
             }else{
                 DispatchQueue.main.async {
