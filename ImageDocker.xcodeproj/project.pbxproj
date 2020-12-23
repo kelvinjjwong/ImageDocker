@@ -48,6 +48,10 @@
 		8E3FA9212353310600B677A3 /* MemoryCollectionViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E3FA91F2353310600B677A3 /* MemoryCollectionViewItem.xib */; };
 		8E3FA92323535C5800B677A3 /* MemoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3FA92223535C5800B677A3 /* MemoriesViewController.swift */; };
 		8E3FA9252355047400B677A3 /* MemoriesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3FA9242355047400B677A3 /* MemoriesCollectionViewController.swift */; };
+		8E4095F8259397FC00BF717B /* ExportProfileItem.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E4095F7259397FC00BF717B /* ExportProfileItem.storyboard */; };
+		8E4095FA2593982200BF717B /* ExportProfileItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4095F92593982200BF717B /* ExportProfileItemController.swift */; };
+		8E4095FD25939A0900BF717B /* ExportProfilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4095FB25939A0900BF717B /* ExportProfilesViewController.swift */; };
+		8E4095FE25939A0900BF717B /* ExportProfilesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E4095FC25939A0900BF717B /* ExportProfilesViewController.xib */; };
 		8E4B7C1920929EFA00DDD9E0 /* LocationConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */; };
 		8E4C38CA211776300089502C /* Mobile in Resources */ = {isa = PBXBuildFile; fileRef = 8E4C38C92117762F0089502C /* Mobile */; };
 		8E4C38CD2117B5340089502C /* Phone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38CC2117B5340089502C /* Phone.swift */; };
@@ -364,6 +368,10 @@
 		8E3FA91F2353310600B677A3 /* MemoryCollectionViewItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MemoryCollectionViewItem.xib; sourceTree = "<group>"; };
 		8E3FA92223535C5800B677A3 /* MemoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoriesViewController.swift; sourceTree = "<group>"; };
 		8E3FA9242355047400B677A3 /* MemoriesCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoriesCollectionViewController.swift; sourceTree = "<group>"; };
+		8E4095F7259397FC00BF717B /* ExportProfileItem.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ExportProfileItem.storyboard; sourceTree = "<group>"; };
+		8E4095F92593982200BF717B /* ExportProfileItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportProfileItemController.swift; sourceTree = "<group>"; };
+		8E4095FB25939A0900BF717B /* ExportProfilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportProfilesViewController.swift; sourceTree = "<group>"; };
+		8E4095FC25939A0900BF717B /* ExportProfilesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExportProfilesViewController.xib; sourceTree = "<group>"; };
 		8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationConsumer.swift; sourceTree = "<group>"; };
 		8E4C38C92117762F0089502C /* Mobile */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Mobile; sourceTree = "<group>"; };
 		8E4C38CC2117B5340089502C /* Phone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phone.swift; sourceTree = "<group>"; };
@@ -1023,6 +1031,10 @@
 				8EB271A223413CE7003BF3AF /* ExportConfigurationViewController.xib */,
 				8EB271A523418503003BF3AF /* ExportStackItems.storyboard */,
 				8EB271A723418C68003BF3AF /* ExportProfileViewController.swift */,
+				8E4095F7259397FC00BF717B /* ExportProfileItem.storyboard */,
+				8E4095F92593982200BF717B /* ExportProfileItemController.swift */,
+				8E4095FB25939A0900BF717B /* ExportProfilesViewController.swift */,
+				8E4095FC25939A0900BF717B /* ExportProfilesViewController.xib */,
 			);
 			path = Export;
 			sourceTree = "<group>";
@@ -1599,6 +1611,7 @@
 				8EF32D122094CB2000511538 /* Icons.xcassets in Resources */,
 				8E15E73F23AC74DC0094240A /* TreeViewController.xib in Resources */,
 				8EC82EAC2121C5A200FC0899 /* AddLocalDirectoryViewController.xib in Resources */,
+				8E4095F8259397FC00BF717B /* ExportProfileItem.storyboard in Resources */,
 				8E8D4716222991230091E9C3 /* FaceCollectionViewItem.xib in Resources */,
 				8E0AFA41208BDEA100CE8B68 /* Assets.xcassets in Resources */,
 				8E3FA91D235310AA00B677A3 /* MemoriesViews.storyboard in Resources */,
@@ -1628,6 +1641,7 @@
 				8EBA9DE0216F8BB100DACAAD /* NotesViewController.xib in Resources */,
 				8EB271A623418503003BF3AF /* ExportStackItems.storyboard in Resources */,
 				8E9D8045234990A00062692A /* DeviceCopyView.storyboard in Resources */,
+				8E4095FE25939A0900BF717B /* ExportProfilesViewController.xib in Resources */,
 				8EB271A423413CE7003BF3AF /* ExportConfigurationViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1733,6 +1747,7 @@
 				8EBA759D23B5CD6F00548376 /* EventDao.swift in Sources */,
 				8EF3FEEA2423509E00AF83BB /* ImageDB.swift in Sources */,
 				8EF4CE5521D77BAB00C53AFF /* People.swift in Sources */,
+				8E4095FD25939A0900BF717B /* ExportProfilesViewController.swift in Sources */,
 				8E8D471222279AA80091E9C3 /* FaceCollectionViewItemsLoader.swift in Sources */,
 				8E15E73C23AC74DC0094240A /* TreeDataSource.swift in Sources */,
 				8EFA02E1243B3E5200D7C355 /* PostgresClientKit+Image+Statistic.swift in Sources */,
@@ -1923,6 +1938,7 @@
 				8E8CF269235AA3860016932A /* Naming.swift in Sources */,
 				8EBA758F23B55B7700548376 /* MomentsTreeDataSource.swift in Sources */,
 				8EEF071A2256C9D9000520B7 /* DevicePathDetailViewController.swift in Sources */,
+				8E4095FA2593982200BF717B /* ExportProfileItemController.swift in Sources */,
 				8E8D471C22315F540091E9C3 /* SingleColumnTableViewController.swift in Sources */,
 				8EB271932340EF6F003BF3AF /* ViewController+Schedule.swift in Sources */,
 				8EAD03AF2337290E00AAC7C6 /* GRDB+Image.swift in Sources */,
