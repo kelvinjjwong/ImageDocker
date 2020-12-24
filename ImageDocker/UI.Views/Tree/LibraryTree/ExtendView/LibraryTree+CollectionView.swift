@@ -43,7 +43,7 @@ extension ViewController {
                     TaskManager.loadingImagesCollection = false
                 })
             }else{
-                print("LOADING from library entry \(name)")
+                print("LOADING from library entry name:\(name) -> url:\(url.path)")
                 self.imagesLoader.load(from: url, indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
                 self.refreshCollectionView()
                 TaskManager.loadingImagesCollection = false

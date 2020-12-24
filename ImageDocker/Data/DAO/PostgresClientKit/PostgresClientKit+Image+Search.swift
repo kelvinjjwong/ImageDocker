@@ -895,7 +895,7 @@ order by "date"
         let db = PostgresConnection.database()
         var otherPredicate:String = ""
         if !includeHidden {
-            otherPredicate = " AND (hidden is null || hidden = false)"
+            otherPredicate = " AND (\"hidden\" is null or \"hidden\" = false)"
         }
         
         var condition = "\"containerPath\" = $1"
@@ -906,9 +906,9 @@ order by "date"
         }
         
         if pageSize > 0 && pageNumber > 0 {
-            return Image.fetchAll(db, where: "\(condition) \(otherPredicate)", orderBy: "\"photoTakenDate\", filename", offset: pageSize * (pageNumber - 1), limit: pageSize)
+            return Image.fetchAll(db, where: "\(condition) \(otherPredicate)", orderBy: "\"photoTakenDate\", filename", values: key, offset: pageSize * (pageNumber - 1), limit: pageSize)
         }else{
-            return Image.fetchAll(db, where: "\(condition) \(otherPredicate)", orderBy: "\"photoTakenDate\", filename")
+            return Image.fetchAll(db, where: "\(condition) \(otherPredicate)", orderBy: "\"photoTakenDate\", filename", values: key)
         }
     }
     
