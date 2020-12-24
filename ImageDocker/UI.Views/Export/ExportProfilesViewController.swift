@@ -55,9 +55,28 @@ class ExportProfilesViewController: NSViewController {
         viewController.initView(profile: profile,
                                 
         onExport: {
-            // GO
+            viewController.btnExport.isEnabled = false
+            viewController.btnStop.isHidden = false
+            DispatchQueue.global().async {
+                print(">>>>>>>>>> STARTED EXPORT PROFILE \(profile.id)")
+                let (state, message) = ExportManager.default.withMessageBox(viewController.lblMessage).export(profile: profile, rehearsal: false, limit: nil)
+                print("=================== EXPORT END ================")
+                print("state= \(state)")
+                print("message= \(message)")
+                DispatchQueue.main.async {
+                    viewController.btnExport.isEnabled = true
+                    viewController.btnStop.isHidden = true
+                }
+            }
         }, onStop: {
-            // STOP
+            DispatchQueue.global().async {
+                ExportManager.default.withMessageBox(viewController.lblMessage).stopTask(profileId: profile.id)
+                print(">>>>>>>>>> STOPPED EXPORT PROFILE \(profile.id)")
+                DispatchQueue.main.async {
+                    viewController.btnExport.isEnabled = true
+                    viewController.btnStop.isHidden = true
+                }
+            }
         })
         
         stackView.addArrangedSubview(viewController.view)
