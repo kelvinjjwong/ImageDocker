@@ -187,7 +187,7 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
             """
         }else if profileSetting.starts(with: "exclude:"){
             SQL = """
-            and \(tableAlias)."\(tableColumn)" not in (\(profileSetting.replacingFirstOccurrence(of: "exclude:", with: "").replacingOccurrences(of: "'", with: "''").replacingOccurrences(of: "\"", with: "'")))
+            and ( \(tableAlias)."\(tableColumn)" is null or \(tableAlias)."\(tableColumn)" not in (\(profileSetting.replacingFirstOccurrence(of: "exclude:", with: "").replacingOccurrences(of: "'", with: "''").replacingOccurrences(of: "\"", with: "'"))) )
             """
         }
         return SQL
