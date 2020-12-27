@@ -47,7 +47,7 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         let db = PostgresConnection.database()
         let root = repositoryRoot.withStash()
         return Image.count(db, where: """
-        "repositoryPath"=$1 and hidden=false and "scanedFace"<>1 and id not in (select distinct "imageId" from "ImageFace")
+        "repositoryPath"=$1 and hidden=false and "scanedFace"<>true and id not in (select distinct "imageId" from "ImageFace")
         """, parameters:[root])
     }
     
