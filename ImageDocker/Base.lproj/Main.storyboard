@@ -233,12 +233,12 @@
                                                                 </connections>
                                                             </button>
                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DpT-Dg-Oeb">
-                                                                <rect key="frame" x="748" y="0.0" width="99" height="31"/>
+                                                                <rect key="frame" x="768" y="6" width="73" height="21"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="20" id="Gmp-RZ-apS"/>
                                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="SPU-3L-Anh"/>
                                                                 </constraints>
-                                                                <buttonCell key="cell" type="push" title="Reload" bezelStyle="rounded" image="NSRefreshTemplate" imagePosition="left" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="XGb-ik-U2U">
+                                                                <buttonCell key="cell" type="roundTextured" title="Reload" bezelStyle="texturedRounded" image="NSRefreshTemplate" imagePosition="left" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="XGb-ik-U2U">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
@@ -247,7 +247,7 @@
                                                                 </connections>
                                                             </button>
                                                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gkw-tO-uG9">
-                                                                <rect key="frame" x="651" y="5" width="95" height="23"/>
+                                                                <rect key="frame" x="665" y="5" width="95" height="23"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="22" id="WXq-VJ-o8B"/>
                                                                     <constraint firstAttribute="width" constant="95" id="yDU-mD-v5y"/>
@@ -268,7 +268,7 @@
                                                                 </connections>
                                                             </popUpButton>
                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hk8-oy-P7s">
-                                                                <rect key="frame" x="562" y="5" width="81" height="23"/>
+                                                                <rect key="frame" x="576" y="5" width="81" height="23"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="81" id="IHT-ip-Bpd"/>
                                                                 </constraints>
@@ -598,13 +598,13 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
                                             <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fHj-eQ-neO">
-                                                <rect key="frame" x="0.0" y="0.0" width="580" height="156"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="580" height="153"/>
                                                 <clipView key="contentView" id="eei-jG-19T">
-                                                    <rect key="frame" x="0.0" y="0.0" width="580" height="156"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="580" height="153"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" id="ECf-s9-RCm" customClass="DarkTableView" customModule="ImageDocker" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="1317" height="156"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="1317" height="153"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <size key="intercellSpacing" width="3" height="2"/>
                                                             <color key="backgroundColor" name="controlShadowColor" catalog="System" colorSpace="catalog"/>
