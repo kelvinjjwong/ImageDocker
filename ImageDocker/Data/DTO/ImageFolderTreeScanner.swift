@@ -666,9 +666,9 @@ class ImageFolderTreeScanner {
 //                    if indicator != nil {
 //                        indicator?.dataChanged()
 //                    }
-                }
-            }
-        }
+                } // end of folderUrlsToRemoved.count > 0
+            } // end of autorelease
+        } // end of loop repositories
         
         print("\(Date()) CHECK REPO: CHECK TO BE ADDED AND REMOVED")
         if indicator != nil {
@@ -808,7 +808,7 @@ class ImageFolderTreeScanner {
 //                indicator?.dataChanged()
 //            }
             print("\(Date()) URLS TO ADD FROM FILESYS: SAVE DONE")
-        }
+        } // end of urlsToAdd.count > 0
         
         var k = 0
         if urlsToRemoved.count > 0 {
@@ -846,7 +846,7 @@ class ImageFolderTreeScanner {
                 //ModelStore.save()
             //}
             print("\(Date()) PHOTOS TO REMOVED FROM DB: SAVE DONE")
-        }
+        } // end of urlsToRemoved.count > 0
         
         print("\(Date()) CHECK REPO: EXECUTE ADD OR REMOVE: DONE")
         
