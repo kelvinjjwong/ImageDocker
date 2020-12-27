@@ -135,6 +135,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var btnCombineDuplicates: NSPopUpButton!
     
     
+    @IBOutlet weak var btnCollectionFilter: NSButton!
     @IBOutlet weak var chbShowHidden: NSButton!
     
     let imagesLoader = CollectionViewItemsLoader()
@@ -446,6 +447,11 @@ class ViewController: NSViewController {
     @IBAction func onCheckShowHiddenClicked(_ sender: NSButton) {
         self.switchShowHideState()
     }
+    
+    @IBAction func onCollectionFilterClicked(_ sender: NSButton) {
+        self.showCollectionFilter(sender)
+    }
+    
     
     // MARK: - SELECTION BATCH EDITOR TOOLBAR - SWITCHER
     

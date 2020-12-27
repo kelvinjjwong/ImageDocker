@@ -267,6 +267,19 @@
                                                                     <action selector="onCombineDuplicatesButtonClicked:" target="XfG-lQ-9wD" id="Mfq-f0-6Pn"/>
                                                                 </connections>
                                                             </popUpButton>
+                                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hk8-oy-P7s">
+                                                                <rect key="frame" x="573" y="0.0" width="93" height="32"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="81" id="IHT-ip-Bpd"/>
+                                                                </constraints>
+                                                                <buttonCell key="cell" type="push" title="Filter" bezelStyle="rounded" image="filter" imagePosition="left" alignment="center" borderStyle="border" inset="2" id="CLm-Ka-NPj">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="onCollectionFilterClicked:" target="XfG-lQ-9wD" id="SUG-EM-29L"/>
+                                                                </connections>
+                                                            </button>
                                                         </subviews>
                                                         <constraints>
                                                             <constraint firstItem="Sab-MP-Qfo" firstAttribute="leading" secondItem="kAZ-Sm-Ax7" secondAttribute="trailing" constant="20" id="183-Wq-j1a"/>
@@ -276,8 +289,10 @@
                                                             <constraint firstItem="KZW-eM-F1C" firstAttribute="top" secondItem="m9M-hY-L99" secondAttribute="top" id="CiJ-4L-Rq1"/>
                                                             <constraint firstItem="DpT-Dg-Oeb" firstAttribute="leading" secondItem="Gkw-tO-uG9" secondAttribute="trailing" constant="8" id="ESZ-gX-iIz"/>
                                                             <constraint firstAttribute="bottom" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="35" id="FQQ-0m-lCs"/>
+                                                            <constraint firstItem="hk8-oy-P7s" firstAttribute="top" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="7" id="GX9-Zt-INf"/>
                                                             <constraint firstItem="eaf-Jq-heG" firstAttribute="leading" secondItem="DpT-Dg-Oeb" secondAttribute="trailing" constant="10" id="HFK-qr-pmb"/>
                                                             <constraint firstAttribute="trailing" secondItem="KZW-eM-F1C" secondAttribute="trailing" id="Hj4-Gx-NJd"/>
+                                                            <constraint firstItem="Gkw-tO-uG9" firstAttribute="leading" secondItem="hk8-oy-P7s" secondAttribute="trailing" constant="8" id="TMt-ns-OH5"/>
                                                             <constraint firstItem="KZW-eM-F1C" firstAttribute="leading" secondItem="m9M-hY-L99" secondAttribute="leading" id="TrQ-Wm-NbH"/>
                                                             <constraint firstAttribute="bottom" secondItem="kAZ-Sm-Ax7" secondAttribute="bottom" constant="7" id="Ybw-3Z-dGC"/>
                                                             <constraint firstItem="kAZ-Sm-Ax7" firstAttribute="leading" secondItem="m9M-hY-L99" secondAttribute="leading" constant="76" id="Yjk-XW-fuZ"/>
@@ -583,13 +598,13 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                         <subviews>
                                             <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fHj-eQ-neO">
-                                                <rect key="frame" x="0.0" y="0.0" width="580" height="168"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="580" height="161"/>
                                                 <clipView key="contentView" id="eei-jG-19T">
-                                                    <rect key="frame" x="0.0" y="0.0" width="580" height="168"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="580" height="161"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" id="ECf-s9-RCm" customClass="DarkTableView" customModule="ImageDocker" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="1317" height="168"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="1317" height="161"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <size key="intercellSpacing" width="3" height="2"/>
                                                             <color key="backgroundColor" name="controlShadowColor" catalog="System" colorSpace="catalog"/>
@@ -1162,6 +1177,7 @@
                         <outlet property="btnAssignEvent" destination="xCg-De-lnA" id="Jab-Ym-d9U"/>
                         <outlet property="btnBatchEditorToolbarSwitcher" destination="ltZ-4C-dje" id="Cvz-B9-eBG"/>
                         <outlet property="btnChoiceMapService" destination="bhg-cd-YhI" id="kx1-3W-tkc"/>
+                        <outlet property="btnCollectionFilter" destination="hk8-oy-P7s" id="5v2-Zk-8UF"/>
                         <outlet property="btnCombineDuplicates" destination="Gkw-tO-uG9" id="p8M-jW-YwA"/>
                         <outlet property="btnCopyLocation" destination="vj9-Vb-qDW" id="Hxx-t9-L6I"/>
                         <outlet property="btnCopyToDevice" destination="Zj8-N8-ari" id="0b1-3U-nKo"/>
@@ -3010,6 +3026,7 @@ brew install ifuse</string>
         <image name="download" width="16" height="16"/>
         <image name="edit" width="16" height="15"/>
         <image name="face" width="16" height="16"/>
+        <image name="filter" width="16" height="16"/>
         <image name="forward" width="17" height="16"/>
         <image name="hide" width="17" height="15"/>
         <image name="trash" width="16" height="16"/>

@@ -1398,10 +1398,10 @@ class EditRepositoryViewController: NSViewController {
     @IBAction func onCleanDeviceClicked(_ sender: NSButton) {
         self.lblDeviceId.stringValue = ""
         self.lblDeviceName.stringValue = ""
-        self.linkDeviceToRepository(deviceId: "")
+        self.linkDeviceToRepository(deviceId: "", deviceName: "")
     }
     
-    fileprivate func linkDeviceToRepository(deviceId: String){
+    fileprivate func linkDeviceToRepository(deviceId: String, deviceName:String){
         if let container = self.originalContainer {
             var repo = container
             repo.deviceId = deviceId
@@ -1409,7 +1409,7 @@ class EditRepositoryViewController: NSViewController {
             if state != .OK {
                 self.lblMessage.stringValue = "\(state) - Unable to link repository with device in database."
             }else{
-                self.lblMessage.stringValue = "\(state) - Updated link between repository and device [\(deviceId)]."
+                self.lblMessage.stringValue = "\(state) - Updated link between repository and device [\(deviceId) - \(deviceName)]."
             }
         }
     }
@@ -2006,6 +2006,8 @@ extension EditRepositoryViewController : DeviceListDelegate {
     fileprivate func displayDeviceInfo(deviceId: String, updateDB:Bool = false) {
         
         if let device = DeviceDao.default.getDevice(deviceId: deviceId) {
+            //print("in device id = \(deviceId)")
+            //print("queried device id = \(device.deviceId)")
             self.lblDeviceId.stringValue = device.deviceId ?? ""
             var name = device.name ?? ""
             if name == "" {
@@ -2020,7 +2022,7 @@ extension EditRepositoryViewController : DeviceListDelegate {
             print("update db? \(updateDB)")
             if updateDB {
                 print("linking repo with device \(device.deviceId)")
-                self.linkDeviceToRepository(deviceId: device.deviceId ?? "")
+                self.linkDeviceToRepository(deviceId: device.deviceId ?? "", deviceName: name)
             }
         }else{
             self.lblDeviceId.stringValue = ""

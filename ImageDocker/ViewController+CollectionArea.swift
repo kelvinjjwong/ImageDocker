@@ -123,4 +123,9 @@ extension ViewController {
             
         }
     }
+    
+    internal func showCollectionFilter(_ button:NSButton) {
+        // TODO pop up window for collection filter
+        print("todo pop up")
+    }
 }

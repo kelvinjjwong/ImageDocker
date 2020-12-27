@@ -38,7 +38,7 @@ class DeviceDaoPostgresCK : DeviceDaoInterface {
     
     func getDevice(deviceId: String) -> ImageDevice? {
         let db = PostgresConnection.database()
-        return ImageDevice.fetchOne(db)
+        return ImageDevice.fetchOne(db, parameters: ["deviceId" : deviceId])
     }
     
     func saveDevice(device: ImageDevice) -> ExecuteState {

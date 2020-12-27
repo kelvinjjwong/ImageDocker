@@ -42,6 +42,7 @@ class DeviceListViewController: NSViewController {
         didSet {
             if lastSelectedRow != nil && devices.count > 0 && lastSelectedRow! < devices.count {
                 if let selectedDeviceId = devices[lastSelectedRow!].deviceId {
+                    //print("selected device id \(selectedDeviceId)")
                     if self.selectionDelegate != nil {
                         self.selectionDelegate?.selectDevice(deviceId: selectedDeviceId)
                     }
@@ -106,6 +107,7 @@ extension DeviceListViewController: NSTableViewDelegate {
     }
     
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
+        print("selected row \(row)")
         lastSelectedRow = row
         return true
     }

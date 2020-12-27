@@ -12,6 +12,8 @@ class LibrariesViewController: NSViewController {
     
     @IBOutlet weak var btnReload: NSButton!
     @IBOutlet weak var btnCalculate: NSButton!
+    @IBOutlet weak var btnNewRepository: NSButton!
+    
     @IBOutlet weak var tblSpaceOccupation: NSTableView!
     
     var records:[(String,String,String,String,String, String,String)] = []
@@ -34,6 +36,25 @@ class LibrariesViewController: NSViewController {
         self.tblSpaceOccupation.delegate = self
         self.tblSpaceOccupation.dataSource = self
     }
+    
+    @IBAction func onNewRepositoryClicked(_ sender: NSButton) {
+        let viewController = EditRepositoryViewController()
+        let window = NSWindow(contentViewController: viewController)
+        
+        let screenWidth = Int(NSScreen.main?.frame.width ?? 0)
+        let screenHeight = Int(NSScreen.main?.frame.height ?? 0)
+        let windowWidth = 980
+        let windowHeight = 820
+        let originX = (screenWidth - windowWidth) / 2
+        let originY = (screenHeight - windowHeight) / 2
+        
+        let frame = CGRect(origin: CGPoint(x: originX, y: originY), size: CGSize(width: windowWidth, height: windowHeight))
+        window.title = "New Repository"
+        window.setFrame(frame, display: false)
+        window.makeKeyAndOrderFront(self)
+        viewController.initNew(window: window)
+    }
+    
     
     @IBAction func onReloadClicked(_ sender: NSButton) {
         if self.onReload != nil {
