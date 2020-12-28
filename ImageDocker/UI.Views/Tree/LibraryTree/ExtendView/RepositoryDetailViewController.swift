@@ -47,6 +47,7 @@ class RepositoryDetailViewController: NSViewController {
     fileprivate var onConfigure: (() -> Void)!
     
     func initView(path:String, onConfigure: @escaping (() -> Void)) {
+        self.scrollDetail.hasVerticalScroller = false
         self.txtDetail.string = "Calculating ..."
         self.onConfigure = onConfigure
         self.txtDetail.isHidden = true
