@@ -1164,6 +1164,10 @@ class DeviceCopyViewController: NSViewController {
                 } // end of file-loop
             } // end of path-loop
             
+            DispatchQueue.main.async {
+                self.lblMessage.stringValue = ""
+            }
+            
             guard !self.forceStop else {
                 self.forceStop = false
                 self.working = false
@@ -1183,7 +1187,7 @@ class DeviceCopyViewController: NSViewController {
 //                self.btnRemoveSourcePath.isEnabled = true
                 self.reloadFileList()
             }
-        }
+        } // end of global async
     }
     
     // MARK: - ACTION BUTTON - UPDATE REPOSITORY
