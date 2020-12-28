@@ -133,7 +133,7 @@ class DeviceCopyViewController: NSViewController {
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
         btnSave.isEnabled = false
-        btnCopy.isEnabled = true // should be available for maintenance
+        btnCopy.isEnabled = false
         //txtStorePath.isEditable = false
         tblSourcePath.isEnabled = true
         
@@ -172,8 +172,8 @@ class DeviceCopyViewController: NSViewController {
             print("DIFFERENT DEVICE \(device.deviceId) != \(self.device.deviceId)")
             self.device = device
             
-            self.btnCopy.isEnabled = true
-            self.btnUpdateRepository.isEnabled = false
+            self.btnCopy.isEnabled = false
+            self.btnUpdateRepository.isEnabled = true
             
             self.connected = connected
             
@@ -921,11 +921,6 @@ class DeviceCopyViewController: NSViewController {
             self.btnCopy.isEnabled = false
         }
         
-        if self.hasEmptyMD5() {
-            self.btnUpdateRepository.isEnabled = true
-        }else{
-            self.btnUpdateRepository.isEnabled = false
-        }
     }
     
     @IBAction func onLoadClicked(_ sender: NSButton) {
@@ -1164,15 +1159,12 @@ class DeviceCopyViewController: NSViewController {
                 } // end of file-loop
             } // end of path-loop
             
-            DispatchQueue.main.async {
-                self.lblMessage.stringValue = ""
-            }
-            
             guard !self.forceStop else {
                 self.forceStop = false
                 self.working = false
                 DispatchQueue.main.async {
                     self.enableButtons()
+                    self.lblMessage.stringValue = ""
                 }
                 return
             }
@@ -1279,6 +1271,7 @@ class DeviceCopyViewController: NSViewController {
         self.disableButtons()
         
         let deviceFiles = self.deviceDao.getDeviceFiles(deviceId: self.device.deviceId)
+        print("device file count: \(deviceFiles.count)")
         if deviceFiles.count > 0 {
             self.accumulator = Accumulator(target: deviceFiles.count, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblProgressMessage)
             
