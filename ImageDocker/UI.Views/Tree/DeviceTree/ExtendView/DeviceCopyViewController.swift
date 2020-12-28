@@ -133,7 +133,7 @@ class DeviceCopyViewController: NSViewController {
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
         btnSave.isEnabled = false
-        btnCopy.isEnabled = false
+        btnCopy.isEnabled = true // should be available for maintenance
         //txtStorePath.isEditable = false
         tblSourcePath.isEnabled = true
         
@@ -172,7 +172,7 @@ class DeviceCopyViewController: NSViewController {
             print("DIFFERENT DEVICE \(device.deviceId) != \(self.device.deviceId)")
             self.device = device
             
-            self.btnCopy.isEnabled = false
+            self.btnCopy.isEnabled = true
             self.btnUpdateRepository.isEnabled = false
             
             self.connected = connected
@@ -1188,14 +1188,39 @@ class DeviceCopyViewController: NSViewController {
     
     // MARK: - ACTION BUTTON - UPDATE REPOSITORY
     
+    // copy files from raw folder to repository folder if it wasn't copied
+    // update field 'importToPath' for images read from apple devices if it's not up-to-date with current app version
+    // update field 'localFilePath' if it's null or empty or not-up-to-date in db
+    // generate md5 and update field 'md5' if it's null or empty in db
     fileprivate func updateDeviceFileIntoRepository(fileRecord deviceFile:ImageDeviceFile, storageUrlWithSlash:String, repositoryPath:String, fileHandler:ComputerFileManager){
         var file = deviceFile
-        if let filename = file.filename, let importToPath = file.importToPath, importToPath.starts(with: storageUrlWithSlash) {
+        if let path = file.path, let filename = file.filename, let importToPath_origin = file.importToPath, importToPath_origin.starts(with: storageUrlWithSlash) {
             
             var needSave = false
+            
+            var importToPath = importToPath_origin
+            
+            // fix old version records incorrectly excluded 'subpath' from 'importToPath'
+            // e.g,                   when: path=/DCIM/100APPLE/IMG_0106.JPG
+            //                        then:
+            //          old version importToPath=/Volumes/Mac Drive/MacStorage/photo.apple.iphone6/Camera
+            //      current version importToPath=/Volumes/Mac Drive/MacStorage/photo.apple.iphone6/Camera/100APPLE
+            // so that 'localFilePath' should be=Camera/100APPLE/IMG_0106.JPG
+            if path.starts(with: "/DCIM/") && path.contains("APPLE/") {
+                let appleFolder = path.replacingFirstOccurrence(of: "/DCIM/", with: "").replacingFirstOccurrence(of: "/\(filename)", with: "")
+                importToPath = "\(storageUrlWithSlash)Camera/\(appleFolder)"
+                if importToPath != importToPath_origin {
+                    file.importToPath = importToPath
+                    needSave = true
+                }
+            }
+            
+            
             let subpath = importToPath.replacingOccurrences(of: storageUrlWithSlash, with: "")
+            
+            // update field 'localFilePath' if it's null or empty in db
             let localFilePath = "\(subpath)/\(filename)"
-            if localFilePath != "/" && ( file.localFilePath == nil || file.localFilePath == "" ) {
+            if localFilePath != "/" && ( file.localFilePath == nil || file.localFilePath == "" || importToPath != importToPath_origin ) {
                 file.localFilePath = localFilePath
                 needSave = true
             }else{
@@ -1217,6 +1242,7 @@ class DeviceCopyViewController: NSViewController {
                 print("Error occured when trying to create folder \(repositoryFolderUrl.path)")
                 print(error)
             }
+            // copy files from raw folder to repository folder if it wasn't copied
             if !FileManager.default.fileExists(atPath: repositoryFileUrl.path) {
                 do {
                     try FileManager.default.copyItem(atPath: importedFileUrl.path, toPath: repositoryFileUrl.path)
@@ -1225,6 +1251,8 @@ class DeviceCopyViewController: NSViewController {
                     print(error)
                 }
             }
+            
+            // generate md5 and update field 'md5' if it's null or empty in db
             if file.fileMD5 == nil || file.fileMD5 == "" {
                 let md5 = fileHandler.md5(pathOfFile: importedFileUrl.path)
                 if md5 != "" {
