@@ -446,6 +446,7 @@ class TaskletManager {
     }
     
     func isTaskStopped(id:String) -> Bool {
+        if id == "" { return false }
         if let state = self.tasksStartStopState[id] {
             return !state
         }
@@ -545,6 +546,7 @@ class TaskletManager {
     }
     
     func updateProgress(id:String, message:String, increase:Bool = false) {
+        if id == "" {return}
         if let task = self.getTask(id: id) {
             self.updateProgress(task: task, message: message, increase: increase)
         }
