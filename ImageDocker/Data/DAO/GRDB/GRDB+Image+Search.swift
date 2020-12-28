@@ -411,6 +411,29 @@ select DATE('now', 'localtime')  date
         return result
     }
     
+    func getAllPhotoPaths(repositoryPath:String, includeHidden:Bool = true) -> Set<String> {
+        var result:Set<String> = []
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.read { db in
+                if includeHidden {
+                    let cursor = try Image.filter(sql: "repositoryPath = '\(repositoryPath)'").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchCursor(db)
+                    while let photo = try cursor.next() {
+                        result.insert(photo.path)
+                    }
+                }else{
+                    let cursor = try Image.filter(sql: "repositoryPath = '\(repositoryPath)' and hidden = 0").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchCursor(db)
+                    while let photo = try cursor.next() {
+                        result.insert(photo.path)
+                    }
+                }
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
     func getPhotoFilesWithoutSubPath(rootPath:String) -> [Image] {
         var result:[Image] = []
         do {

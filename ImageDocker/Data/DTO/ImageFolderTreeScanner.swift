@@ -401,281 +401,255 @@ class ImageFolderTreeScanner {
         return result
     }
     
-    func scanRepositories(indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil)  {
+    fileprivate func scanRepository(repository repo:ImageContainer, excludedContainerPaths:Set<String>, step i:Int, total totalCount:Int, indicator:Accumulator? = nil) -> (Bool, Set<String>, [String:ImageContainer]) {
+        
+        // for return:
+        var filesysUrls:Set<String> = Set<String>()
+        var fileUrlToRepo:[String:ImageContainer] = [:]
+        
+        // for local use:
+        var foldersysUrls:Set<String> = Set<String>()
+        let repositoryPath = repo.path.withStash()
         
         if suppressedScan {
             if indicator != nil {
                 indicator?.forceComplete()
             }
-            return
+            return (false, filesysUrls, fileUrlToRepo)
         }
         
         if indicator != nil {
-            indicator?.display(message: "Loading repositories from database .....")
+            indicator?.display(message: "Scanning repository \(i)/\(totalCount) .....")
         }
         
-        let repositories = self.repositoryDao.getRepositories()
-        print("REPO COUNT = \(repositories.count)")
-        
-        if indicator != nil {
-            indicator?.display(message: "Scanning \(repositories.count) repositories .....")
+        var repoExistInFileSys = false
+        var isDir:ObjCBool = false
+        if FileManager.default.fileExists(atPath: repo.path, isDirectory: &isDir) {
+            if isDir.boolValue == true {
+                repoExistInFileSys = true
+            }
         }
         
-        let excludedContainerPaths = self.deviceDao.getExcludedImportedContainerPaths()
+        if !repoExistInFileSys {
+            print("[Repository Scan] Repository does not exist in FileSys: [\(repo.path)]")
+            let deleteState = self.repositoryDao.deleteContainer(path: repo.path, deleteImage: true)
+            if deleteState == .OK {
+                print("[Repository Scan] Deleted non-exist repository and related images in DB: [\(repo.path)]")
+            }else{
+                print("[Repository Scan] [\(deleteState)] Unable to delete non-exist repository and related images in DB: [\(repo.path)]")
+            }
+            return (false, filesysUrls, fileUrlToRepo)// continue
+        }
         
-        var filesysUrls:Set<String> = Set<String>()
-        var fileUrlToRepo:[String:ImageContainer] = [:]
-        let totalCount = repositories.count
-        var i = 0
-        for repo in repositories {
-            var foldersysUrls:Set<String> = Set<String>()
-            let repositoryPath = repo.path.withStash()
-            
-            
-            i += 1
-            
-            if suppressedScan {
-                if indicator != nil {
-                    indicator?.forceComplete()
-                }
-                return
-            }
-            
-            if indicator != nil {
-                indicator?.display(message: "Scanning repository \(i)/\(totalCount) .....")
-            }
-            
-            var repoExistInFileSys = false
-            var isDir:ObjCBool = false
-            if FileManager.default.fileExists(atPath: repo.path, isDirectory: &isDir) {
-                if isDir.boolValue == true {
-                    repoExistInFileSys = true
-                }
-            }
-            
-            if !repoExistInFileSys {
-                print("[Repository Scan] Repository does not exist in FileSys: [\(repo.path)]")
-                let deleteState = self.repositoryDao.deleteContainer(path: repo.path, deleteImage: true)
-                if deleteState == .OK {
-                    print("[Repository Scan] Deleted non-exist repository and related images in DB: [\(repo.path)]")
-                }else{
-                    print("[Repository Scan] [\(deleteState)] Unable to delete non-exist repository and related images in DB: [\(repo.path)]")
-                }
-                continue
-            }
-            
-            if repo.path.withStash() != repo.repositoryPath.withStash() {
-                print("[Repository Scan] Record is not a valid repository: path=[\(repo.path)] , it should belong to repositoryPath=[\(repo.repositoryPath)]")
-                continue
-            }
-            
-            var containers = self.repositoryDao.getAllContainerPaths(repositoryPath: repositoryPath).sorted()
-            
+        if repo.path.withStash() != repo.repositoryPath.withStash() {
+            print("[Repository Scan] Record is not a valid repository: path=[\(repo.path)] , it should belong to repositoryPath=[\(repo.repositoryPath)]")
+            return (false, filesysUrls, fileUrlToRepo)// continue
+        }
+        
+        var containers = self.repositoryDao.getAllContainerPaths(repositoryPath: repositoryPath).sorted()
+        
 //            var pathToDeviceSubFolder:[String:String] = [:]
-            if repo.deviceId != "" {
-                let devicePaths = self.deviceDao.getDevicePaths(deviceId: repo.deviceId)
-                if devicePaths.count > 0 {
-                    for devicePath in devicePaths {
-                        if !devicePath.exclude && !devicePath.excludeImported {
-                            let path = URL(fileURLWithPath: repo.path).appendingPathComponent(devicePath.toSubFolder).path
+        if repo.deviceId != "" {
+            let devicePaths = self.deviceDao.getDevicePaths(deviceId: repo.deviceId)
+            if devicePaths.count > 0 {
+                for devicePath in devicePaths {
+                    if !devicePath.exclude && !devicePath.excludeImported {
+                        let path = URL(fileURLWithPath: repo.path).appendingPathComponent(devicePath.toSubFolder).path
 //                            pathToDeviceSubFolder[path] = devicePath.toSubFolder
-                            
-                            print("[Repository Scan] get or create container for device [id=\(repo.deviceId)] path [\(path)]")
-                            let folder = ImageFolder(URL(fileURLWithPath: path),
-                                                          name: devicePath.toSubFolder,
-                                                          repositoryPath: repositoryPath,
-                                                          homePath: "",
-                                                          storagePath: "",
-                                                          facePath: "",
-                                                          cropPath: "",
-                                                          countOfImages: 0,
-                                                          manyChildren: devicePath.manyChildren
-                            )
-                            
-                            if let container = folder.containerFolder, container.parentFolder == "" {
-                                self.repositoryDao.updateImageContainerParentFolder(path: path, parentFolder: repo.path)
-                            }
-                            if !containers.contains(path) {
-                                containers.append(path)
-                            }
-                        } // end of if not excluded
-                    } // end of loop devicePaths
-                } // end of if devicePaths.count > 0
-            } // end of if repo.deviceid != ""
-            
-            print("\(Date()) CHECKING REPO \(repo.path)")
-            
-            print("\(Date()) CHECK REPO: ENUMERATING FILESYS")
-            
-            autoreleasepool { () -> Void in
-                print(">>> WALKING THRU DIRECTORY begin \(i)/\(totalCount) <<<")
-                if indicator != nil {
-                    indicator?.display(message: "Walking thru directory [\(i)/\(totalCount)] [\(repo.name)]")
-                }
                         
-                let directoryPaths = self.walkthruDirectoryForPaths(repository: repo, indicator: indicator)
-                for filesysUrl in directoryPaths.filesysUrls {
-                    filesysUrls.insert(filesysUrl)
-                }
-                for key in directoryPaths.fileUrlToRepo.keys {
-                    fileUrlToRepo[key] = directoryPaths.fileUrlToRepo[key]
-                }
-                for folderUrl in directoryPaths.foldersysUrls {
-                    foldersysUrls.insert(folderUrl)
-                }
-                print(">>> WALKING THRU DIRECTORY done \(i)/\(totalCount)  <<<")
+                        print("[Repository Scan] get or create container for device [id=\(repo.deviceId)] path [\(path)]")
+                        let folder = ImageFolder(URL(fileURLWithPath: path),
+                                                      name: devicePath.toSubFolder,
+                                                      repositoryPath: repositoryPath,
+                                                      homePath: "",
+                                                      storagePath: "",
+                                                      facePath: "",
+                                                      cropPath: "",
+                                                      countOfImages: 0,
+                                                      manyChildren: devicePath.manyChildren
+                        )
+                        
+                        if let container = folder.containerFolder, container.parentFolder == "" {
+                            self.repositoryDao.updateImageContainerParentFolder(path: path, parentFolder: repo.path)
+                        }
+                        if !containers.contains(path) {
+                            containers.append(path)
+                        }
+                    } // end of if not excluded
+                } // end of loop devicePaths
+            } // end of if devicePaths.count > 0
+        } // end of if repo.deviceid != ""
+        
+        print("\(Date()) CHECKING REPO \(repo.path)")
+        
+        print("\(Date()) CHECK REPO: ENUMERATING FILESYS")
+        
+        autoreleasepool { () -> Void in
+            print(">>> WALKING THRU DIRECTORY begin \(i)/\(totalCount) <<<")
+            if indicator != nil {
+                indicator?.display(message: "Walking thru directory [\(i)/\(totalCount)] [\(repo.name)]")
             }
-            
-            print("\(Date()) CHECK REPO: ENUMERATING FILESYS: DONE")
-            
-            print("\(Date()) CHECK REPO: CHECK FOLDERS TO BE ADDED AND REMOVED")
-            
-            autoreleasepool { () -> Void in
-                
-                let folderDBUrls = self.repositoryDao.getAllContainerPaths(repositoryPath: repositoryPath)
-                let folderUrlsToAdd:[String] = foldersysUrls.subtracting(folderDBUrls).sorted()
-                let folderUrlsToRemoved:Set<String> = folderDBUrls.subtracting(foldersysUrls)
-                
-                // urlsToAdd should minus those excluded device paths
-                if folderUrlsToAdd.count > 0 {
                     
-                    var k = 0
-                    let kall = folderUrlsToAdd.count
-                    for path in folderUrlsToAdd {
-                        
-                        if suppressedScan {
-                            if indicator != nil {
-                                indicator?.forceComplete()
-                            }
-                            return
-                        }
-                        
-                        k += 1
-                        
-                        var exclude = false
-                        if excludedContainerPaths.contains(path) {
-                            exclude = true
-                            print("Exclude container: \(path)")
-                        }else{
-                            for excludedPath in excludedContainerPaths {
-                                if path.hasPrefix(excludedPath.withStash()) {
-                                    exclude = true
-                                    print("Exclude container: \(path)")
-                                    break
-                                }
-                            }
-                        }
-                        
-                        print("Adding container folder \(k)/\(kall): \(path)")
+            let directoryPaths = self.walkthruDirectoryForPaths(repository: repo, indicator: indicator)
+            for filesysUrl in directoryPaths.filesysUrls {
+                filesysUrls.insert(filesysUrl)
+            }
+            for key in directoryPaths.fileUrlToRepo.keys {
+                fileUrlToRepo[key] = directoryPaths.fileUrlToRepo[key]
+            }
+            for folderUrl in directoryPaths.foldersysUrls {
+                foldersysUrls.insert(folderUrl)
+            }
+            print(">>> WALKING THRU DIRECTORY done \(i)/\(totalCount)  <<<")
+        }
+        
+        print("\(Date()) CHECK REPO: ENUMERATING FILESYS: DONE")
+        
+        print("\(Date()) CHECK REPO: CHECK FOLDERS TO BE ADDED AND REMOVED")
+        
+        autoreleasepool { () -> Void in
+            
+            let folderDBUrls = self.repositoryDao.getAllContainerPaths(repositoryPath: repositoryPath)
+            let folderUrlsToAdd:[String] = foldersysUrls.subtracting(folderDBUrls).sorted()
+            let folderUrlsToRemoved:Set<String> = folderDBUrls.subtracting(foldersysUrls)
+            
+            // urlsToAdd should minus those excluded device paths
+            if folderUrlsToAdd.count > 0 {
+                
+                var k = 0
+                let kall = folderUrlsToAdd.count
+                for path in folderUrlsToAdd {
+                    
+                    if suppressedScan {
                         if indicator != nil {
-                            indicator?.display(message: "Adding container folder \(k)/\(kall) .....")
+                            indicator?.forceComplete()
                         }
-                        
-                        if !exclude {
-                        
-                            let url = URL(fileURLWithPath: path)
-                            let name = url.lastPathComponent
-                            
-                            // create container db record
-                            let _ = ImageFolder(url,
-                                                name: name,
-                                                repositoryPath: repositoryPath,
-                                                homePath: "",
-                                                storagePath: "",
-                                                facePath: "",
-                                                cropPath: "")
-                            
-                            if !containers.contains(path) {
-                                containers.append(path)
-                            }
-                        } // end of not excluded\
-                    } // end of loop folderUrlsToAdd
+                        return
+                    }
                     
-                    // current + added containers used for each container to get nearest parent
-                    containers = containers.sorted().reversed() // put the shortest root to bottom, make it hardest to be found
-                    var j = 0
-                    for path in folderUrlsToAdd {
-                        
-                        if suppressedScan {
-                            if indicator != nil {
-                                indicator?.forceComplete()
-                            }
-                            return
-                        }
-                        
-                        j += 1
-                        
-                        var exclude = false
-                        if excludedContainerPaths.contains(path) {
-                            exclude = true
-                            print("Exclude container: \(path)")
-                        }else{
-                            for excludedPath in excludedContainerPaths {
-                                if path.hasPrefix(excludedPath.withStash()) {
-                                    exclude = true
-                                    print("Exclude container: \(path)")
-                                    break
-                                }
-                            }
-                        }
-                        
-                        
-                        print("Getting parent folder \(j)/\(kall): \(path)")
-                        if indicator != nil {
-                            indicator?.display(message: "Getting parent folder \(j)/\(kall) .....")
-                        }
-                        
-                        if !exclude {
-                            if let parentFolder = path.getNearestParent(from: containers) {
-                                print(">>> parent folder: \(parentFolder)")
-                                self.repositoryDao.updateImageContainerParentFolder(path: path, parentFolder: parentFolder)
-                                
-                                if let parent = self.repositoryDao.getContainer(path: parentFolder), parent.manyChildren == true {
-                                    self.repositoryDao.updateImageContainerHideByParent(path: path, hideByParent: true)
-                                }
-                            }
-                        } // end of not excluded
-                        
-                    } // end of loop folderUrlsToAdd
+                    k += 1
                     
-//                    if indicator != nil {
-//                        indicator?.dataChanged()
-//                    }
-                }// end of folderUrlsToAdd.count > 0
-                
-                if folderUrlsToRemoved.count > 0 {
-                    var k=0
-                    for path in folderUrlsToRemoved {
-                        k+=1
-                        // REMOVE sub CONTAINER FROM DB
-                        if !FileManager.default.fileExists(atPath: path) {
-                            let deleteState = self.repositoryDao.deleteContainer(path: path, deleteImage: true)
-                            
-                            if indicator != nil {
-                                if deleteState == .OK {
-                                    print("Deleted container and related images from DB: \(path)")
-                                    indicator?.display(message: "Removed non-exist container [\(k)/\(folderUrlsToRemoved.count)]")
-                                }else{
-                                    print("[\(deleteState)] Failed to delete container and related images from DB: \(path)")
-                                    indicator?.display(message: "[\(deleteState)] Failed to remove non-exist container [\(k)/\(folderUrlsToRemoved.count)]")
-                                }
+                    var exclude = false
+                    if excludedContainerPaths.contains(path) {
+                        exclude = true
+                        print("Exclude container: \(path)")
+                    }else{
+                        for excludedPath in excludedContainerPaths {
+                            if path.hasPrefix(excludedPath.withStash()) {
+                                exclude = true
+                                print("Exclude container: \(path)")
+                                break
                             }
                         }
                     }
                     
+                    print("Adding container folder \(k)/\(kall): \(path)")
+                    if indicator != nil {
+                        indicator?.display(message: "Adding container folder \(k)/\(kall) .....")
+                    }
+                    
+                    if !exclude {
+                    
+                        let url = URL(fileURLWithPath: path)
+                        let name = url.lastPathComponent
+                        
+                        // create container db record
+                        let _ = ImageFolder(url,
+                                            name: name,
+                                            repositoryPath: repositoryPath,
+                                            homePath: "",
+                                            storagePath: "",
+                                            facePath: "",
+                                            cropPath: "")
+                        
+                        if !containers.contains(path) {
+                            containers.append(path)
+                        }
+                    } // end of not excluded\
+                } // end of loop folderUrlsToAdd
+                
+                // current + added containers used for each container to get nearest parent
+                containers = containers.sorted().reversed() // put the shortest root to bottom, make it hardest to be found
+                var j = 0
+                for path in folderUrlsToAdd {
+                    
+                    if suppressedScan {
+                        if indicator != nil {
+                            indicator?.forceComplete()
+                        }
+                        return
+                    }
+                    
+                    j += 1
+                    
+                    var exclude = false
+                    if excludedContainerPaths.contains(path) {
+                        exclude = true
+                        print("Exclude container: \(path)")
+                    }else{
+                        for excludedPath in excludedContainerPaths {
+                            if path.hasPrefix(excludedPath.withStash()) {
+                                exclude = true
+                                print("Exclude container: \(path)")
+                                break
+                            }
+                        }
+                    }
+                    
+                    
+                    print("Getting parent folder \(j)/\(kall): \(path)")
+                    if indicator != nil {
+                        indicator?.display(message: "Getting parent folder \(j)/\(kall) .....")
+                    }
+                    
+                    if !exclude {
+                        if let parentFolder = path.getNearestParent(from: containers) {
+                            print(">>> parent folder: \(parentFolder)")
+                            self.repositoryDao.updateImageContainerParentFolder(path: path, parentFolder: parentFolder)
+                            
+                            if let parent = self.repositoryDao.getContainer(path: parentFolder), parent.manyChildren == true {
+                                self.repositoryDao.updateImageContainerHideByParent(path: path, hideByParent: true)
+                            }
+                        }
+                    } // end of not excluded
+                    
+                } // end of loop folderUrlsToAdd
+                
 //                    if indicator != nil {
 //                        indicator?.dataChanged()
 //                    }
-                } // end of folderUrlsToRemoved.count > 0
-            } // end of autorelease
-        } // end of loop repositories
+            }// end of folderUrlsToAdd.count > 0
+            
+            if folderUrlsToRemoved.count > 0 {
+                var k=0
+                for path in folderUrlsToRemoved {
+                    k+=1
+                    // REMOVE sub CONTAINER FROM DB
+                    if !FileManager.default.fileExists(atPath: path) {
+                        let deleteState = self.repositoryDao.deleteContainer(path: path, deleteImage: true)
+                        
+                        if indicator != nil {
+                            if deleteState == .OK {
+                                print("Deleted container and related images from DB: \(path)")
+                                indicator?.display(message: "Removed non-exist container [\(k)/\(folderUrlsToRemoved.count)]")
+                            }else{
+                                print("[\(deleteState)] Failed to delete container and related images from DB: \(path)")
+                                indicator?.display(message: "[\(deleteState)] Failed to remove non-exist container [\(k)/\(folderUrlsToRemoved.count)]")
+                            }
+                        }
+                    }
+                }
+                
+//                    if indicator != nil {
+//                        indicator?.dataChanged()
+//                    }
+            } // end of folderUrlsToRemoved.count > 0
+        } // end of autorelease
         
-        print("\(Date()) CHECK REPO: CHECK TO BE ADDED AND REMOVED")
-        if indicator != nil {
-            indicator?.display(message: "[FileSys Scan] Checking differences .....")
-        }
-        
-        let dbUrls = self.imageSearchDao.getAllPhotoPaths()
+        return (true, filesysUrls, fileUrlToRepo)
+    }
+    
+    fileprivate func applyImportGap(dbUrls:Set<String>, filesysUrls:Set<String>, fileUrlToRepo:[String:ImageContainer], excludedContainerPaths:Set<String>, indicator:Accumulator? = nil) -> Bool {
         print("EXISTING DB PHOTO COUNT = \(dbUrls.count)")
         print("EXISTING SYS PHOTO COUNT = \(filesysUrls.count)")
 //        var dbUrls:Set<String> = Set<String>()
@@ -688,7 +662,7 @@ class ImageFolderTreeScanner {
         
         if indicator != nil {
             if dbUrls.count == filesysUrls.count {
-                indicator?.display(message: "[FileSys Scan] Images have no difference btw FileSys and DB.")
+                indicator?.display(message: "[FileSys Scan] Images have no gap btw FileSys and DB.")
             }else if dbUrls.count < filesysUrls.count {
                 let gap = dbUrls.count - filesysUrls.count
                 indicator?.display(message: "[FileSys Scan] Images in DB[\(dbUrls.count)] less (\(gap)) than in FileSys[\(filesysUrls.count)].")
@@ -709,7 +683,7 @@ class ImageFolderTreeScanner {
             if indicator != nil {
                 indicator?.forceComplete()
             }
-            return
+            return false
         }
         
         if indicator != nil {
@@ -738,7 +712,7 @@ class ImageFolderTreeScanner {
                     if indicator != nil {
                         indicator?.forceComplete()
                     }
-                    return
+                    return false
                 }
                 
                 if limitRam > 0 {
@@ -821,7 +795,7 @@ class ImageFolderTreeScanner {
                     if indicator != nil {
                         indicator?.forceComplete()
                     }
-                    return
+                    return false
                 }
                 
                 
@@ -849,6 +823,96 @@ class ImageFolderTreeScanner {
         } // end of urlsToRemoved.count > 0
         
         print("\(Date()) CHECK REPO: EXECUTE ADD OR REMOVE: DONE")
+        
+        return true
+    }
+    
+    // entrance method
+    func scanSingleRepository(repository:ImageContainer, indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil) -> Bool {
+        
+        if indicator != nil {
+            indicator?.display(message: "Scanning repository .....")
+        }
+        
+        let excludedContainerPaths = self.deviceDao.getExcludedImportedContainerPaths()
+        let (_, repoFileSysUrls, repoFileUrlToRepo) = self.scanRepository(repository: repository, excludedContainerPaths: excludedContainerPaths, step: 1, total: 1, indicator: indicator)
+        
+        print("\(Date()) CHECK REPO: CHECK TO BE ADDED AND REMOVED")
+        if indicator != nil {
+            indicator?.display(message: "[FileSys Scan] Checking gap between db and filesys .....")
+        }
+        
+        let dbUrls = self.imageSearchDao.getAllPhotoPaths(repositoryPath: repository.repositoryPath)
+        let shouldContinue = self.applyImportGap(dbUrls: dbUrls, filesysUrls: repoFileSysUrls, fileUrlToRepo: repoFileUrlToRepo, excludedContainerPaths: excludedContainerPaths, indicator: indicator)
+        
+        if !shouldContinue {
+            return false
+        }
+        
+        print("\(Date()) TRIGGER ON DATA CHANGED EVENT AFTER FINISHED SCANNING REPOSITORIES")
+        if indicator != nil {
+            indicator?.display(message: "[FileSys Scan] Repositories scan done.")
+            indicator?.dataChanged()
+        }
+        if onCompleted != nil {
+            onCompleted!()
+        }
+        return true
+    }
+    
+    // entrance method
+    func scanRepositories(indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil)  {
+        
+        if suppressedScan {
+            if indicator != nil {
+                indicator?.forceComplete()
+            }
+            return
+        }
+        
+        if indicator != nil {
+            indicator?.display(message: "Loading repositories from database .....")
+        }
+        
+        let repositories = self.repositoryDao.getRepositories()
+        print("REPO COUNT = \(repositories.count)")
+        
+        if indicator != nil {
+            indicator?.display(message: "Scanning \(repositories.count) repositories .....")
+        }
+        
+        let excludedContainerPaths = self.deviceDao.getExcludedImportedContainerPaths()
+        
+        var filesysUrls:Set<String> = Set<String>()
+        var fileUrlToRepo:[String:ImageContainer] = [:]
+        let totalCount = repositories.count
+        var i = 0
+        for repo in repositories {
+            
+            i += 1
+            let (isContinue, repoFileSysUrls, repoFileUrlToRepo) = self.scanRepository(repository: repo, excludedContainerPaths: excludedContainerPaths, step: i, total: totalCount, indicator: indicator)
+            
+            filesysUrls = filesysUrls.union(repoFileSysUrls)
+            fileUrlToRepo = fileUrlToRepo.merging(repoFileUrlToRepo, uniquingKeysWith: { (container1, container2) -> ImageContainer in
+                return container1
+            })
+            
+            if !isContinue {
+                return
+            }
+        } // end of loop repositories
+        
+        print("\(Date()) CHECK REPO: CHECK TO BE ADDED AND REMOVED")
+        if indicator != nil {
+            indicator?.display(message: "[FileSys Scan] Checking gap between db and filesys .....")
+        }
+        
+        let dbUrls = self.imageSearchDao.getAllPhotoPaths()
+        let shouldContinue = self.applyImportGap(dbUrls: dbUrls, filesysUrls: filesysUrls, fileUrlToRepo: fileUrlToRepo, excludedContainerPaths: excludedContainerPaths, indicator: indicator)
+        
+        if !shouldContinue {
+            return
+        }
         
         print("\(Date()) TRIGGER ON DATA CHANGED EVENT AFTER FINISHED SCANNING REPOSITORIES")
         if indicator != nil {

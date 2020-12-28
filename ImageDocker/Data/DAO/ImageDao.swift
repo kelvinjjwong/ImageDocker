@@ -239,6 +239,10 @@ class ImageSearchDao {
         return self.impl.getAllPhotoPaths(includeHidden: includeHidden)
     }
     
+    func getAllPhotoPaths(repositoryPath:String, includeHidden:Bool = true) -> Set<String> {
+        return self.impl.getAllPhotoPaths(repositoryPath:repositoryPath, includeHidden: includeHidden)
+    }
+    
     func getPhotoFilesWithoutSubPath(rootPath:String) -> [Image] {
         return self.impl.getPhotoFilesWithoutSubPath(rootPath: rootPath)
     }

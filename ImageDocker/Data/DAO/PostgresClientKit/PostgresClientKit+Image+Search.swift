@@ -886,6 +886,23 @@ order by "date"
         return result
     }
     
+    func getAllPhotoPaths(repositoryPath:String, includeHidden: Bool) -> Set<String> {
+        var result:Set<String> = []
+        let db = PostgresConnection.database()
+        if includeHidden {
+            let records = Image.fetchAll(db, where: "\"repositoryPath\" = '\(repositoryPath)'",  orderBy: "\"photoTakenDate\", filename")
+            for record in records {
+                result.insert(record.path)
+            }
+        }else{
+            let records = Image.fetchAll(db, where: "\"repositoryPath\" = '\(repositoryPath)' and hidden = false", orderBy: "\"photoTakenDate\", filename")
+            for record in records {
+                result.insert(record.path)
+            }
+        }
+        return result
+    }
+    
     func getPhotoFilesWithoutSubPath(rootPath: String) -> [Image] {
         let db = PostgresConnection.database()
         return Image.fetchAll(db, where: "path like $1 and \"subPath\" = ''", values: ["\(rootPath.withStash())%"] )
