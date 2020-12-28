@@ -876,7 +876,6 @@
 			isa = PBXGroup;
 			children = (
 				8EFAF1F920BFFC59007A7783 /* MetaInfo */,
-				8E0EAE99209D2623008C377F /* ImageFolderTreeScanner.swift */,
 				8EF500CC209A804100C9805F /* ImageFolder.swift */,
 				8EB986B320B30C910075B081 /* ImageFile.swift */,
 				8EB27162233845F0003BF3AF /* ImageFile+Event.swift */,
@@ -1262,6 +1261,7 @@
 			isa = PBXGroup;
 			children = (
 				8E4C38CB2117B5190089502C /* Device */,
+				8E0EAE99209D2623008C377F /* ImageFolderTreeScanner.swift */,
 				8E98B8F820D7950E00771280 /* ExportManager.swift */,
 				8E73E381223E494C00C14A90 /* ExecutionEnvironment.swift */,
 			);
