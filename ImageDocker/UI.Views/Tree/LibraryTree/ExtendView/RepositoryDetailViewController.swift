@@ -15,6 +15,8 @@ class RepositoryDetailViewController: NSViewController {
     @IBOutlet weak var lblBackupSpace: NSTextField!
     @IBOutlet weak var lblCropSpace: NSTextField!
     @IBOutlet var txtDetail: NSTextView!
+    @IBOutlet weak var scrollDetail: NSScrollView!
+    
     @IBOutlet weak var lblRepoFree: NSTextField!
     @IBOutlet weak var lblBackupFree: NSTextField!
     @IBOutlet weak var lblCropFree: NSTextField!
@@ -89,9 +91,11 @@ class RepositoryDetailViewController: NSViewController {
     
     @IBAction func onEditableDetailClicked(_ sender: NSButton) {
         if let output = self.repoSpace["console_output"] {
+            self.scrollDetail.hasVerticalScroller = true
             self.txtDetail.string = "Editable storage:\n\(output)"
             self.txtDetail.isHidden = false
         }else{
+            self.scrollDetail.hasVerticalScroller = false
             self.txtDetail.string = ""
             self.txtDetail.isHidden = true
         }
@@ -99,9 +103,11 @@ class RepositoryDetailViewController: NSViewController {
     
     @IBAction func onBackupDetailClicked(_ sender: NSButton) {
         if let output = self.backupSpace["console_output"] {
+            self.scrollDetail.hasVerticalScroller = true
             self.txtDetail.string = "Backup storage:\n\(output)"
             self.txtDetail.isHidden = false
         }else{
+            self.scrollDetail.hasVerticalScroller = false
             self.txtDetail.string = ""
             self.txtDetail.isHidden = true
         }
@@ -109,9 +115,11 @@ class RepositoryDetailViewController: NSViewController {
     
     @IBAction func onCropDetailClicked(_ sender: NSButton) {
         if let output = self.faceSpace["console_output"] {
+            self.scrollDetail.hasVerticalScroller = true
             self.txtDetail.string = "Face storage:\n\(output)"
             self.txtDetail.isHidden = false
         }else{
+            self.scrollDetail.hasVerticalScroller = false
             self.txtDetail.string = ""
             self.txtDetail.isHidden = true
         }
