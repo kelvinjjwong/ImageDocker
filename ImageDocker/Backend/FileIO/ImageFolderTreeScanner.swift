@@ -892,9 +892,13 @@ class ImageFolderTreeScanner {
     // entrance method
     func scanSingleRepository(repository:ImageContainer, taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil) -> Bool {
         
+        if TaskletManager.default.isTaskStopped(id: taskId) == true { return false }
+        
         if indicator != nil {
             indicator?.display(message: "Scanning repository .....")
         }
+        
+        TaskletManager.default.updateProgress(id: taskId, message: "Scanning repository .....", increase: false)
         
         let excludedContainerPaths = self.deviceDao.getExcludedImportedContainerPaths()
         let (_, repoFileSysUrls, repoFileUrlToRepo) = self.scanRepository(repository: repository, excludedContainerPaths: excludedContainerPaths, step: 1, total: 1, taskId: taskId, indicator: indicator)
@@ -903,6 +907,8 @@ class ImageFolderTreeScanner {
         if indicator != nil {
             indicator?.display(message: "[FileSys Scan] Checking gap between db and filesys .....")
         }
+        
+        TaskletManager.default.updateProgress(id: taskId, message: "[FileSys Scan] Checking gap between db and filesys .....", increase: false)
         
         let dbUrls = self.imageSearchDao.getAllPhotoPaths(repositoryPath: repository.repositoryPath)
         let shouldContinue = self.applyImportGap(dbUrls: dbUrls, filesysUrls: repoFileSysUrls, fileUrlToRepo: repoFileUrlToRepo, excludedContainerPaths: excludedContainerPaths, taskId: taskId, indicator: indicator)
@@ -916,6 +922,9 @@ class ImageFolderTreeScanner {
             indicator?.display(message: "[FileSys Scan] Repositories scan done.")
             indicator?.dataChanged()
         }
+        
+        TaskletManager.default.updateProgress(id: taskId, message: "[FileSys Scan] Repositories scan done.", increase: false)
+        
         if onCompleted != nil {
             onCompleted!()
         }
@@ -923,7 +932,7 @@ class ImageFolderTreeScanner {
     }
     
     // entrance method
-    func scanRepositories(indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil)  {
+    func scanRepositories(taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil)  {
         
         if suppressedScan {
             if indicator != nil {
@@ -932,9 +941,13 @@ class ImageFolderTreeScanner {
             return
         }
         
+        if TaskletManager.default.isTaskStopped(id: taskId) == true { return }
+        
         if indicator != nil {
             indicator?.display(message: "Loading repositories from database .....")
         }
+        
+        TaskletManager.default.updateProgress(id: taskId, message: "Loading repositories from database .....", increase: false)
         
         let repositories = self.repositoryDao.getRepositories()
         print("REPO COUNT = \(repositories.count)")
@@ -942,6 +955,8 @@ class ImageFolderTreeScanner {
         if indicator != nil {
             indicator?.display(message: "Scanning \(repositories.count) repositories .....")
         }
+        
+        TaskletManager.default.updateProgress(id: taskId, message: "Scanning \(repositories.count) repositories .....", increase: false)
         
         let excludedContainerPaths = self.deviceDao.getExcludedImportedContainerPaths()
         
@@ -969,6 +984,8 @@ class ImageFolderTreeScanner {
             indicator?.display(message: "[FileSys Scan] Checking gap between db and filesys .....")
         }
         
+        TaskletManager.default.updateProgress(id: taskId, message: "[FileSys Scan] Checking gap between db and filesys .....", increase: false)
+        
         let dbUrls = self.imageSearchDao.getAllPhotoPaths()
         let shouldContinue = self.applyImportGap(dbUrls: dbUrls, filesysUrls: filesysUrls, fileUrlToRepo: fileUrlToRepo, excludedContainerPaths: excludedContainerPaths, indicator: indicator)
         
@@ -981,6 +998,9 @@ class ImageFolderTreeScanner {
             indicator?.display(message: "[FileSys Scan] Repositories scan done.")
             indicator?.dataChanged()
         }
+        
+        TaskletManager.default.updateProgress(id: taskId, message: "[FileSys Scan] Repositories scan done.", increase: false)
+        
         if onCompleted != nil {
             onCompleted!()
         }
