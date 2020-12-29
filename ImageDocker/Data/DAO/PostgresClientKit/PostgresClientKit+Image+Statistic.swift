@@ -10,6 +10,42 @@ import Foundation
 
 class ImageCountDaoPostgresCK : ImageCountDaoInterface {
     
+    func countCopiedFromDevice(deviceId:String) -> Int {
+        let db = PostgresConnection.database()
+        return ImageDeviceFile.count(db, where: """
+        "deviceId"=$1
+        """, parameters:[deviceId])
+    }
+    
+    func countImportedAsEditable(repositoryPath:String) -> Int {
+        let db = PostgresConnection.database()
+        return Image.count(db, where: """
+        "repositoryPath"=$1
+        """, parameters:[repositoryPath])
+        
+    }
+    
+    func countExtractedExif(repositoryPath:String) -> Int {
+        let db = PostgresConnection.database()
+        return Image.count(db, where: """
+        "exifCreateDate" is not null and "repositoryPath"=$1
+        """, parameters:[repositoryPath])
+    }
+    
+    func countRecognizedLocation(repositoryPath:String) -> Int {
+        let db = PostgresConnection.database()
+        return Image.count(db, where: """
+        ("address" is not null or "assignAddress" is not null) and "repositoryPath"=$1
+        """, parameters:[repositoryPath])
+    }
+    
+    func countRecognizedFaces(repositoryPath:String) -> Int {
+        let db = PostgresConnection.database()
+        return Image.count(db, where: """
+        "recognizedFace"=true and "repositoryPath"=$1
+        """, parameters:[repositoryPath])
+    }
+    
     func countPhotoFiles(year: Int, month: Int, day: Int, ignoreDate: Bool, country: String, province: String, city: String, place: String?, includeHidden: Bool, imageSource: [String]?, cameraModel: [String]?) -> Int {
         let db = PostgresConnection.database()
         let (stmt, _, sqlArgs) = SQLHelper.generatePostgresSQLStatementForPhotoFiles(year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)

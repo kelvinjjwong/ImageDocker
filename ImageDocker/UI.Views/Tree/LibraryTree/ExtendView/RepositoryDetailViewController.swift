@@ -22,6 +22,25 @@ class RepositoryDetailViewController: NSViewController {
     @IBOutlet weak var lblCropFree: NSTextField!
     @IBOutlet weak var lblTotalSize: NSTextField!
     
+    @IBOutlet weak var lblCopiedFromDevice: NSTextField!
+    @IBOutlet weak var lblImported: NSTextField!
+    @IBOutlet weak var lblExif: NSTextField!
+    @IBOutlet weak var lblLocation: NSTextField!
+    @IBOutlet weak var lblFaces: NSTextField!
+    @IBOutlet weak var indCopiedFromDevice: NSLevelIndicator!
+    @IBOutlet weak var indImported: NSLevelIndicator!
+    @IBOutlet weak var indExif: NSLevelIndicator!
+    @IBOutlet weak var indLocation: NSLevelIndicator!
+    @IBOutlet weak var indFaces: NSLevelIndicator!
+    @IBOutlet weak var btnDropIn: NSButton!
+    @IBOutlet weak var btnImport: NSButton!
+    @IBOutlet weak var btnExif: NSButton!
+    @IBOutlet weak var btnLocation: NSButton!
+    @IBOutlet weak var btnFaces: NSButton!
+    @IBOutlet weak var lblMessage: NSTextField!
+    @IBOutlet weak var indProgress: NSProgressIndicator!
+    @IBOutlet weak var btnStop: NSButton!
+    
     
     // MARK: INIT VIEW
     
@@ -45,11 +64,17 @@ class RepositoryDetailViewController: NSViewController {
     var faceSpace:[String:String] = [:]
     
     fileprivate var onConfigure: (() -> Void)!
+    fileprivate var onShowDeviceDialog: ((PhoneDevice) -> Void)!
     
-    func initView(path:String, onConfigure: @escaping (() -> Void)) {
+    fileprivate var _repositoryPath:String = ""
+    
+    func initView(path:String, onShowDeviceDialog: @escaping ((PhoneDevice) -> Void), onConfigure: @escaping (() -> Void)) {
+        self._repositoryPath = path
+        self.onConfigure = onConfigure
+        self.onShowDeviceDialog = onShowDeviceDialog
+        
         self.scrollDetail.hasVerticalScroller = false
         self.txtDetail.string = "Calculating ..."
-        self.onConfigure = onConfigure
         self.txtDetail.isHidden = true
         self.lblEditableStorageSpace.stringValue = "0M"
         self.lblBackupSpace.stringValue = "0M"
@@ -58,6 +83,77 @@ class RepositoryDetailViewController: NSViewController {
         self.lblBackupFree.stringValue = "0M / 0T"
         self.lblCropFree.stringValue = "0M / 0T"
         self.lblTotalSize.stringValue = "0 GB"
+
+        self.lblCopiedFromDevice.stringValue = "0"
+        self.lblImported.stringValue = "0"
+        self.lblExif.stringValue = "0"
+        self.lblLocation.stringValue = "0"
+        self.lblFaces.stringValue = "0"
+
+        self.indCopiedFromDevice.maxValue = 100.0
+        self.indCopiedFromDevice.minValue = 0.0
+        self.indCopiedFromDevice.doubleValue = 0.0
+        
+        self.indImported.maxValue = 100.0
+        self.indImported.minValue = 0.0
+        self.indImported.doubleValue = 0.0
+        
+        self.indExif.maxValue = 100.0
+        self.indExif.minValue = 0.0
+        self.indExif.doubleValue = 0.0
+        
+        self.indLocation.maxValue = 100.0
+        self.indLocation.minValue = 0.0
+        self.indLocation.doubleValue = 0.0
+        
+        self.indFaces.maxValue = 100.0
+        self.indFaces.minValue = 0.0
+        self.indFaces.doubleValue = 0.0
+        
+        self.lblMessage.isHidden = true
+        self.indProgress.isHidden = true
+        self.btnStop.isHidden = true
+        
+        
+        DispatchQueue.global().async {
+            if let repository = RepositoryDao.default.getRepository(repositoryPath: path) {
+                
+                let countCopiedFromDevice = ImageCountDao.default.countCopiedFromDevice(deviceId: repository.deviceId)
+                let countImported = ImageCountDao.default.countImportedAsEditable(repositoryPath: repository.repositoryPath)
+                let countExtractedExif = ImageCountDao.default.countExtractedExif(repositoryPath: repository.repositoryPath)
+                let countRecognizedLocation = ImageCountDao.default.countRecognizedLocation(repositoryPath: repository.repositoryPath)
+                let countRecognizedFaces = ImageCountDao.default.countRecognizedFaces(repositoryPath: repository.repositoryPath)
+                
+                DispatchQueue.main.async {
+                    self.lblCopiedFromDevice.stringValue = "\(countCopiedFromDevice)"
+                    self.lblImported.stringValue = "\(countImported)"
+                    self.lblExif.stringValue = "\(countExtractedExif)"
+                    self.lblLocation.stringValue = "\(countRecognizedLocation)"
+                    self.lblFaces.stringValue = "\(countRecognizedFaces)"
+                    
+                    var rateCopied = 0.0
+                    var rateImported = 0.0
+                    var rateExif = 0.0
+                    var rateLocation = 0.0
+                    var rateFaces = 0.0
+                    
+                    let denominator = Double((countCopiedFromDevice == 0) ? countImported : countCopiedFromDevice)
+                    if denominator > 0 {
+                        rateCopied = (countCopiedFromDevice == 0) ? 0.0 : 1.0
+                        rateImported = (countCopiedFromDevice == 0) ? 1.0 : (Double(countImported) / denominator)
+                        rateExif = Double(countExtractedExif) / denominator
+                        rateLocation = Double(countRecognizedLocation) / denominator
+                        rateFaces = Double(countRecognizedFaces) / denominator
+                    }
+                    
+                    self.indCopiedFromDevice.doubleValue = rateCopied * 100
+                    self.indImported.doubleValue = rateImported * 100
+                    self.indExif.doubleValue = rateExif * 100
+                    self.indLocation.doubleValue = rateLocation * 100
+                    self.indFaces.doubleValue = rateFaces * 100
+                }
+            }
+        }
         DispatchQueue.global().async {
             if let repository = RepositoryDao.default.getRepository(repositoryPath: path) {
                 
@@ -124,6 +220,43 @@ class RepositoryDetailViewController: NSViewController {
             self.txtDetail.string = ""
             self.txtDetail.isHidden = true
         }
+    }
+    
+    @IBAction func onDropInClicked(_ sender: NSButton) {
+        if let repository = RepositoryDao.default.getRepository(repositoryPath: self._repositoryPath),
+            let device = DeviceDao.default.getDevice(deviceId: repository.deviceId),
+            let deviceType = device.type {
+            
+            var dev:PhoneDevice
+            if deviceType == "iPhone" {
+                dev = PhoneDevice(type: .iPhone, deviceId: device.deviceId ?? "", manufacture: device.manufacture ?? "", model: device.model ?? "")
+                dev.name = device.name ?? ""
+                
+            }else if deviceType == "Android" {
+                dev = PhoneDevice(type: .Android, deviceId: device.deviceId ?? "", manufacture: device.manufacture ?? "", model: device.model ?? "")
+                dev.name = device.name ?? ""
+            }else{
+                return
+            }
+            
+            self.onShowDeviceDialog(dev)
+            
+        }
+    }
+    
+    @IBAction func onImportClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onExifClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onLocationClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onFacesClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onStopClicked(_ sender: NSButton) {
     }
     
 }

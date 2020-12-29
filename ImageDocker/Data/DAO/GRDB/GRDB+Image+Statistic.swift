@@ -12,6 +12,71 @@ import GRDB
 class ImageCountDaoGRDB : ImageCountDaoInterface {
     
     // MARK: - COLLECTION
+    
+    func countCopiedFromDevice(deviceId:String) -> Int {
+        var result = 0
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "deviceId=?", arguments:[deviceId]).fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func countImportedAsEditable(repositoryPath:String) -> Int {
+        var result = 0
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "repositoryPath=?", arguments:[repositoryPath]).fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func countExtractedExif(repositoryPath:String) -> Int {
+        var result = 0
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "exifCreateDate is not null and repositoryPath=?", arguments:[repositoryPath]).fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func countRecognizedLocation(repositoryPath:String) -> Int {
+        var result = 0
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "(address is not null or assignAddress is not null) and repositoryPath=?", arguments:[repositoryPath]).fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
+    func countRecognizedFaces(repositoryPath:String) -> Int {
+        var result = 0
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "recognizedFace=1 and repositoryPath=?", arguments:[repositoryPath]).fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
 
     // count by date & place
     func countPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> Int {

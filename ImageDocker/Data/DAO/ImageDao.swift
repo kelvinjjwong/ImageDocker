@@ -277,6 +277,26 @@ class ImageCountDao {
         }
     }
     
+    func countCopiedFromDevice(deviceId:String) -> Int {
+        return self.impl.countCopiedFromDevice(deviceId: deviceId)
+    }
+    
+    func countImportedAsEditable(repositoryPath:String) -> Int {
+        return self.impl.countImportedAsEditable(repositoryPath: repositoryPath)
+    }
+    
+    func countExtractedExif(repositoryPath:String) -> Int {
+        return self.impl.countExtractedExif(repositoryPath: repositoryPath)
+    }
+    
+    func countRecognizedLocation(repositoryPath:String) -> Int {
+        return self.impl.countRecognizedLocation(repositoryPath: repositoryPath)
+    }
+    
+    func countRecognizedFaces(repositoryPath:String) -> Int {
+        return self.impl.countRecognizedFaces(repositoryPath: repositoryPath)
+    }
+    
     // count by date & place
     func countPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> Int {
         return self.impl.countPhotoFiles(year: year, month: month, day: day, ignoreDate: ignoreDate, country: country, province: province, city: city, place: place, includeHidden: includeHidden, imageSource: imageSource, cameraModel: cameraModel)

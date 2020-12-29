@@ -35,7 +35,12 @@ extension ViewController {
 
     func openRepositoryDetail(container:ImageContainer, url:URL, sender:NSButton) {
         self.createRepositoryDetailPopover()
-        self.repositoryDetailViewController.initView(path: container.path, onConfigure: {
+        self.repositoryDetailViewController.initView(path: container.path,
+                                                     onShowDeviceDialog: { device in
+                                                        
+                                                        self.openDeviceCopyView(device: device, connected: false)
+        },
+                                                     onConfigure: {
             let viewController = EditRepositoryViewController()
             let window = NSWindow(contentViewController: viewController)
             
@@ -129,7 +134,7 @@ extension ViewController {
         if(myPopover == nil){
             myPopover = NSPopover()
             
-            let frame = CGRect(origin: .zero, size: CGSize(width: 660, height: 360))
+            let frame = CGRect(origin: .zero, size: CGSize(width: 1310, height: 360))
             self.repositoryDetailViewController = RepositoryDetailViewController()
             self.repositoryDetailViewController.view.frame = frame
             
