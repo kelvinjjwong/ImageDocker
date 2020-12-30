@@ -843,6 +843,15 @@ order by "date"
         """)
     }
     
+    func getPhotoFilesWithoutExif(repositoryPath:String, limit: Int?) -> [Image] {
+        let db = PostgresConnection.database()
+        return Image.fetchAll(db, where: """
+        "repositoryPath"='\(repositoryPath)' and hidden != true AND "cameraMaker" is null and ("lastTimeExtractExif" = 0 or "updateExifDate" is null OR "photoTakenYear" is null OR "photoTakenYear" = 0 OR (latitude <> '0.0' AND "latitudeBD" = '0.0') OR ("latitudeBD" <> '0.0' AND country = ''))
+        """, orderBy: """
+        "photoTakenDate", filename
+        """)
+    }
+    
     func getPhotoFilesWithoutLocation() -> [Image] {
         let db = PostgresConnection.database()
         return Image.fetchAll(db, where: """

@@ -56,15 +56,15 @@ extension ViewController {
 //            }
 //        })
         
-        self.exportPhotosTimers = Timer.scheduledTimer(withTimeInterval: 600, repeats: true, block:{_ in
-            print("\(Date()) TRYING TO EXPORT \(self.suppressedExport)")
-            guard TaskManager.allowExport() else {return}
-            print("\(Date()) EXPORT FUNCTION WAITING FOR UPDATE")
-//            DispatchQueue.global().async {
-////                ExportManager.default.export(after: self.lastExportPhotos!)
-////                self.lastExportPhotos = Date()
-//            }
-        })
+//        self.exportPhotosTimers = Timer.scheduledTimer(withTimeInterval: 600, repeats: true, block:{_ in
+//            print("\(Date()) TRYING TO EXPORT \(self.suppressedExport)")
+//            guard TaskManager.allowExport() else {return}
+//            print("\(Date()) EXPORT FUNCTION WAITING FOR UPDATE")
+////            DispatchQueue.global().async {
+//////                ExportManager.default.export(after: self.lastExportPhotos!)
+//////                self.lastExportPhotos = Date()
+////            }
+//        })
         
         //        self.scanRepositoriesTimer = Timer.scheduledTimer(withTimeInterval: 180, repeats: true, block:{_ in
         //            print("\(Date()) TRY TO SCAN REPOS")
@@ -73,17 +73,17 @@ extension ViewController {
         //            self.startScanRepositories()
         //        })
         
-        self.scanPhotosToLoadExifTimer = Timer.scheduledTimer(withTimeInterval: 15, repeats: true, block:{_ in
-            print("\(Date()) TRY TO SCAN PHOTO TO LOAD EXIF")
-            guard !self.suppressedScan && TaskManager.allowReadImagesExif() else { return }
-            print("\(Date()) SCANING PHOTOS TO LOAD EXIF")
-            self.startScanRepositoriesToLoadExif()
-        })
+//        self.scanPhotosToLoadExifTimer = Timer.scheduledTimer(withTimeInterval: 15, repeats: true, block:{_ in
+//            print("\(Date()) TRY TO SCAN PHOTO TO LOAD EXIF")
+//            guard !self.suppressedScan && TaskManager.allowReadImagesExif() else { return }
+//            print("\(Date()) SCANING PHOTOS TO LOAD EXIF")
+//            self.startScanRepositoriesToLoadExif()
+//        })
         
 //        self.testTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { _ in
 //            TaskletManager.default.rehearsal()
 //        })
         
-        FakeTaskletManager.default.rehearsal()
+//        FakeTaskletManager.default.rehearsal()
     }
 }

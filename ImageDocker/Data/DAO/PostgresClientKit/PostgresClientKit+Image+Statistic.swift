@@ -17,6 +17,15 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         """, parameters:[deviceId])
     }
     
+    func countImagesShouldImport(rawStoragePath:String, deviceId:String) -> Int {
+        let db = PostgresConnection.database()
+        return ImageDeviceFile.count(db, where: """
+        "importToPath" in (
+        select '\(rawStoragePath)' || "toSubFolder" from "ImageDevicePath"  where "deviceId"='\(deviceId)' and "exclude"=false and "excludeImported"=false
+        )
+        """)
+    }
+    
     func countImportedAsEditable(repositoryPath:String) -> Int {
         let db = PostgresConnection.database()
         return Image.count(db, where: """

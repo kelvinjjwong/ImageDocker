@@ -60,8 +60,6 @@ struct DeviceCopyDestination {
 
 class DeviceCopyViewController: NSViewController {
     
-    let deviceDao = DeviceDao.default
-    
     let dateFormatter = DateFormatter()
     
     //let mountpoint = PreferencesController.iosDeviceMountPoint()
@@ -200,7 +198,7 @@ class DeviceCopyViewController: NSViewController {
                 marketDisplayName = " (\(marketName))"
             }
             
-            let imageDevice = self.deviceDao.getOrCreateDevice(device: device)
+            let imageDevice = DeviceDao.default.getOrCreateDevice(device: device)
             
             self.lblModel.stringValue = "\(imageDevice.manufacture ?? "") \(imageDevice.model ?? "")\(marketDisplayName)"
             if imageDevice.name != nil && imageDevice.name != "" {
@@ -326,7 +324,7 @@ class DeviceCopyViewController: NSViewController {
                 let filepath:URL = URL(fileURLWithPath: file.onDevicePath).appendingPathComponent(file.folder)
                 let url:URL = URL(fileURLWithPath: pretendPath).appendingPathComponent(file.folder).appendingPathComponent(file.filename)
                 f.path = url.path
-                let importedFile:ImageDeviceFile? = self.deviceDao.getImportedFile(deviceId: self.device.deviceId, file: f)
+                let importedFile:ImageDeviceFile? = DeviceDao.default.getImportedFile(deviceId: self.device.deviceId, file: f)
                 if let deviceFile = importedFile {
                     print("IMPORTED \(f.filename)")
                     f.storedMD5 = deviceFile.fileMD5 ?? ""
@@ -416,7 +414,7 @@ class DeviceCopyViewController: NSViewController {
             if shouldExclude {
                 continue
             }
-            let deviceFile = self.deviceDao.getOrCreateDeviceFile(deviceId: self.device.deviceId, file: file)
+            let deviceFile = DeviceDao.default.getOrCreateDeviceFile(deviceId: self.device.deviceId, file: file)
             var f = file
             if deviceFile.importAsFilename != "" {
                 f.storedMD5 = deviceFile.fileMD5 ?? ""
@@ -723,10 +721,10 @@ class DeviceCopyViewController: NSViewController {
         
         DispatchQueue.global().async {
         
-            var imageDevice = self.deviceDao.getOrCreateDevice(device: self.device)
+            var imageDevice = DeviceDao.default.getOrCreateDevice(device: self.device)
             
             if let oldStoragePath = imageDevice.storagePath, oldStoragePath != storagePath {
-                let deviceFiles = self.deviceDao.getDeviceFiles(deviceId: self.device.deviceId)
+                let deviceFiles = DeviceDao.default.getDeviceFiles(deviceId: self.device.deviceId)
                 if deviceFiles.count > 0 {
                     
                     self.accumulator?.reset()
@@ -766,7 +764,7 @@ class DeviceCopyViewController: NSViewController {
                             var file = deviceFile
                             file.importToPath = newFolderPath.path
                             print("Update [\(localFilePath)] with new importToPath: \(newFolderPath.path)")
-                            self.deviceDao.saveDeviceFile(file: file)
+                            DeviceDao.default.saveDeviceFile(file: file)
                         }
                         
                         DispatchQueue.main.async {
@@ -777,7 +775,7 @@ class DeviceCopyViewController: NSViewController {
             }
         
             if let oldRepositoryPath = imageDevice.repositoryPath, oldRepositoryPath != repositoryPath {
-                let deviceFiles = self.deviceDao.getDeviceFiles(deviceId: self.device.deviceId)
+                let deviceFiles = DeviceDao.default.getDeviceFiles(deviceId: self.device.deviceId)
                 if deviceFiles.count > 0 {
                     
                     self.accumulator?.reset()
@@ -829,7 +827,7 @@ class DeviceCopyViewController: NSViewController {
             imageDevice.storagePath = storagePath
             imageDevice.repositoryPath = repositoryPath
             imageDevice.marketName = marketName
-            self.deviceDao.saveDevice(device: imageDevice)
+            DeviceDao.default.saveDevice(device: imageDevice)
             
             DispatchQueue.main.async {
                 self.enableButtons()
@@ -844,7 +842,7 @@ class DeviceCopyViewController: NSViewController {
     
     @IBAction func onDeleteRecordsClicked(_ sender: NSButton) {
         self.lblMessage.stringValue = "Deleting records ..."
-        self.deviceDao.deleteDeviceFiles(deviceId: self.device.deviceId)
+        DeviceDao.default.deleteDeviceFiles(deviceId: self.device.deviceId)
         self.lblMessage.stringValue = "Deleted records."
     }
     
@@ -1097,7 +1095,7 @@ class DeviceCopyViewController: NSViewController {
                                     deviceFile.importToPath = destinationPathForFile
                                     deviceFile.importAsFilename = file.filename
                                     deviceFile.importDate = date
-                                    self.deviceDao.saveDeviceFile(file: deviceFile)
+                                    DeviceDao.default.saveDeviceFile(file: deviceFile)
                                     print("Updated \(file.path)")
                                 }
                             }else{
@@ -1118,7 +1116,7 @@ class DeviceCopyViewController: NSViewController {
                                     deviceFile.importToPath = destinationPathForFile
                                     deviceFile.importAsFilename = file.filename
                                     deviceFile.importDate = date
-                                    self.deviceDao.saveDeviceFile(file: deviceFile)
+                                    DeviceDao.default.saveDeviceFile(file: deviceFile)
                                     print("Updated \(file.path)")
                                 }
                             }else{
@@ -1146,7 +1144,7 @@ class DeviceCopyViewController: NSViewController {
                             deviceFile.importToPath = destinationPathForFile
                             deviceFile.importAsFilename = file.filename
                             deviceFile.importDate = date
-                            self.deviceDao.saveDeviceFile(file: deviceFile)
+                            DeviceDao.default.saveDeviceFile(file: deviceFile)
                             print("Updated \(file.path)")
                         }
                     }
@@ -1257,7 +1255,7 @@ class DeviceCopyViewController: NSViewController {
                 }
             }
             if needSave {
-                self.deviceDao.saveDeviceFile(file: file)
+                DeviceDao.default.saveDeviceFile(file: file)
             }
         }
     }
@@ -1270,7 +1268,7 @@ class DeviceCopyViewController: NSViewController {
         
         self.disableButtons()
         
-        let deviceFiles = self.deviceDao.getDeviceFiles(deviceId: self.device.deviceId)
+        let deviceFiles = DeviceDao.default.getDeviceFiles(deviceId: self.device.deviceId)
         print("device file count: \(deviceFiles.count)")
         if deviceFiles.count > 0 {
             self.accumulator = Accumulator(target: deviceFiles.count, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblProgressMessage)
@@ -1349,7 +1347,7 @@ class DeviceCopyViewController: NSViewController {
                     self.deviceFiles_filtered[selectedPath!.sourcePath] = nil
                 }
             }
-            self.deviceDao.deleteDevicePath(deviceId: self.device.deviceId, path: path.sourcePath)
+            DeviceDao.default.deleteDevicePath(deviceId: self.device.deviceId, path: path.sourcePath)
             selectedPath = nil
             tblSourcePath.reloadData()
         }
@@ -1396,11 +1394,11 @@ class DeviceCopyViewController: NSViewController {
                     // SAVE DEVICE PATH TO DB
                     if isExclude {
                         let devicePath = ImageDevicePath.exclude(deviceId: self.device.deviceId, path: directory)
-                        self.deviceDao.saveDevicePath(file: devicePath)
+                        DeviceDao.default.saveDevicePath(file: devicePath)
                         dest = DeviceCopyDestination.from(devicePath)
                     }else{
                         let devicePath = ImageDevicePath.include(deviceId: self.device.deviceId, path: directory, toSubFolder: toSubFolder, manyChildren: hasManyChildren)
-                        self.deviceDao.saveDevicePath(file: devicePath)
+                        DeviceDao.default.saveDevicePath(file: devicePath)
                         dest = DeviceCopyDestination.from(devicePath)
                     }
                     self.paths.append(dest)

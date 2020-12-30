@@ -40,6 +40,8 @@ class RepositoryDetailViewController: NSViewController {
     @IBOutlet weak var lblMessage: NSTextField!
     @IBOutlet weak var indProgress: NSProgressIndicator!
     @IBOutlet weak var btnStop: NSButton!
+    @IBOutlet weak var lblShouldImport: NSTextField!
+    @IBOutlet weak var indShouldImport: NSLevelIndicator!
     
     
     // MARK: INIT VIEW
@@ -85,6 +87,7 @@ class RepositoryDetailViewController: NSViewController {
         self.lblTotalSize.stringValue = "0 GB"
 
         self.lblCopiedFromDevice.stringValue = "0"
+        self.lblShouldImport.stringValue = "0"
         self.lblImported.stringValue = "0"
         self.lblExif.stringValue = "0"
         self.lblLocation.stringValue = "0"
@@ -93,6 +96,10 @@ class RepositoryDetailViewController: NSViewController {
         self.indCopiedFromDevice.maxValue = 100.0
         self.indCopiedFromDevice.minValue = 0.0
         self.indCopiedFromDevice.doubleValue = 0.0
+        
+        self.indShouldImport.maxValue = 100.0
+        self.indShouldImport.minValue = 0.0
+        self.indShouldImport.doubleValue = 0.0
         
         self.indImported.maxValue = 100.0
         self.indImported.minValue = 0.0
@@ -118,7 +125,14 @@ class RepositoryDetailViewController: NSViewController {
         DispatchQueue.global().async {
             if let repository = RepositoryDao.default.getRepository(repositoryPath: path) {
                 
+                var isAndroid = false
+                if repository.deviceId != "" {
+                    let device = DeviceDao.default.getDevice(deviceId: repository.deviceId)
+                    isAndroid = ( (device?.type ?? "") == "Android")
+                }
+                
                 let countCopiedFromDevice = ImageCountDao.default.countCopiedFromDevice(deviceId: repository.deviceId)
+                let countShouldImport = isAndroid ? ( ImageCountDao.default.countImagesShouldImport(rawStoragePath: repository.storagePath.withStash(), deviceId: repository.deviceId) ) : countCopiedFromDevice
                 let countImported = ImageCountDao.default.countImportedAsEditable(repositoryPath: repository.repositoryPath)
                 let countExtractedExif = ImageCountDao.default.countExtractedExif(repositoryPath: repository.repositoryPath)
                 let countRecognizedLocation = ImageCountDao.default.countRecognizedLocation(repositoryPath: repository.repositoryPath)
@@ -126,12 +140,14 @@ class RepositoryDetailViewController: NSViewController {
                 
                 DispatchQueue.main.async {
                     self.lblCopiedFromDevice.stringValue = "\(countCopiedFromDevice)"
+                    self.lblShouldImport.stringValue = "\(countShouldImport)"
                     self.lblImported.stringValue = "\(countImported)"
                     self.lblExif.stringValue = "\(countExtractedExif)"
                     self.lblLocation.stringValue = "\(countRecognizedLocation)"
                     self.lblFaces.stringValue = "\(countRecognizedFaces)"
                     
                     var rateCopied = 0.0
+                    var rateShouldImport = 0.0
                     var rateImported = 0.0
                     var rateExif = 0.0
                     var rateLocation = 0.0
@@ -140,6 +156,7 @@ class RepositoryDetailViewController: NSViewController {
                     let denominator = Double((countCopiedFromDevice == 0) ? countImported : countCopiedFromDevice)
                     if denominator > 0 {
                         rateCopied = (countCopiedFromDevice == 0) ? 0.0 : 1.0
+                        rateShouldImport = (countCopiedFromDevice == 0) ? 0.0 : (Double(countShouldImport) / Double(countCopiedFromDevice) )
                         rateImported = (countCopiedFromDevice == 0) ? 1.0 : (Double(countImported) / denominator)
                         rateExif = Double(countExtractedExif) / denominator
                         rateLocation = Double(countRecognizedLocation) / denominator
@@ -147,6 +164,7 @@ class RepositoryDetailViewController: NSViewController {
                     }
                     
                     self.indCopiedFromDevice.doubleValue = rateCopied * 100
+                    self.indShouldImport.doubleValue = rateShouldImport * 100
                     self.indImported.doubleValue = rateImported * 100
                     self.indExif.doubleValue = rateExif * 100
                     self.indLocation.doubleValue = rateLocation * 100
@@ -244,10 +262,66 @@ class RepositoryDetailViewController: NSViewController {
         }
     }
     
+    fileprivate func toggleButtons(_ state:Bool) {
+        DispatchQueue.main.async {
+            self.lblMessage.isHidden = state
+            self.indProgress.isHidden = state
+            self.btnStop.isHidden = state
+            
+            self.btnDropIn.isEnabled = state
+            self.btnImport.isEnabled = state
+            self.btnExif.isEnabled = state
+            self.btnLocation.isEnabled = state
+            self.btnFaces.isEnabled = state
+            
+            self.btnConfig.isEnabled = state
+        }
+    }
+    
     @IBAction func onImportClicked(_ sender: NSButton) {
+        if let repository = RepositoryDao.default.getRepository(repositoryPath: self._repositoryPath) {
+            self.toggleButtons(false)
+            let indicator = Accumulator(target: 1000,
+                                        indicator: self.indProgress,
+                                        suspended: true,
+                                        lblMessage: self.lblMessage,
+                                        presetAddingMessage: "Importing images ...",
+                                        onCompleted: { data in
+                                            print("====== COMPLETED SCAN single REPO \(repository.name)")
+                                            self.toggleButtons(true)
+            },
+                                        onDataChanged: {
+                                            print("====== DATE CHANGED when SCAN single REPO \(repository.name)")
+            })
+            
+            ImageFolderTreeScanner.default.scanSingleRepository_asTask(repository: repository, indicator: indicator, onCompleted: {
+                print(">>>> onCompleted")
+                self.toggleButtons(true)
+            })
+        }
     }
     
     @IBAction func onExifClicked(_ sender: NSButton) {
+        if let repository = RepositoryDao.default.getRepository(repositoryPath: self._repositoryPath) {
+            self.toggleButtons(false)
+            let indicator = Accumulator(target: 2,
+                                        indicator: self.indProgress,
+                                        suspended: true,
+                                        lblMessage: self.lblMessage,
+                                        presetAddingMessage: "Searching images for EXIF ...",
+                                        onCompleted: { data in
+                                            print("====== COMPLETED SCAN single REPO for EXIF \(repository.name)")
+                                            self.toggleButtons(true)
+            },
+                                        onDataChanged: {
+                                            print("====== DATE CHANGED when SCAN single REPO for EXIF \(repository.name)")
+            })
+            
+            ImageFolderTreeScanner.default.scanPhotosToLoadExif_asTask(repository: repository, indicator: indicator, onCompleted: {
+                print(">>>> onCompleted")
+                self.toggleButtons(true)
+            })
+        }
     }
     
     @IBAction func onLocationClicked(_ sender: NSButton) {

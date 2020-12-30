@@ -26,6 +26,23 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
         return result
     }
     
+    func countImagesShouldImport(rawStoragePath:String, deviceId:String) -> Int {
+        var result = 0
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: """
+                importToPath in (
+                select ? || toSubFolder from ImageDevicePath  where deviceId=? and exclude=0 and excludeImported=0
+                )
+                """, arguments:[rawStoragePath, deviceId]).fetchCount(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
     func countImportedAsEditable(repositoryPath:String) -> Int {
         var result = 0
         do {

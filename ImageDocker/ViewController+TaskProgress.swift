@@ -53,5 +53,6 @@ extension ViewController {
         
         let cellRect = sender.bounds
         self.taskProgressPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
+        self.taskProgressViewController.onPopoverShow()
     }
 }

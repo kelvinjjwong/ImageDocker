@@ -361,7 +361,7 @@ public class PostgresDB : DBExecutor {
             //let columnNames = generator.persistenceContainer.columns
             
             _sql = statement.sql
-            //print(">> count sql: \(statement.sql)")
+//            print(">> count sql: \(statement.sql)")
             let stmt = try connection.prepareStatement(text: statement.sql)
             defer { stmt.close() }
 

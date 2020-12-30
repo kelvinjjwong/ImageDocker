@@ -353,7 +353,7 @@ extension ImageFile {
         
         if needSave {
             print("UPDATE COORD TO NON ZERO")
-            self.imageRecordDao.saveImage(image: photoFile)
+            ImageRecordDao.default.saveImage(image: photoFile)
         }
         
         //print("COORD IS ZERO ? \(location.coordinate?.isZero) - \(fileName)")

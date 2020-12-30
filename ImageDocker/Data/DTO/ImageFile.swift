@@ -16,9 +16,6 @@ import GRDB
 
 class ImageFile {
     
-    let imageRecordDao = ImageRecordDao.default
-    let repositoryDao = RepositoryDao.default
-    
     // MARK: - URL
   
     var url: URL
@@ -27,7 +24,7 @@ class ImageFile {
     func getBackupUrl() -> URL? {
         if let img = self.imageData {
             let pathOfRepository = img.repositoryPath.withoutStash()
-            if let repo = self.repositoryDao.getContainer(path: pathOfRepository) {
+            if let repo = RepositoryDao.default.getContainer(path: pathOfRepository) {
                 print("backup url: \(repo.storagePath.withStash())\(img.subPath)")
                 return URL(fileURLWithPath: "\(repo.storagePath.withStash())\(img.subPath)")
             }
@@ -135,14 +132,14 @@ class ImageFile {
     func hide() {
         if imageData != nil {
             imageData?.hidden = true
-            self.imageRecordDao.saveImage(image: imageData!)
+            ImageRecordDao.default.saveImage(image: imageData!)
         }
     }
     
     func show() {
         if imageData != nil {
             imageData?.hidden = false
-            self.imageRecordDao.saveImage(image: imageData!)
+            ImageRecordDao.default.saveImage(image: imageData!)
         }
     }
     
@@ -151,7 +148,7 @@ class ImageFile {
     
     func save() -> ExecuteState{
         if self.imageData != nil {
-            return self.imageRecordDao.saveImage(image: self.imageData!)
+            return ImageRecordDao.default.saveImage(image: self.imageData!)
         }else{
             return .NO_RECORD
         }
@@ -266,13 +263,13 @@ class ImageFile {
         
         if let repo = repository {
             print("repo has value, getOrCreatePhoto")
-            self.imageData = self.imageRecordDao.getOrCreatePhoto(filename: fileName,
+            self.imageData = ImageRecordDao.default.getOrCreatePhoto(filename: fileName,
                                                              path: url.path,
                                                              parentPath: url.deletingLastPathComponent().path,
                                                              repositoryPath: repo.repositoryPath.withStash())
         }else{
             print("repo is null, getOrCreatePhoto")
-            self.imageData = self.imageRecordDao.getOrCreatePhoto(filename: fileName,
+            self.imageData = ImageRecordDao.default.getOrCreatePhoto(filename: fileName,
                                                                  path: url.path,
                                                                  parentPath: url.deletingLastPathComponent().path,
                                                                  repositoryPath: nil)

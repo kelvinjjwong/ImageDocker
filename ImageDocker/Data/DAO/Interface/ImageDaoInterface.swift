@@ -113,6 +113,8 @@ protocol ImageSearchDaoInterface {
     
     func getPhotoFilesWithoutExif(limit:Int?) -> [Image]
     
+    func getPhotoFilesWithoutExif(repositoryPath:String, limit:Int?) -> [Image]
+    
     // MARK: - LOCATION
     
     func getPhotoFilesWithoutLocation() -> [Image]
@@ -143,6 +145,8 @@ protocol ImageCountDaoInterface {
     
     
     func countCopiedFromDevice(deviceId:String) -> Int
+    
+    func countImagesShouldImport(rawStoragePath:String, deviceId:String) -> Int
     
     func countImportedAsEditable(repositoryPath:String) -> Int
     

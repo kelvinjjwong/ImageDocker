@@ -38,6 +38,13 @@ class TaskProgressViewController: NSViewController {
         TaskletManager.default.bindToView(view: self).loadTasks()
     }
     
+    func onPopoverShow() {
+        print("popover show")
+        for task in tasks {
+            task.notifyChange()
+        }
+    }
+    
     func addNoTaskNotice() {
         let storyboard = NSStoryboard(name: "TaskProgressStackItem", bundle: nil)
         let viewController = storyboard.instantiateController(withIdentifier: "TaskProgress") as! ProgressViewController
@@ -151,6 +158,8 @@ class TaskProgressViewController: NSViewController {
         if task.state == "STOPPED" {
             return
         }
+        
+        print("====== ui updating task: \(task.name) - \(task.state)")
         
         if let viewController = self.tasksView[task.id] {
             

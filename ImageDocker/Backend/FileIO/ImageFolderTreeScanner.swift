@@ -17,12 +17,6 @@ class DirectoryPaths : NSObject {
 
 class ImageFolderTreeScanner {
     
-    let repositoryDao = RepositoryDao.default
-    let deviceDao = DeviceDao.default
-    let imageSearchDao = ImageSearchDao.default
-    let imageRecordDao = ImageRecordDao.default
-    let imageCountDao = ImageCountDao.default
-    
     static let `default` = ImageFolderTreeScanner()
     var suppressedScan:Bool = false
     
@@ -55,13 +49,13 @@ class ImageFolderTreeScanner {
     }
     
     func scanImageFolderFromDatabase(fast:Bool = true) -> [ImageFolder] {
-        let excludedContainerPaths = self.deviceDao.getExcludedImportedContainerPaths()
+        let excludedContainerPaths = DeviceDao.default.getExcludedImportedContainerPaths()
         
         var imageFolders:[ImageFolder] = [ImageFolder]()
         
         print("\(Date()) Loading containers from db ")
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "FOLDERSETTER_BEGIN"), object: nil)
-        let containers = self.repositoryDao.getAllContainers()
+        let containers = RepositoryDao.default.getAllContainers()
         
         print("\(Date()) Setting up containers' parent ")
         
@@ -255,7 +249,7 @@ class ImageFolderTreeScanner {
                         continue;
                     }
                     
-                    let saveState = self.repositoryDao.saveImageContainer(container: imageContainer)
+                    let saveState = RepositoryDao.default.saveImageContainer(container: imageContainer)
                     if saveState == .OK {
                         print("Saved container into DB \(k)/\(kall): \(imageContainer.path)")
                     }else{
@@ -276,44 +270,56 @@ class ImageFolderTreeScanner {
         return imageFolders
     }
     
-    func scanPhotosToLoadExif(taskId:String = "", indicator:Accumulator? = nil)  {
-        if suppressedScan {
-            if indicator != nil {
-                indicator?.forceComplete()
-            }
-            return
-        }
+    fileprivate func scanPhotosToLoadExif(photos:[Image], taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil) {
+//        if suppressedScan {
+//            if indicator != nil {
+//                indicator?.forceComplete()
+//            }
+//            return
+//        }
+        
+        print("checking stop flag for task id \(taskId)")
         
         if TaskletManager.default.isTaskStopped(id: taskId) == true { return }
         
+        print("continue load exif")
+        
         if indicator != nil {
             DispatchQueue.main.async {
-                let _ = indicator?.add("[EXIF Scan] Loading images ...")
+                let _ = indicator?.add("[EXIF Scan] Extracting EXIF ...")
             }
         }
         
-        TaskletManager.default.updateProgress(id: taskId, message: "[EXIF Scan] Loading images ...", increase: false)
+        TaskletManager.default.updateProgress(id: taskId, message: "[EXIF Scan] Extracting EXIF ...", increase: false)
         
-        let excludedContainerPaths = self.deviceDao.getExcludedImportedContainerPaths(withStash: true)
-
-        let photos = self.imageSearchDao.getPhotoFilesWithoutExif()
-        print("PHOTOS WITHOUT EXIF: \(photos.count)")
-        if photos.count > 0 {
+        let excludedContainerPaths = DeviceDao.default.getExcludedImportedContainerPaths(withStash: true)
+        
+        print("loaded excluded container paths")
+        
+        let photoCount = photos.count
+        
+        if photoCount > 0 {
             print("\(Date()) UPDATING EXIF: \(photos.count)")
             if indicator != nil {
-                indicator?.setTarget(photos.count)
+                indicator?.setTarget(photoCount)
             }
 
-            TaskletManager.default.setTotal(id: taskId, total: photos.count)
+            TaskletManager.default.setTotal(id: taskId, total: photoCount)
+            
+            print("set total \(photoCount)")
+            
+            var i = 0
             
             for photo in photos {
                 
-                if suppressedScan {
-                    if indicator != nil {
-                        indicator?.forceComplete()
-                    }
-                    return
-                }
+                i += 1
+                
+//                if suppressedScan {
+//                    if indicator != nil {
+//                        indicator?.forceComplete()
+//                    }
+//                    return
+//                }
                 
                 if TaskletManager.default.isTaskStopped(id: taskId) == true { return }
                 
@@ -333,17 +339,60 @@ class ImageFolderTreeScanner {
                             let _ = indicator?.add("[EXIF Scan] Loading images ...")
                         }
                     }
-                    
-                    TaskletManager.default.updateProgress(id: taskId, message: "[EXIF Scan] Loading images ...", increase: true)
                 }
-            }
+                
+                TaskletManager.default.updateProgress(id: taskId, message: "[EXIF Scan] [\(i)/\(photoCount)] \(photo.subPath)", increase: true)
+                print("finished exif \(photo.subPath)")
+            } // end of images-loop
             //ModelStore.save()
             print("\(Date()) UPDATING EXIF: SAVE DONE")
         }else {
             if indicator != nil {
                 indicator?.forceComplete()
             }
+            TaskletManager.default.updateProgress(id: taskId, message: "No image need to extract EXIF.", increase: false)
         }
+        
+        TaskletManager.default.forceComplete(id: taskId)
+        
+        if onCompleted != nil {
+            onCompleted!()
+        }
+    }
+    
+    func scanPhotosToLoadExif(repository:ImageContainer, taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil)  {
+        if indicator != nil {
+            DispatchQueue.main.async {
+                let _ = indicator?.add("[EXIF Scan] Loading images ...")
+            }
+        }
+        TaskletManager.default.updateProgress(id: taskId, message: "[EXIF Scan] Loading images ...", increase: false)
+        let photos = ImageSearchDao.default.getPhotoFilesWithoutExif(repositoryPath: repository.repositoryPath)
+        print("PHOTOS WITHOUT EXIF: \(photos.count) - \(repository.name)")
+        self.scanPhotosToLoadExif(photos: photos, taskId: taskId, indicator: indicator, onCompleted: onCompleted)
+    }
+    
+    func scanPhotosToLoadExif(taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil)  {
+        if indicator != nil {
+            DispatchQueue.main.async {
+                let _ = indicator?.add("[EXIF Scan] Loading images ...")
+            }
+        }
+        TaskletManager.default.updateProgress(id: taskId, message: "[EXIF Scan] Loading images ...", increase: false)
+        let photos = ImageSearchDao.default.getPhotoFilesWithoutExif()
+        print("PHOTOS WITHOUT EXIF: \(photos.count)")
+        self.scanPhotosToLoadExif(photos: photos, taskId: taskId, indicator: indicator, onCompleted: onCompleted)
+    }
+    
+    func scanPhotosToLoadExif_asTask(repository:ImageContainer, indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil) {
+        let _ = TaskletManager.default.createAndStartTask(type: "EXIF", name: repository.name
+        , exec: { task in
+            DispatchQueue.global().async {
+                self.scanPhotosToLoadExif(repository: repository, taskId: task.id, indicator: indicator, onCompleted: onCompleted)
+            }
+        }, stop: {task in
+            
+        })
     }
     
     func createRepository(name:String,
@@ -453,7 +502,7 @@ class ImageFolderTreeScanner {
         
         if !repoExistInFileSys {
             print("[Repository Scan] Repository does not exist in FileSys: [\(repo.path)]")
-            let deleteState = self.repositoryDao.deleteContainer(path: repo.path, deleteImage: true)
+            let deleteState = RepositoryDao.default.deleteContainer(path: repo.path, deleteImage: true)
             if deleteState == .OK {
                 print("[Repository Scan] Deleted non-exist repository and related images in DB: [\(repo.path)]")
             }else{
@@ -467,11 +516,11 @@ class ImageFolderTreeScanner {
             return (false, filesysUrls, fileUrlToRepo)// continue
         }
         
-        var containers = self.repositoryDao.getAllContainerPaths(repositoryPath: repositoryPath).sorted()
+        var containers = RepositoryDao.default.getAllContainerPaths(repositoryPath: repositoryPath).sorted()
         
 //            var pathToDeviceSubFolder:[String:String] = [:]
         if repo.deviceId != "" {
-            let devicePaths = self.deviceDao.getDevicePaths(deviceId: repo.deviceId)
+            let devicePaths = DeviceDao.default.getDevicePaths(deviceId: repo.deviceId)
             if devicePaths.count > 0 {
                 for devicePath in devicePaths {
                     if !devicePath.exclude && !devicePath.excludeImported {
@@ -491,7 +540,7 @@ class ImageFolderTreeScanner {
                         )
                         
                         if let container = folder.containerFolder, container.parentFolder == "" {
-                            self.repositoryDao.updateImageContainerParentFolder(path: path, parentFolder: repo.path)
+                            RepositoryDao.default.updateImageContainerParentFolder(path: path, parentFolder: repo.path)
                         }
                         if !containers.contains(path) {
                             containers.append(path)
@@ -532,7 +581,7 @@ class ImageFolderTreeScanner {
         
         autoreleasepool { () -> Void in
             
-            let folderDBUrls = self.repositoryDao.getAllContainerPaths(repositoryPath: repositoryPath)
+            let folderDBUrls = RepositoryDao.default.getAllContainerPaths(repositoryPath: repositoryPath)
             let folderUrlsToAdd:[String] = foldersysUrls.subtracting(folderDBUrls).sorted()
             let folderUrlsToRemoved:Set<String> = folderDBUrls.subtracting(foldersysUrls)
             
@@ -636,10 +685,10 @@ class ImageFolderTreeScanner {
                     if !exclude {
                         if let parentFolder = path.getNearestParent(from: containers) {
                             print(">>> parent folder: \(parentFolder)")
-                            self.repositoryDao.updateImageContainerParentFolder(path: path, parentFolder: parentFolder)
+                            RepositoryDao.default.updateImageContainerParentFolder(path: path, parentFolder: parentFolder)
                             
-                            if let parent = self.repositoryDao.getContainer(path: parentFolder), parent.manyChildren == true {
-                                self.repositoryDao.updateImageContainerHideByParent(path: path, hideByParent: true)
+                            if let parent = RepositoryDao.default.getContainer(path: parentFolder), parent.manyChildren == true {
+                                RepositoryDao.default.updateImageContainerHideByParent(path: path, hideByParent: true)
                             }
                         }
                     } // end of not excluded
@@ -657,7 +706,7 @@ class ImageFolderTreeScanner {
                     k+=1
                     // REMOVE sub CONTAINER FROM DB
                     if !FileManager.default.fileExists(atPath: path) {
-                        let deleteState = self.repositoryDao.deleteContainer(path: path, deleteImage: true)
+                        let deleteState = RepositoryDao.default.deleteContainer(path: path, deleteImage: true)
                         
                         if deleteState == .OK {
                             print("Deleted container and related images from DB: \(path)")
@@ -699,6 +748,8 @@ class ImageFolderTreeScanner {
             if indicator != nil { indicator?.display(message: "[FileSys Scan] Images have no gap btw FileSys and DB.") }
             
             TaskletManager.default.updateProgress(id: taskId, message: "[FileSys Scan] Images have no gap btw FileSys and DB.", increase: false)
+            
+            return true
         }else if dbUrls.count < filesysUrls.count {
             let gap = dbUrls.count - filesysUrls.count
             if indicator != nil { indicator?.display(message: "[FileSys Scan] Images in DB[\(dbUrls.count)] less (\(gap)) than in FileSys[\(filesysUrls.count)].") }
@@ -727,9 +778,9 @@ class ImageFolderTreeScanner {
         
         if indicator != nil {
             indicator?.display(message: "Ready for add/remove image records...")
-            
-            TaskletManager.default.updateProgress(id: taskId, message: "Ready for add/remove image records...", increase: false)
         }
+        
+        TaskletManager.default.updateProgress(id: taskId, message: "Ready for add/remove image records...", increase: false)
         
         if indicator != nil {
             indicator?.setTarget(total)
@@ -849,7 +900,7 @@ class ImageFolderTreeScanner {
                 
                 
                 print("Deleting image from DB (delFlag): \(url)")
-                let deleteState = self.imageRecordDao.deletePhoto(atPath: url)
+                let deleteState = ImageRecordDao.default.deletePhoto(atPath: url)
                 
                 if deleteState == .OK {
                     print("Deleted images ... (\(k)/\(urlsToRemoved.count))")
@@ -878,11 +929,12 @@ class ImageFolderTreeScanner {
         return true
     }
     
-    func scanSingleRepository_asTask(repository:ImageContainer) {
+    func scanSingleRepository_asTask(repository:ImageContainer, indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil) {
         let _ = TaskletManager.default.createAndStartTask(type: "IMPORT", name: repository.name
         , exec: { task in
             DispatchQueue.global().async {
-                self.scanSingleRepository(repository: repository, taskId: task.id)
+                self.scanSingleRepository(repository: repository, taskId: task.id, indicator: indicator, onCompleted: onCompleted)
+                TaskletManager.default.forceComplete(id: task.id)
             }
         }, stop: {task in
             
@@ -894,23 +946,22 @@ class ImageFolderTreeScanner {
         
         if TaskletManager.default.isTaskStopped(id: taskId) == true { return false }
         
-        if indicator != nil {
-            indicator?.display(message: "Scanning repository .....")
-        }
+        if indicator != nil { indicator?.display(message: "Scanning repository .....") }
         
         TaskletManager.default.updateProgress(id: taskId, message: "Scanning repository .....", increase: false)
         
-        let excludedContainerPaths = self.deviceDao.getExcludedImportedContainerPaths()
+        let excludedContainerPaths = DeviceDao.default.getExcludedImportedContainerPaths()
         let (_, repoFileSysUrls, repoFileUrlToRepo) = self.scanRepository(repository: repository, excludedContainerPaths: excludedContainerPaths, step: 1, total: 1, taskId: taskId, indicator: indicator)
         
         print("\(Date()) CHECK REPO: CHECK TO BE ADDED AND REMOVED")
-        if indicator != nil {
-            indicator?.display(message: "[FileSys Scan] Checking gap between db and filesys .....")
-        }
+        if indicator != nil { indicator?.display(message: "[FileSys Scan] Checking gap between db and filesys .....") }
+        
+        TaskletManager.default.updateProgress(id: taskId, message: "[FileSys Scan] Checking gap: loading all images from db .....", increase: false)
+        
+        let dbUrls = ImageSearchDao.default.getAllPhotoPaths(repositoryPath: repository.repositoryPath)
         
         TaskletManager.default.updateProgress(id: taskId, message: "[FileSys Scan] Checking gap between db and filesys .....", increase: false)
         
-        let dbUrls = self.imageSearchDao.getAllPhotoPaths(repositoryPath: repository.repositoryPath)
         let shouldContinue = self.applyImportGap(dbUrls: dbUrls, filesysUrls: repoFileSysUrls, fileUrlToRepo: repoFileUrlToRepo, excludedContainerPaths: excludedContainerPaths, taskId: taskId, indicator: indicator)
         
         if !shouldContinue {
@@ -919,11 +970,11 @@ class ImageFolderTreeScanner {
         
         print("\(Date()) TRIGGER ON DATA CHANGED EVENT AFTER FINISHED SCANNING REPOSITORIES")
         if indicator != nil {
-            indicator?.display(message: "[FileSys Scan] Repositories scan done.")
+            indicator?.display(message: "[FileSys Scan] Repository scan done.")
             indicator?.dataChanged()
         }
         
-        TaskletManager.default.updateProgress(id: taskId, message: "[FileSys Scan] Repositories scan done.", increase: false)
+        TaskletManager.default.updateProgress(id: taskId, message: "[FileSys Scan] Repository scan done.", increase: false)
         
         if onCompleted != nil {
             onCompleted!()
@@ -949,7 +1000,7 @@ class ImageFolderTreeScanner {
         
         TaskletManager.default.updateProgress(id: taskId, message: "Loading repositories from database .....", increase: false)
         
-        let repositories = self.repositoryDao.getRepositories()
+        let repositories = RepositoryDao.default.getRepositories()
         print("REPO COUNT = \(repositories.count)")
         
         if indicator != nil {
@@ -958,7 +1009,7 @@ class ImageFolderTreeScanner {
         
         TaskletManager.default.updateProgress(id: taskId, message: "Scanning \(repositories.count) repositories .....", increase: false)
         
-        let excludedContainerPaths = self.deviceDao.getExcludedImportedContainerPaths()
+        let excludedContainerPaths = DeviceDao.default.getExcludedImportedContainerPaths()
         
         var filesysUrls:Set<String> = Set<String>()
         var fileUrlToRepo:[String:ImageContainer] = [:]
@@ -986,7 +1037,7 @@ class ImageFolderTreeScanner {
         
         TaskletManager.default.updateProgress(id: taskId, message: "[FileSys Scan] Checking gap between db and filesys .....", increase: false)
         
-        let dbUrls = self.imageSearchDao.getAllPhotoPaths()
+        let dbUrls = ImageSearchDao.default.getAllPhotoPaths()
         let shouldContinue = self.applyImportGap(dbUrls: dbUrls, filesysUrls: filesysUrls, fileUrlToRepo: fileUrlToRepo, excludedContainerPaths: excludedContainerPaths, indicator: indicator)
         
         if !shouldContinue {
@@ -1025,7 +1076,7 @@ class ImageFolderTreeScanner {
     // TODO: this procedure keep running in background for a long long time, keep getting and counting db records, need consider performance issue, or need change data structure
     func updateContainers(onCompleted: (() -> Void)? = nil , indicator:Accumulator? = nil) {
         var imageFolders:[ImageFolder] = []
-        let exists = self.repositoryDao.getAllContainers()
+        let exists = RepositoryDao.default.getAllContainers()
         if exists.count > 0 {
             for exist in exists{
                 //print("Updating image count of container: \(exist.path)")
@@ -1040,7 +1091,7 @@ class ImageFolderTreeScanner {
                 )
                 imageFolders.append(imageFolder)
                 
-                let count = self.imageCountDao.countPhotoFiles(rootPath: "\(imageFolder.url.path)/")
+                let count = ImageCountDao.default.countPhotoFiles(rootPath: "\(imageFolder.url.path)/")
                 if var container = imageFolder.containerFolder {
                     if container.imageCount != count {
                         var countChange = ""
@@ -1051,7 +1102,7 @@ class ImageFolderTreeScanner {
                         }
                         print("= changing \(container.imageCount) to \(count)")  // don't delete this comment to avoid crash
                         container.imageCount = count
-                        let updateState = self.repositoryDao.saveImageContainer(container: container)
+                        let updateState = RepositoryDao.default.saveImageContainer(container: container)
                         if indicator != nil {
                             if updateState == .OK {
                                 print("Updated image count [\(container.name) \(countChange) (\(container.parentFolder))]")

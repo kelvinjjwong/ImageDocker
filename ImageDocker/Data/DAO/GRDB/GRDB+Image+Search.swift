@@ -341,6 +341,19 @@ select DATE('now', 'localtime')  date
         return result
     }
     
+    func getPhotoFilesWithoutExif(repositoryPath:String, limit:Int? = nil) -> [Image] {
+        var result:[Image] = []
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "repositoryPath='\(repositoryPath)' and hidden != 1 AND cameraMaker is null and (lastTimeExtractExif = 0 or updateExifDate is null OR photoTakenYear is null OR photoTakenYear = 0 OR (latitude <> '0.0' AND latitudeBD = '0.0') OR (latitudeBD <> '0.0' AND COUNTRY = ''))").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
     // MARK: - LOCATION
     
     func getPhotoFilesWithoutLocation() -> [Image] {

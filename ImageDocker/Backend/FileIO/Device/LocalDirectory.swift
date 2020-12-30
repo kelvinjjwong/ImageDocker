@@ -45,7 +45,7 @@ struct LocalDirectory {
     }
     
     func files(in path: String) -> [PhoneFile] {
-        print("getting files from \(path)")
+//        print("getting files from \(path)")
         var result:[PhoneFile] = []
         let pipe = Pipe()
         autoreleasepool { () -> Void in
@@ -65,7 +65,7 @@ struct LocalDirectory {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         pipe.fileHandleForReading.closeFile()
-        print(string)
+//        print(string)
         
         let filenamesForReference = self.filenamesForReference(in: path)
         
@@ -76,14 +76,14 @@ struct LocalDirectory {
                                           allowedExt: Naming.FileType.allowed,
                                           allowedSuffix: ["_backup_hd"], // wechat chatroom image/video thumbnails
                                           deviceOS: .mac)
-        print("got \(result.count) files from \(path)")
+//        print("got \(result.count) files from \(path)")
         return result
     }
     
     
     
     func folders(in path: String, unlimitedDepth:Bool = false) -> [String] {
-        print("getting folders from \(path)")
+//        print("getting folders from \(path)")
         var result:[String] = []
         let pipe = Pipe()
         autoreleasepool { () -> Void in
@@ -109,12 +109,12 @@ struct LocalDirectory {
         pipe.fileHandleForReading.closeFile()
         //print(string)
         result = DeviceShell.getFolderNames(from: string)
-        print("got \(result.count) folders from \(path)")
+//        print("got \(result.count) folders from \(path)")
         return result
     }
     
     fileprivate func filenamesForReference(in path: String, recursive:Bool=false) -> [String:[String]] {
-        print("getting folders from \(path)")
+//        print("getting folders from \(path)")
         var result:[String:[String]] = [:]
         let param = recursive ? "-1tR" : "-1"
         let pipe = Pipe()
@@ -167,7 +167,7 @@ struct LocalDirectory {
     
     
     func filenames(in path: String, ext:Set<String>? = nil) -> [String] {
-        print("getting folders from \(path)")
+//        print("getting folders from \(path)")
         var result:[String] = []
         let pipe = Pipe()
         autoreleasepool { () -> Void in
@@ -196,12 +196,12 @@ struct LocalDirectory {
                                           allowedExt: ext ?? Naming.FileType.allowed,
                                           allowedSuffix: ["_backup_hd"], // wechat chatroom image/video thumbnails
                                           deviceOS: .mac)
-        print("got \(result.count) files from \(path)")
+//        print("got \(result.count) files from \(path)")
         return result
     }
     
     func occupiedDiskSpace(path: String) -> [String:String] {
-        print("getting occupied disk space of \(path)")
+//        print("getting occupied disk space of \(path)")
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let command = Process()
@@ -245,7 +245,7 @@ struct LocalDirectory {
     }
     
     func freeSpace(path: String) -> (String, String, String) {
-        print("getting free space of \(path)")
+//        print("getting free space of \(path)")
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let command = Process()
@@ -272,7 +272,7 @@ struct LocalDirectory {
         let lines = string.components(separatedBy: "\n")
         for line in lines {
             if line == "" || line.hasPrefix("Filesystem") {continue}
-            print(line)
+//            print(line)
             var columns:[String] = []
             let cols = line.components(separatedBy: " ")
             for col in cols {
@@ -291,7 +291,7 @@ struct LocalDirectory {
                 }
             }
         }
-        print("\(mountPoint) -> \(freeSize) / \(totalSize)")
+//        print("\(mountPoint) -> \(freeSize) / \(totalSize)")
         return (totalSize, freeSize, mountPoint.trimmingCharacters(in: .whitespacesAndNewlines))
     }
     

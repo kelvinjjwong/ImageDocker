@@ -217,6 +217,10 @@ class ImageSearchDao {
         return self.impl.getPhotoFilesWithoutExif(limit: limit)
     }
     
+    func getPhotoFilesWithoutExif(repositoryPath:String, limit:Int? = nil) -> [Image] {
+        return self.impl.getPhotoFilesWithoutExif(repositoryPath: repositoryPath, limit: limit)
+    }
+    
     // MARK: - LOCATION
     
     func getPhotoFilesWithoutLocation() -> [Image] {
@@ -279,6 +283,10 @@ class ImageCountDao {
     
     func countCopiedFromDevice(deviceId:String) -> Int {
         return self.impl.countCopiedFromDevice(deviceId: deviceId)
+    }
+    
+    func countImagesShouldImport(rawStoragePath:String, deviceId:String) -> Int {
+        return self.impl.countImagesShouldImport(rawStoragePath: rawStoragePath, deviceId: deviceId)
     }
     
     func countImportedAsEditable(repositoryPath:String) -> Int {

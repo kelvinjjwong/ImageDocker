@@ -424,6 +424,8 @@ class TaskletManager {
     @objc func onTaskChanged(notification: NSNotification) {
         for task in tasks {
             if task.taskid == notification.name.rawValue {
+                print("=== onTaskChanged - \(task.taskid) - \(task.state)")
+                print("viewManager is nil ? \(viewManager == nil)")
                 if let view = viewManager {
                     DispatchQueue.main.async {
                         view.updateTask(task: task)
@@ -549,6 +551,24 @@ class TaskletManager {
         if id == "" {return}
         if let task = self.getTask(id: id) {
             self.updateProgress(task: task, message: message, increase: increase)
+        }
+    }
+    
+    func forceComplete(id:String) {
+        if id == "" {return}
+        if let task = self.getTask(id: id) {
+            task.state = "COMPLETED"
+
+            if self.isSingleMode() {
+                self.tasksStartStopState[task.id] = false
+            }else{
+                if !task.isFixedDelayJob {
+                    self.tasksStartStopState[task.id] = false
+                }
+            }
+
+            task.notifyChange()
+            print("forceComplete notifyChange \(task.name)")
         }
     }
     
@@ -797,35 +817,35 @@ class FakeTaskletManager {
                 self.stubJob(taskId: task.id)
             }
         }, stop: {task in
-            
+
         })
+//
+//        let _ = TaskletManager.default.createAndStartFixedDelayTask(type: "TEST", name: "test5234", total: 10, intervalInSecond: 5, exec: { task in
+//            self.stubFixedDelayJob(task: task)
+//
+//        }, stop: {task in
+//
+//        })
+//
+//        let _ = TaskletManager.default.createAndStartFixedDelayTask(type: "TEST", name: "test1234", total: 10, intervalInSecond: 5, exec: { task in
+//            self.stubFixedDelayJob1(task: task)
+//
+//        }, stop: {task in
+//
+//        })
         
-        let _ = TaskletManager.default.createAndStartFixedDelayTask(type: "TEST", name: "test5234", total: 10, intervalInSecond: 5, exec: { task in
-            self.stubFixedDelayJob(task: task)
-            
-        }, stop: {task in
-            
-        })
-        
-        let _ = TaskletManager.default.createAndStartFixedDelayTask(type: "TEST", name: "test1234", total: 10, intervalInSecond: 5, exec: { task in
-            self.stubFixedDelayJob1(task: task)
-            
-        }, stop: {task in
-            
-        })
-        
-        let _ = TaskletManager.default.createAndStartTask(type: "TEST", name: "test2234", total: 10, exec: { task in
-            let timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { _ in
-                if TaskletManager.default.isTaskStopped(id: task.id) {
-                    return
-                }
-                TaskletManager.default.updateProgress(type: "TEST", name: "test2234", message: "\(Date()) 2 changing", increase: true)
-            })
-            self.fakeTasks[task.id] = timer
-        }, stop: {task in
-            if let timer = self.fakeTasks[task.id] {
-                timer.invalidate()
-            }
-        })
+//        let _ = TaskletManager.default.createAndStartTask(type: "TEST", name: "test2234", total: 10, exec: { task in
+//            let timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { _ in
+//                if TaskletManager.default.isTaskStopped(id: task.id) {
+//                    return
+//                }
+//                TaskletManager.default.updateProgress(type: "TEST", name: "test2234", message: "\(Date()) 2 changing", increase: true)
+//            })
+//            self.fakeTasks[task.id] = timer
+//        }, stop: {task in
+//            if let timer = self.fakeTasks[task.id] {
+//                timer.invalidate()
+//            }
+//        })
     }
 }

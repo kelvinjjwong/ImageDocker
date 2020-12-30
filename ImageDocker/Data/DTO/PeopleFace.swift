@@ -10,9 +10,6 @@ import Cocoa
 
 class PeopleFace {
     
-    let faceDao = FaceDao.default
-    let imageRecordDao = ImageRecordDao.default
-    
     // MARK: SIZE
     
     static let ThumbnailSize = 60
@@ -50,7 +47,7 @@ class PeopleFace {
     
     func reloadData(){
         let id = self.data.id
-        if let face = self.faceDao.getFace(id: id) {
+        if let face = FaceDao.default.getFace(id: id) {
             self.data = face
             self.personName = self.loadPersonName()
         }
@@ -68,7 +65,7 @@ class PeopleFace {
     
     fileprivate func loadPersonName() -> String {
         if self.person == nil {
-            if let peopleId = self.data.peopleId, let person = self.faceDao.getPerson(id: peopleId) {
+            if let peopleId = self.data.peopleId, let person = FaceDao.default.getPerson(id: peopleId) {
                 self.person = person
                 if let shortName = person.shortName, shortName != "" {
                     return shortName
@@ -94,7 +91,7 @@ class PeopleFace {
     var sourceDescription = ""
     
     fileprivate func loadSourceImage() -> NSImage? {
-        if let sourceImage = self.imageRecordDao.getImage(id: self.data.imageId) {
+        if let sourceImage = ImageRecordDao.default.getImage(id: self.data.imageId) {
             let url = URL(fileURLWithPath: sourceImage.path)
             self.sourceDescription = Naming.Export.getImageBrief(image: sourceImage)
             return self.loadImage(url, size: PeopleFace.SourceImageSize)
@@ -104,7 +101,7 @@ class PeopleFace {
     }
     
     fileprivate func loadSourceImageFile() -> ImageFile? {
-        if let sourceImage = self.imageRecordDao.getImage(id: self.data.imageId) {
+        if let sourceImage = ImageRecordDao.default.getImage(id: self.data.imageId) {
             return ImageFile(photoFile: sourceImage)
         }
         return nil
