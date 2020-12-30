@@ -119,6 +119,8 @@ protocol ImageSearchDaoInterface {
     
     func getPhotoFilesWithoutLocation() -> [Image]
     
+    func getPhotoFilesWithoutLocation(repositoryPath:String) -> [Image]
+    
     func getPhotoFiles(after date:Date) -> [Image]
     
     // MARK: - FACE

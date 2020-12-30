@@ -852,6 +852,15 @@ order by "date"
         """)
     }
     
+    func getPhotoFilesWithoutLocation(repositoryPath:String) -> [Image] {
+        let db = PostgresConnection.database()
+        return Image.fetchAll(db, where: """
+        "repositoryPath"='\(repositoryPath)' and hidden != true AND "updateLocationDate" is null
+        """, orderBy: """
+        "photoTakenDate", filename
+        """)
+    }
+    
     func getPhotoFilesWithoutLocation() -> [Image] {
         let db = PostgresConnection.database()
         return Image.fetchAll(db, where: """

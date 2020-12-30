@@ -223,6 +223,10 @@ class ImageSearchDao {
     
     // MARK: - LOCATION
     
+    func getPhotoFilesWithoutLocation(repositoryPath:String) -> [Image] {
+        return self.impl.getPhotoFilesWithoutLocation(repositoryPath: repositoryPath)
+    }
+    
     func getPhotoFilesWithoutLocation() -> [Image] {
         return self.impl.getPhotoFilesWithoutLocation()
     }

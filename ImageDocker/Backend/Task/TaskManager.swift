@@ -691,6 +691,33 @@ class TaskletManager {
         
     }
     
+    func searchRunningTask(name:String) -> Tasklet? {
+        for task in tasks {
+            if task.name == name && task.state != "COMPLETED" && task.state != "STOPPED"  {
+                return task
+            }
+        }
+        return nil
+    }
+    
+    func searchRunningTask(name:String, type:String) -> Tasklet? {
+        for task in tasks {
+            if task.name == name && task.type == type && task.state != "COMPLETED" && task.state != "STOPPED" {
+                return task
+            }
+        }
+        return nil
+    }
+    
+    func searchRunningTask(name:String, types:[String]) -> Tasklet? {
+        for task in tasks {
+            if task.name == name && types.contains(task.type) && task.state != "COMPLETED" && task.state != "STOPPED" {
+                return task
+            }
+        }
+        return nil
+    }
+    
     // MARK: - FOR ALL TASKS
     
     func loadTasks() {

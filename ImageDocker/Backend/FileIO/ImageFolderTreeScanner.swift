@@ -286,11 +286,11 @@ class ImageFolderTreeScanner {
         
         if indicator != nil {
             DispatchQueue.main.async {
-                let _ = indicator?.add("[EXIF Scan] Extracting EXIF ...")
+                let _ = indicator?.add("[Meta Scan] Loading rules ...")
             }
         }
         
-        TaskletManager.default.updateProgress(id: taskId, message: "[EXIF Scan] Extracting EXIF ...", increase: false)
+        TaskletManager.default.updateProgress(id: taskId, message: "[Meta Scan] Loading rules ...", increase: false)
         
         let excludedContainerPaths = DeviceDao.default.getExcludedImportedContainerPaths(withStash: true)
         
@@ -336,12 +336,12 @@ class ImageFolderTreeScanner {
                 }else{
                     if indicator != nil {
                         DispatchQueue.main.async {
-                            let _ = indicator?.add("[EXIF Scan] Loading images ...")
+                            let _ = indicator?.add("[Meta Scan] Loading images ...")
                         }
                     }
                 }
                 
-                TaskletManager.default.updateProgress(id: taskId, message: "[EXIF Scan] [\(i)/\(photoCount)] \(photo.subPath)", increase: true)
+                TaskletManager.default.updateProgress(id: taskId, message: "[Meta Scan] [\(i)/\(photoCount)] \(photo.subPath)", increase: true)
                 print("finished exif \(photo.subPath)")
             } // end of images-loop
             //ModelStore.save()
@@ -350,7 +350,7 @@ class ImageFolderTreeScanner {
             if indicator != nil {
                 indicator?.forceComplete()
             }
-            TaskletManager.default.updateProgress(id: taskId, message: "No image need to extract EXIF.", increase: false)
+            TaskletManager.default.updateProgress(id: taskId, message: "No image need to extract meta.", increase: false)
         }
         
         TaskletManager.default.forceComplete(id: taskId)
@@ -389,6 +389,29 @@ class ImageFolderTreeScanner {
         , exec: { task in
             DispatchQueue.global().async {
                 self.scanPhotosToLoadExif(repository: repository, taskId: task.id, indicator: indicator, onCompleted: onCompleted)
+            }
+        }, stop: {task in
+            
+        })
+    }
+    
+    func scanPhotosToLoadLocation(repository:ImageContainer, taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil)  {
+        if indicator != nil {
+            DispatchQueue.main.async {
+                let _ = indicator?.add("[Location Scan] Loading images ...")
+            }
+        }
+        TaskletManager.default.updateProgress(id: taskId, message: "[Location Scan] Loading images ...", increase: false)
+        let photos = ImageSearchDao.default.getPhotoFilesWithoutLocation(repositoryPath: repository.repositoryPath)
+        print("PHOTOS WITHOUT LOCATION: \(photos.count) - \(repository.name)")
+        self.scanPhotosToLoadExif(photos: photos, taskId: taskId, indicator: indicator, onCompleted: onCompleted)
+    }
+    
+    func scanPhotosToLoadLocation_asTask(repository:ImageContainer, indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil) {
+        let _ = TaskletManager.default.createAndStartTask(type: "LOCATION", name: repository.name
+        , exec: { task in
+            DispatchQueue.global().async {
+                self.scanPhotosToLoadLocation(repository: repository, taskId: task.id, indicator: indicator, onCompleted: onCompleted)
             }
         }, stop: {task in
             

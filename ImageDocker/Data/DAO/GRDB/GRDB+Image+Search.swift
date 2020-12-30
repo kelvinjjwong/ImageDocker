@@ -356,6 +356,19 @@ select DATE('now', 'localtime')  date
     
     // MARK: - LOCATION
     
+    func getPhotoFilesWithoutLocation(repositoryPath:String) -> [Image] {
+        var result:[Image] = []
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "repositoryPath='\(repositoryPath)' and hidden != 1 AND updateLocationDate is null").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
+            }
+        }catch{
+            print(error)
+        }
+        return result
+    }
+    
     func getPhotoFilesWithoutLocation() -> [Image] {
         var result:[Image] = []
         do {

@@ -170,6 +170,12 @@ class RepositoryDetailViewController: NSViewController {
                     self.indLocation.doubleValue = rateLocation * 100
                     self.indFaces.doubleValue = rateFaces * 100
                 }
+                
+                if let _ = TaskletManager.default.searchRunningTask(name: repository.name) {
+                    self.toggleButtons(false)
+                }else{
+                    self.toggleButtons(true)
+                }
             }
         }
         DispatchQueue.global().async {
@@ -325,6 +331,26 @@ class RepositoryDetailViewController: NSViewController {
     }
     
     @IBAction func onLocationClicked(_ sender: NSButton) {
+        if let repository = RepositoryDao.default.getRepository(repositoryPath: self._repositoryPath) {
+            self.toggleButtons(false)
+            let indicator = Accumulator(target: 2,
+                                        indicator: self.indProgress,
+                                        suspended: true,
+                                        lblMessage: self.lblMessage,
+                                        presetAddingMessage: "Searching images for location ...",
+                                        onCompleted: { data in
+                                            print("====== COMPLETED SCAN single REPO for location \(repository.name)")
+                                            self.toggleButtons(true)
+            },
+                                        onDataChanged: {
+                                            print("====== DATE CHANGED when SCAN single REPO for location \(repository.name)")
+            })
+            
+            ImageFolderTreeScanner.default.scanPhotosToLoadLocation_asTask(repository: repository, indicator: indicator, onCompleted: {
+                print(">>>> onCompleted")
+                self.toggleButtons(true)
+            })
+        }
     }
     
     @IBAction func onFacesClicked(_ sender: NSButton) {
