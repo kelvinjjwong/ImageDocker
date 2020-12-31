@@ -17,8 +17,8 @@ extension ViewController {
             DispatchQueue.main.async {
 //                self.btnScanState.image = NSImage(named: NSImage.Name.statusAvailable)
             }
-            self.treeLoadingIndicator = Accumulator(target: 1000, indicator: self.progressIndicator, suspended: true,
-                                                    lblMessage: self.lblProgressMessage,
+            self.treeLoadingIndicator = Accumulator(target: 1000, indicator: nil, suspended: true,
+                                                    lblMessage: nil,
                                                     presetAddingMessage: "Importing images ...",
                                                     onCompleted: {data in
                                                         print("COMPLETE SCAN REPO")
@@ -75,8 +75,8 @@ extension ViewController {
                 DispatchQueue.main.async {
 //                    self.btnScanState.image = NSImage(named: NSImage.Name.statusAvailable)
                 }
-                self.treeLoadingIndicator = Accumulator(target: 1000, indicator: self.progressIndicator, suspended: true,
-                                                        lblMessage: self.lblProgressMessage,
+                self.treeLoadingIndicator = Accumulator(target: 1000, indicator: nil, suspended: true,
+                                                        lblMessage: nil,
                                                         presetAddingMessage: "Extracting EXIF ...",
                                                         onCompleted: { data in
                                                             print("COMPLETE SCAN PHOTOS TO LOAD EXIF")
@@ -85,7 +85,7 @@ extension ViewController {
                                                             TaskManager.readingImagesExif = false
                                                             DispatchQueue.main.async {
 //                                                                self.btnScanState.image = NSImage(named: NSImage.Name.statusPartiallyAvailable)
-                                                                self.lblProgressMessage.stringValue = ""
+//                                                                self.lblProgressMessage.stringValue = ""
                                                             }
                 }
                 )

@@ -11,7 +11,6 @@ import Cocoa
 extension ViewController {
     
     internal func setupFacesMenu() {
-        self.btnStop.isHidden = true
         
         self.btnFaces.menu?.addItem(NSMenuItem.separator())
         self.btnFaces.menu?.addItem(withTitle: "Manage faces", action: #selector(faceMenuManageAction(_:)), keyEquivalent: "")
@@ -167,18 +166,18 @@ extension ViewController {
                     tasklet.changeListener(selector: #selector(taskletObserver(notification:)))
                     self.runningFaceTask = true
                     self.stopFacesTask = false
-                    self.btnStop.isHidden = false
-                    self.lblProgressMessage.stringValue = "\(action) faces in collection: loading images ..."
-                    
+//                    self.btnStop.isHidden = false
+//                    self.lblProgressMessage.stringValue = "\(action) faces in collection: loading images ..."
+//
                     DispatchQueue.global().async {
                         for imageFile in self.imagesLoader.getItems() {
                             if self.stopFacesTask {
                                 tasklet.forceStop = true
                                 tasklet.running = false
                                 tasklet.forceStopped = true
-                                DispatchQueue.main.async {
-                                    self.btnStop.isHidden = true
-                                }
+//                                DispatchQueue.main.async {
+//                                    self.btnStop.isHidden = true
+//                                }
                                 self.runningFaceTask = false
                                 self.stopFacesTask = false
                                 tasklet.removeListener()
@@ -205,9 +204,9 @@ extension ViewController {
                 tasklet.changeListener(selector: #selector(taskletObserver(notification:)))
                 self.runningFaceTask = true
                 self.stopFacesTask = false
-                self.btnStop.isHidden = false
-                
-                self.lblProgressMessage.stringValue = "\(action) faces in \(area): loading images ..."
+//                self.btnStop.isHidden = false
+//
+//                self.lblProgressMessage.stringValue = "\(action) faces in \(area): loading images ..."
                 
                 if area == "all-years" {
                     area = ""
@@ -236,9 +235,9 @@ extension ViewController {
                                 tasklet.forceStop = true
                                 tasklet.running = false
                                 tasklet.forceStopped = true
-                                DispatchQueue.main.async {
-                                    self.btnStop.isHidden = true
-                                }
+//                                DispatchQueue.main.async {
+//                                    self.btnStop.isHidden = true
+//                                }
                                 self.runningFaceTask = false
                                 self.stopFacesTask = false
                                 tasklet.removeListener()
@@ -288,7 +287,7 @@ extension ViewController {
                         tasklet.forceStop = false
                         tasklet.forceStopped = false
                         tasklet.running = false
-                        self.btnStop.isHidden = true
+//                        self.btnStop.isHidden = true
                         self.runningFaceTask = false
                         self.stopFacesTask = false
                         tasklet.removeListener()

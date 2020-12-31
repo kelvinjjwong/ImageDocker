@@ -28,8 +28,6 @@ extension ViewController {
         self.collectionPaginationPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxX)
     }
     
-    
-    
     func loadCollectionByMoment(moment:Moment, pageSize:Int = 0, pageNumber:Int = 0){
         self.selectedMoment = moment
         self.loadCollectionByMoment(year: moment.year, month: moment.month, day: moment.day, pageSize: pageSize, pageNumber: pageNumber)
