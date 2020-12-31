@@ -940,6 +940,8 @@ order by "date"
             key.append("\(parentPath.withStash())%")
         }
         
+        print("\(condition) \(otherPredicate)")
+        
         if pageSize > 0 && pageNumber > 0 {
             return Image.fetchAll(db, where: "\(condition) \(otherPredicate)", orderBy: "\"photoTakenDate\", filename", values: key, offset: pageSize * (pageNumber - 1), limit: pageSize)
         }else{

@@ -78,7 +78,7 @@ extension ViewController {
         self.containerDetailViewController.initView(container, onLoad: { pageSize, pageNumber in
             print("CALLED ONLOAD \(pageSize) \(pageNumber)")
             self.loadCollectionByContainer(name:title, url:url,
-                                           pageSize: pageSize, pageNumber: pageNumber, subdirectories: container.manyChildren)
+                                           pageSize: pageSize, pageNumber: pageNumber, subdirectories: true)
         })
         
         let cellRect = sender.bounds
@@ -87,8 +87,9 @@ extension ViewController {
     
     
     
-    func reloadImageFolder(sender:NSButton) {
-        if let imageFolder = self.selectedImageFolder, let container = imageFolder.containerFolder {
+    func reloadCollectionFromImageContainer(sender:NSButton) {
+        
+        if let container = self.selectedImageContainer {
             self.createCollectionPaginationPopover()
             self.collectionPaginationViewController
                 .initView(self.imagesLoader.lastRequest,
@@ -100,11 +101,13 @@ extension ViewController {
                 },
                           onLoad: { pageSize, pageNumber in
                             print("CALLED ONLOAD \(pageSize) \(pageNumber)")
-                            self.loadCollectionByContainer(imageFolder, pageSize: pageSize, pageNumber: pageNumber, subdirectories: container.manyChildren)
+                            self.loadCollectionByContainer(name: container.name, url:URL(fileURLWithPath: container.path), pageSize: pageSize, pageNumber: pageNumber, subdirectories: true)
                 })
             
             let cellRect = sender.bounds
             self.collectionPaginationPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .minY)
+        }else{
+            print("no folder selected \(self.selectedImageFolder == nil)")
         }
     }
     

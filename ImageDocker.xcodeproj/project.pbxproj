@@ -33,6 +33,7 @@
 		8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E174B6D208F851100FFE7C7 /* ExifTool.swift */; };
 		8E1D49D524BBE47700353C1C /* ImageDBCloner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1D49D424BBE47700353C1C /* ImageDBCloner.swift */; };
 		8E1D49D724BBF04B00353C1C /* ToggleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1D49D624BBF04B00353C1C /* ToggleGroup.swift */; };
+		8E27F2A5259DD79C003D48BE /* TreeOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E27F2A4259DD79C003D48BE /* TreeOutlineView.swift */; };
 		8E31C37F2120A22600002546 /* DeviceShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E31C37E2120A22600002546 /* DeviceShell.swift */; };
 		8E36B067217920B400646EA5 /* MonthListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E36B066217920B400646EA5 /* MonthListController.swift */; };
 		8E36B069217920C000646EA5 /* DayListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E36B068217920C000646EA5 /* DayListController.swift */; };
@@ -352,6 +353,7 @@
 		8E174B6D208F851100FFE7C7 /* ExifTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExifTool.swift; sourceTree = "<group>"; };
 		8E1D49D424BBE47700353C1C /* ImageDBCloner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDBCloner.swift; sourceTree = "<group>"; };
 		8E1D49D624BBF04B00353C1C /* ToggleGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleGroup.swift; sourceTree = "<group>"; };
+		8E27F2A4259DD79C003D48BE /* TreeOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeOutlineView.swift; sourceTree = "<group>"; };
 		8E2CF36F20AED2FE00A93375 /* CollectionView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CollectionView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E31C37E2120A22600002546 /* DeviceShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceShell.swift; sourceTree = "<group>"; };
 		8E36B066217920B400646EA5 /* MonthListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthListController.swift; sourceTree = "<group>"; };
@@ -772,6 +774,7 @@
 				8E15E73223AC74DB0094240A /* TreeTableCellView.swift */,
 				8E15E73323AC74DB0094240A /* TreeViewController.swift */,
 				8E15E73423AC74DB0094240A /* TreeViewController.xib */,
+				8E27F2A4259DD79C003D48BE /* TreeOutlineView.swift */,
 			);
 			path = TreeView;
 			sourceTree = "<group>";
@@ -1753,6 +1756,7 @@
 				8EFA02E1243B3E5200D7C355 /* PostgresClientKit+Image+Statistic.swift in Sources */,
 				8ECA1FFB23E5751300F56895 /* LibraryTree+ExtendView.swift in Sources */,
 				8E95739A20EBEBD7003BD651 /* FilterViewController.swift in Sources */,
+				8E27F2A5259DD79C003D48BE /* TreeOutlineView.swift in Sources */,
 				8EF3FEE724231C0400AF83BB /* ImageSQLHelper.swift in Sources */,
 				8E8D47292236F63C0091E9C3 /* TablePopover.swift in Sources */,
 				8EFA02DB243B3E1A00D7C355 /* PostgresClientKit+Image+Record.swift in Sources */,

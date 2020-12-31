@@ -11,9 +11,15 @@ import Cocoa
 extension ViewController {
     
     func openDeviceCopyView(device: PhoneDevice, connected: Bool) {
+        let windowKey = "DeviceCopy_\(device.deviceId)"
+        if let openedWindow = self.childWindows[windowKey] {
+            openedWindow.makeKeyAndOrderFront(self)
+            return
+        }
         let storyboard = NSStoryboard(name: "DeviceCopyView", bundle: nil)
         let viewController = storyboard.instantiateController(withIdentifier: "DeviceCopyViewController") as! DeviceCopyViewController
         let window = NSWindow(contentViewController: viewController)
+//        window.isReleasedWhenClosed = true
         
         let screenWidth = Int(NSScreen.main?.frame.width ?? 0)
         let screenHeight = Int(NSScreen.main?.frame.height ?? 0)
@@ -26,6 +32,9 @@ extension ViewController {
         window.title = "Copy From Device"
         window.setFrame(frame, display: false)
         window.makeKeyAndOrderFront(self)
+        
+        self.childWindows[windowKey] = window
+        
         viewController.viewInit(device: device, connected: connected)
     }
 }

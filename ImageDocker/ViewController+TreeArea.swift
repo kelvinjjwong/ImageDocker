@@ -152,6 +152,7 @@ extension ViewController {
                                     onNodeSelected: { collection in
                                         print("action on \(collection.path)")
                                         if let container = collection.relatedObject as? ImageContainer {
+                                            self.selectedImageContainer = container
                                             if PreferencesController.amountForPagination() > 0 && container.imageCount > PreferencesController.amountForPagination() {
                                                 self.btnRefreshCollectionView.title = "Pages..."
                                                 if container.path != "/" {

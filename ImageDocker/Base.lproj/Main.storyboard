@@ -316,14 +316,14 @@
                                                                         </scroller>
                                                                     </scrollView>
                                                                     <progressIndicator wantsLayer="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="Sab-MP-Qfo">
-                                                                        <rect key="frame" x="346" y="6" width="150" height="20"/>
+                                                                        <rect key="frame" x="290" y="6" width="150" height="20"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="18" id="N29-ek-guG"/>
                                                                             <constraint firstAttribute="width" constant="150" id="lXt-MZ-I4h"/>
                                                                         </constraints>
                                                                     </progressIndicator>
                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kAZ-Sm-Ax7">
-                                                                        <rect key="frame" x="74" y="7" width="254" height="17"/>
+                                                                        <rect key="frame" x="18" y="7" width="254" height="17"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="17" id="cbB-lt-2rd"/>
                                                                             <constraint firstAttribute="width" constant="250" id="itr-jB-jIC"/>
@@ -421,7 +421,7 @@
                                                                     <constraint firstItem="Gkw-tO-uG9" firstAttribute="leading" secondItem="hk8-oy-P7s" secondAttribute="trailing" constant="8" id="TMt-ns-OH5"/>
                                                                     <constraint firstItem="KZW-eM-F1C" firstAttribute="leading" secondItem="m9M-hY-L99" secondAttribute="leading" id="TrQ-Wm-NbH"/>
                                                                     <constraint firstAttribute="bottom" secondItem="kAZ-Sm-Ax7" secondAttribute="bottom" constant="7" id="Ybw-3Z-dGC"/>
-                                                                    <constraint firstItem="kAZ-Sm-Ax7" firstAttribute="leading" secondItem="m9M-hY-L99" secondAttribute="leading" constant="76" id="Yjk-XW-fuZ"/>
+                                                                    <constraint firstItem="kAZ-Sm-Ax7" firstAttribute="leading" secondItem="m9M-hY-L99" secondAttribute="leading" constant="20" id="Yjk-XW-fuZ"/>
                                                                     <constraint firstItem="Gkw-tO-uG9" firstAttribute="top" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="7" id="a6L-mg-zAV"/>
                                                                     <constraint firstItem="DpT-Dg-Oeb" firstAttribute="top" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="8" id="jCr-mg-vua"/>
                                                                     <constraint firstAttribute="trailing" secondItem="y2t-Ke-hIj" secondAttribute="trailing" constant="15" id="mZA-F8-9Md"/>

@@ -17,7 +17,7 @@ class TreeViewController : StackBodyViewController {
     
     override func headerTitle() -> String { return self.stackTitle }
     
-    @IBOutlet weak var outlineView: NSOutlineView!
+    @IBOutlet weak var outlineView: TreeOutlineView!
     @IBOutlet weak var scrollView: NSScrollView!
     
     var collectionLoader:((TreeCollection?) -> ([TreeCollection], String?))?
@@ -56,6 +56,7 @@ class TreeViewController : StackBodyViewController {
         super.viewDidLoad()
         self.outlineView.dataSource = self
         self.outlineView.delegate = self
+        self.outlineView.clickDelegate = self
     }
     
     private var trees:[TreeCollection] = []
@@ -146,7 +147,7 @@ class TreeViewController : StackBodyViewController {
     
 }
 
-extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
+extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate, TreeOutlineViewDelegate {
     func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
         if let collection = item as? TreeCollection {
             return collection.childrenCount //collection.children.count
@@ -169,13 +170,13 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
         return self.trees.count > 0
     }
 
-    
+    // click
     func outlineViewSelectionDidChange(_ notification:Notification) {
-        if let collection = self.outlineView.item(atRow: self.outlineView.selectedRow) as? TreeCollection {
-            if self.collectionSelected != nil {
-                self.collectionSelected!(collection)
-            }
-        }
+//        if let collection = self.outlineView.item(atRow: self.outlineView.selectedRow) as? TreeCollection {
+//            if self.collectionSelected != nil {
+//                self.collectionSelected!(collection)
+//            }
+//        }
     }
     
     func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
@@ -281,6 +282,14 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
             }
         }else{
             return false
+        }
+    }
+    
+    func onClicked(row: Int, item: Any?) {
+        if let collection = item as? TreeCollection {
+            if self.collectionSelected != nil {
+                self.collectionSelected!(collection)
+            }
         }
     }
 }

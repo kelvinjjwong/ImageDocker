@@ -16,6 +16,8 @@ import AVKit
 
 class ViewController: NSViewController {
     
+    var childWindows:[String:NSWindow] = [:]
+    
     // MARK: Icon
     let tick:NSImage = NSImage.init(named: NSImage.menuOnStateTemplateName)!
     
@@ -113,6 +115,7 @@ class ViewController: NSViewController {
     
     var selectedMoment:Moment?
     var selectedImageFolder:ImageFolder?
+    var selectedImageContainer:ImageContainer?
     var selectedImageFile:String = ""
     
     var treeLoadingIndicator:Accumulator?
