@@ -19,6 +19,7 @@ class ViewController: NSViewController {
     // MARK: Icon
     let tick:NSImage = NSImage.init(named: NSImage.menuOnStateTemplateName)!
     
+    @IBOutlet weak var btnAlertMessage: NSButton!
     
     
     @IBOutlet weak var btnExport: NSPopUpButton!
@@ -31,6 +32,7 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var btnMemories: NSButton!
     
+    @IBOutlet weak var verticalSplitView: NSSplitView!
     
     // MARK: - Timer
     var scanLocationChangeTimer:Timer!
@@ -252,6 +254,7 @@ class ViewController: NSViewController {
     // MARK: - INIT VIEW
     
     internal func initView() {
+        self.hideNotification()
         print("\(Date()) Loading view - preview zone")
         self.configurePreview()
         print("\(Date()) Loading view - selection view")
@@ -396,6 +399,9 @@ class ViewController: NSViewController {
         }
     }
     
+    @IBAction func onAlertMessageClicked(_ sender: NSButton) {
+        self.hideNotification()
+    }
     
     
     // MARK: - Preview Zone

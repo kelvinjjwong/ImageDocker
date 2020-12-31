@@ -50,7 +50,8 @@ extension ViewController {
                                                 self.openDeviceCopyView(device: device, connected: state == 1)
                                             }
                                         }
-        })
+        },
+                                    notificationHolder: self.btnAlertMessage)
 
         stackedTreeView.addTreeView(title:"Moments",
                                     dataSource: self.momentsTreeDataSource,
@@ -78,7 +79,10 @@ extension ViewController {
                                         if let moment = collection.relatedObject as? Moment {
                                             self.reloadMomentCollection(moment:moment, sender:button)
                                         }
-        })
+        },
+                                    notificationHolder: self.btnAlertMessage)
+        
+        
         stackedTreeView.addTreeView(title:"Events",
                                     dataSource: self.eventsTreeDataSource,
                                     width: TREEVIEW_WIDTH,
@@ -105,7 +109,8 @@ extension ViewController {
                                         if let moment = collection.relatedObject as? Moment {
                                             self.reloadEventCollection(moment:moment, sender:button)
                                         }
-        })
+        },
+                                    notificationHolder: self.btnAlertMessage)
 
 
         stackedTreeView.addTreeView(title:"Places",
@@ -134,7 +139,8 @@ extension ViewController {
                                         if let moment = collection.relatedObject as? Moment {
                                             self.reloadPlaceCollection(moment:moment, sender:button)
                                         }
-        })
+        },
+                                    notificationHolder: self.btnAlertMessage)
 
 
         stackedTreeView.addTreeView(title:"Libraries",
@@ -177,7 +183,8 @@ extension ViewController {
                                                 self.openContainerDetail(container: container, url: URL(fileURLWithPath: container.path), title: container.name, sender: button)
                                             }
                                         }
-        })
+        },
+                                    notificationHolder: self.btnAlertMessage)
         
         stackedTreeView.showTree("Moments")
         

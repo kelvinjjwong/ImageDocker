@@ -51,11 +51,12 @@ class StackedTreeViewController: NSViewController, StackItemHost {
                      nodeValue:((TreeCollection) -> Int)? = nil,
                      onNodeSelected:((TreeCollection) -> Void)? = nil,
                      moreActionOnHeader: ((NSButton) -> ())? = nil,
-                     moreActionOnNode:((TreeCollection, NSButton) -> Void)? = nil) {
+                     moreActionOnNode:((TreeCollection, NSButton) -> Void)? = nil,
+                     notificationHolder:NSButton? = nil) {
         
         let treeHeight = self.calculateMaxHeightOfTreeView()
         
-        let treeView = TreeViewController(title, width: width, height: treeHeight)
+        let treeView = TreeViewController(title, width: width, height: treeHeight, notificationHolder: notificationHolder)
         
         
         // MARK: loader and actions

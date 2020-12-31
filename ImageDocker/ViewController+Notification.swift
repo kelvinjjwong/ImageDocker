@@ -10,6 +10,7 @@ import Cocoa
 
 extension ViewController {
     
+    // legacy
     func createNotificationPopover(message:String){
         var myPopover = self.notificationPopover
         if(myPopover == nil){
@@ -28,7 +29,8 @@ extension ViewController {
         self.notificationViewController.lblMessage.stringValue = message
     }
     
-    func popNotification(message:String){
+    // legacy
+    func popoverNotification(message:String) {
         let currentMouseLocation = NSEvent.mouseLocation
         let posX = currentMouseLocation.x
         let posY = currentMouseLocation.y
@@ -43,4 +45,15 @@ extension ViewController {
         
         self.notificationPopover?.show(relativeTo: invisibleWindow.contentView!.frame, of: invisibleWindow.contentView!, preferredEdge: .maxY)
     }
+    
+    func popNotification(message:String){
+        self.btnAlertMessage.stringValue = message
+        self.btnAlertMessage.isHidden = false
+    }
+    
+    func hideNotification() {
+        self.btnAlertMessage.isHidden = true
+    }
+    
+    
 }

@@ -30,8 +30,11 @@ class TreeViewController : StackBodyViewController {
     
     var minWidth:CGFloat = 150
     
-    init(_ title:String? = nil, width:CGFloat = 0.0, height:CGFloat = 0.0){
+    var notificationHolder:NSButton? = nil
+    
+    init(_ title:String? = nil, width:CGFloat = 0.0, height:CGFloat = 0.0, notificationHolder:NSButton? = nil){
         super.init(nibName: "TreeViewController", bundle: nil)
+        self.notificationHolder = notificationHolder
         if let t = title {
             self.stackTitle = t
         }
@@ -302,7 +305,7 @@ extension TreeViewController : NSPopoverDelegate {
         self.notificationViewController.lblMessage.stringValue = message
     }
     
-    func popNotification(message:String){
+    func popoverNotification(message:String){
         DispatchQueue.main.async {
             let currentMouseLocation = NSEvent.mouseLocation
             let posX = currentMouseLocation.x
@@ -317,6 +320,17 @@ extension TreeViewController : NSPopoverDelegate {
             invisibleWindow.makeKeyAndOrderFront(self)
             
             self.notificationPopover?.show(relativeTo: invisibleWindow.contentView!.frame, of: invisibleWindow.contentView!, preferredEdge: .maxY)
+        }
+    }
+    
+    func popNotification(message:String) {
+        if let holder = self.notificationHolder {
+            DispatchQueue.main.async {
+                holder.title = "  \(message)"
+                holder.isHidden = false
+            }
+        }else{
+            self.popoverNotification(message: message)
         }
     }
 }
