@@ -335,9 +335,9 @@
                                                                         </textFieldCell>
                                                                     </textField>
                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y2t-Ke-hIj">
-                                                                        <rect key="frame" x="1218" y="8" width="74" height="18"/>
+                                                                        <rect key="frame" x="1228" y="8" width="64" height="18"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="width" constant="70" id="XUL-iw-5h3"/>
+                                                                            <constraint firstAttribute="width" constant="60" id="XUL-iw-5h3"/>
                                                                             <constraint firstAttribute="height" constant="14" id="u2L-R0-5zn"/>
                                                                         </constraints>
                                                                         <buttonCell key="cell" type="check" title="Hidden" bezelStyle="regularSquare" imagePosition="left" inset="2" id="XCt-EB-k6H">
@@ -349,7 +349,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eaf-Jq-heG">
-                                                                        <rect key="frame" x="1168" y="8" width="46" height="18"/>
+                                                                        <rect key="frame" x="1178" y="8" width="46" height="18"/>
                                                                         <buttonCell key="cell" type="check" title="ALL" bezelStyle="regularSquare" imagePosition="left" inset="2" id="dsb-eu-8Qc">
                                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                             <font key="font" metaFont="system"/>
@@ -359,7 +359,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DpT-Dg-Oeb">
-                                                                        <rect key="frame" x="1087" y="6" width="73" height="21"/>
+                                                                        <rect key="frame" x="1097" y="6" width="73" height="21"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="20" id="Gmp-RZ-apS"/>
                                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="SPU-3L-Anh"/>
@@ -373,7 +373,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gkw-tO-uG9">
-                                                                        <rect key="frame" x="984" y="5" width="95" height="23"/>
+                                                                        <rect key="frame" x="994" y="5" width="95" height="23"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="22" id="WXq-VJ-o8B"/>
                                                                             <constraint firstAttribute="width" constant="95" id="yDU-mD-v5y"/>
@@ -394,7 +394,7 @@
                                                                         </connections>
                                                                     </popUpButton>
                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hk8-oy-P7s">
-                                                                        <rect key="frame" x="895" y="5" width="81" height="23"/>
+                                                                        <rect key="frame" x="905" y="5" width="81" height="23"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="81" id="IHT-ip-Bpd"/>
                                                                         </constraints>
