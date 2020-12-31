@@ -34,15 +34,15 @@ class StackedTreeViewController: NSViewController, StackItemHost {
     func calculateHeightOfTreeView(_ defaultHeight:CGFloat) -> CGFloat {
         var treeHeight = defaultHeight
         if self.devideCount > 0 {
-            if let outerHeight = self.view.superview?.frame.height {
-                treeHeight = outerHeight / CGFloat(self.devideCount) - 40 - 20
+            if let outerHeight = self.view.superview?.visibleRect.height {
+                treeHeight = outerHeight / CGFloat(self.devideCount) - 100
             }
         }
         return treeHeight
     }
     
     func calculateMaxHeightOfTreeView(maxExpandable:Int = 1) -> CGFloat {
-        return CGFloat( ( 700 - 36 * self.devideCount ) / maxExpandable ) - 20
+        return CGFloat( ( 700 - 36 * self.devideCount ) / maxExpandable ) - 40
     }
     
     func addTreeView(title:String, dataSource:TreeDataSource, width:CGFloat = 400.0, height:CGFloat = 360.0,
