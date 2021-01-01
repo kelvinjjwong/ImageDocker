@@ -546,6 +546,7 @@ struct PlaceRecognizer {
         return photoFile.assignPlace ?? photoFile.suggestPlace ?? photoFile.businessCircle ?? ""
     }
     
+    
     func recognize(from data:Image) -> String {
         var prefix:String = ""
         
@@ -565,7 +566,9 @@ struct PlaceRecognizer {
             if city != "" && city.reversed().starts(with: "市") {
                 city = city.replacingOccurrences(of: "市", with: "")
             }
-            prefix = "\(city)"
+            if city != "广州" {
+                prefix = "\(city)"
+            }
             
             if city == "佛山" && district == "顺德区" {
                 prefix = "顺德"

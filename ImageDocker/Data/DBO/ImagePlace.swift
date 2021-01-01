@@ -12,6 +12,10 @@ import GRDB
 public final class ImagePlace : Codable {
     //var id: Int64?      // <- the row id
     var name: String = ""
+    var latitude:String?
+    var latitudeBD:String?
+    var longitude:String?
+    var longitudeBD:String?
     var country: String?
     var province: String?
     var city: String?
@@ -20,10 +24,6 @@ public final class ImagePlace : Codable {
     var street: String?
     var address: String?
     var addressDescription: String?
-    var latitude:String?
-    var latitudeBD:String?
-    var longitude:String?
-    var longitudeBD:String?
     
     public init() {
         

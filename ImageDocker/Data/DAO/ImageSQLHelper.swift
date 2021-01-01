@@ -166,12 +166,12 @@ struct SQLHelper {
         // FIXME
         if (place == nil || place == ""){
             
-            if country == "" && province == "" && city == "" {
-                placeWhere += " AND (place = '' OR place is null OR \"assignPlace\" = '' OR \"assignPlace\" is null)"
-            }else{
-                //
-                // ignore place
-            }
+//            if country == "" && province == "" && city == "" {
+//                placeWhere += " AND (place = '' OR place is null OR \"assignPlace\" = '' OR \"assignPlace\" is null)"
+//            }else{
+//                //
+//                // ignore place
+//            }
         }else {
             if country == "" && province == "" && city == "" {
                 placeWhere = "AND (place = '\(place ?? "")' OR \"assignPlace\" = '\(place ?? "")' OR province = '\(place ?? "")' OR \"assignProvince\" = '\(place ?? "")' OR city = '\(place ?? "")' OR \"assignCity\" = '\(place ?? "")') "

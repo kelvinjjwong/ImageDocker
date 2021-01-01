@@ -459,7 +459,7 @@ class CollectionViewItemsLoader: NSObject {
             }
             
             if self.considerPlaces && item.place != "" {
-                title = title + " @ " + item.place.replacingOccurrences(of: "特别行政区", with: "")
+                title = title + " @ " + item.place.replacingOccurrences(of: "特别行政区", with: "") // TDOO: put these to preference dialog
             }
             let section:CollectionViewSection = self.getSection(title: title)!
             section.items.append(item)
