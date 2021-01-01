@@ -19,9 +19,9 @@ extension ViewController {
         flowLayout.minimumLineSpacing = 20.0
         collectionView.collectionViewLayout = flowLayout
         view.wantsLayer = true
-        collectionView.backgroundColors = [NSColor.darkGray]
-        collectionView.layer?.backgroundColor = NSColor.darkGray.cgColor
-        collectionView.layer?.borderColor = NSColor.darkGray.cgColor
+        collectionView.backgroundColors = [Colors.DarkGray]
+        collectionView.layer?.backgroundColor = Colors.DarkGray.cgColor
+        collectionView.layer?.borderColor = Colors.DarkGray.cgColor
         
         imagesLoader.singleSectionMode = false
         imagesLoader.showHidden = false

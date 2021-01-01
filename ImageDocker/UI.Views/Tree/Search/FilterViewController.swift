@@ -159,8 +159,8 @@ extension CheckTableViewController: NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, didAdd rowView: NSTableRowView, forRow row: Int) {
         
         rowView.backgroundColor = row % 2 == 1
-            ? NSColor.gray
-            : NSColor.darkGray
+            ? Colors.MidGray
+            : Colors.DarkGray
     }
 }
 

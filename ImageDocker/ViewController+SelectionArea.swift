@@ -34,9 +34,9 @@ extension ViewController {
         
         // view layout
         selectionCollectionView.wantsLayer = true
-        selectionCollectionView.backgroundColors = [NSColor.darkGray]
-        selectionCollectionView.layer?.backgroundColor = NSColor.darkGray.cgColor
-        selectionCollectionView.layer?.borderColor = NSColor.darkGray.cgColor
+        selectionCollectionView.backgroundColors = [Colors.DarkGray]
+        selectionCollectionView.layer?.backgroundColor = Colors.DarkGray.cgColor
+        selectionCollectionView.layer?.borderColor = Colors.DarkGray.cgColor
         
         // data model
         selectionViewController.collectionView = self.selectionCollectionView

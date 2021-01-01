@@ -349,8 +349,8 @@ extension PlaceListViewController: NSTableViewDelegate {
         //guard let tableView = tableView as? CustomTableView else { return }
         
         rowView.backgroundColor = row % 2 == 1
-            ? NSColor.gray
-            : NSColor.darkGray
+            ? Colors.MidGray
+            : Colors.DarkGray
     }
     
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {

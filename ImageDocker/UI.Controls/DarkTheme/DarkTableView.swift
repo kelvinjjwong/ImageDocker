@@ -10,8 +10,8 @@ import Cocoa
 
 public class DarkTableView: NSTableView {
     
-    var bgColor: NSColor = NSColor.gray
-    var alternateBackgroundColor: NSColor = NSColor.darkGray
+    var bgColor: NSColor = Colors.MidGray
+    var alternateBackgroundColor: NSColor = Colors.DarkGray
     
     public override func drawBackground(inClipRect clipRect: NSRect) {
         

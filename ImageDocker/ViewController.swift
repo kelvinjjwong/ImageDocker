@@ -361,7 +361,7 @@ class ViewController: NSViewController {
     
     func configureDarkMode() {
         view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        view.layer?.backgroundColor = NSColor.darkGray.cgColor
+        view.layer?.backgroundColor = Colors.DarkGray.cgColor
         self.btnAssignEvent.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnCopyLocation.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnManageEvents.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -371,11 +371,11 @@ class ViewController: NSViewController {
         self.btnCombineDuplicates.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
         self.comboEventList.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.comboEventList.backgroundColor = NSColor.darkGray
+        self.comboEventList.backgroundColor = Colors.DarkGray
         self.comboPlaceList.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.comboPlaceList.backgroundColor = NSColor.darkGray
+        self.comboPlaceList.backgroundColor = Colors.DarkGray
         self.addressSearcher.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.addressSearcher.backgroundColor = NSColor.darkGray
+        self.addressSearcher.backgroundColor = Colors.DarkGray
         self.addressSearcher.drawsBackground = true
         self.btnChoiceMapService.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         

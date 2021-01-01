@@ -39,7 +39,7 @@ class StackHeaderViewController : NSViewController, StackItemHeader {
         
         // We want the header's color to be different color than its associated stack item.
         view.wantsLayer = true
-        view.layer?.backgroundColor = NSColor.darkGray.cgColor // NSColor.windowBackgroundColor.cgColor
+        view.layer?.backgroundColor = Colors.DarkGray.cgColor // NSColor.windowBackgroundColor.cgColor
         
         if self.moreAction == nil {
             self.btnMore.isHidden = true

@@ -11,6 +11,6 @@ import Cocoa
 class DarkSplitView : NSSplitView {
     
     override var dividerColor: NSColor {
-        return NSColor(calibratedWhite: 0.3, alpha: 1)
+        return Colors.MidGray //NSColor(calibratedWhite: 0.3, alpha: 1)
     }
 }

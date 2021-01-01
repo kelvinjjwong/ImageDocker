@@ -1760,7 +1760,7 @@ extension PreferencesController : NSTableViewDelegate, NSTableViewDataSource{
     }
     
     func tableView(_ tableView: NSTableView, didAdd rowView: NSTableRowView, forRow row: Int) {
-        rowView.backgroundColor = NSColor.darkGray
+        rowView.backgroundColor = Colors.DarkGray
     }
     
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {

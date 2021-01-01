@@ -40,7 +40,7 @@ class SplashViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.wantsLayer = true
-        self.view.layer?.backgroundColor = NSColor.darkGray.cgColor
+        self.view.layer?.backgroundColor = Colors.DarkGray.cgColor
         
         self.btnAbort.isHidden = true
         self.btnRetry.isHidden = true

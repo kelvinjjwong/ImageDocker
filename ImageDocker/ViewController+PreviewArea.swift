@@ -21,11 +21,11 @@ extension ViewController {
         webLocation.load(URLRequest(url: URL(string: "about:blank")!))
         webPossibleLocation.load(URLRequest(url: URL(string: "about:blank")!))
         
-        self.playerContainer.layer?.borderColor = NSColor.darkGray.cgColor
+        self.playerContainer.layer?.borderColor = Colors.DarkGray.cgColor
         
         // Do any additional setup after loading the view.
-        stackedImageViewController = storyboard?.instantiateController(withIdentifier: "imageView") as! StackedImageViewController
-        stackedVideoViewController = storyboard?.instantiateController(withIdentifier: "videoView") as! StackedVideoViewController
+        stackedImageViewController = (storyboard?.instantiateController(withIdentifier: "imageView") as! StackedImageViewController)
+        stackedVideoViewController = (storyboard?.instantiateController(withIdentifier: "videoView") as! StackedVideoViewController)
         
         stackedImageViewController.parentController = self
         stackedVideoViewController.parentController = self
