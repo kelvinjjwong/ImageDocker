@@ -40,7 +40,7 @@ extension ViewController {
             self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(258)))
             self.playerContainer.display()
             
-            self.splitviewPreview.setPosition(size.height - CGFloat(520) - CGFloat(40), ofDividerAt: 0)
+            self.splitviewPreview.setPosition(size.height - CGFloat(565), ofDividerAt: 0)
         }else {
             print("BIG SCREEN")
             let constraintPlayerHeight = NSLayoutConstraint(item: self.playerContainer, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 408)
@@ -48,7 +48,7 @@ extension ViewController {
             self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(408)))
             self.playerContainer.display()
             
-            self.splitviewPreview.setPosition(size.height - CGFloat(670) - CGFloat(40) - CGFloat(30), ofDividerAt: 0)
+            self.splitviewPreview.setPosition(size.height - CGFloat(745), ofDividerAt: 0)
         }
         
         windowInitial = true
