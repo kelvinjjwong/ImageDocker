@@ -63,7 +63,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         let db = PostgresConnection.database()
         do {
             try db.execute(sql: """
-            update "Image" set path = $1, "repositoryPath" = $2, subPath = $3, "containerPath" = $4, id = $5 where path = $6
+            update "Image" set path = $1, "repositoryPath" = $2, "subPath" = $3, "containerPath" = $4, id = $5 where path = $6
             """, parameterValues: [newPath, repositoryPath, subPath, containerPath, id, oldPath])
         }catch{
             print(error)

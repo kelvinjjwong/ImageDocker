@@ -14,12 +14,27 @@ import SwiftyJSON
 import AVFoundation
 import GRDB
 
-let MetaCategorySequence:[String] = ["Location", "DateTime", "Camera", "Lens", "EXIF", "Video", "Audio", "Coordinate", "Software", "System"]
+let MetaCategorySequence:[String] = ["Location", "DateTime", "Camera", "Lens", "EXIF", "Video", "Audio", "Coordinate", "Software", "Repository", "Device", "System"]
 
 extension ImageFile {
     
     func transformDomainToMetaInfo() {
         if let photoFile = self.imageData {
+            print("meta -> repo -> \(photoFile.repositoryPath)")
+            if let repo = RepositoryDao.default.getRepository(repositoryPath: photoFile.repositoryPath) {
+                print("got repo \(repo.name)")
+                metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "", title: "Name", value: repo.name))
+                metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "", title: "SubPath", value: photoFile.subPath))
+                metaInfoHolder.setMetaInfo(MetaInfo(category: "Device", subCategory: "", title: "Id", value: repo.deviceId))
+                if repo.deviceId != "" {
+                    if let device = DeviceDao.default.getDevice(deviceId: repo.deviceId) {
+                        metaInfoHolder.setMetaInfo(MetaInfo(category: "Device", subCategory: "", title: "Name", value: device.name ?? ""))
+                        metaInfoHolder.setMetaInfo(MetaInfo(category: "Device", subCategory: "", title: "Type", value: device.type ?? ""))
+                        metaInfoHolder.setMetaInfo(MetaInfo(category: "Device", subCategory: "", title: "Manufacture", value: device.manufacture ?? ""))
+                        metaInfoHolder.setMetaInfo(MetaInfo(category: "Device", subCategory: "", title: "Model", value: device.model ?? ""))
+                    }
+                }
+            }
             if photoFile.imageWidth != 0 && photoFile.imageHeight != 0 {
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Filename", value: url.lastPathComponent))
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Full path", value: url.path.replacingOccurrences(of: url.lastPathComponent, with: "")))
