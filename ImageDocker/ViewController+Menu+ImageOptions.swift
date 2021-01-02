@@ -39,6 +39,7 @@ extension ViewController {
         self.btnImageOptions.menu?.addItem(withTitle: "Turn 90° clockwise", action: #selector(previewMenuTurnRight(_:)), keyEquivalent: "")
         self.btnImageOptions.menu?.addItem(withTitle: "Turn -90° counter-clockwise", action: #selector(previewMenuTurnLeft(_:)), keyEquivalent: "")
         self.btnImageOptions.menu?.addItem(withTitle: "Upside down", action: #selector(previewMenuTurnUpsideDown(_:)), keyEquivalent: "")
+        self.btnImageOptions.menu?.addItem(withTitle: "Save image direction", action: #selector(previewMenuMarkRotateDirection(_:)), keyEquivalent: "")
         
         self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
         
@@ -64,19 +65,30 @@ extension ViewController {
         print("preview menu - to do function")
     }
     
-    @objc func previewMenuTurnRight(_ menuItem:NSMenuItem) {
+    @objc func previewMenuMarkRotateDirection(_ menuItem:NSMenuItem) {
         self.btnImageOptions.selectItem(at: 0)
         print("preview menu - to do function")
+    }
+    
+    @objc func previewMenuTurnRight(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
+        if let img = self.getImageFromPreview() {
+            self.previewImage(image: img.rotate(degrees: -90))
+        }
     }
     
     @objc func previewMenuTurnLeft(_ menuItem:NSMenuItem) {
         self.btnImageOptions.selectItem(at: 0)
-        print("preview menu - to do function")
+        if let img = self.getImageFromPreview() {
+            self.previewImage(image: img.rotate(degrees: 90))
+        }
     }
     
     @objc func previewMenuTurnUpsideDown(_ menuItem:NSMenuItem) {
         self.btnImageOptions.selectItem(at: 0)
-        print("preview menu - to do function")
+        if let img = self.getImageFromPreview() {
+            self.previewImage(image: img.rotate(degrees: 180))
+        }
     }
     
     fileprivate func copyDateToBatchEditor(value:String, name:String) {

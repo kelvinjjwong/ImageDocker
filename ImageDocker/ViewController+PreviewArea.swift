@@ -70,6 +70,28 @@ extension ViewController {
         loadImage(urls[0])
     }
     
+    internal func getImageFromPreview() -> NSImage? {
+        return stackedImageViewController.imageDisplayer.image
+    }
+    
+    internal func previewImage(image:NSImage) {
+        for sView in self.playerContainer.subviews {
+            sView.removeFromSuperview()
+        }
+        
+        if stackedVideoViewController != nil && stackedVideoViewController.videoDisplayer != nil && stackedVideoViewController.videoDisplayer.player != nil {
+            stackedVideoViewController.videoDisplayer.player?.pause()
+        }
+        
+        stackedImageViewController.view.frame = self.playerContainer.bounds
+        self.playerContainer.addSubview(stackedImageViewController.view)
+        
+        // show image
+        stackedImageViewController.imageDisplayer.image = image
+        
+        self.btnImageOptions.isEnabled = true
+    }
+    
     internal func previewImage(url:URL, isPhoto:Bool) {
         for sView in self.playerContainer.subviews {
             sView.removeFromSuperview()

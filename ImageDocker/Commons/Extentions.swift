@@ -126,31 +126,26 @@ extension String {
 public extension NSImage {
     func rotate(degrees:CGFloat) -> NSImage {
         
-        var imageBounds = NSZeroRect ; imageBounds.size = self.size
-        let pathBounds = NSBezierPath(rect: imageBounds)
-        var transform = NSAffineTransform()
-        transform.rotate(byDegrees: degrees)
-        pathBounds.transform(using: transform as AffineTransform)
-        let rotatedBounds:NSRect = NSMakeRect(NSZeroPoint.x, NSZeroPoint.y , self.size.width, self.size.height )
-        let rotatedImage = NSImage(size: rotatedBounds.size)
-        
-        //Center the image within the rotated bounds
-        imageBounds.origin.x = NSMidX(rotatedBounds) - (NSWidth(imageBounds) / 2)
-        imageBounds.origin.y  = NSMidY(rotatedBounds) - (NSHeight(imageBounds) / 2)
-        
-        // Start a new transform
-        transform = NSAffineTransform()
-        // Move coordinate system to the center (since we want to rotate around the center)
-        transform.translateX(by: +(NSWidth(rotatedBounds) / 2 ), yBy: +(NSHeight(rotatedBounds) / 2))
-        transform.rotate(byDegrees: degrees)
-        // Move the coordinate system bak to normal
-        transform.translateX(by: -(NSWidth(rotatedBounds) / 2 ), yBy: -(NSHeight(rotatedBounds) / 2))
-        // Draw the original image, rotated, into the new image
+        let sinDegrees = abs(sin(degrees * CGFloat.pi / 180.0))
+        let cosDegrees = abs(cos(degrees * CGFloat.pi / 180.0))
+        let newSize = CGSize(width: size.height * sinDegrees + size.width * cosDegrees,
+                             height: size.width * sinDegrees + size.height * cosDegrees)
+
+        let imageBounds = NSRect(x: (newSize.width - size.width) / 2,
+                                 y: (newSize.height - size.height) / 2,
+                                 width: size.width, height: size.height)
+
+        let otherTransform = NSAffineTransform()
+        otherTransform.translateX(by: newSize.width / 2, yBy: newSize.height / 2)
+        otherTransform.rotate(byDegrees: degrees)
+        otherTransform.translateX(by: -newSize.width / 2, yBy: -newSize.height / 2)
+
+        let rotatedImage = NSImage(size: newSize)
         rotatedImage.lockFocus()
-        transform.concat()
-        self.draw(in: imageBounds, from: NSZeroRect, operation: .copy, fraction: 1.0)
+        otherTransform.concat()
+        draw(in: imageBounds, from: CGRect.zero, operation: NSCompositingOperation.copy, fraction: 1.0)
         rotatedImage.unlockFocus()
-        
+
         return rotatedImage
     }
     
