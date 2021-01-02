@@ -217,7 +217,11 @@ class DateTimeViewController: NSViewController {
     fileprivate var onCompleted: (() -> Void)?
     fileprivate var onClose: (() -> Void)?
     
-    func loadFrom(images:[ImageFile], onBeforeChanges: (() -> Void)? = nil, onApplyChanges: (() -> Void)? = nil, onClose: (() -> Void)? = nil ){
+    func loadFrom(images:[ImageFile],
+                  with referenceDate:String?,
+                  onBeforeChanges: (() -> Void)? = nil,
+                  onApplyChanges: (() -> Void)? = nil,
+                  onClose: (() -> Void)? = nil ){
         self.onBeforeChanges = onBeforeChanges
         self.onCompleted = onApplyChanges
         self.onClose = onClose
@@ -232,8 +236,13 @@ class DateTimeViewController: NSViewController {
         self.lblMessage.stringValue = ""
         
         self.chkEarliestDate.state = .on
-        self.toggleCalendarAdjustment(false)
+        self.toggleCalendarAdjustment(true)
         self.applyToTable(applyCalendar: false)
+        
+        if let value = referenceDate {
+            self.setFixedDate(value: value)
+            self.toggleCalendarAdjustment(true)
+        }
     }
     
     private func reinitNumbers() {
@@ -1097,10 +1106,9 @@ extension DateTimeViewController: NSTableViewDataSource {
 
 extension DateTimeViewController {
     
-    @objc func copyDateAction(sender: NSButton) {
-        print("Copy: \(sender.title)")
-        if let date = self.tableDateTimeFormatter.date(from: sender.title) {
-            
+    internal func setFixedDate(value:String) {
+        
+        if let date = self.tableDateTimeFormatter.date(from: value) {
             self.calendarView.date = date
             self.calendarView.selectedDate = date
         
@@ -1132,6 +1140,11 @@ extension DateTimeViewController {
             self.generateDate()
             self.generateTime()
         }
+    }
+    
+    @objc func copyDateAction(sender: NSButton) {
+        print("Copy: \(sender.title)")
+        self.setFixedDate(value: sender.title)
     }
 }
 

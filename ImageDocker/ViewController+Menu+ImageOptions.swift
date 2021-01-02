@@ -13,85 +13,149 @@ extension ViewController {
     internal func setupPreviewMenu() {
         
         self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
-        self.btnImageOptions.menu?.addItem(withTitle: "Extract EXIF from image", action: #selector(previewMenuExtractExif(_:)), keyEquivalent: "")
-        self.btnImageOptions.menu?.addItem(withTitle: "Extract date time from filename", action: #selector(previewMenuExtractDatetime(_:)), keyEquivalent: "")
-        self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
+        
         self.btnImageOptions.menu?.addItem(withTitle: "Large View", action: #selector(previewMenuLargeView(_:)), keyEquivalent: "")
+        
         self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
+        
         self.btnImageOptions.menu?.addItem(withTitle: "Preview editable version", action: #selector(previewMenuPreviewEditableVersion(_:)), keyEquivalent: "")
         self.btnImageOptions.menu?.addItem(withTitle: "Preview backup version", action: #selector(previewMenuPreviewBackupVersion(_:)), keyEquivalent: "")
+        
         self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
+        
         self.btnImageOptions.menu?.addItem(withTitle: "Find editable version from Finder", action: #selector(previewMenuFindEditableInFinder(_:)), keyEquivalent: "")
         self.btnImageOptions.menu?.addItem(withTitle: "Find backup version from Finder", action: #selector(previewMenuFindBackupInFinder(_:)), keyEquivalent: "")
+        
         self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
-        self.btnImageOptions.menu?.addItem(withTitle: "Replace image with backup version", action: #selector(previewMenuReplaceWithBackupVersion(_:)), keyEquivalent: "")
-        self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
+        
+        self.btnImageOptions.menu?.addItem(withTitle: "Pick date time from DateTimeOriginal", action: #selector(previewMenuPickDateTimeOriginal(_:)), keyEquivalent: "")
         self.btnImageOptions.menu?.addItem(withTitle: "Pick date time from Filename", action: #selector(previewMenuPickFilenameDate(_:)), keyEquivalent: "")
         self.btnImageOptions.menu?.addItem(withTitle: "Pick date time from FileCreateDate", action: #selector(previewMenuPickFileCreateDate(_:)), keyEquivalent: "")
         self.btnImageOptions.menu?.addItem(withTitle: "Pick date time from FileModifyDate", action: #selector(previewMenuPickFileModifyDate(_:)), keyEquivalent: "")
         self.btnImageOptions.menu?.addItem(withTitle: "Pick date time from Software Modified Date", action: #selector(previewMenuPickSoftwareModifyDate(_:)), keyEquivalent: "")
+        
         self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
+        
         self.btnImageOptions.menu?.addItem(withTitle: "Turn 90° clockwise", action: #selector(previewMenuTurnRight(_:)), keyEquivalent: "")
         self.btnImageOptions.menu?.addItem(withTitle: "Turn -90° counter-clockwise", action: #selector(previewMenuTurnLeft(_:)), keyEquivalent: "")
         self.btnImageOptions.menu?.addItem(withTitle: "Upside down", action: #selector(previewMenuTurnUpsideDown(_:)), keyEquivalent: "")
+        
         self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
+        
+        self.btnImageOptions.menu?.addItem(withTitle: "Extract EXIF from image", action: #selector(previewMenuExtractExif(_:)), keyEquivalent: "")
+        self.btnImageOptions.menu?.addItem(withTitle: "Extract date time from filename", action: #selector(previewMenuExtractDatetime(_:)), keyEquivalent: "")
+        
+        self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
+        
         self.btnImageOptions.menu?.addItem(withTitle: "Find faces", action: #selector(previewMenuFindFace(_:)), keyEquivalent: "")
         self.btnImageOptions.menu?.addItem(withTitle: "Recognize faces", action: #selector(previewMenuRecognizeFace(_:)), keyEquivalent: "")
+        
         self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
+        
         self.btnImageOptions.menu?.addItem(withTitle: "Write notes", action: #selector(previewMenuWriteNote(_:)), keyEquivalent: "")
-    }
-    
-    @objc func previewMenuReplaceWithBackupVersion(_ menuItem:NSMenuItem) {
-        self.btnImageOptions.selectItem(at: 0)
-    }
-    
-    @objc func previewMenuPickFilenameDate(_ menuItem:NSMenuItem) {
-        self.btnImageOptions.selectItem(at: 0)
-    }
-    
-    @objc func previewMenuPickFileCreateDate(_ menuItem:NSMenuItem) {
-        self.btnImageOptions.selectItem(at: 0)
-    }
-    
-    @objc func previewMenuPickFileModifyDate(_ menuItem:NSMenuItem) {
-        self.btnImageOptions.selectItem(at: 0)
-    }
-    
-    @objc func previewMenuPickSoftwareModifyDate(_ menuItem:NSMenuItem) {
-        self.btnImageOptions.selectItem(at: 0)
-    }
-    
-    @objc func previewMenuTurnRight(_ menuItem:NSMenuItem) {
-        self.btnImageOptions.selectItem(at: 0)
-    }
-    
-    @objc func previewMenuTurnLeft(_ menuItem:NSMenuItem) {
-        self.btnImageOptions.selectItem(at: 0)
-    }
-    
-    @objc func previewMenuTurnUpsideDown(_ menuItem:NSMenuItem) {
-        self.btnImageOptions.selectItem(at: 0)
-    }
-    
-    @objc func previewMenuFindFace(_ menuItem:NSMenuItem) {
-        self.btnImageOptions.selectItem(at: 0)
-    }
-    
-    @objc func previewMenuRecognizeFace(_ menuItem:NSMenuItem) {
-        self.btnImageOptions.selectItem(at: 0)
+        
+        self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
+        
+        self.btnImageOptions.menu?.addItem(withTitle: "Replace image with backup version", action: #selector(previewMenuRestoreBackupImage(_:)), keyEquivalent: "")
     }
     
     @objc func previewMenuWriteNote(_ menuItem:NSMenuItem) {
         self.btnImageOptions.selectItem(at: 0)
+        print("preview menu - to do function")
     }
     
-    @objc func previewMenuAction(_ menuItem:NSMenuItem) {
-        print("clicked prewview menu")
+    @objc func previewMenuTurnRight(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
+        print("preview menu - to do function")
+    }
+    
+    @objc func previewMenuTurnLeft(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
+        print("preview menu - to do function")
+    }
+    
+    @objc func previewMenuTurnUpsideDown(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
+        print("preview menu - to do function")
+    }
+    
+    fileprivate func copyDateToBatchEditor(value:String, name:String) {
+//        if self.selectionViewController.imagesLoader.getItems().count == 0 {
+//            Alert.noImageSelected()
+//            return
+//        }
+        
+        let components = value.components(separatedBy: " ")
+        if components.count >= 2{
+            let datetime:String = components[0] + " " + components[1]
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
+            if let _ = dateFormatter.date(from: datetime) {
+                let newValue = components[0].replacingOccurrences(of: ":", with: "-") + " " + components[1]
+                self.openDatePicker(self.btnDatePicker, with: newValue)
+                self.popNotification(message: "Copied \(newValue) to date picker in batch editor.")
+            }
+        }
+    }
+    
+    @objc func previewMenuPickFilenameDate(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
+        if let value = self.img.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "From Filename") {
+            self.copyDateToBatchEditor(value: value, name: "Date in Filename")
+        }else{
+            self.popNotification(message: "Selected image does not have date time in filename, may need re-scan its EXIF.")
+        }
+    }
+    
+    @objc func previewMenuPickDateTimeOriginal(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
+        if let value = self.img.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "DateTimeOriginal") {
+            self.copyDateToBatchEditor(value: value, name: "DateTimeOriginal")
+        }else{
+            self.popNotification(message: "Selected image does not have DateTimeOriginal, may need re-scan its EXIF.")
+        }
+    }
+    
+    @objc func previewMenuPickFileCreateDate(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
+        if let value = self.img.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "FileCreateDate") {
+            self.copyDateToBatchEditor(value: value, name: "FileCreateDate")
+        }else{
+            self.popNotification(message: "Selected image does not have FileCreateDate, may need re-scan its EXIF.")
+        }
+    }
+    
+    @objc func previewMenuPickFileModifyDate(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
+        if let value = self.img.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "FileModifyDate") {
+            self.copyDateToBatchEditor(value: value, name: "FileModifyDate")
+        }else{
+            self.popNotification(message: "Selected image does not have FileModifyDate, may need re-scan its EXIF.")
+        }
+    }
+    
+    @objc func previewMenuPickSoftwareModifyDate(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
+        if let value = self.img.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "Software Modified") {
+            self.copyDateToBatchEditor(value: value, name: "SoftwareModifyDate")
+        }else{
+            self.popNotification(message: "Selected image does not have SoftwareModifyDate, may need re-scan its EXIF.")
+        }
+    }
+    
+    @objc func previewMenuFindFace(_ menuItem:NSMenuItem) {
+        self.findFacesFromSelectedImage()
+    }
+    
+    @objc func previewMenuRecognizeFace(_ menuItem:NSMenuItem) {
+        self.recognizeFacesFromSelectedImage()
     }
     
     @objc func previewMenuExtractExif(_ menuItem:NSMenuItem) {
         self.btnImageOptions.selectItem(at: 0)
         self.loadImageExif()
+        self.popNotification(message: "Done extract EXIF for selected image.")
+        print("preview menu - done")
     }
     
     @objc func previewMenuExtractDatetime(_ menuItem:NSMenuItem) {
@@ -106,27 +170,36 @@ extension ViewController {
                     print("earliest date is \(dt) UTC")
                     self.img.storePhotoTakenDate(dateTime: dt)
                 }
-                self.img.save()
+                let _ = self.img.save()
                 self.loadImageExif()
+                
+                self.popNotification(message: "Done extract date time from filename for selected image.")
             }
+        }else{
+
+            self.popNotification(message: "Failed to extract date time from filename for selected image.")
         }
+        print("preview menu - done")
     }
     
     @objc func previewMenuFindEditableInFinder(_ menuItem:NSMenuItem){
         self.btnImageOptions.selectItem(at: 0)
         let url = self.img.url
         NSWorkspace.shared.activateFileViewerSelecting([url])
+        print("preview menu - done")
     }
     
     @objc func previewMenuFindBackupInFinder(_ menuItem:NSMenuItem){
         self.btnImageOptions.selectItem(at: 0)
         let url = self.img.url
         NSWorkspace.shared.activateFileViewerSelecting([url])
+        print("preview menu - done")
     }
     
     @objc func previewMenuLargeView(_ menuItem:NSMenuItem){
         self.btnImageOptions.selectItem(at: 0)
         self.onCollectionViewItemQuickLook(self.img)
+        print("preview menu - done")
     }
     
     @objc func previewMenuPreviewEditableVersion(_ menuItem:NSMenuItem) {
@@ -136,6 +209,7 @@ extension ViewController {
         DispatchQueue.main.async {
             self.lblImageDescription.stringValue = "EDITABLE VERSION"
         }
+        print("preview menu - done")
     }
     
     @objc func previewMenuPreviewBackupVersion(_ menuItem:NSMenuItem) {
@@ -146,9 +220,10 @@ extension ViewController {
                 self.lblImageDescription.stringValue = "BACKUP VERSION"
             }
         }
+        print("preview menu - done")
     }
     
-    @objc func previewMenuRestoreBackupImage() {
+    @objc func previewMenuRestoreBackupImage(_ menuItem:NSMenuItem) {
         self.btnImageOptions.selectItem(at: 0)
         DispatchQueue.global().async {
             if let imageFile = self.img {
@@ -165,16 +240,14 @@ extension ViewController {
                             try FileManager.default.createDirectory(atPath: tmpFolder, withIntermediateDirectories: true, attributes: nil)
                             try FileManager.default.moveItem(atPath: url.path, toPath: tmpPath)
                             try FileManager.default.copyItem(atPath: backupUrl.path, toPath: url.path)
-                            
-                            DispatchQueue.main.async {
-                                self.lblImageDescription.stringValue = "RESTORED FROM BACKUP VERSION"
-                            }
+
+                            self.popNotification(message: "Done replaced image with backup version for selected image.")
                         }catch{
                             print("Unable to restore backup image from [\(backupUrl.path)] to [url.path]")
                             print(error)
-                            DispatchQueue.main.async {
-                                self.lblImageDescription.stringValue = "RESTORE BACKUP VERSION FAILED"
-                            }
+
+                            self.popNotification(message: "Failed to replace image with backup version for selected image.")
+                            
                             print("Restoring original editable version from \(tmpPath)")
                             do {
                                 try FileManager.default.removeItem(atPath: url.path)
@@ -191,32 +264,31 @@ extension ViewController {
                             print(error)
                         }
                     }else{
-                        DispatchQueue.main.async {
-                            self.lblImageDescription.stringValue = "BACKUP VERSION DOES NOT EXIST"
-                        }
+                        self.popNotification(message: "Error: Selected image's backup version does not exist.")
                     }
                 }else{
-                    DispatchQueue.main.async {
-                        self.lblImageDescription.stringValue = "EDITABLE VERSION DOES NOT EXIST"
-                    }
+                    self.popNotification(message: "Error: Selected image's editable version does not exist.")
                 }
             }
+            
         }
     }
     
-    fileprivate func findFaces() {
+    fileprivate func findFacesFromSelectedImage() {
         self.btnImageOptions.selectItem(at: 0)
         let url = self.img.url
         DispatchQueue.global().async {
-            FaceTask.default.findFaces(path: url.path)
+            let _ = FaceTask.default.findFaces(path: url.path)
+            self.popNotification(message: "Done find faces from selected image.")
         }
     }
     
-    func recognizeFaces() {
+    func recognizeFacesFromSelectedImage() {
         self.btnImageOptions.selectItem(at: 0)
         let url = self.img.url
         DispatchQueue.global().async {
-            FaceTask.default.recognizeFaces(path: url.path)
+            let _ = FaceTask.default.recognizeFaces(path: url.path)
+            self.popNotification(message: "Done recognize faces from selected image.")
         }
     }
 }

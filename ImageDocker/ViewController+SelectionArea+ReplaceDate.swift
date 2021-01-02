@@ -28,7 +28,7 @@ extension ViewController {
         self.calendarPopover = myPopover
     }
     
-    func openDatePicker(_ sender: NSButton) {
+    func openDatePicker(_ sender: NSButton, with referenceDate:String? = nil) {
         if self.selectionViewController.imagesLoader.getItems().count == 0 {
             Alert.noImageSelected()
             return
@@ -38,6 +38,7 @@ extension ViewController {
         let cellRect = sender.bounds
         self.calendarPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
         self.calendarViewController.loadFrom(images: self.selectionViewController.imagesLoader.getItems(),
+                                             with: referenceDate,
                                              onBeforeChanges: {
                                                 TaskManager.applyingSelectionModifies = true
                                                 
