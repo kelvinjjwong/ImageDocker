@@ -12,8 +12,29 @@ import AVFoundation
 import AVKit
 
 extension ViewController {
+    
+    @objc func onMetaTableDoubleClicked() {
+        let row = self.metaInfoTableView.clickedRow
+        if row >= 0 && row < self.img.metaInfoHolder.getInfos().count {
+            print("meta double clicked row \(row)")
+            let info = self.img.metaInfoHolder.getInfos()[row]
+            if let value = info.value {
+                print("clicked info \(value)")
+                let pasteboard = NSPasteboard.general
+                pasteboard.declareTypes([.string], owner: nil)
+                pasteboard.setString(value, forType: .string)
+                
+                self.popNotification(message: "Copied image's meta value to pasteboard.")
+            }
+            
+        }
+    }
 
     internal func configurePreview(){
+        
+        self.metaInfoTableView.toolTip = "Double click to copy value."
+        self.metaInfoTableView.target = self
+        self.metaInfoTableView.doubleAction = #selector(onMetaTableDoubleClicked)
         
         webLocation.setValue(false, forKey: "drawsBackground")
         webPossibleLocation.setValue(false, forKey: "drawsBackground")

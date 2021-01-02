@@ -20,9 +20,9 @@ extension ImageFile {
     
     func transformDomainToMetaInfo() {
         if let photoFile = self.imageData {
-            print("meta -> repo -> \(photoFile.repositoryPath)")
+//            print("meta -> repo -> \(photoFile.repositoryPath)")
             if let repo = RepositoryDao.default.getRepository(repositoryPath: photoFile.repositoryPath) {
-                print("got repo \(repo.name)")
+//                print("got repo \(repo.name)")
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "", title: "Name", value: repo.name))
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "", title: "SubPath", value: photoFile.subPath))
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "Device", subCategory: "", title: "Id", value: repo.deviceId))

@@ -47,7 +47,7 @@ extension ViewController {
     }
     
     func popNotification(message:String){
-        self.btnAlertMessage.stringValue = message
+        self.btnAlertMessage.title = message
         self.btnAlertMessage.isHidden = false
     }
     
