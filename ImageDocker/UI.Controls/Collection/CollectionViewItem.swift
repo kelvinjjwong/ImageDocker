@@ -232,10 +232,10 @@ class CollectionViewItem: NSCollectionViewItem {
         if let imageFile = self.imageFile, let url = self.imageFile?.url, FileManager.default.fileExists(atPath: url.path) {
             if self.previewDelegate != nil {
                 self.previewDelegate?.onCollectionViewItemPreview(url: url, isPhoto: imageFile.isPhoto)
-                self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "EDITABLE VERSION PREVIEW")
+                self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Performing preview of selected image's editable version")
             }
         }else{
-            self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "EDITABLE VERSION DOES NOT EXIST")
+            self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Selected image's editable version does not exist")
         }
     }
     
@@ -243,10 +243,10 @@ class CollectionViewItem: NSCollectionViewItem {
         if let imageFile = self.imageFile, let url = self.imageFile?.backupUrl, FileManager.default.fileExists(atPath: url.path) {
             if self.previewDelegate != nil {
                 self.previewDelegate?.onCollectionViewItemPreview(url: url, isPhoto: imageFile.isPhoto)
-                self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "BACKUP VERSION PREVIEW")
+                self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Performing preview of selected image's backup version")
             }
         }else{
-            self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "BACKUP VERSION DOES NOT EXIST")
+            self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Selected image's backup version does not exist")
         }
     }
     
@@ -264,11 +264,11 @@ class CollectionViewItem: NSCollectionViewItem {
                         try FileManager.default.createDirectory(atPath: tmpFolder, withIntermediateDirectories: true, attributes: nil)
                         try FileManager.default.moveItem(atPath: url.path, toPath: tmpPath)
                         try FileManager.default.copyItem(atPath: backupUrl.path, toPath: url.path)
-                        self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "RESTORED FROM BACKUP VERSION")
+                        self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Done replace selected image with backup version")
                     }catch{
                         print("Unable to restore backup image from [\(backupUrl.path)] to [url.path]")
                         print(error)
-                        self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "RESTORE BACKUP VERSION FAILED")
+                        self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Failed to replace selected image with backup version.")
                         print("Restoring original editable version from \(tmpPath)")
                         do {
                             try FileManager.default.removeItem(atPath: url.path)
@@ -285,10 +285,10 @@ class CollectionViewItem: NSCollectionViewItem {
                         print(error)
                     }
                 }else{
-                    self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "BACKUP VERSION DOES NOT EXIST")
+                    self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Selected image's backup version does not exist")
                 }
             }else{
-                self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "EDITABLE VERSION DOES NOT EXIST")
+                self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Selected image's editable version does not exist")
             }
         }
     }

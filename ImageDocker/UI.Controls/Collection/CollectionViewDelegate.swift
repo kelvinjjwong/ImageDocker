@@ -146,9 +146,7 @@ protocol CollectionViewItemPreviewMessageDelegate {
 
 extension ViewController : CollectionViewItemPreviewMessageDelegate {
     func onCollectionViewItemPreviewMessage(description:String) {
-        DispatchQueue.main.async {
-            self.lblImageDescription.stringValue = description
-        }
+        self.popNotification(message: description)
     }
 }
 
