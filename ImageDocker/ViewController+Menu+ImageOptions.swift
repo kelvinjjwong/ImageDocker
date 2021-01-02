@@ -24,21 +24,65 @@ extension ViewController {
         self.btnImageOptions.menu?.addItem(withTitle: "Find editable version from Finder", action: #selector(previewMenuFindEditableInFinder(_:)), keyEquivalent: "")
         self.btnImageOptions.menu?.addItem(withTitle: "Find backup version from Finder", action: #selector(previewMenuFindBackupInFinder(_:)), keyEquivalent: "")
         self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
-        self.btnImageOptions.menu?.addItem(withTitle: "Replace image with backup version", action: #selector(previewMenuAction(_:)), keyEquivalent: "")
+        self.btnImageOptions.menu?.addItem(withTitle: "Replace image with backup version", action: #selector(previewMenuReplaceWithBackupVersion(_:)), keyEquivalent: "")
         self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
-        self.btnImageOptions.menu?.addItem(withTitle: "Pick date time from Filename", action: #selector(previewMenuAction(_:)), keyEquivalent: "")
-        self.btnImageOptions.menu?.addItem(withTitle: "Pick date time from FileCreateDate", action: #selector(previewMenuAction(_:)), keyEquivalent: "")
-        self.btnImageOptions.menu?.addItem(withTitle: "Pick date time from FileModifyDate", action: #selector(previewMenuAction(_:)), keyEquivalent: "")
-        self.btnImageOptions.menu?.addItem(withTitle: "Pick date time from Software Modified Date", action: #selector(previewMenuAction(_:)), keyEquivalent: "")
+        self.btnImageOptions.menu?.addItem(withTitle: "Pick date time from Filename", action: #selector(previewMenuPickFilenameDate(_:)), keyEquivalent: "")
+        self.btnImageOptions.menu?.addItem(withTitle: "Pick date time from FileCreateDate", action: #selector(previewMenuPickFileCreateDate(_:)), keyEquivalent: "")
+        self.btnImageOptions.menu?.addItem(withTitle: "Pick date time from FileModifyDate", action: #selector(previewMenuPickFileModifyDate(_:)), keyEquivalent: "")
+        self.btnImageOptions.menu?.addItem(withTitle: "Pick date time from Software Modified Date", action: #selector(previewMenuPickSoftwareModifyDate(_:)), keyEquivalent: "")
         self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
-        self.btnImageOptions.menu?.addItem(withTitle: "Turn 90° clockwise", action: #selector(previewMenuAction(_:)), keyEquivalent: "")
-        self.btnImageOptions.menu?.addItem(withTitle: "Turn -90° counter-clockwise", action: #selector(previewMenuAction(_:)), keyEquivalent: "")
-        self.btnImageOptions.menu?.addItem(withTitle: "Upside down", action: #selector(previewMenuAction(_:)), keyEquivalent: "")
+        self.btnImageOptions.menu?.addItem(withTitle: "Turn 90° clockwise", action: #selector(previewMenuTurnRight(_:)), keyEquivalent: "")
+        self.btnImageOptions.menu?.addItem(withTitle: "Turn -90° counter-clockwise", action: #selector(previewMenuTurnLeft(_:)), keyEquivalent: "")
+        self.btnImageOptions.menu?.addItem(withTitle: "Upside down", action: #selector(previewMenuTurnUpsideDown(_:)), keyEquivalent: "")
         self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
-        self.btnImageOptions.menu?.addItem(withTitle: "Find faces", action: #selector(previewMenuAction(_:)), keyEquivalent: "")
-        self.btnImageOptions.menu?.addItem(withTitle: "Recognize faces", action: #selector(previewMenuAction(_:)), keyEquivalent: "")
+        self.btnImageOptions.menu?.addItem(withTitle: "Find faces", action: #selector(previewMenuFindFace(_:)), keyEquivalent: "")
+        self.btnImageOptions.menu?.addItem(withTitle: "Recognize faces", action: #selector(previewMenuRecognizeFace(_:)), keyEquivalent: "")
         self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
-        self.btnImageOptions.menu?.addItem(withTitle: "Write notes", action: #selector(previewMenuAction(_:)), keyEquivalent: "")
+        self.btnImageOptions.menu?.addItem(withTitle: "Write notes", action: #selector(previewMenuWriteNote(_:)), keyEquivalent: "")
+    }
+    
+    @objc func previewMenuReplaceWithBackupVersion(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
+    }
+    
+    @objc func previewMenuPickFilenameDate(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
+    }
+    
+    @objc func previewMenuPickFileCreateDate(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
+    }
+    
+    @objc func previewMenuPickFileModifyDate(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
+    }
+    
+    @objc func previewMenuPickSoftwareModifyDate(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
+    }
+    
+    @objc func previewMenuTurnRight(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
+    }
+    
+    @objc func previewMenuTurnLeft(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
+    }
+    
+    @objc func previewMenuTurnUpsideDown(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
+    }
+    
+    @objc func previewMenuFindFace(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
+    }
+    
+    @objc func previewMenuRecognizeFace(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
+    }
+    
+    @objc func previewMenuWriteNote(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
     }
     
     @objc func previewMenuAction(_ menuItem:NSMenuItem) {
