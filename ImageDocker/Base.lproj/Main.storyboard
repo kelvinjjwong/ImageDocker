@@ -264,23 +264,83 @@
                                             <action selector="onAlertMessageClicked:" target="XfG-lQ-9wD" id="SDR-Er-mCK"/>
                                         </connections>
                                     </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LT3-25-saL">
+                                        <rect key="frame" x="1581" y="24" width="40" height="19"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="40" id="J83-Ia-kRl"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="roundRect" bezelStyle="roundedRect" image="collapse_left" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="lge-jh-cRq">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="controlContent"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onToggleLeftPanel:" target="XfG-lQ-9wD" id="lWa-8f-oMu"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Tb9-dq-5sY">
+                                        <rect key="frame" x="1622" y="24" width="40" height="19"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="40" id="2Aw-fx-VVb"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="roundRect" bezelStyle="roundedRect" image="collapse_bottom" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="NK0-vF-OIh">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="controlContent"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onToggleBottomPanel:" target="XfG-lQ-9wD" id="2Bo-Gs-e5x"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nF3-v7-GTT">
+                                        <rect key="frame" x="1663" y="24" width="40" height="19"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="40" id="6mQ-ch-PYx"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="roundRect" bezelStyle="roundedRect" image="collapse_right" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Sc9-n0-iL1">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="controlContent"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onToggleRightPanel:" target="XfG-lQ-9wD" id="p9q-HU-HJU"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1L2-wU-5mb">
+                                        <rect key="frame" x="1704" y="24" width="40" height="19"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="40" id="Pf2-x0-glH"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="roundRect" bezelStyle="roundedRect" image="map" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jeY-XH-oIP">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="controlContent"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onTogglePreviewInnerPanel:" target="XfG-lQ-9wD" id="pho-lS-zSE"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="0rZ-ZR-afb"/>
+                                    <constraint firstItem="nF3-v7-GTT" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="7" id="3xO-wQ-5ca"/>
                                     <constraint firstItem="SE2-Sb-Hue" firstAttribute="top" secondItem="0O0-hl-4CA" secondAttribute="bottom" constant="4" id="5FV-le-s2l"/>
                                     <constraint firstItem="zJa-km-Rrl" firstAttribute="leading" secondItem="csF-Eh-wOF" secondAttribute="trailing" constant="5" id="5mg-lp-7Wk"/>
+                                    <constraint firstItem="1L2-wU-5mb" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="7" id="Ach-2F-jkC"/>
                                     <constraint firstItem="SE2-Sb-Hue" firstAttribute="leading" secondItem="gVf-na-PZy" secondAttribute="leading" constant="365" id="Aya-AU-vCP"/>
                                     <constraint firstItem="kCb-sM-PKJ" firstAttribute="leading" secondItem="wQ3-4F-bW7" secondAttribute="trailing" constant="5" id="Bnf-Oq-jVs"/>
                                     <constraint firstItem="wQ3-4F-bW7" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="11" id="Cpz-BF-ZaT"/>
                                     <constraint firstItem="csF-Eh-wOF" firstAttribute="leading" secondItem="kCb-sM-PKJ" secondAttribute="trailing" constant="5" id="Dfn-B9-P0E"/>
                                     <constraint firstItem="kCb-sM-PKJ" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="EaW-Ms-XCk"/>
                                     <constraint firstItem="0O0-hl-4CA" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="7" id="Hyt-ZK-cy0"/>
+                                    <constraint firstItem="Bwo-eW-DeK" firstAttribute="leading" secondItem="1L2-wU-5mb" secondAttribute="trailing" constant="15" id="IXu-vg-oHj"/>
                                     <constraint firstItem="csF-Eh-wOF" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="K5o-tc-nMl"/>
+                                    <constraint firstItem="Tb9-dq-5sY" firstAttribute="leading" secondItem="LT3-25-saL" secondAttribute="trailing" constant="1" id="VlZ-U7-1j3"/>
+                                    <constraint firstItem="nF3-v7-GTT" firstAttribute="leading" secondItem="Tb9-dq-5sY" secondAttribute="trailing" constant="1" id="Zfw-c4-CgD"/>
+                                    <constraint firstItem="Tb9-dq-5sY" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="7" id="dQK-Iu-Lwa"/>
                                     <constraint firstItem="zJa-km-Rrl" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="edb-HN-MZH"/>
                                     <constraint firstItem="Bwo-eW-DeK" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="9" id="l7J-fy-SVL"/>
+                                    <constraint firstItem="LT3-25-saL" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="7" id="o69-sW-qCC"/>
                                     <constraint firstAttribute="trailing" secondItem="Bwo-eW-DeK" secondAttribute="trailing" constant="10" id="req-3Z-Qx1"/>
                                     <constraint firstItem="0O0-hl-4CA" firstAttribute="leading" secondItem="zJa-km-Rrl" secondAttribute="trailing" constant="30" id="uqX-14-2ZJ"/>
                                     <constraint firstItem="wQ3-4F-bW7" firstAttribute="leading" secondItem="gVf-na-PZy" secondAttribute="leading" constant="10" id="vrS-mp-TFb"/>
+                                    <constraint firstItem="1L2-wU-5mb" firstAttribute="leading" secondItem="nF3-v7-GTT" secondAttribute="trailing" constant="1" id="wPv-VM-9mi"/>
                                 </constraints>
                             </customView>
                             <splitView arrangesAllSubviews="NO" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lfc-6c-aMy">
@@ -1184,6 +1244,11 @@
                         <outlet property="btnShare" destination="0by-PK-DjP" id="b9S-z4-3RB"/>
                         <outlet property="btnShow" destination="W0U-Cw-aB7" id="rYg-OY-AwZ"/>
                         <outlet property="btnTasks" destination="csF-Eh-wOF" id="6h3-Vs-dhx"/>
+                        <outlet property="btnToggleBottomPanel" destination="Tb9-dq-5sY" id="wtp-VO-TE5"/>
+                        <outlet property="btnToggleLeftPanel" destination="LT3-25-saL" id="mGB-7V-g0Q"/>
+                        <outlet property="btnTogglePreviewPanel" destination="1L2-wU-5mb" id="V0u-cf-TZc"/>
+                        <outlet property="btnToggleRightPanel" destination="nF3-v7-GTT" id="ecf-2U-S8v"/>
+                        <outlet property="centralHorizontalSplitView" destination="X01-1a-Mbk" id="f2Y-3h-0eu"/>
                         <outlet property="chbSelectAll" destination="eaf-Jq-heG" id="LF3-04-nwk"/>
                         <outlet property="chbShowHidden" destination="y2t-Ke-hIj" id="VwI-t7-yiN"/>
                         <outlet property="collectionProgressIndicator" destination="Sab-MP-Qfo" id="tTT-fa-2Dw"/>
@@ -1193,6 +1258,7 @@
                         <outlet property="imgPhoto" destination="9Na-U8-3R2" id="b6k-Ma-bp4"/>
                         <outlet property="indicatorMessage" destination="kAZ-Sm-Ax7" id="QkM-9I-20Z"/>
                         <outlet property="lblImageDescription" destination="q9K-Bh-dED" id="6j0-7g-FlX"/>
+                        <outlet property="leftVerticalSplitView" destination="lZJ-XP-YJ8" id="Ky7-8V-BfT"/>
                         <outlet property="mapZoomSlider" destination="eId-m8-eKf" id="zoE-94-C0F"/>
                         <outlet property="metaInfoTableView" destination="ECf-s9-RCm" id="GLo-W4-I6C"/>
                         <outlet property="playerContainer" destination="73d-nT-eRs" id="WGK-6c-bD3"/>
@@ -3002,6 +3068,9 @@ brew install ifuse</string>
         <image name="NSSlideshowTemplate" width="17" height="14"/>
         <image name="broom" width="16" height="16"/>
         <image name="clock" width="16" height="16"/>
+        <image name="collapse_bottom" width="28" height="23"/>
+        <image name="collapse_left" width="23" height="18"/>
+        <image name="collapse_right" width="23" height="18"/>
         <image name="combine" width="16" height="16"/>
         <image name="ding" width="13" height="15"/>
         <image name="download" width="16" height="16"/>
@@ -3009,6 +3078,7 @@ brew install ifuse</string>
         <image name="face" width="16" height="16"/>
         <image name="forward" width="17" height="16"/>
         <image name="hide" width="17" height="15"/>
+        <image name="map" width="16" height="16"/>
         <image name="option" width="16" height="16"/>
         <image name="task" width="12" height="16"/>
         <image name="trash" width="16" height="16"/>

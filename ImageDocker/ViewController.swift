@@ -21,20 +21,31 @@ class ViewController: NSViewController {
     // MARK: Icon
     let tick:NSImage = NSImage.init(named: NSImage.menuOnStateTemplateName)!
     
+    // MARK: TOP BAR
     @IBOutlet weak var btnAlertMessage: NSButton!
-    
     
     @IBOutlet weak var btnExport: NSPopUpButton!
     @IBOutlet weak var btnFaces: NSPopUpButton!
+    @IBOutlet weak var btnTasks: NSButton!
+    @IBOutlet weak var btnMemories: NSButton!
     
     @IBOutlet weak var txtSearch: NSSearchField!
     
+    @IBOutlet weak var btnToggleLeftPanel: NSButton!
+    @IBOutlet weak var btnToggleBottomPanel: NSButton!
+    @IBOutlet weak var btnToggleRightPanel: NSButton!
+    @IBOutlet weak var btnTogglePreviewPanel: NSButton!
+    
+    
     @IBOutlet weak var btnImageOptions: NSPopUpButton!
     
+    // MARK: Layout
     
-    @IBOutlet weak var btnMemories: NSButton!
-    
+    // right splitter
     @IBOutlet weak var verticalSplitView: NSSplitView!
+    @IBOutlet weak var centralHorizontalSplitView: DarkSplitView!
+    @IBOutlet weak var leftVerticalSplitView: NSSplitView!
+    @IBOutlet weak var splitviewPreview: DarkSplitView!
     
     // MARK: - Timer
     var scanLocationChangeTimer:Timer!
@@ -51,7 +62,6 @@ class ViewController: NSViewController {
     
     var testTimer:Timer!
     
-    @IBOutlet weak var splitviewPreview: DarkSplitView!
     @IBOutlet weak var scrollviewMetaInfoTable: NSScrollView!
     
     var notificationPopover:NSPopover?
@@ -59,7 +69,6 @@ class ViewController: NSViewController {
     
     // MARK: - TASK
     
-    @IBOutlet weak var btnTasks: NSButton!
     var taskProgressPopover:NSPopover?
     var taskProgressViewController:TaskProgressViewController!
     
@@ -596,6 +605,50 @@ class ViewController: NSViewController {
         self.popTasks(sender)
     }
     
+    @IBAction func onToggleLeftPanel(_ sender: NSButton) {
+        let leftPanel = self.leftVerticalSplitView.arrangedSubviews[0]
+        if self.leftVerticalSplitView.isSubviewCollapsed(leftPanel) {
+            leftPanel.isHidden = false
+            self.btnToggleLeftPanel.image = Icons.collapseLeftPanel
+        }else{
+            leftPanel.isHidden = true
+            self.btnToggleLeftPanel.image = Icons.expandLeftPanel
+        }
+    }
+    
+    @IBAction func onToggleBottomPanel(_ sender: NSButton) {
+        let bottomPanel = self.centralHorizontalSplitView.arrangedSubviews[1]
+        if self.centralHorizontalSplitView.isSubviewCollapsed(bottomPanel) {
+            bottomPanel.isHidden = false
+            self.btnToggleBottomPanel.image = Icons.collapseBottomPanel
+        }else{
+            bottomPanel.isHidden = true
+            self.btnToggleBottomPanel.image = Icons.expandBottomPanel
+        }
+    }
+    
+    @IBAction func onToggleRightPanel(_ sender: NSButton) {
+        let rightPanel = self.verticalSplitView.arrangedSubviews[1]
+        if self.verticalSplitView.isSubviewCollapsed(rightPanel) {
+            rightPanel.isHidden = false
+            self.btnToggleRightPanel.image = Icons.collapseRightPanel
+        }else{
+            rightPanel.isHidden = true
+            self.btnToggleRightPanel.image = Icons.expandRightPanel
+        }
+    }
+    
+    @IBAction func onTogglePreviewInnerPanel(_ sender: NSButton) {
+        let metaTablePanel = self.splitviewPreview.arrangedSubviews[0]
+        if self.splitviewPreview.isSubviewCollapsed(metaTablePanel) {
+            metaTablePanel.isHidden = false
+            self.resizePreviewHoriztontalDivider()
+            self.btnTogglePreviewPanel.image = Icons.collapsePreviewPanel
+        }else{
+            metaTablePanel.isHidden = true
+            self.btnTogglePreviewPanel.image = Icons.expandPreviewPanel
+        }
+    }
     
     
 }

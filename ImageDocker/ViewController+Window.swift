@@ -39,19 +39,26 @@ extension ViewController {
             self.playerContainer.addConstraint(constraintPlayerHeight)
             self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(258)))
             self.playerContainer.display()
-            
-            self.splitviewPreview.setPosition(size.height - CGFloat(565), ofDividerAt: 0)
         }else {
             print("BIG SCREEN")
             let constraintPlayerHeight = NSLayoutConstraint(item: self.playerContainer, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 408)
             self.playerContainer.addConstraint(constraintPlayerHeight)
             self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(408)))
             self.playerContainer.display()
-            
-            self.splitviewPreview.setPosition(size.height - CGFloat(745), ofDividerAt: 0)
         }
         
+        self.resizePreviewHoriztontalDivider()
+        
         windowInitial = true
+    }
+    
+    internal func resizePreviewHoriztontalDivider() {
+        let size = UIHelper.windowSize()
+        if size.isSmallScreen {
+            self.splitviewPreview.setPosition(size.height - CGFloat(565), ofDividerAt: 0)
+        }else{
+            self.splitviewPreview.setPosition(size.height - CGFloat(750), ofDividerAt: 0)
+        }
     }
 }
 

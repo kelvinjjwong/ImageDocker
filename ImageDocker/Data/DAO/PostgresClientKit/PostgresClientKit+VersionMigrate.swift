@@ -500,6 +500,13 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v36") { db in
+            try db.create(table: "PeopleEvent", body: { t in
+                t.column("peopleId", .text).notNull().indexed()
+                t.column("event", .text).notNull().indexed()
+            })
+        }
+        
         do {
             try migrator.migrate(cleanVersions: dropBeforeCreate)
         }catch{
