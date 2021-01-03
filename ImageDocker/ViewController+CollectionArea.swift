@@ -15,8 +15,8 @@ extension ViewController {
         let flowLayout = NSCollectionViewFlowLayout()
         flowLayout.itemSize = NSSize(width: 180.0, height: 150.0)
         flowLayout.sectionInset = NSEdgeInsets(top: 10.0, left: 20, bottom: 10.0, right: 20.0)
-        flowLayout.minimumInteritemSpacing = 20.0
-        flowLayout.minimumLineSpacing = 20.0
+        flowLayout.minimumInteritemSpacing = 2.0
+        flowLayout.minimumLineSpacing = 2.0
         collectionView.collectionViewLayout = flowLayout
         view.wantsLayer = true
         collectionView.backgroundColors = [Colors.DarkGray]
