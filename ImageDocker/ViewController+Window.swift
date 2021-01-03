@@ -57,7 +57,7 @@ extension ViewController {
         if size.isSmallScreen {
             self.splitviewPreview.setPosition(size.height - CGFloat(565), ofDividerAt: 0)
         }else{
-            self.splitviewPreview.setPosition(size.height - CGFloat(750), ofDividerAt: 0)
+            self.splitviewPreview.setPosition(size.height - CGFloat(745), ofDividerAt: 0)
         }
     }
 }
