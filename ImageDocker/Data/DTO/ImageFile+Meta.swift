@@ -14,7 +14,7 @@ import SwiftyJSON
 import AVFoundation
 import GRDB
 
-let MetaCategorySequence:[String] = ["Location", "DateTime", "Camera", "Lens", "EXIF", "Video", "Audio", "Coordinate", "Software", "Repository", "Device", "System"]
+let MetaCategorySequence:[String] = ["Location", "DateTime", "Camera", "Lens", "EXIF", "Video", "Audio", "Coordinate", "Software", "Event", "Repository", "Device", "System"]
 
 extension ImageFile {
     
@@ -39,6 +39,10 @@ extension ImageFile {
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Filename", value: url.lastPathComponent))
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Full path", value: url.path.replacingOccurrences(of: url.lastPathComponent, with: "")))
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "", title: "Size", value: "\(photoFile.imageWidth ?? 0) x \(photoFile.imageHeight ?? 0)"))
+            }
+            
+            if let event = photoFile.event {
+                metaInfoHolder.setMetaInfo(MetaInfo(category: "Event", subCategory: "", title: "Name", value: event))
             }
             metaInfoHolder.setMetaInfo(MetaInfo(category: "Camera", subCategory: "", title: "Manufacture", value: photoFile.cameraMaker))
             let model = Naming.Camera.recognize(maker: photoFile.cameraMaker ?? "", model: photoFile.cameraModel ?? "")
