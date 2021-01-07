@@ -163,6 +163,9 @@ public class PostgresDB : DBExecutor {
             print("Error at PostgresDB.query(object:table:sql:values:offset:limit) -> [T]")
             print("Error at sql: \(_sql)")
             print(error) // better error handling goes here
+//            if "\(error)".contains("Host is down") {
+//                
+//            }
 
             return []
         }

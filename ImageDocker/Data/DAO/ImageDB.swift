@@ -10,6 +10,8 @@ import Foundation
 
 public final class ImageDB {
     
+    public static let NOTIFICATION_ERROR = "DB_ERROR"
+    
     let impl:ImageDBInterface
     
     static let local = ImageDB(impl: SQLiteConnectionGRDB.default)

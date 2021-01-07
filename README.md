@@ -42,6 +42,7 @@ v0.9.3
 
 - [PostgresClientKit](https://github.com/codewinsdotcom/PostgresClientKit): to manage data in PostgreSQL database ([Apache Licence 2.0](https://github.com/codewinsdotcom/PostgresClientKit/blob/master/LICENSE))
 - [GRDB](https://github.com/groue/GRDB.swift): to manage data in a SQLite database ([The MIT License](https://github.com/groue/GRDB.swift/blob/master/LICENSE))
+- [ACBTokenField](https://github.com/akhilcb/ACBTokenField) ([The MIT License](https://github.com/akhilcb/ACBTokenField/blob/master/LICENSE))
 - [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) ([The MIT License](https://github.com/SwiftyJSON/SwiftyJSON/blob/master/LICENSE))
 - [CryptoSwift](https://github.com/krzyzanowskim/CryptoSwift) ([License](https://github.com/krzyzanowskim/CryptoSwift/blob/master/LICENSE))
 - [ExifTool](https://www.sno.phy.queensu.ca/~phil/exiftool/): to load EXIF info from images ([Perl License](https://www.sno.phy.queensu.ca/~phil/exiftool/#license))
@@ -57,6 +58,7 @@ v0.9.3
 
 - Personal AP key of Baidu Map API is required for displaying maps and recognizing geolocations inside China
 - Personal AP key of Google Map API is required for recognizing geolocations outside China
+- OSX Fuse or iFuse should be installed before user try to load photos from iOS devices by ImageDocker
 - Android device needs to enable USB debug mode before connecting to computer via USB, so that Android Debug Bridge can access the files in the device. It would be better install [HandShaker](https://formulae.brew.sh/cask/handshaker) for easier transfer images from Android device to computer, although this application has been discontinued.
 
 ## PLEASE NOTE

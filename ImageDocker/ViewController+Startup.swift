@@ -15,6 +15,8 @@ extension ViewController {
     internal func doStartWork() {
         self.startingUp = true
         
+        self.txtSearch.isEnabled = false
+        
         let _ = PreferencesController.predefinedLocalDBFilePath // must do in main thread
         
         DispatchQueue.global().async {
@@ -88,7 +90,8 @@ extension ViewController {
         self.view.subviews.removeLast()
         self.startingUp = false
         print("FINISHED STARTUP WORK")
-        
+
+        self.configureMainSearchBar()
         self.showMemories()
     }
     
@@ -99,6 +102,7 @@ extension ViewController {
     internal func prepareToolbarsOnStartup() {
         DispatchQueue.main.async {
             self.showToolbarOfCollectionView()
+            
             
             if self.startingUp {
                 self.splashController.message("Preparing UI ...", progress: 5)

@@ -72,6 +72,9 @@
 		8E4E5B762219624D00FE4B68 /* FaceRecognitionOpenCV in Resources */ = {isa = PBXBuildFile; fileRef = 8E4E5B752219624D00FE4B68 /* FaceRecognitionOpenCV */; };
 		8E4E5B78221985A400FE4B68 /* ImageFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B77221985A400FE4B68 /* ImageFace.swift */; };
 		8E4E5B7F221F3D1800FE4B68 /* PeopleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B7E221F3D1800FE4B68 /* PeopleViewController.swift */; };
+		8E5D257C25A200A200D531A7 /* NSImage+Rotate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5D257B25A200A200D531A7 /* NSImage+Rotate.swift */; };
+		8E5D257E25A200FB00D531A7 /* URL+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5D257D25A200FB00D531A7 /* URL+Image.swift */; };
+		8E5D258025A2013900D531A7 /* TokenField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5D257F25A2013900D531A7 /* TokenField.swift */; };
 		8E69D53624B331AD0075A05D /* MomentsTreeHeaderMoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E69D53424B331AD0075A05D /* MomentsTreeHeaderMoreViewController.swift */; };
 		8E69D53724B331AD0075A05D /* MomentsTreeHeaderMoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E69D53524B331AD0075A05D /* MomentsTreeHeaderMoreViewController.xib */; };
 		8E69D53924B333510075A05D /* MomentsTree+ExtendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E69D53824B333510075A05D /* MomentsTree+ExtendView.swift */; };
@@ -393,6 +396,9 @@
 		8E4E5B752219624D00FE4B68 /* FaceRecognitionOpenCV */ = {isa = PBXFileReference; lastKnownFileType = folder; path = FaceRecognitionOpenCV; sourceTree = "<group>"; };
 		8E4E5B77221985A400FE4B68 /* ImageFace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFace.swift; sourceTree = "<group>"; };
 		8E4E5B7E221F3D1800FE4B68 /* PeopleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleViewController.swift; sourceTree = "<group>"; };
+		8E5D257B25A200A200D531A7 /* NSImage+Rotate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+Rotate.swift"; sourceTree = "<group>"; };
+		8E5D257D25A200FB00D531A7 /* URL+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Image.swift"; sourceTree = "<group>"; };
+		8E5D257F25A2013900D531A7 /* TokenField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenField.swift; sourceTree = "<group>"; };
 		8E69D53424B331AD0075A05D /* MomentsTreeHeaderMoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsTreeHeaderMoreViewController.swift; sourceTree = "<group>"; };
 		8E69D53524B331AD0075A05D /* MomentsTreeHeaderMoreViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MomentsTreeHeaderMoreViewController.xib; sourceTree = "<group>"; };
 		8E69D53824B333510075A05D /* MomentsTree+ExtendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MomentsTree+ExtendView.swift"; sourceTree = "<group>"; };
@@ -923,6 +929,16 @@
 			path = Face;
 			sourceTree = "<group>";
 		};
+		8E5D257A25A2006B00D531A7 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				8E5D257B25A200A200D531A7 /* NSImage+Rotate.swift */,
+				8E5D257D25A200FB00D531A7 /* URL+Image.swift */,
+				8E5D257F25A2013900D531A7 /* TokenField.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		8E741942242251BA002BAAAE /* Interface */ = {
 			isa = PBXGroup;
 			children = (
@@ -1168,6 +1184,7 @@
 		8ECA1FE623E325C500F56895 /* UI.Controls */ = {
 			isa = PBXGroup;
 			children = (
+				8E5D257A25A2006B00D531A7 /* Extensions */,
 				8EBA9DE6217477D900DACAAD /* UIHelper.swift */,
 				8ECA1FE923E3272000F56895 /* Alert */,
 				8ECA1FE823E326CF00F56895 /* DarkTheme */,
@@ -1737,6 +1754,7 @@
 				8EEF07222260D0E1000520B7 /* CollectionPaginationViewController.swift in Sources */,
 				8EBA759323B55B9900548376 /* EventsTreeDataSource.swift in Sources */,
 				8ECA200223E5AF2700F56895 /* MomentsTree+CollectionView.swift in Sources */,
+				8E5D257C25A200A200D531A7 /* NSImage+Rotate.swift in Sources */,
 				8EBA759523B55BAB00548376 /* DeviceTreeDataSource.swift in Sources */,
 				8EFA7CFD211D72B300419777 /* ImageDeviceFile.swift in Sources */,
 				8EBA75A123B5D06900548376 /* FaceDao.swift in Sources */,
@@ -1813,6 +1831,7 @@
 				8EB27159233842E4003BF3AF /* ImageFile+Preview.swift in Sources */,
 				8E4E5B7F221F3D1800FE4B68 /* PeopleViewController.swift in Sources */,
 				8EF4E1ED2453C05800999DD1 /* PostgresDBValueContainer.swift in Sources */,
+				8E5D257E25A200FB00D531A7 /* URL+Image.swift in Sources */,
 				8EB2719D23412FD5003BF3AF /* ViewController+Menu+Scan.swift in Sources */,
 				8E36B067217920B400646EA5 /* MonthListController.swift in Sources */,
 				8EFA02F1243B3EDF00D7C355 /* PostgresClientKit+ExportProfile.swift in Sources */,
@@ -1870,6 +1889,7 @@
 				8EAD03B723372C4600AAC7C6 /* GRDB+ImageDevice.swift in Sources */,
 				8E8D4715222991230091E9C3 /* FaceCollectionViewItem.swift in Sources */,
 				8EC82EAB2121C5A200FC0899 /* AddLocalDirectoryViewController.swift in Sources */,
+				8E5D258025A2013900D531A7 /* TokenField.swift in Sources */,
 				8E4C38D72118291F0089502C /* TreeController+LibraryEntry.swift in Sources */,
 				8EAC5F202144A60900E187E0 /* DeviceFolderViewController.swift in Sources */,
 				8EE1AB3D20D05E49001C75B0 /* EventListViewController.swift in Sources */,

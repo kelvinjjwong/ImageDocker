@@ -220,6 +220,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 """, parameterValues: [path, parentFolder])
         }catch{
             print(error)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
             return .ERROR
         }
         return .OK
@@ -233,6 +234,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 """, parameterValues: [path])
         }catch{
             print(error)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
             return .ERROR
         }
         return .OK
