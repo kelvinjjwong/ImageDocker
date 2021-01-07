@@ -88,20 +88,26 @@ extension ViewController: NSTokenFieldDelegate {
                 return [
                     "\(text) | Year",
                     "\(text) | Event",
-                    "\(text) | Place"
+                    "\(text) | Place",
+                    "\(text) | Note",
+                    "\(text) | Folder"
                 ]
             }else if number > 0 && number <= 12 {
                 return [
                     "\(text) | Month",
                     "\(text) | Day",
                     "\(text) | Event",
-                    "\(text) | Place"
+                    "\(text) | Place",
+                    "\(text) | Note",
+                    "\(text) | Folder"
                 ]
             }else if number > 0 && number <= 31 {
                 return [
                     "\(text) | Day",
                     "\(text) | Event",
-                    "\(text) | Place"
+                    "\(text) | Place",
+                    "\(text) | Note",
+                    "\(text) | Folder"
                 ]
             }
         }
@@ -109,6 +115,8 @@ extension ViewController: NSTokenFieldDelegate {
             "\(text) | Event",
             "\(text) | Place",
             "\(text) | Camera",
+            "\(text) | Note",
+            "\(text) | Folder"
         ]
     }
 
