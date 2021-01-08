@@ -43,72 +43,28 @@ extension ViewController {
     // MARK: CLICK ACTION
     
     func loadCollectionByPlace(moment:Moment, pageSize:Int = 0, pageNumber:Int = 0){
-            // disable click event on gov nodes
-    //        if collection.placeData == "" && collection.countryData == "" && collection.provinceData == "" && collection.cityData == "" {
-    //            print("SELECTED GOV COLLECTION:")
-    //            print("\(collection.countryData) | \(collection.provinceData) | \(collection.cityData) | \(collection.placeData)")
-    //            return
-    //        }
-            print("SELECTED PLACE COLLECTION:")
-            print("\(moment.countryData) | \(moment.provinceData) | \(moment.cityData) | \(moment.placeData)")
+        print("SELECTED PLACE COLLECTION:")
+        print("\(moment.countryData) | \(moment.provinceData) | \(moment.cityData) | \(moment.placeData)")
             
-            self.selectedMoment = moment
-            //guard !self.scaningRepositories && !self.creatingRepository else {return}
-            TaskManager.loadingImagesCollection = true
-            
-            self.imagesLoader.clean()
-            collectionView.reloadData()
-            
-            self.imagesLoader.showHidden = self.chbShowHidden.state == .on
-            
-            DispatchQueue.global().async {
-                self.collectionLoadingIndicator = Accumulator(target: moment.photoCount, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {data in
-                    TaskManager.loadingImagesCollection = false
-                    //                let total:Int = data["total"] ?? 0
-                    //                let hidden:Int = data["hidden"] ?? 0
-                    //                let message:String = "\(total) images, \(hidden) hidden"
-                    //                self.indicatorMessage.stringValue = message
-                })
-                //print("GETTING COLLECTION \(collection.year) \(collection.month) \(collection.day) \(collection.place ?? "")")
-                if self.imagesLoader.isLoading() {
-                    DispatchQueue.main.async {
-                        self.indicatorMessage.stringValue = "Cancelling last request ..."
-                    }
-                    self.imagesLoader.cancel(onCancelled: {
-                        self.imagesLoader.load(
-                            year: moment.year,
-                            month: moment.month,
-                            day: moment.day,
-                            ignoreDate: (moment.year == 0),
-                            country: moment.countryData,
-                            province: moment.provinceData,
-                            city: moment.cityData,
-                            place: moment.placeData,
-                            filterImageSource: self.filterImageSource,
-                            filterCameraModel: self.filterCameraModel,
-                            indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber)
-                        self.refreshCollectionView()
-                        TaskManager.loadingImagesCollection = false
-                    })
-                }else{
-                    self.imagesLoader.load(
-                        year: moment.year,
-                        month: moment.month,
-                        day: moment.day,
-                        ignoreDate: (moment.year == 0),
-                        country: moment.countryData,
-                        province: moment.provinceData,
-                        city: moment.cityData,
-                        place: moment.placeData,
-                        filterImageSource: self.filterImageSource,
-                        filterCameraModel: self.filterCameraModel,
-                        indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber)
-                    self.refreshCollectionView()
-                    TaskManager.loadingImagesCollection = false
-                }
-                
-            }
+        self.selectedMoment = moment
+        
+        loadCollection {
+            self.imagesLoader.load(
+                year: moment.year,
+                month: moment.month,
+                day: moment.day,
+                ignoreDate: (moment.year == 0),
+                country: moment.countryData,
+                province: moment.provinceData,
+                city: moment.cityData,
+                place: moment.placeData,
+                filterImageSource: self.filterImageSource,
+                filterCameraModel: self.filterCameraModel,
+                indicator:self.collectionLoadingIndicator,
+                pageSize: pageSize,
+                pageNumber: pageNumber)
         }
+    }
     
     
 }

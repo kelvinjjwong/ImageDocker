@@ -34,37 +34,11 @@ extension ViewController {
         if keyword != "" {
             let condition = SearchCondition.get(from: keyword)
             
-            TaskManager.loadingImagesCollection = true
-            
-            self.imagesLoader.clean()
-            collectionView.reloadData()
-            
-            self.imagesLoader.showHidden = self.chbShowHidden.state == .on
-            
-            DispatchQueue.global().async {
-                self.collectionLoadingIndicator = Accumulator(target: 100, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {data in
-                    TaskManager.loadingImagesCollection = false
-                    //                let total:Int = data["total"] ?? 0
-                    //                let hidden:Int = data["hidden"] ?? 0
-                    //                let message:String = "\(total) images, \(hidden) hidden"
-                    //                self.indicatorMessage.stringValue = message
-                })
-                if self.imagesLoader.isLoading() {
-                    DispatchQueue.main.async {
-                        self.indicatorMessage.stringValue = "Cancelling last request ..."
-                    }
-                    self.imagesLoader.cancel(onCancelled: {
-                        self.imagesLoader.search(conditions: condition, indicator: self.collectionLoadingIndicator, pageSize: 200, pageNumber: 1)
-                        self.refreshCollectionView()
-                        TaskManager.loadingImagesCollection = false
-                    })
-                }else{
-                    self.imagesLoader.search(conditions: condition, indicator: self.collectionLoadingIndicator, pageSize: 200, pageNumber: 1)
-                    self.refreshCollectionView()
-                    TaskManager.loadingImagesCollection = false
-                }
-                self.runningSearch = false
-                
+            loadCollection {
+                self.imagesLoader.search(
+                    conditions: condition,
+                    indicator: self.collectionLoadingIndicator,
+                    pageSize: 200, pageNumber: 1)
             }
         }else{
             self.imagesLoader.clean()
@@ -90,7 +64,9 @@ extension ViewController: NSTokenFieldDelegate {
                     "\(text) | Event",
                     "\(text) | Place",
                     "\(text) | Note",
-                    "\(text) | Folder"
+                    "\(text) | Camera",
+                    "\(text) | Folder",
+                    "\(text) | Any"
                 ]
             }else if number > 0 && number <= 12 {
                 return [
@@ -99,7 +75,9 @@ extension ViewController: NSTokenFieldDelegate {
                     "\(text) | Event",
                     "\(text) | Place",
                     "\(text) | Note",
-                    "\(text) | Folder"
+                    "\(text) | Camera",
+                    "\(text) | Folder",
+                    "\(text) | Any"
                 ]
             }else if number > 0 && number <= 31 {
                 return [
@@ -107,16 +85,20 @@ extension ViewController: NSTokenFieldDelegate {
                     "\(text) | Event",
                     "\(text) | Place",
                     "\(text) | Note",
-                    "\(text) | Folder"
+                    "\(text) | Camera",
+                    "\(text) | Folder",
+                    "\(text) | Any"
                 ]
             }
         }
         return [
             "\(text) | Event",
             "\(text) | Place",
-            "\(text) | Camera",
+            "\(text) | Person",
             "\(text) | Note",
-            "\(text) | Folder"
+            "\(text) | Camera",
+            "\(text) | Folder",
+            "\(text) | Any"
         ]
     }
 
@@ -145,6 +127,7 @@ extension ViewController: NSTokenFieldDelegate {
         return nil
     }
     
+    // not shared
     @objc private func tokenFieldMenuItemTapped(_ menuItem: NSMenuItem) {
         if let fieldEditor = txtSearch?.currentEditor() {
             let textRange = fieldEditor.selectedRange

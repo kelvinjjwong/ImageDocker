@@ -37,37 +37,17 @@ extension ViewController {
         //guard !self.scaningRepositories && !self.creatingRepository else {return}
         print("select \(year) \(month) \(day)")
         
-        TaskManager.loadingImagesCollection = true
-        
-        self.imagesLoader.clean()
-        collectionView.reloadData()
-        
-        self.imagesLoader.showHidden = self.chbShowHidden.state == .on
-        
-        DispatchQueue.global().async {
-            self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {data in
-                TaskManager.loadingImagesCollection = false
-                //                let total:Int = data["total"] ?? 0
-                //                let hidden:Int = data["hidden"] ?? 0
-                //                let message:String = "\(total) images, \(hidden) hidden"
-                //                self.indicatorMessage.stringValue = message
-            })
-            //print("GETTING COLLECTION \(collection.year) \(collection.month) \(collection.day) \(collection.place ?? "")")
-            if self.imagesLoader.isLoading() {
-                DispatchQueue.main.async {
-                    self.indicatorMessage.stringValue = "Cancelling last request ..."
-                }
-                self.imagesLoader.cancel(onCancelled: {
-                    self.imagesLoader.load(year: year, month: month, day: day, place: nil, filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel, indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber)
-                    self.refreshCollectionView()
-                    TaskManager.loadingImagesCollection = false
-                })
-            }else{
-                self.imagesLoader.load(year: year, month: month, day: day, place: nil, filterImageSource: self.filterImageSource, filterCameraModel: self.filterCameraModel,  indicator:self.collectionLoadingIndicator, pageSize: pageSize, pageNumber: pageNumber)
-                self.refreshCollectionView()
-                TaskManager.loadingImagesCollection = false
-            }
-            
+        loadCollection {
+            self.imagesLoader.load(
+                year: year,
+                month: month,
+                day: day,
+                place: nil,
+                filterImageSource: self.filterImageSource,
+                filterCameraModel: self.filterCameraModel,
+                indicator:self.collectionLoadingIndicator,
+                pageSize: pageSize,
+                pageNumber: pageNumber)
         }
     }
     

@@ -141,4 +141,36 @@ extension ViewController {
         // TODO pop up window for collection filter
         print("todo pop up")
     }
+    
+    // MARK: - COLLECTION DATA LOAD
+    
+    func loadCollection(imagesLoader: @escaping (() -> Void) ){
+        TaskManager.loadingImagesCollection = true
+        
+        self.imagesLoader.clean()
+        collectionView.reloadData()
+        
+        self.imagesLoader.showHidden = self.chbShowHidden.state == .on
+        
+        DispatchQueue.global().async {
+            self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {data in
+                TaskManager.loadingImagesCollection = false
+            })
+            if self.imagesLoader.isLoading() {
+                DispatchQueue.main.async {
+                    self.indicatorMessage.stringValue = "Cancelling last request ..."
+                }
+                self.imagesLoader.cancel(onCancelled: {
+                    imagesLoader()
+                    self.refreshCollectionView()
+                    TaskManager.loadingImagesCollection = false
+                })
+            }else{
+                imagesLoader()
+                self.refreshCollectionView()
+                TaskManager.loadingImagesCollection = false
+            }
+            
+        }
+    }
 }
