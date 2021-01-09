@@ -24,6 +24,26 @@ extension ViewController {
     
     @objc func processMainSearch() {
         print("======== process main search === \(self.txtSearch.tokenStringValue)")
+        let keywords = self.txtSearch.tokenStringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        if keywords != "" {
+            let conditions = SearchCondition.get(from: keywords, includeHidden: (self.chbShowHidden.state == .on))
+            
+            loadCollection {
+                self.imagesLoader.search(
+                    conditions: conditions,
+                    indicator: self.collectionLoadingIndicator,
+                    pageSize: 200, pageNumber: 1)
+            }
+        }else{
+            self.imagesLoader.clean()
+            collectionView.reloadData()
+            self.imagesLoader.clearSearch(pageSize: 200, pageNumber: 1)
+            DispatchQueue.global().async {
+                self.imagesLoader.reload()
+                self.refreshCollectionView()
+                self.runningSearch = false
+            }
+        }
     }
     
     internal func search(_ keyword:String) {
