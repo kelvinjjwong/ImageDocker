@@ -648,6 +648,29 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         return result
     }
     
+    func searchImages(condition:SearchCondition, includeHidden:Bool, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)?, pageSize:Int, pageNumber:Int) -> [Image] {
+        let db = PostgresConnection.database()
+        print("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
+        let (stmt, stmtHidden) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: condition, includeHidden: includeHidden)
+        
+        var result:[Image] = []
+        let hiddenCount = db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)")
+        if pageNumber > 0 && pageSize > 0 {
+            result = Image.fetchAll(db, sql: """
+                select * from "Image" where \(stmt) order by "photoTakenDate", filename
+                """, offset: pageSize * (pageNumber - 1), limit: pageSize)
+        }else{
+            result = Image.fetchAll(db, sql: """
+                select * from "Image" where \(stmt) order by "photoTakenDate", filename
+                """)
+        }
+        if hiddenCountHandler != nil {
+            hiddenCountHandler!(hiddenCount)
+        }
+        print("loaded \(result.count) records")
+        return result
+    }
+    
     func getImagesByDate(year: Int, month: Int, day: Int, event: String?) -> [Image] {
         let db = PostgresConnection.database()
         var sql = """

@@ -95,6 +95,15 @@ struct SQLHelper {
         return ""
     }
     
+    static func joinStatementConditions(fields:[String], values:[String], like:Bool = false, or:Bool = false) -> String {
+        var conditions:[String] = []
+        for field in fields {
+            let conditionStatement = joinArrayToStatementCondition(values: values, field: field, like: like)
+            conditions.append(conditionStatement)
+        }
+        return joinStatementConditions(conditions: conditions, or: or)
+    }
+    
     static func joinArrayToStatementCondition(values:[String], field:String, like:Bool = false) -> String {
         var statement = ""
         if values.count > 0 {
@@ -359,6 +368,115 @@ struct SQLHelper {
             ], or: true)
         
         let stmtWithoutHiddenFlag = SQLHelper.joinStatementConditions(conditions: [dateStatement, peopleIdStatement, keywordStatement])
+        
+        let stmt = "\(stmtWithoutHiddenFlag) \(hiddenFlagStatement)"
+        let stmtHidden = "\(stmtWithoutHiddenFlag) \(hiddenStatement)"
+        
+        print("------")
+        print(stmt)
+        print("------")
+        
+        return (stmt, stmtHidden)
+    }
+    
+    static func generateSQLStatementForSearchingPhotoFiles(condition:SearchCondition, includeHidden:Bool = true) -> (String, String) {
+        
+        var hiddenFlagStatement = ""
+        if !includeHidden {
+            hiddenFlagStatement = "AND hidden=false AND \"hiddenByRepository\"=false AND \"hiddenByContainer\"=false"
+        }
+        let hiddenStatement = "AND (hidden=true OR \"hiddenByRepository\"=true OR \"hiddenByContainer\"=true)"
+        
+        let yearStatement = SQLHelper.joinArrayToStatementCondition(values: condition.years, field: "photoTakenYear".quotedDatabaseIdentifier)
+        let monthStatement = SQLHelper.joinArrayToStatementCondition(values: condition.months, field: "photoTakenMonth".quotedDatabaseIdentifier)
+        let dayStatement = SQLHelper.joinArrayToStatementCondition(values: condition.days, field: "photoTakenDay".quotedDatabaseIdentifier)
+        
+        // let peopleIdStatement = SQLHelper.joinArrayToStatementCondition(values: condition.peopleIds, field: "recognizedPeopleIds".quotedDatabaseIdentifier, like: true)
+        
+        let eventStatement = SQLHelper.joinArrayToStatementCondition(values: condition.events, field: "event".quotedDatabaseIdentifier, like: true)
+        
+        let notesStatement = SQLHelper.joinStatementConditions(fields: [
+            "longDescription",
+            "shortDescription"
+        ], values: condition.notes, like: true, or: true)
+        
+        let placesStatement = SQLHelper.joinStatementConditions(fields: [
+            "place",
+            "country",
+            "province",
+            "city",
+            "district",
+            "businessCircle",
+            "street",
+            "address",
+            "addressDescription",
+            "assignPlace",
+            "assignCountry",
+            "assignProvince",
+            "assignCity",
+            "assignDistrict",
+            "assignBusinessCircle",
+            "assignStreet",
+            "assignAddress",
+            "assignAddressDescription"
+        ], values: condition.notes, like: true, or: true)
+        
+        let camerasStatement = SQLHelper.joinStatementConditions(fields: [
+            "cameraMaker",
+            "cameraModel",
+            "softwareName"
+        ], values: condition.notes, like: true, or: true)
+        
+        let folderStatement = SQLHelper.joinArrayToStatementCondition(values: condition.folders, field: "repositoryPath".quotedDatabaseIdentifier, like: true)
+        
+        let filenameStatement = SQLHelper.joinArrayToStatementCondition(values: condition.filenames, field: "filename".quotedDatabaseIdentifier, like: true)
+        
+        let anyStatement = SQLHelper.joinStatementConditions(fields: [
+            "event",
+            "longDescription",
+            "shortDescription",
+            "place",
+            "country",
+            "province",
+            "city",
+            "district",
+            "businessCircle",
+            "street",
+            "address",
+            "addressDescription",
+            "assignPlace",
+            "assignCountry",
+            "assignProvince",
+            "assignCity",
+            "assignDistrict",
+            "assignBusinessCircle",
+            "assignStreet",
+            "assignAddress",
+            "assignAddressDescription",
+            "cameraMaker",
+            "cameraModel",
+            "softwareName",
+            "repositoryPath",
+            "filename"
+        ], values: condition.notes, like: true, or: true)
+        
+        let stmtWithoutHiddenFlag = SQLHelper.joinStatementConditions(conditions: [
+            
+            yearStatement,
+            monthStatement,
+            dayStatement,
+            
+            eventStatement,
+            notesStatement,
+            placesStatement,
+            camerasStatement,
+            
+            folderStatement,
+            filenameStatement,
+            
+            anyStatement
+            
+        ], or: false)
         
         let stmt = "\(stmtWithoutHiddenFlag) \(hiddenFlagStatement)"
         let stmtHidden = "\(stmtWithoutHiddenFlag) \(hiddenStatement)"

@@ -213,18 +213,13 @@ class CollectionViewItemsLoader: NSObject {
         self.indicator = indicator
         
         //var urls: [URL] = []
-        let photoFiles = ImageSearchDao.default.searchPhotoFiles(years: conditions.years,
-                                                             months: conditions.months,
-                                                             days: conditions.days,
-                                                             peopleIds: conditions.peopleIds,
-                                                             keywords: conditions.keywords,
-                                                             includeHidden: conditions.includeHidden,
-                                                             hiddenCountHandler: self.hiddenCountHandler,
-                                                             pageSize: pageSize, pageNumber: pageNumber)
-        //print("GOT PHOTOS for year:\(year) month:\(month) day:\(day) event:\(event) place:\(place) count \(photoFiles.count)")
-        //for photoFile in photoFiles {
-        //    urls.append(URL(fileURLWithPath: photoFile.path!))
-        //}
+        let photoFiles = ImageSearchDao.default.searchImages(
+             condition: conditions,
+             includeHidden: conditions.includeHidden,
+             hiddenCountHandler: self.hiddenCountHandler,
+             pageSize: pageSize,
+             pageNumber: pageNumber)
+        
         setupItems(photoFiles: photoFiles)
         
     }

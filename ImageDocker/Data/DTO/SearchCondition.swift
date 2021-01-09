@@ -14,52 +14,169 @@ struct SearchCondition {
     var months:[Int]
     var days:[Int]
     var peopleIds:[String]
-    var keywords:[String]
+    var events:[String]
+    var places:[String]
+    var notes:[String]
+    var cameras:[String]
+    var folders:[String]
+    var filenames:[String]
+    var any:[String]
     var includeHidden:Bool
     
     static func get(from query:String, includeHidden:Bool = false) -> SearchCondition {
-        var peopleIds:[String] = []
-        var keys:[String] = []
         var years:[Int] = []
         var months:[Int] = []
         var days:[Int] = []
-        let keywords = query.components(separatedBy: " ")
-        for kw in keywords {
-            let keyword = kw.replacingOccurrences(of: "'", with: "")
-            if let i = Int(keyword), keyword.count == 4 {
-                years.append(i)
-            }else if keyword.count == 5 && keyword.hasSuffix("年") {
-                let index = keyword.index(keyword.startIndex, offsetBy: 4)
-                let year = keyword.prefix(upTo: index)
-                if let y = Int(year) {
-                    years.append(y)
-                }else{
-                    keys.append(keyword)
-                }
-            }else if keyword.count <= 3 && keyword.hasSuffix("月") {
-                let index = keyword.index(keyword.startIndex, offsetBy: keyword.count-1)
-                let month = keyword.prefix(upTo: index)
-                if let m = Int(month) {
-                    months.append(m)
-                }else{
-                    keys.append(keyword)
-                }
-            }else if keyword.count <= 3 && (keyword.hasSuffix("日") || keyword.hasSuffix("号")) {
-                let index = keyword.index(keyword.startIndex, offsetBy: keyword.count-1)
-                let day = keyword.prefix(upTo: index)
-                if let d = Int(day) {
-                    print("search day: \(d)")
-                    days.append(d)
-                }else{
-                    keys.append(keyword)
-                }
-            }else if let peopleId = FaceTask.default.peopleId(name: keyword) {
-                peopleIds.append(peopleId)
-                //keys.append(keyword)
+        var peopleIds:[String] = []
+        var events:[String] = []
+        var places:[String] = []
+        var notes:[String] = []
+        var cameras:[String] = []
+        var folders:[String] = []
+        var filenames:[String] = []
+        var any:[String] = []
+        let conditions = query.components(separatedBy: "||")
+        for condition in conditions {
+            var keyword = ""
+            var type = ""
+            let part = condition.components(separatedBy: " | ")
+            if part.count == 1 {
+                any.append(condition)
+            }else if part.count == 2 {
+                keyword = part[0].replacingOccurrences(of: "'", with: "''")
+                                 .replacingOccurrences(of: "--", with: "")
+                                 .trimmingCharacters(in: .whitespacesAndNewlines)
+                type = part[1].replacingOccurrences(of: "'", with: "''")
+                              .trimmingCharacters(in: .whitespacesAndNewlines)
             }else{
-                keys.append(keyword)
+                print("Unrecognized search condition \"\(condition)\"")
+                continue
             }
+            
+            if type == YEAR {
+                if let i = Int(keyword), i >= 1950 && i < 10000 {
+                    years.append(i)
+                }else{
+                    print("Unrecognized search condition \"\(condition)\"")
+                    continue
+                }
+            }else if type == MONTH {
+                if let i = Int(keyword), i >= 1 && i <= 12 {
+                    months.append(i)
+                }else{
+                    print("Unrecognized search condition \"\(condition)\"")
+                    continue
+                }
+            }else if type == DAY {
+                if let i = Int(keyword), i >= 1 && i <= 31 {
+                    days.append(i)
+                }else{
+                    print("Unrecognized search condition \"\(condition)\"")
+                    continue
+                }
+            }else if type == PEOPLE {
+                peopleIds.append(keyword)
+            }else if type == EVENT {
+                events.append(keyword)
+            }else if type == PLACE {
+                places.append(keyword)
+            }else if type == NOTE {
+                notes.append(keyword)
+            }else if type == CAMERA {
+                cameras.append(keyword)
+            }else if type == FOLDER {
+                folders.append(keyword)
+            }else if type == FILENAME {
+                filenames.append(keyword)
+            }else if type == ANY {
+                any.append(keyword)
+            }else{
+                print("Unrecognized search condition \"\(condition)\"")
+                continue
+            }
+            
         }
-        return SearchCondition(years: years, months: months, days: days, peopleIds: peopleIds, keywords: keys, includeHidden: includeHidden)
+        return SearchCondition(
+                        years: years,
+                        months: months,
+                        days: days,
+                        peopleIds: peopleIds,
+                        events: events,
+                        places: places,
+                        notes: notes,
+                        cameras: cameras,
+                        folders: folders,
+                        filenames: filenames,
+                        any: any,
+                        includeHidden: includeHidden)
+    }
+    
+    
+    // MARK: - Prompt text localized
+    
+    static var YEAR:String {
+        get {
+            return "Year"
+        }
+    }
+    
+    static var MONTH:String {
+        get {
+            return "Month"
+        }
+    }
+    
+    static var DAY:String {
+        get {
+            return "Day"
+        }
+    }
+    
+    static var PEOPLE:String {
+        get {
+            return "Person"
+        }
+    }
+    
+    static var EVENT:String {
+        get{
+            return "Event"
+        }
+    }
+    
+    static var PLACE:String {
+        get{
+            return "Place"
+        }
+    }
+    
+    static var NOTE:String {
+        get{
+            return "Note"
+        }
+    }
+    
+    static var CAMERA:String {
+        get{
+            return "Camera"
+        }
+    }
+    
+    static var FOLDER:String {
+        get{
+            return "Folder"
+        }
+    }
+    
+    static var FILENAME:String {
+        get{
+            return "Filename"
+        }
+    }
+    
+    static var ANY:String {
+        get{
+            return "Any"
+        }
     }
 }

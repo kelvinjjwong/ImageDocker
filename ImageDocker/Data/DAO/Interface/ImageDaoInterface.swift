@@ -84,6 +84,8 @@ protocol ImageSearchDaoInterface {
     // search by date & people & any keywords
     func searchPhotoFiles(years:[Int], months:[Int], days:[Int], peopleIds:[String], keywords:[String], includeHidden:Bool, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? , pageSize:Int, pageNumber:Int) -> [Image]
     
+    func searchImages(condition:SearchCondition, includeHidden:Bool, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)?, pageSize:Int, pageNumber:Int) -> [Image]
+    
     // MARK: - DATE
     
     
