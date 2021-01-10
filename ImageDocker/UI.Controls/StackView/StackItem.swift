@@ -28,7 +28,7 @@ protocol StackItemHeader : class {
     
     var gotoAction: ((String) -> ())? { get set }
     
-    var filterAction: ((String) -> ())? { get set }
+    var filterAction: (() -> ())? { get set }
     
     var moreAction: ((NSButton) -> ())? { get set }
     

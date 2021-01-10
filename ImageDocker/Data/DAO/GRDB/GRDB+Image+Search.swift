@@ -85,42 +85,10 @@ class ImageSearchDaoGRDB : ImageSearchDaoInterface {
     
     // MARK: - SEARCH
     
-    // search by date & people & any keywords
-    func searchPhotoFiles(years:[Int], months:[Int], days:[Int], peopleIds:[String], keywords:[String], includeHidden:Bool = true, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil , pageSize:Int = 0, pageNumber:Int = 0) -> [Image] {
-        
-        print("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
-        let (stmt, stmtHidden) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(years: years, months: months, days: days, peopleIds: peopleIds, keywords: keywords, includeHidden:includeHidden)
-        
-        var result:[Image] = []
-        var hiddenCount:Int = 0
-        do {
-            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
-            try db.read { db in
-                hiddenCount = try Image.filter(sql: stmtHidden).fetchCount(db)
-                if pageNumber > 0 && pageSize > 0 {
-                    result = try Image.filter(sql:stmt)
-                        .order([Column("photoTakenDate").asc, Column("filename").asc])
-                        .limit(pageSize, offset: pageSize * (pageNumber - 1))
-                        .fetchAll(db)
-                }else{
-                    result = try Image.filter(sql:stmt)
-                        .order([Column("photoTakenDate").asc, Column("filename").asc])
-                        .fetchAll(db)
-                }
-            }
-        }catch{
-            print(error)
-        }
-        if hiddenCountHandler != nil {
-            hiddenCountHandler!(hiddenCount)
-        }
-        return result
-    }
-    
     func searchImages(condition:SearchCondition, includeHidden:Bool, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)?, pageSize:Int, pageNumber:Int) -> [Image] {
         
         print("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
-        let (stmt, stmtHidden) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: condition, includeHidden: includeHidden)
+        let (stmt, stmtHidden) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: condition, includeHidden: includeHidden, quoteColumn: false)
         
         var result:[Image] = []
         var hiddenCount:Int = 0

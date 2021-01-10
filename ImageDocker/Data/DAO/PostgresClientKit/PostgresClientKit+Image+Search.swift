@@ -223,10 +223,47 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
             arguments = "AND \"photoTakenYear\"=\(year) AND \"photoTakenMonth\"=\(month)"
         }
         
+        var additionalConditions = ""
+        if let cd = condition {
+            if !cd.isEmpty() {
+                (additionalConditions, _) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: cd, includeHidden: true, quoteColumn: true)
+            }
+        }
+        if additionalConditions.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+            additionalConditions = "AND \(additionalConditions)"
+        }
+        
         let sql = """
         SELECT count(path) as "photoCount", \(fields)  FROM
-        (SELECT COALESCE("photoTakenYear",0) AS "photoTakenYear", COALESCE("photoTakenMonth",0) AS "photoTakenMonth", COALESCE("photoTakenDay",0) AS "photoTakenDay", path, "imageSource", "cameraModel" from "Image") t
-        WHERE 1=1 \(arguments) GROUP BY \(fields) ORDER BY \(fields) DESC
+        (SELECT COALESCE("photoTakenYear",0) AS "photoTakenYear", COALESCE("photoTakenMonth",0) AS "photoTakenMonth", COALESCE("photoTakenDay",0) AS "photoTakenDay", path, "imageSource", 
+        "event",
+        "longDescription",
+        "shortDescription",
+        "place",
+        "country",
+        "province",
+        "city",
+        "district",
+        "businessCircle",
+        "street",
+        "address",
+        "addressDescription",
+        "assignPlace",
+        "assignCountry",
+        "assignProvince",
+        "assignCity",
+        "assignDistrict",
+        "assignBusinessCircle",
+        "assignStreet",
+        "assignAddress",
+        "assignAddressDescription",
+        "cameraMaker",
+        "cameraModel",
+        "softwareName",
+        "repositoryPath",
+        "filename"
+        from "Image") t
+        WHERE 1=1 \(arguments) \(additionalConditions) GROUP BY \(fields) ORDER BY \(fields) DESC
         """
         print(">> Postgres SQL of loading moments treeview")
         print(sql)
@@ -625,33 +662,10 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         return result
     }
     
-    func searchPhotoFiles(years: [Int], months: [Int], days: [Int], peopleIds: [String], keywords: [String], includeHidden: Bool, hiddenCountHandler: ((Int) -> Void)?, pageSize: Int, pageNumber: Int) -> [Image] {
-        let db = PostgresConnection.database()
-        print("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
-        let (stmt, stmtHidden) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(years: years, months: months, days: days, peopleIds: peopleIds, keywords: keywords, includeHidden:includeHidden)
-        
-        var result:[Image] = []
-        let hiddenCount = db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)")
-        if pageNumber > 0 && pageSize > 0 {
-            result = Image.fetchAll(db, sql: """
-                select * from "Image" where \(stmt) order by "photoTakenDate", filename
-                """, offset: pageSize * (pageNumber - 1), limit: pageSize)
-        }else{
-            result = Image.fetchAll(db, sql: """
-                select * from "Image" where \(stmt) order by "photoTakenDate", filename
-                """)
-        }
-        if hiddenCountHandler != nil {
-            hiddenCountHandler!(hiddenCount)
-        }
-        print("loaded \(result.count) records")
-        return result
-    }
-    
     func searchImages(condition:SearchCondition, includeHidden:Bool, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)?, pageSize:Int, pageNumber:Int) -> [Image] {
         let db = PostgresConnection.database()
         print("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
-        let (stmt, stmtHidden) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: condition, includeHidden: includeHidden)
+        let (stmt, stmtHidden) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: condition, includeHidden: includeHidden, quoteColumn: true)
         
         var result:[Image] = []
         let hiddenCount = db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)")

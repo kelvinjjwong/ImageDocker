@@ -37,7 +37,7 @@ struct SearchCondition {
             && any.isEmpty
     }
     
-    static func get(from query:String, includeHidden:Bool = false) -> SearchCondition {
+    static func get(from query:String, separator:String = " | ", includeHidden:Bool = false) -> SearchCondition {
         var years:[Int] = []
         var months:[Int] = []
         var days:[Int] = []
@@ -53,7 +53,7 @@ struct SearchCondition {
         for condition in conditions {
             var keyword = ""
             var type = ""
-            let part = condition.components(separatedBy: " | ")
+            let part = condition.components(separatedBy: separator)
             if part.count == 1 {
                 any.append(condition)
             }else if part.count == 2 {

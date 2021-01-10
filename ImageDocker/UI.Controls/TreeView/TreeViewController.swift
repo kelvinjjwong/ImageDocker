@@ -20,7 +20,7 @@ class TreeViewController : StackBodyViewController {
     @IBOutlet weak var outlineView: TreeOutlineView!
     @IBOutlet weak var scrollView: NSScrollView!
     
-    var collectionLoader:((TreeCollection?) -> ([TreeCollection], String?))?
+    var collectionLoader:((TreeCollection?, SearchCondition) -> ([TreeCollection], String?))?
     var collectionIcon:((TreeCollection) -> NSImage)?
     var collectionTitle:((TreeCollection) -> String)?
     var collectionValue:((TreeCollection) -> Int)?
@@ -63,9 +63,10 @@ class TreeViewController : StackBodyViewController {
     
     // show roots
     func show() {
+        let condition = SearchCondition.get(from: stackItemContainer!.header.searchCondition, separator: "|") // search includes hidden images
         DispatchQueue.global().async {
             if self.collectionLoader != nil {
-                let (treeNodes, message) = self.collectionLoader!(nil)
+                let (treeNodes, message) = self.collectionLoader!(nil, condition)
                 self.trees = treeNodes
                 
                 if let msg = message {
@@ -248,9 +249,10 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate, Tr
     }
     
     func expandTreeNode(_ item:TreeCollection){
+        let condition = SearchCondition.get(from: self.stackItemContainer!.header.searchCondition, separator: "|") // search includes hidden images
         DispatchQueue.global().async {
             if self.collectionLoader != nil {
-                let (treeNodes, message) = self.collectionLoader!(item)
+                let (treeNodes, message) = self.collectionLoader!(item, condition)
                 
                 if treeNodes.count > 0 {
                     DispatchQueue.main.async {

@@ -23,7 +23,7 @@ class StackHeaderViewController : NSViewController, StackItemHeader {
     
     var gotoAction: ((String) -> ())? // optional extendable method
     
-    var filterAction: ((String) -> ())? // optional extendable method
+    var filterAction: (() -> ())? // optional extendable method
     
     var moreAction: ((NSButton) -> ())? // optional extendable method
     
@@ -74,6 +74,9 @@ class StackHeaderViewController : NSViewController, StackItemHeader {
     
     @objc func processSearch() {
         print("===== TREE search: \(self.searchField.tokenStringValue)")
+        if self.filterAction != nil {
+            self.filterAction!()
+        }
     }
     
     // MARK: - Actions
@@ -83,29 +86,8 @@ class StackHeaderViewController : NSViewController, StackItemHeader {
         disclose?()
     }
     
-    @IBAction func onGotoClicked(_ sender: NSButton) {
-        let text = self.searchField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        gotoAction?(text)
-    }
-    
-    @IBAction func onFilterClicked(_ sender: NSButton) {
-        let text = self.searchField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        print("filter button clicked with \(text)")
-        if text != "" {
-            filterAction?(text)
-        }
-    }
-    
     @IBAction func onMoreClicked(_ sender: NSButton) {
         moreAction?(sender)
-    }
-    
-    @IBAction func onSearchAction(_ sender: NSSearchField) {
-        let text = self.searchField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        print("filter button clicked with \(text)")
-        if text != "" {
-            filterAction?(text)
-        }
     }
     
     // MARK: - StackItemHeader Procotol

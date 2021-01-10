@@ -60,11 +60,12 @@ class StackedTreeViewController: NSViewController, StackItemHost {
         
         
         // MARK: loader and actions
-        treeView.collectionLoader = { collection in
+        treeView.collectionLoader = { collection, condition in
             if disableFilter {
                 return dataSource.loadChildren(collection, condition: nil)
             }else{
-                let condition = SearchCondition.get(from: treeView.stackItemContainer!.header.searchCondition) // search includes hidden images
+                DispatchQueue.main.async {
+                }
                 return dataSource.loadChildren(collection, condition: condition)
             }
         }
@@ -111,8 +112,9 @@ class StackedTreeViewController: NSViewController, StackItemHost {
         stackItem.header.moreAction = moreActionOnHeader
         
         if !disableFilter {
-            stackItem.header.filterAction = { keyword in
-                treeView.filter(keyword: keyword)
+            stackItem.header.filterAction = { 
+                //treeView.filter(keyword: keyword)
+                treeView.show()
             }
 //            stackItem.header.gotoAction = { keyword in
 //                treeView.findNode(keyword: keyword)
