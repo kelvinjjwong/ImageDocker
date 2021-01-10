@@ -314,6 +314,7 @@ class ViewController: NSViewController {
         self.btnChoiceMapService.setImage(nil, forSegment: 0)
         self.btnChoiceMapService.setImage(tick, forSegment: 1)
         
+        
         self.suppressedScan = true
 //        self.btnScanState.image = NSImage(named: NSImage.Name.statusNone)
 //        self.btnScanState.isHidden = true

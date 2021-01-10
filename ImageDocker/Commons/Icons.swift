@@ -43,10 +43,10 @@ struct Icons {
     static let expandLeftPanel:NSImage = NSImage(imageLiteralResourceName: "expand_left")
     static let expandRightPanel:NSImage = NSImage(imageLiteralResourceName: "expand_right")
     static let expandBottomPanel:NSImage = NSImage(imageLiteralResourceName: "expand_bottom")
-    static let expandPreviewPanel:NSImage = NSImage(imageLiteralResourceName: "map")
+    static let expandPreviewPanel:NSImage = NSImage(imageLiteralResourceName: "list")
     static let collapseLeftPanel:NSImage = NSImage(imageLiteralResourceName: "collapse_left")
     static let collapseRightPanel:NSImage = NSImage(imageLiteralResourceName: "collapse_right")
     static let collapseBottomPanel:NSImage = NSImage(imageLiteralResourceName: "collapse_bottom")
-    static let collapsePreviewPanel:NSImage = NSImage(imageLiteralResourceName: "list")
+    static let collapsePreviewPanel:NSImage = NSImage(imageLiteralResourceName: "map")
 
 }
