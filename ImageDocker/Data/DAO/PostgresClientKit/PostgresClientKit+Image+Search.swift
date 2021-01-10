@@ -235,7 +235,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         
         let sql = """
         SELECT count(path) as "photoCount", \(fields)  FROM
-        (SELECT COALESCE("photoTakenYear",0) AS "photoTakenYear", COALESCE("photoTakenMonth",0) AS "photoTakenMonth", COALESCE("photoTakenDay",0) AS "photoTakenDay", path, "imageSource", 
+        (SELECT COALESCE("photoTakenYear",0) AS "photoTakenYear", COALESCE("photoTakenMonth",0) AS "photoTakenMonth", COALESCE("photoTakenDay",0) AS "photoTakenDay", path, "imageSource",
         "event",
         "longDescription",
         "shortDescription",
@@ -372,17 +372,38 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         var selectFields = ""
         var orderFields = ""
         var whereStmt = ""
-        var order = ""
         var argumentValues:[String] = []
         
+        var additionalConditions = ""
+        if let cd = condition {
+            if !cd.isEmpty() {
+                (additionalConditions, _) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: cd, includeHidden: true, quoteColumn: true)
+            }
+        }
+        if additionalConditions.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+            additionalConditions = "AND \(additionalConditions)"
+        }
+        
         if momentCondition == .PLACE {
-            selectFields = "country, province, city, place, 0 as \"photoTakenYear\", 0 as \"photoTakenMonth\", 0 as \"photoTakenDay\""
-            fields = "country, province, city, place, \"photoTakenYear\", \"photoTakenMonth\", \"photoTakenDay\""
-            orderFields = "country, province, city, place, \"photoTakenYear\" DESC, \"photoTakenMonth\" DESC, \"photoTakenDay\" DESC"
+            selectFields = """
+            country, province, city, place, 0 as "photoTakenYear", 0 as "photoTakenMonth", 0 as "photoTakenDay"
+            """
+            fields = """
+            country, province, city, place, "photoTakenYear", "photoTakenMonth", "photoTakenDay"
+            """
+            orderFields = """
+            country, province, city, place, "photoTakenYear" DESC, "photoTakenMonth" DESC, "photoTakenDay" DESC
+            """
         }else if momentCondition == .YEAR {
-            selectFields = "country, province, city, place, \"photoTakenYear\", 0 as \"photoTakenMonth\", 0 as \"photoTakenDay\""
-            fields = "country, province, city, place, \"photoTakenYear\", \"photoTakenMonth\", \"photoTakenDay\""
-            orderFields = "country, province, city, place, \"photoTakenYear\" DESC, \"photoTakenMonth\" DESC, \"photoTakenDay\" DESC"
+            selectFields = """
+            country, province, city, place, "photoTakenYear", 0 as "photoTakenMonth", 0 as "photoTakenDay"
+            """
+            fields = """
+            country, province, city, place, "photoTakenYear", "photoTakenMonth", "photoTakenDay"
+            """
+            orderFields = """
+            country, province, city, place, "photoTakenYear" DESC, "photoTakenMonth" DESC, "photoTakenDay" DESC
+            """
             if let p = parent {
                 var numericPlaceholder = 0
                 SQLHelper.appendSqlTextCondition("country", value: p.countryData, where: &whereStmt, args: &argumentValues, numericPlaceholder: &numericPlaceholder)
@@ -390,11 +411,16 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
                 SQLHelper.appendSqlTextCondition("city", value: p.cityData, where: &whereStmt, args: &argumentValues, numericPlaceholder: &numericPlaceholder)
                 SQLHelper.appendSqlTextCondition("place", value: p.placeData, where: &whereStmt, args: &argumentValues, numericPlaceholder: &numericPlaceholder)
             }
-            order = "DESC"
         }else if momentCondition == .MONTH {
-            selectFields = "country, province, city, place, \"photoTakenYear\", \"photoTakenMonth\", 0 as \"photoTakenDay\""
-            fields = "country, province, city, place, \"photoTakenYear\", \"photoTakenMonth\", \"photoTakenDay\""
-            orderFields = "country, province, city, place, \"photoTakenYear\" DESC, \"photoTakenMonth\" DESC, \"photoTakenDay\" DESC"
+            selectFields = """
+            country, province, city, place, "photoTakenYear", "photoTakenMonth", 0 as "photoTakenDay"
+            """
+            fields = """
+            country, province, city, place, "photoTakenYear", "photoTakenMonth", "photoTakenDay"
+            """
+            orderFields = """
+            country, province, city, place, "photoTakenYear" DESC, "photoTakenMonth" DESC, "photoTakenDay" DESC
+            """
             if let p = parent {
                 var numericPlaceholder = 0
                 SQLHelper.appendSqlTextCondition("country", value: p.countryData, where: &whereStmt, args: &argumentValues, numericPlaceholder: &numericPlaceholder)
@@ -403,11 +429,16 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
                 SQLHelper.appendSqlTextCondition("place", value: p.placeData, where: &whereStmt, args: &argumentValues, numericPlaceholder: &numericPlaceholder)
                 SQLHelper.appendSqlIntegerCondition("\"photoTakenYear\"", value: p.year, where: &whereStmt)
             }
-            order = "DESC"
         }else if momentCondition == .DAY {
-            selectFields = "country, province, city, place, \"photoTakenYear\", \"photoTakenMonth\", \"photoTakenDay\""
-            fields = "country, province, city, place, \"photoTakenYear\", \"photoTakenMonth\", \"photoTakenDay\""
-            orderFields = "country, province, city, place, \"photoTakenYear\" DESC, \"photoTakenMonth\" DESC, \"photoTakenDay\" DESC"
+            selectFields = """
+            country, province, city, place, "photoTakenYear", "photoTakenMonth", "photoTakenDay"
+            """
+            fields = """
+            country, province, city, place, "photoTakenYear", "photoTakenMonth", "photoTakenDay"
+            """
+            orderFields = """
+            country, province, city, place, "photoTakenYear" DESC, "photoTakenMonth" DESC, "photoTakenDay" DESC
+            """
             if let p = parent {
                 var numericPlaceholder = 0
                 SQLHelper.appendSqlTextCondition("country", value: p.countryData, where: &whereStmt, args: &argumentValues, numericPlaceholder: &numericPlaceholder)
@@ -417,17 +448,64 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
                 SQLHelper.appendSqlIntegerCondition("\"photoTakenYear\"", value: p.year, where: &whereStmt)
                 SQLHelper.appendSqlIntegerCondition("\"photoTakenMonth\"", value: p.month, where: &whereStmt)
             }
-            order = "DESC"
         }
         
         let sql = """
         SELECT count(path) as "photoCount", \(selectFields) FROM
         (
-        SELECT COALESCE(country, '') as country, COALESCE(province, '') as province, COALESCE(city, '') as city, place, "photoTakenYear", "photoTakenMonth", "photoTakenDay", path, "imageSource","cameraModel" from "Image" WHERE "assignCountry" is null and "assignProvince" is null and "assignCity" is null
+        SELECT COALESCE(country, '') as country, COALESCE(province, '') as province, COALESCE(city, '') as city, place, "photoTakenYear", "photoTakenMonth", "photoTakenDay", path, "imageSource",
+        "event",
+        "longDescription",
+        "shortDescription",
+        "district",
+        "businessCircle",
+        "street",
+        "address",
+        "addressDescription",
+        "assignPlace",
+        "assignCountry",
+        "assignProvince",
+        "assignCity",
+        "assignDistrict",
+        "assignBusinessCircle",
+        "assignStreet",
+        "assignAddress",
+        "assignAddressDescription",
+        "cameraMaker",
+        "cameraModel",
+        "softwareName",
+        "repositoryPath",
+        "filename"
+        from "Image"
+        WHERE "assignCountry" is null and "assignProvince" is null and "assignCity" is null
         UNION
-        SELECT "assignCountry" as country, "assignProvince" as province, "assignCity" as city, "assignPlace" as place, "photoTakenYear", "photoTakenMonth", "photoTakenDay", path, "imageSource","cameraModel" from "Image" WHERE "assignCountry" is not null and "assignProvince" is not null and "assignCity" is not null
+        SELECT "assignCountry" as country, "assignProvince" as province, "assignCity" as city, "assignPlace" as place, "photoTakenYear", "photoTakenMonth", "photoTakenDay", path, "imageSource",
+        "event",
+        "longDescription",
+        "shortDescription",
+        "district",
+        "businessCircle",
+        "street",
+        "address",
+        "addressDescription",
+        "assignPlace",
+        "assignCountry",
+        "assignProvince",
+        "assignCity",
+        "assignDistrict",
+        "assignBusinessCircle",
+        "assignStreet",
+        "assignAddress",
+        "assignAddressDescription",
+        "cameraMaker",
+        "cameraModel",
+        "softwareName",
+        "repositoryPath",
+        "filename"
+        from "Image"
+        WHERE "assignCountry" is not null and "assignProvince" is not null and "assignCity" is not null
         ) t
-        WHERE 1=1 \(whereStmt)
+        WHERE 1=1 \(whereStmt) \(additionalConditions)
         GROUP BY \(fields) ORDER BY \(orderFields)
         """
         print(sql)

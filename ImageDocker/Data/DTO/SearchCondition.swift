@@ -51,6 +51,7 @@ struct SearchCondition {
         var any:[String] = []
         let conditions = query.components(separatedBy: "||")
         for condition in conditions {
+            if condition == "" {continue}
             var keyword = ""
             var type = ""
             let part = condition.components(separatedBy: separator)

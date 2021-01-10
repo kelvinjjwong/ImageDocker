@@ -326,13 +326,13 @@ struct SQLHelper {
         }
         //let hiddenStatement = "AND (hidden=true OR \"hiddenByRepository\"=true OR \"hiddenByContainer\"=true)"
         
-        let yearStatement = SQLHelper.joinArrayToStatementCondition(field: "photoTakenYear".quotedDatabaseIdentifier, values: condition.years, quoteColumn: quoteColumn)
-        let monthStatement = SQLHelper.joinArrayToStatementCondition(field: "photoTakenMonth".quotedDatabaseIdentifier, values: condition.months, quoteColumn: quoteColumn)
-        let dayStatement = SQLHelper.joinArrayToStatementCondition(field: "photoTakenDay".quotedDatabaseIdentifier, values: condition.days, quoteColumn: quoteColumn)
+        let yearStatement = SQLHelper.joinArrayToStatementCondition(field: "photoTakenYear", values: condition.years, quoteColumn: quoteColumn)
+        let monthStatement = SQLHelper.joinArrayToStatementCondition(field: "photoTakenMonth", values: condition.months, quoteColumn: quoteColumn)
+        let dayStatement = SQLHelper.joinArrayToStatementCondition(field: "photoTakenDay", values: condition.days, quoteColumn: quoteColumn)
         
         // let peopleIdStatement = SQLHelper.joinArrayToStatementCondition(values: condition.peopleIds, field: "recognizedPeopleIds".quotedDatabaseIdentifier, like: true)
         
-        let eventStatement = SQLHelper.joinArrayToStatementCondition(field: "event".quotedDatabaseIdentifier, values: condition.events, like: true, quoteColumn: quoteColumn)
+        let eventStatement = SQLHelper.joinArrayToStatementCondition(field: "event", values: condition.events, like: true, quoteColumn: quoteColumn)
         
         let notesStatement = SQLHelper.joinStatementConditions(fields: [
             "longDescription",
@@ -366,9 +366,9 @@ struct SQLHelper {
             "softwareName"
         ], values: condition.cameras, like: true, or: true, quoteColumn: quoteColumn)
         
-        let folderStatement = SQLHelper.joinArrayToStatementCondition(field: "repositoryPath".quotedDatabaseIdentifier, values: condition.folders, like: true, quoteColumn: quoteColumn)
+        let folderStatement = SQLHelper.joinArrayToStatementCondition(field: "repositoryPath", values: condition.folders, like: true, quoteColumn: quoteColumn)
         
-        let filenameStatement = SQLHelper.joinArrayToStatementCondition(field: "filename".quotedDatabaseIdentifier, values: condition.filenames, like: true, quoteColumn: quoteColumn)
+        let filenameStatement = SQLHelper.joinArrayToStatementCondition(field: "filename", values: condition.filenames, like: true, quoteColumn: quoteColumn)
         
         let anyStatement = SQLHelper.joinStatementConditions(fields: [
             "event",
