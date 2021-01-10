@@ -100,12 +100,14 @@ class TreeCollection {
 
 protocol TreeDataSource {
     
-    func loadChildren(_ collection:TreeCollection?) -> ([TreeCollection], String?)
+    func loadChildren(_ collection:TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?)
     func findNode(path: String) -> TreeCollection?
     func filter(keyword: String)
     func findNode(keyword: String) -> TreeCollection?
 }
 
+
+// sample only
 class StaticTreeDataSource : TreeDataSource {
     
     internal var tree_datas:[TreeCollection] = []
@@ -156,7 +158,11 @@ class StaticTreeDataSource : TreeDataSource {
         return result
     }
     
-    func loadChildren(_ collection:TreeCollection?) -> ([TreeCollection], String?) {
+    func loadChildren(_ collection:TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?) {
+        
+        if let condition = condition, !condition.isEmpty() {
+            // TODO: search images first
+        }
         
         var resultDataset:[TreeCollection] = []
         var sourceDataset:[TreeCollection] = []

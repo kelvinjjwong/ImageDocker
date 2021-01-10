@@ -12,7 +12,12 @@ class DeviceTreeDataSource : TreeDataSource {
     
     private var deviceIdToDevice : [String : PhoneDevice] = [String : PhoneDevice] ()
     
-    func loadChildren(_ collection: TreeCollection?) -> ([TreeCollection], String?) {
+    func loadChildren(_ collection: TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?) {
+        
+        if let condition = condition, !condition.isEmpty() {
+            // TODO: search ImageDeviceFile first ??
+        }
+        
         if collection == nil {
             let android = TreeCollection("Android")
             let iphone = TreeCollection("iPhone")

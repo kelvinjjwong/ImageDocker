@@ -208,17 +208,17 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         return results
     }
     
-    func getMoments(_ condition: MomentCondition, year: Int, month: Int) -> [Moment] {
+    func getMoments(_ momentCondition: MomentCondition, year: Int, month: Int, condition:SearchCondition?) -> [Moment] {
         let db = PostgresConnection.database()
         var fields = ""
         var arguments = ""
         
-        if condition == .YEAR {
+        if momentCondition == .YEAR {
             fields = "\"photoTakenYear\""
-        }else if condition == .MONTH {
+        }else if momentCondition == .MONTH {
             fields = "\"photoTakenYear\", \"photoTakenMonth\""
             arguments = "AND \"photoTakenYear\"=\(year)"
-        }else if condition == .DAY {
+        }else if momentCondition == .DAY {
             fields = "\"photoTakenYear\", \"photoTakenMonth\", \"photoTakenDay\""
             arguments = "AND \"photoTakenYear\"=\(year) AND \"photoTakenMonth\"=\(month)"
         }
@@ -329,7 +329,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         return years
     }
     
-    func getMomentsByPlace(_ condition: MomentCondition, parent: Moment?) -> [Moment] {
+    func getMomentsByPlace(_ momentCondition: MomentCondition, parent: Moment?, condition:SearchCondition?) -> [Moment] {
         let db = PostgresConnection.database()
         var fields = ""
         var selectFields = ""
@@ -338,11 +338,11 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         var order = ""
         var argumentValues:[String] = []
         
-        if condition == .PLACE {
+        if momentCondition == .PLACE {
             selectFields = "country, province, city, place, 0 as \"photoTakenYear\", 0 as \"photoTakenMonth\", 0 as \"photoTakenDay\""
             fields = "country, province, city, place, \"photoTakenYear\", \"photoTakenMonth\", \"photoTakenDay\""
             orderFields = "country, province, city, place, \"photoTakenYear\" DESC, \"photoTakenMonth\" DESC, \"photoTakenDay\" DESC"
-        }else if condition == .YEAR {
+        }else if momentCondition == .YEAR {
             selectFields = "country, province, city, place, \"photoTakenYear\", 0 as \"photoTakenMonth\", 0 as \"photoTakenDay\""
             fields = "country, province, city, place, \"photoTakenYear\", \"photoTakenMonth\", \"photoTakenDay\""
             orderFields = "country, province, city, place, \"photoTakenYear\" DESC, \"photoTakenMonth\" DESC, \"photoTakenDay\" DESC"
@@ -354,7 +354,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
                 SQLHelper.appendSqlTextCondition("place", value: p.placeData, where: &whereStmt, args: &argumentValues, numericPlaceholder: &numericPlaceholder)
             }
             order = "DESC"
-        }else if condition == .MONTH {
+        }else if momentCondition == .MONTH {
             selectFields = "country, province, city, place, \"photoTakenYear\", \"photoTakenMonth\", 0 as \"photoTakenDay\""
             fields = "country, province, city, place, \"photoTakenYear\", \"photoTakenMonth\", \"photoTakenDay\""
             orderFields = "country, province, city, place, \"photoTakenYear\" DESC, \"photoTakenMonth\" DESC, \"photoTakenDay\" DESC"
@@ -367,7 +367,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
                 SQLHelper.appendSqlIntegerCondition("\"photoTakenYear\"", value: p.year, where: &whereStmt)
             }
             order = "DESC"
-        }else if condition == .DAY {
+        }else if momentCondition == .DAY {
             selectFields = "country, province, city, place, \"photoTakenYear\", \"photoTakenMonth\", \"photoTakenDay\""
             fields = "country, province, city, place, \"photoTakenYear\", \"photoTakenMonth\", \"photoTakenDay\""
             orderFields = "country, province, city, place, \"photoTakenYear\" DESC, \"photoTakenMonth\" DESC, \"photoTakenDay\" DESC"
@@ -431,7 +431,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         return result
     }
     
-    func getImageEvents() -> [Moment] {
+    func getImageEvents(condition:SearchCondition?) -> [Moment] {
         let db = PostgresConnection.database()
         
         final class TempRecord : PostgresCustomRecord {
@@ -464,7 +464,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         return result
     }
     
-    func getMomentsByEvent(event: String, category: String, year: Int, month: Int) -> [Moment] {
+    func getMomentsByEvent(event: String, category: String, year: Int, month: Int, condition:SearchCondition?) -> [Moment] {
         let db = PostgresConnection.database()
         var sqlParams:[PostgresValueConvertible?] = []
         var whereStmt = "event=$1"

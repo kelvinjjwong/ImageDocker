@@ -58,16 +58,16 @@ extension ImageSearchDaoGRDB {
     
     
     
-    func getMoments(_ condition:MomentCondition, year:Int, month:Int) -> [Moment] {
+    func getMoments(_ momentCondition:MomentCondition, year:Int, month:Int, condition:SearchCondition?) -> [Moment] {
         var fields = ""
         var arguments = ""
         
-        if condition == .YEAR {
+        if momentCondition == .YEAR {
             fields = "photoTakenYear"
-        }else if condition == .MONTH {
+        }else if momentCondition == .MONTH {
             fields = "photoTakenYear, photoTakenMonth"
             arguments = "AND photoTakenYear=\(year)"
-        }else if condition == .DAY {
+        }else if momentCondition == .DAY {
             fields = "photoTakenYear, photoTakenMonth, photoTakenDay"
             arguments = "AND photoTakenYear=\(year) AND photoTakenMonth=\(month)"
         }
@@ -157,15 +157,15 @@ extension ImageSearchDaoGRDB {
         }
     }
     
-    func getMomentsByPlace(_ condition:MomentCondition, parent:Moment?) -> [Moment] {
+    func getMomentsByPlace(_ momentCondition:MomentCondition, parent:Moment?, condition:SearchCondition?) -> [Moment] {
         var fields = ""
         var whereStmt = ""
         var order = ""
         var argumentValues:[String] = []
         
-        if condition == .PLACE {
+        if momentCondition == .PLACE {
             fields = "country, province, city, place"
-        }else if condition == .YEAR {
+        }else if momentCondition == .YEAR {
             fields = "country, province, city, place, photoTakenYear"
             if let p = parent {
                 self.appendSqlTextCondition("country", value: p.countryData, where: &whereStmt, args: &argumentValues)
@@ -174,7 +174,7 @@ extension ImageSearchDaoGRDB {
                 self.appendSqlTextCondition("place", value: p.placeData, where: &whereStmt, args: &argumentValues)
             }
             order = "DESC"
-        }else if condition == .MONTH {
+        }else if momentCondition == .MONTH {
             fields = "country, province, city, place, photoTakenYear, photoTakenMonth"
             if let p = parent {
                 self.appendSqlTextCondition("country", value: p.countryData, where: &whereStmt, args: &argumentValues)
@@ -184,7 +184,7 @@ extension ImageSearchDaoGRDB {
                 self.appendSqlIntegerCondition("photoTakenYear", value: p.year, where: &whereStmt)
             }
             order = "DESC"
-        }else if condition == .DAY {
+        }else if momentCondition == .DAY {
             fields = "country, province, city, place, photoTakenYear, photoTakenMonth, photoTakenDay"
             if let p = parent {
                 self.appendSqlTextCondition("country", value: p.countryData, where: &whereStmt, args: &argumentValues)
@@ -298,7 +298,7 @@ extension ImageSearchDaoGRDB {
     
     
     
-    func getImageEvents() -> [Moment] {
+    func getImageEvents(condition:SearchCondition?) -> [Moment] {
         var result:[Moment] = []
         let sql = """
         select t.cnt, ifnull(e.category,'') category, t.name from (
@@ -332,7 +332,7 @@ extension ImageSearchDaoGRDB {
         
     }
     
-    func getMomentsByEvent(event:String, category:String, year:Int = 0, month:Int) -> [Moment] {
+    func getMomentsByEvent(event:String, category:String, year:Int = 0, month:Int, condition:SearchCondition?) -> [Moment] {
         var whereStmt = "event=?"
         var ev = event
         if event == "未分配事件" {

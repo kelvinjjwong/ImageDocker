@@ -27,6 +27,12 @@ class StackHeaderViewController : NSViewController, StackItemHeader {
     
     var moreAction: ((NSButton) -> ())? // optional extendable method
     
+    var searchCondition: String {
+        get {
+            return searchField.tokenStringValue
+        }
+    }
+    
     // MARK: - View Controller Lifecycle
     
     override func viewDidLoad() {

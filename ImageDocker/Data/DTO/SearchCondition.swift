@@ -23,6 +23,20 @@ struct SearchCondition {
     var any:[String]
     var includeHidden:Bool
     
+    func isEmpty() -> Bool {
+        return years.isEmpty
+            && months.isEmpty
+            && days.isEmpty
+            && peopleIds.isEmpty
+            && events.isEmpty
+            && places.isEmpty
+            && notes.isEmpty
+            && cameras.isEmpty
+            && folders.isEmpty
+            && filenames.isEmpty
+            && any.isEmpty
+    }
+    
     static func get(from query:String, includeHidden:Bool = false) -> SearchCondition {
         var years:[Int] = []
         var months:[Int] = []

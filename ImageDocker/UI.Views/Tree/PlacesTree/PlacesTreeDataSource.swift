@@ -10,8 +10,6 @@ import Foundation
 
 class PlacesTreeDataSource : TreeDataSource {
     
-    let dao = ImageSearchDao.default
-    
     func convertPlacesToTreeCollections(_ moments:[Moment]) -> [TreeCollection] {
         var govs:[TreeCollection] = []
         for moment in moments {
@@ -115,9 +113,10 @@ class PlacesTreeDataSource : TreeDataSource {
         return node
     }
     
-    func loadChildren(_ collection: TreeCollection?) -> ([TreeCollection], String?) {
+    func loadChildren(_ collection: TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?) {
+        
         if collection == nil {
-            let moments = self.dao.getMomentsByPlace(.PLACE)
+            let moments = ImageSearchDao.default.getMomentsByPlace(.PLACE, condition: condition)
             return (self.convertPlacesToTreeCollections(moments), nil)
         }else{
             if let parentNode = collection, let parent = parentNode.relatedObject as? Moment {
@@ -126,13 +125,13 @@ class PlacesTreeDataSource : TreeDataSource {
                     var moments:[Moment] = []
                     if parent.year == 0 {
                         print("loading years")
-                        moments = self.dao.getMomentsByPlace(.YEAR, parent: parent)
+                        moments = ImageSearchDao.default.getMomentsByPlace(.YEAR, parent: parent, condition: condition)
                     }else if parent.month == 0 {
                         print("loading months")
-                        moments = self.dao.getMomentsByPlace(.MONTH, parent: parent)
+                        moments = ImageSearchDao.default.getMomentsByPlace(.MONTH, parent: parent, condition: condition)
                     }else if parent.day == 0 {
                         print("loading days")
-                        moments = self.dao.getMomentsByPlace(.DAY, parent: parent)
+                        moments = ImageSearchDao.default.getMomentsByPlace(.DAY, parent: parent, condition: condition)
                     }
                     for moment in moments {
                         let node = self.convertDateToTreeCollection(moment)

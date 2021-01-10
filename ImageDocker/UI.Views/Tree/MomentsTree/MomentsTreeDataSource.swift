@@ -10,8 +10,6 @@ import Foundation
 
 class MomentsTreeDataSource : TreeDataSource {
     
-    let dao = ImageSearchDao.default
-    
     func convertToTreeCollection(_ data:Moment) -> TreeCollection {
         let collection = TreeCollection(data.represent, id: data.id, object: data)
         if data.year == 0 && data.month == 0 && data.day == 0 {
@@ -22,17 +20,18 @@ class MomentsTreeDataSource : TreeDataSource {
         return collection
     }
     
-    func loadChildren(_ collection: TreeCollection?) -> ([TreeCollection], String?) {
+    func loadChildren(_ collection: TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?) {
         var nodes:[TreeCollection] = []
         var datas:[Moment] = []
+        
         if collection == nil {
-            datas = self.dao.getMoments(.YEAR)
+            datas = ImageSearchDao.default.getMoments(.YEAR, condition: condition)
         }else{
             if let parent = collection?.relatedObject as? Moment {
                 if parent.month == 0 {
-                    datas = self.dao.getMoments(.MONTH, year: parent.year)
+                    datas = ImageSearchDao.default.getMoments(.MONTH, year: parent.year, condition: condition)
                 }else if parent.day == 0 {
-                    datas = self.dao.getMoments(.DAY, year: parent.year, month: parent.month)
+                    datas = ImageSearchDao.default.getMoments(.DAY, year: parent.year, month: parent.month, condition: condition)
                 }
             }
         }

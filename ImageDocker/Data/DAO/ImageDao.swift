@@ -117,8 +117,8 @@ class ImageSearchDao {
     
     // MARK: - MOMENTS
     
-    func getMoments(_ condition:MomentCondition, year:Int = 0, month:Int = 0) -> [Moment] {
-        return self.impl.getMoments(condition, year: year, month: month)
+    func getMoments(_ momentCondition:MomentCondition, year:Int = 0, month:Int = 0, condition:SearchCondition? = nil) -> [Moment] {
+        return self.impl.getMoments(momentCondition, year: year, month: month, condition: condition)
     }
     
     func getAllMoments(imageSource:[String]? = nil, cameraModel:[String]? = nil) -> [Moment] {
@@ -127,16 +127,16 @@ class ImageSearchDao {
     
     // MARK: - PLACES
     
-    func getMomentsByPlace(_ condition:MomentCondition, parent:Moment? = nil) -> [Moment] {
-        return self.impl.getMomentsByPlace(condition, parent: parent)
+    func getMomentsByPlace(_ momentCondition:MomentCondition, parent:Moment? = nil, condition:SearchCondition? = nil) -> [Moment] {
+        return self.impl.getMomentsByPlace(momentCondition, parent: parent, condition: condition)
     }
     
-    func getImageEvents() -> [Moment] {
-        return self.impl.getImageEvents()
+    func getImageEvents(condition:SearchCondition?) -> [Moment] {
+        return self.impl.getImageEvents(condition: condition)
     }
     
-    func getMomentsByEvent(event:String, category:String, year:Int = 0, month:Int = 0) -> [Moment] {
-        return self.impl.getMomentsByEvent(event: event, category: category, year: year, month: month)
+    func getMomentsByEvent(event:String, category:String, year:Int = 0, month:Int = 0, condition:SearchCondition? = nil) -> [Moment] {
+        return self.impl.getMomentsByEvent(event: event, category: category, year: year, month: month, condition: condition)
     }
     
     func getYears(event:String? = nil) -> [Int] {

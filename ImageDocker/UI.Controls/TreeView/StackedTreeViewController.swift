@@ -61,7 +61,12 @@ class StackedTreeViewController: NSViewController, StackItemHost {
         
         // MARK: loader and actions
         treeView.collectionLoader = { collection in
-            return dataSource.loadChildren(collection)
+            if disableFilter {
+                return dataSource.loadChildren(collection, condition: nil)
+            }else{
+                let condition = SearchCondition.get(from: treeView.stackItemContainer!.header.searchCondition) // search includes hidden images
+                return dataSource.loadChildren(collection, condition: condition)
+            }
         }
         if nodeIcon != nil {
             treeView.collectionIcon = nodeIcon!
@@ -109,9 +114,9 @@ class StackedTreeViewController: NSViewController, StackItemHost {
             stackItem.header.filterAction = { keyword in
                 treeView.filter(keyword: keyword)
             }
-            stackItem.header.gotoAction = { keyword in
-                treeView.findNode(keyword: keyword)
-            }
+//            stackItem.header.gotoAction = { keyword in
+//                treeView.findNode(keyword: keyword)
+//            }
         }
         stackItem.header.beforeExpand = {
             self.hideAllTrees()

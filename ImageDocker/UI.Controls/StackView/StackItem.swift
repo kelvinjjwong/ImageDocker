@@ -32,6 +32,8 @@ protocol StackItemHeader : class {
     
     var moreAction: ((NSButton) -> ())? { get set }
     
+    var searchCondition: String { get }
+    
     func update(toDisclosureState: StackItemContainer.DisclosureState)
 }
 

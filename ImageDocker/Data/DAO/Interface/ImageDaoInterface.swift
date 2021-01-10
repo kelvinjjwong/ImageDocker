@@ -55,17 +55,17 @@ protocol ImageSearchDaoInterface {
     
     // MARK: - MOMENTS
     
-    func getMoments(_ condition:MomentCondition, year:Int, month:Int) -> [Moment]
+    func getMoments(_ momentCondition:MomentCondition, year:Int, month:Int, condition:SearchCondition?) -> [Moment]
     
     func getAllMoments(imageSource:[String]?, cameraModel:[String]?) -> [Moment]
     
     // MARK: - PLACES
     
-    func getMomentsByPlace(_ condition:MomentCondition, parent:Moment?) -> [Moment]
+    func getMomentsByPlace(_ momentCondition:MomentCondition, parent:Moment?, condition:SearchCondition?) -> [Moment]
     
-    func getImageEvents() -> [Moment]
+    func getImageEvents(condition:SearchCondition?) -> [Moment]
     
-    func getMomentsByEvent(event:String, category:String, year:Int, month:Int) -> [Moment]
+    func getMomentsByEvent(event:String, category:String, year:Int, month:Int, condition:SearchCondition?) -> [Moment]
     
     func getYears(event:String?) -> [Int]
     

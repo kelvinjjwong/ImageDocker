@@ -10,8 +10,6 @@ import Foundation
 
 class EventsTreeDataSource : TreeDataSource {
     
-    let dao = ImageSearchDao.default
-    
     func convertEventsToTreeCollections(_ moments:[Moment]) -> [TreeCollection] {
         var events:[TreeCollection] = []
         for moment in moments {
@@ -80,15 +78,16 @@ class EventsTreeDataSource : TreeDataSource {
         return node
     }
     
-    func loadChildren(_ collection: TreeCollection?) -> ([TreeCollection], String?) {
+    func loadChildren(_ collection: TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?) {
+        
         if collection == nil {
-            let moments = self.dao.getImageEvents()
+            let moments = ImageSearchDao.default.getImageEvents(condition: condition)
             return (self.convertEventsToTreeCollections(moments), nil)
         }else{
             if let parentNode = collection, let parent = parentNode.relatedObject as? Moment {
                 if parent.event != "" {
                     var nodes:[TreeCollection] = []
-                    let moments:[Moment] = self.dao.getMomentsByEvent(event: parent.event, category: parent.eventCategory, year: parent.year, month: parent.month)
+                    let moments:[Moment] = ImageSearchDao.default.getMomentsByEvent(event: parent.event, category: parent.eventCategory, year: parent.year, month: parent.month, condition: condition)
                     for moment in moments {
                         let node = self.convertDateToTreeCollection(moment)
                         nodes.append(node)

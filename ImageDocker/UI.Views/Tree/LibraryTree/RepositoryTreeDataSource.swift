@@ -18,18 +18,19 @@ class RepositoryTreeDataSource : TreeDataSource {
         return node
     }
     
-    func loadChildren(_ collection: TreeCollection?) -> ([TreeCollection], String?) {
+    func loadChildren(_ collection: TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?) {
+        
         if collection == nil {
-            return (self.loadRepositories(), nil)
+            return (self.loadRepositories(condition: condition), nil)
         }else{
             if let container = collection?.relatedObject as? ImageContainer {
-                return (self.loadSubContainers(parentPath: container.path), nil)
+                return (self.loadSubContainers(parentPath: container.path, condition: condition), nil)
             }
         }
         return ([], nil)
     }
     
-    func loadRepositories() -> [TreeCollection] {
+    func loadRepositories(condition:SearchCondition? = nil) -> [TreeCollection] {
         var nodes:[TreeCollection] = []
         let containers = RepositoryDao.default.getRepositories(orderBy: "name")
         if containers.count == 0 {
@@ -43,7 +44,7 @@ class RepositoryTreeDataSource : TreeDataSource {
         return nodes
     }
     
-    func loadSubContainers(parentPath: String) -> [TreeCollection] {
+    func loadSubContainers(parentPath: String, condition:SearchCondition? = nil) -> [TreeCollection] {
         var nodes:[TreeCollection] = []
         let containers = RepositoryDao.default.getSubContainers(parent: parentPath)
         for container in containers {
