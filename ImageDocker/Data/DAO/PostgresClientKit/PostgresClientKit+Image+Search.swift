@@ -557,7 +557,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         }
         
         var result:[Moment] = []
-        let sql = """
+        var sql = """
         select t.cnt, COALESCE(e.category,'') as category, t.name from (
         select name, sum(cnt) as cnt from (
         select name, 0 as cnt from "ImageEvent"
@@ -566,6 +566,59 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         ) t1 group by name) as t
         left join "ImageEvent" e on e.name = t.name order by category, t.name
         """
+        
+        var additionalConditions = ""
+        if let cd = condition {
+            if !cd.isEmpty() {
+                (additionalConditions, _) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: cd, includeHidden: true, quoteColumn: true)
+            }
+        }
+        if additionalConditions.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+            additionalConditions = "AND \(additionalConditions)"
+            
+            sql = """
+            select count(path) as cnt, category, name from
+            (
+            select "Image".path as path, COALESCE("ImageEvent".category,'') as category, COALESCE("Image".event,'') as name,
+            "photoTakenYear",
+            "photoTakenMonth",
+            "photoTakenDay",
+            "imageSource",
+            "event",
+            "longDescription",
+            "shortDescription",
+            "place",
+            "country",
+            "province",
+            "city",
+            "district",
+            "businessCircle",
+            "street",
+            "address",
+            "addressDescription",
+            "assignPlace",
+            "assignCountry",
+            "assignProvince",
+            "assignCity",
+            "assignDistrict",
+            "assignBusinessCircle",
+            "assignStreet",
+            "assignAddress",
+            "assignAddressDescription",
+            "cameraMaker",
+            "cameraModel",
+            "softwareName",
+            "repositoryPath",
+            "filename"
+            from "Image"
+            left join "ImageEvent" on "ImageEvent".name = "Image".event
+            ) t
+            WHERE 1=1 \(additionalConditions)
+            group by category, name
+            order by category, name
+            """
+        }
+        
         print(sql)
         
         let records = TempRecord.fetchAll(db, sql: sql)
@@ -598,10 +651,54 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
             fields = "\"photoTakenYear\", \"photoTakenMonth\", \"photoTakenDay\""
             whereStmt = "\(whereStmt) AND \"photoTakenYear\"=\(year) AND \"photoTakenMonth\"=\(month)"
         }
+        
+        var additionalConditions = ""
+        if let cd = condition {
+            if !cd.isEmpty() {
+                (additionalConditions, _) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: cd, includeHidden: true, quoteColumn: true)
+            }
+        }
+        if additionalConditions.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+            additionalConditions = "AND \(additionalConditions)"
+        }
+        
         var result:[Moment] = []
         let sql = """
-        select count(path) as cnt, COALESCE(event, '') as event, \(fields) from "Image"
-        where \(whereStmt)
+        select count(path) as cnt, COALESCE(event, '') as event, \(fields)
+        from (
+        select path, event,
+        "photoTakenYear",
+        "photoTakenMonth",
+        "photoTakenDay",
+        "imageSource",
+        "longDescription",
+        "shortDescription",
+        "place",
+        "country",
+        "province",
+        "city",
+        "district",
+        "businessCircle",
+        "street",
+        "address",
+        "addressDescription",
+        "assignPlace",
+        "assignCountry",
+        "assignProvince",
+        "assignCity",
+        "assignDistrict",
+        "assignBusinessCircle",
+        "assignStreet",
+        "assignAddress",
+        "assignAddressDescription",
+        "cameraMaker",
+        "cameraModel",
+        "softwareName",
+        "repositoryPath",
+        "filename"
+        from "Image"
+        ) t
+        where \(whereStmt) \(additionalConditions)
         group by event, \(fields) order by event, \(fields) DESC
         """
         print(sql)
