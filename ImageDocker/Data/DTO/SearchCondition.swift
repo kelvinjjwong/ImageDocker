@@ -111,6 +111,59 @@ struct SearchCondition {
                         includeHidden: includeHidden)
     }
     
+    // MARK: - Menu for completion string
+    
+    
+    static func createTokenFieldCompletionMenu(for text:String, separator:String = " | ") -> [String] {
+        if let number = Int(text) {
+            if number >= 1950 && number <= 10000 {
+                return [
+                    "\(text)\(separator)\(SearchCondition.YEAR)",
+                    "\(text)\(separator)\(SearchCondition.EVENT)",
+                    "\(text)\(separator)\(SearchCondition.PLACE)",
+                    "\(text)\(separator)\(SearchCondition.NOTE)",
+                    "\(text)\(separator)\(SearchCondition.CAMERA)",
+                    "\(text)\(separator)\(SearchCondition.FOLDER)",
+                    "\(text)\(separator)\(SearchCondition.FILENAME)",
+                    "\(text)\(separator)\(SearchCondition.ANY)"
+                ]
+            }else if number > 0 && number <= 12 {
+                return [
+                    "\(text)\(separator)\(SearchCondition.MONTH)",
+                    "\(text)\(separator)\(SearchCondition.DAY)",
+                    "\(text)\(separator)\(SearchCondition.EVENT)",
+                    "\(text)\(separator)\(SearchCondition.PLACE)",
+                    "\(text)\(separator)\(SearchCondition.NOTE)",
+                    "\(text)\(separator)\(SearchCondition.CAMERA)",
+                    "\(text)\(separator)\(SearchCondition.FOLDER)",
+                    "\(text)\(separator)\(SearchCondition.FILENAME)",
+                    "\(text)\(separator)\(SearchCondition.ANY)"
+                ]
+            }else if number > 0 && number <= 31 {
+                return [
+                    "\(text)\(separator)\(SearchCondition.DAY)",
+                    "\(text)\(separator)\(SearchCondition.DAY)",
+                    "\(text)\(separator)\(SearchCondition.EVENT)",
+                    "\(text)\(separator)\(SearchCondition.PLACE)",
+                    "\(text)\(separator)\(SearchCondition.NOTE)",
+                    "\(text)\(separator)\(SearchCondition.CAMERA)",
+                    "\(text)\(separator)\(SearchCondition.FOLDER)",
+                    "\(text)\(separator)\(SearchCondition.FILENAME)",
+                    "\(text)\(separator)\(SearchCondition.ANY)"
+                ]
+            }
+        }
+        return [
+            "\(text)\(separator)\(SearchCondition.EVENT)",
+            "\(text)\(separator)\(SearchCondition.PLACE)",
+            "\(text)\(separator)\(SearchCondition.NOTE)",
+            "\(text)\(separator)\(SearchCondition.CAMERA)",
+            "\(text)\(separator)\(SearchCondition.FOLDER)",
+            "\(text)\(separator)\(SearchCondition.FILENAME)",
+            "\(text)\(separator)\(SearchCondition.ANY)"
+        ]
+    }
+    
     
     // MARK: - Prompt text localized
     

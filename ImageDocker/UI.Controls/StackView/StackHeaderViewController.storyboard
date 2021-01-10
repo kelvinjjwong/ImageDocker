@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15702"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -35,17 +35,6 @@
                                     <action selector="showHidePressed:" target="pdi-cw-Syh" id="83h-Ey-ThS"/>
                                 </connections>
                             </button>
-                            <searchField wantsLayer="YES" focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xlY-no-zEZ">
-                                <rect key="frame" x="101" y="9" width="101" height="18"/>
-                                <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" focusRingType="none" usesSingleLineMode="YES" bezelStyle="round" id="dWw-r6-FWz">
-                                    <font key="font" metaFont="menu" size="11"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </searchFieldCell>
-                                <connections>
-                                    <action selector="onSearchAction:" target="pdi-cw-Syh" id="u1N-ni-vFE"/>
-                                </connections>
-                            </searchField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WxK-wB-ai7">
                                 <rect key="frame" x="253" y="8" width="36" height="19"/>
                                 <constraints>
@@ -59,61 +48,34 @@
                                     <action selector="onMoreClicked:" target="pdi-cw-Syh" id="VGl-Kk-u5y"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iXy-rO-DCJ">
-                                <rect key="frame" x="230" y="8" width="22" height="19"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="22" id="C8i-x5-zms"/>
-                                </constraints>
-                                <buttonCell key="cell" type="recessed" title="Button" bezelStyle="recessed" image="filter" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="37q-8J-T4R">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="systemBold" size="12"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="onFilterClicked:" target="pdi-cw-Syh" id="7pS-WN-oeD"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="k3W-2F-PD6">
-                                <rect key="frame" x="207" y="8" width="22" height="19"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="22" id="fWI-TR-O9y"/>
-                                </constraints>
-                                <buttonCell key="cell" type="recessed" title="Button" bezelStyle="recessed" image="goto" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8hD-8Q-C5G">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="systemBold" size="12"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="onGotoClicked:" target="pdi-cw-Syh" id="QvT-C4-jfD"/>
-                                </connections>
-                            </button>
+                            <tokenField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JMM-YR-IPg">
+                                <rect key="frame" x="99" y="9" width="149" height="18"/>
+                                <tokenFieldCell key="cell" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" drawsBackground="YES" allowsEditingTextAttributes="YES" id="kTx-eE-7TQ">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </tokenFieldCell>
+                            </tokenField>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="xlY-no-zEZ" firstAttribute="leading" secondItem="DlM-mi-Io7" secondAttribute="trailing" constant="12" id="4LT-xt-Aah"/>
-                            <constraint firstItem="xlY-no-zEZ" firstAttribute="top" secondItem="aNo-2X-RW3" secondAttribute="top" constant="9" id="5gd-bo-Rur"/>
-                            <constraint firstItem="WxK-wB-ai7" firstAttribute="leading" secondItem="iXy-rO-DCJ" secondAttribute="trailing" constant="1" id="AFu-4n-R0t"/>
-                            <constraint firstItem="iXy-rO-DCJ" firstAttribute="top" secondItem="aNo-2X-RW3" secondAttribute="top" constant="9" id="HLh-QX-Dso"/>
+                            <constraint firstItem="JMM-YR-IPg" firstAttribute="top" secondItem="aNo-2X-RW3" secondAttribute="top" constant="9" id="2Kg-Nq-1RL"/>
+                            <constraint firstItem="JMM-YR-IPg" firstAttribute="leading" secondItem="DlM-mi-Io7" secondAttribute="trailing" constant="10" id="8cL-LM-SSm"/>
                             <constraint firstAttribute="bottom" secondItem="WxK-wB-ai7" secondAttribute="bottom" constant="9" id="Lxf-fh-Gpj"/>
-                            <constraint firstAttribute="bottom" secondItem="k3W-2F-PD6" secondAttribute="bottom" constant="9" id="MJd-lS-w4z"/>
                             <constraint firstItem="WxK-wB-ai7" firstAttribute="top" secondItem="aNo-2X-RW3" secondAttribute="top" constant="9" id="Nj6-G2-LFm"/>
                             <constraint firstItem="PXc-Rt-M8c" firstAttribute="leading" secondItem="aNo-2X-RW3" secondAttribute="leading" constant="5" id="P0M-V5-hFb"/>
                             <constraint firstItem="PXc-Rt-M8c" firstAttribute="top" secondItem="aNo-2X-RW3" secondAttribute="top" constant="11" id="SYx-KW-62K"/>
                             <constraint firstAttribute="bottom" secondItem="DlM-mi-Io7" secondAttribute="bottom" constant="10" id="UUY-dI-jKg"/>
                             <constraint firstItem="DlM-mi-Io7" firstAttribute="top" secondItem="aNo-2X-RW3" secondAttribute="top" constant="5" id="Y6f-zn-siR"/>
-                            <constraint firstAttribute="bottom" secondItem="xlY-no-zEZ" secondAttribute="bottom" constant="9" id="YA8-oS-FlT"/>
-                            <constraint firstAttribute="bottom" secondItem="iXy-rO-DCJ" secondAttribute="bottom" constant="9" id="aTJ-B6-VFS"/>
                             <constraint firstItem="DlM-mi-Io7" firstAttribute="leading" secondItem="aNo-2X-RW3" secondAttribute="leading" constant="24" id="b6E-dV-yFi"/>
-                            <constraint firstItem="k3W-2F-PD6" firstAttribute="leading" secondItem="xlY-no-zEZ" secondAttribute="trailing" constant="5" id="dd9-75-oXt"/>
-                            <constraint firstItem="iXy-rO-DCJ" firstAttribute="leading" secondItem="k3W-2F-PD6" secondAttribute="trailing" constant="1" id="ffa-2G-C1W"/>
-                            <constraint firstItem="WxK-wB-ai7" firstAttribute="leading" secondItem="iXy-rO-DCJ" secondAttribute="trailing" constant="1" id="fgV-Sa-I5Q"/>
-                            <constraint firstItem="k3W-2F-PD6" firstAttribute="top" secondItem="aNo-2X-RW3" secondAttribute="top" constant="9" id="lgg-sg-xVE"/>
+                            <constraint firstItem="WxK-wB-ai7" firstAttribute="leading" secondItem="JMM-YR-IPg" secondAttribute="trailing" constant="5" id="hhl-ed-sdl"/>
+                            <constraint firstAttribute="bottom" secondItem="JMM-YR-IPg" secondAttribute="bottom" constant="9" id="lgU-tZ-bIN"/>
                             <constraint firstAttribute="trailing" secondItem="WxK-wB-ai7" secondAttribute="trailing" constant="1" id="tWg-NE-gOl"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="btnFilter" destination="iXy-rO-DCJ" id="KZh-hU-feS"/>
-                        <outlet property="btnGoto" destination="k3W-2F-PD6" id="Nph-bw-Czl"/>
                         <outlet property="btnMore" destination="WxK-wB-ai7" id="2V2-xe-ZSi"/>
                         <outlet property="headerTextField" destination="DlM-mi-Io7" id="EKE-50-aYa"/>
-                        <outlet property="searchField" destination="xlY-no-zEZ" id="vkc-7J-Ub2"/>
+                        <outlet property="searchField" destination="JMM-YR-IPg" id="W16-9t-5Ex"/>
                         <outlet property="showHideButton" destination="PXc-Rt-M8c" id="Jqt-GW-Q81"/>
                     </connections>
                 </viewController>
@@ -123,8 +85,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="filter" width="16" height="16"/>
-        <image name="goto" width="16" height="16"/>
         <image name="more_horizontal" width="16" height="4"/>
     </resources>
 </document>

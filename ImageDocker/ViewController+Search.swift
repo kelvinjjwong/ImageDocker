@@ -75,56 +75,10 @@ extension ViewController {
 
 // shared among all token fields who set delegate to viewController
 extension ViewController: NSTokenFieldDelegate {
-    
-    private func createTokenFieldCompletionMenu(for text:String) -> [String] {
-        if let number = Int(text) {
-            if number >= 1950 && number <= 10000 {
-                return [
-                    "\(text) | Year",
-                    "\(text) | Event",
-                    "\(text) | Place",
-                    "\(text) | Note",
-                    "\(text) | Camera",
-                    "\(text) | Folder",
-                    "\(text) | Any"
-                ]
-            }else if number > 0 && number <= 12 {
-                return [
-                    "\(text) | Month",
-                    "\(text) | Day",
-                    "\(text) | Event",
-                    "\(text) | Place",
-                    "\(text) | Note",
-                    "\(text) | Camera",
-                    "\(text) | Folder",
-                    "\(text) | Any"
-                ]
-            }else if number > 0 && number <= 31 {
-                return [
-                    "\(text) | Day",
-                    "\(text) | Event",
-                    "\(text) | Place",
-                    "\(text) | Note",
-                    "\(text) | Camera",
-                    "\(text) | Folder",
-                    "\(text) | Any"
-                ]
-            }
-        }
-        return [
-            "\(text) | Event",
-            "\(text) | Place",
-            "\(text) | Person",
-            "\(text) | Note",
-            "\(text) | Camera",
-            "\(text) | Folder",
-            "\(text) | Any"
-        ]
-    }
 
     public func tokenField(_ tokenField: NSTokenField, completionsForSubstring substring: String, indexOfToken tokenIndex: Int, indexOfSelectedItem selectedIndex: UnsafeMutablePointer<Int>?) -> [Any]? {
         
-        return self.createTokenFieldCompletionMenu(for: substring)
+        return SearchCondition.createTokenFieldCompletionMenu(for: substring, separator: " | ")
     }
     
     public func tokenField(_ tokenField: NSTokenField, menuForRepresentedObject representedObject: Any) -> NSMenu? {
@@ -135,7 +89,7 @@ extension ViewController: NSTokenFieldDelegate {
                 let components = substring.components(separatedBy: "|")
                 substring = components[0].trimmingCharacters(in: .whitespacesAndNewlines)
             }
-            let nameList = self.createTokenFieldCompletionMenu(for: substring)
+            let nameList = SearchCondition.createTokenFieldCompletionMenu(for: substring, separator: " | ")
             let menu = NSMenu()
             nameList.forEach {
                 menu.addItem(withTitle: $0,
@@ -147,7 +101,6 @@ extension ViewController: NSTokenFieldDelegate {
         return nil
     }
     
-    // not shared
     @objc private func tokenFieldMenuItemTapped(_ menuItem: NSMenuItem) {
         if let fieldEditor = txtSearch?.currentEditor() {
             let textRange = fieldEditor.selectedRange
