@@ -55,12 +55,20 @@ class RepositoryDao {
         return self.impl.getRepository(repositoryPath: repositoryPath)
     }
     
-    func getRepositories(orderBy:String = "path") -> [ImageContainer] {
-        return self.impl.getRepositories(orderBy: orderBy)
+    func getRepositories(orderBy:String = "path", condition:SearchCondition? = nil) -> [ImageContainer] {
+        return self.impl.getRepositories(orderBy: orderBy, condition: condition)
     }
     
-    func getSubContainers(parent path:String) -> [ImageContainer] {
-        return self.impl.getSubContainers(parent: path)
+    func getRepositoryPaths(imagesCondition:SearchCondition) -> [String] {
+        return self.impl.getRepositoryPaths(imagesCondition: imagesCondition)
+    }
+    
+    func getSubContainers(parent path:String, condition:SearchCondition? = nil) -> [ImageContainer] {
+        return self.impl.getSubContainers(parent: path, condition: condition)
+    }
+    
+    func getSubContainerPaths(parent path:String, imagesCondition:SearchCondition) -> [String] {
+        return self.impl.getSubContainerPaths(parent: path, imagesCondition: imagesCondition)
     }
     
     func countSubContainers(parent path:String) -> Int {

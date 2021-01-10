@@ -128,7 +128,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     
     // MARK: - SEARCH
     
-    func getRepositories(orderBy:String = "path") -> [ImageContainer] {
+    func getRepositories(orderBy:String = "path", condition:SearchCondition?) -> [ImageContainer] {
         var result:[ImageContainer] = []
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
@@ -143,7 +143,12 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
         
     }
     
-    func getSubContainers(parent path:String) -> [ImageContainer] {
+    func getRepositoryPaths(imagesCondition:SearchCondition) -> [String] {
+        // TDOO: GRDB implement for getRepositoryPaths
+        return []
+    }
+    
+    func getSubContainers(parent path:String, condition:SearchCondition?) -> [ImageContainer] {
         var result:[ImageContainer] = []
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
@@ -156,6 +161,11 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
         }
         return result
         
+    }
+    
+    func getSubContainerPaths(parent path:String, imagesCondition:SearchCondition) -> [String] {
+        // TODO: GRDB implement for getSubContainerPaths
+        return []
     }
     
     func countSubContainers(parent path:String) -> Int {

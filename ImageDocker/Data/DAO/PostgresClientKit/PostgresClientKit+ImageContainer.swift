@@ -94,14 +94,173 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         return ImageContainer.fetchOne(db, where: "(\"repositoryPath\" = $1 or \"repositoryPath\" = $2) and \"parentFolder\"=''", values: [repositoryPath.withoutStash(), repositoryPath.withStash()])
     }
     
-    func getRepositories(orderBy: String) -> [ImageContainer] {
+    func getRepositories(orderBy: String, condition:SearchCondition?) -> [ImageContainer] {
         let db = PostgresConnection.database()
-        return ImageContainer.fetchAll(db, parameters: ["parentFolder" : ""], orderBy: orderBy)
+        var result:[ImageContainer] = []
+        let containers = ImageContainer.fetchAll(db, parameters: ["parentFolder" : ""], orderBy: orderBy)
+        if let imagesCondition = condition, !imagesCondition.isEmpty() {
+            let containersConformCondition = self.getRepositoryPaths(imagesCondition: imagesCondition)
+            if containersConformCondition.count > 0 {
+                for container in containers {
+                    if containersConformCondition.contains(container.repositoryPath) {
+                        result.append(container)
+                    }
+                }
+            }
+        }else{
+            result = containers
+        }
+        
+        return result
     }
     
-    func getSubContainers(parent path: String) -> [ImageContainer] {
+    func getRepositoryPaths(imagesCondition:SearchCondition) -> [String] {
+        var result:[String] = []
+        
+        var additionalConditions = ""
+        if !imagesCondition.isEmpty() {
+            (additionalConditions, _) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: imagesCondition, includeHidden: true, quoteColumn: true)
+        }
+        if additionalConditions.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+            additionalConditions = "AND \(additionalConditions)"
+        }
+        
+        let sql = """
+        select distinct "repositoryPath" from
+        (
+        select path, event,
+        "photoTakenYear",
+        "photoTakenMonth",
+        "photoTakenDay",
+        "imageSource",
+        "longDescription",
+        "shortDescription",
+        "place",
+        "country",
+        "province",
+        "city",
+        "district",
+        "businessCircle",
+        "street",
+        "address",
+        "addressDescription",
+        "assignPlace",
+        "assignCountry",
+        "assignProvince",
+        "assignCity",
+        "assignDistrict",
+        "assignBusinessCircle",
+        "assignStreet",
+        "assignAddress",
+        "assignAddressDescription",
+        "cameraMaker",
+        "cameraModel",
+        "softwareName",
+        "repositoryPath",
+        "filename"
+        from "Image"
+        ) t
+        where 1=1 \(additionalConditions)
+        order by "repositoryPath" DESC
+        """
+        print(sql)
+        
+        final class TempRecord : PostgresCustomRecord {
+            var repositoryPath:String = ""
+            public init() {}
+        }
         let db = PostgresConnection.database()
-        return ImageContainer.fetchAll(db, parameters: ["parentFolder" : path], orderBy: "\"path\"")
+        let records = TempRecord.fetchAll(db, sql: sql)
+        for row in records {
+            result.append(row.repositoryPath)
+        }
+        return result
+    }
+    
+    func getSubContainers(parent path: String, condition:SearchCondition?) -> [ImageContainer] {
+        let db = PostgresConnection.database()
+        var result:[ImageContainer] = []
+        let containers = ImageContainer.fetchAll(db, parameters: ["parentFolder" : path], orderBy: "\"path\"")
+        if let imagesCondition = condition, !imagesCondition.isEmpty() {
+            let containersConformCondition = self.getSubContainerPaths(parent: path, imagesCondition: imagesCondition)
+            if containersConformCondition.count > 0 {
+                for container in containers {
+                    for conform in containersConformCondition {
+                        if conform == container.path || conform.hasPrefix(container.path.withStash()) {
+                            result.append(container)
+                            break
+                        }
+                    }
+                }
+            }
+        }else{
+            result = containers
+        }
+        
+        return result
+    }
+    
+    func getSubContainerPaths(parent:String, imagesCondition:SearchCondition) -> [String] {
+        var result:[String] = []
+        
+        var additionalConditions = ""
+        if !imagesCondition.isEmpty() {
+            (additionalConditions, _) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: imagesCondition, includeHidden: true, quoteColumn: true)
+        }
+        if additionalConditions.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+            additionalConditions = "AND \(additionalConditions)"
+        }
+        
+        let sql = """
+        select DISTINCT "containerPath" from
+        (
+        select path, "containerPath", event,
+        "photoTakenYear",
+        "photoTakenMonth",
+        "photoTakenDay",
+        "imageSource",
+        "longDescription",
+        "shortDescription",
+        "place",
+        "country",
+        "province",
+        "city",
+        "district",
+        "businessCircle",
+        "street",
+        "address",
+        "addressDescription",
+        "assignPlace",
+        "assignCountry",
+        "assignProvince",
+        "assignCity",
+        "assignDistrict",
+        "assignBusinessCircle",
+        "assignStreet",
+        "assignAddress",
+        "assignAddressDescription",
+        "cameraMaker",
+        "cameraModel",
+        "softwareName",
+        "repositoryPath",
+        "filename"
+        from "Image"
+        ) t
+        where path like '\(parent.replacingOccurrences(of: "'", with: "''").withStash())%' \(additionalConditions)
+        order by "containerPath" DESC
+        """
+        print(sql)
+        
+        final class TempRecord : PostgresCustomRecord {
+            var repositoryPath:String = ""
+            public init() {}
+        }
+        let db = PostgresConnection.database()
+        let records = TempRecord.fetchAll(db, sql: sql)
+        for row in records {
+            result.append(row.repositoryPath)
+        }
+        return result
     }
     
     func countSubContainers(parent path: String) -> Int {

@@ -30,9 +30,13 @@ protocol RepositoryDaoInterface {
     
     func getRepository(repositoryPath:String) -> ImageContainer?
     
-    func getRepositories(orderBy:String) -> [ImageContainer]
+    func getRepositories(orderBy:String, condition:SearchCondition?) -> [ImageContainer]
     
-    func getSubContainers(parent path:String) -> [ImageContainer]
+    func getRepositoryPaths(imagesCondition:SearchCondition) -> [String]
+    
+    func getSubContainers(parent path:String, condition:SearchCondition?) -> [ImageContainer]
+    
+    func getSubContainerPaths(parent path:String, imagesCondition:SearchCondition) -> [String]
     
     func countSubContainers(parent path:String) -> Int
     

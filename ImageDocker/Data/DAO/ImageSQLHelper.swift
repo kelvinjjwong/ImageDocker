@@ -366,7 +366,7 @@ struct SQLHelper {
             "softwareName"
         ], values: condition.cameras, like: true, or: true, quoteColumn: quoteColumn)
         
-        let folderStatement = SQLHelper.joinArrayToStatementCondition(field: "repositoryPath", values: condition.folders, like: true, quoteColumn: quoteColumn)
+        let folderStatement = SQLHelper.joinArrayToStatementCondition(field: "path", values: condition.folders, like: true, quoteColumn: quoteColumn)
         
         let filenameStatement = SQLHelper.joinArrayToStatementCondition(field: "filename", values: condition.filenames, like: true, quoteColumn: quoteColumn)
         

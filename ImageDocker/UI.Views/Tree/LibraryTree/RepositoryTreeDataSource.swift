@@ -32,7 +32,7 @@ class RepositoryTreeDataSource : TreeDataSource {
     
     func loadRepositories(condition:SearchCondition? = nil) -> [TreeCollection] {
         var nodes:[TreeCollection] = []
-        let containers = RepositoryDao.default.getRepositories(orderBy: "name")
+        let containers = RepositoryDao.default.getRepositories(orderBy: "name", condition: condition)
         if containers.count == 0 {
             print(">>> no repository is loaded for tree")
         }
@@ -46,7 +46,7 @@ class RepositoryTreeDataSource : TreeDataSource {
     
     func loadSubContainers(parentPath: String, condition:SearchCondition? = nil) -> [TreeCollection] {
         var nodes:[TreeCollection] = []
-        let containers = RepositoryDao.default.getSubContainers(parent: parentPath)
+        let containers = RepositoryDao.default.getSubContainers(parent: parentPath, condition: condition)
         for container in containers {
             let node = self.convertToTreeNode(container)
             nodes.append(node)
