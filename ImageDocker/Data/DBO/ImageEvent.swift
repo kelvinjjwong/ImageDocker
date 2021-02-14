@@ -21,6 +21,23 @@ public final class ImageEvent : Codable {
     var endMonth: Int?
     var endDay: Int?
     var category: String = ""
+    var owner: String = ""
+    var ownerAge: String = ""
+    var attenders: String = ""
+    var family: String = ""
+    var activity1: String = ""
+    var activity2: String = ""
+    var imageCount: Int = 0
+    var note: String = ""
+    var lastUpdateTime: Date?
+    var ownerNickname: String = ""
+    var ownerId: String = ""
+    var owner2: String = ""
+    var owner2Nickname: String = ""
+    var owner2Id: String = ""
+    var owner3: String = ""
+    var owner3Nickname: String = ""
+    var owner3Id: String = ""
     
     public init() {
         
@@ -42,7 +59,7 @@ extension ImageEvent : PostgresRecord {
     }
     
     public func primaryKeys() -> [String] {
-        return ["category", "name"]
+        return ["name"]
     }
     
     

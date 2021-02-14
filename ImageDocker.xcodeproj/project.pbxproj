@@ -720,11 +720,7 @@
 				8EB271902340EED2003BF3AF /* ViewController+TreeArea+Filter.swift */,
 				8EB2718E2340EE95003BF3AF /* ViewController+TreeArea+Scan.swift */,
 				8EB2717A2340D8BC003BF3AF /* ViewController+SelectionArea.swift */,
-				8EB2718C2340EE4C003BF3AF /* ViewController+SelectionArea+WriteNote.swift */,
 				8EB2718A2340EE18003BF3AF /* ViewController+SelectionArea+ExportSelected.swift */,
-				8EB271882340EDC5003BF3AF /* ViewController+SelectionArea+AssignEvent.swift */,
-				8EB271862340EA34003BF3AF /* ViewController+SelectionArea+ReplaceDate.swift */,
-				8EB271842340E9C6003BF3AF /* ViewController+SelectionArea+ReplacePlace.swift */,
 				8EB271822340E98B003BF3AF /* ViewController+SelectionArea+CombineDuplicated.swift */,
 				8EB271782340D8A3003BF3AF /* ViewController+PreviewArea.swift */,
 				8EB271762340D867003BF3AF /* ViewController+CollectionArea.swift */,
@@ -799,12 +795,16 @@
 		8E3EC3B8214DB235004B6125 /* Editors */ = {
 			isa = PBXGroup;
 			children = (
+				8EB271882340EDC5003BF3AF /* ViewController+SelectionArea+AssignEvent.swift */,
 				8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */,
 				8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */,
+				8EB271842340E9C6003BF3AF /* ViewController+SelectionArea+ReplacePlace.swift */,
 				8E98B8EE20D0EE3300771280 /* PlaceListViewController.swift */,
 				8E98B8EF20D0EE3300771280 /* PlaceListViewController.xib */,
+				8EB271862340EA34003BF3AF /* ViewController+SelectionArea+ReplaceDate.swift */,
 				8E3EC3BB214DE623004B6125 /* DateTimeViewController.swift */,
 				8E3EC3BC214DE623004B6125 /* DateTimeViewController.xib */,
+				8EB2718C2340EE4C003BF3AF /* ViewController+SelectionArea+WriteNote.swift */,
 				8EBA9DDD216F8BB100DACAAD /* NotesViewController.swift */,
 				8EBA9DDE216F8BB100DACAAD /* NotesViewController.xib */,
 			);

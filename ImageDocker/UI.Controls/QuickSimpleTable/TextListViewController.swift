@@ -12,9 +12,11 @@ class TextListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxDa
     
     var items:[String] = []
     weak var combobox:NSComboBox!
+    private var onChange: ((String) -> Void)? = nil
     
-    init(_ listView:NSComboBox){
+    init(_ listView:NSComboBox, onChange: ((String) -> Void)? = nil){
         self.combobox = listView
+        self.onChange = onChange
     }
     
     func load(_ items:[String]){
@@ -28,17 +30,21 @@ class TextListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxDa
         self.combobox.selectItem(withObjectValue: value)
     }
     
+    func cleanSelection(){
+        self.combobox.selectItem(withObjectValue:nil)
+    }
+    
     func clean() {
         self.items = []
         self.combobox.reloadData()
     }
     
     func numberOfItems(in comboBox: NSComboBox) -> Int {
-        return(items.count)
+        return self.items.count
     }
     
     func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
-        return(items[index] as AnyObject)
+        return items[index] as AnyObject
     }
     
     func comboBox(_ comboBox: NSComboBox, indexOfItemWithStringValue string: String) -> Int {
@@ -50,6 +56,14 @@ class TextListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxDa
             i += 1
         }
         return -1
+    }
+    
+    func comboBoxSelectionDidChange(_ notification: Notification) {
+        if self.onChange == nil {return}
+        if combobox == nil {return}
+        if combobox!.indexOfSelectedItem < 0 || combobox!.indexOfSelectedItem >= items.count {return}
+        let item = items[combobox!.indexOfSelectedItem]
+        self.onChange!(item)
     }
     
     

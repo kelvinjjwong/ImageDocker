@@ -81,6 +81,10 @@ class FaceDao {
         return self.impl.getPerson(id: id)
     }
     
+    func getPerson(name: String) -> People? {
+        return self.impl.getPerson(name: name)
+    }
+    
     func savePersonName(id:String, name:String, shortName:String) -> ExecuteState {
         return self.impl.savePersonName(id: id, name: name, shortName: shortName)
     }

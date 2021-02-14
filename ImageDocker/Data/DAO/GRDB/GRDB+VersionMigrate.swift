@@ -505,6 +505,38 @@ extension SQLiteConnectionGRDB {
             })
         }
         
+        migrator.registerMigration("v37") { db in
+            try db.alter(table: "ImageEvent", body: { t in
+                t.add(column: "owner", .text).defaults(to: "")
+                t.add(column: "ownerAge", .text).defaults(to: "")
+                t.add(column: "attenders", .text).defaults(to: "")
+                t.add(column: "family", .text).defaults(to: "")
+                t.add(column: "activity1", .text).defaults(to: "")
+                t.add(column: "activity2", .text).defaults(to: "")
+                t.add(column: "imageCount", .integer).defaults(to: 0)
+                t.add(column: "note", .text).defaults(to: "")
+                t.add(column: "lastUpdateTime", .datetime)
+            })
+        }
+        
+        migrator.registerMigration("v38") { db in
+            try db.alter(table: "ImageEvent", body: { t in
+                t.add(column: "ownerNickname", .text).defaults(to: "")
+                t.add(column: "ownerId", .text).defaults(to: "")
+            })
+        }
+        
+        migrator.registerMigration("v39") { db in
+            try db.alter(table: "ImageEvent", body: { t in
+                t.add(column: "owner2", .text).defaults(to: "")
+                t.add(column: "owner2Nickname", .text).defaults(to: "")
+                t.add(column: "owner2Id", .text).defaults(to: "")
+                t.add(column: "owner3", .text).defaults(to: "")
+                t.add(column: "owner3Nickname", .text).defaults(to: "")
+                t.add(column: "owner3Id", .text).defaults(to: "")
+            })
+        }
+        
         
         do {
             let dbQueue = try DatabaseQueue(path: SQLiteDataSource.default.getDataSource())

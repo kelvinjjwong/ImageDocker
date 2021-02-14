@@ -15,7 +15,7 @@ extension ViewController {
         if(myPopover == nil){
             myPopover = NSPopover()
             
-            let frame = CGRect(origin: .zero, size: CGSize(width: 600, height: 400))
+            let frame = CGRect(origin: .zero, size: CGSize(width: 1200, height: 620))
             self.eventViewController = EventListViewController()
             self.eventViewController.view.frame = frame
             self.eventViewController.refreshDelegate = self

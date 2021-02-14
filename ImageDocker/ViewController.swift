@@ -142,9 +142,11 @@ class ViewController: NSViewController {
     @IBOutlet weak var indicatorMessage: NSTextField!
     @IBOutlet weak var btnRefreshCollectionView: NSButton!
     @IBOutlet weak var btnCombineDuplicates: NSPopUpButton!
+    @IBOutlet weak var btnPreviousPageCollection: NSButton!
+    @IBOutlet weak var btnNextPageCollection: NSButton!
+    @IBOutlet weak var lblPagesCollection: NSTextField!
     
     
-    @IBOutlet weak var btnCollectionFilter: NSButton!
     @IBOutlet weak var chbShowHidden: NSButton!
     
     let imagesLoader = CollectionViewItemsLoader()
@@ -446,6 +448,12 @@ class ViewController: NSViewController {
         self.refreshCollection(sender)
     }
     
+    @IBAction func onPreviousPageCollectionClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onNextPageCollectionClicked(_ sender: NSButton) {
+    }
+    
     
     @IBAction func onCombineDuplicatesButtonClicked(_ sender: NSPopUpButton) {
         let i = sender.indexOfSelectedItem
@@ -464,10 +472,6 @@ class ViewController: NSViewController {
     
     @IBAction func onCheckShowHiddenClicked(_ sender: NSButton) {
         self.switchShowHideState()
-    }
-    
-    @IBAction func onCollectionFilterClicked(_ sender: NSButton) {
-        self.showCollectionFilter(sender)
     }
     
     

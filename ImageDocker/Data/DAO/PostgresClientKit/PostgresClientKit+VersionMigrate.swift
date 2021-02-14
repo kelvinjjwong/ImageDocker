@@ -507,6 +507,38 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v37") { db in
+            try db.alter(table: "ImageEvent", body: { t in
+                t.add("owner", .text).defaults(to: "")
+                t.add("ownerAge", .text).defaults(to: "")
+                t.add("attenders", .text).defaults(to: "")
+                t.add("family", .text).defaults(to: "")
+                t.add("activity1", .text).defaults(to: "")
+                t.add("activity2", .text).defaults(to: "")
+                t.add("imageCount", .integer).defaults(to: 0)
+                t.add("note", .text).defaults(to: "")
+                t.add("lastUpdateTime", .datetime)
+            })
+        }
+        
+        migrator.version("v38") { db in
+            try db.alter(table: "ImageEvent", body: { t in
+                t.add("ownerNickname", .text).defaults(to: "")
+                t.add("ownerId", .text).defaults(to: "")
+            })
+        }
+        
+        migrator.version("v39") { db in
+            try db.alter(table: "ImageEvent", body: { t in
+                t.add("owner2", .text).defaults(to: "")
+                t.add("owner2Nickname", .text).defaults(to: "")
+                t.add("owner2Id", .text).defaults(to: "")
+                t.add("owner3", .text).defaults(to: "")
+                t.add("owner3Nickname", .text).defaults(to: "")
+                t.add("owner3Id", .text).defaults(to: "")
+            })
+        }
+        
         do {
             try migrator.migrate(cleanVersions: dropBeforeCreate)
         }catch{

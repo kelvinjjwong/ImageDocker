@@ -29,12 +29,28 @@ class EventDao {
         return self.impl.getOrCreateEvent(name: name)
     }
     
+    func updateEventDetail(event:ImageEvent){
+        return self.impl.updateEventDetail(event: event)
+    }
+    
     func getAllEvents() -> [ImageEvent] {
         return self.impl.getAllEvents()
     }
     
     func getEvents(byName names:String? = nil) -> [ImageEvent] {
         return self.impl.getEvents(byName: names)
+    }
+    
+    func getEventCategories() -> [String] {
+        return self.impl.getEventCategories()
+    }
+    
+    func getEventActivities() -> [String] {
+        return self.impl.getEventActivities()
+    }
+    
+    func getEventActivities(category: String) -> [String] {
+        return self.impl.getEventActivities(category: category)
     }
     
     func getAllEvents(imageSource:[String]? = nil, cameraModel:[String]? = nil) -> [Event] {
@@ -47,5 +63,13 @@ class EventDao {
     
     func deleteEvent(name:String) -> ExecuteState{
         return self.impl.deleteEvent(name: name)
+    }
+    
+    func countImagesOfEvent(event:String) -> Int {
+        return self.impl.countImagesOfEvent(event:event)
+    }
+    
+    func importEventsFromImages() {
+        return self.impl.importEventsFromImages()
     }
 }

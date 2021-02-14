@@ -34,6 +34,7 @@ class Moment {
     var day:Int = 0
     var event:String = ""
     var eventCategory:String = ""
+    var eventOwner:String = ""
     var photoCount:Int = 0
     var children:[Moment] = [Moment]()
     
@@ -49,6 +50,7 @@ class Moment {
     
     var eventData:String = ""
     var eventCategoryData:String = ""
+    var eventOwnerData:String = ""
     
     init(gov:String) {
         self.gov = gov
@@ -73,11 +75,28 @@ class Moment {
         self.eventCategoryData = eventCategory
     }
     
+    init(eventCategory:String, owner:String){
+        self.eventCategory = eventCategory
+        self.eventCategoryData = eventCategory
+        self.eventOwner = owner
+        self.eventOwnerData = owner
+    }
+    
     init(event:String, category:String, imageCount:Int = 0) {
         self.eventData = event
         self.event = event
         self.eventCategoryData = category
         self.eventCategory = category
+        self.photoCount = imageCount
+    }
+    
+    init(event:String, category:String, owner:String, imageCount:Int = 0) {
+        self.eventData = event
+        self.event = event
+        self.eventCategoryData = category
+        self.eventCategory = category
+        self.eventOwner = owner
+        self.eventOwnerData = owner
         self.photoCount = imageCount
     }
     

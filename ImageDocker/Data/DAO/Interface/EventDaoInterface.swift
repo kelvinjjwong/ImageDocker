@@ -12,13 +12,25 @@ protocol EventDaoInterface {
     
     func getOrCreateEvent(name:String) -> ImageEvent
     
+    func updateEventDetail(event:ImageEvent)
+    
     func getAllEvents() -> [ImageEvent]
     
     func getEvents(byName names:String?) -> [ImageEvent]
+    
+    func getEventCategories() -> [String]
+    
+    func getEventActivities() -> [String]
+    
+    func getEventActivities(category: String) -> [String]
     
     func getAllEvents(imageSource:[String]?, cameraModel:[String]?) -> [Event]
     
     func renameEvent(oldName:String, newName:String) -> ExecuteState
     
     func deleteEvent(name:String) -> ExecuteState
+    
+    func countImagesOfEvent(event:String) -> Int
+    
+    func importEventsFromImages()
 }

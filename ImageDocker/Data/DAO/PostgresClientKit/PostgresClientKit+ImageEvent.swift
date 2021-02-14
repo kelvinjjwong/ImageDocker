@@ -22,6 +22,30 @@ class EventDaoPostgresCK : EventDaoInterface {
         
     }
     
+    func updateEventDetail(event:ImageEvent){
+        let db = PostgresConnection.database()
+        if var rec = ImageEvent.fetchOne(db, parameters: ["name": event.name]) {
+            rec.category = event.category
+            rec.activity1 = event.activity1
+            rec.activity2 = event.activity2
+            rec.attenders = event.attenders
+            rec.family = event.family
+            rec.note = event.note
+            rec.imageCount = event.imageCount
+            rec.lastUpdateTime = Date()
+            rec.owner = event.owner
+            rec.ownerNickname = event.ownerNickname
+            rec.ownerId = event.ownerId
+            rec.owner2 = event.owner2
+            rec.owner2Nickname = event.owner2Nickname
+            rec.owner2Id = event.owner2Id
+            rec.owner3 = event.owner3
+            rec.owner3Nickname = event.owner3Nickname
+            rec.owner3Id = event.owner3Id
+            rec.save(db)
+        }
+    }
+    
     func getAllEvents() -> [ImageEvent] {
         let db = PostgresConnection.database()
         return ImageEvent.fetchAll(db)
@@ -35,6 +59,77 @@ class EventDaoPostgresCK : EventDaoInterface {
             whereStmt = SQLHelper.likeArray(field: "name", array: keys)
         }
         return ImageEvent.fetchAll(db, where: whereStmt, orderBy: "name")
+    }
+    
+    func getEventCategories() -> [String] {
+        var result:[String] = []
+        
+        let sql = """
+        select distinct "category" from "ImageEvent" order by "category"
+        """
+//        print(sql)
+        
+        final class TempRecord : PostgresCustomRecord {
+            var category:String = ""
+            public init() {}
+        }
+        let db = PostgresConnection.database()
+        let records = TempRecord.fetchAll(db, sql: sql)
+        for row in records {
+            result.append(row.category)
+        }
+        return result
+        
+    }
+    
+    func getEventActivities() -> [String] {
+        var result:[String] = []
+        
+        let sql = """
+        select "act" from (
+        select distinct "activity1" as "act" from "ImageEvent" where "activity1" <> ''
+        union
+        select distinct "activity2" as "act" from "ImageEvent" where "activity2" <> ''
+        ) t order by "act"
+        """
+//        print(sql)
+        
+        final class TempRecord : PostgresCustomRecord {
+            var acc:String = ""
+            public init() {}
+        }
+        let db = PostgresConnection.database()
+        let records = TempRecord.fetchAll(db, sql: sql)
+        for row in records {
+            result.append(row.acc)
+        }
+        return result
+        
+    }
+    
+    func getEventActivities(category: String) -> [String] {
+        var result:[String] = []
+        
+        let sql = """
+        select "act" from (
+        select distinct "activity1" as "act" from "ImageEvent" where "category" = '\(category)' and "activity1" <> ''
+        union
+        select distinct "activity2" as "act" from "ImageEvent" where "category" = '\(category)' and "activity2" <> ''
+        ) t order by "act"
+        """
+        print(sql)
+        
+        final class TempRecord : PostgresCustomRecord {
+            var acc:String = ""
+            public init() {}
+        }
+        let db = PostgresConnection.database()
+        let records = TempRecord.fetchAll(db, sql: sql)
+        for row in records {
+            result.append(row.acc)
+        }
+        return result
+        
     }
     
     func getAllEvents(imageSource: [String]?, cameraModel: [String]?) -> [Event] {
@@ -120,7 +215,7 @@ class EventDaoPostgresCK : EventDaoInterface {
         }
         do {
             try db.execute(sql: """
-            UPDATE "Image" SET "assignPlace"=$1 WHERE "assignPlace"=$2
+            UPDATE "Image" SET "event"=$1, "lastUpdateTime"=now() WHERE "event"=$2
             """, parameterValues: [newName, oldName])
             let event = ImageEvent()
             event.name = oldName
@@ -140,5 +235,81 @@ class EventDaoPostgresCK : EventDaoInterface {
         return .OK
     }
     
+    
+    func countImagesOfEvent(event:String) -> Int {
+        let db = PostgresConnection.database()
+        let result = Image.count(db, where: """
+        "event"=$1
+        """, parameters:[event])
+        
+        do {
+            try db.execute(sql: """
+            UPDATE "ImageEvent" SET "imageCount"=$1,"lastUpdateTime"=now() WHERE "name"=$2
+            """, parameterValues: [result, event])
+        }catch {
+            print(error)
+        }
+        
+        final class TempRecord : PostgresCustomRecord {
+            var dt:Date? = nil
+            public init() {}
+        }
+        
+        let maxSql = """
+        select max("photoTakenDate") from "Image" where "event"='\(event)'
+        """
+        print(maxSql)
+        var maxDate:Date? = nil
+        let max = TempRecord.fetchAll(db, sql: maxSql)
+        if max.count > 0 {
+            maxDate = max[0].dt
+        }
+        
+        let minSql = """
+        select min("photoTakenDate") from "Image" where "event"='\(event)'
+        """
+        print(minSql)
+        var minDate:Date? = nil
+        let min = TempRecord.fetchAll(db, sql: minSql)
+        if min.count > 0 {
+            minDate = min[0].dt
+        }
+        
+        do {
+            try db.execute(sql: """
+            UPDATE "ImageEvent" SET "startDate"=$1,"endDate"=$2, "lastUpdateTime"=now() WHERE "name"=$3
+            """, parameterValues: [minDate, maxDate, event])
+        }catch {
+            print(error)
+        }
+        
+        return result
+    }
+    
+    func importEventsFromImages() {
+        let db = PostgresConnection.database()
+        final class TempRecord : PostgresCustomRecord {
+            var event:String? = nil
+            public init() {}
+        }
+        
+        let sql = """
+        select DISTINCT "event" from "Image" where "event" not in (
+        select DISTINCT "name" from "ImageEvent")
+        """
+        let records = TempRecord.fetchAll(db, sql: sql)
+        var events:[String] = []
+        if records.count > 0 {
+            for record in records {
+                if let ev = record.event {
+                    events.append(ev)
+                }
+            }
+            
+            for ev in events {
+                let _ = self.getOrCreateEvent(name: ev)
+            }
+        }
+    }
 
 }

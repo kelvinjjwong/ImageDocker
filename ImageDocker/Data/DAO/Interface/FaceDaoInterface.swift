@@ -40,6 +40,8 @@ protocol FaceDaoInterface {
     
     func getPerson(id: String) -> People?
     
+    func getPerson(name: String) -> People?
+    
     func savePersonName(id:String, name:String, shortName:String) -> ExecuteState
     
     func updatePersonIconImage(id:String, repositoryPath:String, cropPath:String, subPath:String, filename:String) -> Bool

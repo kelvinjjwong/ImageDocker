@@ -235,6 +235,20 @@ class FaceDaoGRDB : FaceDaoInterface {
         return nil
     }
     
+    func getPerson(name: String) -> People? {
+        var obj:People?
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.read { db in
+                obj = try People.fetchOne(db, sql: "name = '\(name)'")
+            }
+            return obj
+        }catch{
+            print(error)
+        }
+        return nil
+    }
+    
     func savePersonName(id:String, name:String, shortName:String) -> ExecuteState {
         var person = People.new(id: id, name: name, shortName: shortName)
         do {

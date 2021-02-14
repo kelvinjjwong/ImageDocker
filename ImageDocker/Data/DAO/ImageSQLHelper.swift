@@ -278,7 +278,7 @@ struct SQLHelper {
         var stmtWithoutHiddenWhere = ""
         
         if year == 0 {
-            stmtWithoutHiddenWhere = "\(eventWhere) \(hiddenWhere)"
+            stmtWithoutHiddenWhere = "\(eventWhere) and \"photoTakenYear\" is null \(hiddenWhere)"
         } else if day == 0 {
             if month == 0 {
                 stmtWithoutHiddenWhere = "\(eventWhere) and \"photoTakenYear\" = \(year) \(hiddenWhere)"
