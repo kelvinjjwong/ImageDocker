@@ -440,22 +440,8 @@
                                                                             <action selector="onCheckSelectAllClicked:" target="XfG-lQ-9wD" id="lBZ-oO-AIo"/>
                                                                         </connections>
                                                                     </button>
-                                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DpT-Dg-Oeb">
-                                                                        <rect key="frame" x="1084" y="6" width="73" height="21"/>
-                                                                        <constraints>
-                                                                            <constraint firstAttribute="height" constant="20" id="Gmp-RZ-apS"/>
-                                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="SPU-3L-Anh"/>
-                                                                        </constraints>
-                                                                        <buttonCell key="cell" type="roundTextured" title="Reload" bezelStyle="texturedRounded" image="NSRefreshTemplate" imagePosition="left" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="XGb-ik-U2U">
-                                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                            <font key="font" metaFont="system"/>
-                                                                        </buttonCell>
-                                                                        <connections>
-                                                                            <action selector="onRefreshCollectionButtonClicked:" target="XfG-lQ-9wD" id="Mi6-Nw-XuV"/>
-                                                                        </connections>
-                                                                    </button>
                                                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gkw-tO-uG9">
-                                                                        <rect key="frame" x="893" y="5" width="95" height="23"/>
+                                                                        <rect key="frame" x="894" y="5" width="95" height="23"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="22" id="WXq-VJ-o8B"/>
                                                                             <constraint firstAttribute="width" constant="95" id="yDU-mD-v5y"/>
@@ -476,7 +462,7 @@
                                                                         </connections>
                                                                     </popUpButton>
                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IGx-sv-JYq">
-                                                                        <rect key="frame" x="1052" y="0.0" width="37" height="32"/>
+                                                                        <rect key="frame" x="1066" y="0.0" width="37" height="32"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="25" id="ZBi-2B-wJR"/>
                                                                         </constraints>
@@ -489,7 +475,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="meR-zL-rAv">
-                                                                        <rect key="frame" x="1152" y="0.0" width="37" height="32"/>
+                                                                        <rect key="frame" x="1155" y="0.0" width="37" height="32"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="25" id="JsJ-9k-Ggr"/>
                                                                         </constraints>
@@ -502,7 +488,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uR6-jc-2Z7">
-                                                                        <rect key="frame" x="991" y="9" width="64" height="16"/>
+                                                                        <rect key="frame" x="1097" y="9" width="64" height="16"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="60" id="QU5-Rs-auk"/>
                                                                         </constraints>
@@ -512,6 +498,20 @@
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
                                                                     </textField>
+                                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DpT-Dg-Oeb">
+                                                                        <rect key="frame" x="994" y="6" width="73" height="21"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="20" id="Gmp-RZ-apS"/>
+                                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="SPU-3L-Anh"/>
+                                                                        </constraints>
+                                                                        <buttonCell key="cell" type="roundTextured" title="Reload" bezelStyle="texturedRounded" image="NSRefreshTemplate" imagePosition="left" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="XGb-ik-U2U">
+                                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                            <font key="font" metaFont="system"/>
+                                                                        </buttonCell>
+                                                                        <connections>
+                                                                            <action selector="onRefreshCollectionButtonClicked:" target="XfG-lQ-9wD" id="Mi6-Nw-XuV"/>
+                                                                        </connections>
+                                                                    </button>
                                                                 </subviews>
                                                                 <constraints>
                                                                     <constraint firstItem="Sab-MP-Qfo" firstAttribute="leading" secondItem="kAZ-Sm-Ax7" secondAttribute="trailing" constant="20" id="183-Wq-j1a"/>
@@ -521,19 +521,19 @@
                                                                     <constraint firstItem="KZW-eM-F1C" firstAttribute="top" secondItem="m9M-hY-L99" secondAttribute="top" id="CiJ-4L-Rq1"/>
                                                                     <constraint firstAttribute="bottom" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="35" id="FQQ-0m-lCs"/>
                                                                     <constraint firstAttribute="trailing" secondItem="KZW-eM-F1C" secondAttribute="trailing" id="Hj4-Gx-NJd"/>
-                                                                    <constraint firstItem="uR6-jc-2Z7" firstAttribute="leading" secondItem="Gkw-tO-uG9" secondAttribute="trailing" constant="5" id="K1h-L0-Tfs"/>
                                                                     <constraint firstItem="meR-zL-rAv" firstAttribute="top" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="7" id="Qif-zz-CZZ"/>
+                                                                    <constraint firstItem="IGx-sv-JYq" firstAttribute="leading" secondItem="DpT-Dg-Oeb" secondAttribute="trailing" constant="5" id="SfC-vA-1mW"/>
                                                                     <constraint firstItem="KZW-eM-F1C" firstAttribute="leading" secondItem="m9M-hY-L99" secondAttribute="leading" id="TrQ-Wm-NbH"/>
-                                                                    <constraint firstItem="DpT-Dg-Oeb" firstAttribute="leading" secondItem="IGx-sv-JYq" secondAttribute="trailing" constant="1" id="V5f-ZQ-aLb"/>
-                                                                    <constraint firstItem="IGx-sv-JYq" firstAttribute="leading" secondItem="uR6-jc-2Z7" secondAttribute="trailing" constant="5" id="Vtb-zQ-5mN"/>
                                                                     <constraint firstAttribute="bottom" secondItem="kAZ-Sm-Ax7" secondAttribute="bottom" constant="7" id="Ybw-3Z-dGC"/>
                                                                     <constraint firstItem="kAZ-Sm-Ax7" firstAttribute="leading" secondItem="m9M-hY-L99" secondAttribute="leading" constant="20" id="Yjk-XW-fuZ"/>
+                                                                    <constraint firstItem="meR-zL-rAv" firstAttribute="leading" secondItem="uR6-jc-2Z7" secondAttribute="trailing" constant="2" id="ZXy-a2-Y0K"/>
                                                                     <constraint firstItem="Gkw-tO-uG9" firstAttribute="top" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="7" id="a6L-mg-zAV"/>
                                                                     <constraint firstItem="uR6-jc-2Z7" firstAttribute="top" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="10" id="aNP-KS-xkJ"/>
-                                                                    <constraint firstItem="meR-zL-rAv" firstAttribute="leading" secondItem="DpT-Dg-Oeb" secondAttribute="trailing" constant="1" id="b9p-5w-rw4"/>
-                                                                    <constraint firstItem="eaf-Jq-heG" firstAttribute="leading" secondItem="meR-zL-rAv" secondAttribute="trailing" constant="5" id="g2g-3T-oKt"/>
+                                                                    <constraint firstItem="eaf-Jq-heG" firstAttribute="leading" secondItem="meR-zL-rAv" secondAttribute="trailing" constant="2" id="g2g-3T-oKt"/>
                                                                     <constraint firstItem="DpT-Dg-Oeb" firstAttribute="top" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="8" id="jCr-mg-vua"/>
+                                                                    <constraint firstItem="DpT-Dg-Oeb" firstAttribute="leading" secondItem="Gkw-tO-uG9" secondAttribute="trailing" constant="5" id="m4s-Ab-YVA"/>
                                                                     <constraint firstAttribute="trailing" secondItem="y2t-Ke-hIj" secondAttribute="trailing" constant="15" id="mZA-F8-9Md"/>
+                                                                    <constraint firstItem="uR6-jc-2Z7" firstAttribute="leading" secondItem="IGx-sv-JYq" secondAttribute="trailing" constant="2" id="nTO-ev-JEO"/>
                                                                     <constraint firstItem="IGx-sv-JYq" firstAttribute="top" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="7" id="xED-Ca-jyc"/>
                                                                     <constraint firstItem="eaf-Jq-heG" firstAttribute="top" secondItem="KZW-eM-F1C" secondAttribute="bottom" constant="11" id="xrc-T9-jh9"/>
                                                                 </constraints>
@@ -2168,11 +2168,11 @@
                                                                 <rect key="frame" x="34" y="83" width="230" height="170"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="D2k-1f-peO">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="230" height="170"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="230" height="155"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="Ach-a0-h7S" viewBased="YES" id="kXx-S6-VDX">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="257" height="145"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="257" height="130"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <size key="intercellSpacing" width="3" height="2"/>
                                                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2248,7 +2248,7 @@
                                                                     <nil key="backgroundColor"/>
                                                                 </clipView>
                                                                 <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="5J2-jr-2kG">
-                                                                    <rect key="frame" x="0.0" y="154" width="230" height="16"/>
+                                                                    <rect key="frame" x="0.0" y="155" width="230" height="15"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="OpC-4i-XUI">
@@ -2704,14 +2704,14 @@ brew install ifuse</string>
                                                                 <rect key="frame" x="20" y="20" width="374" height="132"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <clipView key="contentView" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" id="UBo-bc-TBt">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="374" height="132"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="359" height="132"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <textView ambiguous="YES" editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="Xti-RX-E8d">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="374" height="132"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="359" height="132"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            <size key="minSize" width="374" height="132"/>
+                                                                            <size key="minSize" width="359" height="132"/>
                                                                             <size key="maxSize" width="390" height="10000000"/>
                                                                             <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                         </textView>
