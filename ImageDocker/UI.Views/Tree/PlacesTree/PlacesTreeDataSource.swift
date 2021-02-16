@@ -124,13 +124,13 @@ class PlacesTreeDataSource : TreeDataSource {
                     var nodes:[TreeCollection] = []
                     var moments:[Moment] = []
                     if parent.year == 0 {
-                        print("loading years")
+//                        print("loading years")
                         moments = ImageSearchDao.default.getMomentsByPlace(.YEAR, parent: parent, condition: condition)
                     }else if parent.month == 0 {
-                        print("loading months")
+//                        print("loading months")
                         moments = ImageSearchDao.default.getMomentsByPlace(.MONTH, parent: parent, condition: condition)
                     }else if parent.day == 0 {
-                        print("loading days")
+//                        print("loading days")
                         moments = ImageSearchDao.default.getMomentsByPlace(.DAY, parent: parent, condition: condition)
                     }
                     for moment in moments {
@@ -139,11 +139,11 @@ class PlacesTreeDataSource : TreeDataSource {
                     }
                     return (nodes, nil)
                 }else{
-                    print("parent place is empty")
+//                    print("parent place is empty")
                 }
                 
             }else{
-                print("PlacesTreeDS: no related object")
+//                print("PlacesTreeDS: no related object")
             }
         }
         return ([], nil)

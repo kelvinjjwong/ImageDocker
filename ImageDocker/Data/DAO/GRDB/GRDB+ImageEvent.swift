@@ -186,7 +186,7 @@ select distinct activity2 as act from ImageEvent where category='\(category)' ac
         SQLHelper.inArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs)
         
         let sql = "SELECT event, photoTakenYear, photoTakenMonth, photoTakenDay, place, count(path) as photoCount FROM Image WHERE 1=1 \(imageSourceWhere) \(cameraModelWhere) GROUP BY event, photoTakenYear,photoTakenMonth,photoTakenDay,place ORDER BY event DESC,photoTakenYear DESC,photoTakenMonth DESC,photoTakenDay DESC,place"
-        print(sql)
+//        print(sql)
         var result:[Row] = []
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()

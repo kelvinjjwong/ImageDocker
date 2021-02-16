@@ -319,8 +319,8 @@ class ExportDaoGRDB : ExportDaoInterface {
         
         // TODO: after profile.lastExportEndTime
         
-        print("sql for export images:")
-        print(sql)
+//        print("sql for export images:")
+//        print(sql)
         
         return sql
     }

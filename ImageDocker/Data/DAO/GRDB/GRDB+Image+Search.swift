@@ -304,7 +304,7 @@ select DATE('now', 'localtime')  date
         var sql = "select distinct DATE(photoTakenDate) as photoTakenDate from image where hidden=0 and DATE(phototakendate) IN ("
         sql += "DATE('now', 'localtime', '-\(k) year'), DATE('now', 'localtime', '-\(k) year', '-1 day'), DATE('now', 'localtime', '-\(k) year', '-2 day'), DATE('now', 'localtime', '-\(k) year', '+1 day'), DATE('now', 'localtime', '-\(k) year', '+2 day')"
         sql += ") order by DATE(photoTakenDate) desc"
-        print(sql)
+//        print(sql)
         
         var result:[String] = []
         do {

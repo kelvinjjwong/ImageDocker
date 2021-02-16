@@ -29,7 +29,7 @@ class TaskProgressViewController: NSViewController {
     // run only once
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("popover did load")
+//        print("popover did load")
         view.wantsLayer = true
         stackView.setHuggingPriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
         
@@ -39,7 +39,7 @@ class TaskProgressViewController: NSViewController {
     }
     
     func onPopoverShow() {
-        print("popover show")
+//        print("popover show")
         for task in tasks {
             task.notifyChange()
         }
@@ -70,7 +70,7 @@ class TaskProgressViewController: NSViewController {
         
         viewController.initView(task: task,
                                 onStop: {
-                                    print("onStop - \(task.name) - \(task.state) - \(task.isFixedDelayJob)")
+//                                    print("onStop - \(task.name) - \(task.state) - \(task.isFixedDelayJob)")
                                     if task.state == "STOPPED" {
                                         self.restartTask(task: task)
                                         return
@@ -159,7 +159,7 @@ class TaskProgressViewController: NSViewController {
             return
         }
         
-        print("====== ui updating task: \(task.name) - \(task.state)")
+//        print("====== ui updating task: \(task.name) - \(task.state)")
         
         if let viewController = self.tasksView[task.id] {
             

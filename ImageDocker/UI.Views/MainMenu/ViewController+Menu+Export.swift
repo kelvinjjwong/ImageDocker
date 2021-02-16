@@ -19,7 +19,7 @@ extension ViewController {
     }
     
     @objc func exportMenuConfigAction(_ menuItem:NSMenuItem) {
-        print("clicked export menu configuration")
+//        print("clicked export menu configuration")
         self.btnExport.selectItem(at: 0)
         
         let viewController = ExportConfigurationViewController()
@@ -42,7 +42,7 @@ extension ViewController {
     }
     
     @objc func exportMenuExportProfilesAction(_ menuItem:NSMenuItem) {
-        print("clicked export menu export action")
+//        print("clicked export menu export action")
         self.btnExport.selectItem(at: 0)
         
         let viewController = ExportProfilesViewController()

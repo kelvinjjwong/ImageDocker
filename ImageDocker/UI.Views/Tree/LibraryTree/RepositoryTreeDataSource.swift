@@ -34,10 +34,10 @@ class RepositoryTreeDataSource : TreeDataSource {
         var nodes:[TreeCollection] = []
         let containers = RepositoryDao.default.getRepositories(orderBy: "name", condition: condition)
         if containers.count == 0 {
-            print(">>> no repository is loaded for tree")
+//            print(">>> no repository is loaded for tree")
         }
         for container in containers {
-            print(">>> loaded repo for tree: \(container.name)")
+//            print(">>> loaded repo for tree: \(container.name)")
             let node = self.convertToTreeNode(container)
             nodes.append(node)
         }

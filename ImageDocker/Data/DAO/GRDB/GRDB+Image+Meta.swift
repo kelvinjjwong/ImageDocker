@@ -77,8 +77,8 @@ extension ImageSearchDaoGRDB {
         (SELECT IFNULL(photoTakenYear,0) AS photoTakenYear, IFNULL(photoTakenMonth,0) AS photoTakenMonth, IFNULL(photoTakenDay,0) AS photoTakenDay, path, imageSource, cameraModel from Image)
         WHERE 1=1 \(arguments) GROUP BY \(fields) ORDER BY \(fields) DESC
         """
-        print(">> GRDB SQL of loading moments treeview")
-        print(sql)
+//        print(">> GRDB SQL of loading moments treeview")
+//        print(sql)
         var result:[Moment] = []
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
@@ -126,7 +126,7 @@ extension ImageSearchDaoGRDB {
         (SELECT IFNULL(photoTakenYear,0) AS photoTakenYear, IFNULL(photoTakenMonth,0) AS photoTakenMonth, IFNULL(photoTakenDay,0) AS photoTakenDay, path, imageSource, cameraModel from Image)
         WHERE 1=1 \(imageSourceWhere) \(cameraModelWhere) GROUP BY photoTakenYear,photoTakenMonth,photoTakenDay ORDER BY photoTakenYear DESC,photoTakenMonth DESC,photoTakenDay DESC
         """
-        print(sql)
+//        print(sql)
         var result:[Row] = []
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
@@ -207,8 +207,8 @@ extension ImageSearchDaoGRDB {
         WHERE 1=1 \(whereStmt)
         GROUP BY \(fields) ORDER BY \(fields) \(order)
         """
-        print(sql)
-        print("SQL values: \(argumentValues)")
+//        print(sql)
+//        print("SQL values: \(argumentValues)")
         var result:[Moment] = []
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
@@ -282,7 +282,7 @@ extension ImageSearchDaoGRDB {
         GROUP BY country,province,city,place,photoTakenYear,photoTakenMonth,photoTakenDay ORDER BY country,province,city,place,photoTakenYear DESC,photoTakenMonth DESC,photoTakenDay DESC
         """
         
-        print(sql)
+//        print(sql)
         var result:[Row] = []
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
@@ -309,7 +309,7 @@ extension ImageSearchDaoGRDB {
         ) group by name) as t
         left join ImageEvent e on e.name = t.name order by category, t.name
         """
-        print(sql)
+//        print(sql)
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
@@ -355,8 +355,8 @@ extension ImageSearchDaoGRDB {
         where \(whereStmt)
         group by event, \(fields) order by event, \(fields) DESC
         """
-        print(sql)
-        print("SQL argument: \(ev)")
+//        print(sql)
+//        print("SQL argument: \(ev)")
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in

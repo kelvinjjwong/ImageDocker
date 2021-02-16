@@ -68,7 +68,7 @@ class DeviceTreeDataSource : TreeDataSource {
         
         // devices those connected
         let devices:[String] = Android.bridge.devices()
-        print("android device count: \(devices.count)")
+//        print("android device count: \(devices.count)")
         self.cleanCachedDeviceIds(type: .Android)
         if devices.count > 0 {
             for deviceId in devices {

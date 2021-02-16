@@ -57,8 +57,8 @@ extension ViewController {
     // MARK: CLICK ACTION
     
     func loadCollectionByPlace(moment:Moment, pageSize:Int = 0, pageNumber:Int = 0){
-        print("SELECTED PLACE COLLECTION:")
-        print("\(moment.countryData) | \(moment.provinceData) | \(moment.cityData) | \(moment.placeData)")
+//        print("SELECTED PLACE COLLECTION:")
+//        print("\(moment.countryData) | \(moment.provinceData) | \(moment.cityData) | \(moment.placeData)")
             
         self.selectedMoment = moment
         

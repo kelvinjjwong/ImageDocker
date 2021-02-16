@@ -167,19 +167,19 @@ extension ViewController {
         self.btnImageOptions.selectItem(at: 0)
         self.loadImageExif()
         self.popNotification(message: "Done extract EXIF for selected image.")
-        print("preview menu - done")
+//        print("preview menu - done")
     }
     
     @objc func previewMenuExtractDatetime(_ menuItem:NSMenuItem) {
         self.btnImageOptions.selectItem(at: 0)
         let url = self.img.url
         let dateString = Naming.DateTime.recognize(url: url)
-        print("recognized date: \(dateString)")
+//        print("recognized date: \(dateString)")
         if dateString != "" {
             if self.img.imageData != nil {
                 self.img.imageData?.dateTimeFromFilename = dateString
                 if let dt = self.img.earliestDate() {
-                    print("earliest date is \(dt) UTC")
+//                    print("earliest date is \(dt) UTC")
                     self.img.storePhotoTakenDate(dateTime: dt)
                 }
                 let _ = self.img.save()
@@ -191,27 +191,27 @@ extension ViewController {
 
             self.popNotification(message: "Failed to extract date time from filename for selected image.")
         }
-        print("preview menu - done")
+//        print("preview menu - done")
     }
     
     @objc func previewMenuFindEditableInFinder(_ menuItem:NSMenuItem){
         self.btnImageOptions.selectItem(at: 0)
         let url = self.img.url
         NSWorkspace.shared.activateFileViewerSelecting([url])
-        print("preview menu - done")
+//        print("preview menu - done")
     }
     
     @objc func previewMenuFindBackupInFinder(_ menuItem:NSMenuItem){
         self.btnImageOptions.selectItem(at: 0)
         let url = self.img.url
         NSWorkspace.shared.activateFileViewerSelecting([url])
-        print("preview menu - done")
+//        print("preview menu - done")
     }
     
     @objc func previewMenuLargeView(_ menuItem:NSMenuItem){
         self.btnImageOptions.selectItem(at: 0)
         self.onCollectionViewItemQuickLook(self.img)
-        print("preview menu - done")
+//        print("preview menu - done")
     }
     
     @objc func previewMenuPreviewEditableVersion(_ menuItem:NSMenuItem) {
@@ -221,7 +221,7 @@ extension ViewController {
         DispatchQueue.main.async {
             self.lblImageDescription.stringValue = "EDITABLE VERSION"
         }
-        print("preview menu - done")
+//        print("preview menu - done")
     }
     
     @objc func previewMenuPreviewBackupVersion(_ menuItem:NSMenuItem) {
@@ -232,7 +232,7 @@ extension ViewController {
                 self.lblImageDescription.stringValue = "BACKUP VERSION"
             }
         }
-        print("preview menu - done")
+//        print("preview menu - done")
     }
     
     @objc func previewMenuRestoreBackupImage(_ menuItem:NSMenuItem) {
@@ -248,7 +248,7 @@ extension ViewController {
                         let tmpFolder = "/tmp/\(uuid)"
                         let tmpPath = "\(tmpFolder)/\(filename)"
                         do {
-                            print("Restoring backup image from [\(backupUrl.path)] to [url.path]")
+//                            print("Restoring backup image from [\(backupUrl.path)] to [url.path]")
                             try FileManager.default.createDirectory(atPath: tmpFolder, withIntermediateDirectories: true, attributes: nil)
                             try FileManager.default.moveItem(atPath: url.path, toPath: tmpPath)
                             try FileManager.default.copyItem(atPath: backupUrl.path, toPath: url.path)
@@ -260,7 +260,7 @@ extension ViewController {
 
                             self.popNotification(message: "Failed to replace image with backup version for selected image.")
                             
-                            print("Restoring original editable version from \(tmpPath)")
+//                            print("Restoring original editable version from \(tmpPath)")
                             do {
                                 try FileManager.default.removeItem(atPath: url.path)
                                 try FileManager.default.moveItem(atPath: tmpPath, toPath: url.path)

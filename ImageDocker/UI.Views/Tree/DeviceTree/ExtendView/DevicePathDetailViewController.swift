@@ -39,9 +39,9 @@ class DevicePathDetailViewController: NSViewController {
         let _ = DeviceDao.default.saveDevicePath(file: data)
         
         let containerPath = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(self.devicePath.toSubFolder).path
-        print("CONTAINER TO BE UPDATED: \(containerPath)")
+//        print("CONTAINER TO BE UPDATED: \(containerPath)")
         let _ = RepositoryDao.default.updateImageContainerToggleManyChildren(path: containerPath, state: state)
-        print("Updated expandable state to \(state ? "ON" : "OFF").")
+//        print("Updated expandable state to \(state ? "ON" : "OFF").")
         
         self.lblMessage.stringValue = "Updated expandable state to \(state ? "ON" : "OFF")."
     }
@@ -107,7 +107,7 @@ class DevicePathDetailViewController: NSViewController {
         data.excludeImported = (self.chkExcludeImported.state == .on)
         data.manyChildren = (self.chkManyChildren.state == .on)
         
-        print("deviceId=\(data.deviceId), old localFolder=\(oldLocalFolder), new localFolder=\(data.toSubFolder), repository=\(self.repositoryPath)")
+//        print("deviceId=\(data.deviceId), old localFolder=\(oldLocalFolder), new localFolder=\(data.toSubFolder), repository=\(self.repositoryPath)")
         
         DispatchQueue.global().async {
             
@@ -154,7 +154,7 @@ class DevicePathDetailViewController: NSViewController {
             // apply changes to database when device path's local folder to be renamed
             
             if !data.exclude && !data.excludeImported && oldLocalFolder != data.toSubFolder {
-                print("changed local folder from [\(oldLocalFolder)] to [\(data.toSubFolder)]")
+//                print("changed local folder from [\(oldLocalFolder)] to [\(data.toSubFolder)]")
                 
                 let oldLocalPath = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(oldLocalFolder).path
                 let newLocalPath = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(data.toSubFolder).path
@@ -181,7 +181,7 @@ class DevicePathDetailViewController: NSViewController {
                         self.lblMessage.stringValue = "Failed to change local folder: unable to access."
                     }
                 }else{
-                    print("TODO: UPDATE RELATED physical directory of IMAGE DEVICE FILES")
+//                    print("TODO: UPDATE RELATED physical directory of IMAGE DEVICE FILES")
                     
                     //UPDATE RELATED physical directory of IMAGE DEVICE FILES
                     var renamedLocalFolder = false
@@ -198,7 +198,7 @@ class DevicePathDetailViewController: NSViewController {
                             self.lblMessage.stringValue = "Failed to change local folder: unable to rename folder."
                         }
                     }else{
-                        print("TODO: UPDATE RELATED importToPath of IMAGE DEVICE FILES")
+//                        print("TODO: UPDATE RELATED importToPath of IMAGE DEVICE FILES")
                         
                         // UPDATE RELATED importToPath of IMAGE DEVICE FILES
                         DispatchQueue.main.async {
@@ -219,7 +219,7 @@ class DevicePathDetailViewController: NSViewController {
                             self.lblMessage.stringValue = "Updated imported files."
                         }
                         
-                        print("TODO: UPDATE CONTAINERS and SUB-CONTAINERS")
+//                        print("TODO: UPDATE CONTAINERS and SUB-CONTAINERS")
                         // UPDATE container and sub-containers
                         DispatchQueue.main.async {
                             self.lblMessage.stringValue = "Updating related containers..."
@@ -249,7 +249,7 @@ class DevicePathDetailViewController: NSViewController {
                             self.lblMessage.stringValue = "Updated related containers."
                         }
                         
-                        print("TODO: UPDATE RELATED path AND subpath of IMAGEs where IMAGE.path = (IMAGE DEVICE FILE.importToPath + importAsFilename)")
+//                        print("TODO: UPDATE RELATED path AND subpath of IMAGEs where IMAGE.path = (IMAGE DEVICE FILE.importToPath + importAsFilename)")
                         
                         // UPDATE RELATED path AND subpath of IMAGEs where IMAGE.path = (IMAGE DEVICE FILE.importToPath + importAsFilename)
                         DispatchQueue.main.async {

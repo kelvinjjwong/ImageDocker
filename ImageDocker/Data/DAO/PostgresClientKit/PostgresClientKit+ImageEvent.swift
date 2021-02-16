@@ -117,7 +117,7 @@ class EventDaoPostgresCK : EventDaoInterface {
         select distinct "activity2" as "act" from "ImageEvent" where "category" = '\(category)' and "activity2" <> ''
         ) t order by "act"
         """
-        print(sql)
+//        print(sql)
         
         final class TempRecord : PostgresCustomRecord {
             var acc:String = ""

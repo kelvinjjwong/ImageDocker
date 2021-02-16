@@ -227,7 +227,7 @@ public extension Process {
             let data = err.fileHandleForReading.readDataToEndOfFile()
             let string:String = String(data: data, encoding: String.Encoding.utf8)!
             err.fileHandleForReading.closeFile()
-            print(string)
+//            print(string)
         }
         
         if let _ = complete {

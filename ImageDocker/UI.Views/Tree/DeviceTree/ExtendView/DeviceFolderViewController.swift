@@ -147,7 +147,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
                         print("Error: \(error)")
                     }
                 }
-                print("total size: \(totalSize)")
+//                print("total size: \(totalSize)")
                 let totalSizeInMB = totalSize / 1000 / 1000
                 var event = ""
                 var place = ""
@@ -348,10 +348,10 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
     }
     
     private func gotoParent() {
-        print("current: \(currentPath.path)")
+//        print("current: \(currentPath.path)")
         let parent = currentPath.deletingLastPathComponent()
         self.currentPath = parent
-        print("parent: \(currentPath.path)")
+//        print("parent: \(currentPath.path)")
         goto(url: parent)
     }
     
@@ -371,7 +371,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
         if i >= 0 && i < self.deviceListController.deviceItems.count {
             let device = self.deviceListController.deviceItems[i]
             
-            print("EXPORT TO DEVICE: \(device.deviceId) - \(device.name)")
+//            print("EXPORT TO DEVICE: \(device.deviceId) - \(device.name)")
             
             self.btnOK.isEnabled = false
             self.btnHome.isEnabled = false
@@ -440,7 +440,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
                     if let data = image.imageData {
                         
                         if self.isComputer {
-                            print("EXPORTING FROM \(image.url.path) TO \(destinationPath.path)")
+//                            print("EXPORTING FROM \(image.url.path) TO \(destinationPath.path)")
                             let fileUrl = destinationPath.appendingPathComponent(data.filename)
                             do {
                                 try FileManager.default.copyItem(at: image.url, to: fileUrl)
@@ -449,7 +449,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
                                 print(error)
                             }
                         }else{
-                            print("EXPORTING FROM \(image.url.path) TO \(device.deviceId):\(destinationPath.path)")
+//                            print("EXPORTING FROM \(image.url.path) TO \(device.deviceId):\(destinationPath.path)")
                             let _ = Android.bridge.push(device: device.deviceId, from: image.url.path, to: destinationPath.path)
                             if Android.bridge.existsFile(device: device.deviceId, path: destinationPath.path) {
                                 copiedCount += 1
@@ -539,7 +539,7 @@ class DeviceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBox
         self.deviceItems.append(computer)
         
         let devices:[String] = Android.bridge.devices()
-        print("android device count: \(devices.count)")
+//        print("android device count: \(devices.count)")
         if devices.count > 0 {
             for deviceId in devices {
                 if let device:PhoneDevice = Android.bridge.device(id: deviceId) {
@@ -555,7 +555,7 @@ class DeviceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBox
                         dev.name = "\(imageDevice.manufacture ?? dev.manufacture) \(imageDevice.model ?? dev.model)"
                     }
                     self.deviceItems.append(dev)
-                    print("COMBO added \(dev.name)")
+//                    print("COMBO added \(dev.name)")
                 }
             }
         }
@@ -563,7 +563,7 @@ class DeviceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBox
     
     func comboBoxSelectionDidChange(_ notification: Notification) {
         if let index = self.combobox?.indexOfSelectedItem {
-            print("selection changed, selected index=\(index)")
+//            print("selection changed, selected index=\(index)")
             if self.onSelectionChanged != nil {
                 self.onSelectionChanged!()
             }

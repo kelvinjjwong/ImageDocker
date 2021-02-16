@@ -646,7 +646,7 @@ class ExportConfigurationViewController: NSViewController {
             profile = pf
         }
         let sql = ExportDao.default.getSQLForImageExport(profile: profile)
-        print(sql)
+//        print(sql)
         self.lblCalculate.stringValue = "Copied SQL to clipboard."
         let pasteboard = NSPasteboard.general
         pasteboard.declareTypes([.string], owner: nil)

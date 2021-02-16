@@ -163,7 +163,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         where 1=1 \(additionalConditions)
         order by "repositoryPath" DESC
         """
-        print(sql)
+//        print(sql)
         
         final class TempRecord : PostgresCustomRecord {
             var repositoryPath:String = ""
@@ -249,7 +249,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         where path like '\(parent.replacingOccurrences(of: "'", with: "''").withStash())%' \(additionalConditions)
         order by "containerPath" DESC
         """
-        print(sql)
+//        print(sql)
         
         final class TempRecord : PostgresCustomRecord {
             var repositoryPath:String = ""

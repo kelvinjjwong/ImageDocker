@@ -270,9 +270,9 @@ class ViewController: NSViewController {
     
     internal func initView() {
         self.hideNotification()
-        print("\(Date()) Loading view - preview zone")
+//        print("\(Date()) Loading view - preview zone")
         self.configurePreview()
-        print("\(Date()) Loading view - selection view")
+//        print("\(Date()) Loading view - selection view")
         self.configureSelectionView()
         
         PreferencesController.healthCheck()
@@ -283,21 +283,21 @@ class ViewController: NSViewController {
         self.setupExportMenu()
         self.setupPreviewMenu()
         
-        print("\(Date()) Loading view - configure tree")
+//        print("\(Date()) Loading view - configure tree")
         configureTree()
-        print("\(Date()) Loading view - configure collection view")
+//        print("\(Date()) Loading view - configure collection view")
         configureCollectionView()
-        print("\(Date()) Loading view - configure editors")
+//        print("\(Date()) Loading view - configure editors")
         configureEditors()
-        print("\(Date()) Loading view - setup event list")
+//        print("\(Date()) Loading view - setup event list")
         setupEventList()
-        print("\(Date()) Loading view - setup place list")
+//        print("\(Date()) Loading view - setup place list")
         setupPlaceList()
         
-        print("\(Date()) Loading view - update library tree")
+//        print("\(Date()) Loading view - update library tree")
         self.splashController.message("Loading libraries ...", progress: 4)
         updateLibraryTree()
-        print("\(Date()) Loading view - update library tree: DONE")
+//        print("\(Date()) Loading view - update library tree: DONE")
         
 //        self.deviceCopyWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "DeviceCopyWindowController")) as? NSWindowController
         
@@ -327,7 +327,7 @@ class ViewController: NSViewController {
         
         self.startSchedules()
         
-        print("\(Date()) Loading view: DONE")
+//        print("\(Date()) Loading view: DONE")
     }
     
     override func viewDidLoad() {
@@ -351,7 +351,7 @@ class ViewController: NSViewController {
         
         self.btnImageOptions.isEnabled = false
         
-        print("\(Date()) Loading view")
+//        print("\(Date()) Loading view")
         
         //self.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
@@ -360,13 +360,13 @@ class ViewController: NSViewController {
         
         batchEditIndicator.isDisplayedWhenStopped = false
         
-        print("\(Date()) Loading view - configure dark mode")
+//        print("\(Date()) Loading view - configure dark mode")
         configureDarkMode()
         
         self.imagesLoader.hiddenCountHandler = { hiddenCount in
             DispatchQueue.main.async {
                 self.chbShowHidden.title = "Hidden (\(hiddenCount))"
-                print("hidden: \(hiddenCount)")
+//                print("hidden: \(hiddenCount)")
             }
         }
         
@@ -466,12 +466,12 @@ class ViewController: NSViewController {
         if totalRecords > (pages * pageSize) {
             pages += 1
         }
-        print("totalrecords: \(totalRecords), pageSize:\(pageSize), pages:\(pages)")
+//        print("totalrecords: \(totalRecords), pageSize:\(pageSize), pages:\(pages)")
         self.changePaginationState(currentPage: currentPage, totalPages: pages)
     }
     
     internal func changePaginationState(currentPage:Int, totalPages:Int){
-        print("page: \(currentPage), total: \(totalPages)")
+//        print("page: \(currentPage), total: \(totalPages)")
         self.currentPageOfCollection = currentPage
         self.totalPagesOfCollection = totalPages
         self.lblPagesCollection.stringValue = "\(currentPage) / \(totalPages)"

@@ -157,7 +157,7 @@ class MemoriesViewController : NSViewController {
                 self.btnLastYear.isHidden = true
             }
         }else{
-            print("Invalid year number: \(year)")
+//            print("Invalid year number: \(year)")
             return
         }
         
@@ -460,7 +460,7 @@ extension MemoriesViewController {
         if self.timerStarted {
             self.stopCollectionLoop()
         }
-        print(">>> start load memory collection on \(year)-\(month)-\(day)")
+//        print(">>> start load memory collection on \(year)-\(month)-\(day)")
         DispatchQueue.global().async {
             
             self.collectionViewController.imagesLoader.clean()
@@ -470,7 +470,7 @@ extension MemoriesViewController {
             
             DispatchQueue.main.async {
                 self.collectionViewController.collectionView.reloadData()
-                print(">>> finished load memory collection on \(year)-\(month)-\(day), result: \(self.collectionViewController.imagesLoader.getItems().count)")
+//                print(">>> finished load memory collection on \(year)-\(month)-\(day), result: \(self.collectionViewController.imagesLoader.getItems().count)")
                 self.lblDescription.stringValue = "\(self.collectionViewController.imagesLoader.getItems().count) images on \(year)-\(month)-\(day)"
                 self.selectItem(at: focusIndex)
                 
@@ -512,7 +512,7 @@ extension MemoriesViewController {
     }
     
     private func selectItem(offset:Int){
-        print("select offset: \(offset)")
+//        print("select offset: \(offset)")
         self.selectItem(at: self.selectedIndex + offset, forceFocus: true)
     }
 }

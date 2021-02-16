@@ -94,11 +94,11 @@ class EventsTreeDataSource : TreeDataSource {
                     }
                     return (nodes, nil)
                 }else{
-                    print("parent event is empty")
+//                    print("parent event is empty")
                 }
                 
             }else{
-                print("EventsTreeDS: no related object")
+//                print("EventsTreeDS: no related object")
             }
         }
         return ([], nil)
