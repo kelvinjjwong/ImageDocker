@@ -10,7 +10,7 @@ import Cocoa
 
 protocol EventListRefreshDelegate {
     func refreshEventList()
-    func selectEvent(name:String)
+    func selectEvent(event:ImageEvent)
 }
 
 class EventListViewController: NSViewController {
@@ -56,7 +56,7 @@ class EventListViewController: NSViewController {
                 self.reloadCombos()
                 
                 if self.refreshDelegate != nil {
-                    self.refreshDelegate?.selectEvent(name: events[lastSelectedRow!].name)
+                    self.refreshDelegate?.selectEvent(event: events[lastSelectedRow!])
                 }
             }
         }
@@ -262,7 +262,10 @@ class EventListViewController: NSViewController {
         EventDao.default.updateEventDetail(event: event)
         
         if(name != selectedEventName){
-            let _ = EventDao.default.renameEvent(oldName: selectedEventName, newName: name)
+            let dbState = EventDao.default.renameEvent(oldName: selectedEventName, newName: name)
+            if dbState == .OK {
+                event.name = name
+            }
         }
         //ModelStore.save()
         
@@ -270,7 +273,7 @@ class EventListViewController: NSViewController {
         
         if self.refreshDelegate != nil {
             refreshDelegate?.refreshEventList()
-            self.refreshDelegate?.selectEvent(name: name)
+            self.refreshDelegate?.selectEvent(event: event)
         }
     }
     
@@ -299,6 +302,7 @@ class EventListViewController: NSViewController {
         EventDao.default.importEventsFromImages()
         self.reloadTable()
     }
+    
     
     
 }

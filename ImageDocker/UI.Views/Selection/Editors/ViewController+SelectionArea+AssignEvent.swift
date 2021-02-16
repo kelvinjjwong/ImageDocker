@@ -89,8 +89,8 @@ extension ViewController : EventListRefreshDelegate{
         self.comboEventList.reloadData()
     }
     
-    func selectEvent(name: String) {
-        self.comboEventList.stringValue = name
+    func selectEvent(event: ImageEvent) {
+        self.comboEventList.stringValue = event.name
     }
 }
 
