@@ -404,7 +404,7 @@ extension MemoriesViewController {
         
         let storyboard = NSStoryboard(name: "MemoriesViews", bundle: nil)
         
-        collectionViewController = storyboard.instantiateController(withIdentifier: "memoriesCollectionView") as! MemoriesCollectionViewController
+        collectionViewController = storyboard.instantiateController(withIdentifier: "memoriesCollectionView") as? MemoriesCollectionViewController
         self.addChild(collectionViewController)
         
         // outlet

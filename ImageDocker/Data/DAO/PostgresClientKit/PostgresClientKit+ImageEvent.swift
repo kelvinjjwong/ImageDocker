@@ -24,7 +24,7 @@ class EventDaoPostgresCK : EventDaoInterface {
     
     func updateEventDetail(event:ImageEvent){
         let db = PostgresConnection.database()
-        if var rec = ImageEvent.fetchOne(db, parameters: ["name": event.name]) {
+        if let rec = ImageEvent.fetchOne(db, parameters: ["name": event.name]) {
             rec.category = event.category
             rec.activity1 = event.activity1
             rec.activity2 = event.activity2

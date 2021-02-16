@@ -149,7 +149,7 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var chbShowHidden: NSButton!
     
-    let imagesLoader = CollectionViewItemsLoader()
+    var imagesLoader:CollectionViewItemsLoader!
     var collectionLoadingIndicator:Accumulator?
     
     // MARK: - SELECTION VIEW
@@ -333,6 +333,8 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.imagesLoader = CollectionViewItemsLoader()
+        
         self.btnShare.sendAction(on: .leftMouseDown)
         self.btnCombineDuplicates.toolTip = "Combine duplicated images to the 1st image"
         
@@ -449,9 +451,37 @@ class ViewController: NSViewController {
     }
     
     @IBAction func onPreviousPageCollectionClicked(_ sender: NSButton) {
+        self.previousPageCollection()
     }
     
     @IBAction func onNextPageCollectionClicked(_ sender: NSButton) {
+        self.nextPageCollection()
+    }
+    
+    var currentPageOfCollection = 0
+    var totalPagesOfCollection = 0
+    
+    internal func changePaginationState(currentPage:Int, pageSize:Int, totalRecords:Int) {
+        var pages = totalRecords / pageSize
+        if totalRecords > (pages * pageSize) {
+            pages += 1
+        }
+        print("totalrecords: \(totalRecords), pageSize:\(pageSize), pages:\(pages)")
+        self.changePaginationState(currentPage: currentPage, totalPages: pages)
+    }
+    
+    internal func changePaginationState(currentPage:Int, totalPages:Int){
+        print("page: \(currentPage), total: \(totalPages)")
+        self.currentPageOfCollection = currentPage
+        self.totalPagesOfCollection = totalPages
+        self.lblPagesCollection.stringValue = "\(currentPage) / \(totalPages)"
+        self.btnPreviousPageCollection.isHidden = !(currentPage > 1)
+        self.btnNextPageCollection.isHidden = !(currentPage < totalPages)
+        if totalPages > 1 {
+            self.btnRefreshCollectionView.title = "Pages..."
+        }else{
+            self.btnRefreshCollectionView.title = "Reload"
+        }
     }
     
     

@@ -132,14 +132,14 @@ class ImageFile {
     func hide() {
         if imageData != nil {
             imageData?.hidden = true
-            ImageRecordDao.default.saveImage(image: imageData!)
+            let _ = ImageRecordDao.default.saveImage(image: imageData!)
         }
     }
     
     func show() {
         if imageData != nil {
             imageData?.hidden = false
-            ImageRecordDao.default.saveImage(image: imageData!)
+            let _ = ImageRecordDao.default.saveImage(image: imageData!)
         }
     }
     
@@ -236,7 +236,7 @@ class ImageFile {
         }
         
         if needSave {
-            save()
+            let _ = save()
         }
         
         self.transformDomainToMetaInfo()
@@ -316,7 +316,7 @@ class ImageFile {
         if !quickCreate {
             self.recognizePlace() // TODO: why imageFile.quicksave no need recognize place?
             
-            save()
+            let _ = save()
         }
         
         self.transformDomainToMetaInfo()

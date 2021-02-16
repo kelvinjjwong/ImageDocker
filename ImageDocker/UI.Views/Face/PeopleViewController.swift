@@ -527,9 +527,9 @@ class PeopleViewController: NSViewController {
     
     fileprivate func onFamilyCheck(id:String, checked:Bool){
         if checked {
-            FaceDao.default.saveFamilyMember(peopleId: self.selectedPeopleId, familyId: id)
+            let _ = FaceDao.default.saveFamilyMember(peopleId: self.selectedPeopleId, familyId: id)
         }else{
-            FaceDao.default.deleteFamilyMember(peopleId: self.selectedPeopleId, familyId: id)
+            let _ = FaceDao.default.deleteFamilyMember(peopleId: self.selectedPeopleId, familyId: id)
         }
     }
     
@@ -540,7 +540,7 @@ class PeopleViewController: NSViewController {
         if self.faceCollectionViewController.selectedFaceIds.count > 0 {
             for selectedFaceId in self.faceCollectionViewController.selectedFaceIds {
                 if let crop = FaceDao.default.getFace(id: selectedFaceId) {
-                    var c = crop
+                    let c = crop
                     c.peopleId = id
                     c.recognizeBy = "UserAssign"
                     c.recognizeDate = Date()
@@ -554,7 +554,7 @@ class PeopleViewController: NSViewController {
 //                    if name != "Unknown" {
                         c.locked = true
 //                    }
-                    FaceDao.default.saveFaceCrop(c)
+                    let _ = FaceDao.default.saveFaceCrop(c)
                     print("Face crop \(crop.id) assigned as [\(name)], updated into DB.")
                     
                     if let person = FaceDao.default.getPerson(id: id) {
@@ -610,7 +610,7 @@ class PeopleViewController: NSViewController {
                 if names.count > 0 {
                     let name = names[0]
                     if name != "Unknown" {
-                        var c = face
+                        let c = face
                         c.peopleId = name
                         c.recognizeBy = "FaceRecognitionOpenCV"
                         c.recognizeDate = Date()
@@ -621,7 +621,7 @@ class PeopleViewController: NSViewController {
                             version += 1
                             c.recognizeVersion = "\(version)"
                         }
-                        FaceDao.default.saveFaceCrop(c)
+                        let _ = FaceDao.default.saveFaceCrop(c)
                         print("Face crop \(face.id) recognized as [\(name)], updated into DB.")
                         k += 1
                         DispatchQueue.main.async {
@@ -649,7 +649,7 @@ class PeopleViewController: NSViewController {
         let name = self.txtPeopleName.stringValue
         let shortName = self.txtPeopleNickName.stringValue
         if id != "" && name != "" && shortName != "" {
-            FaceDao.default.savePersonName(id: id, name: name, shortName: shortName)
+            let _ = FaceDao.default.savePersonName(id: id, name: name, shortName: shortName)
             self.lblIdentityMessasge.stringValue = "Saved."
             FaceTask.default.reloadPeople()
             self.loadIcons()
@@ -661,11 +661,11 @@ class PeopleViewController: NSViewController {
     @IBAction func onChkIconClicked(_ sender: NSButton) {
         if self.selectedFaceId != "" && self.selectedPeopleId != "" {
             if sender.state == .on {
-                FaceDao.default.updateFaceIconFlag(id: self.selectedFaceId, peopleId: self.selectedPeopleId)
+                let _ = FaceDao.default.updateFaceIconFlag(id: self.selectedFaceId, peopleId: self.selectedPeopleId)
                 self.loadIcons()
                 self.iconCollectionViewController.restoreHighlightedItems()
             }else{
-                FaceDao.default.removeFaceIcon(peopleId: self.selectedPeopleId)
+                let _ = FaceDao.default.removeFaceIcon(peopleId: self.selectedPeopleId)
                 self.loadIcons()
                 self.iconCollectionViewController.restoreHighlightedItems()
             }
@@ -690,8 +690,8 @@ class PeopleViewController: NSViewController {
             let callAs = self.txtCallAs.stringValue
             let beCalledAs = self.txtBeCalledAs.stringValue
             if callAs != "" && beCalledAs != "" {
-                FaceDao.default.saveRelationship(primary: self.selectedPeopleId, secondary: person.id, callName: callAs)
-                FaceDao.default.saveRelationship(primary: person.id, secondary: self.selectedPeopleId, callName: beCalledAs)
+                let _ = FaceDao.default.saveRelationship(primary: self.selectedPeopleId, secondary: person.id, callName: callAs)
+                let _ = FaceDao.default.saveRelationship(primary: person.id, secondary: self.selectedPeopleId, callName: beCalledAs)
                 self.lblRelationshipMessage.stringValue = "Saved."
                 self.loadRelationships()
             }else{
@@ -737,7 +737,7 @@ class PeopleViewController: NSViewController {
     @IBAction func onChkSampleClicked(_ sender: NSButton) {
         if self.faceCollectionViewController.selectedFaceIds.count > 0 {
             for selectedFaceId in self.faceCollectionViewController.selectedFaceIds {
-                FaceDao.default.updateFaceSampleFlag(id: selectedFaceId, flag: (sender.state == .on) )
+                let _ = FaceDao.default.updateFaceSampleFlag(id: selectedFaceId, flag: (sender.state == .on) )
                 // copy or remove face crop to/from recognition sample directory
                 if let face = FaceDao.default.getFace(id: selectedFaceId) {
                     let targetFolder = URL(fileURLWithPath: FaceRecognition.trainingSamplePath).appendingPathComponent(selectedPeopleId)
@@ -795,7 +795,7 @@ class PeopleViewController: NSViewController {
         if self.selectedFamilyId != "" {
             let msg = "\(self.selectedFamilyName) [\(self.selectedFamilyType)]"
             if Alert.dialogOKCancel(question: "DELETE this organization and all memberships ?", text: msg, width: 350) {
-                FaceDao.default.deleteFamily(id: self.selectedFamilyId)
+                let _ = FaceDao.default.deleteFamily(id: self.selectedFamilyId)
                 self.lblFamilyMessage.stringValue = "Deleted."
                 self.selectedFamilyId = ""
                 self.loadFamilies()
@@ -844,7 +844,7 @@ class PeopleViewController: NSViewController {
                                 self.lblFaceDescription.stringValue = "Unrecognized"
                             }
                         }else{
-                            var c = crop
+                            let c = crop
                             c.peopleId = name
                             c.recognizeBy = "FaceRecognitionOpenCV"
                             c.recognizeDate = Date()
@@ -855,7 +855,7 @@ class PeopleViewController: NSViewController {
                                 version += 1
                                 c.recognizeVersion = "\(version)"
                             }
-                            FaceDao.default.saveFaceCrop(c)
+                            let _ = FaceDao.default.saveFaceCrop(c)
                             print("Face crop \(crop.id) recognized as [\(name)], updated into DB.")
                             
                             if let person = FaceDao.default.getPerson(id: name) {
@@ -945,9 +945,9 @@ class PeopleViewController: NSViewController {
         if self.faceCollectionViewController.selectedFaceIds.count > 0 {
             for selectedFaceId in self.faceCollectionViewController.selectedFaceIds {
                 if sender.state == .on {
-                    FaceDao.default.updateFaceLockFlag(id: selectedFaceId, flag: true)
+                    let _ = FaceDao.default.updateFaceLockFlag(id: selectedFaceId, flag: true)
                 }else{
-                    FaceDao.default.updateFaceLockFlag(id: selectedFaceId, flag: false)
+                    let _ = FaceDao.default.updateFaceLockFlag(id: selectedFaceId, flag: false)
                 }
             }
         }

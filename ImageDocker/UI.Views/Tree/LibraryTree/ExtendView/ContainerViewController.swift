@@ -71,11 +71,11 @@ class ContainerViewController: NSViewController {
     @IBAction func onShowHideClicked(_ sender: NSButton) {
         if let container = self.container {
             if container.hiddenByContainer {
-                RepositoryDao.default.showContainer(path: container.path)
+                let _ = RepositoryDao.default.showContainer(path: container.path)
                 self.container?.hiddenByContainer = false
                 self.btnShowHide.title = "Hide Images"
             }else{
-                RepositoryDao.default.hideContainer(path: container.path)
+                let _ = RepositoryDao.default.hideContainer(path: container.path)
                 self.container?.hiddenByContainer = true
                 self.btnShowHide.title = "Show Images"
             }

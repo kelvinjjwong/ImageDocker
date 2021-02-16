@@ -101,7 +101,7 @@ class NotesViewController: NSViewController {
             for image in self.images {
                 if let img = image.imageData {
                     
-                    ImageRecordDao.default.storeImageDescription(path: img.path,
+                    let _ = ImageRecordDao.default.storeImageDescription(path: img.path,
                                                              shortDescription: brief,
                                                              longDescription: detailed)
                     

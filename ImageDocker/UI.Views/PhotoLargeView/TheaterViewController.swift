@@ -396,7 +396,7 @@ extension TheaterViewController {
         
         let storyboard = NSStoryboard(name: "LargeViewItems", bundle: nil)
         
-        collectionViewController = storyboard.instantiateController(withIdentifier: "theaterCollectionView") as! TheaterCollectionViewController
+        collectionViewController = storyboard.instantiateController(withIdentifier: "theaterCollectionView") as? TheaterCollectionViewController
         self.addChild(collectionViewController)
         
         // outlet

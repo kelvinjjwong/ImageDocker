@@ -191,7 +191,7 @@ class PlaceListViewController: NSViewController {
         let name:String = placeName.stringValue
         guard name != "" && selectedPlaceName != nil && selectedPlaceName != "" else {return}
         
-        PlaceDao.default.renamePlace(oldName: selectedPlaceName!, newName: name)
+        let _ = PlaceDao.default.renamePlace(oldName: selectedPlaceName!, newName: name)
         //ModelStore.save()
         
         self.places = PlaceDao.default.getPlaces()
@@ -209,7 +209,7 @@ class PlaceListViewController: NSViewController {
         if name == "" {return}
         collectLocationFromForm()
         
-        PlaceDao.default.updatePlace(name: name, location: location!)
+        let _ = PlaceDao.default.updatePlace(name: name, location: location!)
         //ModelStore.save()
         
         self.places = PlaceDao.default.getPlaces()
@@ -227,7 +227,7 @@ class PlaceListViewController: NSViewController {
         
         if Alert.dialogOKCancel(question: "Disconnect photos with this place ?", text: name) {
             
-            PlaceDao.default.deletePlace(name: name)
+            let _ = PlaceDao.default.deletePlace(name: name)
             //ModelStore.save()
             
             self.places = PlaceDao.default.getPlaces()

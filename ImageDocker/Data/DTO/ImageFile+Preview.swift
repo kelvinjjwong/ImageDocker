@@ -61,7 +61,7 @@ extension ImageFile {
         if let imageSource = imageSource {
             guard CGImageSourceGetType(imageSource) != nil else { return nil }
             
-            let orientation = url.getImageOrientation()
+            let _ = url.getImageOrientation()
             //print("======== photo orientation = \(orientation)")
             
             let thumbnailOptions = [

@@ -97,10 +97,10 @@ class FaceTask {
                     return false
                 }
                 
-                var img = image
+                let img = image
                 if img.id == nil {
                     img.id = UUID().uuidString
-                    ImageRecordDao.default.saveImage(image: img)
+                    let _ = ImageRecordDao.default.saveImage(image: img)
                 }
                 let imageId = img.id!
                 
@@ -134,7 +134,7 @@ class FaceTask {
                                                           year: image.photoTakenYear ?? 0,
                                                           month: image.photoTakenMonth ?? 0,
                                                           day: image.photoTakenDay ?? 0)
-                            FaceDao.default.saveFaceCrop(imageFace)
+                            let _ = FaceDao.default.saveFaceCrop(imageFace)
                             print("Face crop \(imageFace.id) saved.")
                         }else{
                             print("Face already in DB")
@@ -144,7 +144,7 @@ class FaceTask {
                     print("Face detection done in \(cropPath.path)")
                     
                     img.scanedFace = true
-                    ImageFaceDao.default.updateImageScannedFace(imageId: imageId, facesCount: faces.count)
+                    let _ = ImageFaceDao.default.updateImageScannedFace(imageId: imageId, facesCount: faces.count)
                 }) // another thread
                 
             }else{
@@ -189,7 +189,7 @@ class FaceTask {
                         //if name != "unknown" && name != "Unknown" && name != "" {
                             recognizedPeopleIds += "\(name),"
                         //}
-                        var c = crop
+                        let c = crop
                         c.peopleId = name
                         c.recognizeBy = "FaceRecognitionOpenCV"
                         c.recognizeDate = Date()
@@ -200,17 +200,17 @@ class FaceTask {
                             version += 1
                             c.recognizeVersion = "\(version)"
                         }
-                        FaceDao.default.saveFaceCrop(c)
+                        let _ = FaceDao.default.saveFaceCrop(c)
                         print("Face crop \(crop.id) updated into DB.")
                     }else{
                         print("No face recognized for image [\(imageId)].")
                     }
                 }
                 
-                ImageFaceDao.default.updateImageRecognizedFace(imageId: imageId, recognizedPeopleIds: recognizedPeopleIds)
+                let _ = ImageFaceDao.default.updateImageRecognizedFace(imageId: imageId, recognizedPeopleIds: recognizedPeopleIds)
             }else{
                 print("No crops for this image.")
-                ImageFaceDao.default.updateImageRecognizedFace(imageId: imageId)
+                let _ = ImageFaceDao.default.updateImageRecognizedFace(imageId: imageId)
                 return false
             }
             

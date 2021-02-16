@@ -49,7 +49,7 @@ struct CollectionViewLastRequest {
     var searchCondition:SearchCondition? = nil
 }
 
-class CollectionViewItemsLoader: NSObject {
+class CollectionViewItemsLoader : NSObject {
   
     private var items = [ImageFile]()
     var numberOfSections = 1
@@ -234,6 +234,16 @@ class CollectionViewItemsLoader: NSObject {
             }
         }
         setupItems(photoFiles: images)
+    }
+    
+    func nextPage() {
+        lastRequest.pageNumber += 1
+        self.reload()
+    }
+    
+    func previousPage() {
+        lastRequest.pageNumber -= 1
+        self.reload()
     }
     
     func reload() {

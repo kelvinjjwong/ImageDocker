@@ -85,32 +85,6 @@ extension ViewController {
         self.containerDetailPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxX)
     }
     
-    
-    
-    func reloadCollectionFromImageContainer(sender:NSButton) {
-        
-        if let container = self.selectedImageContainer {
-            self.createCollectionPaginationPopover()
-            self.collectionPaginationViewController
-                .initView(self.imagesLoader.lastRequest,
-                          onCountTotal: {
-                            return ImageCountDao.default.countImages(repositoryRoot: container.path.withStash())
-                },
-                          onCountHidden: {
-                            return ImageCountDao.default.countHiddenImages(repositoryRoot: container.path.withStash())
-                },
-                          onLoad: { pageSize, pageNumber in
-                            print("CALLED ONLOAD \(pageSize) \(pageNumber)")
-                            self.loadCollectionByContainer(name: container.name, url:URL(fileURLWithPath: container.path), pageSize: pageSize, pageNumber: pageNumber, subdirectories: true)
-                })
-            
-            let cellRect = sender.bounds
-            self.collectionPaginationPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .minY)
-        }else{
-            print("no folder selected \(self.selectedImageFolder == nil)")
-        }
-    }
-    
     // MARK: - POPOVER
     
     func createCollectionPaginationPopover(){

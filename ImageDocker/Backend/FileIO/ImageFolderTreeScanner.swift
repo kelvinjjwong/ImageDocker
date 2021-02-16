@@ -563,7 +563,7 @@ class ImageFolderTreeScanner {
                         )
                         
                         if let container = folder.containerFolder, container.parentFolder == "" {
-                            RepositoryDao.default.updateImageContainerParentFolder(path: path, parentFolder: repo.path)
+                            let _ = RepositoryDao.default.updateImageContainerParentFolder(path: path, parentFolder: repo.path)
                         }
                         if !containers.contains(path) {
                             containers.append(path)
@@ -708,10 +708,10 @@ class ImageFolderTreeScanner {
                     if !exclude {
                         if let parentFolder = path.getNearestParent(from: containers) {
                             print(">>> parent folder: \(parentFolder)")
-                            RepositoryDao.default.updateImageContainerParentFolder(path: path, parentFolder: parentFolder)
+                            let _ = RepositoryDao.default.updateImageContainerParentFolder(path: path, parentFolder: parentFolder)
                             
                             if let parent = RepositoryDao.default.getContainer(path: parentFolder), parent.manyChildren == true {
-                                RepositoryDao.default.updateImageContainerHideByParent(path: path, hideByParent: true)
+                                let _ = RepositoryDao.default.updateImageContainerHideByParent(path: path, hideByParent: true)
                             }
                         }
                     } // end of not excluded
@@ -956,7 +956,7 @@ class ImageFolderTreeScanner {
         let _ = TaskletManager.default.createAndStartTask(type: "IMPORT", name: repository.name
         , exec: { task in
             DispatchQueue.global().async {
-                self.scanSingleRepository(repository: repository, taskId: task.id, indicator: indicator, onCompleted: onCompleted)
+                let _ = self.scanSingleRepository(repository: repository, taskId: task.id, indicator: indicator, onCompleted: onCompleted)
                 TaskletManager.default.forceComplete(id: task.id)
             }
         }, stop: {task in
@@ -1115,7 +1115,7 @@ class ImageFolderTreeScanner {
                 imageFolders.append(imageFolder)
                 
                 let count = ImageCountDao.default.countPhotoFiles(rootPath: "\(imageFolder.url.path)/")
-                if var container = imageFolder.containerFolder {
+                if let container = imageFolder.containerFolder {
                     if container.imageCount != count {
                         var countChange = ""
                         if container.imageCount > count {

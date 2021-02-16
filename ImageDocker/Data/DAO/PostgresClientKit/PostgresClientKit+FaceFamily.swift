@@ -220,7 +220,7 @@ class FaceDaoPostgresCK : FaceDaoInterface {
     func updatePersonIconImage(id: String, repositoryPath: String, cropPath: String, subPath: String, filename: String) -> Bool {
         let db = PostgresConnection.database()
         if let person = getPerson(id: id) {
-            var ps = person
+            let ps = person
             ps.iconRepositoryPath = repositoryPath
             ps.iconCropPath = cropPath
             ps.iconSubPath = subPath

@@ -9,31 +9,45 @@
 import Cocoa
 
 extension ViewController {
+    
+    fileprivate func countImagesOfPlace(moment:Moment) -> Int {
+        return ImageCountDao.default.countPhotoFiles(year: moment.year,
+                                                    month: moment.month,
+                                                    day: moment.day,
+                                                    ignoreDate: (moment.year == 0),
+                                                    country: moment.countryData == "" ? (moment.gov == "未知国家" ? "" : moment.gov) : moment.countryData,
+                                                    province: moment.provinceData,
+                                                    city: moment.cityData,
+                                                    place: moment.placeData == "" ? (moment.place == "未知地点" ? "" : moment.place) : moment.placeData,
+                                                    imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
+    }
+    
+    fileprivate func countHiddenImagesOfPlace(moment:Moment) -> Int {
+        return ImageCountDao.default.countHiddenPhotoFiles(year: moment.year, month: moment.month, day: moment.day,
+                                                            ignoreDate: (moment.year == 0),
+                                                            country: moment.countryData == "" ? (moment.gov == "未知国家" ? "" : moment.gov) : moment.countryData,
+                                                            province: moment.provinceData,
+                                                            city: moment.cityData,
+                                                            place: moment.placeData == "" ? (moment.place == "未知地点" ? "" : moment.place) : moment.placeData,
+                                                            imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
+    }
 
     func reloadPlaceCollection(moment:Moment, sender:NSButton) {
         self.createCollectionPaginationPopover()
         self.collectionPaginationViewController
             .initView(self.imagesLoader.lastRequest,
                       onCountTotal: {
-                        return ImageCountDao.default.countPhotoFiles(year: moment.year, month: moment.month, day: moment.day,
-                                                                  ignoreDate: (moment.year == 0),
-                                                                  country: moment.countryData == "" ? (moment.gov == "未知国家" ? "" : moment.gov) : moment.countryData,
-                                                                  province: moment.provinceData,
-                                                                  city: moment.cityData,
-                                                                  place: moment.placeData == "" ? (moment.place == "未知地点" ? "" : moment.place) : moment.placeData,
-                                                                  imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
+                        return self.countImagesOfPlace(moment: moment)
             },
                       onCountHidden: {
-                        return ImageCountDao.default.countHiddenPhotoFiles(year: moment.year, month: moment.month, day: moment.day,
-                                                                        ignoreDate: (moment.year == 0),
-                                                                        country: moment.countryData == "" ? (moment.gov == "未知国家" ? "" : moment.gov) : moment.countryData,
-                                                                        province: moment.provinceData,
-                                                                        city: moment.cityData,
-                                                                        place: moment.placeData == "" ? (moment.place == "未知地点" ? "" : moment.place) : moment.placeData,
-                                                                        imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
+                        return self.countHiddenImagesOfPlace(moment: moment)
             },
                       onLoad: { pageSize, pageNumber in
                         self.loadCollectionByPlace(moment:moment, pageSize: pageSize, pageNumber: pageNumber)
+            },
+                      onPaginationStateChanges: { currentPage, totalPages in
+                      self.changePaginationState(currentPage: currentPage, totalPages: totalPages)
+                        
             })
         
         let cellRect = sender.bounds
@@ -47,6 +61,12 @@ extension ViewController {
         print("\(moment.countryData) | \(moment.provinceData) | \(moment.cityData) | \(moment.placeData)")
             
         self.selectedMoment = moment
+        
+        var totalRecords = self.countImagesOfPlace(moment: moment)
+        if self.chbShowHidden.state == .off {
+            totalRecords -= self.countHiddenImagesOfPlace(moment: moment)
+        }
+        self.changePaginationState(currentPage: pageNumber, pageSize: pageSize, totalRecords: totalRecords)
         
         loadCollection {
             self.imagesLoader.load(

@@ -11,6 +11,9 @@ import Cocoa
 extension ViewController {
     
     internal func configureCollectionView() {
+        self.btnPreviousPageCollection.isHidden = true
+        self.btnNextPageCollection.isHidden = true
+        self.lblPagesCollection.stringValue = ""
         collectionProgressIndicator.isHidden = true
         let flowLayout = NSCollectionViewFlowLayout()
         flowLayout.itemSize = NSSize(width: 180.0, height: 150.0)
@@ -84,6 +87,20 @@ extension ViewController {
         }
     }
     
+    internal func previousPageCollection() {
+        self.changePaginationState(currentPage: self.currentPageOfCollection - 1, totalPages: self.totalPagesOfCollection)
+        self.loadCollection {
+            self.imagesLoader.previousPage()
+        }
+    }
+    
+    internal func nextPageCollection() {
+        self.changePaginationState(currentPage: self.currentPageOfCollection + 1, totalPages: self.totalPagesOfCollection)
+        self.loadCollection {
+            self.imagesLoader.nextPage()
+        }
+    }
+    
     internal func refreshCollection(_ sender: NSButton) {
         if self.imagesLoader.lastRequest.loadSource == .repository && self.imagesLoader.lastRequest.pageNumber > 0 && self.imagesLoader.lastRequest.pageSize > 0 {
             print("clicked repo collection reload button")
@@ -135,11 +152,6 @@ extension ViewController {
             }
             
         }
-    }
-    
-    internal func showCollectionFilter(_ button:NSButton) {
-        // TODO pop up window for collection filter
-        print("todo pop up")
     }
     
     // MARK: - COLLECTION DATA LOAD

@@ -82,7 +82,7 @@ struct FaceRecognitionOpenCV {
                                                             } else {
                                                                 print("EOF on stdout from process")
                                                                 outHandle.closeFile()
-                                                                NotificationCenter.default.removeObserver(obs1)
+                                                                NotificationCenter.default.removeObserver(obs1!)
                                                             }
             }
 
@@ -91,7 +91,7 @@ struct FaceRecognitionOpenCV {
                                                           object: cmd, queue: nil) { notification in
                                                             print("terminated")
                                                             outHandle.closeFile()
-                                                            NotificationCenter.default.removeObserver(obs2)
+                                                            NotificationCenter.default.removeObserver(obs2!)
             }
             
             cmd.launch()

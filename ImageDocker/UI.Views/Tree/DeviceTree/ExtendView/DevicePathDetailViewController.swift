@@ -33,14 +33,14 @@ class DevicePathDetailViewController: NSViewController {
     
     
     @IBAction func onManyChildrenClicked(_ sender: NSButton) {
-        var data = self.devicePath!
+        let data = self.devicePath!
         let state = self.chkManyChildren.state == .on
         data.manyChildren = state
-        DeviceDao.default.saveDevicePath(file: data)
+        let _ = DeviceDao.default.saveDevicePath(file: data)
         
         let containerPath = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(self.devicePath.toSubFolder).path
         print("CONTAINER TO BE UPDATED: \(containerPath)")
-        RepositoryDao.default.updateImageContainerToggleManyChildren(path: containerPath, state: state)
+        let _ = RepositoryDao.default.updateImageContainerToggleManyChildren(path: containerPath, state: state)
         print("Updated expandable state to \(state ? "ON" : "OFF").")
         
         self.lblMessage.stringValue = "Updated expandable state to \(state ? "ON" : "OFF")."
@@ -101,7 +101,7 @@ class DevicePathDetailViewController: NSViewController {
         self.btnUpdate.isEnabled = false
         
         
-        var data = self.devicePath!
+        let data = self.devicePath!
         let oldLocalFolder = data.toSubFolder
         data.toSubFolder = self.txtSubFolder.stringValue.trimmingCharacters(in: .whitespaces)
         data.excludeImported = (self.chkExcludeImported.state == .on)
@@ -113,7 +113,7 @@ class DevicePathDetailViewController: NSViewController {
             
             if data.toSubFolder == oldLocalFolder {
                 // subfolder unchanged
-                DeviceDao.default.saveDevicePath(file: data)
+                let _ = DeviceDao.default.saveDevicePath(file: data)
                 DispatchQueue.main.async {
                     self.lblMessage.stringValue = "Saved toggles."
                 }
@@ -212,7 +212,7 @@ class DevicePathDetailViewController: NSViewController {
                             for record in importedRecords {
                                 var rec = record
                                 rec.importToPath = newLocalPath
-                                DeviceDao.default.saveDeviceFile(file: rec)
+                                let _ = DeviceDao.default.saveDeviceFile(file: rec)
                             }
                         }
                         DispatchQueue.main.async {
@@ -225,7 +225,7 @@ class DevicePathDetailViewController: NSViewController {
                             self.lblMessage.stringValue = "Updating related containers..."
                         }
                         if let container = RepositoryDao.default.getContainer(path: oldLocalPath) {
-                            var cont = container
+                            let cont = container
                             cont.path = newLocalPath
                             cont.name = data.toSubFolder
                             cont.subPath = data.toSubFolder
@@ -236,14 +236,14 @@ class DevicePathDetailViewController: NSViewController {
                                     self.lblMessage.stringValue = "Updating related containers...\(subContainers.count+1)"
                                 }
                                 for subContainer in subContainers {
-                                    var sub = subContainer
+                                    let sub = subContainer
                                     sub.path = sub.path.replacingFirstOccurrence(of: oldLocalPath.withStash(), with: newLocalPath.withStash())
                                     sub.parentFolder = newLocalPath
                                     sub.subPath = sub.subPath.replacingFirstOccurrence(of: oldLocalFolder.withStash(), with: data.toSubFolder.withStash())
-                                    RepositoryDao.default.saveImageContainer(container: sub)
+                                    let _ = RepositoryDao.default.saveImageContainer(container: sub)
                                 }
                             }
-                            RepositoryDao.default.saveImageContainer(container: cont)
+                            let _ = RepositoryDao.default.saveImageContainer(container: cont)
                         }
                         DispatchQueue.main.async {
                             self.lblMessage.stringValue = "Updated related containers."
@@ -262,7 +262,7 @@ class DevicePathDetailViewController: NSViewController {
                                 self.lblMessage.stringValue = "Updating imported images in repository...\(images.count)"
                             }
                             for image in images {
-                                var img = image
+                                let img = image
                                 img.path = img.path.replacingFirstOccurrence(of: oldLocalPath.withStash(), with: newLocalPath.withStash())
                                 if img.containerPath == oldLocalPath {
                                     // from the directory
@@ -281,7 +281,7 @@ class DevicePathDetailViewController: NSViewController {
                         }
                         
                         
-                        DeviceDao.default.saveDevicePath(file: data)
+                        let _ = DeviceDao.default.saveDevicePath(file: data)
                         DispatchQueue.main.async {
                             self.lblMessage.stringValue = "Updated local folder."
                         }

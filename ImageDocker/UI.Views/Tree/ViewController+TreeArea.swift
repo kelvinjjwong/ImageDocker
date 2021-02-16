@@ -163,7 +163,6 @@ extension ViewController {
                                             }else{
                                                 self.btnRefreshCollectionView.title = "Reload"
                                                 self.loadCollectionByContainer(name:container.name, url:URL(fileURLWithPath: container.path))
-                                                //self.loadCollectionByContainer(collection.imageFolder!)
                                             }
                                         }
                                         

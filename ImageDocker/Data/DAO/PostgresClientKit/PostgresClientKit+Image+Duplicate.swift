@@ -68,7 +68,7 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
         print("\(Date()) Marking duplicate tag to photo files")
         print("duplicated date count: \(dupDates.count)")
         var marks:[String] = []
-        var placeholders = 0
+//        var placeholders = 0
         for i in 1...dupDates.count {
             marks.append("$\(i)")
         }

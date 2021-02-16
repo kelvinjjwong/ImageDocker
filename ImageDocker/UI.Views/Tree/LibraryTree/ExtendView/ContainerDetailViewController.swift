@@ -75,10 +75,10 @@ class ContainerDetailViewController: NSViewController {
     
     @IBAction func onShowHideClicked(_ sender: NSButton) {
         if container.hiddenByContainer {
-            RepositoryDao.default.showContainer(path: container.path)
+            let _ = RepositoryDao.default.showContainer(path: container.path)
             container.hiddenByContainer = false
         }else{
-            RepositoryDao.default.hideContainer(path: container.path)
+            let _ = RepositoryDao.default.hideContainer(path: container.path)
             container.hiddenByContainer = true
         }
         self.updateShowHideState()

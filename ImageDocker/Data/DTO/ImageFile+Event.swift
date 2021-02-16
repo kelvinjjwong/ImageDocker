@@ -17,7 +17,7 @@ import GRDB
 extension ImageFile {
     
     func assignEvent(event:ImageEvent){
-        var event = event
+        let event = event
         if imageData != nil {
             imageData?.event = event.name
             

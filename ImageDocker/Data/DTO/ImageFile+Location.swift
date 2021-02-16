@@ -39,7 +39,7 @@ extension ImageFile {
         }else {
             // if latitude not zero, but location is empty, update location
             if self.location.coordinate != nil && self.location.coordinate!.isNotZero && self.location.country == "" {
-                print("COORD NOT ZERO BUT LOCATION IS EMPTY: \(self.url.path)")
+//                print("COORD NOT ZERO BUT LOCATION IS EMPTY: \(self.url.path)")
                 needLoadLocation = true
             }
         }
@@ -114,7 +114,7 @@ extension ImageFile {
         if location.address != "" && location.coordinate != nil && location.coordinate!.isNotZero {
             //print("\(self.fileName) METAINFO.address: \(address ?? "")")
             //print("\(self.fileName) LOCATION.address: \(location?.address ?? "")")
-            print("LOAD LOCATION 2 FROM ImageFile.location - \(fileName)")
+//            print("LOAD LOCATION 2 FROM ImageFile.location - \(fileName)")
             if locationConsumer != nil {
                 //print("\(self.fileName) getting location from meta by location consumer")
                 locationConsumer?.consume(location: self.location)
@@ -127,10 +127,10 @@ extension ImageFile {
             if location.coordinateBD != nil && location.coordinateBD!.isNotZero {
                 //print("------")
                 //print("\(self.fileName) calling baidu location")
-                print("LOAD LOCATION 2 FROM Baidu WebService - \(fileName) - \(self.location.coordinateBD?.latitude) \(self.location.coordinateBD?.longitude)")
+//                print("LOAD LOCATION 2 FROM Baidu WebService - \(fileName) - \(self.location.coordinateBD?.latitude) \(self.location.coordinateBD?.longitude)")
                 BaiduLocation.queryForAddress(coordinateBD: self.location.coordinateBD!, locationConsumer: locationConsumer ?? self, textConsumer: textConsumer)
             }else{
-                print("LOAD LOCATION 3 FROM ImageFile.location - \(fileName)")
+//                print("LOAD LOCATION 3 FROM ImageFile.location - \(fileName)")
                 if locationConsumer != nil {
                     //print("\(self.fileName) getting location from meta by location consumer")
                     locationConsumer?.consume(location: self.location)
@@ -179,7 +179,7 @@ extension ImageFile : LocationConsumer {
         imageData?.updateLocationDate = Date()
         
         print("UPDATE LOCATION for image \(url.path)")
-        save()
+        let _ = save()
         
     }
     

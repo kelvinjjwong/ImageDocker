@@ -228,7 +228,7 @@ class EventListViewController: NSViewController {
         
         if Alert.dialogOKCancel(question: "Disconnect photos with this event ?", text: name) {
             
-            EventDao.default.deleteEvent(name: name)
+            let _ = EventDao.default.deleteEvent(name: name)
             
             self.reloadTable()
             
@@ -262,7 +262,7 @@ class EventListViewController: NSViewController {
         EventDao.default.updateEventDetail(event: event)
         
         if(name != selectedEventName){
-            EventDao.default.renameEvent(oldName: selectedEventName, newName: name)
+            let _ = EventDao.default.renameEvent(oldName: selectedEventName, newName: name)
         }
         //ModelStore.save()
         

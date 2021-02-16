@@ -64,7 +64,7 @@ extension ViewController {
                     //print("assigning event: \(event.name)")
                     item.assignEvent(event: event)
                     //ExifTool.helper.assignKeyValueForImage(key: "Event", value: "some event", url: url)
-                    item.save()
+                    let _ = item.save()
                 }
                 let _ = accumulator.add()
             }

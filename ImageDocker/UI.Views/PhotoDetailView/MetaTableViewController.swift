@@ -21,7 +21,7 @@ extension ViewController: NSTableViewDelegate {
                 let datetime:String = components[1] + " " + components[2]
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
-                if let date = dateFormatter.date(from: datetime) {
+                if let _ = dateFormatter.date(from: datetime) {
                     //self.editorDatePicker.dateValue = date
                 }
                 

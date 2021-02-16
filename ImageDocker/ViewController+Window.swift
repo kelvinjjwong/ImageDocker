@@ -35,13 +35,13 @@ extension ViewController {
             self.btnBatchEditorToolbarSwitcher.image = NSImage(named: NSImage.goRightTemplateName)
             self.btnBatchEditorToolbarSwitcher.toolTip = "Show event/datetime selectors"
             
-            let constraintPlayerHeight = NSLayoutConstraint(item: self.playerContainer, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 258)
+            let constraintPlayerHeight = NSLayoutConstraint(item: self.playerContainer!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 258)
             self.playerContainer.addConstraint(constraintPlayerHeight)
             self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(258)))
             self.playerContainer.display()
         }else {
             print("BIG SCREEN")
-            let constraintPlayerHeight = NSLayoutConstraint(item: self.playerContainer, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 408)
+            let constraintPlayerHeight = NSLayoutConstraint(item: self.playerContainer!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 408)
             self.playerContainer.addConstraint(constraintPlayerHeight)
             self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(408)))
             self.playerContainer.display()

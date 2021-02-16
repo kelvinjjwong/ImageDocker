@@ -514,7 +514,7 @@ class CalendarCell:NSButton
             let attrs:[NSAttributedString.Key : Any] = [
                 NSAttributedString.Key.paragraphStyle: paragraphStyle,
                 NSAttributedString.Key.font: solarFont,
-                NSAttributedString.Key.foregroundColor: textColor]
+                NSAttributedString.Key.foregroundColor: textColor!]
             let size = (self.solarStr as NSString).size(withAttributes: attrs)
             let r = NSMakeRect(bounds.origin.x,
                 bounds.origin.y + (bounds.size.height - size.height)/2.0-1,

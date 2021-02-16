@@ -413,12 +413,12 @@ class EditRepositoryViewController: NSViewController {
                                                 cropPath: cropPath)
         
         if let repository = imagefolder.containerFolder {
-            var repo = repository
+            let repo = repository
             repo.folderAsEvent = (self.chkFolderAsEvent.state == .on)
             repo.eventFolderLevel = (self.lstEventFolderLevel.indexOfSelectedItem + 1)
             repo.folderAsBrief = (self.chkFolderAsBrief.state == .on)
             repo.briefFolderLevel = self.getBriefFolderLevelFromSelection()
-            RepositoryDao.default.saveImageContainer(container: repo)
+            let _ = RepositoryDao.default.saveImageContainer(container: repo)
         }
     }
     
@@ -439,14 +439,14 @@ class EditRepositoryViewController: NSViewController {
             pass = pass && self.checkDirectory(path: self.txtHomePath.stringValue, messageBox: self.lblHomePathRemark)
             guard pass else {return}
             
-            var origin = container
+            let origin = container
             origin.name = name
             origin.homePath = homePath
             origin.folderAsEvent = self.chkFolderAsEvent.state == .on
             origin.eventFolderLevel = (self.lstEventFolderLevel.indexOfSelectedItem + 1)
             origin.folderAsBrief = (self.chkFolderAsBrief.state == .on)
             origin.briefFolderLevel = self.getBriefFolderLevelFromSelection()
-            RepositoryDao.default.saveImageContainer(container: origin)
+            let _ = RepositoryDao.default.saveImageContainer(container: origin)
             self.lblMessage.stringValue = "General info updated."
             
         }else{ // new
@@ -885,14 +885,14 @@ class EditRepositoryViewController: NSViewController {
                 }
                 
                 // TODO: should be demised in future to improve performance
-                ImageRecordDao.default.updateImageRawBase(pathStartsWith: originalRawPath, rawPath: newRawPath)
+                let _ = ImageRecordDao.default.updateImageRawBase(pathStartsWith: originalRawPath, rawPath: newRawPath)
                 
-                ImageRecordDao.default.updateImageRawBase(oldRawPath: originalRawPath, newRawPath: newRawPath)
+                let _ = ImageRecordDao.default.updateImageRawBase(oldRawPath: originalRawPath, newRawPath: newRawPath)
                 
                 // save repo's path
-                var repo = repoContainer
+                let repo = repoContainer
                 repo.storagePath = newRawPath
-                RepositoryDao.default.saveImageContainer(container: repo)
+                let _ = RepositoryDao.default.saveImageContainer(container: repo)
                 self.originalContainer = repo
                 
                 DispatchQueue.main.async {
@@ -1012,7 +1012,7 @@ class EditRepositoryViewController: NSViewController {
                         // fix empty id
                         let id = image.id ?? UUID().uuidString
                         
-                        ImageRecordDao.default.updateImagePaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath, subPath: subPath, containerPath: containerPath, id: id)
+                        let _ = ImageRecordDao.default.updateImagePaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath, subPath: subPath, containerPath: containerPath, id: id)
                     }
                 }
                 
@@ -1036,7 +1036,7 @@ class EditRepositoryViewController: NSViewController {
                         let _ = self.accumulator?.add("Updating sub-containers ...")
                     }
                     
-                    var sub = subContainer
+                    let sub = subContainer
                     let oldPath = sub.path
                     if sub.subPath == "" {
                         sub.subPath = sub.path.replacingFirstOccurrence(of: originalRepoPath, with: "")
@@ -1047,15 +1047,15 @@ class EditRepositoryViewController: NSViewController {
                     sub.repositoryPath = newRepoPath
                     sub.parentFolder = sub.parentFolder.replacingFirstOccurrence(of: repoContainer.path, with: newRepoPathNoStash) // without stash
                     sub.path = sub.path.replacingFirstOccurrence(of: originalRepoPath, with: newRepoPath)
-                    RepositoryDao.default.updateImageContainerPaths(oldPath: oldPath, newPath: sub.path, repositoryPath: sub.repositoryPath, parentFolder: sub.parentFolder, subPath: sub.subPath)
+                    let _ = RepositoryDao.default.updateImageContainerPaths(oldPath: oldPath, newPath: sub.path, repositoryPath: sub.repositoryPath, parentFolder: sub.parentFolder, subPath: sub.subPath)
                 }
                 
                 // save repo's path
-                var repo = repoContainer
+                let repo = repoContainer
                 let oldPath = repo.path
                 let newPath = newRepoPathNoStash
                 repo.repositoryPath = newRepoPath
-                RepositoryDao.default.updateImageContainerRepositoryPaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath)
+                let _ = RepositoryDao.default.updateImageContainerRepositoryPaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath)
                 self.originalContainer = repo
                 
                 DispatchQueue.main.async {
@@ -1137,9 +1137,9 @@ class EditRepositoryViewController: NSViewController {
                 
                 
                 // save repo's path
-                var repo = repoContainer
+                let repo = repoContainer
                 repo.facePath = newFacePath
-                RepositoryDao.default.saveImageContainer(container: repo)
+                let _ = RepositoryDao.default.saveImageContainer(container: repo)
                 self.originalContainer = repo
                 
                 DispatchQueue.main.async {
@@ -1216,12 +1216,12 @@ class EditRepositoryViewController: NSViewController {
                 }
                 
                 // update crop-image records
-                FaceDao.default.updateFaceCropPaths(old: originalCropPath, new: newCropPath)
+                let _ = FaceDao.default.updateFaceCropPaths(old: originalCropPath, new: newCropPath)
                 
                 // save repo's path
-                var repo = repoContainer
+                let repo = repoContainer
                 repo.cropPath = newCropPath
-                RepositoryDao.default.saveImageContainer(container: repo)
+                let _ = RepositoryDao.default.saveImageContainer(container: repo)
                 self.originalContainer = repo
                 
                 DispatchQueue.main.async {
@@ -1313,16 +1313,16 @@ class EditRepositoryViewController: NSViewController {
                         for image in images {
                             if needHideRawImage && image.path.starts(with: raw) && !image.hidden {
                                 // hide raw image if not hidden
-                                var img = image
+                                let img = image
                                 img.hidden = true
-                                ImageRecordDao.default.saveImage(image: img)
+                                let _ = ImageRecordDao.default.saveImage(image: img)
                                 updateCount += 1
                             }
                             if !doneShowRepoImage && needShowRepoImage && image.path.starts(with: repo) {
                                 // show the 1st repo image
-                                var img = image
+                                let img = image
                                 img.hidden = false
-                                ImageRecordDao.default.saveImage(image: img)
+                                let _ = ImageRecordDao.default.saveImage(image: img)
                                 updateCount += 1
                                 // only do once
                                 doneShowRepoImage = true
@@ -1349,7 +1349,7 @@ class EditRepositoryViewController: NSViewController {
                 
                 self.toggleButtons(false)
                 DispatchQueue.global().async {
-                    RepositoryDao.default.deleteRepository(repositoryRoot: container.path)
+                    let _ = RepositoryDao.default.deleteRepository(repositoryRoot: container.path)
                     
                     DispatchQueue.main.async {
                         
@@ -1403,7 +1403,7 @@ class EditRepositoryViewController: NSViewController {
     
     fileprivate func linkDeviceToRepository(deviceId: String, deviceName:String){
         if let container = self.originalContainer {
-            var repo = container
+            let repo = container
             repo.deviceId = deviceId
             let state = RepositoryDao.default.saveImageContainer(container: repo)
             if state != .OK {
@@ -1420,9 +1420,9 @@ class EditRepositoryViewController: NSViewController {
         if let container = self.originalContainer {
             if container.hiddenByRepository {
                 DispatchQueue.global().async {
-                    RepositoryDao.default.showRepository(repositoryRoot: container.path.withStash())
+                    let _ = RepositoryDao.default.showRepository(repositoryRoot: container.path.withStash())
                     self.originalContainer?.hiddenByRepository = false
-                    RepositoryDao.default.saveImageContainer(container: self.originalContainer!)
+                    let _ = RepositoryDao.default.saveImageContainer(container: self.originalContainer!)
                     
                     DispatchQueue.main.async {
                         self.lblMessage.stringValue = "Updated images as enabled"
@@ -1433,9 +1433,9 @@ class EditRepositoryViewController: NSViewController {
                 }
             }else{
                 DispatchQueue.global().async {
-                    RepositoryDao.default.hideRepository(repositoryRoot: container.path.withStash())
+                    let _ = RepositoryDao.default.hideRepository(repositoryRoot: container.path.withStash())
                     self.originalContainer?.hiddenByRepository = true
-                    RepositoryDao.default.saveImageContainer(container: self.originalContainer!)
+                    let _ = RepositoryDao.default.saveImageContainer(container: self.originalContainer!)
                     DispatchQueue.main.async {
                         self.lblMessage.stringValue = "Updated images as disabled"
                         self.btnShowHide.title = "Enable Repository"
@@ -1597,10 +1597,10 @@ class EditRepositoryViewController: NSViewController {
                     // ensure image-filename-aware crop path exists
                     let cropPath = URL(fileURLWithPath: repository.cropPath).appendingPathComponent(image.subPath)
                     
-                    var img = image
+                    let img = image
                     if img.id == nil {
                         img.id = UUID().uuidString
-                        ImageRecordDao.default.saveImage(image: img)
+                        let _ = ImageRecordDao.default.saveImage(image: img)
                     }
                     let imageId = img.id!
                     
@@ -1642,7 +1642,7 @@ class EditRepositoryViewController: NSViewController {
                                                                       year: image.photoTakenYear ?? 0,
                                                                       month: image.photoTakenMonth ?? 0,
                                                                       day: image.photoTakenDay ?? 0)
-                                        FaceDao.default.saveFaceCrop(imageFace)
+                                        let _ = FaceDao.default.saveFaceCrop(imageFace)
                                         print("Face crop \(imageFace.id) saved.")
                                     })
                                     
@@ -1657,7 +1657,7 @@ class EditRepositoryViewController: NSViewController {
                     
                     if img.scanedFace != true {
                         img.scanedFace = true
-                        ImageRecordDao.default.saveImage(image: img)
+                        let _ = ImageRecordDao.default.saveImage(image: img)
                     }
                     
                     DispatchQueue.main.async {
@@ -1685,7 +1685,7 @@ class EditRepositoryViewController: NSViewController {
                     if image.shortDescription != nil && image.shortDescription != "" {
                         continue
                     }
-                    var img = image
+                    let img = image
                     i += 1
                     img.shortDescription = Naming.Image.getBriefFromFolderName(image: image, folderLevel: level)
                     let _ = ImageRecordDao.default.saveImage(image: img)
@@ -1717,7 +1717,7 @@ class EditRepositoryViewController: NSViewController {
                 let total = images.count
                 var i = 0
                 for image in images {
-                    var img = image
+                    let img = image
                     i += 1
                     img.shortDescription = Naming.Image.getBriefFromFolderName(image: image, folderLevel: level)
                     let _ = ImageRecordDao.default.saveImage(image: img)
@@ -1860,7 +1860,7 @@ class EditRepositoryViewController: NSViewController {
                     if image.event != nil && image.event != "" {
                         continue
                     }
-                    var img = image
+                    let img = image
                     i += 1
                     img.event = Naming.Image.getEventFromFolderName(image: image, folderLevel: level)
                     let _ = ImageRecordDao.default.saveImage(image: img)
@@ -1892,7 +1892,7 @@ class EditRepositoryViewController: NSViewController {
                 let total = images.count
                 var i = 0
                 for image in images {
-                    var img = image
+                    let img = image
                     i += 1
                     img.event = Naming.Image.getEventFromFolderName(image: image, folderLevel: level)
                     let _ = ImageRecordDao.default.saveImage(image: img)
@@ -2021,7 +2021,7 @@ extension EditRepositoryViewController : DeviceListDelegate {
             
             print("update db? \(updateDB)")
             if updateDB {
-                print("linking repo with device \(device.deviceId)")
+                print("linking repo with device \(device.deviceId ?? "")")
                 self.linkDeviceToRepository(deviceId: device.deviceId ?? "", deviceName: name)
             }
         }else{

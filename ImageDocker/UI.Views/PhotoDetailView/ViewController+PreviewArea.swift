@@ -328,7 +328,7 @@ extension ViewController {
                 }
                 
                 //print("place after assign location: \(item.place)")
-                item.save()
+                let _ = item.save()
             }
             let _ = accumulator.add()
         }

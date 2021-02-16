@@ -109,14 +109,14 @@ extension SelectionCollectionViewController : CollectionViewItemCheckDelegate {
     }
     
     func onCollectionViewItemCheck(_ item: CollectionViewItem, checkBySection:Bool) {
-        if let imageFile = item.imageFile {
-        }
+//        if let imageFile = item.imageFile {
+//        }
         
     }
     
     func onCollectionViewItemUncheck(_ item: CollectionViewItem, checkBySection:Bool) {
-        if let imageFile = item.imageFile {
-        }
+//        if let imageFile = item.imageFile {
+//        }
     }
     
     

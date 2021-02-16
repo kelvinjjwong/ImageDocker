@@ -296,7 +296,7 @@ class CollectionViewItem: NSCollectionViewItem {
     fileprivate func findFaces() {
         if let _ = self.imageFile, let url = self.imageFile?.url {
             DispatchQueue.global().async {
-                FaceTask.default.findFaces(path: url.path)
+                let _ = FaceTask.default.findFaces(path: url.path)
             }
             
         }else{
@@ -308,7 +308,7 @@ class CollectionViewItem: NSCollectionViewItem {
     func recognizeFaces() {
         if let _ = self.imageFile, let url = self.imageFile?.url {
             DispatchQueue.global().async {
-                FaceTask.default.recognizeFaces(path: url.path)
+                let _ = FaceTask.default.recognizeFaces(path: url.path)
             }
         }else{
             print("ERROR: Image object is null or file doesn't exist.")

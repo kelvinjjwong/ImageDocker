@@ -634,7 +634,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
     
     func getMomentsByEvent(event: String, category: String, year: Int, month: Int, condition:SearchCondition?) -> [Moment] {
         let db = PostgresConnection.database()
-        var sqlParams:[PostgresValueConvertible?] = []
+//        var sqlParams:[PostgresValueConvertible?] = []
         var whereStmt = "event=$1"
         var ev = event
         if event == "未分配事件" {

@@ -203,7 +203,7 @@ extension ImageFile {
         }
         
         
-        let orientation = url.getImageOrientation()
+        let _ = url.getImageOrientation()
         //print("======== photo orientation = \(orientation)")
         
         if let tiffData = imgProps[TIFFDictionary] as? [String: AnyObject] {
@@ -320,7 +320,7 @@ extension ImageFile {
             return
         }
         
-        var photoFile = self.imageData!
+        let photoFile = self.imageData!
         //print("loaded PhotoFile for \(filename)")
         
         let now = Date()
@@ -372,7 +372,7 @@ extension ImageFile {
         
         if needSave {
             print("UPDATE COORD TO NON ZERO")
-            ImageRecordDao.default.saveImage(image: photoFile)
+            let _ = ImageRecordDao.default.saveImage(image: photoFile)
         }
         
         //print("COORD IS ZERO ? \(location.coordinate?.isZero) - \(fileName)")

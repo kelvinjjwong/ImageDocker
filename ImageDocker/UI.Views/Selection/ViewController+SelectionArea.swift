@@ -14,7 +14,7 @@ extension ViewController {
     internal func configureSelectionView(){
         
         // init controller
-        selectionViewController = storyboard?.instantiateController(withIdentifier: "selectionView") as! SelectionCollectionViewController
+        selectionViewController = storyboard?.instantiateController(withIdentifier: "selectionView") as? SelectionCollectionViewController
         selectionViewController.onItemClicked = { image in
             self.selectImageFile(image)
         }

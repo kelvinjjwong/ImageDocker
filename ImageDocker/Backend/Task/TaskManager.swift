@@ -335,7 +335,7 @@ class TaskletManager {
         print("Queued tasks: \(self.queue.list.count)")
         for task in self.queue.list {
             if task.isFixedDelayJob {
-                print("\(task.name) - \(task.state) - ran \(task.timesOfRun) times - next run: \(task.timeOfNextRun) - startStopState: \(self.tasksStartStopState[task.id])")
+                print("\(task.name) - \(task.state) - ran \(task.timesOfRun) times - next run: \(task.timeOfNextRun) - startStopState: \(String(describing: self.tasksStartStopState[task.id]))")
             }else{
                 print("\(task.name) - \(task.state)")
             }

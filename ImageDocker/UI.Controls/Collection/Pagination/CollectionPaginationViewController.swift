@@ -23,10 +23,12 @@ class CollectionPaginationViewController: NSViewController {
     fileprivate var total = 0
     fileprivate var pages = 0
     fileprivate var currentPage = 0
+    fileprivate var totalPages = 0
     fileprivate var pageSize = 0
     fileprivate var onLoad: ((_ pageSize:Int, _ pageNumber:Int) -> Void)!
     fileprivate var onCountTotal: (() -> Int)!
     fileprivate var onCountHidden: (() -> Int)!
+    fileprivate var onPaginationStateChanges: ((Int, Int) -> Void)! // currentPage, totalPages
     
     // MARK: INIT VIEW
     
@@ -45,13 +47,16 @@ class CollectionPaginationViewController: NSViewController {
     func initView(_ lastRequest:CollectionViewLastRequest,
                   onCountTotal: @escaping (() -> Int),
                   onCountHidden: @escaping (() -> Int),
-                  onLoad: @escaping ((_ pageSize:Int, _ pageNumber:Int) -> Void) ) {
+                  onLoad: @escaping ((_ pageSize:Int, _ pageNumber:Int) -> Void),
+                  onPaginationStateChanges: @escaping ((Int, Int) -> Void)
+    ) {
         self.lastRequest = lastRequest
         self.pageSize = lastRequest.pageSize
         self.currentPage = lastRequest.pageNumber
         self.onLoad = onLoad
         self.onCountTotal = onCountTotal
         self.onCountHidden = onCountHidden
+        self.onPaginationStateChanges = onPaginationStateChanges
         self.countImages()
         self.calculatePages()
         
@@ -64,14 +69,38 @@ class CollectionPaginationViewController: NSViewController {
         self.calculatePages()
     }
     
+    public func gotoFirstPage() {
+        self.currentPage = 1
+        self.calculatePages()
+        self.onLoad(self.pageSize, self.currentPage)
+    }
+    
     @IBAction func onPreviousPageClicked(_ sender: NSButton) {
         self.currentPage -= 1
         self.calculatePages()
     }
     
+    public func gotoPreviousPage() {
+        self.currentPage -= 1
+        self.calculatePages()
+        self.onLoad(self.pageSize, self.currentPage)
+    }
+    
     @IBAction func onNextPageClicked(_ sender: NSButton) {
         self.currentPage += 1
         self.calculatePages()
+    }
+    
+    public func gotoNextPage() {
+        self.currentPage += 1
+        self.calculatePages()
+        self.onLoad(self.pageSize, self.currentPage)
+    }
+    
+    public func gotoLastPage() {
+        self.currentPage = self.pages
+        self.calculatePages()
+        self.onLoad(self.pageSize, self.currentPage)
     }
     
     @IBAction func onLoadClicked(_ sender: NSButton) {
@@ -120,6 +149,10 @@ class CollectionPaginationViewController: NSViewController {
             end = total
         }
         self.lblShowsItems.stringValue = "\(start) - \(end)"
+        self.onPaginationStateChanges(
+            self.currentPage,
+            self.pages
+        )
         print("divided pages \(self.pages)")
     }
     
