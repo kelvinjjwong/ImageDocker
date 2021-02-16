@@ -12,6 +12,7 @@
 		8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015120208F7D23009C2549 /* StackedImageViewController.swift */; };
 		8E015123208F7D34009C2549 /* StackedVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015122208F7D34009C2549 /* StackedVideoViewController.swift */; };
 		8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E06AAFB20EEFFAD000A40C9 /* GoogleLocation.swift */; };
+		8E08D87025DB6932009A365F /* TextListComboController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E08D86F25DB6932009A365F /* TextListComboController.swift */; };
 		8E0AFA3D208BDEA000CE8B68 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0AFA3C208BDEA000CE8B68 /* AppDelegate.swift */; };
 		8E0AFA41208BDEA100CE8B68 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E0AFA40208BDEA100CE8B68 /* Assets.xcassets */; };
 		8E0AFA44208BDEA100CE8B68 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E0AFA42208BDEA100CE8B68 /* Main.storyboard */; };
@@ -328,6 +329,7 @@
 		8E015120208F7D23009C2549 /* StackedImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedImageViewController.swift; sourceTree = "<group>"; };
 		8E015122208F7D34009C2549 /* StackedVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedVideoViewController.swift; sourceTree = "<group>"; };
 		8E06AAFB20EEFFAD000A40C9 /* GoogleLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLocation.swift; sourceTree = "<group>"; };
+		8E08D86F25DB6932009A365F /* TextListComboController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextListComboController.swift; sourceTree = "<group>"; };
 		8E0AFA39208BDEA000CE8B68 /* ImageDocker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageDocker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E0AFA3C208BDEA000CE8B68 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8E0AFA40208BDEA100CE8B68 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -675,6 +677,21 @@
 				8EF4E1DA2453C05800999DD1 /* PostgresSchemaInfo.swift */,
 			);
 			path = CommonEntity;
+			sourceTree = "<group>";
+		};
+		8E08D87125DB695E009A365F /* CustomTableView */ = {
+			isa = PBXGroup;
+			children = (
+				8E36B06B21792EDC00646EA5 /* CustomRowView.swift */,
+				8E8D471B22315F540091E9C3 /* SingleColumnTableViewController.swift */,
+				8E8D47212233DCD30091E9C3 /* DictionaryTableViewController.swift */,
+				8E8D47242236733B0091E9C3 /* OneColumnTableViewController.swift */,
+				8E8D47252236733B0091E9C3 /* OneColumnTableViewController.xib */,
+				8E8D47282236F63C0091E9C3 /* TablePopover.swift */,
+				8EBC0180236B072F00FB6E2F /* TwoColumnTableViewController.swift */,
+				8EBC0181236B072F00FB6E2F /* TwoColumnTableViewController.xib */,
+			);
+			path = CustomTableView;
 			sourceTree = "<group>";
 		};
 		8E0AFA30208BDEA000CE8B68 = {
@@ -1184,35 +1201,29 @@
 		8ECA1FE623E325C500F56895 /* UI.Controls */ = {
 			isa = PBXGroup;
 			children = (
+				8ECA1FE723E3269F00F56895 /* CustomComboDropdown */,
+				8E08D87125DB695E009A365F /* CustomTableView */,
 				8E5D257A25A2006B00D531A7 /* Extensions */,
-				8EBA9DE6217477D900DACAAD /* UIHelper.swift */,
 				8ECA1FE923E3272000F56895 /* Alert */,
 				8ECA1FE823E326CF00F56895 /* DarkTheme */,
-				8ECA1FE723E3269F00F56895 /* QuickSimpleTable */,
 				8E3EC3B7214DB1E4004B6125 /* Calendar */,
 				8EB986AD20B223740075B081 /* Preview */,
 				8EB986A820B21AEC0075B081 /* Collection */,
 				8E15E72E23AC74DB0094240A /* TreeView */,
 				8E15E72823AC74DB0094240A /* StackView */,
 				8E1D49D624BBF04B00353C1C /* ToggleGroup.swift */,
+				8EBA9DE6217477D900DACAAD /* UIHelper.swift */,
 			);
 			path = UI.Controls;
 			sourceTree = "<group>";
 		};
-		8ECA1FE723E3269F00F56895 /* QuickSimpleTable */ = {
+		8ECA1FE723E3269F00F56895 /* CustomComboDropdown */ = {
 			isa = PBXGroup;
 			children = (
-				8E36B06B21792EDC00646EA5 /* CustomRowView.swift */,
-				8E8D471B22315F540091E9C3 /* SingleColumnTableViewController.swift */,
 				8E8D471F22338DAC0091E9C3 /* TextListViewController.swift */,
-				8E8D47212233DCD30091E9C3 /* DictionaryTableViewController.swift */,
-				8E8D47242236733B0091E9C3 /* OneColumnTableViewController.swift */,
-				8E8D47252236733B0091E9C3 /* OneColumnTableViewController.xib */,
-				8E8D47282236F63C0091E9C3 /* TablePopover.swift */,
-				8EBC0180236B072F00FB6E2F /* TwoColumnTableViewController.swift */,
-				8EBC0181236B072F00FB6E2F /* TwoColumnTableViewController.xib */,
+				8E08D86F25DB6932009A365F /* TextListComboController.swift */,
 			);
-			path = QuickSimpleTable;
+			path = CustomComboDropdown;
 			sourceTree = "<group>";
 		};
 		8ECA1FE823E326CF00F56895 /* DarkTheme */ = {
@@ -1758,6 +1769,7 @@
 				8EBA759523B55BAB00548376 /* DeviceTreeDataSource.swift in Sources */,
 				8EFA7CFD211D72B300419777 /* ImageDeviceFile.swift in Sources */,
 				8EBA75A123B5D06900548376 /* FaceDao.swift in Sources */,
+				8E08D87025DB6932009A365F /* TextListComboController.swift in Sources */,
 				8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */,
 				8EF4E1F42453C05800999DD1 /* PostgresDB.swift in Sources */,
 				8E15E73E23AC74DC0094240A /* TreeViewController.swift in Sources */,
