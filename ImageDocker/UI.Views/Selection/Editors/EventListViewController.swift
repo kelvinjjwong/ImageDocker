@@ -208,6 +208,14 @@ class EventListViewController: NSViewController {
         event.activity1 = self.cmbActivity1.stringValue
         event.activity2 = self.cmbActivity2.stringValue
         event.owner = self.cmbOwner.stringValue
+        event.ownerId = self.lblOwnerId.stringValue
+        event.ownerNickname = self.lblOwnerNickname.stringValue
+        event.owner2 = self.cmbOwner2.stringValue
+        event.owner2Id = self.lblOwner2Id.stringValue
+        event.owner2Nickname = self.lblOwner2Nickname.stringValue
+        event.owner3 = self.cmbOwner3.stringValue
+        event.owner3Id = self.lblOwner3Id.stringValue
+        event.owner3Nickname = self.lblOwner3Nickname.stringValue
         event.attenders = self.txtAttendees.stringValue
         event.family = self.cmbFamily.stringValue
         event.note = self.txtNote.stringValue

@@ -34,6 +34,8 @@
 		8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E174B6D208F851100FFE7C7 /* ExifTool.swift */; };
 		8E1D49D524BBE47700353C1C /* ImageDBCloner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1D49D424BBE47700353C1C /* ImageDBCloner.swift */; };
 		8E1D49D724BBF04B00353C1C /* ToggleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1D49D624BBF04B00353C1C /* ToggleGroup.swift */; };
+		8E27F04125DC0291003B585F /* ImageMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E27F03F25DC0291003B585F /* ImageMapView.swift */; };
+		8E27F04225DC0291003B585F /* ImageMapView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E27F04025DC0291003B585F /* ImageMapView.xib */; };
 		8E27F2A5259DD79C003D48BE /* TreeOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E27F2A4259DD79C003D48BE /* TreeOutlineView.swift */; };
 		8E31C37F2120A22600002546 /* DeviceShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E31C37E2120A22600002546 /* DeviceShell.swift */; };
 		8E36B067217920B400646EA5 /* MonthListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E36B066217920B400646EA5 /* MonthListController.swift */; };
@@ -358,6 +360,8 @@
 		8E174B6D208F851100FFE7C7 /* ExifTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExifTool.swift; sourceTree = "<group>"; };
 		8E1D49D424BBE47700353C1C /* ImageDBCloner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDBCloner.swift; sourceTree = "<group>"; };
 		8E1D49D624BBF04B00353C1C /* ToggleGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleGroup.swift; sourceTree = "<group>"; };
+		8E27F03F25DC0291003B585F /* ImageMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageMapView.swift; sourceTree = "<group>"; };
+		8E27F04025DC0291003B585F /* ImageMapView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageMapView.xib; sourceTree = "<group>"; };
 		8E27F2A4259DD79C003D48BE /* TreeOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeOutlineView.swift; sourceTree = "<group>"; };
 		8E2CF36F20AED2FE00A93375 /* CollectionView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CollectionView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E31C37E2120A22600002546 /* DeviceShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceShell.swift; sourceTree = "<group>"; };
@@ -1273,6 +1277,8 @@
 				8EBA9DE12173C7FC00DACAAD /* PhotoLargeView */,
 				8E85B7D020B91E9E005A9845 /* Selection */,
 				8EB271A023413CB0003BF3AF /* Export */,
+				8E27F03F25DC0291003B585F /* ImageMapView.swift */,
+				8E27F04025DC0291003B585F /* ImageMapView.xib */,
 			);
 			path = UI.Views;
 			sourceTree = "<group>";
@@ -1654,6 +1660,7 @@
 				8E69D53724B331AD0075A05D /* MomentsTreeHeaderMoreViewController.xib in Resources */,
 				8EB986BB20B30C920075B081 /* HeaderView.xib in Resources */,
 				8EB2716E233E0729003BF3AF /* LibrariesViewController.xib in Resources */,
+				8E27F04225DC0291003B585F /* ImageMapView.xib in Resources */,
 				8E3EC3B6214DB1B8004B6125 /* LunarCalendarView.xib in Resources */,
 				8EF32D122094CB2000511538 /* Icons.xcassets in Resources */,
 				8E15E73F23AC74DC0094240A /* TreeViewController.xib in Resources */,
@@ -1965,6 +1972,7 @@
 				8EFA02EF243B3ECE00D7C355 /* PostgresClientKit+FaceFamily.swift in Sources */,
 				8EF3FEEC24235B0C00AF83BB /* DBEngine+SQLiteConnection+GRDB.swift in Sources */,
 				8E4C38CF2117B54D0089502C /* Android.swift in Sources */,
+				8E27F04125DC0291003B585F /* ImageMapView.swift in Sources */,
 				8EB2718D2340EE4C003BF3AF /* ViewController+SelectionArea+WriteNote.swift in Sources */,
 				8E8D47182229AC220091E9C3 /* FaceIconCollectionViewController.swift in Sources */,
 				8EF4E1EE2453C05800999DD1 /* OrderedDictionary.swift in Sources */,

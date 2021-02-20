@@ -11,7 +11,7 @@ import PostgresClientKit
 
 public class PostgresDB : DBExecutor {
     
-    static let showSQL = false
+    static let showSQL = true
     
     private let postgresConfig: ConnectionConfiguration
     

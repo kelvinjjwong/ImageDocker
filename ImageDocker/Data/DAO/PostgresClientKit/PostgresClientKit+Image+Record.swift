@@ -173,7 +173,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             if field == "PhotoTakenDate" {
                 
                 values.append("""
-                    "photoTakenDate" = $\(placeholders+=1), "photoTakenYear" = \(add(&placeholders)), "photoTakenMonth" = \(add(&placeholders)), "photoTakenDay" = \(add(&placeholders))
+                    "photoTakenDate" = \(add(&placeholders)), "photoTakenYear" = \(add(&placeholders)), "photoTakenMonth" = \(add(&placeholders)), "photoTakenDay" = \(add(&placeholders))
                     """)
                 arguments.append(date)
                 let year = Calendar.current.component(.year, from: date)

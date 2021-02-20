@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
+        <plugIn identifier="com.apple.WebKit2IBPlugin" version="16097"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="ImageMapView" customModule="ImageDocker" customModuleProvider="target">
+            <connections>
+                <outlet property="addressSearcher" destination="tgY-lG-Jmr" id="UL0-rt-GfR"/>
+                <outlet property="btnChoiceMapService" destination="5fC-ON-kit" id="9uL-16-z7u"/>
+                <outlet property="btnCopyLocation" destination="EOP-nc-Ic3" id="XQc-1G-ncw"/>
+                <outlet property="btnManagePlaces" destination="VkR-K6-gNo" id="LAh-6P-HXe"/>
+                <outlet property="btnReplaceLocation" destination="d7q-ju-2pW" id="hBD-zp-QyA"/>
+                <outlet property="comboPlaceList" destination="XqM-FP-bc1" id="gPd-4B-AN8"/>
+                <outlet property="mapZoomSlider" destination="2hv-fz-Uzt" id="zi8-TR-HQt"/>
+                <outlet property="possibleLocationText" destination="ErS-xp-n2c" id="xpq-bP-fJO"/>
+                <outlet property="possibleMapZoomSlider" destination="Yl0-ow-rzk" id="5Ij-o5-rRH"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+                <outlet property="webLocation" destination="LpF-0O-uKi" id="2qo-eS-WdJ"/>
+                <outlet property="webPossibleLocation" destination="oIS-HD-NHP" id="2py-OL-NDY"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="573" height="456"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <wkWebView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LpF-0O-uKi">
+                    <rect key="frame" x="0.0" y="302" width="548" height="154"/>
+                    <wkWebViewConfiguration key="configuration">
+                        <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                        <wkPreferences key="preferences" javaScriptCanOpenWindowsAutomatically="NO"/>
+                    </wkWebViewConfiguration>
+                </wkWebView>
+                <slider horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2hv-fz-Uzt">
+                    <rect key="frame" x="549" y="298" width="24" height="160"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="22" id="9HO-fM-reT"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="155" id="Je4-J5-VrZ"/>
+                        <constraint firstAttribute="height" constant="155" id="ghC-YA-als"/>
+                    </constraints>
+                    <sliderCell key="cell" alignment="left" minValue="1" maxValue="4" doubleValue="3" tickMarkPosition="right" numberOfTickMarks="4" allowsTickMarkValuesOnly="YES" sliderType="linear" id="URK-PR-ywf"/>
+                    <connections>
+                        <action selector="onMapSliderClicked:" target="-2" id="Ld2-gk-DpG"/>
+                    </connections>
+                </slider>
+                <segmentedControl verticalHuggingPriority="750" id="5fC-ON-kit">
+                    <rect key="frame" x="1" y="272" width="157" height="24"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="bKG-CM-xEl">
+                        <font key="font" metaFont="system"/>
+                        <segments>
+                            <segment label="Google" width="75"/>
+                            <segment label="Baidu" width="75" selected="YES" tag="1"/>
+                        </segments>
+                    </segmentedCell>
+                    <connections>
+                        <action selector="onButtonChoiceMapServiceClicked:" target="-2" id="xED-NT-MdW"/>
+                    </connections>
+                </segmentedControl>
+                <searchField wantsLayer="YES" verticalHuggingPriority="750" textCompletion="NO" id="tgY-lG-Jmr">
+                    <rect key="frame" x="164" y="273" width="284" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="fp3-vg-zVa">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </searchFieldCell>
+                    <connections>
+                        <action selector="onAddressSearcherAction:" target="-2" id="mjr-kd-u5T"/>
+                    </connections>
+                </searchField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EOP-nc-Ic3">
+                    <rect key="frame" x="447" y="267" width="132" height="32"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="Mes-bY-hVs"/>
+                        <constraint firstAttribute="width" constant="120" id="nYb-mu-voe"/>
+                    </constraints>
+                    <buttonCell key="cell" type="push" title="▼ Copy Location" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="KLS-kO-qsC">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="onCopyLocationFromMapClicked:" target="-2" id="gj0-5U-LPA"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" id="VkR-K6-gNo">
+                    <rect key="frame" x="459" y="13" width="95" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="push" title="★ Places" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="C7z-uc-67j">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="onMarkLocationClicked:" target="-2" id="IpX-oJ-4Zc"/>
+                    </connections>
+                </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ErS-xp-n2c">
+                    <rect key="frame" x="-2" y="251" width="577" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="6Zp-Iy-hUo"/>
+                    </constraints>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="in1-MX-vE6">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <wkWebView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oIS-HD-NHP">
+                    <rect key="frame" x="0.0" y="46" width="548" height="200"/>
+                    <wkWebViewConfiguration key="configuration">
+                        <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                        <wkPreferences key="preferences" javaScriptCanOpenWindowsAutomatically="NO"/>
+                    </wkWebViewConfiguration>
+                </wkWebView>
+                <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XqM-FP-bc1">
+                    <rect key="frame" x="158" y="18" width="308" height="25"/>
+                    <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="10" id="SnN-QR-Vt7">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </comboBoxCell>
+                </comboBox>
+                <slider horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Yl0-ow-rzk">
+                    <rect key="frame" x="549" y="43" width="24" height="205"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="22" id="zqI-qu-t3p"/>
+                    </constraints>
+                    <sliderCell key="cell" state="on" alignment="left" minValue="1" maxValue="4" doubleValue="3" tickMarkPosition="right" numberOfTickMarks="4" allowsTickMarkValuesOnly="YES" sliderType="linear" id="UqA-As-M98"/>
+                    <connections>
+                        <action selector="onPossibleMapSliderClicked:" target="-2" id="g9Y-pD-SlP"/>
+                    </connections>
+                </slider>
+                <button verticalHuggingPriority="750" id="d7q-ju-2pW">
+                    <rect key="frame" x="0.0" y="13" width="159" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="push" title="◀︎ Replace Location" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="FGT-92-Pli">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="onReplaceLocationClicked:" target="-2" id="F0U-v3-w60"/>
+                    </connections>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="VkR-K6-gNo" firstAttribute="top" secondItem="Yl0-ow-rzk" secondAttribute="bottom" constant="5" id="18q-Zd-1EK"/>
+                <constraint firstItem="5fC-ON-kit" firstAttribute="top" secondItem="LpF-0O-uKi" secondAttribute="bottom" constant="7" id="46w-Ip-3Ip"/>
+                <constraint firstItem="EOP-nc-Ic3" firstAttribute="leading" secondItem="tgY-lG-Jmr" secondAttribute="trailing" constant="5" id="Aoy-Gd-erx"/>
+                <constraint firstItem="ErS-xp-n2c" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="EyT-H1-d1s"/>
+                <constraint firstAttribute="trailing" secondItem="Yl0-ow-rzk" secondAttribute="trailing" id="K1y-iq-sfR"/>
+                <constraint firstItem="oIS-HD-NHP" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="LLk-pv-yrp"/>
+                <constraint firstItem="ErS-xp-n2c" firstAttribute="top" secondItem="5fC-ON-kit" secondAttribute="bottom" constant="3" id="OeZ-L9-tiQ"/>
+                <constraint firstItem="2hv-fz-Uzt" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="P2C-qD-aSn"/>
+                <constraint firstAttribute="trailing" secondItem="2hv-fz-Uzt" secondAttribute="trailing" id="Rgg-pr-zE6"/>
+                <constraint firstItem="VkR-K6-gNo" firstAttribute="leading" secondItem="XqM-FP-bc1" secondAttribute="trailing" constant="2" id="YDy-YR-PgL"/>
+                <constraint firstItem="EOP-nc-Ic3" firstAttribute="top" secondItem="LpF-0O-uKi" secondAttribute="bottom" constant="7" id="eiP-Lf-08q"/>
+                <constraint firstItem="LpF-0O-uKi" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="hDd-wa-gdH"/>
+                <constraint firstItem="Yl0-ow-rzk" firstAttribute="top" secondItem="ErS-xp-n2c" secondAttribute="bottom" constant="5" id="jlN-Wv-1tO"/>
+                <constraint firstItem="d7q-ju-2pW" firstAttribute="top" secondItem="oIS-HD-NHP" secondAttribute="bottom" constant="5" id="lLW-Op-P4y"/>
+                <constraint firstItem="XqM-FP-bc1" firstAttribute="top" secondItem="oIS-HD-NHP" secondAttribute="bottom" constant="5" id="plk-Ww-Kc4"/>
+                <constraint firstItem="XqM-FP-bc1" firstAttribute="leading" secondItem="d7q-ju-2pW" secondAttribute="trailing" constant="5" id="q7I-Xi-Iho"/>
+                <constraint firstItem="tgY-lG-Jmr" firstAttribute="top" secondItem="LpF-0O-uKi" secondAttribute="bottom" constant="7" id="rKw-2X-3t5"/>
+                <constraint firstItem="Yl0-ow-rzk" firstAttribute="leading" secondItem="oIS-HD-NHP" secondAttribute="trailing" constant="3" id="tFl-M1-7j3"/>
+                <constraint firstAttribute="trailing" secondItem="ErS-xp-n2c" secondAttribute="trailing" id="tLL-aH-gdx"/>
+                <constraint firstItem="LpF-0O-uKi" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="tfo-uJ-5o4"/>
+                <constraint firstItem="oIS-HD-NHP" firstAttribute="top" secondItem="ErS-xp-n2c" secondAttribute="bottom" constant="5" id="tmU-vT-wub"/>
+                <constraint firstAttribute="trailing" secondItem="EOP-nc-Ic3" secondAttribute="trailing" id="ulr-HC-3J3"/>
+                <constraint firstItem="2hv-fz-Uzt" firstAttribute="leading" secondItem="LpF-0O-uKi" secondAttribute="trailing" constant="3" id="urY-x0-UQ3"/>
+                <constraint firstItem="ErS-xp-n2c" firstAttribute="top" secondItem="tgY-lG-Jmr" secondAttribute="bottom" constant="2" id="xLd-Dq-tt5"/>
+            </constraints>
+            <point key="canvasLocation" x="206.5" y="-226"/>
+        </customView>
+    </objects>
+</document>
