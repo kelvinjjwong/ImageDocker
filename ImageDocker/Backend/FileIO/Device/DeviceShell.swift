@@ -76,13 +76,13 @@ struct DeviceShell {
                     filename = referFilenames[filerowIndex]
                     //print("filename [\(filename)] found in folder: [\(folder)] refer array count:\(referFilenames.count) filerowIndex:\(filerowIndex)")
                 }else{
-                    print("filename not found in folder: [\(folder)] refer array count:\(referFilenames.count) filerowIndex:\(filerowIndex)")
+                    //print("filename not found in folder: [\(folder)] refer array count:\(referFilenames.count) filerowIndex:\(filerowIndex)")
                 }
                 if filename != "" && line.hasSuffix(filename) {
                     //print("bingo: \(filename)")
                 }else{
                     filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)
-                    print("OBJ BAD LUCK, use old method: \(filename)")
+                    //print("OBJ BAD LUCK, use old method: \(filename)")
                 }
             //}else{
             //    filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)
@@ -163,13 +163,13 @@ struct DeviceShell {
                     filename = referFilenames[filerowIndex]
                     //print("filename [\(filename)] found in folder: [\(folder)] refer array count:\(referFilenames.count) filerowIndex:\(filerowIndex)")
                 }else{
-                    print("filename not found in folder: [\(folder)] refer array count:\(referFilenames.count) filerowIndex:\(filerowIndex)")
+                    //print("filename not found in folder: [\(folder)] refer array count:\(referFilenames.count) filerowIndex:\(filerowIndex)")
                 }
                 if filename != "" && line.hasSuffix(filename) {
                     //print("bingo: \(filename)")
                 }else{
                     filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)
-                    print("STR BAD LUCK, use old method: \(filename)")
+                    //print("STR BAD LUCK, use old method: \(filename)")
                 }
             //}else{
             //    filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)

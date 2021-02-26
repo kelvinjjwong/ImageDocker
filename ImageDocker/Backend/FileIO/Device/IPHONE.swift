@@ -315,38 +315,41 @@ struct IPHONE {
     }
     
     func pull(mountPoint:String, sourcePath:String, from remoteFile:String, to targetPath:String) -> Bool{
+        print("IOS PULL: from \(remoteFile) - to: \(targetPath)")
         //guard mounted(path: mountPoint) else {return false}
-        let remoteUrl:URL = URL(fileURLWithPath: mountPoint).appendingPathComponent(remoteFile)
-        let localUrl:URL = URL(fileURLWithPath: targetPath)
+        let filename = URL(fileURLWithPath: remoteFile).lastPathComponent
+        let mountedDeviceFilePath:URL = URL(fileURLWithPath: mountPoint).appendingPathComponent(remoteFile)
+        let targetFileFolder:URL = URL(fileURLWithPath: targetPath)
+        let targetFilePath = targetFileFolder.appendingPathComponent(filename)
+        
+        //let targetFilenameWithSubPath = remoteFile.replacingOccurrences(of: sourcePath, with: "", options: .literal, range: remoteFile.range(of: sourcePath))
         
         let fileManager = FileManager.default
-        if fileManager.fileExists(atPath: remoteUrl.path) && fileManager.fileExists(atPath: localUrl.path) {
-            let targetFilename = remoteFile.replacingOccurrences(of: sourcePath, with: "", options: .literal, range: remoteFile.range(of: sourcePath))
-            let targetFile = localUrl.appendingPathComponent(targetFilename)
-            let targetPath = targetFile.deletingLastPathComponent()
-            if !fileManager.fileExists(atPath: targetPath.path) {
+        if fileManager.fileExists(atPath: mountedDeviceFilePath.path) {
+            
+            if !fileManager.fileExists(atPath: targetFileFolder.path) {
                 do {
-                    try fileManager.createDirectory(at: targetPath, withIntermediateDirectories: true, attributes: nil)
+                    try fileManager.createDirectory(at: targetFileFolder, withIntermediateDirectories: true, attributes: nil)
                 }catch{
-                    print("Unable to create target path: \(targetPath.path)")
+                    print("Unable to create target path: \(targetFileFolder.path)")
                     print(error)
                 }
             }
-            if !fileManager.fileExists(atPath: targetFile.path) {
+            if !fileManager.fileExists(atPath: targetFilePath.path) {
                 do{
-                    print("\(Date()) Pulling from \(remoteUrl.path) to \(targetFile.path)")
-                    try fileManager.copyItem(at: remoteUrl, to: targetFile)
+                    print("\(Date()) Pulling from \(mountedDeviceFilePath.path) to \(targetFilePath.path)")
+                    try fileManager.copyItem(at: mountedDeviceFilePath, to: targetFilePath)
                     return true
                 }catch{
                     print(error)
                     return false
                 }
             }else{
-                print("TARGET FILE EXISTS: \(targetFile.path)")
+                print("TARGET FILE EXISTS: \(targetFilePath.path), ignore copy")
                 return false
             }
         }else{
-            print("\(Date()) URL not exists: \(remoteUrl.path) OR \(localUrl.path)")
+            print("\(Date()) Mounted device file path not exists: \(mountedDeviceFilePath.path)")
             return false
         }
     }
