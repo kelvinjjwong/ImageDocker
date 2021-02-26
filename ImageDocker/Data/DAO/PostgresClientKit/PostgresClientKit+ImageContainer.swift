@@ -20,7 +20,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                                        parentFolder: parentFolder,
                                        path: path,
                                        imageCount: 0,
-                                       repositoryPath: repositoryPath,
+                                       repositoryPath: repositoryPath.withStash(),
                                        homePath: homePath,
                                        storagePath: storagePath,
                                        facePath: facePath,
@@ -292,9 +292,9 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         var sql = ""
         if let root = rootPath {
             sql = """
-            select distinct "containerPath" from "Image" where "repositoryPath" = $1 order by "containerpath"
+            select distinct "containerPath" from "Image" where ("repositoryPath" = $1 or "repositoryPath" = $2) order by "containerpath"
             """
-            records = TempRecord.fetchAll(db, sql: sql, values: [root])
+            records = TempRecord.fetchAll(db, sql: sql, values: [root.withStash(), root.withoutStash()])
         }else{
             sql = """
             select distinct "containerpath" from "image" order by "containerpath"
@@ -350,9 +350,9 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         var sql = ""
         if let repoPath = repositoryPath {
             sql = """
-            select "path" from "ImageContainer" where "repositoryPath" = $1 order by "path"
+            select "path" from "ImageContainer" where ("repositoryPath" = $1 or "repositoryPath" = $2) order by "path"
             """
-            records = TempRecord.fetchAll(db, sql: sql, values: [repoPath])
+            records = TempRecord.fetchAll(db, sql: sql, values: [repoPath.withStash(), repoPath.withoutStash()])
         }else{
             sql = """
             select "path" from "ImageContainer" order by "path"
@@ -404,7 +404,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         do {
             try db.execute(sql: """
                 update "ImageContainer" set "path" = $1, "repositoryPath" = $2, "parentFolder" = $3, "subPath" = $4 where "path" = $5
-                """, parameterValues: [newPath, repositoryPath, parentFolder, subPath, oldPath])
+                """, parameterValues: [newPath, repositoryPath.withStash(), parentFolder, subPath, oldPath])
         }catch{
             print(error)
             return .ERROR
@@ -417,7 +417,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         do {
             try db.execute(sql: """
                 update "ImageContainer" set "path" = $1, "repositoryPath" = $2 where "path" = $3
-                """, parameterValues: [newPath, repositoryPath, oldPath])
+                """, parameterValues: [newPath, repositoryPath.withStash(), oldPath])
         }catch{
             print(error)
             return .ERROR
