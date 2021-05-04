@@ -533,7 +533,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         let sql = """
         select "name","lastPhotoTakenDate" from
         (select "name",("path" || '/') as "repositoryPath" from "ImageContainer" where "parentFolder"='') c left join (
-        select max("photoTakenDate") as "lastPhotoTakenDate","repositoryPath" from "Image" group by "repositoryPath") i on c."repositorypath" = i."repositoryPath"
+        select max("photoTakenDate") as "lastPhotoTakenDate","repositoryPath" from "Image" group by "repositoryPath") i on c."repositoryPath" = i."repositoryPath"
         order by "name"
         """
         var results:[String:String] = [:]

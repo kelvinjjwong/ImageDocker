@@ -172,7 +172,7 @@ class DeviceDaoPostgresCK : DeviceDaoInterface {
     func getLastImportDateOfDevices() -> ([String : String], [(String, String, String?, String?)]) {
         let db = PostgresConnection.database()
         let sql = """
-        select (CASE WHEN c."name" IS NULL THEN 'NOT_SCAN' ELSE c."name" END) as name,d."deviceId", d."name" as "deviceName", f."lastimportdate",d."repositoryPath",d."storagePath" from "ImageDevice" d left join (
+        select (CASE WHEN c."name" IS NULL THEN 'NOT_SCAN' ELSE c."name" END) as name,d."deviceId", d."name" as "deviceName", f."lastImportDate",d."repositoryPath",d."storagePath" from "ImageDevice" d left join (
         select max("importDate") as "lastImportDate","deviceId" from "ImageDeviceFile" group by "deviceId" ) f on d."deviceId"=f."deviceId"
         left join
         (select "name","deviceId" from "ImageContainer" where "parentFolder"='') c on d."deviceId"=c."deviceId"

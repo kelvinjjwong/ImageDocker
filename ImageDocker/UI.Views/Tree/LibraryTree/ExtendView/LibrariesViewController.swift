@@ -136,7 +136,17 @@ class LibrariesViewController: NSViewController {
                 }
                 totalTotal += totalSize
                 let total = self.getBytesText(totalSize)
-                self.records.append((name, total, repoTxt, backupTxt, "", lastImportDate, "(NOT SCANNED)"))
+                
+                var exists = false
+                for rec in self.records {
+                    if rec.0 == name {
+                        exists = true
+                        break
+                    }
+                }
+                if !exists {
+                    self.records.append((name, total, repoTxt, backupTxt, "", lastImportDate, "(NOT SCANNED)"))
+                }
                 DispatchQueue.main.async {
                     self.tblSpaceOccupation.reloadData()
                 }
@@ -156,6 +166,9 @@ class LibrariesViewController: NSViewController {
             self.records.append(("Disk", "Used", "Free", "Total", "", "", ""))
             
             for key in diskUsage.keys {
+                if key.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+                    continue
+                }
                 let (diskTotal, diskFree, _) = LocalDirectory.bridge.freeSpace(path: key)
                 self.records.append((key, "\(diskUsage[key] ?? 0) G", diskFree, diskTotal, "", "", ""))
             }

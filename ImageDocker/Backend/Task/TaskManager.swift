@@ -424,8 +424,8 @@ class TaskletManager {
     @objc func onTaskChanged(notification: NSNotification) {
         for task in tasks {
             if task.taskid == notification.name.rawValue {
-                print("=== onTaskChanged - \(task.taskid) - \(task.state)")
-                print("viewManager is nil ? \(viewManager == nil)")
+                //print("=== onTaskChanged - \(task.taskid) - \(task.state)")
+                //print("viewManager is nil ? \(viewManager == nil)")
                 if let view = viewManager {
                     DispatchQueue.main.async {
                         view.updateTask(task: task)

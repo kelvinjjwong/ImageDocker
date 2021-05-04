@@ -16,7 +16,7 @@ extension ViewController {
         if(myPopover == nil){
             myPopover = NSPopover()
             
-            let frame = CGRect(origin: .zero, size: CGSize(width: 810, height: 390))
+            let frame = CGRect(origin: .zero, size: CGSize(width: 900, height: 450))
             self.librariesViewController = LibrariesViewController(onReload: {
                 DispatchQueue.main.async {
                     self.stackedTreeView.reloadTree("Libraries")
