@@ -58,7 +58,7 @@ class EventDaoPostgresCK : EventDaoInterface {
             let keys:[String] = names.components(separatedBy: " ")
             whereStmt = SQLHelper.likeArray(field: "name", array: keys)
         }
-        return ImageEvent.fetchAll(db, where: whereStmt, orderBy: "name")
+        return ImageEvent.fetchAll(db, where: whereStmt, orderBy: "category,name")
     }
     
     func getEventCategories() -> [String] {

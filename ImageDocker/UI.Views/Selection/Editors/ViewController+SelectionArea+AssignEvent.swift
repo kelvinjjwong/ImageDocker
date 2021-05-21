@@ -49,8 +49,10 @@ extension ViewController {
         accumulator.reset()
         
         var event:ImageEvent? = nil
+        let selectedEvent = self.comboEventList.stringValue
+        let part = selectedEvent.components(separatedBy: " | ")
         for ev in self.eventListController.events {
-            if ev.name == self.comboEventList.stringValue {
+            if ev.category == part[0] && ev.name == part[1]{
                 event = ev
                 break
             }
@@ -90,13 +92,22 @@ extension ViewController : EventListRefreshDelegate{
     }
     
     func selectEvent(event: ImageEvent) {
-        self.comboEventList.stringValue = event.name
+        self.comboEventList.stringValue = "\(event.category == "" ? Words.uncategorized.word() : event.category) | \(event.name)"
     }
 }
 
 class EventListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxDataSource, NSComboBoxDelegate {
     
     var events:[ImageEvent] = []
+    
+    convenience override init() {
+        self.init()
+        NotificationCenter.default.addObserver(self, selector: #selector(loadEvents(notification:)), name: NSNotification.Name(rawValue: ChangeEvent.language), object: nil)
+    }
+    
+    @objc func loadEvents(notification:Notification) {
+        self.loadEvents()
+    }
     
     func loadEvents() {
         self.events = EventDao.default.getEvents()
@@ -126,14 +137,16 @@ class EventListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
     }
     
     func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
-        return(events[index].name as AnyObject)
+        return("\(events[index].category == "" ? Words.uncategorized.word() : events[index].category) | \(events[index].name)" as AnyObject)
     }
     
     func comboBox(_ comboBox: NSComboBox, indexOfItemWithStringValue string: String) -> Int {
         var i = 0
+        let part = string.components(separatedBy: " | ")
+        let item = part.count == 2 ? part[1] : string
         for event in events {
             let str = event.name
-            if str == string{
+            if str == item {
                 return i
             }
             i += 1

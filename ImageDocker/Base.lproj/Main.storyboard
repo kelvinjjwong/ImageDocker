@@ -1330,6 +1330,37 @@
                                 <rect key="frame" x="-7" y="51" width="764" height="611"/>
                                 <font key="font" metaFont="system"/>
                                 <tabViewItems>
+                                    <tabViewItem label="General" identifier="" id="oL2-WJ-7lY">
+                                        <view key="view" id="O8g-UX-uRR">
+                                            <rect key="frame" x="10" y="33" width="744" height="565"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="roF-Y6-XSq">
+                                                    <rect key="frame" x="28" y="530" width="153" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="User interface language:" id="tz0-Je-Hun">
+                                                        <font key="font" usesAppearanceFont="YES"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jmU-hC-1k6">
+                                                    <rect key="frame" x="197" y="522" width="222" height="25"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <popUpButtonCell key="cell" type="push" title="English" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="3zu-Uh-TuG" id="dXs-fP-N6H">
+                                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                        <menu key="menu" id="rTf-hr-Vse">
+                                                            <items>
+                                                                <menuItem title="English" state="on" id="3zu-Uh-TuG"/>
+                                                                <menuItem title="Chinese Simplified" id="HZk-ac-DIk"/>
+                                                            </items>
+                                                        </menu>
+                                                    </popUpButtonCell>
+                                                </popUpButton>
+                                            </subviews>
+                                        </view>
+                                    </tabViewItem>
                                     <tabViewItem label="Performance" identifier="" id="yk8-pT-h14">
                                         <view key="view" id="HmM-lu-hoA">
                                             <rect key="frame" x="10" y="33" width="744" height="565"/>
@@ -2169,7 +2200,7 @@
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="D2k-1f-peO">
                                                                     <rect key="frame" x="0.0" y="0.0" width="230" height="155"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="Ach-a0-h7S" viewBased="YES" id="kXx-S6-VDX">
                                                                             <rect key="frame" x="0.0" y="0.0" width="257" height="130"/>
@@ -2364,11 +2395,11 @@
                                     </tabViewItem>
                                     <tabViewItem label="Mobile Device" identifier="" id="izW-fJ-2f0">
                                         <view key="view" id="Qaf-Fi-1GF">
-                                            <rect key="frame" x="10" y="33" width="744" height="600"/>
+                                            <rect key="frame" x="10" y="33" width="744" height="565"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <box fixedFrame="YES" title="iOS Device" translatesAutoresizingMaskIntoConstraints="NO" id="B7a-R9-AeF">
-                                                    <rect key="frame" x="23" y="161" width="699" height="269"/>
+                                                    <rect key="frame" x="23" y="126" width="699" height="269"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="DjH-St-qKB">
                                                         <rect key="frame" x="3" y="3" width="693" height="251"/>
@@ -2553,7 +2584,7 @@ brew install ifuse</string>
                                                     </view>
                                                 </box>
                                                 <box fixedFrame="YES" title="Android Device" translatesAutoresizingMaskIntoConstraints="NO" id="XZN-Cv-RAI">
-                                                    <rect key="frame" x="23" y="456" width="699" height="125"/>
+                                                    <rect key="frame" x="23" y="421" width="699" height="125"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="kAY-qe-d85">
                                                         <rect key="frame" x="3" y="3" width="693" height="107"/>
@@ -2594,11 +2625,11 @@ brew install ifuse</string>
                                     </tabViewItem>
                                     <tabViewItem label="Face Recognition" identifier="" id="aLE-h6-zdO">
                                         <view key="view" id="62z-YH-nL3">
-                                            <rect key="frame" x="10" y="33" width="744" height="600"/>
+                                            <rect key="frame" x="10" y="33" width="744" height="565"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <box fixedFrame="YES" title="Recognition Engine" translatesAutoresizingMaskIntoConstraints="NO" id="SU6-IS-Mpk">
-                                                    <rect key="frame" x="16" y="153" width="714" height="289"/>
+                                                    <rect key="frame" x="16" y="118" width="714" height="289"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="PjB-bq-Iim">
                                                         <rect key="frame" x="3" y="3" width="708" height="271"/>
@@ -2705,7 +2736,7 @@ brew install ifuse</string>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <clipView key="contentView" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" id="UBo-bc-TBt">
                                                                     <rect key="frame" x="0.0" y="0.0" width="359" height="132"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textView ambiguous="YES" editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="Xti-RX-E8d">
                                                                             <rect key="frame" x="0.0" y="0.0" width="359" height="132"/>
@@ -2722,7 +2753,7 @@ brew install ifuse</string>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                                 <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="LQe-l0-saR">
-                                                                    <rect key="frame" x="358" y="0.0" width="16" height="132"/>
+                                                                    <rect key="frame" x="359" y="0.0" width="15" height="132"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                             </scrollView>
@@ -2730,7 +2761,7 @@ brew install ifuse</string>
                                                     </view>
                                                 </box>
                                                 <box fixedFrame="YES" title="Recognition Model" translatesAutoresizingMaskIntoConstraints="NO" id="7Pu-4H-y6B">
-                                                    <rect key="frame" x="16" y="462" width="714" height="114"/>
+                                                    <rect key="frame" x="16" y="427" width="714" height="114"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="u0u-CL-tbL">
                                                         <rect key="frame" x="3" y="3" width="708" height="96"/>
@@ -2970,6 +3001,7 @@ brew install ifuse</string>
                         <outlet property="lblIdeviceIdMessage" destination="4iT-vh-aLf" id="kJA-98-5qk"/>
                         <outlet property="lblIdeviceInfoMessage" destination="rml-oG-jEK" id="nkt-Qk-tNh"/>
                         <outlet property="lblIfuseMessage" destination="hn7-Vf-Mhz" id="vka-0u-NiZ"/>
+                        <outlet property="lblLanguage" destination="roF-Y6-XSq" id="8SU-8E-qMF"/>
                         <outlet property="lblLocalDBFileMessage" destination="iy1-vx-3sc" id="tRb-Mh-9lH"/>
                         <outlet property="lblLocalDBServerMessage" destination="eTh-Ux-n5k" id="Y9l-24-apD"/>
                         <outlet property="lblMajorFaceModelPath" destination="oGj-ct-Bre" id="4p6-eR-Kxf"/>
@@ -2984,6 +3016,7 @@ brew install ifuse</string>
                         <outlet property="lblSelectedMemory" destination="Cby-mt-lNm" id="fpb-gO-p3b"/>
                         <outlet property="lstAmountForPagination" destination="C0h-yv-KP9" id="nbL-kr-yMt"/>
                         <outlet property="memorySlider" destination="vjx-6i-AGL" id="mvi-kn-bhT"/>
+                        <outlet property="popupLanguage" destination="jmU-hC-1k6" id="ciW-Td-NDX"/>
                         <outlet property="scrDatabaseArchives" destination="fRD-SJ-Ld7" id="BaS-xL-T9h"/>
                         <outlet property="tabs" destination="2L9-ci-i6l" id="i7B-53-DnW"/>
                         <outlet property="tblDatabaseArchives" destination="kXx-S6-VDX" id="cMa-8y-5Be"/>

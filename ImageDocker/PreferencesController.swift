@@ -15,6 +15,8 @@ final class PreferencesController: NSViewController {
     
     // MARK: - KEYS
     
+    fileprivate static let languageKey = "LanguageKey"
+    
     // MARK: GEOLOCATION API
     fileprivate static let baiduAKKey = "BaiduAKKey"
     fileprivate static let baiduSKKey = "BaiduSKKey"
@@ -59,6 +61,11 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var tabs: NSTabView!
     
     @IBOutlet weak var btnApply: NSButton!
+    
+    
+    // MARK: GENERAL
+    @IBOutlet weak var lblLanguage: NSTextField!
+    @IBOutlet weak var popupLanguage: NSPopUpButton!
     
     
     // MARK: GEOLOCATION API
@@ -1044,6 +1051,14 @@ final class PreferencesController: NSViewController {
     
     // MARK: - READ SETTINGS
     
+    // MARK: GENERAL
+    
+    class func language() -> String {
+        let defaults = UserDefaults.standard
+        let value = defaults.string(forKey: languageKey) ?? "eng"
+        return value
+    }
+    
     // MARK: PERFORMANCE
     
     class func amountForPagination() -> Int {
@@ -1321,6 +1336,24 @@ final class PreferencesController: NSViewController {
     
     // MARK: - SAVE SETTINGS
     
+    func saveGeneralSection(_ defaults:UserDefaults) {
+        let oldValue = PreferencesController.language()
+        
+        let lang = self.popupLanguage.titleOfSelectedItem ?? "English"
+        var value = "eng"
+        if lang == "English" {
+            value = "eng"
+        }else if lang == "Chinese Simplified" {
+            value = "chs"
+        }
+        defaults.set(value,
+                     forKey: PreferencesController.languageKey)
+        
+        if oldValue != value {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ChangeEvent.language), object: nil)
+        }
+    }
+    
     func saveGeolocationAPISection(_ defaults:UserDefaults) {
         
         defaults.set(txtGoogleAPIKey.stringValue,
@@ -1439,6 +1472,7 @@ final class PreferencesController: NSViewController {
     func savePreferences() {
         let defaults = UserDefaults.standard
         
+        self.saveGeneralSection(defaults)
         self.savePerformanceSection(defaults)
         self.saveDatabaseSection(defaults)
         self.saveBackupSection(defaults)
@@ -1629,6 +1663,17 @@ final class PreferencesController: NSViewController {
         txtGoogleAPIKey.stringValue = PreferencesController.googleAPIKey()
     }
     
+    func initGeneral() {
+        let language = PreferencesController.language()
+        if language == "eng" {
+            self.popupLanguage.selectItem(withTitle: "English")
+        }else if language == "chs" {
+            self.popupLanguage.selectItem(withTitle: "Chinese Simplified")
+        }else{
+            self.popupLanguage.selectItem(withTitle: "English")
+        }
+    }
+    
     func initPerformanceSection() {
         self.setupMemorySlider()
         let paginationAmount = PreferencesController.amountForPagination()
@@ -1644,6 +1689,7 @@ final class PreferencesController: NSViewController {
         super.viewDidLoad()
         self.title = "Setting"
         // Do any additional setup after loading the view.
+        self.initGeneral()
         self.initPerformanceSection()
         self.initDatabaseSection()
         self.initBackupSection()

@@ -119,6 +119,9 @@
 		8E98B8F720D6044900771280 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E98B8F620D6044900771280 /* Event.swift */; };
 		8E98B8F920D7950E00771280 /* ExportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E98B8F820D7950E00771280 /* ExportManager.swift */; };
 		8E99DBFB2284A18600654C03 /* SearchCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E99DBFA2284A18600654C03 /* SearchCondition.swift */; };
+		8E9CF30B26489D5500558423 /* Localize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9CF30A26489D5500558423 /* Localize.swift */; };
+		8E9CF30D26489EAA00558423 /* Words.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9CF30C26489EAA00558423 /* Words.swift */; };
+		8E9CF30F2648D42500558423 /* ChangeEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9CF30E2648D42500558423 /* ChangeEvent.swift */; };
 		8E9D8039234884040062692A /* EditRepositoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E9D8038234884040062692A /* EditRepositoryViewController.xib */; };
 		8E9D803B2348A9EE0062692A /* GRDB+ExportProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9D803A2348A9EE0062692A /* GRDB+ExportProfile.swift */; };
 		8E9D803D2348AA550062692A /* ExportProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9D803C2348AA550062692A /* ExportProfile.swift */; };
@@ -446,6 +449,9 @@
 		8E98B8F620D6044900771280 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		8E98B8F820D7950E00771280 /* ExportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportManager.swift; sourceTree = "<group>"; };
 		8E99DBFA2284A18600654C03 /* SearchCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCondition.swift; sourceTree = "<group>"; };
+		8E9CF30A26489D5500558423 /* Localize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localize.swift; sourceTree = "<group>"; };
+		8E9CF30C26489EAA00558423 /* Words.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Words.swift; sourceTree = "<group>"; };
+		8E9CF30E2648D42500558423 /* ChangeEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeEvent.swift; sourceTree = "<group>"; };
 		8E9D8038234884040062692A /* EditRepositoryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditRepositoryViewController.xib; sourceTree = "<group>"; };
 		8E9D803A2348A9EE0062692A /* GRDB+ExportProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+ExportProfile.swift"; sourceTree = "<group>"; };
 		8E9D803C2348AA550062692A /* ExportProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportProfile.swift; sourceTree = "<group>"; };
@@ -1328,6 +1334,9 @@
 				8EE382F723E02585003B7153 /* Colors.swift */,
 				8EBA69292090C87D00221131 /* Extentions.swift */,
 				8EB9C0102507735F00507CA7 /* DataStructures.swift */,
+				8E9CF30A26489D5500558423 /* Localize.swift */,
+				8E9CF30C26489EAA00558423 /* Words.swift */,
+				8E9CF30E2648D42500558423 /* ChangeEvent.swift */,
 			);
 			path = Commons;
 			sourceTree = "<group>";
@@ -1808,6 +1817,7 @@
 				8E15E73C23AC74DC0094240A /* TreeDataSource.swift in Sources */,
 				8EFA02E1243B3E5200D7C355 /* PostgresClientKit+Image+Statistic.swift in Sources */,
 				8ECA1FFB23E5751300F56895 /* LibraryTree+ExtendView.swift in Sources */,
+				8E9CF30F2648D42500558423 /* ChangeEvent.swift in Sources */,
 				8E95739A20EBEBD7003BD651 /* FilterViewController.swift in Sources */,
 				8E27F2A5259DD79C003D48BE /* TreeOutlineView.swift in Sources */,
 				8EF3FEE724231C0400AF83BB /* ImageSQLHelper.swift in Sources */,
@@ -1842,6 +1852,7 @@
 				8EFA02E9243B3E9B00D7C355 /* PostgresClientKit+ImagePlace.swift in Sources */,
 				8EEB88842090B44B00CDEC81 /* ImageDropView.swift in Sources */,
 				8EBA9DE7217477D900DACAAD /* UIHelper.swift in Sources */,
+				8E9CF30B26489D5500558423 /* Localize.swift in Sources */,
 				8EC82EA42121C10A00FC0899 /* LocalDirectory.swift in Sources */,
 				8EF4E1F52453C05800999DD1 /* Error.swift in Sources */,
 				8EB271AC2346BE8A003BF3AF /* TaskProgressViewController.swift in Sources */,
@@ -1963,6 +1974,7 @@
 				8EFA02F3243B3EF500D7C355 /* PostgresClientKit+VersionMigrate.swift in Sources */,
 				8EB2717D2340D8D5003BF3AF /* ViewController+TreeArea.swift in Sources */,
 				8EB271892340EDC5003BF3AF /* ViewController+SelectionArea+AssignEvent.swift in Sources */,
+				8E9CF30D26489EAA00558423 /* Words.swift in Sources */,
 				8E3FA92323535C5800B677A3 /* MemoriesViewController.swift in Sources */,
 				8EFA02EB243B3EA900D7C355 /* PostgresClientKit+ImageEvent.swift in Sources */,
 				8EB986C620B6EBC40075B081 /* DarkTableView.swift in Sources */,
