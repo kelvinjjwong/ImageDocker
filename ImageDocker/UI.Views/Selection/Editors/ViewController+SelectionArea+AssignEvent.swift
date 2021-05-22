@@ -100,10 +100,10 @@ class EventListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
     
     var events:[ImageEvent] = []
     
-    convenience override init() {
-        self.init()
-        NotificationCenter.default.addObserver(self, selector: #selector(loadEvents(notification:)), name: NSNotification.Name(rawValue: ChangeEvent.language), object: nil)
-    }
+//    convenience override init() {
+//        self.init()
+//        NotificationCenter.default.addObserver(self, selector: #selector(loadEvents(notification:)), name: NSNotification.Name(rawValue: ChangeEvent.language), object: nil)
+//    }
     
     @objc func loadEvents(notification:Notification) {
         self.loadEvents()
