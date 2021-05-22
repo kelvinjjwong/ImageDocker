@@ -100,6 +100,7 @@ class EventListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
     
     var events:[ImageEvent] = []
     
+    // comment out to avoid accidental shutdown on startup application
 //    convenience override init() {
 //        self.init()
 //        NotificationCenter.default.addObserver(self, selector: #selector(loadEvents(notification:)), name: NSNotification.Name(rawValue: ChangeEvent.language), object: nil)
