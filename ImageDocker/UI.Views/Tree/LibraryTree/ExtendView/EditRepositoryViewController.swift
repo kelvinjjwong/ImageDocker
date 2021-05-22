@@ -189,16 +189,16 @@ class EditRepositoryViewController: NSViewController {
         self.emptyStorageTextFields()
         self.emptyFaceTextFields()
         self.originalContainer = nil
-        self.btnOK.title = "Save"
+        self.btnOK.title = Words.save.word()
         self.lblMessage.stringValue = ""
         if let window = self.window {
-            window.title = "Add Repository"
+            window.title = Words.addRepository.word()
         }
-        self.btnBrowseHomePath.title = "Assign"
-        self.btnBrowseStoragePath.title = "Assign"
-        self.btnBrowseRepositoryPath.title = "Assign"
-        self.btnBrowseFacePath.title = "Assign"
-        self.btnBrowseCropPath.title = "Assign"
+        self.btnBrowseHomePath.title = Words.assign.word()
+        self.btnBrowseStoragePath.title = Words.assign.word()
+        self.btnBrowseRepositoryPath.title = Words.assign.word()
+        self.btnBrowseFacePath.title = Words.assign.word()
+        self.btnBrowseCropPath.title = Words.assign.word()
         self.btnFaceBackToOrigin.isHidden = true
         self.btnNormalize.isHidden = true
         self.btnFindFaces.isHidden = true
@@ -254,38 +254,38 @@ class EditRepositoryViewController: NSViewController {
             self.btnUpdateCropImages.isHidden = false
             self.btnRemove.isHidden = false
             self.btnUpdateEmptyEvent.isHidden = false
-            self.btnOK.title = "Update Name & Home"
-            window.title = "Edit Repository"
+            self.btnOK.title = Words.updateRepositoryName.word()
+            window.title = Words.editRepository.word()
             
-            self.btnBrowseRepositoryPath.title = "Move..."
+            self.btnBrowseRepositoryPath.title = Words.moveTo.word()
             
             if container.homePath == "" {
-                self.btnBrowseHomePath.title = "Assign"
+                self.btnBrowseHomePath.title = Words.assign.word()
             }else{
-                self.btnBrowseHomePath.title = "Move..."
+                self.btnBrowseHomePath.title = Words.moveTo.word()
             }
             if container.storagePath == "" {
-                self.btnBrowseStoragePath.title = "Assign"
+                self.btnBrowseStoragePath.title = Words.assign.word()
             }else{
-                self.btnBrowseStoragePath.title = "Move..."
+                self.btnBrowseStoragePath.title = Words.moveTo.word()
             }
             if container.facePath == "" {
-                self.btnBrowseFacePath.title = "Assign"
+                self.btnBrowseFacePath.title = Words.assign.word()
             }else{
-                self.btnBrowseFacePath.title = "Move..."
+                self.btnBrowseFacePath.title = Words.moveTo.word()
             }
             if container.cropPath == "" {
-                self.btnBrowseCropPath.title = "Assign"
+                self.btnBrowseCropPath.title = Words.assign.word()
             }else{
-                self.btnBrowseCropPath.title = "Move..."
+                self.btnBrowseCropPath.title = Words.moveTo.word()
             }
             
             self.stat()
             
             if container.hiddenByRepository {
-                self.btnShowHide.title = "Enable Repository"
+                self.btnShowHide.title = Words.enableRepository.word()
             }else{
-                self.btnShowHide.title = "Disable Repository"
+                self.btnShowHide.title = Words.disableRepository.word()
             }
             
             if container.deviceId != "" {
@@ -300,7 +300,7 @@ class EditRepositoryViewController: NSViewController {
             
         }else{
             self.originalContainer = nil
-            self.lblMessage.stringValue = "ERROR: Cannot find repository with path [\(path)]"
+            self.lblMessage.stringValue = "\(Words.cannotFindRepositoryPath.word()) [\(path)]"
         }
     }
     
@@ -321,7 +321,7 @@ class EditRepositoryViewController: NSViewController {
                 let imageWithoutFace = ImageCountDao.default.countImageWithoutFace(repositoryRoot: path)
                 let imageNotYetFacialDetection = ImageCountDao.default.countImageNotYetFacialDetection(repositoryRoot: path)
                 
-                let msg = "Hidden:\(container.hiddenByRepository), Total:\(imagesTotal), No-repo:\(imagesWithoutRepoPath), No-sub:\(imagesWithoutSubPath), No-id:\(imagesWithoutId), Unmatch-repo:\(imagesUnmatchedRepoPath), container-no-repo:\(containersWithoutRepoPath), container-no-sub:\(containersWithoutSubPath), No-face:\(imageWithoutFace), Not-yet-scan:\(imageNotYetFacialDetection)"
+                let msg = "\(Words.hidden.word()):\(container.hiddenByRepository), \(Words.total.word()):\(imagesTotal), \(Words.imageMissingRepositoryPath.word()):\(imagesWithoutRepoPath), \(Words.imageMissingSubPath.word()):\(imagesWithoutSubPath), \(Words.imageMissingId.word()):\(imagesWithoutId), \(Words.imageNotMatchingRepository.word()):\(imagesUnmatchedRepoPath), \(Words.containerNoRepo.word()):\(containersWithoutRepoPath), \(Words.containerNoSub.word()):\(containersWithoutSubPath), \(Words.imageWithoutFace.word()):\(imageWithoutFace), \(Words.imageNotYetScanFace.word()):\(imageNotYetFacialDetection)"
                 
                 print(msg)
                 DispatchQueue.main.async {

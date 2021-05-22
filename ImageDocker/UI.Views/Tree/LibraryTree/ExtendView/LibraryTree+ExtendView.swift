@@ -19,7 +19,7 @@ extension ViewController {
             let frame = CGRect(origin: .zero, size: CGSize(width: 900, height: 450))
             self.librariesViewController = LibrariesViewController(onReload: {
                 DispatchQueue.main.async {
-                    self.stackedTreeView.reloadTree("Libraries")
+                    self.stackedTreeView.reloadTree(Words.nav_cat_libraries.word())
                 }
             })
             self.librariesViewController.view.frame = frame
@@ -52,7 +52,7 @@ extension ViewController {
             let originY = (screenHeight - windowHeight) / 2
             
             let frame = CGRect(origin: CGPoint(x: originX, y: originY), size: CGSize(width: windowWidth, height: windowHeight))
-            window.title = "Repository Configuration"
+            window.title = Words.repositoryConfiguration.word()
             window.setFrame(frame, display: false)
             window.makeKeyAndOrderFront(self)
             viewController.initEdit(path: url.path, window: window)

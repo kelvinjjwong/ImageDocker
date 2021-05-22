@@ -10,6 +10,8 @@ import Cocoa
 
 extension ViewController {
     
+    
+    
     // init trees
     internal func configureTree(){
         //self.sourceList.backgroundColor = NSColor.darkGray
@@ -28,7 +30,7 @@ extension ViewController {
         stackedTreeView.view.boundToSuperView(superview: self.stackedTreeCanvasView)
         stackedTreeView.view.setWidth(TREEVIEW_WIDTH)
 
-        stackedTreeView.addTreeView(title:"Devices",
+        stackedTreeView.addTreeView(title:Words.nav_cat_devices.word(),
                                     dataSource: self.deviceTreeDataSource,
                                     width: TREEVIEW_WIDTH,
                                     disableFilter: true,
@@ -42,7 +44,7 @@ extension ViewController {
                                     onNodeSelected: { collection in
 //                                        print("action on \(collection.path)")
                                         if collection.path == "Android" || collection.path == "iPhone" {
-                                            self.stackedTreeView.expand(tree: "Devices", path: collection.path)
+                                            self.stackedTreeView.expand(tree: Words.nav_cat_devices.word(), path: collection.path)
                                         }else{
                                             if let id = collection.relatedObjectId,
                                                 let device = self.deviceTreeDataSource.getDeviceById(id),
@@ -53,7 +55,7 @@ extension ViewController {
         },
                                     notificationHolder: self.btnAlertMessage)
 
-        stackedTreeView.addTreeView(title:"Moments",
+        stackedTreeView.addTreeView(title:Words.nav_cat_moments.word(),
                                     dataSource: self.momentsTreeDataSource,
                                     width: TREEVIEW_WIDTH,
                                     nodeValue: { collection in
@@ -83,7 +85,7 @@ extension ViewController {
                                     notificationHolder: self.btnAlertMessage)
         
         
-        stackedTreeView.addTreeView(title:"Events",
+        stackedTreeView.addTreeView(title:Words.nav_cat_events.word(),
                                     dataSource: self.eventsTreeDataSource,
                                     width: TREEVIEW_WIDTH,
                                     nodeValue: { collection in
@@ -113,7 +115,7 @@ extension ViewController {
                                     notificationHolder: self.btnAlertMessage)
 
 
-        stackedTreeView.addTreeView(title:"Places",
+        stackedTreeView.addTreeView(title:Words.nav_cat_places.word(),
                                     dataSource: self.placesTreeDataSource,
                                     width: TREEVIEW_WIDTH,
                                     nodeValue: { collection in
@@ -143,7 +145,7 @@ extension ViewController {
                                     notificationHolder: self.btnAlertMessage)
 
 
-        stackedTreeView.addTreeView(title:"Libraries",
+        stackedTreeView.addTreeView(title:Words.nav_cat_libraries.word(),
                                     dataSource: self.repositoryTreeDataSource,
                                     width: TREEVIEW_WIDTH,
                                     nodeIcon: { collection in
@@ -154,14 +156,14 @@ extension ViewController {
                                         if let container = collection.relatedObject as? ImageContainer {
                                             self.selectedImageContainer = container
                                             if PreferencesController.amountForPagination() > 0 && container.imageCount > PreferencesController.amountForPagination() {
-                                                self.btnRefreshCollectionView.title = "Pages..."
+                                                self.btnRefreshCollectionView.title = Words.pages.word()
                                                 if container.path != "/" {
                                                     self.loadCollectionByContainer(name:container.name, url:URL(fileURLWithPath: container.path), pageSize: 200, pageNumber: 1, subdirectories: true)
                                                 }else{
 //                                                    print("WARN: collection url is null")
                                                 }
                                             }else{
-                                                self.btnRefreshCollectionView.title = "Reload"
+                                                self.btnRefreshCollectionView.title = Words.reload.word()
                                                 self.loadCollectionByContainer(name:container.name, url:URL(fileURLWithPath: container.path))
                                             }
                                         }

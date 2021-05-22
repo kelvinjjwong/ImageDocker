@@ -19,7 +19,7 @@ extension ViewController {
             }
             self.treeLoadingIndicator = Accumulator(target: 1000, indicator: nil, suspended: true,
                                                     lblMessage: nil,
-                                                    presetAddingMessage: "Importing images ...",
+                                                    presetAddingMessage: Words.importingImages.word(),
                                                     onCompleted: {data in
 //                                                        print("COMPLETE SCAN REPO")
                                                         ExportManager.default.enable()
@@ -77,7 +77,7 @@ extension ViewController {
                 }
                 self.treeLoadingIndicator = Accumulator(target: 1000, indicator: nil, suspended: true,
                                                         lblMessage: nil,
-                                                        presetAddingMessage: "Extracting EXIF ...",
+                                                        presetAddingMessage: Words.extractingExif.word(),
                                                         onCompleted: { data in
 //                                                            print("COMPLETE SCAN PHOTOS TO LOAD EXIF")
                                                             
