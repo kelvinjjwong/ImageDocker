@@ -42,7 +42,6 @@ extension ViewController {
         webLocation.load(URLRequest(url: URL(string: "about:blank")!))
         webPossibleLocation.load(URLRequest(url: URL(string: "about:blank")!))
         
-        self.playerContainer.layer?.borderColor = Colors.DarkGray.cgColor
         
         // Do any additional setup after loading the view.
         stackedImageViewController = (storyboard?.instantiateController(withIdentifier: "imageView") as! StackedImageViewController)
@@ -50,12 +49,20 @@ extension ViewController {
         
         stackedImageViewController.parentController = self
         stackedVideoViewController.parentController = self
+        stackedImageViewController.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
+        stackedVideoViewController.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
+        stackedVideoViewController.view.layer?.backgroundColor = Colors.DarkGray.cgColor
+        stackedImageViewController.view.layer?.backgroundColor = Colors.DarkGray.cgColor
         
         self.addChild(stackedImageViewController)
         self.addChild(stackedVideoViewController)
         
         stackedImageViewController.view.frame = self.playerContainer.bounds
         self.playerContainer.addSubview(stackedImageViewController.view)
+        self.playerContainer.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
+        self.playerContainer.layer?.borderColor = Colors.DarkGray.cgColor
+        self.playerContainer.layer?.backgroundColor = Colors.DarkGray.cgColor
+        
         
         possibleLocationText.textColor = NSColor.white
         locationTextDelegate = LocationTextDelegate()
