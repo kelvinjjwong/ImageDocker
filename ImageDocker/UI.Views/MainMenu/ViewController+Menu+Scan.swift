@@ -14,12 +14,12 @@ extension ViewController {
         switch(number){
         case 1:
             if enabled {
-                return "Scan & Import from repositories"
+                return Words.scanAndImportImages.word()
             }else{
-                return "Stop scanning repositories"
+                return Words.stopScanningRepository.word()
             }
         case 2:
-            return "Scan & Extract EXIF from images"
+            return Words.scanAndExtractExif.word()
         default:
             return ""
         }

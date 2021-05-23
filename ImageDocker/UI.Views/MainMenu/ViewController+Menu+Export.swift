@@ -11,11 +11,11 @@ import Cocoa
 extension ViewController {
 
     internal func setupExportMenu() {
-        
+        self.btnExport.menu?.item(at: 0)?.title = Words.mainmenu_export.word()
         self.btnExport.menu?.addItem(NSMenuItem.separator())
-        self.btnExport.menu?.addItem(withTitle: "Configuration", action: #selector(exportMenuConfigAction(_:)), keyEquivalent: "")
+        self.btnExport.menu?.addItem(withTitle: Words.mainmenu_export_configuration.word(), action: #selector(exportMenuConfigAction(_:)), keyEquivalent: "")
         self.btnExport.menu?.addItem(NSMenuItem.separator())
-        self.btnExport.menu?.addItem(withTitle: "Export Profiles ...", action: #selector(exportMenuExportProfilesAction(_:)), keyEquivalent: "")
+        self.btnExport.menu?.addItem(withTitle: Words.mainmenu_export_export.word(), action: #selector(exportMenuExportProfilesAction(_:)), keyEquivalent: "")
     }
     
     @objc func exportMenuConfigAction(_ menuItem:NSMenuItem) {
@@ -33,7 +33,7 @@ extension ViewController {
         let originY = (screenHeight - windowHeight) / 2
         
         let frame = CGRect(origin: CGPoint(x: originX, y: originY), size: CGSize(width: windowWidth, height: windowHeight))
-        window.title = "Export Manager"
+        window.title = Words.exportManager.word()
         window.setFrame(frame, display: false)
         window.makeKeyAndOrderFront(self)
         viewController.initView(window: window)
@@ -56,7 +56,7 @@ extension ViewController {
         let originY = (screenHeight - windowHeight) / 2
         
         let frame = CGRect(origin: CGPoint(x: originX, y: originY), size: CGSize(width: windowWidth, height: windowHeight))
-        window.title = "Export Manager"
+        window.title = Words.exportManager.word()
         window.setFrame(frame, display: false)
         window.makeKeyAndOrderFront(self)
         viewController.initView(window: window)

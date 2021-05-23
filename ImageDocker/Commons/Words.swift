@@ -312,7 +312,7 @@ struct Words {
     
     static let findFaces = Localize(
         eng: "Find Faces",
-        chs: "识别人脸"
+        chs: "识别人物"
     )
     
     static let saveRepository = Localize(
@@ -337,32 +337,32 @@ struct Words {
     
     static let mainmenu_face = Localize(
         eng: "Faces",
-        chs: "人脸"
+        chs: "人物"
     )
     
     static let mainmenu_face_manageFaces = Localize(
         eng: "Manage Faces",
-        chs: "管理已发现的人脸"
+        chs: "管理已发现的人物"
     )
     
     static let mainmenu_face_scan = Localize(
         eng: "Scan faces in pictures",
-        chs: "在照片中发现人脸"
+        chs: "在照片中发现人物"
     )
     
     static let mainmenu_face_reScan = Localize(
         eng: "Force Re-Scan all pictures",
-        chs: "在照片中重新发现人脸"
+        chs: "在照片中重新发现人物"
     )
     
     static let mainmenu_face_recognize = Localize(
         eng: "Recognize faces in pictures",
-        chs: "在照片中识别人脸"
+        chs: "在照片中识别人物"
     )
     
     static let mainmenu_face_reRecognize = Localize(
         eng: "Force Re-Recognize all pictures",
-        chs: "在照片中重新识别人脸"
+        chs: "在照片中重新识别人物"
     )
     
     static let mainmenu_face_in_collection = Localize (
@@ -379,4 +379,56 @@ struct Words {
         eng: "Pictures in %s",
         chs: "%s 年"
     )
+    
+    static let mainmenu_export = Localize(
+        eng: "Export",
+        chs: "导出照片"
+    )
+    
+    static let mainmenu_export_configuration = Localize(
+        eng: "Configuration",
+        chs: "配置..."
+    )
+    
+    static let mainmenu_export_export = Localize(
+        eng: "Export profile...",
+        chs: "导出..."
+    )
+    
+    static let exportManager = Localize (
+        eng: "Export Manager",
+        chs: "配置照片导出"
+    )
+    
+    static let faceManager = Localize (
+        eng: "Face Manager",
+        chs: "人物管理"
+    )
+    
+    static let scanAndImportImages = Localize (
+        eng: "Scan & Import from repositories",
+        chs: "扫描照片库并导入照片"
+    )
+    
+    static let stopScanningRepository = Localize(
+        eng: "Stop scanning repositories",
+        chs: "停止扫描照片库"
+    )
+    
+    static let scanAndExtractExif = Localize(
+        eng: "Scan & Extract EXIF from images",
+        chs: "扫描照片并解析地理位置"
+    )
+    
+    static let imageOption = Localize(
+        eng: "Image Options",
+        chs: "更多修改选项"
+    )
+    
+    static let largeView = Localize(
+        eng: "Large View",
+        chs: "放大展示"
+    )
+    
+    
 }

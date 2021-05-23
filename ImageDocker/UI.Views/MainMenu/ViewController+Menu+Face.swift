@@ -185,9 +185,9 @@ extension ViewController {
                                 break
                             }
                             let url = imageFile.url
-                            if action == "Scan" {
+                            if action == "Scan" { // TODO change for chinese
                                 let _ = FaceTask.default.findFaces(path: url.path)
-                            }else if action == "Recognize" {
+                            }else if action == "Recognize" { // TODO change for chinese
                                 let _ = FaceTask.default.recognizeFaces(path: url.path)
                             }
                             tasklet.progress += 1

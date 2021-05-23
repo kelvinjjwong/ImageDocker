@@ -12,9 +12,11 @@ extension ViewController {
     
     internal func setupPreviewMenu() {
         
+        self.btnImageOptions.menu?.item(at: 0)?.title = Words.imageOption.word()
+        
         self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
         
-        self.btnImageOptions.menu?.addItem(withTitle: "Large View", action: #selector(previewMenuLargeView(_:)), keyEquivalent: "")
+        self.btnImageOptions.menu?.addItem(withTitle: Words.largeView.word(), action: #selector(previewMenuLargeView(_:)), keyEquivalent: "")
         
         self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
         
