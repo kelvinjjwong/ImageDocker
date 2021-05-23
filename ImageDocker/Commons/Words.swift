@@ -329,4 +329,54 @@ struct Words {
         eng: "Use folder name as image's brief",
         chs: "使用文件夹名称作为照片描述"
     )
+    
+    static let restarting = Localize(
+        eng: "Restarting ...",
+        chs: "重新开始任务..."
+    )
+    
+    static let mainmenu_face = Localize(
+        eng: "Faces",
+        chs: "人脸"
+    )
+    
+    static let mainmenu_face_manageFaces = Localize(
+        eng: "Manage Faces",
+        chs: "管理已发现的人脸"
+    )
+    
+    static let mainmenu_face_scan = Localize(
+        eng: "Scan faces in pictures",
+        chs: "在照片中发现人脸"
+    )
+    
+    static let mainmenu_face_reScan = Localize(
+        eng: "Force Re-Scan all pictures",
+        chs: "在照片中重新发现人脸"
+    )
+    
+    static let mainmenu_face_recognize = Localize(
+        eng: "Recognize faces in pictures",
+        chs: "在照片中识别人脸"
+    )
+    
+    static let mainmenu_face_reRecognize = Localize(
+        eng: "Force Re-Recognize all pictures",
+        chs: "在照片中重新识别人脸"
+    )
+    
+    static let mainmenu_face_in_collection = Localize (
+        eng: "Pictures in collection",
+        chs: "从选中的照片集"
+    )
+    
+    static let mainmenu_face_in_allYears = Localize(
+        eng: "Pictures in all-years",
+        chs: "从所有时刻"
+    )
+    
+    static let mainmenu_face_in_year = Localize(
+        eng: "Pictures in %s",
+        chs: "%s 年"
+    )
 }

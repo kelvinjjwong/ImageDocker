@@ -114,7 +114,7 @@ class TaskProgressViewController: NSViewController {
                 viewController.progress.doubleValue = 0
                 
                 if !TaskletManager.default.isSingleMode() {
-                    viewController.lblMessage.stringValue = "Restarting ..."
+                    viewController.lblMessage.stringValue = Words.restarting.word()
                 }            }
         }
     }

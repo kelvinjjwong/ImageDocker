@@ -11,40 +11,41 @@ import Cocoa
 extension ViewController {
     
     internal func setupFacesMenu() {
+        self.btnFaces.menu?.item(at: 0)?.title = Words.mainmenu_face.word()
         
         self.btnFaces.menu?.addItem(NSMenuItem.separator())
-        self.btnFaces.menu?.addItem(withTitle: "Manage faces", action: #selector(faceMenuManageAction(_:)), keyEquivalent: "")
+        self.btnFaces.menu?.addItem(withTitle: Words.mainmenu_face_manageFaces.word(), action: #selector(faceMenuManageAction(_:)), keyEquivalent: "")
         self.btnFaces.menu?.addItem(NSMenuItem.separator())
         
-        let menuScan = NSMenuItem(title: "Scan faces in pictures", action: nil, keyEquivalent: "")
+        let menuScan = NSMenuItem(title: Words.mainmenu_face_scan.word(), action: nil, keyEquivalent: "")
         let subMenuScan = NSMenu()
-        let menuForceScan = NSMenuItem(title: "Force Re-Scan all pictures", action: nil, keyEquivalent: "")
+        let menuForceScan = NSMenuItem(title: Words.mainmenu_face_reScan.word(), action: nil, keyEquivalent: "")
         let subMenuForceScan = NSMenu()
         
-        let menuRecognize = NSMenuItem(title: "Recognize faces in pictures", action: nil, keyEquivalent: "")
+        let menuRecognize = NSMenuItem(title: Words.mainmenu_face_recognize.word(), action: nil, keyEquivalent: "")
         let subMenuRecognize = NSMenu()
-        let menuForceRecognize = NSMenuItem(title: "Force Re-Recognize all pictures", action: nil, keyEquivalent: "")
+        let menuForceRecognize = NSMenuItem(title: Words.mainmenu_face_reRecognize.word(), action: nil, keyEquivalent: "")
         let subMenuForceRecognize = NSMenu()
         
         let years = ImageSearchDao.default.getYears()
-        subMenuScan.addItem(withTitle: "Pictures in collection", action: #selector(faceMenuScanAction(_:)), keyEquivalent: "")
-        subMenuRecognize.addItem(withTitle: "Pictures in collection", action: #selector(faceMenuRecognizeAction(_:)), keyEquivalent: "")
-        subMenuForceScan.addItem(withTitle: "Pictures in collection", action: #selector(faceMenuForceScanAction(_:)), keyEquivalent: "")
-        subMenuForceRecognize.addItem(withTitle: "Pictures in collection", action: #selector(faceMenuForceRecognizeAction(_:)), keyEquivalent: "")
+        subMenuScan.addItem(withTitle: Words.mainmenu_face_in_collection.word(), action: #selector(faceMenuScanAction(_:)), keyEquivalent: "")
+        subMenuRecognize.addItem(withTitle: Words.mainmenu_face_in_collection.word(), action: #selector(faceMenuRecognizeAction(_:)), keyEquivalent: "")
+        subMenuForceScan.addItem(withTitle: Words.mainmenu_face_in_collection.word(), action: #selector(faceMenuForceScanAction(_:)), keyEquivalent: "")
+        subMenuForceRecognize.addItem(withTitle: Words.mainmenu_face_in_collection.word(), action: #selector(faceMenuForceRecognizeAction(_:)), keyEquivalent: "")
         
-        subMenuScan.addItem(withTitle: "Pictures in all-years", action: #selector(faceMenuScanAction(_:)), keyEquivalent: "")
-        subMenuRecognize.addItem(withTitle: "Pictures in all-years", action: #selector(faceMenuRecognizeAction(_:)), keyEquivalent: "")
-        subMenuForceScan.addItem(withTitle: "Pictures in all-years", action: #selector(faceMenuForceScanAction(_:)), keyEquivalent: "")
-        subMenuForceRecognize.addItem(withTitle: "Pictures in all-years", action: #selector(faceMenuForceRecognizeAction(_:)), keyEquivalent: "")
+        subMenuScan.addItem(withTitle: Words.mainmenu_face_in_allYears.word(), action: #selector(faceMenuScanAction(_:)), keyEquivalent: "")
+        subMenuRecognize.addItem(withTitle: Words.mainmenu_face_in_allYears.word(), action: #selector(faceMenuRecognizeAction(_:)), keyEquivalent: "")
+        subMenuForceScan.addItem(withTitle: Words.mainmenu_face_in_allYears.word(), action: #selector(faceMenuForceScanAction(_:)), keyEquivalent: "")
+        subMenuForceRecognize.addItem(withTitle: Words.mainmenu_face_in_allYears.word(), action: #selector(faceMenuForceRecognizeAction(_:)), keyEquivalent: "")
         for year in years {
             if year == 0 {
                 continue
             }
             
-            subMenuScan.addItem(withTitle: "Pictures in \(year)", action: #selector(faceMenuScanAction(_:)), keyEquivalent: "")
-            subMenuRecognize.addItem(withTitle: "Pictures in \(year)", action: #selector(faceMenuRecognizeAction(_:)), keyEquivalent: "")
-            subMenuForceScan.addItem(withTitle: "Pictures in \(year)", action: #selector(faceMenuForceScanAction(_:)), keyEquivalent: "")
-            subMenuForceRecognize.addItem(withTitle: "Pictures in \(year)", action: #selector(faceMenuForceRecognizeAction(_:)), keyEquivalent: "")
+            subMenuScan.addItem(withTitle: "\(Words.mainmenu_face_in_year.word("%s", year))", action: #selector(faceMenuScanAction(_:)), keyEquivalent: "")
+            subMenuRecognize.addItem(withTitle: "\(Words.mainmenu_face_in_year.word("%s", year))", action: #selector(faceMenuRecognizeAction(_:)), keyEquivalent: "")
+            subMenuForceScan.addItem(withTitle: "\(Words.mainmenu_face_in_year.word("%s", year))", action: #selector(faceMenuForceScanAction(_:)), keyEquivalent: "")
+            subMenuForceRecognize.addItem(withTitle: "\(Words.mainmenu_face_in_year.word("%s", year))", action: #selector(faceMenuForceRecognizeAction(_:)), keyEquivalent: "")
         }
         menuScan.submenu = subMenuScan
         menuRecognize.submenu = subMenuRecognize

@@ -27,4 +27,21 @@ class Localize {
         }
     }
     
+    func word(_ placeholder:String, _ keywords:Any...) -> String {
+        let lang = PreferencesController.language()
+        var template = ""
+        if lang == "chs" {
+            template = self.chs
+        }else{
+            template = self.eng
+        }
+        
+        for i in 0..<keywords.count {
+            let keyword = keywords[i]
+            template = template.replacingFirstOccurrence(of: placeholder, with: "\(keyword)")
+        }
+        let result = template
+        return result
+    }
+    
 }
