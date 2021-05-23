@@ -319,4 +319,14 @@ struct Words {
         eng: "Save Repository",
         chs: "存储照片库的修改"
     )
+    
+    static let useFolderAsEvent = Localize(
+        eng: "Use folder name as event name",
+        chs: "使用文件夹名称作为活动名称"
+    )
+    
+    static let useFolderAsBrief = Localize(
+        eng: "Use folder name as image's brief",
+        chs: "使用文件夹名称作为照片描述"
+    )
 }

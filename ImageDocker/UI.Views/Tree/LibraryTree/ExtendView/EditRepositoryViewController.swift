@@ -144,6 +144,10 @@ class EditRepositoryViewController: NSViewController {
         self.btnUpdateAllEvents.title = Words.updateAllEvents.word()
         self.btnUpdateEmptyBrief.title = Words.updateEmptyBriefs.word()
         self.btnUpdateAllBrief.title = Words.updateAllBriefs.word()
+        self.btnPreviewEventFolders.title = Words.preview.word()
+        self.btnPreviewBriefFolders.title = Words.preview.word()
+        self.chkFolderAsBrief.title = Words.useFolderAsBrief.word()
+        self.chkFolderAsEvent.title = Words.useFolderAsEvent.word()
     }
     
     fileprivate func toggleButtons(_ show:Bool){
