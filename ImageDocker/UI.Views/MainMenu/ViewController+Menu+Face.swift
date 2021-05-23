@@ -8,7 +8,23 @@
 
 import Cocoa
 
+class FaceMenu {
+    
+    var action = ""
+    var area = ""
+    
+    init(action:String, area: String) {
+        self.action = action
+        self.area = area
+    }
+}
+
 extension ViewController {
+    
+    internal func addSubMenu(_ menu:NSMenu, title: String, action: Selector, representedObject:Any) {
+        let submenu = menu.addItem(withTitle: title, action: action, keyEquivalent: "")
+        submenu.representedObject = representedObject
+    }
     
     internal func setupFacesMenu() {
         self.btnFaces.menu?.item(at: 0)?.title = Words.mainmenu_face.word()
@@ -28,24 +44,63 @@ extension ViewController {
         let subMenuForceRecognize = NSMenu()
         
         let years = ImageSearchDao.default.getYears()
-        subMenuScan.addItem(withTitle: Words.mainmenu_face_in_collection.word(), action: #selector(faceMenuScanAction(_:)), keyEquivalent: "")
-        subMenuRecognize.addItem(withTitle: Words.mainmenu_face_in_collection.word(), action: #selector(faceMenuRecognizeAction(_:)), keyEquivalent: "")
-        subMenuForceScan.addItem(withTitle: Words.mainmenu_face_in_collection.word(), action: #selector(faceMenuForceScanAction(_:)), keyEquivalent: "")
-        subMenuForceRecognize.addItem(withTitle: Words.mainmenu_face_in_collection.word(), action: #selector(faceMenuForceRecognizeAction(_:)), keyEquivalent: "")
+        self.addSubMenu(subMenuScan,
+                        title: Words.mainmenu_face_in_collection.word(),
+                        action: #selector(faceMenuScanAction(_:)),
+                        representedObject: FaceMenu(action: "scan", area: "collection"))
+        self.addSubMenu(subMenuRecognize,
+                        title: Words.mainmenu_face_in_collection.word(),
+                        action: #selector(faceMenuRecognizeAction(_:)),
+                        representedObject: FaceMenu(action: "recognize", area: "collection"))
         
-        subMenuScan.addItem(withTitle: Words.mainmenu_face_in_allYears.word(), action: #selector(faceMenuScanAction(_:)), keyEquivalent: "")
-        subMenuRecognize.addItem(withTitle: Words.mainmenu_face_in_allYears.word(), action: #selector(faceMenuRecognizeAction(_:)), keyEquivalent: "")
-        subMenuForceScan.addItem(withTitle: Words.mainmenu_face_in_allYears.word(), action: #selector(faceMenuForceScanAction(_:)), keyEquivalent: "")
-        subMenuForceRecognize.addItem(withTitle: Words.mainmenu_face_in_allYears.word(), action: #selector(faceMenuForceRecognizeAction(_:)), keyEquivalent: "")
+        self.addSubMenu(subMenuForceScan,
+                        title: Words.mainmenu_face_in_collection.word(),
+                        action: #selector(faceMenuForceScanAction(_:)),
+                        representedObject: FaceMenu(action: "scan", area: "collection"))
+        self.addSubMenu(subMenuForceRecognize,
+                        title: Words.mainmenu_face_in_collection.word(),
+                        action: #selector(faceMenuForceRecognizeAction(_:)),
+                        representedObject: FaceMenu(action: "recognize", area: "collection"))
+        
+        self.addSubMenu(subMenuScan,
+                        title: Words.mainmenu_face_in_allYears.word(),
+                        action: #selector(faceMenuScanAction(_:)),
+                        representedObject: FaceMenu(action: "scan", area: Words.imagesInAllYears.word()))
+        self.addSubMenu(subMenuRecognize,
+                        title: Words.mainmenu_face_in_allYears.word(),
+                        action: #selector(faceMenuRecognizeAction(_:)),
+                        representedObject: FaceMenu(action: "recognize", area: Words.imagesInAllYears.word()))
+        
+        self.addSubMenu(subMenuForceScan,
+                        title: Words.mainmenu_face_in_allYears.word(),
+                        action: #selector(faceMenuForceScanAction(_:)),
+                        representedObject: FaceMenu(action: "scan", area: Words.imagesInAllYears.word()))
+        self.addSubMenu(subMenuForceRecognize,
+                        title: Words.mainmenu_face_in_allYears.word(),
+                        action: #selector(faceMenuForceRecognizeAction(_:)),
+                        representedObject: FaceMenu(action: "recognize", area: Words.imagesInAllYears.word()))
+        
         for year in years {
             if year == 0 {
                 continue
             }
             
-            subMenuScan.addItem(withTitle: "\(Words.mainmenu_face_in_year.word("%s", year))", action: #selector(faceMenuScanAction(_:)), keyEquivalent: "")
-            subMenuRecognize.addItem(withTitle: "\(Words.mainmenu_face_in_year.word("%s", year))", action: #selector(faceMenuRecognizeAction(_:)), keyEquivalent: "")
-            subMenuForceScan.addItem(withTitle: "\(Words.mainmenu_face_in_year.word("%s", year))", action: #selector(faceMenuForceScanAction(_:)), keyEquivalent: "")
-            subMenuForceRecognize.addItem(withTitle: "\(Words.mainmenu_face_in_year.word("%s", year))", action: #selector(faceMenuForceRecognizeAction(_:)), keyEquivalent: "")
+            self.addSubMenu(subMenuScan,
+                            title: "\(Words.mainmenu_face_in_year.word("%s", year))",
+                            action: #selector(faceMenuScanAction(_:)),
+                            representedObject: FaceMenu(action: "scan", area: "\(year)"))
+            self.addSubMenu(subMenuRecognize,
+                            title: "\(Words.mainmenu_face_in_year.word("%s", year))",
+                            action: #selector(faceMenuRecognizeAction(_:)),
+                            representedObject: FaceMenu(action: "recognize", area: "\(year)"))
+            self.addSubMenu(subMenuForceScan,
+                            title: "\(Words.mainmenu_face_in_year.word("%s", year))",
+                            action: #selector(faceMenuForceScanAction(_:)),
+                            representedObject: FaceMenu(action: "scan", area: "\(year)"))
+            self.addSubMenu(subMenuForceRecognize,
+                            title: "\(Words.mainmenu_face_in_year.word("%s", year))",
+                            action: #selector(faceMenuForceRecognizeAction(_:)),
+                            representedObject: FaceMenu(action: "recognize", area: "\(year)"))
         }
         menuScan.submenu = subMenuScan
         menuRecognize.submenu = subMenuRecognize
@@ -75,7 +130,7 @@ extension ViewController {
         let originY = (screenHeight - windowHeight) / 2
         
         let frame = CGRect(origin: CGPoint(x: originX, y: originY), size: CGSize(width: windowWidth, height: windowHeight))
-        window.title = "Export Manager"
+        window.title = Words.faceManager.word()
         window.setFrame(frame, display: false)
         window.makeKeyAndOrderFront(self)
         viewController.initView()
@@ -97,25 +152,35 @@ extension ViewController {
     }
     
     @objc func faceMenuScanAction(_ menuItem:NSMenuItem) {
-        self.doFaceMenuAction("Scan \(menuItem.title)")
+        if let obj = menuItem.representedObject as? FaceMenu {
+            self.doFaceMenuAction("\(Words.scan.word()) \(obj.area)")
+        }
     }
     
     
     @objc func faceMenuRecognizeAction(_ menuItem:NSMenuItem) {
-        self.doFaceMenuAction("Recognize \(menuItem.title)")
+        if let obj = menuItem.representedObject as? FaceMenu {
+            self.doFaceMenuAction("\(Words.recognize.word()) \(obj.area)")
+        }
     }
     
     @objc func faceMenuForceScanAction(_ menuItem:NSMenuItem) {
-        self.doFaceMenuAction("Force-Scan \(menuItem.title)")
+        if let obj = menuItem.representedObject as? FaceMenu {
+            self.doFaceMenuAction("\(Words.forceScan.word()) \(obj.area)")
+        }
     }
     
     
     @objc func faceMenuForceRecognizeAction(_ menuItem:NSMenuItem) {
-        self.doFaceMenuAction("Force-Recognize \(menuItem.title)")
+        if let obj = menuItem.representedObject as? FaceMenu {
+            self.doFaceMenuAction("\(Words.forceRecognize.word()) \(obj.area)")
+        }
     }
     
     @objc func faceMenuForceRecognizeUnknownAction(_ menuItem:NSMenuItem) {
-        self.doFaceMenuAction("Recognize-Unknown \(menuItem.title)")
+        if let obj = menuItem.representedObject as? FaceMenu {
+            self.doFaceMenuAction("Recognize-Unknown \(obj.area)")
+        }
     }
     
     internal func openFaceManager() {
@@ -131,7 +196,7 @@ extension ViewController {
         let originY = (screenHeight - windowHeight) / 2
         
         let frame = CGRect(origin: CGPoint(x: originX, y: originY), size: CGSize(width: windowWidth, height: windowHeight))
-        window.title = "Export Manager"
+        window.title = Words.faceManager.word()
         window.setFrame(frame, display: false)
         window.makeKeyAndOrderFront(self)
         viewController.initView()
@@ -153,14 +218,14 @@ extension ViewController {
     }
     
     internal func doFaceMenuAction(_ title:String) {
-        if !runningFaceTask && title != "" && title != "Faces" {
+        if !runningFaceTask && title != "" && title != Words.mainmenu_face.word() {
             let parts = title.components(separatedBy: " ")
             let action = parts[0]
             var area = parts[parts.count-1]
 //            print("\(action) \(area)")
             if area == "collection" {
                 if self.imagesLoader.getItems().count > 0 {
-                    let tasklet = TaskletManager.default.task(type: "face", name: "\(action) faces in collection")
+                    let tasklet = TaskletManager.default.task(type: "face", name: "\(action)\(Words.facesInCollection.word())")
                     tasklet.total = self.imagesLoader.getItems().count
                     tasklet.progress = 0
                     tasklet.running = true
@@ -185,9 +250,9 @@ extension ViewController {
                                 break
                             }
                             let url = imageFile.url
-                            if action == "Scan" { // TODO change for chinese
+                            if action == Words.scan.word() {
                                 let _ = FaceTask.default.findFaces(path: url.path)
-                            }else if action == "Recognize" { // TODO change for chinese
+                            }else if action == Words.recognize.word() {
                                 let _ = FaceTask.default.recognizeFaces(path: url.path)
                             }
                             tasklet.progress += 1
@@ -198,7 +263,7 @@ extension ViewController {
 //                    print("no item in collection")
                 }
             }else{
-                let tasklet = TaskletManager.default.task(type: "face", name: "\(action) faces in \(area)")
+                let tasklet = TaskletManager.default.task(type: "face", name: "\(action)\(Words.facesInArea.word("%s", area))")
                 tasklet.total = 1
                 tasklet.progress = 0
                 tasklet.running = true
@@ -209,17 +274,17 @@ extension ViewController {
 //
 //                self.lblProgressMessage.stringValue = "\(action) faces in \(area): loading images ..."
                 
-                if area == "all-years" {
+                if area == Words.imagesInAllYears.word() {
                     area = ""
                 }
                 DispatchQueue.global().async {
                     
                     var images:[Image] = []
-                    if action == "Scan" {
+                    if action == Words.scan.word() {
                         images = ImageSearchDao.default.getImagesByYear(year: area, scannedFace: false)
-                    }else if action == "Recognize" {
+                    }else if action == Words.recognize.word() {
                         images = ImageSearchDao.default.getImagesByYear(year: area, recognizedFace: false)
-                    }else if action == "Force-Scan" || action == "Force-Recognize" {
+                    }else if action == Words.forceScan.word() || action == Words.forceRecognize.word() {
                         images = ImageSearchDao.default.getImagesByYear(year: area)
                     }
                     if images.count > 0 {
@@ -272,9 +337,9 @@ extension ViewController {
                             if continousWorking {
                                 autoreleasepool { () -> Void in
                                     let image = images[index]
-                                    if action == "Scan" || action == "Force-Scan" {
+                                    if action == Words.scan.word() || action == Words.forceScan.word() {
                                         let _ = FaceTask.default.findFaces(image: image)
-                                    }else if action == "Recognize" || action == "Force-Recognize" {
+                                    }else if action == Words.recognize.word() || action == Words.forceRecognize.word() {
                                         let _ = FaceTask.default.recognizeFaces(image: image)
                                     }
                                     tasklet.progress += 1
