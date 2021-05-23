@@ -21,7 +21,7 @@ extension ViewController {
         
         DispatchQueue.global().async {
             self.splashController.progressWillEnd(at: 5)
-            self.splashController.message("Creating database backup ...", progress: 1)
+            self.splashController.message(Words.splash_creatingDatabaseBackup.word(), progress: 1)
             let _ = ExecutionEnvironment.default.createDatabaseBackup(suffix: "-on-launch")
 
             IPHONE.bridge.unmountFuse()
@@ -39,7 +39,7 @@ extension ViewController {
                     break
                 }
                 let retryDisplay = retry > 0 ? ", retrying \(retry)/\(maxAttempt)" : ""
-                self.splashController.message("Connecting database ... \(additionalMessage)\(retryDisplay)", progress: 2)
+                self.splashController.message("\(Words.splash_connectingDatabase.word()) \(additionalMessage)\(retryDisplay)", progress: 2)
                 if retry > 0 {
                     for i in 0..<idleSeconds {
                         if self.splashController.cancelWaiting {
@@ -61,7 +61,7 @@ extension ViewController {
                     if let err = error {
                         additionalMessage = "\(err)"
                     }else{
-                        additionalMessage = "failed with unknown reason"
+                        additionalMessage = Words.splash_failedWithUnknownReason.word()
                     }
                     
                 }else{
@@ -78,7 +78,7 @@ extension ViewController {
             if !dbConnected {
                 self.splashController.showQuit()
             }else{
-                self.splashController.message("Initializing user interface ...", progress: 3)
+                self.splashController.message(Words.splash_initializingUI.word(), progress: 3)
                 DispatchQueue.main.async {
                     self.initView()
                 }
@@ -105,7 +105,7 @@ extension ViewController {
             
             
             if self.startingUp {
-                self.splashController.message("Preparing UI ...", progress: 5)
+                self.splashController.message(Words.splash_preparingUI.word(), progress: 5)
             }
         }
     }

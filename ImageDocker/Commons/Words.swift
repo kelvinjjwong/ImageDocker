@@ -10,6 +10,56 @@ import Foundation
 
 struct Words {
     
+    static let splash_prepareingFolders = Localize(
+        eng: "Preparing folders ...",
+        chs: "正在载入照片库文件夹..."
+    )
+    
+    static let splash_preparingUI = Localize(
+        eng: "Preparing UI ...",
+        chs: "正在渲染用户界面..."
+    )
+    
+    static let splash_creatingDatabaseBackup = Localize(
+        eng: "Creating database backup ...",
+        chs: "正在备份数据库..."
+    )
+    
+    static let splash_connectingDatabase = Localize(
+        eng: "Connecting database ... ",
+        chs: "尝试连接数据库... "
+    )
+    
+    static let splash_failedWithUnknownReason = Localize(
+        eng: "failed with unknown reason",
+        chs: "发生未知错误"
+    )
+    
+    static let splash_initializingUI = Localize(
+        eng: "Initializing user interface ...",
+        chs: "正在载入用户界面部件..."
+    )
+    
+    static let splash_laodingLibraries = Localize(
+        eng: "Loading libraries ...",
+        chs: "正在载入照片库..."
+    )
+    
+    static let main_combineTooltip = Localize(
+        eng: "Combine duplicated images to the 1st image",
+        chs: "合并重复的照片到以第一张为主"
+    )
+    
+    static let dbError = Localize(
+        eng: "DB Error",
+        chs: "数据库错误"
+    )
+    
+    static let todayInPreviousYears = Localize(
+        eng: "Today in Previous Years",
+        chs: "往年今日"
+    )
+    
     static let save = Localize(
         eng: "Save",
         chs: "保存"
@@ -158,5 +208,115 @@ struct Words {
     static let cannotFindRepositoryPath = Localize(
         eng: "ERROR: Cannot find repository with path",
         chs: "错误：找不到照片库的路径"
+    )
+    
+    static let browsePath = Localize(
+        eng: "Browse...",
+        chs: "选取路径..."
+    )
+    
+    static let viewInFinder = Localize(
+        eng: "View in Finder",
+        chs: "检视文件夹"
+    )
+    
+    static let update = Localize(
+        eng: "Update",
+        chs: "保存新设定"
+    )
+    
+    static let backToOrigin = Localize(
+        eng: "Back to Origin",
+        chs: "恢复到原本设定"
+    )
+    
+    static let followHome = Localize(
+        eng: "Follow Home",
+        chs: "跟随根路径"
+    )
+    
+    static let link = Localize(
+        eng: "Link",
+        chs: "绑定"
+    )
+    
+    static let checkPaths = Localize(
+        eng: "Check Paths",
+        chs: "检查路径正确性"
+    )
+    
+    static let clean = Localize(
+        eng: "Clean",
+        chs: "解绑"
+    )
+    
+    static let preview = Localize(
+        eng: "Preview",
+        chs: "预览"
+    )
+    
+    static let updateEmptyEvents = Localize(
+        eng: "Update Empty Events",
+        chs: "填充活动空白"
+    )
+    
+    static let updateEmptyBriefs = Localize(
+        eng: "Update Empty Briefs",
+        chs: "填充描述空白"
+    )
+    
+    static let updateAllEvents = Localize(
+        eng: "Update All Events",
+        chs: "修改所有照片的活动"
+    )
+    
+    static let updateAllBriefs = Localize(
+        eng: "Update All Briefs",
+        chs: "修改所有照片的描述"
+    )
+    
+    static let pathFollowDevicePath = Localize(
+        eng: "Let paths of Repository follow Device's",
+        chs: "照片库路径沿用外设路径"
+    )
+    
+    static let copyEditableImagesToRaw = Localize (
+        eng: "Copy Editable Images to Raw Storage",
+        chs: "使用可修改照片覆盖原始版本"
+    )
+    
+    static let normalizeDuplicatedHiddens = Localize (
+        eng: "Normalize Hidden of Duplicates",
+        chs: "梳理重复照片的隐藏版本"
+    )
+    
+    static let hideImagesOfRepository = Localize (
+        eng: "Hide Images",
+        chs: "隐藏所有照片"
+    )
+    
+    static let showImagesOfRepository = Localize(
+        eng: "Show Images",
+        chs: "显示所有照片"
+    )
+    
+    static let deleteAllImages = Localize(
+        eng: "DELETE all images",
+        chs: "删除所有照片"
+    )
+    
+    static let stat = Localize(
+        eng: "Statistic",
+        chs: "统计"
+    )
+    
+    static let findFaces = Localize(
+        eng: "Find Faces",
+        chs: "识别人脸"
+    )
+    
+    static let saveRepository = Localize(
+        eng: "Save Repository",
+        chs: "存储照片库的修改"
     )
 }

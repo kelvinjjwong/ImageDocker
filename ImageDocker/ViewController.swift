@@ -295,7 +295,7 @@ class ViewController: NSViewController {
         setupPlaceList()
         
 //        print("\(Date()) Loading view - update library tree")
-        self.splashController.message("Loading libraries ...", progress: 4)
+        self.splashController.message(Words.splash_laodingLibraries.word(), progress: 4)
         updateLibraryTree()
 //        print("\(Date()) Loading view - update library tree: DONE")
         
@@ -336,7 +336,7 @@ class ViewController: NSViewController {
         self.imagesLoader = CollectionViewItemsLoader()
         
         self.btnShare.sendAction(on: .leftMouseDown)
-        self.btnCombineDuplicates.toolTip = "Combine duplicated images to the 1st image"
+        self.btnCombineDuplicates.toolTip = Words.main_combineTooltip.word()
         
         self.splashController = SplashViewController(onStartup: {
             self.splashController.view.frame = self.view.bounds
@@ -365,7 +365,7 @@ class ViewController: NSViewController {
         
         self.imagesLoader.hiddenCountHandler = { hiddenCount in
             DispatchQueue.main.async {
-                self.chbShowHidden.title = "Hidden (\(hiddenCount))"
+                self.chbShowHidden.title = "\(Words.hidden.word()) (\(hiddenCount))"
 //                print("hidden: \(hiddenCount)")
             }
         }
@@ -378,7 +378,7 @@ class ViewController: NSViewController {
     
     @objc func processDatabaseError(notification:Notification) {
         if let error = notification.object as? Error {
-            self.popNotification(message: "DB Error: \(error)")
+            self.popNotification(message: "\(Words.dbError.word()): \(error)")
         }
     }
     
@@ -478,9 +478,9 @@ class ViewController: NSViewController {
         self.btnPreviousPageCollection.isHidden = !(currentPage > 1)
         self.btnNextPageCollection.isHidden = !(currentPage < totalPages)
         if totalPages > 1 {
-            self.btnRefreshCollectionView.title = "Pages..."
+            self.btnRefreshCollectionView.title = Words.pages.word()
         }else{
-            self.btnRefreshCollectionView.title = "Reload"
+            self.btnRefreshCollectionView.title = Words.reload.word()
         }
     }
     

@@ -27,7 +27,7 @@ extension ViewController {
         let originY = (screenHeight - windowHeight) / 2
         
         let frame = CGRect(origin: CGPoint(x: originX, y: originY), size: CGSize(width: windowWidth, height: windowHeight))
-        window.title = "Today in Previous Years"
+        window.title = Words.todayInPreviousYears.word()
         window.setFrame(frame, display: false)
         window.makeKeyAndOrderFront(self)
         viewController.initView { (year, month, day) in

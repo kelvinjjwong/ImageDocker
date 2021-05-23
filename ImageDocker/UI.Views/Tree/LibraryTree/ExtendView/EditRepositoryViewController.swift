@@ -106,6 +106,44 @@ class EditRepositoryViewController: NSViewController {
         self.briefFoldersPreviewPopover = TwoColumnTablePopover(width: 600, height: 500) { id, name, action in
             // do nothing
         }
+        
+        self.setupUIDisplay()
+    }
+    
+    func setupUIDisplay() {
+        self.btnFindFaces.title = Words.findFaces.word()
+        self.btnOK.title = Words.saveRepository.word()
+        self.btnStat.title = Words.stat.word()
+        self.btnRemove.title = Words.deleteAllImages.word()
+        self.btnShowHide.title = Words.disableRepository.word()
+        self.btnCopyToRaw.title = Words.copyEditableImagesToRaw.word()
+        self.btnNormalize.title = Words.normalizeDuplicatedHiddens.word()
+        self.btnCleanDevice.title = Words.clean.word()
+        self.btnLoadDevices.title = Words.link.word()
+        self.btnFindCropPath.title = Words.viewInFinder.word()
+        self.btnFindFacePath.title = Words.viewInFinder.word()
+        self.btnFindHomePath.title = Words.viewInFinder.word()
+        self.btnBrowseCropPath.title = Words.browsePath.word()
+        self.btnBrowseFacePath.title = Words.browsePath.word()
+        self.btnBrowseHomePath.title = Words.browsePath.word()
+        self.btnFaceFollowHome.title = Words.followHome.word()
+        self.btnFollowHomePath.title = Words.followHome.word()
+        self.btnFindStoragePath.title = Words.viewInFinder.word()
+        self.btnRestoreOriginal.title = Words.backToOrigin.word()
+        self.btnFaceBackToOrigin.title = Words.backToOrigin.word()
+        self.btnUpdateCropImages.title = Words.update.word()
+        self.btnUpdateFaceImages.title = Words.update.word()
+        self.btnBrowseStoragePath.title = Words.browsePath.word()
+        self.btnCompareDevicePath.title = Words.checkPaths.word()
+        self.btnPathsFollowDevice.title = Words.pathFollowDevicePath.word()
+        self.btnFindRepositoryPath.title = Words.viewInFinder.word()
+        self.btnUpdateStorageImages.title = Words.update.word()
+        self.btnBrowseRepositoryPath.title = Words.browsePath.word()
+        self.btnUpdateRepositoryImages.title = Words.update.word()
+        self.btnUpdateEmptyEvent.title = Words.updateEmptyEvents.word()
+        self.btnUpdateAllEvents.title = Words.updateAllEvents.word()
+        self.btnUpdateEmptyBrief.title = Words.updateEmptyBriefs.word()
+        self.btnUpdateAllBrief.title = Words.updateAllBriefs.word()
     }
     
     fileprivate func toggleButtons(_ show:Bool){
@@ -1425,8 +1463,8 @@ class EditRepositoryViewController: NSViewController {
                     let _ = RepositoryDao.default.saveImageContainer(container: self.originalContainer!)
                     
                     DispatchQueue.main.async {
-                        self.lblMessage.stringValue = "Updated images as enabled"
-                        self.btnShowHide.title = "Disable Repository"
+                        self.lblMessage.stringValue = Words.showImagesOfRepository.word()
+                        self.btnShowHide.title = Words.enableRepository.word()
                     }
                     
                     self.stat()
@@ -1437,8 +1475,8 @@ class EditRepositoryViewController: NSViewController {
                     self.originalContainer?.hiddenByRepository = true
                     let _ = RepositoryDao.default.saveImageContainer(container: self.originalContainer!)
                     DispatchQueue.main.async {
-                        self.lblMessage.stringValue = "Updated images as disabled"
-                        self.btnShowHide.title = "Enable Repository"
+                        self.lblMessage.stringValue = Words.hideImagesOfRepository.word()
+                        self.btnShowHide.title = Words.disableRepository.word()
                     }
                     
                     self.stat()

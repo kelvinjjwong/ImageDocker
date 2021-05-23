@@ -71,7 +71,7 @@ class SplashViewController: NSViewController {
             self.subProgressIndicator.maxValue = 100
             self.subProgressIndicator.doubleValue = 0
             
-            self.lblSubMessage.stringValue = "Preparing folders ..."
+            self.lblSubMessage.stringValue = Words.splash_prepareingFolders.word()
             self.lblSubMessage.isHidden = false
             self.lblSubProgress.isHidden = true
             self.subProgressIndicator.isHidden = false
@@ -94,7 +94,7 @@ class SplashViewController: NSViewController {
                 self.lblSubProgress.isHidden = true
                 self.subProgressIndicator.isHidden = true
                 
-                self.message("Preparing UI ...", progress: 6)
+                self.message(Words.splash_preparingUI.word(), progress: 6)
                 
                 NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "FOLDERSETTER_BEGIN"), object: nil)
                 NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "FOLDERSETTER_TOTAL"), object: nil)
