@@ -269,7 +269,11 @@ class ViewController: NSViewController {
     // MARK: - INIT VIEW
     
     internal func initView() {
+        if !(self.view.window?.isZoomed ?? true) {
+            self.view.window?.performZoom(self)
+        }
         self.hideNotification()
+        self.setupUIDisplays()
 //        print("\(Date()) Loading view - preview zone")
         self.configurePreview()
 //        print("\(Date()) Loading view - selection view")
@@ -413,8 +417,24 @@ class ViewController: NSViewController {
         self.collectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.selectionCollectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
-        self.playerContainer.appearance = NSAppearance(named: NSAppearance.Name.vibrantLight)
+        self.playerContainer.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
+    }
+    
+    internal func setupUIDisplays() {
+        self.btnTasks.title = Words.tasks.word()
+        self.btnMemories.title = Words.memories.word()
+        self.btnCombineDuplicates.title = Words.combineDuplicates.word()
+        self.btnRefreshCollectionView.title = Words.reload.word()
+        self.btnAssignEvent.title = Words.assignEvent.word()
+        self.btnManageEvents.title = Words.manageEvents.word()
+        self.btnDatePicker.title = Words.changeDate.word()
+        self.btnNotes.title = Words.writeNotes.word()
+        self.btnDuplicates.title = Words.duplicates.word()
+        self.btnDuplicates.image = Icons.duplicates
+        self.selectionCheckAllBox.title = Words.selectAll.word()
+        self.chbShowHidden.title = Words.hidden.word()
+        self.chbSelectAll.title = Words.selectAll.word()
     }
     
     internal var startupAggregateFlag: Int = 0 {

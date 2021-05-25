@@ -48,5 +48,6 @@ struct Icons {
     static let collapseRightPanel:NSImage = NSImage(imageLiteralResourceName: "collapse_right")
     static let collapseBottomPanel:NSImage = NSImage(imageLiteralResourceName: "collapse_bottom")
     static let collapsePreviewPanel:NSImage = NSImage(imageLiteralResourceName: "map")
+    static let duplicates:NSImage = NSImage(imageLiteralResourceName: "combine")
 
 }

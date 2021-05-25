@@ -155,6 +155,26 @@ struct Words {
         chs: "重新载入"
     )
     
+    static let changeDate = Localize(
+        eng: "Change Date",
+        chs: "修改时间"
+    )
+    
+    static let selectAll = Localize(
+        eng: "ALL",
+        chs: "全部"
+    )
+    
+    static let assignEvent = Localize(
+        eng: "Assign",
+        chs: "指定活动"
+    )
+    
+    static let manageEvents = Localize(
+        eng: "Events",
+        chs: "管理活动"
+    )
+    
     static let importingImages = Localize(
         eng: "Importing images ...",
         chs: "正在导入照片 ..."
@@ -337,7 +357,7 @@ struct Words {
     
     static let mainmenu_face = Localize(
         eng: "Faces",
-        chs: "人物"
+        chs: "人物集"
     )
     
     static let mainmenu_face_manageFaces = Localize(
@@ -640,6 +660,24 @@ struct Words {
         chs: "完成对照片的人物识别"
     )
     
+    static let tasks = Localize(
+        eng: "Tasks",
+        chs: "多任务"
+    )
     
+    static let memories = Localize(
+        eng: "Memories",
+        chs: "往年今日"
+    )
+    
+    static let combineDuplicates = Localize(
+        eng: "Combine",
+        chs: "合并重复项"
+    )
+    
+    static let duplicates = Localize(
+        eng: "Duplicates",
+        chs: "重复项"
+    )
     
 }
