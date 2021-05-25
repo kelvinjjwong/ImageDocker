@@ -82,6 +82,9 @@ class ViewController: NSViewController {
     // MARK: - MetaInfo table view
     //var metaInfo:[MetaInfo] = [MetaInfo]()
     var lastSelectedMetaInfoRow: Int?
+    
+    var imageMetaViewController : ImageMetaViewController!
+    
     @IBOutlet weak var metaInfoTableView: NSTableView!
     
     @IBOutlet weak var lblImageDescription: NSTextField!
@@ -413,7 +416,6 @@ class ViewController: NSViewController {
         self.btnShow.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnHide.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
-        self.metaInfoTableView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.collectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.selectionCollectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         

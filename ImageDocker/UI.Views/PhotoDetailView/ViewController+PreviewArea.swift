@@ -32,6 +32,17 @@ extension ViewController {
 
     internal func configurePreview(){
         
+        self.imageMetaViewController = storyboard?.instantiateController(withIdentifier: "ImageMetaViewController") as! ImageMetaViewController
+        self.splitviewPreview.addArrangedSubview(imageMetaViewController.view)
+        
+        self.splitviewPreview.dividerStyle = .paneSplitter
+        imageMetaViewController.view.setHeight(380)
+        
+        self.scrollviewMetaInfoTable = imageMetaViewController.scrollView
+        self.metaInfoTableView = imageMetaViewController.tableView
+        self.metaInfoTableView.delegate = self
+        self.metaInfoTableView.dataSource = self
+        
         self.metaInfoTableView.toolTip = "Double click to copy value."
         self.metaInfoTableView.target = self
         self.metaInfoTableView.doubleAction = #selector(onMetaTableDoubleClicked)
