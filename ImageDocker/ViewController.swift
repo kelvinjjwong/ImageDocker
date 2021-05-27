@@ -84,6 +84,9 @@ class ViewController: NSViewController {
     var lastSelectedMetaInfoRow: Int?
     
     var imageMetaViewController : ImageMetaViewController!
+    var imagePreviewController : ImagePreviewController!
+    var imageLocationViewController : ImageLocationViewController!
+    var imageLocationEditViewController : ImageLocationEditViewController!
     
     @IBOutlet weak var metaInfoTableView: NSTableView!
     
@@ -91,18 +94,13 @@ class ViewController: NSViewController {
     
     
     // MARK: - Image Map
-    var zoomSize:Int = 16
-    var previousTick:Int = 3
     @IBOutlet weak var webLocation: WKWebView!
     @IBOutlet weak var mapZoomSlider: NSSlider!
     
     // MARK: - Editor - Map
-    var zoomSizeForPossibleAddress:Int = 16
-    var previousTickForPossibleAddress:Int = 3
     @IBOutlet weak var addressSearcher: NSSearchField!
 
     @IBOutlet weak var webPossibleLocation: WKWebView!
-    var possibleLocation:Location?
     
     @IBOutlet weak var possibleLocationText: NSTextField!
     var locationTextDelegate:LocationTextDelegate?
@@ -113,7 +111,6 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var btnChoiceMapService: NSSegmentedControl!
     
-    var coordinateAPI:LocationAPI = .baidu
     
     // MARK: - Tree
     
@@ -199,7 +196,6 @@ class ViewController: NSViewController {
     @IBOutlet weak var comboEventList: NSComboBox!
     @IBOutlet weak var comboPlaceList: NSComboBox!
     var eventListController:EventListComboController!
-    var placeListController:PlaceListComboController!
     
     // MARK: - Device Copy Dialog
     
@@ -257,7 +253,6 @@ class ViewController: NSViewController {
     
     override func viewDidAppear() {
         self.view.window?.delegate = self
-        self.resize()
         
         print("AFTER SIZE \(self.view.frame.size.width) x \(self.view.frame.size.height)")
     }
@@ -272,9 +267,6 @@ class ViewController: NSViewController {
     // MARK: - INIT VIEW
     
     internal func initView() {
-        if !(self.view.window?.isZoomed ?? true) {
-            self.view.window?.performZoom(self)
-        }
         self.hideNotification()
         self.setupUIDisplays()
 //        print("\(Date()) Loading view - preview zone")
@@ -298,8 +290,9 @@ class ViewController: NSViewController {
         configureEditors()
 //        print("\(Date()) Loading view - setup event list")
         setupEventList()
-//        print("\(Date()) Loading view - setup place list")
-        setupPlaceList()
+        
+        self.configureDarkMode()
+        self.resize()
         
 //        print("\(Date()) Loading view - update library tree")
         self.splashController.message(Words.splash_laodingLibraries.word(), progress: 4)
@@ -317,11 +310,6 @@ class ViewController: NSViewController {
 //        self.peopleWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "PeopleWindowController")) as? NSWindowController
         
         
-        self.btnChoiceMapService.selectSegment(withTag: 1)
-        self.coordinateAPI = .baidu
-        
-        self.btnChoiceMapService.setImage(nil, forSegment: 0)
-        self.btnChoiceMapService.setImage(tick, forSegment: 1)
         
         
         self.suppressedScan = true
@@ -339,6 +327,9 @@ class ViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if !(self.view.window?.isZoomed ?? true) {
+            self.view.window?.performZoom(self)
+        }
         
         self.imagesLoader = CollectionViewItemsLoader()
         
@@ -368,7 +359,6 @@ class ViewController: NSViewController {
         batchEditIndicator.isDisplayedWhenStopped = false
         
 //        print("\(Date()) Loading view - configure dark mode")
-        configureDarkMode()
         
         self.imagesLoader.hiddenCountHandler = { hiddenCount in
             DispatchQueue.main.async {
@@ -451,13 +441,6 @@ class ViewController: NSViewController {
         self.hideNotification()
     }
     
-    
-    // MARK: - Preview Zone
-    
-    @IBAction func onMapSliderClick(_ sender: NSSliderCell) {
-        let tick:Int = sender.integerValue
-        self.resizeMap(tick: tick)
-    }
     
     // MARK: - Tree Node Controls
     
@@ -565,31 +548,7 @@ class ViewController: NSViewController {
         self.checkAllInSelectionArea()
     }
     
-    // MARK: - Selection View - Batch Editor - Location Actions
-    
-    @IBAction func onAddressSearcherAction(_ sender: Any) {
-        let address:String = addressSearcher.stringValue
-        self.searchAddress(address)
-    }
-    
-    // from selected image
-    @IBAction func onCopyLocationFromMapClicked(_ sender: Any) {
-        self.copyLocationFromMap()
-        
-    }
-    
-    @IBAction func onReplaceLocationClicked(_ sender: Any) {
-        self.replaceLocation()
-    }
-    
-    // add to favourites
-    @IBAction func onMarkLocationButtonClicked(_ sender: NSButton) {
-        self.openLocationSelector(sender)
-    }
-    
-    @IBAction func onButtonChoiceMapServiceClicked(_ sender: NSSegmentedControl) {
-        self.chooseMapProvider(sender.selectedSegment)
-    }
+    // MARK: - Selection View - Batch Editor
     
     @IBAction func onButtonDuplicatesClicked(_ sender: NSPopUpButton) {
         let i = sender.indexOfSelectedItem

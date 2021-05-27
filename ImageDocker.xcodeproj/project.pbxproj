@@ -286,6 +286,9 @@
 		8EF4E1FC2453C05800999DD1 /* CRUDStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4E1EB2453C05800999DD1 /* CRUDStatement.swift */; };
 		8EF500CD209A804100C9805F /* ImageFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF500CC209A804100C9805F /* ImageFolder.swift */; };
 		8EF8C558265D9B770060D2E0 /* ImageMetaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF8C557265D9B770060D2E0 /* ImageMetaViewController.swift */; };
+		8EF8C55A265DBD6F0060D2E0 /* ImagePreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF8C559265DBD6F0060D2E0 /* ImagePreviewController.swift */; };
+		8EF8C55C265DBD820060D2E0 /* ImageLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF8C55B265DBD820060D2E0 /* ImageLocationViewController.swift */; };
+		8EF8C55E265DBD910060D2E0 /* ImageLocationEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF8C55D265DBD910060D2E0 /* ImageLocationEditViewController.swift */; };
 		8EF92DF024558BB500B55046 /* PostgresRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF92DEF24558BB500B55046 /* PostgresRecord.swift */; };
 		8EF92DF42460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF92DF32460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift */; };
 		8EFA02DB243B3E1A00D7C355 /* PostgresClientKit+Image+Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA02DA243B3E1A00D7C355 /* PostgresClientKit+Image+Record.swift */; };
@@ -617,6 +620,9 @@
 		8EF4E1EB2453C05800999DD1 /* CRUDStatement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRUDStatement.swift; sourceTree = "<group>"; };
 		8EF500CC209A804100C9805F /* ImageFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFolder.swift; sourceTree = "<group>"; };
 		8EF8C557265D9B770060D2E0 /* ImageMetaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageMetaViewController.swift; sourceTree = "<group>"; };
+		8EF8C559265DBD6F0060D2E0 /* ImagePreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewController.swift; sourceTree = "<group>"; };
+		8EF8C55B265DBD820060D2E0 /* ImageLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLocationViewController.swift; sourceTree = "<group>"; };
+		8EF8C55D265DBD910060D2E0 /* ImageLocationEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLocationEditViewController.swift; sourceTree = "<group>"; };
 		8EF92DEF24558BB500B55046 /* PostgresRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostgresRecord.swift; sourceTree = "<group>"; };
 		8EF92DF32460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageSQLHelper+PostgresClientKit.swift"; sourceTree = "<group>"; };
 		8EFA02DA243B3E1A00D7C355 /* PostgresClientKit+Image+Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostgresClientKit+Image+Record.swift"; sourceTree = "<group>"; };
@@ -768,6 +774,9 @@
 				8EA643F4208D6E5100C7D695 /* PreferencesController.swift */,
 				8E98B8F220D5C90600771280 /* WindowController.swift */,
 				8EF8C557265D9B770060D2E0 /* ImageMetaViewController.swift */,
+				8EF8C559265DBD6F0060D2E0 /* ImagePreviewController.swift */,
+				8EF8C55B265DBD820060D2E0 /* ImageLocationViewController.swift */,
+				8EF8C55D265DBD910060D2E0 /* ImageLocationEditViewController.swift */,
 			);
 			path = ImageDocker;
 			sourceTree = "<group>";
@@ -1773,6 +1782,7 @@
 			files = (
 				8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */,
 				8E15E73D23AC74DC0094240A /* TreeTableCellView.swift in Sources */,
+				8EF8C55E265DBD910060D2E0 /* ImageLocationEditViewController.swift in Sources */,
 				8EBA759123B55B8B00548376 /* PlacesTreeDataSource.swift in Sources */,
 				8EB2715D23384401003BF3AF /* ImageFile+PhotoTakenDate.swift in Sources */,
 				8E85B7D220B91ED1005A9845 /* SelectionCollectionViewController.swift in Sources */,
@@ -1792,6 +1802,7 @@
 				8E74194C2422570A002BAAAE /* DeviceDaoInterface.swift in Sources */,
 				8E4E5B672217349600FE4B68 /* FaceDetection.swift in Sources */,
 				8EBA759F23B5CE7300548376 /* DeviceDao.swift in Sources */,
+				8EF8C55C265DBD820060D2E0 /* ImageLocationViewController.swift in Sources */,
 				8E4DECEB23B38A7B00F5538C /* ImageContainer.swift in Sources */,
 				8EBA75A323B5D3B900548376 /* ExportDao.swift in Sources */,
 				8EF92DF024558BB500B55046 /* PostgresRecord.swift in Sources */,
@@ -1888,6 +1899,7 @@
 				8E98B8F320D5C90600771280 /* WindowController.swift in Sources */,
 				8EBA692E2090DB4B00221131 /* VideoDropView.swift in Sources */,
 				8E8D47222233DCD30091E9C3 /* DictionaryTableViewController.swift in Sources */,
+				8EF8C55A265DBD6F0060D2E0 /* ImagePreviewController.swift in Sources */,
 				8EAD03BB23372CF100AAC7C6 /* GRDB+VersionMigrate.swift in Sources */,
 				8EF4E1F02453C05800999DD1 /* PostgresSchemaInfo.swift in Sources */,
 				8ECA200623E5B09200F56895 /* PlacesTree+CollectionView.swift in Sources */,

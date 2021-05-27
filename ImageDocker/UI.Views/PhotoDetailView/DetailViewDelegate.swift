@@ -15,26 +15,10 @@ extension ViewController: DropPlaceDelegate {
     }
 }
 
-
-extension ViewController: CoordinateConsumer {
-    
-    func consume(coordinate:Coord){
-        // no need to transform
-        self.possibleLocation = Location()
-        self.possibleLocation?.searchKeyword = self.addressSearcher.stringValue
-        BaiduLocation.queryForAddress(coordinateBD: coordinate, locationConsumer: self.locationTextDelegate!, modifyLocation: self.possibleLocation)
-        BaiduLocation.queryForMap(coordinateBD: coordinate, view: webPossibleLocation, zoom: zoomSizeForPossibleAddress)
-    }
-    
-    func alert(status: Int, message: String) {
-        print("\(status) : \(message)")
-    }
-}
-
 extension ViewController: LocationConsumer {
     
     func consume(location: Location) {
-        self.possibleLocation = location
+//        self.possibleLocation = location
         
         img.metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Country", value: location.country))
         img.metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Province", value: location.province))

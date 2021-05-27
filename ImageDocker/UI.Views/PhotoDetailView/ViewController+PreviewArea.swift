@@ -31,12 +31,10 @@ extension ViewController {
     }
 
     internal func configurePreview(){
+        self.splitviewPreview.dividerStyle = .thick
         
         self.imageMetaViewController = storyboard?.instantiateController(withIdentifier: "ImageMetaViewController") as! ImageMetaViewController
         self.splitviewPreview.addArrangedSubview(imageMetaViewController.view)
-        
-        self.splitviewPreview.dividerStyle = .paneSplitter
-        imageMetaViewController.view.setHeight(380)
         
         self.scrollviewMetaInfoTable = imageMetaViewController.scrollView
         self.metaInfoTableView = imageMetaViewController.tableView
@@ -47,12 +45,13 @@ extension ViewController {
         self.metaInfoTableView.target = self
         self.metaInfoTableView.doubleAction = #selector(onMetaTableDoubleClicked)
         
-        webLocation.setValue(false, forKey: "drawsBackground")
-        webPossibleLocation.setValue(false, forKey: "drawsBackground")
         
-        webLocation.load(URLRequest(url: URL(string: "about:blank")!))
-        webPossibleLocation.load(URLRequest(url: URL(string: "about:blank")!))
+            
+        self.imagePreviewController = storyboard?.instantiateController(withIdentifier: "ImagePreviewController") as! ImagePreviewController
+        self.splitviewPreview.addArrangedSubview(imagePreviewController.view)
         
+        self.playerContainer = imagePreviewController.playerContainer
+        self.lblImageDescription = imagePreviewController.lblDescription
         
         // Do any additional setup after loading the view.
         stackedImageViewController = (storyboard?.instantiateController(withIdentifier: "imageView") as! StackedImageViewController)
@@ -74,10 +73,59 @@ extension ViewController {
         self.playerContainer.layer?.borderColor = Colors.DarkGray.cgColor
         self.playerContainer.layer?.backgroundColor = Colors.DarkGray.cgColor
         
+        self.imageLocationViewController = storyboard?.instantiateController(withIdentifier: "ImageLocationViewController") as! ImageLocationViewController
+        self.splitviewPreview.addArrangedSubview(imageLocationViewController.view)
         
-        possibleLocationText.textColor = NSColor.white
-        locationTextDelegate = LocationTextDelegate()
-        locationTextDelegate?.textField = self.possibleLocationText
+        self.webLocation = self.imageLocationViewController.locationWebView
+        self.mapZoomSlider = self.imageLocationViewController.locationSlider
+        
+        webLocation.setValue(false, forKey: "drawsBackground")
+        webLocation.load(URLRequest(url: URL(string: "about:blank")!))
+        
+        self.imageLocationEditViewController = storyboard?.instantiateController(withIdentifier: "ImageLocationEditViewController") as! ImageLocationEditViewController
+        self.imageLocationEditViewController.reloadCollectionView = {
+            self.imagesLoader.reorganizeItems(considerPlaces: true)
+            self.collectionView.reloadData()
+        }
+        self.imageLocationEditViewController.reloadSelectionView = {
+            self.selectionViewController.imagesLoader.reorganizeItems()
+            self.selectionViewController.collectionView.reloadData()
+        }
+        self.imageLocationEditViewController.getSelectionItems = {
+            return self.selectionViewController.imagesLoader.getItems()
+        }
+        self.imageLocationEditViewController.getSelectionItem = { path in
+            return self.selectionViewController.imagesLoader.getItem(path: path)
+        }
+        self.imageLocationEditViewController.reloadImageMetaTable = { img in
+            self.img = img
+            self.metaInfoTableView.reloadData()
+        }
+        self.imageLocationEditViewController.getSampleImage = {
+            return self.img
+        }
+        self.imageLocationEditViewController.getSelectionViewIndicator = {
+            return self.batchEditIndicator
+        }
+        
+        self.splitviewPreview.addArrangedSubview(imageLocationEditViewController.view)
+        self.imageLocationEditViewController.locationTextDelegate = LocationTextDelegate()
+        self.imageLocationEditViewController.locationTextDelegate?.textField = self.imageLocationEditViewController.lblLocation
+        self.imageLocationEditViewController.lblLocation.textColor = NSColor.white
+        
+        self.webPossibleLocation = self.imageLocationEditViewController.locationWebView
+        self.possibleLocationText = self.imageLocationEditViewController.lblLocation
+        self.btnChoiceMapService = self.imageLocationEditViewController.apiSwitch
+        self.btnCopyLocation = self.imageLocationEditViewController.btnCopyLocation
+        self.btnReplaceLocation = self.imageLocationEditViewController.btnReplaceLocation
+        self.btnManagePlaces = self.imageLocationEditViewController.btnManagePlaces
+        self.addressSearcher = self.imageLocationEditViewController.locationSearcher
+        self.comboPlaceList = self.imageLocationEditViewController.lstPlaces
+        
+        webPossibleLocation.setValue(false, forKey: "drawsBackground")
+        webPossibleLocation.load(URLRequest(url: URL(string: "about:blank")!))
+        
+        
         
     }
     
@@ -188,7 +236,7 @@ extension ViewController {
         //img.loadMetaInfoFromExif()
         self.loadImageExif()
         img.loadLocation()
-        self.loadBaiduMap()
+        self.imageLocationViewController.loadMap(image: self.img)
         self.loadImageDescription(img)
     }
     
@@ -227,132 +275,12 @@ extension ViewController {
         //self.img.transformDomainToMetaInfo()
         img.metaInfoHolder.sort(by: MetaCategorySequence)
         self.metaInfoTableView.reloadData()
-        self.loadBaiduMap()
-        self.loadImageDescription(img)
-    }
-    
-    internal func loadBaiduMap() {
-        webLocation.load(URLRequest(url: URL(string: "about:blank")!))
-        if img.location.coordinateBD != nil && img.location.coordinateBD!.isNotZero {
-            BaiduLocation.queryForMap(coordinateBD: img.location.coordinateBD!, view: webLocation, zoom: zoomSize)
-        }else{
-            print("img has no coord")
-        }
-    }
-    
-    internal func resizeMap(tick:Int) {
-        if tick == previousTick {
-            return
-        }
-        switch tick {
-        case 1:
-            zoomSize = 14
-        case 2:
-            zoomSize = 15
-        case 3:
-            zoomSize = 16
-        case 4:
-            zoomSize = 17
-        default:
-            zoomSize = 17
-        }
         
-        self.loadBaiduMap()
-        previousTick = tick
+        self.imageLocationViewController.loadMap(image: imageFile)
+        self.loadImageDescription(img)
     }
     
     internal func readImageLocationMeta(title:String) -> String{
         return self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Assign", title: title) ?? self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: title) ?? self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Google", title: title) ?? ""
-    }
-    
-    internal func chooseMapProvider(_ i:Int){
-        if i == 0 {
-            self.coordinateAPI = .google
-            locationTextDelegate?.coordinateAPI = .google
-            self.btnChoiceMapService.setImage(tick, forSegment: 0)
-            self.btnChoiceMapService.setImage(nil, forSegment: 1)
-        }else{
-            self.coordinateAPI = .baidu
-            locationTextDelegate?.coordinateAPI = .baidu
-            self.btnChoiceMapService.setImage(nil, forSegment: 0)
-            self.btnChoiceMapService.setImage(tick, forSegment: 1)
-        }
-    }
-    
-    internal func searchAddress(_ address:String){
-        if address == "" {return}
-        if self.coordinateAPI == .baidu {
-            BaiduLocation.queryForCoordinate(address: address, coordinateConsumer: self)
-        }else if self.coordinateAPI == .google {
-            GoogleLocation.queryForCoordinate(address: address, coordinateConsumer: self)
-        }
-    }
-    
-    internal func openLocationSelector(_ sender: NSButton){
-        self.createPlacePopover()
-        if self.possibleLocation != nil {
-            self.placeViewController.setPossibleLocation(place: self.possibleLocation!)
-        }
-        
-        let cellRect = sender.bounds
-        self.placePopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
-    }
-    
-    internal func copyLocationFromMap() {
-        guard self.img != nil && self.img.location.coordinateBD != nil && self.img.location.coordinateBD!.isNotZero else {return}
-        if self.possibleLocation == nil {
-            self.possibleLocation = Location()
-        }
-        if img.location.coordinate != nil && img.location.coordinateBD != nil {
-            self.possibleLocation?.setCoordinateWithoutConvert(coord: img.location.coordinate!, coordBD: img.location.coordinateBD!)
-        }
-        
-        self.possibleLocation?.country = self.readImageLocationMeta(title: "Country")
-        self.possibleLocation?.province = self.readImageLocationMeta(title: "Province")
-        self.possibleLocation?.city = self.readImageLocationMeta(title: "City")
-        self.possibleLocation?.district = self.readImageLocationMeta(title: "District")
-        self.possibleLocation?.businessCircle = self.readImageLocationMeta(title: "BusinessCircle")
-        self.possibleLocation?.street = self.readImageLocationMeta(title: "Street")
-        self.possibleLocation?.address = self.readImageLocationMeta(title: "Address")
-        self.possibleLocation?.addressDescription = self.readImageLocationMeta(title: "Description")
-        
-        //print("possible location address: \(possibleLocation?.address ?? "")")
-        //print("possible location place: \(possibleLocation?.place ?? "")")
-        
-        
-        self.addressSearcher.stringValue = ""
-        self.comboPlaceList.stringValue = ""
-        self.comboPlaceList.deselectItem(at: self.comboPlaceList.indexOfSelectedItem)
-        
-        BaiduLocation.queryForAddress(coordinateBD: img.location.coordinateBD!, locationConsumer: self, textConsumer: self.locationTextDelegate!)
-        BaiduLocation.queryForMap(coordinateBD: img.location.coordinateBD!, view: webPossibleLocation, zoom: zoomSizeForPossibleAddress)
-    }
-    
-    internal func replaceLocation() {
-        guard self.possibleLocation != nil && self.selectionViewController.imagesLoader.getItems().count > 0 else {return}
-        let accumulator:Accumulator = Accumulator(target: self.selectionViewController.imagesLoader.getItems().count, indicator: self.batchEditIndicator, suspended: false, lblMessage: nil)
-        let location:Location = self.possibleLocation!
-        for item in self.selectionViewController.imagesLoader.getItems() {
-            let url:URL = item.url as URL
-            let imageType = url.imageType()
-            if imageType == .photo || imageType == .video {
-                ExifTool.helper.patchGPSCoordinateForImage(latitude: location.latitude!, longitude: location.longitude!, url: url)
-                item.assignLocation(location: location)
-                
-                
-                let imageInSelection:ImageFile? = self.imagesLoader.getItem(path: url.path)
-                if imageInSelection != nil {
-                    imageInSelection!.assignLocation(location: location)
-                }
-                
-                //print("place after assign location: \(item.place)")
-                let _ = item.save()
-            }
-            let _ = accumulator.add()
-        }
-        self.selectionViewController.imagesLoader.reorganizeItems()
-        self.selectionCollectionView.reloadData()
-        self.imagesLoader.reorganizeItems(considerPlaces: true)
-        self.collectionView.reloadData()
     }
 }
