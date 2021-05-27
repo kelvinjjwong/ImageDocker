@@ -2670,7 +2670,7 @@ brew install ifuse</string>
                 </viewController>
                 <customObject id="8wJ-VW-Acc" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1385" y="940"/>
+            <point key="canvasLocation" x="1949" y="1271"/>
         </scene>
         <!--Stacked Image View Controller-->
         <scene sceneID="nB9-Zv-Hpk">
@@ -2698,7 +2698,7 @@ brew install ifuse</string>
                 </viewController>
                 <customObject id="sge-z6-lRb" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="976" y="940"/>
+            <point key="canvasLocation" x="1540" y="1271"/>
         </scene>
         <!--Selection Collection View Controller-->
         <scene sceneID="k3E-cm-GCB">
@@ -2933,7 +2933,7 @@ brew install ifuse</string>
                 </viewController>
                 <customObject id="cqe-Iw-pM0" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="240" y="1975"/>
+            <point key="canvasLocation" x="1023" y="922"/>
         </scene>
         <!--Image Location View Controller-->
         <scene sceneID="4aU-85-qKV">
@@ -2987,7 +2987,7 @@ brew install ifuse</string>
                 </viewController>
                 <customObject id="IxW-tU-ANX" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="206.5" y="2796"/>
+            <point key="canvasLocation" x="1026" y="1658"/>
         </scene>
         <!--Image Location Edit View Controller-->
         <scene sceneID="NvN-am-ZWe">
@@ -3160,7 +3160,7 @@ brew install ifuse</string>
                 </viewController>
                 <customObject id="UOv-RZ-qWV" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="206.5" y="3084"/>
+            <point key="canvasLocation" x="1026" y="1925"/>
         </scene>
         <!--Image Preview Controller-->
         <scene sceneID="ZAC-7n-W9T">
@@ -3210,7 +3210,7 @@ brew install ifuse</string>
                 </viewController>
                 <customObject id="qRr-TN-hpB" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="206.5" y="2392.5"/>
+            <point key="canvasLocation" x="1026" y="1288"/>
         </scene>
     </scenes>
     <resources>
