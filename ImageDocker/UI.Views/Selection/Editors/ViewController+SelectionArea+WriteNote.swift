@@ -8,7 +8,7 @@
 
 import Cocoa
 
-extension ViewController {
+extension SelectionViewController {
     
     
     func createNotesPopover(){
@@ -29,7 +29,7 @@ extension ViewController {
     }
     
     func openNoteWriter(_ sender: NSButton) {
-        if self.selectionViewController.imagesLoader.getItems().count == 0 {
+        if self.collectionViewController.imagesLoader.getItems().count == 0 {
             Alert.noImageSelected()
             return
         }
@@ -37,15 +37,16 @@ extension ViewController {
         
         let cellRect = sender.bounds
         self.notesPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
-        self.notesViewController.loadFrom(images: self.selectionViewController.imagesLoader.getItems(),
+        self.notesViewController.loadFrom(images: self.collectionViewController.imagesLoader.getItems(),
                                           onApplyChanges: {
-                                            self.selectionViewController.imagesLoader.reload()
-                                            self.selectionViewController.imagesLoader.reorganizeItems()
+                                            self.collectionViewController.imagesLoader.reload()
+                                            self.collectionViewController.imagesLoader.reorganizeItems()
                                             self.selectionCollectionView.reloadData()
                                             
-                                            self.imagesLoader.reload()
-                                            self.imagesLoader.reorganizeItems()
-                                            self.collectionView.reloadData()
+                                            self.reloadMainCollectionView?()
+//                                            self.imagesLoader.reload()
+//                                            self.imagesLoader.reorganizeItems()
+//                                            self.collectionView.reloadData()
         })
     }
 }

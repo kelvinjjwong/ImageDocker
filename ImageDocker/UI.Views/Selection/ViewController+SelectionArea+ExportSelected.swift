@@ -8,7 +8,7 @@
 
 import Cocoa
 
-extension ViewController {
+extension SelectionViewController {
     
     
     internal func createCopyToDevicePopover(images:[ImageFile]){
@@ -32,7 +32,7 @@ extension ViewController {
     }
     
     internal func openExportToDeviceDialog(_ sender: NSButton) {
-        let images = self.selectionViewController.imagesLoader.getItems()
+        let images = self.collectionViewController.imagesLoader.getItems()
         //let devices = Android.bridge.devices()
         if images.count == 0 {
             Alert.noImageSelected()
@@ -48,7 +48,7 @@ extension ViewController {
     }
     
     internal func share(_ sender: NSButton) {
-        let images = self.selectionViewController.imagesLoader.getItems()
+        let images = self.collectionViewController.imagesLoader.getItems()
         if images.count == 0 {
             Alert.noImageSelected()
             return

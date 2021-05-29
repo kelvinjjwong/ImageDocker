@@ -106,7 +106,7 @@ extension ViewController {
             dateFormatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
             if let _ = dateFormatter.date(from: datetime) {
                 let newValue = components[0].replacingOccurrences(of: ":", with: "-") + " " + components[1]
-                self.openDatePicker(self.btnDatePicker, with: newValue)
+                self.selectionViewController.openDatePicker(with: newValue)
                 self.popNotification(message: Words.copiedDateToBatchDatePicker.word("%s", "\(newValue)"))
             }
         }

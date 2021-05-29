@@ -227,16 +227,16 @@ protocol CollectionViewItemShowDuplicatesDelegate {
 extension ViewController : CollectionViewItemShowDuplicatesDelegate {
     func onCollectionViewItemShowDuplicate(_ duplicatesKey: String) {
         if let paths = ImageDuplicationDao.default.getDuplicatePhotos().keyToPath[duplicatesKey] {
-            self.selectionViewController.imagesLoader.clean()
+            self.selectionViewController.collectionViewController.imagesLoader.clean()
             for path in paths {
                 if let image = ImageRecordDao.default.getImage(path: path) {
                     let imageFile = ImageFile(photoFile: image)
-                    self.selectionViewController.imagesLoader.addItem(imageFile)
+                    self.selectionViewController.collectionViewController.imagesLoader.addItem(imageFile)
                 }
                 
             }
-            self.selectionViewController.imagesLoader.reorganizeItems()
-            self.selectionCollectionView.reloadData()
+            self.selectionViewController.collectionViewController.imagesLoader.reorganizeItems()
+            self.selectionViewController.selectionCollectionView.reloadData()
         }
     }
     
@@ -311,10 +311,10 @@ extension ViewController : CollectionViewItemCheckDelegate {
     func onCollectionViewItemCheck(_ item: CollectionViewItem, checkBySection:Bool) {
         //print("checked: \(item.imageFile?.url.lastPathComponent ?? "")")
         if let imageFile = item.imageFile {
-            self.selectionViewController.imagesLoader.addItem(imageFile)
-            self.selectionViewController.imagesLoader.reorganizeItems()
+            self.selectionViewController.collectionViewController.imagesLoader.addItem(imageFile)
+            self.selectionViewController.collectionViewController.imagesLoader.reorganizeItems()
             //self.selectionViewController.collectionView.reloadData()
-            self.selectionCollectionView.reloadData()
+            self.selectionViewController.selectionCollectionView.reloadData()
             
             if !checkBySection {
                 checkSectionIfAllItemsChecked(item)
@@ -326,10 +326,10 @@ extension ViewController : CollectionViewItemCheckDelegate {
     func onCollectionViewItemUncheck(_ item: CollectionViewItem, checkBySection:Bool) {
         //print("unchecked: \(item.imageFile?.url.lastPathComponent ?? "")")
         if let imageFile = item.imageFile {
-            self.selectionViewController.imagesLoader.removeItem(imageFile)
-            self.selectionViewController.imagesLoader.reorganizeItems()
+            self.selectionViewController.collectionViewController.imagesLoader.removeItem(imageFile)
+            self.selectionViewController.collectionViewController.imagesLoader.reorganizeItems()
             //self.selectionViewController.collectionView.reloadData()
-            self.selectionCollectionView.reloadData()
+            self.selectionViewController.selectionCollectionView.reloadData()
             
             if !checkBySection {
                 uncheckSectionIfAllItemsUnchecked(item)

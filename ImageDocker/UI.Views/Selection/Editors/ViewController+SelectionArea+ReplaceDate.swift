@@ -8,7 +8,7 @@
 
 import Cocoa
 
-extension ViewController {
+extension SelectionViewController {
     
     
     func createCalenderPopover(){
@@ -29,7 +29,7 @@ extension ViewController {
     }
     
     func openDatePicker(_ sender: NSButton, with referenceDate:String? = nil) {
-        if self.selectionViewController.imagesLoader.getItems().count == 0 {
+        if self.collectionViewController.imagesLoader.getItems().count == 0 {
             Alert.noImageSelected()
             return
         }
@@ -37,15 +37,15 @@ extension ViewController {
         
         let cellRect = sender.bounds
         self.calendarPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
-        self.calendarViewController.loadFrom(images: self.selectionViewController.imagesLoader.getItems(),
+        self.calendarViewController.loadFrom(images: self.collectionViewController.imagesLoader.getItems(),
                                              with: referenceDate,
                                              onBeforeChanges: {
                                                 TaskManager.applyingSelectionModifies = true
                                                 
         },
                                              onApplyChanges: {
-                                                self.selectionViewController.imagesLoader.reload()
-                                                self.selectionViewController.imagesLoader.reorganizeItems()
+                                                self.collectionViewController.imagesLoader.reload()
+                                                self.collectionViewController.imagesLoader.reorganizeItems()
                                                 self.selectionCollectionView.reloadData()
                                                 
                                                 TaskManager.applyingSelectionModifies = false

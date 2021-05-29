@@ -88,14 +88,14 @@ extension ViewController {
             self.collectionView.reloadData()
         }
         self.imageLocationEditViewController.reloadSelectionView = {
-            self.selectionViewController.imagesLoader.reorganizeItems()
-            self.selectionViewController.collectionView.reloadData()
+            self.selectionViewController.collectionViewController.imagesLoader.reorganizeItems()
+            self.selectionViewController.collectionViewController.collectionView.reloadData()
         }
         self.imageLocationEditViewController.getSelectionItems = {
-            return self.selectionViewController.imagesLoader.getItems()
+            return self.selectionViewController.collectionViewController.imagesLoader.getItems()
         }
         self.imageLocationEditViewController.getSelectionItem = { path in
-            return self.selectionViewController.imagesLoader.getItem(path: path)
+            return self.selectionViewController.collectionViewController.imagesLoader.getItem(path: path)
         }
         self.imageLocationEditViewController.reloadImageMetaTable = { img in
             self.img = img

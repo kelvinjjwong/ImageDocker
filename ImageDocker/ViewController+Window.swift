@@ -31,7 +31,7 @@ extension ViewController {
         smallScreen = size.isSmallScreen
         
         if size.isSmallScreen {
-            self.hideSelectionBatchEditors()
+            self.selectionViewController.hideSelectionBatchEditors()
             self.btnBatchEditorToolbarSwitcher.image = NSImage(named: NSImage.goRightTemplateName)
             self.btnBatchEditorToolbarSwitcher.toolTip = "Show event/datetime selectors"
             

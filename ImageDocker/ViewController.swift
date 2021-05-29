@@ -48,6 +48,9 @@ class ViewController: NSViewController {
     @IBOutlet weak var leftVerticalSplitView: NSSplitView!
     @IBOutlet weak var splitviewPreview: DarkSplitView!
     
+    @IBOutlet weak var bottomView: NSView!
+    
+    
     // MARK: - Timer
     var scanLocationChangeTimer:Timer!
     var lastCheckLocationChange:Date?
@@ -154,7 +157,7 @@ class ViewController: NSViewController {
     
     // MARK: - SELECTION VIEW
     //var selectionEditing = false
-    var selectionViewController : SelectionCollectionViewController!
+    var selectionViewController : SelectionViewController!
     
     @IBOutlet weak var selectionCollectionView: NSCollectionView!
     
@@ -195,7 +198,6 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var comboEventList: NSComboBox!
     @IBOutlet weak var comboPlaceList: NSComboBox!
-    var eventListController:EventListComboController!
     
     // MARK: - Device Copy Dialog
     
@@ -254,6 +256,10 @@ class ViewController: NSViewController {
     override func viewDidAppear() {
         self.view.window?.delegate = self
         
+        if !(self.view.window?.isZoomed ?? true) {
+            self.view.window?.performZoom(self)
+        }
+        
         print("AFTER SIZE \(self.view.frame.size.width) x \(self.view.frame.size.height)")
     }
     
@@ -268,11 +274,12 @@ class ViewController: NSViewController {
     
     internal func initView() {
         self.hideNotification()
-        self.setupUIDisplays()
 //        print("\(Date()) Loading view - preview zone")
         self.configurePreview()
 //        print("\(Date()) Loading view - selection view")
         self.configureSelectionView()
+        
+        self.setupUIDisplays()
         
         PreferencesController.healthCheck()
         
@@ -287,9 +294,6 @@ class ViewController: NSViewController {
 //        print("\(Date()) Loading view - configure collection view")
         configureCollectionView()
 //        print("\(Date()) Loading view - configure editors")
-        configureEditors()
-//        print("\(Date()) Loading view - setup event list")
-        setupEventList()
         
         self.configureDarkMode()
         self.resize()
@@ -327,13 +331,9 @@ class ViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if !(self.view.window?.isZoomed ?? true) {
-            self.view.window?.performZoom(self)
-        }
         
         self.imagesLoader = CollectionViewItemsLoader()
         
-        self.btnShare.sendAction(on: .leftMouseDown)
         self.btnCombineDuplicates.toolTip = Words.main_combineTooltip.word()
         
         self.splashController = SplashViewController(onStartup: {
@@ -355,8 +355,6 @@ class ViewController: NSViewController {
         
         //progressIndicator.isDisplayedWhenStopped = false
         collectionProgressIndicator.isDisplayedWhenStopped = false
-        
-        batchEditIndicator.isDisplayedWhenStopped = false
         
 //        print("\(Date()) Loading view - configure dark mode")
         
@@ -382,16 +380,12 @@ class ViewController: NSViewController {
     func configureDarkMode() {
         view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         view.layer?.backgroundColor = Colors.DarkGray.cgColor
-        self.btnAssignEvent.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnCopyLocation.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.btnManageEvents.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnManagePlaces.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnReplaceLocation.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnRefreshCollectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnCombineDuplicates.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
-        self.comboEventList.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.comboEventList.backgroundColor = Colors.DarkGray
         self.comboPlaceList.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.comboPlaceList.backgroundColor = Colors.DarkGray
         self.addressSearcher.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -399,15 +393,10 @@ class ViewController: NSViewController {
         self.addressSearcher.drawsBackground = true
         self.btnChoiceMapService.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
-        self.btnBatchEditorToolbarSwitcher.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.selectionCheckAllBox.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.chbShowHidden.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
-        self.btnShow.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.btnHide.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
         self.collectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.selectionCollectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
         self.playerContainer.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
@@ -418,13 +407,6 @@ class ViewController: NSViewController {
         self.btnMemories.title = Words.memories.word()
         self.btnCombineDuplicates.title = Words.combineDuplicates.word()
         self.btnRefreshCollectionView.title = Words.reload.word()
-        self.btnAssignEvent.title = Words.assignEvent.word()
-        self.btnManageEvents.title = Words.manageEvents.word()
-        self.btnDatePicker.title = Words.changeDate.word()
-        self.btnNotes.title = Words.writeNotes.word()
-        self.btnDuplicates.title = Words.duplicates.word()
-        self.btnDuplicates.image = Icons.duplicates
-        self.selectionCheckAllBox.title = Words.selectAll.word()
         self.chbShowHidden.title = Words.hidden.word()
         self.chbSelectAll.title = Words.selectAll.word()
     }
@@ -507,98 +489,6 @@ class ViewController: NSViewController {
     
     @IBAction func onCheckShowHiddenClicked(_ sender: NSButton) {
         self.switchShowHideState()
-    }
-    
-    
-    // MARK: - SELECTION BATCH EDITOR TOOLBAR - SWITCHER
-    
-    @IBAction func onBatchEditorToolbarSwitcherClicked(_ sender: NSButton) {
-        self.switchSelectionToolbar()
-    }
-    
-    
-    // MARK: SELECTION TOOLBAR
-    
-    @IBAction func onShareClicked(_ sender: NSButton) {
-        self.share(sender)
-    }
-    
-    // MARK: - COPY IMAGES TO ELSEWHERE (COMPUTER OR DEVICE)
-    
-    @IBAction func onCopyToDeviceClicked(_ sender: NSButton) {
-        self.openExportToDeviceDialog(sender)
-    }
-    
-    internal var copyToDevicePopover:NSPopover? = nil
-    internal var deviceFolderViewController:DeviceFolderViewController!
-    
-    // MARK: - SELECTION AREA
-    
-    @IBAction func onSelectionRemoveAllClicked(_ sender: Any) {
-        self.cleanUpSelectionArea()
-    }
-    
-    
-    @IBAction func onSelectionRemoveButtonClicked(_ sender: Any) {
-        self.cleanSomeFromSelectionArea()
-    }
-    
-
-    @IBAction func onSelectionCheckAllClicked(_ sender: NSButton) {
-        self.checkAllInSelectionArea()
-    }
-    
-    // MARK: - Selection View - Batch Editor
-    
-    @IBAction func onButtonDuplicatesClicked(_ sender: NSPopUpButton) {
-        let i = sender.indexOfSelectedItem
-        self.selectCombineMenuInSelectionArea(i)
-    }
-    
-    // MARK: Selection View - Batch Editor - Notes
-    
-    
-    @IBAction func onButtonNotesClicked(_ sender: NSButton) {
-        self.openNoteWriter(sender)
-    }
-    
-    
-    var notesPopover:NSPopover? = nil
-    var notesViewController:NotesViewController!
-    
-    // MARK: Selection View - Batch Editor - Date
-    
-    @IBAction func onButtonDatePickerClicked(_ sender: NSButton) {
-        self.openDatePicker(sender)
-    }
-    
-    
-    var calendarPopover:NSPopover? = nil
-    var calendarViewController:DateTimeViewController!
-    
-    
-    // MARK: Selection View - Batch Editor - Event Actions
-    
-    // add to favourites
-    @IBAction func onAddEventButtonClicked(_ sender: NSButton) {
-        self.createEventPopover()
-        
-        let cellRect = sender.bounds
-        self.eventPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
-    }
-    
-    @IBAction func onAssignEventButtonClicked(_ sender: Any) {
-        self.assignEvent()
-    }
-    
-    // MARK: Selection View - Batch Editor - Show/Hide Controls
-    
-    @IBAction func onButtonHideClicked(_ sender: Any) {
-        self.hideSelectedImages()
-    }
-    
-    @IBAction func onButtonShowClicked(_ sender: Any) {
-        self.visibleSelectedImages()
     }
     
     // MARK: - FACE

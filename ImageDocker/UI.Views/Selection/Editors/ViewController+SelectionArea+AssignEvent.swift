@@ -8,7 +8,7 @@
 
 import Cocoa
 
-extension ViewController {
+extension SelectionViewController {
     
     func createEventPopover(){
         var myPopover = self.eventPopover
@@ -31,16 +31,17 @@ extension ViewController {
     
     internal func assignEvent() {
         print("CLICKED ASSIGN EVENT BUTTON")
-        print(self.selectionViewController.imagesLoader.getItems().count)
+        print(self.collectionViewController.imagesLoader.getItems().count)
         print(self.comboEventList.stringValue)
-        guard self.selectionViewController.imagesLoader.getItems().count > 0 else {return}
+        guard self.collectionViewController.imagesLoader.getItems().count > 0 else {return}
         guard self.comboEventList.stringValue != "" else {return}
         
-        let accumulator:Accumulator = Accumulator(target: self.selectionViewController.imagesLoader.getItems().count, indicator: self.batchEditIndicator, suspended: false, lblMessage: nil, onCompleted:{ data in
+        let accumulator:Accumulator = Accumulator(target: self.collectionViewController.imagesLoader.getItems().count, indicator: self.batchEditIndicator, suspended: false, lblMessage: nil, onCompleted:{ data in
             //self.refreshCollection()
             
-            self.imagesLoader.reorganizeItems(considerPlaces: true)
-            self.collectionView.reloadData()
+            self.reloadMainCollectionView?()
+//            self.imagesLoader.reorganizeItems(considerPlaces: true)
+//            self.collectionView.reloadData()
             
             //TODO TO DO FUNCTION
             //self.refreshTree()
@@ -59,7 +60,7 @@ extension ViewController {
         }
         if let event = event {
             //print("PREPARE TO ASSIGN EVENT \(event.name)")
-            for item:ImageFile in self.selectionViewController.imagesLoader.getItems() {
+            for item:ImageFile in self.collectionViewController.imagesLoader.getItems() {
                 let url:URL = item.url as URL
                 let imageType = url.imageType()
                 if imageType == .photo || imageType == .video {
@@ -75,7 +76,7 @@ extension ViewController {
     
 }
 
-extension ViewController : EventListRefreshDelegate{
+extension SelectionViewController : EventListRefreshDelegate{
     
     func setupEventList() {
         if self.eventListController == nil {

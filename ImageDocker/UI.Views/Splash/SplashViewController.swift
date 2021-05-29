@@ -40,6 +40,9 @@ class SplashViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.wantsLayer = true
+        if !(self.view.window?.isZoomed ?? true) {
+            self.view.window?.performZoom(self)
+        }
         self.view.layer?.backgroundColor = Colors.DarkGray.cgColor
         
         self.btnAbort.isHidden = true

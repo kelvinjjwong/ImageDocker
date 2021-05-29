@@ -8,7 +8,7 @@
 
 import Cocoa
 
-extension ViewController {
+extension SelectionViewController {
     
     internal func selectCombineMenuInSelectionArea(_ i:Int) {
         
@@ -28,14 +28,14 @@ extension ViewController {
     }
     
     internal func combineSelectedImages(checkedAsChief:Bool) {
-        let items = self.selectionViewController.imagesLoader.getItems()
+        let items = self.collectionViewController.imagesLoader.getItems()
         if items.count == 0 {
             Alert.noImageSelected()
             return
         }
         var major = items[0]
         if checkedAsChief {
-            let checked = self.selectionViewController.imagesLoader.getCheckedItems()
+            let checked = self.collectionViewController.imagesLoader.getCheckedItems()
             if checked.count == 0 {
                 Alert.checkOneImage()
                 return
@@ -64,25 +64,26 @@ extension ViewController {
                 }
                 ImageDuplicationDao.default.getDuplicatePhotos().updateMapping(key: key, path: imageFile.url.path)
             }
-            self.selectionViewController.imagesLoader.reload()
-            self.selectionViewController.imagesLoader.reorganizeItems()
+            self.collectionViewController.imagesLoader.reload()
+            self.collectionViewController.imagesLoader.reorganizeItems()
             self.selectionCollectionView.reloadData()
             
-            self.imagesLoader.reload()
-            self.imagesLoader.reorganizeItems()
-            self.collectionView.reloadData()
+            self.reloadMainCollectionView?()
+//            self.imagesLoader.reload()
+//            self.imagesLoader.reorganizeItems()
+//            self.collectionView.reloadData()
         }
     }
     
     // MARK: Selection View - Batch Editor - Duplicates
     
     internal func markCheckedImageAsDuplicatedChief() {
-        let items = self.selectionViewController.imagesLoader.getItems()
+        let items = self.collectionViewController.imagesLoader.getItems()
         if items.count == 0 {
             Alert.noImageSelected()
             return
         }
-        let checked = self.selectionViewController.imagesLoader.getCheckedItems()
+        let checked = self.collectionViewController.imagesLoader.getCheckedItems()
         if checked.count != 1 {
             Alert.checkOneImage()
             return
@@ -99,24 +100,25 @@ extension ViewController {
                         ImageDuplicationDao.default.markImageDuplicated(path: path, duplicatesKey: duplicatesKey, hide: true)
                     }
                 }
-                self.selectionViewController.imagesLoader.reload()
-                self.selectionViewController.imagesLoader.reorganizeItems()
+                self.collectionViewController.imagesLoader.reload()
+                self.collectionViewController.imagesLoader.reorganizeItems()
                 self.selectionCollectionView.reloadData()
                 
-                self.imagesLoader.reload()
-                self.imagesLoader.reorganizeItems()
-                self.collectionView.reloadData()
+                self.reloadMainCollectionView?()
+//                self.imagesLoader.reload()
+//                self.imagesLoader.reorganizeItems()
+//                self.collectionView.reloadData()
             }
         }
     }
     
     internal func decoupleCheckedImages() {
-        let items = self.selectionViewController.imagesLoader.getItems()
+        let items = self.collectionViewController.imagesLoader.getItems()
         if items.count == 0 {
             Alert.noImageSelected()
             return
         }
-        let checked = self.selectionViewController.imagesLoader.getCheckedItems()
+        let checked = self.collectionViewController.imagesLoader.getCheckedItems()
         if checked.count == 0 {
             Alert.checkImages()
             return
@@ -124,22 +126,23 @@ extension ViewController {
         for imageFile in checked {
             ImageDuplicationDao.default.markImageDuplicated(path: imageFile.url.path, duplicatesKey: nil, hide: false)
         }
-        self.selectionViewController.imagesLoader.reload()
-        self.selectionViewController.imagesLoader.reorganizeItems()
+        self.collectionViewController.imagesLoader.reload()
+        self.collectionViewController.imagesLoader.reorganizeItems()
         self.selectionCollectionView.reloadData()
         
-        self.imagesLoader.reload()
-        self.imagesLoader.reorganizeItems()
-        self.collectionView.reloadData()
+        self.reloadMainCollectionView?()
+//        self.imagesLoader.reload()
+//        self.imagesLoader.reorganizeItems()
+//        self.collectionView.reloadData()
     }
     
     internal func combineCheckedImages() {
-        let items = self.selectionViewController.imagesLoader.getItems()
+        let items = self.collectionViewController.imagesLoader.getItems()
         if items.count == 0 {
             Alert.noImageSelected()
             return
         }
-        let checked = self.selectionViewController.imagesLoader.getCheckedItems()
+        let checked = self.collectionViewController.imagesLoader.getCheckedItems()
         if checked.count == 0 {
             Alert.checkImages()
             return
@@ -185,13 +188,14 @@ extension ViewController {
             }
             
             // refresh UI
-            self.selectionViewController.imagesLoader.reload()
-            self.selectionViewController.imagesLoader.reorganizeItems()
+            self.collectionViewController.imagesLoader.reload()
+            self.collectionViewController.imagesLoader.reorganizeItems()
             self.selectionCollectionView.reloadData()
             
-            self.imagesLoader.reload()
-            self.imagesLoader.reorganizeItems()
-            self.collectionView.reloadData()
+            self.reloadMainCollectionView?()
+//            self.imagesLoader.reload()
+//            self.imagesLoader.reorganizeItems()
+//            self.collectionView.reloadData()
         }
     }
 }

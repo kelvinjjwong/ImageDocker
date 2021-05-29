@@ -552,273 +552,9 @@
                                                     <constraint firstItem="lZJ-XP-YJ8" firstAttribute="top" secondItem="UN4-9k-Mje" secondAttribute="top" constant="10" id="u5h-mx-4Et"/>
                                                 </constraints>
                                             </customView>
-                                            <customView misplaced="YES" id="FmM-ai-OgV">
+                                            <customView fixedFrame="YES" id="FmM-ai-OgV">
                                                 <rect key="frame" x="0.0" y="660" width="1314" height="210"/>
                                                 <autoresizingMask key="autoresizingMask"/>
-                                                <subviews>
-                                                    <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ivI-8f-yJa">
-                                                        <rect key="frame" x="0.0" y="35" width="1314" height="175"/>
-                                                        <clipView key="contentView" id="ueq-7S-QM2">
-                                                            <rect key="frame" x="0.0" y="0.0" width="1314" height="175"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                            <subviews>
-                                                                <collectionView selectable="YES" allowsMultipleSelection="YES" id="ZyN-Zd-qQf">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="1314" height="175"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                                                    <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="mUq-KW-nzo">
-                                                                        <size key="itemSize" width="50" height="50"/>
-                                                                    </collectionViewFlowLayout>
-                                                                    <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </collectionView>
-                                                            </subviews>
-                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                        </clipView>
-                                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="FGF-1P-bhc">
-                                                            <rect key="frame" x="-100" y="-100" width="233" height="15"/>
-                                                            <autoresizingMask key="autoresizingMask"/>
-                                                        </scroller>
-                                                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="uLo-DB-TJ3">
-                                                            <rect key="frame" x="1281" y="0.0" width="15" height="0.0"/>
-                                                            <autoresizingMask key="autoresizingMask"/>
-                                                        </scroller>
-                                                    </scrollView>
-                                                    <button toolTip="Remove CHECKED from selection area" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lT1-yY-BTR">
-                                                        <rect key="frame" x="1232" y="-2" width="44" height="32"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="30" id="yHS-NN-82a"/>
-                                                        </constraints>
-                                                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="broom" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Eem-HU-NXE">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="onSelectionRemoveButtonClicked:" target="XfG-lQ-9wD" id="HdP-BB-eAd"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CaM-Tw-R04">
-                                                        <rect key="frame" x="1179" y="7" width="50" height="18"/>
-                                                        <buttonCell key="cell" type="check" title="ALL" bezelStyle="regularSquare" imagePosition="left" inset="2" id="7Ie-6Y-gWp">
-                                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="onSelectionCheckAllClicked:" target="XfG-lQ-9wD" id="MVj-gD-BlS"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fBu-cK-CdX">
-                                                        <rect key="frame" x="362" y="-2" width="98" height="32"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="84" id="Umb-Y4-yxV"/>
-                                                        </constraints>
-                                                        <buttonCell key="cell" type="push" title="Events" bezelStyle="rounded" image="NSSmartBadgeTemplate" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vBF-8j-nIb">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="onAddEventButtonClicked:" target="XfG-lQ-9wD" id="cNI-oZ-ExQ"/>
-                                                        </connections>
-                                                    </button>
-                                                    <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="9ri-yc-r9m">
-                                                        <rect key="frame" x="881" y="6" width="120" height="20"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="120" id="Xpt-Ff-Zm4"/>
-                                                            <constraint firstAttribute="height" constant="18" id="i48-xy-Jza"/>
-                                                        </constraints>
-                                                    </progressIndicator>
-                                                    <button toolTip="Set ALL as Invisible" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QJ8-hF-79J">
-                                                        <rect key="frame" x="1134" y="-3" width="44" height="32"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="30" id="u4W-yV-Yae"/>
-                                                        </constraints>
-                                                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="hide" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="p5x-Do-Wlz">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="onButtonHideClicked:" target="XfG-lQ-9wD" id="iub-WC-1oV"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button toolTip="Set ALL as Visible" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="W0U-Cw-aB7">
-                                                        <rect key="frame" x="1094" y="-3" width="44" height="32"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="30" id="S9O-aq-b4I"/>
-                                                        </constraints>
-                                                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="view" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WWs-cd-IhV">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="onButtonShowClicked:" target="XfG-lQ-9wD" id="hH8-BS-u3i"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button toolTip="Remove ALL from selection area" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Tuu-5h-g9B">
-                                                        <rect key="frame" x="1272" y="-2" width="44" height="32"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="30" id="3dl-B7-E4k"/>
-                                                        </constraints>
-                                                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="trash" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eSj-Gi-AQc">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="onSelectionRemoveAllClicked:" target="XfG-lQ-9wD" id="FYq-00-wBj"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button toolTip="Copy to device" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Zj8-N8-ari">
-                                                        <rect key="frame" x="1054" y="-2" width="44" height="32"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="30" id="S4O-Kz-xYb"/>
-                                                        </constraints>
-                                                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="download" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zdV-TB-RDD">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="onCopyToDeviceClicked:" target="XfG-lQ-9wD" id="6zB-U3-zBM"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button toolTip="Share" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0by-PK-DjP">
-                                                        <rect key="frame" x="1014" y="-2" width="44" height="32"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="30" id="lry-uc-KQi"/>
-                                                        </constraints>
-                                                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="forward" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fPX-Tq-xS0">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="onShareClicked:" target="XfG-lQ-9wD" id="zKS-pQ-cjU"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xCg-De-lnA">
-                                                        <rect key="frame" x="272" y="-2" width="94" height="32"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="80" id="bIZ-4r-DIe"/>
-                                                        </constraints>
-                                                        <buttonCell key="cell" type="push" title="Assign" bezelStyle="rounded" image="NSLeftFacingTriangleTemplate" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gC1-GR-U1c">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="onAssignEventButtonClicked:" target="XfG-lQ-9wD" id="6De-vX-jxC"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qYv-ia-zVJ">
-                                                        <rect key="frame" x="461" y="-2" width="131" height="32"/>
-                                                        <buttonCell key="cell" type="push" title="Change Date" bezelStyle="rounded" image="clock" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="r9M-rt-OtB">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="onButtonDatePickerClicked:" target="XfG-lQ-9wD" id="AfQ-C5-xyH"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ltZ-4C-dje">
-                                                        <rect key="frame" x="0.0" y="9" width="16" height="15"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="16" id="Fr3-bp-GKn"/>
-                                                        </constraints>
-                                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSGoLeftTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="io7-Yc-lxJ">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="onBatchEditorToolbarSwitcherClicked:" target="XfG-lQ-9wD" id="fvr-rZ-s5k"/>
-                                                        </connections>
-                                                    </button>
-                                                    <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UJe-CL-XGt">
-                                                        <rect key="frame" x="21" y="1" width="253" height="24"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="250" id="KDF-ql-pIb"/>
-                                                        </constraints>
-                                                        <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="10" id="8CH-Aa-93G">
-                                                            <font key="font" metaFont="system"/>
-                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </comboBoxCell>
-                                                    </comboBox>
-                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9Bs-pz-4CN">
-                                                        <rect key="frame" x="593" y="-2" width="88" height="32"/>
-                                                        <buttonCell key="cell" type="push" title="Notes" bezelStyle="rounded" image="edit" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mlb-9Y-BIF">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="onButtonNotesClicked:" target="XfG-lQ-9wD" id="KFQ-R7-1x9"/>
-                                                        </connections>
-                                                    </button>
-                                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JAQ-3Z-0MW">
-                                                        <rect key="frame" x="689" y="2" width="102" height="25"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="100" id="TtX-Ui-DiO"/>
-                                                        </constraints>
-                                                        <popUpButtonCell key="cell" type="roundTextured" title="Duplicate" bezelStyle="texturedRounded" imagePosition="leading" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="noArrow" altersStateOfSelectedItem="NO" selectedItem="7hi-2u-8xh" id="92P-Oj-IXC">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="menu"/>
-                                                            <menu key="menu" id="zQo-Q2-kjc">
-                                                                <items>
-                                                                    <menuItem title="Duplicate" image="combine" hidden="YES" id="7hi-2u-8xh">
-                                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                                    </menuItem>
-                                                                    <menuItem title="Duplicate - Select CHECKED image as CHIEF" image="combine" id="bph-8x-GvH"/>
-                                                                    <menuItem title="Duplicate - Decouple CHECKED images" image="combine" id="ygl-JT-A5A"/>
-                                                                    <menuItem title="Duplicate - Combine CHECKED images to a NEW set" image="combine" id="ZOF-IM-ZZW">
-                                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                                    </menuItem>
-                                                                    <menuItem title="Duplicate - Combine ALL images to a NEW set" image="combine" id="H6F-Rq-5pL">
-                                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                                    </menuItem>
-                                                                    <menuItem title="Duplicate - Combine ALL images to a NEW set, mark the CHECKED one as CHIEF" image="combine" id="V5f-Xg-kri">
-                                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                                    </menuItem>
-                                                                </items>
-                                                            </menu>
-                                                        </popUpButtonCell>
-                                                        <connections>
-                                                            <action selector="onButtonDuplicatesClicked:" target="XfG-lQ-9wD" id="Zc7-TI-iqM"/>
-                                                        </connections>
-                                                    </popUpButton>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstAttribute="bottom" secondItem="CaM-Tw-R04" secondAttribute="bottom" constant="8" id="02d-3o-exU"/>
-                                                    <constraint firstItem="Tuu-5h-g9B" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="10" id="2kq-N2-YsN"/>
-                                                    <constraint firstItem="lT1-yY-BTR" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="10" id="2tz-Zg-NOq"/>
-                                                    <constraint firstAttribute="bottom" secondItem="9ri-yc-r9m" secondAttribute="bottom" constant="7" id="55B-YO-IJ4"/>
-                                                    <constraint firstAttribute="bottom" secondItem="Zj8-N8-ari" secondAttribute="bottom" constant="5" id="5Gv-4r-JL0"/>
-                                                    <constraint firstItem="Zj8-N8-ari" firstAttribute="leading" secondItem="0by-PK-DjP" secondAttribute="trailing" constant="10" id="6oZ-nN-D4x"/>
-                                                    <constraint firstItem="0by-PK-DjP" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="10" id="7gI-ts-GlS"/>
-                                                    <constraint firstItem="JAQ-3Z-0MW" firstAttribute="leading" secondItem="9Bs-pz-4CN" secondAttribute="trailing" constant="16" id="BXt-gD-A5w"/>
-                                                    <constraint firstAttribute="trailing" secondItem="Tuu-5h-g9B" secondAttribute="trailing" constant="10" id="Eld-NY-ewW"/>
-                                                    <constraint firstItem="9Bs-pz-4CN" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="10" id="G5p-1q-NBe"/>
-                                                    <constraint firstItem="QJ8-hF-79J" firstAttribute="leading" secondItem="W0U-Cw-aB7" secondAttribute="trailing" constant="10" id="HqI-Zn-chd"/>
-                                                    <constraint firstAttribute="bottom" secondItem="0by-PK-DjP" secondAttribute="bottom" constant="5" id="IZR-uX-B0h"/>
-                                                    <constraint firstItem="CaM-Tw-R04" firstAttribute="leading" secondItem="QJ8-hF-79J" secondAttribute="trailing" constant="10" id="Kg0-Sh-Inl"/>
-                                                    <constraint firstItem="UJe-CL-XGt" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="12" id="MJH-wn-1xa"/>
-                                                    <constraint firstItem="qYv-ia-zVJ" firstAttribute="leading" secondItem="fBu-cK-CdX" secondAttribute="trailing" constant="15" id="Mhc-tE-2Yn"/>
-                                                    <constraint firstItem="fBu-cK-CdX" firstAttribute="leading" secondItem="xCg-De-lnA" secondAttribute="trailing" constant="10" id="OCI-WN-oWT"/>
-                                                    <constraint firstItem="qYv-ia-zVJ" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="10" id="Vwg-5N-pIu"/>
-                                                    <constraint firstItem="Zj8-N8-ari" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="10" id="Xif-oD-Xtu"/>
-                                                    <constraint firstItem="ltZ-4C-dje" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="12" id="Xyv-9h-Efs"/>
-                                                    <constraint firstAttribute="trailing" secondItem="ivI-8f-yJa" secondAttribute="trailing" constant="5" id="ZbI-YX-bmA"/>
-                                                    <constraint firstAttribute="bottom" secondItem="W0U-Cw-aB7" secondAttribute="bottom" constant="4" id="bxK-ob-x74"/>
-                                                    <constraint firstAttribute="bottom" secondItem="UJe-CL-XGt" secondAttribute="bottom" constant="5" id="eSB-57-UNb"/>
-                                                    <constraint firstItem="0by-PK-DjP" firstAttribute="leading" secondItem="9ri-yc-r9m" secondAttribute="trailing" constant="20" id="fuq-lj-udL"/>
-                                                    <constraint firstItem="ivI-8f-yJa" firstAttribute="leading" secondItem="FmM-ai-OgV" secondAttribute="leading" id="fxO-6d-EeK"/>
-                                                    <constraint firstAttribute="bottom" secondItem="xCg-De-lnA" secondAttribute="bottom" constant="5" id="gVF-0d-2u7"/>
-                                                    <constraint firstAttribute="bottom" secondItem="Tuu-5h-g9B" secondAttribute="bottom" constant="5" id="hZ5-05-9jE"/>
-                                                    <constraint firstItem="ltZ-4C-dje" firstAttribute="leading" secondItem="FmM-ai-OgV" secondAttribute="leading" id="igZ-gd-KEn"/>
-                                                    <constraint firstItem="ivI-8f-yJa" firstAttribute="top" secondItem="FmM-ai-OgV" secondAttribute="top" id="il6-Uh-iBq"/>
-                                                    <constraint firstAttribute="bottom" secondItem="fBu-cK-CdX" secondAttribute="bottom" constant="5" id="mwL-U0-6UT"/>
-                                                    <constraint firstItem="lT1-yY-BTR" firstAttribute="leading" secondItem="CaM-Tw-R04" secondAttribute="trailing" constant="10" id="oYH-Uj-xIT"/>
-                                                    <constraint firstItem="Tuu-5h-g9B" firstAttribute="leading" secondItem="lT1-yY-BTR" secondAttribute="trailing" constant="10" id="ouy-3a-QQA"/>
-                                                    <constraint firstAttribute="bottom" secondItem="QJ8-hF-79J" secondAttribute="bottom" constant="4" id="pXB-Yj-7IB"/>
-                                                    <constraint firstItem="UJe-CL-XGt" firstAttribute="leading" secondItem="ltZ-4C-dje" secondAttribute="trailing" constant="5" id="qdf-OF-SLd"/>
-                                                    <constraint firstItem="JAQ-3Z-0MW" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="9" id="ugw-DL-7PD"/>
-                                                    <constraint firstItem="xCg-De-lnA" firstAttribute="leading" secondItem="UJe-CL-XGt" secondAttribute="trailing" constant="8" id="vTQ-UU-Aeo"/>
-                                                    <constraint firstItem="W0U-Cw-aB7" firstAttribute="leading" secondItem="Zj8-N8-ari" secondAttribute="trailing" constant="10" id="wvO-qL-4Mc"/>
-                                                    <constraint firstAttribute="bottom" secondItem="lT1-yY-BTR" secondAttribute="bottom" constant="5" id="ywS-e6-idT"/>
-                                                    <constraint firstItem="9Bs-pz-4CN" firstAttribute="leading" secondItem="qYv-ia-zVJ" secondAttribute="trailing" constant="15" id="zIh-sz-kFa"/>
-                                                </constraints>
                                             </customView>
                                         </subviews>
                                         <holdingPriorities>
@@ -852,28 +588,16 @@
                     </view>
                     <connections>
                         <outlet property="avPlayer" destination="WMi-QV-cmi" id="SlC-Qu-gmn"/>
-                        <outlet property="batchEditIndicator" destination="9ri-yc-r9m" id="tVw-De-9ga"/>
+                        <outlet property="bottomView" destination="FmM-ai-OgV" id="SoP-fQ-6xV"/>
                         <outlet property="btnAlertMessage" destination="SE2-Sb-Hue" id="DND-ez-1Zo"/>
-                        <outlet property="btnAssignEvent" destination="xCg-De-lnA" id="Jab-Ym-d9U"/>
-                        <outlet property="btnBatchEditorToolbarSwitcher" destination="ltZ-4C-dje" id="Cvz-B9-eBG"/>
                         <outlet property="btnCombineDuplicates" destination="Gkw-tO-uG9" id="p8M-jW-YwA"/>
-                        <outlet property="btnCopyToDevice" destination="Zj8-N8-ari" id="0b1-3U-nKo"/>
-                        <outlet property="btnDatePicker" destination="qYv-ia-zVJ" id="KVx-Yv-c0B"/>
-                        <outlet property="btnDuplicates" destination="JAQ-3Z-0MW" id="3Uo-Pa-nb3"/>
                         <outlet property="btnExport" destination="kCb-sM-PKJ" id="eIT-29-eiQ"/>
                         <outlet property="btnFaces" destination="wQ3-4F-bW7" id="NgX-tX-28L"/>
-                        <outlet property="btnHide" destination="QJ8-hF-79J" id="41M-3L-1WH"/>
                         <outlet property="btnImageOptions" destination="Bwo-eW-DeK" id="1up-ml-dUH"/>
-                        <outlet property="btnManageEvents" destination="fBu-cK-CdX" id="iHI-iO-KSb"/>
                         <outlet property="btnMemories" destination="zJa-km-Rrl" id="meg-5b-t0p"/>
                         <outlet property="btnNextPageCollection" destination="meR-zL-rAv" id="HX2-0B-aQR"/>
-                        <outlet property="btnNotes" destination="9Bs-pz-4CN" id="lkJ-oH-a9Q"/>
                         <outlet property="btnPreviousPageCollection" destination="IGx-sv-JYq" id="rRG-dS-OFu"/>
                         <outlet property="btnRefreshCollectionView" destination="DpT-Dg-Oeb" id="ze3-El-bMX"/>
-                        <outlet property="btnRemoveAllSelection" destination="Tuu-5h-g9B" id="WUI-hC-Chg"/>
-                        <outlet property="btnRemoveSelection" destination="lT1-yY-BTR" id="e6C-Ic-N4o"/>
-                        <outlet property="btnShare" destination="0by-PK-DjP" id="b9S-z4-3RB"/>
-                        <outlet property="btnShow" destination="W0U-Cw-aB7" id="rYg-OY-AwZ"/>
                         <outlet property="btnTasks" destination="csF-Eh-wOF" id="6h3-Vs-dhx"/>
                         <outlet property="btnToggleBottomPanel" destination="Tb9-dq-5sY" id="wtp-VO-TE5"/>
                         <outlet property="btnToggleLeftPanel" destination="LT3-25-saL" id="mGB-7V-g0Q"/>
@@ -884,13 +608,10 @@
                         <outlet property="chbShowHidden" destination="y2t-Ke-hIj" id="VwI-t7-yiN"/>
                         <outlet property="collectionProgressIndicator" destination="Sab-MP-Qfo" id="tTT-fa-2Dw"/>
                         <outlet property="collectionView" destination="9AE-Hz-zmu" id="ItR-cT-i85"/>
-                        <outlet property="comboEventList" destination="UJe-CL-XGt" id="1DN-SK-dFe"/>
                         <outlet property="imgPhoto" destination="9Na-U8-3R2" id="b6k-Ma-bp4"/>
                         <outlet property="indicatorMessage" destination="kAZ-Sm-Ax7" id="QkM-9I-20Z"/>
                         <outlet property="lblPagesCollection" destination="uR6-jc-2Z7" id="IYF-Mk-ffx"/>
                         <outlet property="leftVerticalSplitView" destination="lZJ-XP-YJ8" id="Ky7-8V-BfT"/>
-                        <outlet property="selectionCheckAllBox" destination="CaM-Tw-R04" id="CBY-PY-bPh"/>
-                        <outlet property="selectionCollectionView" destination="ZyN-Zd-qQf" id="1QS-Hl-r3z"/>
                         <outlet property="splitviewPreview" destination="giR-in-kR4" id="kmu-km-TA6"/>
                         <outlet property="stackedTreeCanvasView" destination="CKk-CL-9gu" id="fFJ-OQ-hgD"/>
                         <outlet property="txtSearch" destination="2rl-sF-lP2" id="Mxg-RW-YIV"/>
@@ -2700,10 +2421,318 @@ brew install ifuse</string>
             </objects>
             <point key="canvasLocation" x="1540" y="1271"/>
         </scene>
+        <!--Selection View Controller-->
+        <scene sceneID="paO-7d-UF3">
+            <objects>
+                <viewController storyboardIdentifier="SelectionViewController" id="ZvP-SA-CoE" customClass="SelectionViewController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="7Oc-5w-GcI">
+                        <rect key="frame" x="0.0" y="0.0" width="1312" height="224"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ivI-8f-yJa">
+                                <rect key="frame" x="0.0" y="25" width="1312" height="199"/>
+                                <clipView key="contentView" id="ueq-7S-QM2">
+                                    <rect key="frame" x="0.0" y="0.0" width="1312" height="199"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <collectionView identifier="selectionCollectionView" selectable="YES" allowsMultipleSelection="YES" id="ZyN-Zd-qQf">
+                                            <rect key="frame" x="0.0" y="0.0" width="1312" height="199"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                            <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="mUq-KW-nzo">
+                                                <size key="itemSize" width="50" height="50"/>
+                                            </collectionViewFlowLayout>
+                                            <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </collectionView>
+                                    </subviews>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </clipView>
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="FGF-1P-bhc">
+                                    <rect key="frame" x="-100" y="-100" width="233" height="15"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="uLo-DB-TJ3">
+                                    <rect key="frame" x="1281" y="0.0" width="15" height="0.0"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ltZ-4C-dje">
+                                <rect key="frame" x="0.0" y="1" width="16" height="22"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="1us-Lt-kU5"/>
+                                    <constraint firstAttribute="width" constant="16" id="Fr3-bp-GKn"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="16" id="Z9f-k1-Kh8"/>
+                                </constraints>
+                                <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSGoLeftTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="io7-Yc-lxJ">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onBatchEditorToolbarSwitcherClicked:" target="ZvP-SA-CoE" id="GXi-6G-3QL"/>
+                                </connections>
+                            </button>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="UBE-X3-xaP">
+                                <rect key="frame" x="16" y="2" width="996" height="20"/>
+                                <subviews>
+                                    <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UJe-CL-XGt">
+                                        <rect key="frame" x="0.0" y="-3" width="253" height="25"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="250" id="KDF-ql-pIb"/>
+                                            <constraint firstAttribute="height" constant="19" id="i3V-Iw-rTy"/>
+                                        </constraints>
+                                        <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="10" id="8CH-Aa-93G">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </comboBoxCell>
+                                    </comboBox>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xCg-De-lnA">
+                                        <rect key="frame" x="248" y="-7" width="94" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="80" id="bIZ-4r-DIe"/>
+                                            <constraint firstAttribute="height" constant="20" id="cKa-4R-eQ4"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="push" title="Assign" bezelStyle="rounded" image="NSLeftFacingTriangleTemplate" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gC1-GR-U1c">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onAssignEventButtonClicked:" target="ZvP-SA-CoE" id="Hyg-6u-1Uf"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fBu-cK-CdX">
+                                        <rect key="frame" x="333" y="-7" width="98" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="84" id="Umb-Y4-yxV"/>
+                                            <constraint firstAttribute="height" constant="20" id="pQn-Hy-S6y"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="push" title="Events" bezelStyle="rounded" image="NSSmartBadgeTemplate" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vBF-8j-nIb">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onManageEventsButtonClicked:" target="ZvP-SA-CoE" id="ebS-59-wl5"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qYv-ia-zVJ">
+                                        <rect key="frame" x="422" y="-7" width="131" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="aaf-rk-MxX"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="push" title="Change Date" bezelStyle="rounded" image="clock" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="r9M-rt-OtB">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onButtonDatePickerClicked:" target="ZvP-SA-CoE" id="VR9-1S-FZD"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9Bs-pz-4CN">
+                                        <rect key="frame" x="544" y="-7" width="88" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="3t8-HB-w8J"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="push" title="Notes" bezelStyle="rounded" image="edit" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mlb-9Y-BIF">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onButtonNotesClicked:" target="ZvP-SA-CoE" id="f9c-wU-mzv"/>
+                                        </connections>
+                                    </button>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JAQ-3Z-0MW">
+                                        <rect key="frame" x="623" y="-7" width="124" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="2L7-3A-gtq"/>
+                                            <constraint firstAttribute="width" constant="110" id="dDv-ue-EOI"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="push" title="Duplicate" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="noArrow" altersStateOfSelectedItem="NO" selectedItem="7hi-2u-8xh" id="92P-Oj-IXC">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="menu"/>
+                                            <menu key="menu" id="zQo-Q2-kjc">
+                                                <items>
+                                                    <menuItem title="Duplicate" image="combine" hidden="YES" id="7hi-2u-8xh">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                    <menuItem title="Duplicate - Select CHECKED image as CHIEF" image="combine" id="bph-8x-GvH"/>
+                                                    <menuItem title="Duplicate - Decouple CHECKED images" image="combine" id="ygl-JT-A5A"/>
+                                                    <menuItem title="Duplicate - Combine CHECKED images to a NEW set" image="combine" id="ZOF-IM-ZZW">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                    <menuItem title="Duplicate - Combine ALL images to a NEW set" image="combine" id="H6F-Rq-5pL">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                    <menuItem title="Duplicate - Combine ALL images to a NEW set, mark the CHECKED one as CHIEF" image="combine" id="V5f-Xg-kri">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <connections>
+                                            <action selector="onButtonDuplicatesClicked:" target="ZvP-SA-CoE" id="y21-HW-O8C"/>
+                                        </connections>
+                                    </popUpButton>
+                                    <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="9ri-yc-r9m">
+                                        <rect key="frame" x="750" y="-1" width="120" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="120" id="Xpt-Ff-Zm4"/>
+                                            <constraint firstAttribute="height" constant="18" id="i48-xy-Jza"/>
+                                        </constraints>
+                                    </progressIndicator>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="fBu-cK-CdX" firstAttribute="leading" secondItem="xCg-De-lnA" secondAttribute="trailing" constant="5" id="4ha-4w-a3D"/>
+                                    <constraint firstItem="9ri-yc-r9m" firstAttribute="leading" secondItem="JAQ-3Z-0MW" secondAttribute="trailing" constant="10" id="BKg-E0-2ZG"/>
+                                    <constraint firstItem="JAQ-3Z-0MW" firstAttribute="top" secondItem="UBE-X3-xaP" secondAttribute="top" id="EfL-DW-Yer"/>
+                                    <constraint firstItem="9Bs-pz-4CN" firstAttribute="leading" secondItem="qYv-ia-zVJ" secondAttribute="trailing" constant="5" id="G6x-bR-lhW"/>
+                                    <constraint firstItem="qYv-ia-zVJ" firstAttribute="leading" secondItem="fBu-cK-CdX" secondAttribute="trailing" constant="5" id="Hmb-wD-tPv"/>
+                                    <constraint firstItem="UJe-CL-XGt" firstAttribute="top" secondItem="UBE-X3-xaP" secondAttribute="top" id="Q8S-mY-DEq"/>
+                                    <constraint firstItem="9Bs-pz-4CN" firstAttribute="top" secondItem="UBE-X3-xaP" secondAttribute="top" id="Qs4-dm-Fv8"/>
+                                    <constraint firstItem="xCg-De-lnA" firstAttribute="leading" secondItem="UJe-CL-XGt" secondAttribute="trailing" constant="5" id="WWL-FT-MNU"/>
+                                    <constraint firstAttribute="height" constant="20" id="aTE-Sc-kmY"/>
+                                    <constraint firstItem="9ri-yc-r9m" firstAttribute="top" secondItem="UBE-X3-xaP" secondAttribute="top" constant="2" id="eJt-7I-G9x"/>
+                                    <constraint firstItem="xCg-De-lnA" firstAttribute="top" secondItem="UBE-X3-xaP" secondAttribute="top" id="ghC-Wh-YyG"/>
+                                    <constraint firstItem="UJe-CL-XGt" firstAttribute="leading" secondItem="UBE-X3-xaP" secondAttribute="leading" id="hzc-3j-Lsf"/>
+                                    <constraint firstItem="JAQ-3Z-0MW" firstAttribute="leading" secondItem="9Bs-pz-4CN" secondAttribute="trailing" constant="5" id="jVR-9X-A4X"/>
+                                    <constraint firstItem="qYv-ia-zVJ" firstAttribute="top" secondItem="UBE-X3-xaP" secondAttribute="top" id="tod-Ju-Yhn"/>
+                                    <constraint firstItem="fBu-cK-CdX" firstAttribute="top" secondItem="UBE-X3-xaP" secondAttribute="top" id="y4B-Nn-kkw"/>
+                                </constraints>
+                            </customView>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="UWC-ys-zX6">
+                                <rect key="frame" x="1012" y="1" width="300" height="22"/>
+                                <subviews>
+                                    <button toolTip="Remove ALL from selection area" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Tuu-5h-g9B">
+                                        <rect key="frame" x="256" y="-5" width="46" height="32"/>
+                                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="trash" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eSj-Gi-AQc">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onSelectionRemoveAllClicked:" target="ZvP-SA-CoE" id="yhj-if-9zu"/>
+                                        </connections>
+                                    </button>
+                                    <button toolTip="Remove CHECKED from selection area" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lT1-yY-BTR">
+                                        <rect key="frame" x="219" y="-5" width="46" height="32"/>
+                                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="broom" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Eem-HU-NXE">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onSelectionRemoveButtonClicked:" target="ZvP-SA-CoE" id="g0n-fn-APX"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CaM-Tw-R04">
+                                        <rect key="frame" x="171" y="3" width="50" height="18"/>
+                                        <buttonCell key="cell" type="check" title="ALL" bezelStyle="regularSquare" imagePosition="left" inset="2" id="7Ie-6Y-gWp">
+                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onSelectionCheckAllClicked:" target="ZvP-SA-CoE" id="kBc-l8-h2c"/>
+                                        </connections>
+                                    </button>
+                                    <button toolTip="Set ALL as Invisible" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QJ8-hF-79J">
+                                        <rect key="frame" x="128" y="-5" width="47" height="32"/>
+                                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="hide" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="p5x-Do-Wlz">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onButtonHideClicked:" target="ZvP-SA-CoE" id="8pp-S1-H6f"/>
+                                        </connections>
+                                    </button>
+                                    <button toolTip="Set ALL as Visible" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="W0U-Cw-aB7">
+                                        <rect key="frame" x="91" y="-5" width="46" height="32"/>
+                                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="view" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WWs-cd-IhV">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onButtonShowClicked:" target="ZvP-SA-CoE" id="k0Z-63-Wdr"/>
+                                        </connections>
+                                    </button>
+                                    <button toolTip="Copy to device" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Zj8-N8-ari">
+                                        <rect key="frame" x="54" y="-5" width="46" height="32"/>
+                                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="download" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zdV-TB-RDD">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onCopyToDeviceClicked:" target="ZvP-SA-CoE" id="jmD-wJ-WRC"/>
+                                        </connections>
+                                    </button>
+                                    <button toolTip="Share" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0by-PK-DjP">
+                                        <rect key="frame" x="16" y="-5" width="47" height="32"/>
+                                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="forward" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fPX-Tq-xS0">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onShareClicked:" target="ZvP-SA-CoE" id="LIb-mk-rRb"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="CaM-Tw-R04" firstAttribute="top" secondItem="UWC-ys-zX6" secondAttribute="top" constant="2" id="2t8-Ov-af3"/>
+                                    <constraint firstItem="Tuu-5h-g9B" firstAttribute="leading" secondItem="lT1-yY-BTR" secondAttribute="trailing" constant="5" id="AjF-3d-aIJ"/>
+                                    <constraint firstAttribute="height" constant="22" id="CJq-zI-K7f"/>
+                                    <constraint firstItem="QJ8-hF-79J" firstAttribute="leading" secondItem="W0U-Cw-aB7" secondAttribute="trailing" constant="5" id="CsP-Wk-5XS"/>
+                                    <constraint firstAttribute="width" constant="300" id="Imc-8E-Fwq"/>
+                                    <constraint firstItem="Tuu-5h-g9B" firstAttribute="top" secondItem="UWC-ys-zX6" secondAttribute="top" id="Ja9-B9-Uqj"/>
+                                    <constraint firstItem="lT1-yY-BTR" firstAttribute="leading" secondItem="CaM-Tw-R04" secondAttribute="trailing" constant="5" id="MFh-fD-vOH"/>
+                                    <constraint firstItem="CaM-Tw-R04" firstAttribute="leading" secondItem="QJ8-hF-79J" secondAttribute="trailing" constant="5" id="Ozb-Hv-Uzu"/>
+                                    <constraint firstItem="W0U-Cw-aB7" firstAttribute="leading" secondItem="Zj8-N8-ari" secondAttribute="trailing" constant="5" id="QGs-38-Roz"/>
+                                    <constraint firstItem="0by-PK-DjP" firstAttribute="top" secondItem="UWC-ys-zX6" secondAttribute="top" id="QNI-GL-rVk"/>
+                                    <constraint firstItem="Zj8-N8-ari" firstAttribute="leading" secondItem="0by-PK-DjP" secondAttribute="trailing" constant="5" id="Vcz-oc-Hob"/>
+                                    <constraint firstAttribute="trailing" secondItem="Tuu-5h-g9B" secondAttribute="trailing" constant="5" id="XZf-UH-wIA"/>
+                                    <constraint firstItem="lT1-yY-BTR" firstAttribute="top" secondItem="UWC-ys-zX6" secondAttribute="top" id="ZU2-eA-kPw"/>
+                                    <constraint firstItem="QJ8-hF-79J" firstAttribute="top" secondItem="UWC-ys-zX6" secondAttribute="top" id="cAh-dw-JXF"/>
+                                    <constraint firstItem="W0U-Cw-aB7" firstAttribute="top" secondItem="UWC-ys-zX6" secondAttribute="top" id="fzb-lr-pzp"/>
+                                    <constraint firstItem="Zj8-N8-ari" firstAttribute="top" secondItem="UWC-ys-zX6" secondAttribute="top" id="jsO-Xj-qxJ"/>
+                                </constraints>
+                            </customView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="UWC-ys-zX6" secondAttribute="bottom" constant="1" id="5rt-cC-Own"/>
+                            <constraint firstItem="ivI-8f-yJa" firstAttribute="top" secondItem="7Oc-5w-GcI" secondAttribute="top" id="JMX-vE-1fI"/>
+                            <constraint firstAttribute="bottom" secondItem="UBE-X3-xaP" secondAttribute="bottom" constant="2" id="KsK-Hj-NXQ"/>
+                            <constraint firstAttribute="trailing" secondItem="UWC-ys-zX6" secondAttribute="trailing" id="UyJ-fR-rrB"/>
+                            <constraint firstItem="UWC-ys-zX6" firstAttribute="leading" secondItem="UBE-X3-xaP" secondAttribute="trailing" id="cky-v7-BkV"/>
+                            <constraint firstItem="ivI-8f-yJa" firstAttribute="leading" secondItem="7Oc-5w-GcI" secondAttribute="leading" id="gDr-rD-jLf"/>
+                            <constraint firstItem="UBE-X3-xaP" firstAttribute="leading" secondItem="ltZ-4C-dje" secondAttribute="trailing" id="h70-kk-8fg"/>
+                            <constraint firstItem="ltZ-4C-dje" firstAttribute="leading" secondItem="7Oc-5w-GcI" secondAttribute="leading" id="hmV-MQ-Zx4"/>
+                            <constraint firstItem="UWC-ys-zX6" firstAttribute="top" secondItem="ivI-8f-yJa" secondAttribute="bottom" constant="2" id="jmG-fC-CQg"/>
+                            <constraint firstAttribute="trailing" secondItem="ivI-8f-yJa" secondAttribute="trailing" id="vBo-4m-mGH"/>
+                            <constraint firstAttribute="bottom" secondItem="ltZ-4C-dje" secondAttribute="bottom" constant="2" id="wby-Ww-QQh"/>
+                            <constraint firstItem="ltZ-4C-dje" firstAttribute="leading" secondItem="7Oc-5w-GcI" secondAttribute="leading" id="zDs-6v-pFb"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="batchEditIndicator" destination="9ri-yc-r9m" id="Q1o-yH-xLM"/>
+                        <outlet property="btnAssignEvent" destination="xCg-De-lnA" id="5y3-cc-OJK"/>
+                        <outlet property="btnBatchEditorToolbarSwitcher" destination="ltZ-4C-dje" id="dGf-X9-tHo"/>
+                        <outlet property="btnCopyToDevice" destination="Zj8-N8-ari" id="msL-oY-kw4"/>
+                        <outlet property="btnDatePicker" destination="qYv-ia-zVJ" id="MbY-7G-cua"/>
+                        <outlet property="btnDuplicates" destination="JAQ-3Z-0MW" id="Lqb-R5-oKw"/>
+                        <outlet property="btnHide" destination="QJ8-hF-79J" id="Ieu-6o-wPH"/>
+                        <outlet property="btnManageEvents" destination="fBu-cK-CdX" id="zRo-zZ-8ba"/>
+                        <outlet property="btnNotes" destination="9Bs-pz-4CN" id="WkP-yT-djh"/>
+                        <outlet property="btnRemoveAllSelection" destination="Tuu-5h-g9B" id="bAF-g1-onn"/>
+                        <outlet property="btnRemoveSelection" destination="lT1-yY-BTR" id="toz-mc-vTE"/>
+                        <outlet property="btnShare" destination="0by-PK-DjP" id="sPW-22-uTb"/>
+                        <outlet property="btnShow" destination="W0U-Cw-aB7" id="F3P-9L-R4d"/>
+                        <outlet property="comboEventList" destination="UJe-CL-XGt" id="p0u-Fa-zxw"/>
+                        <outlet property="selectionCheckAllBox" destination="CaM-Tw-R04" id="9Ix-ip-xhZ"/>
+                        <outlet property="selectionCollectionView" destination="ZyN-Zd-qQf" id="eY4-rC-oDn"/>
+                    </connections>
+                </viewController>
+                <customObject id="S1H-jP-StX" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-560" y="1929"/>
+        </scene>
         <!--Selection Collection View Controller-->
         <scene sceneID="k3E-cm-GCB">
             <objects>
-                <viewController storyboardIdentifier="selectionView" id="Vi9-Kl-xUJ" customClass="SelectionCollectionViewController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="selectionCollectionViewController" id="Vi9-Kl-xUJ" customClass="SelectionCollectionViewController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="bVr-Ip-eS5">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -2711,7 +2740,7 @@ brew install ifuse</string>
                 </viewController>
                 <customObject id="EBI-XU-UEs" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-392" y="2075"/>
+            <point key="canvasLocation" x="-366" y="2532"/>
         </scene>
         <!--Image Meta View Controller-->
         <scene sceneID="i56-5S-fHM">
@@ -3056,11 +3085,10 @@ brew install ifuse</string>
                                 </textFieldCell>
                             </textField>
                             <wkWebView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bvd-cW-3vh">
-                                <rect key="frame" x="0.0" y="30" width="550" height="155"/>
+                                <rect key="frame" x="0.0" y="35" width="550" height="150"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="155" id="6Xs-sy-ajD"/>
                                     <constraint firstAttribute="width" constant="550" id="d67-d5-HRG"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="155" id="lhM-XL-gwQ"/>
+                                    <constraint firstAttribute="height" constant="150" id="lhM-XL-gwQ"/>
                                 </constraints>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -3068,7 +3096,7 @@ brew install ifuse</string>
                                 </wkWebViewConfiguration>
                             </wkWebView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rgc-rQ-Zc1">
-                                <rect key="frame" x="-7" y="3" width="159" height="32"/>
+                                <rect key="frame" x="-7" y="5" width="159" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="Aqs-e4-Y6p"/>
                                     <constraint firstAttribute="width" constant="145" id="JYa-HM-xI9"/>
@@ -3082,7 +3110,7 @@ brew install ifuse</string>
                                 </connections>
                             </button>
                             <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yA8-xv-Itc">
-                                <rect key="frame" x="147" y="6" width="328" height="26"/>
+                                <rect key="frame" x="147" y="8" width="328" height="26"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="yX8-CR-zbt"/>
                                 </constraints>
@@ -3093,7 +3121,7 @@ brew install ifuse</string>
                                 </comboBoxCell>
                             </comboBox>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7hD-ia-3RF">
-                                <rect key="frame" x="467" y="3" width="92" height="32"/>
+                                <rect key="frame" x="467" y="5" width="92" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="78" id="4XJ-ri-LIP"/>
                                     <constraint firstAttribute="height" constant="20" id="Hw5-P8-XkF"/>
@@ -3121,18 +3149,17 @@ brew install ifuse</string>
                             </slider>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="twm-GR-yrc" firstAttribute="leading" secondItem="bvd-cW-3vh" secondAttribute="trailing" constant="1" id="1BH-g4-6DN"/>
-                            <constraint firstItem="yA8-xv-Itc" firstAttribute="top" secondItem="bvd-cW-3vh" secondAttribute="bottom" id="30M-5L-IRL"/>
+                            <constraint firstItem="yA8-xv-Itc" firstAttribute="top" secondItem="bvd-cW-3vh" secondAttribute="bottom" constant="3" id="30M-5L-IRL"/>
                             <constraint firstItem="twm-GR-yrc" firstAttribute="leading" secondItem="bvd-cW-3vh" secondAttribute="trailing" constant="3" id="4Uu-gC-hBP"/>
                             <constraint firstItem="01a-yM-dHU" firstAttribute="top" secondItem="VUm-uK-HMu" secondAttribute="top" id="65D-lB-7fK"/>
                             <constraint firstItem="twm-GR-yrc" firstAttribute="top" secondItem="tYa-XN-daY" secondAttribute="bottom" id="A63-0M-s8e"/>
                             <constraint firstItem="bvd-cW-3vh" firstAttribute="top" secondItem="tYa-XN-daY" secondAttribute="bottom" id="AlX-Yu-O3j"/>
                             <constraint firstItem="rsP-uV-cny" firstAttribute="top" secondItem="VUm-uK-HMu" secondAttribute="top" id="CSl-Qs-dSa"/>
-                            <constraint firstItem="7hD-ia-3RF" firstAttribute="top" secondItem="bvd-cW-3vh" secondAttribute="bottom" id="Gcb-qq-trt"/>
+                            <constraint firstItem="7hD-ia-3RF" firstAttribute="top" secondItem="bvd-cW-3vh" secondAttribute="bottom" constant="3" id="Gcb-qq-trt"/>
                             <constraint firstAttribute="trailing" secondItem="01a-yM-dHU" secondAttribute="trailing" id="HG9-5z-1dS"/>
                             <constraint firstItem="tYa-XN-daY" firstAttribute="leading" secondItem="VUm-uK-HMu" secondAttribute="leading" id="N3l-ak-ax0"/>
                             <constraint firstItem="01a-yM-dHU" firstAttribute="leading" secondItem="wBn-6s-Peh" secondAttribute="trailing" constant="10" id="NC4-Kq-zEo"/>
-                            <constraint firstItem="rgc-rQ-Zc1" firstAttribute="top" secondItem="bvd-cW-3vh" secondAttribute="bottom" id="QJQ-8C-o7f"/>
+                            <constraint firstItem="rgc-rQ-Zc1" firstAttribute="top" secondItem="bvd-cW-3vh" secondAttribute="bottom" constant="3" id="QJQ-8C-o7f"/>
                             <constraint firstItem="rsP-uV-cny" firstAttribute="leading" secondItem="VUm-uK-HMu" secondAttribute="leading" id="ROx-dz-cYh"/>
                             <constraint firstAttribute="trailing" secondItem="tYa-XN-daY" secondAttribute="trailing" id="TFK-1p-tLU"/>
                             <constraint firstAttribute="trailing" secondItem="twm-GR-yrc" secondAttribute="trailing" id="ZhU-sR-s8d"/>
