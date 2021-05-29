@@ -16,6 +16,28 @@ extension ViewController {
         self.addChild(self.selectionViewController)
         self.bottomView.addSubview(self.selectionViewController.view)
         self.selectionViewController.initView()
+        
+        self.selectionViewController.isSmallScreen = {
+            return self.smallScreen
+        }
+        
+        self.selectionViewController.reloadMainCollectionView = {
+            self.imagesLoader.reload()
+            self.imagesLoader.reorganizeItems(considerPlaces: true)
+            self.collectionView.reloadData()
+        }
+        
+        self.selectionViewController.selectImage = { image in
+            return self.selectImageFile(image)
+        }
+        
+        self.selectionViewController.getMainCollectionVisibleItems = {
+            return self.collectionView.visibleItems() as! [CollectionViewItem]
+        }
+        
+        self.selectionViewController.selectAllInMainCollectionView = { state in
+            self.chbSelectAll.state = state ? .on : .off
+        }
     }
 }
 

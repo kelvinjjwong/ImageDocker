@@ -90,6 +90,7 @@ class SelectionViewController : NSViewController {
         self.btnNotes.title = Words.writeNotes.word()
         self.btnDuplicates.title = Words.duplicates.word()
         self.btnDuplicates.image = Icons.duplicates
+        self.btnDuplicates.item(at: 0)?.image = Icons.duplicates
         self.selectionCheckAllBox.title = Words.selectAll.word()
     }
     
