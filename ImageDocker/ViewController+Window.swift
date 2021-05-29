@@ -32,8 +32,8 @@ extension ViewController {
         
         if size.isSmallScreen {
             self.selectionViewController.hideSelectionBatchEditors()
-            self.btnBatchEditorToolbarSwitcher.image = NSImage(named: NSImage.goRightTemplateName)
-            self.btnBatchEditorToolbarSwitcher.toolTip = "Show event/datetime selectors"
+            self.selectionViewController.btnBatchEditorToolbarSwitcher.image = NSImage(named: NSImage.goRightTemplateName)
+            self.selectionViewController.btnBatchEditorToolbarSwitcher.toolTip = "Show event/datetime selectors"
             
             let constraintPlayerHeight = NSLayoutConstraint(item: self.playerContainer!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 258)
             self.playerContainer.addConstraint(constraintPlayerHeight)

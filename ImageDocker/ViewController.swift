@@ -160,31 +160,7 @@ class ViewController: NSViewController {
     var selectionViewController : SelectionViewController!
     
     @IBOutlet weak var selectionCollectionView: NSCollectionView!
-    
-    @IBOutlet weak var selectionCheckAllBox: NSButton!
-    
-    @IBOutlet weak var btnAssignEvent: NSButton!
-    @IBOutlet weak var btnManageEvents: NSButton!
-    @IBOutlet weak var btnRemoveSelection: NSButton!
-    @IBOutlet weak var btnShow: NSButton!
-    @IBOutlet weak var btnHide: NSButton!
-    @IBOutlet weak var btnRemoveAllSelection: NSButton!
-    @IBOutlet weak var btnShare: NSButton!
-    @IBOutlet weak var btnCopyToDevice: NSButton!
-    
-    // MARK: SELECTION BATCH EDITOR TOOLBAR - SWITCHER
-    
-    @IBOutlet weak var btnBatchEditorToolbarSwitcher: NSButton!
-    
-    
-    // MARK: SELECTION BATCH EDITOR - DateTime
-    
-    @IBOutlet weak var batchEditIndicator: NSProgressIndicator!
-    @IBOutlet weak var btnDatePicker: NSButton!
-    
-    @IBOutlet weak var btnNotes: NSButton!
-    @IBOutlet weak var btnDuplicates: NSPopUpButton!
-    
+        
     // MARK: SELECTION BATCH EDITOR - EVENT & PLACE
     
     var eventPopover:NSPopover?
@@ -196,7 +172,6 @@ class ViewController: NSViewController {
     var filterPopover:NSPopover?
     var filterViewController:FilterViewController!
     
-    @IBOutlet weak var comboEventList: NSComboBox!
     @IBOutlet weak var comboPlaceList: NSComboBox!
     
     // MARK: - Device Copy Dialog

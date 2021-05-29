@@ -105,7 +105,7 @@ extension ViewController {
             return self.img
         }
         self.imageLocationEditViewController.getSelectionViewIndicator = {
-            return self.batchEditIndicator
+            return self.selectionViewController.batchEditIndicator
         }
         
         self.splitviewPreview.addArrangedSubview(imageLocationEditViewController.view)
