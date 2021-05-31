@@ -290,6 +290,7 @@
 		8EF8C55C265DBD820060D2E0 /* ImageLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF8C55B265DBD820060D2E0 /* ImageLocationViewController.swift */; };
 		8EF8C55E265DBD910060D2E0 /* ImageLocationEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF8C55D265DBD910060D2E0 /* ImageLocationEditViewController.swift */; };
 		8EF8C560266032730060D2E0 /* SelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF8C55F266032730060D2E0 /* SelectionViewController.swift */; };
+		8EF8C562266329160060D2E0 /* MessageEventCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF8C561266329160060D2E0 /* MessageEventCenter.swift */; };
 		8EF92DF024558BB500B55046 /* PostgresRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF92DEF24558BB500B55046 /* PostgresRecord.swift */; };
 		8EF92DF42460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF92DF32460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift */; };
 		8EFA02DB243B3E1A00D7C355 /* PostgresClientKit+Image+Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA02DA243B3E1A00D7C355 /* PostgresClientKit+Image+Record.swift */; };
@@ -625,6 +626,7 @@
 		8EF8C55B265DBD820060D2E0 /* ImageLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLocationViewController.swift; sourceTree = "<group>"; };
 		8EF8C55D265DBD910060D2E0 /* ImageLocationEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLocationEditViewController.swift; sourceTree = "<group>"; };
 		8EF8C55F266032730060D2E0 /* SelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionViewController.swift; sourceTree = "<group>"; };
+		8EF8C561266329160060D2E0 /* MessageEventCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageEventCenter.swift; sourceTree = "<group>"; };
 		8EF92DEF24558BB500B55046 /* PostgresRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostgresRecord.swift; sourceTree = "<group>"; };
 		8EF92DF32460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageSQLHelper+PostgresClientKit.swift"; sourceTree = "<group>"; };
 		8EFA02DA243B3E1A00D7C355 /* PostgresClientKit+Image+Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostgresClientKit+Image+Record.swift"; sourceTree = "<group>"; };
@@ -1352,6 +1354,7 @@
 				8E9CF30A26489D5500558423 /* Localize.swift */,
 				8E9CF30C26489EAA00558423 /* Words.swift */,
 				8E9CF30E2648D42500558423 /* ChangeEvent.swift */,
+				8EF8C561266329160060D2E0 /* MessageEventCenter.swift */,
 			);
 			path = Commons;
 			sourceTree = "<group>";
@@ -2021,6 +2024,7 @@
 				8EB271A323413CE7003BF3AF /* ExportConfigurationViewController.swift in Sources */,
 				8E3EC3B4214DB1B8004B6125 /* LunarSolarConverter.swift in Sources */,
 				8EB271572337B9C3003BF3AF /* GRDB+Image+Search.swift in Sources */,
+				8EF8C562266329160060D2E0 /* MessageEventCenter.swift in Sources */,
 				8EB271A823418C68003BF3AF /* ExportProfileViewController.swift in Sources */,
 				8EB27170233E15B0003BF3AF /* TreeController+LibrarySectionMenu.swift in Sources */,
 				8EBA9DDF216F8BB100DACAAD /* NotesViewController.swift in Sources */,

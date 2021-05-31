@@ -248,6 +248,9 @@ class ViewController: NSViewController {
     // MARK: - INIT VIEW
     
     internal func initView() {
+        MessageEventCenter.default.messagePresenter = { message in
+            self.popNotification(message: message)
+        }
         self.hideNotification()
 //        print("\(Date()) Loading view - preview zone")
         self.configurePreview()
@@ -348,7 +351,7 @@ class ViewController: NSViewController {
     
     @objc func processDatabaseError(notification:Notification) {
         if let error = notification.object as? Error {
-            self.popNotification(message: "\(Words.dbError.word()): \(error)")
+            MessageEventCenter.default.showMessage(message: "\(Words.dbError.word()): \(error)")
         }
     }
     

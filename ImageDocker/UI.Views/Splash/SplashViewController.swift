@@ -36,6 +36,12 @@ class SplashViewController: NSViewController {
         self.onCompleted = onCompleted
         super.init(nibName: "SplashViewController", bundle: nil)
     }
+    
+    override func viewDidAppear() {
+        if !(self.view.window?.isZoomed ?? true) {
+            self.view.window?.performZoom(self)
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

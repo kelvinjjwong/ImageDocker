@@ -70,7 +70,7 @@ class TreeViewController : StackBodyViewController {
                 self.trees = treeNodes
                 
                 if let msg = message {
-                    self.popNotification(message: msg)
+                    MessageEventCenter.default.showMessage(message: msg)
                 }
             }
             DispatchQueue.main.async {
@@ -267,7 +267,7 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate, Tr
                     print("loaded 0 child nodes")
                 }
                 if let msg = message {
-                    self.popNotification(message: msg)
+                    MessageEventCenter.default.showMessage(message: msg)
                 }
             }
         }

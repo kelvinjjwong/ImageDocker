@@ -41,6 +41,8 @@ protocol ImageRecordDaoInterface {
     // MARK: - DESCRIPTION
     
     func storeImageDescription(path:String, shortDescription:String?, longDescription:String?) -> ExecuteState
+    
+    func updateImageRotation(path:String, rotation:Int) -> ExecuteState
 }
 
 protocol ImageSearchDaoInterface {

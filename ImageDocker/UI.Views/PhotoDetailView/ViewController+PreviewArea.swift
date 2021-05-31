@@ -24,7 +24,7 @@ extension ViewController {
                 pasteboard.declareTypes([.string], owner: nil)
                 pasteboard.setString(value, forType: .string)
                 
-                self.popNotification(message: "Copied image's meta value to pasteboard.")
+                MessageEventCenter.default.showMessage(message: "Copied image's meta value to pasteboard.")
             }
             
         }
@@ -49,6 +49,18 @@ extension ViewController {
             
         self.imagePreviewController = storyboard?.instantiateController(withIdentifier: "ImagePreviewController") as! ImagePreviewController
         self.splitviewPreview.addArrangedSubview(imagePreviewController.view)
+        
+        self.imagePreviewController.getImageFromPreview = {
+            return self.getImageFromPreview()
+        }
+        
+        self.imagePreviewController.previewImage = { nsImage in
+            self.previewImage(image: nsImage)
+        }
+        
+        self.imagePreviewController.zoomOutImage = { imageFile in
+            self.onCollectionViewItemQuickLook(imageFile)
+        }
         
         self.playerContainer = imagePreviewController.playerContainer
         self.lblImageDescription = imagePreviewController.lblDescription
@@ -192,6 +204,11 @@ extension ViewController {
     }
     
     internal func previewImage(image:ImageFile) {
+        self.imagePreviewController.imageFile = image
+        
+        let rotation = Float(image.imageData?.rotation ?? 0)
+        
+        
         for sView in self.playerContainer.subviews {
             sView.removeFromSuperview()
         }
@@ -207,7 +224,11 @@ extension ViewController {
             self.playerContainer.addSubview(stackedImageViewController.view)
             
             // show image
-            stackedImageViewController.imageDisplayer.image = image.image
+            if rotation == 0 {
+                stackedImageViewController.imageDisplayer.image = image.image
+            }else{
+                stackedImageViewController.imageDisplayer.image = image.image.rotate(degrees: CGFloat(rotation))
+            }
             
             self.btnImageOptions.isEnabled = true
         } else {

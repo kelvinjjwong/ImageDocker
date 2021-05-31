@@ -107,7 +107,7 @@ extension ViewController {
             if let _ = dateFormatter.date(from: datetime) {
                 let newValue = components[0].replacingOccurrences(of: ":", with: "-") + " " + components[1]
                 self.selectionViewController.openDatePicker(with: newValue)
-                self.popNotification(message: Words.copiedDateToBatchDatePicker.word("%s", "\(newValue)"))
+                MessageEventCenter.default.showMessage(message: Words.copiedDateToBatchDatePicker.word("%s", "\(newValue)"))
             }
         }
     }
@@ -117,7 +117,7 @@ extension ViewController {
         if let value = self.img.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "From Filename") {
             self.copyDateToBatchEditor(value: value, name: "Date in Filename")
         }else{
-            self.popNotification(message: Words.error_imageMissingDateTimeInFilename.word())
+            MessageEventCenter.default.showMessage(message: Words.error_imageMissingDateTimeInFilename.word())
         }
     }
     
@@ -126,7 +126,7 @@ extension ViewController {
         if let value = self.img.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "DateTimeOriginal") {
             self.copyDateToBatchEditor(value: value, name: "DateTimeOriginal")
         }else{
-            self.popNotification(message: Words.error_imageMissingDateTimeOriginal.word())
+            MessageEventCenter.default.showMessage(message: Words.error_imageMissingDateTimeOriginal.word())
         }
     }
     
@@ -135,7 +135,7 @@ extension ViewController {
         if let value = self.img.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "FileCreateDate") {
             self.copyDateToBatchEditor(value: value, name: "FileCreateDate")
         }else{
-            self.popNotification(message: Words.error_imageMissingFileCreateDate.word())
+            MessageEventCenter.default.showMessage(message: Words.error_imageMissingFileCreateDate.word())
         }
     }
     
@@ -144,7 +144,7 @@ extension ViewController {
         if let value = self.img.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "FileModifyDate") {
             self.copyDateToBatchEditor(value: value, name: "FileModifyDate")
         }else{
-            self.popNotification(message: Words.error_imageMissingFileModifyDate.word())
+            MessageEventCenter.default.showMessage(message: Words.error_imageMissingFileModifyDate.word())
         }
     }
     
@@ -153,7 +153,7 @@ extension ViewController {
         if let value = self.img.metaInfoHolder.getMeta(category: "DateTime", subCategory: "", title: "Software Modified") {
             self.copyDateToBatchEditor(value: value, name: "SoftwareModifyDate")
         }else{
-            self.popNotification(message: Words.error_imageMissingSoftwareModifyDate.word())
+            MessageEventCenter.default.showMessage(message: Words.error_imageMissingSoftwareModifyDate.word())
         }
     }
     
@@ -168,7 +168,7 @@ extension ViewController {
     @objc func previewMenuExtractExif(_ menuItem:NSMenuItem) {
         self.btnImageOptions.selectItem(at: 0)
         self.loadImageExif()
-        self.popNotification(message: Words.info_doneExtractExif.word())
+        MessageEventCenter.default.showMessage(message: Words.info_doneExtractExif.word())
 //        print("preview menu - done")
     }
     
@@ -187,11 +187,11 @@ extension ViewController {
                 let _ = self.img.save()
                 self.loadImageExif()
                 
-                self.popNotification(message: Words.info_doneExtractDateTimeFromFilename.word())
+                MessageEventCenter.default.showMessage(message: Words.info_doneExtractDateTimeFromFilename.word())
             }
         }else{
 
-            self.popNotification(message: Words.error_extractDateTimeFromFilename.word())
+            MessageEventCenter.default.showMessage(message: Words.error_extractDateTimeFromFilename.word())
         }
 //        print("preview menu - done")
     }
@@ -255,19 +255,19 @@ extension ViewController {
                             try FileManager.default.moveItem(atPath: url.path, toPath: tmpPath)
                             try FileManager.default.copyItem(atPath: backupUrl.path, toPath: url.path)
 
-                            self.popNotification(message: Words.info_doneReplacedImageToBackupVersion.word())
+                            MessageEventCenter.default.showMessage(message: Words.info_doneReplacedImageToBackupVersion.word())
                         }catch{
                             print("Unable to restore backup image from [\(backupUrl.path)] to [url.path]")
                             print(error)
 
-                            self.popNotification(message: Words.error_replaceImageToBackupVersion.word())
+                            MessageEventCenter.default.showMessage(message: Words.error_replaceImageToBackupVersion.word())
                             
 //                            print("Restoring original editable version from \(tmpPath)")
                             do {
                                 try FileManager.default.removeItem(atPath: url.path)
                                 try FileManager.default.moveItem(atPath: tmpPath, toPath: url.path)
                             }catch{
-                                print("Unable to restore original editable version from [\(tmpPath)] to [\(url.path)]")
+                                MessageEventCenter.default.showMessage(message: "Unable to restore original editable version from [\(tmpPath)] to [\(url.path)]")
                                 print(error)
                             }
                         }
@@ -278,10 +278,10 @@ extension ViewController {
                             print(error)
                         }
                     }else{
-                        self.popNotification(message: Words.error_imageMissingBackupVersion.word())
+                        MessageEventCenter.default.showMessage(message: Words.error_imageMissingBackupVersion.word())
                     }
                 }else{
-                    self.popNotification(message: Words.error_imageMissingEditableVersion.word())
+                    MessageEventCenter.default.showMessage(message: Words.error_imageMissingEditableVersion.word())
                 }
             }
             
@@ -293,7 +293,7 @@ extension ViewController {
         let url = self.img.url
         DispatchQueue.global().async {
             let _ = FaceTask.default.findFaces(path: url.path)
-            self.popNotification(message: Words.info_doneFindingFaces.word())
+            MessageEventCenter.default.showMessage(message: Words.info_doneFindingFaces.word())
         }
     }
     
@@ -302,7 +302,7 @@ extension ViewController {
         let url = self.img.url
         DispatchQueue.global().async {
             let _ = FaceTask.default.recognizeFaces(path: url.path)
-            self.popNotification(message: Words.info_doneRecognizeFaces.word())
+            MessageEventCenter.default.showMessage(message: Words.info_doneRecognizeFaces.word())
         }
     }
 }

@@ -417,9 +417,9 @@
                                                                         </textFieldCell>
                                                                     </textField>
                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y2t-Ke-hIj">
-                                                                        <rect key="frame" x="1236" y="9" width="62" height="16"/>
+                                                                        <rect key="frame" x="1206" y="9" width="92" height="16"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="width" constant="60" id="XUL-iw-5h3"/>
+                                                                            <constraint firstAttribute="width" constant="90" id="XUL-iw-5h3"/>
                                                                             <constraint firstAttribute="height" constant="14" id="u2L-R0-5zn"/>
                                                                         </constraints>
                                                                         <buttonCell key="cell" type="check" title="Hidden" bezelStyle="regularSquare" imagePosition="left" inset="2" id="XCt-EB-k6H">
@@ -431,7 +431,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eaf-Jq-heG">
-                                                                        <rect key="frame" x="1180" y="7" width="50" height="18"/>
+                                                                        <rect key="frame" x="1150" y="7" width="50" height="18"/>
                                                                         <buttonCell key="cell" type="check" title="ALL" bezelStyle="regularSquare" imagePosition="left" inset="2" id="dsb-eu-8Qc">
                                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                             <font key="font" metaFont="system"/>
@@ -441,7 +441,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gkw-tO-uG9">
-                                                                        <rect key="frame" x="888" y="4" width="97" height="25"/>
+                                                                        <rect key="frame" x="858" y="4" width="97" height="25"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="22" id="WXq-VJ-o8B"/>
                                                                             <constraint firstAttribute="width" constant="95" id="yDU-mD-v5y"/>
@@ -462,7 +462,7 @@
                                                                         </connections>
                                                                     </popUpButton>
                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IGx-sv-JYq">
-                                                                        <rect key="frame" x="1059" y="1" width="39" height="32"/>
+                                                                        <rect key="frame" x="1029" y="1" width="39" height="32"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="25" id="ZBi-2B-wJR"/>
                                                                         </constraints>
@@ -475,7 +475,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="meR-zL-rAv">
-                                                                        <rect key="frame" x="1148" y="1" width="39" height="32"/>
+                                                                        <rect key="frame" x="1118" y="1" width="39" height="32"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="25" id="JsJ-9k-Ggr"/>
                                                                         </constraints>
@@ -488,7 +488,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uR6-jc-2Z7">
-                                                                        <rect key="frame" x="1091" y="9" width="64" height="16"/>
+                                                                        <rect key="frame" x="1061" y="9" width="64" height="16"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="60" id="QU5-Rs-auk"/>
                                                                         </constraints>
@@ -499,7 +499,7 @@
                                                                         </textFieldCell>
                                                                     </textField>
                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DpT-Dg-Oeb">
-                                                                        <rect key="frame" x="988" y="5" width="74" height="23"/>
+                                                                        <rect key="frame" x="958" y="5" width="74" height="23"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="20" id="Gmp-RZ-apS"/>
                                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="SPU-3L-Anh"/>
@@ -3206,38 +3206,103 @@ brew install ifuse</string>
                                 </constraints>
                             </containerView>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ptd-Ew-fxV">
-                                <rect key="frame" x="-2" y="0.0" width="579" height="40"/>
+                                <rect key="frame" x="63" y="0.0" width="449" height="40"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="E3T-ci-Ayp"/>
-                                    <constraint firstAttribute="width" constant="575" id="iXm-5t-6n8"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="rd5-eJ-vSv"/>
                                 </constraints>
-                                <textFieldCell key="cell" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" id="0Af-u2-okp">
+                                <textFieldCell key="cell" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" id="0Af-u2-okp">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SmO-fP-RNM">
+                                <rect key="frame" x="0.0" y="4" width="32" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="32" id="921-mN-t17"/>
+                                    <constraint firstAttribute="height" constant="32" id="Z5g-5j-B54"/>
+                                </constraints>
+                                <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="edit" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="Y9n-KA-y42">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onWriteNotesClicked:" target="qiw-dL-OGM" id="cFw-GV-07R"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8La-HV-qNt">
+                                <rect key="frame" x="32" y="4" width="32" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="CyD-0S-YMP"/>
+                                    <constraint firstAttribute="width" constant="32" id="Hn1-xQ-eV2"/>
+                                </constraints>
+                                <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="copy" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="a5n-gH-gk7">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onZoomOutClicked:" target="qiw-dL-OGM" id="Xdo-1q-vOC"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mwk-3f-UCg">
+                                <rect key="frame" x="543" y="4" width="32" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="Wbc-qU-Miu"/>
+                                    <constraint firstAttribute="width" constant="32" id="igx-6G-5Gy"/>
+                                </constraints>
+                                <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="rotate_clockwise" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="pWV-vL-QPV">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onRotateClockwiseClicked:" target="qiw-dL-OGM" id="Rdc-Df-FbF"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hb0-9d-G40">
+                                <rect key="frame" x="511" y="4" width="32" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="6gF-x3-4Nf"/>
+                                    <constraint firstAttribute="width" constant="32" id="BbF-kb-OnB"/>
+                                </constraints>
+                                <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="rotate_counter_clockwise" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="x0q-gg-Kzv">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onRotateCounterClockwiseClicked:" target="qiw-dL-OGM" id="JKG-DG-kcE"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="Mwk-3f-UCg" firstAttribute="leading" secondItem="Hb0-9d-G40" secondAttribute="trailing" id="0Qy-9R-HuV"/>
                             <constraint firstItem="0gW-xQ-8Nz" firstAttribute="top" secondItem="qsW-OV-TMW" secondAttribute="top" id="A97-G7-n8o"/>
-                            <constraint firstItem="ptd-Ew-fxV" firstAttribute="leading" secondItem="qsW-OV-TMW" secondAttribute="leading" id="Esa-he-SL8"/>
+                            <constraint firstItem="SmO-fP-RNM" firstAttribute="top" secondItem="0gW-xQ-8Nz" secondAttribute="bottom" constant="5" id="DXp-q1-CWp"/>
+                            <constraint firstItem="8La-HV-qNt" firstAttribute="top" secondItem="0gW-xQ-8Nz" secondAttribute="bottom" constant="5" id="DoO-k4-NxX"/>
+                            <constraint firstItem="ptd-Ew-fxV" firstAttribute="leading" secondItem="qsW-OV-TMW" secondAttribute="leading" constant="65" id="Esa-he-SL8"/>
                             <constraint firstItem="0gW-xQ-8Nz" firstAttribute="leading" secondItem="qsW-OV-TMW" secondAttribute="leading" id="Gp3-W3-pu1"/>
                             <constraint firstItem="ptd-Ew-fxV" firstAttribute="top" secondItem="0gW-xQ-8Nz" secondAttribute="bottom" constant="1" id="SQe-fC-tk5"/>
-                            <constraint firstAttribute="trailing" secondItem="ptd-Ew-fxV" secondAttribute="trailing" id="UMi-5Q-zvq"/>
+                            <constraint firstAttribute="trailing" secondItem="ptd-Ew-fxV" secondAttribute="trailing" constant="65" id="UMi-5Q-zvq"/>
+                            <constraint firstAttribute="trailing" secondItem="Mwk-3f-UCg" secondAttribute="trailing" id="YQN-zZ-S9c"/>
                             <constraint firstAttribute="trailing" secondItem="0gW-xQ-8Nz" secondAttribute="trailing" id="clX-hJ-OMc"/>
+                            <constraint firstItem="8La-HV-qNt" firstAttribute="leading" secondItem="SmO-fP-RNM" secondAttribute="trailing" id="kzf-96-UR0"/>
+                            <constraint firstItem="SmO-fP-RNM" firstAttribute="leading" secondItem="qsW-OV-TMW" secondAttribute="leading" id="lQQ-Zg-3hc"/>
+                            <constraint firstItem="Hb0-9d-G40" firstAttribute="top" secondItem="0gW-xQ-8Nz" secondAttribute="bottom" constant="5" id="nD3-zm-tDS"/>
                             <constraint firstAttribute="bottom" secondItem="ptd-Ew-fxV" secondAttribute="bottom" id="ngl-OQ-AIt"/>
-                            <constraint firstItem="ptd-Ew-fxV" firstAttribute="top" secondItem="0gW-xQ-8Nz" secondAttribute="bottom" constant="1" id="qIc-8D-PwY"/>
+                            <constraint firstItem="Mwk-3f-UCg" firstAttribute="top" secondItem="0gW-xQ-8Nz" secondAttribute="bottom" constant="5" id="qkm-mf-nvW"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="btnClockwise" destination="Mwk-3f-UCg" id="Xnd-OM-uOH"/>
+                        <outlet property="btnCounterClockwise" destination="Hb0-9d-G40" id="Qzs-lY-ya0"/>
+                        <outlet property="btnWriteNotes" destination="SmO-fP-RNM" id="WuQ-R5-7hj"/>
+                        <outlet property="btnZoomOut" destination="8La-HV-qNt" id="LzQ-1r-QiT"/>
                         <outlet property="lblDescription" destination="ptd-Ew-fxV" id="aQd-6A-jOB"/>
                         <outlet property="playerContainer" destination="0gW-xQ-8Nz" id="mi4-5p-rhs"/>
                     </connections>
                 </viewController>
                 <customObject id="qRr-TN-hpB" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1026" y="1288"/>
+            <point key="canvasLocation" x="1025.5" y="1287.5"/>
         </scene>
     </scenes>
     <resources>
@@ -3258,6 +3323,7 @@ brew install ifuse</string>
         <image name="collapse_left" width="23" height="18"/>
         <image name="collapse_right" width="23" height="18"/>
         <image name="combine" width="16" height="16"/>
+        <image name="copy" width="16" height="16"/>
         <image name="ding" width="13" height="15"/>
         <image name="download" width="16" height="16"/>
         <image name="edit" width="16" height="15"/>
@@ -3265,6 +3331,8 @@ brew install ifuse</string>
         <image name="forward" width="17" height="16"/>
         <image name="hide" width="17" height="15"/>
         <image name="map" width="16" height="16"/>
+        <image name="rotate_clockwise" width="16" height="16"/>
+        <image name="rotate_counter_clockwise" width="16" height="16"/>
         <image name="task" width="12" height="16"/>
         <image name="trash" width="16" height="16"/>
         <image name="view" width="16" height="16"/>

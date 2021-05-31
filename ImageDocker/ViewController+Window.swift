@@ -19,18 +19,19 @@ extension ViewController {
         let windowMinSize = NSMakeSize(CGFloat(600), CGFloat(500))
         let windowMaxSize = NSMakeSize(size.widthMax, size.heightMax - CGFloat(5))
         
-        var windowFrame = self.view.window?.frame
-        windowFrame?.size = windowSize
-        windowFrame?.origin = size.originPoint
-        self.view.window?.maxSize = windowMaxSize
-        self.view.window?.minSize = windowMinSize
-        self.view.window?.setFrame(windowFrame!, display: true)
-        
-        splashController.view.frame = self.view.bounds
-        
         smallScreen = size.isSmallScreen
         
         if size.isSmallScreen {
+            
+            var windowFrame = self.view.window?.frame
+            windowFrame?.size = windowSize
+            windowFrame?.origin = size.originPoint
+            self.view.window?.maxSize = windowMaxSize
+            self.view.window?.minSize = windowMinSize
+            self.view.window?.setFrame(windowFrame!, display: true)
+            
+            splashController.view.frame = self.view.bounds
+            
             self.selectionViewController.hideSelectionBatchEditors()
             self.selectionViewController.btnBatchEditorToolbarSwitcher.image = NSImage(named: NSImage.goRightTemplateName)
             self.selectionViewController.btnBatchEditorToolbarSwitcher.toolTip = "Show event/datetime selectors"
@@ -41,9 +42,9 @@ extension ViewController {
             self.playerContainer.display()
         }else {
             print("BIG SCREEN")
-            let constraintPlayerHeight = NSLayoutConstraint(item: self.playerContainer!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 408)
+            let constraintPlayerHeight = NSLayoutConstraint(item: self.playerContainer!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1.0, constant: 403)
             self.playerContainer.addConstraint(constraintPlayerHeight)
-            self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(408)))
+            self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(403)))
             self.playerContainer.display()
         }
         

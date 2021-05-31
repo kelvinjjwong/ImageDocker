@@ -213,6 +213,18 @@ extension ImageRecordDaoGRDB {
         return .OK
     }
     
+    func updateImageRotation(path:String, rotation:Int) -> ExecuteState{
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute(sql: "UPDATE Image set rotation = \(rotation) WHERE path=?", arguments: StatementArguments([path]) )
+            }
+        }catch{
+            return SQLHelper.errorState(error)
+        }
+        return .OK
+    }
+    
     
 }
 

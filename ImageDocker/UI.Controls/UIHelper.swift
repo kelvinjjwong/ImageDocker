@@ -21,7 +21,7 @@ struct UIHelper {
         let screenWidth = NSScreen.main?.visibleFrame.width // visibleFrame
         let screenHeight = NSScreen.main?.visibleFrame.height
         
-        let windowOriginPoint = CGPoint(x: 0, y: 0)
+        let windowOriginPoint = CGPoint(x: 0, y: 0+70) // plus height of docker
         
         var smallScreen = false
         if Float(screenWidth!) < 1500 {

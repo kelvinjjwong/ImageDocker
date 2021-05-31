@@ -146,7 +146,7 @@ protocol CollectionViewItemPreviewMessageDelegate {
 
 extension ViewController : CollectionViewItemPreviewMessageDelegate {
     func onCollectionViewItemPreviewMessage(description:String) {
-        self.popNotification(message: description)
+        MessageEventCenter.default.showMessage(message: description)
     }
 }
 

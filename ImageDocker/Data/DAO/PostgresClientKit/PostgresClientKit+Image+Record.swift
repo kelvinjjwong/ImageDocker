@@ -243,5 +243,20 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         return .OK
     }
     
+    func updateImageRotation(path:String, rotation:Int) -> ExecuteState{
+        let db = PostgresConnection.database()
+        
+        do {
+            try db.execute(sql: """
+            UPDATE "Image" set "rotation" = \(rotation) WHERE path=$1
+            """, parameterValues: [path])
+        }catch{
+            print(error)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+            return .ERROR
+        }
+        return .OK
+    }
+    
 
 }

@@ -85,6 +85,10 @@ public final class ImageRecordDao {
         return self.impl.storeImageDescription(path: path, shortDescription: shortDescription, longDescription: longDescription)
     }
     
+    func updateImageRotation(path:String, rotation:Int) -> ExecuteState {
+        return self.impl.updateImageRotation(path: path, rotation: rotation)
+    }
+    
     
 }
 
