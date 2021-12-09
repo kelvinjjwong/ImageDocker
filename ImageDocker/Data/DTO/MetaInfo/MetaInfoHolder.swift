@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import ImageIO
 
 
 // CFString to (NS)*String casts
