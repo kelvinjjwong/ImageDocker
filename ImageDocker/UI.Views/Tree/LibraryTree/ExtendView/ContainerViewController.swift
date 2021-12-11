@@ -10,6 +10,8 @@ import Cocoa
 
 class ContainerViewController: NSViewController {
     
+    let logger = ConsoleLogger(category: "CONTAINER", subCategory: "VIEW")
+    
     var container:ImageContainer? = nil
     
     // MARK: CONTROLS
@@ -48,7 +50,7 @@ class ContainerViewController: NSViewController {
             self.stat()
         }else{
             self.lblMessage.stringValue = "ERROR: Invalid container path: \(path)"
-            print("invalid container path: \(path)")
+            self.logger.log("invalid container path: \(path)")
         }
     }
     

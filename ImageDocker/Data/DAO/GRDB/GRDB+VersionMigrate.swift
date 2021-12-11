@@ -537,6 +537,12 @@ extension SQLiteConnectionGRDB {
             })
         }
         
+        migrator.registerMigration("v40") { db in
+            try db.alter(table: "ImageContainer", body: { t in
+                t.add(column: "subContainers", .integer).defaults(to: 0)
+            })
+        }
+        
         
         do {
             let dbQueue = try DatabaseQueue(path: SQLiteDataSource.default.getDataSource())

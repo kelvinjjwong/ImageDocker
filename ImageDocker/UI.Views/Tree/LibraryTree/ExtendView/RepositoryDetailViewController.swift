@@ -11,6 +11,7 @@ import Cocoa
 class RepositoryDetailViewController: NSViewController {
     
     @IBOutlet weak var btnConfig: NSButton!
+    @IBOutlet weak var btnManageSubContainers: NSButton!
     @IBOutlet weak var lblEditableStorageSpace: NSTextField!
     @IBOutlet weak var lblBackupSpace: NSTextField!
     @IBOutlet weak var lblCropSpace: NSTextField!
@@ -42,7 +43,18 @@ class RepositoryDetailViewController: NSViewController {
     @IBOutlet weak var btnStop: NSButton!
     @IBOutlet weak var lblShouldImport: NSTextField!
     @IBOutlet weak var indShouldImport: NSLevelIndicator!
+    @IBOutlet weak var lblPath: NSTextField!
     
+    @IBOutlet weak var lblNewPath: NSTextField!
+    @IBOutlet weak var lblNewContainerName: NSTextField!
+    
+    @IBOutlet weak var btnFindParent: NSButton!
+    @IBOutlet weak var btnPickParent: NSButton!
+    @IBOutlet weak var btnPickGoUp: NSButton!
+    @IBOutlet weak var btnPickGoDown: NSButton!
+    @IBOutlet weak var btnGotoPath: NSButton!
+    
+    @IBOutlet weak var btnRefreshData: NSButton!
     
     // MARK: INIT VIEW
     
@@ -66,14 +78,31 @@ class RepositoryDetailViewController: NSViewController {
     var faceSpace:[String:String] = [:]
     
     fileprivate var onConfigure: (() -> Void)!
+    fileprivate var onManageSubContainers: (() -> Void)!
     fileprivate var onShowDeviceDialog: ((PhoneDevice) -> Void)!
     
     fileprivate var _repositoryPath:String = ""
     
-    func initView(path:String, onShowDeviceDialog: @escaping ((PhoneDevice) -> Void), onConfigure: @escaping (() -> Void)) {
+    func toggleNewPath(_ state:Bool){
+        self.lblNewPath.stringValue = ""
+        self.lblNewContainerName.stringValue = ""
+        self.lblNewPath.isHidden = !state
+        self.lblNewContainerName.isHidden = !state
+        self.btnPickParent.isHidden = true
+        self.btnPickGoUp.isHidden = !state
+        self.btnPickGoDown.isHidden = !state
+        self.btnRefreshData.isHidden = !state
+    }
+    
+    func initView(path:String,
+                  onShowDeviceDialog: @escaping ((PhoneDevice) -> Void),
+                  onConfigure: @escaping (() -> Void),
+                  onManageSubContainers: @escaping (() -> Void)
+    ) {
         self._repositoryPath = path
         self.onConfigure = onConfigure
         self.onShowDeviceDialog = onShowDeviceDialog
+        self.onManageSubContainers = onManageSubContainers
         
         self.scrollDetail.hasVerticalScroller = false
         self.txtDetail.string = "Calculating ..."
@@ -120,6 +149,10 @@ class RepositoryDetailViewController: NSViewController {
         self.lblMessage.isHidden = true
         self.indProgress.isHidden = true
         self.btnStop.isHidden = true
+        
+        self.lblPath.stringValue = path
+        
+        self.toggleNewPath(false)
         
         
         DispatchQueue.global().async {
@@ -209,6 +242,11 @@ class RepositoryDetailViewController: NSViewController {
     @IBAction func onConfigureClicked(_ sender: NSButton) {
         self.onConfigure()
     }
+    
+    @IBAction func onManageSubContainersClicked(_ sender: NSButton) {
+        self.onManageSubContainers()
+    }
+    
     
     @IBAction func onEditableDetailClicked(_ sender: NSButton) {
         if let output = self.repoSpace["console_output"] {
@@ -358,5 +396,133 @@ class RepositoryDetailViewController: NSViewController {
     
     @IBAction func onStopClicked(_ sender: NSButton) {
     }
+    
+    @IBAction func onFindParentClicked(_ sender: NSButton) {
+        if(self.lblNewPath.isHidden){
+            self.toggleNewPath(true)
+        }
+        
+        let url = URL(fileURLWithPath: self.lblPath.stringValue)
+        let newUrl = url.deletingLastPathComponent()
+        self.lblNewPath.stringValue = newUrl.path
+        self.findNewContainer(path: newUrl.path)
+    }
+    
+    private func findNewContainer(path:String){
+        if let newContainer = RepositoryDao.default.getContainer(path: path) {
+            self.lblNewContainerName.stringValue = newContainer.name
+            self.btnPickParent.isHidden = false
+        }else{
+            self.lblNewContainerName.stringValue = "Cannot find matched container"
+            self.btnPickParent.isHidden = true
+        }
+    }
+    
+    @IBAction func onPickParentClicked(_ sender: NSButton) {
+        
+        let buttonTitle = self.btnPickParent.title
+        self.btnPickParent.title = "Saving parent folder..."
+        self.btnPickParent.isEnabled = false
+        self.btnRefreshData.isEnabled = false
+        
+        let newPath = self.lblNewPath.stringValue
+        let path = self.lblPath.stringValue
+        
+        DispatchQueue.global().async {
+            if let parentContainer = RepositoryDao.default.getContainer(path: newPath){
+                
+                if let container = RepositoryDao.default.getContainer(path: path) {
+                    
+                    container.parentFolder = parentContainer.path
+                    container.parentPath = URL(fileURLWithPath: container.path.replacingFirstOccurrence(of: parentContainer.path, with: "")).deletingLastPathComponent().path.withoutStash()
+                        
+                    let state = RepositoryDao.default.saveImageContainer(container: container)
+                    if state == .OK {
+                        let _ = RepositoryDao.default.updateParentContainerSubContainers(thisPath: container.path)
+                        
+                        DispatchQueue.main.async {
+                            self.lblNewContainerName.stringValue = "Saved parent folder"
+                            
+                            self.btnPickParent.title = buttonTitle
+                            self.btnPickParent.isEnabled = true
+                            self.btnRefreshData.isEnabled = true
+                        }
+                    }else{
+                        DispatchQueue.main.async {
+                            self.lblNewContainerName.stringValue = "ERROR: Cannot save parent folder"
+                            
+                            self.btnPickParent.title = buttonTitle
+                            self.btnPickParent.isEnabled = true
+                            self.btnRefreshData.isEnabled = true
+                        }
+                    }
+                    
+                }else{
+                    DispatchQueue.main.async {
+                        self.lblNewContainerName.stringValue = "Cannot find selected folder in database"
+                        
+                        self.btnPickParent.title = buttonTitle
+                        self.btnPickParent.isEnabled = true
+                        self.btnRefreshData.isEnabled = true
+                    }
+                }
+            }else{
+                DispatchQueue.main.async {
+                    self.lblNewContainerName.stringValue = "Cannot find selected parent folder in database"
+                    
+                    self.btnPickParent.title = buttonTitle
+                    self.btnPickParent.isEnabled = true
+                    self.btnRefreshData.isEnabled = true
+                }
+            }
+        }
+    }
+    
+    @IBAction func onPickGoUpClicked(_ sender: NSButton) {
+        let url = URL(fileURLWithPath: self.lblNewPath.stringValue)
+        let newUrl = url.deletingLastPathComponent()
+        if newUrl.path != "/" {
+            self.lblNewPath.stringValue = newUrl.path
+            self.findNewContainer(path: newUrl.path)
+        }else{
+            self.lblNewContainerName.stringValue = "Should not use root folder"
+        }
+    }
+    
+    @IBAction func onPickGoDownClicked(_ sender: NSButton) {
+        let url = URL(fileURLWithPath: self.lblPath.stringValue)
+        let newUrl = url.deletingLastPathComponent()
+        self.lblNewPath.stringValue = newUrl.path
+        self.findNewContainer(path: newUrl.path)
+    }
+    
+    @IBAction func onGotoPathClicked(_ sender: NSButton) {
+        let url = URL(fileURLWithPath: self.lblPath.stringValue)
+        NSWorkspace.shared.activateFileViewerSelecting([url])
+    }
+    
+    @IBAction func onRefreshDataClicked(_ sender: NSButton) {
+        let buttonTitle = self.btnRefreshData.title
+        self.btnRefreshData.title = "Updating..."
+        self.btnPickParent.isEnabled = false
+        self.btnRefreshData.isEnabled = false
+        
+        let path = self.lblPath.stringValue
+        
+        DispatchQueue.global().async {
+            if let _ = RepositoryDao.default.getContainer(path: path) {
+                let _ = RepositoryDao.default.updateParentContainerSubContainers(thisPath: path)
+                let _ = RepositoryDao.default.updateImageContainerSubContainers(path: path)
+            }
+            
+            DispatchQueue.main.async {
+                self.btnRefreshData.title = buttonTitle
+                self.btnPickParent.isEnabled = true
+                self.btnRefreshData.isEnabled = true
+                
+            }
+        }
+    }
+    
     
 }

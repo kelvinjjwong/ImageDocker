@@ -23,7 +23,7 @@ class TreeViewController : StackBodyViewController {
     var collectionLoader:((TreeCollection?, SearchCondition) -> ([TreeCollection], String?))?
     var collectionIcon:((TreeCollection) -> NSImage)?
     var collectionTitle:((TreeCollection) -> String)?
-    var collectionValue:((TreeCollection) -> Int)?
+    var collectionValue:((TreeCollection) -> String)?
     var collectionActionIcon:((TreeCollection) -> NSImage)?
     var collectionAction:((TreeCollection, NSButton) -> Void)?
     var collectionSelected:((TreeCollection) -> Void)?
@@ -203,7 +203,7 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate, Tr
                 }
                 if self.collectionValue != nil {
                     let value = self.collectionValue!(collection)
-                    if value == 0 {
+                    if value == "" {
                         colView.valueField?.isHidden = true
                     }else{
                         colView.valueField?.isHidden = false
@@ -257,14 +257,18 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate, Tr
                 if treeNodes.count > 0 {
                     DispatchQueue.main.async {
                         item.removeAllChildren()
+                        let startTime = Date()
                         for node in treeNodes {
+                            print("\(Date()) [TREE] rendering tree node \(node.name)")
                             item.addChild(collection: node)
                         }
+                        let gap = Date().timeIntervalSince(startTime)
+                        print("\(Date()) [TREE] tree collection insertion time cost \(gap)")
                         self.outlineView.reloadItem(item, reloadChildren: true)
                         self.outlineView.expandItem(item)
                     }
                 }else{
-                    print("loaded 0 child nodes")
+                    print("[TREE] loaded 0 child nodes")
                 }
                 if let msg = message {
                     MessageEventCenter.default.showMessage(message: msg)
@@ -274,7 +278,7 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate, Tr
     }
     
     func outlineView(_ outlineView: NSOutlineView, shouldExpandItem item: Any) -> Bool {
-        print("calling should expand item logic")
+        print("[TREE] calling should expand item logic")
         if let node = item as? TreeCollection {
             if node.children.count == 0 {
                 self.expandTreeNode(node)

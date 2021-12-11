@@ -60,9 +60,9 @@ extension ViewController {
                                     width: TREEVIEW_WIDTH,
                                     nodeValue: { collection in
                                         if let moment = collection.relatedObject as? Moment {
-                                            return moment.photoCount
+                                            return "\(moment.photoCount)"
                                         }else{
-                                            return 0
+                                            return "0"
                                         }
         },
                                     onNodeSelected: { collection in
@@ -90,9 +90,9 @@ extension ViewController {
                                     width: TREEVIEW_WIDTH,
                                     nodeValue: { collection in
                                         if let moment = collection.relatedObject as? Moment {
-                                            return moment.photoCount
+                                            return "\(moment.photoCount)"
                                         }else{
-                                            return 0
+                                            return "0"
                                         }
         },
                                     onNodeSelected: { collection in
@@ -120,9 +120,9 @@ extension ViewController {
                                     width: TREEVIEW_WIDTH,
                                     nodeValue: { collection in
                                         if let moment = collection.relatedObject as? Moment {
-                                            return moment.photoCount
+                                            return "\(moment.photoCount)"
                                         }else{
-                                            return 0
+                                            return "0"
                                         }
         },
                                     onNodeSelected: { collection in

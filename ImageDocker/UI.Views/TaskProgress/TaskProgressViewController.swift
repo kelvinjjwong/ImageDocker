@@ -10,6 +10,8 @@ import Cocoa
 
 class TaskProgressViewController: NSViewController {
     
+    let logger = ConsoleLogger(category: "TASK")
+    
     @IBOutlet weak var stackView: NSStackView!
     @IBOutlet weak var btnStopAll: NSButton!
     @IBOutlet weak var btnRemoveAll: NSButton!
@@ -90,7 +92,7 @@ class TaskProgressViewController: NSViewController {
     
     func onTaskComplete(task:Tasklet) {
         //task.state = "COMPLETED"
-        print("TaskProgressViewController: task \(task.id) completed")
+        logger.log("TaskProgressViewController: task \(task.id) completed")
     }
     
     func stopTask(task:Tasklet) {
@@ -100,7 +102,7 @@ class TaskProgressViewController: NSViewController {
         }
         //task.state = "STOPPED"
         TaskletManager.default.stopTask(id: task.id, fromUI: true)
-        print("TaskProgressViewController: task \(task.id) stopped")
+        logger.log("TaskProgressViewController: task \(task.id) stopped")
     }
     
     func updatePanelForRestartTask(task:Tasklet) {
@@ -121,7 +123,7 @@ class TaskProgressViewController: NSViewController {
     
     func restartTask(task:Tasklet) {
         self.updatePanelForRestartTask(task: task)
-        print("TaskProgressViewController: task \(task.id) restarted")
+        logger.log("TaskProgressViewController: task \(task.id) restarted")
         if task.isFixedDelayJob {
             TaskletManager.default.startFixedDelayExecution(id: task.id)
         }else{

@@ -10,6 +10,8 @@ import Cocoa
 
 class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
     
+    let logger = ConsoleLogger(category: "DEVICE", subCategory: "FOLDER")
+    
     // MARK: - PROPERTIES
     
     private let defaultBasePath = "/sdcard/Pictures/"
@@ -144,7 +146,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
                         let fileSize = attr[FileAttributeKey.size] as! UInt64
                         totalSize += Int(fileSize)
                     } catch {
-                        print("Error: \(error)")
+                        self.logger.log("Error: \(error)")
                     }
                 }
 //                print("total size: \(totalSize)")
@@ -562,7 +564,7 @@ class DeviceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBox
     }
     
     func comboBoxSelectionDidChange(_ notification: Notification) {
-        if let index = self.combobox?.indexOfSelectedItem {
+        if let _ = self.combobox?.indexOfSelectedItem {
 //            print("selection changed, selected index=\(index)")
             if self.onSelectionChanged != nil {
                 self.onSelectionChanged!()

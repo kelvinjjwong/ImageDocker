@@ -33,7 +33,7 @@ extension ViewController {
     internal func configurePreview(){
         self.splitviewPreview.dividerStyle = .thick
         
-        self.imageMetaViewController = storyboard?.instantiateController(withIdentifier: "ImageMetaViewController") as! ImageMetaViewController
+        self.imageMetaViewController = (storyboard?.instantiateController(withIdentifier: "ImageMetaViewController") as! ImageMetaViewController)
         self.splitviewPreview.addArrangedSubview(imageMetaViewController.view)
         
         self.scrollviewMetaInfoTable = imageMetaViewController.scrollView
@@ -47,7 +47,7 @@ extension ViewController {
         
         
             
-        self.imagePreviewController = storyboard?.instantiateController(withIdentifier: "ImagePreviewController") as! ImagePreviewController
+        self.imagePreviewController = (storyboard?.instantiateController(withIdentifier: "ImagePreviewController") as! ImagePreviewController)
         self.splitviewPreview.addArrangedSubview(imagePreviewController.view)
         
         self.imagePreviewController.getImageFromPreview = {
@@ -85,7 +85,7 @@ extension ViewController {
         self.playerContainer.layer?.borderColor = Colors.DarkGray.cgColor
         self.playerContainer.layer?.backgroundColor = Colors.DarkGray.cgColor
         
-        self.imageLocationViewController = storyboard?.instantiateController(withIdentifier: "ImageLocationViewController") as! ImageLocationViewController
+        self.imageLocationViewController = (storyboard?.instantiateController(withIdentifier: "ImageLocationViewController") as! ImageLocationViewController)
         self.splitviewPreview.addArrangedSubview(imageLocationViewController.view)
         
         self.webLocation = self.imageLocationViewController.locationWebView
@@ -94,7 +94,7 @@ extension ViewController {
         webLocation.setValue(false, forKey: "drawsBackground")
         webLocation.load(URLRequest(url: URL(string: "about:blank")!))
         
-        self.imageLocationEditViewController = storyboard?.instantiateController(withIdentifier: "ImageLocationEditViewController") as! ImageLocationEditViewController
+        self.imageLocationEditViewController = (storyboard?.instantiateController(withIdentifier: "ImageLocationEditViewController") as! ImageLocationEditViewController)
         self.imageLocationEditViewController.reloadCollectionView = {
             self.imagesLoader.reorganizeItems(considerPlaces: true)
             self.collectionView.reloadData()

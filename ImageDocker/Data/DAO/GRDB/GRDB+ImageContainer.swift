@@ -23,7 +23,8 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
                               cropPath:String,
                               subPath:String,
                               manyChildren:Bool = false,
-                              hideByParent:Bool = false) -> ImageContainer {
+                              hideByParent:Bool = false) -> (ImageContainer, Bool) {
+        var exists = false
         var container:ImageContainer?
         do {
             let db = try DatabaseQueue(path: SQLiteDataSource.default.getDataSource())
@@ -31,6 +32,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
                 container = try ImageContainer.fetchOne(db, key: path)
             }
             if container == nil {
+                exists = false
                 let queue = try DatabaseQueue(path: SQLiteDataSource.default.getDataSource())
                 try queue.write { db in
                     container = ImageContainer(name: name,
@@ -52,15 +54,18 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
                                                folderAsEvent: false,
                                                eventFolderLevel: 1,
                                                folderAsBrief: false,
-                                               briefFolderLevel: -1
+                                               briefFolderLevel: -1,
+                                               subContainers: 0
                     )
                     try container?.save(db)
                 }
+            }else{
+                exists = true
             }
         }catch{
             print(error)
         }
-        return container!
+        return (container!, exists)
     }
     
     // MARK: - DELETE
@@ -299,6 +304,20 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     }
     
     // MARK: - UPDATE
+    
+    func updateImageContainerSubContainers(path:String) -> Int {
+        let subContainers = self.countSubContainers(parent: path)
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute(sql: "update ImageContainer set subContainer = \(subContainers) where path = ?", arguments: [path])
+            }
+        }catch{
+            print(error)
+            return subContainers
+        }
+        return subContainers
+    }
     
     func updateImageContainerParentFolder(path:String, parentFolder:String) -> ExecuteState{
         do {

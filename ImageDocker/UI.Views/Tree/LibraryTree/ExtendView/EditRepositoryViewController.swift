@@ -10,6 +10,8 @@ import Cocoa
 
 class EditRepositoryViewController: NSViewController {
     
+    let logger = ConsoleLogger(category: "REPO", subCategory: "CONFIG")
+    
     private var originalContainer:ImageContainer? = nil
     
     // MARK: - FIELDS
@@ -974,8 +976,8 @@ class EditRepositoryViewController: NSViewController {
                 let containersWithoutRepoPath = ImageCountDao.default.countContainersWithoutRepositoryPath(repositoryRoot: originalRepoPath)
                 let containersWithoutSubPath = ImageCountDao.default.countContainersWithoutSubPath(repositoryRoot: originalRepoPath)
                 
-                print("No-repo:\(imagesWithoutRepoPath) No-sub:\(imagesWithoutSubPath) No-id:\(imagesWithoutId) Unmatch-repo:\(imagesUnmatchedRepoPath) container-no-repo:\(containersWithoutRepoPath) container-no-sub:\(containersWithoutSubPath)")
-                print("continue if one of above larger than zero")
+                logger.log("No-repo:\(imagesWithoutRepoPath) No-sub:\(imagesWithoutSubPath) No-id:\(imagesWithoutId) Unmatch-repo:\(imagesUnmatchedRepoPath) container-no-repo:\(containersWithoutRepoPath) container-no-sub:\(containersWithoutSubPath)")
+                logger.log("continue if one of above larger than zero")
                 
                 if imagesWithoutRepoPath > 0 || imagesWithoutSubPath > 0 || imagesWithoutId > 0 || imagesUnmatchedRepoPath > 0 || containersWithoutRepoPath > 0 ||  containersWithoutSubPath > 0 {
                     go = true
@@ -985,12 +987,12 @@ class EditRepositoryViewController: NSViewController {
                 }
             }else{
                 // change place
-                print("repo changed place")
+                logger.log("repo changed place")
                 go = true
             }
             guard go else {
                 self.lblMessage.stringValue = ""
-                print("abort")
+                logger.log("abort")
                 return
             }
             
@@ -1309,10 +1311,10 @@ class EditRepositoryViewController: NSViewController {
                                           )
         }
         DispatchQueue.global().async {
-            print("loading duplicates from database")
+            self.logger.log("loading duplicates from database")
             
             let duplicates = ImageDuplicationDao.default.getDuplicatedImages(repositoryRoot: repo, theOtherRepositoryRoot: raw)
-            print("loaded duplicates \(duplicates.count)")
+            self.logger.log("loaded duplicates \(duplicates.count)")
             
             count = duplicates.count
             self.accumulator?.setTarget(count)
@@ -1504,13 +1506,13 @@ class EditRepositoryViewController: NSViewController {
     
     @IBAction func onFindFacesClicked(_ sender: NSButton) {
         guard !self.working else {
-            print("other task is running. abort this task.")
+            self.logger.log("other task is running. abort this task.")
             return
         }
         if let repository = self.originalContainer {
             
             if repository.cropPath == "" {
-                print("ERROR: Crop path is empty, please assign it first: \(repository.path)")
+                self.logger.log("ERROR: Crop path is empty, please assign it first: \(repository.path)")
                 self.lblMessage.stringValue = "ERROR: Crop path is empty, please assign it first"
                 return
             }
@@ -1519,7 +1521,7 @@ class EditRepositoryViewController: NSViewController {
             var isDir:ObjCBool = false
             if FileManager.default.fileExists(atPath: repository.cropPath, isDirectory: &isDir) {
                 if !isDir.boolValue {
-                    print("ERROR: Crop path of repository is not a directory: \(repository.cropPath)")
+                    self.logger.log("ERROR: Crop path of repository is not a directory: \(repository.cropPath)")
                     self.lblMessage.stringValue = "ERROR: Crop path of repository is not a directory"
                     return
                 }
@@ -1545,10 +1547,10 @@ class EditRepositoryViewController: NSViewController {
                                                     }
                                                     print(msg)
                                                     self.working = false
-                                                    print(">>> REMAIN \(self.continousWorkingRemain)")
+                                                    self.logger.log(">>> REMAIN \(self.continousWorkingRemain)")
                                                     if self.continousWorkingRemain <= 0 {
                                                         self.toggleButtons(true)
-                                                        print(">>> DONE")
+                                                        self.logger.log(">>> DONE")
                                                         msg = "Total \(total) images. Processed \(count) images. Found \(detectedCount) images with face(s)."
                                                         self.continousWorking = false
                                                     }
@@ -1570,12 +1572,12 @@ class EditRepositoryViewController: NSViewController {
                 
                 while(self.continousWorkingRemain > 0){
                     if !self.working {
-                        print(">>> RE-TRIGGER")
+                        self.logger.log(">>> RE-TRIGGER")
                         self.continousWorkingAttempt += 1
-                        print(">>> TRIGGER SCANNER ATTEMPT=\(self.continousWorkingAttempt), REMAIN=\(self.continousWorkingRemain)")
+                        self.logger.log(">>> TRIGGER SCANNER ATTEMPT=\(self.continousWorkingAttempt), REMAIN=\(self.continousWorkingRemain)")
                         self.scanFaces(from: images, in: repository)
                     }
-                    print(">>> SLEEP, REMAIN \(self.continousWorkingRemain)")
+                    self.logger.log(">>> SLEEP, REMAIN \(self.continousWorkingRemain)")
                     sleep(10)
                 }
             }
@@ -1606,7 +1608,7 @@ class EditRepositoryViewController: NSViewController {
                     let image = images[i]
                     
                     if Naming.FileType.recognize(from: image.filename) != .photo {
-                        print("It's VIDEO")
+                        self.logger.log("It's VIDEO")
                         DispatchQueue.main.async {
                             let _ = self.accumulator?.add("Finding faces from images ...")
                             
@@ -1629,7 +1631,7 @@ class EditRepositoryViewController: NSViewController {
                             
                             if usedRam >= limitRam {
                                 self.stopByExceedLimit = true
-                                print("##### EXCEEDS SIZE LIMIT")
+                                self.logger.log("##### EXCEEDS SIZE LIMIT")
                                 self.accumulator?.forceComplete()
                                 return
                             }
@@ -1651,13 +1653,12 @@ class EditRepositoryViewController: NSViewController {
                             do {
                                 try FileManager.default.removeItem(atPath: cropPath.path)
                             }catch{
-                                print(error)
-                                print("ERROR: Cannot delete directory for storing crops at path: \(cropPath.path)")
+                                self.logger.log("ERROR: Cannot delete directory for storing crops at path: \(cropPath.path)", error)
                             }
                         } else {
                             self.accumulator?.increaseData(key: "detectedCount")
                             for face in faces {
-                                print("Found face: \(face.filename) at (\(face.x), \(face.y), \(face.width), \(face.height))")
+                                self.logger.log("Found face: \(face.filename) at (\(face.x), \(face.y), \(face.width), \(face.height))")
                                 let exist = FaceDao.default.findFaceCrop(imageId: imageId,
                                                                             x: face.x.databaseValue.description,
                                                                             y: face.y.databaseValue.description,
@@ -1685,16 +1686,16 @@ class EditRepositoryViewController: NSViewController {
                                                                       month: image.photoTakenMonth ?? 0,
                                                                       day: image.photoTakenDay ?? 0)
                                         let _ = FaceDao.default.saveFaceCrop(imageFace)
-                                        print("Face crop \(imageFace.id) saved.")
+                                        self.logger.log("Face crop \(imageFace.id) saved.")
                                     })
                                     
                                 }else{
-                                    print("Face already in DB")
+                                    self.logger.log("Face already in DB")
                                 }
                             }
                         }
                         
-                        print("Face detection done in \(cropPath.path)")
+                        self.logger.log("Face detection done in \(cropPath.path)")
                     }) // end of face detection
                     
                     if img.scanedFace != true {
@@ -2061,9 +2062,9 @@ extension EditRepositoryViewController : DeviceListDelegate {
             }
             self.lblDeviceName.stringValue = name
             
-            print("update db? \(updateDB)")
+            self.logger.log("update db? \(updateDB)")
             if updateDB {
-                print("linking repo with device \(device.deviceId ?? "")")
+                self.logger.log("linking repo with device \(device.deviceId ?? "")")
                 self.linkDeviceToRepository(deviceId: device.deviceId ?? "", deviceName: name)
             }
         }else{

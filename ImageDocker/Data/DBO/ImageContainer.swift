@@ -32,6 +32,7 @@ public final class ImageContainer: Codable {
     var eventFolderLevel: Int = 0
     var folderAsBrief: Bool = false
     var briefFolderLevel: Int = 0
+    var subContainers: Int = 0
     
     public init() {
         
@@ -56,7 +57,8 @@ public final class ImageContainer: Codable {
                 folderAsEvent:Bool,
                 eventFolderLevel:Int,
                 folderAsBrief:Bool,
-                briefFolderLevel:Int) {
+                briefFolderLevel:Int,
+                subContainers:Int) {
         self.name = name
         self.parentFolder = parentFolder
         self.path = path
@@ -77,6 +79,7 @@ public final class ImageContainer: Codable {
         self.eventFolderLevel = eventFolderLevel
         self.folderAsBrief = folderAsBrief
         self.briefFolderLevel = briefFolderLevel
+        self.subContainers = subContainers
         
     }
 }

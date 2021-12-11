@@ -305,7 +305,7 @@ struct LocalDirectory {
             var diskFree = ""
             var diskTotal = ""
             (diskTotal, diskFree, mountPoint) = self.freeSpace(path: path)
-            print("mountpoint \(mountPoint)")
+            print("[LOCAL DIRECTORY] mountpoint \(mountPoint)")
             if diskTotal != "" && diskFree != "" {
                 spaceFree = "\(diskFree) / \(diskTotal)"
                 if let lbl = lblDiskFree {

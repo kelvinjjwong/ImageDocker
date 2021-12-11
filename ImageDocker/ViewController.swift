@@ -16,6 +16,8 @@ import AVKit
 
 class ViewController: NSViewController {
     
+    let logger = ConsoleLogger(category: "MAIN", subCategory: "VIEW")
+    
     var childWindows:[String:NSWindow] = [:]
     
     // MARK: Icon
@@ -235,7 +237,7 @@ class ViewController: NSViewController {
             self.view.window?.performZoom(self)
         }
         
-        print("AFTER SIZE \(self.view.frame.size.width) x \(self.view.frame.size.height)")
+        print("[MAIN] AFTER SIZE \(self.view.frame.size.width) x \(self.view.frame.size.height)")
     }
     
     // MARK: - SPLASH SCREEN ON STARTUP

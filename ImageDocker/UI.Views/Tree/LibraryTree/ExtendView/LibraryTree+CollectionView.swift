@@ -31,7 +31,7 @@ extension ViewController {
                             return self.countHiddenImagesOfContainer(container: container)
                 },
                           onLoad: { pageSize, pageNumber in
-                            print("CALLED ONLOAD \(pageSize) \(pageNumber)")
+                    self.logger.log("CALLED ONLOAD \(pageSize) \(pageNumber)")
                             
                             self.loadCollectionByContainer(container: container, pageSize: pageSize, pageNumber: pageNumber, subdirectories: true)
                 },
@@ -42,7 +42,7 @@ extension ViewController {
             let cellRect = sender.bounds
             self.collectionPaginationPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .minY)
         }else{
-            print("no folder selected \(self.selectedImageFolder == nil)")
+            logger.log("no folder selected \(self.selectedImageFolder == nil)")
         }
     }
     

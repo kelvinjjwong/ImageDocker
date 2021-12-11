@@ -14,6 +14,8 @@ protocol DeviceListDelegate {
 
 class DeviceListViewController: NSViewController {
     
+    let logger = ConsoleLogger(category: "DEVICE", subCategory: "LIST")
+    
     var selectionDelegate:DeviceListDelegate?
     var devices:[ImageDevice] = []
     
@@ -107,7 +109,7 @@ extension DeviceListViewController: NSTableViewDelegate {
     }
     
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
-        print("selected row \(row)")
+        logger.log("selected row \(row)")
         lastSelectedRow = row
         return true
     }

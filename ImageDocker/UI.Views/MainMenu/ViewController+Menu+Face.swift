@@ -361,7 +361,7 @@ extension ViewController {
                 }
             }
         }else{
-            print("no selection")
+            //print("no selection")
         }
     }
 }

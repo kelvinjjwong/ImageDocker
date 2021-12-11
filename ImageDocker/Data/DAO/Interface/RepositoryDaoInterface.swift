@@ -20,7 +20,7 @@ protocol RepositoryDaoInterface {
                               cropPath:String,
                               subPath:String,
                               manyChildren:Bool,
-                              hideByParent:Bool) -> ImageContainer
+                              hideByParent:Bool) -> (ImageContainer, Bool)
     
     func deleteContainer(path: String, deleteImage:Bool) -> ExecuteState
     
@@ -51,6 +51,8 @@ protocol RepositoryDaoInterface {
     func getAllContainerPaths(repositoryPath:String?) -> Set<String>
     
     func saveImageContainer(container:ImageContainer) -> ExecuteState
+    
+    func updateImageContainerSubContainers(path:String) -> Int
     
     func updateImageContainerParentFolder(path:String, parentFolder:String) -> ExecuteState
     

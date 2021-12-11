@@ -11,13 +11,13 @@ import Cocoa
 // MARK: Protocol Delarations -
 
 // The hosting object containing both the header and body.
-protocol StackItemHost : class {
+protocol StackItemHost : AnyObject {
     
     func disclose(_ stackItem: StackItemContainer)
 }
 
 // The object containing the header portion.
-protocol StackItemHeader : class {
+protocol StackItemHeader : AnyObject {
     
     var viewController: NSViewController { get }
     var disclose: (() -> ())? { get set }
@@ -38,7 +38,7 @@ protocol StackItemHeader : class {
 }
 
 // The object containing the main body portion.
-protocol StackItemBody : class {
+protocol StackItemBody : AnyObject {
     
     var viewController: NSViewController { get }
     

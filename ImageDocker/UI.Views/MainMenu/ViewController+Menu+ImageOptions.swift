@@ -64,12 +64,12 @@ extension ViewController {
     
     @objc func previewMenuWriteNote(_ menuItem:NSMenuItem) {
         self.btnImageOptions.selectItem(at: 0)
-        print("preview menu - to do function")
+        logger.log("preview menu - to do function")
     }
     
     @objc func previewMenuMarkRotateDirection(_ menuItem:NSMenuItem) {
         self.btnImageOptions.selectItem(at: 0)
-        print("preview menu - to do function")
+        logger.log("preview menu - to do function")
     }
     
     @objc func previewMenuTurnRight(_ menuItem:NSMenuItem) {
@@ -257,7 +257,7 @@ extension ViewController {
 
                             MessageEventCenter.default.showMessage(message: Words.info_doneReplacedImageToBackupVersion.word())
                         }catch{
-                            print("Unable to restore backup image from [\(backupUrl.path)] to [url.path]")
+                            self.logger.log("Unable to restore backup image from [\(backupUrl.path)] to [url.path]")
                             print(error)
 
                             MessageEventCenter.default.showMessage(message: Words.error_replaceImageToBackupVersion.word())

@@ -10,11 +10,11 @@ import Foundation
 
 class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
-    func getOrCreateContainer(name: String, path: String, parentPath parentFolder: String, repositoryPath: String, homePath: String, storagePath: String, facePath: String, cropPath: String, subPath: String, manyChildren: Bool, hideByParent: Bool) -> ImageContainer {
+    func getOrCreateContainer(name: String, path: String, parentPath parentFolder: String, repositoryPath: String, homePath: String, storagePath: String, facePath: String, cropPath: String, subPath: String, manyChildren: Bool, hideByParent: Bool) -> (ImageContainer, Bool) {
         
         let db = PostgresConnection.database()
         if let container = ImageContainer.fetchOne(db, parameters: ["path": path]) {
-            return container
+            return (container, true)
         }else{
             let container = ImageContainer(name: name,
                                        parentFolder: parentFolder,
@@ -35,10 +35,11 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                                        folderAsEvent: false,
                                        eventFolderLevel: 1,
                                        folderAsBrief: false,
-                                       briefFolderLevel: -1
+                                       briefFolderLevel: -1,
+                                       subContainers: 0
             )
             container.save(db)
-            return container
+            return (container, false)
         }
     }
     
@@ -439,6 +440,21 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
             return .ERROR
         }
         return .OK
+    }
+    
+    func updateImageContainerSubContainers(path:String) -> Int {
+        let subContainers = self.countSubContainers(parent: path)
+        print("[DB] updating subContainers to \(subContainers)")
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+                update "ImageContainer" set "subContainers" = \(subContainers) where "path" = $1
+                """, parameterValues: [path])
+        }catch{
+            print(error)
+            return subContainers
+        }
+        return subContainers
     }
     
     func hideContainer(path: String) -> ExecuteState {

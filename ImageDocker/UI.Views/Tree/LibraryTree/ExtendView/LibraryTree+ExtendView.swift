@@ -41,6 +41,7 @@ extension ViewController {
                                                         self.openDeviceCopyView(device: device, connected: false)
         },
                                                      onConfigure: {
+            
             let viewController = EditRepositoryViewController()
             let window = NSWindow(contentViewController: viewController)
             
@@ -56,18 +57,26 @@ extension ViewController {
             window.setFrame(frame, display: false)
             window.makeKeyAndOrderFront(self)
             viewController.initEdit(path: url.path, window: window)
+        },
+                                                     onManageSubContainers: {
             
-//                        if let window = self.repositoryWindowController.window {
-//                            if self.repositoryWindowController.isWindowLoaded {
-//                                window.makeKeyAndOrderFront(self)
-//                                print("order to front")
-//                            }else{
-//                                self.repositoryWindowController.showWindow(self)
-//                                print("show window")
-//                            }
-//                            let vc = window.contentViewController as! EditRepositoryViewController
-//                        }
-        })
+            let viewController = SubContainersManageViewController()
+            let window = NSWindow(contentViewController: viewController)
+            
+            let screenWidth = Int(NSScreen.main?.frame.width ?? 0)
+            let screenHeight = Int(NSScreen.main?.frame.height ?? 0)
+            let windowWidth = 1600
+            let windowHeight = 820
+            let originX = (screenWidth - windowWidth) / 2
+            let originY = (screenHeight - windowHeight) / 2
+            
+            let frame = CGRect(origin: CGPoint(x: originX, y: originY), size: CGSize(width: windowWidth, height: windowHeight))
+            window.title = Words.repositoryConfiguration.word()
+            window.setFrame(frame, display: false)
+            window.makeKeyAndOrderFront(self)
+            viewController.initView(containerPath: url.path)
+        }
+        )
         
         let cellRect = sender.bounds
         self.repositoryDetailPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxX)
@@ -76,7 +85,7 @@ extension ViewController {
     func openContainerDetail(container:ImageContainer, url:URL, title:String, sender:NSButton) {
         self.createContainerDetailPopover()
         self.containerDetailViewController.initView(container, onLoad: { pageSize, pageNumber in
-            print("CALLED ONLOAD \(pageSize) \(pageNumber)")
+            self.logger.log("CALLED ONLOAD \(pageSize) \(pageNumber)")
             self.loadCollectionByContainer(name:title, url:url,
                                            pageSize: pageSize, pageNumber: pageNumber, subdirectories: true)
         })
@@ -111,7 +120,7 @@ extension ViewController {
         if(myPopover == nil){
             myPopover = NSPopover()
             
-            let frame = CGRect(origin: .zero, size: CGSize(width: 1310, height: 390))
+            let frame = CGRect(origin: .zero, size: CGSize(width: 1310, height: 500))
             self.repositoryDetailViewController = RepositoryDetailViewController()
             self.repositoryDetailViewController.view.frame = frame
             
@@ -129,7 +138,7 @@ extension ViewController {
         if(myPopover == nil){
             myPopover = NSPopover()
             
-            let frame = CGRect(origin: .zero, size: CGSize(width: 540, height: 390))
+            let frame = CGRect(origin: .zero, size: CGSize(width: 1310, height: 400))
             self.containerDetailViewController = ContainerDetailViewController()
             self.containerDetailViewController.view.frame = frame
             

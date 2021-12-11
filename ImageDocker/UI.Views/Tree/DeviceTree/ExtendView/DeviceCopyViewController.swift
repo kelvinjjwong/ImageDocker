@@ -60,6 +60,8 @@ struct DeviceCopyDestination {
 
 class DeviceCopyViewController: NSViewController {
     
+    let logger = ConsoleLogger(category: "DEVICE", subCategory: "COPY")
+    
     let dateFormatter = DateFormatter()
     
     //let mountpoint = PreferencesController.iosDeviceMountPoint()
@@ -254,7 +256,7 @@ class DeviceCopyViewController: NSViewController {
             self.fileTableDelegate.files = []
             self.tblFiles.reloadData()
         }else{
-            print("SAME DEVICE \(device.deviceId) == \(self.device.deviceId)")
+            logger.log("SAME DEVICE \(device.deviceId) == \(self.device.deviceId)")
         }
     }
     
@@ -751,13 +753,13 @@ class DeviceCopyViewController: NSViewController {
                                 do {
                                     try FileManager.default.createDirectory(at: newFolderPath, withIntermediateDirectories: true, attributes: nil)
                                 }catch{
-                                    print("Error occured when trying to create folder \(newFolderPath.path)")
+                                    self.logger.log("Error occured when trying to create folder \(newFolderPath.path)")
                                     print(error)
                                 }
                                 do {
                                     try FileManager.default.copyItem(atPath: oldFilePath.path, toPath: newFilePath.path)
                                 }catch{
-                                    print("Error occured when trying to copy [\(oldFilePath.path)] to [\(newFilePath.path)]")
+                                    self.logger.log("Error occured when trying to copy [\(oldFilePath.path)] to [\(newFilePath.path)]")
                                     print(error)
                                 }
                             }
@@ -803,14 +805,12 @@ class DeviceCopyViewController: NSViewController {
                                 do {
                                     try FileManager.default.createDirectory(at: newFolderPath, withIntermediateDirectories: true, attributes: nil)
                                 }catch{
-                                    print("Error occured when trying to create folder \(newFolderPath.path)")
-                                    print(error)
+                                    self.logger.log("Error occured when trying to create folder \(newFolderPath.path)", error)
                                 }
                                 do {
                                     try FileManager.default.copyItem(atPath: oldFilePath.path, toPath: newFilePath.path)
                                 }catch{
-                                    print("Error occured when trying to copy [\(oldFilePath.path)] to [\(newFilePath.path)]")
-                                    print(error)
+                                    self.logger.log("Error occured when trying to copy [\(oldFilePath.path)] to [\(newFilePath.path)]", error)
                                 }
                             }
                         }
@@ -1233,16 +1233,14 @@ class DeviceCopyViewController: NSViewController {
             do {
                 try FileManager.default.createDirectory(at: repositoryFolderUrl, withIntermediateDirectories: true, attributes: nil)
             }catch{
-                print("Error occured when trying to create folder \(repositoryFolderUrl.path)")
-                print(error)
+                logger.log("Error occured when trying to create folder \(repositoryFolderUrl.path)", error)
             }
             // copy files from raw folder to repository folder if it wasn't copied
             if !FileManager.default.fileExists(atPath: repositoryFileUrl.path) {
                 do {
                     try FileManager.default.copyItem(atPath: importedFileUrl.path, toPath: repositoryFileUrl.path)
                 }catch{
-                    print("Error occured when trying to copy file from \(importedFileUrl.path) to \(repositoryFileUrl.path)")
-                    print(error)
+                    logger.log("Error occured when trying to copy file from \(importedFileUrl.path) to \(repositoryFileUrl.path)", error)
                 }
             }
             

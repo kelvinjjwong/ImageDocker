@@ -48,7 +48,7 @@ class StackedTreeViewController: NSViewController, StackItemHost {
     func addTreeView(title:String, dataSource:TreeDataSource, width:CGFloat = 400.0, height:CGFloat = 360.0,
                      disableFilter: Bool = false,
                      nodeIcon:((TreeCollection) -> NSImage)? = nil,
-                     nodeValue:((TreeCollection) -> Int)? = nil,
+                     nodeValue:((TreeCollection) -> String)? = nil,
                      onNodeSelected:((TreeCollection) -> Void)? = nil,
                      moreActionOnHeader: ((NSButton) -> ())? = nil,
                      moreActionOnNode:((TreeCollection, NSButton) -> Void)? = nil,
@@ -83,7 +83,7 @@ class StackedTreeViewController: NSViewController, StackItemHost {
             if nodeValue != nil {
                 return nodeValue!(collection)
             }else{
-                return collection.childrenCount
+                return "\(collection.childrenCount)"
             }
         }
         treeView.collectionActionIcon = { collection in
@@ -125,7 +125,7 @@ class StackedTreeViewController: NSViewController, StackItemHost {
         }
         stackItem.header.afterExpand = {
             let (opened, closed) = self.countTreeStates()
-            print("opened: \(opened), closed: \(closed)")
+            print("[TREE] opened: \(opened), closed: \(closed)")
         }
         
         // Add the header view.

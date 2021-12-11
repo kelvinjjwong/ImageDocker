@@ -12,7 +12,7 @@ import Cocoa
 extension ViewController {
     
     func configureSelectionView() {
-        self.selectionViewController = storyboard?.instantiateController(withIdentifier: "SelectionViewController") as! SelectionViewController
+        self.selectionViewController = (storyboard?.instantiateController(withIdentifier: "SelectionViewController") as! SelectionViewController)
         self.addChild(self.selectionViewController)
         self.bottomView.addSubview(self.selectionViewController.view)
         self.selectionViewController.initView()

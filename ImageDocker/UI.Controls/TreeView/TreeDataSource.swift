@@ -14,6 +14,9 @@ class TreeCollection {
     var childrenCount = 0
     var path = ""
     
+    var subCollectionsInCollection = 0
+    var itemsInCollection = 0
+    
     var children:[TreeCollection] = []
     private var mapping:[String:TreeCollection] = [:]
     

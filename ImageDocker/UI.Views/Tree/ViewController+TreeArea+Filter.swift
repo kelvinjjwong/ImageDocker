@@ -22,7 +22,7 @@ extension ViewController {
                 
                 //TODO TO DO FUNCTION
                 //self.refreshTree()
-                print("TO DO FUNCTION")
+                self.logger.log("TO DO FUNCTION")
             })
             self.filterViewController.view.frame = frame
             //self.filterViewController.refreshDelegate = self

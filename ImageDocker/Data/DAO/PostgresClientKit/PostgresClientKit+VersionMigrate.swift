@@ -539,6 +539,12 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v40") { db in
+            try db.alter(table: "ImageContainer", body: { t in
+                t.add("subContainers", .integer).defaults(to: 0)
+            })
+        }
+        
         do {
             try migrator.migrate(cleanVersions: dropBeforeCreate)
         }catch{

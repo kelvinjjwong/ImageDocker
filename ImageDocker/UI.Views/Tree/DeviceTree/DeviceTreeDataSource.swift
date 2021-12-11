@@ -10,6 +10,8 @@ import Foundation
 
 class DeviceTreeDataSource : TreeDataSource {
     
+    let logger = ConsoleLogger(category: "TREE", subCategory: "DEVICE")
+    
     private var deviceIdToDevice : [String : PhoneDevice] = [String : PhoneDevice] ()
     
     func loadChildren(_ collection: TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?) {
@@ -107,7 +109,7 @@ class DeviceTreeDataSource : TreeDataSource {
             message = "Enable [DEBUG MODE] in [Settings >> System >> Developer Options] if you've connected your phone via USB."
             
         }
-        print("loader loaded count \(nodes.count)")
+        logger.log("loader loaded count \(nodes.count)")
         return (nodes, message)
     }
     
@@ -128,12 +130,12 @@ class DeviceTreeDataSource : TreeDataSource {
         
         // devices those connected
         let devices:[String] = IPHONE.bridge.devices()
-        print("iphone device count: \(devices.count)")
+        logger.log("iphone device count: \(devices.count)")
         self.cleanCachedDeviceIds(type: .iPhone)
         if devices.count > 0 {
             if let device:PhoneDevice = IPHONE.bridge.device() {
                 let imageDevice = DeviceDao.default.getOrCreateDevice(device: device)
-                print("connected ios device: \(imageDevice.deviceId ?? "")")
+                logger.log("connected ios device: \(imageDevice.deviceId ?? "")")
                 var dev = device
                 if imageDevice.name != "" {
                     dev.name = imageDevice.name ?? ""
@@ -147,7 +149,7 @@ class DeviceTreeDataSource : TreeDataSource {
                     deviceIds.remove(at: i)
                 }
             }else{
-                print("Unable to connect to ios device: \(devices[0])")
+                logger.log("Unable to connect to ios device: \(devices[0])")
                 return ([], "Unable to connect to iOS device. Please unlock the screen and then retry.")
             }
         }
@@ -171,7 +173,7 @@ class DeviceTreeDataSource : TreeDataSource {
             
             message = "No iOS devices found connected. Please connect your iPhone/iPad via USB."
         }
-        print("loader loaded count \(nodes.count)")
+        logger.log("loader loaded count \(nodes.count)")
         return (nodes, message)
     }
     
