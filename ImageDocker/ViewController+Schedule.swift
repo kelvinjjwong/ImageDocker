@@ -13,7 +13,7 @@ extension ViewController {
     internal func startSchedules() {
 //        self.scanLocationChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
 //            guard TaskManager.allowRefreshTrees() else {return}
-//            self.logger.log("\(Date()) SCANING LOCATION CHANGE")
+//            self.logger.log("SCANING LOCATION CHANGE")
 //            if self.lastCheckLocationChange != nil {
 //                let photoFiles:[Image] = ModelStore.default.getPhotoFiles(after: self.lastCheckLocationChange!)
 //                if photoFiles.count > 0 {
@@ -28,7 +28,7 @@ extension ViewController {
         
 //        self.scanPhotoTakenDateChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
 //            guard TaskManager.allowRefreshTrees() else {return}
-//            self.logger.log("\(Date()) SCANING DATE CHANGE")
+//            self.logger.log("SCANING DATE CHANGE")
 //            if self.lastCheckPhotoTakenDateChange != nil {
 //                let photoFiles:[Image] = ModelStore.default.getPhotoFiles(after: self.lastCheckPhotoTakenDateChange!)
 //                if photoFiles.count > 0 {
@@ -43,7 +43,7 @@ extension ViewController {
         
 //        self.scanEventChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
 //            guard TaskManager.allowRefreshTrees() else {return}
-//            self.logger.log("\(Date()) SCANING EVENT CHANGE")
+//            self.logger.log("SCANING EVENT CHANGE")
 //            if self.lastCheckEventChange != nil {
 //                let photoFiles:[Image] = ModelStore.default.getPhotoFiles(after: self.lastCheckEventChange!)
 //                if photoFiles.count > 0 {
@@ -57,9 +57,9 @@ extension ViewController {
 //        })
         
 //        self.exportPhotosTimers = Timer.scheduledTimer(withTimeInterval: 600, repeats: true, block:{_ in
-//            self.logger.log("\(Date()) TRYING TO EXPORT \(self.suppressedExport)")
+//            self.logger.log("TRYING TO EXPORT \(self.suppressedExport)")
 //            guard TaskManager.allowExport() else {return}
-//            self.logger.log("\(Date()) EXPORT FUNCTION WAITING FOR UPDATE")
+//            self.logger.log("EXPORT FUNCTION WAITING FOR UPDATE")
 ////            DispatchQueue.global().async {
 //////                ExportManager.default.export(after: self.lastExportPhotos!)
 //////                self.lastExportPhotos = Date()
@@ -67,16 +67,16 @@ extension ViewController {
 //        })
         
         //        self.scanRepositoriesTimer = Timer.scheduledTimer(withTimeInterval: 180, repeats: true, block:{_ in
-        //            self.logger.log("\(Date()) TRY TO SCAN REPOS")
+        //            self.logger.log("TRY TO SCAN REPOS")
         //            guard !self.suppressedScan && !ExportManager.default.working && !self.scaningRepositories && !self.creatingRepository else {return}
-        //            self.logger.log("\(Date()) SCANING REPOS")
+        //            self.logger.log("SCANING REPOS")
         //            self.startScanRepositories()
         //        })
         
 //        self.scanPhotosToLoadExifTimer = Timer.scheduledTimer(withTimeInterval: 15, repeats: true, block:{_ in
-//            self.logger.log("\(Date()) TRY TO SCAN PHOTO TO LOAD EXIF")
+//            self.logger.log("TRY TO SCAN PHOTO TO LOAD EXIF")
 //            guard !self.suppressedScan && TaskManager.allowReadImagesExif() else { return }
-//            self.logger.log("\(Date()) SCANING PHOTOS TO LOAD EXIF")
+//            self.logger.log("SCANING PHOTOS TO LOAD EXIF")
 //            self.startScanRepositoriesToLoadExif()
 //        })
         

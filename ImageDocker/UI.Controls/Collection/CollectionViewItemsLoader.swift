@@ -135,7 +135,7 @@ class CollectionViewItemsLoader : NSObject {
         self.indicator = indicator
         
         //var urls: [URL] = []
-        self.logger.log("\(Date()) Loading photo files from db")
+        self.logger.log("Loading photo files from db")
         let photoFiles = ImageSearchDao.default.getPhotoFiles(year: year, month: month, day: day, ignoreDate: ignoreDate,
                                                           country: country, province: province, city: city, place: place,
                                                           includeHidden: showHidden,
@@ -146,9 +146,9 @@ class CollectionViewItemsLoader : NSObject {
         //for photoFile in photoFiles {
         //    urls.append(URL(fileURLWithPath: photoFile.path!))
         //}
-        self.logger.log("\(Date()) Setting up items ")
+        self.logger.log("Setting up items ")
         setupItems(photoFiles: photoFiles)
-        self.logger.log("\(Date()) Set up items DONE")
+        self.logger.log("Set up items DONE")
     }
     
     // load with event, paginated
@@ -391,9 +391,9 @@ class CollectionViewItemsLoader : NSObject {
         }
         
         if let photoFiles = photoFiles {
-            self.logger.log("\(Date()) Transforming items to domain ")
+            self.logger.log("Transforming items to domain ")
             self.transformToDomainItems(photoFiles: photoFiles)
-            self.logger.log("\(Date()) Transforming items to domain: DONE ")
+            self.logger.log("Transforming items to domain: DONE ")
         }
         
         self.loading = false
@@ -408,7 +408,6 @@ class CollectionViewItemsLoader : NSObject {
     }
     
     func reorganizeItems(considerPlaces:Bool = false) {
-        //self.logger.log("reorg")
         self.considerPlaces = considerPlaces
         
         if sections.count > 0 {
@@ -429,7 +428,6 @@ class CollectionViewItemsLoader : NSObject {
         section.items.removeAll()
         
         for item in items {
-            self.logger.log(item.place)
             section.items.append(item)
         }
         sortItems(in: section)
@@ -598,11 +596,11 @@ class CollectionViewItemsLoader : NSObject {
         if items.count > 0 {   // When not initial folder folder
             items.removeAll()
         }
-        self.logger.log("\(Date()) Loading duplicate photos from db")
+        self.logger.log("Loading duplicate photos from db")
         // TODO: narrow the range of searching duplicate photos
         let duplicates:Duplicates = ImageDuplicationDao.default.getDuplicatePhotos()
         self.logger.log("Found duplicates: \(duplicates.paths.count)")
-        self.logger.log("\(Date()) Loading duplicate photos from db: DONE")
+        self.logger.log("Loading duplicate photos from db: DONE")
         
         for url in urls {
             
@@ -612,17 +610,17 @@ class CollectionViewItemsLoader : NSObject {
             
             let imageFile = ImageFile(url: url, indicator: self.indicator)
             
-            self.logger.log("\(Date()) Checking duplicate for a photo")
+            self.logger.log("Checking duplicate for a photo")
 
             if duplicates.paths.contains(url.path) {
                 imageFile.hasDuplicates = true
                 imageFile.duplicatesKey = duplicates.pathToKey[url.path] ?? ""
-                self.logger.log(imageFile.duplicatesKey)
+                //self.logger.log(imageFile.duplicatesKey)
             }else {
                 imageFile.hasDuplicates = false
                 imageFile.duplicatesKey = ""
             }
-            self.logger.log("\(Date()) Checking duplicate for a photo: DONE")
+            self.logger.log("Checking duplicate for a photo: DONE")
             
             // prefetch thumbnail to improve performance of collection view
             let _ = imageFile.thumbnail
@@ -643,19 +641,19 @@ class CollectionViewItemsLoader : NSObject {
             items.removeAll()
         }
         
-        self.logger.log("\(Date()) Loading duplicate photos from db")
+        self.logger.log("Loading duplicate photos from db - START")
         // TODO: narrow the range of searching duplicate photos
         let startTime = Date()
         let duplicates:Duplicates = ImageDuplicationDao.default.getDuplicatePhotos()
         let timeCost = Date().timeIntervalSince(startTime)
-        self.logger.log("\(Date()) [CollectionViewItemsLoader] Found duplicates: \(duplicates.paths.count) , time cost: \(timeCost) seconds")
-        self.logger.log(lastRequest)
+        self.logger.timecost("Found duplicates: \(duplicates.paths.count)", fromDate: startTime)
+        //self.logger.log(lastRequest)
 //        if duplicates.paths.count > 0 {
 //            for dup in duplicates.paths {
 //                self.logger.log(dup)
 //            }
 //        }
-        self.logger.log("\(Date()) Loading duplicate photos from db: DONE")
+        //self.logger.log("Loading duplicate photos from db: DONE")
         
         for photoFile in photoFiles {
             
@@ -671,7 +669,7 @@ class CollectionViewItemsLoader : NSObject {
             if duplicates.paths.contains(photoFile.path) {
                 imageFile.hasDuplicates = true
                 imageFile.duplicatesKey = duplicates.pathToKey[photoFile.path] ?? ""
-                self.logger.log(imageFile.duplicatesKey)
+                //self.logger.log(imageFile.duplicatesKey)
             }else {
                 imageFile.hasDuplicates = false
                 imageFile.duplicatesKey = ""
@@ -775,17 +773,17 @@ class CollectionViewItemsLoader : NSObject {
     }
     
     func getCheckedItems() -> [ImageFile] {
-        self.logger.log("testing checked")
+        //self.logger.log("testing checked")
         var result:[ImageFile] = []
-        self.logger.log("sections count: \(sections.count) ")
+        //self.logger.log("sections count: \(sections.count) ")
         for section in sections {
-            self.logger.log("items count: \(section.items.count)")
+            //self.logger.log("items count: \(section.items.count)")
             for item in section.items {
                 
-                self.logger.log("viewItem is null? \(item.collectionViewItem == nil)")
-                self.logger.log("imageFile is null? \(item.collectionViewItem == nil ||  item.collectionViewItem?.imageFile == nil)")
+                //self.logger.log("viewItem is null? \(item.collectionViewItem == nil)")
+                //self.logger.log("imageFile is null? \(item.collectionViewItem == nil ||  item.collectionViewItem?.imageFile == nil)")
                 if let viewItem = item.collectionViewItem, let imageFile = viewItem.imageFile {
-                    self.logger.log("checked? \(viewItem.isChecked())")
+                    //self.logger.log("checked? \(viewItem.isChecked())")
                     if viewItem.isChecked() {
                         result.append(imageFile)
                     }

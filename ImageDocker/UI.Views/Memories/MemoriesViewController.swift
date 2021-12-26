@@ -196,7 +196,7 @@ class MemoriesViewController : NSViewController {
             }else if value == self.btnToday.title {
                 self.btnToday.isEnabled = true
             }
-            self.logger.log(value)
+            //self.logger.log(value)
             self.dates.append(value)
         }
         

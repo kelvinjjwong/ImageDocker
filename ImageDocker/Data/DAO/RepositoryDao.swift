@@ -10,6 +10,8 @@ import Foundation
 
 class RepositoryDao {
     
+    let logger = ConsoleLogger(category: "RepositoryDao")
+    
     private let impl:RepositoryDaoInterface
     
     init(_ impl:RepositoryDaoInterface){

@@ -17,7 +17,8 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
     func reloadDuplicatePhotos() {
         let db = PostgresConnection.database()
         
-        self.logger.log("\(Date()) Loading duplicate photos from db")
+        self.logger.log("Loading duplicate photos from db")
+        let startTime_loadDup = Date()
         
         let duplicates:Duplicates = Duplicates()
         var dupDates:Set<Date> = []
@@ -67,7 +68,8 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
         }
         
         var firstPhotoInPlaceAndDate:[String:String] = [:]
-        logger.log("Marking duplicate tag to photo files")
+        let startTime_TagDup = Date()
+        logger.log("Marking duplicate tag to photo files - START")
         logger.log("duplicated date count: \(dupDates.count)")
         var marks:[String] = []
 //        var placeholders = 0
@@ -120,10 +122,10 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
                 }
             }
         }
-        logger.log("Marking duplicate tag to photo files: DONE")
+        logger.timecost("Marking duplicate tag to photo files: DONE", fromDate: startTime_TagDup)
         
         ImageDuplicateDaoPostgresCK._duplicates = duplicates
-        logger.log("Loading duplicate photos from db: DONE")
+        logger.timecost("Loading duplicate photos from db: DONE", fromDate: startTime_loadDup)
     }
     
     func getDuplicatePhotos() -> Duplicates {

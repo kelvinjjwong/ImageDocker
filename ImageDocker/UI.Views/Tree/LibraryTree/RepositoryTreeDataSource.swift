@@ -13,7 +13,7 @@ class RepositoryTreeDataSource : TreeDataSource {
     let logger = ConsoleLogger(category: "RepositoryTreeDataSource")
     
     func convertToTreeNode(_ container:ImageContainer) -> TreeCollection {
-        //self.logger.log("repo node name \(container.name)")
+        //self.logger.log("convert to tree node - \(container.path)")
         let node = TreeCollection(container.name, id: container.path, object: container)
         if container.subContainers == -1 {
             let childCount = RepositoryDao.default.updateImageContainerSubContainers(path: container.path)
@@ -38,42 +38,38 @@ class RepositoryTreeDataSource : TreeDataSource {
     
     func loadRepositories(condition:SearchCondition? = nil) -> [TreeCollection] {
         var nodes:[TreeCollection] = []
-        self.logger.log("\(Date()) [TREE] start load repositories from database")
+        self.logger.log("load repositories from database - START")
         let startTime = Date()
         let containers = RepositoryDao.default.getRepositories(orderBy: "name", condition: condition)
-        let gap = Date().timeIntervalSince(startTime)
-        self.logger.log("\(Date()) [TREE] db time cost \(gap)")
+        self.logger.timecost("load repositories from database - DONE", fromDate: startTime)
         if containers.count == 0 {
 //            self.logger.log(">>> no repository is loaded for tree")
         }
         let startTime2 = Date()
         for container in containers {
 //            self.logger.log(">>> loaded repo for tree: \(container.name)")
-            self.logger.log("\(Date()) [TREE] converting repository container to tree node - \(container.path)")
+            //self.logger.log("converting repository container to tree node - \(container.path)")
             let node = self.convertToTreeNode(container)
             nodes.append(node)
         }
-        let gap2 = Date().timeIntervalSince(startTime2)
-        self.logger.log("\(Date()) [TREE] collection insertion time cost \(gap2)")
+        self.logger.timecost("convert to TreeNode(s)", fromDate: startTime2)
         return nodes
     }
     
     func loadSubContainers(parentPath: String, condition:SearchCondition? = nil) -> [TreeCollection] {
         var nodes:[TreeCollection] = []
-        self.logger.log("\(Date()) [TREE] start load sub containers from database")
+        self.logger.log("load sub containers from database - START")
         let startTime = Date()
         let containers = RepositoryDao.default.getSubContainers(parent: parentPath, condition: condition)
-        let gap = Date().timeIntervalSince(startTime)
-        self.logger.log("\(Date()) [TREE] db time cost \(gap)")
+        self.logger.timecost("load sub containers from database - DONE", fromDate: startTime)
         
         let startTime2 = Date()
         for container in containers {
-            self.logger.log("\(Date()) [TREE] converting sub container to tree node - \(container.path)")
+            self.logger.log("converting sub container to tree node - \(container.path)")
             let node = self.convertToTreeNode(container)
             nodes.append(node)
         }
-        let gap2 = Date().timeIntervalSince(startTime2)
-        self.logger.log("\(Date()) [TREE] collection insertion time cost \(gap2)")
+        self.logger.timecost("collection to TreeNode(s)", fromDate: startTime2)
         return nodes
     }
     

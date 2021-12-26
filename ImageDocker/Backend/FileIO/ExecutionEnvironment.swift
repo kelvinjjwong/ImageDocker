@@ -246,7 +246,7 @@ pip3 install face_recognition
     }
     
     func createLocalDatabaseFileBackup(suffix:String) -> (String, Bool, Error?){
-        self.logger.log("\(Date()) Start to create sqlite db backup")
+        self.logger.log("Start to create sqlite db backup")
         var backupFolder = ""
         let dbUrl = URL(fileURLWithPath: PreferencesController.databasePath())
         let dbFile = dbUrl.appendingPathComponent("ImageDocker.sqlite")
@@ -272,16 +272,16 @@ pip3 install face_recognition
                 return (backupFolder, false, error)
             }
         }
-        self.logger.log("\(Date()) Finish create db backup")
+        self.logger.log("Finish create db backup")
         return (backupFolder, true, nil)
     }
     
     func createPostgresDatabaseBackup(suffix:String) -> (String, Bool, Error?) {
         guard let cmd = PreferencesController.getPostgresCommandPath() else {
-            self.logger.log("\(Date()) Unable to locate pg_dump command in macOS, backup aborted.")
+            self.logger.log("Unable to locate pg_dump command in macOS, backup aborted.")
             return ("", false, nil)
         }
-        self.logger.log("\(Date()) Start to create postgres db backup")
+        self.logger.log("Start to create postgres db backup")
         
         let backupPath = URL(fileURLWithPath: PreferencesController.databasePath()).appendingPathComponent("DataBackup").path
         var host = ""

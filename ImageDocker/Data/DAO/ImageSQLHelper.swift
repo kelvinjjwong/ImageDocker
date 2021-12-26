@@ -175,7 +175,7 @@ struct SQLHelper {
     
     internal static func _generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String,String) {
         
-        self.logger.log("SQL conditions: year=\(year) | month=\(month) | day=\(day) | ignoreDate:\(ignoreDate) | country=\(country) | province=\(province) | city=\(city) | place=\(place ?? "") | includeHidden=\(includeHidden)")
+        self.logger.log("[Shared Image List] SQL conditions: year=\(year) | month=\(month) | day=\(day) | ignoreDate:\(ignoreDate) | country=\(country) | province=\(province) | city=\(city) | place=\(place ?? "") | includeHidden=\(includeHidden)")
         
         var hiddenWhere = ""
         if !includeHidden {
@@ -249,19 +249,17 @@ struct SQLHelper {
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
         let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=true"
         
-        SQLHelper.logger.log("SQL args: \(sqlArgs)")
         
-        SQLHelper.logger.log("[GRDB Image] Generated SQL statement for all:")
-        SQLHelper.logger.log(stmt)
-        SQLHelper.logger.log("[GRDB Image] Generated SQL statement for hidden:")
-        SQLHelper.logger.log(stmtHidden)
+        SQLHelper.logger.log("[GRDB Image] Generated SQL statement for all: \(stmt)")
+        SQLHelper.logger.log("[GRDB Image] Generated SQL statement for hidden: \(stmtHidden)")
+        SQLHelper.logger.log("[GRDB Image] SQL args: \(sqlArgs)")
         
         return (stmt, stmtHidden, sqlArgs)
     }
     
     internal static func _generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String, String, Bool) {
         
-        SQLHelper.logger.log("SQL conditions: year=\(year) | month=\(month) | day=\(day) | event=\(event) | country=\(country) | province=\(province) | city=\(city) | place=\(place) | includeHidden=\(includeHidden)")
+        SQLHelper.logger.log("[Shared Image List] SQL conditions: year=\(year) | month=\(month) | day=\(day) | event=\(event) | country=\(country) | province=\(province) | city=\(city) | place=\(place) | includeHidden=\(includeHidden)")
         
         var hasEvent = false
         
@@ -309,11 +307,9 @@ struct SQLHelper {
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
         let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=true"
         
-        SQLHelper.logger.log("[GRDB Image -> Searching] Generated SQL statement for all:")
-        SQLHelper.logger.log(stmt)
-        SQLHelper.logger.log("[GRDB Image -> Searching] Generated SQL statement for hidden:")
-        SQLHelper.logger.log(stmtHidden)
-        SQLHelper.logger.log("SQL args: \(sqlArgs)")
+        SQLHelper.logger.log("[GRDB Image -> Searching] Generated SQL statement for all: \(stmt)")
+        SQLHelper.logger.log("[GRDB Image -> Searching] Generated SQL statement for hidden: \(stmtHidden)")
+        SQLHelper.logger.log("[GRDB Image -> Searching] SQL args: \(sqlArgs)")
         
         return (stmt, stmtHidden, sqlArgs)
     }

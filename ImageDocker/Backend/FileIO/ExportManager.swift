@@ -87,7 +87,7 @@ class ExportManager {
         let generatedImageDescription = Naming.Export.getNewDescription(image: image)
         ExifTool.helper.patchImageDescription(description: generatedImageDescription, url: URL(fileURLWithPath: targetFullFilePath))
 
-        self.logger.log("\(Date()) Change ImageDescription for \(image.path) : DONE")
+        self.logger.log("Change ImageDescription for \(image.path) : DONE")
     }
     
     private func patchImageDateTime(image:Image, profile:ExportProfile, targetFilePath:String) {
@@ -146,7 +146,7 @@ class ExportManager {
         
         self.startTask(profileId: profile.id)
         
-        self.logger.log("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
+        self.logger.log("EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
         
         let totalImagesInDb = ExportDao.default.countImagesForExport(profile: profile)
         
@@ -240,7 +240,7 @@ class ExportManager {
         let fullTargetPath = URL(fileURLWithPath: basePath).appendingPathComponent(subfolder)
         let fullTargetFilePath = fullTargetPath.appendingPathComponent(targetFilename)
         
-        self.logger.log("\(Date()) Copy file [\(image.path)] to [\(fullTargetFilePath)]")
+        self.logger.log("Copy file [\(image.path)] to [\(fullTargetFilePath)]")
         
         if rehearsal {
             return true
@@ -302,7 +302,7 @@ class ExportManager {
             // generate MD5
             let md5 = self.generateImageMD5(path: fullTargetFilePath.path)
             
-            self.logger.log("\(Date()) Copy file [\(image.path)] to [\(fullTargetFilePath.path)] DONE.")
+            self.logger.log("Copy file [\(image.path)] to [\(fullTargetFilePath.path)] DONE.")
             
             let _ = ExportDao.default.storeImageExportSuccess(imageId: image.id ?? image.path, profileId: profile.id, repositoryPath: image.repositoryPath, subfolder: subfolder, filename: targetFilename, exportedMD5: md5)
             // TODO handle db interrupt error
@@ -317,7 +317,7 @@ class ExportManager {
     
     // MARK: - HOUSE KEEP
     func housekeepFilesNotInExportLog(profile:ExportProfile) {
-        self.logger.log("\(Date()) EXPORT: HOUSE KEEP")
+        self.logger.log("EXPORT: HOUSE KEEP")
         
         self.printMessage("Checking invalid exported files ...")
         
@@ -405,7 +405,7 @@ class ExportManager {
         
         self.printMessage("")
         
-        self.logger.log("\(Date()) EXPORT: HOUSE KEEP: DONE")
+        self.logger.log("EXPORT: HOUSE KEEP: DONE")
     }
     
     

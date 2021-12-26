@@ -16,7 +16,7 @@ class ImageDuplicateDaoGRDB : ImageDuplicationDaoInterface {
     static var _duplicates:Duplicates? = nil
     
     func reloadDuplicatePhotos() {
-        self.logger.log("\(Date()) Loading duplicate photos from db")
+        self.logger.log("Loading duplicate photos from db")
         
         let duplicates:Duplicates = Duplicates()
         var dupDates:Set<Date> = []
@@ -71,7 +71,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }
         
         var firstPhotoInPlaceAndDate:[String:String] = [:]
-        self.logger.log("\(Date()) Marking duplicate tag to photo files")
+        self.logger.log("Marking duplicate tag to photo files")
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
@@ -120,10 +120,10 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         }catch{
             self.logger.log(error)
         }
-        self.logger.log("\(Date()) Marking duplicate tag to photo files: DONE")
+        self.logger.log("Marking duplicate tag to photo files: DONE")
         
         ImageDuplicateDaoGRDB._duplicates = duplicates
-        self.logger.log("\(Date()) Loading duplicate photos from db: DONE")
+        self.logger.log("Loading duplicate photos from db: DONE")
     }
     
     func getDuplicatePhotos(forceReload: Bool) -> Duplicates {

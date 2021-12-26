@@ -690,7 +690,7 @@ final class PreferencesController: NSViewController {
     
     @IBAction func onCheckBackupToDatabaseName(_ sender: NSButton) {
         guard let cmd = PreferencesController.getPostgresCommandPath() else {
-            self.logger.log("\(Date()) Unable to locate psql command in macOS, check db exist aborted.")
+            self.logger.log("Unable to locate psql command in macOS, check db exist aborted.")
             return
         }
         var host = ""
@@ -754,7 +754,7 @@ final class PreferencesController: NSViewController {
             return
         }
         guard let cmd = PreferencesController.getPostgresCommandPath() else {
-            self.logger.log("\(Date()) Unable to locate pg_dump command in macOS, createdb aborted.")
+            self.logger.log("Unable to locate pg_dump command in macOS, createdb aborted.")
             return
         }
         var host = ""

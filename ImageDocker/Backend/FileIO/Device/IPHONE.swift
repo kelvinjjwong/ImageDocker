@@ -258,18 +258,18 @@ struct IPHONE {
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: remoteUrl.path) && fileManager.fileExists(atPath: localUrl.path) {
             do{
-                self.logger.log("\(Date()) Pulling from \(remoteUrl.path) to \(localUrl.path)")
+                self.logger.log("Pulling from \(remoteUrl.path) to \(localUrl.path)")
                 let options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants ]
                 let resourceKeys = [URLResourceKey.isRegularFileKey, URLResourceKey.typeIdentifierKey, URLResourceKey.isDirectoryKey]
                 let enumerator = fileManager.enumerator(at: remoteUrl,
                                                         includingPropertiesForKeys: resourceKeys,
                                                         options: options, errorHandler: { (url, error) -> Bool in
-                                                            self.logger.log("\(Date()) Remote directory enumerator error at \(url): ", error)
+                                                            self.logger.log("Remote directory enumerator error at \(url): ", error)
                                                             return false
                 })!
                 
                 for case let remoteFileUrl as URL in enumerator {
-                    self.logger.log("\(Date()) Pulling from \(remoteFileUrl.path) to \(localUrl.path)")
+                    self.logger.log("Pulling from \(remoteFileUrl.path) to \(localUrl.path)")
                     try fileManager.copyItem(at: remoteFileUrl, to: localUrl)
                 }
                 return true
@@ -278,7 +278,7 @@ struct IPHONE {
                 return false
             }
         }else{
-            self.logger.log("\(Date()) URL not exists: \(remoteUrl.path) OR \(localUrl.path)")
+            self.logger.log("URL not exists: \(remoteUrl.path) OR \(localUrl.path)")
             return false
         }
     }
@@ -339,7 +339,7 @@ struct IPHONE {
             }
             if !fileManager.fileExists(atPath: targetFilePath.path) {
                 do{
-                    self.logger.log("\(Date()) Pulling from \(mountedDeviceFilePath.path) to \(targetFilePath.path)")
+                    self.logger.log("Pulling from \(mountedDeviceFilePath.path) to \(targetFilePath.path)")
                     try fileManager.copyItem(at: mountedDeviceFilePath, to: targetFilePath)
                     return true
                 }catch{
@@ -351,7 +351,7 @@ struct IPHONE {
                 return false
             }
         }else{
-            self.logger.log("\(Date()) Mounted device file path not exists: \(mountedDeviceFilePath.path)")
+            self.logger.log("Mounted device file path not exists: \(mountedDeviceFilePath.path)")
             return false
         }
     }
@@ -364,7 +364,7 @@ struct IPHONE {
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: remoteUrl.path) && fileManager.fileExists(atPath: localUrl.path) {
             do{
-                self.logger.log("\(Date()) Pushing from \(localUrl.path) to \(remoteUrl.path)")
+                self.logger.log("Pushing from \(localUrl.path) to \(remoteUrl.path)")
                 try fileManager.copyItem(at: localUrl, to: remoteUrl)
                 return true
             }catch{
@@ -372,7 +372,7 @@ struct IPHONE {
                 return false
             }
         }else{
-            self.logger.log("\(Date()) URL not exists: \(remoteUrl.path) OR \(localUrl.path)")
+            self.logger.log("URL not exists: \(remoteUrl.path) OR \(localUrl.path)")
             return false
         }
     }

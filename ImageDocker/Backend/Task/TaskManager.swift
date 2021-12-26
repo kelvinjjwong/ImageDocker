@@ -166,7 +166,7 @@ class Tasklet {
     }
     
     func startFixedDelayExecution(intervalInSecond:Int) {
-        self.logger.log("\(Date()) fixed delay execution - \(self.name) - \(self.state)")
+        self.logger.log("fixed delay execution - \(self.name) - \(self.state)")
         if let exec = self.taskCode {
             DispatchQueue.global().async {
                 while(true) {
@@ -174,7 +174,7 @@ class Tasklet {
 //                        self.logger.log("stopped fixed delay job !!!!!!!!")
                         return
                     }
-                    //self.logger.log("\(Date()) fixed delay execution - \(self.name) - \(self.state)")
+                    //self.logger.log("fixed delay execution - \(self.name) - \(self.state)")
                     
                     if self.state == "COMPLETED" || self.state == "READY" {
                         self.state = "IN_PROGRESS"
@@ -183,7 +183,7 @@ class Tasklet {
                     
                     if self.state == "COMPLETED" || self.state == "READY" {
                         
-//                        self.logger.log("\(Date()) waiting \(intervalInSecond) sec for next fixedDelay run")
+//                        self.logger.log("waiting \(intervalInSecond) sec for next fixedDelay run")
                         
                         if !TaskletManager.default.isSingleMode() {
                             var n = 0
@@ -846,7 +846,7 @@ class FakeTaskletManager {
     }
     
     func rehearsal() {
-        self.logger.log("\(Date()) task manager rehearsal")
+        self.logger.log("task manager rehearsal")
         
         let _ = TaskletManager.default.createAndStartTask(type: "TEST", name: "test4234", exec: { task in
             DispatchQueue.global().async {

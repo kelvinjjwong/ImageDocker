@@ -199,19 +199,19 @@ extension ViewController {
     
     internal func updateLibraryTree() {
         //self.creatingRepository = true
-//        self.logger.log("\(Date()) UPDATING CONTAINERS")
+//        self.logger.log("UPDATING CONTAINERS")
         DispatchQueue.global().async {
             ImageFolderTreeScanner.default.updateContainers(onCompleted: {
                 
-//                self.logger.log("\(Date()) UPDATING CONTAINERS: DONE")
+//                self.logger.log("UPDATING CONTAINERS: DONE")
                 
                 DispatchQueue.main.async {
-//                    self.logger.log("\(Date()) UPDATING LIBRARY TREE")
+//                    self.logger.log("UPDATING LIBRARY TREE")
 //                    self.saveTreeItemsExpandState()
 //                    self.refreshLibraryTree()
 //                    self.restoreTreeItemsExpandState()
 //                    self.restoreTreeSelection()
-//                    self.logger.log("\(Date()) UPDATING LIBRARY TREE: DONE")
+//                    self.logger.log("UPDATING LIBRARY TREE: DONE")
                     
                     //self.creatingRepository = false
                     

@@ -16,7 +16,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         
         let db = PostgresConnection.database()
         if let container = ImageContainer.fetchOne(db, parameters: ["path": path]) {
-            return (container, true)
+            return (container, false)
         }else{
             let container = ImageContainer(name: name,
                                        parentFolder: parentFolder,
@@ -41,7 +41,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                                        subContainers: 0
             )
             container.save(db)
-            return (container, false)
+            return (container, true)
         }
     }
     
@@ -446,7 +446,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
     func updateImageContainerSubContainers(path:String) -> Int {
         let subContainers = self.countSubContainers(parent: path)
-        self.logger.log("\(Date()) [DB][PostgresClientKit+ImageContainer] updating subContainers to \(subContainers)")
+        self.logger.log("[DB][PostgresClientKit+ImageContainer] updating subContainers amount to \(subContainers) - \(path)")
         let db = PostgresConnection.database()
         do {
             try db.execute(sql: """

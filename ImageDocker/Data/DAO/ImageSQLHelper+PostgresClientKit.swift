@@ -45,12 +45,9 @@ extension SQLHelper {
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
         let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=true"
         
-        self.logger.log("SQL args: \(sqlArgs)")
-        
-        self.logger.log("[Postgres Image] Generated SQL statement for all:")
-        self.logger.log(stmt)
-        self.logger.log("[Postgres Image] Generated SQL statement for hidden:")
-        self.logger.log(stmtHidden)
+        self.logger.log("[Postgres Image] Generated SQL statement for all: \(stmt)")
+        self.logger.log("[Postgres Image] Generated SQL statement for hidden: \(stmtHidden)")
+        self.logger.log("[Postgres Image] SQL args: \(sqlArgs)")
         
         return (stmt, stmtHidden, sqlArgs)
     }
@@ -71,11 +68,9 @@ extension SQLHelper {
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
         let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=true"
         
-        self.logger.log("[Postgres Image -> Searching] Generated SQL statement for all:")
-        self.logger.log(stmt)
-        self.logger.log("[Postgres Image -> Searching] Generated SQL statement for hidden:")
-        self.logger.log(stmtHidden)
-        self.logger.log("SQL args: \(sqlArgs)")
+        self.logger.log("[Postgres Image -> Searching] Generated SQL statement for all: \(stmt)")
+        self.logger.log("[Postgres Image -> Searching] Generated SQL statement for hidden: \(stmtHidden)")
+        self.logger.log("[Postgres Image -> Searching] SQL args: \(sqlArgs)")
         
         return (stmt, stmtHidden, sqlArgs)
     }

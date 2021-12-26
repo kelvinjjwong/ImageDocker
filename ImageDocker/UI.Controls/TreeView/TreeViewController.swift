@@ -261,16 +261,15 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate, Tr
                         item.removeAllChildren()
                         let startTime = Date()
                         for node in treeNodes {
-                            self.logger.log("\(Date()) [TREE] rendering tree node \(node.name)")
+                            //self.logger.log("rendering tree node \(node.name)")
                             item.addChild(collection: node)
                         }
-                        let gap = Date().timeIntervalSince(startTime)
-                        self.logger.log("\(Date()) [TREE] tree collection insertion time cost \(gap)")
+                        self.logger.timecost("tree collection insertion", fromDate: startTime)
                         self.outlineView.reloadItem(item, reloadChildren: true)
                         self.outlineView.expandItem(item)
                     }
                 }else{
-                    self.logger.log("[TREE] loaded 0 child nodes")
+                    self.logger.log("loaded 0 child nodes")
                 }
                 if let msg = message {
                     MessageEventCenter.default.showMessage(message: msg)
@@ -280,7 +279,7 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate, Tr
     }
     
     func outlineView(_ outlineView: NSOutlineView, shouldExpandItem item: Any) -> Bool {
-        self.logger.log("[TREE] calling should expand item logic")
+        //self.logger.log("calling should expand item logic")
         if let node = item as? TreeCollection {
             if node.children.count == 0 {
                 self.expandTreeNode(node)

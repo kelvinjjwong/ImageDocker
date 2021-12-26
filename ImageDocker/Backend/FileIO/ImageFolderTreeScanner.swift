@@ -55,11 +55,11 @@ class ImageFolderTreeScanner {
         
         var imageFolders:[ImageFolder] = [ImageFolder]()
         
-        self.logger.log("\(Date()) Loading containers from db ")
+        self.logger.log("Loading containers from db ")
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "FOLDERSETTER_BEGIN"), object: nil)
         let containers = RepositoryDao.default.getAllContainers()
         
-        self.logger.log("\(Date()) Setting up containers' parent ")
+        self.logger.log("Setting up containers' parent ")
         
         let limitRam = PreferencesController.peakMemory() * 1024
         var continousWorking = true
@@ -230,10 +230,10 @@ class ImageFolderTreeScanner {
             } // end of while loop
         }// end of if-containers-is-empty
         urlFolders.removeAll()
-        self.logger.log("\(Date()) Setting up containers' parent: DONE ")
+        self.logger.log("Setting up containers' parent: DONE ")
         
         if foldersNeedSave.count > 0 {
-            self.logger.log("\(Date()) Saving containers' parent")
+            self.logger.log("Saving containers' parent")
             var k = 0
             let kall = foldersNeedSave.count
             for imageFolder in foldersNeedSave {
@@ -259,7 +259,7 @@ class ImageFolderTreeScanner {
                     }
                 }
             }
-            self.logger.log("\(Date()) Saving containers' parent: DONE ")
+            self.logger.log("Saving containers' parent: DONE ")
         }
         foldersNeedSave.removeAll()
         
@@ -301,7 +301,7 @@ class ImageFolderTreeScanner {
         let photoCount = photos.count
         
         if photoCount > 0 {
-            self.logger.log("\(Date()) UPDATING EXIF: \(photos.count)")
+            self.logger.log("UPDATING EXIF: \(photos.count)")
             if indicator != nil {
                 indicator?.setTarget(photoCount)
             }
@@ -347,7 +347,7 @@ class ImageFolderTreeScanner {
                 self.logger.log("finished exif \(photo.subPath)")
             } // end of images-loop
             //ModelStore.save()
-            self.logger.log("\(Date()) UPDATING EXIF: SAVE DONE")
+            self.logger.log("UPDATING EXIF: SAVE DONE")
         }else {
             if indicator != nil {
                 indicator?.forceComplete()
@@ -575,9 +575,9 @@ class ImageFolderTreeScanner {
             } // end of if devicePaths.count > 0
         } // end of if repo.deviceid != ""
         
-        self.logger.log("\(Date()) CHECKING REPO \(repo.path)")
+        self.logger.log("CHECKING REPO \(repo.path)")
         
-        self.logger.log("\(Date()) CHECK REPO: ENUMERATING FILESYS")
+        self.logger.log("CHECK REPO: ENUMERATING FILESYS")
         
         autoreleasepool { () -> Void in
             self.logger.log(">>> WALKING THRU DIRECTORY begin \(i)/\(totalCount) <<<")
@@ -600,9 +600,9 @@ class ImageFolderTreeScanner {
             self.logger.log(">>> WALKING THRU DIRECTORY done \(i)/\(totalCount)  <<<")
         }
         
-        self.logger.log("\(Date()) CHECK REPO: ENUMERATING FILESYS: DONE")
+        self.logger.log("CHECK REPO: ENUMERATING FILESYS: DONE")
         
-        self.logger.log("\(Date()) CHECK REPO: CHECK FOLDERS TO BE ADDED AND REMOVED")
+        self.logger.log("CHECK REPO: CHECK FOLDERS TO BE ADDED AND REMOVED")
         
         autoreleasepool { () -> Void in
             
@@ -790,7 +790,7 @@ class ImageFolderTreeScanner {
         let urlsToAdd:[String] = filesysUrls.subtracting(dbUrls).sorted()
         let urlsToRemoved:Set<String> = dbUrls.subtracting(filesysUrls)
         
-        self.logger.log("\(Date()) CHECK REPO: CHECK TO BE ADDED AND REMOVED : DONE")
+        self.logger.log("CHECK REPO: CHECK TO BE ADDED AND REMOVED : DONE")
         
         let total = urlsToAdd.count + urlsToRemoved.count
         
@@ -813,10 +813,10 @@ class ImageFolderTreeScanner {
         
         TaskletManager.default.setTotal(id: taskId, total: total)
         
-        self.logger.log("\(Date()) CHECK REPO: EXECUTE ADD OR REMOVE")
+        self.logger.log("CHECK REPO: EXECUTE ADD OR REMOVE")
         
         if urlsToAdd.count > 0 {
-            self.logger.log("\(Date()) URLS TO ADD FROM FILESYS: \(urlsToAdd.count)")
+            self.logger.log("URLS TO ADD FROM FILESYS: \(urlsToAdd.count)")
 //            indicator?.dataChanged()
             
             let limitRam = PreferencesController.peakMemory() * 1024
@@ -904,12 +904,12 @@ class ImageFolderTreeScanner {
 //            if indicator != nil {
 //                indicator?.dataChanged()
 //            }
-            self.logger.log("\(Date()) URLS TO ADD FROM FILESYS: SAVE DONE")
+            self.logger.log("URLS TO ADD FROM FILESYS: SAVE DONE")
         } // end of urlsToAdd.count > 0
         
         var k = 0
         if urlsToRemoved.count > 0 {
-            self.logger.log("\(Date()) PHOTOS TO REMOVED FROM DB: \(urlsToRemoved.count)")
+            self.logger.log("PHOTOS TO REMOVED FROM DB: \(urlsToRemoved.count)")
             k += 1
 //            indicator?.dataChanged()
             for url in urlsToRemoved {
@@ -946,10 +946,10 @@ class ImageFolderTreeScanner {
             //DispatchQueue.main.async {
                 //ModelStore.save()
             //}
-            self.logger.log("\(Date()) PHOTOS TO REMOVED FROM DB: SAVE DONE")
+            self.logger.log("PHOTOS TO REMOVED FROM DB: SAVE DONE")
         } // end of urlsToRemoved.count > 0
         
-        self.logger.log("\(Date()) CHECK REPO: EXECUTE ADD OR REMOVE: DONE")
+        self.logger.log("CHECK REPO: EXECUTE ADD OR REMOVE: DONE")
         
         return true
     }
@@ -978,7 +978,7 @@ class ImageFolderTreeScanner {
         let excludedContainerPaths = DeviceDao.default.getExcludedImportedContainerPaths()
         let (_, repoFileSysUrls, repoFileUrlToRepo) = self.scanRepository(repository: repository, excludedContainerPaths: excludedContainerPaths, step: 1, total: 1, taskId: taskId, indicator: indicator)
         
-        self.logger.log("\(Date()) CHECK REPO: CHECK TO BE ADDED AND REMOVED")
+        self.logger.log("CHECK REPO: CHECK TO BE ADDED AND REMOVED")
         if indicator != nil { indicator?.display(message: "[FileSys Scan] Checking gap between db and filesys .....") }
         
         TaskletManager.default.updateProgress(id: taskId, message: "[FileSys Scan] Checking gap: loading all images from db .....", increase: false)
@@ -993,7 +993,7 @@ class ImageFolderTreeScanner {
             return false
         }
         
-        self.logger.log("\(Date()) TRIGGER ON DATA CHANGED EVENT AFTER FINISHED SCANNING REPOSITORIES")
+        self.logger.log("TRIGGER ON DATA CHANGED EVENT AFTER FINISHED SCANNING REPOSITORIES")
         if indicator != nil {
             indicator?.display(message: "[FileSys Scan] Repository scan done.")
             indicator?.dataChanged()
@@ -1055,7 +1055,7 @@ class ImageFolderTreeScanner {
             }
         } // end of loop repositories
         
-        self.logger.log("\(Date()) CHECK REPO: CHECK TO BE ADDED AND REMOVED")
+        self.logger.log("CHECK REPO: CHECK TO BE ADDED AND REMOVED")
         if indicator != nil {
             indicator?.display(message: "[FileSys Scan] Checking gap between db and filesys .....")
         }
@@ -1069,7 +1069,7 @@ class ImageFolderTreeScanner {
             return
         }
         
-        self.logger.log("\(Date()) TRIGGER ON DATA CHANGED EVENT AFTER FINISHED SCANNING REPOSITORIES")
+        self.logger.log("TRIGGER ON DATA CHANGED EVENT AFTER FINISHED SCANNING REPOSITORIES")
         if indicator != nil {
             indicator?.display(message: "[FileSys Scan] Repositories scan done.")
             indicator?.dataChanged()

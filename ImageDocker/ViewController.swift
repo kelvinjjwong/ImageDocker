@@ -254,9 +254,9 @@ class ViewController: NSViewController {
             self.popNotification(message: message)
         }
         self.hideNotification()
-//        self.logger.log("\(Date()) Loading view - preview zone")
+//        self.logger.log("Loading view - preview zone")
         self.configurePreview()
-//        self.logger.log("\(Date()) Loading view - selection view")
+//        self.logger.log("Loading view - selection view")
         self.configureSelectionView()
         
         self.setupUIDisplays()
@@ -269,19 +269,19 @@ class ViewController: NSViewController {
         self.setupExportMenu()
         self.setupPreviewMenu()
         
-//        self.logger.log("\(Date()) Loading view - configure tree")
+//        self.logger.log("Loading view - configure tree")
         configureTree()
-//        self.logger.log("\(Date()) Loading view - configure collection view")
+//        self.logger.log("Loading view - configure collection view")
         configureCollectionView()
-//        self.logger.log("\(Date()) Loading view - configure editors")
+//        self.logger.log("Loading view - configure editors")
         
         self.configureDarkMode()
         self.resize()
         
-//        self.logger.log("\(Date()) Loading view - update library tree")
+//        self.logger.log("Loading view - update library tree")
         self.splashController.message(Words.splash_laodingLibraries.word(), progress: 4)
         updateLibraryTree()
-//        self.logger.log("\(Date()) Loading view - update library tree: DONE")
+//        self.logger.log("Loading view - update library tree: DONE")
         
 //        self.deviceCopyWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "DeviceCopyWindowController")) as? NSWindowController
         
@@ -306,7 +306,7 @@ class ViewController: NSViewController {
         
         self.startSchedules()
         
-//        self.logger.log("\(Date()) Loading view: DONE")
+//        self.logger.log("Loading view: DONE")
     }
     
     override func viewDidLoad() {
@@ -329,14 +329,14 @@ class ViewController: NSViewController {
         
         self.btnImageOptions.isEnabled = false
         
-//        self.logger.log("\(Date()) Loading view")
+//        self.logger.log("Loading view")
         
         //self.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
         //progressIndicator.isDisplayedWhenStopped = false
         collectionProgressIndicator.isDisplayedWhenStopped = false
         
-//        self.logger.log("\(Date()) Loading view - configure dark mode")
+//        self.logger.log("Loading view - configure dark mode")
         
         self.imagesLoader.hiddenCountHandler = { hiddenCount in
             DispatchQueue.main.async {

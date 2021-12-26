@@ -23,7 +23,7 @@ extension ViewController {
     }
     
     func refreshCollectionView() {
-        self.logger.log("REFRESHING COLLECTION VIEW")
+        //self.logger.log("REFRESHING COLLECTION VIEW")
         var needRefreshLocation = false
         for item in imagesLoader.getItems() {
             if item.location.place == "" && item.location.coordinate != nil && (item.location.coordinate?.isNotZero)! {
@@ -34,7 +34,7 @@ extension ViewController {
             //self.logger.log("REFRESH LOCATIONS")
             refreshImagesLocation()
         }else{
-            self.logger.log("REORG ITEMS")
+            //self.logger.log("REORG ITEMS")
             DispatchQueue.main.async{
                 self.imagesLoader.reorganizeItems(considerPlaces: true)
                 self.logger.log("reloading data in main collection view")

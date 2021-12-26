@@ -70,7 +70,7 @@ class SelectionViewController : NSViewController {
         comboEventList.isEditable = false
 //        comboPlaceList.isEditable = false
         self.btnShare.sendAction(on: .leftMouseDown)
-//        self.logger.log("\(Date()) Loading view - setup event list")
+//        self.logger.log("Loading view - setup event list")
         setupEventList()
         self.btnAssignEvent.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnManageEvents.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)

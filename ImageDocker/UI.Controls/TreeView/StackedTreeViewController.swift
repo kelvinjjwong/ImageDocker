@@ -127,7 +127,7 @@ class StackedTreeViewController: NSViewController, StackItemHost {
         }
         stackItem.header.afterExpand = {
             let (opened, closed) = self.countTreeStates()
-            self.logger.log("[TREE] opened: \(opened), closed: \(closed)")
+            //self.logger.log("opened: \(opened), closed: \(closed)")
         }
         
         // Add the header view.

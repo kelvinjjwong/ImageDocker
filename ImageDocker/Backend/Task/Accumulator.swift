@@ -152,7 +152,7 @@ class Accumulator : NSObject {
                 }
             }
             if self.hasOnCompleted {
-                self.logger.log("\(Date()) ACCUMULATOR INVOKING ON COMPLETED CLOSURE")
+                //self.logger.log("ACCUMULATOR INVOKING ON COMPLETED CLOSURE")
                 self.onCompleted(self.data)
             }
             

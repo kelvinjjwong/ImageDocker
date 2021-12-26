@@ -30,6 +30,10 @@ class ConsoleLogger {
         }
     }
     
+    public func timecost(_ message:String, fromDate:Date){
+        log("\(message) - time cost: \(Date().timeIntervalSince(fromDate)) seconds")
+    }
+    
     public func log(_ message:String){
         print("\(prefix()) \(message)")
     }
