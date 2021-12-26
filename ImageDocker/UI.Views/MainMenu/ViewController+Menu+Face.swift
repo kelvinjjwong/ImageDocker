@@ -33,85 +33,85 @@ extension ViewController {
         self.btnFaces.menu?.addItem(withTitle: Words.mainmenu_face_manageFaces.word(), action: #selector(faceMenuManageAction(_:)), keyEquivalent: "")
         self.btnFaces.menu?.addItem(NSMenuItem.separator())
         
-        let menuScan = NSMenuItem(title: Words.mainmenu_face_scan.word(), action: nil, keyEquivalent: "")
-        let subMenuScan = NSMenu()
-        let menuForceScan = NSMenuItem(title: Words.mainmenu_face_reScan.word(), action: nil, keyEquivalent: "")
-        let subMenuForceScan = NSMenu()
+//        let menuScan = NSMenuItem(title: Words.mainmenu_face_scan.word(), action: nil, keyEquivalent: "")
+//        let subMenuScan = NSMenu()
+//        let menuForceScan = NSMenuItem(title: Words.mainmenu_face_reScan.word(), action: nil, keyEquivalent: "")
+//        let subMenuForceScan = NSMenu()
+//
+//        let menuRecognize = NSMenuItem(title: Words.mainmenu_face_recognize.word(), action: nil, keyEquivalent: "")
+//        let subMenuRecognize = NSMenu()
+//        let menuForceRecognize = NSMenuItem(title: Words.mainmenu_face_reRecognize.word(), action: nil, keyEquivalent: "")
+//        let subMenuForceRecognize = NSMenu()
         
-        let menuRecognize = NSMenuItem(title: Words.mainmenu_face_recognize.word(), action: nil, keyEquivalent: "")
-        let subMenuRecognize = NSMenu()
-        let menuForceRecognize = NSMenuItem(title: Words.mainmenu_face_reRecognize.word(), action: nil, keyEquivalent: "")
-        let subMenuForceRecognize = NSMenu()
+//        let years = ImageSearchDao.default.getYears()
+//        self.addSubMenu(subMenuScan,
+//                        title: Words.mainmenu_face_in_collection.word(),
+//                        action: #selector(faceMenuScanAction(_:)),
+//                        representedObject: FaceMenu(action: "scan", area: "collection"))
+//        self.addSubMenu(subMenuRecognize,
+//                        title: Words.mainmenu_face_in_collection.word(),
+//                        action: #selector(faceMenuRecognizeAction(_:)),
+//                        representedObject: FaceMenu(action: "recognize", area: "collection"))
+//
+//        self.addSubMenu(subMenuForceScan,
+//                        title: Words.mainmenu_face_in_collection.word(),
+//                        action: #selector(faceMenuForceScanAction(_:)),
+//                        representedObject: FaceMenu(action: "scan", area: "collection"))
+//        self.addSubMenu(subMenuForceRecognize,
+//                        title: Words.mainmenu_face_in_collection.word(),
+//                        action: #selector(faceMenuForceRecognizeAction(_:)),
+//                        representedObject: FaceMenu(action: "recognize", area: "collection"))
+//
+//        self.addSubMenu(subMenuScan,
+//                        title: Words.mainmenu_face_in_allYears.word(),
+//                        action: #selector(faceMenuScanAction(_:)),
+//                        representedObject: FaceMenu(action: "scan", area: Words.imagesInAllYears.word()))
+//        self.addSubMenu(subMenuRecognize,
+//                        title: Words.mainmenu_face_in_allYears.word(),
+//                        action: #selector(faceMenuRecognizeAction(_:)),
+//                        representedObject: FaceMenu(action: "recognize", area: Words.imagesInAllYears.word()))
+//
+//        self.addSubMenu(subMenuForceScan,
+//                        title: Words.mainmenu_face_in_allYears.word(),
+//                        action: #selector(faceMenuForceScanAction(_:)),
+//                        representedObject: FaceMenu(action: "scan", area: Words.imagesInAllYears.word()))
+//        self.addSubMenu(subMenuForceRecognize,
+//                        title: Words.mainmenu_face_in_allYears.word(),
+//                        action: #selector(faceMenuForceRecognizeAction(_:)),
+//                        representedObject: FaceMenu(action: "recognize", area: Words.imagesInAllYears.word()))
         
-        let years = ImageSearchDao.default.getYears()
-        self.addSubMenu(subMenuScan,
-                        title: Words.mainmenu_face_in_collection.word(),
-                        action: #selector(faceMenuScanAction(_:)),
-                        representedObject: FaceMenu(action: "scan", area: "collection"))
-        self.addSubMenu(subMenuRecognize,
-                        title: Words.mainmenu_face_in_collection.word(),
-                        action: #selector(faceMenuRecognizeAction(_:)),
-                        representedObject: FaceMenu(action: "recognize", area: "collection"))
-        
-        self.addSubMenu(subMenuForceScan,
-                        title: Words.mainmenu_face_in_collection.word(),
-                        action: #selector(faceMenuForceScanAction(_:)),
-                        representedObject: FaceMenu(action: "scan", area: "collection"))
-        self.addSubMenu(subMenuForceRecognize,
-                        title: Words.mainmenu_face_in_collection.word(),
-                        action: #selector(faceMenuForceRecognizeAction(_:)),
-                        representedObject: FaceMenu(action: "recognize", area: "collection"))
-        
-        self.addSubMenu(subMenuScan,
-                        title: Words.mainmenu_face_in_allYears.word(),
-                        action: #selector(faceMenuScanAction(_:)),
-                        representedObject: FaceMenu(action: "scan", area: Words.imagesInAllYears.word()))
-        self.addSubMenu(subMenuRecognize,
-                        title: Words.mainmenu_face_in_allYears.word(),
-                        action: #selector(faceMenuRecognizeAction(_:)),
-                        representedObject: FaceMenu(action: "recognize", area: Words.imagesInAllYears.word()))
-        
-        self.addSubMenu(subMenuForceScan,
-                        title: Words.mainmenu_face_in_allYears.word(),
-                        action: #selector(faceMenuForceScanAction(_:)),
-                        representedObject: FaceMenu(action: "scan", area: Words.imagesInAllYears.word()))
-        self.addSubMenu(subMenuForceRecognize,
-                        title: Words.mainmenu_face_in_allYears.word(),
-                        action: #selector(faceMenuForceRecognizeAction(_:)),
-                        representedObject: FaceMenu(action: "recognize", area: Words.imagesInAllYears.word()))
-        
-        for year in years {
-            if year == 0 {
-                continue
-            }
+//        for year in years {
+//            if year == 0 {
+//                continue
+//            }
             
-            self.addSubMenu(subMenuScan,
-                            title: "\(Words.mainmenu_face_in_year.word("%s", year))",
-                            action: #selector(faceMenuScanAction(_:)),
-                            representedObject: FaceMenu(action: "scan", area: "\(year)"))
-            self.addSubMenu(subMenuRecognize,
-                            title: "\(Words.mainmenu_face_in_year.word("%s", year))",
-                            action: #selector(faceMenuRecognizeAction(_:)),
-                            representedObject: FaceMenu(action: "recognize", area: "\(year)"))
-            self.addSubMenu(subMenuForceScan,
-                            title: "\(Words.mainmenu_face_in_year.word("%s", year))",
-                            action: #selector(faceMenuForceScanAction(_:)),
-                            representedObject: FaceMenu(action: "scan", area: "\(year)"))
-            self.addSubMenu(subMenuForceRecognize,
-                            title: "\(Words.mainmenu_face_in_year.word("%s", year))",
-                            action: #selector(faceMenuForceRecognizeAction(_:)),
-                            representedObject: FaceMenu(action: "recognize", area: "\(year)"))
-        }
-        menuScan.submenu = subMenuScan
-        menuRecognize.submenu = subMenuRecognize
-        menuForceScan.submenu = subMenuForceScan
-        menuForceRecognize.submenu = subMenuForceRecognize
-        
-        self.btnFaces.menu?.addItem(menuScan)
-        self.btnFaces.menu?.addItem(menuForceScan)
-        self.btnFaces.menu?.addItem(NSMenuItem.separator())
-        self.btnFaces.menu?.addItem(menuRecognize)
-        self.btnFaces.menu?.addItem(menuForceRecognize)
+//            self.addSubMenu(subMenuScan,
+//                            title: "\(Words.mainmenu_face_in_year.word("%s", year))",
+//                            action: #selector(faceMenuScanAction(_:)),
+//                            representedObject: FaceMenu(action: "scan", area: "\(year)"))
+//            self.addSubMenu(subMenuRecognize,
+//                            title: "\(Words.mainmenu_face_in_year.word("%s", year))",
+//                            action: #selector(faceMenuRecognizeAction(_:)),
+//                            representedObject: FaceMenu(action: "recognize", area: "\(year)"))
+//            self.addSubMenu(subMenuForceScan,
+//                            title: "\(Words.mainmenu_face_in_year.word("%s", year))",
+//                            action: #selector(faceMenuForceScanAction(_:)),
+//                            representedObject: FaceMenu(action: "scan", area: "\(year)"))
+//            self.addSubMenu(subMenuForceRecognize,
+//                            title: "\(Words.mainmenu_face_in_year.word("%s", year))",
+//                            action: #selector(faceMenuForceRecognizeAction(_:)),
+//                            representedObject: FaceMenu(action: "recognize", area: "\(year)"))
+//        }
+//        menuScan.submenu = subMenuScan
+//        menuRecognize.submenu = subMenuRecognize
+//        menuForceScan.submenu = subMenuForceScan
+//        menuForceRecognize.submenu = subMenuForceRecognize
+//
+//        self.btnFaces.menu?.addItem(menuScan)
+//        self.btnFaces.menu?.addItem(menuForceScan)
+//        self.btnFaces.menu?.addItem(NSMenuItem.separator())
+//        self.btnFaces.menu?.addItem(menuRecognize)
+//        self.btnFaces.menu?.addItem(menuForceRecognize)
     }
     
     @objc func faceMenuManageAction(_ menuItem:NSMenuItem) {
@@ -151,37 +151,37 @@ extension ViewController {
 //        }
     }
     
-    @objc func faceMenuScanAction(_ menuItem:NSMenuItem) {
-        if let obj = menuItem.representedObject as? FaceMenu {
-            self.doFaceMenuAction("\(Words.scan.word()) \(obj.area)")
-        }
-    }
-    
-    
-    @objc func faceMenuRecognizeAction(_ menuItem:NSMenuItem) {
-        if let obj = menuItem.representedObject as? FaceMenu {
-            self.doFaceMenuAction("\(Words.recognize.word()) \(obj.area)")
-        }
-    }
-    
-    @objc func faceMenuForceScanAction(_ menuItem:NSMenuItem) {
-        if let obj = menuItem.representedObject as? FaceMenu {
-            self.doFaceMenuAction("\(Words.forceScan.word()) \(obj.area)")
-        }
-    }
-    
-    
-    @objc func faceMenuForceRecognizeAction(_ menuItem:NSMenuItem) {
-        if let obj = menuItem.representedObject as? FaceMenu {
-            self.doFaceMenuAction("\(Words.forceRecognize.word()) \(obj.area)")
-        }
-    }
-    
-    @objc func faceMenuForceRecognizeUnknownAction(_ menuItem:NSMenuItem) {
-        if let obj = menuItem.representedObject as? FaceMenu {
-            self.doFaceMenuAction("Recognize-Unknown \(obj.area)")
-        }
-    }
+//    @objc func faceMenuScanAction(_ menuItem:NSMenuItem) {
+//        if let obj = menuItem.representedObject as? FaceMenu {
+//            self.doFaceMenuAction("\(Words.scan.word()) \(obj.area)")
+//        }
+//    }
+//
+//
+//    @objc func faceMenuRecognizeAction(_ menuItem:NSMenuItem) {
+//        if let obj = menuItem.representedObject as? FaceMenu {
+//            self.doFaceMenuAction("\(Words.recognize.word()) \(obj.area)")
+//        }
+//    }
+//
+//    @objc func faceMenuForceScanAction(_ menuItem:NSMenuItem) {
+//        if let obj = menuItem.representedObject as? FaceMenu {
+//            self.doFaceMenuAction("\(Words.forceScan.word()) \(obj.area)")
+//        }
+//    }
+//
+//
+//    @objc func faceMenuForceRecognizeAction(_ menuItem:NSMenuItem) {
+//        if let obj = menuItem.representedObject as? FaceMenu {
+//            self.doFaceMenuAction("\(Words.forceRecognize.word()) \(obj.area)")
+//        }
+//    }
+//
+//    @objc func faceMenuForceRecognizeUnknownAction(_ menuItem:NSMenuItem) {
+//        if let obj = menuItem.representedObject as? FaceMenu {
+//            self.doFaceMenuAction("Recognize-Unknown \(obj.area)")
+//        }
+//    }
     
     internal func openFaceManager() {
         let storyboard = NSStoryboard(name: "PeopleFaceViewItems", bundle: nil)
@@ -217,151 +217,151 @@ extension ViewController {
 //        }
     }
     
-    internal func doFaceMenuAction(_ title:String) {
-        if !runningFaceTask && title != "" && title != Words.mainmenu_face.word() {
-            let parts = title.components(separatedBy: " ")
-            let action = parts[0]
-            var area = parts[parts.count-1]
-//            self.logger.log("\(action) \(area)")
-            if area == "collection" {
-                if self.imagesLoader.getItems().count > 0 {
-                    let tasklet = TaskletManager.default.task(type: "face", name: "\(action)\(Words.facesInCollection.word())")
-                    tasklet.total = self.imagesLoader.getItems().count
-                    tasklet.progress = 0
-                    tasklet.running = true
-                    tasklet.changeListener(selector: #selector(taskletObserver(notification:)))
-                    self.runningFaceTask = true
-                    self.stopFacesTask = false
-//                    self.btnStop.isHidden = false
-//                    self.lblProgressMessage.stringValue = "\(action) faces in collection: loading images ..."
+//    internal func doFaceMenuAction(_ title:String) {
+//        if !runningFaceTask && title != "" && title != Words.mainmenu_face.word() {
+//            let parts = title.components(separatedBy: " ")
+//            let action = parts[0]
+//            var area = parts[parts.count-1]
+////            self.logger.log("\(action) \(area)")
+//            if area == "collection" {
+//                if self.imagesLoader.getItems().count > 0 {
+//                    let tasklet = TaskletManager.default.task(type: "face", name: "\(action)\(Words.facesInCollection.word())")
+//                    tasklet.total = self.imagesLoader.getItems().count
+//                    tasklet.progress = 0
+//                    tasklet.running = true
+//                    tasklet.changeListener(selector: #selector(taskletObserver(notification:)))
+//                    self.runningFaceTask = true
+//                    self.stopFacesTask = false
+////                    self.btnStop.isHidden = false
+////                    self.lblProgressMessage.stringValue = "\(action) faces in collection: loading images ..."
+////
+//                    DispatchQueue.global().async {
+//                        for imageFile in self.imagesLoader.getItems() {
+//                            if self.stopFacesTask {
+//                                tasklet.forceStop = true
+//                                tasklet.running = false
+//                                tasklet.forceStopped = true
+////                                DispatchQueue.main.async {
+////                                    self.btnStop.isHidden = true
+////                                }
+//                                self.runningFaceTask = false
+//                                self.stopFacesTask = false
+//                                tasklet.removeListener()
+//                                break
+//                            }
+//                            let url = imageFile.url
+//                            if action == Words.scan.word() {
+//                                let _ = FaceTask.default.findFaces(path: url.path)
+//                            }else if action == Words.recognize.word() {
+//                                let _ = FaceTask.default.recognizeFaces(path: url.path)
+//                            }
+//                            tasklet.progress += 1
+//                            tasklet.notifyChange()
+//                        }
+//                    }
+//                }else{
+////                    self.logger.log("no item in collection")
+//                }
+//            }else{
+//                let tasklet = TaskletManager.default.task(type: "face", name: "\(action)\(Words.facesInArea.word("%s", area))")
+//                tasklet.total = 1
+//                tasklet.progress = 0
+//                tasklet.running = true
+//                tasklet.changeListener(selector: #selector(taskletObserver(notification:)))
+//                self.runningFaceTask = true
+//                self.stopFacesTask = false
+////                self.btnStop.isHidden = false
+////
+////                self.lblProgressMessage.stringValue = "\(action) faces in \(area): loading images ..."
 //
-                    DispatchQueue.global().async {
-                        for imageFile in self.imagesLoader.getItems() {
-                            if self.stopFacesTask {
-                                tasklet.forceStop = true
-                                tasklet.running = false
-                                tasklet.forceStopped = true
-//                                DispatchQueue.main.async {
-//                                    self.btnStop.isHidden = true
-//                                }
-                                self.runningFaceTask = false
-                                self.stopFacesTask = false
-                                tasklet.removeListener()
-                                break
-                            }
-                            let url = imageFile.url
-                            if action == Words.scan.word() {
-                                let _ = FaceTask.default.findFaces(path: url.path)
-                            }else if action == Words.recognize.word() {
-                                let _ = FaceTask.default.recognizeFaces(path: url.path)
-                            }
-                            tasklet.progress += 1
-                            tasklet.notifyChange()
-                        }
-                    }
-                }else{
-//                    self.logger.log("no item in collection")
-                }
-            }else{
-                let tasklet = TaskletManager.default.task(type: "face", name: "\(action)\(Words.facesInArea.word("%s", area))")
-                tasklet.total = 1
-                tasklet.progress = 0
-                tasklet.running = true
-                tasklet.changeListener(selector: #selector(taskletObserver(notification:)))
-                self.runningFaceTask = true
-                self.stopFacesTask = false
-//                self.btnStop.isHidden = false
+//                if area == Words.imagesInAllYears.word() {
+//                    area = ""
+//                }
+//                DispatchQueue.global().async {
 //
-//                self.lblProgressMessage.stringValue = "\(action) faces in \(area): loading images ..."
-                
-                if area == Words.imagesInAllYears.word() {
-                    area = ""
-                }
-                DispatchQueue.global().async {
-                    
-                    var images:[Image] = []
-                    if action == Words.scan.word() {
-                        images = ImageSearchDao.default.getImagesByYear(year: area, scannedFace: false)
-                    }else if action == Words.recognize.word() {
-                        images = ImageSearchDao.default.getImagesByYear(year: area, recognizedFace: false)
-                    }else if action == Words.forceScan.word() || action == Words.forceRecognize.word() {
-                        images = ImageSearchDao.default.getImagesByYear(year: area)
-                    }
-                    if images.count > 0 {
-                        tasklet.total = images.count
-                        
-                        let limitRam = PreferencesController.peakMemory() * 1024
-                        var continousWorking = true
-                        var index = 0
-                        var attempt = 0
-                        
-                        while(index < images.count ){
-                            //for image in images {
-                            if self.stopFacesTask {
-                                tasklet.forceStop = true
-                                tasklet.running = false
-                                tasklet.forceStopped = true
-//                                DispatchQueue.main.async {
-//                                    self.btnStop.isHidden = true
+//                    var images:[Image] = []
+//                    if action == Words.scan.word() {
+//                        images = ImageSearchDao.default.getImagesByYear(year: area, scannedFace: false)
+//                    }else if action == Words.recognize.word() {
+//                        images = ImageSearchDao.default.getImagesByYear(year: area, recognizedFace: false)
+//                    }else if action == Words.forceScan.word() || action == Words.forceRecognize.word() {
+//                        images = ImageSearchDao.default.getImagesByYear(year: area)
+//                    }
+//                    if images.count > 0 {
+//                        tasklet.total = images.count
+//
+//                        let limitRam = PreferencesController.peakMemory() * 1024
+//                        var continousWorking = true
+//                        var index = 0
+//                        var attempt = 0
+//
+//                        while(index < images.count ){
+//                            //for image in images {
+//                            if self.stopFacesTask {
+//                                tasklet.forceStop = true
+//                                tasklet.running = false
+//                                tasklet.forceStopped = true
+////                                DispatchQueue.main.async {
+////                                    self.btnStop.isHidden = true
+////                                }
+//                                self.runningFaceTask = false
+//                                self.stopFacesTask = false
+//                                tasklet.removeListener()
+//                                break
+//                            }
+//
+//                            if limitRam > 0 {
+//                                var taskInfo = mach_task_basic_info()
+//                                var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
+//                                let kerr: kern_return_t = withUnsafeMutablePointer(to: &taskInfo) {
+//                                    $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
+//                                        task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
+//                                    }
 //                                }
-                                self.runningFaceTask = false
-                                self.stopFacesTask = false
-                                tasklet.removeListener()
-                                break
-                            }
-                            
-                            if limitRam > 0 {
-                                var taskInfo = mach_task_basic_info()
-                                var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
-                                let kerr: kern_return_t = withUnsafeMutablePointer(to: &taskInfo) {
-                                    $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
-                                        task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
-                                    }
-                                }
-                                
-                                if kerr == KERN_SUCCESS {
-                                    let usedRam = taskInfo.resident_size / 1024 / 1024
-                                    
-                                    if usedRam >= limitRam {
-                                        attempt += 1
-//                                        self.logger.log("waiting for releasing memory for face detection, attempt: \(attempt)")
-                                        continousWorking = false
-                                        sleep(10)
-                                    }else{
-//                                        self.logger.log("continue for face detection, last attempt: \(attempt)")
-                                        continousWorking = true
-                                    }
-                                }
-                            }
-                            
-                            if continousWorking {
-                                autoreleasepool { () -> Void in
-                                    let image = images[index]
-                                    if action == Words.scan.word() || action == Words.forceScan.word() {
-                                        let _ = FaceTask.default.findFaces(image: image)
-                                    }else if action == Words.recognize.word() || action == Words.forceRecognize.word() {
-                                        let _ = FaceTask.default.recognizeFaces(image: image)
-                                    }
-                                    tasklet.progress += 1
-                                    tasklet.notifyChange()
-                                    
-                                    index += 1
-                                }
-                            }
-                        }
-                    }else{
-                        tasklet.forceStop = false
-                        tasklet.forceStopped = false
-                        tasklet.running = false
-//                        self.btnStop.isHidden = true
-                        self.runningFaceTask = false
-                        self.stopFacesTask = false
-                        tasklet.removeListener()
-                    }
-                }
-            }
-        }else{
-            //self.logger.log("no selection")
-        }
-    }
+//
+//                                if kerr == KERN_SUCCESS {
+//                                    let usedRam = taskInfo.resident_size / 1024 / 1024
+//
+//                                    if usedRam >= limitRam {
+//                                        attempt += 1
+////                                        self.logger.log("waiting for releasing memory for face detection, attempt: \(attempt)")
+//                                        continousWorking = false
+//                                        sleep(10)
+//                                    }else{
+////                                        self.logger.log("continue for face detection, last attempt: \(attempt)")
+//                                        continousWorking = true
+//                                    }
+//                                }
+//                            }
+//
+//                            if continousWorking {
+//                                autoreleasepool { () -> Void in
+//                                    let image = images[index]
+//                                    if action == Words.scan.word() || action == Words.forceScan.word() {
+//                                        let _ = FaceTask.default.findFaces(image: image)
+//                                    }else if action == Words.recognize.word() || action == Words.forceRecognize.word() {
+//                                        let _ = FaceTask.default.recognizeFaces(image: image)
+//                                    }
+//                                    tasklet.progress += 1
+//                                    tasklet.notifyChange()
+//
+//                                    index += 1
+//                                }
+//                            }
+//                        }
+//                    }else{
+//                        tasklet.forceStop = false
+//                        tasklet.forceStopped = false
+//                        tasklet.running = false
+////                        self.btnStop.isHidden = true
+//                        self.runningFaceTask = false
+//                        self.stopFacesTask = false
+//                        tasklet.removeListener()
+//                    }
+//                }
+//            }
+//        }else{
+//            //self.logger.log("no selection")
+//        }
+//    }
 }

@@ -94,8 +94,8 @@ public final class PostgresConnection : ImageDBInterface {
             try PostgresConnection.database().execute(sql: "SELECT NOW()")
             return (true, nil)
         }catch{
-            logger.log("Error at testDatabase()")
-            logger.log(error)
+            self.logger.log("Error at testDatabase()")
+            self.logger.log(error)
             return (false, error)
         }
     }
@@ -105,8 +105,8 @@ public final class PostgresConnection : ImageDBInterface {
             try db.execute(sql: "SELECT NOW()")
             return (true, nil)
         }catch{
-            logger.log("[DB][Postgres] Error at testDatabase(db)")
-            logger.log(error)
+            self.logger.log("[DB][Postgres] Error at testDatabase(db)")
+            self.logger.log(error)
             return (false, error)
         }
     }
@@ -188,13 +188,14 @@ public final class PostgresConnection : ImageDBInterface {
         let psql_path = URL(fileURLWithPath: commandPath).appendingPathComponent("psql").path
         
         let cmd = "\(pgdump_path) -h \(srcHost) \(srcDatabase) | \(psql_path) -h \(destHost) \(destDatabase)"
-        logger.log(cmd)
+        self.logger.log(cmd)
         let pgdump = Process("/bin/bash", ["-c", cmd])
         
-        logger.log("doing pgdump clone")
+        let startTime = Date()
+        self.logger.log("doing pgdump clone")
         pgdump.launch()
         pgdump.waitUntilExit()
-        logger.log("end of pgdump clone")
+        self.logger.timecost("end of pgdump clone", fromDate: startTime)
         return (true, nil)
     }
     
@@ -209,20 +210,21 @@ public final class PostgresConnection : ImageDBInterface {
         do{
             try FileManager.default.createDirectory(at: backupfolder, withIntermediateDirectories: true, attributes: nil)
         }catch{
-            logger.log("Unable to create backup folder \(backupfolder.path)")
-            logger.log(error)
+            self.logger.log("Unable to create backup folder \(backupfolder.path)")
+            self.logger.log(error)
             return (folder, false, error)
         }
         let filepath = backupfolder.appendingPathComponent(filename)
         
         let cmd = "\(pgdump_path) -h \(host) \(database) | /usr/bin/gzip > \(filepath.path)"
-        logger.log(cmd)
+        self.logger.log(cmd)
         let pgdump = Process("/bin/bash", ["-c", cmd])
         
-        logger.log("doing pgdump backup")
+        let startTime = Date()
+        self.logger.log("doing pgdump backup")
         pgdump.launch()
         pgdump.waitUntilExit()
-        logger.log("end of pgdump backup")
+        self.logger.timecost("end of pgdump backup", fromDate: startTime)
         return (folder, true, nil)
     }
     
@@ -232,13 +234,14 @@ public final class PostgresConnection : ImageDBInterface {
         let backupPath = URL(fileURLWithPath: PreferencesController.databasePath()).appendingPathComponent("DataBackup").appendingPathComponent(backupFolder).appendingPathComponent("ImageDocker.backup.gz").path
         
         let cmd = "/usr/bin/gunzip -c \(backupPath) | \(psql_path) -h \(host) \(database)"
-        logger.log(cmd)
+        self.logger.log(cmd)
         let pgdump = Process("/bin/bash", ["-c", cmd])
         
-        logger.log("doing psql restore")
+        let startTime = Date()
+        self.logger.log("doing psql restore")
         pgdump.launch()
         pgdump.waitUntilExit()
-        logger.log("end of psql restore")
+        self.logger.timecost("end of psql restore", fromDate: startTime)
         return (true, nil)
     }
     
