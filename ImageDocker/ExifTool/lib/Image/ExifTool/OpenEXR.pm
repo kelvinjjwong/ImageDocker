@@ -198,7 +198,7 @@ sub ProcessEXR($$)
             }
             $tagInfo = { Name => $name, WasAdded => 1 };
             AddTagToTable($tagTablePtr, $tag, $tagInfo);
-            $et->VPrint(0, $$et{INDENT}, "[adding $tag]\n");
+            $et->Vself.logger.log(0, $$et{INDENT}, "[adding $tag]\n");
         }
         my ($val, $success);
         my $format = $formatType{$type};

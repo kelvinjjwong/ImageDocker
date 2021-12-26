@@ -84,24 +84,25 @@ class Event {
 }
 
 class Events {
+    let logger = ConsoleLogger(category: "Events")
     var events:[Event] = [Event] ()
     
     func read(_ datas:[Row]) -> [Event]{
-        print(datas.count)
+        self.logger.log(datas.count)
         for data in datas {
             let event = data["event"] as? String ?? ""
-            //print(event)
+            //self.logger.log(event)
             let year = data["photoTakenYear"] as Int? ?? 0
-            //print("year")
+            //self.logger.log("year")
             let month = data["photoTakenMonth"] as Int? ?? 0
-            //print("month")
+            //self.logger.log("month")
             let day = data["photoTakenDay"] as Int? ?? 0
-            //print("day")
+            //self.logger.log("day")
             let photoCount = data["photoCount"] as Int? ?? 0
-            //print("count")
+            //self.logger.log("count")
             let place = data["place"] as? String ?? ""
             
-            //print("Got \(event)-\(year)-\(month)-\(day)-\(place)")
+            //self.logger.log("Got \(event)-\(year)-\(month)-\(day)-\(place)")
             var eventEntry:Event
             var monthEntry:Event
             

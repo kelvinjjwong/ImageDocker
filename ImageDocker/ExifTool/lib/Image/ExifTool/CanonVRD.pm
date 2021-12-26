@@ -320,7 +320,7 @@ my $blankFooter = "CANON OPTIONAL DATA\0" . ("\0" x 42) . "\xff\xd9";
     0x126 => {
         Name => 'LuminanceCurvePoints',
         Format => 'int16u[21]',
-        PrintConv => 'Image::ExifTool::CanonVRD::ToneCurvePrint($val)',
+        PrintConv => 'Image::ExifTool::CanonVRD::ToneCurveself.logger.log($val)',
         PrintConvInv => 'Image::ExifTool::CanonVRD::ToneCurvePrintInv($val)',
     },
     0x150 => {
@@ -335,21 +335,21 @@ my $blankFooter = "CANON OPTIONAL DATA\0" . ("\0" x 42) . "\xff\xd9";
     0x160 => {
         Name => 'RedCurvePoints',
         Format => 'int16u[21]',
-        PrintConv => 'Image::ExifTool::CanonVRD::ToneCurvePrint($val)',
+        PrintConv => 'Image::ExifTool::CanonVRD::ToneCurveself.logger.log($val)',
         PrintConvInv => 'Image::ExifTool::CanonVRD::ToneCurvePrintInv($val)',
     },
     # 0x193 same as 0x159
     0x19a => {
         Name => 'GreenCurvePoints',
         Format => 'int16u[21]',
-        PrintConv => 'Image::ExifTool::CanonVRD::ToneCurvePrint($val)',
+        PrintConv => 'Image::ExifTool::CanonVRD::ToneCurveself.logger.log($val)',
         PrintConvInv => 'Image::ExifTool::CanonVRD::ToneCurvePrintInv($val)',
     },
     # 0x1cd same as 0x159
     0x1d4 => {
         Name => 'BlueCurvePoints',
         Format => 'int16u[21]',
-        PrintConv => 'Image::ExifTool::CanonVRD::ToneCurvePrint($val)',
+        PrintConv => 'Image::ExifTool::CanonVRD::ToneCurveself.logger.log($val)',
         PrintConvInv => 'Image::ExifTool::CanonVRD::ToneCurvePrintInv($val)',
     },
     0x18a => {
@@ -368,7 +368,7 @@ my $blankFooter = "CANON OPTIONAL DATA\0" . ("\0" x 42) . "\xff\xd9";
     0x20e => {
         Name => 'RGBCurvePoints',
         Format => 'int16u[21]',
-        PrintConv => 'Image::ExifTool::CanonVRD::ToneCurvePrint($val)',
+        PrintConv => 'Image::ExifTool::CanonVRD::ToneCurveself.logger.log($val)',
         PrintConvInv => 'Image::ExifTool::CanonVRD::ToneCurvePrintInv($val)',
     },
     0x238 => {
@@ -1317,7 +1317,7 @@ my $blankFooter = "CANON OPTIONAL DATA\0" . ("\0" x 42) . "\xff\xd9";
     0x07 => {
         Name => 'RGBCurvePoints',
         Format => 'int32u[21]',
-        PrintConv => 'Image::ExifTool::CanonVRD::ToneCurvePrint($val)',
+        PrintConv => 'Image::ExifTool::CanonVRD::ToneCurveself.logger.log($val)',
         PrintConvInv => 'Image::ExifTool::CanonVRD::ToneCurvePrintInv($val)',
     },
     0x0a => 'ToneCurveX',
@@ -1325,19 +1325,19 @@ my $blankFooter = "CANON OPTIONAL DATA\0" . ("\0" x 42) . "\xff\xd9";
     0x2d => {
         Name => 'RedCurvePoints',
         Format => 'int32u[21]',
-        PrintConv => 'Image::ExifTool::CanonVRD::ToneCurvePrint($val)',
+        PrintConv => 'Image::ExifTool::CanonVRD::ToneCurveself.logger.log($val)',
         PrintConvInv => 'Image::ExifTool::CanonVRD::ToneCurvePrintInv($val)',
     },
     0x53 => {
         Name => 'GreenCurvePoints',
         Format => 'int32u[21]',
-        PrintConv => 'Image::ExifTool::CanonVRD::ToneCurvePrint($val)',
+        PrintConv => 'Image::ExifTool::CanonVRD::ToneCurveself.logger.log($val)',
         PrintConvInv => 'Image::ExifTool::CanonVRD::ToneCurvePrintInv($val)',
     },
     0x79 => {
         Name => 'BlueCurvePoints',
         Format => 'int32u[21]',
-        PrintConv => 'Image::ExifTool::CanonVRD::ToneCurvePrint($val)',
+        PrintConv => 'Image::ExifTool::CanonVRD::ToneCurveself.logger.log($val)',
         PrintConvInv => 'Image::ExifTool::CanonVRD::ToneCurvePrintInv($val)',
     },
 );
@@ -1467,7 +1467,7 @@ sub SortDR4($$)
 
 #------------------------------------------------------------------------------
 # Tone curve print conversion
-sub ToneCurvePrint($)
+sub ToneCurveself.logger.log($)
 {
     my $val = shift;
     my @vals = split ' ', $val;
@@ -1605,7 +1605,7 @@ sub ProcessEditData($$$)
                         }
                     }
                 } else {
-                    $et->VPrint(0, "$$et{INDENT}$subName (SubDirectory) -->\n");
+                    $et->Vself.logger.log(0, "$$et{INDENT}$subName (SubDirectory) -->\n");
                     $et->VerboseDump($dataPt,
                         Start => $pos + $subStart,
                         Addr  => $dataPos + $pos + $subStart,
@@ -1733,7 +1733,7 @@ sub ProcessDR4($$;$)
         my $nvHash;
         my $newVal = $et->GetNewValue('CanonDR4', \$nvHash);
         if ($newVal) {
-            $et->VPrint(0, "  Writing CanonDR4 as a block\n");
+            $et->Vself.logger.log(0, "  Writing CanonDR4 as a block\n");
             $$et{DidCanonVRD} = 1;  # set flag so we don't add this twice
             ++$$et{CHANGED};
             if ($outfile) {
@@ -1913,7 +1913,7 @@ sub ProcessVRD($$)
         # create new VRD file from scratch
         my $newVal = $et->GetNewValue('CanonVRD');
         if ($newVal) {
-            $et->VPrint(0, "  Writing CanonVRD as a block\n");
+            $et->Vself.logger.log(0, "  Writing CanonVRD as a block\n");
             Write($$dirInfo{OutFile}, $newVal) or return -1;
             $$et{DidCanonVRD} = 1;
             ++$$et{CHANGED};
@@ -2170,7 +2170,7 @@ sub ProcessCanonVRD($$;$)
                 my ($dat, $diff);
                 if ($$et{NEW_VALUE}{$tagInfo}) {
                     # write as a block
-                    $et->VPrint(0, "Writing $$tagInfo{Name} as a block\n");
+                    $et->Vself.logger.log(0, "Writing $$tagInfo{Name} as a block\n");
                     $dat = $et->GetNewValue($tagInfo);
                     $dat = '' unless defined $dat;
                     ++$$et{CHANGED};

@@ -1544,7 +1544,7 @@ sub ProcessRIFF($$)
         } elsif ($tag eq 'data' and $len == 0xffffffff and $$et{DataSize64}) {
             $len = $$et{DataSize64};
         }
-        $et->VPrint(0, "RIFF '$tag' chunk ($len bytes of data):\n");
+        $et->Vself.logger.log(0, "RIFF '$tag' chunk ($len bytes of data):\n");
         if ($len <= 0) {
             if ($len < 0) {
                 $et->Warn('Invalid chunk length');
@@ -1562,7 +1562,7 @@ sub ProcessRIFF($$)
         if (($tag eq 'data' or $tag eq 'idx1' or $tag eq 'LIST_movi') and
             $et->Options('FastScan'))
         {
-            $et->VPrint(0, "(end of parsing)\n");
+            $et->Vself.logger.log(0, "(end of parsing)\n");
             last;
         }
         # RIFF chunks are padded to an even number of bytes

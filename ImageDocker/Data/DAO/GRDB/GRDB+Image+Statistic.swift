@@ -11,6 +11,8 @@ import GRDB
 
 class ImageCountDaoGRDB : ImageCountDaoInterface {
     
+    let logger = ConsoleLogger(category: "ImageCountDaoGRDB")
+    
     // MARK: - COLLECTION
     
     func countCopiedFromDevice(deviceId:String) -> Int {
@@ -21,7 +23,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 result = try Image.filter(sql: "deviceId=?", arguments:[deviceId]).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -38,7 +40,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 """, arguments:[rawStoragePath, deviceId]).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -51,7 +53,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 result = try Image.filter(sql: "repositoryPath=?", arguments:[repositoryPath]).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -64,7 +66,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 result = try Image.filter(sql: "exifCreateDate is not null and repositoryPath=?", arguments:[repositoryPath]).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -77,7 +79,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 result = try Image.filter(sql: "(address is not null or assignAddress is not null) and repositoryPath=?", arguments:[repositoryPath]).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -90,7 +92,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 result = try Image.filter(sql: "recognizedFace=1 and repositoryPath=?", arguments:[repositoryPath]).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -106,7 +108,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs) ?? []).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -122,7 +124,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 result = try Image.filter(sql:stmtHidden, arguments:StatementArguments(sqlArgs) ?? []).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -138,7 +140,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 result = try Image.filter(sql:stmt, arguments:StatementArguments(sqlArgs) ?? []).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -154,7 +156,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 result = try Image.filter(sql:stmtHidden, arguments:StatementArguments(sqlArgs) ?? []).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -170,7 +172,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 result = try Image.filter(sql: "repositoryPath=? and hidden=0 and id not in (select distinct imageid from imageface)", arguments:[root]).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -184,7 +186,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 result = try Image.filter(sql: "repositoryPath=? and hidden=0 and scanedFace<>1 and id not in (select distinct imageid from imageface)", arguments:[root]).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -201,7 +203,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 result = try Image.filter(sql: "id is null and path like ?", arguments:[keyword]).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
         
@@ -218,7 +220,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 result = try Image.filter(Column("path").like("\(rootPath)%")).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -234,7 +236,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 result = try Image.filter(sql: "repositoryPath='' and path like ?", arguments:[keyword]).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
         
@@ -250,7 +252,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 result = try Image.filter(sql: "subPath='' and path like ?", arguments:[keyword]).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
         
@@ -266,7 +268,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 result = try Image.filter(sql: "repositoryPath = ? and path not like ?", arguments: [root, keyword]).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
         
@@ -282,7 +284,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 result = try Image.filter(sql: "path like ?", arguments: [keyword]).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
         
@@ -298,7 +300,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 result = try Image.filter(sql: "path like ? and hidden = 1", arguments: [keyword]).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
         
@@ -314,7 +316,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 result = try ImageContainer.filter(sql: "repositoryPath = '' and path like ?", arguments: [keyword]).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
         
@@ -330,7 +332,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
                 result = try ImageContainer.filter(sql: "subPath = '' and path like ?", arguments: [keyword]).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
         

@@ -10,6 +10,8 @@ import Foundation
 
 class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
+    let logger = ConsoleLogger(category: "RepositoryDaoPostgresCK")
+    
     func getOrCreateContainer(name: String, path: String, parentPath parentFolder: String, repositoryPath: String, homePath: String, storagePath: String, facePath: String, cropPath: String, subPath: String, manyChildren: Bool, hideByParent: Bool) -> (ImageContainer, Bool) {
         
         let db = PostgresConnection.database()
@@ -62,7 +64,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
             }
             return .OK
         }catch{
-            print(error)
+            self.logger.log(error)
             return .ERROR
         }
     }
@@ -80,7 +82,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 """, parameterValues: ["\(repositoryRoot.withStash())"])
             return .OK
         }catch{
-            print(error)
+            self.logger.log(error)
             return .ERROR
         }
     }
@@ -164,7 +166,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         where 1=1 \(additionalConditions)
         order by "repositoryPath" DESC
         """
-//        print(sql)
+//        self.logger.log(sql)
         
         final class TempRecord : PostgresCustomRecord {
             var repositoryPath:String = ""
@@ -250,7 +252,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         where path like '\(parent.replacingOccurrences(of: "'", with: "''").withStash())%' \(additionalConditions)
         order by "containerPath" DESC
         """
-//        print(sql)
+//        self.logger.log(sql)
         
         final class TempRecord : PostgresCustomRecord {
             var repositoryPath:String = ""
@@ -379,7 +381,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "ImageContainer" set "parentFolder" = $1 where "path" = $2
                 """, parameterValues: [path, parentFolder])
         }catch{
-            print(error)
+            self.logger.log(error)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
             return .ERROR
         }
@@ -393,7 +395,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "ImageContainer" set "hideByParent" = \(hideByParent ? "true" : "false") where "path" = $1
                 """, parameterValues: [path])
         }catch{
-            print(error)
+            self.logger.log(error)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
             return .ERROR
         }
@@ -407,7 +409,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "ImageContainer" set "path" = $1, "repositoryPath" = $2, "parentFolder" = $3, "subPath" = $4 where "path" = $5
                 """, parameterValues: [newPath, repositoryPath.withStash(), parentFolder, subPath, oldPath])
         }catch{
-            print(error)
+            self.logger.log(error)
             return .ERROR
         }
         return .OK
@@ -420,7 +422,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "ImageContainer" set "path" = $1, "repositoryPath" = $2 where "path" = $3
                 """, parameterValues: [newPath, repositoryPath.withStash(), oldPath])
         }catch{
-            print(error)
+            self.logger.log(error)
             return .ERROR
         }
         return .OK
@@ -436,7 +438,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "ImageContainer" set "hideByParent" = \(state ? "true" : "false") where "path" like $1
                 """, parameterValues: ["\(path.withStash())%"])
         }catch{
-            print(error)
+            self.logger.log(error)
             return .ERROR
         }
         return .OK
@@ -444,14 +446,14 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
     func updateImageContainerSubContainers(path:String) -> Int {
         let subContainers = self.countSubContainers(parent: path)
-        print("[DB] updating subContainers to \(subContainers)")
+        self.logger.log("\(Date()) [DB][PostgresClientKit+ImageContainer] updating subContainers to \(subContainers)")
         let db = PostgresConnection.database()
         do {
             try db.execute(sql: """
                 update "ImageContainer" set "subContainers" = \(subContainers) where "path" = $1
                 """, parameterValues: [path])
         }catch{
-            print(error)
+            self.logger.log(error)
             return subContainers
         }
         return subContainers
@@ -470,7 +472,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "Image" set "hiddenByContainer" = true where "path" like $1
                 """, parameterValues:["\(path.withStash())%"])
         }catch{
-            print(error)
+            self.logger.log(error)
             return .ERROR
         }
         return .OK
@@ -486,7 +488,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "Image" set "hiddenByContainer" = false where "path" like $1
                 """, parameterValues:["\(path.withStash())%"])
         }catch{
-            print(error)
+            self.logger.log(error)
             return .ERROR
         }
         return .OK
@@ -508,7 +510,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "Image" set "hiddenByRepository" = true where "repositoryPath" = $1
                 """, parameterValues: ["\(repositoryRoot.withStash())"])
         }catch{
-            print(error)
+            self.logger.log(error)
             return .ERROR
         }
         return .OK
@@ -530,7 +532,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "Image" set "hiddenByRepository" = false where "repositoryPath" = $1
                 """, parameterValues: ["\(repositoryRoot.withStash())"])
         }catch{
-            print(error)
+            self.logger.log(error)
             return .ERROR
         }
         return .OK

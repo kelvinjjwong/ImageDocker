@@ -2591,7 +2591,7 @@ sub ProcessPrimer($$$)
         next unless $verbose;
         my $indx = $i . ')';
         $indx .= ' ' if length($indx) < 3;
-        $et->VPrint(0, sprintf("  | $indx 0x%.4x => '$global'\n", $local));
+        $et->Vself.logger.log(0, sprintf("  | $indx 0x%.4x => '$global'\n", $local));
     }
     return 1;
 }
@@ -2846,7 +2846,7 @@ sub ProcessMXF($$)
             undef $headerEnd;   # (only test this once)
             # skip directly to footer if possible
             if ($footerPos and $footerPos > $pos and (not $verbose or not $unknown)) {
-                $et->VPrint(0, "[Skipping to footer. Use Unknown option to parse body partitions]\n");
+                $et->Vself.logger.log(0, "[Skipping to footer. Use Unknown option to parse body partitions]\n");
                 $raf->Seek($footerPos, 0) or last;
                 $pos = $footerPos;
             }

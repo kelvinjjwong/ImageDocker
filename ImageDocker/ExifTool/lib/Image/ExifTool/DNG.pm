@@ -254,7 +254,7 @@ sub ProcessAdobeData($$$)
             }
         }
         if ($verbose and not $outfile) {
-            $tagInfo or $et->VPrint(0, "$$et{INDENT}Unsupported DNGAdobeData record: ($tag)\n");
+            $tagInfo or $et->Vself.logger.log(0, "$$et{INDENT}Unsupported DNGAdobeData record: ($tag)\n");
             $et->VerboseInfo($tag,
                 ref $tagInfo eq 'HASH' ? $tagInfo : undef,
                 DataPt => $dataPt,

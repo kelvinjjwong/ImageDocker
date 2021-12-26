@@ -11,7 +11,7 @@ import GRDB
 
 public final class SQLiteConnectionGRDB : ImageDBInterface {
     
-    
+    let logger = ConsoleLogger(category: "SQLiteConnectionGRDB")
     
     static let `default` = SQLiteConnectionGRDB()
     

@@ -10,6 +10,8 @@ import Cocoa
 
 class PeopleFace {
     
+    let logger = ConsoleLogger(category: "PeopleFace")
+    
     // MARK: SIZE
     
     static let ThumbnailSize = 60
@@ -131,7 +133,7 @@ class PeopleFace {
             }
         }
         catch {
-            print("Unexpected error occured: \(error).")
+            self.logger.log("Unexpected error occured: \(error).")
         }
         return nil
     }

@@ -11,18 +11,18 @@ import GRDB
 
 class ImageSearchDaoGRDB : ImageSearchDaoInterface {
     
-    
+    let logger = ConsoleLogger(category: "ImageSearchDaoGRDB")
     
     // MARK: - COLLECTION
     
     // get by date & place
     func getPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil , pageSize:Int = 0, pageNumber:Int = 0) -> [Image] {
         
-        print("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
+        self.logger.log("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
         let (stmt, stmtHidden, sqlArgs) = SQLHelper.generateSQLStatementForPhotoFiles(year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
         
-        print(stmt)
-        print(stmtHidden)
+        self.logger.log(stmt)
+        self.logger.log(stmtHidden)
         
         var result:[Image] = []
         var hiddenCount:Int = 0
@@ -42,19 +42,19 @@ class ImageSearchDaoGRDB : ImageSearchDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         if hiddenCountHandler != nil {
             hiddenCountHandler!(hiddenCount)
         }
-        print("loaded \(result.count) records")
+        self.logger.log("loaded \(result.count) records")
         return result
     }
     
     // get by date & event & place
     func getPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil , pageSize:Int = 0, pageNumber:Int = 0) -> [Image] {
         
-        print("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
+        self.logger.log("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
         let (stmt, stmtHidden, sqlArgs) = SQLHelper.generateSQLStatementForPhotoFiles(year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
         
         var result:[Image] = []
@@ -75,7 +75,7 @@ class ImageSearchDaoGRDB : ImageSearchDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         if hiddenCountHandler != nil {
             hiddenCountHandler!(hiddenCount)
@@ -87,7 +87,7 @@ class ImageSearchDaoGRDB : ImageSearchDaoInterface {
     
     func searchImages(condition:SearchCondition, includeHidden:Bool, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)?, pageSize:Int, pageNumber:Int) -> [Image] {
         
-        print("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
+        self.logger.log("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
         let (stmt, stmtHidden) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: condition, includeHidden: includeHidden, quoteColumn: false)
         
         var result:[Image] = []
@@ -108,7 +108,7 @@ class ImageSearchDaoGRDB : ImageSearchDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         if hiddenCountHandler != nil {
             hiddenCountHandler!(hiddenCount)
@@ -131,7 +131,7 @@ class ImageSearchDaoGRDB : ImageSearchDaoInterface {
                 result = try Image.filter(sql: sql).fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -165,7 +165,7 @@ class ImageSearchDaoGRDB : ImageSearchDaoInterface {
                 result = try Image.filter(sql: sql).fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -190,7 +190,7 @@ class ImageSearchDaoGRDB : ImageSearchDaoInterface {
                 result = try Image.filter(sql: "hidden=0 and photoTakenYear=\(year) and photoTakenMonth=\(month) and photoTakenDay=\(day) and photoTakenHour=\(hour)").fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -208,7 +208,7 @@ class ImageSearchDaoGRDB : ImageSearchDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -226,7 +226,7 @@ class ImageSearchDaoGRDB : ImageSearchDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -263,7 +263,7 @@ class ImageSearchDaoGRDB : ImageSearchDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -290,7 +290,7 @@ select DATE('now', 'localtime')  date
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -304,7 +304,7 @@ select DATE('now', 'localtime')  date
         var sql = "select distinct DATE(photoTakenDate) as photoTakenDate from image where hidden=0 and DATE(phototakendate) IN ("
         sql += "DATE('now', 'localtime', '-\(k) year'), DATE('now', 'localtime', '-\(k) year', '-1 day'), DATE('now', 'localtime', '-\(k) year', '-2 day'), DATE('now', 'localtime', '-\(k) year', '+1 day'), DATE('now', 'localtime', '-\(k) year', '+2 day')"
         sql += ") order by DATE(photoTakenDate) desc"
-//        print(sql)
+//        self.logger.log(sql)
         
         var result:[String] = []
         do {
@@ -320,7 +320,7 @@ select DATE('now', 'localtime')  date
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -335,7 +335,7 @@ select DATE('now', 'localtime')  date
                 result = try Image.filter(sql: "hidden != 1 AND cameraMaker is null and (lastTimeExtractExif = 0 or updateExifDate is null OR photoTakenYear is null OR photoTakenYear = 0 OR (latitude <> '0.0' AND latitudeBD = '0.0') OR (latitudeBD <> '0.0' AND COUNTRY = ''))").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -348,7 +348,7 @@ select DATE('now', 'localtime')  date
                 result = try Image.filter(sql: "repositoryPath='\(repositoryPath)' and hidden != 1 AND cameraMaker is null and (lastTimeExtractExif = 0 or updateExifDate is null OR photoTakenYear is null OR photoTakenYear = 0 OR (latitude <> '0.0' AND latitudeBD = '0.0') OR (latitudeBD <> '0.0' AND COUNTRY = ''))").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -363,7 +363,7 @@ select DATE('now', 'localtime')  date
                 result = try Image.filter(sql: "repositoryPath='\(repositoryPath)' and hidden != 1 AND updateLocationDate is null").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -376,7 +376,7 @@ select DATE('now', 'localtime')  date
                 result = try Image.filter(sql: "hidden != 1 AND updateLocationDate is null").order([Column("photoTakenDate").asc, Column("filename").asc]).fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -389,7 +389,7 @@ select DATE('now', 'localtime')  date
                 result = try Image.filter(sql: "updateLocationDate >= ?", arguments: StatementArguments([date])).fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -406,7 +406,7 @@ select DATE('now', 'localtime')  date
                 result = try Image.filter(sql: "repositoryPath=? and hidden=0 \(scannedCondition) and id not in (select distinct imageid from imageface)", arguments:[root]).fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -431,7 +431,7 @@ select DATE('now', 'localtime')  date
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -454,7 +454,7 @@ select DATE('now', 'localtime')  date
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -467,7 +467,7 @@ select DATE('now', 'localtime')  date
                 result = try Image.filter(Column("path").like("\(rootPath.withStash())%")).filter(Column("subPath") == "").fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -496,7 +496,7 @@ select DATE('now', 'localtime')  date
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -509,7 +509,7 @@ select DATE('now', 'localtime')  date
                 result = try Image.filter(sql: "repositoryPath = ?", arguments:[repositoryPath]).order(sql: "path asc").fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -522,7 +522,7 @@ select DATE('now', 'localtime')  date
                 result = try Image.filter(Column("path").like("\(rootPath.withStash())%")).fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }

@@ -22,6 +22,8 @@ protocol PlaceListRefreshDelegate {
 
 class PlaceListViewController: NSViewController {
     
+    let logger = ConsoleLogger(category: "PlaceListViewController")
+    
     let tick:NSImage = NSImage.init(named: NSImage.menuOnStateTemplateName)!
     
     var refreshDelegate:PlaceListRefreshDelegate?
@@ -261,7 +263,7 @@ extension PlaceListViewController: CoordinateConsumer {
     }
     
     func alert(status: Int, message: String) {
-        print("\(status) - \(message)")
+        self.logger.log("\(status) - \(message)")
     }
     
     
@@ -269,7 +271,7 @@ extension PlaceListViewController: CoordinateConsumer {
 
 extension PlaceListViewController: LocationConsumer {
     func consume(location: Location) {
-        //print("CONSUME LOCATION: COUNTRY \(location.country)")
+        //self.logger.log("CONSUME LOCATION: COUNTRY \(location.country)")
         self.location = location
         
         country.stringValue = location.country
@@ -297,7 +299,7 @@ extension PlaceListViewController: LocationConsumer {
     }
     
     func alert(status: Int, message: String, popup: Bool) {
-        print("\(status) - \(message)")
+        self.logger.log("\(status) - \(message)")
     }
     
     

@@ -12,6 +12,8 @@ import Cocoa
 // reference accumulator
 class Accumulator : NSObject {
     
+    let logger = ConsoleLogger(category: "Accumulator")
+    
     var _target:Int
     private var count:Int = 0
     private var presetAddingMessage:String?
@@ -150,7 +152,7 @@ class Accumulator : NSObject {
                 }
             }
             if self.hasOnCompleted {
-                print("\(Date()) ACCUMULATOR INVOKING ON COMPLETED CLOSURE")
+                self.logger.log("\(Date()) ACCUMULATOR INVOKING ON COMPLETED CLOSURE")
                 self.onCompleted(self.data)
             }
             

@@ -85,7 +85,7 @@ sub FoundTag($$$$;$)
     return 0 unless @$props;
     my $verbose = $et->Options('Verbose');
 
-    $et->VPrint(0, "  | - Tag '", join('/',@$props), "'\n") if $verbose > 1;
+    $et->Vself.logger.log(0, "  | - Tag '", join('/',@$props), "'\n") if $verbose > 1;
 
     # un-escape XML character entities
     $val = Image::ExifTool::XMP::UnescapeXML($val);
@@ -95,7 +95,7 @@ sub FoundTag($$$$;$)
 
     # add any unknown tags to table
     unless ($$tagTablePtr{$tag}) {
-        $et->VPrint(0, "  [adding $tag]\n") if $verbose;
+        $et->Vself.logger.log(0, "  [adding $tag]\n") if $verbose;
         AddTagToTable($tagTablePtr, $tag, { Name => ucfirst $tag });
     }
     # save the tag
@@ -143,7 +143,7 @@ sub Process_iWork($$)
         # get filename of this ZIP member
         my $file = $member->fileName();
         next unless defined $file;
-        $et->VPrint(0, "File: $file\n");
+        $et->Vself.logger.log(0, "File: $file\n");
         # set the document number and extract ZIP tags
         $$et{DOC_NUM} = ++$docNum;
         Image::ExifTool::ZIP::HandleMember($et, $member);

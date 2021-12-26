@@ -11,6 +11,8 @@ import GRDB
 
 class ImageRecordDaoGRDB : ImageRecordDaoInterface {
     
+    let logger = ConsoleLogger(category: "ImageRecordDaoGRDB")
+    
     
     // MARK: - CREATE
     
@@ -30,7 +32,7 @@ class ImageRecordDaoGRDB : ImageRecordDaoInterface {
                 
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return image!
     }
@@ -45,7 +47,7 @@ class ImageRecordDaoGRDB : ImageRecordDaoInterface {
                 image = try Image.fetchOne(db, key: path)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return image
     }
@@ -58,7 +60,7 @@ class ImageRecordDaoGRDB : ImageRecordDaoInterface {
                 image = try Image.filter(sql: "id='\(id)'").fetchOne(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return image
     }

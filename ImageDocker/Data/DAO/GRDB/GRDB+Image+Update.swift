@@ -19,7 +19,7 @@ extension ImageRecordDaoGRDB {
             let _ = try db.write { db in
                 var image = image
                 try image.save(db)
-                //print("saved image")
+                //self.logger.log("saved image")
             }
         }catch{
             return SQLHelper.errorState(error)

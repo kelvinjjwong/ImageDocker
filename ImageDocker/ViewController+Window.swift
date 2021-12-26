@@ -41,7 +41,7 @@ extension ViewController {
             self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(258)))
             self.playerContainer.display()
         }else {
-            print("BIG SCREEN")
+            self.logger.log("BIG SCREEN")
             let constraintPlayerHeight = NSLayoutConstraint(item: self.playerContainer!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1.0, constant: 403)
             self.playerContainer.addConstraint(constraintPlayerHeight)
             self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(403)))

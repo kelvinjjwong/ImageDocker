@@ -11,6 +11,9 @@ import AppKit
 
 /// manage GeoTag's use of exiftool
 struct ExifTool {
+    
+    let logger = ConsoleLogger(category: "ExifTool")
+    
     /// singleton instance of this class
     static let helper = ExifTool()
     
@@ -93,12 +96,12 @@ struct ExifTool {
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
             let string:String = String(data: data, encoding: String.Encoding.utf8)!
             pipe.fileHandleForReading.closeFile()
-            print(string)
+            self.logger.log(string)
         }
     }
     
     func patchDateForVideo(date:Date, url:URL, tags:Set<String>) {
-        print("Changing date time for: \(url.path)")
+        self.logger.log("Changing date time for: \(url.path)")
         
         let dateFormatter:DateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -125,7 +128,7 @@ struct ExifTool {
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
             let string:String = String(data: data, encoding: String.Encoding.utf8)!
             pipe.fileHandleForReading.closeFile()
-            print(string)
+            self.logger.log(string)
         }
     }
     
@@ -155,12 +158,12 @@ struct ExifTool {
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
             let string:String = String(data: data, encoding: String.Encoding.utf8)!
             pipe.fileHandleForReading.closeFile()
-            print(string)
+            self.logger.log(string)
         }
     }
     
     func patchDateForPhoto(date:Date, url:URL, tags:Set<String>) {
-        print("Changing date time for: \(url.path)")
+        self.logger.log("Changing date time for: \(url.path)")
         
         let dateFormatter:DateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -185,7 +188,7 @@ struct ExifTool {
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
             let string:String = String(data: data, encoding: String.Encoding.utf8)!
             pipe.fileHandleForReading.closeFile()
-            print(string)
+            self.logger.log(string)
         }
     }
     
@@ -209,11 +212,11 @@ struct ExifTool {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         pipe.fileHandleForReading.closeFile()
-        print(string)
+        self.logger.log(string)
     }
     
     func patchGPSCoordinateForImage(latitude:Double, longitude:Double, url:URL){
-        print("Changing GPS coordinate for: \(url.path)")
+        self.logger.log("Changing GPS coordinate for: \(url.path)")
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let exiftool = Process()
@@ -231,11 +234,11 @@ struct ExifTool {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         pipe.fileHandleForReading.closeFile()
-        print(string)
+        self.logger.log(string)
     }
     
     func patchImageDescription(description:String, url:URL) {
-        print("Changing ImageDescription for: \(url.path)")
+        self.logger.log("Changing ImageDescription for: \(url.path)")
         
         autoreleasepool { () -> Void in
             let pipe = Pipe()
@@ -255,12 +258,12 @@ struct ExifTool {
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
             let string:String = String(data: data, encoding: String.Encoding.utf8)!
             pipe.fileHandleForReading.closeFile()
-            print(string)
+            self.logger.log(string)
         }
     }
     
     func assignKeyValueForImage(key:String, value:String, url:URL){
-        print("Assigning \(key) -> \(value) for: \(url.path)")
+        self.logger.log("Assigning \(key) -> \(value) for: \(url.path)")
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let exiftool = Process()
@@ -277,7 +280,7 @@ struct ExifTool {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         pipe.fileHandleForReading.closeFile()
-        print(string)
+        self.logger.log(string)
     }
     
     func getImageDescription(url:URL) -> String {

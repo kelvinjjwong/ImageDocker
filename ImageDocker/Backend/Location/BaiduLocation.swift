@@ -12,6 +12,8 @@ import SwiftyJSON
 
 final class BaiduLocation {
     
+    static let logger = ConsoleLogger(category: "BaiduLocation")
+    
     fileprivate static let baseurl:String = "http://api.map.baidu.com"
     
     fileprivate static func ak() -> String {
@@ -47,15 +49,15 @@ final class BaiduLocation {
     
     public static func queryForCoordinate(address:String, coordinateConsumer: CoordinateConsumer){
         let urlString:String = BaiduLocation.urlForCoordinate(address: address)
-        //print(urlString)
-        print(urlString)
+        //self.logger.log(urlString)
+        BaiduLocation.logger.log(urlString)
         let requestUrl:URL = URL(string:urlString)!
         let request = URLRequest(url:requestUrl)
         let task = URLSession.shared.dataTask(with: request) {
             (data, response, error) in
             if error == nil, let usableData = data {
                 let dataStr:String = String(data: usableData, encoding: String.Encoding.utf8)!
-                print(dataStr)
+                BaiduLocation.logger.log(dataStr)
                 let json:JSON = JSON(parseJSON: dataStr)
                 if json != JSON(NSNull()) {
                     let status:Int = json["status"].intValue
@@ -73,7 +75,7 @@ final class BaiduLocation {
                         
                     } else {
                         let message:String = json["message"].stringValue
-                        //print(message)
+                        //self.logger.log(message)
                         coordinateConsumer.alert(status: status, message: message)
                     }
                 }
@@ -85,11 +87,11 @@ final class BaiduLocation {
     public static func queryForAddress(coordinateBD:Coord, locationConsumer:LocationConsumer, textConsumer:LocationConsumer? = nil, modifyLocation:Location? = nil){
         let urlString:String = BaiduLocation.urlForAddress(lat: coordinateBD.latitude, lon: coordinateBD.longitude)
         guard let requestUrl = URL(string:urlString) else {
-            print("ERROR: URL IS NULL")
+            BaiduLocation.logger.log("ERROR: URL IS NULL")
             return
             
         }
-        print("Request for location detail: \(requestUrl)")
+        BaiduLocation.logger.log("Request for location detail: \(requestUrl)")
         let request = URLRequest(url:requestUrl)
         let task = URLSession.shared.dataTask(with: request) {
             (data, response, error) in
@@ -125,7 +127,7 @@ final class BaiduLocation {
                     }
                 }else{
                     
-                    //print("RECEIVED BAIDU LOCATION at \(Date())")
+                    //self.logger.log("RECEIVED BAIDU LOCATION at \(Date())")
                     
                     location.address = json!["result"]["formatted_address"].description
                     location.businessCircle = json!["result"]["business"].description
@@ -155,13 +157,13 @@ final class BaiduLocation {
     }
     
     public static func queryForMap(coordinateBD: Coord, view:WKWebView, zoom: Int){
-        //print("START REQUEST MAP")
+        //self.logger.log("START REQUEST MAP")
         let width:Int = Int(min(CGFloat(512), view.frame.size.width))
         let height:Int = Int(min(CGFloat(512), view.frame.size.height))
         let requestBaiduUrl = urlForMap(width: width, height: height, zoom: zoom, lat: coordinateBD.latitude, lon: coordinateBD.longitude)
         guard let requestUrl = URL(string: requestBaiduUrl) else {return}
         let req = URLRequest(url: requestUrl)
-        //print(requestBaiduUrl)
+        //self.logger.log(requestBaiduUrl)
         view.load(req)
     }
 }

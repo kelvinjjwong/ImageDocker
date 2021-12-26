@@ -23,7 +23,7 @@ extension ViewController {
     }
     
     @objc func processMainSearch() {
-//        print("======== process main search === \(self.txtSearch.tokenStringValue)")
+//        self.logger.log("======== process main search === \(self.txtSearch.tokenStringValue)")
         let keywords = self.txtSearch.tokenStringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         if keywords != "" {
             let conditions = SearchCondition.get(from: keywords, includeHidden: (self.chbShowHidden.state == .on))
@@ -82,7 +82,7 @@ extension ViewController: NSTokenFieldDelegate {
     }
     
     public func tokenField(_ tokenField: NSTokenField, menuForRepresentedObject representedObject: Any) -> NSMenu? {
-//        print(representedObject)
+//        self.logger.log(representedObject)
         if let token = representedObject as? ACBToken {
             var substring = token.name
             if substring.contains("|") {

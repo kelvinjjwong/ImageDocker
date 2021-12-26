@@ -938,7 +938,7 @@ sub ProcessSEI($$)
             last unless $t == 255;
         }
         return 0 if $pos + $size > $end;
-        $et->VPrint(1,"    (SEI type $type)\n");
+        $et->Vself.logger.log(1,"    (SEI type $type)\n");
         if ($type == 1) {                   # picture timing information
             if ($parsePictureTiming) {
                 my $buff = substr($$dataPt, $pos, $size);

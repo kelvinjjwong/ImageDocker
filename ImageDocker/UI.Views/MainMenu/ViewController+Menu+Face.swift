@@ -115,7 +115,7 @@ extension ViewController {
     }
     
     @objc func faceMenuManageAction(_ menuItem:NSMenuItem) {
-//        print("manage action \(menuItem.title)")
+//        self.logger.log("manage action \(menuItem.title)")
         self.btnFaces.selectItem(at: 0)
         
         let storyboard = NSStoryboard(name: "PeopleFaceViewItems", bundle: nil)
@@ -138,10 +138,10 @@ extension ViewController {
 //        if let window = self.peopleWindowController.window {
 //            if self.peopleWindowController.isWindowLoaded {
 //                window.makeKeyAndOrderFront(self)
-//                print("order to front")
+//                self.logger.log("order to front")
 //            }else{
 //                self.peopleWindowController.showWindow(self)
-//                print("show window")
+//                self.logger.log("show window")
 //            }
 //            let vc = window.contentViewController as! PeopleViewController
 //            vc.initView()
@@ -204,10 +204,10 @@ extension ViewController {
 //        if let window = self.peopleWindowController.window {
 //            if self.peopleWindowController.isWindowLoaded {
 //                window.makeKeyAndOrderFront(self)
-//                print("order to front")
+//                self.logger.log("order to front")
 //            }else{
 //                self.peopleWindowController.showWindow(self)
-//                print("show window")
+//                self.logger.log("show window")
 //            }
 //            let vc = window.contentViewController as! PeopleViewController
 //            vc.initView()
@@ -222,7 +222,7 @@ extension ViewController {
             let parts = title.components(separatedBy: " ")
             let action = parts[0]
             var area = parts[parts.count-1]
-//            print("\(action) \(area)")
+//            self.logger.log("\(action) \(area)")
             if area == "collection" {
                 if self.imagesLoader.getItems().count > 0 {
                     let tasklet = TaskletManager.default.task(type: "face", name: "\(action)\(Words.facesInCollection.word())")
@@ -260,7 +260,7 @@ extension ViewController {
                         }
                     }
                 }else{
-//                    print("no item in collection")
+//                    self.logger.log("no item in collection")
                 }
             }else{
                 let tasklet = TaskletManager.default.task(type: "face", name: "\(action)\(Words.facesInArea.word("%s", area))")
@@ -324,11 +324,11 @@ extension ViewController {
                                     
                                     if usedRam >= limitRam {
                                         attempt += 1
-//                                        print("waiting for releasing memory for face detection, attempt: \(attempt)")
+//                                        self.logger.log("waiting for releasing memory for face detection, attempt: \(attempt)")
                                         continousWorking = false
                                         sleep(10)
                                     }else{
-//                                        print("continue for face detection, last attempt: \(attempt)")
+//                                        self.logger.log("continue for face detection, last attempt: \(attempt)")
                                         continousWorking = true
                                     }
                                 }
@@ -361,7 +361,7 @@ extension ViewController {
                 }
             }
         }else{
-            //print("no selection")
+            //self.logger.log("no selection")
         }
     }
 }

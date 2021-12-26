@@ -128,7 +128,7 @@ sub Add_iCCP($$)
         my %dirInfo = ( Parent => 'PNG', DirName => 'ICC_Profile' );
         my $buff = $et->WriteDirectory(\%dirInfo, $tagTablePtr);
         if (defined $buff and length $buff and WriteProfile($outfile, 'icm', \$buff)) {
-            $et->VPrint(0, "Created ICC profile\n");
+            $et->Vself.logger.log(0, "Created ICC profile\n");
             delete $$et{ADD_DIRS}{ICC_Profile}; # don't add it again
             $$et{PNGDoneDir}{ICC_Profile} = 2;
         }
@@ -150,7 +150,7 @@ sub DoneDir($$$;$)
     # handle problem with duplicate XMP when using PNGEarlyXMP option
     return unless $dir eq 'XMP' and defined $$outBuff and length $$outBuff;
     if ($nonStandard and $$et{DEL_GROUP}{$dir}) {
-        $et->VPrint(0,"  Deleting non-standard $dir\n");
+        $et->Vself.logger.log(0,"  Deleting non-standard $dir\n");
         $$outBuff = '';
     } elsif (not $$et{PNGDoneDir}{$dir}) {
         $$et{PNGDoneDir}{$dir} = 1;   # set flag indicating the directory exists
@@ -165,7 +165,7 @@ sub DoneDir($$$;$)
         } elsif ($et->Warn("Duplicate $dir. Ignore to delete", 2)) {
             return; # warning not ignored: don't delete the duplicate
         }
-        $et->VPrint(0,"  Deleting duplicate $dir\n");
+        $et->Vself.logger.log(0,"  Deleting duplicate $dir\n");
         $$outBuff = '';
     }
 }
@@ -296,7 +296,7 @@ sub AddChunks($$;@)
             #        $et->Warn("Creating uncompressed $stdCase{exif} chunk (Compress::Zlib not available)");
             #    }
             #}
-            $et->VPrint(0, "Creating $chunk chunk:\n");
+            $et->Vself.logger.log(0, "Creating $chunk chunk:\n");
             $$et{TIFF_TYPE} = 'APP1';
             $tagTablePtr = Image::ExifTool::GetTagTable('Image::ExifTool::Exif::Main');
             $buff = $et->WriteDirectory(\%dirInfo, $tagTablePtr, \&Image::ExifTool::WriteTIFF);
@@ -304,7 +304,7 @@ sub AddChunks($$;@)
                 WriteProfile($outfile, $chunk, \$buff) or $err = 1;
             }
         } elsif ($dir eq 'XMP') {
-            $et->VPrint(0, "Creating XMP iTXt chunk:\n");
+            $et->Vself.logger.log(0, "Creating XMP iTXt chunk:\n");
             $tagTablePtr = Image::ExifTool::GetTagTable('Image::ExifTool::XMP::Main');
             $dirInfo{ReadOnly} = 1;
             $buff = $et->WriteDirectory(\%dirInfo, $tagTablePtr);
@@ -323,7 +323,7 @@ sub AddChunks($$;@)
             }
         } elsif ($dir eq 'IPTC') {
             $et->Warn('Creating non-standard EXIF in PNG', 1);
-            $et->VPrint(0, "Creating IPTC profile:\n");
+            $et->Vself.logger.log(0, "Creating IPTC profile:\n");
             # write new IPTC data (stored in a Photoshop directory)
             $dirInfo{DirName} = 'Photoshop';
             $tagTablePtr = Image::ExifTool::GetTagTable('Image::ExifTool::Photoshop::Main');
@@ -332,7 +332,7 @@ sub AddChunks($$;@)
                 WriteProfile($outfile, 'iptc', \$buff, 'IPTC') or $err = 1;
             }
         } elsif ($dir eq 'ICC_Profile') {
-            $et->VPrint(0, "Creating ICC profile:\n");
+            $et->Vself.logger.log(0, "Creating ICC profile:\n");
             # write new ICC data (only done if we couldn't create iCCP chunk)
             $tagTablePtr = Image::ExifTool::GetTagTable('Image::ExifTool::ICC_Profile::Main');
             $buff = $et->WriteDirectory(\%dirInfo, $tagTablePtr);
@@ -341,7 +341,7 @@ sub AddChunks($$;@)
                 $et->Warn('Wrote ICC as a raw profile (no Compress::Zlib)');
             }
         } elsif ($dir eq 'PNG-pHYs') {
-            $et->VPrint(0, "Creating pHYs chunk:\n");
+            $et->Vself.logger.log(0, "Creating pHYs chunk:\n");
             $tagTablePtr = Image::ExifTool::GetTagTable('Image::ExifTool::PNG::PhysicalPixel');
             my $blank = "\0\0\x0b\x12\0\0\x0b\x12\x01"; # 2834 pixels per meter (72 dpi)
             $dirInfo{DataPt} = \$blank;

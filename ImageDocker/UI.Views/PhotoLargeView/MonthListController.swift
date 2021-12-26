@@ -40,7 +40,7 @@ extension MonthListController : NSTableViewDelegate {
         numberFormatter.groupingSize = 3
         
         let info:String = self.months[row]
-        //print(info)
+        //self.logger.log(info)
         var value = ""
         //var tip: String? = nil
         if let id = tableColumn?.identifier {

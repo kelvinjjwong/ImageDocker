@@ -17,7 +17,7 @@ import GRDB
 extension ImageFile {
     
     func isNeedLoadLocation() -> Bool {
-        //print("loaded image coordinate: \(self.latitudeBaidu) \(self.longitudeBaidu)")
+        //self.logger.log("loaded image coordinate: \(self.latitudeBaidu) \(self.longitudeBaidu)")
         var needLoadLocation:Bool = false
         
         // force update location
@@ -25,21 +25,21 @@ extension ImageFile {
             needLoadLocation = true
         }
         
-        //print("coordBD zero? \(self.location.coordinateBD?.isZero) country empty? \(self.location.country == "")")
+        //self.logger.log("coordBD zero? \(self.location.coordinateBD?.isZero) country empty? \(self.location.country == "")")
         if self.location.coordinateBD != nil && self.location.coordinateBD!.isNotZero && self.location.country == "" {
-            //print("NEED LOAD LOCATION")
+            //self.logger.log("NEED LOAD LOCATION")
             needLoadLocation = true
         }
         if self.imageData?.updateLocationDate == nil {
             if self.location.coordinate != nil && self.location.coordinate!.isNotZero {
                 //BaiduLocation.queryForAddress(lat: self.latitudeBaidu, lon: self.longitudeBaidu, locationConsumer: self)
-                //print("COORD NOT ZERO")
+                //self.logger.log("COORD NOT ZERO")
                 needLoadLocation = true
             }
         }else {
             // if latitude not zero, but location is empty, update location
             if self.location.coordinate != nil && self.location.coordinate!.isNotZero && self.location.country == "" {
-//                print("COORD NOT ZERO BUT LOCATION IS EMPTY: \(self.url.path)")
+//                self.logger.log("COORD NOT ZERO BUT LOCATION IS EMPTY: \(self.url.path)")
                 needLoadLocation = true
             }
         }
@@ -47,12 +47,12 @@ extension ImageFile {
     }
     
     func assignLocation(location:Location){
-        //print("location address is \(location.address)")
-        //print("location addressDesc is \(location.addressDescription)")
-        //print("location place is \(location.place)")
+        //self.logger.log("location address is \(location.address)")
+        //self.logger.log("location addressDesc is \(location.addressDescription)")
+        //self.logger.log("location place is \(location.place)")
         
         if imageData != nil {
-            //print("photo file not nil")
+            //self.logger.log("photo file not nil")
             imageData?.assignLatitude = location.latitude?.description
             imageData?.assignLongitude = location.longitude?.description
             imageData?.assignLatitudeBD = location.latitudeBD?.description
@@ -93,7 +93,7 @@ extension ImageFile {
     func setCoordinate(latitude:Double, longitude:Double){
         guard latitude > 0 && longitude > 0 else {return}
         
-        //print("SET COORD 1: \(latitude) \(longitude) - \(fileName)")
+        //self.logger.log("SET COORD 1: \(latitude) \(longitude) - \(fileName)")
         location.coordinate = Coord(latitude: latitude, longitude: longitude)
         
         if self.imageData != nil {
@@ -112,31 +112,31 @@ extension ImageFile {
     
     public func loadLocation(locationConsumer:LocationConsumer? = nil, textConsumer:LocationConsumer? = nil) {
         if location.address != "" && location.coordinate != nil && location.coordinate!.isNotZero {
-            //print("\(self.fileName) METAINFO.address: \(address ?? "")")
-            //print("\(self.fileName) LOCATION.address: \(location?.address ?? "")")
-//            print("LOAD LOCATION 2 FROM ImageFile.location - \(fileName)")
+            //self.logger.log("\(self.fileName) METAINFO.address: \(address ?? "")")
+            //self.logger.log("\(self.fileName) LOCATION.address: \(location?.address ?? "")")
+//            self.logger.log("LOAD LOCATION 2 FROM ImageFile.location - \(fileName)")
             if locationConsumer != nil {
-                //print("\(self.fileName) getting location from meta by location consumer")
+                //self.logger.log("\(self.fileName) getting location from meta by location consumer")
                 locationConsumer?.consume(location: self.location)
             }
             if textConsumer != nil {
-                //print("\(self.fileName) getting location from meta by text consumer")
+                //self.logger.log("\(self.fileName) getting location from meta by text consumer")
                 textConsumer?.consume(location: self.location)
             }
         }else {
             if location.coordinateBD != nil && location.coordinateBD!.isNotZero {
-                //print("------")
-                //print("\(self.fileName) calling baidu location")
-//                print("LOAD LOCATION 2 FROM Baidu WebService - \(fileName) - \(self.location.coordinateBD?.latitude) \(self.location.coordinateBD?.longitude)")
+                //self.logger.log("------")
+                //self.logger.log("\(self.fileName) calling baidu location")
+//                self.logger.log("LOAD LOCATION 2 FROM Baidu WebService - \(fileName) - \(self.location.coordinateBD?.latitude) \(self.location.coordinateBD?.longitude)")
                 BaiduLocation.queryForAddress(coordinateBD: self.location.coordinateBD!, locationConsumer: locationConsumer ?? self, textConsumer: textConsumer)
             }else{
-//                print("LOAD LOCATION 3 FROM ImageFile.location - \(fileName)")
+//                self.logger.log("LOAD LOCATION 3 FROM ImageFile.location - \(fileName)")
                 if locationConsumer != nil {
-                    //print("\(self.fileName) getting location from meta by location consumer")
+                    //self.logger.log("\(self.fileName) getting location from meta by location consumer")
                     locationConsumer?.consume(location: self.location)
                 }
                 if textConsumer != nil {
-                    //print("\(self.fileName) getting location from meta by text consumer")
+                    //self.logger.log("\(self.fileName) getting location from meta by text consumer")
                     textConsumer?.consume(location: self.location)
                 }
             }
@@ -178,13 +178,13 @@ extension ImageFile : LocationConsumer {
         
         imageData?.updateLocationDate = Date()
         
-        print("UPDATE LOCATION for image \(url.path)")
+        self.logger.log("UPDATE LOCATION for image \(url.path)")
         let _ = save()
         
     }
     
     func alert(status: Int, message: String, popup: Bool) {
-        print("\(status) : \(message)")
+        self.logger.log("\(status) : \(message)")
     }
     
     

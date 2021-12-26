@@ -46,7 +46,7 @@ class ImageLocationViewController : NSViewController {
             }
         }
 //        else{
-//            print("img has no coord")
+//            self.logger.log("img has no coord")
 //        }
     }
     

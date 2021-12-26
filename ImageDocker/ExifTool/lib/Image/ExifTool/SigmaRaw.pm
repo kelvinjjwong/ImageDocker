@@ -320,7 +320,7 @@ sub ProcessX3FHeader($$$)
                 Size   => 4,
             );
         }
-        $et->VPrint(0, "$$et{INDENT}($unused entries unused)\n");
+        $et->Vself.logger.log(0, "$$et{INDENT}($unused entries unused)\n");
     }
     return 1;
 }
@@ -507,7 +507,7 @@ sub ProcessX3FDirectory($$$)
         my ($offset, $len, $tag) = unpack("x${pos}V2a4", $dir);
         my $tagInfo = $et->GetTagInfo($tagTablePtr, $tag);
         if ($verbose) {
-            $et->VPrint(0, "$$et{INDENT}$index) $tag Subsection ($len bytes):\n");
+            $et->Vself.logger.log(0, "$$et{INDENT}$index) $tag Subsection ($len bytes):\n");
             if ($verbose > 2) {
                 $raf->Seek($offset, 0) or return 'Error seeking';
                 $raf->Read($buff, $len) == $len or return 'Truncated image';

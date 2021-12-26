@@ -33,7 +33,7 @@ class TreeOutlineView : NSOutlineView {
         if (clickedRow != -1) {
             self.outlineView(self, didClickTableRow: self.item(atRow: clickedRow), row: clickedRow)
         }else{
-//            print("out of range")
+//            self.logger.log("out of range")
         }
     }
 }

@@ -21,7 +21,7 @@ extension ViewController {
                                                     lblMessage: nil,
                                                     presetAddingMessage: Words.importingImages.word(),
                                                     onCompleted: {data in
-//                                                        print("COMPLETE SCAN REPO")
+//                                                        self.logger.log("COMPLETE SCAN REPO")
                                                         ExportManager.default.enable()
                                                         TaskManager.scanningFileSystem = false
 //                                                        DispatchQueue.main.async {
@@ -44,7 +44,7 @@ extension ViewController {
     }
     
     internal func onScanEnabled() {
-//        print("enabled scan")
+//        self.logger.log("enabled scan")
         self.suppressedScan = false
         ImageFolderTreeScanner.default.suppressedScan = false
         
@@ -56,7 +56,7 @@ extension ViewController {
     }
     
     internal func onScanDisabled() {
-//        print("disabled scan")
+//        self.logger.log("disabled scan")
         self.suppressedScan = true
         ImageFolderTreeScanner.default.suppressedScan = true
         
@@ -71,7 +71,7 @@ extension ViewController {
                 ExportManager.default.suppressed = true
                 TaskManager.readingImagesExif = true
                 
-//                print("EXTRACTING EXIF")
+//                self.logger.log("EXTRACTING EXIF")
                 DispatchQueue.main.async {
 //                    self.btnScanState.image = NSImage(named: NSImage.Name.statusAvailable)
                 }
@@ -79,7 +79,7 @@ extension ViewController {
                                                         lblMessage: nil,
                                                         presetAddingMessage: Words.extractingExif.word(),
                                                         onCompleted: { data in
-//                                                            print("COMPLETE SCAN PHOTOS TO LOAD EXIF")
+//                                                            self.logger.log("COMPLETE SCAN PHOTOS TO LOAD EXIF")
                                                             
                                                             ExportManager.default.suppressed = false
                                                             TaskManager.readingImagesExif = false

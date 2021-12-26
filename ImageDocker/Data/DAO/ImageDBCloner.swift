@@ -10,6 +10,8 @@ import Foundation
 
 public final class ImageDBCloner {
     
+    let logger = ConsoleLogger(category: "ImageDBCloner")
+    
     static let `default` = ImageDBCloner()
     
     public func fromLocalSQLiteToPostgreSQL(dropBeforeCreate:Bool, postgresDB: () -> PostgresDB, message: ((String) -> Void), onComplete: () -> Void) {
@@ -75,7 +77,7 @@ public final class ImageDBCloner {
                 message("Loaded all data from local database...")
             }catch{
                 message("DB ERROR: \(error.localizedDescription)")
-                print(error)
+                self.logger.log(error)
                 onComplete()
                 return
             }

@@ -11,6 +11,8 @@ import GRDB
 
 class PlaceDaoGRDB : PlaceDaoInterface {
     
+    let logger = ConsoleLogger(category: "PlaceDaoGRDB")
+    
     // MARK: - CREATE
     
     func getOrCreatePlace(name:String, location:Location) -> ImagePlace{
@@ -40,7 +42,7 @@ class PlaceDaoGRDB : PlaceDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return place!
     }
@@ -55,7 +57,7 @@ class PlaceDaoGRDB : PlaceDaoInterface {
                 place = try ImagePlace.fetchOne(db, key: name)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return place
     }
@@ -71,7 +73,7 @@ class PlaceDaoGRDB : PlaceDaoInterface {
                 places = try ImagePlace.fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return places
     }
@@ -93,7 +95,7 @@ class PlaceDaoGRDB : PlaceDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -102,7 +104,7 @@ class PlaceDaoGRDB : PlaceDaoInterface {
     
     
     func renamePlace(oldName:String, newName:String) -> ExecuteState{
-        print("trying to rename place from \(oldName) to \(newName)")
+        self.logger.log("trying to rename place from \(oldName) to \(newName)")
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in

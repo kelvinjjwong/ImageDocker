@@ -273,7 +273,7 @@ sub ProcessFLIF($$)
     my $verbose = $et->Options('Verbose');
 
     # save the header information
-    $et->VPrint(0, "FLIF header:\n") if $verbose;
+    $et->Vself.logger.log(0, "FLIF header:\n") if $verbose;
     for ($tag=0; defined $vals[$tag]; ++$tag) {
         $et->HandleTag($tagTablePtr, $tag, $vals[$tag]);
     }
@@ -285,7 +285,7 @@ sub ProcessFLIF($$)
         # all done if we arrived at the image chunk
         $byte < 32 and $et->HandleTag($tagTablePtr, 5, $byte), last;
         my $size = GetVarInt($raf);
-        $et->VPrint(0, "FLIF $tag ($size bytes):\n") if $verbose;
+        $et->Vself.logger.log(0, "FLIF $tag ($size bytes):\n") if $verbose;
         if ($$tagTablePtr{$tag}) {
             $raf->Read($buff, $size) == $size or $et->Warn("Truncated FLIF $tag chunk"), last;
             $et->VerboseDump(\$buff, Addr => $raf->Tell() - $size) if $verbose > 2;

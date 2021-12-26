@@ -20,6 +20,8 @@ class FaceCollectionViewSection {
 
 class FaceCollectionViewItemsLoader: NSObject {
     
+    let logger = ConsoleLogger(category: "FaceCollectionViewItemsLoader")
+    
     private var items:[PeopleFace] = []
     var numberOfSections = 0
     var singleSectionMode = true
@@ -38,7 +40,7 @@ class FaceCollectionViewItemsLoader: NSObject {
             }
             //self.setupItems(self.items)
         }else{
-            print("NO PEOPLE")
+            self.logger.log("NO PEOPLE")
             //self.setupItems(nil)
         }
         self.collectDomainItemToSingleSection()
@@ -67,7 +69,7 @@ class FaceCollectionViewItemsLoader: NSObject {
                 self.items.append(f)
             }
         }else{
-            print("NO FACE CROP")
+            self.logger.log("NO FACE CROP")
         }
         self.collectDomainItemToSingleSection()
     }

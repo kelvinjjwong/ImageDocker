@@ -118,7 +118,7 @@ sub ExtractTags($$$)
                 $tagInfo{List} = 1 if ref $$meta{$key} eq 'ARRAY';
                 $tagInfo{Name} = $name;
                 my $str = $tag eq $name ? '' : " as $name";
-                $et->VPrint(0, "  [adding $tag$str]\n");
+                $et->Vself.logger.log(0, "  [adding $tag$str]\n");
                 AddTagToTable($tagTablePtr, $tag, \%tagInfo);
             }
             $et->HandleTag($tagTablePtr, $tag, $val);
@@ -153,7 +153,7 @@ sub ProcessLFP($$)
         $raf->Read($id, 80) == 80 or $et->Warn('Truncated LFP segment'), last;  # ignore the sha1
         if ($verbose) {
             $id =~ s/\0.*//s;
-            $et->VPrint(0, substr($buff,1,3), " segment ($size bytes, $id)\n");
+            $et->Vself.logger.log(0, substr($buff,1,3), " segment ($size bytes, $id)\n");
         }
         if ($size > 20000000) {
             $raf->Seek($size, 1) or $et->Warn('Seek error in LFP file'), last;

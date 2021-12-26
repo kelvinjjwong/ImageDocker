@@ -24,7 +24,7 @@ class Location : NSObject {
     
     var coordinate:Coord? {
         didSet {
-            //print("SET ORI COORD TO \(coordinate?.latitude) \(coordinate?.longitude)")
+            //self.logger.log("SET ORI COORD TO \(coordinate?.latitude) \(coordinate?.longitude)")
             if coordinateBD == nil && convert {
                 coordinateBD = coordinate?.fromWGS84toBD09()
             }
@@ -35,7 +35,7 @@ class Location : NSObject {
             if coordinate == nil && convert {
                 coordinate = coordinateBD?.fromBD09toWGS84()
             }
-            //print("SET BD COORD TO \(coordinateBD?.latitude) \(coordinateBD?.longitude)")
+            //self.logger.log("SET BD COORD TO \(coordinateBD?.latitude) \(coordinateBD?.longitude)")
         }
     }
     
@@ -48,7 +48,7 @@ class Location : NSObject {
     
     public func setCoordinateWithoutConvert(coord:Coord, coordBD:Coord){
         if coord.isZero || coordBD.isZero {
-            //print("coord zero? \(coord.isZero) coordBD zero? \(coordBD.isZero)")
+            //self.logger.log("coord zero? \(coord.isZero) coordBD zero? \(coordBD.isZero)")
         }
         self.convert = false
         self.coordinate = coord

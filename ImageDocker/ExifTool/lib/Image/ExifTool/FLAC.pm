@@ -155,7 +155,7 @@ sub ProcessBitStream($$$)
     my $tag;
 
     if ($verbose) {
-        $et->VPrint(0, "  + [BitStream directory, $dirLen bytes, '$byteOrder' order]\n");
+        $et->Vself.logger.log(0, "  + [BitStream directory, $dirLen bytes, '$byteOrder' order]\n");
     }
     foreach $tag (sort keys %$tagTablePtr) {
         next unless $tag =~ /^Bit(\d+)-?(\d+)?/;

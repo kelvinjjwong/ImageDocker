@@ -1032,7 +1032,7 @@ sub ProcessRicohRMETA($$$)
         }
         my $dat = substr($$dataPt, $pos, $size);
         if ($verbose) {
-            $et->VPrint(2, "$$et{INDENT}RMETA section type=$type size=$size\n");
+            $et->Vself.logger.log(2, "$$et{INDENT}RMETA section type=$type size=$size\n");
             if ($verbose > 2) {
                 my %dumpParms = ( Addr => $$dirInfo{DataPos} + $pos, Prefix => $$et{INDENT} );
                 $dumpParms{MaxLen} = 96 if $verbose == 3;

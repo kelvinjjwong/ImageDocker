@@ -191,7 +191,7 @@ class Moments {
             let day = data["photoTakenDay"] as Int? ?? 0
             let photoCount = data["photoCount"] as Int? ?? 0
             
-            //print("Got \(place)-\(year)-\(month)-\(day)")
+            //self.logger.log("Got \(place)-\(year)-\(month)-\(day)")
             var yearEntry:Moment
             var monthEntry:Moment
             
@@ -291,7 +291,7 @@ class Moments {
             gov = gov.replacingOccurrences(of: "特别行政区", with: "")
             place = place.replacingOccurrences(of: "特别行政区", with: "")
             
-            //print("Got \(place)-\(year)-\(month)-\(day)")
+            //self.logger.log("Got \(place)-\(year)-\(month)-\(day)")
             var govEntry:Moment
             var placeEntry:Moment
             var yearEntry:Moment

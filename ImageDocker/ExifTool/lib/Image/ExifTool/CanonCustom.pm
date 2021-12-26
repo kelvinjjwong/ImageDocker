@@ -2442,7 +2442,7 @@ sub ProcessCanonCustom2($$$)
     my $count = Get32u($dataPt, $offset + 4);
     if ($write) {
         $newTags = $et->GetNewTagInfoHash($tagTablePtr);
-        $et->VPrint(0, "  Rewriting CanonCustom2\n");
+        $et->Vself.logger.log(0, "  Rewriting CanonCustom2\n");
     } elsif ($verbose) {
         $et->VerboseDir('CanonCustom2', $count, $len);
     }

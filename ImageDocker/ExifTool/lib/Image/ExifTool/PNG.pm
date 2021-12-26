@@ -818,7 +818,7 @@ sub FoundPNG($$$$;$$$$)
                     $$outBuff = $et->WriteDirectory(\%subdirInfo, $subTable);
                     if ($tagName eq 'XMP' and $$outBuff) {
                         if ($$et{FoundIDAT} and $$et{DEL_GROUP}{XMP}) {
-                            $et->VPrint(0,'  Deleting XMP');
+                            $et->Vself.logger.log(0,'  Deleting XMP');
                             $$outBuff = '';
                         } else {
                             # make sure the XMP is marked as read-only
@@ -841,7 +841,7 @@ sub FoundPNG($$$$;$$$$)
                 if ($$et{DEL_GROUP}{$dirName} or ($dirName eq 'EXIF' and $$et{DEL_GROUP}{IFD0})) {
                     $$outBuff = '';
                     ++$$et{CHANGED};
-                    $et->VPrint(0, "  Deleting $tag chunk");
+                    $et->Vself.logger.log(0, "  Deleting $tag chunk");
                 } else {
                     if ($$et{EDIT_DIRS}{$dirName} or ($dirName eq 'EXIF' and $$et{EDIT_DIRS}{IFD0})) {
                         $et->Warn("Can't write $dirName. Requires Compress::Zlib");
@@ -933,7 +933,7 @@ sub FoundPNG($$$$;$$$$)
         $$tagInfo{LangCode} = $lang if $lang;
         # make unknown profiles binary data type
         $$tagInfo{Binary} = 1 if $tag =~ /^Raw profile type /;
-        $verbose and $et->VPrint(0, "  | [adding $tag]\n");
+        $verbose and $et->Vself.logger.log(0, "  | [adding $tag]\n");
         AddTagToTable($tagTablePtr, $tag, $tagInfo);
     }
 #
@@ -1036,7 +1036,7 @@ sub ProcessProfile($$$)
             # delete non-standard EXIF if recreating from scratch
             if ($$et{DEL_GROUP}{EXIF} or $$et{DEL_GROUP}{IFD0}) {
                 $$outBuff = '';
-                $et->VPrint(0, '  Deleting non-standard APP1 EXIF information');
+                $et->Vself.logger.log(0, '  Deleting non-standard APP1 EXIF information');
                 return 1;
             }
             $$outBuff = $et->WriteDirectory(\%dirInfo, $tagTablePtr,
@@ -1067,7 +1067,7 @@ sub ProcessProfile($$$)
             # delete non-standard EXIF if recreating from scratch
             if ($$et{DEL_GROUP}{EXIF} or $$et{DEL_GROUP}{IFD0}) {
                 $$outBuff = '';
-                $et->VPrint(0, '  Deleting non-standard EXIF/TIFF information');
+                $et->Vself.logger.log(0, '  Deleting non-standard EXIF/TIFF information');
                 return 1;
             }
             $$outBuff = $et->WriteDirectory(\%dirInfo, $tagTablePtr,
@@ -1180,7 +1180,7 @@ sub ProcessPNG_eXIf($$$)
     if ($$dataPt =~ /^(\0|II|MM)/) {
         $type = $1;
     } elsif ($del) {
-        $et->VPrint(0, "  Deleting invalid $tag chunk");
+        $et->Vself.logger.log(0, "  Deleting invalid $tag chunk");
         $$outBuff = '';
         ++$$et{CHANGED};
         return 1;
@@ -1198,7 +1198,7 @@ sub ProcessPNG_eXIf($$$)
     # (zxIf was not adopted)
     #} elsif ($del and ($et->Options('Compress') xor lc($tag) eq 'zxif')) {
     } elsif ($del and lc($tag) eq 'zxif') {
-        $et->VPrint(0, "  Deleting $tag chunk");
+        $et->Vself.logger.log(0, "  Deleting $tag chunk");
         $$outBuff = '';
         ++$$et{CHANGED};
     } elsif ($$et{EDIT_DIRS}{IFD0}) {

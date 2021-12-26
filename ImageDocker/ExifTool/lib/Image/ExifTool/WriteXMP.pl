@@ -402,7 +402,7 @@ sub SaveBlankInfo($$$;$)
 sub ProcessBlankInfo($$$;$)
 {
     my ($et, $tagTablePtr, $blankInfo, $isWriting) = @_;
-    $et->VPrint(1, "  [Elements with nodeID set:]\n") unless $isWriting;
+    $et->Vself.logger.log(1, "  [Elements with nodeID set:]\n") unless $isWriting;
     my ($id, $pre, $post);
     # handle each nodeID separately
     foreach $id (sort keys %{$$blankInfo{Prop}}) {
@@ -770,7 +770,7 @@ sub WriteXMP($$;$)
             my $rtnVal = 1;
             my $newVal = $et->GetNewValue($$et{NEW_VALUE}{$tagInfo});
             if (defined $newVal and length $newVal) {
-                $et->VPrint(0, "  Writing XMP as a block\n");
+                $et->Vself.logger.log(0, "  Writing XMP as a block\n");
                 ++$$et{CHANGED};
                 Write($$dirInfo{OutFile}, $newVal) or $rtnVal = -1;
             }

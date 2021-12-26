@@ -2229,7 +2229,7 @@ sub ProcessLeicaTrailer($;$)
         $et->HDump($pos+$start, $hdrLen, "MakerNotes header", $name);
     } elsif ($et->Options('Verbose')) {
         my $where = sprintf('at offset 0x%x', $pos);
-        $et->VPrint(0, "Leica MakerNote trailer ($len bytes $where):\n");
+        $et->Vself.logger.log(0, "Leica MakerNote trailer ($len bytes $where):\n");
     }
     # delete LeicaTrailer member so we don't try to process it again
     delete $$et{LeicaTrailer};

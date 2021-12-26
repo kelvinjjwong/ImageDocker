@@ -97,7 +97,7 @@ class PostgresRow : CustomStringConvertible {
         guard let index = index(ofColumn: columnName) else {
             fatalError("Unable to convert value of column \(columnName)")
         }
-        //print("debug 11")
+        //self.logger.log("debug 11")
         return Value.decode(from: self, atUncheckedIndex: index)
     }
     
@@ -106,7 +106,7 @@ class PostgresRow : CustomStringConvertible {
         guard let index = index(ofColumn: columnName) else {
             return nil
         }
-        //print("debug 8")
+        //self.logger.log("debug 8")
         return Value.decodeIfPresent(from: self, atUncheckedIndex: index)
     }
     
@@ -126,7 +126,7 @@ class PostgresRow : CustomStringConvertible {
     }
     
     public subscript<Value:PostgresRowValueConvertible>(_ index: Int) -> Value {
-        //print("debug 12")
+        //self.logger.log("debug 12")
         return Value.decode(from: self, atUncheckedIndex: index)
     }
     
@@ -135,7 +135,7 @@ class PostgresRow : CustomStringConvertible {
         guard index >= 0 || index < values.count else {
             return nil
         }
-        //print("debug 9")
+        //self.logger.log("debug 9")
         return Value.decodeIfPresent(from: self, atUncheckedIndex: index)
     }
     

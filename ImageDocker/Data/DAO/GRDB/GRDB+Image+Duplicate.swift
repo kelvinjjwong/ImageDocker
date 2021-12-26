@@ -11,10 +11,12 @@ import GRDB
 
 class ImageDuplicateDaoGRDB : ImageDuplicationDaoInterface {
     
+    let logger = ConsoleLogger(category: "ImageDuplicateDaoGRDB")
+    
     static var _duplicates:Duplicates? = nil
     
     func reloadDuplicatePhotos() {
-        print("\(Date()) Loading duplicate photos from db")
+        self.logger.log("\(Date()) Loading duplicate photos from db")
         
         let duplicates:Duplicates = Duplicates()
         var dupDates:Set<Date> = []
@@ -60,23 +62,23 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                     duplicates.yearMonths.insert(year * 1000 + month)
                     duplicates.yearMonthDays.insert(year * 100000 + month * 100 + day)
                     
-                    //print("duplicated date: \(date)")
+                    //self.logger.log("duplicated date: \(date)")
                     dupDates.insert(date)
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         
         var firstPhotoInPlaceAndDate:[String:String] = [:]
-        print("\(Date()) Marking duplicate tag to photo files")
+        self.logger.log("\(Date()) Marking duplicate tag to photo files")
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
-                print("duplicated date count: \(dupDates.count)")
+                self.logger.log("duplicated date count: \(dupDates.count)")
                 let marks = repeatElement("?", count: dupDates.count).joined(separator: ",")
                 let sql = "SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,path FROM Image WHERE photoTakenYear <> 0 AND photoTakenYear IS NOT NULL AND photoTakenDate in (\(marks))"
-                //print(sql)
+                //self.logger.log(sql)
                 let photosInSameDate = try Row.fetchCursor(db, sql: sql, arguments:StatementArguments(dupDates))
                 
                 while let photo = try photosInSameDate.next() {
@@ -88,7 +90,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                         let minute = Calendar.current.component(.minute, from: date)
                         let second = Calendar.current.component(.second, from: date)
                         let key = "\(photo["place"] ?? "")_\(year)_\(month)_\(day)_\(hour)_\(minute)_\(second)"
-                        //print("duplicated record: \(key)")
+                        //self.logger.log("duplicated record: \(key)")
                         let path = photo["path"] as String? ?? ""
                         if let first = firstPhotoInPlaceAndDate[key] {
                             // duplicates
@@ -109,19 +111,19 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 }
             }
             //            for key in duplicates.keyToPath.keys {
-            //                print("-------")
-            //                print("duplicated key: \(key)")
+            //                self.logger.log("-------")
+            //                self.logger.log("duplicated key: \(key)")
             //                for p in duplicates.keyToPath[key]! {
-            //                    print("duplicated path: \(p)")
+            //                    self.logger.log("duplicated path: \(p)")
             //                }
             //            }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
-        print("\(Date()) Marking duplicate tag to photo files: DONE")
+        self.logger.log("\(Date()) Marking duplicate tag to photo files: DONE")
         
         ImageDuplicateDaoGRDB._duplicates = duplicates
-        print("\(Date()) Loading duplicate photos from db: DONE")
+        self.logger.log("\(Date()) Loading duplicate photos from db: DONE")
     }
     
     func getDuplicatePhotos(forceReload: Bool) -> Duplicates {
@@ -146,7 +148,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 
                 while let image = try cursor.next() {
                     if let key = image.duplicatesKey, key != "" {
-                        //print("found \(key) - \(image.path)")
+                        //self.logger.log("found \(key) - \(image.path)")
                         if let _ = result[key] {
                             result[key]?.append(image)
                         }else{
@@ -158,7 +160,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
             
             
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -171,7 +173,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 result = try Image.filter(sql: "hidden=0 and duplicatesKey='\(duplicatesKey)'").fetchOne(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -184,7 +186,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 result = try Image.filter(sql: "duplicatesKey='\(duplicatesKey)'").order(Column("path").asc).fetchOne(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -196,7 +198,7 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
                 try db.execute(sql: "update Image set duplicatesKey = ?, hidden = ? where path = ?", arguments: [duplicatesKey, hide, path])
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
     }
 }

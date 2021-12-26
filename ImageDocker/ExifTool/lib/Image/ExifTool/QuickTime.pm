@@ -6760,7 +6760,7 @@ sub ParseItemInfoEntry($$)
             $$items{$id}{URI} = GetString(\$val, $pos);
         }
     }
-    $et->VPrint(1, "$$et{INDENT}  Item $id: Type=", $$items{$id}{Type} || '',
+    $et->Vself.logger.log(1, "$$et{INDENT}  Item $id: Type=", $$items{$id}{Type} || '',
                    ' Name=', $$items{$id}{Name} || '',
                    ' ContentType=', $$items{$id}{ContentType} || '',
                    "\n") if $verbose > 1;
@@ -6816,7 +6816,7 @@ sub ParseItemPropAssoc($$)
         }
         $$items{$id}{Association} = \@association;
         $$items{$id}{Essential} = \@essential;
-        $et->VPrint(1, "$$et{INDENT}  Item $id properties: @association\n") if $verbose > 1;
+        $et->Vself.logger.log(1, "$$et{INDENT}  Item $id properties: @association\n") if $verbose > 1;
     }
     return undef;
 }
@@ -7264,10 +7264,10 @@ sub ProcessMOV($$;$)
                     my $pos = $raf->Tell() - 4;
                     $raf->Seek(0,2);
                     my $str = $$dirInfo{DirName} . ' with ' . ($raf->Tell() - $pos) . ' bytes';
-                    $et->VPrint(0,"$$et{INDENT}\[Terminator found in $str remaining]");
+                    $et->Vself.logger.log(0,"$$et{INDENT}\[Terminator found in $str remaining]");
                 } else {
                     $tag = PrintableTagID($tag);
-                    $et->VPrint(0,"$$et{INDENT}Tag '$tag' extends to end of file");
+                    $et->Vself.logger.log(0,"$$et{INDENT}Tag '$tag' extends to end of file");
                 }
                 last;
             }
@@ -7498,7 +7498,7 @@ ItemID:         foreach $id (keys %$items) {
                         # delay processing of ipco box until after all other boxes
                         if ($tag eq 'ipco' and not $$et{IsItemProperty}) {
                             $$et{ItemPropertyContainer} = [ \%dirInfo, $subTable, $proc ];
-                            $et->VPrint(0,"$$et{INDENT}\[Process ipco box later]");
+                            $et->Vself.logger.log(0,"$$et{INDENT}\[Process ipco box later]");
                         } else {
                             $et->ProcessDirectory(\%dirInfo, $subTable, $proc);
                         }

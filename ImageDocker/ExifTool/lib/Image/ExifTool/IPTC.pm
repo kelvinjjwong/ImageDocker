@@ -1136,7 +1136,7 @@ sub ProcessIPTC($$$)
         if ($len & 0x8000) {
             my $n = $len & 0x7fff; # get num bytes in length field
             if ($pos + $n > $dirEnd or $n > 8) {
-                $et->VPrint(0, "Invalid extended IPTC entry (dataset $rec:$tag, len $len)\n");
+                $et->Vself.logger.log(0, "Invalid extended IPTC entry (dataset $rec:$tag, len $len)\n");
                 $success = 0;
                 last;
             }
@@ -1146,7 +1146,7 @@ sub ProcessIPTC($$$)
             }
         }
         if ($pos + $len > $dirEnd) {
-            $et->VPrint(0, "Invalid IPTC entry (dataset $rec:$tag, len $len)\n");
+            $et->Vself.logger.log(0, "Invalid IPTC entry (dataset $rec:$tag, len $len)\n");
             $success = 0;
             last;
         }
@@ -1164,7 +1164,7 @@ sub ProcessIPTC($$$)
             }
             $recordName = $$tableInfo{Name};
             $recordPtr = Image::ExifTool::GetTagTable($tableName);
-            $et->VPrint(0,$$et{INDENT},"-- $recordName record --\n");
+            $et->Vself.logger.log(0,$$et{INDENT},"-- $recordName record --\n");
             $lastRec = $rec;
         }
         my $val = substr($$dataPt, $pos, $len);

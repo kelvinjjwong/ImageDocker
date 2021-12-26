@@ -10,6 +10,8 @@ import Cocoa
 
 class TreeCollection {
     
+    let logger = ConsoleLogger(category: "TreeCollection")
+    
     var name = ""
     var childrenCount = 0
     var path = ""
@@ -64,7 +66,7 @@ class TreeCollection {
         self.children.append(child)
         self.mapping[name] = child
         self.childrenCount = self.children.count
-        print("added \(child.path)")
+        self.logger.log("added \(child.path)")
     }
     
     func addChild(collection:TreeCollection) {
@@ -93,7 +95,7 @@ class TreeCollection {
         var result:[TreeCollection] = []
         for child in children {
             result.append(child)
-            print("flatted: \(child.path)")
+            self.logger.log("flatted: \(child.path)")
             result.append(contentsOf: child.getUnlimitedDepthChildren())
         }
         return result
@@ -112,6 +114,8 @@ protocol TreeDataSource {
 
 // sample only
 class StaticTreeDataSource : TreeDataSource {
+    
+    let logger = ConsoleLogger(category: "StaticTreeDataSource")
     
     internal var tree_datas:[TreeCollection] = []
     internal var flattable_all:[TreeCollection] = []
@@ -172,7 +176,7 @@ class StaticTreeDataSource : TreeDataSource {
         
         if let c = collection {
             let path = c.path
-            print("loading children of \(path)")
+            self.logger.log("loading children of \(path)")
             if let node = self.findNode(path: path) {
                 sourceDataset = node.children
             }
@@ -185,14 +189,14 @@ class StaticTreeDataSource : TreeDataSource {
             child.childrenCount = data.children.count
             resultDataset.append(child)
         }
-        print("loaded \(resultDataset.count) children")
+        self.logger.log("loaded \(resultDataset.count) children")
         return (resultDataset, nil)
     }
     
     internal func findNode(path: String) -> TreeCollection? {
         for data in flattable_all {
             if data.path == path {
-                print("got it from source datas")
+                self.logger.log("got it from source datas")
                 return data
             }
         }
@@ -227,7 +231,7 @@ class StaticTreeDataSource : TreeDataSource {
     }
     
     func findNode(keyword: String) -> TreeCollection? {
-        print("find node containing \(keyword)")
+        self.logger.log("find node containing \(keyword)")
         return nil
     }
     

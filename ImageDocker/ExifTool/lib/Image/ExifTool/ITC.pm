@@ -164,7 +164,7 @@ sub ProcessITC($$)
                 last;
             }
         } else {
-            $et->VPrint(0, "Unknown $tag block ($size bytes)\n");
+            $et->Vself.logger.log(0, "Unknown $tag block ($size bytes)\n");
             $raf->Seek($size-8, 1) or last;
         }
     }

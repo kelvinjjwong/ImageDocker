@@ -407,7 +407,7 @@ sub ProcessZIP($$)
             $et->Warn("Install IO::String to decode compressed ZIP information from a $type");
             last;
         }
-        $et->VPrint(1, "  --- using Archive::Zip ---\n");
+        $et->Vself.logger.log(1, "  --- using Archive::Zip ---\n");
         $zip = new Archive::Zip;
         # catch all warnings! (Archive::Zip is bad for this)
         local $SIG{'__WARN__'} = \&WarnProc;
@@ -569,7 +569,7 @@ sub ProcessZIP($$)
 # process the ZIP file by hand (funny, but this seems easier than using Archive::Zip)
 #
     $docNum = 0;
-    $et->VPrint(1, "  -- processing as binary data --\n");
+    $et->Vself.logger.log(1, "  -- processing as binary data --\n");
     $raf->Seek(30, 0);
     $et->SetFileType();
     SetByteOrder('II');

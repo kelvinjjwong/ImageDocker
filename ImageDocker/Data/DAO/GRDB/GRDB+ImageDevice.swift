@@ -10,6 +10,8 @@ import Foundation
 import GRDB
 
 class DeviceDaoGRDB : DeviceDaoInterface {
+    
+    let logger = ConsoleLogger(category: "DeviceDaoGRDB")
     // MARK: - DEVICES
     
     func getDevices() -> [ImageDevice] {
@@ -20,7 +22,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
                 result = try ImageDevice.order(Column("name").asc).fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -33,7 +35,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
                 result = try ImageDevice.filter(sql: "type='\(type)'").order(Column("name").asc).fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -57,7 +59,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return dev!
     }
@@ -70,7 +72,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
                 dev = try ImageDevice.fetchOne(db, key: deviceId)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return dev
     }
@@ -99,7 +101,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
                 deviceFile = try ImageDeviceFile.fetchOne(db, key: key)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return deviceFile
     }
@@ -126,7 +128,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return deviceFile!
     }
@@ -164,7 +166,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
                 result = try ImageDeviceFile.filter(sql: "deviceId='\(deviceId)'").order(Column("importToPath").asc).fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -177,7 +179,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
                 result = try ImageDeviceFile.filter(sql: "deviceId='\(deviceId)' and importToPath='\(importToPath)'").order(Column("fileId").asc).fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -194,7 +196,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
             }
             return devicePath
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return nil
     }
@@ -232,7 +234,7 @@ class DeviceDaoGRDB : DeviceDaoInterface {
                 result = try ImageDevicePath.filter(sql: "deviceId='\(deviceId)'").order(Column("path").asc).fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         if result.count == 0 {
             if deviceType == .Android {
@@ -279,7 +281,7 @@ where p.excludeimported=1
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         
         return results
@@ -312,7 +314,7 @@ order by c.name
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         
         return (results, notScans)

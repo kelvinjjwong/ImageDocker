@@ -113,7 +113,7 @@ sub FoundTag($$$$;$)
 
     my $prop = $$props[-1];
     if ($verbose > 1) {
-        $et->VPrint(0, $$et{INDENT}, '[', join('/',@$props), ' = ',
+        $et->Vself.logger.log(0, $$et{INDENT}, '[', join('/',@$props), ' = ',
                     $et->Printable($val), "]\n");
     }
     # un-escape XML character entities
@@ -154,7 +154,7 @@ sub FoundTag($$$$;$)
     my $tag = join '/', @$keys;     # generate tag ID from 'key' values
     my $tagInfo = $$tagTablePtr{$tag};
     unless ($tagInfo) {
-        $et->VPrint(0, $$et{INDENT}, "[adding $tag]\n") if $verbose;
+        $et->Vself.logger.log(0, $$et{INDENT}, "[adding $tag]\n") if $verbose;
         # generate tag name from ID
         my $name = $tag;
         $name =~ s{^MetaDataList//}{};  # shorten long MODD metadata tag names
@@ -281,7 +281,7 @@ sub ExtractObject($$;$)
                     next if not defined $val or ref($val) eq 'HASH';
                     my $tagInfo = $et->GetTagInfo($tagTablePtr, $tag);
                     unless ($tagInfo) {
-                        $et->VPrint(0, $$et{INDENT}, "[adding $tag]\n") if $verbose;
+                        $et->Vself.logger.log(0, $$et{INDENT}, "[adding $tag]\n") if $verbose;
                         my $name = $tag;
                         $name =~ s/([^A-Za-z])([a-z])/$1\u$2/g; # capitalize words
                         $name =~ tr/-_a-zA-Z0-9//dc; # remove illegal characters

@@ -128,7 +128,7 @@ sub ProcessRSRC($$)
                 my ($resName, $nameLen);
                 $resName = '' unless $raf->Seek($resNameOff, 0) and $raf->Read($buff, 1) and
                     ($nameLen = ord $buff) != 0 and $raf->Read($resName, $nameLen) == $nameLen;
-                $et->VPrint(0,sprintf("%s resource ID 0x%.4x (offset 0x%.4x, $valLen bytes, name='%s'):\n",
+                $et->Vself.logger.log(0,sprintf("%s resource ID 0x%.4x (offset 0x%.4x, $valLen bytes, name='%s'):\n",
                     $resType, $id, $resOff, $resName));
                 $et->VerboseDump(\$val);
             }

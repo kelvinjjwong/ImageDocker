@@ -9,6 +9,8 @@
 import Cocoa
 
 class TwoColumnTableViewController: NSViewController {
+    
+    let logger = ConsoleLogger(category: "TwoColumnTableViewController")
 
     @IBOutlet weak var table: NSTableView!
     var items:[(String, String, String)] = []
@@ -30,7 +32,7 @@ class TwoColumnTableViewController: NSViewController {
             array.append((item, item, ""))
         }
         self.items = array
-        print(items.count)
+        self.logger.log(items.count)
         self.table.reloadData()
     }
     
@@ -44,7 +46,7 @@ class TwoColumnTableViewController: NSViewController {
             array.append((item.0, item.1, ""))
         }
         self.items = array
-        print(items.count)
+        self.logger.log(items.count)
         self.table.reloadData()
     }
     
@@ -53,7 +55,7 @@ class TwoColumnTableViewController: NSViewController {
         self.table.delegate = self
         self.table.dataSource = self
         self.items = items
-        print(items.count)
+        self.logger.log(items.count)
         self.table.reloadData()
     }
     

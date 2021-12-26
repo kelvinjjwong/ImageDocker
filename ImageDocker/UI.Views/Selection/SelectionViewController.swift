@@ -10,6 +10,8 @@ import Cocoa
 
 class SelectionViewController : NSViewController {
     
+    let logger = ConsoleLogger(category: "SelectionViewController")
+    
     var collectionViewController : SelectionCollectionViewController!
     
     @IBOutlet weak var selectionCollectionView: NSCollectionView!
@@ -68,7 +70,7 @@ class SelectionViewController : NSViewController {
         comboEventList.isEditable = false
 //        comboPlaceList.isEditable = false
         self.btnShare.sendAction(on: .leftMouseDown)
-//        print("\(Date()) Loading view - setup event list")
+//        self.logger.log("\(Date()) Loading view - setup event list")
         setupEventList()
         self.btnAssignEvent.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnManageEvents.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)

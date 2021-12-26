@@ -10,6 +10,8 @@ import Cocoa
 
 class LocationTextDelegate : LocationConsumer {
     
+    let logger = ConsoleLogger(category: "LocationTextDelegate")
+    
     var textField:NSTextField?
     
     var coordinateAPI:LocationAPI = .baidu
@@ -21,11 +23,11 @@ class LocationTextDelegate : LocationConsumer {
     
     func consume(location: Location) {
         self.location = location
-        print(location.country)
-        print(location.province)
-        print(location.city)
-        print(location.district)
-        print(location.address)
+        self.logger.log(location.country)
+        self.logger.log(location.province)
+        self.logger.log(location.city)
+        self.logger.log(location.district)
+        self.logger.log(location.address)
         if textField != nil {
             if location.address != "" {
                 var desc = ""
@@ -38,14 +40,14 @@ class LocationTextDelegate : LocationConsumer {
                 if location.searchKeyword != "" {
                     GoogleLocation.queryForAddress(address: location.searchKeyword, locationConsumer: self, modifyLocation: location)
                 }else{
-                    print("== no address detail, no keyword for google searching")
+                    self.logger.log("== no address detail, no keyword for google searching")
                 }
             }
         }
     }
     
     func alert(status: Int, message: String, popup: Bool) {
-        print("\(status) : \(message)")
+        self.logger.log("\(status) : \(message)")
     }
     
     

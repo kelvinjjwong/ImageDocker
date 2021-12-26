@@ -1810,7 +1810,7 @@ sub ProcessDict($$$$;$$)
                             $val2 = '<err>';
                             $str = 'Error reading object';
                         }
-                        $et->VPrint(0, "$$et{INDENT}${str}:\n");
+                        $et->Vself.logger.log(0, "$$et{INDENT}${str}:\n");
                     }
                 }
             } elsif (ref $val eq 'HASH') {
@@ -2051,7 +2051,7 @@ sub ProcessDict($$$$;$$)
         # decode stream if necessary
         DecodeStream($et, $dict) or last;
         if ($verbose > 2) {
-            $et->VPrint(2,"$$et{INDENT}$$et{DIR_NAME} stream data\n");
+            $et->Vself.logger.log(2,"$$et{INDENT}$$et{DIR_NAME} stream data\n");
             my %parms = ( Prefix => $$et{INDENT} );
             $parms{MaxLen} = $verbose > 3 ? 1024 : 96 if $verbose < 5;
             HexDump(\$$dict{_stream}, undef, %parms);
@@ -2272,7 +2272,7 @@ XRef:
         if ($verbose) {
             ++$i;
             my $n = scalar(@{$$dict{_tags}});
-            $et->VPrint(0, "PDF dictionary ($i of $num) with $n entries:\n");
+            $et->Vself.logger.log(0, "PDF dictionary ($i of $num) with $n entries:\n");
         }
         ProcessDict($et, $tagTablePtr, $dict, \%xref, 0, $type);
     }

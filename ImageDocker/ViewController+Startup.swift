@@ -89,7 +89,7 @@ extension ViewController {
     internal func didStartWork() {
         self.view.subviews.removeLast()
         self.startingUp = false
-        print("FINISHED STARTUP WORK")
+        self.logger.log("FINISHED STARTUP WORK")
 
         self.configureMainSearchBar()
         self.showMemories()

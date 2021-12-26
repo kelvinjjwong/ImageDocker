@@ -352,7 +352,7 @@ sub ProcessTTC($$)
     # loop through all fonts in the collection
     for ($i=0; $i<$num; ++$i) {
         my $n = $i + 1;
-        $et->VPrint(0, "Font $n:\n");
+        $et->Vself.logger.log(0, "Font $n:\n");
         $$et{SET_GROUP1} = "+$n";
         my $offset = Get32u(\$buff, $i * 4);
         $raf->Seek($offset, 0) or last;
@@ -403,7 +403,7 @@ sub ProcessOTF($$)
             $tag =~ s/([\0-\x1f\x80-\xff])/sprintf('\x%.2x',ord $1)/ge;
             my $str = sprintf("%s%d) Tag '%s' (offset 0x%.4x, %d bytes)\n",
                               $$et{INDENT}, $pos/16, $tag, $offset, $size);
-            $et->VPrint(0, $str);
+            $et->Vself.logger.log(0, $str);
             $et->VerboseDump(\$buff, Addr => $offset) if $verbose > 2;
             next unless $tag eq 'name';
         }

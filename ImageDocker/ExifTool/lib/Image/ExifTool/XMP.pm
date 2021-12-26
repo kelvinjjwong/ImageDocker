@@ -2713,7 +2713,7 @@ sub ScanForXMP($$)
     my ($buff, $xmp);
     my $lastBuff = '';
 
-    $et->VPrint(0,"Scanning for XMP\n");
+    $et->Vself.logger.log(0,"Scanning for XMP\n");
     for (;;) {
         defined $buff or $raf->Read($buff, 65536) or return 0;
         unless (defined $xmp) {
@@ -3126,7 +3126,7 @@ NoLoop:
     if ($$et{OPTIONS}{Verbose}) {
         if ($added) {
             my $g1 = $et->GetGroup($key, 1);
-            $et->VPrint(0, $$et{INDENT}, "[adding $g1:$tag]\n");
+            $et->Vself.logger.log(0, $$et{INDENT}, "[adding $g1:$tag]\n");
         }
         my $tagID = join('/',@$props);
         $et->VerboseInfo($tagID, $tagInfo, Value => $rawVal || $val);
@@ -3247,7 +3247,7 @@ sub ParseXMPElement($$$;$$$$)
                             my ($good) = grep /^$try$/, keys %uri2ns;
                             if ($good) {
                                 $stdNS = $uri2ns{$good};
-                                $et->VPrint(0, $$et{INDENT}, "[different $stdNS version: $val]\n");
+                                $et->Vself.logger.log(0, $$et{INDENT}, "[different $stdNS version: $val]\n");
                             }
                         }
                     }

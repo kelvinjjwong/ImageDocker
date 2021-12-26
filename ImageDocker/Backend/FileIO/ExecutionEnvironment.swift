@@ -10,6 +10,8 @@ import Foundation
 
 struct ExecutionEnvironment {
     
+    let logger = ConsoleLogger(category: "ExecutionEnvironment")
+    
     static let `default` = ExecutionEnvironment()
     
     fileprivate let RUBY = URL(fileURLWithPath: "/usr/bin/ruby")
@@ -27,7 +29,7 @@ struct ExecutionEnvironment {
             do {
                 try cmd.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
             //cmd.terminate()
             
@@ -53,7 +55,7 @@ struct ExecutionEnvironment {
             do {
                 try cmd.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
             //cmd.terminate()
             
@@ -90,7 +92,7 @@ struct ExecutionEnvironment {
         
         for path in paths {
             let p = URL(fileURLWithPath: path).appendingPathComponent(command).path
-            //print(p)
+            //self.logger.log(p)
             if FileManager.default.fileExists(atPath: p) {
                 return p
             }
@@ -99,7 +101,7 @@ struct ExecutionEnvironment {
     }
     
     func pipList(_ pipPath:String) -> Set<String>{
-        print("calling pip: \(pipPath)")
+        self.logger.log("calling pip: \(pipPath)")
         var result:Set<String> = []
         let pipe = Pipe()
         
@@ -112,14 +114,14 @@ struct ExecutionEnvironment {
             do {
                 try cmd.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
             //cmd.terminate()
             
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
             let string = String(data: data, encoding: String.Encoding.utf8)!
             pipe.fileHandleForReading.closeFile()
-            print(string)
+            self.logger.log(string)
             let lines = string.components(separatedBy: "\n")
             for line in lines {
                 let part = line.components(separatedBy: " ")
@@ -146,7 +148,7 @@ struct ExecutionEnvironment {
             do {
                 try cmd.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
             //cmd.terminate()
             
@@ -180,7 +182,7 @@ struct ExecutionEnvironment {
             do {
                 try cmd.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
             //cmd.terminate()
             
@@ -244,7 +246,7 @@ pip3 install face_recognition
     }
     
     func createLocalDatabaseFileBackup(suffix:String) -> (String, Bool, Error?){
-        print("\(Date()) Start to create sqlite db backup")
+        self.logger.log("\(Date()) Start to create sqlite db backup")
         var backupFolder = ""
         let dbUrl = URL(fileURLWithPath: PreferencesController.databasePath())
         let dbFile = dbUrl.appendingPathComponent("ImageDocker.sqlite")
@@ -257,7 +259,7 @@ pip3 install face_recognition
             do{
                 try fileManager.createDirectory(at: backupUrl, withIntermediateDirectories: true, attributes: nil)
                 
-                print("Backup data to: \(backupUrl.path)")
+                self.logger.log("Backup data to: \(backupUrl.path)")
                 try fileManager.copyItem(at: dbFile, to: backupUrl.appendingPathComponent("ImageDocker.sqlite"))
                 if fileManager.fileExists(atPath: dbFileSHM.path){
                     try fileManager.copyItem(at: dbFileSHM, to: backupUrl.appendingPathComponent("ImageDocker.sqlite-shm"))
@@ -266,20 +268,20 @@ pip3 install face_recognition
                     try fileManager.copyItem(at: dbFileWAL, to: backupUrl.appendingPathComponent("ImageDocker.sqlite-wal"))
                 }
             }catch{
-                print(error)
+                self.logger.log(error)
                 return (backupFolder, false, error)
             }
         }
-        print("\(Date()) Finish create db backup")
+        self.logger.log("\(Date()) Finish create db backup")
         return (backupFolder, true, nil)
     }
     
     func createPostgresDatabaseBackup(suffix:String) -> (String, Bool, Error?) {
         guard let cmd = PreferencesController.getPostgresCommandPath() else {
-            print("\(Date()) Unable to locate pg_dump command in macOS, backup aborted.")
+            self.logger.log("\(Date()) Unable to locate pg_dump command in macOS, backup aborted.")
             return ("", false, nil)
         }
-        print("\(Date()) Start to create postgres db backup")
+        self.logger.log("\(Date()) Start to create postgres db backup")
         
         let backupPath = URL(fileURLWithPath: PreferencesController.databasePath()).appendingPathComponent("DataBackup").path
         var host = ""
@@ -299,7 +301,7 @@ pip3 install face_recognition
             database = PreferencesController.remoteDBDatabase()
             
         }else{
-            print("Database is not Postgres. backup aborted.")
+            self.logger.log("Database is not Postgres. backup aborted.")
             return ("", false, nil)
         }
         return PostgresConnection.default.backupDatabase(commandPath: cmd, database: database, host: host, port: port, user: user, backupPath: backupPath, suffix: suffix)
@@ -313,7 +315,7 @@ pip3 install face_recognition
         }else if (location == .fromSetting && PreferencesController.databaseLocation() == "network") || location == .remoteDBServer {
             return self.createPostgresDatabaseBackup(suffix: suffix)
         }else{
-            print("Database location error. backup aborted.")
+            self.logger.log("Database location error. backup aborted.")
             return ("", false, nil)
         }
     }

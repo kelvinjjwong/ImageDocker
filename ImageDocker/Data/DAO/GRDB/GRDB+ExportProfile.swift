@@ -11,6 +11,8 @@ import GRDB
 
 class ExportDaoGRDB : ExportDaoInterface {
     
+    let logger = ConsoleLogger(category: "ExportDaoGRDB")
+    
     // MARK: - PROFILE CRUD
     
     func getOrCreateExportProfile(id:String,
@@ -64,7 +66,7 @@ class ExportDaoGRDB : ExportDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return profile!
     }
@@ -184,7 +186,7 @@ class ExportDaoGRDB : ExportDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return date
     }
@@ -206,7 +208,7 @@ class ExportDaoGRDB : ExportDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return (subfolder, filename)
     }
@@ -219,7 +221,7 @@ class ExportDaoGRDB : ExportDaoInterface {
                 profile = try ExportProfile.fetchOne(db, key: id)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return profile
     }
@@ -232,7 +234,7 @@ class ExportDaoGRDB : ExportDaoInterface {
                 profile = try ExportProfile.fetchOne(db, key: ["name" : name])
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return profile
     }
@@ -246,7 +248,7 @@ class ExportDaoGRDB : ExportDaoInterface {
                 profiles = try ExportProfile.fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return profiles
     }
@@ -319,8 +321,8 @@ class ExportDaoGRDB : ExportDaoInterface {
         
         // TODO: after profile.lastExportEndTime
         
-//        print("sql for export images:")
-//        print(sql)
+//        self.logger.log("sql for export images:")
+//        self.logger.log(sql)
         
         return sql
     }
@@ -334,7 +336,7 @@ class ExportDaoGRDB : ExportDaoInterface {
                 result = try Image.fetchAll(db, sql: sql)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -351,7 +353,7 @@ class ExportDaoGRDB : ExportDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -376,7 +378,7 @@ class ExportDaoGRDB : ExportDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -402,7 +404,7 @@ class ExportDaoGRDB : ExportDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -438,7 +440,7 @@ class ExportDaoGRDB : ExportDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         
         do {
@@ -479,7 +481,7 @@ class ExportDaoGRDB : ExportDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         
         do {

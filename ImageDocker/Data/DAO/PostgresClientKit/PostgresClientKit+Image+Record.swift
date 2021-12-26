@@ -11,9 +11,11 @@ import PostgresClientKit
 
 class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
     
+    let logger = ConsoleLogger(category: "ImageRecordDaoPostgresCK")
+    
     func getOrCreatePhoto(filename: String, path: String, parentPath: String, repositoryPath: String?) -> Image {
         let db = PostgresConnection.database()
-        print("trying to get image with path: \(path)")
+        self.logger.log("trying to get image with path: \(path)")
         if let image = Image.fetchOne(db, parameters: ["path" : path]) {
             return image
         }else{
@@ -47,7 +49,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
                 update "Image" set "delFlag" = $1
                 """, parameterValues: [true])
             }catch{
-                print(error)
+                self.logger.log(error)
                 return .ERROR
             }
             return .OK
@@ -66,7 +68,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             update "Image" set path = $1, "repositoryPath" = $2, "subPath" = $3, "containerPath" = $4, id = $5 where path = $6
             """, parameterValues: [newPath, repositoryPath, subPath, containerPath, id, oldPath])
         }catch{
-            print(error)
+            self.logger.log(error)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
             return .ERROR
         }
@@ -81,7 +83,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             update "Image" set "originPath" = $1 where "originPath" = $2
             """, parameterValues: [newRawPath, oldRawPath])
         }catch{
-            print(error)
+            self.logger.log(error)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
             return .ERROR
         }
@@ -96,7 +98,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             update "Image" set "originPath" = $1 where "repositoryPath" = $2
             """, parameterValues: [rawPath, repositoryPath])
         }catch{
-            print(error)
+            self.logger.log(error)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
             return .ERROR
         }
@@ -111,7 +113,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             update "Image" set "originPath" = $1 where path like $2
             """, parameterValues: [rawPath, "\(path.withStash())%"])
         }catch{
-            print(error)
+            self.logger.log(error)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
             return .ERROR
         }
@@ -126,7 +128,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             update "Image" set "repositoryPath" = $1 where path like $2
             """, parameterValues: [repositoryPath, "\(path.withStash())%"])
         }catch{
-            print(error)
+            self.logger.log(error)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
             return .ERROR
         }
@@ -141,7 +143,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             update "Image" set "repositoryPath" = $1 where "repositoryPath" = $2
             """, parameterValues: [newRepository, oldRepositoryPath])
         }catch{
-            print(error)
+            self.logger.log(error)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
             return .ERROR
         }
@@ -156,7 +158,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             update "Image" set path = "repositoryPath" || "subPath" where "repositoryPath" = $1 and "subPath" <> ''
             """, parameterValues: [repositoryPath])
         }catch{
-            print(error)
+            self.logger.log(error)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
             return .ERROR
         }
@@ -212,7 +214,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             UPDATE "Image" set \(valueSets) WHERE path=\(add(&placeholders))
             """, parameterValues: arguments)
         }catch{
-            print(error)
+            self.logger.log(error)
             return .ERROR
         }
         return .OK
@@ -236,7 +238,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
                 """, parameterValues: [detailed, path])
             }
         }catch{
-            print(error)
+            self.logger.log(error)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
             return .ERROR
         }
@@ -251,7 +253,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             UPDATE "Image" set "rotation" = \(rotation) WHERE path=$1
             """, parameterValues: [path])
         }catch{
-            print(error)
+            self.logger.log(error)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
             return .ERROR
         }

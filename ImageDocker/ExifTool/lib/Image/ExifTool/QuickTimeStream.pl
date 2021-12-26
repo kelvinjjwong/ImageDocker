@@ -123,7 +123,7 @@ sub SaveMetaKeys($$$)
         my ($tagID, $format, $pid);
         if ($verbose) {
             $pid = PrintableTagID($id,1);
-            $et->VPrint(0,"$oldIndent+ [Metdata Key entry, Local ID=$pid, $size bytes]\n");
+            $et->Vself.logger.log(0,"$oldIndent+ [Metdata Key entry, Local ID=$pid, $size bytes]\n");
             $$et{INDENT} .= '| ';
         }
 
@@ -163,14 +163,14 @@ sub SaveMetaKeys($$$)
                 } else {
                     $str = '';
                 }
-                $et->VPrint(1, $$et{INDENT}."- Tag '".PrintableTagID($tag)."' ($len bytes)$str\n");
+                $et->Vself.logger.log(1, $$et{INDENT}."- Tag '".PrintableTagID($tag)."' ($len bytes)$str\n");
                 HexDump(\$val, undef, Prefix => $$et{INDENT}) if $verbose > 2;
             }
         }
         if (defined $tagID and defined $format) {
             if ($verbose) {
                 my $t2 = PrintableTagID($tagID);
-                $et->VPrint(0,"$$et{INDENT}Added Local ID $pid = $t2 ($format)\n");
+                $et->Vself.logger.log(0,"$$et{INDENT}Added Local ID $pid = $t2 ($format)\n");
             }
             $$ee{'keys'}{$id} = { TagID => $tagID, Format => $format };
         }
@@ -262,7 +262,7 @@ sub ProcessSamples($)
     my $tell = $raf->Tell();
 
     if ($verbose) {
-        $et->VPrint(0,"---- Extract Embedded ----\n");
+        $et->Vself.logger.log(0,"---- Extract Embedded ----\n");
         $oldIndent = $$et{INDENT};
         $$et{INDENT} = '';
         $parms{MaxLen} = $verbose == 3 ? 96 : 2048 if $verbose < 5;
@@ -295,7 +295,7 @@ sub ProcessSamples($)
         }
         if ($verbose > 1) {
             my $hdr = $$et{SET_GROUP1} ? "$$et{SET_GROUP1} Type='$type' Format='$metaFormat'" : "Type='$type'";
-            $et->VPrint(1, "${hdr}, Sample ".($i+1).' of '.scalar(@$start)." ($size bytes)\n");
+            $et->Vself.logger.log(1, "${hdr}, Sample ".($i+1).' of '.scalar(@$start)." ($size bytes)\n");
             $parms{Addr} = $$start[$i];
             HexDump(\$buff, undef, %parms) if $verbose > 2;
         }
@@ -354,7 +354,7 @@ sub ProcessSamples($)
                     delete $$et{ee};
                 }
             } elsif ($verbose) {
-                $et->VPrint(0, "Unknown meta format ($metaFormat)");
+                $et->Vself.logger.log(0, "Unknown meta format ($metaFormat)");
             }
 
         } elsif ($type eq 'gps ') {
@@ -383,7 +383,7 @@ sub ProcessSamples($)
     }
     if ($verbose) {
         $$et{INDENT} = $oldIndent;
-        $et->VPrint(0,"--------------------------\n");
+        $et->Vself.logger.log(0,"--------------------------\n");
     }
     # clean up
     $raf->Seek($tell, 0); # restore original file position

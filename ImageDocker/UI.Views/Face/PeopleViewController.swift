@@ -10,6 +10,8 @@ import Cocoa
 
 class PeopleViewController: NSViewController {
     
+    let logger = ConsoleLogger(category: "PeopleViewController")
+    
     // MARK: CONSTANTS
     
     fileprivate let FamilyTypes:[String] = ["家人", "亲戚", "家族", "同事", "朋友", "同学", "校友"]
@@ -389,7 +391,7 @@ class PeopleViewController: NSViewController {
                 }
             }
         }
-        print("my relationships: \(myRelationships.count)")
+        self.logger.log("my relationships: \(myRelationships.count)")
         self.relationshipTableController.load(myRelationships)
     }
     
@@ -534,7 +536,7 @@ class PeopleViewController: NSViewController {
     }
     
     fileprivate func onDifferentPersonClicked(id:String, name:String){
-        print("selected \(id) \(name)")
+        self.logger.log("selected \(id) \(name)")
         self.lblFaceDescription.stringValue = ""
         
         if self.faceCollectionViewController.selectedFaceIds.count > 0 {
@@ -555,7 +557,7 @@ class PeopleViewController: NSViewController {
                         c.locked = true
 //                    }
                     let _ = FaceDao.default.saveFaceCrop(c)
-                    print("Face crop \(crop.id) assigned as [\(name)], updated into DB.")
+                    self.logger.log("Face crop \(crop.id) assigned as [\(name)], updated into DB.")
                     
                     if let person = FaceDao.default.getPerson(id: id) {
                         DispatchQueue.main.async {
@@ -572,17 +574,17 @@ class PeopleViewController: NSViewController {
     
     fileprivate func onRecognizeUnknownClicked(id:String) {
         // TODO FUNCTION
-        print("selected menu: \(id)")
+        self.logger.log("selected menu: \(id)")
         self.lblProgressMessage.stringValue = "Recognizing..."
         var faces:[ImageFace] = []
         if id == "all" {
             faces = FaceDao.default.getFaceCrops(peopleId: "", year: nil, month: nil, sample: false, icon: nil, tag: nil, locked: false)
         }else if id == "selected" {
             if self.tblFaceYear.numberOfSelectedRows > 0 && self.tblFaceMonth.numberOfSelectedRows > 0 && self.selectedCategory != "Unknown" {
-                print("selection at \(self.selectedCategory),\(self.selectedSubCategory)")
+                self.logger.log("selection at \(self.selectedCategory),\(self.selectedSubCategory)")
                 faces = FaceDao.default.getFaceCrops(peopleId: "", year: Int(self.selectedCategory), month: Int(selectedSubCategory), sample: false, icon: nil, tag: nil, locked: false)
             }else{
-                print("no selection")
+                self.logger.log("no selection")
                 self.lblProgressMessage.stringValue = "No category is selected."
                 return
             }
@@ -591,7 +593,7 @@ class PeopleViewController: NSViewController {
         }
         if faces.count == 0 {
             self.lblProgressMessage.stringValue = "No face need to be recognized."
-            print("no faces need to be recognized")
+            self.logger.log("no faces need to be recognized")
             return
         }
         var peopleName:[String:String] = [:]
@@ -622,7 +624,7 @@ class PeopleViewController: NSViewController {
                             c.recognizeVersion = "\(version)"
                         }
                         let _ = FaceDao.default.saveFaceCrop(c)
-                        print("Face crop \(face.id) recognized as [\(name)], updated into DB.")
+                        self.logger.log("Face crop \(face.id) recognized as [\(name)], updated into DB.")
                         k += 1
                         DispatchQueue.main.async {
                             let personName = peopleName[name] ?? name
@@ -724,10 +726,10 @@ class PeopleViewController: NSViewController {
 //            if let window = self.theaterWindowController.window {
 //                if self.theaterWindowController.isWindowLoaded {
 //                    window.makeKeyAndOrderFront(self)
-//                    print("order to front")
+//                    self.logger.log("order to front")
 //                }else{
 //                    self.theaterWindowController.showWindow(self)
-//                    print("show window")
+//                    self.logger.log("show window")
 //                }
 //                let vc = window.contentViewController as! TheaterViewController
 //                vc.viewInit(image: imageFile)
@@ -746,23 +748,23 @@ class PeopleViewController: NSViewController {
                         do {
                             try FileManager.default.createDirectory(at: targetFolder, withIntermediateDirectories: true, attributes: nil)
                         }catch{
-                            print("Unable to create directory at \(targetFolder.path)")
-                            print(error)
+                            self.logger.log("Unable to create directory at \(targetFolder.path)")
+                            self.logger.log(error)
                         }
                         let source = URL(fileURLWithPath: face.cropPath).appendingPathComponent(face.subPath).appendingPathComponent(face.filename)
                         do {
                             try FileManager.default.copyItem(at: source, to: target)
-                            print("Copied sample file from [\(source.path)] to [\(target.path)]")
+                            self.logger.log("Copied sample file from [\(source.path)] to [\(target.path)]")
                         }catch{
-                            print("Unable to copy sample file from [\(source.path)] to [\(target.path)]")
-                            print(error)
+                            self.logger.log("Unable to copy sample file from [\(source.path)] to [\(target.path)]")
+                            self.logger.log(error)
                         }
                     }else{
                         do {
                             try FileManager.default.removeItem(at: target)
                         }catch{
-                            print("Failed to delete sample file: \(target.path)")
-                            print(error)
+                            self.logger.log("Failed to delete sample file: \(target.path)")
+                            self.logger.log(error)
                         }
                     }
                 }
@@ -856,7 +858,7 @@ class PeopleViewController: NSViewController {
                                 c.recognizeVersion = "\(version)"
                             }
                             let _ = FaceDao.default.saveFaceCrop(c)
-                            print("Face crop \(crop.id) recognized as [\(name)], updated into DB.")
+                            self.logger.log("Face crop \(crop.id) recognized as [\(name)], updated into DB.")
                             
                             if let person = FaceDao.default.getPerson(id: name) {
                                 DispatchQueue.main.async {
@@ -897,12 +899,12 @@ class PeopleViewController: NSViewController {
                             let parts = line.components(separatedBy: " ")
                             if let total = Int(parts[1]) {
                                 self.totalSamples = total
-                                print("total \(total) samples")
+                                self.logger.log("total \(total) samples")
                                 DispatchQueue.main.async {
                                     self.lblProgressMessage.stringValue = "Preparing trainer..."
                                 }
                             }else{
-                                print("unable to get total number from \(line)")
+                                self.logger.log("unable to get total number from \(line)")
                             }
                         }else if line.starts(with: "PROCESSING IMAGE ") {
                             let parts = line.components(separatedBy: " ")
@@ -910,7 +912,7 @@ class PeopleViewController: NSViewController {
                             let dividen = numbers.components(separatedBy: "/")
                             let number = dividen[0]
                             let name = parts[5]
-                            print("processing \(number), recognized as \(name)")
+                            self.logger.log("processing \(number), recognized as \(name)")
                             DispatchQueue.main.async {
                                 self.lblProgressMessage.stringValue = "Processing sample No.\(number)..."
                             }
@@ -935,7 +937,7 @@ class PeopleViewController: NSViewController {
             menu.append((year, "Unknown faces in \(year)"))
         }
         for a in menu {
-            print("menu: \(a)")
+            self.logger.log("menu: \(a)")
         }
         self.menuRecognizeUnknown.load(menu)
         self.menuRecognizeUnknown.show(sender)

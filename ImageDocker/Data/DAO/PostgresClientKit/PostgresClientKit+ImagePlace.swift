@@ -10,6 +10,8 @@ import Foundation
 
 class PlaceDaoPostgresCK : PlaceDaoInterface {
     
+    let logger = ConsoleLogger(category: "PlaceDaoPostgresCK")
+    
     func getOrCreatePlace(name: String, location: Location) -> ImagePlace {
         let db = PostgresConnection.database()
         if let place = ImagePlace.fetchOne(db, parameters: ["name": name]) {
@@ -68,7 +70,7 @@ class PlaceDaoPostgresCK : PlaceDaoInterface {
             oldPlace.name = oldName
             oldPlace.delete(db)
         }catch {
-            print(error)
+            self.logger.log(error)
             return .ERROR
         }
         return .OK

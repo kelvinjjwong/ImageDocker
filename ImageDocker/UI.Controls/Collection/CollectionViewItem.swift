@@ -10,6 +10,8 @@
 import Cocoa
 
 class CollectionViewItem: NSCollectionViewItem {
+    
+    let logger = ConsoleLogger(category: "CollectionViewItem")
   
     @IBOutlet weak var checkBox: NSButton!
     @IBOutlet weak var lblPlace: NSTextField!
@@ -260,29 +262,29 @@ class CollectionViewItem: NSCollectionViewItem {
                     let tmpFolder = "/tmp/\(uuid)"
                     let tmpPath = "\(tmpFolder)/\(filename)"
                     do {
-                        print("Restoring backup image from [\(backupUrl.path)] to [url.path]")
+                        self.logger.log("Restoring backup image from [\(backupUrl.path)] to [url.path]")
                         try FileManager.default.createDirectory(atPath: tmpFolder, withIntermediateDirectories: true, attributes: nil)
                         try FileManager.default.moveItem(atPath: url.path, toPath: tmpPath)
                         try FileManager.default.copyItem(atPath: backupUrl.path, toPath: url.path)
                         self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Done replace selected image with backup version")
                     }catch{
-                        print("Unable to restore backup image from [\(backupUrl.path)] to [url.path]")
-                        print(error)
+                        self.logger.log("Unable to restore backup image from [\(backupUrl.path)] to [url.path]")
+                        self.logger.log(error)
                         self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Failed to replace selected image with backup version.")
-                        print("Restoring original editable version from \(tmpPath)")
+                        self.logger.log("Restoring original editable version from \(tmpPath)")
                         do {
                             try FileManager.default.removeItem(atPath: url.path)
                             try FileManager.default.moveItem(atPath: tmpPath, toPath: url.path)
                         }catch{
-                            print("Unable to restore original editable version from [\(tmpPath)] to [\(url.path)]")
-                            print(error)
+                            self.logger.log("Unable to restore original editable version from [\(tmpPath)] to [\(url.path)]")
+                            self.logger.log(error)
                         }
                     }
                     do {
                         try FileManager.default.removeItem(atPath: tmpPath)
                         try FileManager.default.removeItem(atPath: tmpFolder)
                     }catch{
-                        print(error)
+                        self.logger.log(error)
                     }
                 }else{
                     self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Selected image's backup version does not exist")
@@ -300,7 +302,7 @@ class CollectionViewItem: NSCollectionViewItem {
             }
             
         }else{
-            print("ERROR: Image object is null or file doesn't exist.")
+            self.logger.log("ERROR: Image object is null or file doesn't exist.")
             return
         }
     }
@@ -311,7 +313,7 @@ class CollectionViewItem: NSCollectionViewItem {
                 let _ = FaceTask.default.recognizeFaces(path: url.path)
             }
         }else{
-            print("ERROR: Image object is null or file doesn't exist.")
+            self.logger.log("ERROR: Image object is null or file doesn't exist.")
             return
         }
     }

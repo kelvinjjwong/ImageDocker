@@ -63,7 +63,7 @@ extension String {
             return match
             //return results.map { nsString.substringWithRange( $0.range )} //rangeAtIndex(0)
         } catch let error as NSError {
-            print("invalid regex: \(error.localizedDescription)")
+            print("\(Date()) [String] invalid regex: \(error.localizedDescription)")
             return []
         }
     }
@@ -227,7 +227,7 @@ public extension Process {
             let data = err.fileHandleForReading.readDataToEndOfFile()
             let _ = String(data: data, encoding: String.Encoding.utf8)!
             err.fileHandleForReading.closeFile()
-//            print(string)
+//            self.logger.log(string)
         }
         
         if let _ = complete {

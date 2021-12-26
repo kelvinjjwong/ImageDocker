@@ -130,7 +130,7 @@ public final class PostgresConnection : ImageDBInterface {
                 status = true
             }catch{
                 err = error
-                print(error)
+                self.logger.log(error)
             }
             
             let data = pipe.fileHandleForReading.readDataToEndOfFile()

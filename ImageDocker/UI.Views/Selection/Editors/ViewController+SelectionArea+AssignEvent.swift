@@ -30,9 +30,9 @@ extension SelectionViewController {
     }
     
     internal func assignEvent() {
-        print("CLICKED ASSIGN EVENT BUTTON")
-        print(self.collectionViewController.imagesLoader.getItems().count)
-        print(self.comboEventList.stringValue)
+        self.logger.log("CLICKED ASSIGN EVENT BUTTON")
+        self.logger.log(self.collectionViewController.imagesLoader.getItems().count)
+        self.logger.log(self.comboEventList.stringValue)
         guard self.collectionViewController.imagesLoader.getItems().count > 0 else {return}
         guard self.comboEventList.stringValue != "" else {return}
         
@@ -45,7 +45,7 @@ extension SelectionViewController {
             
             //TODO TO DO FUNCTION
             //self.refreshTree()
-            print("TO DO FUNCTION")
+            self.logger.log("TO DO FUNCTION")
         })
         accumulator.reset()
         
@@ -59,12 +59,12 @@ extension SelectionViewController {
             }
         }
         if let event = event {
-            //print("PREPARE TO ASSIGN EVENT \(event.name)")
+            //self.logger.log("PREPARE TO ASSIGN EVENT \(event.name)")
             for item:ImageFile in self.collectionViewController.imagesLoader.getItems() {
                 let url:URL = item.url as URL
                 let imageType = url.imageType()
                 if imageType == .photo || imageType == .video {
-                    //print("assigning event: \(event.name)")
+                    //self.logger.log("assigning event: \(event.name)")
                     item.assignEvent(event: event)
                     //ExifTool.helper.assignKeyValueForImage(key: "Event", value: "some event", url: url)
                     let _ = item.save()
@@ -117,7 +117,7 @@ class EventListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
     
     func comboBox(_ comboBox: NSComboBox, completedString string: String) -> String? {
         
-        //print("SubString = \(string)")
+        //self.logger.log("SubString = \(string)")
         
         for event in events {
             let state = event.name
@@ -126,7 +126,7 @@ class EventListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
                 // only use first part of the strings in the list with length of the search string
                 let statePartialStr = state.lowercased()[state.lowercased().startIndex..<state.lowercased().index(state.lowercased().startIndex, offsetBy: string.count)]
                 if statePartialStr.range(of: string.lowercased()) != nil {
-                    //print("SubString Match = \(state)")
+                    //self.logger.log("SubString Match = \(state)")
                     return state
                 }
             }

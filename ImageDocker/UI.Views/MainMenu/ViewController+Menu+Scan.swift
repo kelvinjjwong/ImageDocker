@@ -33,7 +33,7 @@ extension ViewController {
     }
 //    
 //    @objc func scanMenuAction(_ menuItem:NSMenuItem) {
-//        print("clicked scan menu scan now")
+//        self.logger.log("clicked scan menu scan now")
 //        let title = menuItem.title
 //        self.btnScan.selectItem(at: 0)
 //        
@@ -44,7 +44,7 @@ extension ViewController {
 //            menuItem.title = self.titlesOfScanMenu(1, true)
 //            self.onScanDisabled()
 //        }else if title == self.titlesOfScanMenu(2) {
-//            print("clicked extract exif")
+//            self.logger.log("clicked extract exif")
 //        }
 //    }
     

@@ -18,6 +18,8 @@ enum ExecuteState : Int {
 
 struct SQLHelper {
     
+    static let logger = ConsoleLogger(category: "SQLHelper")
+    
     static func appendSqlTextCondition(_ column:String, value:String?, where statement:inout String, args arguments:inout [String]) {
         if value == nil || value == "" {
             statement = "\(statement) AND (\(column)='' OR \(column) IS NULL)"
@@ -46,7 +48,7 @@ struct SQLHelper {
     }
     
     static func errorState(_ error:Error) -> ExecuteState {
-        print(error)
+        SQLHelper.logger.log(error)
         if error.localizedDescription.starts(with: "SQLite error") {
             if error.localizedDescription.hasSuffix("database is locked") {
                 return .DATABASE_LOCKED
@@ -173,7 +175,7 @@ struct SQLHelper {
     
     internal static func _generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String,String) {
         
-        print("SQL conditions: year=\(year) | month=\(month) | day=\(day) | ignoreDate:\(ignoreDate) | country=\(country) | province=\(province) | city=\(city) | place=\(place ?? "") | includeHidden=\(includeHidden)")
+        self.logger.log("SQL conditions: year=\(year) | month=\(month) | day=\(day) | ignoreDate:\(ignoreDate) | country=\(country) | province=\(province) | city=\(city) | place=\(place ?? "") | includeHidden=\(includeHidden)")
         
         var hiddenWhere = ""
         if !includeHidden {
@@ -247,19 +249,19 @@ struct SQLHelper {
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
         let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=true"
         
-        print("SQL args: \(sqlArgs)")
+        SQLHelper.logger.log("SQL args: \(sqlArgs)")
         
-        print("[GRDB Image] Generated SQL statement for all:")
-        print(stmt)
-        print("[GRDB Image] Generated SQL statement for hidden:")
-        print(stmtHidden)
+        SQLHelper.logger.log("[GRDB Image] Generated SQL statement for all:")
+        SQLHelper.logger.log(stmt)
+        SQLHelper.logger.log("[GRDB Image] Generated SQL statement for hidden:")
+        SQLHelper.logger.log(stmtHidden)
         
         return (stmt, stmtHidden, sqlArgs)
     }
     
     internal static func _generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String, String, Bool) {
         
-        print("SQL conditions: year=\(year) | month=\(month) | day=\(day) | event=\(event) | country=\(country) | province=\(province) | city=\(city) | place=\(place) | includeHidden=\(includeHidden)")
+        SQLHelper.logger.log("SQL conditions: year=\(year) | month=\(month) | day=\(day) | event=\(event) | country=\(country) | province=\(province) | city=\(city) | place=\(place) | includeHidden=\(includeHidden)")
         
         var hasEvent = false
         
@@ -307,11 +309,11 @@ struct SQLHelper {
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
         let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=true"
         
-        print("[GRDB Image -> Searching] Generated SQL statement for all:")
-        print(stmt)
-        print("[GRDB Image -> Searching] Generated SQL statement for hidden:")
-        print(stmtHidden)
-        print("SQL args: \(sqlArgs)")
+        SQLHelper.logger.log("[GRDB Image -> Searching] Generated SQL statement for all:")
+        SQLHelper.logger.log(stmt)
+        SQLHelper.logger.log("[GRDB Image -> Searching] Generated SQL statement for hidden:")
+        SQLHelper.logger.log(stmtHidden)
+        SQLHelper.logger.log("SQL args: \(sqlArgs)")
         
         return (stmt, stmtHidden, sqlArgs)
     }
@@ -420,9 +422,9 @@ struct SQLHelper {
         let stmt = "\(stmtWithoutHiddenFlag) \(hiddenFlagStatement)"
         let stmtHidden = "\(stmtWithoutHiddenFlag) "
         
-        print("------")
-        print(stmt)
-        print("------")
+        SQLHelper.logger.log("------")
+        SQLHelper.logger.log(stmt)
+        SQLHelper.logger.log("------")
         
         return (stmt, stmtHidden)
     }

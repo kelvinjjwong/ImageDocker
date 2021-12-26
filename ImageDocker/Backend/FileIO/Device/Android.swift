@@ -10,6 +10,8 @@ import Foundation
 
 struct Android {
     
+    let logger = ConsoleLogger(category: "Android")
+    
     /// singleton instance of this class
     static let bridge = Android()
     
@@ -40,15 +42,15 @@ struct Android {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         pipe.fileHandleForReading.closeFile()
-        print(string)
+        self.logger.log(string)
         if string.range(of: "* failed to start daemon") != nil || string.range(of: "error: cannot connect to daemon") != nil {
             return []
         }
         let lines = string.components(separatedBy: "\n")
         for line in lines {
-            print(line)
+            self.logger.log(line)
             if line.range(of: "device usb") != nil {
-                print(line)
+                self.logger.log(line)
                 let parts = line.components(separatedBy: " ")
                 if parts[0] != "" {
                     result.append(parts[0])
@@ -114,7 +116,7 @@ struct Android {
             device = PhoneDevice(type: .Android, deviceId: id, manufacture: manufacture, model: model)
             device.iccid = iccid
             device.meid = meid
-            print("Android connected: \(manufacture) \(model)")
+            self.logger.log("Android connected: \(manufacture) \(model)")
             return device
         }else{
             return nil
@@ -164,7 +166,7 @@ struct Android {
     }
     
     func existsFile(device id: String, path: String) -> Bool {
-        print("checking if exists \(id) \(path)")
+        self.logger.log("checking if exists \(id) \(path)")
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let command = Process()
@@ -173,18 +175,18 @@ struct Android {
             command.launchPath = adb.path
             command.arguments = ["-s", id, "shell", "ls '\(path)'"]
             //command.launch()
-            //print(command.isRunning)
+            //self.logger.log(command.isRunning)
             do {
                 try command.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
         }
         //command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         pipe.fileHandleForReading.closeFile()
-        print(string)
+        self.logger.log(string)
         if string.starts(with: "ls: \(path): No such file or directory") {
             return false
         }
@@ -192,7 +194,7 @@ struct Android {
     }
     
     func exists(device id: String, path: String) -> Bool {
-        print("checking if exists \(id) \(path)")
+        self.logger.log("checking if exists \(id) \(path)")
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let command = Process()
@@ -201,18 +203,18 @@ struct Android {
             command.launchPath = adb.path
             command.arguments = ["-s", id, "shell", "cd '\(path)'"]
             //command.launch()
-            //print(command.isRunning)
+            //self.logger.log(command.isRunning)
             do {
                 try command.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
         }
         //command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         pipe.fileHandleForReading.closeFile()
-        //print(string)
+        //self.logger.log(string)
         if string.range(of: "No such file or directory") != nil {
             return false
         }
@@ -220,7 +222,7 @@ struct Android {
     }
     
     func files(device id: String, in path: String) -> [PhoneFile] {
-        print("getting files from \(id) \(path)")
+        self.logger.log("getting files from \(id) \(path)")
         var result:[PhoneFile] = []
         let pipe = Pipe()
         autoreleasepool { () -> Void in
@@ -230,18 +232,18 @@ struct Android {
             command.launchPath = adb.path
             command.arguments = ["-s", id, "shell", "cd '\(path)'; ls -gotR"]
             //command.launch()
-            //print(command.isRunning)
+            //self.logger.log(command.isRunning)
             do {
                 try command.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
         }
         //command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         pipe.fileHandleForReading.closeFile()
-        //print(string)
+        //self.logger.log(string)
         if string == "error: device '\(id)' not found" {
             return []
         }
@@ -255,8 +257,8 @@ struct Android {
                                             allowedExt: Naming.FileType.allowed,
                                             allowedSuffix: ["_backup_hd"], // wechat chatroom image/video thumbnails
                                             deviceOS: .android)
-        print("got \(result.count) files from \(id) \(path)")
-        //print("done files")
+        self.logger.log("got \(result.count) files from \(id) \(path)")
+        //self.logger.log("done files")
         return result
     }
     
@@ -274,7 +276,7 @@ struct Android {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         pipe.fileHandleForReading.closeFile()
-        print(string)
+        self.logger.log(string)
         if string != "" {
             let parts = string.components(separatedBy: " ")
             if parts.count > 1 {
@@ -298,7 +300,7 @@ struct Android {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         pipe.fileHandleForReading.closeFile()
-        print(string)
+        self.logger.log(string)
         if string != "" {
             let parts = string.components(separatedBy: " ")
             if parts.count > 1 {
@@ -319,7 +321,7 @@ struct Android {
             do {
                 try command.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
         }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
@@ -330,7 +332,7 @@ struct Android {
     }
     
     func pull(device id: String, from filePath:String, to targetPath:String) -> (Bool, Error?){
-        print("pulling from \(filePath) to \(targetPath)")
+        self.logger.log("pulling from \(filePath) to \(targetPath)")
         let pipe = Pipe()
         var err:Error?
         autoreleasepool { () -> Void in
@@ -342,13 +344,13 @@ struct Android {
             do {
                 try command.run()
             }catch{
-                print(error)
+                self.logger.log(error)
                 err = error
             }
         }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
-        print(string)
+        self.logger.log(string)
         pipe.fileHandleForReading.closeFile()
         let lines = string.components(separatedBy: "\n")
         let result = lines.count > 1 ? lines[lines.count - 2] : ""
@@ -368,14 +370,14 @@ struct Android {
             do {
                 try command.run()
             }catch{
-                print(error)
+                self.logger.log(error)
                 err = error
             }
         }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         pipe.fileHandleForReading.closeFile()
-        print(string)
+        self.logger.log(string)
         let lines = string.components(separatedBy: "\n")
         let rtn = lines.count > 1 ? lines[lines.count - 2] : ""
         return (rtn, err)
@@ -394,7 +396,7 @@ struct Android {
             do {
                 try command.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
         }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
@@ -403,7 +405,7 @@ struct Android {
     }
     
     func folders(device id: String, in path: String) -> [String] {
-        print("getting folders from \(path)")
+        self.logger.log("getting folders from \(path)")
         var result:[String] = []
         let pipe = Pipe()
         autoreleasepool { () -> Void in
@@ -415,7 +417,7 @@ struct Android {
             do {
                 try command.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
         }
         //command.waitUntilExit()
@@ -423,12 +425,12 @@ struct Android {
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         pipe.fileHandleForReading.closeFile()
         result = DeviceShell.getFolderNames(from: string)
-        print("got \(result.count) folders from \(path)")
+        self.logger.log("got \(result.count) folders from \(path)")
         return result
     }
     
     fileprivate func filenamesForReference(device id: String, in path: String, recursive:Bool=false) -> [String:[String]] {
-        print("getting folders from \(path)")
+        self.logger.log("getting folders from \(path)")
         var result:[String:[String]] = [:]
         let param = recursive ? " -tR" : ""
         let pipe = Pipe()
@@ -441,7 +443,7 @@ struct Android {
             do {
                 try command.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
         }
         //command.waitUntilExit()
@@ -479,7 +481,7 @@ struct Android {
     }
     
     func filenames(device id: String, in path: String) -> [String] {
-        print("getting folders from \(path)")
+        self.logger.log("getting folders from \(path)")
         var result:[String] = []
         let pipe = Pipe()
         autoreleasepool { () -> Void in
@@ -491,7 +493,7 @@ struct Android {
             do {
                 try command.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
         }
         //command.waitUntilExit()
@@ -507,7 +509,7 @@ struct Android {
                                           allowedExt: Naming.FileType.allowed,
                                           allowedSuffix: ["_backup_hd"], // wechat chatroom image/video thumbnails
                                           deviceOS: .android)
-        print("got \(result.count) files from \(path)")
+        self.logger.log("got \(result.count) files from \(path)")
         return result
     }
     
@@ -522,7 +524,7 @@ struct Android {
             do {
                 try command.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
         }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()

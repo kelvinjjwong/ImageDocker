@@ -367,7 +367,7 @@ class EditRepositoryViewController: NSViewController {
                 
                 let msg = "\(Words.hidden.word()):\(container.hiddenByRepository), \(Words.total.word()):\(imagesTotal), \(Words.imageMissingRepositoryPath.word()):\(imagesWithoutRepoPath), \(Words.imageMissingSubPath.word()):\(imagesWithoutSubPath), \(Words.imageMissingId.word()):\(imagesWithoutId), \(Words.imageNotMatchingRepository.word()):\(imagesUnmatchedRepoPath), \(Words.containerNoRepo.word()):\(containersWithoutRepoPath), \(Words.containerNoSub.word()):\(containersWithoutSubPath), \(Words.imageWithoutFace.word()):\(imageWithoutFace), \(Words.imageNotYetScanFace.word()):\(imageNotYetFacialDetection)"
                 
-                print(msg)
+                self.logger.log(msg)
                 DispatchQueue.main.async {
                     self.lblMessage.stringValue = msg
                     self.toggleButtons(true)
@@ -398,7 +398,7 @@ class EditRepositoryViewController: NSViewController {
             }catch{
                 pass = false
                 messageBox.stringValue = "Unable to create directory at \(path)"
-                print(error)
+                self.logger.log(error)
             }
         }
         return pass
@@ -669,13 +669,13 @@ class EditRepositoryViewController: NSViewController {
                             do {
                                 try FileManager.default.createDirectory(at: containerUrl, withIntermediateDirectories: true, attributes: nil)
                             }catch{
-                                print(error)
+                                self.logger.log(error)
                             }
                             do { // copy file
                                 try FileManager.default.copyItem(atPath: sourcePath, toPath: targetPath)
                                 copiedCount += 1
                             }catch{
-                                print(error)
+                                self.logger.log(error)
                                 errorCount += 1
                             }
                         }
@@ -911,12 +911,12 @@ class EditRepositoryViewController: NSViewController {
                                 do {
                                     try FileManager.default.createDirectory(at: containerUrl, withIntermediateDirectories: true, attributes: nil)
                                 }catch{
-                                    print(error)
+                                    self.logger.log(error)
                                 }
                                 do { // copy file
                                     try FileManager.default.copyItem(at: oldUrl, to: newUrl)
                                 }catch{
-                                    print(error)
+                                    self.logger.log(error)
                                 }
                             }
                             
@@ -1033,12 +1033,12 @@ class EditRepositoryViewController: NSViewController {
                                 do {
                                     try FileManager.default.createDirectory(at: containerUrl, withIntermediateDirectories: true, attributes: nil)
                                 }catch{
-                                    print(error)
+                                    self.logger.log(error)
                                 }
                                 do { // no file in new place, copy file
                                     try FileManager.default.copyItem(at: oldUrl, to: newUrl)
                                 }catch{
-                                    print(error)
+                                    self.logger.log(error)
                                 }
                             }
                         }
@@ -1165,12 +1165,12 @@ class EditRepositoryViewController: NSViewController {
                                 do {
                                     try FileManager.default.createDirectory(at: containerUrl, withIntermediateDirectories: true, attributes: nil)
                                 }catch{
-                                    print(error)
+                                    self.logger.log(error)
                                 }
                                 do { // copy file
                                     try FileManager.default.copyItem(at: oldUrl, to: newUrl)
                                 }catch{
-                                    print(error)
+                                    self.logger.log(error)
                                 }
                             }
                         }
@@ -1245,12 +1245,12 @@ class EditRepositoryViewController: NSViewController {
                                 do {
                                     try FileManager.default.createDirectory(at: containerUrl, withIntermediateDirectories: true, attributes: nil)
                                 }catch{
-                                    print(error)
+                                    self.logger.log(error)
                                 }
                                 do { // copy file
                                     try FileManager.default.copyItem(at: oldUrl, to: newUrl)
                                 }catch{
-                                    print(error)
+                                    self.logger.log(error)
                                 }
                             }
                             
@@ -1300,7 +1300,7 @@ class EditRepositoryViewController: NSViewController {
                                            onCompleted: { data in
                                                 DispatchQueue.main.async {
                                                     let msg = "Normalized \(count) duplicated image-sets. Updated \(updateCount) images."
-                                                    print(msg)
+                                                    self.logger.log(msg)
                                                     self.lblMessage.stringValue = msg
                                                     self.working = false
                                                     
@@ -1545,7 +1545,7 @@ class EditRepositoryViewController: NSViewController {
                                                             msg += ", cleaning memory..."
                                                         }
                                                     }
-                                                    print(msg)
+                                                    self.logger.log(msg)
                                                     self.working = false
                                                     self.logger.log(">>> REMAIN \(self.continousWorkingRemain)")
                                                     if self.continousWorkingRemain <= 0 {
@@ -1604,7 +1604,7 @@ class EditRepositoryViewController: NSViewController {
                     self.accumulator?.setTarget(total)
                 }
                 for i in begin..<images.count {
-                    print(">>> GETTING IMAGE index \(i), TOTAL \(images.count)")
+                    self.logger.log(">>> GETTING IMAGE index \(i), TOTAL \(images.count)")
                     let image = images[i]
                     
                     if Naming.FileType.recognize(from: image.filename) != .photo {
@@ -2049,8 +2049,8 @@ extension EditRepositoryViewController : DeviceListDelegate {
     fileprivate func displayDeviceInfo(deviceId: String, updateDB:Bool = false) {
         
         if let device = DeviceDao.default.getDevice(deviceId: deviceId) {
-            //print("in device id = \(deviceId)")
-            //print("queried device id = \(device.deviceId)")
+            //self.logger.log("in device id = \(deviceId)")
+            //self.logger.log("queried device id = \(device.deviceId)")
             self.lblDeviceId.stringValue = device.deviceId ?? ""
             var name = device.name ?? ""
             if name == "" {

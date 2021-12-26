@@ -79,6 +79,8 @@ struct ImagePropertyRules {
 
 struct FileTypeRecognizer {
     
+    let logger = ConsoleLogger(category: "FileTypeRecognizer")
+    
     let photoExts:[String] = ["jpg", "jpeg", "png"]
     let videoExts:[String] = ["mov", "mp4", "mpeg", "mts", "m2ts"]
     
@@ -98,7 +100,7 @@ struct FileTypeRecognizer {
                 }
             }
             catch {
-                print("Unexpected error occured when recognizing image type: \(error).")
+                self.logger.log("Unexpected error occured when recognizing image type: \(error).")
             }
         }
         
@@ -206,7 +208,7 @@ class CameraModelRecognizer {
         guard maker != "" && model != "" else {return model}
         for m in models.keys {
             if maker == m {
-                //print("Recognized maker \(m), trying to get name of model \(model)")
+                //self.logger.log("Recognized maker \(m), trying to get name of model \(model)")
                 for mm in models[m]! {
                     if model.starts(with: mm.key) {
                         return mm.value + " (" + model + ")"
@@ -222,10 +224,10 @@ class CameraModelRecognizer {
         guard maker != "" && model != "" else {return model}
         for m in models.keys {
             if maker == m {
-                //print("Recognized maker \(m), trying to get market name of model \(model)")
+                //self.logger.log("Recognized maker \(m), trying to get market name of model \(model)")
                 for mm in models[m]! {
                     if model.starts(with: mm.key) {
-                        //print("Got market name [\(mm.value)] of [\(m) \(model)]")
+                        //self.logger.log("Got market name [\(mm.value)] of [\(m) \(model)]")
                         return mm.value
                     }
                 }

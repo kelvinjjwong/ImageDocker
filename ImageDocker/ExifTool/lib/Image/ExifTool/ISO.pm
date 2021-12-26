@@ -150,7 +150,7 @@ sub ProcessISO($$)
             $tagTablePtr = GetTagTable('Image::ExifTool::ISO::Main');
         }
         my $type = unpack('C', $buff);
-        $et->VPrint(0, "Volume descriptor type $type ($volumeDescriptorType{$type})\n");
+        $et->Vself.logger.log(0, "Volume descriptor type $type ($volumeDescriptorType{$type})\n");
         last if $type == 255;   # stop at terminator
         next unless $$tagTablePtr{$type};
         my $subTablePtr = GetTagTable($$tagTablePtr{$type}{SubDirectory}{TagTable});

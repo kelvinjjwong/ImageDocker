@@ -1454,18 +1454,18 @@ sub ProcessID3($$)
         $et->FoundTag('ID3Size', $id3Len);
         # process ID3v2 header if it exists
         if (%id3Header) {
-            $et->VPrint(0, "$id3Header{DirName}:\n");
+            $et->Vself.logger.log(0, "$id3Header{DirName}:\n");
             $et->ProcessDirectory(\%id3Header, $tagTablePtr);
         }
         # process ID3v1 trailer if it exists
         if (%id3Trailer) {
-            $et->VPrint(0, "ID3v1:\n");
+            $et->Vself.logger.log(0, "ID3v1:\n");
             SetByteOrder('MM');
             $tagTablePtr = GetTagTable('Image::ExifTool::ID3::v1');
             $et->ProcessDirectory(\%id3Trailer, $tagTablePtr);
             # process "Enhanced TAG" information if available
             if ($id3Trailer{EnhancedTAG}) {
-                $et->VPrint(0, "ID3v1 Enhanced TAG:\n");
+                $et->Vself.logger.log(0, "ID3v1 Enhanced TAG:\n");
                 $tagTablePtr = GetTagTable('Image::ExifTool::ID3::v1_Enh');
                 $id3Trailer{DataPt} = $id3Trailer{EnhancedTAG};
                 $id3Trailer{DataPos} -= 227; # (227 = length of Enhanced TAG block)

@@ -16,6 +16,8 @@ import GRDB
 
 class ImageFile {
     
+    let logger = ConsoleLogger(category: "ImageFile")
+    
     // MARK: - URL
   
     var url: URL
@@ -25,7 +27,7 @@ class ImageFile {
         if let img = self.imageData {
             let pathOfRepository = img.repositoryPath.withoutStash()
             if let repo = RepositoryDao.default.getContainer(path: pathOfRepository) {
-                print("backup url: \(repo.storagePath.withStash())\(img.subPath)")
+                self.logger.log("backup url: \(repo.storagePath.withStash())\(img.subPath)")
                 return URL(fileURLWithPath: "\(repo.storagePath.withStash())\(img.subPath)")
             }
         }
@@ -157,7 +159,7 @@ class ImageFile {
     // MARK: - LOADER
     
     // READ FROM DATABASE
-    init (photoFile:Image, indicator:Accumulator? = nil, metaInfoStore:MetaInfoStoreDelegate? = nil, sharedDB:DatabaseWriter? = nil) {
+    init (photoFile:Image, indicator:Accumulator? = nil, loadExifFromFile:Bool = true, metaInfoStore:MetaInfoStoreDelegate? = nil, sharedDB:DatabaseWriter? = nil) {
         exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"
         exifDateFormatWithTimezone.dateFormat = "yyyy:MM:dd HH:mm:ssxxx"
         
@@ -190,49 +192,52 @@ class ImageFile {
         
         let now = Date()
         
-        if self.imageData?.updateExifDate == nil || self.imageData?.photoTakenYear == 0 || self.imageData?.photoTakenYear == nil || self.imageData?.photoTakenDate == nil {
-            
-            if let data = self.imageData {
-                if let datetime = Naming.DateTime.get(from: data), datetime < now {
-                    self.storePhotoTakenDate(dateTime: datetime)
-                    needSave = true
-                }else{
-                    // exif not loaded yet
-                    autoreleasepool { () -> Void in
-                        self.loadMetaInfoFromOSX()
-                        self.loadMetaInfoFromExif()
-                        
+        if loadExifFromFile {
+            if self.imageData?.updateExifDate == nil || self.imageData?.photoTakenYear == 0 || self.imageData?.photoTakenYear == nil || self.imageData?.photoTakenDate == nil {
+                
+                if let data = self.imageData {
+                    if let datetime = Naming.DateTime.get(from: data), datetime < now {
+                        self.storePhotoTakenDate(dateTime: datetime)
                         needSave = true
+                    }else{
+                        // exif not loaded yet
+                        autoreleasepool { () -> Void in
+                            self.loadMetaInfoFromOSX()
+                            self.loadMetaInfoFromExif()
+                            
+                            needSave = true
+                        }
                     }
+                }
+                
+            }
+            
+            if self.imageData?.cameraMaker == nil {
+                autoreleasepool { () -> Void in
+                    self.loadMetaInfoFromOSX()
+                    self.loadMetaInfoFromExif()
+                    
+                    needSave = true
                 }
             }
             
-        }
-        
-        if self.imageData?.cameraMaker == nil {
-            autoreleasepool { () -> Void in
-                self.loadMetaInfoFromOSX()
-                self.loadMetaInfoFromExif()
-                
+            if self.isNeedLoadLocation() {
                 needSave = true
+                autoreleasepool { () -> Void in
+                    //self.logger.log("LOADING LOCATION")
+                    loadLocation(locationConsumer: self)
+                }
             }
-        }
-        
-        if self.isNeedLoadLocation() {
-            needSave = true
-            autoreleasepool { () -> Void in
-                //print("LOADING LOCATION")
-                loadLocation(locationConsumer: self)
+            
+            if isPhoto || isVideo {
+                originalCoordinate = location.coordinate
             }
-        }
-        if isPhoto || isVideo {
-            originalCoordinate = location.coordinate
-        }
-        
-        self.recognizePlace()
-        
-        if self.imageData?.updateExifDate == nil {
-            self.imageData?.updateExifDate = Date()
+            
+            self.recognizePlace()
+            
+            if self.imageData?.updateExifDate == nil {
+                self.imageData?.updateExifDate = Date()
+            }
         }
         
         if needSave {
@@ -262,13 +267,13 @@ class ImageFile {
         self.metaInfoHolder = metaInfoStore ?? MetaInfoHolder()
         
         if let repo = repository {
-            print("repo has value, getOrCreatePhoto")
+            self.logger.log("repo has value, getOrCreatePhoto")
             self.imageData = ImageRecordDao.default.getOrCreatePhoto(filename: fileName,
                                                              path: url.path,
                                                              parentPath: url.deletingLastPathComponent().path,
                                                              repositoryPath: repo.repositoryPath.withStash())
         }else{
-            print("repo is null, getOrCreatePhoto")
+            self.logger.log("repo is null, getOrCreatePhoto")
             self.imageData = ImageRecordDao.default.getOrCreatePhoto(filename: fileName,
                                                                  path: url.path,
                                                                  parentPath: url.deletingLastPathComponent().path,
@@ -276,7 +281,7 @@ class ImageFile {
         }
         
         if !quickCreate {
-            print("LOAD META FROM DB BY IMAGE URL")
+            self.logger.log("LOAD META FROM DB BY IMAGE URL")
             loadMetaInfoFromDatabase()
             
             if self.imageData?.updateExifDate == nil || self.imageData?.photoTakenYear == 0 {
@@ -287,7 +292,7 @@ class ImageFile {
                 }
                 
             }
-            //print("loaded image coordinate: \(self.latitudeBaidu) \(self.longitudeBaidu)")
+            //self.logger.log("loaded image coordinate: \(self.latitudeBaidu) \(self.longitudeBaidu)")
             if self.imageData?.updateLocationDate == nil {
                 if self.location.coordinate != nil && self.location.coordinate!.isNotZero {
                     //BaiduLocation.queryForAddress(lat: self.latitudeBaidu, lon: self.longitudeBaidu, locationConsumer: self)

@@ -4,7 +4,7 @@
 # import the necessary packages
 
 import time
-print("STARTUP {} Preparing".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))))
+self.logger.log("STARTUP {} Preparing".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))))
 
 from imutils import paths
 import face_recognition
@@ -25,11 +25,11 @@ ap.add_argument("-d", "--detection-method", type=str, default="cnn",
 args = vars(ap.parse_args())
 
 # grab the paths to the input images in our dataset
-print("STARTUP {} Quantifying faces...".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))))
+self.logger.log("STARTUP {} Quantifying faces...".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))))
 imagePaths = list(paths.list_images(args["dataset"]))
 
 total = len(imagePaths)
-print("TOTAL {}".format(total))
+self.logger.log("TOTAL {}".format(total))
 
 # initialize the list of known encodings and known names
 knownEncodings = []
@@ -41,7 +41,7 @@ for (i, imagePath) in enumerate(imagePaths):
 	name = imagePath.split(os.path.sep)[-2]
 
 
-	print("PROCESSING IMAGE {} {}/{} {}".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())),
+	self.logger.log("PROCESSING IMAGE {} {}/{} {}".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())),
 		i + 1,
 		len(imagePaths),
 		name))
@@ -67,10 +67,10 @@ for (i, imagePath) in enumerate(imagePaths):
 		knownNames.append(name)
 
 # dump the facial encodings + names to disk
-print("ENCODE {} Serializing encodings...".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))))
+self.logger.log("ENCODE {} Serializing encodings...".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))))
 data = {"encodings": knownEncodings, "names": knownNames}
 f = open(args["encodings"], "wb")
 f.write(pickle.dumps(data))
 f.close()
-print("DONE {}".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))))
+self.logger.log("DONE {}".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))))
 

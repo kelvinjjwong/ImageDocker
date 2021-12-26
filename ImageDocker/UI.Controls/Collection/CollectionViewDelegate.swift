@@ -16,14 +16,14 @@ extension ViewController {
             let viewItem = item as! CollectionViewItem
             viewItem.setHighlight(selected: selected)
             if selected {
-                //print("SELECTED IMAGE COORD IS ZERO ? \(viewItem.imageFile?.location.coordinate?.isZero) - \(viewItem.imageFile?.fileName)")
+                //self.logger.log("SELECTED IMAGE COORD IS ZERO ? \(viewItem.imageFile?.location.coordinate?.isZero) - \(viewItem.imageFile?.fileName)")
                 self.selectImageFile(viewItem.imageFile!)
             }
         }
     }
     
     func refreshCollectionView() {
-        print("REFRESHING COLLECTION VIEW")
+        self.logger.log("REFRESHING COLLECTION VIEW")
         var needRefreshLocation = false
         for item in imagesLoader.getItems() {
             if item.location.place == "" && item.location.coordinate != nil && (item.location.coordinate?.isNotZero)! {
@@ -31,15 +31,15 @@ extension ViewController {
             }
         }
         if needRefreshLocation {
-            //print("REFRESH LOCATIONS")
+            //self.logger.log("REFRESH LOCATIONS")
             refreshImagesLocation()
         }else{
-            print("REORG ITEMS")
+            self.logger.log("REORG ITEMS")
             DispatchQueue.main.async{
                 self.imagesLoader.reorganizeItems(considerPlaces: true)
-                print("reloading data in main collection view")
+                self.logger.log("reloading data in main collection view")
                 self.collectionView.reloadData()
-                print("reloaded data in main collection view")
+                self.logger.log("reloaded data in main collection view")
             }
         }
     }
@@ -177,10 +177,10 @@ extension ViewController : CollectionViewItemQuickLookDelegate {
 //        if let window = self.theaterWindowController.window {
 //            if self.theaterWindowController.isWindowLoaded {
 //                window.makeKeyAndOrderFront(self)
-//                print("order to front")
+//                self.logger.log("order to front")
 //            }else{
 //                self.theaterWindowController.showWindow(self)
-//                print("show window")
+//                self.logger.log("show window")
 //            }
 //            let vc = window.contentViewController as! TheaterViewController
 //            vc.viewInit(image: image)
@@ -207,10 +207,10 @@ extension ViewController : CollectionViewItemQuickLookDelegate {
 //        if let window = self.theaterWindowController.window {
 //            if self.theaterWindowController.isWindowLoaded {
 //                window.makeKeyAndOrderFront(self)
-//                print("order to front")
+//                self.logger.log("order to front")
 //            }else{
 //                self.theaterWindowController.showWindow(self)
-//                print("show window")
+//                self.logger.log("show window")
 //            }
 //            let vc = window.contentViewController as! TheaterViewController
 //            vc.viewInit(year: collection.year, month: collection.month, day: collection.day, event: event)
@@ -288,7 +288,7 @@ extension ViewController : CollectionViewItemCheckDelegate {
                 
                 let section = section as! HeaderView
                 
-                //print("section title: \(section.sectionTitle.stringValue)")
+                //self.logger.log("section title: \(section.sectionTitle.stringValue)")
                 var shouldUncheckSection:Bool = true
                 let sec = imagesLoader.getSection(title: section.sectionTitle.stringValue, createIfNotExist: false)
                 if sec != nil {
@@ -309,7 +309,7 @@ extension ViewController : CollectionViewItemCheckDelegate {
     }
     
     func onCollectionViewItemCheck(_ item: CollectionViewItem, checkBySection:Bool) {
-        //print("checked: \(item.imageFile?.url.lastPathComponent ?? "")")
+        //self.logger.log("checked: \(item.imageFile?.url.lastPathComponent ?? "")")
         if let imageFile = item.imageFile {
             self.selectionViewController.collectionViewController.imagesLoader.addItem(imageFile)
             self.selectionViewController.collectionViewController.imagesLoader.reorganizeItems()
@@ -324,7 +324,7 @@ extension ViewController : CollectionViewItemCheckDelegate {
     }
     
     func onCollectionViewItemUncheck(_ item: CollectionViewItem, checkBySection:Bool) {
-        //print("unchecked: \(item.imageFile?.url.lastPathComponent ?? "")")
+        //self.logger.log("unchecked: \(item.imageFile?.url.lastPathComponent ?? "")")
         if let imageFile = item.imageFile {
             self.selectionViewController.collectionViewController.imagesLoader.removeItem(imageFile)
             self.selectionViewController.collectionViewController.imagesLoader.reorganizeItems()
@@ -387,6 +387,8 @@ extension ViewController : PlacesCompletionEvent {
 
 class MetaConsumer : LocationConsumer {
     
+    let logger = ConsoleLogger(category: "MetaConsumer")
+    
     
     var imageFile:ImageFile
     let accumulator:Accumulator?
@@ -396,22 +398,22 @@ class MetaConsumer : LocationConsumer {
         self.imageFile = imageFile
         self.accumulator = accumulator
         self.onCompleteHandler = onComplete
-        //print("META CONSUMER INIT")
+        //self.logger.log("META CONSUMER INIT")
     }
     
     private func checkComplete(){
         if accumulator != nil && (accumulator?.add("Organizing images ..."))! {
             if self.onCompleteHandler != nil {
-                //print("ON COMPLETE")
+                //self.logger.log("ON COMPLETE")
                 onCompleteHandler?.onPlacesCompleted()
             }
         }else{
-            //print("ACCUMULATOR IS NULL")
+            //self.logger.log("ACCUMULATOR IS NULL")
         }
     }
     
     func consume(location:Location){
-        //print("CONSUME LOCATION")
+        //self.logger.log("CONSUME LOCATION")
         imageFile.metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Country", value: location.country))
         imageFile.metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Province", value: location.province))
         imageFile.metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "City", value: location.city))
@@ -424,15 +426,15 @@ class MetaConsumer : LocationConsumer {
         imageFile.metaInfoHolder.setMetaInfo(MetaInfo(category: "Location", subCategory: "Baidu", title: "Suggest Place", value: location.place))
         
         imageFile.recognizePlace()
-        //print("total \(accumulator?._target) , current \(accumulator?.current())")
-        //print("======")
+        //self.logger.log("total \(accumulator?._target) , current \(accumulator?.current())")
+        //self.logger.log("======")
         
         
         checkComplete()
     }
     
     func alert(status: Int, message: String, popup: Bool) {
-        print("\(status) : \(message)")
+        self.logger.log("\(status) : \(message)")
     }
     
 }

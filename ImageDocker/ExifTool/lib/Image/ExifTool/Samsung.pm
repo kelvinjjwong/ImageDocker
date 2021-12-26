@@ -1201,7 +1201,7 @@ SamBlock:
                 $fixup->AddFixup(length($buff) - $offsetPos);
                 $fixup->AddFixup(length($buff) - $offsetPos + 4);
             }
-            $et->VPrint(0, "Writing Samsung trailer ($dirLen bytes)\n") if $verbose;
+            $et->Vself.logger.log(0, "Writing Samsung trailer ($dirLen bytes)\n") if $verbose;
             Write($$dirInfo{OutFile}, $buff) or return -1;
             return 1;
         }

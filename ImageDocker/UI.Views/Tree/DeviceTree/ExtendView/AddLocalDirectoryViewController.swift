@@ -185,10 +185,10 @@ class AddLocalDirectoryViewController: NSViewController, DirectoryViewGotoDelega
     }
     
     func gotoParent() {
-//        print("current: \(currentPath.path)")
+//        self.logger.log("current: \(currentPath.path)")
         let parent = currentPath.deletingLastPathComponent()
         self.currentPath = parent
-//        print("parent: \(currentPath.path)")
+//        self.logger.log("parent: \(currentPath.path)")
         goto(url: parent)
     }
     
@@ -331,7 +331,7 @@ extension DirectoryFolderTableDelegate : NSTableViewDelegate {
         numberFormatter.groupingSize = 3
         
         let info:String = self.folders[row]
-        //print(info)
+        //self.logger.log(info)
         var value = ""
         //var tip: String? = nil
         if let id = tableColumn?.identifier {

@@ -10,6 +10,8 @@ import Cocoa
 
 class ExportConfigurationViewController: NSViewController {
     
+    let logger = ConsoleLogger(category: "ExportConfigurationViewController")
+    
     // MARK: - CONTROLS
     
     @IBOutlet weak var txtName: NSTextField!
@@ -281,14 +283,14 @@ class ExportConfigurationViewController: NSViewController {
             self.toggleGroup_Repository.enable()
             self.toggleGroup_Repository.selected = "include"
             let value = repos.replacingFirstOccurrence(of: "include:", with: "")
-            print("repo: \(value)")
+            self.logger.log("repo: \(value)")
             self.repositoryTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
             self.repositoryTableController.enableCheckboxes()
         }else if repos.hasPrefix("exclude:") {
             self.toggleGroup_Repository.enable()
             self.toggleGroup_Repository.selected = "exclude"
             let value = repos.replacingFirstOccurrence(of: "exclude:", with: "")
-            print("repo: \(value)")
+            self.logger.log("repo: \(value)")
             self.repositoryTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
             self.repositoryTableController.enableCheckboxes()
         }
@@ -302,14 +304,14 @@ class ExportConfigurationViewController: NSViewController {
             self.toggleGroup_Event.enable()
             self.toggleGroup_Event.selected = "include"
             let value = events.replacingFirstOccurrence(of: "include:", with: "")
-            print("event: \(value)")
+            self.logger.log("event: \(value)")
             self.eventTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
             self.eventTableController.enableCheckboxes()
         }else if events.hasPrefix("exclude:") {
             self.toggleGroup_Event.enable()
             self.toggleGroup_Event.selected = "exclude"
             let value = events.replacingFirstOccurrence(of: "exclude:", with: "")
-            print("event: \(value)")
+            self.logger.log("event: \(value)")
             self.eventTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
             self.eventTableController.enableCheckboxes()
         }
@@ -323,14 +325,14 @@ class ExportConfigurationViewController: NSViewController {
             self.toggleGroup_People.enable()
             self.toggleGroup_People.selected = "include"
             let value = people.replacingFirstOccurrence(of: "include:", with: "")
-            print("people: \(value)")
+            self.logger.log("people: \(value)")
             self.peopleTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
             self.peopleTableController.enableCheckboxes()
         }else if people.hasPrefix("exclude:") {
             self.toggleGroup_People.enable()
             self.toggleGroup_People.selected = "exclude"
             let value = people.replacingFirstOccurrence(of: "exclude:", with: "")
-            print("people: \(value)")
+            self.logger.log("people: \(value)")
             self.peopleTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
             self.peopleTableController.enableCheckboxes()
         }
@@ -344,14 +346,14 @@ class ExportConfigurationViewController: NSViewController {
             self.toggleGroup_Family.enable()
             self.toggleGroup_Family.selected = "include"
             let value = family.replacingFirstOccurrence(of: "include:", with: "")
-            print("family: \(value)")
+            self.logger.log("family: \(value)")
             self.familyTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
             self.familyTableController.enableCheckboxes()
         }else if family.hasPrefix("exclude:") {
             self.toggleGroup_Family.enable()
             self.toggleGroup_Family.selected = "exclude"
             let value = family.replacingFirstOccurrence(of: "exclude:", with: "")
-            print("family: \(value)")
+            self.logger.log("family: \(value)")
             self.familyTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
             self.familyTableController.enableCheckboxes()
         }
@@ -487,8 +489,8 @@ class ExportConfigurationViewController: NSViewController {
                                                                subFolder: form.subFolder)
             
             if status != .OK {
-                print(status)
-                print("Unable to update export profile id=\(self.editingId)")
+                self.logger.log(status)
+                self.logger.log("Unable to update export profile id=\(self.editingId)")
                 return
             }else{
                 profile = form
@@ -496,9 +498,9 @@ class ExportConfigurationViewController: NSViewController {
             }
         }
         
-        print("profile id \(profile.id)")
+        self.logger.log("profile id \(profile.id)")
         if let vc = self.profileStackItems[profile.id] {
-            print("going to update view \(profile.id)")
+            self.logger.log("going to update view \(profile.id)")
             vc.updateView(profile: profile)
         }else{
             self.addProfileItem(profile: profile)
@@ -519,7 +521,7 @@ class ExportConfigurationViewController: NSViewController {
                                     self.fillFields(profile: profile)
         }, onDelete: {
             if Alert.dialogOKCancel(question: "DELETE PROFILE", text: "Do you confirm to delete profile [\(profile.name)] ?") {
-                print("proceed delete")
+                self.logger.log("proceed delete")
                 let state = ExportDao.default.deleteExportProfile(id: profile.id)
                 if state == .OK {
                     NSLayoutConstraint.deactivate(viewController.view.constraints)
@@ -646,7 +648,7 @@ class ExportConfigurationViewController: NSViewController {
             profile = pf
         }
         let sql = ExportDao.default.getSQLForImageExport(profile: profile)
-//        print(sql)
+//        self.logger.log(sql)
         self.lblCalculate.stringValue = "Copied SQL to clipboard."
         let pasteboard = NSPasteboard.general
         pasteboard.declareTypes([.string], owner: nil)

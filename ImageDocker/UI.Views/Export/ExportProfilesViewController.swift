@@ -10,6 +10,8 @@ import Cocoa
 
 class ExportProfilesViewController: NSViewController {
     
+    let logger = ConsoleLogger(category: "ExportProfilesViewController")
+    
     @IBOutlet weak var stackView: NSStackView!
     private var window:NSWindow? = nil
     
@@ -58,11 +60,11 @@ class ExportProfilesViewController: NSViewController {
             viewController.btnExport.isEnabled = false
             viewController.btnStop.isHidden = false
             DispatchQueue.global().async {
-                print(">>>>>>>>>> STARTED EXPORT PROFILE \(profile.id)")
+                self.logger.log(">>>>>>>>>> STARTED EXPORT PROFILE \(profile.id)")
                 let (state, message) = ExportManager.default.withMessageBox(viewController.lblMessage).export(profile: profile, rehearsal: false, limit: nil)
-                print("=================== EXPORT END ================")
-                print("state= \(state)")
-                print("message= \(message)")
+                self.logger.log("=================== EXPORT END ================")
+                self.logger.log("state= \(state)")
+                self.logger.log("message= \(message)")
                 DispatchQueue.main.async {
                     viewController.btnExport.isEnabled = true
                     viewController.btnStop.isHidden = true
@@ -71,7 +73,7 @@ class ExportProfilesViewController: NSViewController {
         }, onStop: {
             DispatchQueue.global().async {
                 ExportManager.default.withMessageBox(viewController.lblMessage).stopTask(profileId: profile.id)
-                print(">>>>>>>>>> STOPPED EXPORT PROFILE \(profile.id)")
+                self.logger.log(">>>>>>>>>> STOPPED EXPORT PROFILE \(profile.id)")
                 DispatchQueue.main.async {
                     viewController.btnExport.isEnabled = true
                     viewController.btnStop.isHidden = true

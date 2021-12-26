@@ -341,7 +341,7 @@ Record: for ($rec=0; ; ++$rec) {
             $val = substr($$dataPt, $pos + 2, $len);
             $pos += 2 + $len;
         } elsif ($isStruct{$type}) {   # object, mixed array or typed object
-            $et->VPrint(1, "  + [$amfType[$type]]\n");
+            $et->Vself.logger.log(1, "  + [$amfType[$type]]\n");
             my $getName;
             $val = '';  # dummy value
             if ($type == 0x08) {        # mixed array
@@ -363,7 +363,7 @@ Record: for ($rec=0; ; ++$rec) {
                 $pos += 2 + $len;
                 # first string of a typed object is the object name
                 if ($getName) {
-                    $et->VPrint(1,"  | (object name '$tag')\n");
+                    $et->Vself.logger.log(1,"  | (object name '$tag')\n");
                     undef $getName;
                     next; # (ignore name for now)
                 }
@@ -395,7 +395,7 @@ Record: for ($rec=0; ; ++$rec) {
                 last if $t == 0x09; # (end of object)
                 if (not $$subTablePtr{$tag} and $tag =~ /^\w+$/) {
                     AddTagToTable($subTablePtr, $tag, { Name => ucfirst($tag) });
-                    $et->VPrint(1, "  | (adding $tag)\n");
+                    $et->Vself.logger.log(1, "  | (adding $tag)\n");
                 }
                 $et->HandleTag($subTablePtr, $tag, $v,
                     DataPt  => $dataPt,
@@ -449,12 +449,12 @@ Record: for ($rec=0; ; ++$rec) {
             # only process certain Meta packets
             if ($type == 0x02 and not $rec) {
                 my $verb = $processMetaPacket{$val} ? 'processing' : 'ignoring';
-                $et->VPrint(0, "  | ($verb $val information)\n");
+                $et->Vself.logger.log(0, "  | ($verb $val information)\n");
                 last unless $processMetaPacket{$val};
             } else {
                 # give verbose indication if we ignore a lone value
                 my $t = $amfType[$type] || sprintf('type 0x%x',$type);
-                $et->VPrint(1, "  | (ignored lone $t value '$val')\n");
+                $et->Vself.logger.log(1, "  | (ignored lone $t value '$val')\n");
             }
         }
     }
@@ -494,7 +494,7 @@ sub ProcessFLV($$)
         my $tagInfo = $et->GetTagInfo($tagTablePtr, $type);
         if ($verbose > 1) {
             my $name = $tagInfo ? $$tagInfo{Name} : "type $type";
-            $et->VPrint(1, "FLV $name packet, len $len\n");
+            $et->Vself.logger.log(1, "FLV $name packet, len $len\n");
         }
         undef $buff;
         if ($tagInfo and $$tagInfo{SubDirectory}) {
@@ -651,7 +651,7 @@ sub ProcessSWF($$)
         my $pos = 2;
         my $tag = $code >> 6;
         my $size = $code & 0x3f;
-        $et->VPrint(1, "SWF tag $tag ($size bytes):\n");
+        $et->Vself.logger.log(1, "SWF tag $tag ($size bytes):\n");
         last unless $tag == 69 or $tag == 77 or $hasMeta;
         # read enough to get a complete short record
         if ($pos + $size > $buffLen) {
@@ -677,7 +677,7 @@ sub ProcessSWF($$)
                 $buffLen = length $buff;
                 last if $pos + $size > $buffLen;
             }
-            $et->VPrint(1, "  [extended size $size bytes]\n");
+            $et->Vself.logger.log(1, "  [extended size $size bytes]\n");
         }
         if ($tag == 69) {       # FlashAttributes
             last unless $size;

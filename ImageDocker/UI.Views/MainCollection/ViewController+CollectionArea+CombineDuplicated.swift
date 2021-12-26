@@ -34,10 +34,10 @@ extension ViewController {
                 if image.hasDuplicates {
                     if let list = ImageDuplicationDao.default.getDuplicatePhotos().keyToPath[image.duplicatesKey] {
                         if image.url.path == list[0] {
-                            //print("\(image.duplicatesKey) MAJOR \(image.url.path)")
+                            //self.logger.log("\(image.duplicatesKey) MAJOR \(image.url.path)")
                             ImageDuplicationDao.default.markImageDuplicated(path: image.url.path, duplicatesKey: image.duplicatesKey, hide: false)
                         }else{
-                            //print("\(image.duplicatesKey) SLAVE \(image.url.path)")
+                            //self.logger.log("\(image.duplicatesKey) SLAVE \(image.url.path)")
                             ImageDuplicationDao.default.markImageDuplicated(path: image.url.path, duplicatesKey: image.duplicatesKey, hide: true)
                         }
                     }

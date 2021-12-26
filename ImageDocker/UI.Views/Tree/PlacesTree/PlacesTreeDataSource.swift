@@ -53,7 +53,7 @@ class PlacesTreeDataSource : TreeDataSource {
             moment.gov = gov
             moment.place = place
             
-            //print("Got place \(gov) -> \(place)")
+            //self.logger.log("Got place \(gov) -> \(place)")
             
             var govEntry:TreeCollection
             var placeEntry:TreeCollection
@@ -81,7 +81,7 @@ class PlacesTreeDataSource : TreeDataSource {
                 placeEntry.expandable = true
                 govEntry.addChild(collection: placeEntry)
             }else{
-                //print("ERROR: duplicated place entry \(gov) -> \(place)")
+                //self.logger.log("ERROR: duplicated place entry \(gov) -> \(place)")
             }
         }
         
@@ -124,13 +124,13 @@ class PlacesTreeDataSource : TreeDataSource {
                     var nodes:[TreeCollection] = []
                     var moments:[Moment] = []
                     if parent.year == 0 {
-//                        print("loading years")
+//                        self.logger.log("loading years")
                         moments = ImageSearchDao.default.getMomentsByPlace(.YEAR, parent: parent, condition: condition)
                     }else if parent.month == 0 {
-//                        print("loading months")
+//                        self.logger.log("loading months")
                         moments = ImageSearchDao.default.getMomentsByPlace(.MONTH, parent: parent, condition: condition)
                     }else if parent.day == 0 {
-//                        print("loading days")
+//                        self.logger.log("loading days")
                         moments = ImageSearchDao.default.getMomentsByPlace(.DAY, parent: parent, condition: condition)
                     }
                     for moment in moments {
@@ -139,11 +139,11 @@ class PlacesTreeDataSource : TreeDataSource {
                     }
                     return (nodes, nil)
                 }else{
-//                    print("parent place is empty")
+//                    self.logger.log("parent place is empty")
                 }
                 
             }else{
-//                print("PlacesTreeDS: no related object")
+//                self.logger.log("PlacesTreeDS: no related object")
             }
         }
         return ([], nil)

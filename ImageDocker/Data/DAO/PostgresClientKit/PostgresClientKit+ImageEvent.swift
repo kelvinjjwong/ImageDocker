@@ -10,6 +10,8 @@ import Foundation
 
 class EventDaoPostgresCK : EventDaoInterface {
     
+    let logger = ConsoleLogger(category: "EventDaoPostgresCK")
+    
     func getOrCreateEvent(name: String) -> ImageEvent {
         let db = PostgresConnection.database()
         if let event = ImageEvent.fetchOne(db, parameters: ["name": name]) {
@@ -67,7 +69,7 @@ class EventDaoPostgresCK : EventDaoInterface {
         let sql = """
         select distinct "category" from "ImageEvent" order by "category"
         """
-//        print(sql)
+//        self.logger.log(sql)
         
         final class TempRecord : PostgresCustomRecord {
             var category:String = ""
@@ -92,7 +94,7 @@ class EventDaoPostgresCK : EventDaoInterface {
         select distinct "activity2" as "act" from "ImageEvent" where "activity2" <> ''
         ) t order by "act"
         """
-//        print(sql)
+//        self.logger.log(sql)
         
         final class TempRecord : PostgresCustomRecord {
             var acc:String = ""
@@ -117,7 +119,7 @@ class EventDaoPostgresCK : EventDaoInterface {
         select distinct "activity2" as "act" from "ImageEvent" where "category" = '\(category)' and "activity2" <> ''
         ) t order by "act"
         """
-//        print(sql)
+//        self.logger.log(sql)
         
         final class TempRecord : PostgresCustomRecord {
             var acc:String = ""
@@ -162,18 +164,18 @@ class EventDaoPostgresCK : EventDaoInterface {
         var events:[Event] = [Event] ()
         for data in records {
             let event = data.event
-            //print(event)
+            //self.logger.log(event)
             let year = data.photoTakenYear
-            //print("year")
+            //self.logger.log("year")
             let month = data.photoTakenMonth
-            //print("month")
+            //self.logger.log("month")
             let day = data.photoTakenDay
-            //print("day")
+            //self.logger.log("day")
             let photoCount = data.photoCount
-            //print("count")
+            //self.logger.log("count")
             let place = data.place
             
-            //print("Got \(event)-\(year)-\(month)-\(day)-\(place)")
+            //self.logger.log("Got \(event)-\(year)-\(month)-\(day)-\(place)")
             var eventEntry:Event
             var monthEntry:Event
             
@@ -221,7 +223,7 @@ class EventDaoPostgresCK : EventDaoInterface {
             event.name = oldName
             event.delete(db)
         }catch {
-            print(error)
+            self.logger.log(error)
             return .ERROR
         }
         return .OK
@@ -247,7 +249,7 @@ class EventDaoPostgresCK : EventDaoInterface {
             UPDATE "ImageEvent" SET "imageCount"=$1,"lastUpdateTime"=now() WHERE "name"=$2
             """, parameterValues: [result, event])
         }catch {
-            print(error)
+            self.logger.log(error)
         }
         
         final class TempRecord : PostgresCustomRecord {
@@ -258,7 +260,7 @@ class EventDaoPostgresCK : EventDaoInterface {
         let maxSql = """
         select max("photoTakenDate") from "Image" where "event"='\(event)'
         """
-        print(maxSql)
+        self.logger.log(maxSql)
         var maxDate:Date? = nil
         let max = TempRecord.fetchAll(db, sql: maxSql)
         if max.count > 0 {
@@ -268,7 +270,7 @@ class EventDaoPostgresCK : EventDaoInterface {
         let minSql = """
         select min("photoTakenDate") from "Image" where "event"='\(event)'
         """
-        print(minSql)
+        self.logger.log(minSql)
         var minDate:Date? = nil
         let min = TempRecord.fetchAll(db, sql: minSql)
         if min.count > 0 {
@@ -280,7 +282,7 @@ class EventDaoPostgresCK : EventDaoInterface {
             UPDATE "ImageEvent" SET "startDate"=$1,"endDate"=$2, "lastUpdateTime"=now() WHERE "name"=$3
             """, parameterValues: [minDate, maxDate, event])
         }catch {
-            print(error)
+            self.logger.log(error)
         }
         
         return result

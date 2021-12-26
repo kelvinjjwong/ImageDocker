@@ -3708,7 +3708,7 @@ sub ProcessDICOM($$)
             $len = 0;   # don't read value if undefined length
             if ($verbose) {
                 # start list of items in verbose output
-                $et->VPrint(0, "$$et{INDENT}+ [List of items]\n");
+                $et->Vself.logger.log(0, "$$et{INDENT}+ [List of items]\n");
                 $$et{INDENT} .= '| ';
             }
         }

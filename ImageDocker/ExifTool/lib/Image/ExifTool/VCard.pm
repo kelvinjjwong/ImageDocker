@@ -165,7 +165,7 @@ sub GetVCardTag($$$$;$$)
             $tagInfo = { %$srcInfo };
         } else {
             $tagInfo = { };
-            $et->VPrint(0, $$et{INDENT}, "[adding $tag]\n");
+            $et->Vself.logger.log(0, $$et{INDENT}, "[adding $tag]\n");
         }
         $$tagInfo{Name} = $name;
         delete $$tagInfo{Description};  # create new description

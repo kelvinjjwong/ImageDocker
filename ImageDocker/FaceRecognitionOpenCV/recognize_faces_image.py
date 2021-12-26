@@ -2,7 +2,7 @@
 # python recognize_faces_image.py --encodings encodings.pickle --image examples/example_01.png 
 
 import time
-print("{} [INFO] Preparing".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))))
+self.logger.log("{} [INFO] Preparing".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))))
 
 # import the necessary packages
 import face_recognition
@@ -27,7 +27,7 @@ ap.add_argument("-d", "--detection-method", type=str, default="cnn",
 args = vars(ap.parse_args())
 
 # load the known faces and embeddings
-print("{} [INFO] Loading encoded pickle ...".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))))
+self.logger.log("{} [INFO] Loading encoded pickle ...".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))))
 data = pickle.loads(open(args["encodings"], "rb").read())
 
 # load the input image and convert it from BGR to RGB
@@ -37,7 +37,7 @@ rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 # detect the (x, y)-coordinates of the bounding boxes corresponding
 # to each face in the input image, then compute the facial embeddings
 # for each face
-print("{} [INFO] recognizing faces...".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))))
+self.logger.log("{} [INFO] recognizing faces...".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))))
 boxes = face_recognition.face_locations(rgb,
 	model=args["detection_method"])
 encodings = face_recognition.face_encodings(rgb, boxes)
@@ -128,7 +128,7 @@ for ((top, right, bottom, left), name) in zip(boxes, names):
 	# Draw the name
 	#cv2.putText(image, name , (label_text_x, label_text_y), font, 0.5, label_text_color, 1)
 	#font.draw_text(image, (3, 3), '你好', 24, label_text_color)
-	print("RECOGNITION RESULT: {} {} {} {} {}".format(left, top, right, bottom, name))
+	self.logger.log("RECOGNITION RESULT: {} {} {} {} {}".format(left, top, right, bottom, name))
 
 img_PIL = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
 draw = ImageDraw.Draw(img_PIL)
@@ -155,9 +155,9 @@ image = cv2.cvtColor(numpy.asarray(img_PIL),cv2.COLOR_RGB2BGR)
 # save image
 if args["output"] is not None:
 	cv2.imwrite(args["output"], image)
-	print("{} [INFO] Saved image to {}".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), args["output"]))
+	self.logger.log("{} [INFO] Saved image to {}".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), args["output"]))
 
-print("{} [INFO] DONE.".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))))
+self.logger.log("{} [INFO] DONE.".format(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))))
 
 # show the output image
 # check to see if we are supposed to display the image to

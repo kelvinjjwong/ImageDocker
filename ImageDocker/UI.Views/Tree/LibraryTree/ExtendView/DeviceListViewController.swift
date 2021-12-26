@@ -34,7 +34,7 @@ class DeviceListViewController: NSViewController {
     func initView() {
         lastSelectedRow = nil
         self.devices = DeviceDao.default.getDevices()
-        print(devices.count)
+        self.logger.log(devices.count)
         self.tblDevices.reloadData()
     }
     
@@ -44,7 +44,7 @@ class DeviceListViewController: NSViewController {
         didSet {
             if lastSelectedRow != nil && devices.count > 0 && lastSelectedRow! < devices.count {
                 if let selectedDeviceId = devices[lastSelectedRow!].deviceId {
-                    //print("selected device id \(selectedDeviceId)")
+                    //self.logger.log("selected device id \(selectedDeviceId)")
                     if self.selectionDelegate != nil {
                         self.selectionDelegate?.selectDevice(deviceId: selectedDeviceId)
                     }

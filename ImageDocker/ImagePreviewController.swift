@@ -10,6 +10,8 @@ import Cocoa
 
 class ImagePreviewController : NSViewController {
     
+    let logger = ConsoleLogger(category: "ImagePreviewController")
+    
     @IBOutlet weak var playerContainer: NSView!
     @IBOutlet weak var lblDescription: NSTextField!
     @IBOutlet weak var btnWriteNotes: NSButton!
@@ -31,7 +33,7 @@ class ImagePreviewController : NSViewController {
     }
     
     @IBAction func onWriteNotesClicked(_ sender: NSButton) {
-        print("preview menu - to do function")
+        self.logger.log("preview menu - to do function")
     }
     
     @IBAction func onZoomOutClicked(_ sender: NSButton) {

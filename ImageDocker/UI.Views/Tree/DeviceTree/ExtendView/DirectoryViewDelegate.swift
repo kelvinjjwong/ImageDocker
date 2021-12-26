@@ -56,15 +56,15 @@ class LocalDirectoryViewDelegate : DirectoryViewDelegate {
         
         let desktopUrls = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask)
         let desktopUrl = desktopUrls[desktopUrls.count - 1]
-//        print(desktopUrl.path)
+//        self.logger.log(desktopUrl.path)
         
         let documentUrls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentUrl = documentUrls[documentUrls.count - 1]
-//        print(documentUrl.path)
+//        self.logger.log(documentUrl.path)
         
         let pictureUrls = FileManager.default.urls(for: .picturesDirectory, in: .userDomainMask)
         let pictureUrl = pictureUrls[pictureUrls.count - 1]
-//        print(pictureUrl.path)
+//        self.logger.log(pictureUrl.path)
         
         
         var shortcuts:[DirectoryViewShortcut] = []

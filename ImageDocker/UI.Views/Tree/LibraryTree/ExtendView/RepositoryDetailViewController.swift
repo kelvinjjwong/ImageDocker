@@ -10,6 +10,8 @@ import Cocoa
 
 class RepositoryDetailViewController: NSViewController {
     
+    let logger = ConsoleLogger(category: "RepositoryDetailViewController")
+    
     @IBOutlet weak var btnConfig: NSButton!
     @IBOutlet weak var btnManageSubContainers: NSButton!
     @IBOutlet weak var lblEditableStorageSpace: NSTextField!
@@ -331,15 +333,15 @@ class RepositoryDetailViewController: NSViewController {
                                         lblMessage: self.lblMessage,
                                         presetAddingMessage: "Importing images ...",
                                         onCompleted: { data in
-                                            print("====== COMPLETED SCAN single REPO \(repository.name)")
+                                            self.logger.log("====== COMPLETED SCAN single REPO \(repository.name)")
                                             self.toggleButtons(true)
             },
                                         onDataChanged: {
-                                            print("====== DATE CHANGED when SCAN single REPO \(repository.name)")
+                                            self.logger.log("====== DATE CHANGED when SCAN single REPO \(repository.name)")
             })
             
             ImageFolderTreeScanner.default.scanSingleRepository_asTask(repository: repository, indicator: indicator, onCompleted: {
-                print(">>>> onCompleted")
+                self.logger.log(">>>> onCompleted")
                 self.toggleButtons(true)
             })
         }
@@ -354,15 +356,15 @@ class RepositoryDetailViewController: NSViewController {
                                         lblMessage: self.lblMessage,
                                         presetAddingMessage: "Searching images for EXIF ...",
                                         onCompleted: { data in
-                                            print("====== COMPLETED SCAN single REPO for EXIF \(repository.name)")
+                                            self.logger.log("====== COMPLETED SCAN single REPO for EXIF \(repository.name)")
                                             self.toggleButtons(true)
             },
                                         onDataChanged: {
-                                            print("====== DATE CHANGED when SCAN single REPO for EXIF \(repository.name)")
+                                            self.logger.log("====== DATE CHANGED when SCAN single REPO for EXIF \(repository.name)")
             })
             
             ImageFolderTreeScanner.default.scanPhotosToLoadExif_asTask(repository: repository, indicator: indicator, onCompleted: {
-                print(">>>> onCompleted")
+                self.logger.log(">>>> onCompleted")
                 self.toggleButtons(true)
             })
         }
@@ -377,15 +379,15 @@ class RepositoryDetailViewController: NSViewController {
                                         lblMessage: self.lblMessage,
                                         presetAddingMessage: "Searching images for location ...",
                                         onCompleted: { data in
-                                            print("====== COMPLETED SCAN single REPO for location \(repository.name)")
+                                            self.logger.log("====== COMPLETED SCAN single REPO for location \(repository.name)")
                                             self.toggleButtons(true)
             },
                                         onDataChanged: {
-                                            print("====== DATE CHANGED when SCAN single REPO for location \(repository.name)")
+                                            self.logger.log("====== DATE CHANGED when SCAN single REPO for location \(repository.name)")
             })
             
             ImageFolderTreeScanner.default.scanPhotosToLoadLocation_asTask(repository: repository, indicator: indicator, onCompleted: {
-                print(">>>> onCompleted")
+                self.logger.log(">>>> onCompleted")
                 self.toggleButtons(true)
             })
         }

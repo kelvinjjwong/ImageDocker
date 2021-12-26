@@ -103,27 +103,27 @@ extension ViewController {
     
     internal func refreshCollection(_ sender: NSButton) {
         if self.imagesLoader.lastRequest.loadSource == .repository && self.imagesLoader.lastRequest.pageNumber > 0 && self.imagesLoader.lastRequest.pageSize > 0 {
-//            print("clicked repo collection reload button")
+//            self.logger.log("clicked repo collection reload button")
             self.reloadCollectionFromImageContainer(sender: sender)
         }else if self.imagesLoader.lastRequest.loadSource == .moment && self.imagesLoader.lastRequest.pageNumber > 0 && self.imagesLoader.lastRequest.pageSize > 0 {
             if self.imagesLoader.lastRequest.place == nil {
                 if let moment = self.selectedMoment {
                     self.reloadMomentCollection(moment: moment, sender: sender)
                 }else{
-//                    print("no selected moment")
+//                    self.logger.log("no selected moment")
                 }
             }else{
                 if let moment = self.selectedMoment {
                     self.reloadPlaceCollection(moment: moment, sender: sender)
                 }else{
-//                    print("no selected moment")
+//                    self.logger.log("no selected moment")
                 }
             }
         }else if self.imagesLoader.lastRequest.loadSource == .event && self.imagesLoader.lastRequest.pageNumber > 0 && self.imagesLoader.lastRequest.pageSize > 0 {
             if let moment = self.selectedMoment {
                 self.reloadEventCollection(moment: moment, sender: sender)
             }else{
-//                print("no selected moment")
+//                self.logger.log("no selected moment")
             }
         }else{
             self.refreshCollection()
@@ -132,7 +132,7 @@ extension ViewController {
     
     internal func selectImageFile(_ imageFile:ImageFile){
         self.selectedImageFile = imageFile.fileName
-        //print("selected image file: \(filename)")
+        //self.logger.log("selected image file: \(filename)")
         //let url:URL = (self.selectedImageFolder?.url.appendingPathComponent(imageFile.fileName, isDirectory: false))!
         DispatchQueue.main.async {
             self.loadImage(imageFile: imageFile)

@@ -42,7 +42,7 @@ extension TheaterCollectionViewController : NSCollectionViewDataSource {
     func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
         let item = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "TheaterCollectionViewItem"), for: indexPath)
         guard let collectionViewItem = item as? TheaterCollectionViewItem else {return item}
-        //print("created item")
+        //self.logger.log("created item")
         let imageFile = imagesLoader.item(for: indexPath as NSIndexPath)
         DispatchQueue.main.async {
             collectionViewItem.imageFile = imageFile

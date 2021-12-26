@@ -10,6 +10,8 @@ import Foundation
 
 class FaceTask {
     
+    let logger = ConsoleLogger(category: "FaceTask")
+    
     static let `default` = FaceTask()
     
     var peopleName:[String:String] = [:]
@@ -63,7 +65,7 @@ class FaceTask {
     
     func findFaces(image:Image) -> Bool {
         if !FileManager.default.fileExists(atPath: image.path) {
-            print("ERROR: No file found at \(image.path)")
+            self.logger.log("ERROR: No file found at \(image.path)")
             return false
         }
         if Naming.FileType.recognize(from: image.filename) != .photo  {
@@ -75,25 +77,25 @@ class FaceTask {
                 var isDir:ObjCBool = false
                 if FileManager.default.fileExists(atPath: repository.cropPath, isDirectory: &isDir) {
                     if !isDir.boolValue {
-                        print("ERROR: Crop path of repository is not a directory: \(repository.cropPath)")
+                        self.logger.log("ERROR: Crop path of repository is not a directory: \(repository.cropPath)")
                         return false
                     }
                 }
                 
                 // ensure image-filename-aware crop path exists
                 let cropPath = URL(fileURLWithPath: repository.cropPath).appendingPathComponent(image.subPath)
-                print("Trying to create directory: \(cropPath.path)")
+                self.logger.log("Trying to create directory: \(cropPath.path)")
                 //if FileManager.default.fileExists(atPath: repository.cropPath, isDirectory: &isDir), isDir.boolValue {
                 do {
                     try FileManager.default.createDirectory(atPath: cropPath.path, withIntermediateDirectories: true, attributes: nil)
                 }catch{
-                    print(error)
-                    print("ERROR: Cannot create directory for storing crops at path: \(cropPath.path)")
+                    self.logger.log(error)
+                    self.logger.log("ERROR: Cannot create directory for storing crops at path: \(cropPath.path)")
                     return false
                 }
                 //}
                 if !FileManager.default.fileExists(atPath: cropPath.path, isDirectory: &isDir) {
-                    print("ERROR: Cannot create directory: \(cropPath.path)")
+                    self.logger.log("ERROR: Cannot create directory: \(cropPath.path)")
                     return false
                 }
                 
@@ -108,7 +110,7 @@ class FaceTask {
                 
                 FaceDetection.default.findFace(from: url, into: cropPath, onCompleted: {faces in
                     for face in faces {
-                        print("Found face: \(face.filename) at (\(face.x), \(face.y), \(face.width), \(face.height))")
+                        self.logger.log("Found face: \(face.filename) at (\(face.x), \(face.y), \(face.width), \(face.height))")
                         let exist = FaceDao.default.findFaceCrop(imageId: imageId,
                                                                     x: face.x.databaseValue.description,
                                                                     y: face.y.databaseValue.description,
@@ -135,24 +137,24 @@ class FaceTask {
                                                           month: image.photoTakenMonth ?? 0,
                                                           day: image.photoTakenDay ?? 0)
                             let _ = FaceDao.default.saveFaceCrop(imageFace)
-                            print("Face crop \(imageFace.id) saved.")
+                            self.logger.log("Face crop \(imageFace.id) saved.")
                         }else{
-                            print("Face already in DB")
+                            self.logger.log("Face already in DB")
                         }
                     }
                     
-                    print("Face detection done in \(cropPath.path)")
+                    self.logger.log("Face detection done in \(cropPath.path)")
                     
                     img.scanedFace = true
                     let _ = ImageFaceDao.default.updateImageScannedFace(imageId: imageId, facesCount: faces.count)
                 }) // another thread
                 
             }else{
-                print("ERROR: Crop path is empty, please assign it first: \(repository.path)")
+                self.logger.log("ERROR: Crop path is empty, please assign it first: \(repository.path)")
                 return false
             }
         }else{
-            print("ERROR: Cannot find image's repository by repository path: \(image.repositoryPath)")
+            self.logger.log("ERROR: Cannot find image's repository by repository path: \(image.repositoryPath)")
             return false
         }
         return true
@@ -162,7 +164,7 @@ class FaceTask {
         if let image = ImageRecordDao.default.getImage(path: path) {
             return self.findFaces(image: image)
         }else{
-            print("ERROR: Cannot find image record: \(path)")
+            self.logger.log("ERROR: Cannot find image record: \(path)")
             return false
         }
     }
@@ -170,7 +172,7 @@ class FaceTask {
     func recognizeFaces(image:Image) -> Bool {
         
         if !FileManager.default.fileExists(atPath: image.path) {
-            print("ERROR: No file found at \(image.path)")
+            self.logger.log("ERROR: No file found at \(image.path)")
             return false
         }
         if Naming.FileType.recognize(from: image.filename) != .photo  {
@@ -185,7 +187,7 @@ class FaceTask {
                     let recognition = FaceRecognition.default.recognize(imagePath: path.path)
                     if recognition.count > 0 {
                         let name = recognition[0]
-                        print("Face crop \(crop.id) is recognized as \(name)")
+                        self.logger.log("Face crop \(crop.id) is recognized as \(name)")
                         //if name != "unknown" && name != "Unknown" && name != "" {
                             recognizedPeopleIds += "\(name),"
                         //}
@@ -201,15 +203,15 @@ class FaceTask {
                             c.recognizeVersion = "\(version)"
                         }
                         let _ = FaceDao.default.saveFaceCrop(c)
-                        print("Face crop \(crop.id) updated into DB.")
+                        self.logger.log("Face crop \(crop.id) updated into DB.")
                     }else{
-                        print("No face recognized for image [\(imageId)].")
+                        self.logger.log("No face recognized for image [\(imageId)].")
                     }
                 }
                 
                 let _ = ImageFaceDao.default.updateImageRecognizedFace(imageId: imageId, recognizedPeopleIds: recognizedPeopleIds)
             }else{
-                print("No crops for this image.")
+                self.logger.log("No crops for this image.")
                 let _ = ImageFaceDao.default.updateImageRecognizedFace(imageId: imageId)
                 return false
             }
@@ -217,7 +219,7 @@ class FaceTask {
             
             
         }else{
-            print("ERROR: Image ID is not set.")
+            self.logger.log("ERROR: Image ID is not set.")
             return false
         }
         return true
@@ -227,7 +229,7 @@ class FaceTask {
         if let image = ImageRecordDao.default.getImage(path: path) {
             return self.recognizeFaces(image: image)
         }else{
-            print("ERROR: Cannot find image record: \(path)")
+            self.logger.log("ERROR: Cannot find image record: \(path)")
             return false
         }
     }

@@ -16,10 +16,10 @@ extension ViewController {
     @objc func onMetaTableDoubleClicked() {
         let row = self.metaInfoTableView.clickedRow
         if row >= 0 && row < self.img.metaInfoHolder.getInfos().count {
-            print("meta double clicked row \(row)")
+            self.logger.log("meta double clicked row \(row)")
             let info = self.img.metaInfoHolder.getInfos()[row]
             if let value = info.value {
-                print("clicked info \(value)")
+                self.logger.log("clicked info \(value)")
                 let pasteboard = NSPasteboard.general
                 pasteboard.declareTypes([.string], owner: nil)
                 pasteboard.setString(value, forType: .string)

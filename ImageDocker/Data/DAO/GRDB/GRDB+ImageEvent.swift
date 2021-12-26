@@ -11,6 +11,8 @@ import GRDB
 
 class EventDaoGRDB : EventDaoInterface {
     
+    let logger = ConsoleLogger(category: "EventDaoGRDB")
+    
     
     // MARK: - CREATE
     
@@ -28,7 +30,7 @@ class EventDaoGRDB : EventDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return event!
     }
@@ -57,7 +59,7 @@ class EventDaoGRDB : EventDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
     }
     
@@ -72,7 +74,7 @@ class EventDaoGRDB : EventDaoInterface {
                 events = try ImageEvent.order([Column("country").asc, Column("province").asc, Column("city").asc, Column("name").asc]).fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return events
     }
@@ -94,7 +96,7 @@ class EventDaoGRDB : EventDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -117,7 +119,7 @@ select distinct category from ImageEvent order by category
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -144,7 +146,7 @@ select distinct activity2 as act from ImageEvent where activity2 <> ''
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
         
@@ -172,7 +174,7 @@ select distinct activity2 as act from ImageEvent where category='\(category)' ac
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
         
@@ -186,7 +188,7 @@ select distinct activity2 as act from ImageEvent where category='\(category)' ac
         SQLHelper.inArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs)
         
         let sql = "SELECT event, photoTakenYear, photoTakenMonth, photoTakenDay, place, count(path) as photoCount FROM Image WHERE 1=1 \(imageSourceWhere) \(cameraModelWhere) GROUP BY event, photoTakenYear,photoTakenMonth,photoTakenDay,place ORDER BY event DESC,photoTakenYear DESC,photoTakenMonth DESC,photoTakenDay DESC,place"
-//        print(sql)
+//        self.logger.log(sql)
         var result:[Row] = []
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
@@ -194,7 +196,7 @@ select distinct activity2 as act from ImageEvent where category='\(category)' ac
                 result = try Row.fetchAll(db, sql: sql, arguments:StatementArguments(sqlArgs) ?? [])
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         
         return Events().read(result)
@@ -204,7 +206,7 @@ select distinct activity2 as act from ImageEvent where category='\(category)' ac
     // MARK: - UPDATE
     
     func renameEvent(oldName:String, newName:String) -> ExecuteState{
-        print("RENAME EVENT \(oldName) to \(newName)")
+        self.logger.log("RENAME EVENT \(oldName) to \(newName)")
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
@@ -249,7 +251,7 @@ select distinct activity2 as act from ImageEvent where category='\(category)' ac
                 try db.execute(sql: "UPDATE ImageEvent SET imageCount=? WHERE name=?", arguments: [result, event])
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         
         do {
@@ -277,7 +279,7 @@ select distinct activity2 as act from ImageEvent where category='\(category)' ac
                 try db.execute(sql: "UPDATE ImageEvent SET startDate=?,endDate=? WHERE name=?", arguments: [minDate, maxDate, event])
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -304,7 +306,7 @@ select distinct activity2 as act from ImageEvent where category='\(category)' ac
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
     }
 }

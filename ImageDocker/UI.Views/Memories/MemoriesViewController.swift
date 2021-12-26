@@ -12,6 +12,8 @@ import Carbon.HIToolbox
 
 class MemoriesViewController : NSViewController {
     
+    let logger = ConsoleLogger(category: "MemoriesViewController")
+    
     @IBOutlet weak var lblToday: NSTextField!
     @IBOutlet weak var lblDescription: NSTextField!
     @IBOutlet weak var preview: NSView!
@@ -157,7 +159,7 @@ class MemoriesViewController : NSViewController {
                 self.btnLastYear.isHidden = true
             }
         }else{
-//            print("Invalid year number: \(year)")
+//            self.logger.log("Invalid year number: \(year)")
             return
         }
         
@@ -194,7 +196,7 @@ class MemoriesViewController : NSViewController {
             }else if value == self.btnToday.title {
                 self.btnToday.isEnabled = true
             }
-            print(value)
+            self.logger.log(value)
             self.dates.append(value)
         }
         
@@ -224,7 +226,7 @@ class MemoriesViewController : NSViewController {
     
     /// reload collection with images taken on specific date
     private func reloadCollection(date:String) {
-        //print("reload collection on \(date)")
+        //self.logger.log("reload collection on \(date)")
         self.lblDescription.stringValue = "Loading images on \(date) ..."
         let parts = date.components(separatedBy: "-")
         let year = Int(parts[0]) ?? 0
@@ -460,7 +462,7 @@ extension MemoriesViewController {
         if self.timerStarted {
             self.stopCollectionLoop()
         }
-//        print(">>> start load memory collection on \(year)-\(month)-\(day)")
+//        self.logger.log(">>> start load memory collection on \(year)-\(month)-\(day)")
         DispatchQueue.global().async {
             
             self.collectionViewController.imagesLoader.clean()
@@ -470,7 +472,7 @@ extension MemoriesViewController {
             
             DispatchQueue.main.async {
                 self.collectionViewController.collectionView.reloadData()
-//                print(">>> finished load memory collection on \(year)-\(month)-\(day), result: \(self.collectionViewController.imagesLoader.getItems().count)")
+//                self.logger.log(">>> finished load memory collection on \(year)-\(month)-\(day), result: \(self.collectionViewController.imagesLoader.getItems().count)")
                 self.lblDescription.stringValue = "\(self.collectionViewController.imagesLoader.getItems().count) images on \(year)-\(month)-\(day)"
                 self.selectItem(at: focusIndex)
                 
@@ -494,9 +496,9 @@ extension MemoriesViewController {
     }
     
     private func selectItem(at index:Int, forceFocus:Bool = false){
-        //print("select index: \(index)")
+        //self.logger.log("select index: \(index)")
         if index >= 0 && index < self.collectionViewController.imagesLoader.getItems().count {
-            //print("select image \(index)")
+            //self.logger.log("select image \(index)")
             let indexPath:IndexPath = IndexPath(item: index, section: 0)
             let indexSet:Set<IndexPath> = [indexPath]
             
@@ -512,7 +514,7 @@ extension MemoriesViewController {
     }
     
     private func selectItem(offset:Int){
-//        print("select offset: \(offset)")
+//        self.logger.log("select offset: \(offset)")
         self.selectItem(at: self.selectedIndex + offset, forceFocus: true)
     }
 }

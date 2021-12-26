@@ -10,6 +10,8 @@ import Foundation
 
 struct SearchCondition {
     
+    static let logger = ConsoleLogger(category: "SearchCondition")
+    
     var years:[Int]
     var months:[Int]
     var days:[Int]
@@ -64,7 +66,7 @@ struct SearchCondition {
                 type = part[1].replacingOccurrences(of: "'", with: "''")
                               .trimmingCharacters(in: .whitespacesAndNewlines)
             }else{
-                print("Unrecognized search condition \"\(condition)\"")
+                SearchCondition.logger.log("Unrecognized search condition \"\(condition)\"")
                 continue
             }
             
@@ -72,21 +74,21 @@ struct SearchCondition {
                 if let i = Int(keyword), i >= 1950 && i < 10000 {
                     years.append(i)
                 }else{
-                    print("Unrecognized search condition \"\(condition)\"")
+                    SearchCondition.logger.log("Unrecognized search condition \"\(condition)\"")
                     continue
                 }
             }else if type == MONTH {
                 if let i = Int(keyword), i >= 1 && i <= 12 {
                     months.append(i)
                 }else{
-                    print("Unrecognized search condition \"\(condition)\"")
+                    SearchCondition.logger.log("Unrecognized search condition \"\(condition)\"")
                     continue
                 }
             }else if type == DAY {
                 if let i = Int(keyword), i >= 1 && i <= 31 {
                     days.append(i)
                 }else{
-                    print("Unrecognized search condition \"\(condition)\"")
+                    SearchCondition.logger.log("Unrecognized search condition \"\(condition)\"")
                     continue
                 }
             }else if type == PEOPLE {
@@ -106,7 +108,7 @@ struct SearchCondition {
             }else if type == ANY {
                 any.append(keyword)
             }else{
-                print("Unrecognized search condition \"\(condition)\"")
+                SearchCondition.logger.log("Unrecognized search condition \"\(condition)\"")
                 continue
             }
             

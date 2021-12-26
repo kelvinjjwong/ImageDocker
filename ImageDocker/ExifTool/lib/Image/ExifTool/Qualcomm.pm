@@ -1296,7 +1296,7 @@ sub ProcessQualcomm($$$)
         unless (defined $$tagTablePtr{$tag} or $Image::ExifTool::specialTags{$tag}) {
             my %tagInfo;
             if (MakeNameAndDesc($tag, \%tagInfo)) {
-                $et->VPrint(0, $$et{INDENT}, "[adding Qualcomm:$tagInfo{Name}]\n");
+                $et->Vself.logger.log(0, $$et{INDENT}, "[adding Qualcomm:$tagInfo{Name}]\n");
                 AddTagToTable($tagTablePtr, $tag, \%tagInfo);
             }
         }

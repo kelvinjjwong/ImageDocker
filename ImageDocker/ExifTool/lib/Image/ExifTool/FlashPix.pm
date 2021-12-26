@@ -1346,7 +1346,7 @@ sub ProcessProperties($$$)
                     $name =~ s/(^| )([a-z])/\U$2/g; # start with uppercase
                     $name =~ tr/-_a-zA-Z0-9//dc;    # remove illegal characters
                     next unless length $name;
-                    $et->VPrint(0, "$$et{INDENT}\[adding $name]\n") if $verbose;
+                    $et->Vself.logger.log(0, "$$et{INDENT}\[adding $name]\n") if $verbose;
                     AddTagToTable($tagTablePtr, $tag, { Name => $name });
                 }
                 next;
@@ -1482,7 +1482,7 @@ sub ProcessFPXR($$$)
             my $name = Image::ExifTool::Decode(undef, $1, 'UCS2', 'II', 'Latin');
             if ($verbose) {
                 my $psize = ($size == 0xffffffff) ? 'storage' : "$size bytes";
-                $et->VPrint(0,"  |  $entry) Name: '$name' [$psize]\n");
+                $et->Vself.logger.log(0,"  |  $entry) Name: '$name' [$psize]\n");
             }
             # remove directory specification
             $name =~ s{.*/}{}s;
@@ -1548,7 +1548,7 @@ sub ProcessFPXR($$$)
             # save value for this tag if stream is complete
             my $len = length $$obj{Stream};
             if ($len >= $$obj{Size}) {
-                $et->VPrint(0, "  + [FPXR stream $index, $len bytes]\n") if $verbose;
+                $et->Vself.logger.log(0, "  + [FPXR stream $index, $len bytes]\n") if $verbose;
                 if ($len > $$obj{Size}) {
                     $et->Warn('Extra data in FPXR segment (truncated)');
                     $$obj{Stream} = substr($$obj{Stream}, 0, $$obj{Size});

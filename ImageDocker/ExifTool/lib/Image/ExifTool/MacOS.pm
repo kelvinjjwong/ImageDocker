@@ -306,7 +306,7 @@ sub ExtractMDItemTags($$)
     my ($fn, $tag, $val);
 
     ($fn = $file) =~ s/([`"\$\\])/\\$1/g;   # escape necessary characters
-    $et->VPrint(0, '(running mdls)');
+    $et->Vself.logger.log(0, '(running mdls)');
     my @mdls = `mdls "$fn" 2> /dev/null`;   # get MacOS metadata
     if ($? or not @mdls) {
         $et->Warn('Error running "mdls" to extract MDItem tags');
@@ -350,7 +350,7 @@ sub ExtractMDItemTags($$)
             $tagInfo{List} = 1 if ref $val eq 'ARRAY';
             $tagInfo{Groups}{2} = 'Audio' if $tag =~ /Audio/;
             $tagInfo{Groups}{2} = 'Author' if $tag =~ /(Copyright|Author)/;
-            $et->VPrint(0, "  [adding $tag]\n");
+            $et->Vself.logger.log(0, "  [adding $tag]\n");
             AddTagToTable($tagTablePtr, $tag, \%tagInfo);
         }
         $val = $et->Decode($val, 'UTF8') unless ref $val;
@@ -370,7 +370,7 @@ sub ExtractXAttrTags($$)
     my ($fn, $tag, $val, $warn);
 
     ($fn = $file) =~ s/([`"\$\\])/\\$1/g;       # escape necessary characters
-    $et->VPrint(0, '(running xattr)');
+    $et->Vself.logger.log(0, '(running xattr)');
     my @xattr = `xattr -lx "$fn" 2> /dev/null`; # get MacOS extended attributes
     if ($? or not @xattr) {
         $? and $et->Warn('Error running "xattr" to extract XAttr tags');
@@ -403,7 +403,7 @@ sub ExtractXAttrTags($$)
                 $name = 'XAttr' . ucfirst $name;
                 my %tagInfo = ( Name => $name );
                 $tagInfo{Groups} = { 2 => 'Time' } if $tag=~/Date$/;
-                $et->VPrint(0, "  [adding $tag]\n");
+                $et->Vself.logger.log(0, "  [adding $tag]\n");
                 AddTagToTable($tagTablePtr, $tag, \%tagInfo);
             }
             if ($val =~ /^bplist0/) {

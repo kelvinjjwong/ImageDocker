@@ -659,7 +659,7 @@ sub ProcessLayers($$$)
 
     my $pos = 0;
     for ($i=0; $i<$num; ++$i) {
-        $et->VPrint(0, $oldIndent.'+ [Layer '.($i+1)." of $num]\n");
+        $et->Vself.logger.log(0, $oldIndent.'+ [Layer '.($i+1)." of $num]\n");
         last if $pos + 18 > $len;
         # read the layer information data
         $raf->Seek($dataPos + $pos, 0) and $raf->Read($data, 18) == 18 or last;

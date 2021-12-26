@@ -122,7 +122,7 @@ extension StackItemBody where Self : NSViewController {
                 constraint.constant = heightValue
             }
         }else{
-            print("no constraint")
+            print("\(Date()) [StackItem] no constraint")
         }
     }
     

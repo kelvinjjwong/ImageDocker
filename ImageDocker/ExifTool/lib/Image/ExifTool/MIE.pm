@@ -1715,7 +1715,7 @@ sub ProcessMIE($$)
         $$dirInfo{DirLen} = $end - $pos;
         if ($outfile and $$et{DEL_GROUP}{MIE}) {
             # delete the trailer
-            $et->VPrint(0,"  Deleting MIE trailer\n");
+            $et->Vself.logger.log(0,"  Deleting MIE trailer\n");
             ++$$et{CHANGED};
             return 1;
         } elsif ($et->Options('Verbose') or $$et{HTML_DUMP}) {

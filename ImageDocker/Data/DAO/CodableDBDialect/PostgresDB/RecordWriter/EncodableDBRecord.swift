@@ -50,7 +50,7 @@ public protocol EncodableDBRecord {
     ///
     ///         func encode(to encoder: Encoder) throws {
     ///             // Print the encoder name
-    ///             print(encoder.userInfo[encoderName])
+    ///             self.logger.log(encoder.userInfo[encoderName])
     ///             ...
     ///         }
     ///     }

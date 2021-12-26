@@ -845,7 +845,7 @@ sub ProcessXtra($$$)
                 if ($name =~ /^[-\w]+$/) {
                     $tagInfo = { Name => ucfirst($name) };
                     AddTagToTable($tagTablePtr, $tag, $tagInfo);
-                    $et->VPrint(0, $$et{INDENT}, "[adding Microsoft:$tag]\n");
+                    $et->Vself.logger.log(0, $$et{INDENT}, "[adding Microsoft:$tag]\n");
                 }
             }
             $et->HandleTag($tagTablePtr, $tag, $val,

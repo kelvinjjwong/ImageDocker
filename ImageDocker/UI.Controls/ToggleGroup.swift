@@ -10,6 +10,8 @@ import Cocoa
 
 public final class ToggleGroup {
     
+    let logger = ConsoleLogger(category: "ToggleGroup")
+    
     private var keysOrderred:[String] = []
     
     private var toggles:[String:NSButton]
@@ -63,7 +65,7 @@ public final class ToggleGroup {
     public func disable(key:String, onComplete:((String) -> Void)? = nil) {
         let keys = self.keys
         for k in keys {
-            print(k)
+            self.logger.log(k)
         }
         var i = -1
         for k in keys {
@@ -72,7 +74,7 @@ public final class ToggleGroup {
                 break
             }
         }
-        print("disable \(key) at \(i)")
+        self.logger.log("disable \(key) at \(i)")
         var needCheckNext = false
         for (k, button) in toggles {
             if k == key {
@@ -92,7 +94,7 @@ public final class ToggleGroup {
             }
             
             let enableKey = keys[i]
-            print("will enable \(enableKey) at \(i)")
+            self.logger.log("will enable \(enableKey) at \(i)")
             for (k, button) in toggles {
                 if enableKey == k {
                     button.state = .on

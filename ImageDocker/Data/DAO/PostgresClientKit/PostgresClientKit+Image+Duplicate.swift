@@ -12,10 +12,12 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
     
     static var _duplicates:Duplicates? = nil
     
+    let logger = ConsoleLogger(category: "DB", subCategory: "PostgresClientKit+Image+Duplicate")
+    
     func reloadDuplicatePhotos() {
         let db = PostgresConnection.database()
         
-        print("\(Date()) Loading duplicate photos from db")
+        self.logger.log("\(Date()) Loading duplicate photos from db")
         
         let duplicates:Duplicates = Duplicates()
         var dupDates:Set<Date> = []
@@ -60,13 +62,13 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
             duplicates.yearMonths.insert(year * 1000 + month)
             duplicates.yearMonthDays.insert(year * 100000 + month * 100 + day)
             
-            //print("duplicated date: \(date)")
+            //self.logger.log("duplicated date: \(date)")
             dupDates.insert(date)
         }
         
         var firstPhotoInPlaceAndDate:[String:String] = [:]
-        print("\(Date()) Marking duplicate tag to photo files")
-        print("duplicated date count: \(dupDates.count)")
+        logger.log("Marking duplicate tag to photo files")
+        logger.log("duplicated date count: \(dupDates.count)")
         var marks:[String] = []
 //        var placeholders = 0
         for i in 1...dupDates.count {
@@ -99,7 +101,7 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
                 let minute = Calendar.current.component(.minute, from: date)
                 let second = Calendar.current.component(.second, from: date)
                 let key = "\(photo.place ?? "")_\(year)_\(month)_\(day)_\(hour)_\(minute)_\(second)"
-                //print("duplicated record: \(key)")
+                //self.logger.log("duplicated record: \(key)")
                 let path = photo.path
                 if let first = firstPhotoInPlaceAndDate[key] {
                     // duplicates
@@ -118,10 +120,10 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
                 }
             }
         }
-        print("\(Date()) Marking duplicate tag to photo files: DONE")
+        logger.log("Marking duplicate tag to photo files: DONE")
         
         ImageDuplicateDaoPostgresCK._duplicates = duplicates
-        print("\(Date()) Loading duplicate photos from db: DONE")
+        logger.log("Loading duplicate photos from db: DONE")
     }
     
     func getDuplicatePhotos() -> Duplicates {
@@ -151,7 +153,7 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
             """, orderBy: "\"duplicatesKey\" asc, path asc", values: [keyword, otherKeyword])
         for image in records {
             if let key = image.duplicatesKey, key != "" {
-                //print("found \(key) - \(image.path)")
+                //self.logger.log("found \(key) - \(image.path)")
                 if let _ = result[key] {
                     result[key]?.append(image)
                 }else{
@@ -177,8 +179,8 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
         do{
             try db.execute(sql: "update \"Image\" set \"duplicatesKey\" = $1, hidden = $2 where path = $3", parameterValues: [duplicatesKey, hide, path])
         }catch{
-            print("Error at markImageDuplicated")
-            print(error)
+            logger.log("Error at markImageDuplicated")
+            logger.log(error)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
         }
     }

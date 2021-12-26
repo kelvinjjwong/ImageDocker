@@ -10,6 +10,8 @@ import Cocoa
 
 final class PreferencesController: NSViewController {
     
+    let logger = ConsoleLogger(category: "PreferencesController")
+    
     // Postgres DB date timezone offset (hours)
     static let postgresTimestampTimezoneOffset = "+8"
     
@@ -440,7 +442,7 @@ final class PreferencesController: NSViewController {
                 self.lblCheckDatabaseName.stringValue = "Error: empty."
                 return
             }
-            print(checkDatabase)
+            self.logger.log(checkDatabase)
             guard (checkDatabase == "Not exists." || checkDatabase == "Created." || checkDatabase == "Empty DB.") else{
                 self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
                 self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
@@ -450,7 +452,7 @@ final class PreferencesController: NSViewController {
             let row = self.tblDatabaseArchives.selectedRow
             let timestamp = self.backupArchives[row].0
             let folder = self.backupArchives[row].3
-            print("restore from \(folder)")
+            self.logger.log("restore from \(folder)")
             
             var host = ""
             var port = 5432
@@ -546,7 +548,7 @@ final class PreferencesController: NSViewController {
                 self.lblCheckDatabaseName.stringValue = "Error: empty."
                 return
             }
-            print(checkDatabase)
+            self.logger.log(checkDatabase)
             guard (checkDatabase == "Not exists." || checkDatabase == "Created." || checkDatabase == "Empty DB.") else{
                 self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
                 self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
@@ -602,7 +604,7 @@ final class PreferencesController: NSViewController {
                 self.lblCheckDatabaseName.stringValue = "Error: empty."
                 return
             }
-            print(checkDatabase)
+            self.logger.log(checkDatabase)
             guard (checkDatabase == "Not exists." || checkDatabase == "Created." || checkDatabase == "Empty DB.") else{
                 self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
                 self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
@@ -673,12 +675,12 @@ final class PreferencesController: NSViewController {
             for folder in selected {
                 let url = backupPath.appendingPathComponent(folder)
                 
-                print("delete backup folder \(folder)")
+                self.logger.log("delete backup folder \(folder)")
                 do{
                     try FileManager.default.removeItem(at: url)
                 }catch{
-                    print("Unable to delete backup archive: \(url.path)")
-                    print(error)
+                    self.logger.log("Unable to delete backup archive: \(url.path)")
+                    self.logger.log(error)
                 }
             }
             self.loadBackupArchives()
@@ -688,7 +690,7 @@ final class PreferencesController: NSViewController {
     
     @IBAction func onCheckBackupToDatabaseName(_ sender: NSButton) {
         guard let cmd = PreferencesController.getPostgresCommandPath() else {
-            print("\(Date()) Unable to locate psql command in macOS, check db exist aborted.")
+            self.logger.log("\(Date()) Unable to locate psql command in macOS, check db exist aborted.")
             return
         }
         var host = ""
@@ -703,7 +705,7 @@ final class PreferencesController: NSViewController {
             port = PreferencesController.remoteDBPort()
             user = PreferencesController.remoteDBUsername()
         }else{
-            print("Selected to-database is not postgres. check db exist aborted.")
+            self.logger.log("Selected to-database is not postgres. check db exist aborted.")
             return
         }
         let targetDatabase = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -748,11 +750,11 @@ final class PreferencesController: NSViewController {
     @IBAction func onCreateDatabaseClicked(_ sender: NSButton) {
         let databaseName = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         guard databaseName != "" else {
-            print("Error: database name is empty")
+            self.logger.log("Error: database name is empty")
             return
         }
         guard let cmd = PreferencesController.getPostgresCommandPath() else {
-            print("\(Date()) Unable to locate pg_dump command in macOS, createdb aborted.")
+            self.logger.log("\(Date()) Unable to locate pg_dump command in macOS, createdb aborted.")
             return
         }
         var host = ""
@@ -767,7 +769,7 @@ final class PreferencesController: NSViewController {
             port = PreferencesController.remoteDBPort()
             user = PreferencesController.remoteDBUsername()
         }else{
-            print("Selected to-database is not postgres. createdb aborted.")
+            self.logger.log("Selected to-database is not postgres. createdb aborted.")
             return
         }
         
@@ -779,16 +781,16 @@ final class PreferencesController: NSViewController {
             let (status, _, pgError, err) = PostgresConnection.default.createDatabase(commandPath: cmd, database: databaseName, host: host, port: port, user: user)
             
             if status == true {
-                print("created database \(databaseName) on \(user)@\(host):\(port)")
+                self.logger.log("created database \(databaseName) on \(user)@\(host):\(port)")
                 DispatchQueue.main.async {
                     self.btnCreateDatabase.isEnabled = true
                     self.lblCheckDatabaseName.stringValue = "Created."
                 }
             }else{
-                print("Unable to create database \(databaseName) on \(user)@\(host):\(port)")
-                print(pgError)
+                self.logger.log("Unable to create database \(databaseName) on \(user)@\(host):\(port)")
+                self.logger.log(pgError)
                 if let error = err {
-                    print(error)
+                    self.logger.log(error)
                 }
                 DispatchQueue.main.async {
                     self.btnCreateDatabase.isEnabled = true
@@ -986,14 +988,14 @@ final class PreferencesController: NSViewController {
     @IBAction func onBaiduLinkClicked(_ sender: Any) {
         if let url = URL(string: "http://lbsyun.baidu.com"),
             NSWorkspace.shared.open(url) {
-            print("triggered link \(url)")
+            self.logger.log("triggered link \(url)")
         }
     }
     
     @IBAction func onGoogleLinkClicked(_ sender: Any) {
         if let url = URL(string: "https://developers.google.com/maps/documentation/maps-static/intro"),
             NSWorkspace.shared.open(url) {
-            print("triggered link \(url)")
+            self.logger.log("triggered link \(url)")
         }
     }
     
@@ -1464,7 +1466,7 @@ final class PreferencesController: NSViewController {
         if self.lstAmountForPagination.stringValue != "Unlimited" {
             paginationAmount = Int(self.lstAmountForPagination.titleOfSelectedItem ?? "0") ?? 0
         }
-        print("SET AMOUNT FOR PAGINATION AS \(paginationAmount)")
+        self.logger.log("SET AMOUNT FOR PAGINATION AS \(paginationAmount)")
         defaults.set(paginationAmount,
                      forKey: PreferencesController.amountForPaginationKey)
     }
@@ -1677,7 +1679,7 @@ final class PreferencesController: NSViewController {
     func initPerformanceSection() {
         self.setupMemorySlider()
         let paginationAmount = PreferencesController.amountForPagination()
-        print("GOT AMOUNT FOR PAGINATION \(paginationAmount)")
+        self.logger.log("GOT AMOUNT FOR PAGINATION \(paginationAmount)")
         if paginationAmount == 0 {
             self.lstAmountForPagination.selectItem(withTitle: "Unlimited")
         }else{

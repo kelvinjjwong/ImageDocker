@@ -237,7 +237,7 @@ class ViewController: NSViewController {
             self.view.window?.performZoom(self)
         }
         
-        print("[MAIN] AFTER SIZE \(self.view.frame.size.width) x \(self.view.frame.size.height)")
+        self.logger.log("[MAIN] AFTER SIZE \(self.view.frame.size.width) x \(self.view.frame.size.height)")
     }
     
     // MARK: - SPLASH SCREEN ON STARTUP
@@ -254,9 +254,9 @@ class ViewController: NSViewController {
             self.popNotification(message: message)
         }
         self.hideNotification()
-//        print("\(Date()) Loading view - preview zone")
+//        self.logger.log("\(Date()) Loading view - preview zone")
         self.configurePreview()
-//        print("\(Date()) Loading view - selection view")
+//        self.logger.log("\(Date()) Loading view - selection view")
         self.configureSelectionView()
         
         self.setupUIDisplays()
@@ -269,19 +269,19 @@ class ViewController: NSViewController {
         self.setupExportMenu()
         self.setupPreviewMenu()
         
-//        print("\(Date()) Loading view - configure tree")
+//        self.logger.log("\(Date()) Loading view - configure tree")
         configureTree()
-//        print("\(Date()) Loading view - configure collection view")
+//        self.logger.log("\(Date()) Loading view - configure collection view")
         configureCollectionView()
-//        print("\(Date()) Loading view - configure editors")
+//        self.logger.log("\(Date()) Loading view - configure editors")
         
         self.configureDarkMode()
         self.resize()
         
-//        print("\(Date()) Loading view - update library tree")
+//        self.logger.log("\(Date()) Loading view - update library tree")
         self.splashController.message(Words.splash_laodingLibraries.word(), progress: 4)
         updateLibraryTree()
-//        print("\(Date()) Loading view - update library tree: DONE")
+//        self.logger.log("\(Date()) Loading view - update library tree: DONE")
         
 //        self.deviceCopyWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "DeviceCopyWindowController")) as? NSWindowController
         
@@ -306,7 +306,7 @@ class ViewController: NSViewController {
         
         self.startSchedules()
         
-//        print("\(Date()) Loading view: DONE")
+//        self.logger.log("\(Date()) Loading view: DONE")
     }
     
     override func viewDidLoad() {
@@ -329,19 +329,19 @@ class ViewController: NSViewController {
         
         self.btnImageOptions.isEnabled = false
         
-//        print("\(Date()) Loading view")
+//        self.logger.log("\(Date()) Loading view")
         
         //self.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
         //progressIndicator.isDisplayedWhenStopped = false
         collectionProgressIndicator.isDisplayedWhenStopped = false
         
-//        print("\(Date()) Loading view - configure dark mode")
+//        self.logger.log("\(Date()) Loading view - configure dark mode")
         
         self.imagesLoader.hiddenCountHandler = { hiddenCount in
             DispatchQueue.main.async {
                 self.chbShowHidden.title = "\(Words.hidden.word()) (\(hiddenCount))"
-//                print("hidden: \(hiddenCount)")
+//                self.logger.log("hidden: \(hiddenCount)")
             }
         }
         
@@ -433,12 +433,12 @@ class ViewController: NSViewController {
         if totalRecords > (pages * pageSize) {
             pages += 1
         }
-//        print("totalrecords: \(totalRecords), pageSize:\(pageSize), pages:\(pages)")
+//        self.logger.log("totalrecords: \(totalRecords), pageSize:\(pageSize), pages:\(pages)")
         self.changePaginationState(currentPage: currentPage, totalPages: pages)
     }
     
     internal func changePaginationState(currentPage:Int, totalPages:Int){
-//        print("page: \(currentPage), total: \(totalPages)")
+//        self.logger.log("page: \(currentPage), total: \(totalPages)")
         self.currentPageOfCollection = currentPage
         self.totalPagesOfCollection = totalPages
         self.lblPagesCollection.stringValue = "\(currentPage) / \(totalPages)"
@@ -486,7 +486,7 @@ class ViewController: NSViewController {
     var runningSearch = false
     
     @IBAction func onSearchAction(_ sender: NSTokenField) {
-        print("action on search: \(self.txtSearch.stringValue)")
+        self.logger.log("action on search: \(self.txtSearch.stringValue)")
     }
     
     

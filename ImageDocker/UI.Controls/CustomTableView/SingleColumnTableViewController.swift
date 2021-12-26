@@ -14,6 +14,8 @@ import Cocoa
 
 class SingleColumnTableViewController: NSObject {
     
+    let logger = ConsoleLogger(category: "SingleColumnTableViewController")
+    
 //    var selectionDelegate:FaceCategoryListSelectionDelegate?
     var items:[String] = []
     var onClick:((String) -> Void)? = nil
@@ -33,7 +35,7 @@ class SingleColumnTableViewController: NSObject {
         self.table.delegate = self
         self.table.dataSource = self
         self.items = items
-        print(items.count)
+        self.logger.log(items.count)
         self.table.reloadData()
     }
     

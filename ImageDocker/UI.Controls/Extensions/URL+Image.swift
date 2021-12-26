@@ -36,9 +36,9 @@ public extension URL {
         let imgRef = imgSrc!
         
         if let imgProps = CGImageSourceCopyPropertiesAtIndex(imgRef, 0, nil) as NSDictionary?, let orientation = imgProps[kCGImagePropertyOrientation as String]  {
-            print("==== photo orientation = \(orientation)")
+            print("\(Date()) [URL] ==== photo orientation = \(orientation)")
             if let _ = orientation as? CGImagePropertyOrientation {
-                //print(ori)
+                //self.logger.log(ori)
             }
             
         }

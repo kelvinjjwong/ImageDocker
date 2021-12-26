@@ -182,7 +182,7 @@ sub ProcessComments($$$)
             $tag = 'vendor';
             $val = $buff;
             $num = ($pos + 4 < $end) ? Get32u($dataPt, $pos) : 0;
-            $et->VPrint(0, "  + [Vorbis comments with $num entries]\n");
+            $et->Vself.logger.log(0, "  + [Vorbis comments with $num entries]\n");
             $pos += 4;
         }
         # add tag to table unless it exists already
@@ -191,7 +191,7 @@ sub ProcessComments($$$)
             # remove invalid characters in tag name and capitalize following letters
             $name =~ s/[^\w-]+(.?)/\U$1/sg;
             $name =~ s/([a-z0-9])_([a-z])/$1\U$2/g;
-            $et->VPrint(0, "  | [adding $tag]\n");
+            $et->Vself.logger.log(0, "  | [adding $tag]\n");
             AddTagToTable($tagTablePtr, $tag, { Name => $name });
         }
         $et->HandleTag($tagTablePtr, $tag, $et->Decode($val, 'UTF8'),

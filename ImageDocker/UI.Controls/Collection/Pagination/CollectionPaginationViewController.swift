@@ -10,6 +10,8 @@ import Cocoa
 
 class CollectionPaginationViewController: NSViewController {
     
+    let logger = ConsoleLogger(category: "CollectionPaginationViewController")
+    
     // MARK: PROPERTIES
     
     @IBOutlet weak var lblTotalItems: NSTextField!
@@ -106,7 +108,7 @@ class CollectionPaginationViewController: NSViewController {
     @IBAction func onLoadClicked(_ sender: NSButton) {
         self.countImages()
         self.calculatePages()
-        print("CALL ONLOAD")
+        self.logger.log("CALL ONLOAD")
         self.onLoad(self.pageSize, self.currentPage)
     }
     
@@ -153,7 +155,7 @@ class CollectionPaginationViewController: NSViewController {
             self.currentPage,
             self.pages
         )
-        print("divided pages \(self.pages)")
+        self.logger.log("divided pages \(self.pages)")
     }
     
 }

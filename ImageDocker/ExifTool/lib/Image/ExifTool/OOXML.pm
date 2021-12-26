@@ -213,7 +213,7 @@ sub FoundTag($$$$;$)
     my $verbose = $et->Options('Verbose');
 
     my $tag = $$props[-1];
-    $et->VPrint(0, "  | - Tag '", join('/',@$props), "'\n") if $verbose > 1;
+    $et->Vself.logger.log(0, "  | - Tag '", join('/',@$props), "'\n") if $verbose > 1;
 
     # un-escape XML character entities
     $val = Image::ExifTool::XMP::UnescapeXML($val);
@@ -246,7 +246,7 @@ sub FoundTag($$$$;$)
                 $tagInfo{Format} = 'date',
                 $tagInfo{PrintConv} = '$self->ConvertDateTime($val)';
             }
-            $et->VPrint(0, "  | [adding $tag]\n") if $verbose;
+            $et->Vself.logger.log(0, "  | [adding $tag]\n") if $verbose;
             AddTagToTable($tagTablePtr, $tag, \%tagInfo);
         }
     } elsif ($tag eq 'xmlns') {
@@ -288,7 +288,7 @@ sub FoundTag($$$$;$)
             $val = Image::ExifTool::XMP::ConvertXMPDate($val) if $fmt eq 'date';
         }
     } else {
-        $et->VPrint(0, "  [adding $tag]\n") if $verbose;
+        $et->Vself.logger.log(0, "  [adding $tag]\n") if $verbose;
         AddTagToTable($tagTablePtr, $tag, { Name => ucfirst $tag });
     }
     # save the tag
@@ -324,7 +324,7 @@ sub ProcessDOCX($$)
             $fileType = 'THMX';
         }
     } else {
-        $et->VPrint(0, "Unrecognized MIME type: $mime\n");
+        $et->Vself.logger.log(0, "Unrecognized MIME type: $mime\n");
         # get MIME type according to file extension
         $fileType = $$et{FILE_EXT};
         # default to 'DOCX' if this isn't a known OOXML extension
@@ -342,7 +342,7 @@ sub ProcessDOCX($$)
         # get filename of this ZIP member
         my $file = $member->fileName();
         next unless defined $file;
-        $et->VPrint(0, "File: $file\n");
+        $et->Vself.logger.log(0, "File: $file\n");
         # set the document number and extract ZIP tags
         $$et{DOC_NUM} = ++$docNum;
         Image::ExifTool::ZIP::HandleMember($et, $member);

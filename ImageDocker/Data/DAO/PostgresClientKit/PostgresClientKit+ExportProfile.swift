@@ -10,6 +10,8 @@ import Foundation
 
 class ExportDaoPostgresCK : ExportDaoInterface {
     
+    let logger = ConsoleLogger(category: "ExportDaoPostgresCK")
+    
     // MARK: - PROFILE CRUD
     
     func getOrCreateExportProfile(id: String, name: String, directory: String, repositoryPath: String, specifyPeople: Bool, specifyEvent: Bool, specifyRepository: Bool, people: String, events: String, duplicateStrategy: String, fileNaming: String, subFolder: String, patchImageDescription: Bool, patchDateTime: Bool, patchGeolocation: Bool, specifyFamily:Bool, family:String) -> ExportProfile {
@@ -237,8 +239,8 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
         
         // TODO: after profile.lastExportEndTime
         
-        print("sql for export images:")
-        print(sql)
+        self.logger.log("sql for export images:")
+        self.logger.log(sql)
         
         return sql
     }
@@ -320,23 +322,23 @@ select count(1) from "ExportLog" where "profileId"='\(profile.id)'
         SELECT count(1) from "ExportLog" where "imageId" = '\(imageId)' and "profileId" = '\(profileId)'
         """)
         if count < 1 {
-            print("insert log \(imageId) \(profileId)")
+            self.logger.log("insert log \(imageId) \(profileId)")
             do {
                 try db.execute(sql: """
                 INSERT INTO "ExportLog" ("imageId", "profileId", "lastExportTime", "repositoryPath", "subfolder", "filename", "exportedMd5", "state", "failMessage") VALUES ($1, $2, now(), $3, $4, $5, $6, 't', '')
                 """, parameterValues: [imageId, profileId, repositoryPath, subfolder, filename, exportedMD5])
             }catch{
-                print(error)
+                self.logger.log(error)
                 return .ERROR
             }
         }else{
-            print("update log \(imageId) \(profileId)")
+            self.logger.log("update log \(imageId) \(profileId)")
             do {
                 try db.execute(sql: """
                 UPDATE "ExportLog" set "lastExportTime" = now(), "repositoryPath" = $1, "subfolder" = $2, "filename" = $3, "exportedMd5" = $4, "state" = 't', "failMessage" = '' WHERE "imageId"=$5 and "profileId"=$6
                 """, parameterValues: [repositoryPath, subfolder, filename, exportedMD5, imageId, profileId])
             }catch{
-                print(error)
+                self.logger.log(error)
                 return .ERROR
             }
         }

@@ -275,7 +275,7 @@ sub Add($$$$;$)
 #          or -1 on error loading data and "ERROR" is set to offending data name
 # Note: The "Error" member may be set externally to print a specific error
 #       message instead of doing the dump.
-sub Print($$;$$$$$)
+sub self.logger.log($$;$$$$$)
 {
     local $_;
     my ($self, $raf, $dataPt, $dataPos, $outfile, $level, $title) = @_;
@@ -864,7 +864,7 @@ Image::ExifTool::HtmlDump - Dump information in hex to HTML page
     use Image::ExifTool::HtmlDump;
     my $dump = new Image::ExifTool::HtmlDump;
     $dump->Add($start, $size, $comment);
-    $dump->Print($dumpInfo, $raf, $dataPt, $dataPos, $outfile);
+    $dump->self.logger.log($dumpInfo, $raf, $dataPt, $dataPos, $outfile);
 
 =head1 DESCRIPTION
 

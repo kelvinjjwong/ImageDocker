@@ -10,8 +10,10 @@ import Foundation
 
 class RepositoryTreeDataSource : TreeDataSource {
     
+    let logger = ConsoleLogger(category: "RepositoryTreeDataSource")
+    
     func convertToTreeNode(_ container:ImageContainer) -> TreeCollection {
-        //print("repo node name \(container.name)")
+        //self.logger.log("repo node name \(container.name)")
         let node = TreeCollection(container.name, id: container.path, object: container)
         if container.subContainers == -1 {
             let childCount = RepositoryDao.default.updateImageContainerSubContainers(path: container.path)
@@ -36,42 +38,42 @@ class RepositoryTreeDataSource : TreeDataSource {
     
     func loadRepositories(condition:SearchCondition? = nil) -> [TreeCollection] {
         var nodes:[TreeCollection] = []
-        print("\(Date()) [TREE] start load repositories from database")
+        self.logger.log("\(Date()) [TREE] start load repositories from database")
         let startTime = Date()
         let containers = RepositoryDao.default.getRepositories(orderBy: "name", condition: condition)
         let gap = Date().timeIntervalSince(startTime)
-        print("\(Date()) [TREE] db time cost \(gap)")
+        self.logger.log("\(Date()) [TREE] db time cost \(gap)")
         if containers.count == 0 {
-//            print(">>> no repository is loaded for tree")
+//            self.logger.log(">>> no repository is loaded for tree")
         }
         let startTime2 = Date()
         for container in containers {
-//            print(">>> loaded repo for tree: \(container.name)")
-            print("\(Date()) [TREE] converting repository container to tree node - \(container.path)")
+//            self.logger.log(">>> loaded repo for tree: \(container.name)")
+            self.logger.log("\(Date()) [TREE] converting repository container to tree node - \(container.path)")
             let node = self.convertToTreeNode(container)
             nodes.append(node)
         }
         let gap2 = Date().timeIntervalSince(startTime2)
-        print("\(Date()) [TREE] collection insertion time cost \(gap2)")
+        self.logger.log("\(Date()) [TREE] collection insertion time cost \(gap2)")
         return nodes
     }
     
     func loadSubContainers(parentPath: String, condition:SearchCondition? = nil) -> [TreeCollection] {
         var nodes:[TreeCollection] = []
-        print("\(Date()) [TREE] start load sub containers from database")
+        self.logger.log("\(Date()) [TREE] start load sub containers from database")
         let startTime = Date()
         let containers = RepositoryDao.default.getSubContainers(parent: parentPath, condition: condition)
         let gap = Date().timeIntervalSince(startTime)
-        print("\(Date()) [TREE] db time cost \(gap)")
+        self.logger.log("\(Date()) [TREE] db time cost \(gap)")
         
         let startTime2 = Date()
         for container in containers {
-            print("\(Date()) [TREE] converting sub container to tree node - \(container.path)")
+            self.logger.log("\(Date()) [TREE] converting sub container to tree node - \(container.path)")
             let node = self.convertToTreeNode(container)
             nodes.append(node)
         }
         let gap2 = Date().timeIntervalSince(startTime2)
-        print("\(Date()) [TREE] collection insertion time cost \(gap2)")
+        self.logger.log("\(Date()) [TREE] collection insertion time cost \(gap2)")
         return nodes
     }
     

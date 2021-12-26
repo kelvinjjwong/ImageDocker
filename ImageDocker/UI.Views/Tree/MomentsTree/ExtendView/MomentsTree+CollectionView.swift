@@ -44,11 +44,11 @@ extension ViewController {
         self.selectedMoment = moment
 
         var totalRecords = self.countImagesOfMoment(moment: moment)
-//        print("total records including hidden: \(totalRecords)")
+//        self.logger.log("total records including hidden: \(totalRecords)")
         if self.chbShowHidden.state == .off {
             totalRecords -= self.countHiddenImagesOfMoment(moment: moment)
         }
-//        print("total records excluding hidden: \(totalRecords)")
+//        self.logger.log("total records excluding hidden: \(totalRecords)")
         self.changePaginationState(currentPage: pageNumber, pageSize: pageSize, totalRecords: totalRecords)
         
         self.loadCollectionByMoment(year: moment.year, month: moment.month, day: moment.day, pageSize: pageSize, pageNumber: pageNumber)
@@ -56,7 +56,7 @@ extension ViewController {
     
     func loadCollectionByMoment(year:Int, month:Int, day:Int, pageSize:Int = 0, pageNumber:Int = 0){
         //guard !self.scaningRepositories && !self.creatingRepository else {return}
-//        print("select \(year) \(month) \(day)")
+//        self.logger.log("select \(year) \(month) \(day)")
         
         loadCollection {
             self.imagesLoader.load(

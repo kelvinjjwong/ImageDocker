@@ -29,6 +29,8 @@ struct FaceClip {
 @available(OSX 10.13, *)
 class FaceDetection {
     
+    let logger = ConsoleLogger(category: "FaceDetection")
+    
     fileprivate let CropSize:Int = 200
     
     static let `default` = FaceDetection()
@@ -53,14 +55,14 @@ class FaceDetection {
     
     func findFace(from imageFile:URL, into cropsStorage:URL, nameBy:NamingRule = .number, onCompleted: (([FaceClip]) -> Void)? = nil) {
         guard let cgImage = CGImage.getCGImage(from: imageFile) else {
-            print("ERROR: Cannot convert to CGImage: \(imageFile.path)")
+            self.logger.log("ERROR: Cannot convert to CGImage: \(imageFile.path)")
             return
         }
         // Start face detection via Vision
         autoreleasepool { () -> Void in
             let facesRequest = VNDetectFaceRectanglesRequest { request, error in
                 guard error == nil else {
-                    print("ERROR: \(error!.localizedDescription)")
+                    self.logger.log("ERROR: \(error!.localizedDescription)")
                     return
                 }
                 self.handleFaces(request, cgImage: cgImage, cropsPath: cropsStorage, nameBy: nameBy, onCompleted: onCompleted)
@@ -76,21 +78,21 @@ class FaceDetection {
         }
         
         
-        print("Trying to create directory: \(cropsPath.path)")
+        self.logger.log("Trying to create directory: \(cropsPath.path)")
         var isDir:ObjCBool = false
         do {
             try FileManager.default.createDirectory(atPath: cropsPath.path, withIntermediateDirectories: true, attributes: nil)
         }catch{
-            print(error)
-            print("ERROR: Cannot create directory for storing crops at path: \(cropsPath.path)")
+            self.logger.log(error)
+            self.logger.log("ERROR: Cannot create directory for storing crops at path: \(cropsPath.path)")
             return
         }
         if !FileManager.default.fileExists(atPath: cropsPath.path, isDirectory: &isDir) {
-            print("ERROR: Cannot create directory: \(cropsPath.path)")
+            self.logger.log("ERROR: Cannot create directory: \(cropsPath.path)")
             return
         }
         if !isDir.boolValue {
-            print("ERROR: Cannot create directory: \(cropsPath.path), it's occupied by a file.")
+            self.logger.log("ERROR: Cannot create directory: \(cropsPath.path), it's occupied by a file.")
             return
         }
         
@@ -100,16 +102,16 @@ class FaceDetection {
         observations.forEach { observation in
             let (cgImage, x, y, width, height, frameX, frameY, frameWidth, frameHeight) = cgImage.cropImageToFace(observation, borderPercentage: self.BorderPercentage)
             guard let image = cgImage else {
-                print("Image file cannot be cropped.")
+                self.logger.log("Image file cannot be cropped.")
                 return
             }
             i += 1
-            print("got \(i)")
+            self.logger.log("got \(i)")
             // Create image file from detected faces
             autoreleasepool(invoking: { () -> Void in
                 let data = NSBitmapImageRep.init(cgImage: image).representation(using: .jpeg, properties: [:])
                 if data == nil {
-                    print("data object is nil")
+                    self.logger.log("data object is nil")
                     
                 }else{
                     
@@ -123,15 +125,15 @@ class FaceDetection {
                         filenameTemporary = "\(observation.uuid)-temp.jpg"
                     }
                     let faceURL = cropsPath.appendingPathComponent(filename)
-                    print("Creating crop file: \(filename)")
+                    self.logger.log("Creating crop file: \(filename)")
                     if Int(frameWidth) > CropSize || Int(frameHeight) > CropSize {
                         let tempURL = cropsPath.appendingPathComponent(filenameTemporary)
                         
                         do {
                             try data?.write(to: tempURL)
                         }catch{
-                            print("Unable to save big size crop to temporary file: \(tempURL.path)")
-                            print(error)
+                            self.logger.log("Unable to save big size crop to temporary file: \(tempURL.path)")
+                            self.logger.log(error)
                         }
                         
                         if let image = self.createThumbnail(from: tempURL, size: CropSize) {
@@ -141,8 +143,8 @@ class FaceDetection {
                                     do {
                                         try cgData?.write(to: faceURL)
                                     }catch{
-                                        print("Unable to save resized crop to file: \(faceURL.path)")
-                                        print(error)
+                                        self.logger.log("Unable to save resized crop to file: \(faceURL.path)")
+                                        self.logger.log(error)
                                     }
                                 }
                             }
@@ -150,8 +152,8 @@ class FaceDetection {
                         do {
                             try FileManager.default.removeItem(at: tempURL)
                         }catch{
-                            print("Unable to delete temporary file: \(tempURL.path)")
-                            print(error)
+                            self.logger.log("Unable to delete temporary file: \(tempURL.path)")
+                            self.logger.log(error)
                         }
                         
                         
@@ -159,7 +161,7 @@ class FaceDetection {
                         do {
                             try data?.write(to: faceURL)
                         }catch{
-                            print(error)
+                            self.logger.log(error)
                         }
                     }
                     
@@ -196,7 +198,7 @@ extension CGImage {
     static func getCGImage(from file: URL) -> CGImage? {
         // Extract NSImage from image file
         guard let nsImage = NSImage(contentsOfFile: file.path) else {
-            print("File cannot be converted to NSImage: \(file.path)")
+            print("\(Date()) [CGImage] File cannot be converted to NSImage: \(file.path)")
             return nil
         }
         // Convert NSImage to CGImage
@@ -213,8 +215,8 @@ extension CGImage {
         let y = (1 - face.boundingBox.origin.y) * CGFloat(height) - newHeight
         let croppingRect = CGRect(x: x, y: y, width: newWidth, height: newHeight)
         let increasedRect = croppingRect.insetBy(dx: newWidth * -percentage, dy: newHeight * -percentage)
-        print("x:\(x), y:\(y), width:\(newWidth), height:\(newHeight)")
-        print("increased x:\(increasedRect.origin.x), y:\(increasedRect.origin.y), width:\(increasedRect.size.width), height:\(increasedRect.size.height)")
+        print("\(Date()) [CGImage] x:\(x), y:\(y), width:\(newWidth), height:\(newHeight)")
+        print("\(Date()) [CGImage] increased x:\(increasedRect.origin.x), y:\(increasedRect.origin.y), width:\(increasedRect.size.width), height:\(increasedRect.size.height)")
         let cgImage = self.cropping(to: increasedRect)
         return (cgImage, x, y, newWidth, newHeight, increasedRect.origin.x, increasedRect.origin.y, increasedRect.size.width, increasedRect.size.height)
     }

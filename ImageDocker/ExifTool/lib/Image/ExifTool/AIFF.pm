@@ -214,14 +214,14 @@ sub ProcessAIFF($$)
         $pos += 8;
         my ($tag, $len) = unpack('a4N', $buff);
         my $tagInfo = $et->GetTagInfo($tagTablePtr, $tag);
-        $et->VPrint(0, "AIFF '$tag' chunk ($len bytes of data):\n");
+        $et->Vself.logger.log(0, "AIFF '$tag' chunk ($len bytes of data):\n");
         # AIFF chunks are padded to an even number of bytes
         my $len2 = $len + ($len & 0x01);
         if ($tagInfo) {
             if ($$tagInfo{TypeOnly}) {
                 $len = $len2 = 4;
                 $page = ($page || 0) + 1;
-                $et->VPrint(0, $$et{INDENT} . "Page $page:\n");
+                $et->Vself.logger.log(0, $$et{INDENT} . "Page $page:\n");
             }
             $raf->Read($buff, $len2) >= $len or $err=1, last;
             unless ($$tagInfo{SubDirectory} or $$tagInfo{Binary}) {

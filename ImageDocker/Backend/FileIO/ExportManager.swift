@@ -10,6 +10,8 @@ import Cocoa
 
 class ExportManager {
     
+    let logger = ConsoleLogger(category: "ExportManager")
+    
     static let `default` = ExportManager()
     
     //var working:Bool = false
@@ -56,7 +58,7 @@ class ExportManager {
     fileprivate func nonStop(profileId:String) -> Bool {
         
         if PreferencesController.isSQLite() && self.suppressed {
-            print("ExportManager is suppressed.")
+            self.logger.log("ExportManager is suppressed.")
             TaskManager.exporting = false
             self.stopAllTasks()
             return false
@@ -85,7 +87,7 @@ class ExportManager {
         let generatedImageDescription = Naming.Export.getNewDescription(image: image)
         ExifTool.helper.patchImageDescription(description: generatedImageDescription, url: URL(fileURLWithPath: targetFullFilePath))
 
-        print("\(Date()) Change ImageDescription for \(image.path) : DONE")
+        self.logger.log("\(Date()) Change ImageDescription for \(image.path) : DONE")
     }
     
     private func patchImageDateTime(image:Image, profile:ExportProfile, targetFilePath:String) {
@@ -137,14 +139,14 @@ class ExportManager {
         let triggerTime = Date()
         
         
-        //print("exporting")
+        //self.logger.log("exporting")
         TaskManager.exporting = true
-        print("  ")
-        print("!! ExportManager start working at \(Date())")
+        self.logger.log("  ")
+        self.logger.log("!! ExportManager start working at \(Date())")
         
         self.startTask(profileId: profile.id)
         
-        print("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
+        self.logger.log("\(Date()) EXPORT: CHECKING UPDATES AND WHICH NOT EXPORTED")
         
         let totalImagesInDb = ExportDao.default.countImagesForExport(profile: profile)
         
@@ -226,7 +228,7 @@ class ExportManager {
         
         // invalid source file
         if !FileManager.default.fileExists(atPath: image.path) {
-            print("Source image not found in file system: \(image.path)")
+            self.logger.log("Source image not found in file system: \(image.path)")
             return false
         }
         
@@ -238,7 +240,7 @@ class ExportManager {
         let fullTargetPath = URL(fileURLWithPath: basePath).appendingPathComponent(subfolder)
         let fullTargetFilePath = fullTargetPath.appendingPathComponent(targetFilename)
         
-        print("\(Date()) Copy file [\(image.path)] to [\(fullTargetFilePath)]")
+        self.logger.log("\(Date()) Copy file [\(image.path)] to [\(fullTargetFilePath)]")
         
         if rehearsal {
             return true
@@ -258,8 +260,8 @@ class ExportManager {
                         do {
                             try FileManager.default.removeItem(atPath: exportedPath.path)
                         }catch{
-                            print("WARN: Unable to delete previous exported file: \(exportedPath.path)")
-                            print(error)
+                            self.logger.log("WARN: Unable to delete previous exported file: \(exportedPath.path)")
+                            self.logger.log(error)
                         }
                     }
                 }
@@ -268,16 +270,16 @@ class ExportManager {
                 do {
                     try FileManager.default.removeItem(atPath: "\(fullTargetFilePath.path)")
                 }catch{
-                    print("WARN: Unable to delete previous exported file: \(fullTargetFilePath.path)")
-                    print(error)
+                    self.logger.log("WARN: Unable to delete previous exported file: \(fullTargetFilePath.path)")
+                    self.logger.log(error)
                 }
             }
             do {
                 try FileManager.default.copyItem(atPath: image.path, toPath: "\(fullTargetFilePath.path)")
                 copied = true
             }catch {
-                print("Unable to copy from: [\(image.path)] to: [\(fullTargetFilePath.path)] ")
-                print(error)
+                self.logger.log("Unable to copy from: [\(image.path)] to: [\(fullTargetFilePath.path)] ")
+                self.logger.log(error)
                 copied = false
                 errorMessage = error.localizedDescription
             }
@@ -300,7 +302,7 @@ class ExportManager {
             // generate MD5
             let md5 = self.generateImageMD5(path: fullTargetFilePath.path)
             
-            print("\(Date()) Copy file [\(image.path)] to [\(fullTargetFilePath.path)] DONE.")
+            self.logger.log("\(Date()) Copy file [\(image.path)] to [\(fullTargetFilePath.path)] DONE.")
             
             let _ = ExportDao.default.storeImageExportSuccess(imageId: image.id ?? image.path, profileId: profile.id, repositoryPath: image.repositoryPath, subfolder: subfolder, filename: targetFilename, exportedMD5: md5)
             // TODO handle db interrupt error
@@ -315,7 +317,7 @@ class ExportManager {
     
     // MARK: - HOUSE KEEP
     func housekeepFilesNotInExportLog(profile:ExportProfile) {
-        print("\(Date()) EXPORT: HOUSE KEEP")
+        self.logger.log("\(Date()) EXPORT: HOUSE KEEP")
         
         self.printMessage("Checking invalid exported files ...")
         
@@ -330,7 +332,7 @@ class ExportManager {
         let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: profile.directory),
                                                         includingPropertiesForKeys: [.isDirectoryKey, .isReadableKey, .isWritableKey ],
                                                         options: [.skipsHiddenFiles], errorHandler: { (url, error) -> Bool in
-                                                            print("directoryEnumerator error at \(url): ", error)
+                                                            self.logger.log("directoryEnumerator error at \(url): ", error)
                                                             return true
         })!
         
@@ -346,7 +348,7 @@ class ExportManager {
                 if url.isWritable! {
                     if !url.isDirectory! {
                         if !fileRecords.contains(file.path) {
-                            print("found file not in record: \(file.path) , mark to delete")
+                            self.logger.log("found file not in record: \(file.path) , mark to delete")
                             uselessFiles.insert(file.path)
                         }
                     }else {
@@ -354,12 +356,12 @@ class ExportManager {
                     }
                 }
             }catch{
-                print("Error reading url properties for \(file.path)")
-                print(error)
+                self.logger.log("Error reading url properties for \(file.path)")
+                self.logger.log(error)
             }
         }
         
-        print("Useless exported file count: \(uselessFiles.count)")
+        self.logger.log("Useless exported file count: \(uselessFiles.count)")
         
         self.printMessage("Found invalid exported files: \(uselessFiles.count)")
         
@@ -375,13 +377,13 @@ class ExportManager {
                 i += 1
                 self.printMessage("Deleting invalid exported file ... ( \(i) / \(total) )")
                 
-                print("deleting invalid exported file \(uselessFile)")
+                self.logger.log("deleting invalid exported file \(uselessFile)")
                 
                 do {
                     try FileManager.default.removeItem(atPath: uselessFile)
                 }catch {
-                    print("Cannot delete invalid exported file \(uselessFile)")
-                    print(error)
+                    self.logger.log("Cannot delete invalid exported file \(uselessFile)")
+                    self.logger.log(error)
                 }
             }
         }
@@ -396,14 +398,14 @@ class ExportManager {
                     try FileManager.default.removeItem(atPath: folder)
                 }
             }catch{
-                print("  Cannot delete empty exported folder \(folder)")
-                print(error)
+                self.logger.log("  Cannot delete empty exported folder \(folder)")
+                self.logger.log(error)
             }
         }
         
         self.printMessage("")
         
-        print("\(Date()) EXPORT: HOUSE KEEP: DONE")
+        self.logger.log("\(Date()) EXPORT: HOUSE KEEP: DONE")
     }
     
     
@@ -442,8 +444,8 @@ class ExportManager {
                 do {
                     try FileManager.default.removeItem(atPath: path.path)
                 }catch {
-                    print("Unable to delete invalid exported file \(path.path)")
-                    print(error)
+                    self.logger.log("Unable to delete invalid exported file \(path.path)")
+                    self.logger.log(error)
                 }
             }
         }

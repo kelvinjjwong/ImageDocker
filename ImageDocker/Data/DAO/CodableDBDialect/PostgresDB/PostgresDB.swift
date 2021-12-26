@@ -11,6 +11,8 @@ import PostgresClientKit
 
 public class PostgresDB : DBExecutor {
     
+    let logger = ConsoleLogger(category: "PostgresDB")
+    
     static let showSQL = false
     
     private let postgresConfig: ConnectionConfiguration
@@ -32,13 +34,13 @@ public class PostgresDB : DBExecutor {
         self.postgresConfig = configuration
     }
     public func execute(sql: String) throws {
-        if(PostgresDB.showSQL) {print(" >>> execute sql: \(sql)")}
+        if(PostgresDB.showSQL) {self.logger.log(" >>> execute sql: \(sql)")}
         let statement = SQLStatement(sql: sql)
         try self.execute(statement: statement)
     }
     
     public func execute(sql: String, parameterValues:[PostgresValueConvertible?]) throws {
-        if(PostgresDB.showSQL) {print(" >>> execute sql: \(sql)")}
+        if(PostgresDB.showSQL) {self.logger.log(" >>> execute sql: \(sql)")}
         let statement = SQLStatement(sql: sql)
         statement.arguments = parameterValues
         try self.execute(statement: statement)
@@ -68,12 +70,12 @@ public class PostgresDB : DBExecutor {
             let generator = PostgreSQLStatementGenerator(table: table, record: object)
             let statement = generator.deleteStatement(keyColumns: primaryKeys)
             _sql = statement.sql
-            if(PostgresDB.showSQL) {print(" >>> execute sql: \(_sql)")}
+            if(PostgresDB.showSQL) {self.logger.log(" >>> execute sql: \(_sql)")}
             try self.execute(statement: statement)
         }catch{
-            print("Error at PostgresDB.delete(object:table:primaryKeys)")
-            print("Error at sql: \(_sql)")
-            print(error)
+            self.logger.log("Error at PostgresDB.delete(object:table:primaryKeys)")
+            self.logger.log("Error at sql: \(_sql)")
+            self.logger.log(error)
         }
     }
     
@@ -84,7 +86,7 @@ public class PostgresDB : DBExecutor {
             
             let generator = PostgreSQLStatementGenerator(table: table, record: object)
             let existsStatement = generator.existsStatement(keyColumns: primaryKeys)
-            if(PostgresDB.showSQL) {print(" >>> execute sql: \(existsStatement.sql)")}
+            if(PostgresDB.showSQL) {self.logger.log(" >>> execute sql: \(existsStatement.sql)")}
             let existsStmt = try connection.prepareStatement(text: existsStatement.sql)
             defer { existsStmt.close() }
             
@@ -103,14 +105,14 @@ public class PostgresDB : DBExecutor {
             if exists {
             
                 let statement = generator.updateStatement(keyColumns: primaryKeys)
-                if(PostgresDB.showSQL) {print(" >>> execute sql: \(statement.sql)")}
+                if(PostgresDB.showSQL) {self.logger.log(" >>> execute sql: \(statement.sql)")}
                 let stmt = try connection.prepareStatement(text: statement.sql)
                 defer { stmt.close() }
                 
                 let _ = try stmt.execute(parameterValues: statement.arguments)
             } else {
                 let statement = generator.insertStatement()
-                if(PostgresDB.showSQL) {print(" >>> execute sql: \(statement.sql)")}
+                if(PostgresDB.showSQL) {self.logger.log(" >>> execute sql: \(statement.sql)")}
                 let stmt = try connection.prepareStatement(text: statement.sql)
                 defer { stmt.close() }
                 
@@ -118,8 +120,8 @@ public class PostgresDB : DBExecutor {
             }
 
         } catch {
-            print("Error at PostgresDB.save(object:table:primaryKeys)")
-            print(error) // better error handling goes here
+            self.logger.log("Error at PostgresDB.save(object:table:primaryKeys)")
+            self.logger.log(error) // better error handling goes here
         }
         
     }
@@ -141,7 +143,7 @@ public class PostgresDB : DBExecutor {
             }
             _sql = "\(sql) \(pagination)"
             
-            if(PostgresDB.showSQL) {print(" >>> query sql: \(_sql)")}
+            if(PostgresDB.showSQL) {self.logger.log(" >>> query sql: \(_sql)")}
             
             let stmt = try connection.prepareStatement(text: "\(_sql)")
             defer { stmt.close() }
@@ -160,9 +162,9 @@ public class PostgresDB : DBExecutor {
             }
             return result
         } catch {
-            print("Error at PostgresDB.query(object:table:sql:values:offset:limit) -> [T]")
-            print("Error at sql: \(_sql)")
-            print(error) // better error handling goes here
+            self.logger.log("Error at PostgresDB.query(object:table:sql:values:offset:limit) -> [T]")
+            self.logger.log("Error at sql: \(_sql)")
+            self.logger.log(error) // better error handling goes here
 //            if "\(error)".contains("Host is down") {
 //                
 //            }
@@ -189,7 +191,7 @@ public class PostgresDB : DBExecutor {
             
             _sql = "\(statement.sql) \(pagination)"
             
-            if(PostgresDB.showSQL) {print(" >>> query sql: \(_sql)")}
+            if(PostgresDB.showSQL) {self.logger.log(" >>> query sql: \(_sql)")}
             
             let stmt = try connection.prepareStatement(text: "\(_sql)")
             defer { stmt.close() }
@@ -208,9 +210,9 @@ public class PostgresDB : DBExecutor {
             }
             return result
         } catch {
-            print("Error at PostgresDB.query(object:table:where:orderBy:values:offset:limit) -> [T]")
-            print("Error at sql: \(_sql)")
-            print(error) // better error handling goes here
+            self.logger.log("Error at PostgresDB.query(object:table:where:orderBy:values:offset:limit) -> [T]")
+            self.logger.log("Error at sql: \(_sql)")
+            self.logger.log(error) // better error handling goes here
 
             return []
         }
@@ -231,7 +233,7 @@ public class PostgresDB : DBExecutor {
             
             _sql = statement.sql
             
-            if(PostgresDB.showSQL) {print(" >>> query sql: \(_sql)")}
+            if(PostgresDB.showSQL) {self.logger.log(" >>> query sql: \(_sql)")}
             
             let stmt = try connection.prepareStatement(text: _sql)
             defer { stmt.close() }
@@ -250,9 +252,9 @@ public class PostgresDB : DBExecutor {
             }
             return result
         } catch {
-            print("Error at PostgresDB.query(object:table:parameters:orderBy) -> [T]")
-            print("Error at sql: \(_sql)")
-            print(error) // better error handling goes here
+            self.logger.log("Error at PostgresDB.query(object:table:parameters:orderBy) -> [T]")
+            self.logger.log("Error at sql: \(_sql)")
+            self.logger.log(error) // better error handling goes here
 
             return []
         }
@@ -290,12 +292,12 @@ public class PostgresDB : DBExecutor {
     }
     
     public func count(sql:String, parameterValues: [PostgresValueConvertible?]) -> Int {
-        if(PostgresDB.showSQL) {print(" >>> count sql: \(sql)")}
+        if(PostgresDB.showSQL) {self.logger.log(" >>> count sql: \(sql)")}
         do {
             let connection = try PostgresClientKit.Connection(configuration: self.postgresConfig)
             defer { connection.close() }
             
-            //print(">> count sql: \(sql)")
+            //self.logger.log(">> count sql: \(sql)")
             let stmt = try connection.prepareStatement(text: sql)
             defer { stmt.close() }
 
@@ -309,9 +311,9 @@ public class PostgresDB : DBExecutor {
             }
             return result
         } catch {
-            print("Error at PostgresDB.count(sql:parameterValues)")
-            print("Error sql: \(sql)")
-            print(error) // better error handling goes here
+            self.logger.log("Error at PostgresDB.count(sql:parameterValues)")
+            self.logger.log("Error sql: \(sql)")
+            self.logger.log(error) // better error handling goes here
 
             return -1
         }
@@ -330,7 +332,7 @@ public class PostgresDB : DBExecutor {
             let statement = generator.countStatement(keyColumns: keyColumns)
             //let columnNames = generator.persistenceContainer.columns
             
-            //print(">> count sql: \(statement.sql)")
+            //self.logger.log(">> count sql: \(statement.sql)")
             let stmt = try connection.prepareStatement(text: statement.sql)
             _sql = statement.sql
             defer { stmt.close() }
@@ -345,9 +347,9 @@ public class PostgresDB : DBExecutor {
             }
             return result
         } catch {
-            print("Error at PostgresDB.count(object:table:parameters)")
-            print("Error at sql: \(_sql)")
-            print(error) // better error handling goes here
+            self.logger.log("Error at PostgresDB.count(object:table:parameters)")
+            self.logger.log("Error at sql: \(_sql)")
+            self.logger.log(error) // better error handling goes here
 
             return -1
         }
@@ -364,7 +366,7 @@ public class PostgresDB : DBExecutor {
             //let columnNames = generator.persistenceContainer.columns
             
             _sql = statement.sql
-//            print(">> count sql: \(statement.sql)")
+//            self.logger.log(">> count sql: \(statement.sql)")
             let stmt = try connection.prepareStatement(text: statement.sql)
             defer { stmt.close() }
 
@@ -378,9 +380,9 @@ public class PostgresDB : DBExecutor {
             }
             return result
         } catch {
-            print("Error at PostgresDB.count(object:table:where:values)")
-            print("Error at sql: \(_sql)")
-            print(error) // better error handling goes here
+            self.logger.log("Error at PostgresDB.count(object:table:where:values)")
+            self.logger.log("Error at sql: \(_sql)")
+            self.logger.log(error) // better error handling goes here
 
             return -1
         }
@@ -416,8 +418,8 @@ public class PostgresDB : DBExecutor {
             
             return tableInfo
         } catch {
-            print("Error at PostgresDB.queryTableInfo")
-            print(error) // better error handling goes here
+            self.logger.log("Error at PostgresDB.queryTableInfo")
+            self.logger.log(error) // better error handling goes here
             return TableInfo(table)
         }
     }
@@ -467,7 +469,7 @@ public class PostgresDB : DBExecutor {
             }
             
         } catch {
-            print(error) // better error handling goes here
+            self.logger.log(error) // better error handling goes here
         }
         return tables
     }

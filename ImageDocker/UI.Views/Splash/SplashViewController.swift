@@ -74,7 +74,7 @@ class SplashViewController: NSViewController {
     }
     
     @objc func beginSubProgress(notification:Notification){
-//        print("BEGIN SUB PROGRESS")
+//        self.logger.log("BEGIN SUB PROGRESS")
         DispatchQueue.main.async {
             self.subProgressIndicator.minValue = 0
             self.subProgressIndicator.maxValue = 100
@@ -89,14 +89,14 @@ class SplashViewController: NSViewController {
     
     @objc func increSubProgress(notification:Notification){
         
-//        print("INCREASE SUB PROGRESS BY 1")
+//        self.logger.log("INCREASE SUB PROGRESS BY 1")
         DispatchQueue.main.async {
             self.subProgressIndicator.increment(by: 1)
             let value = Int(self.subProgressIndicator.doubleValue)
             let total = Int(self.subProgressIndicator.maxValue)
             self.lblSubProgress.stringValue = "\(value) / \(total)"
             
-//            print("value=\(value), total=\(total)")
+//            self.logger.log("value=\(value), total=\(total)")
             
             if value == total {
                 self.lblSubMessage.isHidden = true
@@ -115,7 +115,7 @@ class SplashViewController: NSViewController {
     @objc func setTotalOfSubProgress(notification:Notification){
         if let obj = notification.object {
             let total = obj as? Int ?? 0
-//            print("SET SUB TOTAL TO \(total)")
+//            self.logger.log("SET SUB TOTAL TO \(total)")
             DispatchQueue.main.async {
                 self.subProgressIndicator.minValue = 0
                 self.subProgressIndicator.maxValue = Double(total)
@@ -142,7 +142,7 @@ class SplashViewController: NSViewController {
         DispatchQueue.main.async {
             self.lblMessage.stringValue = value
             
-//            print("progressStage=\(self.progressStage)")
+//            self.logger.log("progressStage=\(self.progressStage)")
             
             if self.progressStage != progress {
                 // progress indicator + 1
@@ -154,8 +154,8 @@ class SplashViewController: NSViewController {
                 
                 self.progressStage = progress
                 
-//                print("message=\(value)")
-//                print("progress=\(progress), step=\(self.progressStep), end=\(self.progressEnd)")
+//                self.logger.log("message=\(value)")
+//                self.logger.log("progress=\(progress), step=\(self.progressStep), end=\(self.progressEnd)")
                 
                 if self.progressStep >= self.progressEnd {
                     self.onCompleted()

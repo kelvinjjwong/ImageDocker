@@ -644,7 +644,7 @@ sub ProcessJpeg2000Box($$$)
                     }
                 } elsif ($verbose) {
                     my $msg = sprintf("offset 0x%.4x to end of file", $dataPos + $base + $pos);
-                    $et->VPrint(0, "$$et{INDENT}- Tag '$boxID' ($msg)\n");
+                    $et->Vself.logger.log(0, "$$et{INDENT}- Tag '$boxID' ($msg)\n");
                 }
                 last;   # (ignore the rest of the file when reading)
             }
@@ -689,7 +689,7 @@ sub ProcessJpeg2000Box($$$)
         # delete all UUID boxes and any writable box if deleting all information
         if ($outfile and $tagInfo) {
             if ($boxID eq 'uuid' and $$et{DEL_GROUP}{'*'}) {
-                $et->VPrint(0, "  Deleting $$tagInfo{Name}\n");
+                $et->Vself.logger.log(0, "  Deleting $$tagInfo{Name}\n");
                 ++$$et{CHANGED};
                 next;
             } elsif ($$tagInfo{Writable}) {

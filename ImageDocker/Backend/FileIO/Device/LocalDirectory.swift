@@ -11,6 +11,8 @@ import Cocoa
 
 struct LocalDirectory {
     
+    let logger = ConsoleLogger(category: "LocalDirectory")
+    
     static let bridge = LocalDirectory()
     
     func datetime(of filename: String, in path:String) -> String {
@@ -25,7 +27,7 @@ struct LocalDirectory {
             do {
                 try command.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
         }
         //command.waitUntilExit()
@@ -45,7 +47,7 @@ struct LocalDirectory {
     }
     
     func files(in path: String) -> [PhoneFile] {
-//        print("getting files from \(path)")
+//        self.logger.log("getting files from \(path)")
         var result:[PhoneFile] = []
         let pipe = Pipe()
         autoreleasepool { () -> Void in
@@ -58,14 +60,14 @@ struct LocalDirectory {
             do {
                 try command.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
         }
         //command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         pipe.fileHandleForReading.closeFile()
-//        print(string)
+//        self.logger.log(string)
         
         let filenamesForReference = self.filenamesForReference(in: path)
         
@@ -76,14 +78,14 @@ struct LocalDirectory {
                                           allowedExt: Naming.FileType.allowed,
                                           allowedSuffix: ["_backup_hd"], // wechat chatroom image/video thumbnails
                                           deviceOS: .mac)
-//        print("got \(result.count) files from \(path)")
+//        self.logger.log("got \(result.count) files from \(path)")
         return result
     }
     
     
     
     func folders(in path: String, unlimitedDepth:Bool = false) -> [String] {
-//        print("getting folders from \(path)")
+//        self.logger.log("getting folders from \(path)")
         var result:[String] = []
         let pipe = Pipe()
         autoreleasepool { () -> Void in
@@ -100,21 +102,21 @@ struct LocalDirectory {
             do {
                 try command.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
         }
         //command.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         pipe.fileHandleForReading.closeFile()
-        //print(string)
+        //self.logger.log(string)
         result = DeviceShell.getFolderNames(from: string)
-//        print("got \(result.count) folders from \(path)")
+//        self.logger.log("got \(result.count) folders from \(path)")
         return result
     }
     
     fileprivate func filenamesForReference(in path: String, recursive:Bool=false) -> [String:[String]] {
-//        print("getting folders from \(path)")
+//        self.logger.log("getting folders from \(path)")
         var result:[String:[String]] = [:]
         let param = recursive ? "-1tR" : "-1"
         let pipe = Pipe()
@@ -128,7 +130,7 @@ struct LocalDirectory {
             do {
                 try command.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
         }
         //command.waitUntilExit()
@@ -167,7 +169,7 @@ struct LocalDirectory {
     
     
     func filenames(in path: String, ext:Set<String>? = nil) -> [String] {
-//        print("getting folders from \(path)")
+//        self.logger.log("getting folders from \(path)")
         var result:[String] = []
         let pipe = Pipe()
         autoreleasepool { () -> Void in
@@ -180,7 +182,7 @@ struct LocalDirectory {
             do {
                 try command.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
         }
         //command.waitUntilExit()
@@ -196,12 +198,12 @@ struct LocalDirectory {
                                           allowedExt: ext ?? Naming.FileType.allowed,
                                           allowedSuffix: ["_backup_hd"], // wechat chatroom image/video thumbnails
                                           deviceOS: .mac)
-//        print("got \(result.count) files from \(path)")
+//        self.logger.log("got \(result.count) files from \(path)")
         return result
     }
     
     func occupiedDiskSpace(path: String) -> [String:String] {
-//        print("getting occupied disk space of \(path)")
+//        self.logger.log("getting occupied disk space of \(path)")
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let command = Process()
@@ -213,7 +215,7 @@ struct LocalDirectory {
             do {
                 try command.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
         }
         //command.waitUntilExit()
@@ -225,27 +227,27 @@ struct LocalDirectory {
         let lines = string.components(separatedBy: "\n")
         for line in lines {
             if line == "" {continue}
-            //print(line)
+            //self.logger.log(line)
             var columns:[String] = []
             let cols = line.components(separatedBy: "\t")
             for col in cols {
                 if col == "" || col == " " {
                     continue
                 }
-                //print("col -> \(col)")
+                //self.logger.log("col -> \(col)")
                 columns.append(col)
             }
             let space = columns[0].trimmingCharacters(in: .whitespacesAndNewlines)
             let subpath = columns[1].trimmingCharacters(in: .whitespacesAndNewlines)
             result[subpath] = space
-            //print("\(subpath) -> \(space)")
+            //self.logger.log("\(subpath) -> \(space)")
         }
         result["console_output"] = string
         return result
     }
     
     func freeSpace(path: String) -> (String, String, String) {
-//        print("getting free space of \(path)")
+//        self.logger.log("getting free space of \(path)")
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let command = Process()
@@ -257,7 +259,7 @@ struct LocalDirectory {
             do {
                 try command.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
         }
         //command.waitUntilExit()
@@ -272,14 +274,14 @@ struct LocalDirectory {
         let lines = string.components(separatedBy: "\n")
         for line in lines {
             if line == "" || line.hasPrefix("Filesystem") {continue}
-//            print(line)
+//            self.logger.log(line)
             var columns:[String] = []
             let cols = line.components(separatedBy: " ")
             for col in cols {
                 if col == "" || col == " " {
                     continue
                 }
-                //print("col -> \(col)")
+                //self.logger.log("col -> \(col)")
                 columns.append(col)
             }
             if columns.count >= 6 {
@@ -291,7 +293,7 @@ struct LocalDirectory {
                 }
             }
         }
-//        print("\(mountPoint) -> \(freeSize) / \(totalSize)")
+//        self.logger.log("\(mountPoint) -> \(freeSize) / \(totalSize)")
         return (totalSize, freeSize, mountPoint.trimmingCharacters(in: .whitespacesAndNewlines))
     }
     
@@ -305,7 +307,7 @@ struct LocalDirectory {
             var diskFree = ""
             var diskTotal = ""
             (diskTotal, diskFree, mountPoint) = self.freeSpace(path: path)
-            print("[LOCAL DIRECTORY] mountpoint \(mountPoint)")
+            self.logger.log("[LOCAL DIRECTORY] mountpoint \(mountPoint)")
             if diskTotal != "" && diskFree != "" {
                 spaceFree = "\(diskFree) / \(diskTotal)"
                 if let lbl = lblDiskFree {

@@ -10,6 +10,8 @@ import Cocoa
 
 class StackedTreeViewController: NSViewController, StackItemHost {
     
+    let logger = ConsoleLogger(category: "StackedTreeViewController")
+    
     @IBOutlet weak var stack: CustomStackView!
     
     var trees:[TreeViewController] = []
@@ -91,7 +93,7 @@ class StackedTreeViewController: NSViewController, StackItemHost {
         }
         treeView.collectionSelected = onNodeSelected
 //        { collection in
-//            print("selected \(collection.path)")
+//            self.logger.log("selected \(collection.path)")
 //        }
         treeView.collectionAction = moreActionOnNode
             
@@ -125,7 +127,7 @@ class StackedTreeViewController: NSViewController, StackItemHost {
         }
         stackItem.header.afterExpand = {
             let (opened, closed) = self.countTreeStates()
-            print("[TREE] opened: \(opened), closed: \(closed)")
+            self.logger.log("[TREE] opened: \(opened), closed: \(closed)")
         }
         
         // Add the header view.

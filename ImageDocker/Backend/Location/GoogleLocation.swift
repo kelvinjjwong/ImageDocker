@@ -12,6 +12,8 @@ import SwiftyJSON
 
 class GoogleLocation {
     
+    static let logger = ConsoleLogger(category: "GoogleLocation")
+    
     fileprivate static func ak() -> String {
         return PreferencesController.googleAPIKey()
     }
@@ -44,9 +46,9 @@ class GoogleLocation {
                                     let pair = param.components(separatedBy: "%2C")
                                     if pair.count > 0{
                                         let coord:Coord = Coord(latitude: Double(pair[0]) ?? 0, longitude: Double(pair[1]) ?? 0)
-                                        //print(coord.latitude)
-                                        //print(coord.longitude)
-                                        //print("long,lati=\(coord.longitude),\(coord.latitude)")
+                                        //self.logger.log(coord.latitude)
+                                        //self.logger.log(coord.longitude)
+                                        //self.logger.log("long,lati=\(coord.longitude),\(coord.latitude)")
                                         
                                         DispatchQueue.main.async {
                                             
@@ -60,10 +62,10 @@ class GoogleLocation {
                         }
                     }
                 }
-                //print(dataStr)
+                //self.logger.log(dataStr)
                 
             }else{
-                print(error ?? "unknown error")
+                GoogleLocation.logger.log(error ?? "unknown error")
             }
         }
         
@@ -183,7 +185,7 @@ class GoogleLocation {
                     }
                 }
             }else{
-                print(error ?? "")
+                GoogleLocation.logger.log(error ?? "")
                 locationConsumer.alert(status: -1, message: "Unexpected ERROR!", popup: false)
                 if textConsumer != nil {
                     textConsumer?.alert(status: -1, message: "Unexpected ERROR!", popup: false)

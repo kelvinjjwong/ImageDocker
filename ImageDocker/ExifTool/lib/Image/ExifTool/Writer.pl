@@ -1833,7 +1833,7 @@ sub SetFileName($$;$$)
             $self->Warn("Error creating directory for '$newName'");
             return -1;
         }
-        $self->VPrint(0, "Created directory for '$newName'");
+        $self->Vself.logger.log(0, "Created directory for '$newName'");
     }
     if ($opt eq 'Link') {
         unless (link $file, $newName) {
@@ -2048,7 +2048,7 @@ sub WriteInfo($$;$$)
             $fileType = GetFileType($infile);
             @fileTypeList = GetFileType($infile);
             $tiffType = $$self{FILE_EXT} = GetFileExtension($infile);
-            $self->VPrint(0, "Rewriting $infile...\n");
+            $self->Vself.logger.log(0, "Rewriting $infile...\n");
             $inRef = \*EXIFTOOL_FILE2;
             $closeIn = 1;   # we must close the file since we opened it
         } else {
@@ -2065,7 +2065,7 @@ sub WriteInfo($$;$$)
             if ($$self{OPTIONS}{WriteMode} =~ /g/i) {
                 $fileType = $tiffType = $outType;   # use output file type if no input file
                 $infile = "$fileType file";         # make bogus file name
-                $self->VPrint(0, "Creating $infile...\n");
+                $self->Vself.logger.log(0, "Creating $infile...\n");
                 $inRef = \ '';      # set $inRef to reference to empty data
             } else {
                 $self->Error("Not creating new $outType file (disallowed by WriteMode)");
@@ -2294,10 +2294,10 @@ sub WriteInfo($$;$$)
             # copy Mac OS resource fork if it exists
             if ($^O eq 'darwin' and -s "$infile/..namedfork/rsrc") {
                 if ($$self{DEL_GROUP}{RSRC}) {
-                    $self->VPrint(0,"Deleting Mac OS resource fork\n");
+                    $self->Vself.logger.log(0,"Deleting Mac OS resource fork\n");
                     ++$$self{CHANGED};
                 } else {
-                    $self->VPrint(0,"Copying Mac OS resource fork\n");
+                    $self->Vself.logger.log(0,"Copying Mac OS resource fork\n");
                     my ($buf, $err);
                     local (*SRC, *DST);
                     if ($self->Open(\*SRC, "$infile/..namedfork/rsrc")) {
@@ -2648,7 +2648,7 @@ Conv: for (;;) {
             if (defined $err2) {
                 if ($err2) {
                     $err = "$err2 for $wgrp1:$tag";
-                    $self->VPrint(2, "$err\n");
+                    $self->Vself.logger.log(2, "$err\n");
                     undef $val;     # value was invalid
                 } else {
                     $err = $err2;   # empty error (quietly don't write tag)
@@ -2698,13 +2698,13 @@ Conv: for (;;) {
                         $err = '' unless defined $err;
                     } else {
                         $err = CleanWarning() . " in $wgrp1:$tag (${type}Inv)";
-                        $self->VPrint(2, "$err\n");
+                        $self->Vself.logger.log(2, "$err\n");
                     }
                     undef $val;
                     last Conv;
                 } elsif (not defined $val) {
                     $err = "Error converting value for $wgrp1:$tag (${type}Inv)";
-                    $self->VPrint(2, "$err\n");
+                    $self->Vself.logger.log(2, "$err\n");
                     last Conv;
                 }
             } elsif ($conv) {
@@ -2740,7 +2740,7 @@ Conv: for (;;) {
                             ($val, $multi) = ReverseLookup($val, $conv);
                             unless (defined $val) {
                                 $err = "Can't encode $wgrp1:$tag ($err2)";
-                                $self->VPrint(2, "$err\n");
+                                $self->Vself.logger.log(2, "$err\n");
                                 last Conv;
                             }
                         } elsif (defined $val2) {
@@ -2756,14 +2756,14 @@ Conv: for (;;) {
                     if (not defined $val) {
                         my $prob = $evalWarning ? lcfirst CleanWarning() : ($multi ? 'matches more than one ' : 'not in ') . $type;
                         $err = "Can't convert $wgrp1:$tag ($prob)";
-                        $self->VPrint(2, "$err\n");
+                        $self->Vself.logger.log(2, "$err\n");
                         last Conv;
                     } elsif ($evalWarning) {
-                        $self->VPrint(2, CleanWarning() . " for $wgrp1:$tag\n");
+                        $self->Vself.logger.log(2, CleanWarning() . " for $wgrp1:$tag\n");
                     }
                 } elsif (not $$tagInfo{WriteAlso}) {
                     $err = "Can't convert value for $wgrp1:$tag (no ${type}Inv)";
-                    $self->VPrint(2, "$err\n");
+                    $self->Vself.logger.log(2, "$err\n");
                     undef $val;
                     last Conv;
                 }
@@ -4864,7 +4864,7 @@ sub WriteTrailerBuffer($$$)
 {
     my ($self, $trailInfo, $outfile) = @_;
     if ($$self{DEL_GROUP}{Trailer}) {
-        $self->VPrint(0, "  Deleting trailer ($$trailInfo{Offset} bytes)\n");
+        $self->Vself.logger.log(0, "  Deleting trailer ($$trailInfo{Offset} bytes)\n");
         ++$$self{CHANGED};
         return 1;
     }
@@ -4911,7 +4911,7 @@ sub AddNewTrailers($;@)
             $$self{DidCanonVRD} = 1;
         }
         my $verb = $trailPt ? 'Writing' : 'Adding';
-        $self->VPrint(0, "  $verb $type as a block\n");
+        $self->Vself.logger.log(0, "  $verb $type as a block\n");
         if ($trailPt) {
             $$trailPt .= $val;
         } else {
@@ -4988,7 +4988,7 @@ sub WriteMultiXMP($$$$$)
             my $len = $size - $off;
             $len = $maxLen if $len > $maxLen;
             $app1hdr = "\xff\xe1" . pack('n', $len + 75 + 2);
-            $self->VPrint(0, "Writing extended XMP segment ($len bytes)\n");
+            $self->Vself.logger.log(0, "Writing extended XMP segment ($len bytes)\n");
             Write($outfile, $app1hdr, $xmpExtAPP1hdr, $guid, pack('N2', $size, $off),
                   substr($$extPt, $off, $len)) or $success = 0;
         }
@@ -6343,7 +6343,7 @@ sub CopyImageData($$$)
     my $raf = $$self{RAF};
     my ($dataBlock, $err);
     my $num = @$imageDataBlocks;
-    $self->VPrint(0, "  Copying $num image data blocks\n") if $num;
+    $self->Vself.logger.log(0, "  Copying $num image data blocks\n") if $num;
     foreach $dataBlock (@$imageDataBlocks) {
         my ($pos, $size, $pad) = @$dataBlock;
         $raf->Seek($pos, 0) or $err = 'read', last;

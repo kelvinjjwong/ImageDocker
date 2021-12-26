@@ -10,6 +10,8 @@ import Cocoa
 
 class DateTimeViewController: NSViewController {
     
+    let logger = ConsoleLogger(category: "DateTimeViewController")
+    
     
     var images:[ImageTimestamp] = []
     let tableDateFormatter = DateFormatter()
@@ -457,7 +459,7 @@ class DateTimeViewController: NSViewController {
     }
     
     @IBAction func onStepperAdjustMonthClicked(_ sender: NSStepper) {
-        print("clicked month stepper")
+        self.logger.log("clicked month stepper")
         let newValue = sender.integerValue
         let oldValue = self.txtAdjustMonth.integerValue
         if newValue > oldValue {
@@ -1143,7 +1145,7 @@ extension DateTimeViewController {
     }
     
     @objc func copyDateAction(sender: NSButton) {
-        print("Copy: \(sender.title)")
+        self.logger.log("Copy: \(sender.title)")
         self.setFixedDate(value: sender.title)
     }
 }

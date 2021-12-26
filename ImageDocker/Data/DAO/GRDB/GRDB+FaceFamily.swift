@@ -10,6 +10,8 @@ import Foundation
 import GRDB
 
 class FaceDaoGRDB : FaceDaoInterface {
+    
+    let logger = ConsoleLogger(category: "FaceDaoGRDB")
 
     // MARK: - FAMILY
     
@@ -21,7 +23,7 @@ class FaceDaoGRDB : FaceDaoInterface {
                 result = try Family.order(sql: "name asc").fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -39,7 +41,7 @@ class FaceDaoGRDB : FaceDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -94,7 +96,7 @@ class FaceDaoGRDB : FaceDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
             recordId = nil
         }
         return recordId
@@ -134,7 +136,7 @@ class FaceDaoGRDB : FaceDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return (value1, value2)
     }
@@ -158,7 +160,7 @@ class FaceDaoGRDB : FaceDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -188,7 +190,7 @@ class FaceDaoGRDB : FaceDaoInterface {
                 obj = try PeopleRelationship.fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return obj
     }
@@ -203,7 +205,7 @@ class FaceDaoGRDB : FaceDaoInterface {
                 obj = try People.order(sql: "name asc").fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return obj
     }
@@ -216,7 +218,7 @@ class FaceDaoGRDB : FaceDaoInterface {
                 obj = try People.filter(sql: "id <> '\(except)'").order(sql: "name asc").fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return obj
     }
@@ -230,7 +232,7 @@ class FaceDaoGRDB : FaceDaoInterface {
             }
             return obj
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return nil
     }
@@ -244,7 +246,7 @@ class FaceDaoGRDB : FaceDaoInterface {
             }
             return obj
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return nil
     }
@@ -276,7 +278,7 @@ class FaceDaoGRDB : FaceDaoInterface {
                 }
                 return true
             }catch{
-                print(error)
+                self.logger.log(error)
                 return false
             }
         }else{
@@ -308,7 +310,7 @@ class FaceDaoGRDB : FaceDaoInterface {
             }
             return obj
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return nil
     }
@@ -321,7 +323,7 @@ class FaceDaoGRDB : FaceDaoInterface {
                 result = try ImageFace.filter(sql: "imageId='\(imageId)'").order(sql: "cast(faceX as decimal)").fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -335,7 +337,7 @@ class FaceDaoGRDB : FaceDaoInterface {
             }
             return obj
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return nil
     }
@@ -354,7 +356,7 @@ class FaceDaoGRDB : FaceDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return results.sorted().reversed()
     }
@@ -377,7 +379,7 @@ class FaceDaoGRDB : FaceDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return results.sorted().reversed()
     }
@@ -414,7 +416,7 @@ class FaceDaoGRDB : FaceDaoInterface {
                 result = try ImageFace.filter(sql: sql).fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }

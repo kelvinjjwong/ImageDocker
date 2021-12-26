@@ -9,18 +9,23 @@
 import Foundation
 
 public final class StubDBExecutor : DBExecutor {
+    
+    let logger = ConsoleLogger(category: "StubDBExecutor")
+    
     public func count(sql: String) -> Int {
-        print("\n\n  >>> count by sql:\n\(sql)")
+        self.logger.log("\n\n  >>> count by sql:\n\(sql)")
         return 0
     }
     
     public func execute(sql: String) throws {
-        print("\n\n  >>> stub executing sql:\n\(sql)")
+        self.logger.log("\n\n  >>> stub executing sql:\n\(sql)")
     }
     
 }
 
 public final class MigratorTest {
+    
+    let logger = ConsoleLogger(category: "MigratorTest")
     
     init(){
         
@@ -73,7 +78,7 @@ public final class MigratorTest {
         do {
             try migrator.migrate(cleanVersions: false)
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         
         

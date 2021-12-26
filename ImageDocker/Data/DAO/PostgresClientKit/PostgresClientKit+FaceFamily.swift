@@ -9,6 +9,9 @@
 import Foundation
 
 class ImageFaceDaoPostgresCK : ImageFaceDaoInterface {
+    
+    let logger = ConsoleLogger(category: "ImageFaceDaoPostgresCK")
+    
     func updateImageScannedFace(imageId: String, facesCount: Int) -> ExecuteState {
         let db = PostgresConnection.database()
         do {
@@ -16,7 +19,7 @@ class ImageFaceDaoPostgresCK : ImageFaceDaoInterface {
             update "Image" set "scanedFace"=true, "facesCount"=$1 where id=$2
             """, parameterValues: [facesCount, imageId])
         }catch{
-            print(error)
+            self.logger.log(error)
             return .ERROR
         }
         return .OK
@@ -29,7 +32,7 @@ class ImageFaceDaoPostgresCK : ImageFaceDaoInterface {
             update "Image" set "recognizedFace"=true,"recognizedPeopleIds"=$1 where id=$2
             """, parameterValues: [recognizedPeopleIds,imageId])
         }catch{
-            print(error)
+            self.logger.log(error)
             return .ERROR
         }
         return .OK
@@ -39,6 +42,8 @@ class ImageFaceDaoPostgresCK : ImageFaceDaoInterface {
 }
 
 class FaceDaoPostgresCK : FaceDaoInterface {
+    
+    let logger = ConsoleLogger(category: "FaceDaoPostgresCK")
     
     func getFamilies() -> [Family] {
         let db = PostgresConnection.database()
@@ -116,7 +121,7 @@ class FaceDaoPostgresCK : FaceDaoInterface {
                 try db.execute(sql: "INSERT INTO \"Family\" (id, name, category) VALUES ('\(recordId!)','\(name)','\(type)')")
             }
         }catch{
-            print(error)
+            self.logger.log(error)
             recordId = nil
         }
         return recordId
@@ -130,7 +135,7 @@ class FaceDaoPostgresCK : FaceDaoInterface {
             try db.execute(sql: "DELETE FROM \"FamilyJoint\" WHERE \"bigFamilyId\"='\(id)'")
             try db.execute(sql: "DELETE FROM \"Family\" WHERE id='\(id)'")
         }catch{
-            print(error)
+            self.logger.log(error)
             return .ERROR
         }
         return .OK
@@ -176,7 +181,7 @@ class FaceDaoPostgresCK : FaceDaoInterface {
                 try db.execute(sql: "INSERT INTO \"PeopleRelationship\" (subject, object, \"callName\") VALUES ('\(primary)','\(secondary)','\(callName)')")
             }
         }catch{
-            print(error)
+            self.logger.log(error)
             return .ERROR
         }
         return .OK
@@ -237,7 +242,7 @@ class FaceDaoPostgresCK : FaceDaoInterface {
             try db.execute(sql: "update \"ImageFace\" set \"peopleId\" = '', \"peopleAge\" = 0 where \"peopleId\" = $1", parameterValues: [id])
             try db.execute(sql: "delete from \"People\" where id = $1", parameterValues: [id])
         }catch{
-            print(error)
+            self.logger.log(error)
             return .ERROR
         }
         return .OK

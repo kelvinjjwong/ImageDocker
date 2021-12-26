@@ -30,10 +30,10 @@ class SampleDataSource1: StaticTreeDataSource {
         }
         for data in tree_data {
             flattable_all.append(data)
-//            print("flatted: \(data.path)")
+//            self.logger.log("flatted: \(data.path)")
             flattable_all.append(contentsOf: data.getUnlimitedDepthChildren())
         }
-//        print("total \(flattable_all.count) node")
+//        self.logger.log("total \(flattable_all.count) node")
         self.filter(keyword: "")
         self.convertFlatToTree()
         

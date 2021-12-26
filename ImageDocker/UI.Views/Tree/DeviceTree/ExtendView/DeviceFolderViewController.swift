@@ -149,7 +149,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
                         self.logger.log("Error: \(error)")
                     }
                 }
-//                print("total size: \(totalSize)")
+//                self.logger.log("total size: \(totalSize)")
                 let totalSizeInMB = totalSize / 1000 / 1000
                 var event = ""
                 var place = ""
@@ -350,10 +350,10 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
     }
     
     private func gotoParent() {
-//        print("current: \(currentPath.path)")
+//        self.logger.log("current: \(currentPath.path)")
         let parent = currentPath.deletingLastPathComponent()
         self.currentPath = parent
-//        print("parent: \(currentPath.path)")
+//        self.logger.log("parent: \(currentPath.path)")
         goto(url: parent)
     }
     
@@ -373,7 +373,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
         if i >= 0 && i < self.deviceListController.deviceItems.count {
             let device = self.deviceListController.deviceItems[i]
             
-//            print("EXPORT TO DEVICE: \(device.deviceId) - \(device.name)")
+//            self.logger.log("EXPORT TO DEVICE: \(device.deviceId) - \(device.name)")
             
             self.btnOK.isEnabled = false
             self.btnHome.isEnabled = false
@@ -421,7 +421,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
                     do {
                         try FileManager.default.createDirectory(atPath: destinationPath.path, withIntermediateDirectories: true, attributes: nil)
                     }catch{
-                        print(error)
+                        self.logger.log(error)
                         DispatchQueue.main.async {
                             self.lblProgressMessage.stringValue = "UNABLE TO CREATE FOLDER, PLEASE CHANGE ANOTHER PLACE"
                         }
@@ -442,16 +442,16 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
                     if let data = image.imageData {
                         
                         if self.isComputer {
-//                            print("EXPORTING FROM \(image.url.path) TO \(destinationPath.path)")
+//                            self.logger.log("EXPORTING FROM \(image.url.path) TO \(destinationPath.path)")
                             let fileUrl = destinationPath.appendingPathComponent(data.filename)
                             do {
                                 try FileManager.default.copyItem(at: image.url, to: fileUrl)
                                 copiedCount += 1
                             }catch{
-                                print(error)
+                                self.logger.log(error)
                             }
                         }else{
-//                            print("EXPORTING FROM \(image.url.path) TO \(device.deviceId):\(destinationPath.path)")
+//                            self.logger.log("EXPORTING FROM \(image.url.path) TO \(device.deviceId):\(destinationPath.path)")
                             let _ = Android.bridge.push(device: device.deviceId, from: image.url.path, to: destinationPath.path)
                             if Android.bridge.existsFile(device: device.deviceId, path: destinationPath.path) {
                                 copiedCount += 1
@@ -541,7 +541,7 @@ class DeviceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBox
         self.deviceItems.append(computer)
         
         let devices:[String] = Android.bridge.devices()
-//        print("android device count: \(devices.count)")
+//        self.logger.log("android device count: \(devices.count)")
         if devices.count > 0 {
             for deviceId in devices {
                 if let device:PhoneDevice = Android.bridge.device(id: deviceId) {
@@ -557,7 +557,7 @@ class DeviceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBox
                         dev.name = "\(imageDevice.manufacture ?? dev.manufacture) \(imageDevice.model ?? dev.model)"
                     }
                     self.deviceItems.append(dev)
-//                    print("COMBO added \(dev.name)")
+//                    self.logger.log("COMBO added \(dev.name)")
                 }
             }
         }
@@ -565,7 +565,7 @@ class DeviceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBox
     
     func comboBoxSelectionDidChange(_ notification: Notification) {
         if let _ = self.combobox?.indexOfSelectedItem {
-//            print("selection changed, selected index=\(index)")
+//            self.logger.log("selection changed, selected index=\(index)")
             if self.onSelectionChanged != nil {
                 self.onSelectionChanged!()
             }

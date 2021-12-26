@@ -198,7 +198,7 @@ sub ProcessXCF($$)
         $raf->Read($buff, 8) == 8 or last;
         my $tag  = Get32u(\$buff, 0) or last;
         my $size = Get32u(\$buff, 4);
-        $verbose and $et->VPrint(0, "XCF property $tag ($size bytes):\n");
+        $verbose and $et->Vself.logger.log(0, "XCF property $tag ($size bytes):\n");
         unless ($$tagTablePtr{$tag}) {
             $raf->Seek($size, 1);
             next;

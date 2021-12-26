@@ -11,6 +11,8 @@ import GRDB
 
 class RepositoryDaoGRDB : RepositoryDaoInterface {
     
+    let logger = ConsoleLogger(category: "RepositoryDaoGRDB")
+    
     // MARK: - CREATE
     
     func getOrCreateContainer(name:String,
@@ -63,7 +65,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
                 exists = true
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return (container!, exists)
     }
@@ -112,7 +114,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
                 result = try ImageContainer.filter(sql: "path=?", arguments: StatementArguments([path])).fetchOne(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -125,7 +127,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
                 result = try ImageContainer.filter(sql: "(repositoryPath = ? or repositoryPath = ?) and parentFolder=''", arguments: [repositoryPath.withoutStash(), repositoryPath.withStash()]).fetchOne(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
         
@@ -139,10 +141,10 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try ImageContainer.filter(sql: "parentFolder=''").order(Column(orderBy).asc).fetchAll(db)
-                print(result.count)
+                self.logger.log(result.count)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
         
@@ -159,10 +161,10 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 result = try ImageContainer.filter(sql: "parentFolder=?", arguments: [path]).order(Column("path").asc).fetchAll(db)
-                print(result.count)
+                self.logger.log(result.count)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
         
@@ -181,7 +183,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
                 result = try ImageContainer.filter(sql: "parentFolder=?", arguments: [path]).fetchCount(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -195,7 +197,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
                 containers = try ImageContainer.order(Column("path").asc).fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return containers
     }
@@ -208,7 +210,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
                 result = try ImageContainer.filter(Column("path").like("\(rootPath.withStash())%")).fetchAll(db)
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -237,7 +239,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -260,7 +262,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -283,7 +285,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         return result
     }
@@ -313,7 +315,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
                 try db.execute(sql: "update ImageContainer set subContainer = \(subContainers) where path = ?", arguments: [path])
             }
         }catch{
-            print(error)
+            self.logger.log(error)
             return subContainers
         }
         return subContainers
@@ -347,7 +349,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
-                //print("UPDATE CONTAINER old path = \(oldPath) with new path = \(newPath)")
+                //self.logger.log("UPDATE CONTAINER old path = \(oldPath) with new path = \(newPath)")
                 try db.execute(sql: "update ImageContainer set path = ?, repositoryPath = ?, parentFolder = ?, subPath = ? where path = ?", arguments: [newPath, repositoryPath.withStash(), parentFolder, subPath, oldPath])
             }
         }catch{
@@ -461,7 +463,7 @@ order by name
                 }
             }
         }catch{
-            print(error)
+            self.logger.log(error)
         }
         
         return results

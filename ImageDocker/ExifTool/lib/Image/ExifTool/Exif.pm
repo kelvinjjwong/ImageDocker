@@ -5591,7 +5591,7 @@ sub ProcessExif($$$)
                         $valuePtr = 0;
                     } elsif ($leicaTrailer and $$et{RAF}) {
                         if ($verbose > 0) {
-                            $et->VPrint(0, "$$et{INDENT}$index) $tagStr --> (outside APP1 segment)\n");
+                            $et->Vself.logger.log(0, "$$et{INDENT}$index) $tagStr --> (outside APP1 segment)\n");
                         }
                         if ($et->Options('FastScan')) {
                             $et->Warn('Ignored Leica MakerNote trailer');

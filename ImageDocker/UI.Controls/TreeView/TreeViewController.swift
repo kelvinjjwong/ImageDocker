@@ -10,6 +10,8 @@ import Cocoa
 
 class TreeViewController : StackBodyViewController {
     
+    let logger = ConsoleLogger(category: "TreeViewController")
+    
     var notificationPopover:NSPopover?
     var notificationViewController:NotificationViewController!
     
@@ -259,16 +261,16 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate, Tr
                         item.removeAllChildren()
                         let startTime = Date()
                         for node in treeNodes {
-                            print("\(Date()) [TREE] rendering tree node \(node.name)")
+                            self.logger.log("\(Date()) [TREE] rendering tree node \(node.name)")
                             item.addChild(collection: node)
                         }
                         let gap = Date().timeIntervalSince(startTime)
-                        print("\(Date()) [TREE] tree collection insertion time cost \(gap)")
+                        self.logger.log("\(Date()) [TREE] tree collection insertion time cost \(gap)")
                         self.outlineView.reloadItem(item, reloadChildren: true)
                         self.outlineView.expandItem(item)
                     }
                 }else{
-                    print("[TREE] loaded 0 child nodes")
+                    self.logger.log("[TREE] loaded 0 child nodes")
                 }
                 if let msg = message {
                     MessageEventCenter.default.showMessage(message: msg)
@@ -278,7 +280,7 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate, Tr
     }
     
     func outlineView(_ outlineView: NSOutlineView, shouldExpandItem item: Any) -> Bool {
-        print("[TREE] calling should expand item logic")
+        self.logger.log("[TREE] calling should expand item logic")
         if let node = item as? TreeCollection {
             if node.children.count == 0 {
                 self.expandTreeNode(node)

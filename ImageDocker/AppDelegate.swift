@@ -11,6 +11,8 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
     
+    let logger = ConsoleLogger(category: "AppDelegate")
+    
     func applicationWillFinishLaunching(_ notification: Notification) {
 //        DispatchQueue.global().async {
 //            ExecutionEnvironment.default.createDataBackup(suffix:"-on-launch")
@@ -60,8 +62,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
             do {
                 try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
             }catch{
-                print("Unable to create application directory")
-                print(error)
+                self.logger.log("Unable to create application directory")
+                self.logger.log(error)
             }
         }
         

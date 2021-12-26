@@ -10,6 +10,8 @@ import Cocoa
 
 class StackHeaderViewController : NSViewController, StackItemHeader {
     
+    let logger = ConsoleLogger(category: "StackHeaderViewController")
+    
     @IBOutlet weak var headerTextField: NSTextField!
     @IBOutlet weak var showHideButton: NSButton!
     @IBOutlet weak var searchField: NSTokenField!
@@ -73,7 +75,7 @@ class StackHeaderViewController : NSViewController, StackItemHeader {
     }
     
     @objc func processSearch() {
-        print("===== TREE search: \(self.searchField.tokenStringValue)")
+        self.logger.log("===== TREE search: \(self.searchField.tokenStringValue)")
         if self.filterAction != nil {
             self.filterAction!()
         }
@@ -117,7 +119,7 @@ extension StackHeaderViewController : NSTokenFieldDelegate {
     }
     
     public func tokenField(_ tokenField: NSTokenField, menuForRepresentedObject representedObject: Any) -> NSMenu? {
-        print(representedObject)
+        self.logger.log(representedObject)
         if let token = representedObject as? ACBToken {
             var substring = token.name
             if substring.contains("|") {

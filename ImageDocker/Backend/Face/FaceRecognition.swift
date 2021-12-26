@@ -30,6 +30,8 @@ struct FaceRecognition {
 
 struct FaceRecognitionOpenCV {
     
+    let logger = ConsoleLogger(category: "FaceRecognitionOpenCV")
+    
     fileprivate var workingPath: URL
     
     init() {
@@ -41,17 +43,17 @@ struct FaceRecognitionOpenCV {
     }
     
     func training(dataSetPath:String = FaceRecognition.trainingSamplePath, modelPath:String = FaceRecognition.defaultModelPath, onOutput:@escaping (String) -> Void) {
-        print("training")
-        print(dataSetPath)
-        print(modelPath)
+        self.logger.log("training")
+        self.logger.log(dataSetPath)
+        self.logger.log(modelPath)
         
         let python = PreferencesController.pythonPath()
         if python == "" {
-            print("Path for python has not been located.")
+            self.logger.log("Path for python has not been located.")
             return
         }
         if !FileManager.default.fileExists(atPath: python) {
-            print("Python not found in \(python)")
+            self.logger.log("Python not found in \(python)")
             return
         }
         
@@ -75,12 +77,12 @@ struct FaceRecognitionOpenCV {
                                                             let data = outHandle.availableData
                                                             if data.count > 0 {
                                                                 if let str = String(data: data, encoding: String.Encoding.utf8) {
-                                                                    print("got output: \(str)")
+                                                                    self.logger.log("got output: \(str)")
                                                                     onOutput(str)
                                                                 }
                                                                 //outHandle.waitForDataInBackgroundAndNotify()
                                                             } else {
-                                                                print("EOF on stdout from process")
+                                                                self.logger.log("EOF on stdout from process")
                                                                 outHandle.closeFile()
                                                                 NotificationCenter.default.removeObserver(obs1!)
                                                             }
@@ -89,7 +91,7 @@ struct FaceRecognitionOpenCV {
             var obs2 : NSObjectProtocol!
             obs2 = NotificationCenter.default.addObserver(forName: Process.didTerminateNotification,
                                                           object: cmd, queue: nil) { notification in
-                                                            print("terminated")
+                                                            self.logger.log("terminated")
                                                             outHandle.closeFile()
                                                             NotificationCenter.default.removeObserver(obs2!)
             }
@@ -110,17 +112,17 @@ struct FaceRecognitionOpenCV {
             modelpath = FaceRecognition.defaultModelPath
         }
         if !FileManager.default.fileExists(atPath: modelpath) {
-            print("No available encoded model for recognition")
+            self.logger.log("No available encoded model for recognition")
             return []
         }
         
         let python = PreferencesController.pythonPath()
         if python == "" {
-            print("Path for python has not been located.")
+            self.logger.log("Path for python has not been located.")
             return []
         }
         if !FileManager.default.fileExists(atPath: python) {
-            print("Python not found in \(python)")
+            self.logger.log("Python not found in \(python)")
             return []
         }
         
@@ -134,25 +136,25 @@ struct FaceRecognitionOpenCV {
             do {
                 try cmd.run()
             }catch{
-                print(error)
+                self.logger.log(error)
             }
             
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
             let string = String(data: data, encoding: String.Encoding.utf8)!
             pipe.fileHandleForReading.closeFile()
             
-            print(string)
+            self.logger.log(string)
             
             let lines = string.components(separatedBy: "\n")
             for line in lines {
-                print(line)
+                self.logger.log(line)
                 if line.starts(with: "RECOGNITION RESULT:") {
-                    //print(line)
+                    //self.logger.log(line)
                     let parts = line.components(separatedBy: " ")
                     if parts.count == 7 && parts[6] != "" {
                         let name = parts[6]
                         result.append(name)
-                        print("Found face [\(name)] from image \(imagePath)")
+                        self.logger.log("Found face [\(name)] from image \(imagePath)")
                     }
                 }
             }

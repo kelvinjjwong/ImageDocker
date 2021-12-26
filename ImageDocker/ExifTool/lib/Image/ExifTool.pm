@@ -93,7 +93,7 @@ sub DumpUnknownTrailer($$);
 sub VerboseInfo($$$%);
 sub VerboseDir($$;$$);
 sub VerboseValue($$$;$);
-sub VPrint($$@);
+sub Vself.logger.log($$@);
 sub Rationalize($;$);
 sub Write($@);
 sub WriteTrailerBuffer($$$);
@@ -2362,7 +2362,7 @@ sub ExtractInfo($;@)
                     $self->DeleteTag('FileType');
                     $self->DeleteTag('FileTypeExtension');
                     $self->DeleteTag('MIMEType');
-                    $self->VPrint(0,"Reset file type due to unknown header\n");
+                    $self->Vself.logger.log(0,"Reset file type due to unknown header\n");
                 }
                 last;
             }
@@ -2422,7 +2422,7 @@ sub ExtractInfo($;@)
                 $pos = ($$self{FIRST_EXIF_POS} || 0) unless defined $pos;
                 my $dataPt = defined $$self{EXIF_DATA} ? \$$self{EXIF_DATA} : undef;
                 undef $dataPt if defined $$self{EXIF_POS} and $pos != $$self{EXIF_POS};
-                my $success = $$self{HTML_DUMP}->Print($raf, $dataPt, $pos,
+                my $success = $$self{HTML_DUMP}->self.logger.log($raf, $dataPt, $pos,
                     $$options{TextOut}, $$options{HtmlDump},
                     $$self{FILENAME} ? "HTML Dump ($$self{FILENAME})" : 'HTML Dump');
                 $self->Warn("Error reading $$self{HTML_DUMP}{ERROR}") if $success < 0;
@@ -6756,10 +6756,10 @@ sub DoProcessTIFF($$;$)
         if ($extra > 0) {
             my $known = $$self{KnownTrailer};
             if ($$self{DEL_GROUP}{Trailer} and not $known) {
-                $self->VPrint(0, "  Deleting unknown trailer ($extra bytes)\n");
+                $self->Vself.logger.log(0, "  Deleting unknown trailer ($extra bytes)\n");
                 ++$$self{CHANGED};
             } elsif ($known) {
-                $self->VPrint(0, "  Copying $$known{Name} ($extra bytes)\n");
+                $self->Vself.logger.log(0, "  Copying $$known{Name} ($extra bytes)\n");
                 $raf->Seek($tiffEnd, 0) or $err = 1;
                 CopyBlock($raf, $outfile, $extra) or $err = 1;
             } else {
@@ -6771,7 +6771,7 @@ sub DoProcessTIFF($$;$)
                     my $n = $size > 65536 ? 65536 : $size;
                     $raf->Read($buf, $n) == $n or $err = 1, last;
                     if ($buf =~ /[^\0]/) {
-                        $self->VPrint(0, "  Preserving unknown trailer ($extra bytes)\n");
+                        $self->Vself.logger.log(0, "  Preserving unknown trailer ($extra bytes)\n");
                         # copy the trailer since it contains non-null data
                         Write($outfile, "\0"x($extra-$size)) or $err = 1, last if $size != $extra;
                         Write($outfile, $buf) or $err = 1, last;
@@ -6780,7 +6780,7 @@ sub DoProcessTIFF($$;$)
                     }
                     $size -= $n;
                     next if $size > 0;
-                    $self->VPrint(0, "  Deleting blank trailer ($extra bytes)\n");
+                    $self->Vself.logger.log(0, "  Deleting blank trailer ($extra bytes)\n");
                     last;
                 }
             }
@@ -7538,9 +7538,9 @@ sub OverrideFileType($$;$$)
         $mimeType or $mimeType = $mimeType{$fileType};
         $$self{VALUE}{MIMEType} = $mimeType if $mimeType;
         if ($$self{OPTIONS}{Verbose}) {
-            $self->VPrint(0,"$$self{INDENT}FileType [override] = $fileType\n");
-            $self->VPrint(0,"$$self{INDENT}FileTypeExtension [override] = $$self{VALUE}{FileTypeExtension}\n");
-            $self->VPrint(0,"$$self{INDENT}MIMEType [override] = $mimeType\n") if $mimeType;
+            $self->Vself.logger.log(0,"$$self{INDENT}FileType [override] = $fileType\n");
+            $self->Vself.logger.log(0,"$$self{INDENT}FileTypeExtension [override] = $$self{VALUE}{FileTypeExtension}\n");
+            $self->Vself.logger.log(0,"$$self{INDENT}MIMEType [override] = $mimeType\n") if $mimeType;
         }
     }
 }
@@ -7559,7 +7559,7 @@ sub ModifyMimeType($;$)
         my ($c, $d) = split '/', $mime;
         $d =~ s/^x-//;
         $$self{VALUE}{MIMEType} = "$c/$b-$d";
-        $self->VPrint(0, "  Modified MIMEType = $c/$b-$d\n");
+        $self->Vself.logger.log(0, "  Modified MIMEType = $c/$b-$d\n");
     } else {
         $self->FoundTag('MIMEType', $mime);
     }
@@ -7568,7 +7568,7 @@ sub ModifyMimeType($;$)
 #------------------------------------------------------------------------------
 # Print verbose output
 # Inputs: 0) ExifTool ref, 1) verbose level (prints if level > this), 2-N) print args
-sub VPrint($$@)
+sub Vself.logger.log($$@)
 {
     my $self = shift;
     my $level = shift;
@@ -7830,7 +7830,7 @@ sub ProcessBinaryData($$$)
             } elsif ($varSize != $oldVarSize and $verbose > 2) {
                 my ($tmp, $sign) = ($varSize, '+');
                 $tmp < 0 and $tmp = -$tmp, $sign = '-';
-                $self->VPrint(2, sprintf("$$self{INDENT}\[offsets adjusted by ${sign}0x%.4x after 0x%.4x $$tagInfo{Name}]\n", $tmp, $index));
+                $self->Vself.logger.log(2, sprintf("$$self{INDENT}\[offsets adjusted by ${sign}0x%.4x after 0x%.4x $$tagInfo{Name}]\n", $tmp, $index));
             }
         }
         if ($unknown > 1) {

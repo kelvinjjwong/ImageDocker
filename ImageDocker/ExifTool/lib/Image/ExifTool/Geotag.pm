@@ -164,7 +164,7 @@ sub LoadTrackLog($$;$)
         } elsif ($val eq 'DATETIMEONLY') {
             $$geotag{DateTimeOnly} = 1;
             $$geotag{IsDate} = 1;
-            $et->VPrint(0, 'Geotagging date/time only');
+            $et->Vself.logger.log(0, 'Geotagging date/time only');
             return $geotag;
         } else {
             return "Error opening GPS file '$val'";
@@ -292,11 +292,11 @@ sub LoadTrackLog($$;$)
                     # validate and store GPS fix
                     next unless defined $$fix{lat} and defined $$fix{lon} and $$fix{'time'};
                     unless ($$fix{lat} =~ /^[+-]?\d+\.?\d*/ and $$fix{lon} =~ /^[+-]?\d+\.?\d*/) {
-                        $e0 or $et->VPrint(0, "Coordinate format error in $from\n"), $e0 = 1;
+                        $e0 or $et->Vself.logger.log(0, "Coordinate format error in $from\n"), $e0 = 1;
                         next;
                     }
                     unless (defined($time = GetTime($$fix{'time'}))) {
-                        $e1 or $et->VPrint(0, "Timestamp format error in $from\n"), $e1 = 1;
+                        $e1 or $et->Vself.logger.log(0, "Timestamp format error in $from\n"), $e1 = 1;
                         next;
                     }
                     $isDate = 1;
@@ -755,7 +755,7 @@ sub FindFix($$$$$$$)
         }
     }
     if (defined $p and $$et{OPTIONS}{Verbose} > 2) {
-        $et->VPrint(2, "  Taking $key from fix:\n", PrintFix($points, $t))
+        $et->Vself.logger.log(2, "  Taking $key from fix:\n", PrintFix($points, $t))
     }
     return $p;
 }
@@ -863,23 +863,23 @@ sub SetGeoValues($$;$)
         } elsif ($time < $$times[0]) {
             if ($time < $$times[0] - $geoMaxExtSecs) {
                 $err or $err = 'Time is too far before track';
-                $et->VPrint(2, '  Track start:     ', PrintFixTime($$times[0]), "\n") if $verbose > 2;
+                $et->Vself.logger.log(2, '  Track start:     ', PrintFixTime($$times[0]), "\n") if $verbose > 2;
                 $fix = { } if $$geotag{DateTimeOnly};
             } else {
                 $fix = $$points{$$times[0]};
                 $iExt = 0;  $iDir = 1;
-                $et->VPrint(2, "  Taking pos from fix:\n",
+                $et->Vself.logger.log(2, "  Taking pos from fix:\n",
                     PrintFix($points, $$times[0])) if $verbose > 2;
             }
         } elsif ($time > $$times[-1]) {
             if ($time > $$times[-1] + $geoMaxExtSecs) {
                 $err or $err = 'Time is too far beyond track';
-                $et->VPrint(2, '  Track end:       ', PrintFixTime($$times[-1]), "\n") if $verbose > 2;
+                $et->Vself.logger.log(2, '  Track end:       ', PrintFixTime($$times[-1]), "\n") if $verbose > 2;
                 $fix = { } if $$geotag{DateTimeOnly};
             } else {
                 $fix = $$points{$$times[-1]};
                 $iExt = $#$times;  $iDir = -1;
-                $et->VPrint(2, "  Taking pos from fix:\n",
+                $et->Vself.logger.log(2, "  Taking pos from fix:\n",
                     PrintFix($points, $$times[-1])) if $verbose > 2;
             }
         } else {
@@ -915,17 +915,17 @@ sub SetGeoValues($$;$)
                 }
                 if (abs($time - $tn) > $geoMaxExtSecs) {
                     $err or $err = 'Time is too far from nearest GPS fix';
-                    $et->VPrint(2, '  Nearest fix:     ', PrintFixTime($tn), "\n") if $verbose > 2;
+                    $et->Vself.logger.log(2, '  Nearest fix:     ', PrintFixTime($tn), "\n") if $verbose > 2;
                     $fix = { } if $$geotag{DateTimeOnly};
                 } else {
                     $fix = $$points{$tn};
-                    $et->VPrint(2, "  Taking pos from fix:\n",
+                    $et->Vself.logger.log(2, "  Taking pos from fix:\n",
                         PrintFix($points, $tn)) if $verbose > 2;
                 }
             } else {
                 my $f0 = $t1 == $t0 ? 0 : ($time - $t0) / ($t1 - $t0);
                 my $p0 = $$points{$t0};
-                $et->VPrint(2, "  Interpolating between fixes (f=$f0):\n",
+                $et->Vself.logger.log(2, "  Interpolating between fixes (f=$f0):\n",
                     PrintFix($points, $t0, $t1)) if $verbose > 2;
                 $fix = { };
                 # loop through available fix information categories
@@ -964,7 +964,7 @@ Category:       foreach $category (qw{pos track alt orient}) {
                             }
                             # re-calculate the interpolation factor
                             $f = $f0b = $t1b == $t0b ? 0 : ($time - $t0b) / ($t1b - $t0b);
-                            $et->VPrint(2, "  Interpolating $category between fixes (f=$f):\n",
+                            $et->Vself.logger.log(2, "  Interpolating $category between fixes (f=$f):\n",
                                 PrintFix($points, $t0b, $t1b)) if $verbose > 2;
                         }
                         # must interpolate cyclical values differently
@@ -1124,7 +1124,7 @@ sub ConvertGeosync($$)
             foreach $tag (@timeTags) {
                 if ($$info{$tag}) {
                     $imgTime = $$info{$tag};
-                    $et->VPrint(2, "Geosyncing with $tag from '$syncFile'\n");
+                    $et->Vself.logger.log(2, "Geosyncing with $tag from '$syncFile'\n");
                     last;
                 }
             }
@@ -1179,7 +1179,7 @@ sub ConvertGeosync($$)
             # print verbose output
             if ($et->Options('Verbose') > 1) {
                 # print GPS and image timestamps in UTC
-                $et->VPrint(1, "Added Geosync point:\n",
+                $et->Vself.logger.log(1, "Added Geosync point:\n",
                                '  GPS time stamp:  ', PrintFixTime($gpsSecs), "\n",
                                '  Image date/time: ', PrintFixTime($imgSecs), "\n");
             }

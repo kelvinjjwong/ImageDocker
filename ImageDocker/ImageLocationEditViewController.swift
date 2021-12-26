@@ -11,6 +11,8 @@ import WebKit
 
 class ImageLocationEditViewController : NSViewController {
     
+    let logger = ConsoleLogger(category: "ImageLocationEditViewController")
+    
     // MARK: Icon
     let tick:NSImage = NSImage.init(named: NSImage.menuOnStateTemplateName)!
     
@@ -138,7 +140,7 @@ class ImageLocationEditViewController : NSViewController {
             }
         }
 //        else{
-//            print("img has no coord")
+//            self.logger.log("img has no coord")
 //        }
     }
     
@@ -161,8 +163,8 @@ class ImageLocationEditViewController : NSViewController {
             self.possibleLocation?.address = self.readImageLocationMeta(title: "Address")
             self.possibleLocation?.addressDescription = self.readImageLocationMeta(title: "Description")
             
-            //print("possible location address: \(possibleLocation?.address ?? "")")
-            //print("possible location place: \(possibleLocation?.place ?? "")")
+            //self.logger.log("possible location address: \(possibleLocation?.address ?? "")")
+            //self.logger.log("possible location place: \(possibleLocation?.place ?? "")")
             
             
             self.locationSearcher.stringValue = ""
@@ -172,7 +174,7 @@ class ImageLocationEditViewController : NSViewController {
             BaiduLocation.queryForAddress(coordinateBD: sampleImage.location.coordinateBD!, locationConsumer: self, textConsumer: self.locationTextDelegate!)
             BaiduLocation.queryForMap(coordinateBD: sampleImage.location.coordinateBD!, view: self.locationWebView, zoom: self.zoomSize)
         }else{
-            print("sample image file is not selected")
+            self.logger.log("sample image file is not selected")
         }
     }
     
@@ -219,7 +221,7 @@ class ImageLocationEditViewController : NSViewController {
                         imageInSelection!.assignLocation(location: location)
                     }
                     
-                    //print("place after assign location: \(item.place)")
+                    //self.logger.log("place after assign location: \(item.place)")
                     let _ = item.save()
                 }
                 let _ = accumulator.add()
@@ -227,7 +229,7 @@ class ImageLocationEditViewController : NSViewController {
             self.reloadSelectionView?()
             self.reloadCollectionView?()
         }else{
-            print("selectionViewController is not linked to ImageLocationEditViewController")
+            self.logger.log("selectionViewController is not linked to ImageLocationEditViewController")
         }
     }
     
@@ -267,7 +269,7 @@ extension ImageLocationEditViewController: CoordinateConsumer {
     }
     
     func alert(status: Int, message: String) {
-        print("\(status) : \(message)")
+        self.logger.log("\(status) : \(message)")
     }
 }
 
@@ -296,7 +298,7 @@ extension ImageLocationEditViewController: LocationConsumer {
     }
     
     func alert(status: Int, message: String, popup:Bool = false) {
-        print("LOCATION ALERT: \(status) : \(message)")
+        self.logger.log("LOCATION ALERT: \(status) : \(message)")
     }
     
     
@@ -350,7 +352,7 @@ class PlaceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
     
     func comboBox(_ comboBox: NSComboBox, completedString string: String) -> String? {
         
-        //print("SubString = \(string)")
+        //self.logger.log("SubString = \(string)")
         
         for place in places {
             let state = place.name
@@ -359,7 +361,7 @@ class PlaceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBoxD
                 // only use first part of the strings in the list with length of the search string
                 let statePartialStr = state.lowercased()[state.lowercased().startIndex..<state.lowercased().index(state.lowercased().startIndex, offsetBy: string.count)]
                 if statePartialStr.range(of: string.lowercased()) != nil {
-                    //print("SubString Match = \(state)")
+                    //self.logger.log("SubString Match = \(state)")
                     return state
                 }
             }

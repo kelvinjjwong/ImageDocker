@@ -25,13 +25,15 @@ public enum FileExistState:Int{
 
 class ComputerFileManager : FileSystemHandler {
     
+    let logger = ConsoleLogger(category: "ComputerFileManager")
+    
     static let `default` = ComputerFileManager()
     func createDirectory(atPath path:String) -> Bool {
         do {
             try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
         }catch{
-            print("Cannot create directory: \(path)")
-            print(error)
+            self.logger.log("Cannot create directory: \(path)")
+            self.logger.log(error)
             return false
         }
         return true
@@ -58,8 +60,8 @@ class ComputerFileManager : FileSystemHandler {
         do {
             try FileManager.default.removeItem(atPath: path)
         }catch {
-            print("Cannot delete original copy: \(path)")
-            print(error)
+            self.logger.log("Cannot delete original copy: \(path)")
+            self.logger.log(error)
             return false
         }
         return true
@@ -84,7 +86,7 @@ class ComputerFileManager : FileSystemHandler {
             string = String(data: data, encoding: String.Encoding.utf8)!
             pipe.fileHandleForReading.closeFile()
         }
-        print(string)
+        self.logger.log(string)
         if string != "" && string.starts(with: "MD5 (") {
             let comp:[String] = string.components(separatedBy: " = ")
             if comp.count == 2 {
@@ -96,6 +98,8 @@ class ComputerFileManager : FileSystemHandler {
 }
 
 class AndroidFileManager : FileSystemHandler {
+    
+    let logger = ConsoleLogger(category: "AndroidFileManager")
     
     private var deviceId:String
     
@@ -114,17 +118,17 @@ class AndroidFileManager : FileSystemHandler {
     
     func fileExists(atPath path: String, md5: String) -> FileExistState {
         if Android.bridge.existsFile(device: self.deviceId, path: path) {
-            print("exists")
+            self.logger.log("exists")
             let md5AtPath = self.md5(pathOfFile: path)
             if md5 == md5AtPath {
-                print("with same md5")
+                self.logger.log("with same md5")
                 return .existAtPathWithSameMD5
             }else{
-                print("with different md5")
+                self.logger.log("with different md5")
                 return .existAtPathWithDifferentMD5
             }
         }else{
-            print("not exist")
+            self.logger.log("not exist")
             return .notExistAtPath
         }
     }

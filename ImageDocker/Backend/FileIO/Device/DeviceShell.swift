@@ -21,7 +21,7 @@ struct DeviceShell {
         if columns.count >= columnSize {
             var parts:[String] = []
             for i in columnIndex..<columns.count {
-                //print("\(i): \(columns[i])")
+                //self.logger.log("\(i): \(columns[i])")
                 parts.append(columns[i])
             }
             filename = parts.joined(separator: " ")
@@ -68,21 +68,21 @@ struct DeviceShell {
                 }
                 columns.append(col)
             }
-            //print(line)
+            //self.logger.log(line)
             var filename = ""
             //if deviceOS == .android {
                 let referFilenames = reference[folder] ?? []
                 if referFilenames.count > 0 && filerowIndex < referFilenames.count {
                     filename = referFilenames[filerowIndex]
-                    //print("filename [\(filename)] found in folder: [\(folder)] refer array count:\(referFilenames.count) filerowIndex:\(filerowIndex)")
+                    //self.logger.log("filename [\(filename)] found in folder: [\(folder)] refer array count:\(referFilenames.count) filerowIndex:\(filerowIndex)")
                 }else{
-                    //print("filename not found in folder: [\(folder)] refer array count:\(referFilenames.count) filerowIndex:\(filerowIndex)")
+                    //self.logger.log("filename not found in folder: [\(folder)] refer array count:\(referFilenames.count) filerowIndex:\(filerowIndex)")
                 }
                 if filename != "" && line.hasSuffix(filename) {
-                    //print("bingo: \(filename)")
+                    //self.logger.log("bingo: \(filename)")
                 }else{
                     filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)
-                    //print("OBJ BAD LUCK, use old method: \(filename)")
+                    //self.logger.log("OBJ BAD LUCK, use old method: \(filename)")
                 }
             //}else{
             //    filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)
@@ -142,8 +142,8 @@ struct DeviceShell {
                 }
                 columns.append(col)
             }
-            //print(line)
-            //print(deviceOS)
+            //self.logger.log(line)
+            //self.logger.log(deviceOS)
             
             let folder = subFolder == "" ? "." : subFolder
             var filenames = filerows[folder]
@@ -161,15 +161,15 @@ struct DeviceShell {
                 let referFilenames = reference[folder] ?? []
                 if referFilenames.count > 0 && filerowIndex < referFilenames.count {
                     filename = referFilenames[filerowIndex]
-                    //print("filename [\(filename)] found in folder: [\(folder)] refer array count:\(referFilenames.count) filerowIndex:\(filerowIndex)")
+                    //self.logger.log("filename [\(filename)] found in folder: [\(folder)] refer array count:\(referFilenames.count) filerowIndex:\(filerowIndex)")
                 }else{
-                    //print("filename not found in folder: [\(folder)] refer array count:\(referFilenames.count) filerowIndex:\(filerowIndex)")
+                    //self.logger.log("filename not found in folder: [\(folder)] refer array count:\(referFilenames.count) filerowIndex:\(filerowIndex)")
                 }
                 if filename != "" && line.hasSuffix(filename) {
-                    //print("bingo: \(filename)")
+                    //self.logger.log("bingo: \(filename)")
                 }else{
                     filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)
-                    //print("STR BAD LUCK, use old method: \(filename)")
+                    //self.logger.log("STR BAD LUCK, use old method: \(filename)")
                 }
             //}else{
             //    filename = self.getFilenameFromLs(from: columns, at: deviceOS == .android ? 5 : 6)

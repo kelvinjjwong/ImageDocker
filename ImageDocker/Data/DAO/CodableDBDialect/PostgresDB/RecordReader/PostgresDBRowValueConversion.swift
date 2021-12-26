@@ -19,28 +19,27 @@ public protocol PostgresRowValueProtocol {
 extension PostgresRowValueProtocol {
     
     static func decode(from row: PostgresRow, atUncheckedIndex index: Int) -> Self {
-        //print("column size: \(row.values.count), decode index: \(index)")
+        //self.logger.log("column size: \(row.values.count), decode index: \(index)")
         let dbValue = row.values[index].postgresValue
-        //print("decoding table [\(row.table)] column: \(row.columnNames[index])")
-        //print(" >> value to be decoded: \(dbValue.rawValue ?? "nil")")
+        //self.logger.log("decoding table [\(row.table)] column: \(row.columnNames[index])")
+        //self.logger.log(" >> value to be decoded: \(dbValue.rawValue ?? "nil")")
         if let value = fromPostgresValue(dbValue) {
-//            print("decoding column: \(row.columnNames[index])")
-//            print("value to be decoded: \(dbValue.rawValue ?? "nil")")
-//            print("value decoded: \(value)")
+//            self.logger.log("decoding column: \(row.columnNames[index])")
+//            self.logger.log("value to be decoded: \(dbValue.rawValue ?? "nil")")
+//            self.logger.log("value decoded: \(value)")
             return value
         } else {
-            print("fatal error")
-            print("fatal error: decoding table [\(row.table)] column: \(row.columnNames[index])")
-            print("fatal error: >> value to be decoded: \(dbValue.rawValue ?? "nil")")
+            print("\(Date()) [PostgresRowValueProtocol] fatal error: decoding table [\(row.table)] column: \(row.columnNames[index])")
+            print("\(Date()) [PostgresRowValueProtocol] fatal error: >> value to be decoded: \(dbValue.rawValue ?? "nil")")
             fatalConversionError(to: Self.self, from: dbValue)
         }
     }
     
     static func decodeIfPresent(from row: PostgresRow, atUncheckedIndex index: Int) -> Self? {
-        //print("decodeIfPresent column size: \(row.values.count), decode index: \(index)")
+        //self.logger.log("decodeIfPresent column size: \(row.values.count), decode index: \(index)")
         let dbValue = row.values[index].postgresValue
-        //print("decodeIfPresent decoding table [\(row.table)] column: \(row.columnNames[index])")
-        //print(" >> decodeIfPresent value to be decoded: \(dbValue.rawValue ?? "nil")")
+        //self.logger.log("decodeIfPresent decoding table [\(row.table)] column: \(row.columnNames[index])")
+        //self.logger.log(" >> decodeIfPresent value to be decoded: \(dbValue.rawValue ?? "nil")")
         if let value = fromPostgresValue(dbValue) {
             return value
         } else {

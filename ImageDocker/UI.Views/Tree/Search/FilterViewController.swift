@@ -10,6 +10,8 @@ import Cocoa
 
 class FilterViewController: NSViewController {
     
+    let logger = ConsoleLogger(category: "FilterViewController")
+    
     // MARK: Tables
     
     @IBOutlet weak var imageSourceTable: NSTableView!
@@ -91,7 +93,7 @@ class FilterViewController: NSViewController {
     @objc func onCheckImageSource(sender: NSButton) {
         if sender.toolTip != nil && (sender.toolTip?.starts(with: "Select "))! {
             let name = sender.toolTip!.replacingOccurrences(of: "Select ", with: "")
-            print(name)
+            self.logger.log(name)
             if sender.state == .on {
                 imageSourceTableController?.dataSet![name] = true
             }else if sender.state == .off {
@@ -103,7 +105,7 @@ class FilterViewController: NSViewController {
     @objc func onCheckCameraModel(sender: NSButton) {
         if sender.toolTip != nil && (sender.toolTip?.starts(with: "Select "))! {
             let name = sender.toolTip!.replacingOccurrences(of: "Select ", with: "")
-            print(name)
+            self.logger.log(name)
             if sender.state == .on {
                 cameraModelTableController?.dataSet![name] = true
             }else if sender.state == .off {

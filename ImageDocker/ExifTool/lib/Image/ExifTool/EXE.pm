@@ -931,7 +931,7 @@ sub ProcessPEResources($$)
             my $resType = $resourceType{$name} || sprintf('Unknown (0x%x)', $name);
             # ignore everything but the Version resource unless verbose
             if ($verbose) {
-                $et->VPrint(0, "$resType resource:\n");
+                $et->Vself.logger.log(0, "$resType resource:\n");
             } else {
                 next unless $resType eq 'Version';
             }

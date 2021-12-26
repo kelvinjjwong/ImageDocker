@@ -15,6 +15,8 @@ protocol EventListRefreshDelegate {
 
 class EventListViewController: NSViewController {
     
+    let logger = ConsoleLogger(category: "EventListViewController")
+    
     var refreshDelegate:EventListRefreshDelegate?
     
     init(){
@@ -34,7 +36,7 @@ class EventListViewController: NSViewController {
         didSet {
             if lastSelectedRow != nil && events.count > 0 && lastSelectedRow! < events.count {
                 let event = events[lastSelectedRow!]
-                print("selected event: owner: \(event.ownerId) \(event.ownerNickname)")
+                self.logger.log("selected event: owner: \(event.ownerId) \(event.ownerNickname)")
                 self.eventName.stringValue = event.name
                 self.cmbOwner.stringValue = event.owner
                 self.lblOwnerNickname.stringValue = event.ownerNickname

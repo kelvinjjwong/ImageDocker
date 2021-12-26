@@ -98,7 +98,7 @@ sub ProcessMPC($$)
         SetByteOrder('II');
         my $pos = $raf->Tell() - 32;
         if ($et->Options('Verbose')) {
-            $et->VPrint(0, "MPC Header (32 bytes):\n");
+            $et->Vself.logger.log(0, "MPC Header (32 bytes):\n");
             $et->VerboseDump(\$buff, DataPos => $pos);
         }
         my $tagTablePtr = GetTagTable('Image::ExifTool::MPC::Main');

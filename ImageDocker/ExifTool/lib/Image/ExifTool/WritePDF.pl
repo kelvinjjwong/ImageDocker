@@ -339,7 +339,7 @@ sub WritePDF($$)
         }
         $raf->Seek($prevUpdate, 0) or $rtn = -1;
         if ($$et{DEL_GROUP}{'PDF-update'}) {
-            $et->VPrint(0, "  Reverted previous ExifTool updates\n");
+            $et->Vself.logger.log(0, "  Reverted previous ExifTool updates\n");
             ++$$et{CHANGED};
             return $rtn;
         }
@@ -517,7 +517,7 @@ sub WritePDF($$)
     # XMP is deleted as a block -- so check for this
     unless ($newXMP or $$info{XMP}) {
         $$et{CHANGED} = $oldChanged;
-        $et->VPrint(0, "  (XMP not changed -- still empty)\n");
+        $et->Vself.logger.log(0, "  (XMP not changed -- still empty)\n");
     }
     my ($metaChanged, $rootChanged);
 

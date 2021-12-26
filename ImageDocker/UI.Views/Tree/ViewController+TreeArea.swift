@@ -42,7 +42,7 @@ extension ViewController {
                                         }
         },
                                     onNodeSelected: { collection in
-//                                        print("action on \(collection.path)")
+//                                        self.logger.log("action on \(collection.path)")
                                         if collection.path == "Android" || collection.path == "iPhone" {
                                             self.stackedTreeView.expand(tree: Words.nav_cat_devices.word(), path: collection.path)
                                         }else{
@@ -66,18 +66,18 @@ extension ViewController {
                                         }
         },
                                     onNodeSelected: { collection in
-//                                        print("action on \(collection.path)")
+//                                        self.logger.log("action on \(collection.path)")
                                         if let moment = collection.relatedObject as? Moment {
                                             self.loadCollectionByMoment(moment:moment, pageSize: 200, pageNumber: 1)
                                         }
         },
                                     moreActionOnHeader: { button in
-//                                        print("clicked moments more button")
+//                                        self.logger.log("clicked moments more button")
                                         self.momentsTreeCategory = "MOMENTS"
                                         self.openMomentsTreeHeaderExtendView(sender: button)
         },
                                     moreActionOnNode: { collection, button in
-//                                        print("more on moments \(collection.path)")
+//                                        self.logger.log("more on moments \(collection.path)")
                                         if let moment = collection.relatedObject as? Moment {
                                             self.reloadMomentCollection(moment:moment, sender:button)
                                         }
@@ -96,18 +96,18 @@ extension ViewController {
                                         }
         },
                                     onNodeSelected: { collection in
-//                                        print("action on \(collection.path)")
+//                                        self.logger.log("action on \(collection.path)")
                                         if let moment = collection.relatedObject as? Moment {
                                             self.loadCollectionByEvent(moment:moment, pageSize: 200, pageNumber: 1)
                                         }
         },
                                     moreActionOnHeader: { button in
-//                                        print("clicked events more button")
+//                                        self.logger.log("clicked events more button")
                                         self.momentsTreeCategory = "EVENTS"
                                         self.openMomentsTreeHeaderExtendView(sender: button)
         },
                                     moreActionOnNode: { collection, button in
-//                                        print("more on events \(collection.path)")
+//                                        self.logger.log("more on events \(collection.path)")
                                         if let moment = collection.relatedObject as? Moment {
                                             self.reloadEventCollection(moment:moment, sender:button)
                                         }
@@ -126,18 +126,18 @@ extension ViewController {
                                         }
         },
                                     onNodeSelected: { collection in
-//                                        print("action on \(collection.path)")
+//                                        self.logger.log("action on \(collection.path)")
                                         if let moment = collection.relatedObject as? Moment {
                                             self.loadCollectionByPlace(moment:moment, pageSize: 200, pageNumber: 1)
                                         }
         },
                                     moreActionOnHeader: { button in
-//                                        print("clicked places more button")
+//                                        self.logger.log("clicked places more button")
                                         self.momentsTreeCategory = "PLACES"
                                         self.openMomentsTreeHeaderExtendView(sender: button)
         },
                                     moreActionOnNode: { collection, button in
-//                                        print("more on places \(collection.path)")
+//                                        self.logger.log("more on places \(collection.path)")
                                         if let moment = collection.relatedObject as? Moment {
                                             self.reloadPlaceCollection(moment:moment, sender:button)
                                         }
@@ -152,7 +152,7 @@ extension ViewController {
                                         return Icons.folder
         },
                                     onNodeSelected: { collection in
-//                                        print("action on \(collection.path)")
+//                                        self.logger.log("action on \(collection.path)")
                                         if let container = collection.relatedObject as? ImageContainer {
                                             self.selectedImageContainer = container
                                             if PreferencesController.amountForPagination() > 0 && container.imageCount > PreferencesController.amountForPagination() {
@@ -160,7 +160,7 @@ extension ViewController {
                                                 if container.path != "/" {
                                                     self.loadCollectionByContainer(name:container.name, url:URL(fileURLWithPath: container.path), pageSize: 200, pageNumber: 1, subdirectories: true)
                                                 }else{
-//                                                    print("WARN: collection url is null")
+//                                                    self.logger.log("WARN: collection url is null")
                                                 }
                                             }else{
                                                 self.btnRefreshCollectionView.title = Words.reload.word()
@@ -170,14 +170,14 @@ extension ViewController {
                                         
         },
                                     moreActionOnHeader: { button in
-//                                        print("clicked libs more button")
+//                                        self.logger.log("clicked libs more button")
                                         self.createLibrariesViewPopover()
                                         
                                         let cellRect = button.bounds
                                         self.librariesViewPopover?.show(relativeTo: cellRect, of: button, preferredEdge: .maxX)
         },
                                     moreActionOnNode: { collection, button in
-//                                        print("more on libs \(collection.path)")
+//                                        self.logger.log("more on libs \(collection.path)")
                                         if let container = collection.relatedObject as? ImageContainer {
                                             if container.parentFolder == "" {
                                                 self.openRepositoryDetail(container: container, url: URL(fileURLWithPath: container.path), sender: button)
@@ -199,19 +199,19 @@ extension ViewController {
     
     internal func updateLibraryTree() {
         //self.creatingRepository = true
-//        print("\(Date()) UPDATING CONTAINERS")
+//        self.logger.log("\(Date()) UPDATING CONTAINERS")
         DispatchQueue.global().async {
             ImageFolderTreeScanner.default.updateContainers(onCompleted: {
                 
-//                print("\(Date()) UPDATING CONTAINERS: DONE")
+//                self.logger.log("\(Date()) UPDATING CONTAINERS: DONE")
                 
                 DispatchQueue.main.async {
-//                    print("\(Date()) UPDATING LIBRARY TREE")
+//                    self.logger.log("\(Date()) UPDATING LIBRARY TREE")
 //                    self.saveTreeItemsExpandState()
 //                    self.refreshLibraryTree()
 //                    self.restoreTreeItemsExpandState()
 //                    self.restoreTreeSelection()
-//                    print("\(Date()) UPDATING LIBRARY TREE: DONE")
+//                    self.logger.log("\(Date()) UPDATING LIBRARY TREE: DONE")
                     
                     //self.creatingRepository = false
                     

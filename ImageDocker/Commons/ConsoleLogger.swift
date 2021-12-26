@@ -34,6 +34,22 @@ class ConsoleLogger {
         print("\(prefix()) \(message)")
     }
     
+    public func log(_ message:Int){
+        print("\(prefix()) \(message)")
+    }
+    
+    public func log(_ message:Double){
+        print("\(prefix()) \(message)")
+    }
+    
+    public func log(_ message:Float){
+        print("\(prefix()) \(message)")
+    }
+    
+    public func log(_ message:Any){
+        print("\(prefix()) \(message)")
+    }
+    
     public func log(_ error:Error){
         print("\(prefix()) \(error)")
     }
