@@ -50,10 +50,10 @@ final class PreferencesController: NSViewController {
     fileprivate static let ideviceinfoKey = "ideviceinfoKey"
     
     // MARK: FACE RECOGNITION
-    fileprivate static let homebrewKey = "HomebrewKey"
-    fileprivate static let pythonKey = "PythonKey"
-    fileprivate static let faceRecognitionModelKey = "FaceRecognitionModelKey"
-    fileprivate static let alternativeFaceModelPathKey = "AlternativeFaceModelPathKey"
+//    fileprivate static let homebrewKey = "HomebrewKey"
+//    fileprivate static let pythonKey = "PythonKey"
+//    fileprivate static let faceRecognitionModelKey = "FaceRecognitionModelKey"
+//    fileprivate static let alternativeFaceModelPathKey = "AlternativeFaceModelPathKey"
     
     // MARK: PERFORMANCE
     fileprivate static let memoryPeakKey = "memoryPeakKey"
@@ -157,16 +157,16 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var lblIdeviceInfoMessage: NSTextField!
     
     // MARK: FACE RECOGNITION
-    @IBOutlet weak var txtPythonPath: NSTextField!
-    @IBOutlet weak var lblHomebrewMessage: NSTextField!
-    @IBOutlet weak var lblPythonMessage: NSTextField!
-    @IBOutlet weak var lblComponentsStatus: NSTextField!
-    @IBOutlet weak var chkMajorFaceRecognitionModel: NSButton!
-    @IBOutlet weak var chkAlternativeFaceRecognitionModel: NSButton!
-    @IBOutlet weak var lblMajorFaceModelPath: NSTextField!
-    @IBOutlet weak var txtAlternativeFaceModelPath: NSTextField!
-    @IBOutlet weak var btnCheckFaceComponents: NSButton!
-    @IBOutlet var lblComponentsInstruction: NSTextView!
+//    @IBOutlet weak var txtPythonPath: NSTextField!
+//    @IBOutlet weak var lblHomebrewMessage: NSTextField!
+//    @IBOutlet weak var lblPythonMessage: NSTextField!
+//    @IBOutlet weak var lblComponentsStatus: NSTextField!
+//    @IBOutlet weak var chkMajorFaceRecognitionModel: NSButton!
+//    @IBOutlet weak var chkAlternativeFaceRecognitionModel: NSButton!
+//    @IBOutlet weak var lblMajorFaceModelPath: NSTextField!
+//    @IBOutlet weak var txtAlternativeFaceModelPath: NSTextField!
+//    @IBOutlet weak var btnCheckFaceComponents: NSButton!
+//    @IBOutlet var lblComponentsInstruction: NSTextView!
     
     // MARK: PERFORMANCE
     @IBOutlet weak var memorySlider: NSSlider!
@@ -894,94 +894,94 @@ final class PreferencesController: NSViewController {
     
     // MARK: - ACTION FOR FACE RECOGNITION SECTION
     
-    @IBAction func onLocateHomebrewClicked(_ sender: NSButton) {
-        let path = ExecutionEnvironment.default.locate("brew")
-        if path != "" {
-            self.txtHomebrewPath.stringValue = path
-            self.lblHomebrewMessage.stringValue = ""
-        }else{
-            self.txtHomebrewPath.stringValue = ""
-            self.lblHomebrewMessage.stringValue = "ERROR: Missing Homebrew"
-        }
-    }
-    
-    @IBAction func onLocatePythonClicked(_ sender: NSButton) {
-        let path = ExecutionEnvironment.default.locate("python3")
-        if path != "" {
-            self.txtPythonPath.stringValue = path
-            self.lblPythonMessage.stringValue = ""
-        }else{
-            self.txtPythonPath.stringValue = ""
-            self.lblPythonMessage.stringValue = "ERROR: Missing Python 3"
-        }
-    }
-    
-    @IBAction func onCheckComponentsClicked(_ sender: NSButton) {
-        let _ = self.checkComponentStatus()
-    }
-    
-    fileprivate func checkComponentStatus() -> Bool {
-        let py3 = self.txtPythonPath.stringValue
-        let brew = self.txtHomebrewPath.stringValue
-        if py3 == "" || brew == "" {
-            return false
-        }
-        if !FileManager.default.fileExists(atPath: py3) || !FileManager.default.fileExists(atPath: brew) {
-            return false
-        }
-        self.btnCheckFaceComponents.isEnabled = false
-        DispatchQueue.global().async {
-            let pip = ExecutionEnvironment.default.locate("pip3")
-            let pips = ExecutionEnvironment.default.pipList(pip)
-            let brews = ExecutionEnvironment.default.brewList(brew)
-            let casks = ExecutionEnvironment.default.brewCaskList(brew)
-            
-            var result = ""
-            for component in ExecutionEnvironment.componentsForDlibFaceRecognition {
-                if pips.contains(component) || brews.contains(component) || casks.contains(component) {
-                    result += "INSTALLED: \(component)\n"
-                }else{
-                    result += "NOT FOUND: \(component)\n"
-                }
-            }
-            DispatchQueue.main.async {
-                self.lblComponentsStatus.stringValue = result
-                self.btnCheckFaceComponents.isEnabled = true
-            }
-        }
-        return true
-    }
+//    @IBAction func onLocateHomebrewClicked(_ sender: NSButton) {
+//        let path = ExecutionEnvironment.default.locate("brew")
+//        if path != "" {
+//            self.txtHomebrewPath.stringValue = path
+//            self.lblHomebrewMessage.stringValue = ""
+//        }else{
+//            self.txtHomebrewPath.stringValue = ""
+//            self.lblHomebrewMessage.stringValue = "ERROR: Missing Homebrew"
+//        }
+//    }
+//    
+//    @IBAction func onLocatePythonClicked(_ sender: NSButton) {
+//        let path = ExecutionEnvironment.default.locate("python3")
+//        if path != "" {
+//            self.txtPythonPath.stringValue = path
+//            self.lblPythonMessage.stringValue = ""
+//        }else{
+//            self.txtPythonPath.stringValue = ""
+//            self.lblPythonMessage.stringValue = "ERROR: Missing Python 3"
+//        }
+//    }
+//    
+//    @IBAction func onCheckComponentsClicked(_ sender: NSButton) {
+//        let _ = self.checkComponentStatus()
+//    }
+//    
+//    fileprivate func checkComponentStatus() -> Bool {
+//        let py3 = self.txtPythonPath.stringValue
+//        let brew = self.txtHomebrewPath.stringValue
+//        if py3 == "" || brew == "" {
+//            return false
+//        }
+//        if !FileManager.default.fileExists(atPath: py3) || !FileManager.default.fileExists(atPath: brew) {
+//            return false
+//        }
+//        self.btnCheckFaceComponents.isEnabled = false
+//        DispatchQueue.global().async {
+//            let pip = ExecutionEnvironment.default.locate("pip3")
+//            let pips = ExecutionEnvironment.default.pipList(pip)
+//            let brews = ExecutionEnvironment.default.brewList(brew)
+//            let casks = ExecutionEnvironment.default.brewCaskList(brew)
+//            
+//            var result = ""
+//            for component in ExecutionEnvironment.componentsForDlibFaceRecognition {
+//                if pips.contains(component) || brews.contains(component) || casks.contains(component) {
+//                    result += "INSTALLED: \(component)\n"
+//                }else{
+//                    result += "NOT FOUND: \(component)\n"
+//                }
+//            }
+//            DispatchQueue.main.async {
+//                self.lblComponentsStatus.stringValue = result
+//                self.btnCheckFaceComponents.isEnabled = true
+//            }
+//        }
+//        return true
+//    }
     
     // MARK: TOGGLE GROUP - FACE MODEL
     
-    private var toggleGroup_FaceModel:ToggleGroup!
-    
-    @IBAction func onMajorFaceModelClicked(_ sender: NSButton) {
-        self.toggleGroup_FaceModel.selected = "major"
-    }
-    
-    @IBAction func onAlternativeFaceModelClicked(_ sender: NSButton) {
-        self.toggleGroup_FaceModel.selected = "alternative"
-    }
-    
-    @IBAction func onBrowseAlternativeFaceModelClicked(_ sender: NSButton) {
-        let openPanel = NSOpenPanel()
-        openPanel.canChooseDirectories  = false
-        openPanel.canChooseFiles        = true
-        openPanel.showsHiddenFiles      = false
-        openPanel.canCreateDirectories  = false
-        
-        openPanel.beginSheetModal(for: self.view.window!) { (response) -> Void in
-            guard response == NSApplication.ModalResponse.OK else {return}
-            if let path = openPanel.url?.path {
-                DispatchQueue.main.async {
-                    if path != "" {
-                        self.txtAlternativeFaceModelPath.stringValue = path
-                    }
-                }
-            }
-        }
-    }
+//    private var toggleGroup_FaceModel:ToggleGroup!
+//
+//    @IBAction func onMajorFaceModelClicked(_ sender: NSButton) {
+//        self.toggleGroup_FaceModel.selected = "major"
+//    }
+//
+//    @IBAction func onAlternativeFaceModelClicked(_ sender: NSButton) {
+//        self.toggleGroup_FaceModel.selected = "alternative"
+//    }
+//
+//    @IBAction func onBrowseAlternativeFaceModelClicked(_ sender: NSButton) {
+//        let openPanel = NSOpenPanel()
+//        openPanel.canChooseDirectories  = false
+//        openPanel.canChooseFiles        = true
+//        openPanel.showsHiddenFiles      = false
+//        openPanel.canCreateDirectories  = false
+//
+//        openPanel.beginSheetModal(for: self.view.window!) { (response) -> Void in
+//            guard response == NSApplication.ModalResponse.OK else {return}
+//            if let path = openPanel.url?.path {
+//                DispatchQueue.main.async {
+//                    if path != "" {
+//                        self.txtAlternativeFaceModelPath.stringValue = path
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     // MARK: - ACTION FOR GEOLOCATION API SECTION
     
@@ -1085,29 +1085,29 @@ final class PreferencesController: NSViewController {
     // MARK: FACE RECOGNITION
     
     
-    class func homebrewPath() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: homebrewKey) else {return ""}
-        return txt
-    }
-    
-    class func pythonPath() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: pythonKey) else {return ""}
-        return txt
-    }
-    
-    class func faceRecognitionModel() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: faceRecognitionModelKey) else {return "major"}
-        return txt
-    }
-    
-    class func alternativeFaceModel() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: alternativeFaceModelPathKey) else {return ""}
-        return txt
-    }
+//    class func homebrewPath() -> String {
+//        let defaults = UserDefaults.standard
+//        guard let txt = defaults.string(forKey: homebrewKey) else {return ""}
+//        return txt
+//    }
+//
+//    class func pythonPath() -> String {
+//        let defaults = UserDefaults.standard
+//        guard let txt = defaults.string(forKey: pythonKey) else {return ""}
+//        return txt
+//    }
+//
+//    class func faceRecognitionModel() -> String {
+//        let defaults = UserDefaults.standard
+//        guard let txt = defaults.string(forKey: faceRecognitionModelKey) else {return "major"}
+//        return txt
+//    }
+//
+//    class func alternativeFaceModel() -> String {
+//        let defaults = UserDefaults.standard
+//        guard let txt = defaults.string(forKey: alternativeFaceModelPathKey) else {return ""}
+//        return txt
+//    }
     
     // MARK: GEOLOCATION API
     
@@ -1366,16 +1366,16 @@ final class PreferencesController: NSViewController {
                      forKey: PreferencesController.baiduSKKey)
     }
     
-    func saveFaceRecognitionSection(_ defaults:UserDefaults) {
-        defaults.set(txtHomebrewPath.stringValue,
-                     forKey: PreferencesController.homebrewKey)
-        defaults.set(txtPythonPath.stringValue,
-                     forKey: PreferencesController.pythonKey)
-        defaults.set(txtAlternativeFaceModelPath.stringValue,
-                     forKey: PreferencesController.alternativeFaceModelPathKey)
-        defaults.set(self.toggleGroup_FaceModel.selected,
-                     forKey: PreferencesController.faceRecognitionModelKey)
-    }
+//    func saveFaceRecognitionSection(_ defaults:UserDefaults) {
+//        defaults.set(txtHomebrewPath.stringValue,
+//                     forKey: PreferencesController.homebrewKey)
+//        defaults.set(txtPythonPath.stringValue,
+//                     forKey: PreferencesController.pythonKey)
+//        defaults.set(txtAlternativeFaceModelPath.stringValue,
+//                     forKey: PreferencesController.alternativeFaceModelPathKey)
+//        defaults.set(self.toggleGroup_FaceModel.selected,
+//                     forKey: PreferencesController.faceRecognitionModelKey)
+//    }
     
     func saveMobileSection(_ defaults:UserDefaults) {
         
@@ -1479,7 +1479,7 @@ final class PreferencesController: NSViewController {
         self.saveDatabaseSection(defaults)
         self.saveBackupSection(defaults)
         self.saveMobileSection(defaults)
-        self.saveFaceRecognitionSection(defaults)
+//        self.saveFaceRecognitionSection(defaults)
         self.saveGeolocationAPISection(defaults)
     }
     
@@ -1625,38 +1625,38 @@ final class PreferencesController: NSViewController {
         txtExportToAndroidPath.stringValue = PreferencesController.exportToAndroidDirectory()
     }
     
-    func initFaceRecognitionSection() {
-        txtHomebrewPath.stringValue = PreferencesController.homebrewPath()
-        txtPythonPath.stringValue = PreferencesController.pythonPath()
-        lblMajorFaceModelPath.stringValue = FaceRecognition.defaultModelPath
-        txtAlternativeFaceModelPath.stringValue = PreferencesController.alternativeFaceModel()
-        
-        
-        self.toggleGroup_FaceModel = ToggleGroup([
-            "major"       : self.chkMajorFaceRecognitionModel,
-            "alternative" : self.chkAlternativeFaceRecognitionModel
-        ])
-        self.toggleGroup_FaceModel.selected = PreferencesController.faceRecognitionModel()
-        
-        self.btnCheckFaceComponents.isEnabled = false
-        var result = ""
-        self.lblComponentsInstruction.string = ExecutionEnvironment.instructionForDlibFaceRecognition
-        var testing = true
-        if PreferencesController.pythonPath() != "" && PreferencesController.homebrewPath() != "" {
-            testing = self.checkComponentStatus()
-        }
-        if testing {
-            for component in ExecutionEnvironment.componentsForDlibFaceRecognition {
-                result += "CHECKING: \(component)\n"
-            }
-        }else{
-            self.btnCheckFaceComponents.isEnabled = true
-            for component in ExecutionEnvironment.componentsForDlibFaceRecognition {
-                result += "REQUIRED: \(component)\n"
-            }
-        }
-        self.lblComponentsStatus.stringValue = result
-    }
+//    func initFaceRecognitionSection() {
+//        txtHomebrewPath.stringValue = PreferencesController.homebrewPath()
+//        txtPythonPath.stringValue = PreferencesController.pythonPath()
+//        lblMajorFaceModelPath.stringValue = FaceRecognition.defaultModelPath
+//        txtAlternativeFaceModelPath.stringValue = PreferencesController.alternativeFaceModel()
+//
+//
+//        self.toggleGroup_FaceModel = ToggleGroup([
+//            "major"       : self.chkMajorFaceRecognitionModel,
+//            "alternative" : self.chkAlternativeFaceRecognitionModel
+//        ])
+//        self.toggleGroup_FaceModel.selected = PreferencesController.faceRecognitionModel()
+//
+//        self.btnCheckFaceComponents.isEnabled = false
+//        var result = ""
+//        self.lblComponentsInstruction.string = ExecutionEnvironment.instructionForDlibFaceRecognition
+//        var testing = true
+//        if PreferencesController.pythonPath() != "" && PreferencesController.homebrewPath() != "" {
+//            testing = self.checkComponentStatus()
+//        }
+//        if testing {
+//            for component in ExecutionEnvironment.componentsForDlibFaceRecognition {
+//                result += "CHECKING: \(component)\n"
+//            }
+//        }else{
+//            self.btnCheckFaceComponents.isEnabled = true
+//            for component in ExecutionEnvironment.componentsForDlibFaceRecognition {
+//                result += "REQUIRED: \(component)\n"
+//            }
+//        }
+//        self.lblComponentsStatus.stringValue = result
+//    }
     
     func initGeolocationAPISection() {
         
@@ -1696,7 +1696,7 @@ final class PreferencesController: NSViewController {
         self.initDatabaseSection()
         self.initBackupSection()
         self.initMobileSection()
-        self.initFaceRecognitionSection()
+//        self.initFaceRecognitionSection()
         self.initGeolocationAPISection()
         
     }

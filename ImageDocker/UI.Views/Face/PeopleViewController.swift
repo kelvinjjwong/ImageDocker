@@ -574,73 +574,74 @@ class PeopleViewController: NSViewController {
     
     fileprivate func onRecognizeUnknownClicked(id:String) {
         // TODO FUNCTION
-        self.logger.log("selected menu: \(id)")
-        self.lblProgressMessage.stringValue = "Recognizing..."
-        var faces:[ImageFace] = []
-        if id == "all" {
-            faces = FaceDao.default.getFaceCrops(peopleId: "", year: nil, month: nil, sample: false, icon: nil, tag: nil, locked: false)
-        }else if id == "selected" {
-            if self.tblFaceYear.numberOfSelectedRows > 0 && self.tblFaceMonth.numberOfSelectedRows > 0 && self.selectedCategory != "Unknown" {
-                self.logger.log("selection at \(self.selectedCategory),\(self.selectedSubCategory)")
-                faces = FaceDao.default.getFaceCrops(peopleId: "", year: Int(self.selectedCategory), month: Int(selectedSubCategory), sample: false, icon: nil, tag: nil, locked: false)
-            }else{
-                self.logger.log("no selection")
-                self.lblProgressMessage.stringValue = "No category is selected."
-                return
-            }
-        }else{
-            faces = FaceDao.default.getFaceCrops(peopleId: "", year: Int(id), month: nil, sample: false, icon: nil, tag: nil, locked: false)
-        }
-        if faces.count == 0 {
-            self.lblProgressMessage.stringValue = "No face need to be recognized."
-            self.logger.log("no faces need to be recognized")
-            return
-        }
-        var peopleName:[String:String] = [:]
-        let people = FaceDao.default.getPeople()
-        for person in people {
-            peopleName[person.id] = person.shortName ?? person.name
-        }
-        DispatchQueue.global().async {
-            let total = faces.count
-            var i = 0
-            var k = 0
-            for face in faces {
-                i += 1
-                let url = URL(fileURLWithPath: face.cropPath).appendingPathComponent(face.subPath).appendingPathComponent(face.filename)
-                let names = FaceRecognition.default.recognize(imagePath: url.path)
-                if names.count > 0 {
-                    let name = names[0]
-                    if name != "Unknown" {
-                        let c = face
-                        c.peopleId = name
-                        c.recognizeBy = "FaceRecognitionOpenCV"
-                        c.recognizeDate = Date()
-                        if c.recognizeVersion == nil {
-                            c.recognizeVersion = "1"
-                        }else{
-                            var version = Int(c.recognizeVersion ?? "0") ?? 0
-                            version += 1
-                            c.recognizeVersion = "\(version)"
-                        }
-                        let _ = FaceDao.default.saveFaceCrop(c)
-                        self.logger.log("Face crop \(face.id) recognized as [\(name)], updated into DB.")
-                        k += 1
-                        DispatchQueue.main.async {
-                            let personName = peopleName[name] ?? name
-                            self.lblProgressMessage.stringValue = "Recognizing \(i)/\(total): Recognized [\(personName)]"
-                        }
-                    }else{
-                        DispatchQueue.main.async {
-                            self.lblProgressMessage.stringValue = "Recognizing \(i)/\(total): Unrecognized"
-                        }
-                    }
-                }
-            }
-            DispatchQueue.main.async {
-                self.lblProgressMessage.stringValue = "Recognized \(k) faces. \(total-k) unrecognized."
-            }
-        }
+//        self.logger.log("selected menu: \(id)")
+//        self.lblProgressMessage.stringValue = "Recognizing..."
+//        var faces:[ImageFace] = []
+//        if id == "all" {
+//            faces = FaceDao.default.getFaceCrops(peopleId: "", year: nil, month: nil, sample: false, icon: nil, tag: nil, locked: false)
+//        }else if id == "selected" {
+//            if self.tblFaceYear.numberOfSelectedRows > 0 && self.tblFaceMonth.numberOfSelectedRows > 0 && self.selectedCategory != "Unknown" {
+//                self.logger.log("selection at \(self.selectedCategory),\(self.selectedSubCategory)")
+//                faces = FaceDao.default.getFaceCrops(peopleId: "", year: Int(self.selectedCategory), month: Int(selectedSubCategory), sample: false, icon: nil, tag: nil, locked: false)
+//            }else{
+//                self.logger.log("no selection")
+//                self.lblProgressMessage.stringValue = "No category is selected."
+//                return
+//            }
+//        }else{
+//            faces = FaceDao.default.getFaceCrops(peopleId: "", year: Int(id), month: nil, sample: false, icon: nil, tag: nil, locked: false)
+//        }
+//        if faces.count == 0 {
+//            self.lblProgressMessage.stringValue = "No face need to be recognized."
+//            self.logger.log("no faces need to be recognized")
+//            return
+//        }
+//        var peopleName:[String:String] = [:]
+//        let people = FaceDao.default.getPeople()
+//        for person in people {
+//            peopleName[person.id] = person.shortName ?? person.name
+//        }
+//        DispatchQueue.global().async {
+//            let total = faces.count
+//            var i = 0
+//            var k = 0
+//            for face in faces {
+//                i += 1
+//                let url = URL(fileURLWithPath: face.cropPath).appendingPathComponent(face.subPath).appendingPathComponent(face.filename)
+//                let names = FaceRecognition.default.recognize(imagePath: url.path)
+//                if names.count > 0 {
+//                    let name = names[0]
+//                    if name != "Unknown" {
+//                        let c = face
+//                        c.peopleId = name
+//                        c.recognizeBy = "FaceRecognitionOpenCV"
+//                        c.recognizeDate = Date()
+//                        if c.recognizeVersion == nil {
+//                            c.recognizeVersion = "1"
+//                        }else{
+//                            var version = Int(c.recognizeVersion ?? "0") ?? 0
+//                            version += 1
+//                            c.recognizeVersion = "\(version)"
+//                        }
+//                        let _ = FaceDao.default.saveFaceCrop(c)
+//                        self.logger.log("Face crop \(face.id) recognized as [\(name)], updated into DB.")
+//                        k += 1
+//                        DispatchQueue.main.async {
+//                            let personName = peopleName[name] ?? name
+//                            self.lblProgressMessage.stringValue = "Recognizing \(i)/\(total): Recognized [\(personName)]"
+//                        }
+//                    }else{
+//                        DispatchQueue.main.async {
+//                            self.lblProgressMessage.stringValue = "Recognizing \(i)/\(total): Unrecognized"
+//                        }
+//                    }
+//                }
+//            }
+//            DispatchQueue.main.async {
+//                self.lblProgressMessage.stringValue = "Recognized \(k) faces. \(total-k) unrecognized."
+//            }
+//        }
+        self.logger.log("TODO")
     }
     
     // MARK: ACTION
@@ -737,39 +738,40 @@ class PeopleViewController: NSViewController {
     }
     
     @IBAction func onChkSampleClicked(_ sender: NSButton) {
-        if self.faceCollectionViewController.selectedFaceIds.count > 0 {
-            for selectedFaceId in self.faceCollectionViewController.selectedFaceIds {
-                let _ = FaceDao.default.updateFaceSampleFlag(id: selectedFaceId, flag: (sender.state == .on) )
-                // copy or remove face crop to/from recognition sample directory
-                if let face = FaceDao.default.getFace(id: selectedFaceId) {
-                    let targetFolder = URL(fileURLWithPath: FaceRecognition.trainingSamplePath).appendingPathComponent(selectedPeopleId)
-                    let target = targetFolder.appendingPathComponent("\(selectedFaceId).jpg")
-                    if sender.state == .on {
-                        do {
-                            try FileManager.default.createDirectory(at: targetFolder, withIntermediateDirectories: true, attributes: nil)
-                        }catch{
-                            self.logger.log("Unable to create directory at \(targetFolder.path)")
-                            self.logger.log(error)
-                        }
-                        let source = URL(fileURLWithPath: face.cropPath).appendingPathComponent(face.subPath).appendingPathComponent(face.filename)
-                        do {
-                            try FileManager.default.copyItem(at: source, to: target)
-                            self.logger.log("Copied sample file from [\(source.path)] to [\(target.path)]")
-                        }catch{
-                            self.logger.log("Unable to copy sample file from [\(source.path)] to [\(target.path)]")
-                            self.logger.log(error)
-                        }
-                    }else{
-                        do {
-                            try FileManager.default.removeItem(at: target)
-                        }catch{
-                            self.logger.log("Failed to delete sample file: \(target.path)")
-                            self.logger.log(error)
-                        }
-                    }
-                }
-            }
-        }
+//        if self.faceCollectionViewController.selectedFaceIds.count > 0 {
+//            for selectedFaceId in self.faceCollectionViewController.selectedFaceIds {
+//                let _ = FaceDao.default.updateFaceSampleFlag(id: selectedFaceId, flag: (sender.state == .on) )
+//                // copy or remove face crop to/from recognition sample directory
+//                if let face = FaceDao.default.getFace(id: selectedFaceId) {
+//                    let targetFolder = URL(fileURLWithPath: FaceRecognition.trainingSamplePath).appendingPathComponent(selectedPeopleId)
+//                    let target = targetFolder.appendingPathComponent("\(selectedFaceId).jpg")
+//                    if sender.state == .on {
+//                        do {
+//                            try FileManager.default.createDirectory(at: targetFolder, withIntermediateDirectories: true, attributes: nil)
+//                        }catch{
+//                            self.logger.log("Unable to create directory at \(targetFolder.path)")
+//                            self.logger.log(error)
+//                        }
+//                        let source = URL(fileURLWithPath: face.cropPath).appendingPathComponent(face.subPath).appendingPathComponent(face.filename)
+//                        do {
+//                            try FileManager.default.copyItem(at: source, to: target)
+//                            self.logger.log("Copied sample file from [\(source.path)] to [\(target.path)]")
+//                        }catch{
+//                            self.logger.log("Unable to copy sample file from [\(source.path)] to [\(target.path)]")
+//                            self.logger.log(error)
+//                        }
+//                    }else{
+//                        do {
+//                            try FileManager.default.removeItem(at: target)
+//                        }catch{
+//                            self.logger.log("Failed to delete sample file: \(target.path)")
+//                            self.logger.log(error)
+//                        }
+//                    }
+//                }
+//            }
+//        }
+        self.logger.log("TODO")
     }
     
     @IBAction func onChangeFamilyNameClicked(_ sender: NSButton) {
@@ -830,117 +832,122 @@ class PeopleViewController: NSViewController {
     }
     
     @IBAction func onRecognizeClicked(_ sender: NSButton) {
-        self.lblFaceDescription.stringValue = ""
-        if self.selectedFaceId != "" {
-            if let crop = FaceDao.default.getFace(id: self.selectedFaceId) {
-                let path = URL(fileURLWithPath: crop.cropPath).appendingPathComponent(crop.subPath).appendingPathComponent(crop.filename)
-                self.btnRecognize.isEnabled = false
-                self.btnDifferentPerson.isEnabled = false
-                self.lblFaceDescription.stringValue = "Recognizing ..."
-                DispatchQueue.global().async {
-                    let recognition = FaceRecognition.default.recognize(imagePath: path.path)
-                    if recognition.count > 0 {
-                        let name = recognition[0]
-                        if name == "Unknown" {
-                            DispatchQueue.main.async {
-                                self.lblFaceDescription.stringValue = "Unrecognized"
-                            }
-                        }else{
-                            let c = crop
-                            c.peopleId = name
-                            c.recognizeBy = "FaceRecognitionOpenCV"
-                            c.recognizeDate = Date()
-                            if c.recognizeVersion == nil {
-                                c.recognizeVersion = "1"
-                            }else{
-                                var version = Int(c.recognizeVersion ?? "0") ?? 0
-                                version += 1
-                                c.recognizeVersion = "\(version)"
-                            }
-                            let _ = FaceDao.default.saveFaceCrop(c)
-                            self.logger.log("Face crop \(crop.id) recognized as [\(name)], updated into DB.")
-                            
-                            if let person = FaceDao.default.getPerson(id: name) {
-                                DispatchQueue.main.async {
-                                    self.lblFaceDescription.stringValue = person.shortName ?? person.name
-                                }
-                            }
-                        }
-                    }else{
-                        DispatchQueue.main.async {
-                            self.lblFaceDescription.stringValue = "Unrecognized"
-                        }
-                    }
-                    
-                    DispatchQueue.main.async {
-                        self.btnRecognize.isEnabled = true
-                        self.btnDifferentPerson.isEnabled = true
-                    }
-                }
-                
-            }
-        }
+//        self.lblFaceDescription.stringValue = ""
+//        if self.selectedFaceId != "" {
+//            if let crop = FaceDao.default.getFace(id: self.selectedFaceId) {
+//                let path = URL(fileURLWithPath: crop.cropPath).appendingPathComponent(crop.subPath).appendingPathComponent(crop.filename)
+//                self.btnRecognize.isEnabled = false
+//                self.btnDifferentPerson.isEnabled = false
+//                self.lblFaceDescription.stringValue = "Recognizing ..."
+//                DispatchQueue.global().async {
+//                    let recognition = FaceRecognition.default.recognize(imagePath: path.path)
+//                    if recognition.count > 0 {
+//                        let name = recognition[0]
+//                        if name == "Unknown" {
+//                            DispatchQueue.main.async {
+//                                self.lblFaceDescription.stringValue = "Unrecognized"
+//                            }
+//                        }else{
+//                            let c = crop
+//                            c.peopleId = name
+//                            c.recognizeBy = "FaceRecognitionOpenCV"
+//                            c.recognizeDate = Date()
+//                            if c.recognizeVersion == nil {
+//                                c.recognizeVersion = "1"
+//                            }else{
+//                                var version = Int(c.recognizeVersion ?? "0") ?? 0
+//                                version += 1
+//                                c.recognizeVersion = "\(version)"
+//                            }
+//                            let _ = FaceDao.default.saveFaceCrop(c)
+//                            self.logger.log("Face crop \(crop.id) recognized as [\(name)], updated into DB.")
+//
+//                            if let person = FaceDao.default.getPerson(id: name) {
+//                                DispatchQueue.main.async {
+//                                    self.lblFaceDescription.stringValue = person.shortName ?? person.name
+//                                }
+//                            }
+//                        }
+//                    }else{
+//                        DispatchQueue.main.async {
+//                            self.lblFaceDescription.stringValue = "Unrecognized"
+//                        }
+//                    }
+//
+//                    DispatchQueue.main.async {
+//                        self.btnRecognize.isEnabled = true
+//                        self.btnDifferentPerson.isEnabled = true
+//                    }
+//                }
+//
+//            }
+//        }
+        self.logger.log("TO BE DEMISED")
     }
     
     fileprivate var totalSamples = 0
     
     @IBAction func onTrainingClicked(_ sender: NSButton) {
-        self.lblProgressMessage.stringValue = "Training model..."
-        DispatchQueue.global().async {
-            FaceRecognition.default.training(onOutput: { content in
-                let lines = content.components(separatedBy: "\n")
-                if lines.count > 0 {
-                    for line in lines {
-                        if line.starts(with: "STARTUP ") {
-                            DispatchQueue.main.async {
-                                self.lblProgressMessage.stringValue = "Preparing trainer..."
-                            }
-                        }else if line.starts(with: "TOTAL ") {
-                            let parts = line.components(separatedBy: " ")
-                            if let total = Int(parts[1]) {
-                                self.totalSamples = total
-                                self.logger.log("total \(total) samples")
-                                DispatchQueue.main.async {
-                                    self.lblProgressMessage.stringValue = "Preparing trainer..."
-                                }
-                            }else{
-                                self.logger.log("unable to get total number from \(line)")
-                            }
-                        }else if line.starts(with: "PROCESSING IMAGE ") {
-                            let parts = line.components(separatedBy: " ")
-                            let numbers = parts[4]
-                            let dividen = numbers.components(separatedBy: "/")
-                            let number = dividen[0]
-                            let name = parts[5]
-                            self.logger.log("processing \(number), recognized as \(name)")
-                            DispatchQueue.main.async {
-                                self.lblProgressMessage.stringValue = "Processing sample No.\(number)..."
-                            }
-                        }else if line.starts(with: "DONE ") {
-                            DispatchQueue.main.async {
-                                self.lblProgressMessage.stringValue = "Training completed with \(self.totalSamples) samples."
-                            }
-                        }
-                    }
-                }
-                
-            })
-        }
+//        self.lblProgressMessage.stringValue = "Training model..."
+//        DispatchQueue.global().async {
+//            FaceRecognition.default.training(onOutput: { content in
+//                let lines = content.components(separatedBy: "\n")
+//                if lines.count > 0 {
+//                    for line in lines {
+//                        if line.starts(with: "STARTUP ") {
+//                            DispatchQueue.main.async {
+//                                self.lblProgressMessage.stringValue = "Preparing trainer..."
+//                            }
+//                        }else if line.starts(with: "TOTAL ") {
+//                            let parts = line.components(separatedBy: " ")
+//                            if let total = Int(parts[1]) {
+//                                self.totalSamples = total
+//                                self.logger.log("total \(total) samples")
+//                                DispatchQueue.main.async {
+//                                    self.lblProgressMessage.stringValue = "Preparing trainer..."
+//                                }
+//                            }else{
+//                                self.logger.log("unable to get total number from \(line)")
+//                            }
+//                        }else if line.starts(with: "PROCESSING IMAGE ") {
+//                            let parts = line.components(separatedBy: " ")
+//                            let numbers = parts[4]
+//                            let dividen = numbers.components(separatedBy: "/")
+//                            let number = dividen[0]
+//                            let name = parts[5]
+//                            self.logger.log("processing \(number), recognized as \(name)")
+//                            DispatchQueue.main.async {
+//                                self.lblProgressMessage.stringValue = "Processing sample No.\(number)..."
+//                            }
+//                        }else if line.starts(with: "DONE ") {
+//                            DispatchQueue.main.async {
+//                                self.lblProgressMessage.stringValue = "Training completed with \(self.totalSamples) samples."
+//                            }
+//                        }
+//                    }
+//                }
+//
+//            })
+//        }
+        
+        self.logger.log("TO BE DEMISED")
     }
     
     @IBAction func onRecognizeAllClicked(_ sender: NSButton) {
-        let years = FaceDao.default.getYearsOfFaceCrops(peopleId: "")
-        var menu:[(String, String)] = []
-        menu.append(("all", "All Unknown Faces"))
-        menu.append(("selected", "Unknown faces in selected month"))
-        for year in years {
-            menu.append((year, "Unknown faces in \(year)"))
-        }
-        for a in menu {
-            self.logger.log("menu: \(a)")
-        }
-        self.menuRecognizeUnknown.load(menu)
-        self.menuRecognizeUnknown.show(sender)
+//        let years = FaceDao.default.getYearsOfFaceCrops(peopleId: "")
+//        var menu:[(String, String)] = []
+//        menu.append(("all", "All Unknown Faces"))
+//        menu.append(("selected", "Unknown faces in selected month"))
+//        for year in years {
+//            menu.append((year, "Unknown faces in \(year)"))
+//        }
+//        for a in menu {
+//            self.logger.log("menu: \(a)")
+//        }
+//        self.menuRecognizeUnknown.load(menu)
+//        self.menuRecognizeUnknown.show(sender)
+        
+        self.logger.log("TO BE DEMISED")
     }
     
     @IBAction func onChkLockClicked(_ sender: NSButton) {

@@ -50,8 +50,8 @@ extension ViewController {
         
         self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
         
-        self.btnImageOptions.menu?.addItem(withTitle: Words.findFaces.word(), action: #selector(previewMenuFindFace(_:)), keyEquivalent: "")
-        self.btnImageOptions.menu?.addItem(withTitle: Words.recognizeFaces.word(), action: #selector(previewMenuRecognizeFace(_:)), keyEquivalent: "")
+//        self.btnImageOptions.menu?.addItem(withTitle: Words.findFaces.word(), action: #selector(previewMenuFindFace(_:)), keyEquivalent: "")
+//        self.btnImageOptions.menu?.addItem(withTitle: Words.recognizeFaces.word(), action: #selector(previewMenuRecognizeFace(_:)), keyEquivalent: "")
         
         self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
         
@@ -157,13 +157,13 @@ extension ViewController {
         }
     }
     
-    @objc func previewMenuFindFace(_ menuItem:NSMenuItem) {
-        self.findFacesFromSelectedImage()
-    }
-    
-    @objc func previewMenuRecognizeFace(_ menuItem:NSMenuItem) {
-        self.recognizeFacesFromSelectedImage()
-    }
+//    @objc func previewMenuFindFace(_ menuItem:NSMenuItem) {
+//        self.findFacesFromSelectedImage()
+//    }
+//    
+//    @objc func previewMenuRecognizeFace(_ menuItem:NSMenuItem) {
+//        self.recognizeFacesFromSelectedImage()
+//    }
     
     @objc func previewMenuExtractExif(_ menuItem:NSMenuItem) {
         self.btnImageOptions.selectItem(at: 0)
@@ -288,21 +288,21 @@ extension ViewController {
         }
     }
     
-    fileprivate func findFacesFromSelectedImage() {
-        self.btnImageOptions.selectItem(at: 0)
-        let url = self.img.url
-        DispatchQueue.global().async {
-            let _ = FaceTask.default.findFaces(path: url.path)
-            MessageEventCenter.default.showMessage(message: Words.info_doneFindingFaces.word())
-        }
-    }
-    
-    func recognizeFacesFromSelectedImage() {
-        self.btnImageOptions.selectItem(at: 0)
-        let url = self.img.url
-        DispatchQueue.global().async {
-            let _ = FaceTask.default.recognizeFaces(path: url.path)
-            MessageEventCenter.default.showMessage(message: Words.info_doneRecognizeFaces.word())
-        }
-    }
+//    fileprivate func findFacesFromSelectedImage() {
+//        self.btnImageOptions.selectItem(at: 0)
+//        let url = self.img.url
+//        DispatchQueue.global().async {
+//            let _ = FaceTask.default.findFaces(path: url.path)
+//            MessageEventCenter.default.showMessage(message: Words.info_doneFindingFaces.word())
+//        }
+//    }
+//
+//    func recognizeFacesFromSelectedImage() {
+//        self.btnImageOptions.selectItem(at: 0)
+//        let url = self.img.url
+//        DispatchQueue.global().async {
+//            let _ = FaceTask.default.recognizeFaces(path: url.path)
+//            MessageEventCenter.default.showMessage(message: Words.info_doneRecognizeFaces.word())
+//        }
+//    }
 }

@@ -184,9 +184,9 @@ class CollectionViewItem: NSCollectionViewItem {
         }else if i == 5 {
             self.quicklook()
         }else if i == 7 {
-            self.findFaces()
+//            self.findFaces()
         }else if i == 8 {
-            self.recognizeFaces()
+//            self.recognizeFaces()
         }else if i == 9 {
             self.restoreBackupImage()
         }
@@ -295,28 +295,28 @@ class CollectionViewItem: NSCollectionViewItem {
         }
     }
     
-    fileprivate func findFaces() {
-        if let _ = self.imageFile, let url = self.imageFile?.url {
-            DispatchQueue.global().async {
-                let _ = FaceTask.default.findFaces(path: url.path)
-            }
-            
-        }else{
-            self.logger.log("ERROR: Image object is null or file doesn't exist.")
-            return
-        }
-    }
-    
-    func recognizeFaces() {
-        if let _ = self.imageFile, let url = self.imageFile?.url {
-            DispatchQueue.global().async {
-                let _ = FaceTask.default.recognizeFaces(path: url.path)
-            }
-        }else{
-            self.logger.log("ERROR: Image object is null or file doesn't exist.")
-            return
-        }
-    }
+//    fileprivate func findFaces() {
+//        if let _ = self.imageFile, let url = self.imageFile?.url {
+//            DispatchQueue.global().async {
+//                let _ = FaceTask.default.findFaces(path: url.path)
+//            }
+//
+//        }else{
+//            self.logger.log("ERROR: Image object is null or file doesn't exist.")
+//            return
+//        }
+//    }
+//
+//    func recognizeFaces() {
+//        if let _ = self.imageFile, let url = self.imageFile?.url {
+//            DispatchQueue.global().async {
+//                let _ = FaceTask.default.recognizeFaces(path: url.path)
+//            }
+//        }else{
+//            self.logger.log("ERROR: Image object is null or file doesn't exist.")
+//            return
+//        }
+//    }
     
 }
 
