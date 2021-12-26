@@ -72,7 +72,6 @@
 		8E4DECEB23B38A7B00F5538C /* ImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4DECE723B38A7B00F5538C /* ImageContainer.swift */; };
 		8E4E5B672217349600FE4B68 /* FaceDetection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B662217349600FE4B68 /* FaceDetection.swift */; };
 		8E4E5B6922195BFF00FE4B68 /* FaceRecognition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B6822195BFF00FE4B68 /* FaceRecognition.swift */; };
-		8E4E5B762219624D00FE4B68 /* FaceRecognitionOpenCV in Resources */ = {isa = PBXBuildFile; fileRef = 8E4E5B752219624D00FE4B68 /* FaceRecognitionOpenCV */; };
 		8E4E5B78221985A400FE4B68 /* ImageFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B77221985A400FE4B68 /* ImageFace.swift */; };
 		8E4E5B7F221F3D1800FE4B68 /* PeopleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B7E221F3D1800FE4B68 /* PeopleViewController.swift */; };
 		8E5D257C25A200A200D531A7 /* NSImage+Rotate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5D257B25A200A200D531A7 /* NSImage+Rotate.swift */; };
@@ -425,7 +424,6 @@
 		8E4DECE723B38A7B00F5538C /* ImageContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageContainer.swift; sourceTree = "<group>"; };
 		8E4E5B662217349600FE4B68 /* FaceDetection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetection.swift; sourceTree = "<group>"; };
 		8E4E5B6822195BFF00FE4B68 /* FaceRecognition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceRecognition.swift; sourceTree = "<group>"; };
-		8E4E5B752219624D00FE4B68 /* FaceRecognitionOpenCV */ = {isa = PBXFileReference; lastKnownFileType = folder; path = FaceRecognitionOpenCV; sourceTree = "<group>"; };
 		8E4E5B77221985A400FE4B68 /* ImageFace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFace.swift; sourceTree = "<group>"; };
 		8E4E5B7E221F3D1800FE4B68 /* PeopleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleViewController.swift; sourceTree = "<group>"; };
 		8E5D257B25A200A200D531A7 /* NSImage+Rotate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+Rotate.swift"; sourceTree = "<group>"; };
@@ -1230,7 +1228,6 @@
 		8EBA69262090C37B00221131 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				8E4E5B752219624D00FE4B68 /* FaceRecognitionOpenCV */,
 				8E4C38C92117762F0089502C /* Mobile */,
 				8EF32D112094CB2000511538 /* Icons.xcassets */,
 				8EFE763D2094B12200B7CFCA /* ImageDocker-Bridging-Header.h */,
@@ -1729,7 +1726,6 @@
 				8EE1AB3E20D05E49001C75B0 /* EventListViewController.xib in Resources */,
 				8E0AFA44208BDEA100CE8B68 /* Main.storyboard in Resources */,
 				8E95739B20EBEBD7003BD651 /* FilterViewController.xib in Resources */,
-				8E4E5B762219624D00FE4B68 /* FaceRecognitionOpenCV in Resources */,
 				8EB2716A233BB408003BF3AF /* RepositoryDetailViewController.xib in Resources */,
 				8EB986BE20B30C920075B081 /* CollectionViewItem.xib in Resources */,
 				8E9D804123495F100062692A /* LargeViewItems.storyboard in Resources */,
