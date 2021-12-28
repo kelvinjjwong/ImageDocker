@@ -543,6 +543,33 @@ extension SQLiteConnectionGRDB {
             })
         }
         
+        migrator.registerMigration("v41") { db in
+            try db.alter(table: "Image", body: { t in
+                t.add(column: "resizedFilePath", .text).defaults(to: "")
+                t.add(column: "taggedFilePath", .text).defaults(to: "")
+                t.add(column: "fileExt", .text).defaults(to: "")
+                t.add(column: "peopleId", .text).defaults(to: "")
+                t.add(column: "peopleIdRecognized", .text).defaults(to: "")
+                t.add(column: "peopleIdAssign", .text).defaults(to: "")
+                t.add(column: "trainingSample", .boolean).defaults(to: false)
+                t.add(column: "facesReviewed", .boolean).defaults(to: false)
+            })
+            
+            try db.create(table: "Face", body: { t in
+                t.column("imageId", .text).notNull().indexed()
+                t.column("pos_top", .double).defaults(to: 0.0)
+                t.column("pos_right", .double).defaults(to: 0.0)
+                t.column("pos_bottom", .double).defaults(to: 0.0)
+                t.column("pos_left", .double).defaults(to: 0.0)
+                t.column("peopleIdRecognized", .text).notNull().defaults(to: "")
+                t.column("peopleIdAssign", .text).notNull().defaults(to: "")
+                t.column("peopleId", .text).notNull().defaults(to: "")
+                t.column("peopleName", .text).notNull().defaults(to: "")
+                t.column("shortName", .text).notNull().defaults(to: "")
+                t.column("file", .text).notNull().defaults(to: "")
+            })
+        }
+        
         
         do {
             let dbQueue = try DatabaseQueue(path: SQLiteDataSource.default.getDataSource())

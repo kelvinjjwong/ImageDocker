@@ -545,6 +545,37 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v41") { db in
+            try db.alter(table: "Image", body: { t in
+                t.add("resizedFilePath", .text).defaults(to: "")
+                t.add("taggedFilePath", .text).defaults(to: "")
+                t.add("fileExt", .text).defaults(to: "")
+                t.add("peopleId", .text).defaults(to: "")
+                t.add("peopleIdRecognized", .text).defaults(to: "")
+                t.add("peopleIdAssign", .text).defaults(to: "")
+                t.add("trainingSample", .boolean).defaults(to: false)
+                t.add("facesReviewed", .boolean).defaults(to: false)
+            })
+            
+            try db.create(table: "Face", body: { t in
+                t.column("imageId", .text).notNull().indexed()
+                t.column("pos_top", .double).defaults(to: 0.0)
+                t.column("pos_right", .double).defaults(to: 0.0)
+                t.column("pos_bottom", .double).defaults(to: 0.0)
+                t.column("pos_left", .double).defaults(to: 0.0)
+                t.column("peopleIdRecognized", .text).notNull().defaults(to: "")
+                t.column("peopleIdAssign", .text).notNull().defaults(to: "")
+                t.column("peopleId", .text).notNull().defaults(to: "")
+                t.column("peopleName", .text).notNull().defaults(to: "")
+                t.column("shortName", .text).notNull().defaults(to: "")
+                t.column("file", .text).notNull().defaults(to: "")
+            })
+            
+            try db.update(sql: """
+update "Image" set "resizedFilePath"='',"taggedFilePath"='',"fileExt"='',"peopleId"='',"peopleIdRecognized"='',"peopleIdAssign"='',"trainingSample"='f',"facesReviewed"='f'
+""")
+        }
+        
         do {
             try migrator.migrate(cleanVersions: dropBeforeCreate)
         }catch{

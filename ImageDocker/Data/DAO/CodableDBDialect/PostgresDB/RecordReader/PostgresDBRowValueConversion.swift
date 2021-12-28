@@ -19,7 +19,7 @@ public protocol PostgresRowValueProtocol {
 extension PostgresRowValueProtocol {
     
     static func decode(from row: PostgresRow, atUncheckedIndex index: Int) -> Self {
-        //self.logger.log("column size: \(row.values.count), decode index: \(index)")
+        //print("column size: \(row.values.count), decode index: \(index)")
         let dbValue = row.values[index].postgresValue
         //self.logger.log("decoding table [\(row.table)] column: \(row.columnNames[index])")
         //self.logger.log(" >> value to be decoded: \(dbValue.rawValue ?? "nil")")

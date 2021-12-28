@@ -113,6 +113,14 @@ public final class Image : Codable {
     var recognizedPeopleIds:String = ""
     var lastTimeExtractExif:Int?
     var noneExif:Bool = false
+    var resizedFilePath:String = ""
+    var taggedFilePath:String = ""
+    var fileExt:String = ""
+    var peopleId:String = ""
+    var peopleIdRecognized:String = ""
+    var peopleIdAssign:String = ""
+    var trainingSample:Bool = false
+    var facesReviewed:Bool = false
     
     public init() {
         
