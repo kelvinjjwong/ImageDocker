@@ -264,7 +264,7 @@ class ViewController: NSViewController {
         PreferencesController.healthCheck()
         
         
-        self.setupFacesMenu()
+//        self.setupFacesMenu()
         self.setupScanMenu()
         self.setupExportMenu()
         self.setupPreviewMenu()

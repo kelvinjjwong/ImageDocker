@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -65,7 +65,7 @@
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AeO-Uo-9h3">
-                    <rect key="frame" x="0.0" y="21" width="19" height="19"/>
+                    <rect key="frame" x="0.0" y="19.5" width="19.5" height="23"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="19" id="bXl-2A-csj"/>
                         <constraint firstAttribute="height" constant="19" id="y9e-gW-qm1"/>
@@ -93,14 +93,14 @@
                     </connections>
                 </button>
                 <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="HcE-Zh-rv4">
-                    <rect key="frame" x="-5" y="3" width="25" height="19"/>
+                    <rect key="frame" x="-10" y="3" width="30" height="19"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="25" id="bH2-qx-dkq"/>
                         <constraint firstAttribute="height" constant="19" id="tqO-X8-wzX"/>
                     </constraints>
                     <popUpButtonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" autoenablesItems="NO" id="x4F-Td-KzV">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
+                        <font key="font" metaFont="menu"/>
                         <menu key="menu" autoenablesItems="NO" id="tEK-js-g3a">
                             <items>
                                 <menuItem state="on" image="more_horizontal" hidden="YES" id="fyA-MO-0B9"/>
@@ -116,13 +116,6 @@
                                     <modifierMask key="keyEquivalentModifierMask"/>
                                 </menuItem>
                                 <menuItem isSeparatorItem="YES" id="QRi-e3-hdU"/>
-                                <menuItem title="Find Faces" id="pRO-pa-zpy">
-                                    <modifierMask key="keyEquivalentModifierMask"/>
-                                </menuItem>
-                                <menuItem title="Recognize Faces" id="OLE-KJ-wUP">
-                                    <modifierMask key="keyEquivalentModifierMask"/>
-                                </menuItem>
-                                <menuItem isSeparatorItem="YES" id="4AG-cR-dQG"/>
                                 <menuItem title="Replace with Backup Version" id="nQl-wu-n9k">
                                     <modifierMask key="keyEquivalentModifierMask"/>
                                 </menuItem>
@@ -154,11 +147,12 @@
                 <constraint firstItem="AeO-Uo-9h3" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="tzO-OO-1Ne"/>
                 <constraint firstItem="HhR-2S-1Qc" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" id="y4F-IE-8V6"/>
             </constraints>
+            <point key="canvasLocation" x="139" y="114"/>
         </customView>
         <collectionViewItem id="c2X-bD-ueb" customClass="CollectionViewItem" customModule="ImageDocker" customModuleProvider="target"/>
     </objects>
     <resources>
-        <image name="NSStopProgressTemplate" width="11" height="11"/>
+        <image name="NSStopProgressTemplate" width="14" height="13"/>
         <image name="copy" width="16" height="16"/>
         <image name="more_horizontal" width="16" height="4"/>
     </resources>

@@ -1200,84 +1200,7 @@ class EditRepositoryViewController: NSViewController {
     }
     
     @IBAction func onUpdateCropImagesClicked(_ sender: NSButton) {
-        guard !self.working else {return}
-        if let repoContainer = self.originalContainer {
-            let originalCropPath = repoContainer.cropPath.withStash()
-            let newCropPath = self.txtCropPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withStash()
-            
-            if newCropPath == "/" || newCropPath == originalCropPath {
-                return
-            }
-            
-            self.working = true
-            
-            
-            self.toggleButtons(false)
-            self.lblMessage.stringValue = ""
-            
-            DispatchQueue.global().async {
-            
-                if originalCropPath != "/" { // clone from original CROP path
-                    let oldBaseUrl = URL(fileURLWithPath: originalCropPath)
-                    let newBaseUrl = URL(fileURLWithPath: newCropPath)
-                    let oldFullUrl = oldBaseUrl.resolvingSymlinksInPath()
-                    let newFullUrl = newBaseUrl.resolvingSymlinksInPath()
-                    
-                    // copy physical files
-                    if newFullUrl.path != oldFullUrl.path { // physically inequal, need copy files
-                        let oldFiles = ImageFolderTreeScanner.default.walkthruDirectory(at: oldBaseUrl)
-                        
-                        let total = oldFiles.allObjects.count
-                        
-                        DispatchQueue.main.async {
-                            self.accumulator = Accumulator(target: total, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage)
-                        }
-                        
-                        for case let oldUrl as URL in oldFiles {
-                            DispatchQueue.main.async {
-                                let _ = self.accumulator?.add("Copying crop file ...")
-                            }
-                            
-                            let newFilePath = oldUrl.path.replacingFirstOccurrence(of: oldBaseUrl.path.withStash(), with: newBaseUrl.path.withStash())
-                            let newUrl = URL(fileURLWithPath: newFilePath)
-                            let containerUrl = newUrl.deletingLastPathComponent()
-                            if !FileManager.default.fileExists(atPath: newFilePath) { // no folder, create folder
-                                do {
-                                    try FileManager.default.createDirectory(at: containerUrl, withIntermediateDirectories: true, attributes: nil)
-                                }catch{
-                                    self.logger.log(error)
-                                }
-                                do { // copy file
-                                    try FileManager.default.copyItem(at: oldUrl, to: newUrl)
-                                }catch{
-                                    self.logger.log(error)
-                                }
-                            }
-                            
-                            
-                        }
-                    }
-                }
-                
-                // update crop-image records
-                let _ = FaceDao.default.updateFaceCropPaths(old: originalCropPath, new: newCropPath)
-                
-                // save repo's path
-                let repo = repoContainer
-                repo.cropPath = newCropPath
-                let _ = RepositoryDao.default.saveImageContainer(container: repo)
-                self.originalContainer = repo
-                
-                DispatchQueue.main.async {
-                    
-                    self.toggleButtons(true)
-                    self.lblMessage.stringValue = "Crop files updated."
-                    
-                    self.working = false
-                }
-            }
-            
-        }
+        // TODO: DEMISE
        
     }
     
@@ -1505,212 +1428,89 @@ class EditRepositoryViewController: NSViewController {
     // MARK: - FIND FACES
     
     @IBAction func onFindFacesClicked(_ sender: NSButton) {
-        guard !self.working else {
-            self.logger.log("other task is running. abort this task.")
-            return
-        }
-        if let repository = self.originalContainer {
-            
-            if repository.cropPath == "" {
-                self.logger.log("ERROR: Crop path is empty, please assign it first: \(repository.path)")
-                self.lblMessage.stringValue = "ERROR: Crop path is empty, please assign it first"
-                return
-            }
-            
-            // ensure base crop path exists
-            var isDir:ObjCBool = false
-            if FileManager.default.fileExists(atPath: repository.cropPath, isDirectory: &isDir) {
-                if !isDir.boolValue {
-                    self.logger.log("ERROR: Crop path of repository is not a directory: \(repository.cropPath)")
-                    self.lblMessage.stringValue = "ERROR: Crop path of repository is not a directory"
-                    return
-                }
-            }
-            
-            
-            let limitRam = PreferencesController.peakMemory() * 1024
-            self.stopByExceedLimit = false
-            
-            self.accumulator = Accumulator(target: 100, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage,
-                                           onCompleted: { data in
-                                                DispatchQueue.main.async {
-                                                    let count = data["count"] ?? 0
-                                                    let total = data["total"] ?? 0
-                                                    let detectedCount = data["detectedCount"] ?? 0
-                                                    self.continousWorkingRemain = total - count
-                                                    var msg = "Total \(total) images. Processed \(count) images. Found \(detectedCount) images with face(s)."
-                                                    if self.stopByExceedLimit {
-                                                        msg += " Stopped since total size exceeds memory limitation \(limitRam) MB"
-                                                        if self.continousWorkingRemain > 0 {
-                                                            msg += ", cleaning memory..."
-                                                        }
-                                                    }
-                                                    self.logger.log(msg)
-                                                    self.working = false
-                                                    self.logger.log(">>> REMAIN \(self.continousWorkingRemain)")
-                                                    if self.continousWorkingRemain <= 0 {
-                                                        self.toggleButtons(true)
-                                                        self.logger.log(">>> DONE")
-                                                        msg = "Total \(total) images. Processed \(count) images. Found \(detectedCount) images with face(s)."
-                                                        self.continousWorking = false
-                                                    }
-                                                    
-                                                    self.lblMessage.stringValue = msg
-                                                }
-                                            },
-                                            startupMessage: "Loading images from database ..."
-                                            )
-            
-            DispatchQueue.global().async {
-                self.continousWorkingRemain = 1
-                self.continousWorking = true
-                self.continousWorkingAttempt = 0
-                
-                let images = ImageSearchDao.default.getImagesWithoutFace(repositoryRoot: repository.path.withStash())
-                
-                self.accumulator?.cleanData()
-                
-                while(self.continousWorkingRemain > 0){
-                    if !self.working {
-                        self.logger.log(">>> RE-TRIGGER")
-                        self.continousWorkingAttempt += 1
-                        self.logger.log(">>> TRIGGER SCANNER ATTEMPT=\(self.continousWorkingAttempt), REMAIN=\(self.continousWorkingRemain)")
-                        self.scanFaces(from: images, in: repository)
-                    }
-                    self.logger.log(">>> SLEEP, REMAIN \(self.continousWorkingRemain)")
-                    sleep(10)
-                }
-            }
-        }
+//        guard !self.working else {
+//            self.logger.log("other task is running. abort this task.")
+//            return
+//        }
+//        if let repository = self.originalContainer {
+//            
+//            if repository.cropPath == "" {
+//                self.logger.log("ERROR: Crop path is empty, please assign it first: \(repository.path)")
+//                self.lblMessage.stringValue = "ERROR: Crop path is empty, please assign it first"
+//                return
+//            }
+//            
+//            // ensure base crop path exists
+//            var isDir:ObjCBool = false
+//            if FileManager.default.fileExists(atPath: repository.cropPath, isDirectory: &isDir) {
+//                if !isDir.boolValue {
+//                    self.logger.log("ERROR: Crop path of repository is not a directory: \(repository.cropPath)")
+//                    self.lblMessage.stringValue = "ERROR: Crop path of repository is not a directory"
+//                    return
+//                }
+//            }
+//            
+//            
+//            let limitRam = PreferencesController.peakMemory() * 1024
+//            self.stopByExceedLimit = false
+//            
+//            self.accumulator = Accumulator(target: 100, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage,
+//                                           onCompleted: { data in
+//                                                DispatchQueue.main.async {
+//                                                    let count = data["count"] ?? 0
+//                                                    let total = data["total"] ?? 0
+//                                                    let detectedCount = data["detectedCount"] ?? 0
+//                                                    self.continousWorkingRemain = total - count
+//                                                    var msg = "Total \(total) images. Processed \(count) images. Found \(detectedCount) images with face(s)."
+//                                                    if self.stopByExceedLimit {
+//                                                        msg += " Stopped since total size exceeds memory limitation \(limitRam) MB"
+//                                                        if self.continousWorkingRemain > 0 {
+//                                                            msg += ", cleaning memory..."
+//                                                        }
+//                                                    }
+//                                                    self.logger.log(msg)
+//                                                    self.working = false
+//                                                    self.logger.log(">>> REMAIN \(self.continousWorkingRemain)")
+//                                                    if self.continousWorkingRemain <= 0 {
+//                                                        self.toggleButtons(true)
+//                                                        self.logger.log(">>> DONE")
+//                                                        msg = "Total \(total) images. Processed \(count) images. Found \(detectedCount) images with face(s)."
+//                                                        self.continousWorking = false
+//                                                    }
+//                                                    
+//                                                    self.lblMessage.stringValue = msg
+//                                                }
+//                                            },
+//                                            startupMessage: "Loading images from database ..."
+//                                            )
+//            
+//            DispatchQueue.global().async {
+//                self.continousWorkingRemain = 1
+//                self.continousWorking = true
+//                self.continousWorkingAttempt = 0
+//                
+//                let images = ImageSearchDao.default.getImagesWithoutFace(repositoryRoot: repository.path.withStash())
+//                
+//                self.accumulator?.cleanData()
+//                
+//                while(self.continousWorkingRemain > 0){
+//                    if !self.working {
+//                        self.logger.log(">>> RE-TRIGGER")
+//                        self.continousWorkingAttempt += 1
+//                        self.logger.log(">>> TRIGGER SCANNER ATTEMPT=\(self.continousWorkingAttempt), REMAIN=\(self.continousWorkingRemain)")
+//                        self.scanFaces(from: images, in: repository)
+//                    }
+//                    self.logger.log(">>> SLEEP, REMAIN \(self.continousWorkingRemain)")
+//                    sleep(10)
+//                }
+//            }
+//        }
     }
     
     fileprivate var stopByExceedLimit = false
     fileprivate var continousWorking = false
     fileprivate var continousWorkingAttempt = 0
     fileprivate var continousWorkingRemain = 0
-    
-    fileprivate func scanFaces(from images:[Image], in repository:ImageContainer){
-        
-        let limitRam = PreferencesController.peakMemory() * 1024
-        
-        self.toggleButtons(false)
-        self.working = true
-        let begin = self.accumulator?.getData(key: "count") ?? 0
-        
-        DispatchQueue.global().async {
-            if images.count > 0 {
-                let total = images.count
-                if self.continousWorkingAttempt == 1 {
-                    self.accumulator?.setTarget(total)
-                }
-                for i in begin..<images.count {
-                    self.logger.log(">>> GETTING IMAGE index \(i), TOTAL \(images.count)")
-                    let image = images[i]
-                    
-                    if Naming.FileType.recognize(from: image.filename) != .photo {
-                        self.logger.log("It's VIDEO")
-                        DispatchQueue.main.async {
-                            let _ = self.accumulator?.add("Finding faces from images ...")
-                            
-                        }
-                        continue
-                    }
-                    
-                    if limitRam > 0 {
-                    
-                        var taskInfo = mach_task_basic_info()
-                        var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
-                        let kerr: kern_return_t = withUnsafeMutablePointer(to: &taskInfo) {
-                            $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
-                                task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
-                            }
-                        }
-                        
-                        if kerr == KERN_SUCCESS {
-                            let usedRam = taskInfo.resident_size / 1024 / 1024
-                            
-                            if usedRam >= limitRam {
-                                self.stopByExceedLimit = true
-                                self.logger.log("##### EXCEEDS SIZE LIMIT")
-                                self.accumulator?.forceComplete()
-                                return
-                            }
-                        }
-                    }
-                    
-                    // ensure image-filename-aware crop path exists
-                    let cropPath = URL(fileURLWithPath: repository.cropPath).appendingPathComponent(image.subPath)
-                    
-                    let img = image
-                    if img.id == nil {
-                        img.id = UUID().uuidString
-                        let _ = ImageRecordDao.default.saveImage(image: img)
-                    }
-                    let imageId = img.id!
-                    
-                    FaceDetection.default.findFace(from: image.path, into: cropPath.path, onCompleted: {faces in
-                        if faces.count == 0 {
-                            do {
-                                try FileManager.default.removeItem(atPath: cropPath.path)
-                            }catch{
-                                self.logger.log("ERROR: Cannot delete directory for storing crops at path: \(cropPath.path)", error)
-                            }
-                        } else {
-                            self.accumulator?.increaseData(key: "detectedCount")
-                            for face in faces {
-                                self.logger.log("Found face: \(face.filename) at (\(face.x), \(face.y), \(face.width), \(face.height))")
-                                let exist = FaceDao.default.findFaceCrop(imageId: imageId,
-                                                                            x: face.x.databaseValue.description,
-                                                                            y: face.y.databaseValue.description,
-                                                                            width: face.width.databaseValue.description,
-                                                                            height: face.height.databaseValue.description)
-                                if exist == nil {
-                                    autoreleasepool(invoking: { () -> Void in
-                                        let imageFace = ImageFace.new(imageId: imageId,
-                                                                      repositoryPath: repository.repositoryPath.withStash(),
-                                                                      cropPath: repository.cropPath,
-                                                                      subPath: image.subPath,
-                                                                      filename: face.filename,
-                                                                      faceX: face.x.databaseValue.description,
-                                                                      faceY: face.y.databaseValue.description,
-                                                                      faceWidth: face.width.databaseValue.description,
-                                                                      faceHeight: face.height.databaseValue.description,
-                                                                      frameX: face.frameX.databaseValue.description,
-                                                                      frameY: face.frameY.databaseValue.description,
-                                                                      frameWidth: face.frameWidth.databaseValue.description,
-                                                                      frameHeight: face.frameHeight.databaseValue.description,
-                                                                      imageDate: image.photoTakenDate,
-                                                                      tagOnly: false,
-                                                                      remark: "",
-                                                                      year: image.photoTakenYear ?? 0,
-                                                                      month: image.photoTakenMonth ?? 0,
-                                                                      day: image.photoTakenDay ?? 0)
-                                        let _ = FaceDao.default.saveFaceCrop(imageFace)
-                                        self.logger.log("Face crop \(imageFace.id) saved.")
-                                    })
-                                    
-                                }else{
-                                    self.logger.log("Face already in DB")
-                                }
-                            }
-                        }
-                        
-                        self.logger.log("Face detection done in \(cropPath.path)")
-                    }) // end of face detection
-                    
-                    if img.scanedFace != true {
-                        img.scanedFace = true
-                        let _ = ImageRecordDao.default.saveImage(image: img)
-                    }
-                    
-                    DispatchQueue.main.async {
-                        let _ = self.accumulator?.add("Finding faces from images ...")
-                        
-                    }
-                }
-            }
-        }
-    }
     
     @IBAction func onUpdateEmptyBriefClicked(_ sender: NSButton) {
         self.lblMessage.stringValue = "Updating images..."

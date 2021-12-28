@@ -48,11 +48,11 @@ class PeopleFace {
     }
     
     func reloadData(){
-        let id = self.data.id
-        if let face = FaceDao.default.getFace(id: id) {
-            self.data = face
-            self.personName = self.loadPersonName()
-        }
+//        let id = self.data.id
+//        if let face = FaceDao.default.getFace(id: id) {
+//            self.data = face
+//            self.personName = self.loadPersonName()
+//        }
     }
     
     fileprivate func generateFaceUrl() {

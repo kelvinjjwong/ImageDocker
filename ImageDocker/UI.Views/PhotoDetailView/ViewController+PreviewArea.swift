@@ -272,16 +272,16 @@ extension ViewController {
         if let image = self.img.imageData {
             var people = ""
             if let id = image.id {
-                let faces = FaceDao.default.getFaceCrops(imageId: id)
-                for face in faces {
-                    if let peopleId = face.peopleId, peopleId != "" {
-                        var name = FaceTask.default.people(id: peopleId)
-                        if name == "" {
-                            name = "(unknown)"
-                        }
-                        people += "\(name) "
-                    }
-                }
+//                let faces = FaceDao.default.getFaceCrops(imageId: id)
+//                for face in faces {
+//                    if let peopleId = face.peopleId, peopleId != "" {
+//                        var name = FaceTask.default.people(id: peopleId)
+//                        if name == "" {
+//                            name = "(unknown)"
+//                        }
+//                        people += "\(name) "
+//                    }
+//                }
             }
             self.lblImageDescription.stringValue = """
             \(people) \(image.shortDescription ?? "")

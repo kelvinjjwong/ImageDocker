@@ -60,20 +60,6 @@ class FaceCollectionViewItemsLoader: NSObject {
         self.collectDomainItemToSingleSection()
     }
     
-    func loadFaces(peopleId:String, year:Int?=nil, month:Int?=nil, sample:Bool?=nil, icon:Bool?=nil, tag:Bool?=nil) {
-        self.items = []
-        let faces = FaceDao.default.getFaceCrops(peopleId: peopleId, year: year, month: month, sample: sample, icon: icon, tag: tag)
-        if faces.count > 0 {
-            for face in faces {
-                let f = PeopleFace(face)
-                self.items.append(f)
-            }
-        }else{
-            self.logger.log("NO FACE CROP")
-        }
-        self.collectDomainItemToSingleSection()
-    }
-    
     func clean(){
         self.items = []
         let section = self.getSection(title: "All")!

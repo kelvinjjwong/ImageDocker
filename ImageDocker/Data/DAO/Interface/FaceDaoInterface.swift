@@ -47,32 +47,4 @@ protocol FaceDaoInterface {
     func updatePersonIconImage(id:String, repositoryPath:String, cropPath:String, subPath:String, filename:String) -> Bool
     
     func deletePerson(id:String) -> ExecuteState
-    
-    // MARK: - FACE
-    
-    func getFace(id: String) -> ImageFace?
-    
-    func getFaceCrops(imageId: String) -> [ImageFace]
-    
-    func findFaceCrop(imageId: String, x:String, y:String, width:String, height:String) -> ImageFace?
-    
-    func getYearsOfFaceCrops(peopleId:String) -> [String]
-    
-    func getMonthsOfFaceCrops(peopleId:String, imageYear:String) -> [String]
-    
-    func getFaceCrops(peopleId:String, year:Int?, month:Int?, sample:Bool?, icon:Bool?, tag:Bool?, locked:Bool?) -> [ImageFace]
-    
-    func saveFaceCrop(_ face:ImageFace) -> ExecuteState
-    
-    func updateFaceIconFlag(id:String, peopleId:String) -> ExecuteState
-    
-    func removeFaceIcon(peopleId:String) -> ExecuteState
-    
-    func updateFaceSampleFlag(id:String, flag:Bool) -> ExecuteState
-    
-    func updateFaceTagFlag(id:String, flag:Bool) -> ExecuteState
-    
-    func updateFaceLockFlag(id:String, flag:Bool) -> ExecuteState
-    
-    func updateFaceCropPaths(old:String, new:String) -> ExecuteState
 }
