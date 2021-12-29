@@ -782,6 +782,9 @@
 			isa = PBXGroup;
 			children = (
 				8ECA1FF123E3294A00F56895 /* Commons */,
+				8E48147B277CB1560097493E /* Logging */,
+				8E481479277CB0AF0097493E /* UI.Languages */,
+				8E48147A277CB1110097493E /* UI.Icons_Colors */,
 				8ECA1FEA23E3275E00F56895 /* UI.Views */,
 				8ECA1FE623E325C500F56895 /* UI.Controls */,
 				8E4DECED23B38D1B00F5538C /* Data */,
@@ -910,6 +913,32 @@
 				8E3FA9242355047400B677A3 /* MemoriesCollectionViewController.swift */,
 			);
 			path = Memories;
+			sourceTree = "<group>";
+		};
+		8E481479277CB0AF0097493E /* UI.Languages */ = {
+			isa = PBXGroup;
+			children = (
+				8E9CF30A26489D5500558423 /* Localize.swift */,
+				8E9CF30C26489EAA00558423 /* Words.swift */,
+			);
+			path = UI.Languages;
+			sourceTree = "<group>";
+		};
+		8E48147A277CB1110097493E /* UI.Icons_Colors */ = {
+			isa = PBXGroup;
+			children = (
+				8E15E74023AC7B310094240A /* Icons.swift */,
+				8EE382F723E02585003B7153 /* Colors.swift */,
+			);
+			path = UI.Icons_Colors;
+			sourceTree = "<group>";
+		};
+		8E48147B277CB1560097493E /* Logging */ = {
+			isa = PBXGroup;
+			children = (
+				8ECB51042764406D004DFDD7 /* ConsoleLogger.swift */,
+			);
+			path = Logging;
 			sourceTree = "<group>";
 		};
 		8E4C38CB2117B5190089502C /* Device */ = {
@@ -1366,15 +1395,10 @@
 		8ECA1FF123E3294A00F56895 /* Commons */ = {
 			isa = PBXGroup;
 			children = (
-				8E15E74023AC7B310094240A /* Icons.swift */,
-				8EE382F723E02585003B7153 /* Colors.swift */,
 				8EBA69292090C87D00221131 /* Extentions.swift */,
 				8EB9C0102507735F00507CA7 /* DataStructures.swift */,
-				8E9CF30A26489D5500558423 /* Localize.swift */,
-				8E9CF30C26489EAA00558423 /* Words.swift */,
 				8E9CF30E2648D42500558423 /* ChangeEvent.swift */,
 				8EF8C561266329160060D2E0 /* MessageEventCenter.swift */,
-				8ECB51042764406D004DFDD7 /* ConsoleLogger.swift */,
 			);
 			path = Commons;
 			sourceTree = "<group>";
