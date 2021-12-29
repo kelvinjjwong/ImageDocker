@@ -556,7 +556,9 @@ extension PostgresConnection {
                 t.add("trainingSample", .boolean).defaults(to: false)
                 t.add("facesReviewed", .boolean).defaults(to: false)
             })
-            
+        }
+        
+        migrator.version("v42") { db in
             try db.create(table: "Face", body: { t in
                 t.column("imageId", .text).notNull().indexed()
                 t.column("pos_top", .double).defaults(to: 0.0)
@@ -570,10 +572,13 @@ extension PostgresConnection {
                 t.column("shortName", .text).notNull().defaults(to: "")
                 t.column("file", .text).notNull().defaults(to: "")
             })
-            
-            try db.update(sql: """
-update "Image" set "resizedFilePath"='',"taggedFilePath"='',"fileExt"='',"peopleId"='',"peopleIdRecognized"='',"peopleIdAssign"='',"trainingSample"='f',"facesReviewed"='f'
-""")
+        }
+        
+        migrator.version("v43") { db in
+            try db.alter(table: "ImageDevice", body: { t in
+                t.add("deviceWidth", .integer).defaults(to: 0)
+                t.add("deviceHeight", .integer).defaults(to: 0)
+            })
         }
         
         do {

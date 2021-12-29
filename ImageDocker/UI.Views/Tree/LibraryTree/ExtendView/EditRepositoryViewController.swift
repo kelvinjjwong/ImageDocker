@@ -59,7 +59,7 @@ class EditRepositoryViewController: NSViewController {
     @IBOutlet weak var btnFaceBackToOrigin: NSButton!
     @IBOutlet weak var btnFaceFollowHome: NSButton!
     @IBOutlet weak var btnPathsFollowDevice: NSButton!
-    @IBOutlet weak var btnFindFaces: NSButton!
+//    @IBOutlet weak var btnFindFaces: NSButton!
     @IBOutlet weak var boxRepository: NSBox!
     @IBOutlet weak var boxFaces: NSBox!
     @IBOutlet weak var boxDevice: NSBox!
@@ -113,7 +113,7 @@ class EditRepositoryViewController: NSViewController {
     }
     
     func setupUIDisplay() {
-        self.btnFindFaces.title = Words.findFaces.word()
+//        self.btnFindFaces.title = Words.findFaces.word()
         self.btnOK.title = Words.saveRepository.word()
         self.btnStat.title = Words.stat.word()
         self.btnRemove.title = Words.deleteAllImages.word()
@@ -154,7 +154,7 @@ class EditRepositoryViewController: NSViewController {
     
     fileprivate func toggleButtons(_ show:Bool){
         DispatchQueue.main.async {
-            self.btnFindFaces.isEnabled = show
+//            self.btnFindFaces.isEnabled = show
             self.btnOK.isEnabled = show
             self.btnStat.isEnabled = show
             self.btnRemove.isEnabled = show
@@ -245,7 +245,7 @@ class EditRepositoryViewController: NSViewController {
         self.btnBrowseCropPath.title = Words.assign.word()
         self.btnFaceBackToOrigin.isHidden = true
         self.btnNormalize.isHidden = true
-        self.btnFindFaces.isHidden = true
+//        self.btnFindFaces.isHidden = true
         self.btnShowHide.isHidden = true
         self.btnStat.isHidden = true
         self.btnRestoreOriginal.isHidden = true
@@ -287,7 +287,7 @@ class EditRepositoryViewController: NSViewController {
             self.txtCropPath.stringValue = container.cropPath
             self.btnFaceBackToOrigin.isHidden = false
             self.btnNormalize.isHidden = false
-            self.btnFindFaces.isHidden = false
+//            self.btnFindFaces.isHidden = false
             self.btnShowHide.isHidden = false
             self.btnStat.isHidden = false
             self.btnRestoreOriginal.isHidden = false

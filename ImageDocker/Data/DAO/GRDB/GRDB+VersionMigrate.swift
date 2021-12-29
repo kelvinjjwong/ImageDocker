@@ -554,6 +554,9 @@ extension SQLiteConnectionGRDB {
                 t.add(column: "trainingSample", .boolean).defaults(to: false)
                 t.add(column: "facesReviewed", .boolean).defaults(to: false)
             })
+        }
+        
+        migrator.registerMigration("v42") { db in
             
             try db.create(table: "Face", body: { t in
                 t.column("imageId", .text).notNull().indexed()
@@ -567,6 +570,13 @@ extension SQLiteConnectionGRDB {
                 t.column("peopleName", .text).notNull().defaults(to: "")
                 t.column("shortName", .text).notNull().defaults(to: "")
                 t.column("file", .text).notNull().defaults(to: "")
+            })
+        }
+        
+        migrator.registerMigration("v43") { db in
+            try db.alter(table: "ImageDevice", body: { t in
+                t.add(column: "deviceWidth", .integer).defaults(to: 0)
+                t.add(column: "deviceHeight", .integer).defaults(to: 0)
             })
         }
         
