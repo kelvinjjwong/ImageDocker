@@ -41,7 +41,10 @@ extension ViewController {
             self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(258)))
             self.playerContainer.display()
         }else {
-            self.logger.log("BIG SCREEN")
+            self.logger.log("BIG SCREEN \(self.view.bounds)")
+            
+            splashController.view.frame = self.view.bounds
+            
             let constraintPlayerHeight = NSLayoutConstraint(item: self.playerContainer!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1.0, constant: 403)
             self.playerContainer.addConstraint(constraintPlayerHeight)
             self.playerContainer.setFrameSize(NSMakeSize(CGFloat(575), CGFloat(403)))

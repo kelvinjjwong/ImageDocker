@@ -43,12 +43,15 @@ class ImagePreviewController : NSViewController {
     }
     
     @IBAction func onRotateClockwiseClicked(_ sender: NSButton) {
-        if let nsImage = self.getImageFromPreview?(), let imageData = self.imageFile?.imageData {
+        if let nsImage = self.getImageFromPreview?(),
+           let imageId = self.imageFile?.imageData?.id,
+            let imageData = ImageRecordDao.default.getImage(id: imageId) {
             let originDegree = imageData.rotation ?? 0
             var degree = originDegree - 90
             if degree <= -360 || degree >= 360 {
                 degree = 0
             }
+            self.logger.log("rotate from \(originDegree) to \(degree)")
             self.previewImage?(nsImage.rotate(degrees: CGFloat(degree)))
             let dbState = ImageRecordDao.default.updateImageRotation(path: imageData.path, rotation: degree)
             if dbState != .OK {

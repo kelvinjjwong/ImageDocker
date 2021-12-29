@@ -97,7 +97,17 @@ class CollectionViewItem: NSCollectionViewItem {
     
     fileprivate func renderControls(_ imageFile:ImageFile) {
         DispatchQueue.main.async {
-            self.imageView?.image = imageFile.thumbnail
+            var degree = 0
+            if let imageData = imageFile.imageData, let rotationDegree = imageData.rotation {
+                degree = rotationDegree
+            }
+            if let thumbnail = imageFile.thumbnail {
+                if degree != 0 {
+                    self.imageView?.image = thumbnail.rotate(degrees: CGFloat(degree))
+                }else{
+                    self.imageView?.image = thumbnail
+                }
+            }
         }
         if imageFile.photoTakenDate() != nil {
             textField?.stringValue = imageFile.dateString(imageFile.photoTakenDate(), format: displayDateFormat)

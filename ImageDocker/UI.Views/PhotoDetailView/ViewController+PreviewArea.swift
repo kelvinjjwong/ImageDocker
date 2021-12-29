@@ -153,6 +153,7 @@ extension ViewController {
     }
     
     internal func previewImage(image:NSImage) {
+        self.logger.log("previewImage(NSImage)")
         for sView in self.playerContainer.subviews {
             sView.removeFromSuperview()
         }
@@ -171,6 +172,7 @@ extension ViewController {
     }
     
     internal func previewImage(url:URL, isPhoto:Bool) {
+        self.logger.log("previewImage(url, isPhoto) - \(url) - \(isPhoto)")
         for sView in self.playerContainer.subviews {
             sView.removeFromSuperview()
         }
@@ -204,17 +206,19 @@ extension ViewController {
     }
     
     internal func previewImage(image:ImageFile) {
+        self.logger.log("previewImage(ImageFile)")
         self.imagePreviewController.imageFile = image
         
         let rotation = Float(image.imageData?.rotation ?? 0)
         
         
-        for sView in self.playerContainer.subviews {
-            sView.removeFromSuperview()
-        }
         
         if stackedVideoViewController != nil && stackedVideoViewController.videoDisplayer != nil && stackedVideoViewController.videoDisplayer.player != nil {
             stackedVideoViewController.videoDisplayer.player?.pause()
+        }
+        
+        for sView in self.playerContainer.subviews {
+            sView.removeFromSuperview()
         }
         
         if img.isPhoto {
@@ -234,11 +238,17 @@ extension ViewController {
         } else {
             
             // switch to video view
-            stackedVideoViewController.view.frame = self.playerContainer.bounds
+            stackedVideoViewController.view.frameCenterRotation = CGFloat(0) // must be step 1
+            stackedVideoViewController.view.frame = self.playerContainer.bounds // must be step 2
             self.playerContainer.addSubview(stackedVideoViewController.view)
             
             // show video
-            stackedVideoViewController.videoDisplayer.player = AVPlayer(url: image.url)
+            if rotation == 0 {
+                stackedVideoViewController.videoDisplayer.player = AVPlayer(url: image.url)
+            }else{
+                stackedVideoViewController.videoDisplayer.player = AVPlayer(url: image.url)
+                stackedVideoViewController.view.frameCenterRotation = CGFloat(rotation)
+            }
             stackedVideoViewController.videoDisplayer.player?.play()
             
             self.btnImageOptions.isEnabled = false
@@ -304,4 +314,5 @@ extension ViewController {
     internal func readImageLocationMeta(title:String) -> String{
         return self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Assign", title: title) ?? self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Baidu", title: title) ?? self.img.metaInfoHolder.getMeta(category: "Location", subCategory: "Google", title: title) ?? ""
     }
+    
 }
