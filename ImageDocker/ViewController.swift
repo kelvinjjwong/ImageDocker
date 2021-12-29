@@ -312,11 +312,14 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.logger.log("before splash - frame \(self.view.bounds)")
+        
         self.imagesLoader = CollectionViewItemsLoader()
         
         self.btnCombineDuplicates.toolTip = Words.main_combineTooltip.word()
         
         self.splashController = SplashViewController(onStartup: {
+            self.logger.log("startup frame \(self.view.bounds)")
             self.splashController.view.frame = self.view.bounds
             self.doStartWork()
         }, onCompleted: {
