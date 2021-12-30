@@ -56,6 +56,14 @@
 		8E4095FA2593982200BF717B /* ExportProfileItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4095F92593982200BF717B /* ExportProfileItemController.swift */; };
 		8E4095FD25939A0900BF717B /* ExportProfilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4095FB25939A0900BF717B /* ExportProfilesViewController.swift */; };
 		8E4095FE25939A0900BF717B /* ExportProfilesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E4095FC25939A0900BF717B /* ExportProfilesViewController.xib */; };
+		8E48147D277DAE260097493E /* Words+DeviceCopyDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E48147C277DAE260097493E /* Words+DeviceCopyDialog.swift */; };
+		8E48147F277DAE6C0097493E /* Words+MainCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E48147E277DAE6C0097493E /* Words+MainCollectionView.swift */; };
+		8E481481277DAE940097493E /* Words+MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E481480277DAE940097493E /* Words+MainMenu.swift */; };
+		8E481483277DAEDE0097493E /* Words+PreviewImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E481482277DAEDE0097493E /* Words+PreviewImage.swift */; };
+		8E481485277DAF780097493E /* Words+Tree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E481484277DAF780097493E /* Words+Tree.swift */; };
+		8E481487277DAFF10097493E /* Words+Splash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E481486277DAFF10097493E /* Words+Splash.swift */; };
+		8E481489277DB02F0097493E /* Words+EditRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E481488277DB02F0097493E /* Words+EditRepository.swift */; };
+		8E48148B277DB0570097493E /* Words+SelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E48148A277DB0570097493E /* Words+SelectionView.swift */; };
 		8E4B7C1920929EFA00DDD9E0 /* LocationConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */; };
 		8E4C38CA211776300089502C /* Mobile in Resources */ = {isa = PBXBuildFile; fileRef = 8E4C38C92117762F0089502C /* Mobile */; };
 		8E4C38CD2117B5340089502C /* Phone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38CC2117B5340089502C /* Phone.swift */; };
@@ -409,6 +417,14 @@
 		8E4095F92593982200BF717B /* ExportProfileItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportProfileItemController.swift; sourceTree = "<group>"; };
 		8E4095FB25939A0900BF717B /* ExportProfilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportProfilesViewController.swift; sourceTree = "<group>"; };
 		8E4095FC25939A0900BF717B /* ExportProfilesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExportProfilesViewController.xib; sourceTree = "<group>"; };
+		8E48147C277DAE260097493E /* Words+DeviceCopyDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+DeviceCopyDialog.swift"; sourceTree = "<group>"; };
+		8E48147E277DAE6C0097493E /* Words+MainCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+MainCollectionView.swift"; sourceTree = "<group>"; };
+		8E481480277DAE940097493E /* Words+MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+MainMenu.swift"; sourceTree = "<group>"; };
+		8E481482277DAEDE0097493E /* Words+PreviewImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+PreviewImage.swift"; sourceTree = "<group>"; };
+		8E481484277DAF780097493E /* Words+Tree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Tree.swift"; sourceTree = "<group>"; };
+		8E481486277DAFF10097493E /* Words+Splash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Splash.swift"; sourceTree = "<group>"; };
+		8E481488277DB02F0097493E /* Words+EditRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+EditRepository.swift"; sourceTree = "<group>"; };
+		8E48148A277DB0570097493E /* Words+SelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+SelectionView.swift"; sourceTree = "<group>"; };
 		8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationConsumer.swift; sourceTree = "<group>"; };
 		8E4C38C92117762F0089502C /* Mobile */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Mobile; sourceTree = "<group>"; };
 		8E4C38CC2117B5340089502C /* Phone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phone.swift; sourceTree = "<group>"; };
@@ -920,6 +936,14 @@
 			children = (
 				8E9CF30A26489D5500558423 /* Localize.swift */,
 				8E9CF30C26489EAA00558423 /* Words.swift */,
+				8E481488277DB02F0097493E /* Words+EditRepository.swift */,
+				8E48147C277DAE260097493E /* Words+DeviceCopyDialog.swift */,
+				8E48147E277DAE6C0097493E /* Words+MainCollectionView.swift */,
+				8E481480277DAE940097493E /* Words+MainMenu.swift */,
+				8E481482277DAEDE0097493E /* Words+PreviewImage.swift */,
+				8E481484277DAF780097493E /* Words+Tree.swift */,
+				8E481486277DAFF10097493E /* Words+Splash.swift */,
+				8E48148A277DB0570097493E /* Words+SelectionView.swift */,
 			);
 			path = UI.Languages;
 			sourceTree = "<group>";
@@ -1891,6 +1915,7 @@
 				8E8D47292236F63C0091E9C3 /* TablePopover.swift in Sources */,
 				8EFA02DB243B3E1A00D7C355 /* PostgresClientKit+Image+Record.swift in Sources */,
 				8E0EAE9A209D2623008C377F /* ImageFolderTreeScanner.swift in Sources */,
+				8E481483277DAEDE0097493E /* Words+PreviewImage.swift in Sources */,
 				8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */,
 				8EAD03B523372C0100AAC7C6 /* GRDB+ImageEvent.swift in Sources */,
 				8E3FA9252355047400B677A3 /* MemoriesCollectionViewController.swift in Sources */,
@@ -1970,6 +1995,7 @@
 				8EB271852340E9C6003BF3AF /* ViewController+SelectionArea+ReplacePlace.swift in Sources */,
 				8EFE763C2094AF6B00B7CFCA /* TreeController.swift in Sources */,
 				8EF0C1F1277B5431001E3366 /* Face.swift in Sources */,
+				8E481485277DAF780097493E /* Words+Tree.swift in Sources */,
 				8EF4E1EC2453C05800999DD1 /* EncodableDBRecord.swift in Sources */,
 				8E3EC3B5214DB1B8004B6125 /* LunarCalendarView.swift in Sources */,
 				8EBC0182236B072F00FB6E2F /* TwoColumnTableViewController.swift in Sources */,
@@ -1987,6 +2013,7 @@
 				8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */,
 				8EB271912340EED2003BF3AF /* ViewController+TreeArea+Filter.swift in Sources */,
 				8EB271972340F1FF003BF3AF /* ViewController+TaskProgress.swift in Sources */,
+				8E481489277DB02F0097493E /* Words+EditRepository.swift in Sources */,
 				8E7B98DF2147E7880019ED87 /* FileSystemHandler.swift in Sources */,
 				8E4E5B78221985A400FE4B68 /* ImageFace.swift in Sources */,
 				8EF4E1F92453C05800999DD1 /* Stub.swift in Sources */,
@@ -1996,6 +2023,7 @@
 				8E73E382223E494C00C14A90 /* ExecutionEnvironment.swift in Sources */,
 				8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */,
 				8E741946242256E2002BAAAE /* RepositoryDaoInterface.swift in Sources */,
+				8E48147F277DAE6C0097493E /* Words+MainCollectionView.swift in Sources */,
 				8EB271532337B768003BF3AF /* GRDB+Image+Statistic.swift in Sources */,
 				8EF92DF42460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift in Sources */,
 				8E98B8F720D6044900771280 /* Event.swift in Sources */,
@@ -2011,6 +2039,7 @@
 				8EAC5F202144A60900E187E0 /* DeviceFolderViewController.swift in Sources */,
 				8EE1AB3D20D05E49001C75B0 /* EventListViewController.swift in Sources */,
 				8EB986B920B30C920075B081 /* CollectionViewItem.swift in Sources */,
+				8E481481277DAE940097493E /* Words+MainMenu.swift in Sources */,
 				8EBA759B23B5CC5300548376 /* PlaceDao.swift in Sources */,
 				8EFA02DD243B3E2D00D7C355 /* PostgresClientKit+Image+Search.swift in Sources */,
 				8EAD03BD23372D5E00AAC7C6 /* GRDB+Image+Meta.swift in Sources */,
@@ -2039,6 +2068,7 @@
 				8EB2715B23384364003BF3AF /* ImageFile+SourceFilename.swift in Sources */,
 				8ECB51002764268C004DFDD7 /* SubContainersManageViewController.swift in Sources */,
 				8EAD03B12337299E00AAC7C6 /* GRDB+ImageContainer.swift in Sources */,
+				8E481487277DAFF10097493E /* Words+Splash.swift in Sources */,
 				8EAD03B923372C8C00AAC7C6 /* GRDB+FaceFamily.swift in Sources */,
 				8E4DECEA23B38A7B00F5538C /* ImagePlace.swift in Sources */,
 				8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */,
@@ -2080,6 +2110,8 @@
 				8EBA9DDF216F8BB100DACAAD /* NotesViewController.swift in Sources */,
 				8EEF0728226215E7000520B7 /* SplashViewController.swift in Sources */,
 				8EC5BA2E21775571001510AF /* TheaterCollectionViewItem.swift in Sources */,
+				8E48148B277DB0570097493E /* Words+SelectionView.swift in Sources */,
+				8E48147D277DAE260097493E /* Words+DeviceCopyDialog.swift in Sources */,
 				8EFAF1FB20BFFC8A007A7783 /* MetaInfoHolder.swift in Sources */,
 				8E8CF269235AA3860016932A /* Naming.swift in Sources */,
 				8EBA758F23B55B7700548376 /* MomentsTreeDataSource.swift in Sources */,

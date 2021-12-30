@@ -80,7 +80,6 @@ class DeviceCopyViewController: NSViewController {
     
     // MARK: CONTROLS
     
-    @IBOutlet weak var lblModel: NSTextField!
     @IBOutlet weak var txtStorePath: NSTextField!
     @IBOutlet weak var txtName: NSTextField!
     @IBOutlet weak var btnBrowseStorePath: NSButton!
@@ -104,6 +103,17 @@ class DeviceCopyViewController: NSViewController {
     @IBOutlet weak var btnDeepLoad: NSButton!
     @IBOutlet weak var txtHomePath: NSTextField!
     @IBOutlet weak var btnStop: NSButton!
+    @IBOutlet weak var btnBrowseHome: NSButton!
+    @IBOutlet weak var btnGotoHome: NSButton!
+    @IBOutlet weak var btnGotoRepository: NSButton!
+    @IBOutlet weak var btnGotoStorage: NSButton!
+    @IBOutlet weak var lblModel: NSTextField!
+    @IBOutlet weak var lblName: NSTextField!
+    @IBOutlet weak var lblHome: NSTextField!
+    @IBOutlet weak var lblRepository: NSTextField!
+    @IBOutlet weak var lblStorage: NSTextField!
+    @IBOutlet weak var lblModelName: NSTextField!
+    
     
     
     
@@ -130,6 +140,30 @@ class DeviceCopyViewController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.btnCopy.title = Words.device_copy_files.word()
+        self.btnLoad.title = Words.device_load_file_list.word()
+        self.btnDeepLoad.title = Words.device_deep_load.word()
+        self.btnDeleteRecords.title = Words.device_delete_records.word()
+        self.btnUpdateRepository.title = Words.device_copy_to_repository.word()
+        self.btnDeleteRecords.title = Words.device_delete_records.word()
+        self.btnSave.title = Words.device_save.word()
+        self.btnStop.title = Words.device_stop.word()
+        self.btnMount.title = Words.device_mount.word()
+        self.btnLoadFromLocal.title = Words.device_local.word()
+        self.btnBrowseHome.title = Words.device_browse.word()
+        self.btnBrowseRepository.title = Words.device_browse.word()
+        self.btnBrowseStorePath.title = Words.device_browse.word()
+        self.btnGotoHome.title = Words.device_goto.word()
+        self.btnGotoRepository.title = Words.device_goto.word()
+        self.btnGotoStorage.title = Words.device_goto.word()
+        self.cbShowCopied.title = Words.device_show_copied.word()
+        self.lblModelName.stringValue = Words.device_model.word()
+        self.lblName.stringValue = Words.device_name.word()
+        self.lblHome.stringValue = Words.device_home_folder.word()
+        self.lblRepository.stringValue = Words.device_editable_folder.word()
+        self.lblStorage.stringValue = Words.device_raw_folder.word()
+        
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
         btnSave.isEnabled = false
@@ -240,13 +274,13 @@ class DeviceCopyViewController: NSViewController {
                 
             }else if device.type == .iPhone {
                 if IPHONE.bridge.mounted(path: PreferencesController.iosDeviceMountPoint()) {
-                    self.btnMount.title = "Unmount"
+                    self.btnMount.title = Words.device_unmount.word()
                     self.paths = DeviceCopyDestination.from(deviceId: device.deviceId, deviceType: .iPhone)
                     self.emptyFileLists(paths: paths)
                     self.sourcePathTableDelegate.paths = paths
                     self.tblSourcePath.reloadData()
                 }else{
-                    self.btnMount.title = "Mount"
+                    self.btnMount.title = Words.device_mount.word()
                     self.emptyFileLists(paths: paths)
                     self.paths = []
                     self.sourcePathTableDelegate.paths = paths
