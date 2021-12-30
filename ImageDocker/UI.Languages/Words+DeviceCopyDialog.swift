@@ -33,7 +33,7 @@ extension Words {
     
     static let device_copy_to_repository = Localize (
         eng: "Copy to repository",
-        chs: "将影像导入到资料库"
+        chs: "将影像导入到照片库"
     )
     
     static let device_delete_records = Localize (

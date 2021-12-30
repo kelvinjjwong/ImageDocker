@@ -33,6 +33,8 @@ class LibrariesViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.btnReload.title = Words.tree_reload_tree.word()
+        
         self.tblSpaceOccupation.delegate = self
         self.tblSpaceOccupation.dataSource = self
     }

@@ -31,15 +31,9 @@ extension Words {
         chs: "照片库"
     )
     
-    
-    
-    static let importingImages = Localize(
-        eng: "Importing images ...",
-        chs: "正在导入照片 ..."
+    static let tree_reload_tree = Localize(
+        eng: "Reload Tree",
+        chs: "重新载入树节点"
     )
     
-    static let extractingExif = Localize(
-        eng: "Extracting EXIF ...",
-        chs: "正在解析图像位置 ..."
-    )
 }

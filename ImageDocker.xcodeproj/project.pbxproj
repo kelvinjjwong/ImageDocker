@@ -65,6 +65,10 @@
 		8E481489277DB02F0097493E /* Words+EditRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E481488277DB02F0097493E /* Words+EditRepository.swift */; };
 		8E48148B277DB0570097493E /* Words+SelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E48148A277DB0570097493E /* Words+SelectionView.swift */; };
 		8E48148D277DBF030097493E /* Words+ExportProfileDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E48148C277DBF030097493E /* Words+ExportProfileDialog.swift */; };
+		8E48148F277DF62E0097493E /* Words+Tree+Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E48148E277DF62E0097493E /* Words+Tree+Repository.swift */; };
+		8E481491277DF6400097493E /* Words+Tree+Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E481490277DF6400097493E /* Words+Tree+Events.swift */; };
+		8E481493277DF6570097493E /* Words+Tree+Places.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E481492277DF6570097493E /* Words+Tree+Places.swift */; };
+		8E481495277DF6670097493E /* Words+Tree+Moments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E481494277DF6670097493E /* Words+Tree+Moments.swift */; };
 		8E4B7C1920929EFA00DDD9E0 /* LocationConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */; };
 		8E4C38CA211776300089502C /* Mobile in Resources */ = {isa = PBXBuildFile; fileRef = 8E4C38C92117762F0089502C /* Mobile */; };
 		8E4C38CD2117B5340089502C /* Phone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38CC2117B5340089502C /* Phone.swift */; };
@@ -427,6 +431,10 @@
 		8E481488277DB02F0097493E /* Words+EditRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+EditRepository.swift"; sourceTree = "<group>"; };
 		8E48148A277DB0570097493E /* Words+SelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+SelectionView.swift"; sourceTree = "<group>"; };
 		8E48148C277DBF030097493E /* Words+ExportProfileDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+ExportProfileDialog.swift"; sourceTree = "<group>"; };
+		8E48148E277DF62E0097493E /* Words+Tree+Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Tree+Repository.swift"; sourceTree = "<group>"; };
+		8E481490277DF6400097493E /* Words+Tree+Events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Tree+Events.swift"; sourceTree = "<group>"; };
+		8E481492277DF6570097493E /* Words+Tree+Places.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Tree+Places.swift"; sourceTree = "<group>"; };
+		8E481494277DF6670097493E /* Words+Tree+Moments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Tree+Moments.swift"; sourceTree = "<group>"; };
 		8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationConsumer.swift; sourceTree = "<group>"; };
 		8E4C38C92117762F0089502C /* Mobile */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Mobile; sourceTree = "<group>"; };
 		8E4C38CC2117B5340089502C /* Phone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phone.swift; sourceTree = "<group>"; };
@@ -938,14 +946,18 @@
 			children = (
 				8E9CF30A26489D5500558423 /* Localize.swift */,
 				8E9CF30C26489EAA00558423 /* Words.swift */,
-				8E481488277DB02F0097493E /* Words+EditRepository.swift */,
-				8E48147C277DAE260097493E /* Words+DeviceCopyDialog.swift */,
-				8E48147E277DAE6C0097493E /* Words+MainCollectionView.swift */,
+				8E481486277DAFF10097493E /* Words+Splash.swift */,
 				8E481480277DAE940097493E /* Words+MainMenu.swift */,
+				8E48147E277DAE6C0097493E /* Words+MainCollectionView.swift */,
+				8E48148A277DB0570097493E /* Words+SelectionView.swift */,
 				8E481482277DAEDE0097493E /* Words+PreviewImage.swift */,
 				8E481484277DAF780097493E /* Words+Tree.swift */,
-				8E481486277DAFF10097493E /* Words+Splash.swift */,
-				8E48148A277DB0570097493E /* Words+SelectionView.swift */,
+				8E48148E277DF62E0097493E /* Words+Tree+Repository.swift */,
+				8E481490277DF6400097493E /* Words+Tree+Events.swift */,
+				8E481492277DF6570097493E /* Words+Tree+Places.swift */,
+				8E481494277DF6670097493E /* Words+Tree+Moments.swift */,
+				8E48147C277DAE260097493E /* Words+DeviceCopyDialog.swift */,
+				8E481488277DB02F0097493E /* Words+EditRepository.swift */,
 				8E48148C277DBF030097493E /* Words+ExportProfileDialog.swift */,
 			);
 			path = UI.Languages;
@@ -1893,6 +1905,7 @@
 				8ECA200223E5AF2700F56895 /* MomentsTree+CollectionView.swift in Sources */,
 				8E5D257C25A200A200D531A7 /* NSImage+Rotate.swift in Sources */,
 				8EBA759523B55BAB00548376 /* DeviceTreeDataSource.swift in Sources */,
+				8E481495277DF6670097493E /* Words+Tree+Moments.swift in Sources */,
 				8EFA7CFD211D72B300419777 /* ImageDeviceFile.swift in Sources */,
 				8EBA75A123B5D06900548376 /* FaceDao.swift in Sources */,
 				8E08D87025DB6932009A365F /* TextListComboController.swift in Sources */,
@@ -1927,6 +1940,7 @@
 				8E4C38D9211829410089502C /* DeviceTreeController.swift in Sources */,
 				8EB2719B2340F907003BF3AF /* ViewController+CollectionArea+CombineDuplicated.swift in Sources */,
 				8EB271832340E98B003BF3AF /* ViewController+SelectionArea+CombineDuplicated.swift in Sources */,
+				8E481493277DF6570097493E /* Words+Tree+Places.swift in Sources */,
 				8EFA02E3243B3E6400D7C355 /* PostgresClientKit+Image+Duplicate.swift in Sources */,
 				8ECB51052764406D004DFDD7 /* ConsoleLogger.swift in Sources */,
 				8E85B7CF20B8786C005A9845 /* Accumulator.swift in Sources */,
@@ -1979,6 +1993,7 @@
 				8E36B067217920B400646EA5 /* MonthListController.swift in Sources */,
 				8EFA02F1243B3EDF00D7C355 /* PostgresClientKit+ExportProfile.swift in Sources */,
 				8EF8C558265D9B770060D2E0 /* ImageMetaViewController.swift in Sources */,
+				8E48148F277DF62E0097493E /* Words+Tree+Repository.swift in Sources */,
 				8E98B8F320D5C90600771280 /* WindowController.swift in Sources */,
 				8EBA692E2090DB4B00221131 /* VideoDropView.swift in Sources */,
 				8E8D47222233DCD30091E9C3 /* DictionaryTableViewController.swift in Sources */,
@@ -2034,6 +2049,7 @@
 				8E3FA9202353310600B677A3 /* MemoryCollectionViewItem.swift in Sources */,
 				8E9D803D2348AA550062692A /* ExportProfile.swift in Sources */,
 				8ECA200823E5B0AA00F56895 /* EventsTree+CollectionView.swift in Sources */,
+				8E481491277DF6400097493E /* Words+Tree+Events.swift in Sources */,
 				8E4C38D12117B56A0089502C /* IPHONE.swift in Sources */,
 				8EAD03B723372C4600AAC7C6 /* GRDB+ImageDevice.swift in Sources */,
 				8E8D4715222991230091E9C3 /* FaceCollectionViewItem.swift in Sources */,

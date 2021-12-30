@@ -25,6 +25,8 @@ class MomentsTreeHeaderMoreViewController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.btnReload.title = Words.tree_reload_tree.word()
     }
     
     @IBAction func onReloadClicked(_ sender: NSButton) {
