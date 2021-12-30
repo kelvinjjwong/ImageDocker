@@ -64,6 +64,7 @@
 		8E481487277DAFF10097493E /* Words+Splash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E481486277DAFF10097493E /* Words+Splash.swift */; };
 		8E481489277DB02F0097493E /* Words+EditRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E481488277DB02F0097493E /* Words+EditRepository.swift */; };
 		8E48148B277DB0570097493E /* Words+SelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E48148A277DB0570097493E /* Words+SelectionView.swift */; };
+		8E48148D277DBF030097493E /* Words+ExportProfileDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E48148C277DBF030097493E /* Words+ExportProfileDialog.swift */; };
 		8E4B7C1920929EFA00DDD9E0 /* LocationConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */; };
 		8E4C38CA211776300089502C /* Mobile in Resources */ = {isa = PBXBuildFile; fileRef = 8E4C38C92117762F0089502C /* Mobile */; };
 		8E4C38CD2117B5340089502C /* Phone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38CC2117B5340089502C /* Phone.swift */; };
@@ -425,6 +426,7 @@
 		8E481486277DAFF10097493E /* Words+Splash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Splash.swift"; sourceTree = "<group>"; };
 		8E481488277DB02F0097493E /* Words+EditRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+EditRepository.swift"; sourceTree = "<group>"; };
 		8E48148A277DB0570097493E /* Words+SelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+SelectionView.swift"; sourceTree = "<group>"; };
+		8E48148C277DBF030097493E /* Words+ExportProfileDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+ExportProfileDialog.swift"; sourceTree = "<group>"; };
 		8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationConsumer.swift; sourceTree = "<group>"; };
 		8E4C38C92117762F0089502C /* Mobile */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Mobile; sourceTree = "<group>"; };
 		8E4C38CC2117B5340089502C /* Phone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phone.swift; sourceTree = "<group>"; };
@@ -944,6 +946,7 @@
 				8E481484277DAF780097493E /* Words+Tree.swift */,
 				8E481486277DAFF10097493E /* Words+Splash.swift */,
 				8E48148A277DB0570097493E /* Words+SelectionView.swift */,
+				8E48148C277DBF030097493E /* Words+ExportProfileDialog.swift */,
 			);
 			path = UI.Languages;
 			sourceTree = "<group>";
@@ -1968,6 +1971,7 @@
 				8E8D471A2229AC430091E9C3 /* FaceCollectionViewController.swift in Sources */,
 				8ECA1FF723E5252B00F56895 /* SampleTreeDataSource.swift in Sources */,
 				8EB27159233842E4003BF3AF /* ImageFile+Preview.swift in Sources */,
+				8E48148D277DBF030097493E /* Words+ExportProfileDialog.swift in Sources */,
 				8E4E5B7F221F3D1800FE4B68 /* PeopleViewController.swift in Sources */,
 				8EF4E1ED2453C05800999DD1 /* PostgresDBValueContainer.swift in Sources */,
 				8E5D257E25A200FB00D531A7 /* URL+Image.swift in Sources */,

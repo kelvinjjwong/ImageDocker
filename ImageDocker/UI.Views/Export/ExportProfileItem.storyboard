@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -24,9 +24,9 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bif-6D-76m">
-                                                    <rect key="frame" x="113" y="150" width="304" height="16"/>
+                                                    <rect key="frame" x="113" y="150" width="354" height="16"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="300" id="aDT-sO-vOs"/>
+                                                        <constraint firstAttribute="width" constant="350" id="aDT-sO-vOs"/>
                                                     </constraints>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="twE-zM-2Cy">
                                                         <font key="font" metaFont="system"/>
@@ -35,7 +35,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6h8-fE-QW8">
-                                                    <rect key="frame" x="865" y="8" width="91" height="32"/>
+                                                    <rect key="frame" x="864" y="8" width="93" height="32"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="79" id="VMX-t2-FX6"/>
                                                     </constraints>
@@ -48,7 +48,7 @@
                                                     </connections>
                                                 </button>
                                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d8c-wf-fJj">
-                                                    <rect key="frame" x="863" y="141" width="95" height="32"/>
+                                                    <rect key="frame" x="862" y="142" width="97" height="32"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="83" id="9KG-9c-eAV"/>
                                                     </constraints>
@@ -80,9 +80,9 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ola-a0-YrN">
-                                                    <rect key="frame" x="113" y="124" width="304" height="16"/>
+                                                    <rect key="frame" x="113" y="125" width="354" height="16"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="300" id="9rz-lP-GcI"/>
+                                                        <constraint firstAttribute="width" constant="350" id="9rz-lP-GcI"/>
                                                     </constraints>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="au9-EB-dfG">
                                                         <font key="font" metaFont="system"/>
@@ -102,7 +102,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VH9-mE-s6L">
-                                                    <rect key="frame" x="423" y="150" width="114" height="16"/>
+                                                    <rect key="frame" x="473" y="150" width="114" height="16"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="110" id="GXf-M7-7Gv"/>
                                                     </constraints>
@@ -113,7 +113,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ylr-dF-7ds">
-                                                    <rect key="frame" x="543" y="150" width="318" height="16"/>
+                                                    <rect key="frame" x="593" y="150" width="268" height="16"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="5g6-fS-vDJ"/>
                                                     </constraints>
@@ -124,11 +124,11 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ap9-mW-GfS">
-                                                    <rect key="frame" x="423" y="102" width="186" height="16"/>
+                                                    <rect key="frame" x="473" y="102" width="114" height="16"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="182" id="tnw-sy-7Re"/>
+                                                        <constraint firstAttribute="width" constant="110" id="tnw-sy-7Re"/>
                                                     </constraints>
-                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Duplicated Filename Strategy:" id="R51-h3-0KD">
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Duplication:" id="R51-h3-0KD">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -146,9 +146,9 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sna-Wg-j79">
-                                                    <rect key="frame" x="113" y="100" width="304" height="16"/>
+                                                    <rect key="frame" x="113" y="101" width="354" height="16"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="300" id="gzT-5K-pye"/>
+                                                        <constraint firstAttribute="width" constant="350" id="gzT-5K-pye"/>
                                                     </constraints>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="0uP-sS-JOD">
                                                         <font key="font" metaFont="system"/>
@@ -157,7 +157,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OWP-da-VCk">
-                                                    <rect key="frame" x="423" y="125" width="114" height="16"/>
+                                                    <rect key="frame" x="473" y="125" width="114" height="16"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="110" id="HZP-VE-PAD"/>
                                                     </constraints>
@@ -168,7 +168,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wcN-ep-Jkx">
-                                                    <rect key="frame" x="543" y="126" width="409" height="16"/>
+                                                    <rect key="frame" x="593" y="126" width="359" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="WzV-YX-LKh">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -187,7 +187,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2pz-6Y-WMn">
-                                                    <rect key="frame" x="615" y="101" width="337" height="16"/>
+                                                    <rect key="frame" x="593" y="101" width="359" height="16"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="YWv-Sa-05o"/>
                                                     </constraints>
@@ -198,7 +198,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9KS-F1-j0c">
-                                                    <rect key="frame" x="113" y="76" width="839" height="16"/>
+                                                    <rect key="frame" x="113" y="77" width="839" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="F3u-Q7-udk">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -283,6 +283,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="boxProfile" destination="jk0-rC-KNB" id="dtA-5N-XtP"/>
                         <outlet property="btnExport" destination="d8c-wf-fJj" id="ZBh-TV-FGO"/>
                         <outlet property="btnStop" destination="6h8-fE-QW8" id="var-sr-7Oc"/>
                         <outlet property="lblDescription" destination="tfv-85-shm" id="bTd-Uy-pv0"/>
@@ -292,6 +293,13 @@
                         <outlet property="lblFileNaming" destination="sna-Wg-j79" id="6TJ-Wb-uWy"/>
                         <outlet property="lblMessage" destination="Wf3-fR-qnb" id="9lF-Xy-hj6"/>
                         <outlet property="lblName" destination="Bif-6D-76m" id="hjh-Mk-Ua0"/>
+                        <outlet property="lblProfileExifPatching" destination="OFl-sA-c4Q" id="98k-KR-Rf7"/>
+                        <outlet property="lblProfileFileNaming" destination="Mrg-K2-W0j" id="KHd-4E-DyF"/>
+                        <outlet property="lblProfileFilenameDuplicated" destination="ap9-mW-GfS" id="hJe-Js-SyQ"/>
+                        <outlet property="lblProfileFromRepository" destination="VH9-mE-s6L" id="e44-MN-SPp"/>
+                        <outlet property="lblProfileName" destination="tTh-3Q-595" id="EQI-Wj-QqZ"/>
+                        <outlet property="lblProfileSubFolder" destination="OWP-da-VCk" id="KH5-oq-2L6"/>
+                        <outlet property="lblProfileToDirectory" destination="wgg-8y-d3c" id="tWu-eh-Qad"/>
                         <outlet property="lblRepository" destination="ylr-dF-7ds" id="JvY-hP-kiA"/>
                         <outlet property="lblSubFolder" destination="wcN-ep-Jkx" id="i1K-Nl-Bh2"/>
                     </connections>
@@ -302,7 +310,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="NSStopProgressTemplate" width="11" height="11"/>
+        <image name="NSStopProgressTemplate" width="14" height="13"/>
         <image name="download" width="16" height="16"/>
     </resources>
 </document>

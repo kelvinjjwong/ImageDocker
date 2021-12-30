@@ -14,6 +14,15 @@ class ExportConfigurationViewController: NSViewController {
     
     // MARK: - CONTROLS
     
+    @IBOutlet weak var boxEditProfile: NSBox!
+    @IBOutlet weak var lblProfileName: NSTextField!
+    @IBOutlet weak var lblProfileToRepository: NSTextField!
+    
+    @IBOutlet weak var boxFileNaming: NSBox!
+    @IBOutlet weak var boxExifPatching: NSBox!
+    @IBOutlet weak var boxFilenameDuplicated: NSBox!
+    @IBOutlet weak var boxSubFolder: NSBox!
+    
     @IBOutlet weak var txtName: NSTextField!
     @IBOutlet weak var txtDirectory: NSTextField!
     
@@ -101,6 +110,61 @@ class ExportConfigurationViewController: NSViewController {
     
     func initView(window:NSWindow){
         self.window = window
+        
+        self.boxEditProfile.title = Words.export_profile_edit_profile.word()
+        self.boxFileNaming.title = Words.export_profile_file_naming.word()
+        self.boxExifPatching.title = Words.export_profile_exif_patching.word()
+        self.boxFilenameDuplicated.title = Words.export_profile_when_filename_is_duplicated.word()
+        self.boxSubFolder.title = Words.export_profile_sub_folder.word()
+        
+        self.lblProfileName.stringValue = Words.export_profile_name.word()
+        self.lblProfileToRepository.stringValue = Words.export_profile_to_directory.word()
+        
+        self.btnSave.title = Words.export_profile_save.word()
+        self.btnClean.title = Words.export_profile_new.word()
+        self.btnAssign.title = Words.export_profile_assign_to_directory.word()
+        self.btnGoto.title = Words.export_profile_goto_to_directory.word()
+        
+        self.chkRepository.title = Words.export_profile_repositories.word()
+        self.chkEvents.title = Words.export_profile_events.word()
+        self.chkPeople.title = Words.export_profile_people.word()
+        self.chkFamilies.title = Words.export_profile_families.word()
+        
+        self.chkIncludeRepository.title = Words.export_profile_include.word()
+        self.chkExcludeRepository.title = Words.export_profile_exclude.word()
+        self.chkIncludeEvent.title = Words.export_profile_include.word()
+        self.chkExcludeEvent.title = Words.export_profile_exclude.word()
+        self.chkIncludePeople.title = Words.export_profile_include.word()
+        self.chkExcludePeople.title = Words.export_profile_exclude.word()
+        self.chkIncludeFamily.title = Words.export_profile_include.word()
+        self.chkExcludeFamily.title = Words.export_profile_exclude.word()
+        
+        self.chkOriginFilename.title = Words.export_profile_file_naming_keep_origin.word()
+        self.chkDateTimeFilename.title = Words.export_profile_file_naming_date_time.word()
+        self.chkDateTimeBriefFilename.title = Words.export_profile_file_naming_date_time_brief.word()
+        
+        self.chkPatchImageDescription.title = Words.export_profile_exif_patching_image_description.word()
+        self.chkPatchDateTime.title = Words.export_profile_exif_patching_photo_taken_date_time.word()
+        self.chkPatchGeolocation.title = Words.export_profile_exif_patching_geolocation.word()
+        
+        self.chkOverwriteDuplicate.title = Words.export_profile_when_filename_is_duplicated_overwrite.word()
+        self.chkDeviceNameSuffix.title = Words.export_profile_when_filename_is_duplicated_use_device_name_as_suffix.word()
+        self.chkDeviceModelSuffix.title = Words.export_profile_when_filename_is_duplicated_use_device_model_as_suffix.word()
+        self.chkNumberSuffix.title = Words.export_profile_when_filename_is_duplicated_use_number_as_suffix.word()
+        
+        self.chkNoSubFolder.title = Words.export_profile_sub_folder_no_subfolder.word()
+        self.chkDateEventSubFolder.title = Words.export_profile_sub_folder_year_month_event.word()
+        self.chkEventSubFolder.title = Words.export_profile_sub_folder_event.word()
+        self.chkExportDateTimeSubFolder.title = Words.export_profile_sub_folder_export_date_time.word()
+        
+        self.btnCalculate.title = Words.export_profile_calculate_images.word()
+        self.btnCopySQLToClipboard.title = Words.export_profile_copy_sql_to_clipboard.word()
+        self.btnExport.title = Words.export_profile_export.word()
+        self.btnRehearsal.title = Words.export_profile_rehearsal.word()
+        self.lstRehearsalAmount.item(at: 0)?.title = "10 \(Words.export_profile_rehearsal_n_images.word())"
+        self.lstRehearsalAmount.item(at: 1)?.title = "100 \(Words.export_profile_rehearsal_n_images.word())"
+        self.lstRehearsalAmount.item(at: 2)?.title = "500 \(Words.export_profile_rehearsal_n_images.word())"
+        self.lstRehearsalAmount.item(at: 3)?.title = Words.export_profile_rehearsal_all_images.word()
     }
     
     private var toggleGroup_Repository:ToggleGroup!
@@ -903,6 +967,28 @@ class ExportConfigurationViewController: NSViewController {
     }
     
     // MARK: - EXIF PATCHING OPTIONS
+    
+    private func getExifPatching() -> String {
+        if self.chkPatchImageDescription.state == .on {return "DESCRIPTION"}
+        if self.chkPatchDateTime.state == .on {return "DATETIME"}
+        if self.chkPatchGeolocation.state == .on {return "GEOLOCATION"}
+        return ""
+    }
+    
+    private func setExifPatching(_ value:String) {
+        self.chkPatchImageDescription.state = .off
+        self.chkPatchDateTime.state = .off
+        self.chkPatchGeolocation.state = .off
+        if value.contains("DESCRIPTION") {
+            self.chkPatchImageDescription.state = .on
+        }
+        if value.contains("DATETIME") {
+            self.chkPatchDateTime.state = .on
+        }
+        if value.contains("GEOLOCATION") {
+            self.chkPatchGeolocation.state = .on
+        }
+    }
     
     @IBAction func onPatchImageDescriptionClicked(_ sender: NSButton) {
     }

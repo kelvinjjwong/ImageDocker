@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ExportConfigurationViewController" customModule="ImageDocker" customModuleProvider="target">
             <connections>
+                <outlet property="boxEditProfile" destination="hD6-8y-Jla" id="W96-bD-10l"/>
+                <outlet property="boxExifPatching" destination="GFo-gU-tyw" id="LD2-bR-fMW"/>
+                <outlet property="boxFileNaming" destination="HT5-YW-8qh" id="Vh5-jG-2Wb"/>
+                <outlet property="boxFilenameDuplicated" destination="m65-Qq-iQP" id="JBb-FK-4nO"/>
+                <outlet property="boxSubFolder" destination="WSy-9o-7mS" id="mdM-pc-m1g"/>
                 <outlet property="btnAssign" destination="dEa-11-yMp" id="3VR-Zp-V5R"/>
                 <outlet property="btnCalculate" destination="379-yu-9KB" id="HQt-uG-IoT"/>
                 <outlet property="btnClean" destination="lG5-iQ-i7b" id="qe4-I4-zj6"/>
@@ -43,6 +48,8 @@
                 <outlet property="chkPeople" destination="E81-GP-ppk" id="X4n-97-CBp"/>
                 <outlet property="chkRepository" destination="ebe-RW-NOI" id="9hb-5j-vPC"/>
                 <outlet property="lblCalculate" destination="wC2-0l-112" id="ePe-b3-Vea"/>
+                <outlet property="lblProfileName" destination="Jyr-h1-K6M" id="5QB-4q-bHD"/>
+                <outlet property="lblProfileToRepository" destination="w55-yG-MjF" id="0s8-ug-eNC"/>
                 <outlet property="lstRehearsalAmount" destination="DV0-my-FgX" id="qPq-EB-dgx"/>
                 <outlet property="stackView" destination="Bfq-zr-1HI" id="jDm-gU-rvK"/>
                 <outlet property="tblEvent" destination="7bd-83-30L" id="wC3-IF-NSU"/>
@@ -68,7 +75,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jyr-h1-K6M">
-                                <rect key="frame" x="27" y="386" width="44" height="17"/>
+                                <rect key="frame" x="27" y="386" width="90" height="17"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Name:" id="hBC-dd-OPl">
                                     <font key="font" usesAppearanceFont="YES"/>
@@ -77,7 +84,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w55-yG-MjF">
-                                <rect key="frame" x="27" y="342" width="82" height="17"/>
+                                <rect key="frame" x="27" y="342" width="90" height="17"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="To Directory:" id="Lvc-56-1Uu">
                                     <font key="font" metaFont="system"/>
@@ -126,7 +133,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="E81-GP-ppk">
-                                <rect key="frame" x="18" y="167" width="68" height="18"/>
+                                <rect key="frame" x="18" y="167" width="120" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="People:" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="suF-fm-KmL">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -137,7 +144,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z7q-9H-81f">
-                                <rect key="frame" x="314" y="304" width="90" height="18"/>
+                                <rect key="frame" x="314" y="304" width="150" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Events:" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="vtw-mP-q6g">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -155,7 +162,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5S6-ZH-o9Y">
-                                            <rect key="frame" x="18" y="124" width="81" height="18"/>
+                                            <rect key="frame" x="18" y="124" width="200" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Overwrite" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Wg7-To-LlH">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -166,7 +173,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RTE-n8-rbD">
-                                            <rect key="frame" x="18" y="54" width="185" height="18"/>
+                                            <rect key="frame" x="18" y="54" width="200" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Use device model as suffix" bezelStyle="regularSquare" imagePosition="left" inset="2" id="d9W-yH-hR7">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -177,7 +184,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rlW-mf-YH9">
-                                            <rect key="frame" x="18" y="18" width="151" height="18"/>
+                                            <rect key="frame" x="18" y="18" width="200" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Use number as suffix" bezelStyle="regularSquare" imagePosition="left" inset="2" id="yF4-52-oMT">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -188,7 +195,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4f0-w4-h4F">
-                                            <rect key="frame" x="18" y="90" width="181" height="18"/>
+                                            <rect key="frame" x="18" y="90" width="200" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Use device name as suffix" bezelStyle="regularSquare" imagePosition="left" inset="2" id="6iJ-Dl-gxV">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -213,7 +220,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ebe-RW-NOI">
-                                <rect key="frame" x="18" y="304" width="101" height="18"/>
+                                <rect key="frame" x="18" y="304" width="120" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Repositories:" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="T7w-32-yiX">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -231,7 +238,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iZC-Fe-cyG">
-                                            <rect key="frame" x="18" y="78" width="91" height="18"/>
+                                            <rect key="frame" x="18" y="78" width="200" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Keep origin" bezelStyle="regularSquare" imagePosition="left" inset="2" id="AC5-Rl-IPV">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -242,7 +249,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RSU-ky-kP1">
-                                            <rect key="frame" x="18" y="47" width="97" height="18"/>
+                                            <rect key="frame" x="18" y="47" width="200" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Date &amp; Time" bezelStyle="regularSquare" imagePosition="left" inset="2" id="oUU-CI-egJ">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -253,7 +260,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qcD-JS-5AE">
-                                            <rect key="frame" x="18" y="16" width="174" height="18"/>
+                                            <rect key="frame" x="18" y="16" width="200" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Date &amp; Time &amp; Brief Note" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="m9B-tU-QDd">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -274,7 +281,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FbC-um-0dY">
-                                            <rect key="frame" x="18" y="123" width="107" height="18"/>
+                                            <rect key="frame" x="18" y="123" width="200" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="No sub-folder" bezelStyle="regularSquare" imagePosition="left" inset="2" id="9oI-5A-hN7">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -285,7 +292,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Lk-gv-sAn">
-                                            <rect key="frame" x="18" y="54" width="72" height="18"/>
+                                            <rect key="frame" x="18" y="54" width="200" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="EVENT /" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Xwm-0R-GaF">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -296,7 +303,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X3B-lY-Z62">
-                                            <rect key="frame" x="18" y="88" width="178" height="18"/>
+                                            <rect key="frame" x="18" y="88" width="200" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="YEAR / MONTH (EVENT) /" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ugc-JP-sUB">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -307,7 +314,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ngP-eZ-9kY">
-                                            <rect key="frame" x="18" y="18" width="148" height="18"/>
+                                            <rect key="frame" x="18" y="18" width="200" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Export Date &amp; Time /" bezelStyle="regularSquare" imagePosition="left" inset="2" id="f7A-g4-U7x">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -328,7 +335,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e7j-or-OMl">
-                                            <rect key="frame" x="18" y="78" width="131" height="18"/>
+                                            <rect key="frame" x="18" y="78" width="200" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Image description" bezelStyle="regularSquare" imagePosition="left" inset="2" id="EiV-tw-fSB">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -339,7 +346,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wyc-bl-J1o">
-                                            <rect key="frame" x="18" y="48" width="175" height="18"/>
+                                            <rect key="frame" x="18" y="48" width="200" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Photo Taken Date &amp; Time" bezelStyle="regularSquare" imagePosition="left" inset="2" id="7A5-7e-wQy">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -350,7 +357,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YvT-oX-grX">
-                                            <rect key="frame" x="18" y="18" width="95" height="18"/>
+                                            <rect key="frame" x="18" y="18" width="200" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Geolocation" bezelStyle="regularSquare" imagePosition="left" inset="2" id="ePY-qE-3jj">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -827,7 +834,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9TH-Ny-DM1">
-                                <rect key="frame" x="314" y="167" width="75" height="18"/>
+                                <rect key="frame" x="314" y="167" width="150" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Families:" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Dx9-bh-WUB">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>

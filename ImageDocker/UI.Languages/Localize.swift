@@ -45,3 +45,43 @@ class Localize {
     }
     
 }
+
+class OptionLocalize {
+    
+    var options:[String:Localize] = [:]
+    var allowMultiSelection = false
+    
+    init() {
+        
+    }
+    
+    convenience init(allowMultiSelection:Bool) {
+        self.init()
+        self.allowMultiSelection = allowMultiSelection
+    }
+    
+    func add(option:String, word:Localize) -> OptionLocalize{
+        self.options[option] = word
+        return self
+    }
+    
+    func word(_ op:String) -> String {
+        if allowMultiSelection {
+            var array:[String] = []
+            for key in self.options.keys {
+                if op.contains(key) {
+                    if let word = self.options[key]?.word() {
+                        array.append(word)
+                    }
+                }
+            }
+            return array.joined(separator: ", ")
+        }else{
+            if let word = self.options[op] {
+                return word.word()
+            }else{
+                return op
+            }
+        }
+    }
+}
