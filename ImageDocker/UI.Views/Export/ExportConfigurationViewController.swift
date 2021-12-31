@@ -45,6 +45,8 @@ class ExportConfigurationViewController: NSViewController {
     
     var eventTableController : DictionaryTableViewController!
     
+    var eventCategoriesTableController : DictionaryTableViewController!
+    
     @IBOutlet weak var chkPeople: NSButton!
     @IBOutlet weak var chkIncludePeople: NSButton!
     @IBOutlet weak var chkExcludePeople: NSButton!
@@ -88,6 +90,19 @@ class ExportConfigurationViewController: NSViewController {
     @IBOutlet weak var btnRehearsal: NSButton!
     @IBOutlet weak var btnExport: NSButton!
     
+    @IBOutlet weak var boxName: NSBox!
+    @IBOutlet weak var boxAction: NSBox!
+    @IBOutlet weak var boxRepositories: NSBox!
+    @IBOutlet weak var boxEvents: NSBox!
+    @IBOutlet weak var boxFamilies: NSBox!
+    @IBOutlet weak var boxPeople: NSBox!
+    
+    
+    @IBOutlet weak var boxEventCategories: NSBox!
+    @IBOutlet weak var chkEventCategories: NSButton!
+    @IBOutlet weak var chkIncludeEventCategories: NSButton!
+    @IBOutlet weak var chkExcludeEventCategories: NSButton!
+    @IBOutlet weak var tblEventCategories: NSTableView!
     
     var repoNames:[String:String] = [:]
     
@@ -112,6 +127,8 @@ class ExportConfigurationViewController: NSViewController {
         self.window = window
         
         self.boxEditProfile.title = Words.export_profile_edit_profile.word()
+        self.boxName.title = Words.export_profile_name_and_path.word()
+        self.boxAction.title = Words.export_profile_action.word()
         self.boxFileNaming.title = Words.export_profile_file_naming.word()
         self.boxExifPatching.title = Words.export_profile_exif_patching.word()
         self.boxFilenameDuplicated.title = Words.export_profile_when_filename_is_duplicated.word()
@@ -125,10 +142,16 @@ class ExportConfigurationViewController: NSViewController {
         self.btnAssign.title = Words.export_profile_assign_to_directory.word()
         self.btnGoto.title = Words.export_profile_goto_to_directory.word()
         
-        self.chkRepository.title = Words.export_profile_repositories.word()
-        self.chkEvents.title = Words.export_profile_events.word()
-        self.chkPeople.title = Words.export_profile_people.word()
-        self.chkFamilies.title = Words.export_profile_families.word()
+        self.boxRepositories.title = Words.export_profile_repositories.word()
+        self.chkRepository.title = Words.export_profile_has_limit.word()
+        self.boxEvents.title = Words.export_profile_events.word()
+        self.chkEvents.title = Words.export_profile_has_limit.word()
+        self.boxPeople.title = Words.export_profile_people.word()
+        self.chkPeople.title = Words.export_profile_has_limit.word()
+        self.boxFamilies.title = Words.export_profile_families.word()
+        self.chkFamilies.title = Words.export_profile_has_limit.word()
+        self.boxEventCategories.title = Words.export_profile_event_categories.word()
+        self.chkEventCategories.title = Words.export_profile_has_limit.word()
         
         self.chkIncludeRepository.title = Words.export_profile_include.word()
         self.chkExcludeRepository.title = Words.export_profile_exclude.word()
@@ -138,6 +161,8 @@ class ExportConfigurationViewController: NSViewController {
         self.chkExcludePeople.title = Words.export_profile_exclude.word()
         self.chkIncludeFamily.title = Words.export_profile_include.word()
         self.chkExcludeFamily.title = Words.export_profile_exclude.word()
+        self.chkIncludeEventCategories.title = Words.export_profile_include.word()
+        self.chkExcludeEventCategories.title = Words.export_profile_exclude.word()
         
         self.chkOriginFilename.title = Words.export_profile_file_naming_keep_origin.word()
         self.chkDateTimeFilename.title = Words.export_profile_file_naming_date_time.word()
@@ -161,9 +186,9 @@ class ExportConfigurationViewController: NSViewController {
         self.btnCopySQLToClipboard.title = Words.export_profile_copy_sql_to_clipboard.word()
         self.btnExport.title = Words.export_profile_export.word()
         self.btnRehearsal.title = Words.export_profile_rehearsal.word()
-        self.lstRehearsalAmount.item(at: 0)?.title = "10 \(Words.export_profile_rehearsal_n_images.word())"
-        self.lstRehearsalAmount.item(at: 1)?.title = "100 \(Words.export_profile_rehearsal_n_images.word())"
-        self.lstRehearsalAmount.item(at: 2)?.title = "500 \(Words.export_profile_rehearsal_n_images.word())"
+        self.lstRehearsalAmount.item(at: 0)?.title = Words.export_profile_rehearsal_n_images.fill(arguments: "10")
+        self.lstRehearsalAmount.item(at: 1)?.title = Words.export_profile_rehearsal_n_images.fill(arguments: "100")
+        self.lstRehearsalAmount.item(at: 2)?.title = Words.export_profile_rehearsal_n_images.fill(arguments: "500")
         self.lstRehearsalAmount.item(at: 3)?.title = Words.export_profile_rehearsal_all_images.word()
     }
     
@@ -238,6 +263,21 @@ class ExportConfigurationViewController: NSViewController {
         }
         self.eventTableController.load(eventNames)
         self.tblEvent.isEnabled = false
+        
+        self.chkEventCategories.state = .off
+        self.eventCategoriesTableController = DictionaryTableViewController(self.tblEventCategories)
+        
+        var eventCategoryNames:[[String:String]] = []
+        let eventCategories = EventDao.default.getEventCategories()
+        for eventCategory in eventCategories {
+            var item:[String:String] = [:]
+            item["check"] = "false"
+            item["name"] = eventCategory
+            item["id"] = eventCategory
+            eventCategoryNames.append(item)
+        }
+        self.eventCategoriesTableController.load(eventCategoryNames)
+        self.tblEventCategories.isEnabled = false
         
         self.chkPeople.state = .off
         self.peopleTableController = DictionaryTableViewController(self.tblPeople)

@@ -25,6 +25,21 @@ extension Words {
         chs: "编辑预设组合"
     )
     
+    static let export_profile_name_and_path = Localize (
+        eng: "Name & Path",
+        chs: "预设组合的命名和目标"
+    )
+    
+    static let export_profile_action = Localize (
+        eng: "Action",
+        chs: "行动"
+    )
+    
+    static let export_profile_has_limit = Localize (
+        eng: "Limit",
+        chs: "限制"
+    )
+    
     static let export_profile_name = Localize (
         eng: "Name:",
         chs: "名称:"
@@ -38,6 +53,11 @@ extension Words {
     static let export_profile_repositories = Localize (
         eng: "Repositories:",
         chs: "照片库:"
+    )
+    
+    static let export_profile_event_categories = Localize (
+        eng: "Events Categories:",
+        chs: "活动分类:"
     )
     
     static let export_profile_events = Localize (
@@ -67,12 +87,12 @@ extension Words {
     
     static let export_profile_file_naming_date_time = Localize (
         eng: "Date & Time",
-        chs: "添加拍摄日期、时间"
+        chs: "拍摄日期、时间"
     )
     
     static let export_profile_file_naming_date_time_brief = Localize (
         eng: "Date & Time & Brief Note",
-        chs: "添加拍摄日期、时间、注释"
+        chs: "拍摄日期、时间、注释"
     )
     
     static let export_profile_file_naming_options = OptionLocalize()
@@ -209,13 +229,13 @@ extension Words {
     )
     
     static let export_profile_rehearsal_n_images = Localize (
-        eng: "images",
-        chs: "张照片"
+        eng: "Rehearsal %s images",
+        chs: "演练 %s 张照片"
     )
     
     static let export_profile_rehearsal_all_images = Localize (
         eng: "ALL images",
-        chs: "所有包含的照片"
+        chs: "演练所有包含的照片"
     )
     
     static let export_profile_item = Localize (
