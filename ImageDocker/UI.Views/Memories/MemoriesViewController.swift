@@ -180,6 +180,11 @@ class MemoriesViewController : NSViewController {
         self.btnToday.isEnabled = false
         
         let pickedDates = ImageSearchDao.default.getDatesByTodayInPrevious(year: year)
+        if pickedDates.count == 0 {
+            self.logger.log("0 images loaded for year \(year), jump to last year \(year-1)")
+            self.pickYear(year: year-1)
+            return
+        }
         self.dates.removeAll()
         
         // enable buttons if present
