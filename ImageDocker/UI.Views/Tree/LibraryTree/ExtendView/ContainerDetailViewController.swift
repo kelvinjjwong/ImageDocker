@@ -34,6 +34,19 @@ class ContainerDetailViewController: NSViewController {
     @IBOutlet weak var lblNewPath: NSTextField!
     @IBOutlet weak var lblNewParentContainerName: NSTextField!
     
+    @IBOutlet weak var boxPagination: NSBox!
+    @IBOutlet weak var lblCaptionTotalRecords: NSTextField!
+    @IBOutlet weak var lblCaptionShowRecords: NSTextField!
+    @IBOutlet weak var lblCaptionPageSize: NSTextField!
+    
+    @IBOutlet weak var boxPath: NSBox!
+    @IBOutlet weak var lblCaptionFolder: NSTextField!
+    
+    @IBOutlet weak var boxStat: NSBox!
+    @IBOutlet weak var btnRevealInFinder: NSButton!
+    @IBOutlet weak var btnLoadPage: NSButton!
+    
+    
     fileprivate var container:ImageContainer!
     fileprivate var total = 0
     fileprivate var pages = 0
@@ -53,6 +66,27 @@ class ContainerDetailViewController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.boxPagination.title = Words.library_tree_collection_view_pagination.word()
+        self.lblCaptionFolder.stringValue = Words.library_tree_folder.word()
+        self.lblCaptionPageSize.stringValue = Words.library_tree_pagination_items_per_page.word()
+        self.lblCaptionShowRecords.stringValue = Words.library_tree_pagination_shows.word()
+        self.lblCaptionTotalRecords.stringValue = Words.library_tree_pagination_total.word()
+        self.btnFirstPage.title = Words.library_tree_pagination_first_page.word()
+        self.btnPreviousPage.title = Words.library_tree_pagination_previous.word()
+        self.btnNextPage.title = Words.library_tree_pagination_next.word()
+        self.btnLoadPage.title = Words.library_tree_pagination_load.word()
+        
+        self.boxPath.title = Words.library_tree_path_and_relationship.word()
+        self.boxStat.title = Words.library_tree_stat_and_state.word()
+        self.chkHideByRepository.title = Words.library_tree_hidden_by_repository.word()
+        self.chkHideByMyself.title = Words.library_tree_hidden_by_itself.word()
+        self.btnFindParentFolder.title = Words.library_tree_find_another_parent_folder.word()
+        self.btnRevealInFinder.title = Words.library_tree_reveal_in_finder.word()
+        self.btnGoUp.title = Words.library_tree_go_up.word()
+        self.btnRestoreParentFolder.title = Words.library_tree_restore.word()
+        self.btnPickParentFolder.title = Words.library_tree_save_as_parent_folder.word()
+        self.btnRefreshData.title = Words.library_tree_refresh_relationship_data.word()
     }
     
     func toggleNewPath(_ state:Bool){
@@ -84,9 +118,9 @@ class ContainerDetailViewController: NSViewController {
         self.chkHideByRepository.isEnabled = false
         self.chkHideByMyself.isEnabled = false
         if container.hiddenByContainer {
-            self.btnShowHide.title = "Show Me"
+            self.btnShowHide.title = Words.library_tree_show_me.word()
         }else{
-            self.btnShowHide.title = "Hide Me"
+            self.btnShowHide.title = Words.library_tree_hide_me.word()
         }
     }
     
@@ -131,7 +165,7 @@ class ContainerDetailViewController: NSViewController {
     fileprivate func countImages() {
         self.total = ImageCountDao.default.countImages(repositoryRoot: container.path.withStash())
         let hiddenCount = ImageCountDao.default.countHiddenImages(repositoryRoot: container.path.withStash())
-        self.lblTotalItems.stringValue = "\(self.total) (\(hiddenCount) hidden)"
+        self.lblTotalItems.stringValue = "\(self.total) (\(hiddenCount) \(Words.library_tree_hidden.word())"
     }
     
     fileprivate func calculatePages() {
@@ -186,7 +220,7 @@ class ContainerDetailViewController: NSViewController {
             self.lblNewParentContainerName.stringValue = newContainer.name
             self.btnPickParentFolder.isHidden = false
         }else{
-            self.lblNewParentContainerName.stringValue = "Cannot find matched container"
+            self.lblNewParentContainerName.stringValue = Words.library_tree_cannot_find_matched_container.word()
             self.btnPickParentFolder.isHidden = true
         }
     }
@@ -198,7 +232,7 @@ class ContainerDetailViewController: NSViewController {
             self.lblNewPath.stringValue = newUrl.path
             self.findNewContainer(path: newUrl.path)
         }else{
-            self.lblNewParentContainerName.stringValue = "Should not use root folder"
+            self.lblNewParentContainerName.stringValue = Words.library_tree_should_not_use_root_folder.word()
         }
     }
     
@@ -212,7 +246,7 @@ class ContainerDetailViewController: NSViewController {
     @IBAction func onPickParentFolderClicked(_ sender: NSButton) {
         
         let buttonTitle = self.btnPickParentFolder.title
-        self.btnPickParentFolder.title = "Saving parent folder..."
+        self.btnPickParentFolder.title = Words.library_tree_saving_parent_folder.word()
         self.btnPickParentFolder.isEnabled = false
         self.btnRefreshData.isEnabled = false
         
@@ -232,7 +266,7 @@ class ContainerDetailViewController: NSViewController {
                         let _ = RepositoryDao.default.updateParentContainerSubContainers(thisPath: container.path)
                         
                         DispatchQueue.main.async {
-                            self.lblNewParentContainerName.stringValue = "Saved parent folder"
+                            self.lblNewParentContainerName.stringValue = Words.library_tree_saved_parent_folder.word()
                             
                             self.btnPickParentFolder.title = buttonTitle
                             self.btnPickParentFolder.isEnabled = true
@@ -240,7 +274,7 @@ class ContainerDetailViewController: NSViewController {
                         }
                     }else{
                         DispatchQueue.main.async {
-                            self.lblNewParentContainerName.stringValue = "ERROR: Cannot save parent folder"
+                            self.lblNewParentContainerName.stringValue = Words.library_tree_cannot_save_parent_folder.word()
                             
                             self.btnPickParentFolder.title = buttonTitle
                             self.btnPickParentFolder.isEnabled = true
@@ -250,7 +284,7 @@ class ContainerDetailViewController: NSViewController {
                     
                 }else{
                     DispatchQueue.main.async {
-                        self.lblNewParentContainerName.stringValue = "Cannot find selected folder in database"
+                        self.lblNewParentContainerName.stringValue = Words.library_tree_cannot_find_selected_folder_in_db.word()
                         
                         self.btnPickParentFolder.title = buttonTitle
                         self.btnPickParentFolder.isEnabled = true
@@ -259,7 +293,7 @@ class ContainerDetailViewController: NSViewController {
                 }
             }else{
                 DispatchQueue.main.async {
-                    self.lblNewParentContainerName.stringValue = "Cannot find selected parent folder in database"
+                    self.lblNewParentContainerName.stringValue = Words.library_tree_cannot_find_selected_parent_folder_in_db.word()
                     
                     self.btnPickParentFolder.title = buttonTitle
                     self.btnPickParentFolder.isEnabled = true
@@ -271,7 +305,7 @@ class ContainerDetailViewController: NSViewController {
     
     @IBAction func onRefreshDataClicked(_ sender: NSButton) {
         let buttonTitle = self.btnRefreshData.title
-        self.btnRefreshData.title = "Updating..."
+        self.btnRefreshData.title = Words.library_tree_updating.word()
         self.btnPickParentFolder.isEnabled = false
         self.btnRefreshData.isEnabled = false
         

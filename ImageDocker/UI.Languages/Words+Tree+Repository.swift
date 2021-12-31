@@ -52,17 +52,17 @@ extension Words {
     
     static let library_tree_extracted_exif = Localize (
         eng: "Extracted EXIF:",
-        chs: "已提取EXIF的照片和录像:"
+        chs: "已提取EXIF的照片:"
     )
     
     static let library_tree_recognized_location = Localize (
         eng: "Recognized location:",
-        chs: "有地理位置的照片和录像:"
+        chs: "有地理位置的照片:"
     )
     
     static let library_tree_recognized_faces = Localize (
         eng: "Recognized faces:",
-        chs: "已识别人脸的照片和录像:"
+        chs: "已识别人脸的照片:"
     )
     
     static let library_tree_disk_space_statistics = Localize (
@@ -77,12 +77,12 @@ extension Words {
     
     static let library_tree_backup_storage = Localize (
         eng: "Backup Storage:",
-        chs: "不可修改的后备存储点:"
+        chs: "初版的存储点:"
     )
     
     static let library_tree_faces_storage = Localize (
         eng: "Faces Storage:",
-        chs: "人脸识别结果的存储点:"
+        chs: "已识别人脸的存储点:"
     )
     
     static let library_tree_total_size = Localize (
@@ -97,7 +97,7 @@ extension Words {
     
     static let library_tree_folder = Localize (
         eng: "Folder:",
-        chs: "磁盘目录:"
+        chs: "文件夹:"
     )
     
     static let library_tree_find_another_parent_folder = Localize (
@@ -137,7 +137,7 @@ extension Words {
     
     static let library_tree_collection_view_pagination = Localize (
         eng: "Collection View Pagination",
-        chs: "浏览视图分页"
+        chs: "分页浏览"
     )
     
     static let library_tree_pagination_total = Localize (
@@ -175,6 +175,116 @@ extension Words {
         chs: "载入"
     )
     
+    static let library_tree_go_up = Localize (
+        eng: "Go Up",
+        chs: "上一级"
+    )
+    
+    static let library_tree_restore = Localize (
+        eng: "Restore",
+        chs: "恢复如初"
+    )
+    
+    static let library_tree_save_as_parent_folder = Localize (
+        eng: "Save as parent folder",
+        chs: "确定归属到这个文件夹"
+    )
+    
+    static let library_tree_refresh_relationship_data = Localize (
+        eng: "Refresh relationship data",
+        chs: "变更关联数据"
+    )
+    
+    static let library_tree_stop = Localize (
+        eng: "Stop",
+        chs: "中止"
+    )
+    
+    static let library_tree_stat_and_state = Localize (
+        eng: "State & Stats",
+        chs: "照片库设定"
+    )
+    
+    static let library_tree_path_and_relationship = Localize (
+        eng: "Path & Relationship",
+        chs: "文件夹设定"
+    )
+    
+    static let library_tree_hidden_by_repository = Localize (
+        eng: "Hidden by repository",
+        chs: "整个照片库被禁用"
+    )
+    
+    static let library_tree_hidden_by_itself = Localize (
+        eng: "Hidden by myself",
+        chs: "这个文件夹被禁用"
+    )
+    
+    static let library_tree_hide_me = Localize (
+        eng: "Hide Me",
+        chs: "禁用"
+    )
+    
+    static let library_tree_show_me = Localize (
+        eng: "Show Me",
+        chs: "启用"
+    )
+    
+    static let library_tree_hidden = Localize (
+        eng: "hidden",
+        chs: "被隐藏"
+    )
+    
+    static let library_tree_cannot_find_matched_container = Localize (
+        eng: "Cannot find matched container",
+        chs: "找不到可以匹配的文件夹"
+    )
+    
+    static let library_tree_should_not_use_root_folder = Localize (
+        eng: "Should not use root folder",
+        chs: "不能选用根文件夹"
+    )
+    
+    static let library_tree_saving_parent_folder = Localize (
+        eng: "Saving parent folder...",
+        chs: "正在归属到这个文件夹..."
+    )
+    
+    static let library_tree_updating = Localize (
+        eng: "Updating...",
+        chs: "正在变更..."
+    )
+    
+    static let library_tree_saved_parent_folder = Localize (
+        eng: "Saved parent folder",
+        chs: "已存储新的归属关系"
+    )
+    
+    static let library_tree_cannot_save_parent_folder = Localize (
+        eng: "ERROR: Cannot save parent folder",
+        chs: "错误: 不能存储新的归属关系"
+    )
+    
+    static let library_tree_cannot_find_selected_folder_in_db = Localize (
+        eng: "ERROR: Cannot find selected folder in database",
+        chs: "错误: 数据库里没有你选择的文件夹"
+    )
+    
+    static let library_tree_cannot_find_selected_parent_folder_in_db = Localize (
+        eng: "ERROR: Cannot find selected parent folder in database",
+        chs: "错误: 数据库里没有你选择的上级文件夹"
+    )
+    
+    static let library_tree_cannot_find_selected_repository_in_db = Localize (
+        eng: "ERROR: Cannot find selected repository in database",
+        chs: "错误: 数据库里没有你选择的照片库"
+    )
+    
+    static let library_tree_calculating = Localize (
+        eng: "Calculating ...",
+        chs: "正在计算 ..."
+    )
+    
     static let importingImages = Localize(
         eng: "Importing images ...",
         chs: "正在导入照片 ..."
@@ -183,5 +293,15 @@ extension Words {
     static let extractingExif = Localize(
         eng: "Extracting EXIF ...",
         chs: "正在解析图像位置 ..."
+    )
+    
+    static let searchingImagesForLocation = Localize(
+        eng: "Searching images for location ...",
+        chs: "搜索照片以扫描地理位置 ..."
+    )
+    
+    static let searchingImagesForEXIF = Localize(
+        eng: "Searching images for EXIF ...",
+        chs: "搜索照片以扫描EXIF ..."
     )
 }

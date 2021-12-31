@@ -21,6 +21,12 @@ class CollectionPaginationViewController: NSViewController {
     @IBOutlet weak var btnPreviousPage: NSButton!
     @IBOutlet weak var btnNextPage: NSButton!
     
+    @IBOutlet weak var boxPagination: NSBox!
+    @IBOutlet weak var lblCaptionTotalRecords: NSTextField!
+    @IBOutlet weak var lblCaptionShowRecords: NSTextField!
+    @IBOutlet weak var lblCaptionPageSize: NSTextField!
+    @IBOutlet weak var btnLoadPage: NSButton!
+    
     fileprivate var lastRequest:CollectionViewLastRequest!
     fileprivate var total = 0
     fileprivate var pages = 0
@@ -44,6 +50,14 @@ class CollectionPaginationViewController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.boxPagination.title = Words.library_tree_collection_view_pagination.word()
+        self.lblCaptionTotalRecords.stringValue = Words.library_tree_pagination_total.word()
+        self.lblCaptionPageSize.stringValue = Words.library_tree_pagination_items_per_page.word()
+        self.lblCaptionShowRecords.stringValue = Words.library_tree_pagination_shows.word()
+        self.btnFirstPage.title = Words.library_tree_pagination_first_page.word()
+        self.btnPreviousPage.title = Words.library_tree_pagination_previous.word()
+        self.btnNextPage.title = Words.library_tree_pagination_next.word()
+        self.btnLoadPage.title = Words.library_tree_pagination_load.word()
     }
     
     func initView(_ lastRequest:CollectionViewLastRequest,
@@ -115,7 +129,7 @@ class CollectionPaginationViewController: NSViewController {
     fileprivate func countImages() {
         self.total = self.onCountTotal()
         let hiddenCount = self.onCountHidden()
-        self.lblTotalItems.stringValue = "\(self.total) (\(hiddenCount) hidden)"
+        self.lblTotalItems.stringValue = "\(self.total) (\(hiddenCount) \(Words.library_tree_hidden)"
     }
     
     fileprivate func calculatePages() {

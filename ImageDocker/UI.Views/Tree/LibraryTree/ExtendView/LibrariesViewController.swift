@@ -34,6 +34,8 @@ class LibrariesViewController: NSViewController {
         super.viewDidLoad()
         
         self.btnReload.title = Words.tree_reload_tree.word()
+        self.btnCalculate.title = Words.library_tree_calculate_space.word()
+        self.btnNewRepository.title = Words.library_tree_new_repository.word()
         
         self.tblSpaceOccupation.delegate = self
         self.tblSpaceOccupation.dataSource = self

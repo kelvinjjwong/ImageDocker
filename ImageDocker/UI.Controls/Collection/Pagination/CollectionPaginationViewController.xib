@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CollectionPaginationViewController" customModule="ImageDocker" customModuleProvider="target">
             <connections>
+                <outlet property="boxPagination" destination="M2B-U3-HQH" id="BWo-MM-EOU"/>
                 <outlet property="btnFirstPage" destination="tcO-1W-Meh" id="717-Y1-emr"/>
+                <outlet property="btnLoadPage" destination="RFE-ID-3ex" id="dYj-tg-Tbg"/>
                 <outlet property="btnNextPage" destination="fwL-VQ-dYv" id="K3l-os-qNd"/>
                 <outlet property="btnPreviousPage" destination="G6N-Un-Z9w" id="igF-a3-WQa"/>
+                <outlet property="lblCaptionPageSize" destination="axC-RR-ke3" id="fC2-4d-2Sy"/>
+                <outlet property="lblCaptionShowRecords" destination="4pp-XE-IJW" id="L0G-8I-1UH"/>
+                <outlet property="lblCaptionTotalRecords" destination="hB0-4N-8BY" id="UMz-Hc-XtY"/>
                 <outlet property="lblShowsItems" destination="dPE-qU-Fcx" id="SKh-X1-i32"/>
                 <outlet property="lblTotalItems" destination="eJw-Os-7WU" id="WFi-GM-LI4"/>
                 <outlet property="lstPageSize" destination="e4T-Vl-EUp" id="rtO-4Q-xPC"/>
@@ -142,6 +147,6 @@
         </customView>
     </objects>
     <resources>
-        <image name="NSIconViewTemplate" width="14" height="10"/>
+        <image name="NSIconViewTemplate" width="15" height="14"/>
     </resources>
 </document>

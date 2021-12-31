@@ -58,6 +58,31 @@ class RepositoryDetailViewController: NSViewController {
     
     @IBOutlet weak var btnRefreshData: NSButton!
     
+    
+    @IBOutlet weak var boxImageRecords: NSBox!
+    @IBOutlet weak var lblCaptionCopiedFromDevice: NSTextField!
+    @IBOutlet weak var lblCaptionImagesShouldImport: NSTextField!
+    @IBOutlet weak var lblCaptionImportedEditable: NSTextField!
+    @IBOutlet weak var lblCaptionExtractedExif: NSTextField!
+    @IBOutlet weak var lblCaptionRecognizedLocation: NSTextField!
+    @IBOutlet weak var lblCaptionRecognizedFaces: NSTextField!
+    
+    @IBOutlet weak var boxDiskSpaceStat: NSBox!
+    @IBOutlet weak var lblCaptionEditableStorage: NSTextField!
+    @IBOutlet weak var lblCaptionBackupStorage: NSTextField!
+    @IBOutlet weak var lblCaptionFacesStorage: NSTextField!
+    @IBOutlet weak var lblCaptionTotalSize: NSTextField!
+    @IBOutlet weak var lblCaptionFreeOnEditableStorage: NSTextField!
+    @IBOutlet weak var lblCaptionFreeOnBackupStorage: NSTextField!
+    @IBOutlet weak var lblCaptionFreeOnFacesStorage: NSTextField!
+    @IBOutlet weak var btnDetailOfEditableStorage: NSButton!
+    @IBOutlet weak var btnDetailOfBackupStorage: NSButton!
+    @IBOutlet weak var btnDetailOfFacesStorage: NSButton!
+    
+    @IBOutlet weak var lblCaptionFolder: NSTextField!
+    
+    
+    
     // MARK: INIT VIEW
     
     init() {
@@ -71,6 +96,43 @@ class RepositoryDetailViewController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.btnConfig.title = Words.library_tree_configure.word()
+        self.btnManageSubContainers.title = Words.library_tree_manage_sub_containers.word()
+        
+        self.boxImageRecords.title = Words.library_tree_stat_image_records.word()
+        self.boxDiskSpaceStat.title = Words.library_tree_disk_space_statistics.word()
+        self.lblCaptionCopiedFromDevice.stringValue = Words.library_tree_copied_from_device.word()
+        self.lblCaptionImagesShouldImport.stringValue = Words.library_tree_images_should_import.word()
+        self.lblCaptionImportedEditable.stringValue = Words.library_tree_imported_as_editable.word()
+        self.lblCaptionExtractedExif.stringValue = Words.library_tree_extracted_exif.word()
+        self.lblCaptionRecognizedLocation.stringValue = Words.library_tree_recognized_location.word()
+        self.lblCaptionRecognizedFaces.stringValue = Words.library_tree_recognized_faces.word()
+        self.btnDropIn.title = Words.library_tree_drop_in.word()
+        self.btnImport.title = Words.library_tree_import.word()
+        self.btnExif.title = Words.library_tree_extract.word()
+        self.btnLocation.title = Words.library_tree_recognize.word()
+        self.btnFaces.title = Words.library_tree_recognize.word()
+        self.btnStop.title = Words.library_tree_stop.word()
+        self.lblCaptionFolder.stringValue = Words.library_tree_folder.word()
+        self.lblCaptionEditableStorage.stringValue = Words.library_tree_editable_storage.word()
+        self.lblCaptionBackupStorage.stringValue = Words.library_tree_backup_storage.word()
+        self.lblCaptionFacesStorage.stringValue = Words.library_tree_faces_storage.word()
+        self.lblCaptionTotalSize.stringValue = Words.library_tree_total_size.word()
+        self.lblCaptionFreeOnEditableStorage.stringValue = Words.library_tree_free_on_disk.word()
+        self.lblCaptionFreeOnBackupStorage.stringValue = Words.library_tree_free_on_disk.word()
+        self.lblCaptionFreeOnFacesStorage.stringValue = Words.library_tree_free_on_disk.word()
+        self.btnDetailOfEditableStorage.title = Words.library_tree_detail.word()
+        self.btnDetailOfBackupStorage.title = Words.library_tree_detail.word()
+        self.btnDetailOfFacesStorage.title = Words.library_tree_detail.word()
+        self.btnFindParent.title = Words.library_tree_find_another_parent_folder.word()
+        self.btnGotoPath.title = Words.library_tree_reveal_in_finder.word()
+        self.btnPickGoUp.title = Words.library_tree_go_up.word()
+        self.btnPickGoDown.title = Words.library_tree_restore.word()
+        self.btnPickParent.title = Words.library_tree_save_as_parent_folder.word()
+        self.btnRefreshData.title = Words.library_tree_refresh_relationship_data.word()
+        
+        
         self.txtDetail.isEditable = false
         self.txtDetail.isHidden = true
     }
@@ -107,7 +169,7 @@ class RepositoryDetailViewController: NSViewController {
         self.onManageSubContainers = onManageSubContainers
         
         self.scrollDetail.hasVerticalScroller = false
-        self.txtDetail.string = "Calculating ..."
+        self.txtDetail.string = Words.library_tree_calculating.word()
         self.txtDetail.isHidden = true
         self.lblEditableStorageSpace.stringValue = "0M"
         self.lblBackupSpace.stringValue = "0M"
@@ -235,7 +297,7 @@ class RepositoryDetailViewController: NSViewController {
                 }
             }else{
                 DispatchQueue.main.async {
-                    self.txtDetail.string = "Cannot find repository from DB: \(path)"
+                    self.txtDetail.string = "\(Words.library_tree_cannot_find_selected_repository_in_db.word()): \(path)"
                 }
             }
         }
@@ -253,7 +315,7 @@ class RepositoryDetailViewController: NSViewController {
     @IBAction func onEditableDetailClicked(_ sender: NSButton) {
         if let output = self.repoSpace["console_output"] {
             self.scrollDetail.hasVerticalScroller = true
-            self.txtDetail.string = "Editable storage:\n\(output)"
+            self.txtDetail.string = "\(Words.library_tree_editable_storage.word())\n\(output)"
             self.txtDetail.isHidden = false
         }else{
             self.scrollDetail.hasVerticalScroller = false
@@ -265,7 +327,7 @@ class RepositoryDetailViewController: NSViewController {
     @IBAction func onBackupDetailClicked(_ sender: NSButton) {
         if let output = self.backupSpace["console_output"] {
             self.scrollDetail.hasVerticalScroller = true
-            self.txtDetail.string = "Backup storage:\n\(output)"
+            self.txtDetail.string = "\(Words.library_tree_backup_storage.word())\n\(output)"
             self.txtDetail.isHidden = false
         }else{
             self.scrollDetail.hasVerticalScroller = false
@@ -277,7 +339,7 @@ class RepositoryDetailViewController: NSViewController {
     @IBAction func onCropDetailClicked(_ sender: NSButton) {
         if let output = self.faceSpace["console_output"] {
             self.scrollDetail.hasVerticalScroller = true
-            self.txtDetail.string = "Face storage:\n\(output)"
+            self.txtDetail.string = "\(Words.library_tree_faces_storage.word())\n\(output)"
             self.txtDetail.isHidden = false
         }else{
             self.scrollDetail.hasVerticalScroller = false
@@ -331,7 +393,7 @@ class RepositoryDetailViewController: NSViewController {
                                         indicator: self.indProgress,
                                         suspended: true,
                                         lblMessage: self.lblMessage,
-                                        presetAddingMessage: "Importing images ...",
+                                        presetAddingMessage: Words.importingImages.word(),
                                         onCompleted: { data in
                                             self.logger.log("====== COMPLETED SCAN single REPO \(repository.name)")
                                             self.toggleButtons(true)
@@ -354,7 +416,7 @@ class RepositoryDetailViewController: NSViewController {
                                         indicator: self.indProgress,
                                         suspended: true,
                                         lblMessage: self.lblMessage,
-                                        presetAddingMessage: "Searching images for EXIF ...",
+                                        presetAddingMessage: Words.searchingImagesForEXIF.word(),
                                         onCompleted: { data in
                                             self.logger.log("====== COMPLETED SCAN single REPO for EXIF \(repository.name)")
                                             self.toggleButtons(true)
@@ -377,7 +439,7 @@ class RepositoryDetailViewController: NSViewController {
                                         indicator: self.indProgress,
                                         suspended: true,
                                         lblMessage: self.lblMessage,
-                                        presetAddingMessage: "Searching images for location ...",
+                                        presetAddingMessage: Words.searchingImagesForLocation.word(),
                                         onCompleted: { data in
                                             self.logger.log("====== COMPLETED SCAN single REPO for location \(repository.name)")
                                             self.toggleButtons(true)
@@ -415,7 +477,7 @@ class RepositoryDetailViewController: NSViewController {
             self.lblNewContainerName.stringValue = newContainer.name
             self.btnPickParent.isHidden = false
         }else{
-            self.lblNewContainerName.stringValue = "Cannot find matched container"
+            self.lblNewContainerName.stringValue = Words.library_tree_cannot_find_matched_container.word()
             self.btnPickParent.isHidden = true
         }
     }
@@ -423,7 +485,7 @@ class RepositoryDetailViewController: NSViewController {
     @IBAction func onPickParentClicked(_ sender: NSButton) {
         
         let buttonTitle = self.btnPickParent.title
-        self.btnPickParent.title = "Saving parent folder..."
+        self.btnPickParent.title = Words.library_tree_saving_parent_folder.word()
         self.btnPickParent.isEnabled = false
         self.btnRefreshData.isEnabled = false
         
@@ -443,7 +505,7 @@ class RepositoryDetailViewController: NSViewController {
                         let _ = RepositoryDao.default.updateParentContainerSubContainers(thisPath: container.path)
                         
                         DispatchQueue.main.async {
-                            self.lblNewContainerName.stringValue = "Saved parent folder"
+                            self.lblNewContainerName.stringValue = Words.library_tree_saved_parent_folder.word()
                             
                             self.btnPickParent.title = buttonTitle
                             self.btnPickParent.isEnabled = true
@@ -451,7 +513,7 @@ class RepositoryDetailViewController: NSViewController {
                         }
                     }else{
                         DispatchQueue.main.async {
-                            self.lblNewContainerName.stringValue = "ERROR: Cannot save parent folder"
+                            self.lblNewContainerName.stringValue = Words.library_tree_cannot_save_parent_folder.word()
                             
                             self.btnPickParent.title = buttonTitle
                             self.btnPickParent.isEnabled = true
@@ -461,7 +523,7 @@ class RepositoryDetailViewController: NSViewController {
                     
                 }else{
                     DispatchQueue.main.async {
-                        self.lblNewContainerName.stringValue = "Cannot find selected folder in database"
+                        self.lblNewContainerName.stringValue = Words.library_tree_cannot_find_selected_folder_in_db.word()
                         
                         self.btnPickParent.title = buttonTitle
                         self.btnPickParent.isEnabled = true
@@ -470,7 +532,7 @@ class RepositoryDetailViewController: NSViewController {
                 }
             }else{
                 DispatchQueue.main.async {
-                    self.lblNewContainerName.stringValue = "Cannot find selected parent folder in database"
+                    self.lblNewContainerName.stringValue = Words.library_tree_cannot_find_selected_parent_folder_in_db.word()
                     
                     self.btnPickParent.title = buttonTitle
                     self.btnPickParent.isEnabled = true
@@ -487,7 +549,7 @@ class RepositoryDetailViewController: NSViewController {
             self.lblNewPath.stringValue = newUrl.path
             self.findNewContainer(path: newUrl.path)
         }else{
-            self.lblNewContainerName.stringValue = "Should not use root folder"
+            self.lblNewContainerName.stringValue = Words.library_tree_should_not_use_root_folder.word()
         }
     }
     
@@ -505,7 +567,7 @@ class RepositoryDetailViewController: NSViewController {
     
     @IBAction func onRefreshDataClicked(_ sender: NSButton) {
         let buttonTitle = self.btnRefreshData.title
-        self.btnRefreshData.title = "Updating..."
+        self.btnRefreshData.title = Words.library_tree_updating.word()
         self.btnPickParent.isEnabled = false
         self.btnRefreshData.isEnabled = false
         

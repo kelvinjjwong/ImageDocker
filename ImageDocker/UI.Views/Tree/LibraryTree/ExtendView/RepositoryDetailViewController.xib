@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="RepositoryDetailViewController" customModule="ImageDocker" customModuleProvider="target">
             <connections>
+                <outlet property="boxDiskSpaceStat" destination="bFY-rd-6v8" id="NgR-4v-ax0"/>
+                <outlet property="boxImageRecords" destination="f6B-W7-9KK" id="uI4-1V-fj9"/>
                 <outlet property="btnConfig" destination="0H0-eA-dKu" id="bJP-MQ-0rV"/>
+                <outlet property="btnDetailOfBackupStorage" destination="Gm5-cX-bWe" id="gT8-On-6HZ"/>
+                <outlet property="btnDetailOfEditableStorage" destination="sia-un-56V" id="pGe-Gg-CcS"/>
+                <outlet property="btnDetailOfFacesStorage" destination="LFJ-Ie-qq3" id="Gpa-kR-G0o"/>
                 <outlet property="btnDropIn" destination="ecm-wc-htM" id="75b-c4-sI3"/>
                 <outlet property="btnExif" destination="6X6-bQ-2lv" id="rFL-DC-jK6"/>
                 <outlet property="btnFaces" destination="2MN-mM-T5B" id="uos-lm-Si5"/>
@@ -32,7 +37,21 @@
                 <outlet property="indShouldImport" destination="AWw-ud-kub" id="4zi-dM-ChB"/>
                 <outlet property="lblBackupFree" destination="kUt-lf-Kd9" id="MRq-Lu-x7e"/>
                 <outlet property="lblBackupSpace" destination="Zh0-Im-ZDk" id="wzw-qJ-9Et"/>
-                <outlet property="lblCopiedFromDevice" destination="cDv-6C-scu" id="egH-ZL-W0R"/>
+                <outlet property="lblCaptionBackupStorage" destination="2VV-rR-SkW" id="oqk-hD-8Bv"/>
+                <outlet property="lblCaptionCopiedFromDevice" destination="SNj-eC-dnE" id="VC1-so-GzZ"/>
+                <outlet property="lblCaptionEditableStorage" destination="xFA-37-i3Q" id="LjM-AM-5ky"/>
+                <outlet property="lblCaptionExtractedExif" destination="d8d-hV-tIX" id="iHR-qq-FFy"/>
+                <outlet property="lblCaptionFacesStorage" destination="IKB-ur-947" id="RaJ-Lm-1RV"/>
+                <outlet property="lblCaptionFolder" destination="7Pc-ER-aj0" id="ft9-vq-Tzk"/>
+                <outlet property="lblCaptionFreeOnBackupStorage" destination="OI3-jI-Mqa" id="QuX-eh-6fa"/>
+                <outlet property="lblCaptionFreeOnEditableStorage" destination="dWs-BM-Ur8" id="7Yf-v0-2qd"/>
+                <outlet property="lblCaptionFreeOnFacesStorage" destination="uPK-HB-e15" id="vJU-Cg-wp2"/>
+                <outlet property="lblCaptionImagesShouldImport" destination="wPr-zu-ajp" id="1kL-9W-AwU"/>
+                <outlet property="lblCaptionImportedEditable" destination="YKH-th-PJE" id="DZZ-qY-feD"/>
+                <outlet property="lblCaptionRecognizedFaces" destination="fmX-Zd-Dxf" id="fsN-ba-jb4"/>
+                <outlet property="lblCaptionRecognizedLocation" destination="4Ba-Fh-UTT" id="qLR-yj-BUF"/>
+                <outlet property="lblCaptionTotalSize" destination="7SV-wJ-Ulj" id="GPX-wR-WWj"/>
+                <outlet property="lblCopiedFromDevice" destination="SNj-eC-dnE" id="gsu-VB-RMm"/>
                 <outlet property="lblCropFree" destination="ZG9-nT-zO1" id="4z5-0r-lE6"/>
                 <outlet property="lblCropSpace" destination="0TJ-2s-c5V" id="gav-jS-ll0"/>
                 <outlet property="lblEditableStorageSpace" destination="eWm-dv-0Gx" id="xMW-fa-aAY"/>

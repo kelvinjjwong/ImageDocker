@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ContainerDetailViewController" customModule="ImageDocker" customModuleProvider="target">
             <connections>
+                <outlet property="boxPagination" destination="kIb-zL-SAl" id="mwp-p6-czZ"/>
+                <outlet property="boxPath" destination="ukD-WW-RCC" id="PM2-n3-RAm"/>
+                <outlet property="boxStat" destination="xKy-Og-oBA" id="wTd-uN-l9k"/>
                 <outlet property="btnFindParentFolder" destination="4Cf-fK-OyS" id="hQX-B3-0Az"/>
                 <outlet property="btnFirstPage" destination="Sh4-nA-nMN" id="okZ-ha-wOL"/>
                 <outlet property="btnGoUp" destination="sji-Md-iKc" id="tTx-fS-LU0"/>
+                <outlet property="btnLoadPage" destination="KXy-zA-Xvt" id="UFX-pr-MlW"/>
                 <outlet property="btnNextPage" destination="wrR-lR-ZhC" id="N4N-L3-OJV"/>
                 <outlet property="btnPickParentFolder" destination="QmB-0k-jgQ" id="CIh-0z-VRe"/>
                 <outlet property="btnPreviousPage" destination="r6V-oM-fhg" id="9Xk-yk-1Fd"/>
                 <outlet property="btnRefreshData" destination="Q5o-6C-s4M" id="ULA-8b-WjL"/>
                 <outlet property="btnRestoreParentFolder" destination="zM0-VT-aBj" id="pIj-2k-u5Q"/>
+                <outlet property="btnRevealInFinder" destination="B5d-xD-YwC" id="MXd-Nd-zQh"/>
                 <outlet property="btnShowHide" destination="615-B9-lfT" id="p06-bq-u15"/>
                 <outlet property="chkHideByMyself" destination="cL6-v5-ryF" id="OCK-mw-sY0"/>
                 <outlet property="chkHideByRepository" destination="dWb-oO-bXE" id="8Zb-1N-QyK"/>
+                <outlet property="lblCaptionFolder" destination="TeE-er-t1N" id="4aI-6v-cJa"/>
+                <outlet property="lblCaptionPageSize" destination="TgW-xN-qAZ" id="67H-Xb-yiH"/>
+                <outlet property="lblCaptionShowRecords" destination="p6Q-P7-rzp" id="yM2-Ui-tf8"/>
+                <outlet property="lblCaptionTotalRecords" destination="WCU-B2-Ppp" id="lah-DE-bpf"/>
                 <outlet property="lblMessage" destination="gZO-L4-3cz" id="wBL-SD-rI9"/>
                 <outlet property="lblNewParentContainerName" destination="Wfr-hc-RT8" id="dg8-GH-vXu"/>
                 <outlet property="lblNewPath" destination="9zx-8i-EI6" id="1LS-X9-n7n"/>
@@ -197,7 +206,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sh4-nA-nMN">
-                                <rect key="frame" x="6" y="13" width="112" height="32"/>
+                                <rect key="frame" x="6" y="13" width="105" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="&lt;&lt; 1st Page" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5Pj-Vp-mUg">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -205,28 +214,6 @@
                                 </buttonCell>
                                 <connections>
                                     <action selector="onFirstPageClicked:" target="-2" id="ZpG-IW-utP"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wrR-lR-ZhC">
-                                <rect key="frame" x="257" y="13" width="81" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Next &gt;" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Cds-YE-OOx">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="onNextPageClicked:" target="-2" id="7ln-PV-YQZ"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r6V-oM-fhg">
-                                <rect key="frame" x="153" y="13" width="104" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="&lt; Previous" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GVR-sn-TaL">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="onPreviousPageClicked:" target="-2" id="e3M-Rl-IKg"/>
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bm8-US-MYg">
@@ -239,7 +226,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p6Q-P7-rzp">
-                                <rect key="frame" x="20" y="60" width="48" height="17"/>
+                                <rect key="frame" x="18" y="60" width="57" height="17"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Shows:" id="Osr-4K-cc7">
                                     <font key="font" metaFont="system"/>
@@ -257,7 +244,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KXy-zA-Xvt">
-                                <rect key="frame" x="386" y="13" width="90" height="32"/>
+                                <rect key="frame" x="384" y="13" width="102" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Load" bezelStyle="rounded" image="NSIconViewTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tAe-eZ-3Cb">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -265,6 +252,28 @@
                                 </buttonCell>
                                 <connections>
                                     <action selector="onLoadClicked:" target="-2" id="gDi-fe-IHV"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wrR-lR-ZhC">
+                                <rect key="frame" x="247" y="13" width="101" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Next &gt;" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Cds-YE-OOx">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onNextPageClicked:" target="-2" id="7ln-PV-YQZ"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r6V-oM-fhg">
+                                <rect key="frame" x="143" y="13" width="104" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="&lt; Previous" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GVR-sn-TaL">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onPreviousPageClicked:" target="-2" id="e3M-Rl-IKg"/>
                                 </connections>
                             </button>
                         </subviews>
