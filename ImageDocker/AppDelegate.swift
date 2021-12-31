@@ -29,10 +29,25 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
-        DispatchQueue.global().async {
-            let _ = ExecutionEnvironment.default.createDatabaseBackup(suffix:"-on-exit")
-        }
+        
         IPHONE.bridge.unmountFuse()
+        let alert = NSAlert()
+        DispatchQueue.global().async {
+            let (folder, state, error) = ExecutionEnvironment.default.createDatabaseBackup(suffix:"-on-exit")
+            
+            DispatchQueue.main.async {
+                alert.buttons[0].title = "Quit"
+                alert.buttons[0].isEnabled = true
+            }
+        }
+        
+        
+        alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK"))
+        alert.messageText = NSLocalizedString("Quiting application",
+                                              comment: "Backup database in progress ...")
+        alert.buttons[0].title = "Backup database in progress ..."
+        alert.buttons[0].isEnabled = false
+        alert.runModal()
     }
     
     func userNotificationCenter(_ center: NSUserNotificationCenter, shouldPresent notification: NSUserNotification) -> Bool {
