@@ -69,6 +69,7 @@
 		8E481491277DF6400097493E /* Words+Tree+Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E481490277DF6400097493E /* Words+Tree+Events.swift */; };
 		8E481493277DF6570097493E /* Words+Tree+Places.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E481492277DF6570097493E /* Words+Tree+Places.swift */; };
 		8E481495277DF6670097493E /* Words+Tree+Moments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E481494277DF6670097493E /* Words+Tree+Moments.swift */; };
+		8E481497277EB7C70097493E /* Words+Tree+Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E481496277EB7C70097493E /* Words+Tree+Device.swift */; };
 		8E4B7C1920929EFA00DDD9E0 /* LocationConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */; };
 		8E4C38CA211776300089502C /* Mobile in Resources */ = {isa = PBXBuildFile; fileRef = 8E4C38C92117762F0089502C /* Mobile */; };
 		8E4C38CD2117B5340089502C /* Phone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38CC2117B5340089502C /* Phone.swift */; };
@@ -435,6 +436,7 @@
 		8E481490277DF6400097493E /* Words+Tree+Events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Tree+Events.swift"; sourceTree = "<group>"; };
 		8E481492277DF6570097493E /* Words+Tree+Places.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Tree+Places.swift"; sourceTree = "<group>"; };
 		8E481494277DF6670097493E /* Words+Tree+Moments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Tree+Moments.swift"; sourceTree = "<group>"; };
+		8E481496277EB7C70097493E /* Words+Tree+Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Tree+Device.swift"; sourceTree = "<group>"; };
 		8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationConsumer.swift; sourceTree = "<group>"; };
 		8E4C38C92117762F0089502C /* Mobile */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Mobile; sourceTree = "<group>"; };
 		8E4C38CC2117B5340089502C /* Phone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phone.swift; sourceTree = "<group>"; };
@@ -959,6 +961,7 @@
 				8E48147C277DAE260097493E /* Words+DeviceCopyDialog.swift */,
 				8E481488277DB02F0097493E /* Words+EditRepository.swift */,
 				8E48148C277DBF030097493E /* Words+ExportProfileDialog.swift */,
+				8E481496277EB7C70097493E /* Words+Tree+Device.swift */,
 			);
 			path = UI.Languages;
 			sourceTree = "<group>";
@@ -1879,6 +1882,7 @@
 				8EB2715D23384401003BF3AF /* ImageFile+PhotoTakenDate.swift in Sources */,
 				8E85B7D220B91ED1005A9845 /* SelectionCollectionViewController.swift in Sources */,
 				8E7419442422526F002BAAAE /* ImageDaoInterface.swift in Sources */,
+				8E481497277EB7C70097493E /* Words+Tree+Device.swift in Sources */,
 				8EB2718F2340EE95003BF3AF /* ViewController+TreeArea+Scan.swift in Sources */,
 				8E00BB8E2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift in Sources */,
 				8EF4CE5E21D8026800C53AFF /* EditRepositoryViewController.swift in Sources */,

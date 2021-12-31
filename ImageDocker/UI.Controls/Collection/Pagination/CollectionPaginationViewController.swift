@@ -129,7 +129,7 @@ class CollectionPaginationViewController: NSViewController {
     fileprivate func countImages() {
         self.total = self.onCountTotal()
         let hiddenCount = self.onCountHidden()
-        self.lblTotalItems.stringValue = "\(self.total) (\(hiddenCount) \(Words.library_tree_hidden)"
+        self.lblTotalItems.stringValue = "\(self.total) (\(hiddenCount) \(Words.library_tree_hidden.word()))"
     }
     
     fileprivate func calculatePages() {

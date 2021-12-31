@@ -232,7 +232,7 @@ class MemoriesViewController : NSViewController {
     /// reload collection with images taken on specific date
     private func reloadCollection(date:String) {
         //self.logger.log("reload collection on \(date)")
-        self.lblDescription.stringValue = "Loading images on \(date) ..."
+        self.lblDescription.stringValue = Words.memories_loading_images.fill(arguments: date)
         let parts = date.components(separatedBy: "-")
         let year = Int(parts[0]) ?? 0
         let month = Int(parts[1]) ?? 0

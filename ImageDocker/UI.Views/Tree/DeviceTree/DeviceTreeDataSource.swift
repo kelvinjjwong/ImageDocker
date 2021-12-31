@@ -106,7 +106,7 @@ class DeviceTreeDataSource : TreeDataSource {
         var message:String? = nil
         if devices.count == 0 {
 //                self.showTreeNodeButton(collection: collection, image: NSImage(named: .caution))
-            message = "Enable [DEBUG MODE] in [Settings >> System >> Developer Options] if you've connected your phone via USB."
+            message = Words.device_tree_need_debug_mode.word()
             
         }
         logger.log("loader loaded count \(nodes.count)")
@@ -115,13 +115,13 @@ class DeviceTreeDataSource : TreeDataSource {
     
     private func loadIPhoneDevices() -> ([TreeCollection], String?) {
         if PreferencesController.iosDeviceMountPoint() == "" {
-            return ([], "Please setup mount point for iOS devices")
+            return ([], Words.device_tree_setup_mountpoint_for_ios.word())
         }
         
         if !IPHONE.bridge.validCommands() {
 //                self.showTreeNodeButton(collection: collection, image: NSImage(named: .caution))
             
-            return ([], "iFuse/iDevice is not installed. Please install it by command [brew cask install osxfuse] and then [brew install ifuse] in console. To install Homebrew as a prior condition, please access [https://brew.sh] for detail.")
+            return ([], Words.device_tree_ifuse_not_installed.word())
         }
         
         var nodes:[TreeCollection] = []
@@ -150,7 +150,7 @@ class DeviceTreeDataSource : TreeDataSource {
                 }
             }else{
                 logger.log("Unable to connect to ios device: \(devices[0])")
-                return ([], "Unable to connect to iOS device. Please unlock the screen and then retry.")
+                return ([], Words.device_tree_unable_to_connect_ios.word())
             }
         }
         // devices those not connected
@@ -171,7 +171,7 @@ class DeviceTreeDataSource : TreeDataSource {
         if devices.count == 0 {
 //                self.showTreeNodeButton(collection: collection, image: NSImage(named: .caution))
             
-            message = "No iOS devices found connected. Please connect your iPhone/iPad via USB."
+            message = Words.device_tree_no_ios_connected.word()
         }
         logger.log("loader loaded count \(nodes.count)")
         return (nodes, message)

@@ -10,7 +10,10 @@ import Foundation
 
 struct Words {
     
-    
+    static let memories_loading_images = Localize (
+        eng: "Loading images on %s ...",
+        chs: "正在载入 %s 的照片和录像 ..."
+    )
     
     
     
