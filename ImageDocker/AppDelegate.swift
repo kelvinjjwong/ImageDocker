@@ -33,11 +33,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         IPHONE.bridge.unmountFuse()
         let alert = NSAlert()
         DispatchQueue.global().async {
-            let (folder, state, error) = ExecutionEnvironment.default.createDatabaseBackup(suffix:"-on-exit")
+            let _ = ExecutionEnvironment.default.createDatabaseBackup(suffix:"-on-exit")
             
             DispatchQueue.main.async {
                 alert.buttons[0].title = "Quit"
                 alert.buttons[0].isEnabled = true
+                alert.window.close()
+                exit(0)
             }
         }
         
