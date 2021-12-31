@@ -576,7 +576,7 @@ class ExportConfigurationViewController: NSViewController {
     /// Used to add a particular view controller as an item to our stack view.
     func addProfileItem(profile:ExportProfile) {
         
-        let storyboard = NSStoryboard(name: "ExportStackItems", bundle: nil)
+        let storyboard = NSStoryboard(name: "ExportProfileItemConfig", bundle: nil)
         let viewController = storyboard.instantiateController(withIdentifier: "ExportProfile") as! ExportProfileViewController
         
         viewController.initView(profile: profile,

@@ -194,7 +194,7 @@
 		8EB2719F23412FE8003BF3AF /* ViewController+Menu+Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2719E23412FE8003BF3AF /* ViewController+Menu+Export.swift */; };
 		8EB271A323413CE7003BF3AF /* ExportConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271A123413CE7003BF3AF /* ExportConfigurationViewController.swift */; };
 		8EB271A423413CE7003BF3AF /* ExportConfigurationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EB271A223413CE7003BF3AF /* ExportConfigurationViewController.xib */; };
-		8EB271A623418503003BF3AF /* ExportStackItems.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8EB271A523418503003BF3AF /* ExportStackItems.storyboard */; };
+		8EB271A623418503003BF3AF /* ExportProfileItemConfig.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8EB271A523418503003BF3AF /* ExportProfileItemConfig.storyboard */; };
 		8EB271A823418C68003BF3AF /* ExportProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271A723418C68003BF3AF /* ExportProfileViewController.swift */; };
 		8EB271AC2346BE8A003BF3AF /* TaskProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271AA2346BE8A003BF3AF /* TaskProgressViewController.swift */; };
 		8EB271AD2346BE8A003BF3AF /* TaskProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EB271AB2346BE8A003BF3AF /* TaskProgressViewController.xib */; };
@@ -561,7 +561,7 @@
 		8EB2719E23412FE8003BF3AF /* ViewController+Menu+Export.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Menu+Export.swift"; sourceTree = "<group>"; };
 		8EB271A123413CE7003BF3AF /* ExportConfigurationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportConfigurationViewController.swift; sourceTree = "<group>"; };
 		8EB271A223413CE7003BF3AF /* ExportConfigurationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExportConfigurationViewController.xib; sourceTree = "<group>"; };
-		8EB271A523418503003BF3AF /* ExportStackItems.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ExportStackItems.storyboard; sourceTree = "<group>"; };
+		8EB271A523418503003BF3AF /* ExportProfileItemConfig.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ExportProfileItemConfig.storyboard; sourceTree = "<group>"; };
 		8EB271A723418C68003BF3AF /* ExportProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportProfileViewController.swift; sourceTree = "<group>"; };
 		8EB271AA2346BE8A003BF3AF /* TaskProgressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskProgressViewController.swift; sourceTree = "<group>"; };
 		8EB271AB2346BE8A003BF3AF /* TaskProgressViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskProgressViewController.xib; sourceTree = "<group>"; };
@@ -1190,7 +1190,7 @@
 			children = (
 				8EB271A123413CE7003BF3AF /* ExportConfigurationViewController.swift */,
 				8EB271A223413CE7003BF3AF /* ExportConfigurationViewController.xib */,
-				8EB271A523418503003BF3AF /* ExportStackItems.storyboard */,
+				8EB271A523418503003BF3AF /* ExportProfileItemConfig.storyboard */,
 				8EB271A723418C68003BF3AF /* ExportProfileViewController.swift */,
 				8E4095F7259397FC00BF717B /* ExportProfileItem.storyboard */,
 				8E4095F92593982200BF717B /* ExportProfileItemController.swift */,
@@ -1809,7 +1809,7 @@
 				8EB271AF2346BEAA003BF3AF /* TaskProgressStackItem.storyboard in Resources */,
 				8EF125AA2214590000C423CA /* DeviceListViewController.xib in Resources */,
 				8EBA9DE0216F8BB100DACAAD /* NotesViewController.xib in Resources */,
-				8EB271A623418503003BF3AF /* ExportStackItems.storyboard in Resources */,
+				8EB271A623418503003BF3AF /* ExportProfileItemConfig.storyboard in Resources */,
 				8E9D8045234990A00062692A /* DeviceCopyView.storyboard in Resources */,
 				8E4095FE25939A0900BF717B /* ExportProfilesViewController.xib in Resources */,
 				8EB271A423413CE7003BF3AF /* ExportConfigurationViewController.xib in Resources */,
