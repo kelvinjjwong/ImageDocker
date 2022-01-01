@@ -14,7 +14,25 @@ class ExportDaoPostgresCK : ExportDaoInterface {
     
     // MARK: - PROFILE CRUD
     
-    func getOrCreateExportProfile(id: String, name: String, directory: String, repositoryPath: String, specifyPeople: Bool, specifyEvent: Bool, specifyRepository: Bool, people: String, events: String, duplicateStrategy: String, fileNaming: String, subFolder: String, patchImageDescription: Bool, patchDateTime: Bool, patchGeolocation: Bool, specifyFamily:Bool, family:String) -> ExportProfile {
+    func getOrCreateExportProfile(id: String,
+                                  name: String,
+                                  directory: String,
+                                  repositoryPath: String,
+                                  specifyPeople: Bool,
+                                  specifyEvent: Bool,
+                                  specifyRepository: Bool,
+                                  people: String,
+                                  events: String,
+                                  duplicateStrategy: String,
+                                  fileNaming: String,
+                                  subFolder: String,
+                                  patchImageDescription: Bool,
+                                  patchDateTime: Bool,
+                                  patchGeolocation: Bool,
+                                  specifyFamily:Bool,
+                                  family:String,
+                                  eventCategories:String
+    ) -> ExportProfile {
         let db = PostgresConnection.database()
         if let profile = ExportProfile.fetchOne(db, parameters: ["id" : id]) {
             return profile
@@ -38,7 +56,8 @@ class ExportDaoPostgresCK : ExportDaoInterface {
                 enabled: true,
                 lastExportTime: nil,
                 specifyFamily: specifyFamily,
-                family: family
+                family: family,
+                eventCategories: eventCategories
             )
             profile.save(db)
             return profile
@@ -61,7 +80,8 @@ class ExportDaoPostgresCK : ExportDaoInterface {
                              patchDateTime:Bool,
                              patchGeolocation:Bool,
                              fileNaming: String,
-                             subFolder: String) -> ExecuteState {
+                             subFolder: String,
+                             eventCategories:String) -> ExecuteState {
         let db = PostgresConnection.database()
         if let profile = ExportProfile.fetchOne(db, parameters: ["id" : id]) {
             profile.name = name
@@ -80,6 +100,7 @@ class ExportDaoPostgresCK : ExportDaoInterface {
             profile.patchGeolocation = patchGeolocation
             profile.fileNaming = fileNaming
             profile.subFolder = subFolder
+            profile.eventCategories = eventCategories
             profile.save(db)
             return .OK
         }else{
@@ -198,7 +219,7 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
     func generateImageQuerySQL(isCount:Bool, profile:ExportProfile, pageSize:Int?, pageNumber:Int?) -> String {
         let repoSQL = self.generateImageQuerySQLPart(tableAlias: "c", tableColumn: "name", profileSetting: profile.repositoryPath)
         let eventSQL = self.generateImageQuerySQLPart(tableAlias: "i", tableColumn: "event", profileSetting: profile.events)
-        
+        // TODO: eventCategoriesSQL
         var pagination = ""
         if !isCount {
             if let limit = pageSize, let pageNumber = pageNumber {

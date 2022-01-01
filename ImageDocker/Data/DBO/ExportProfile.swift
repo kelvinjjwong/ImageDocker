@@ -29,6 +29,7 @@ public final class ExportProfile : Codable {
     var subFolder:String = ""
     var specifyFamily: Bool = false
     var family: String = ""
+    var eventCategories: String? = ""
     
     public init() {
         
@@ -52,7 +53,8 @@ public final class ExportProfile : Codable {
                 enabled:Bool,
                 lastExportTime:Date?,
                 specifyFamily:Bool,
-                family:String) {
+                family:String,
+                eventCategories:String) {
         self.id = id
         self.name = name
         self.directory = directory
@@ -72,6 +74,7 @@ public final class ExportProfile : Codable {
         self.lastExportTime = lastExportTime
         self.specifyFamily = specifyFamily
         self.family = family
+        self.eventCategories = eventCategories
     }
 }
 

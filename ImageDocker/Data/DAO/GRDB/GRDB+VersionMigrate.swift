@@ -580,6 +580,11 @@ extension SQLiteConnectionGRDB {
             })
         }
         
+        migrator.registerMigration("v44") { db in
+            try db.alter(table: "ExportProfile", body: { t in
+                t.add(column: "eventCategories", .text).defaults(to: "")
+            })
+        }
         
         do {
             let dbQueue = try DatabaseQueue(path: SQLiteDataSource.default.getDataSource())

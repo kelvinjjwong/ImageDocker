@@ -194,6 +194,7 @@ class ExportConfigurationViewController: NSViewController {
     
     private var toggleGroup_Repository:ToggleGroup!
     private var toggleGroup_Event:ToggleGroup!
+    private var toggleGroup_EventCategory:ToggleGroup!
     private var toggleGroup_People:ToggleGroup!
     private var toggleGroup_Family:ToggleGroup!
     
@@ -207,6 +208,13 @@ class ExportConfigurationViewController: NSViewController {
         ], keysOrderred: ["include", "exclude"])
         
         self.toggleGroup_Repository.selected = "include"
+        
+        self.toggleGroup_EventCategory = ToggleGroup([
+            "include" : self.chkIncludeEventCategories,
+            "exclude" : self.chkExcludeEventCategories
+        ], keysOrderred: ["include", "exclude"])
+        
+        self.toggleGroup_EventCategory.selected = "include"
         
         self.toggleGroup_Event = ToggleGroup([
             "include" : self.chkIncludeEvent,
@@ -483,6 +491,7 @@ class ExportConfigurationViewController: NSViewController {
         
         // convert checkboxes to string
         var people = ""
+        var eventCategories = ""
         var events = ""
         var repos = ""
         var family = ""
@@ -494,6 +503,17 @@ class ExportConfigurationViewController: NSViewController {
                     repos = "include:\(checked)"
                 }else if self.chkExcludeRepository.state == .on {
                     repos = "exclude:\(checked)"
+                }
+            }
+        }
+        
+        if self.chkEventCategories.state == .on {
+            let checked = self.eventCategoriesTableController.getCheckedItemAsQuotedString(column: "name", separator: ",")
+            if checked != "" {
+                if self.chkIncludeEventCategories.state == .on {
+                    eventCategories = "include:\(checked)"
+                }else if self.chkIncludeEventCategories.state == .on {
+                    eventCategories = "exclude:\(checked)"
                 }
             }
         }
@@ -547,6 +567,7 @@ class ExportConfigurationViewController: NSViewController {
         profile.patchGeolocation = self.chkPatchGeolocation.state == .on
         profile.fileNaming = fileNaming
         profile.subFolder = subfolder
+        profile.eventCategories = eventCategories
         
         return profile
     }
@@ -571,7 +592,8 @@ class ExportConfigurationViewController: NSViewController {
                                                                  patchDateTime: form.patchDateTime,
                                                                  patchGeolocation: form.patchGeolocation,
                                                                  specifyFamily: form.specifyFamily,
-                                                                 family: form.family
+                                                                 family: form.family,
+                                                                 eventCategories: form.eventCategories ?? ""
                                                                 )
         if !self.isNewRecord {
             let status = ExportDao.default.updateExportProfile(id: self.editingId,
@@ -590,7 +612,9 @@ class ExportConfigurationViewController: NSViewController {
                                                                patchDateTime: form.patchDateTime,
                                                                patchGeolocation: form.patchGeolocation,
                                                                fileNaming: form.fileNaming,
-                                                               subFolder: form.subFolder)
+                                                               subFolder: form.subFolder,
+                                                               eventCategories: form.eventCategories ?? ""
+                                                            )
             
             if status != .OK {
                 self.logger.log(status)
@@ -805,8 +829,23 @@ class ExportConfigurationViewController: NSViewController {
         }
     }
     
+    
     @IBAction func onCheckEventsClicked(_ sender: NSButton) {
         self.toggleEvent(sender.state == .on)
+    }
+    
+    @IBAction func onCheckEventCategoryClicked(_ sender: NSButton) {
+        self.toggleEventCategory(sender.state == .on)
+    }
+    
+    func toggleEventCategory(_ state:Bool) {
+        if state == true {
+            self.toggleGroup_EventCategory.enable()
+            self.eventCategoriesTableController.enableCheckboxes()
+        }else{
+            self.toggleGroup_EventCategory.disable()
+            self.eventCategoriesTableController.disableCheckboxes()
+        }
     }
     
     func togglePeople(_ state:Bool) {
@@ -851,6 +890,14 @@ class ExportConfigurationViewController: NSViewController {
     
     @IBAction func onExcludeEventClicked(_ sender: NSButton) {
         self.toggleGroup_Event.selected = "exclude"
+    }
+    
+    @IBAction func onIncludeEventCategoryClicked(_ sender: NSButton) {
+        self.toggleGroup_EventCategory.selected = "include"
+    }
+    
+    @IBAction func onExcludeEventCategoryClicked(_ sender: NSButton) {
+        self.toggleGroup_EventCategory.selected = "exclude"
     }
     
     @IBAction func onIncludePeopleClicked(_ sender: NSButton) {

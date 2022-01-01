@@ -1000,6 +1000,9 @@
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="onCheckEventCategoryClicked:" target="-2" id="bW4-d3-jNd"/>
+                                            </connections>
                                         </button>
                                         <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="utQ-3D-onK">
                                             <rect key="frame" x="5" y="7" width="351" height="206"/>
@@ -1099,6 +1102,9 @@
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="onIncludeEventCategoryClicked:" target="-2" id="bm7-w9-Rar"/>
+                                            </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hgX-sy-XRi">
                                             <rect key="frame" x="269" y="220" width="73" height="18"/>
@@ -1107,6 +1113,9 @@
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="onExcludeEventCategoryClicked:" target="-2" id="1GQ-0y-vfo"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                 </view>
