@@ -56,7 +56,7 @@ private struct _RowDecoder<R: Decodable>: Decoder {
         throw DecodingError.keyNotFound(
             codingKey,
             DecodingError.Context(
-                codingPath: Array(codingPath.dropLast()),   // TODO: remove Array initializer when Swift >= 5
+                codingPath: Array(codingPath.dropLast()),
                 debugDescription: debugDescription))
     }
     
@@ -70,7 +70,6 @@ private struct _RowDecoder<R: Decodable>: Decoder {
             // provide correct feedback.
             throw MissingColumnError(column: key.stringValue)
         }
-        // TODO: test
         // See DatabaseValueConversionErrorTests.testDecodableFetchableRecord2
         return PostgresColumnDecoder<R>(row: row, columnIndex: index, codingPath: codingPath)
     }
@@ -195,7 +194,7 @@ private struct _RowDecoder<R: Decodable>: Decoder {
             if let decodedRootKey = decodedRootKey {
                 throw DecodingError.keyNotFound(decodedRootKey, DecodingError.Context(
                     codingPath: codingPath,
-                    debugDescription: "No such key: \(decodedRootKey.stringValue)")) // TODO: better error message
+                    debugDescription: "No such key: \(decodedRootKey.stringValue)")) 
             }
             decodedRootKey = key
             //self.logger.log("debug 6")

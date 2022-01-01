@@ -409,35 +409,7 @@ fileprivate class ACBTokenFieldController: NSObject, NSTokenFieldDelegate, NSCon
     
     private var prevTokenCount: Int = 0
     
-//TODO: This doesn't work due to a swift compiler issue since tokenField is weak
-//    private static var tokenContext = 0
-    
-//    @objc var tokenField: NSTokenField? {
-//        didSet {
-//            setupObservers()
-//        }
-//    }
-//
-//    deinit {
-//        removeObserver(self, forKeyPath: #keyPath(tokenField.delegate), context: &ACBTokenFieldController.tokenContext)
-//    }
-//
-//    func setupObservers() {
-//        self.addObserver(self, forKeyPath: #keyPath(tokenField.delegate), options: [.old, .new], context: &ACBTokenFieldController.tokenContext)
-//    }
-//
-//    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-//        if context == &ACBTokenFieldController.tokenContext {
-//            if keyPath == #keyPath(tokenField.delegate) {
-//                if (tokenField!.delegate is ACBTokenFieldController) == false {
-//                    tokenField!.tokenDelegate = tokenField!.delegate
-//                    tokenField!.delegate = self
-//                }
-//            }
-//        }
-//    }
-    
-    // # MARK: Forward Invocation methods
+    // MARK: Forward Invocation methods
     
     override func forwardingTarget(for aSelector: Selector!) -> Any? {
         if let tokenDelegate = tokenField?.tokenDelegate,

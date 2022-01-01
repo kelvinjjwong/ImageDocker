@@ -217,9 +217,20 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
     }
     
     func generateImageQuerySQL(isCount:Bool, profile:ExportProfile, pageSize:Int?, pageNumber:Int?) -> String {
-        let repoSQL = self.generateImageQuerySQLPart(tableAlias: "c", tableColumn: "name", profileSetting: profile.repositoryPath)
-        let eventSQL = self.generateImageQuerySQLPart(tableAlias: "i", tableColumn: "event", profileSetting: profile.events)
-        // TODO: eventCategoriesSQL
+        
+        let repoFilterSQL = self.generateImageQuerySQLPart(tableAlias: "c", tableColumn: "name", profileSetting: profile.repositoryPath)
+        let eventFilterSQL = self.generateImageQuerySQLPart(tableAlias: "i", tableColumn: "event", profileSetting: profile.events)
+        
+        let eventCategories = profile.eventCategories ?? ""
+        var eventCategoryFilterSQL = ""
+        var eventCategoryJoinSQL = ""
+        if eventCategories != "" {
+            eventCategoryJoinSQL = """
+            left join "ImageEvent" e on i."event" = e."name"
+            """
+            eventCategoryFilterSQL = self.generateImageQuerySQLPart(tableAlias: "e", tableColumn: "category", profileSetting: eventCategories)
+        }
+        
         var pagination = ""
         if !isCount {
             if let limit = pageSize, let pageNumber = pageNumber {
@@ -240,20 +251,24 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
         select i.*
         from "Image" i
         left join "ImageContainer" c on i."repositoryPath" = c."repositoryPath"
+        left join "ImageEvent" e on i."event" = e."name"
         where i.hidden = 'f' and i."hiddenByContainer" = 'f' and i."hiddenByRepository" = 'f'
         and i."photoTakenYear" > 0
         and c."name" in ('Who''s iphone6', 'Who''s iPhone8')
         and i.event in ('boating','swimming')
+        and e.category in ('trip','party')
         and "recognizedPeopleIds" similar to '%(,someone,|,anotherone,)%'
         """
         let sql = """
         select \(columns)
         from "Image" i
         left join "ImageContainer" c on i."repositoryPath" = c."repositoryPath"
+        \(eventCategoryJoinSQL)
         where i.hidden = 'f' and i."hiddenByContainer" = 'f' and i."hiddenByRepository" = 'f'
         and i."photoTakenYear" > 0
-        \(repoSQL)
-        \(eventSQL)
+        \(repoFilterSQL)
+        \(eventFilterSQL)
+        \(eventCategoryFilterSQL)
         \(orderSQL)
         \(pagination)
         """
