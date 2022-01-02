@@ -62,11 +62,9 @@ class DictionaryTableViewController: NSObject {
         var indexes:[Int] = []
         for i in 0..<items.count {
             let item = items[i]
-            self.logger.log("comparing [\(item[column])]")
             if let columnValue = item[column] {
                 //self.logger.log("checking \(columnValue)")
                 if array.contains(columnValue) {
-                    self.logger.log("matched")
                     //self.logger.log("containes \(columnValue)")
                     indexes.append(i)
                 }
@@ -79,8 +77,6 @@ class DictionaryTableViewController: NSObject {
             var edititem = items[i]
             edititem["check"] = "true"
             items[i] = edititem
-            let testid = edititem["id"]!
-            self.logger.log("idx: \(i) id: \(edititem["id"]) checkbox: \(self.checkboxes["checkbox_\(testid)"]) ")
             if let id = edititem["id"], let checkbox = self.checkboxes["checkbox_\(id)"] {
                 self.logger.log("turn \(id) on")
                 checkbox.state = .on
@@ -255,8 +251,6 @@ extension DictionaryTableViewController: NSTableViewDelegate {
                 }
                 
                 self.checkboxes[id] = button
-                
-                self.logger.log("init checkbox \(item["id"]) value \(item["check"])")
                 
                 colView.addSubview(button)
             }else{
