@@ -210,6 +210,42 @@ class FaceDaoGRDB : FaceDaoInterface {
         return obj
     }
     
+    func getPeopleIds(inFamilyQuotedSeparated:String, db: DatabaseWriter) -> [String] {
+        var peopleIds:[String] = []
+        do{
+            try db.read { db in
+                let members = try FamilyMember.filter(sql: "familyId in (\(inFamilyQuotedSeparated))").fetchAll(db)
+                for member in members {
+                    peopleIds.append(member.peopleId.quotedDatabaseValueIdentifier)
+                }
+            }
+        }catch{
+            self.logger.log(error)
+        }
+        return peopleIds
+    }
+    
+    func getPeople(inFamilyQuotedSeparated:String, exclude:Bool) -> [People] {
+        var obj:[People] = []
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            let peopleIds:[String] = self.getPeopleIds(inFamilyQuotedSeparated: inFamilyQuotedSeparated, db: db)
+            if peopleIds.count == 0 {
+                try db.read { db in
+                    obj = try People.order(sql: "name asc").fetchAll(db)
+                }
+            }else{
+                let peopleIdsSeparated = peopleIds.joined(separator: ",")
+                try db.read { db in
+                    obj = try People.filter(sql: "id \(exclude ? "NOT" : "") in (\(peopleIdsSeparated))").order(sql: "name asc").fetchAll(db)
+                }
+            }
+        }catch{
+            self.logger.log(error)
+        }
+        return obj
+    }
+    
     func getPeople(except:String) -> [People] {
         var obj:[People] = []
         do {

@@ -12,7 +12,6 @@ class ExportProfileViewController : NSViewController {
     
     @IBOutlet weak var lblName: NSTextField!
     @IBOutlet weak var lblDirectory: NSTextField!
-    @IBOutlet weak var lblDescription: NSTextField!
     @IBOutlet weak var btnEdit: NSButton!
     @IBOutlet weak var btnDelete: NSButton!
     @IBOutlet weak var lblRepository: NSTextField!
@@ -20,6 +19,10 @@ class ExportProfileViewController : NSViewController {
     @IBOutlet weak var lblEXIFPatching: NSTextField!
     @IBOutlet weak var lblSubFolder: NSTextField!
     @IBOutlet weak var lblFileNaming: NSTextField!
+    @IBOutlet weak var lblPeople: NSTextField!
+    @IBOutlet weak var lblEventCategory: NSTextField!
+    @IBOutlet weak var lblEvent: NSTextField!
+    @IBOutlet weak var lblFamilies: NSTextField!
     
     @IBOutlet weak var boxProfile: NSBox!
     @IBOutlet weak var lblProfileName: NSTextField!
@@ -29,6 +32,10 @@ class ExportProfileViewController : NSViewController {
     @IBOutlet weak var lblProfileFromRepository: NSTextField!
     @IBOutlet weak var lblProfileSubFolder: NSTextField!
     @IBOutlet weak var lblProfileFilenameDuplicated: NSTextField!
+    @IBOutlet weak var lblProfileFamilies: NSTextField!
+    @IBOutlet weak var lblProfilePeople: NSTextField!
+    @IBOutlet weak var lblProfileEventCategory: NSTextField!
+    @IBOutlet weak var lblProfileEvent: NSTextField!
     
     var onEdit: (() -> Void)? = nil
     
@@ -54,6 +61,10 @@ class ExportProfileViewController : NSViewController {
         self.lblProfileFromRepository.stringValue = Words.export_profile_item_from_repository.word()
         self.lblProfileSubFolder.stringValue = Words.export_profile_item_sub_folder.word()
         self.lblProfileFilenameDuplicated.stringValue = Words.export_profile_item_duplicated_filename_strategy.word()
+        self.lblProfileFamilies.stringValue = Words.export_profile_families.word()
+        self.lblProfilePeople.stringValue = Words.export_profile_people.word()
+        self.lblProfileEventCategory.stringValue = Words.export_profile_event_categories.word()
+        self.lblProfileEvent.stringValue = Words.export_profile_events.word()
         
         self.btnEdit.title = Words.export_profile_item_edit.word()
         self.btnDelete.title = Words.export_profile_item_delete.word()
@@ -77,7 +88,7 @@ class ExportProfileViewController : NSViewController {
             self.lblSubFolder.stringValue = Words.export_profile_sub_folder_options.word(profile.subFolder)
             self.lblFileNaming.stringValue = Words.export_profile_file_naming_options.word(profile.fileNaming)
             
-            var patching = ""
+            var patching = Words.export_profile_item_none.word()
             if profile.patchImageDescription {
                 patching += "\(Words.export_profile_exif_patching_image_description.word()), "
             }
@@ -87,18 +98,22 @@ class ExportProfileViewController : NSViewController {
             if profile.patchGeolocation {
                 patching += "\(Words.export_profile_exif_patching_geolocation.word()), "
             }
-            patching = patching.substring(from: 0, to: -2)
+            if patching != Words.export_profile_item_none.word() {
+                patching = patching.substring(from: 0, to: -2)
+            }
             self.lblEXIFPatching.stringValue = patching
             
-            var people = ""
-            if !profile.specifyPeople || profile.people == "" {
-                people = Words.export_profile_item_any_people.word()
+            var eventCategories = Words.export_profile_item_no_limit.word()
+            if !(profile.specifyEventCategory ?? false) || (profile.eventCategories ?? "") == "" {
+                eventCategories = Words.export_profile_item_any_event.word()
             }else{
-                people = profile.people
+                eventCategories = (profile.eventCategories ?? "")
                     .replacingOccurrences(of: "include:", with: "\(Words.export_profile_include.word()):")
                     .replacingOccurrences(of: "exclude:", with: "\(Words.export_profile_exclude.word()):")
             }
-            var events = ""
+            self.lblEventCategory.stringValue = eventCategories
+            
+            var events = Words.export_profile_item_no_limit.word()
             if !profile.specifyEvent || profile.events == "" {
                 events = Words.export_profile_item_any_event.word()
             }else{
@@ -106,7 +121,9 @@ class ExportProfileViewController : NSViewController {
                     .replacingOccurrences(of: "include:", with: "\(Words.export_profile_include.word()):")
                     .replacingOccurrences(of: "exclude:", with: "\(Words.export_profile_exclude.word()):")
             }
-            var family = ""
+            self.lblEvent.stringValue = events
+            
+            var family = Words.export_profile_item_no_limit.word()
             if !profile.specifyFamily || profile.family == "" {
                 family = Words.export_profile_item_any_family.word()
             }else{
@@ -114,7 +131,17 @@ class ExportProfileViewController : NSViewController {
                     .replacingOccurrences(of: "include:", with: "\(Words.export_profile_include):")
                     .replacingOccurrences(of: "exclude:", with: "\(Words.export_profile_exclude):")
             }
-            self.lblDescription.stringValue = "\(Words.export_profile_people.word()) \(people) ; \(Words.export_profile_events.word()) \(events) ; \(Words.export_profile_families.word()) \(family)"
+            self.lblFamilies.stringValue = family
+            
+            var people = Words.export_profile_item_no_limit.word()
+            if !profile.specifyPeople || profile.people == "" {
+                people = Words.export_profile_item_any_people.word()
+            }else{
+                people = profile.people
+                    .replacingOccurrences(of: "include:", with: "\(Words.export_profile_include.word()):")
+                    .replacingOccurrences(of: "exclude:", with: "\(Words.export_profile_exclude.word()):")
+            }
+            self.lblPeople.stringValue = people
         }
     }
     

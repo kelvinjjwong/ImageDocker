@@ -55,12 +55,25 @@ class EventDaoPostgresCK : EventDaoInterface {
     
     func getEvents(byName names: String?) -> [ImageEvent] {
         let db = PostgresConnection.database()
-        var whereStmt = ""
-        if let names = names {
+        var stmtName = ""
+        if let names = names, names != "" {
             let keys:[String] = names.components(separatedBy: " ")
-            whereStmt = SQLHelper.likeArray(field: "name", array: keys)
+            stmtName = SQLHelper.likeArray(field: "name", array: keys)
         }
-        return ImageEvent.fetchAll(db, where: whereStmt, orderBy: "category,name")
+        
+        return ImageEvent.fetchAll(db, where: stmtName, orderBy: "category,name")
+    }
+    
+    func getEvents(categoriesQuotedSeparated:String?, exclude:Bool = false) -> [ImageEvent] {
+        let db = PostgresConnection.database()
+        var stmtCategory = ""
+        if let categoriesQuotedSeparated = categoriesQuotedSeparated, categoriesQuotedSeparated != "" {
+            stmtCategory = """
+        "category" \(exclude ? "NOT" : "") in (\(categoriesQuotedSeparated))
+        """
+        }
+        
+        return ImageEvent.fetchAll(db, where: stmtCategory, orderBy: "category,name")
     }
     
     func getEventCategories() -> [String] {

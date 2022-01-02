@@ -44,9 +44,10 @@ class ExportDao {
                                   patchGeolocation:Bool,
                                   specifyFamily:Bool,
                                   family:String,
-                                  eventCategories:String
+                                  eventCategories:String,
+                                  specifyEventCategory:Bool
                                   ) -> ExportProfile{
-        return self.impl.getOrCreateExportProfile(id: id, name: name, directory: directory, repositoryPath: repositoryPath, specifyPeople: specifyPeople, specifyEvent: specifyEvent, specifyRepository: specifyRepository, people: people, events: events, duplicateStrategy: duplicateStrategy, fileNaming: fileNaming, subFolder: subFolder, patchImageDescription: patchImageDescription, patchDateTime: patchDateTime, patchGeolocation: patchGeolocation, specifyFamily: specifyFamily, family: family, eventCategories: eventCategories)
+        return self.impl.getOrCreateExportProfile(id: id, name: name, directory: directory, repositoryPath: repositoryPath, specifyPeople: specifyPeople, specifyEvent: specifyEvent, specifyRepository: specifyRepository, people: people, events: events, duplicateStrategy: duplicateStrategy, fileNaming: fileNaming, subFolder: subFolder, patchImageDescription: patchImageDescription, patchDateTime: patchDateTime, patchGeolocation: patchGeolocation, specifyFamily: specifyFamily, family: family, eventCategories: eventCategories, specifyEventCategory: specifyEventCategory)
     }
     
     func updateExportProfile(id:String,
@@ -66,8 +67,9 @@ class ExportDao {
                              patchGeolocation:Bool,
                              fileNaming: String,
                              subFolder: String,
-                             eventCategories:String) -> ExecuteState{
-        return self.impl.updateExportProfile(id: id, name: name, directory: directory, duplicateStrategy: duplicateStrategy, specifyPeople: specifyPeople, specifyEvent: specifyEvent, specifyRepository: specifyRepository, specifyFamily: specifyFamily, people: people, events: events, repositoryPath: repositoryPath, family: family, patchImageDescription: patchImageDescription, patchDateTime: patchDateTime, patchGeolocation: patchGeolocation, fileNaming: fileNaming, subFolder: subFolder, eventCategories: eventCategories)
+                             eventCategories:String,
+                             specifyEventCategory: Bool) -> ExecuteState{
+        return self.impl.updateExportProfile(id: id, name: name, directory: directory, duplicateStrategy: duplicateStrategy, specifyPeople: specifyPeople, specifyEvent: specifyEvent, specifyRepository: specifyRepository, specifyFamily: specifyFamily, people: people, events: events, repositoryPath: repositoryPath, family: family, patchImageDescription: patchImageDescription, patchDateTime: patchDateTime, patchGeolocation: patchGeolocation, fileNaming: fileNaming, subFolder: subFolder, eventCategories: eventCategories, specifyEventCategory: specifyEventCategory)
     }
     
     func enableExportProfile(id:String) -> ExecuteState{

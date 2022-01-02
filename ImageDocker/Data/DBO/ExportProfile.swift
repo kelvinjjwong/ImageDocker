@@ -30,6 +30,7 @@ public final class ExportProfile : Codable {
     var specifyFamily: Bool = false
     var family: String = ""
     var eventCategories: String? = ""
+    var specifyEventCategory: Bool? = false
     
     public init() {
         
@@ -54,7 +55,8 @@ public final class ExportProfile : Codable {
                 lastExportTime:Date?,
                 specifyFamily:Bool,
                 family:String,
-                eventCategories:String) {
+                eventCategories:String,
+                specifyEventCategory:Bool) {
         self.id = id
         self.name = name
         self.directory = directory
@@ -75,6 +77,7 @@ public final class ExportProfile : Codable {
         self.specifyFamily = specifyFamily
         self.family = family
         self.eventCategories = eventCategories
+        self.specifyEventCategory = specifyEventCategory
     }
 }
 

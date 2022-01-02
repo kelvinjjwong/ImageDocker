@@ -73,6 +73,10 @@ class FaceDao {
         return self.impl.getPeople()
     }
     
+    func getPeople(inFamilyQuotedSeparated:String, exclude:Bool = false) -> [People] {
+        return self.impl.getPeople(inFamilyQuotedSeparated: inFamilyQuotedSeparated, exclude: exclude)
+    }
+    
     func getPeople(except:String) -> [People] {
         return self.impl.getPeople(except: except)
     }

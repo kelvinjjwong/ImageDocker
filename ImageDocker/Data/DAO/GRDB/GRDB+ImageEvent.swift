@@ -81,16 +81,37 @@ class EventDaoGRDB : EventDaoInterface {
     
     func getEvents(byName names:String? = nil) -> [ImageEvent] {
         var result:[ImageEvent] = []
-        var stmt = ""
+        var stmtName = ""
         if let names = names {
             let keys:[String] = names.components(separatedBy: " ")
-            stmt = SQLHelper.likeArray(field: "name", array: keys)
+            stmtName = SQLHelper.likeArray(field: "name", array: keys)
         }
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
-                if stmt != "" {
-                    result = try ImageEvent.filter(stmt).order(Column("name").asc).fetchAll(db)
+                if stmtName != "" {
+                    result = try ImageEvent.filter(stmtName).order(Column("name").asc).fetchAll(db)
+                }else{
+                    result = try ImageEvent.order(Column("name").asc).fetchAll(db)
+                }
+            }
+        }catch{
+            self.logger.log(error)
+        }
+        return result
+    }
+    
+    func getEvents(categoriesQuotedSeparated:String? = nil, exclude:Bool = false) -> [ImageEvent] {
+        var result:[ImageEvent] = []
+        var stmtCategory = ""
+        if let categoriesQuotedSeparated = categoriesQuotedSeparated {
+            stmtCategory = "category (\(exclude ? "NOT" : "") in (\(categoriesQuotedSeparated)"
+        }
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.read { db in
+                if stmtCategory != "" {
+                    result = try ImageEvent.filter(stmtCategory).order(Column("name").asc).fetchAll(db)
                 }else{
                     result = try ImageEvent.order(Column("name").asc).fetchAll(db)
                 }

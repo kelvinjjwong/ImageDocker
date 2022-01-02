@@ -587,6 +587,12 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v45") { db in
+            try db.alter(table: "ExportProfile", body: { t in
+                t.add("specifyEventCategory", .boolean).defaults(to: false)
+            })
+        }
+        
         do {
             try migrator.migrate(cleanVersions: dropBeforeCreate)
         }catch{

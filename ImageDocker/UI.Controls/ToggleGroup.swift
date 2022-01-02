@@ -34,10 +34,14 @@ public final class ToggleGroup {
     }
     
     // dictionary is no order, if you need to iterate it by order, you should specify keysOrderred array
-    public init(_ toggles:[String:NSButton], keysOrderred:[String] = [], onSelect:((String) -> Void)? = nil){
+    public init(_ toggles:[String:NSButton], keysOrderred:[String] = [], onSelect:((String) -> Void)? = nil, defaultValue:String? = nil){
         self.toggles = toggles
         self.keysOrderred = keysOrderred
         self._selectAction = onSelect
+        
+        if let defaultValue = defaultValue {
+            self.selected = defaultValue
+        }
     }
     
     public var keys:[String] {

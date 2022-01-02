@@ -197,6 +197,42 @@ class FaceDaoPostgresCK : FaceDaoInterface {
         return People.fetchAll(db, orderBy: "name")
     }
     
+    func getPeopleIds(inFamilyQuotedSeparated:String, db: PostgresDB) -> [String] {
+        var peopleIds:[String] = []
+        
+        final class TempRecord : PostgresCustomRecord {
+            var peopleId:String = ""
+            public init() {}
+        }
+        let records = TempRecord.fetchAll(db, sql: """
+        SELECT "peopleId" FROM "FamilyMember" WHERE "familyId" in (\(inFamilyQuotedSeparated))
+        """)
+        if records.count > 0 {
+            for record in records {
+                peopleIds.append(record.peopleId.quotedDatabaseValueIdentifier)
+            }
+        }
+        return peopleIds
+    }
+    
+    func getPeople(inFamilyQuotedSeparated:String, exclude:Bool) -> [People] {
+        let db = PostgresConnection.database()
+        var stmt = ""
+        if inFamilyQuotedSeparated != "" {
+            
+            let peopleIds:[String] = self.getPeopleIds(inFamilyQuotedSeparated: inFamilyQuotedSeparated, db: db)
+            if peopleIds.count > 0 {
+                
+                let peopleIdsSeparated = peopleIds.joined(separator: ",")
+                
+                stmt = """
+            "id" \(exclude ? "NOT" : "") in (\(peopleIdsSeparated))
+            """
+            }
+        }
+        return People.fetchAll(db, where: stmt, orderBy: "name")
+    }
+    
     func getPeople(except: String) -> [People] {
         let db = PostgresConnection.database()
         return People.fetchAll(db, where: "id <> '\(except)'", orderBy: "name")

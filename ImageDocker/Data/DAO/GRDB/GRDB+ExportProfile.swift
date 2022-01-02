@@ -32,7 +32,8 @@ class ExportDaoGRDB : ExportDaoInterface {
                                   patchGeolocation:Bool,
                                   specifyFamily:Bool,
                                   family:String,
-                                  eventCategories:String
+                                  eventCategories:String,
+                                  specifyEventCategory:Bool
                                   ) -> ExportProfile{
         var profile:ExportProfile?
         do {
@@ -62,7 +63,8 @@ class ExportDaoGRDB : ExportDaoInterface {
                         lastExportTime: nil,
                         specifyFamily: specifyFamily,
                         family: family,
-                        eventCategories: eventCategories
+                        eventCategories: eventCategories,
+                        specifyEventCategory: specifyEventCategory
                     )
                     try profile?.save(db)
                 }
@@ -90,7 +92,8 @@ class ExportDaoGRDB : ExportDaoInterface {
                              patchGeolocation:Bool,
                              fileNaming: String,
                              subFolder: String,
-                             eventCategories:String) -> ExecuteState{
+                             eventCategories:String,
+                             specifyEventCategory:Bool) -> ExecuteState{
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.write { db in
@@ -112,6 +115,7 @@ class ExportDaoGRDB : ExportDaoInterface {
                     profile.fileNaming = fileNaming
                     profile.subFolder = subFolder
                     profile.eventCategories = eventCategories
+                    profile.specifyEventCategory = specifyEventCategory
                     
                     try profile.save(db)
                 }

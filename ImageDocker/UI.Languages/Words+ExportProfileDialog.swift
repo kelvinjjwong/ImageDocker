@@ -283,6 +283,21 @@ extension Words {
         chs: "全部活动"
     )
     
+    static let export_profile_item_any_event_category = Localize (
+        eng: "Any event category",
+        chs: "全部活动分类"
+    )
+    
+    static let export_profile_item_none = Localize (
+        eng: "no limitation",
+        chs: "没有"
+    )
+    
+    static let export_profile_item_no_limit = Localize (
+        eng: "no limitation",
+        chs: "没有限制"
+    )
+    
     static let export_profile_item_any_family = Localize (
         eng: "Any family",
         chs: "全部家庭和组织"

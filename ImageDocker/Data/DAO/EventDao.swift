@@ -41,6 +41,10 @@ class EventDao {
         return self.impl.getEvents(byName: names)
     }
     
+    func getEvents(categoriesQuotedSeparated:String? = nil, exclude:Bool = false) -> [ImageEvent] {
+        return self.impl.getEvents(categoriesQuotedSeparated: categoriesQuotedSeparated, exclude: exclude)
+    }
+    
     func getEventCategories() -> [String] {
         return self.impl.getEventCategories()
     }

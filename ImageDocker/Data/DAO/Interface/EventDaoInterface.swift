@@ -18,6 +18,8 @@ protocol EventDaoInterface {
     
     func getEvents(byName names:String?) -> [ImageEvent]
     
+    func getEvents(categoriesQuotedSeparated:String?, exclude:Bool) -> [ImageEvent]
+    
     func getEventCategories() -> [String]
     
     func getEventActivities() -> [String]

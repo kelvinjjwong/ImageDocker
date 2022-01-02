@@ -27,13 +27,18 @@ class DictionaryTableViewController: NSObject {
         self.table = table
     }
     
-    func load(_ items:[[String:String]]) {
+    func load(_ items:[[String:String]], afterLoaded:(() -> Void)? = nil) {
         lastSelectedRow = nil
         self.table.delegate = self
         self.table.dataSource = self
         self.items = items
         //self.logger.log(items.count)
         self.table.reloadData()
+        
+        if let afterLoaded = afterLoaded {
+            self.logger.log("item amount = \(items.count) , checkbox amount = \(self.checkboxes.count)")
+            afterLoaded()
+        }
     }
     
     func clean(){
@@ -53,13 +58,16 @@ class DictionaryTableViewController: NSObject {
     }
     
     func setCheckedItems(column:String, from array:[String]) {
+        self.logger.log("setCheckedItems() array: \(array)")
         var indexes:[Int] = []
         for i in 0..<items.count {
             let item = items[i]
+            self.logger.log("comparing [\(item[column])]")
             if let columnValue = item[column] {
-                self.logger.log("checking \(columnValue)")
+                //self.logger.log("checking \(columnValue)")
                 if array.contains(columnValue) {
-                    self.logger.log("containes \(columnValue)")
+                    self.logger.log("matched")
+                    //self.logger.log("containes \(columnValue)")
                     indexes.append(i)
                 }
             }
@@ -71,6 +79,8 @@ class DictionaryTableViewController: NSObject {
             var edititem = items[i]
             edititem["check"] = "true"
             items[i] = edititem
+            let testid = edititem["id"]!
+            self.logger.log("idx: \(i) id: \(edititem["id"]) checkbox: \(self.checkboxes["checkbox_\(testid)"]) ")
             if let id = edititem["id"], let checkbox = self.checkboxes["checkbox_\(id)"] {
                 self.logger.log("turn \(id) on")
                 checkbox.state = .on
@@ -79,10 +89,16 @@ class DictionaryTableViewController: NSObject {
     }
     
     func uncheckAll() {
+        self.logger.log("uncheckAll()")
         for i in 0..<items.count {
             var item = items[i]
             item["check"] = "false"
             items[i] = item
+            
+            if let id = item["id"], let checkbox = self.checkboxes["checkbox_\(id)"] {
+                self.logger.log("turn \(id) off")
+                checkbox.state = .off
+            }
         }
     }
     
@@ -91,6 +107,11 @@ class DictionaryTableViewController: NSObject {
             var item = items[i]
             item["check"] = "true"
             items[i] = item
+            
+            if let id = item["id"], let checkbox = self.checkboxes["checkbox_\(id)"] {
+                self.logger.log("turn \(id) on")
+                checkbox.state = .on
+            }
         }
     }
     
@@ -133,6 +154,11 @@ class DictionaryTableViewController: NSObject {
     func getCheckedItemAsQuotedString(column:String, separator:String) -> String {
         let items = self.getCheckedItems(column: column)
         return items.joinedQuoted(separator: separator)
+    }
+    
+    func getCheckedItemAsSingleQuotedString(column:String, separator:String) -> String {
+        let items = self.getCheckedItems(column: column)
+        return items.joinedSingleQuoted(separator: separator)
     }
     
     // MARK: ACTION
@@ -221,7 +247,7 @@ extension DictionaryTableViewController: NSTableViewDelegate {
                 button.action = #selector(DictionaryTableViewController.onCheckboxClicked(sender:))
                 button.identifier = NSUserInterfaceItemIdentifier(id)
                 button.target = self
-                value = item["checkbox"] ?? ""
+                value = item["check"] ?? ""
                 if value == "on" || value == "true" || value == "yes" {
                     button.state = .on
                 }else{
@@ -229,6 +255,8 @@ extension DictionaryTableViewController: NSTableViewDelegate {
                 }
                 
                 self.checkboxes[id] = button
+                
+                self.logger.log("init checkbox \(item["id"]) value \(item["check"])")
                 
                 colView.addSubview(button)
             }else{

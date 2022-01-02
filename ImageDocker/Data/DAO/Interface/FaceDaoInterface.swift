@@ -36,6 +36,8 @@ protocol FaceDaoInterface {
     
     func getPeople() -> [People]
     
+    func getPeople(inFamilyQuotedSeparated:String, exclude:Bool) -> [People]
+    
     func getPeople(except:String) -> [People]
     
     func getPerson(id: String) -> People?

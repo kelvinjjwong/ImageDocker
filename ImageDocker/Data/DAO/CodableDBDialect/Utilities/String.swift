@@ -38,4 +38,12 @@ extension Array {
         }
         return values.joined(separator: separator)
     }
+    
+    @inlinable public func joinedSingleQuoted(separator: String) -> String {
+        var values:[String] = []
+        for value in self {
+            values.append("\(value)".quotedDatabaseValueIdentifier)
+        }
+        return values.joined(separator: separator)
+    }
 }

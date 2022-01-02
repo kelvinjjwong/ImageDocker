@@ -31,7 +31,8 @@ class ExportDaoPostgresCK : ExportDaoInterface {
                                   patchGeolocation: Bool,
                                   specifyFamily:Bool,
                                   family:String,
-                                  eventCategories:String
+                                  eventCategories:String,
+                                  specifyEventCategory:Bool
     ) -> ExportProfile {
         let db = PostgresConnection.database()
         if let profile = ExportProfile.fetchOne(db, parameters: ["id" : id]) {
@@ -57,7 +58,8 @@ class ExportDaoPostgresCK : ExportDaoInterface {
                 lastExportTime: nil,
                 specifyFamily: specifyFamily,
                 family: family,
-                eventCategories: eventCategories
+                eventCategories: eventCategories,
+                specifyEventCategory: specifyEventCategory
             )
             profile.save(db)
             return profile
@@ -81,7 +83,8 @@ class ExportDaoPostgresCK : ExportDaoInterface {
                              patchGeolocation:Bool,
                              fileNaming: String,
                              subFolder: String,
-                             eventCategories:String) -> ExecuteState {
+                             eventCategories:String,
+                             specifyEventCategory:Bool) -> ExecuteState {
         let db = PostgresConnection.database()
         if let profile = ExportProfile.fetchOne(db, parameters: ["id" : id]) {
             profile.name = name
@@ -101,6 +104,7 @@ class ExportDaoPostgresCK : ExportDaoInterface {
             profile.fileNaming = fileNaming
             profile.subFolder = subFolder
             profile.eventCategories = eventCategories
+            profile.specifyEventCategory = specifyEventCategory
             profile.save(db)
             return .OK
         }else{
