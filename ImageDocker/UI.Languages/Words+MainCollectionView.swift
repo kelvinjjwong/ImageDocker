@@ -10,6 +10,11 @@ import Foundation
 
 extension Words {
     
+    static let searchingImages = Localize(
+        eng: "Searching images ...",
+        chs: "载入图片和录像 ..."
+    )
+    
     static let pages = Localize(
         eng: "Pages...",
         chs: "分页..."

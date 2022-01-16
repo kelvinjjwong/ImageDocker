@@ -341,7 +341,7 @@ class ImageFile {
         
         if notifyIndicator && self.indicator != nil {
             DispatchQueue.main.async {
-                let _ = self.indicator?.add("Searching images ...")
+                let _ = self.indicator?.add(Words.searchingImages.word())
             }
             
             

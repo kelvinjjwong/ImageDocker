@@ -873,9 +873,13 @@ class DeviceCopyViewController: NSViewController {
     // MARK: ACTION BUTTON - DELETE RECORDS
     
     @IBAction func onDeleteRecordsClicked(_ sender: NSButton) {
-        self.lblMessage.stringValue = "Deleting records ..."
-        let _ = DeviceDao.default.deleteDeviceFiles(deviceId: self.device.deviceId)
-        self.lblMessage.stringValue = "Deleted records."
+        if Alert.dialogOKCancel(question: "DELETE DEVICE FILE RECORDS", text: "Do you confirm to delete all device file imported recoreds?") {
+            self.logger.log("proceed delete")
+            self.lblMessage.stringValue = "Deleting records ..."
+            let _ = DeviceDao.default.deleteDeviceFiles(deviceId: self.device.deviceId)
+            self.lblMessage.stringValue = "Deleted records."
+        }
+        
     }
     
     // MARK: - ACTION BUTTON - LOAD FILE LIST

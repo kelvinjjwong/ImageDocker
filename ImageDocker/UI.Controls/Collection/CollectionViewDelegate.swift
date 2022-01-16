@@ -97,7 +97,7 @@ extension ViewController : NSCollectionViewDataSource {
         
         view.sectionTitle.stringValue = imagesLoader.titleOfSection(indexPath.section)
         let numberOfItemsInSection = imagesLoader.numberOfItems(in: indexPath.section)
-        view.imageCount.stringValue = "\(numberOfItemsInSection) images"
+        view.imageCount.stringValue = Words.n_images.fill(arguments: numberOfItemsInSection)
         
         return view
     }

@@ -456,9 +456,11 @@ class RepositoryDetailViewController: NSViewController {
     }
     
     @IBAction func onFacesClicked(_ sender: NSButton) {
+        print("to do")
     }
     
     @IBAction func onStopClicked(_ sender: NSButton) {
+        print("to do")
     }
     
     @IBAction func onFindParentClicked(_ sender: NSButton) {

@@ -52,6 +52,14 @@ class Localize {
         return str
     }
     
+    func fill(arguments: Int...) -> String {
+        var str = self.word()
+        for arg in arguments {
+            str = str.replacingFirstOccurrence(of: "%s", with: "\(arg)")
+        }
+        return str
+    }
+    
 }
 
 class OptionLocalize {

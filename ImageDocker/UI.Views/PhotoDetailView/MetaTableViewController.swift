@@ -44,11 +44,11 @@ extension ViewController: NSTableViewDelegate {
             var isAction:Bool = false
             switch id {
             case NSUserInterfaceItemIdentifier("category"):
-                value = info.category
+                value = Words.meta(info.category).word()
             case NSUserInterfaceItemIdentifier("subCategory"):
-                value = info.subCategory
+                value = Words.meta(info.subCategory).word()
             case NSUserInterfaceItemIdentifier("title"):
-                value = info.title
+                value = Words.meta(info.title).word()
             case NSUserInterfaceItemIdentifier("value"):
                 value = info.value ?? ""
             case NSUserInterfaceItemIdentifier("copy"):

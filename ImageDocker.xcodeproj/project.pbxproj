@@ -70,6 +70,7 @@
 		8E481493277DF6570097493E /* Words+Tree+Places.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E481492277DF6570097493E /* Words+Tree+Places.swift */; };
 		8E481495277DF6670097493E /* Words+Tree+Moments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E481494277DF6670097493E /* Words+Tree+Moments.swift */; };
 		8E481497277EB7C70097493E /* Words+Tree+Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E481496277EB7C70097493E /* Words+Tree+Device.swift */; };
+		8E481499278A3C8E0097493E /* CellPhoneResolution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E481498278A3C8E0097493E /* CellPhoneResolution.swift */; };
 		8E4B7C1920929EFA00DDD9E0 /* LocationConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */; };
 		8E4C38CA211776300089502C /* Mobile in Resources */ = {isa = PBXBuildFile; fileRef = 8E4C38C92117762F0089502C /* Mobile */; };
 		8E4C38CD2117B5340089502C /* Phone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4C38CC2117B5340089502C /* Phone.swift */; };
@@ -437,6 +438,7 @@
 		8E481492277DF6570097493E /* Words+Tree+Places.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Tree+Places.swift"; sourceTree = "<group>"; };
 		8E481494277DF6670097493E /* Words+Tree+Moments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Tree+Moments.swift"; sourceTree = "<group>"; };
 		8E481496277EB7C70097493E /* Words+Tree+Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Tree+Device.swift"; sourceTree = "<group>"; };
+		8E481498278A3C8E0097493E /* CellPhoneResolution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellPhoneResolution.swift; sourceTree = "<group>"; };
 		8E4B7C1820929EFA00DDD9E0 /* LocationConsumer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationConsumer.swift; sourceTree = "<group>"; };
 		8E4C38C92117762F0089502C /* Mobile */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Mobile; sourceTree = "<group>"; };
 		8E4C38CC2117B5340089502C /* Phone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phone.swift; sourceTree = "<group>"; };
@@ -1441,6 +1443,7 @@
 				8EB9C0102507735F00507CA7 /* DataStructures.swift */,
 				8E9CF30E2648D42500558423 /* ChangeEvent.swift */,
 				8EF8C561266329160060D2E0 /* MessageEventCenter.swift */,
+				8E481498278A3C8E0097493E /* CellPhoneResolution.swift */,
 			);
 			path = Commons;
 			sourceTree = "<group>";
@@ -1472,6 +1475,7 @@
 			children = (
 				8ECA1FF823E5638800F56895 /* DeviceTree+ExtendView.swift */,
 				8EFA7CF8211A36F700419777 /* DeviceCopyViewController.swift */,
+				8E9D8044234990A00062692A /* DeviceCopyView.storyboard */,
 				8EC82EA92121C5A200FC0899 /* AddLocalDirectoryViewController.swift */,
 				8EC82EAA2121C5A200FC0899 /* AddLocalDirectoryViewController.xib */,
 				8EC82EAD21283ED000FC0899 /* DirectoryViewDelegate.swift */,
@@ -1479,7 +1483,6 @@
 				8EAC5F1F2144A60900E187E0 /* DeviceFolderViewController.xib */,
 				8EEF07182256C9D9000520B7 /* DevicePathDetailViewController.swift */,
 				8EEF07192256C9D9000520B7 /* DevicePathDetailViewController.xib */,
-				8E9D8044234990A00062692A /* DeviceCopyView.storyboard */,
 			);
 			path = ExtendView;
 			sourceTree = "<group>";
@@ -2070,6 +2073,7 @@
 				8EF4E1F62453C05800999DD1 /* String.swift in Sources */,
 				8E9D803B2348A9EE0062692A /* GRDB+ExportProfile.swift in Sources */,
 				8EF4CE5921D77BEA00C53AFF /* ImagePeople.swift in Sources */,
+				8E481499278A3C8E0097493E /* CellPhoneResolution.swift in Sources */,
 				8EB986BC20B30C920075B081 /* CollectionViewDelegate.swift in Sources */,
 				8EB2717F2340D989003BF3AF /* ViewController+Startup.swift in Sources */,
 				8E4B7C1920929EFA00DDD9E0 /* LocationConsumer.swift in Sources */,

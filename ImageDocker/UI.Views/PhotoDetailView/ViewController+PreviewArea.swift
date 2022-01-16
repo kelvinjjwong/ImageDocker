@@ -24,7 +24,7 @@ extension ViewController {
                 pasteboard.declareTypes([.string], owner: nil)
                 pasteboard.setString(value, forType: .string)
                 
-                MessageEventCenter.default.showMessage(message: "Copied image's meta value to pasteboard.")
+                MessageEventCenter.default.showMessage(message: Words.copied_meta_value_to_pasteboard.word())
             }
             
         }
@@ -41,7 +41,7 @@ extension ViewController {
         self.metaInfoTableView.delegate = self
         self.metaInfoTableView.dataSource = self
         
-        self.metaInfoTableView.toolTip = "Double click to copy value."
+        self.metaInfoTableView.toolTip = Words.double_click_to_copy_value.word()
         self.metaInfoTableView.target = self
         self.metaInfoTableView.doubleAction = #selector(onMetaTableDoubleClicked)
         
