@@ -11,14 +11,17 @@ use strict;
 use vars qw($VERSION);
 use Image::ExifTool qw(:DataAccess :Utils);
 
-$VERSION = '1.25';
+$VERSION = '1.33';
 
 sub ProcessOcad($$$);
 sub ProcessJPEG_HDR($$$);
 
-# (this main JPEG table is for documentation purposes only)
+# (most of the tags in this table are for documentation purposes only)
 %Image::ExifTool::JPEG::Main = (
-    NOTES => 'This table lists information extracted by ExifTool from JPEG images.',
+    NOTES => q{
+        This table lists information extracted by ExifTool from JPEG images. See
+        L<https://www.w3.org/Graphics/JPEG/jfif3.pdf> for the JPEG specification.
+    },
     APP0 => [{
         Name => 'JFIF',
         Condition => '$$valPt =~ /^JFIF\0/',
@@ -60,6 +63,13 @@ sub ProcessJPEG_HDR($$$);
         Name => 'FLIR',
         Condition => '$$valPt =~ /^FLIR\0/',
         SubDirectory => { TagTable => 'Image::ExifTool::FLIR::FFF' },
+      }, {
+        Name => 'RawThermalImage', # (from Parrot Bebop-Pro Thermal drone)
+        Condition => '$$valPt =~ /^PARROT\0(II\x2a\0|MM\0\x2a)/',
+        Groups => { 0 => 'APP1', 1 => 'Parrot', 2 => 'Preview' },
+        Notes => 'thermal image from Parrot Bebop-Pro Thermal drone',
+        RawConv => 'substr($val, 7)',
+        Binary => 1,
     }],
     APP2 => [{
         Name => 'ICC_Profile',
@@ -87,6 +97,16 @@ sub ProcessJPEG_HDR($$$);
         Condition => '$$valPt =~ /^Stim\0/',
         SubDirectory => { TagTable => 'Image::ExifTool::Stim::Main' },
       }, {
+        Name => 'JPS',
+        Condition => '$$valPt =~ /^_JPSJPS_/',
+        SubDirectory => { TagTable => 'Image::ExifTool::JPEG::JPS' },
+      }, {
+        Name => 'ThermalData', # (written by DJI FLIR models)
+        Condition => '$$self{Make} eq "DJI"',
+        Notes => 'DJI raw thermal data',
+        Groups => { 0 => 'APP3', 1 => 'DJI', 2 => 'Image' },
+        Binary => 1,
+      }, {
         Name => 'PreviewImage', # (written by HP R837 and Samsung S1060)
         Condition => '$$valPt =~ /^\xff\xd8\xff\xdb/',
         Notes => 'Samsung/HP preview image', # (Samsung, HP, BenQ)
@@ -100,6 +120,10 @@ sub ProcessJPEG_HDR($$$);
         Condition => '$$valPt =~ /^FPXR\0/',
         SubDirectory => { TagTable => 'Image::ExifTool::FlashPix::Main' },
       }, {
+        Name => 'ThermalParams', # (written by DJI FLIR models)
+        Condition => '$$self{Make} eq "DJI" and $$valPt =~ /^\xaa\x55\x12\x06/',
+        SubDirectory => { TagTable => 'Image::ExifTool::DJI::ThermalParams' },
+      }, {
         Name => 'PreviewImage', # (eg. Samsung S1060)
         Notes => 'continued from APP3',
     }],
@@ -107,6 +131,16 @@ sub ProcessJPEG_HDR($$$);
         Name => 'RMETA',
         Condition => '$$valPt =~ /^RMETA\0/',
         SubDirectory => { TagTable => 'Image::ExifTool::Ricoh::RMETA' },
+      }, {
+        Name => 'SamsungUniqueID',
+        Condition => '$$valPt =~ /ssuniqueid\0/',
+        SubDirectory => { TagTable => 'Image::ExifTool::Samsung::APP5' },
+      }, {
+        Name => 'ThermalCalibration', # (written by DJI FLIR models)
+        Condition => '$$self{Make} eq "DJI"',
+        Notes => 'DJI thermal calibration data',
+        Groups => { 0 => 'APP5', 1 => 'DJI', 2 => 'Image' },
+        Binary => 1,
       }, {
         Name => 'PreviewImage', # (eg. BenQ DC E1050)
         Notes => 'continued from APP4',
@@ -123,11 +157,26 @@ sub ProcessJPEG_HDR($$$);
         Name => 'HP_TDHD', # (written by R837)
         Condition => '$$valPt =~ /^TDHD\x01\0\0\0/',
         SubDirectory => { TagTable => 'Image::ExifTool::HP::TDHD' },
+      }, {
+        Name => 'GoPro',
+        Condition => '$$valPt =~ /^GoPro\0/',
+        SubDirectory => { TagTable => 'Image::ExifTool::GoPro::GPMF' },
+      # also seen Motorola APP6 "MMIMETA\0", with sub-types: AL3A,ALED,MMI0,MOTD,QC3A
+      }, {
+        Name => 'DJI_DTAT', # (written by ZH20T)
+        Condition => '$$valPt =~ /^DTAT\0\0.\{/s',
+        Groups => { 0 => 'APP6', 1 => 'DJI' },
+        Notes => 'DJI Thermal Analysis Tool record',
+        ValueConv => 'substr($val,7)',
     }],
     APP7 => [{
         Name => 'Pentax',
         Condition => '$$valPt =~ /^PENTAX \0/',
         SubDirectory => { TagTable => 'Image::ExifTool::Pentax::Main' },
+      }, {
+        Name => 'Huawei',
+        Condition => '$$valPt =~ /^HUAWEI\0\0/',
+        SubDirectory => { TagTable => 'Image::ExifTool::Unknown::Main' },
       }, {
         Name => 'Qualcomm',
         Condition => '$$valPt =~ /^\x1aQualcomm Camera Attributes/',
@@ -148,11 +197,15 @@ sub ProcessJPEG_HDR($$$);
         Condition => '$$valPt =~ /^UNICODE\0/',
         Notes => 'PhotoStudio Unicode comment',
     },
-    APP11 => {
+    APP11 => [{
         Name => 'JPEG-HDR',
         Condition => '$$valPt =~ /^HDR_RI /',
         SubDirectory => { TagTable => 'Image::ExifTool::JPEG::HDR' },
-    },
+    },{
+        Name => 'JUMBF',
+        Condition => '$$valPt =~ /^JP/',
+        SubDirectory => { TagTable => 'Image::ExifTool::Jpeg2000::Main' },
+    }],
     APP12 => [{
         Name => 'PictureInfo',
         Condition => '$$valPt =~ /(\[picture info\]|Type=)/',
@@ -174,7 +227,7 @@ sub ProcessJPEG_HDR($$$);
     APP14 => {
         Name => 'Adobe',
         Condition => '$$valPt =~ /^Adobe/',
-        Writable => 1,  # (for docs only)
+        Writable => 2,  # (for docs only)
         SubDirectory => { TagTable => 'Image::ExifTool::JPEG::Adobe' },
     },
     APP15 => {
@@ -187,7 +240,7 @@ sub ProcessJPEG_HDR($$$);
         Name => 'Comment',
         # note: flag as writable for documentation, but it won't show up
         # in the TagLookup as writable because there is no WRITE_PROC
-        Writable => 1,
+        Writable => 2,
     },
     SOF => {
         Name => 'StartOfFrame',
@@ -225,10 +278,83 @@ sub ProcessJPEG_HDR($$$);
         Condition => '$$valPt =~ /QDIOBS$/',
         SubDirectory => { TagTable => 'Image::ExifTool::Samsung::Trailer' },
       }, {
+        Name => 'EmbeddedVideo',
+        Notes => 'extracted only when ExtractEmbedded option is used',
+        Condition => '$$valPt =~ /^.{4}ftyp/s',
+      }, {
+        Name => 'Insta360',
+        Condition => '$$valPt =~ /8db42d694ccc418790edff439fe026bf$/',
+      }, {
+        Name => 'NikonApp',
+        Condition => '$$valPt =~ m(\0{6}/NIKON APP$)',
+        Notes => 'contains editing information in XMP format',
+      }, {
         Name => 'PreviewImage',
         Condition => '$$valPt =~ /^\xff\xd8\xff/',
-        Writable => 1,  # (for docs only)
+        Writable => 2,  # (for docs only)
     }],
+);
+
+# JPS APP3 segment (ref http://paulbourke.net/stereographics/stereoimage/)
+%Image::ExifTool::JPEG::JPS = (
+    PROCESS_PROC => \&Image::ExifTool::ProcessBinaryData,
+    GROUPS => { 0 => 'APP3', 1 => 'JPS', 2 => 'Image' },
+    NOTES => 'Tags found in JPEG Stereo (JPS) images.',
+    0x0a => {
+        Name => 'JPSSeparation',
+        Format => 'int32u', # (just so we can look ahead to MediaType);
+        Notes => 'stereo only',
+        RawConv => q{
+            $$self{MediaType} = $val & 0xff;
+            return undef unless $$self{MediaType} == 1;
+            return(($val >> 24) & 0xff);
+        },
+    },
+    0x08 => {
+        Name => 'HdrLength',
+        Format => 'int16u',
+        Hidden => 1,
+        RawConv => '$$self{HdrLength} = $val; undef',
+    },
+    0x0b => {
+        Name => 'JPSFlags',
+        PrintConv => { BITMASK => {
+            0 => 'Half height',
+            1 => 'Half width',
+            2 => 'Left field first',
+        }},
+    },
+    0x0c => [{
+        Name => 'JPSLayout',
+        Condition => '$$self{MediaType} == 0',
+        Notes => 'mono',
+        PrintConv => {
+            0 => 'Both Eyes',
+            1 => 'Left Eye',
+            2 => 'Right Eye',
+        },
+    },{
+        Name => 'JPSLayout',
+        Condition => '$$self{MediaType} == 1',
+        Notes => 'stereo',
+        PrintConv => {
+            1 => 'Interleaved',
+            2 => 'Side By Side',
+            3 => 'Over Under',
+            4 => 'Anaglyph',
+        },
+    }],
+    0x0d => {
+        Name => 'JPSType',
+        Hook => '$varSize += $$self{HdrLength} - 4', # comment starts after header block
+        PrintConv => { 0 => 'Mono', 1 => 'Stereo' },
+    },
+    # 0x0e - in16u comment length (ignored -- assume the remainder is all comment)
+    #        (this is offset if we had a 4-byte JPS header block)
+    0x10 => {
+        Name => 'JPSComment',
+        Format => 'string',
+    },
 );
 
 # EPPIM APP6 (Toshiba PrintIM) segment (ref PH, from PDR-M700 samples)
@@ -241,6 +367,7 @@ sub ProcessJPEG_HDR($$$);
     0xc4a5 => {
         Name => 'PrintIM',
         # must set Writable here so this tag will be saved with MakerNotes option
+        # (but it isn't actually writable because there is no WRITE_PROC)
         Writable => 'undef',
         Description => 'Print Image Matching',
         SubDirectory => {
@@ -249,7 +376,7 @@ sub ProcessJPEG_HDR($$$);
     },
 );
 
-# SPIFF APP8 segment.  Refs:
+# APP8 SPIFF segment.  Refs:
 # 1) http://www.fileformat.info/format/spiff/
 # 2) http://www.jpeg.org/public/spiff.pdf
 %Image::ExifTool::JPEG::SPIFF = (
@@ -336,11 +463,11 @@ sub ProcessJPEG_HDR($$$);
     },
 );
 
-# Media Jukebox APP9 segment (ref PH)
+# APP9 Media Jukebox segment (ref PH)
 %Image::ExifTool::JPEG::MediaJukebox = (
     GROUPS => { 0 => 'XML', 1 => 'MediaJukebox', 2 => 'Image' },
     VARS => { NO_ID => 1 },
-    NOTES => 'Tags found in the XML metadata of the "Media Jukebox" APP9 segment.',
+    NOTES => 'Tags found in the XML metadata of the APP9 "Media Jukebox" segment.',
     Date => {
         Groups => { 2 => 'Time' },
         # convert from days since Dec 30, 1899 to seconds since Jan 1, 1970
@@ -383,7 +510,7 @@ sub ProcessJPEG_HDR($$$);
     PROCESS_PROC => \&Image::ExifTool::ProcessBinaryData,
     GROUPS => { 0 => 'APP13', 1 => 'AdobeCM', 2 => 'Image' },
     NOTES => q{
-        The "Adobe_CM" APP13 segment presumably contains color management
+        The APP13 "Adobe_CM" segment presumably contains color management
         information, but the meaning of the data is currently unknown.  If anyone
         has an idea about what this means, please let me know.
     },
@@ -398,7 +525,7 @@ sub ProcessJPEG_HDR($$$);
     PROCESS_PROC => \&Image::ExifTool::ProcessBinaryData,
     GROUPS => { 0 => 'APP14', 1 => 'Adobe', 2 => 'Image' },
     NOTES => q{
-        The "Adobe" APP14 segment stores image encoding information for DCT filters.
+        The APP14 "Adobe" segment stores image encoding information for DCT filters.
         This segment may be copied or deleted as a block using the Extra "Adobe"
         tag, but note that it is not deleted by default when deleting all metadata
         because it may affect the appearance of the image.
@@ -439,7 +566,7 @@ sub ProcessJPEG_HDR($$$);
     'Q' => 'Quality',
 );
 
-# AVI1 APP0 segment (ref http://www.schnarff.com/file-formats/bmp/BMPDIB.TXT)
+# APP0 AVI1 segment (ref http://www.schnarff.com/file-formats/bmp/BMPDIB.TXT)
 %Image::ExifTool::JPEG::AVI1 = (
     PROCESS_PROC => \&Image::ExifTool::ProcessBinaryData,
     GROUPS => { 0 => 'APP0', 1 => 'AVI1', 2 => 'Image' },
@@ -455,7 +582,7 @@ sub ProcessJPEG_HDR($$$);
     },
 );
 
-# Ocad APP0 segment (ref PH)
+# APP0 Ocad segment (ref PH)
 %Image::ExifTool::JPEG::Ocad = (
     PROCESS_PROC => \&ProcessOcad,
     GROUPS => { 0 => 'APP0', 1 => 'Ocad', 2 => 'Image' },
@@ -471,7 +598,7 @@ sub ProcessJPEG_HDR($$$);
     }
 );
 
-# NITF APP6 segment (National Imagery Transmission Format)
+# APP6 NITF segment (National Imagery Transmission Format)
 # ref http://www.gwg.nga.mil/ntb/baseline/docs/n010697/bwcguide25aug98.pdf
 %Image::ExifTool::JPEG::NITF = (
     PROCESS_PROC => \&Image::ExifTool::ProcessBinaryData,
@@ -488,7 +615,7 @@ sub ProcessJPEG_HDR($$$);
     },
     2 => {
         Name => 'ImageFormat',
-        ValueConv => 'chr($val)',
+        ValueConv => 'chr($val & 0xff)',
         PrintConv => { B => 'IMode B' },
     },
     3 => {
@@ -591,7 +718,7 @@ segments are included in the Image::ExifTool module itself.
 
 =head1 AUTHOR
 
-Copyright 2003-2018, Phil Harvey (phil at owl.phy.queensu.ca)
+Copyright 2003-2022, Phil Harvey (philharvey66 at gmail.com)
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

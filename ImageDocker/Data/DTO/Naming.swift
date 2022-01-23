@@ -81,10 +81,10 @@ struct FileTypeRecognizer {
     
     let logger = ConsoleLogger(category: "FileTypeRecognizer")
     
-    let photoExts:[String] = ["jpg", "jpeg", "png"]
+    let photoExts:[String] = ["jpg", "jpeg", "png", "heic"]
     let videoExts:[String] = ["mov", "mp4", "mpeg", "mts", "m2ts"]
     
-    let allowed:Set<String> = ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg", "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "vcf", "amr"]
+    let allowed:Set<String> = ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg", "png", "heic", "mts", "m2ts", "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "vcf", "amr"]
     
     func recognize(from url:URL) -> ImageType {
         var type = self.recognize(from: url.lastPathComponent)

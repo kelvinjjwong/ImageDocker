@@ -19,7 +19,7 @@ use strict;
 use vars qw($VERSION $warnString);
 use Image::ExifTool qw(:DataAccess :Utils);
 
-$VERSION = '1.18';
+$VERSION = '1.27';
 
 sub WarnProc($) { $warnString = $_[0]; }
 
@@ -37,6 +37,20 @@ my %openDocType = (
     'application/epub+zip' => 'EPUB', #PH (not open doc)
 );
 
+# iWork file types based on names of files found in the zip archive
+my %iWorkFile = (
+    'Index/Slide.iwa' => 'KEY',
+    'Index/Tables/DataList.iwa' => 'NUMBERS',
+);
+
+my %iWorkType = (
+    NUMBERS => 'NUMBERS',
+    PAGES   => 'PAGES',
+    KEY     => 'KEY',
+    KTH     => 'KTH',
+    NMBTEMPLATE => 'NMBTEMPLATE',
+);
+
 # ZIP metadata blocks
 %Image::ExifTool::ZIP::Main = (
     PROCESS_PROC => \&Image::ExifTool::ProcessBinaryData,
@@ -47,10 +61,10 @@ my %openDocType = (
         additional meta information from compressed documents inside some ZIP-based
         files such Office Open XML (DOCX, PPTX and XLSX), Open Document (ODB, ODC,
         ODF, ODG, ODI, ODP, ODS and ODT), iWork (KEY, PAGES, NUMBERS), Capture One
-        Enhanced Image Package (EIP), Adobe InDesign Markup Language (IDML), and
-        Electronic Publication (EPUB).  The ExifTool family 3 groups may be used to
-        organize ZIP tags by embedded document number (ie. the exiftool C<-g3>
-        option).
+        Enhanced Image Package (EIP), Adobe InDesign Markup Language (IDML),
+        Electronic Publication (EPUB), and Sketch design files (SKETCH).  The
+        ExifTool family 3 groups may be used to organize ZIP tags by embedded
+        document number (ie. the exiftool C<-g3> option).
     },
     2 => 'ZipRequiredVersion',
     3 => {
@@ -92,7 +106,7 @@ my %openDocType = (
                 ($val >> 16) & 0x1f, # day
                 ($val >> 11) & 0x1f, # hour
                 ($val >> 5)  & 0x3f, # minute
-                 $val        & 0x1f  # second
+                ($val        & 0x1f) * 2  # second
             );
         },
         PrintConv => '$self->ConvertDateTime($val)',
@@ -111,6 +125,7 @@ my %openDocType = (
         Name => 'ZipFileName',
         Format => 'string[$$self{ZipFileNameLength}]',
     },
+    _com => 'ZipFileComment',
 );
 
 # GNU ZIP tags (ref 3)
@@ -210,7 +225,7 @@ my %openDocType = (
                 ($val >> 16) & 0x1f, # day
                 ($val >> 11) & 0x1f, # hour
                 ($val >> 5)  & 0x3f, # minute
-                 $val        & 0x1f  # second
+                ($val        & 0x1f) * 2  # second
             );
         },
         PrintConv => '$self->ConvertDateTime($val)',
@@ -268,7 +283,7 @@ sub ProcessRAR($$)
         last if $size < 0;
         next unless $size;  # ignore blocks with no data
         # don't try to read very large blocks unless LargeFileSupport is enabled
-        if ($size > 0x80000000 and not $et->Options('LargeFileSupport')) {
+        if ($size >= 0x80000000 and not $et->Options('LargeFileSupport')) {
             $et->Warn('Large block encountered. Aborting.');
             last;
         }
@@ -294,6 +309,9 @@ sub ProcessRAR($$)
         $raf->Seek($size, 1) or last if $size;
     }
     $$et{DOC_NUM} = 0;
+    if ($docNum > 1 and not $et->Options('Duplicates')) {
+        $et->Warn("Use the Duplicates option to extract tags for all $docNum files", 1);
+    }
 
     return 1;
 }
@@ -363,6 +381,8 @@ sub HandleMember($$;$)
     $et->HandleTag($tagTablePtr, 9, $member->compressedSize());
     $et->HandleTag($tagTablePtr, 11, $member->uncompressedSize());
     $et->HandleTag($tagTablePtr, 15, $member->fileName());
+    my $com = $member->fileComment();
+    $et->HandleTag($tagTablePtr, '_com', $com) if defined $com and length $com;
 }
 
 #------------------------------------------------------------------------------
@@ -373,13 +393,14 @@ sub ProcessZIP($$)
 {
     my ($et, $dirInfo) = @_;
     my $raf = $$dirInfo{RAF};
-    my ($buff, $buf2, $zip, $docNum);
+    my ($buff, $buf2, $zip);
 
-    return 0 unless $raf->Read($buff, 30) and $buff =~ /^PK\x03\x04/;
+    return 0 unless $raf->Read($buff, 30) == 30 and $buff =~ /^PK\x03\x04/;
 
     my $tagTablePtr = GetTagTable('Image::ExifTool::ZIP::Main');
+    my $docNum = 0;
 
-    # use Archive::Zip if avilable
+    # use Archive::Zip if available
     for (;;) {
         unless (eval { require Archive::Zip } and eval { require IO::File }) {
             if ($$et{FILE_EXT} and $$et{FILE_EXT} ne 'ZIP') {
@@ -407,7 +428,7 @@ sub ProcessZIP($$)
             $et->Warn("Install IO::String to decode compressed ZIP information from a $type");
             last;
         }
-        $et->Vself.logger.log(1, "  --- using Archive::Zip ---\n");
+        $et->VPrint(1, "  --- using Archive::Zip ---\n");
         $zip = new Archive::Zip;
         # catch all warnings! (Archive::Zip is bad for this)
         local $SIG{'__WARN__'} = \&WarnProc;
@@ -430,15 +451,26 @@ sub ProcessZIP($$)
             $et->Warn("$err reading ZIP file");
             last;
         }
+        # extract zip file comment
+        my $comment = $zip->zipfileComment();
+        $et->FoundTag(Comment => $comment) if defined $comment and length $comment;
+
         $$dirInfo{ZIP} = $zip;
 
         # check for an Office Open file (DOCX, etc)
         # --> read '[Content_Types].xml' to determine the file type
-        my ($mime, @members, $epub);
+        my ($mime, @members);
         my $cType = $zip->memberNamed('[Content_Types].xml');
         if ($cType) {
             ($buff, $status) = $zip->contents($cType);
-            if (not $status and $buff =~ /ContentType\s*=\s*(['"])([^"']+)\.main(\+xml)?\1/) {
+            if (not $status and (
+                # first look for the main document with the expected name
+                $buff =~ m{\sPartName\s*=\s*['"](?:/ppt/presentation.xml|/word/document.xml|/xl/workbook.xml)['"][^>]*\sContentType\s*=\s*(['"])([^"']+)\.main(\+xml)?\1} or
+                # then look for the main part
+                $buff =~ /<Override[^>]*\sPartName[^<]+\sContentType\s*=\s*(['"])([^"']+)\.main(\+xml)?\1/ or
+                # and if all else fails, use the default main
+                $buff =~ /ContentType\s*=\s*(['"])([^"']+)\.main(\+xml)?\1/))
+            {
                 $mime = $2;
             }
         }
@@ -461,7 +493,7 @@ sub ProcessZIP($$)
         }
 
         # check for an iWork file
-        @members = $zip->membersMatching('^(index\.(xml|apxl)|QuickLook/Thumbnail\.jpg)$');
+        @members = $zip->membersMatching('(?i)^(index\.(xml|apxl)|QuickLook/Thumbnail\.jpg|[^/]+\.(pages|numbers|key)/Index.(zip|xml|apxl))$');
         if (@members) {
             require Image::ExifTool::iWork;
             Image::ExifTool::iWork::Process_iWork($et, $dirInfo);
@@ -485,8 +517,9 @@ sub ProcessZIP($$)
                     ($buff, $status) = $zip->contents($meta);
                     unless ($status) {
                         my %dirInfo = (
-                            DataPt => \$buff,
-                            DirLen => length $buff,
+                            DirName => 'XML',
+                            DataPt  => \$buff,
+                            DirLen  => length $buff,
                             DataLen => length $buff,
                         );
                         # (avoid structure warnings when copying from XML)
@@ -551,25 +584,56 @@ sub ProcessZIP($$)
         # otherwise just extract general ZIP information
         $et->SetFileType();
         @members = $zip->members();
-        $docNum = 0;
-        my $member;
+        my ($member, $iWorkType);
+        # special files to extract
+        my %extract = (
+            'meta.json' => 1,
+            'previews/preview.png' => 'PreviewPNG',
+            'preview.jpg' => 'PreviewImage', # (iWork 2013 files)
+            'preview-web.jpg' => 'OtherImage', # (iWork 2013 files)
+            'preview-micro.jpg' => 'ThumbnailImage', # (iWork 2013 files)
+            'QuickLook/Thumbnail.jpg' => 'ThumbnailImage', # (iWork 2009 files)
+            'QuickLook/Preview.pdf' => 'PreviewPDF', # (iWork 2009 files)
+        );
         foreach $member (@members) {
             $$et{DOC_NUM} = ++$docNum;
             HandleMember($et, $member, $tagTablePtr);
+            my $file = $member->fileName();
+            # extract things from Sketch files
+            if ($extract{$file}) {
+                ($buff, $status) = $zip->contents($member);
+                $status and $et->Warn("Error extracting $file"), next;
+                if ($file eq 'meta.json') {
+                    $et->ExtractInfo(\$buff, { ReEntry => 1 });
+                    if ($$et{VALUE}{App} and $$et{VALUE}{App} =~ /sketch/i) {
+                        $et->OverrideFileType('SKETCH');
+                    }
+                } else {
+                    $et->FoundTag($extract{$file} => $buff);
+                }
+            } elsif ($file eq 'Index/Document.iwa' and not $iWorkType) {
+                my $type = $iWorkType{$$et{FILE_EXT} || ''};
+                $iWorkType = $type || 'PAGES';
+            } elsif ($iWorkFile{$file}) {
+                $iWorkType = $iWorkFile{$file};
+            }
         }
+        $et->OverrideFileType($iWorkType) if $iWorkType;
         last;
     }
     # all done if we processed this using Archive::Zip
     if ($zip) {
         delete $$dirInfo{ZIP};
         delete $$et{DOC_NUM};
+        if ($docNum > 1 and not $et->Options('Duplicates')) {
+            $et->Warn("Use the Duplicates option to extract tags for all $docNum files", 1);
+        }
         return 1;
     }
 #
 # process the ZIP file by hand (funny, but this seems easier than using Archive::Zip)
 #
-    $docNum = 0;
-    $et->Vself.logger.log(1, "  -- processing as binary data --\n");
+    $et->VPrint(1, "  -- processing as binary data --\n");
     $raf->Seek(30, 0);
     $et->SetFileType();
     SetByteOrder('II');
@@ -598,6 +662,7 @@ sub ProcessZIP($$)
             DataLen => 30 + $len,
             DirStart => 0,
             DirLen => 30 + $len,
+            MixedTags => 1, # (to ignore FileComment tag)
         );
         $et->ProcessDirectory(\%dirInfo, $tagTablePtr);
         my $flags = Get16u(\$buff, 6);
@@ -614,6 +679,9 @@ sub ProcessZIP($$)
         $raf->Read($buff, 30) == 30 and $buff =~ /^PK\x03\x04/ or last;
     }
     delete $$et{DOC_NUM};
+    if ($docNum > 1 and not $et->Options('Duplicates')) {
+        $et->Warn("Use the Duplicates option to extract tags for all $docNum files", 1);
+    }
     return 1;
 }
 
@@ -635,12 +703,12 @@ This module contains definitions required by Image::ExifTool to extract meta
 information from ZIP, GZIP and RAR archives.  This includes ZIP-based file
 types like Office Open XML (DOCX, PPTX and XLSX), Open Document (ODB, ODC,
 ODF, ODG, ODI, ODP, ODS and ODT), iWork (KEY, PAGES, NUMBERS), Capture One
-Enhanced Image Package (EIP), Adobe InDesign Markup Language (IDML), and
-Electronic Publication (EPUB).
+Enhanced Image Package (EIP), Adobe InDesign Markup Language (IDML),
+Electronic Publication (EPUB), and Sketch design files (SKETCH).
 
 =head1 AUTHOR
 
-Copyright 2003-2018, Phil Harvey (phil at owl.phy.queensu.ca)
+Copyright 2003-2022, Phil Harvey (philharvey66 at gmail.com)
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

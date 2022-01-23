@@ -1066,7 +1066,7 @@ my %componentDataDef = (
     '060e2b34.0101.0102.04010503.08000000' => { Name => 'Palette', Type => 'DataValue', Unknown => 1 },
     '060e2b34.0101.0102.04010503.09000000' => { Name => 'PaletteLayout', Type => 'RGBALayout', Unknown => 1 },
     '060e2b34.0101.0102.04010503.0a000000' => { Name => 'ComponentDepth', Format => 'int32u' },
-    '060e2b34.0101.0102.04010601.00000000' => { Name => 'VideoCodingSchemeID', Type => 'AUID', Unknown => 1 },
+    '060e2b34.0101.0102.04010601.00000000' => { Name => 'VideoCodingSchemeID', Type => 'AUID' },
     '060e2b34.0101.0102.04010802.03000000' => { Name => 'RoundedCaptureFilmFrameRate', Format => 'int32u' },
     '060e2b34.0101.0102.04020301.02000000' => { Name => 'AudioAverageBitrate', Format => 'float', PrintConv => 'ConvertBitrate($val)', Groups => { 2 => 'Audio' } },
     '060e2b34.0101.0102.04020301.03000000' => { Name => 'AudioFixedBitrateFlag', Type => 'Boolean', Groups => { 2 => 'Audio' } },
@@ -2591,7 +2591,7 @@ sub ProcessPrimer($$$)
         next unless $verbose;
         my $indx = $i . ')';
         $indx .= ' ' if length($indx) < 3;
-        $et->Vself.logger.log(0, sprintf("  | $indx 0x%.4x => '$global'\n", $local));
+        $et->VPrint(0, sprintf("  | $indx 0x%.4x => '${global}'\n", $local));
     }
     return 1;
 }
@@ -2846,7 +2846,7 @@ sub ProcessMXF($$)
             undef $headerEnd;   # (only test this once)
             # skip directly to footer if possible
             if ($footerPos and $footerPos > $pos and (not $verbose or not $unknown)) {
-                $et->Vself.logger.log(0, "[Skipping to footer. Use Unknown option to parse body partitions]\n");
+                $et->VPrint(0, "[Skipping to footer. Use Unknown option to parse body partitions]\n");
                 $raf->Seek($footerPos, 0) or last;
                 $pos = $footerPos;
             }
@@ -2987,7 +2987,7 @@ information from MXF (Material Exchange Format) files.
 
 =head1 AUTHOR
 
-Copyright 2003-2018, Phil Harvey (phil at owl.phy.queensu.ca)
+Copyright 2003-2022, Phil Harvey (philharvey66 at gmail.com)
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

@@ -150,7 +150,7 @@ sub ProcessISO($$)
             $tagTablePtr = GetTagTable('Image::ExifTool::ISO::Main');
         }
         my $type = unpack('C', $buff);
-        $et->Vself.logger.log(0, "Volume descriptor type $type ($volumeDescriptorType{$type})\n");
+        $et->VPrint(0, "Volume descriptor type $type ($volumeDescriptorType{$type})\n");
         last if $type == 255;   # stop at terminator
         next unless $$tagTablePtr{$type};
         my $subTablePtr = GetTagTable($$tagTablePtr{$type}{SubDirectory}{TagTable});
@@ -184,7 +184,7 @@ information from ISO 9660 disk images.
 
 =head1 AUTHOR
 
-Copyright 2003-2018, Phil Harvey (phil at owl.phy.queensu.ca)
+Copyright 2003-2022, Phil Harvey (philharvey66 at gmail.com)
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

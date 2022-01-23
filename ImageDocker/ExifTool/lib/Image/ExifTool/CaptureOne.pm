@@ -69,7 +69,7 @@ sub FoundCOS($$$$;$)
 
     my $tag = $$props[-1];
     unless ($$tagTablePtr{$tag}) {
-        $et->Vself.logger.log(0, "  | [adding $tag]\n");
+        $et->VPrint(0, "  | [adding $tag]\n");
         my $name = ucfirst $tag;
         $name =~ tr/-_a-zA-Z0-9//dc;
         return 0 unless length $tag;
@@ -159,7 +159,7 @@ sub ProcessEIP($$)
         # get filename of this ZIP member
         $file = $member->fileName();
         next unless defined $file;
-        $et->Vself.logger.log(0, "File: $file\n");
+        $et->VPrint(0, "File: $file\n");
         # set the document number and extract ZIP tags
         $$et{DOC_NUM} = ++$docNum;
         Image::ExifTool::ZIP::HandleMember($et, $member);
@@ -221,7 +221,7 @@ settings files (COS).
 
 =head1 AUTHOR
 
-Copyright 2003-2018, Phil Harvey (phil at owl.phy.queensu.ca)
+Copyright 2003-2022, Phil Harvey (philharvey66 at gmail.com)
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

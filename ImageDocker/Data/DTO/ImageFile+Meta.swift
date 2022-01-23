@@ -386,7 +386,8 @@ extension ImageFile {
         let nowToSeconds = Int(now.timeIntervalSince1970)
         
         let jsonStr:String = ExifTool.helper.getFormattedExif(url: url)
-        //self.logger.log(jsonStr)
+        self.logger.log("exif url: \(url)")
+        //self.logger.log("exif json: \(jsonStr)")
         let json:JSON = JSON(parseJSON: jsonStr)
         if json != JSON(NSNull()) {
             //metaInfoHolder.setMetaInfo(MetaInfo(category: "System", title: "Size", value: json[0]["Composite"]["ImageSize"].description), ifNotExists: true)

@@ -192,7 +192,7 @@ class ImageFile {
         
         let now = Date()
         
-        if loadExifFromFile {
+//        if loadExifFromFile {
             if self.imageData?.updateExifDate == nil || self.imageData?.photoTakenYear == 0 || self.imageData?.photoTakenYear == nil || self.imageData?.photoTakenDate == nil {
                 
                 if let data = self.imageData {
@@ -212,14 +212,14 @@ class ImageFile {
                 
             }
             
-            if self.imageData?.cameraMaker == nil {
-                autoreleasepool { () -> Void in
-                    self.loadMetaInfoFromOSX()
-                    self.loadMetaInfoFromExif()
-                    
-                    needSave = true
-                }
-            }
+//            if self.imageData?.cameraMaker == nil {
+//                autoreleasepool { () -> Void in
+//                    self.loadMetaInfoFromOSX()
+//                    self.loadMetaInfoFromExif()
+//                    
+//                    needSave = true
+//                }
+//            }
             
             if self.isNeedLoadLocation() {
                 needSave = true
@@ -238,7 +238,7 @@ class ImageFile {
             if self.imageData?.updateExifDate == nil {
                 self.imageData?.updateExifDate = Date()
             }
-        }
+//        }
         
         if needSave {
             let _ = save()

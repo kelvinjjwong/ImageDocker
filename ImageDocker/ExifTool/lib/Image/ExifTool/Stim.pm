@@ -15,14 +15,14 @@ use vars qw($VERSION);
 
 $VERSION = '1.01';
 
-# Tags found in Stim APP3 segment in JPEG images
+# Tags found in APP3 Stim segment in JPEG images
 %Image::ExifTool::Stim::Main = (
     GROUPS => { 0 => 'Stim', 1 => 'Stim', 2 => 'Image'},
     NOTES => q{
         These tags are part of the CIPA Stereo Still Image specification, and are
         found in the APP3 "Stim" segment of JPEG images.  See
-        L<http://www.cipa.jp/std/documents/e/DC-006_E.pdf> for the
-        official specification.
+        L<https://web.archive.org/web/20190718152459/http://www.cipa.jp/std/documents/e/DC-006_E.pdf>
+        for the official specification.
     },
     0 => 'StimVersion',
     1 => {
@@ -174,7 +174,7 @@ information.
 
 =head1 AUTHOR
 
-Copyright 2003-2018, Phil Harvey (phil at owl.phy.queensu.ca)
+Copyright 2003-2022, Phil Harvey (philharvey66 at gmail.com)
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

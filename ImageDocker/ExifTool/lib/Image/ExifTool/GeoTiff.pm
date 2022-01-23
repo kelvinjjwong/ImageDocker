@@ -19,11 +19,12 @@ use strict;
 use vars qw($VERSION);
 use Image::ExifTool qw(:DataAccess :Utils);
 
-$VERSION = '1.11';
+$VERSION = '1.12';
 
 # format codes for geoTiff directory entries
 my %geoTiffFormat = (
-    0      => 'int16u',
+    0      => 'int16u', # (value is stored in offset, and count is 1)
+    0x87af => 'int16u', # (value is stored after directory)
     0x87b0 => 'double',
     0x87b1 => 'string',
 );
@@ -572,6 +573,8 @@ my %epsg_vertcs = (
             3053 => 'Hjorsey 1955 Lambert',
             3057 => 'ISN93 Lambert 1993',
             3300 => 'Estonian Coordinate System of 1992',
+            3786 => 'Popular Visualisation CRS / Mercator', #PH (NC)
+            3857 => 'WGS 84 / Pseudo-Mercator', #PH (NC)
             20137 => 'Adindan UTM zone 37N',
             20138 => 'Adindan UTM zone 38N',
             20248 => 'AGD66 AMG zone 48',
@@ -602,7 +605,7 @@ my %epsg_vertcs = (
             20499 => 'Ain el Abd Bahrain Grid',
             20538 => 'Afgooye UTM zone 38N',
             20539 => 'Afgooye UTM zone 39N',
-            20700 => 'Lisbon Portugese Grid',
+            20700 => 'Lisbon Portuguese Grid',
             20822 => 'Aratu UTM zone 22S',
             20823 => 'Aratu UTM zone 23S',
             20824 => 'Aratu UTM zone 24S',
@@ -2167,31 +2170,30 @@ sub ProcessGeoTiff($)
             my $offset = Get16u($dirData, $pt+6);
             my $format = $geoTiffFormat{$loc};
             my ($val, $dataPt);
-            if ($format eq 'double') {          # in the double parms
-                if (not $doubleData or length($$doubleData) < 8*($offset+$count)) {
-                    $et->Warn("Missing double data for $$tagInfo{Name}");
-                    next;
-                }
+            if (not $format) {
+                $et->Warn("Unknown GeoTiff location ($loc) for $$tagInfo{Name}");
+                next;
+            } elsif ($format eq 'double') {     # in the double parms
                 $dataPt = $doubleData;
-                $offset *= 8;
-                $val = Image::ExifTool::ReadValue($dataPt, $offset, $format,
-                                                  $count, length($$doubleData)-$offset);
             } elsif ($format eq 'string') {     # in the ASCII parms
-                if (not $asciiData or length($$asciiData) < $offset+$count) {
-                    $et->Warn("Missing string data for $$tagInfo{Name}");
-                    next;
-                }
                 $dataPt = $asciiData;
-                $val = substr($$dataPt, $offset, $count);
-                $val =~ s/(\0|\|)$//;   # remove trailing terminator (NULL or '|')
-            } elsif ($format eq 'int16u') {     # use the offset as the value
+            } elsif ($format eq 'int16u') {     # in the GeoTiffDirectory data
                 $dataPt = $dirData;
-                $val = $offset;
-                $offset = $pt+6;
-            } else {
-                $et->Warn("Unknown GeoTiff location: $loc");
+                unless ($loc) {                 # is value is stored in offset?
+                    $count = 1;                 # (implied by location of 0)
+                    $offset = ($pt + 6) / 2;    # offset of the "offset" value
+                }
+            }
+            my $size = Image::ExifTool::FormatSize($format);
+            if (not $dataPt or length($$dataPt) < $size*($offset+$count)) {
+                $et->Warn("Missing $format data for $$tagInfo{Name}");
                 next;
             }
+            $offset *= $size;
+            $val = Image::ExifTool::ReadValue($dataPt, $offset, $format,
+                                              $count, length($$dataPt)-$offset);
+            # remove trailing terminator (NULL or '|') from string value
+            $val =~ s/(\0|\|)$// if $format eq 'string';
             $verbose and $et->VerboseInfo($tag, $tagInfo,
                 'Table'  => $tagTable,
                 'Index'  => $i,
@@ -2200,7 +2202,7 @@ sub ProcessGeoTiff($)
                 'Start'  => $offset,
                 'Format' => $format,
                 'Count'  => $count,
-                'Size'   => $count * Image::ExifTool::FormatSize($format),
+                'Size'   => $count * $size,
             );
             $et->FoundTag($tagInfo, $val);
         }
@@ -2240,7 +2242,7 @@ coordinates.
 
 =head1 AUTHOR
 
-Copyright 2003-2018, Phil Harvey (phil at owl.phy.queensu.ca)
+Copyright 2003-2022, Phil Harvey (philharvey66 at gmail.com)
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

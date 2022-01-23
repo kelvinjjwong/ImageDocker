@@ -15,7 +15,7 @@ use strict;
 use vars qw($VERSION $AUTOLOAD %iptcCharset);
 use Image::ExifTool qw(:DataAccess :Utils);
 
-$VERSION = '1.55';
+$VERSION = '1.57';
 
 %iptcCharset = (
     "\x1b%G"  => 'UTF8',
@@ -202,7 +202,7 @@ my %fileFormat = (
         Shift => 'Time',
         ValueConv => 'Image::ExifTool::Exif::ExifDate($val)',
         ValueConvInv => 'Image::ExifTool::IPTC::IptcDate($val)',
-        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($val)',
+        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($self,$val)',
     },
     80 => {
         Name => 'TimeSent',
@@ -211,7 +211,7 @@ my %fileFormat = (
         Shift => 'Time',
         ValueConv => 'Image::ExifTool::Exif::ExifTime($val)',
         ValueConvInv => 'Image::ExifTool::IPTC::IptcTime($val)',
-        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($val)',
+        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($self,$val)',
     },
     90 => {
         Name => 'CodedCharacterSet',
@@ -340,7 +340,7 @@ my %fileFormat = (
         Shift => 'Time',
         ValueConv => 'Image::ExifTool::Exif::ExifDate($val)',
         ValueConvInv => 'Image::ExifTool::IPTC::IptcDate($val)',
-        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($val)',
+        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($self,$val)',
     },
     35 => {
         Name => 'ReleaseTime',
@@ -349,7 +349,7 @@ my %fileFormat = (
         Shift => 'Time',
         ValueConv => 'Image::ExifTool::Exif::ExifTime($val)',
         ValueConvInv => 'Image::ExifTool::IPTC::IptcTime($val)',
-        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($val)',
+        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($self,$val)',
     },
     37 => {
         Name => 'ExpirationDate',
@@ -358,7 +358,7 @@ my %fileFormat = (
         Shift => 'Time',
         ValueConv => 'Image::ExifTool::Exif::ExifDate($val)',
         ValueConvInv => 'Image::ExifTool::IPTC::IptcDate($val)',
-        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($val)',
+        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($self,$val)',
     },
     38 => {
         Name => 'ExpirationTime',
@@ -367,7 +367,7 @@ my %fileFormat = (
         Shift => 'Time',
         ValueConv => 'Image::ExifTool::Exif::ExifTime($val)',
         ValueConvInv => 'Image::ExifTool::IPTC::IptcTime($val)',
-        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($val)',
+        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($self,$val)',
     },
     40 => {
         Name => 'SpecialInstructions',
@@ -397,7 +397,7 @@ my %fileFormat = (
         Shift => 'Time',
         ValueConv => 'Image::ExifTool::Exif::ExifDate($val)',
         ValueConvInv => 'Image::ExifTool::IPTC::IptcDate($val)',
-        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($val)',
+        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($self,$val)',
     },
     50 => {
         Name => 'ReferenceNumber',
@@ -411,7 +411,7 @@ my %fileFormat = (
         Shift => 'Time',
         ValueConv => 'Image::ExifTool::Exif::ExifDate($val)',
         ValueConvInv => 'Image::ExifTool::IPTC::IptcDate($val)',
-        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($val)',
+        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($self,$val)',
     },
     60 => {
         Name => 'TimeCreated',
@@ -420,7 +420,7 @@ my %fileFormat = (
         Shift => 'Time',
         ValueConv => 'Image::ExifTool::Exif::ExifTime($val)',
         ValueConvInv => 'Image::ExifTool::IPTC::IptcTime($val)',
-        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($val)',
+        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($self,$val)',
     },
     62 => {
         Name => 'DigitalCreationDate',
@@ -429,7 +429,7 @@ my %fileFormat = (
         Shift => 'Time',
         ValueConv => 'Image::ExifTool::Exif::ExifDate($val)',
         ValueConvInv => 'Image::ExifTool::IPTC::IptcDate($val)',
-        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($val)',
+        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($self,$val)',
     },
     63 => {
         Name => 'DigitalCreationTime',
@@ -438,7 +438,7 @@ my %fileFormat = (
         Shift => 'Time',
         ValueConv => 'Image::ExifTool::Exif::ExifTime($val)',
         ValueConvInv => 'Image::ExifTool::IPTC::IptcTime($val)',
-        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($val)',
+        PrintConvInv => 'Image::ExifTool::IPTC::InverseDateOrTime($self,$val)',
     },
     65 => {
         Name => 'OriginatingProgram',
@@ -497,6 +497,7 @@ my %fileFormat = (
     103 => {
         Name => 'OriginalTransmissionReference',
         Format => 'string[0,32]',
+        Notes => 'now used as a job identifier',
     },
     105 => {
         Name => 'Headline',
@@ -534,7 +535,7 @@ my %fileFormat = (
             I haven't found a reference for the format of tags 121, 184-188 and
             225-232, so I have just make them writable as strings with
             reasonable length.  Beware that if this is wrong, other utilities
-            won't be able to read these tags as written by ExifTool
+            may not be able to read these tags as written by ExifTool
         },
     },
     122 => {
@@ -674,6 +675,8 @@ my %fileFormat = (
     231 => {
         Name => 'DocumentHistory',
         Format => 'string[0,256]', # (guess)
+        ValueConv => '$val =~ s/\0+/\n/g; $val', # (have seen embedded nulls)
+        ValueConvInv => '$val',
     },
     232 => {
         Name => 'ExifCameraInfo',
@@ -1048,6 +1051,7 @@ sub ProcessIPTC($$$)
     my $dirLen = $$dirInfo{DirLen} || 0;
     my $dirEnd = $pos + $dirLen;
     my $verbose = $et->Options('Verbose');
+    my $validate = $et->Options('Validate');
     my $success = 0;
     my ($lastRec, $recordPtr, $recordName);
 
@@ -1136,7 +1140,7 @@ sub ProcessIPTC($$$)
         if ($len & 0x8000) {
             my $n = $len & 0x7fff; # get num bytes in length field
             if ($pos + $n > $dirEnd or $n > 8) {
-                $et->Vself.logger.log(0, "Invalid extended IPTC entry (dataset $rec:$tag, len $len)\n");
+                $et->VPrint(0, "Invalid extended IPTC entry (dataset $rec:$tag, len $len)\n");
                 $success = 0;
                 last;
             }
@@ -1146,11 +1150,14 @@ sub ProcessIPTC($$$)
             }
         }
         if ($pos + $len > $dirEnd) {
-            $et->Vself.logger.log(0, "Invalid IPTC entry (dataset $rec:$tag, len $len)\n");
+            $et->VPrint(0, "Invalid IPTC entry (dataset $rec:$tag, len $len)\n");
             $success = 0;
             last;
         }
         if (not defined $lastRec or $lastRec != $rec) {
+            if ($validate and defined $lastRec and $rec < $lastRec) {
+                $et->Warn("IPTC doesn't conform to spec: Records out of sequence",1)
+            }
             my $tableInfo = $tagTablePtr->{$rec};
             unless ($tableInfo) {
                 $et->WarnOnce("Unrecognized IPTC record $rec (ignored)");
@@ -1164,7 +1171,7 @@ sub ProcessIPTC($$$)
             }
             $recordName = $$tableInfo{Name};
             $recordPtr = Image::ExifTool::GetTagTable($tableName);
-            $et->Vself.logger.log(0,$$et{INDENT},"-- $recordName record --\n");
+            $et->VPrint(0,$$et{INDENT},"-- $recordName record --\n");
             $lastRec = $rec;
         }
         my $val = substr($$dataPt, $pos, $len);
@@ -1181,9 +1188,26 @@ sub ProcessIPTC($$$)
         # (could use $$recordPtr{FORMAT} if no Format below, but don't do this to
         #  be backward compatible with improperly written PhotoMechanic tags)
         $format = $$tagInfo{Format} if $tagInfo;
-        # use logic to determine format if not specified
-        unless ($format) {
+        if (not $format) {
+            # guess at "int" format if not specified
             $format = 'int' if $len <= 4 and $len != 3 and $val =~ /[\0-\x08]/;
+        } elsif ($validate) {
+            my ($fmt,$min,$max);
+            if ($format =~ /(.*)\[(\d+)(,(\d+))?\]/) {
+                $fmt = $1;
+                $min = $2;
+                $max = $4 || $2;
+            } else {
+                $fmt = $format;
+                $min = $max = 1;
+            }
+            my $siz = Image::ExifTool::FormatSize($fmt) || 1;
+            $min *= $siz; $max *= $siz;
+            if ($len < $min or $len > $max) {
+                my $should = ($min == $max) ? $min : ($len < $min ? "$min min" : "$max max");
+                my $what = ($len < $siz * $min) ? 'short' : 'long';
+                $et->Warn("IPTC $$tagInfo{Name} too $what ($len bytes; should be $should)", 1);
+            }
         }
         if ($format) {
             if ($format =~ /^int/) {
@@ -1195,7 +1219,10 @@ sub ProcessIPTC($$$)
                     }
                 }
             } elsif ($format =~ /^string/) {
-                $val =~ s/\0+$//;   # some braindead softwares add null terminators
+                # some braindead softwares add null terminators
+                if ($val =~ s/\0+$// and $validate) {
+                    $et->Warn("IPTC $$tagInfo{Name} improperly terminated", 1);
+                }
                 if ($rec == 1) {
                     # handle CodedCharacterSet tag
                     $xlat = HandleCodedCharset($et, $val) if $tag == 90;
@@ -1205,9 +1232,11 @@ sub ProcessIPTC($$$)
                     TranslateCodedString($et, \$val, \$xlat, 1);
                 }
             } elsif ($format =~ /^digits/) {
-                $val =~ s/\0+$//;
+                if ($val =~ s/\0+$// and $validate) {
+                    $et->Warn("IPTC $$tagInfo{Name} improperly terminated", 1);
+                }
             } elsif ($format !~ /^undef/) {
-                warn("Invalid IPTC format: $format");
+                warn("Invalid IPTC format: $format");   # (this would be a programming error)
             }
         }
         $verbose and $et->VerboseInfo($tag, $tagInfo,
@@ -1251,7 +1280,7 @@ image files.
 
 =head1 AUTHOR
 
-Copyright 2003-2018, Phil Harvey (phil at owl.phy.queensu.ca)
+Copyright 2003-2022, Phil Harvey (philharvey66 at gmail.com)
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

@@ -21,7 +21,7 @@ use strict;
 use vars qw($VERSION);
 use Image::ExifTool qw(:DataAccess :Utils);
 
-$VERSION = '1.14';
+$VERSION = '1.17';
 
 sub ProcessPEResources($$);
 sub ProcessPEVersion($$);
@@ -52,6 +52,10 @@ my %resourceType = (
 );
 
 my %languageCode = (
+    Notes => q{
+        See L<https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid>
+        for the full list of Microsoft language codes.
+    },
     '0000' => 'Neutral',
     '007F' => 'Invariant',
     '0400' => 'Process default',
@@ -218,10 +222,32 @@ my %languageCode = (
         ValueConv => 'ConvertUnixTime($val,1)',
         PrintConv => '$self->ConvertDateTime($val)',
     },
+    9 => {
+        Name => 'ImageFileCharacteristics',
+        # ref https://docs.microsoft.com/en-us/windows/desktop/api/winnt/ns-winnt-_image_file_header
+        PrintConv => { BITMASK => {
+            0 => 'No relocs',
+            1 => 'Executable',
+            2 => 'No line numbers',
+            3 => 'No symbols',
+            4 => 'Aggressive working-set trim',
+            5 => 'Large address aware',
+            7 => 'Bytes reversed lo',
+            8 => '32-bit',
+            9 => 'No debug',
+            10 => 'Removable run from swap',
+            11 => 'Net run from swap',
+            12 => 'System file',
+            13 => 'DLL',
+            14 => 'Uniprocessor only',
+            15 => 'Bytes reversed hi',
+        }},
+    },
     10 => {
         Name => 'PEType',
         PrintHex => 1,
         PrintConv => {
+            0x107 => 'ROM Image',
             0x10b => 'PE32',
             0x20b => 'PE32+',
         },
@@ -375,7 +401,7 @@ my %languageCode = (
         existing StringFileInfo tags even if not listed in this table.
     },
     LanguageCode => {
-        Notes => 'extracted from the StringFileInfo value',
+        Notes => 'Windows code page; extracted from the StringFileInfo value',
         # ref http://techsupt.winbatch.com/TS/T000001050F49.html
         # (also see http://support.bigfix.com/fixlet/documents/WinInspectors-2006-08-10.pdf)
         # (also see ftp://ftp.dyu.edu.tw/pub/cpatch/faq/tech/tech_nlsnt.txt)
@@ -931,7 +957,7 @@ sub ProcessPEResources($$)
             my $resType = $resourceType{$name} || sprintf('Unknown (0x%x)', $name);
             # ignore everything but the Version resource unless verbose
             if ($verbose) {
-                $et->Vself.logger.log(0, "$resType resource:\n");
+                $et->VPrint(0, "$resType resource:\n");
             } else {
                 next unless $resType eq 'Version';
             }
@@ -983,7 +1009,7 @@ sub ProcessPEDict($$)
     my $raf = $$dirInfo{RAF};
     my $dataPt = $$dirInfo{DataPt};
     my $dirLen = length($$dataPt);
-    my ($pos, @sections, %dirInfo);
+    my ($pos, @sections, %dirInfo, $rsrcFound);
 
     # loop through all sections
     for ($pos=0; $pos+40<=$dirLen; $pos+=40) {
@@ -993,14 +1019,16 @@ sub ProcessPEDict($$)
         my $offset = Get32u($dataPt, $pos + 20);
         # remember the section offsets for the VirtualAddress lookup later
         push @sections, { Base => $offset, Size => $size, VirtualAddress => $va };
-        # save details of the first resource section
+        # save details of the first resource section (or .text if .rsrc not found, ref forum11465)
+        next unless ($name eq ".rsrc\0\0\0" and not $rsrcFound and defined($rsrcFound = 1)) or
+                    ($name eq ".text\0\0\0" and not %dirInfo);
         %dirInfo = (
             RAF      => $raf,
             Base     => $offset,
             DirStart => 0,   # (relative to Base)
             DirLen   => $size,
             Sections => \@sections,
-        ) if $name eq ".rsrc\0\0\0" and not %dirInfo;
+        );
     }
     # process the first resource section
     ProcessPEResources($et, \%dirInfo) or return 0 if %dirInfo;
@@ -1118,7 +1146,8 @@ sub ProcessEXE($$)
         my $fileSize = ($cp - ($cblp ? 1 : 0)) * 512 + $cblp;
         #(patch to accommodate observed 64-bit files)
         #return 0 if $fileSize < 0x40 or $fileSize < $lfarlc;
-        return 0 if $fileSize < 0x40;
+        #return 0 if $fileSize < 0x40; (changed to warning in ExifTool 12.08)
+        $et->Warn('Invalid file size in DOS header') if $fileSize < 0x40;
         # read the Windows NE, PE or LE (virtual device driver) header
         #if ($lfarlc == 0x40 and $fileSize > $lfanew + 2 and ...
         if ($raf->Seek($lfanew, 0) and $raf->Read($buff, 0x40) and $buff =~ /^(NE|PE|LE)/) {
@@ -1141,9 +1170,10 @@ sub ProcessEXE($$)
                 #  20 int16u SizeOfOptionalHeader
                 #  22 int16u Characteristics
                 if ($size >= 24) {  # PE header is 24 bytes (plus optional header)
-                    my $machine = $Image::ExifTool::EXE::Main{0}{PrintConv}{Get16u(\$buff, 4)} || '';
+                    my $mach = Get16u(\$buff, 4);   # MachineType
+                    my $flags = Get16u(\$buff, 22); # ImageFileCharacteristics
+                    my $machine = $Image::ExifTool::EXE::Main{0}{PrintConv}{$mach} || '';
                     my $winType = $machine =~ /64/ ? 'Win64' : 'Win32';
-                    my $flags = Get16u(\$buff, 22);
                     $ext = $flags & 0x2000 ? 'DLL' : 'EXE';
                     $et->SetFileType("$winType $ext", undef, $ext);
                     return 1 if $fast3;
@@ -1155,11 +1185,12 @@ sub ProcessEXE($$)
                             $buff .= $buf2;
                             $size += $more;
                             my $magic = Get16u(\$buff, 24);
-                            # verify PE32/PE32+ magic number
-                            unless ($magic == 0x10b or $magic == 0x20b) {
+                            # verify PE magic number
+                            unless ($magic == 0x107 or $magic == 0x10b or $magic == 0x20b) {
                                 $et->Warn('Unknown PE magic number');
                                 return 1;
                             }
+                            # --> 64-bit if $magic is 0x20b ????
                         } else {
                             $et->Warn('Error reading optional header');
                         }
@@ -1338,7 +1369,7 @@ sub ProcessEXE($$)
             python => 'py',
             ruby   => 'rb',
             php    => 'php',
-        }->{$1};
+        }->{$prog};
         # use '.sh' for extension of all shell scripts
         $ext = $prog =~ /sh$/ ? 'sh' : '' unless defined $ext;
     }
@@ -1367,7 +1398,7 @@ library files.
 
 =head1 AUTHOR
 
-Copyright 2003-2018, Phil Harvey (phil at owl.phy.queensu.ca)
+Copyright 2003-2022, Phil Harvey (philharvey66 at gmail.com)
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

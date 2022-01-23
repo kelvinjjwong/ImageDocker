@@ -182,7 +182,7 @@ sub ProcessComments($$$)
             $tag = 'vendor';
             $val = $buff;
             $num = ($pos + 4 < $end) ? Get32u($dataPt, $pos) : 0;
-            $et->Vself.logger.log(0, "  + [Vorbis comments with $num entries]\n");
+            $et->VPrint(0, "  + [Vorbis comments with $num entries]\n");
             $pos += 4;
         }
         # add tag to table unless it exists already
@@ -191,7 +191,7 @@ sub ProcessComments($$$)
             # remove invalid characters in tag name and capitalize following letters
             $name =~ s/[^\w-]+(.?)/\U$1/sg;
             $name =~ s/([a-z0-9])_([a-z])/$1\U$2/g;
-            $et->Vself.logger.log(0, "  | [adding $tag]\n");
+            $et->VPrint(0, "  | [adding $tag]\n");
             AddTagToTable($tagTablePtr, $tag, { Name => $name });
         }
         $et->HandleTag($tagTablePtr, $tag, $et->Decode($val, 'UTF8'),
@@ -228,7 +228,7 @@ information from Ogg Vorbis audio headers.
 
 =head1 AUTHOR
 
-Copyright 2003-2018, Phil Harvey (phil at owl.phy.queensu.ca)
+Copyright 2003-2022, Phil Harvey (philharvey66 at gmail.com)
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

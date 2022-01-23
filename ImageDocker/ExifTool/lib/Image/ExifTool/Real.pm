@@ -604,7 +604,7 @@ sub ProcessReal($$)
         ($tag, $size, $vers) = unpack('a4Nn', $buff);
         last if $tag eq "\0\0\0\0";
         if ($verbose) {
-            $et->Vself.logger.log(0, "$tag chunk ($size bytes):\n");
+            $et->VPrint(0, "$tag chunk ($size bytes):\n");
         } else {
             last if $tag eq 'DATA'; # stop normal parsing at DATA tag
         }
@@ -653,7 +653,7 @@ sub ProcessReal($$)
     # override MIMEType with stream MIME type if we only have one stream
     if (@mimeTypes == 1 and length $mimeTypes[0]) {
         $$et{VALUE}{MIMEType} = $mimeTypes[0];
-        $et->Vself.logger.log(0, "  MIMEType = $mimeTypes[0]\n");
+        $et->VPrint(0, "  MIMEType = $mimeTypes[0]\n");
     }
 #
 # Process footer containing Real metadata and ID3 information
@@ -676,7 +676,7 @@ sub ProcessReal($$)
             $et->Warn('Bad metadata footer');
         }
         if ($raf->Seek(-128, 2) and $raf->Read($buff, 128) == 128 and $buff =~ /^TAG/) {
-            $et->Vself.logger.log(0, "ID3v1:\n");
+            $et->VPrint(0, "ID3v1:\n");
             my %dirInfo = (
                 DataPt => \$buff,
                 DirStart => 0,
@@ -715,7 +715,7 @@ little-endian, but the Real format is big-endian.
 
 =head1 AUTHOR
 
-Copyright 2003-2018, Phil Harvey (phil at owl.phy.queensu.ca)
+Copyright 2003-2022, Phil Harvey (philharvey66 at gmail.com)
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

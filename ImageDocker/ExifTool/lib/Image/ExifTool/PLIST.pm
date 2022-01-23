@@ -21,7 +21,7 @@ use Image::ExifTool qw(:DataAccess :Utils);
 use Image::ExifTool::XMP;
 use Image::ExifTool::GPS;
 
-$VERSION = '1.07';
+$VERSION = '1.09';
 
 sub ExtractObject($$;$);
 sub Get24u($$);
@@ -35,6 +35,11 @@ my %readProc = (
     8 => \&Get64u,
     0x104 => \&GetFloat,
     0x108 => \&GetDouble,
+);
+
+# recognize different types of PLIST files based on certain tags
+my %plistType = (
+    adjustmentBaseVersion => 'AAE',
 );
 
 # PLIST tags (generated on-the-fly for most tags)
@@ -113,7 +118,7 @@ sub FoundTag($$$$;$)
 
     my $prop = $$props[-1];
     if ($verbose > 1) {
-        $et->Vself.logger.log(0, $$et{INDENT}, '[', join('/',@$props), ' = ',
+        $et->VPrint(0, $$et{INDENT}, '[', join('/',@$props), ' = ',
                     $et->Printable($val), "]\n");
     }
     # un-escape XML character entities
@@ -154,7 +159,7 @@ sub FoundTag($$$$;$)
     my $tag = join '/', @$keys;     # generate tag ID from 'key' values
     my $tagInfo = $$tagTablePtr{$tag};
     unless ($tagInfo) {
-        $et->Vself.logger.log(0, $$et{INDENT}, "[adding $tag]\n") if $verbose;
+        $et->VPrint(0, $$et{INDENT}, "[adding $tag]\n") if $verbose;
         # generate tag name from ID
         my $name = $tag;
         $name =~ s{^MetaDataList//}{};  # shorten long MODD metadata tag names
@@ -173,6 +178,8 @@ sub FoundTag($$$$;$)
         delete $$et{LIST_TAGS}{$$et{LastPListTag}};
     }
     $$et{LastPListTag} = $tagInfo;
+    # override file type if applicable
+    $et->OverrideFileType($plistType{$tag}) if $plistType{$tag} and $$et{FILE_TYPE} eq 'XMP';
     # save the tag
     $et->HandleTag($tagTablePtr, $tag, $val);
 
@@ -281,7 +288,7 @@ sub ExtractObject($$;$)
                     next if not defined $val or ref($val) eq 'HASH';
                     my $tagInfo = $et->GetTagInfo($tagTablePtr, $tag);
                     unless ($tagInfo) {
-                        $et->Vself.logger.log(0, $$et{INDENT}, "[adding $tag]\n") if $verbose;
+                        $et->VPrint(0, $$et{INDENT}, "[adding $tag]\n") if $verbose;
                         my $name = $tag;
                         $name =~ s/([^A-Za-z])([a-z])/$1\u$2/g; # capitalize words
                         $name =~ tr/-_a-zA-Z0-9//dc; # remove illegal characters
@@ -323,12 +330,12 @@ sub ProcessBinaryPLIST($$$)
 {
     my ($et, $dirInfo, $tagTablePtr) = @_;
     my ($i, $buff, @table);
+    my $dataPt = $$dirInfo{DataPt};
 
     $et->VerboseDir('Binary PLIST');
     SetByteOrder('MM');
 
-    unless ($$dirInfo{RAF}) {
-        my $dataPt = $$dirInfo{DataPt};
+    if ($dataPt) {
         my $start = $$dirInfo{DirStart};
         if ($start or ($$dirInfo{DirLen} and $$dirInfo{DirLen} != length $$dataPt)) {
             my $buf2 = substr($$dataPt, $start || 0, $$dirInfo{DirLen});
@@ -339,7 +346,7 @@ sub ProcessBinaryPLIST($$$)
         my $strt = $$dirInfo{DirStart} || 0;
     }
     # read and parse the trailer
-    my $raf = $$dirInfo{RAF};
+    my $raf = $$dirInfo{RAF} or return 0;
     $raf->Seek(-32,2) and $raf->Read($buff,32)==32 or return 0;
     my $intSize = Get8u(\$buff, 6);
     my $refSize = Get8u(\$buff, 7);
@@ -431,7 +438,7 @@ This module decodes both the binary and XML-based PLIST format.
 
 =head1 AUTHOR
 
-Copyright 2003-2018, Phil Harvey (phil at owl.phy.queensu.ca)
+Copyright 2003-2022, Phil Harvey (philharvey66 at gmail.com)
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

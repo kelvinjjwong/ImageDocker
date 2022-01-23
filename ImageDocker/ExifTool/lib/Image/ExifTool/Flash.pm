@@ -341,7 +341,7 @@ Record: for ($rec=0; ; ++$rec) {
             $val = substr($$dataPt, $pos + 2, $len);
             $pos += 2 + $len;
         } elsif ($isStruct{$type}) {   # object, mixed array or typed object
-            $et->Vself.logger.log(1, "  + [$amfType[$type]]\n");
+            $et->VPrint(1, "  + [$amfType[$type]]\n");
             my $getName;
             $val = '';  # dummy value
             if ($type == 0x08) {        # mixed array
@@ -363,7 +363,7 @@ Record: for ($rec=0; ; ++$rec) {
                 $pos += 2 + $len;
                 # first string of a typed object is the object name
                 if ($getName) {
-                    $et->Vself.logger.log(1,"  | (object name '$tag')\n");
+                    $et->VPrint(1,"  | (object name '${tag}')\n");
                     undef $getName;
                     next; # (ignore name for now)
                 }
@@ -395,7 +395,7 @@ Record: for ($rec=0; ; ++$rec) {
                 last if $t == 0x09; # (end of object)
                 if (not $$subTablePtr{$tag} and $tag =~ /^\w+$/) {
                     AddTagToTable($subTablePtr, $tag, { Name => ucfirst($tag) });
-                    $et->Vself.logger.log(1, "  | (adding $tag)\n");
+                    $et->VPrint(1, "  | (adding $tag)\n");
                 }
                 $et->HandleTag($subTablePtr, $tag, $v,
                     DataPt  => $dataPt,
@@ -418,7 +418,7 @@ Record: for ($rec=0; ; ++$rec) {
             my $num = Get32u($dataPt, $pos);
             $$dirInfo{Pos} = $pos + 4;
             my ($i, @vals);
-            # add array index to compount tag name
+            # add array index to compound tag name
             my $structName = $$dirInfo{StructName};
             for ($i=0; $i<$num; ++$i) {
                 $$dirInfo{StructName} = $structName . $i if defined $structName;
@@ -449,12 +449,12 @@ Record: for ($rec=0; ; ++$rec) {
             # only process certain Meta packets
             if ($type == 0x02 and not $rec) {
                 my $verb = $processMetaPacket{$val} ? 'processing' : 'ignoring';
-                $et->Vself.logger.log(0, "  | ($verb $val information)\n");
+                $et->VPrint(0, "  | ($verb $val information)\n");
                 last unless $processMetaPacket{$val};
             } else {
                 # give verbose indication if we ignore a lone value
                 my $t = $amfType[$type] || sprintf('type 0x%x',$type);
-                $et->Vself.logger.log(1, "  | (ignored lone $t value '$val')\n");
+                $et->VPrint(1, "  | (ignored lone $t value '${val}')\n");
             }
         }
     }
@@ -494,7 +494,7 @@ sub ProcessFLV($$)
         my $tagInfo = $et->GetTagInfo($tagTablePtr, $type);
         if ($verbose > 1) {
             my $name = $tagInfo ? $$tagInfo{Name} : "type $type";
-            $et->Vself.logger.log(1, "FLV $name packet, len $len\n");
+            $et->VPrint(1, "FLV $name packet, len $len\n");
         }
         undef $buff;
         if ($tagInfo and $$tagInfo{SubDirectory}) {
@@ -651,7 +651,7 @@ sub ProcessSWF($$)
         my $pos = 2;
         my $tag = $code >> 6;
         my $size = $code & 0x3f;
-        $et->Vself.logger.log(1, "SWF tag $tag ($size bytes):\n");
+        $et->VPrint(1, "SWF tag $tag ($size bytes):\n");
         last unless $tag == 69 or $tag == 77 or $hasMeta;
         # read enough to get a complete short record
         if ($pos + $size > $buffLen) {
@@ -677,7 +677,7 @@ sub ProcessSWF($$)
                 $buffLen = length $buff;
                 last if $pos + $size > $buffLen;
             }
-            $et->Vself.logger.log(1, "  [extended size $size bytes]\n");
+            $et->VPrint(1, "  [extended size $size bytes]\n");
         }
         if ($tag == 69) {       # FlashAttributes
             last unless $size;
@@ -721,7 +721,7 @@ will add AMF3 support.
 
 =head1 AUTHOR
 
-Copyright 2003-2018, Phil Harvey (phil at owl.phy.queensu.ca)
+Copyright 2003-2022, Phil Harvey (philharvey66 at gmail.com)
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

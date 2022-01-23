@@ -30,21 +30,28 @@ struct ExifTool {
     }
     
     func getFormattedExif(url:URL) -> String{
-        
+        // need install exiftool to macos first
+        // https://exiftool.org
+        // verification: "which exiftool"
         
         let pipe = Pipe()
+        let pipe2 = Pipe()
         
         autoreleasepool { () -> Void in
             let exiftool = Process()
             exiftool.standardOutput = pipe
-            exiftool.standardError = FileHandle.nullDevice
+            exiftool.standardError = pipe2
             exiftool.launchPath = mainUrl.path
             exiftool.arguments = ["-j", "-g", url.path]
             exiftool.launch()
             exiftool.waitUntilExit()
         }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let err = pipe2.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        let errStr:String = String(data: err, encoding: .utf8)!
+        print("exiftool err: \(errStr)")
+        // if errStr contains "exiftool err: Illegal declaration of subroutine" need install exiftool.dmg
         pipe.fileHandleForReading.closeFile()
         return string
     }

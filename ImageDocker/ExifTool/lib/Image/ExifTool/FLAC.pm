@@ -155,7 +155,7 @@ sub ProcessBitStream($$$)
     my $tag;
 
     if ($verbose) {
-        $et->Vself.logger.log(0, "  + [BitStream directory, $dirLen bytes, '$byteOrder' order]\n");
+        $et->VPrint(0, "  + [BitStream directory, $dirLen bytes, '${byteOrder}' order]\n");
     }
     foreach $tag (sort keys %$tagTablePtr) {
         next unless $tag =~ /^Bit(\d+)-?(\d+)?/;
@@ -284,7 +284,7 @@ information from Free Lossless Audio Codec (FLAC) audio files.
 
 =head1 AUTHOR
 
-Copyright 2003-2018, Phil Harvey (phil at owl.phy.queensu.ca)
+Copyright 2003-2022, Phil Harvey (philharvey66 at gmail.com)
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

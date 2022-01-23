@@ -15,7 +15,7 @@ use vars qw($VERSION);
 use Image::ExifTool qw(:DataAccess :Utils);
 use Image::ExifTool::Import;
 
-$VERSION = '1.02';
+$VERSION = '1.03';
 
 sub ExtractTags($$$);
 
@@ -50,6 +50,7 @@ sub ExtractTags($$$);
     DevicesAccelerometerSampleArrayZ    => { Name => 'AccelerometerZ'},
     DevicesClockZuluTime => {
         Name => 'DateTimeOriginal',
+        Description => 'Date/Time Original',
         Groups => { 2 => 'Time' },
         ValueConv => 'require Image::ExifTool::XMP; Image::ExifTool::XMP::ConvertXMPDate($val)',
         PrintConv => '$self->ConvertDateTime($val)',
@@ -118,7 +119,7 @@ sub ExtractTags($$$)
                 $tagInfo{List} = 1 if ref $$meta{$key} eq 'ARRAY';
                 $tagInfo{Name} = $name;
                 my $str = $tag eq $name ? '' : " as $name";
-                $et->Vself.logger.log(0, "  [adding $tag$str]\n");
+                $et->VPrint(0, "  [adding $tag$str]\n");
                 AddTagToTable($tagTablePtr, $tag, \%tagInfo);
             }
             $et->HandleTag($tagTablePtr, $tag, $val);
@@ -135,16 +136,12 @@ sub ProcessLFP($$)
     my ($et, $dirInfo) = @_;
     my $raf = $$dirInfo{RAF};
     my $verbose = $et->Options('Verbose');
-    my ($buff, $id, %dumpParms);
+    my ($buff, $id);
 
     # validate the Lytro file header
     return 0 unless $raf->Read($buff, 16) == 16 and $buff =~ /^\x89LFP\x0d\x0a\x1a\x0a/;
     $et->SetFileType();   # set the FileType tag
     SetByteOrder('MM');
-    if ($verbose > 2) {
-        %dumpParms = ( Out => $$et{OPTIONS}{TextOut} );
-        $dumpParms{MaxLen} = 128 if $verbose < 4;
-    }
     my $tagTablePtr = GetTagTable('Image::ExifTool::Lytro::Main');
     while ($raf->Read($buff, 16) == 16) {
         $buff =~ /^\x89LF/ or $et->Warn('LFP format error'), last;
@@ -153,13 +150,13 @@ sub ProcessLFP($$)
         $raf->Read($id, 80) == 80 or $et->Warn('Truncated LFP segment'), last;  # ignore the sha1
         if ($verbose) {
             $id =~ s/\0.*//s;
-            $et->Vself.logger.log(0, substr($buff,1,3), " segment ($size bytes, $id)\n");
+            $et->VPrint(0, substr($buff,1,3), " segment ($size bytes, $id)\n");
         }
         if ($size > 20000000) {
             $raf->Seek($size, 1) or $et->Warn('Seek error in LFP file'), last;
         } else {
             $raf->Read($buff,$size) == $size or $et->Warn('Truncated LFP data'), last;
-            HexDump(\$buff, undef, %dumpParms, Addr=>$raf->Tell()-$size) if $verbose > 2;
+            $et->VerboseDump(\$buff, Addr=>$raf->Tell()-$size);
             if ($buff =~ /^\{\s+"/) { # JSON metadata?
                 pos($buff) = 0;
                 $et->HandleTag($tagTablePtr, 'JSONMetadata', $buff);
@@ -195,7 +192,7 @@ from Lytro Light Field Picture (LFP) files.
 
 =head1 AUTHOR
 
-Copyright 2003-2018, Phil Harvey (phil at owl.phy.queensu.ca)
+Copyright 2003-2022, Phil Harvey (philharvey66 at gmail.com)
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
