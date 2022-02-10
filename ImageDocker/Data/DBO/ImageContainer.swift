@@ -82,6 +82,10 @@ public final class ImageContainer: Codable {
         self.subContainers = subContainers
         
     }
+    
+    func hasParentContainer() -> Bool {
+        return self.parentFolder != ""
+    }
 }
 
 extension ImageContainer: FetchableRecord, MutablePersistableRecord, TableRecord {

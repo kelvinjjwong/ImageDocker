@@ -624,12 +624,12 @@ class DeviceCopyViewController: NSViewController {
         if self.device.type == .iPhone {
 //            self.logger.log(self.btnMount.title)
             let mountpoint = PreferencesController.iosDeviceMountPoint()
-            if self.btnMount.title == "Mount" {
+            if self.btnMount.title == Words.device_mount.word() {
 //                self.logger.log("INVOKE MOUNT")
                 IPHONE.bridge.unmount(path: mountpoint)
                 if IPHONE.bridge.mount(path: mountpoint) {
 //                    self.logger.log("JUST MOUNTED")
-                    self.btnMount.title = "Unmount"
+                    self.btnMount.title = Words.device_unmount.word()
                     
                     self.paths = [
                         DeviceCopyDestination.new(("/DCIM/", "Camera"))
@@ -645,7 +645,7 @@ class DeviceCopyViewController: NSViewController {
 //                self.logger.log("INVOKE UNMOUNT")
                 // Unmount
                 IPHONE.bridge.unmount(path: mountpoint)
-                self.btnMount.title = "Mount"
+                self.btnMount.title = Words.device_mount.word()
                 
                 self.emptyFileLists(paths: paths)
                 self.paths = []

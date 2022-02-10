@@ -50,6 +50,7 @@ class ImageFolderTreeScanner {
         return count
     }
     
+    // deprecated?
     func scanImageFolderFromDatabase(fast:Bool = true) -> [ImageFolder] {
         let excludedContainerPaths = DeviceDao.default.getExcludedImportedContainerPaths()
         
@@ -61,10 +62,10 @@ class ImageFolderTreeScanner {
         
         self.logger.log("Setting up containers' parent ")
         
-        let limitRam = PreferencesController.peakMemory() * 1024
-        var continousWorking = true
-        var index = 0
-        var attempt = 0
+//        let limitRam = PreferencesController.peakMemory() * 1024
+//        var continousWorking = true
+//        var index = 0
+//        var attempt = 0
             
         var urlFolders:[String:ImageFolder] = [:]
         var foldersNeedSave:Set<ImageFolder> = []
@@ -74,160 +75,289 @@ class ImageFolderTreeScanner {
         if containers.count == 0 {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "FOLDERSETTER_INCREMENT"), object: nil)
         }else{
-            while(index < containers.count ){
-            //for container in containers { // most high memory impact
-                
-                if limitRam > 0 {
-                    var taskInfo = mach_task_basic_info()
-                    var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
-                    let kerr: kern_return_t = withUnsafeMutablePointer(to: &taskInfo) {
-                        $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
-                            task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
-                        }
-                    }
+            
+            var index = 0
+            MemoryReleasable.default.run(
+                when: {return index < containers.count},
+                shouldStop: {return false},
+                do: {
+                    let container = containers[index]
                     
-                    if kerr == KERN_SUCCESS {
-                        let usedRam = taskInfo.resident_size / 1024 / 1024
-                        
-                        if usedRam >= limitRam {
-                            attempt += 1
-                            self.logger.log("waiting for releasing memory for Setting up containers' parent, attempt: \(attempt)")
-                            continousWorking = false
-                            sleep(10)
-                        }else{
-//                            self.logger.log("continue for Setting up containers' parent, last attempt: \(attempt)")
-                            continousWorking = true
+                    var containerExistInFileSys = false
+                    var isDir:ObjCBool = false
+                    if FileManager.default.fileExists(atPath: container.path, isDirectory: &isDir) {
+                        if isDir.boolValue == true {
+                            containerExistInFileSys = true
                         }
                     }
-                }
-                
-                if continousWorking {
-                    autoreleasepool { () -> Void in
-                        let container = containers[index]
-                        
-                        var containerExistInFileSys = false
-                        var isDir:ObjCBool = false
-                        if FileManager.default.fileExists(atPath: container.path, isDirectory: &isDir) {
-                            if isDir.boolValue == true {
-                                containerExistInFileSys = true
-                            }
-                        }
-                        if !containerExistInFileSys {
-                            self.logger.log("Container does not exist in FileSys, ignore processing: \(index)/\(jall): \(container.path)")
+                    if !containerExistInFileSys {
+                        self.logger.log("Container does not exist in FileSys, ignore processing: \(index)/\(jall): \(container.path)")
 
+                    }else{
+                    
+                        var exclude = false
+                        if excludedContainerPaths.contains(container.path) {
+                            exclude = true
                         }else{
-                        
-                            var exclude = false
-                            if excludedContainerPaths.contains(container.path) {
-                                exclude = true
-                            }else{
-                                for excludedPath in excludedContainerPaths {
-                                    if container.path.hasPrefix(excludedPath.withStash()) {
-                                        exclude = true
-                                        break
-                                    }
+                            for excludedPath in excludedContainerPaths {
+                                if container.path.hasPrefix(excludedPath.withStash()) {
+                                    exclude = true
+                                    break
                                 }
                             }
-                        
-                            if container.hideByParent || exclude {
-                                // do nothing
-                            }else{
+                        }
+                    
+                        if container.hideByParent || exclude {
+                            // do nothing
+                        }else{
 //                                self.logger.log("[Container DB Scan] Setting parent for container \(index)/\(jall) [\(container.path)]")
-                                let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path),
-                                                                          name:container.name,
-                                                                          repositoryPath: container.repositoryPath,
-                                                                          homePath: container.homePath,
-                                                                          storagePath: container.storagePath,
-                                                                          facePath: container.facePath,
-                                                                          cropPath: container.cropPath,
-                                                                          countOfImages: Int(container.imageCount),
-                                                                          withContainer: true)
-                                urlFolders[container.path] = imageFolder
-                                if fast { // fast
-                                    if container.parentFolder != "" {
-                                        if let parentFolder = urlFolders[container.parentFolder] {
-                                            imageFolder.setParent(parentFolder)
+                            let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path),
+                                                                      name:container.name,
+                                                                      repositoryPath: container.repositoryPath,
+                                                                      homePath: container.homePath,
+                                                                      storagePath: container.storagePath,
+                                                                      facePath: container.facePath,
+                                                                      cropPath: container.cropPath,
+                                                                      countOfImages: Int(container.imageCount),
+                                                                      withContainer: true)
+                            urlFolders[container.path] = imageFolder
+                            if fast { // fast
+                                if container.hasParentContainer() {
+                                    if let parentFolder = urlFolders[container.parentFolder] {
+                                        imageFolder.setParent(parentFolder)
 //                                            self.logger.log("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "") << FROM CACHE")
-                                        }
-                                    }else{
-                                        if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
-                                            imageFolder.setParent(parent)
-//                                            self.logger.log("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
-                                            foldersNeedSave.insert(imageFolder)
-                                        }
                                     }
-                                    
                                 }else{
                                     if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
                                         imageFolder.setParent(parent)
-//                                        self.logger.log("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
+//                                            self.logger.log("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
                                         foldersNeedSave.insert(imageFolder)
                                     }
                                 }
-                                if let parent = imageFolder.parent {
-                                    let subPath = container.path.replacingFirstOccurrence(of: "\(parent.url.path.withStash())", with: "")
-                                    imageFolder.name = subPath
-                                    
-//                                    self.logger.log("SUB PATH -> \(subPath)")
-                                    
-                                    if subPath.contains("/") {
-                                        let parts = subPath.components(separatedBy: "/")
-                                        var midPaths:[String] = []
-                                        for part in parts {
-                                            if part == "" {continue}
-                                            if midPaths.count == 0 {
-                                                let midPath = parent.url.appendingPathComponent(part).path
-//                                                self.logger.log("MID FOLDER EXTRACTED FROM SUB PATH: \(midPath)")
-                                                midPaths.append(midPath)
-                                            }else{
-                                                let parentMidPath = midPaths[midPaths.count-1]
-                                                let midPath = URL(fileURLWithPath: parentMidPath).appendingPathComponent(part).path
-//                                                self.logger.log("MID FOLDER EXTRACTED FROM SUB PATH: \(midPath)")
-                                                midPaths.append(midPath)
-                                            }
-                                        }
-                                        var parents:[ImageFolder] = [parent]
-                                        var midFolders:[ImageFolder] = []
-                                        for midPath in midPaths {
-                                            if midPath.withStash() == container.path.withStash() {
-                                                continue
-                                            }
-                                            // create imagefolder without container data
-                                            let midUrl = URL(fileURLWithPath: midPath)
-                                            
-                                            // get middle dummy ImageFolder from cache if it exists
-                                            var midFolder = urlFolders[midPath]
-                                            if midFolder == nil {
-                                                // create dummy ImageFolder in the middle
-                                                midFolder = ImageFolder(midUrl, name: midUrl.lastPathComponent)
-                                                midFolder!.setParent(parents[parents.count - 1])
-//                                                self.logger.log("SET PARENT FOR \(midFolder!.url.path) -> PARENT SET TO \(midFolder!.parent?.url.path ?? "") << CREATED DUMMY")
-                                                
-                                                // to be added to the whole set
-                                                midFolders.append(midFolder!)
-                                                
-                                                // cache mapping
-                                                urlFolders[midPath] = midFolder!
-                                            }
-                                            parents.append(midFolder!) // for next calculation
-                                        }
-                                        imageFolder.setParent(parents[parents.count - 1])
+                                
+                            }else{
+                                if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
+                                    imageFolder.setParent(parent)
 //                                        self.logger.log("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
-                                        imageFolder.name = URL(fileURLWithPath: container.path).lastPathComponent
-                                        
-                                        imageFolders.append(contentsOf: midFolders)
-                                    }
+                                    foldersNeedSave.insert(imageFolder)
                                 }
-                                imageFolders.append(imageFolder)
-                            } // end of if excluded
-                        } // end of if containerExistInFileSys
-                        
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "FOLDERSETTER_INCREMENT"), object: nil)
-                        index += 1
-                    } // end of autorelease
+                            }
+                            if let parent = imageFolder.parent {
+                                let subPath = container.path.replacingFirstOccurrence(of: parent.url.path.withStash(), with: "")
+                                imageFolder.name = subPath
+                                
+//                                    self.logger.log("SUB PATH -> \(subPath)")
+                                
+                                if subPath.contains("/") {
+                                    let parts = subPath.components(separatedBy: "/")
+                                    var midPaths:[String] = []
+                                    for part in parts {
+                                        if part == "" {continue}
+                                        if midPaths.count == 0 {
+                                            let midPath = parent.url.appendingPathComponent(part).path
+//                                                self.logger.log("MID FOLDER EXTRACTED FROM SUB PATH: \(midPath)")
+                                            midPaths.append(midPath)
+                                        }else{
+                                            let parentMidPath = midPaths[midPaths.count-1]
+                                            let midPath = URL(fileURLWithPath: parentMidPath).appendingPathComponent(part).path
+//                                                self.logger.log("MID FOLDER EXTRACTED FROM SUB PATH: \(midPath)")
+                                            midPaths.append(midPath)
+                                        }
+                                    }
+                                    var parents:[ImageFolder] = [parent]
+                                    var midFolders:[ImageFolder] = []
+                                    for midPath in midPaths {
+                                        if midPath.withStash() == container.path.withStash() {
+                                            continue
+                                        }
+                                        // create imagefolder without container data
+                                        let midUrl = URL(fileURLWithPath: midPath)
+                                        
+                                        // get middle dummy ImageFolder from cache if it exists
+                                        var midFolder = urlFolders[midPath]
+                                        if midFolder == nil {
+                                            // create dummy ImageFolder in the middle
+                                            midFolder = ImageFolder(midUrl, name: midUrl.lastPathComponent)
+                                            midFolder!.setParent(parents[parents.count - 1])
+//                                                self.logger.log("SET PARENT FOR \(midFolder!.url.path) -> PARENT SET TO \(midFolder!.parent?.url.path ?? "") << CREATED DUMMY")
+                                            
+                                            // to be added to the whole set
+                                            midFolders.append(midFolder!)
+                                            
+                                            // cache mapping
+                                            urlFolders[midPath] = midFolder!
+                                        }
+                                        parents.append(midFolder!) // for next calculation
+                                    }
+                                    imageFolder.setParent(parents[parents.count - 1])
+//                                        self.logger.log("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
+                                    imageFolder.name = URL(fileURLWithPath: container.path).lastPathComponent
+                                    
+                                    imageFolders.append(contentsOf: midFolders)
+                                }
+                            }
+                            imageFolders.append(imageFolder)
+                        } // end of if excluded
+                    } // end of if containerExistInFileSys
                     
-                } // end of continuous working
-            } // end of while loop
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "FOLDERSETTER_INCREMENT"), object: nil)
+                    index += 1
+                })
+            
+//            while(index < containers.count ){
+//            //for container in containers { // most high memory impact
+//
+//                if limitRam > 0 {
+//                    var taskInfo = mach_task_basic_info()
+//                    var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
+//                    let kerr: kern_return_t = withUnsafeMutablePointer(to: &taskInfo) {
+//                        $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
+//                            task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
+//                        }
+//                    }
+//
+//                    if kerr == KERN_SUCCESS {
+//                        let usedRam = taskInfo.resident_size / 1024 / 1024
+//
+//                        if usedRam >= limitRam {
+//                            attempt += 1
+//                            self.logger.log("waiting for releasing memory for Setting up containers' parent, attempt: \(attempt)")
+//                            continousWorking = false
+//                            sleep(10)
+//                        }else{
+////                            self.logger.log("continue for Setting up containers' parent, last attempt: \(attempt)")
+//                            continousWorking = true
+//                        }
+//                    }
+//                }
+//
+//                if continousWorking {
+//                    autoreleasepool { () -> Void in
+//                        let container = containers[index]
+//
+//                        var containerExistInFileSys = false
+//                        var isDir:ObjCBool = false
+//                        if FileManager.default.fileExists(atPath: container.path, isDirectory: &isDir) {
+//                            if isDir.boolValue == true {
+//                                containerExistInFileSys = true
+//                            }
+//                        }
+//                        if !containerExistInFileSys {
+//                            self.logger.log("Container does not exist in FileSys, ignore processing: \(index)/\(jall): \(container.path)")
+//
+//                        }else{
+//
+//                            var exclude = false
+//                            if excludedContainerPaths.contains(container.path) {
+//                                exclude = true
+//                            }else{
+//                                for excludedPath in excludedContainerPaths {
+//                                    if container.path.hasPrefix(excludedPath.withStash()) {
+//                                        exclude = true
+//                                        break
+//                                    }
+//                                }
+//                            }
+//
+//                            if container.hideByParent || exclude {
+//                                // do nothing
+//                            }else{
+////                                self.logger.log("[Container DB Scan] Setting parent for container \(index)/\(jall) [\(container.path)]")
+//                                let imageFolder:ImageFolder = ImageFolder(URL(fileURLWithPath: container.path),
+//                                                                          name:container.name,
+//                                                                          repositoryPath: container.repositoryPath,
+//                                                                          homePath: container.homePath,
+//                                                                          storagePath: container.storagePath,
+//                                                                          facePath: container.facePath,
+//                                                                          cropPath: container.cropPath,
+//                                                                          countOfImages: Int(container.imageCount),
+//                                                                          withContainer: true)
+//                                urlFolders[container.path] = imageFolder
+//                                if fast { // fast
+//                                    if container.parentFolder != "" {
+//                                        if let parentFolder = urlFolders[container.parentFolder] {
+//                                            imageFolder.setParent(parentFolder)
+////                                            self.logger.log("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "") << FROM CACHE")
+//                                        }
+//                                    }else{
+//                                        if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
+//                                            imageFolder.setParent(parent)
+////                                            self.logger.log("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
+//                                            foldersNeedSave.insert(imageFolder)
+//                                        }
+//                                    }
+//
+//                                }else{
+//                                    if let parent:ImageFolder = imageFolder.getNearestParent(from: imageFolders) { // performance weaker
+//                                        imageFolder.setParent(parent)
+////                                        self.logger.log("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
+//                                        foldersNeedSave.insert(imageFolder)
+//                                    }
+//                                }
+//                                if let parent = imageFolder.parent {
+//                                    let subPath = container.path.replacingFirstOccurrence(of: "\(parent.url.path.withStash())", with: "")
+//                                    imageFolder.name = subPath
+//
+////                                    self.logger.log("SUB PATH -> \(subPath)")
+//
+//                                    if subPath.contains("/") {
+//                                        let parts = subPath.components(separatedBy: "/")
+//                                        var midPaths:[String] = []
+//                                        for part in parts {
+//                                            if part == "" {continue}
+//                                            if midPaths.count == 0 {
+//                                                let midPath = parent.url.appendingPathComponent(part).path
+////                                                self.logger.log("MID FOLDER EXTRACTED FROM SUB PATH: \(midPath)")
+//                                                midPaths.append(midPath)
+//                                            }else{
+//                                                let parentMidPath = midPaths[midPaths.count-1]
+//                                                let midPath = URL(fileURLWithPath: parentMidPath).appendingPathComponent(part).path
+////                                                self.logger.log("MID FOLDER EXTRACTED FROM SUB PATH: \(midPath)")
+//                                                midPaths.append(midPath)
+//                                            }
+//                                        }
+//                                        var parents:[ImageFolder] = [parent]
+//                                        var midFolders:[ImageFolder] = []
+//                                        for midPath in midPaths {
+//                                            if midPath.withStash() == container.path.withStash() {
+//                                                continue
+//                                            }
+//                                            // create imagefolder without container data
+//                                            let midUrl = URL(fileURLWithPath: midPath)
+//
+//                                            // get middle dummy ImageFolder from cache if it exists
+//                                            var midFolder = urlFolders[midPath]
+//                                            if midFolder == nil {
+//                                                // create dummy ImageFolder in the middle
+//                                                midFolder = ImageFolder(midUrl, name: midUrl.lastPathComponent)
+//                                                midFolder!.setParent(parents[parents.count - 1])
+////                                                self.logger.log("SET PARENT FOR \(midFolder!.url.path) -> PARENT SET TO \(midFolder!.parent?.url.path ?? "") << CREATED DUMMY")
+//
+//                                                // to be added to the whole set
+//                                                midFolders.append(midFolder!)
+//
+//                                                // cache mapping
+//                                                urlFolders[midPath] = midFolder!
+//                                            }
+//                                            parents.append(midFolder!) // for next calculation
+//                                        }
+//                                        imageFolder.setParent(parents[parents.count - 1])
+////                                        self.logger.log("SET PARENT FOR \(imageFolder.url.path) -> PARENT SET TO \(imageFolder.parent?.url.path ?? "")")
+//                                        imageFolder.name = URL(fileURLWithPath: container.path).lastPathComponent
+//
+//                                        imageFolders.append(contentsOf: midFolders)
+//                                    }
+//                                }
+//                                imageFolders.append(imageFolder)
+//                            } // end of if excluded
+//                        } // end of if containerExistInFileSys
+//
+//                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "FOLDERSETTER_INCREMENT"), object: nil)
+//                        index += 1
+//                    } // end of autorelease
+//
+//                } // end of continuous working
+//            } // end of while loop
         }// end of if-containers-is-empty
         urlFolders.removeAll()
         self.logger.log("Setting up containers' parent: DONE ")
@@ -288,11 +418,11 @@ class ImageFolderTreeScanner {
         
         if indicator != nil {
             DispatchQueue.main.async {
-                let _ = indicator?.add("[Meta Scan] Loading rules ...")
+                let _ = indicator?.add(Words.progress_meta_scan_loading_rules.word())
             }
         }
         
-        TaskletManager.default.updateProgress(id: taskId, message: "[Meta Scan] Loading rules ...", increase: false)
+        TaskletManager.default.updateProgress(id: taskId, message: Words.progress_meta_scan_loading_rules.word(), increase: false)
         
         let excludedContainerPaths = DeviceDao.default.getExcludedImportedContainerPaths(withStash: true)
         
@@ -338,12 +468,12 @@ class ImageFolderTreeScanner {
                 }else{
                     if indicator != nil {
                         DispatchQueue.main.async {
-                            let _ = indicator?.add("[Meta Scan] Loading images ...")
+                            let _ = indicator?.add(Words.progress_meta_scan_loading_images.word())
                         }
                     }
                 }
                 
-                TaskletManager.default.updateProgress(id: taskId, message: "[Meta Scan] [\(i)/\(photoCount)] \(photo.subPath)", increase: true)
+                TaskletManager.default.updateProgress(id: taskId, message: Words.progress_meta_scan_images.fill(arguments: "\(i)", "\(photoCount)", photo.subPath), increase: true)
                 self.logger.log("finished exif \(photo.subPath)")
             } // end of images-loop
             //ModelStore.save()
@@ -470,10 +600,10 @@ class ImageFolderTreeScanner {
                 self.logger.log("[FileSys Scan] Getting entry: \(path)")
                 
                 if indicator != nil {
-                    indicator?.display(message: "[FileSys Scan] \(repositoryPath) ...")
+                    indicator?.display(message: Words.filesys_scan_repository.fill(arguments: repositoryPath))
                 }
                 
-                TaskletManager.default.updateProgress(id: taskId, message: "[FileSys Scan] \(repositoryPath) ...", increase: false)
+                TaskletManager.default.updateProgress(id: taskId, message: Words.filesys_scan_repository.fill(arguments: repositoryPath), increase: false)
                 
                 result.filesysUrls.insert(path)
                 result.fileUrlToRepo[path] = repository
@@ -708,8 +838,9 @@ class ImageFolderTreeScanner {
                     TaskletManager.default.updateProgress(id: taskId, message: "Getting parent folder \(j)/\(kall) .....", increase: false)
                     
                     if !exclude {
-                        if let parentFolder = path.getNearestParent(from: containers) {
+                        if let parentFolder = path.getNearestParent(from: containers) { //FIXME: has bug here
                             self.logger.log(">>> parent folder: \(parentFolder)")
+                            
                             let _ = RepositoryDao.default.updateImageContainerParentFolder(path: path, parentFolder: parentFolder)
                             
                             if let parent = RepositoryDao.default.getContainer(path: parentFolder), parent.manyChildren == true {
@@ -770,21 +901,21 @@ class ImageFolderTreeScanner {
         self.logger.log("EXISTING DB PHOTO COUNT2 = \(dbUrls.count)")
         
         if dbUrls.count == filesysUrls.count {
-            if indicator != nil { indicator?.display(message: "[FileSys Scan] Images have no gap btw FileSys and DB.") }
+            if indicator != nil { indicator?.display(message: Words.filesys_scan_no_gap_between_db_and_filesys.word()) }
             
-            TaskletManager.default.updateProgress(id: taskId, message: "[FileSys Scan] Images have no gap btw FileSys and DB.", increase: false)
+            TaskletManager.default.updateProgress(id: taskId, message: Words.filesys_scan_no_gap_between_db_and_filesys.word(), increase: false)
             
             return true
         }else if dbUrls.count < filesysUrls.count {
             let gap = dbUrls.count - filesysUrls.count
-            if indicator != nil { indicator?.display(message: "[FileSys Scan] Images in DB[\(dbUrls.count)] less (\(gap)) than in FileSys[\(filesysUrls.count)].") }
+            if indicator != nil { indicator?.display(message: Words.filesys_scan_db_less_than_filesys.fill(arguments: dbUrls.count, gap, filesysUrls.count)) }
             
-            TaskletManager.default.updateProgress(id: taskId, message: "[FileSys Scan] Images in DB[\(dbUrls.count)] less (\(gap)) than in FileSys[\(filesysUrls.count)].", increase: false)
+            TaskletManager.default.updateProgress(id: taskId, message: Words.filesys_scan_db_less_than_filesys.fill(arguments: dbUrls.count, gap, filesysUrls.count), increase: false)
         }else if dbUrls.count > filesysUrls.count {
             let gap = dbUrls.count - filesysUrls.count
-            if indicator != nil { indicator?.display(message: "[FileSys Scan] Images in DB[\(dbUrls.count)] more (+\(gap) than in FileSys[\(filesysUrls.count)].") }
+            if indicator != nil { indicator?.display(message: Words.filesys_scan_db_more_than_filesys.fill(arguments: dbUrls.count, gap, filesysUrls.count)) }
             
-            TaskletManager.default.updateProgress(id: taskId, message: "[FileSys Scan] Images in DB[\(dbUrls.count)] more (+\(gap) than in FileSys[\(filesysUrls.count)].", increase: false)
+            TaskletManager.default.updateProgress(id: taskId, message: Words.filesys_scan_db_more_than_filesys.fill(arguments: dbUrls.count, gap, filesysUrls.count), increase: false)
         }
         
         let urlsToAdd:[String] = filesysUrls.subtracting(dbUrls).sorted()
@@ -819,88 +950,143 @@ class ImageFolderTreeScanner {
             self.logger.log("URLS TO ADD FROM FILESYS: \(urlsToAdd.count)")
 //            indicator?.dataChanged()
             
-            let limitRam = PreferencesController.peakMemory() * 1024
-            var continousWorking = true
             var index = 0
-            var attempt = 0
-            
-            while(index < urlsToAdd.count ){
-            //for url in urlsToAdd { // most high memory impact
-                
+            MemoryReleasable.default.run(
+            when: { return index < urlsToAdd.count },
+            shouldStop: {
                 if suppressedScan {
                     if indicator != nil {
                         indicator?.forceComplete()
                     }
-                    return false
+                    return true
                 }
                 
-                if TaskletManager.default.isTaskStopped(id: taskId) == true { return false }
+                if TaskletManager.default.isTaskStopped(id: taskId) == true { return true }
                 
-                if limitRam > 0 {
-                    var taskInfo = mach_task_basic_info()
-                    var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
-                    let kerr: kern_return_t = withUnsafeMutablePointer(to: &taskInfo) {
-                        $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
-                            task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
-                        }
-                    }
-                    
-                    if kerr == KERN_SUCCESS {
-                        let usedRam = taskInfo.resident_size / 1024 / 1024
-                        
-                        if usedRam >= limitRam {
-                            continousWorking = false
-                            attempt += 1
-                            self.logger.log(">>> waiting for releasing memory for URLS TO ADD FROM FILESYS, attempt:\(attempt)")
-                            sleep(10)
-                        }else{
-                            self.logger.log(">>> continue for URLS TO ADD FROM FILESYS, last attempt:\(attempt)")
-                            continousWorking = true
-                        }
-                    }
-                }
-                if continousWorking {
-                    autoreleasepool { () -> Void in
-                        let url = urlsToAdd[index]
-                        
-                        var exclude = false
-                        if excludedContainerPaths.contains(url) {
+                return false
+            },
+            do: {
+                let url = urlsToAdd[index]
+                
+                var exclude = false
+                if excludedContainerPaths.contains(url) {
+                    self.logger.log("Exclude image (excluded device path): \(url)")
+                    exclude = true
+                }else{
+                    for excludedPath in excludedContainerPaths {
+                        if url.hasPrefix(excludedPath.withStash()) {
                             self.logger.log("Exclude image (excluded device path): \(url)")
                             exclude = true
-                        }else{
-                            for excludedPath in excludedContainerPaths {
-                                if url.hasPrefix(excludedPath.withStash()) {
-                                    self.logger.log("Exclude image (excluded device path): \(url)")
-                                    exclude = true
-                                    break
-                                }
-                            }
+                            break
                         }
-                        
-                        if !exclude {
-                            let createState = self.createImageIfAbsent(url: url, fileUrlToRepo: fileUrlToRepo, indicator: indicator)
-                            if createState == .OK {
-                                DispatchQueue.main.async {
-                                    self.logger.log("Imported images ... (\(index)/\(urlsToAdd.count))")
-                                    if indicator != nil { let _ = indicator?.add("Imported images ... (\(index)/\(urlsToAdd.count))") }
-                                }
-                                
-                                TaskletManager.default.updateProgress(id: taskId, message: "Imported images ... (\(index)/\(urlsToAdd.count))", increase: true)
-                            }else{
-                                DispatchQueue.main.async {
-                                    self.logger.log("[\(createState)] Unable to import images ... (\(index)/\(urlsToAdd.count))")
-                                    if indicator != nil { let _ = indicator?.add("[\(createState)] Unable to import images ... (\(index)/\(urlsToAdd.count))") }
-                                }
-                                
-                                TaskletManager.default.updateProgress(id: taskId, message: "[\(createState)] Unable to import images ... (\(index)/\(urlsToAdd.count))", increase: true)
-                            }
-                        }else{
-                        }
-                        index += 1
                     }
                 }
                 
-            }
+                if !exclude {
+                    let createState = self.createImageIfAbsent(url: url, fileUrlToRepo: fileUrlToRepo, indicator: indicator)
+                    if createState == .OK {
+                        DispatchQueue.main.async {
+                            self.logger.log("Imported images ... (\(index)/\(urlsToAdd.count))")
+                            if indicator != nil { let _ = indicator?.add("Imported images ... (\(index)/\(urlsToAdd.count))") }
+                        }
+                        
+                        TaskletManager.default.updateProgress(id: taskId, message: "Imported images ... (\(index)/\(urlsToAdd.count))", increase: true)
+                    }else{
+                        DispatchQueue.main.async {
+                            self.logger.log("[\(createState)] Unable to import images ... (\(index)/\(urlsToAdd.count))")
+                            if indicator != nil { let _ = indicator?.add("[\(createState)] Unable to import images ... (\(index)/\(urlsToAdd.count))") }
+                        }
+                        
+                        TaskletManager.default.updateProgress(id: taskId, message: "[\(createState)] Unable to import images ... (\(index)/\(urlsToAdd.count))", increase: true)
+                    }
+                }else{
+                }
+                index += 1
+            })
+
+            
+//            let limitRam = PreferencesController.peakMemory() * 1024
+//            var continousWorking = true
+//            var index = 0
+//            var attempt = 0
+//
+//            while(index < urlsToAdd.count ){
+//            //for url in urlsToAdd { // most high memory impact
+//
+//                if suppressedScan {
+//                    if indicator != nil {
+//                        indicator?.forceComplete()
+//                    }
+//                    return false
+//                }
+//
+//                if TaskletManager.default.isTaskStopped(id: taskId) == true { return false }
+//
+//                if limitRam > 0 {
+//                    var taskInfo = mach_task_basic_info()
+//                    var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
+//                    let kerr: kern_return_t = withUnsafeMutablePointer(to: &taskInfo) {
+//                        $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
+//                            task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
+//                        }
+//                    }
+//
+//                    if kerr == KERN_SUCCESS {
+//                        let usedRam = taskInfo.resident_size / 1024 / 1024
+//
+//                        if usedRam >= limitRam {
+//                            continousWorking = false
+//                            attempt += 1
+//                            self.logger.log(">>> waiting for releasing memory for URLS TO ADD FROM FILESYS, attempt:\(attempt)")
+//                            sleep(10)
+//                        }else{
+//                            self.logger.log(">>> continue for URLS TO ADD FROM FILESYS, last attempt:\(attempt)")
+//                            continousWorking = true
+//                        }
+//                    }
+//                }
+//                if continousWorking {
+//                    autoreleasepool { () -> Void in
+//                        let url = urlsToAdd[index]
+//
+//                        var exclude = false
+//                        if excludedContainerPaths.contains(url) {
+//                            self.logger.log("Exclude image (excluded device path): \(url)")
+//                            exclude = true
+//                        }else{
+//                            for excludedPath in excludedContainerPaths {
+//                                if url.hasPrefix(excludedPath.withStash()) {
+//                                    self.logger.log("Exclude image (excluded device path): \(url)")
+//                                    exclude = true
+//                                    break
+//                                }
+//                            }
+//                        }
+//
+//                        if !exclude {
+//                            let createState = self.createImageIfAbsent(url: url, fileUrlToRepo: fileUrlToRepo, indicator: indicator)
+//                            if createState == .OK {
+//                                DispatchQueue.main.async {
+//                                    self.logger.log("Imported images ... (\(index)/\(urlsToAdd.count))")
+//                                    if indicator != nil { let _ = indicator?.add("Imported images ... (\(index)/\(urlsToAdd.count))") }
+//                                }
+//
+//                                TaskletManager.default.updateProgress(id: taskId, message: "Imported images ... (\(index)/\(urlsToAdd.count))", increase: true)
+//                            }else{
+//                                DispatchQueue.main.async {
+//                                    self.logger.log("[\(createState)] Unable to import images ... (\(index)/\(urlsToAdd.count))")
+//                                    if indicator != nil { let _ = indicator?.add("[\(createState)] Unable to import images ... (\(index)/\(urlsToAdd.count))") }
+//                                }
+//
+//                                TaskletManager.default.updateProgress(id: taskId, message: "[\(createState)] Unable to import images ... (\(index)/\(urlsToAdd.count))", increase: true)
+//                            }
+//                        }else{
+//                        }
+//                        index += 1
+//                    }
+//                }
+//
+//            }
 //            if indicator != nil {
 //                indicator?.dataChanged()
 //            }
@@ -979,13 +1165,13 @@ class ImageFolderTreeScanner {
         let (_, repoFileSysUrls, repoFileUrlToRepo) = self.scanRepository(repository: repository, excludedContainerPaths: excludedContainerPaths, step: 1, total: 1, taskId: taskId, indicator: indicator)
         
         self.logger.log("CHECK REPO: CHECK TO BE ADDED AND REMOVED")
-        if indicator != nil { indicator?.display(message: "[FileSys Scan] Checking gap between db and filesys .....") }
+        if indicator != nil { indicator?.display(message: Words.checking_gap_between_db_and_filesys.word()) }
         
-        TaskletManager.default.updateProgress(id: taskId, message: "[FileSys Scan] Checking gap: loading all images from db .....", increase: false)
+        TaskletManager.default.updateProgress(id: taskId, message: Words.filesys_scan_loading_all_images_from_db.word(), increase: false)
         
         let dbUrls = ImageSearchDao.default.getAllPhotoPaths(repositoryPath: repository.repositoryPath)
         
-        TaskletManager.default.updateProgress(id: taskId, message: "[FileSys Scan] Checking gap between db and filesys .....", increase: false)
+        TaskletManager.default.updateProgress(id: taskId, message: Words.checking_gap_between_db_and_filesys.word(), increase: false)
         
         let shouldContinue = self.applyImportGap(dbUrls: dbUrls, filesysUrls: repoFileSysUrls, fileUrlToRepo: repoFileUrlToRepo, excludedContainerPaths: excludedContainerPaths, taskId: taskId, indicator: indicator)
         
@@ -995,11 +1181,11 @@ class ImageFolderTreeScanner {
         
         self.logger.log("TRIGGER ON DATA CHANGED EVENT AFTER FINISHED SCANNING REPOSITORIES")
         if indicator != nil {
-            indicator?.display(message: "[FileSys Scan] Repository scan done.")
+            indicator?.display(message: Words.filesys_scan_repository_scan_done.word())
             indicator?.dataChanged()
         }
         
-        TaskletManager.default.updateProgress(id: taskId, message: "[FileSys Scan] Repository scan done.", increase: false)
+        TaskletManager.default.updateProgress(id: taskId, message: Words.filesys_scan_repository_scan_done.word(), increase: false)
         
         if onCompleted != nil {
             onCompleted!()
@@ -1020,19 +1206,19 @@ class ImageFolderTreeScanner {
         if TaskletManager.default.isTaskStopped(id: taskId) == true { return }
         
         if indicator != nil {
-            indicator?.display(message: "Loading repositories from database .....")
+            indicator?.display(message: Words.progress_loading_repoistories_from_db.word())
         }
         
-        TaskletManager.default.updateProgress(id: taskId, message: "Loading repositories from database .....", increase: false)
+        TaskletManager.default.updateProgress(id: taskId, message: Words.progress_loading_repoistories_from_db.word(), increase: false)
         
         let repositories = RepositoryDao.default.getRepositories()
         self.logger.log("REPO COUNT = \(repositories.count)")
         
         if indicator != nil {
-            indicator?.display(message: "Scanning \(repositories.count) repositories .....")
+            indicator?.display(message: Words.progress_scanning_n_repoistories.fill(arguments: repositories.count))
         }
         
-        TaskletManager.default.updateProgress(id: taskId, message: "Scanning \(repositories.count) repositories .....", increase: false)
+        TaskletManager.default.updateProgress(id: taskId, message: Words.progress_scanning_n_repoistories.fill(arguments: repositories.count), increase: false)
         
         let excludedContainerPaths = DeviceDao.default.getExcludedImportedContainerPaths()
         
@@ -1057,10 +1243,10 @@ class ImageFolderTreeScanner {
         
         self.logger.log("CHECK REPO: CHECK TO BE ADDED AND REMOVED")
         if indicator != nil {
-            indicator?.display(message: "[FileSys Scan] Checking gap between db and filesys .....")
+            indicator?.display(message: Words.checking_gap_between_db_and_filesys.word())
         }
         
-        TaskletManager.default.updateProgress(id: taskId, message: "[FileSys Scan] Checking gap between db and filesys .....", increase: false)
+        TaskletManager.default.updateProgress(id: taskId, message: Words.checking_gap_between_db_and_filesys.word(), increase: false)
         
         let dbUrls = ImageSearchDao.default.getAllPhotoPaths()
         let shouldContinue = self.applyImportGap(dbUrls: dbUrls, filesysUrls: filesysUrls, fileUrlToRepo: fileUrlToRepo, excludedContainerPaths: excludedContainerPaths, indicator: indicator)
@@ -1071,11 +1257,11 @@ class ImageFolderTreeScanner {
         
         self.logger.log("TRIGGER ON DATA CHANGED EVENT AFTER FINISHED SCANNING REPOSITORIES")
         if indicator != nil {
-            indicator?.display(message: "[FileSys Scan] Repositories scan done.")
+            indicator?.display(message: Words.filesys_scan_repository_scan_done.word())
             indicator?.dataChanged()
         }
         
-        TaskletManager.default.updateProgress(id: taskId, message: "[FileSys Scan] Repositories scan done.", increase: false)
+        TaskletManager.default.updateProgress(id: taskId, message: Words.filesys_scan_repository_scan_done.word(), increase: false)
         
         if onCompleted != nil {
             onCompleted!()

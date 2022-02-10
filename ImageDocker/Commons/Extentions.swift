@@ -107,9 +107,9 @@ extension String {
     }
     
     func isParentOf(_ path:String) -> Bool {
-        let theOtherPath = path.withStash()
-        let myPath = self.withStash()
-        return theOtherPath.starts(with: myPath) && theOtherPath != myPath
+        let target = path.withStash()
+        let me = self.withStash()
+        return target.starts(with: me) && target != me
     }
     
     func getNearestParent(from sortedPaths: [String]) -> String?{
@@ -120,6 +120,70 @@ extension String {
             }
         }
         return nil
+    }
+    
+    func separate(by separator:String) -> [String] {
+        var str = self
+        if str.hasPrefix(separator) {
+            str = str.substring(from: 1, to: str.count)
+        }
+        if str.hasSuffix(separator) {
+            str = str.substring(from: 0, to: -1)
+        }
+        if str.contains(separator) {
+            return str.components(separatedBy: separator)
+        }
+        return [str]
+    }
+}
+
+class MemoryReleasable {
+    
+    let logger = ConsoleLogger(category: "HighRamJob")
+    
+    static let `default` = MemoryReleasable()
+    
+    func run(when condition:(() -> Bool), shouldStop: (() -> Bool), do closure:(() -> Void)) {
+        let limitRam = PreferencesController.peakMemory() * 1024
+        var continousWorking = true
+        var attempt = 0
+        while(condition()) {
+            
+            if(shouldStop()) {
+                return
+            }
+            
+            if limitRam > 0 {
+                var taskInfo = mach_task_basic_info()
+                var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
+                let kerr: kern_return_t = withUnsafeMutablePointer(to: &taskInfo) {
+                    $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
+                        task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
+                    }
+                }
+                
+                if kerr == KERN_SUCCESS {
+                    let usedRam = taskInfo.resident_size / 1024 / 1024
+                    
+                    if usedRam >= limitRam {
+                        attempt += 1
+                        //self.logger.log("waiting for releasing memory for Setting up containers' parent, attempt: \(attempt)")
+                        continousWorking = false
+                        sleep(10)
+                    }else{
+//                            self.logger.log("continue for Setting up containers' parent, last attempt: \(attempt)")
+                        continousWorking = true
+                    }
+                }
+            }
+            
+            if continousWorking {
+                autoreleasepool { () -> Void in
+                    closure()
+                } // end of autorelease
+                
+            } // end of continuous working
+        }
     }
 }
 

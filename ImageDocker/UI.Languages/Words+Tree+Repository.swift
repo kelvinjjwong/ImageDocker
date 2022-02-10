@@ -117,7 +117,7 @@ extension Words {
     
     static let library_tree_import = Localize (
         eng: "Import",
-        chs: "入库"
+        chs: "入库以编辑"
     )
     
     static let library_tree_extract = Localize (
@@ -303,5 +303,65 @@ extension Words {
     static let searchingImagesForEXIF = Localize(
         eng: "Searching images for EXIF ...",
         chs: "搜索照片以扫描EXIF ..."
+    )
+    
+    static let checking_gap_between_db_and_filesys = Localize(
+        eng: "[FileSys Scan] Checking gap between db and filesys .....",
+        chs: "[扫描文件系统] 正在检查数据库与文件系统之间的差异 ....."
+    )
+    
+    static let progress_meta_scan_loading_rules = Localize(
+        eng: "[Meta Scan] Loading rules ...",
+        chs: "[扫描元信息] 正在载入规则 ..."
+    )
+    
+    static let progress_meta_scan_loading_images = Localize(
+        eng: "[Meta Scan] Loading rules ...",
+        chs: "[扫描元信息] 正在载入照片和录像 ..."
+    )
+    
+    static let progress_meta_scan_images = Localize(
+        eng: "[Meta Scan] [%s/%s] %s",
+        chs: "[扫描元信息] [%s/%s] %s"
+    )
+    
+    static let progress_loading_repoistories_from_db = Localize(
+        eng: "Loading repositories from database .....",
+        chs: "正在从数据库载入所有照片库 ....."
+    )
+    
+    static let progress_scanning_n_repoistories = Localize(
+        eng: "Scanning %s repositories .....",
+        chs: "正在扫描 %s 个照片库 ....."
+    )
+    
+    static let filesys_scan_repository = Localize(
+        eng: "[FileSys Scan] %s ...",
+        chs: "[扫描文件系统] %s ..."
+    )
+    
+    static let filesys_scan_loading_all_images_from_db = Localize(
+        eng: "[FileSys Scan] Checking gap: loading all images from db .....",
+        chs: "[扫描文件系统] 检查差异：正在从数据库载入所有照片和录像 ..."
+    )
+    
+    static let filesys_scan_repository_scan_done = Localize(
+        eng: "[FileSys Scan] Repository scan done.",
+        chs: "[扫描文件系统] 已完成照片库的扫描."
+    )
+    
+    static let filesys_scan_no_gap_between_db_and_filesys = Localize(
+        eng: "[FileSys Scan] Images have no gap btw FileSys and DB.",
+        chs: "[扫描文件系统] 数据库与文件系统之间没有差异."
+    )
+    
+    static let filesys_scan_db_less_than_filesys = Localize(
+        eng: "[FileSys Scan] Images in DB[%s] less (-%s) than in FileSys[%s].",
+        chs: "[扫描文件系统] 数据库 (%s) 少了 (-%s) 照片和录像 较之于文件系统 (%s)."
+    )
+    
+    static let filesys_scan_db_more_than_filesys = Localize(
+        eng: "[FileSys Scan] Images in DB[%s] more (+%s) than in FileSys[%s].",
+        chs: "[扫描文件系统] 数据库 (%s) 多了 (+%s) 照片和录像 较之于文件系统 (%s)."
     )
 }
