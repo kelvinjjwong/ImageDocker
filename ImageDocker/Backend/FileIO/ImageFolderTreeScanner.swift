@@ -482,7 +482,7 @@ class ImageFolderTreeScanner {
             if indicator != nil {
                 indicator?.forceComplete()
             }
-            TaskletManager.default.updateProgress(id: taskId, message: "No image need to extract meta.", increase: false)
+            TaskletManager.default.updateProgress(id: taskId, message: Words.extract_meta_no_need.word(), increase: false)
         }
         
         TaskletManager.default.forceComplete(id: taskId)
@@ -495,10 +495,10 @@ class ImageFolderTreeScanner {
     func scanPhotosToLoadExif(repository:ImageContainer, taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil)  {
         if indicator != nil {
             DispatchQueue.main.async {
-                let _ = indicator?.add("[EXIF Scan] Loading images ...")
+                let _ = indicator?.add(Words.exif_scan_loading_images.word())
             }
         }
-        TaskletManager.default.updateProgress(id: taskId, message: "[EXIF Scan] Loading images ...", increase: false)
+        TaskletManager.default.updateProgress(id: taskId, message: Words.exif_scan_loading_images.word(), increase: false)
         let photos = ImageSearchDao.default.getPhotoFilesWithoutExif(repositoryPath: repository.repositoryPath)
         self.logger.log("PHOTOS WITHOUT EXIF: \(photos.count) - \(repository.name)")
         self.scanPhotosToLoadExif(photos: photos, taskId: taskId, indicator: indicator, onCompleted: onCompleted)
@@ -507,10 +507,10 @@ class ImageFolderTreeScanner {
     func scanPhotosToLoadExif(taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil)  {
         if indicator != nil {
             DispatchQueue.main.async {
-                let _ = indicator?.add("[EXIF Scan] Loading images ...")
+                let _ = indicator?.add(Words.exif_scan_loading_images.word())
             }
         }
-        TaskletManager.default.updateProgress(id: taskId, message: "[EXIF Scan] Loading images ...", increase: false)
+        TaskletManager.default.updateProgress(id: taskId, message: Words.exif_scan_loading_images.word(), increase: false)
         let photos = ImageSearchDao.default.getPhotoFilesWithoutExif()
         self.logger.log("PHOTOS WITHOUT EXIF: \(photos.count)")
         self.scanPhotosToLoadExif(photos: photos, taskId: taskId, indicator: indicator, onCompleted: onCompleted)
@@ -530,10 +530,10 @@ class ImageFolderTreeScanner {
     func scanPhotosToLoadLocation(repository:ImageContainer, taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil)  {
         if indicator != nil {
             DispatchQueue.main.async {
-                let _ = indicator?.add("[Location Scan] Loading images ...")
+                let _ = indicator?.add(Words.location_scan_loading_images.word())
             }
         }
-        TaskletManager.default.updateProgress(id: taskId, message: "[Location Scan] Loading images ...", increase: false)
+        TaskletManager.default.updateProgress(id: taskId, message: Words.location_scan_loading_images.word(), increase: false)
         let photos = ImageSearchDao.default.getPhotoFilesWithoutLocation(repositoryPath: repository.repositoryPath)
         self.logger.log("PHOTOS WITHOUT LOCATION: \(photos.count) - \(repository.name)")
         self.scanPhotosToLoadExif(photos: photos, taskId: taskId, indicator: indicator, onCompleted: onCompleted)
@@ -642,10 +642,10 @@ class ImageFolderTreeScanner {
         if TaskletManager.default.isTaskStopped(id: taskId) == true { return (false, filesysUrls, fileUrlToRepo) }
         
         if indicator != nil {
-            indicator?.display(message: "Scanning repository \(i)/\(totalCount) .....")
+            indicator?.display(message: Words.scanning_repository.fill(arguments: i, totalCount))
         }
         
-        TaskletManager.default.updateProgress(id: taskId, message: "Scanning repository \(i)/\(totalCount) .....", increase: false)
+        TaskletManager.default.updateProgress(id: taskId, message: Words.scanning_repository.fill(arguments: i, totalCount), increase: false)
         
         var repoExistInFileSys = false
         var isDir:ObjCBool = false
@@ -712,10 +712,10 @@ class ImageFolderTreeScanner {
         autoreleasepool { () -> Void in
             self.logger.log(">>> WALKING THRU DIRECTORY begin \(i)/\(totalCount) <<<")
             if indicator != nil {
-                indicator?.display(message: "Walking thru directory [\(i)/\(totalCount)] [\(repo.name)]")
+                indicator?.display(message: Words.walking_thru_directory.fill(arguments: "\(i)", "\(totalCount)", repo.name))
             }
             
-            TaskletManager.default.updateProgress(id: taskId, message: "Walking thru directory [\(i)/\(totalCount)] [\(repo.name)]", increase: false)
+            TaskletManager.default.updateProgress(id: taskId, message: Words.walking_thru_directory.fill(arguments: "\(i)", "\(totalCount)", repo.name), increase: false)
                     
             let directoryPaths = self.walkthruDirectoryForPaths(repository: repo, indicator: indicator)
             for filesysUrl in directoryPaths.filesysUrls {
@@ -774,10 +774,10 @@ class ImageFolderTreeScanner {
                     
                     self.logger.log("Adding container folder \(k)/\(kall): \(path)")
                     if indicator != nil {
-                        indicator?.display(message: "Adding container folder \(k)/\(kall) .....")
+                        indicator?.display(message: Words.adding_container_folder.fill(arguments: k, kall))
                     }
                     
-                    TaskletManager.default.updateProgress(id: taskId, message: "Adding container folder \(k)/\(kall) .....", increase: false)
+                    TaskletManager.default.updateProgress(id: taskId, message: Words.adding_container_folder.fill(arguments: k, kall), increase: false)
                     
                     if !exclude {
                     
@@ -832,10 +832,10 @@ class ImageFolderTreeScanner {
                     
                     self.logger.log("Getting parent folder \(j)/\(kall): \(path)")
                     if indicator != nil {
-                        indicator?.display(message: "Getting parent folder \(j)/\(kall) .....")
+                        indicator?.display(message: Words.getting_parent_folder.fill(arguments: j, kall))
                     }
                     
-                    TaskletManager.default.updateProgress(id: taskId, message: "Getting parent folder \(j)/\(kall) .....", increase: false)
+                    TaskletManager.default.updateProgress(id: taskId, message: Words.getting_parent_folder.fill(arguments: j, kall), increase: false)
                     
                     if !exclude {
                         if let parentFolder = path.getNearestParent(from: containers) { //FIXME: has bug here
@@ -866,15 +866,15 @@ class ImageFolderTreeScanner {
                         
                         if deleteState == .OK {
                             self.logger.log("Deleted container and related images from DB: \(path)")
-                            if indicator != nil { indicator?.display(message: "Removed non-exist container [\(k)/\(folderUrlsToRemoved.count)]") }
+                            if indicator != nil { indicator?.display(message: Words.removed_non_exist_container.fill(arguments: k, folderUrlsToRemoved.count)) }
                             
-                            TaskletManager.default.updateProgress(id: taskId, message: "Removed non-exist container [\(k)/\(folderUrlsToRemoved.count)]", increase: false)
+                            TaskletManager.default.updateProgress(id: taskId, message: Words.removed_non_exist_container.fill(arguments: k, folderUrlsToRemoved.count), increase: false)
 
                         }else{
                             self.logger.log("[\(deleteState)] Failed to delete container and related images from DB: \(path)")
-                            if indicator != nil { indicator?.display(message: "[\(deleteState)] Failed to remove non-exist container [\(k)/\(folderUrlsToRemoved.count)]") }
+                            if indicator != nil { indicator?.display(message: Words.failed_to_remove_non_exist_container.fill(arguments: "\(deleteState)", "\(k)", "\(folderUrlsToRemoved.count)")) }
                             
-                            TaskletManager.default.updateProgress(id: taskId, message: "[\(deleteState)] Failed to remove non-exist container [\(k)/\(folderUrlsToRemoved.count)]", increase: false)
+                            TaskletManager.default.updateProgress(id: taskId, message: Words.failed_to_remove_non_exist_container.fill(arguments: "\(deleteState)", "\(k)", "\(folderUrlsToRemoved.count)"), increase: false)
 
                         }
                     }
@@ -933,10 +933,10 @@ class ImageFolderTreeScanner {
         }
         
         if indicator != nil {
-            indicator?.display(message: "Ready for add/remove image records...")
+            indicator?.display(message: Words.ready_to_add_remove_images.word())
         }
         
-        TaskletManager.default.updateProgress(id: taskId, message: "Ready for add/remove image records...", increase: false)
+        TaskletManager.default.updateProgress(id: taskId, message: Words.ready_to_add_remove_images.word(), increase: false)
         
         if indicator != nil {
             indicator?.setTarget(total)
@@ -987,17 +987,17 @@ class ImageFolderTreeScanner {
                     if createState == .OK {
                         DispatchQueue.main.async {
                             self.logger.log("Imported images ... (\(index)/\(urlsToAdd.count))")
-                            if indicator != nil { let _ = indicator?.add("Imported images ... (\(index)/\(urlsToAdd.count))") }
+                            if indicator != nil { let _ = indicator?.add(Words.imported_images.fill(arguments: index, urlsToAdd.count)) }
                         }
                         
-                        TaskletManager.default.updateProgress(id: taskId, message: "Imported images ... (\(index)/\(urlsToAdd.count))", increase: true)
+                        TaskletManager.default.updateProgress(id: taskId, message: Words.imported_images.fill(arguments: index, urlsToAdd.count), increase: true)
                     }else{
                         DispatchQueue.main.async {
                             self.logger.log("[\(createState)] Unable to import images ... (\(index)/\(urlsToAdd.count))")
-                            if indicator != nil { let _ = indicator?.add("[\(createState)] Unable to import images ... (\(index)/\(urlsToAdd.count))") }
+                            if indicator != nil { let _ = indicator?.add(Words.failed_to_import_images.fill(arguments: "\(createState)", "\(index)", "\(urlsToAdd.count)")) }
                         }
                         
-                        TaskletManager.default.updateProgress(id: taskId, message: "[\(createState)] Unable to import images ... (\(index)/\(urlsToAdd.count))", increase: true)
+                        TaskletManager.default.updateProgress(id: taskId, message: Words.failed_to_import_images.fill(arguments: "\(createState)", "\(index)", "\(urlsToAdd.count)"), increase: true)
                     }
                 }else{
                 }
@@ -1115,14 +1115,14 @@ class ImageFolderTreeScanner {
                 
                 if deleteState == .OK {
                     self.logger.log("Deleted images ... (\(k)/\(urlsToRemoved.count))")
-                    if indicator != nil { let _ = indicator?.add("Deleted images ... (\(k)/\(urlsToRemoved.count))") }
+                    if indicator != nil { let _ = indicator?.add(Words.deleted_images.fill(arguments: k, urlsToRemoved.count)) }
                     
-                    TaskletManager.default.updateProgress(id: taskId, message: "Deleted images ... (\(k)/\(urlsToRemoved.count))", increase: true)
+                    TaskletManager.default.updateProgress(id: taskId, message: Words.deleted_images.fill(arguments: k, urlsToRemoved.count), increase: true)
                 }else{
                     self.logger.log("[\(deleteState)] Unable to delete images ... (\(k)/\(urlsToRemoved.count))")
-                    if indicator != nil { let _ = indicator?.add("[\(deleteState)] Unable to delete images ... (\(k)/\(urlsToRemoved.count))") }
+                    if indicator != nil { let _ = indicator?.add(Words.failed_to_delete_images.fill(arguments: "\(deleteState)", "\(k)", "\(urlsToRemoved.count)")) }
                     
-                    TaskletManager.default.updateProgress(id: taskId, message: "[\(deleteState)] Unable to delete images ... (\(k)/\(urlsToRemoved.count))", increase: true)
+                    TaskletManager.default.updateProgress(id: taskId, message: Words.failed_to_delete_images.fill(arguments: "\(deleteState)", "\(k)", "\(urlsToRemoved.count)"), increase: true)
                 }
             }
             
@@ -1157,9 +1157,9 @@ class ImageFolderTreeScanner {
         
         if TaskletManager.default.isTaskStopped(id: taskId) == true { return false }
         
-        if indicator != nil { indicator?.display(message: "Scanning repository .....") }
+        if indicator != nil { indicator?.display(message: Words.scanning_repository.word()) }
         
-        TaskletManager.default.updateProgress(id: taskId, message: "Scanning repository .....", increase: false)
+        TaskletManager.default.updateProgress(id: taskId, message: Words.scanning_repository.word(), increase: false)
         
         let excludedContainerPaths = DeviceDao.default.getExcludedImportedContainerPaths()
         let (_, repoFileSysUrls, repoFileUrlToRepo) = self.scanRepository(repository: repository, excludedContainerPaths: excludedContainerPaths, step: 1, total: 1, taskId: taskId, indicator: indicator)

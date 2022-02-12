@@ -32,8 +32,8 @@ class ProgressViewController : NSViewController {
     var isNoTask = false
     
     func noTask() {
-        self.id = "No task"
-        self.message = "No task is running now."
+        self.id = Words.progress_no_task.word()
+        self.message = Words.progress_no_task_running.word()
         self.isNoTask = true
     }
     

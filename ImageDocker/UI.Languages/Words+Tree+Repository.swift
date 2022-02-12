@@ -335,6 +335,16 @@ extension Words {
         chs: "正在扫描 %s 个照片库 ....."
     )
     
+    static let progress_no_task = Localize(
+        eng: "No task.",
+        chs: "没有任务."
+    )
+    
+    static let progress_no_task_running = Localize(
+        eng: "No task is running now.",
+        chs: "当前没有进行中的任务."
+    )
+    
     static let filesys_scan_repository = Localize(
         eng: "[FileSys Scan] %s ...",
         chs: "[扫描文件系统] %s ..."
@@ -363,5 +373,75 @@ extension Words {
     static let filesys_scan_db_more_than_filesys = Localize(
         eng: "[FileSys Scan] Images in DB[%s] more (+%s) than in FileSys[%s].",
         chs: "[扫描文件系统] 数据库 (%s) 多了 (+%s) 照片和录像 较之于文件系统 (%s)."
+    )
+    
+    static let location_scan_loading_images = Localize(
+        eng: "[Location Scan] Loading images ...",
+        chs: "[扫描地理位置] 正在载入照片和录像 ..."
+    )
+    
+    static let extract_meta_no_need = Localize(
+        eng: "No image need to extract meta.",
+        chs: "没有照片和录像需要解读元信息."
+    )
+    
+    static let exif_scan_loading_images = Localize(
+        eng: "[EXIF Scan] Loading images ...",
+        chs: "[扫描元信息] 正在载入照片和录像 ..."
+    )
+    
+    static let scanning_repository = Localize (
+        eng: "Scanning repository %s/%s .....",
+        chs: "正在扫描照片库 %s/%s ....."
+    )
+    
+    static let walking_thru_directory = Localize (
+        eng: "Walking thru directory [%s/%s] [%s]",
+        chs: "正在扫描文件夹 [%s/%s] [%s] ....."
+    )
+    
+    static let adding_container_folder = Localize (
+        eng: "Adding container folder %s/%s .....",
+        chs: "正在添加照片文件夹 %s/%s ....."
+    )
+    
+    static let getting_parent_folder = Localize (
+        eng: "Getting parent folder %s/%s .....",
+        chs: "正在匹配父级照片文件夹 %s/%s ....."
+    )
+    
+    static let imported_images = Localize (
+        eng: "Imported images ... (%s/%s)",
+        chs: "已导入照片和录像 ... (%s/%s)"
+    )
+    
+    static let failed_to_import_images = Localize (
+        eng: "[%s] Unable to import images ... (%s/%s)",
+        chs: "[%s] 无法导入照片和录像 ... (%s/%s)"
+    )
+    
+    static let deleted_images = Localize (
+        eng: "Deleted images ... (%s/%s)",
+        chs: "已删除照片和录像 ... (%s/%s)"
+    )
+    
+    static let failed_to_delete_images = Localize (
+        eng: "[%s] Unable to delete images ... (%s/%s)",
+        chs: "[%s] 无法删除照片和录像 ... (%s/%s)"
+    )
+    
+    static let removed_non_exist_container = Localize (
+        eng: "Removed non-exist container [%s/%s] .....",
+        chs: "已删除不存在的照片文件夹数据记录 [%s/%s] ....."
+    )
+    
+    static let failed_to_remove_non_exist_container = Localize (
+        eng: "[%s] Failed to remove non-exist container [%s/%s] .....",
+        chs: "[%s] 无法删除不存在的照片文件夹数据记录 [%s/%s] ....."
+    )
+    
+    static let ready_to_add_remove_images = Localize(
+        eng: "Ready for add/remove image records...",
+        chs: "已准备好添加/删除照片数据记录..."
     )
 }
