@@ -25,9 +25,22 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
-                                        <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW">
+                                        <menuItem title="Preferences" id="BOF-NM-1cW">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <segue destination="UOy-CF-cGN" kind="modal" id="NQP-MK-arr"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Database &amp; Backup ..." id="SWm-zu-Y1n">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <segue destination="ld1-y7-yeS" kind="modal" id="M47-hv-Hqv"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="External API …" id="A2b-q1-Q5m">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <segue destination="q6N-YI-cAA" kind="modal" id="gbY-Xq-hsI"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
@@ -107,7 +120,69 @@
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1491" y="-856"/>
+            <point key="canvasLocation" x="1419" y="-322"/>
+        </scene>
+        <!--ExternalAPI Controller-->
+        <scene sceneID="7za-Oo-KdH">
+            <objects>
+                <viewController id="q6N-YI-cAA" customClass="ExternalAPIController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="WQ0-xS-7po">
+                        <rect key="frame" x="0.0" y="0.0" width="750" height="666"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <tabView translatesAutoresizingMaskIntoConstraints="NO" id="RUU-qL-6Sx">
+                                <rect key="frame" x="-7" y="50" width="764" height="612"/>
+                                <font key="font" metaFont="system"/>
+                                <tabViewItems>
+                                    <tabViewItem label="Face Recognition API" identifier="" id="F45-Yg-p3l">
+                                        <view key="view" id="JML-66-eBe">
+                                            <rect key="frame" x="10" y="33" width="744" height="566"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        </view>
+                                    </tabViewItem>
+                                    <tabViewItem label="Geo Location API" identifier="" id="JwZ-bD-VSW">
+                                        <view key="view" id="SK5-8d-O7X">
+                                            <rect key="frame" x="10" y="33" width="744" height="566"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        </view>
+                                    </tabViewItem>
+                                </tabViewItems>
+                            </tabView>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RxM-N4-T1g">
+                                <rect key="frame" x="341" y="13" width="69" height="32"/>
+                                <buttonCell key="cell" type="push" title="Apply" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xjm-fN-8yg">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="RUU-qL-6Sx" secondAttribute="trailing" id="1pu-o1-9OH"/>
+                            <constraint firstItem="RxM-N4-T1g" firstAttribute="top" secondItem="RUU-qL-6Sx" secondAttribute="bottom" constant="20" id="Bxl-Jz-Jgm"/>
+                            <constraint firstItem="RUU-qL-6Sx" firstAttribute="top" secondItem="WQ0-xS-7po" secondAttribute="top" constant="10" id="CZe-2L-U3Q"/>
+                            <constraint firstItem="RxM-N4-T1g" firstAttribute="centerX" secondItem="WQ0-xS-7po" secondAttribute="centerX" id="HJW-wj-JC9"/>
+                            <constraint firstItem="RxM-N4-T1g" firstAttribute="top" secondItem="RUU-qL-6Sx" secondAttribute="bottom" constant="20" id="W4d-i3-Ub1"/>
+                            <constraint firstAttribute="bottom" secondItem="RxM-N4-T1g" secondAttribute="bottom" constant="20" id="iFn-oa-xb1"/>
+                            <constraint firstItem="RUU-qL-6Sx" firstAttribute="leading" secondItem="WQ0-xS-7po" secondAttribute="leading" id="z57-wu-ISl"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <customObject id="8kR-a0-4QH" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2366" y="-389"/>
+        </scene>
+        <!--Database Backup Controller-->
+        <scene sceneID="Eg7-s0-BBR">
+            <objects>
+                <viewController id="ld1-y7-yeS" customClass="DatabaseBackupController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="8hS-9E-iEM">
+                        <rect key="frame" x="0.0" y="0.0" width="750" height="666"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="MO7-Mv-2h8" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2366" y="418"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="R2V-B0-nI4">
@@ -355,7 +430,7 @@
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <splitView arrangesAllSubviews="NO" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lZJ-XP-YJ8">
-                                                        <rect key="frame" x="0.0" y="32" width="1334" height="671"/>
+                                                        <rect key="frame" x="0.0" y="5" width="1334" height="671"/>
                                                         <subviews>
                                                             <customView fixedFrame="YES" id="CKk-CL-9gu">
                                                                 <rect key="frame" x="0.0" y="0.0" width="0.0" height="671"/>
@@ -366,7 +441,7 @@
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <subviews>
                                                                     <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KZW-eM-F1C">
-                                                                        <rect key="frame" x="0.0" y="62" width="1333" height="636"/>
+                                                                        <rect key="frame" x="0.0" y="35" width="1333" height="636"/>
                                                                         <clipView key="contentView" copiesOnScroll="NO" id="WeQ-Og-l1c">
                                                                             <rect key="frame" x="0.0" y="0.0" width="1333" height="636"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -398,14 +473,14 @@
                                                                         </scroller>
                                                                     </scrollView>
                                                                     <progressIndicator wantsLayer="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="Sab-MP-Qfo">
-                                                                        <rect key="frame" x="290" y="33" width="150" height="20"/>
+                                                                        <rect key="frame" x="290" y="6" width="150" height="20"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="18" id="N29-ek-guG"/>
                                                                             <constraint firstAttribute="width" constant="150" id="lXt-MZ-I4h"/>
                                                                         </constraints>
                                                                     </progressIndicator>
                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kAZ-Sm-Ax7">
-                                                                        <rect key="frame" x="18" y="34" width="254" height="17"/>
+                                                                        <rect key="frame" x="18" y="7" width="254" height="17"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="17" id="cbB-lt-2rd"/>
                                                                             <constraint firstAttribute="width" constant="250" id="itr-jB-jIC"/>
@@ -417,7 +492,7 @@
                                                                         </textFieldCell>
                                                                     </textField>
                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y2t-Ke-hIj">
-                                                                        <rect key="frame" x="1226" y="36" width="92" height="16"/>
+                                                                        <rect key="frame" x="1226" y="9" width="92" height="16"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="90" id="XUL-iw-5h3"/>
                                                                             <constraint firstAttribute="height" constant="14" id="u2L-R0-5zn"/>
@@ -431,7 +506,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eaf-Jq-heG">
-                                                                        <rect key="frame" x="1170" y="34" width="50" height="18"/>
+                                                                        <rect key="frame" x="1170" y="7" width="50" height="18"/>
                                                                         <buttonCell key="cell" type="check" title="ALL" bezelStyle="regularSquare" imagePosition="left" inset="2" id="dsb-eu-8Qc">
                                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                             <font key="font" metaFont="system"/>
@@ -441,7 +516,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gkw-tO-uG9">
-                                                                        <rect key="frame" x="878" y="31" width="97" height="25"/>
+                                                                        <rect key="frame" x="878" y="4" width="97" height="25"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="22" id="WXq-VJ-o8B"/>
                                                                             <constraint firstAttribute="width" constant="95" id="yDU-mD-v5y"/>
@@ -462,7 +537,7 @@
                                                                         </connections>
                                                                     </popUpButton>
                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IGx-sv-JYq">
-                                                                        <rect key="frame" x="1049" y="28" width="39" height="32"/>
+                                                                        <rect key="frame" x="1049" y="1" width="39" height="32"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="25" id="ZBi-2B-wJR"/>
                                                                         </constraints>
@@ -475,7 +550,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="meR-zL-rAv">
-                                                                        <rect key="frame" x="1138" y="28" width="39" height="32"/>
+                                                                        <rect key="frame" x="1138" y="1" width="39" height="32"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="25" id="JsJ-9k-Ggr"/>
                                                                         </constraints>
@@ -488,7 +563,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uR6-jc-2Z7">
-                                                                        <rect key="frame" x="1081" y="36" width="64" height="16"/>
+                                                                        <rect key="frame" x="1081" y="9" width="64" height="16"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="60" id="QU5-Rs-auk"/>
                                                                         </constraints>
@@ -499,7 +574,7 @@
                                                                         </textFieldCell>
                                                                     </textField>
                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DpT-Dg-Oeb">
-                                                                        <rect key="frame" x="978" y="32" width="74" height="23"/>
+                                                                        <rect key="frame" x="978" y="5" width="74" height="23"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="20" id="Gmp-RZ-apS"/>
                                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="SPU-3L-Anh"/>
@@ -2158,7 +2233,7 @@ brew install ifuse</string>
                 </viewController>
                 <customObject id="VgO-wr-HZa" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1577" y="-294"/>
+            <point key="canvasLocation" x="2366" y="-1122"/>
         </scene>
         <!--Stacked Video View Controller-->
         <scene sceneID="5qv-yD-6bp">
@@ -2185,7 +2260,7 @@ brew install ifuse</string>
                 </viewController>
                 <customObject id="8wJ-VW-Acc" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1949" y="1271"/>
+            <point key="canvasLocation" x="1751" y="1272"/>
         </scene>
         <!--Stacked Image View Controller-->
         <scene sceneID="nB9-Zv-Hpk">
@@ -2213,7 +2288,7 @@ brew install ifuse</string>
                 </viewController>
                 <customObject id="sge-z6-lRb" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1540" y="1271"/>
+            <point key="canvasLocation" x="1457" y="1272"/>
         </scene>
         <!--Selection View Controller-->
         <scene sceneID="paO-7d-UF3">

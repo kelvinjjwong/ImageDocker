@@ -255,6 +255,8 @@
 		8ECB51002764268C004DFDD7 /* SubContainersManageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECB50FE2764268C004DFDD7 /* SubContainersManageViewController.swift */; };
 		8ECB51012764268C004DFDD7 /* SubContainersManageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8ECB50FF2764268C004DFDD7 /* SubContainersManageViewController.xib */; };
 		8ECB51052764406D004DFDD7 /* ConsoleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECB51042764406D004DFDD7 /* ConsoleLogger.swift */; };
+		8ED8333F27B7EA5800B31319 /* ExternalAPIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED8333E27B7EA5800B31319 /* ExternalAPIController.swift */; };
+		8ED8334127B9144B00B31319 /* DatabaseBackupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED8334027B9144B00B31319 /* DatabaseBackupController.swift */; };
 		8EE1AB3D20D05E49001C75B0 /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */; };
 		8EE1AB3E20D05E49001C75B0 /* EventListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */; };
 		8EE382F823E02585003B7153 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE382F723E02585003B7153 /* Colors.swift */; };
@@ -622,6 +624,8 @@
 		8ECB50FE2764268C004DFDD7 /* SubContainersManageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubContainersManageViewController.swift; sourceTree = "<group>"; };
 		8ECB50FF2764268C004DFDD7 /* SubContainersManageViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SubContainersManageViewController.xib; sourceTree = "<group>"; };
 		8ECB51042764406D004DFDD7 /* ConsoleLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleLogger.swift; sourceTree = "<group>"; };
+		8ED8333E27B7EA5800B31319 /* ExternalAPIController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAPIController.swift; sourceTree = "<group>"; };
+		8ED8334027B9144B00B31319 /* DatabaseBackupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseBackupController.swift; sourceTree = "<group>"; };
 		8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListViewController.swift; sourceTree = "<group>"; };
 		8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventListViewController.xib; sourceTree = "<group>"; };
 		8EE382F723E02585003B7153 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -833,6 +837,8 @@
 				8EF8C559265DBD6F0060D2E0 /* ImagePreviewController.swift */,
 				8EF8C55B265DBD820060D2E0 /* ImageLocationViewController.swift */,
 				8EF8C55D265DBD910060D2E0 /* ImageLocationEditViewController.swift */,
+				8ED8333E27B7EA5800B31319 /* ExternalAPIController.swift */,
+				8ED8334027B9144B00B31319 /* DatabaseBackupController.swift */,
 			);
 			path = ImageDocker;
 			sourceTree = "<group>";
@@ -1897,6 +1903,7 @@
 				8EF125A92214590000C423CA /* DeviceListViewController.swift in Sources */,
 				8E4DECE823B38A7B00F5538C /* Image.swift in Sources */,
 				8E98B8F920D7950E00771280 /* ExportManager.swift in Sources */,
+				8ED8333F27B7EA5800B31319 /* ExternalAPIController.swift in Sources */,
 				8EB271B12346BEC3003BF3AF /* ProgresViewController.swift in Sources */,
 				8E74194C2422570A002BAAAE /* DeviceDaoInterface.swift in Sources */,
 				8E4E5B672217349600FE4B68 /* FaceDetection.swift in Sources */,
@@ -1939,6 +1946,7 @@
 				8EFA02DB243B3E1A00D7C355 /* PostgresClientKit+Image+Record.swift in Sources */,
 				8E0EAE9A209D2623008C377F /* ImageFolderTreeScanner.swift in Sources */,
 				8E481483277DAEDE0097493E /* Words+PreviewImage.swift in Sources */,
+				8ED8334127B9144B00B31319 /* DatabaseBackupController.swift in Sources */,
 				8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */,
 				8EAD03B523372C0100AAC7C6 /* GRDB+ImageEvent.swift in Sources */,
 				8E3FA9252355047400B677A3 /* MemoriesCollectionViewController.swift in Sources */,
