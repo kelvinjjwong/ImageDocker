@@ -1676,8 +1676,6 @@
 			dependencies = (
 			);
 			name = ImageDocker;
-			packageProductDependencies = (
-			);
 			productName = ImageDocker;
 			productReference = 8E0AFA39208BDEA000CE8B68 /* ImageDocker.app */;
 			productType = "com.apple.product-type.application";
@@ -1725,7 +1723,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1340;
 				ORGANIZATIONNAME = nonamecat;
 				TargetAttributes = {
 					8E0AFA38208BDEA000CE8B68 = {
@@ -1758,8 +1756,6 @@
 				Base,
 			);
 			mainGroup = 8E0AFA30208BDEA000CE8B68;
-			packageReferences = (
-			);
 			productRefGroup = 8E0AFA3A208BDEA000CE8B68 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -2231,6 +2227,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -2292,6 +2289,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -2330,6 +2328,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = ZU637G36U2;
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = ImageDocker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2353,6 +2352,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = ZU637G36U2;
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = ImageDocker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
