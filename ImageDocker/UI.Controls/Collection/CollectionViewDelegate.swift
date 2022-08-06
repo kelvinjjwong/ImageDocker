@@ -230,7 +230,7 @@ extension ViewController : CollectionViewItemShowDuplicatesDelegate {
             self.selectionViewController.collectionViewController.imagesLoader.clean()
             for path in paths {
                 if let image = ImageRecordDao.default.getImage(path: path) {
-                    let imageFile = ImageFile(photoFile: image)
+                    let imageFile = ImageFile(image: image)
                     self.selectionViewController.collectionViewController.imagesLoader.addItem(imageFile)
                 }
                 
@@ -264,7 +264,7 @@ extension ViewController : CollectionViewItemCheckDelegate {
                 if sec != nil {
                     
                     for item in (sec?.items)! {
-                        if !(item.collectionViewItem?.isChecked())! {
+                        if let i=item.collectionViewItem, !i.isChecked() {
                             shouldCheckSection = false
                             break
                         }
@@ -294,7 +294,7 @@ extension ViewController : CollectionViewItemCheckDelegate {
                 if sec != nil {
                     
                     for item in (sec?.items)! {
-                        if (item.collectionViewItem?.isChecked())! {
+                        if let i = item.collectionViewItem, i.isChecked() {
                             shouldUncheckSection = false
                             break
                         }

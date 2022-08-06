@@ -664,7 +664,7 @@ class CollectionViewItemsLoader : NSObject {
                 return
             }
             
-            let imageFile = ImageFile(photoFile: photoFile, indicator: self.indicator, loadExifFromFile: true)
+            let imageFile = ImageFile(image: photoFile, indicator: self.indicator, loadExifFromFile: true)
             
             if duplicates.paths.contains(photoFile.path) {
                 imageFile.hasDuplicates = true

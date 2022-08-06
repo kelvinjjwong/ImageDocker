@@ -1051,7 +1051,7 @@ order by "date"
     func getPhotoFilesWithoutExif(limit: Int?) -> [Image] {
         let db = PostgresConnection.database()
         return Image.fetchAll(db, where: """
-        hidden != true AND "cameraMaker" is null and ("lastTimeExtractExif" = 0 or "updateExifDate" is null OR "photoTakenYear" is null OR "photoTakenYear" = 0 OR (latitude <> '0.0' AND "latitudeBD" = '0.0') OR ("latitudeBD" <> '0.0' AND country = ''))
+        hidden != true AND ("updateExifDate" is null OR "photoTakenYear" is null OR "photoTakenYear" = 0 OR latitude is null or (latitude <> '0.0' AND "latitudeBD" = '0.0') OR ("latitudeBD" <> '0.0' AND country = ''))
         """, orderBy: """
         "photoTakenDate", filename
         """)
@@ -1060,16 +1060,21 @@ order by "date"
     func getPhotoFilesWithoutExif(repositoryPath:String, limit: Int?) -> [Image] {
         let db = PostgresConnection.database()
         return Image.fetchAll(db, where: """
-        "repositoryPath"='\(repositoryPath)' and hidden != true AND "cameraMaker" is null and ("lastTimeExtractExif" = 0 or "updateExifDate" is null OR "photoTakenYear" is null OR "photoTakenYear" = 0 OR (latitude <> '0.0' AND "latitudeBD" = '0.0') OR ("latitudeBD" <> '0.0' AND country = ''))
+        "repositoryPath"='\(repositoryPath)' and hidden != true AND ("updateExifDate" is null OR "photoTakenYear" is null OR "photoTakenYear" = 0 OR latitude is null or (latitude <> '0.0' AND "latitudeBD" = '0.0') OR ("latitudeBD" <> '0.0' AND country = ''))
         """, orderBy: """
         "photoTakenDate", filename
         """)
     }
     
+    /// "repositoryPath"='\(repositoryPath)' and hidden != true AND "cameraMaker" is null and ("lastTimeExtractExif" = 0 or "updateExifDate" is null OR "photoTakenYear" is null OR "photoTakenYear" = 0 OR (latitude <> '0.0' AND "latitudeBD" = '0.0') OR ("latitudeBD" <> '0.0' AND country = ''))
+    ///
+    ///
+    ///
+    
     func getPhotoFilesWithoutLocation(repositoryPath:String) -> [Image] {
         let db = PostgresConnection.database()
         return Image.fetchAll(db, where: """
-        "repositoryPath"='\(repositoryPath)' and hidden != true AND "updateLocationDate" is null
+        "repositoryPath"='\(repositoryPath)' and hidden != true AND ("updateLocationDate" is null or latitude is null or (latitude <> '0.0' AND "latitudeBD" = '0.0') OR ("latitudeBD" <> '0.0' AND country = ''))
         """, orderBy: """
         "photoTakenDate", filename
         """)
@@ -1078,7 +1083,7 @@ order by "date"
     func getPhotoFilesWithoutLocation() -> [Image] {
         let db = PostgresConnection.database()
         return Image.fetchAll(db, where: """
-        hidden != true AND "updateLocationDate" is null
+        hidden != true AND ("updateLocationDate" is null or latitude is null or (latitude <> '0.0' AND "latitudeBD" = '0.0') OR ("latitudeBD" <> '0.0' AND country = ''))
         """, orderBy: """
         "photoTakenDate", filename
         """)

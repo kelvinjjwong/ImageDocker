@@ -104,7 +104,7 @@ class PeopleFace {
     
     fileprivate func loadSourceImageFile() -> ImageFile? {
         if let sourceImage = ImageRecordDao.default.getImage(id: self.data.imageId) {
-            return ImageFile(photoFile: sourceImage)
+            return ImageFile(image: sourceImage)
         }
         return nil
     }

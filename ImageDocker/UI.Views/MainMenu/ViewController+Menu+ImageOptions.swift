@@ -60,6 +60,27 @@ extension ViewController {
         self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
         
         self.btnImageOptions.menu?.addItem(withTitle: Words.replaceImageWithBackupVersion.word(), action: #selector(previewMenuRestoreBackupImage(_:)), keyEquivalent: "")
+        
+        self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
+        
+        self.btnImageOptions.menu?.addItem(withTitle: Words.rescanImageExif.word(), action: #selector(rescanImageExif(_:)), keyEquivalent: "")
+    }
+    
+    @objc func rescanImageExif(_ menuItem:NSMenuItem) {
+        self.btnImageOptions.selectItem(at: 0)
+        
+        if let imageFile = self.img {
+            let url = imageFile.url
+            logger.log("preview menu - rescan image exif - \(url)")
+            if let image = imageFile.imageData {
+                let i = ImageFile(image: image, forceReloadExif: true)
+                print(i.location.latitude)
+                print(i.location.longitude)
+                print(i.location.latitudeBD)
+                print(i.location.longitudeBD)
+            }
+        }
+        
     }
     
     @objc func previewMenuWriteNote(_ menuItem:NSMenuItem) {

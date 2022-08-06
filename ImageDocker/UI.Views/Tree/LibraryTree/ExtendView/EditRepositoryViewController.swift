@@ -413,6 +413,7 @@ class EditRepositoryViewController: NSViewController {
         let facePath = self.txtFacePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         let cropPath = self.txtCropPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         let repositoryPath = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        let deviceId = self.lblDeviceId.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         if name == "" {
             self.lblNameRemark.stringValue = "Please give me a name."
         }
@@ -462,6 +463,7 @@ class EditRepositoryViewController: NSViewController {
             repo.eventFolderLevel = (self.lstEventFolderLevel.indexOfSelectedItem + 1)
             repo.folderAsBrief = (self.chkFolderAsBrief.state == .on)
             repo.briefFolderLevel = self.getBriefFolderLevelFromSelection()
+            repo.deviceId = deviceId
             let _ = RepositoryDao.default.saveImageContainer(container: repo)
         }
     }

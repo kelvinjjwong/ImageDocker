@@ -402,7 +402,7 @@ class ImageFolderTreeScanner {
         return imageFolders
     }
     
-    fileprivate func scanPhotosToLoadExif(photos:[Image], taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil) {
+    fileprivate func scanPhotosToLoadExif(images:[Image], taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil) {
 //        if suppressedScan {
 //            if indicator != nil {
 //                indicator?.forceComplete()
@@ -428,10 +428,10 @@ class ImageFolderTreeScanner {
         
         self.logger.log("loaded excluded container paths")
         
-        let photoCount = photos.count
+        let photoCount = images.count
         
         if photoCount > 0 {
-            self.logger.log("UPDATING EXIF: \(photos.count)")
+            self.logger.log("UPDATING EXIF: \(images.count)")
             if indicator != nil {
                 indicator?.setTarget(photoCount)
             }
@@ -442,7 +442,7 @@ class ImageFolderTreeScanner {
             
             var i = 0
             
-            for photo in photos {
+            for photo in images {
                 
                 i += 1
                 
@@ -464,7 +464,7 @@ class ImageFolderTreeScanner {
                     }
                 }
                 if !exclude {
-                    let _ = ImageFile(photoFile: photo, indicator: indicator)
+                    let _ = ImageFile(image: photo, indicator: indicator, forceReloadExif: true)
                 }else{
                     if indicator != nil {
                         DispatchQueue.main.async {
@@ -499,9 +499,9 @@ class ImageFolderTreeScanner {
             }
         }
         TaskletManager.default.updateProgress(id: taskId, message: Words.exif_scan_loading_images.word(), increase: false)
-        let photos = ImageSearchDao.default.getPhotoFilesWithoutExif(repositoryPath: repository.repositoryPath)
-        self.logger.log("PHOTOS WITHOUT EXIF: \(photos.count) - \(repository.name)")
-        self.scanPhotosToLoadExif(photos: photos, taskId: taskId, indicator: indicator, onCompleted: onCompleted)
+        let images = ImageSearchDao.default.getPhotoFilesWithoutExif(repositoryPath: repository.repositoryPath)
+        self.logger.log("PHOTOS WITHOUT EXIF: \(images.count) - \(repository.name)")
+        self.scanPhotosToLoadExif(images: images, taskId: taskId, indicator: indicator, onCompleted: onCompleted)
     }
     
     func scanPhotosToLoadExif(taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil)  {
@@ -511,9 +511,9 @@ class ImageFolderTreeScanner {
             }
         }
         TaskletManager.default.updateProgress(id: taskId, message: Words.exif_scan_loading_images.word(), increase: false)
-        let photos = ImageSearchDao.default.getPhotoFilesWithoutExif()
-        self.logger.log("PHOTOS WITHOUT EXIF: \(photos.count)")
-        self.scanPhotosToLoadExif(photos: photos, taskId: taskId, indicator: indicator, onCompleted: onCompleted)
+        let images = ImageSearchDao.default.getPhotoFilesWithoutExif()
+        self.logger.log("PHOTOS WITHOUT EXIF: \(images.count)")
+        self.scanPhotosToLoadExif(images: images, taskId: taskId, indicator: indicator, onCompleted: onCompleted)
     }
     
     func scanPhotosToLoadExif_asTask(repository:ImageContainer, indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil) {
@@ -534,9 +534,9 @@ class ImageFolderTreeScanner {
             }
         }
         TaskletManager.default.updateProgress(id: taskId, message: Words.location_scan_loading_images.word(), increase: false)
-        let photos = ImageSearchDao.default.getPhotoFilesWithoutLocation(repositoryPath: repository.repositoryPath)
-        self.logger.log("PHOTOS WITHOUT LOCATION: \(photos.count) - \(repository.name)")
-        self.scanPhotosToLoadExif(photos: photos, taskId: taskId, indicator: indicator, onCompleted: onCompleted)
+        let images = ImageSearchDao.default.getPhotoFilesWithoutLocation(repositoryPath: repository.repositoryPath)
+        self.logger.log("PHOTOS WITHOUT LOCATION: \(images.count) - \(repository.name)")
+        self.scanPhotosToLoadExif(images: images, taskId: taskId, indicator: indicator, onCompleted: onCompleted)
     }
     
     func scanPhotosToLoadLocation_asTask(repository:ImageContainer, indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil) {
@@ -694,7 +694,7 @@ class ImageFolderTreeScanner {
                                                       manyChildren: devicePath.manyChildren
                         )
                         
-                        if let container = folder.containerFolder, container.parentFolder == "" {
+                        if let container = folder.containerFolder, container.parentFolder == "", container.path != repo.path {
                             let _ = RepositoryDao.default.updateImageContainerParentFolder(path: path, parentFolder: repo.path)
                         }
                         if !containers.contains(path) {
@@ -702,6 +702,7 @@ class ImageFolderTreeScanner {
                         }
                     } // end of if not excluded
                 } // end of loop devicePaths
+                let _ = RepositoryDao.default.updateImageContainerSubContainers(path: repo.path)
             } // end of if devicePaths.count > 0
         } // end of if repo.deviceid != ""
         
@@ -793,6 +794,8 @@ class ImageFolderTreeScanner {
                                             facePath: "",
                                             cropPath: "")
                         
+                        // FIXME: update parentFolder field
+                        
                         if !containers.contains(path) {
                             containers.append(path)
                         }
@@ -839,7 +842,7 @@ class ImageFolderTreeScanner {
                     
                     if !exclude {
                         if let parentFolder = path.getNearestParent(from: containers) { //FIXME: has bug here
-                            self.logger.log(">>> parent folder: \(parentFolder)")
+                            self.logger.log("### FIND PARENT >>> \(path) >>> parent folder: \(parentFolder)")
                             
                             let _ = RepositoryDao.default.updateImageContainerParentFolder(path: path, parentFolder: parentFolder)
                             

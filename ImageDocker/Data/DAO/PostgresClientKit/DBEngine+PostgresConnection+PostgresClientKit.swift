@@ -216,7 +216,7 @@ public final class PostgresConnection : ImageDBInterface {
         }
         let filepath = backupfolder.appendingPathComponent(filename)
         
-        let cmd = "\(pgdump_path) -h \(host) \(database) | /usr/bin/gzip > \(filepath.path)"
+        let cmd = "\(pgdump_path) -h \(host) -U \(user) \(database) | /usr/bin/gzip > \(filepath.path)"
         self.logger.log(cmd)
         let pgdump = Process("/bin/bash", ["-c", cmd])
         

@@ -159,13 +159,13 @@ class ImageFile {
     // MARK: - LOADER
     
     // READ FROM DATABASE
-    init (photoFile:Image, indicator:Accumulator? = nil, loadExifFromFile:Bool = true, metaInfoStore:MetaInfoStoreDelegate? = nil, sharedDB:DatabaseWriter? = nil) {
+    init (image:Image, indicator:Accumulator? = nil, loadExifFromFile:Bool = true, metaInfoStore:MetaInfoStoreDelegate? = nil, sharedDB:DatabaseWriter? = nil, forceReloadExif:Bool = false) {
         exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"
         exifDateFormatWithTimezone.dateFormat = "yyyy:MM:dd HH:mm:ssxxx"
         
         self.indicator = indicator
-        self.url = URL(fileURLWithPath: photoFile.path)
-        self.fileName = photoFile.filename
+        self.url = URL(fileURLWithPath: image.path)
+        self.fileName = image.filename
         self.location = Location()
         
         let imageType = url.imageType()
@@ -174,7 +174,7 @@ class ImageFile {
         self.isVideo = (imageType == .video)
         
         self.metaInfoHolder = metaInfoStore ?? MetaInfoHolder()
-        self.imageData = photoFile
+        self.imageData = image
         
         loadMetaInfoFromDatabase()
         
@@ -211,6 +211,15 @@ class ImageFile {
                 }
                 
             }
+        
+        if(forceReloadExif){
+            autoreleasepool { () -> Void in
+                self.loadMetaInfoFromOSX()
+                self.loadMetaInfoFromExif()
+                
+                needSave = true
+            }
+        }
             
 //            if self.imageData?.cameraMaker == nil {
 //                autoreleasepool { () -> Void in
@@ -220,7 +229,7 @@ class ImageFile {
 //                    needSave = true
 //                }
 //            }
-            
+        print("need load location: \(self.isNeedLoadLocation())")
             if self.isNeedLoadLocation() {
                 needSave = true
                 autoreleasepool { () -> Void in

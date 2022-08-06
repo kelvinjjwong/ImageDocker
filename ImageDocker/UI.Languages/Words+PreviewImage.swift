@@ -106,6 +106,11 @@ extension Words {
         chs: "将照片恢复到原始版本"
     )
     
+    static let rescanImageExif = Localize(
+        eng: "Scan image EXIF again",
+        chs: "再次扫描照片的元数据"
+    )
+    
     static let editableVersion = Localize(
         eng: "EDITABLE VERSION",
         chs: "可修改的版本"

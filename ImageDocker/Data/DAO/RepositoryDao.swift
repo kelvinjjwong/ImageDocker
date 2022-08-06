@@ -35,7 +35,7 @@ class RepositoryDao {
     
     func getOrCreateContainer(name:String,
                               path:String,
-                              parentPath parentFolder:String = "",
+                              parentPath:String = "",
                               repositoryPath:String,
                               homePath:String,
                               storagePath:String,
@@ -44,7 +44,7 @@ class RepositoryDao {
                               subPath:String,
                               manyChildren:Bool = false,
                               hideByParent:Bool = false) -> ImageContainer {
-        let (container, isNew) = self.impl.getOrCreateContainer(name: name, path: path, parentPath: parentFolder, repositoryPath: repositoryPath, homePath: homePath, storagePath: storagePath, facePath: facePath, cropPath: cropPath, subPath: subPath, manyChildren: manyChildren, hideByParent: hideByParent)
+        let (container, isNew) = self.impl.getOrCreateContainer(name: name, path: path, parentPath: parentPath, repositoryPath: repositoryPath, homePath: homePath, storagePath: storagePath, facePath: facePath, cropPath: cropPath, subPath: subPath, manyChildren: manyChildren, hideByParent: hideByParent)
         
         if isNew {
             let _ = self.updateParentContainerSubContainers(thisPath: path)

@@ -371,7 +371,7 @@ extension ImageFile {
         }
         
         if needSave {
-            self.logger.log("UPDATE COORD TO NON ZERO")
+            //self.logger.log("UPDATE COORD TO NON ZERO")
             let _ = ImageRecordDao.default.saveImage(image: photoFile)
         }
         
