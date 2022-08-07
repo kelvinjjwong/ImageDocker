@@ -229,7 +229,6 @@ class ImageFile {
 //                    needSave = true
 //                }
 //            }
-        print("need load location: \(self.isNeedLoadLocation())")
             if self.isNeedLoadLocation() {
                 needSave = true
                 autoreleasepool { () -> Void in
@@ -249,7 +248,7 @@ class ImageFile {
             }
 //        }
         
-        if needSave {
+        if needSave || forceReloadExif {
             let _ = save()
         }
         

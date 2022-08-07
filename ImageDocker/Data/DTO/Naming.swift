@@ -557,11 +557,19 @@ struct PlaceRecognizer {
         var district = ""
         var place = ""
         
+        let isAssigned = data.assignCity != nil && (data.assignCity ?? "") != ""
+        
         country = data.assignCountry ?? data.country ?? ""
-        city = data.assignCity ?? data.city ?? ""
+        if isAssigned {
+            city = data.assignCity?.emptyThenNil() ?? ""
+            district = data.assignDistrict?.emptyThenNil() ?? ""
+            place = data.assignPlace?.emptyThenNil() ?? data.assignBusinessCircle?.emptyThenNil() ?? data.assignCity?.emptyThenNil() ?? ""
+        }else{
+            city = data.city?.emptyThenNil() ?? ""
+            district = data.district?.emptyThenNil() ?? ""
+            place = data.suggestPlace?.emptyThenNil() ?? data.businessCircle?.emptyThenNil() ?? data.city?.emptyThenNil() ?? ""
+        }
         city = city.replacingOccurrences(of: "特别行政区", with: "")
-        district = data.assignDistrict ?? data.district ?? ""
-        place = data.assignPlace ?? data.suggestPlace ?? data.businessCircle ?? ""
         place = place.replacingOccurrences(of: "特别行政区", with: "")
     
         if country == "中国" {
@@ -577,7 +585,7 @@ struct PlaceRecognizer {
             }
         }
         if place != "" {
-            if place.starts(with: prefix) {
+            if place.starts(with: prefix) || place.contains("自治") {
                 return place
             }else {
                 return "\(prefix)\(place)"

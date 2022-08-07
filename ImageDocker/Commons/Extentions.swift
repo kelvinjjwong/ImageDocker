@@ -30,6 +30,14 @@ extension Double {
 
 extension String {
     
+    func emptyThenNil() -> String? {
+        if self == "" {
+            return nil
+        }else{
+            return self
+        }
+    }
+    
     func paddingLeft(_ width:Int, with:String = " ") -> String{
         let toPad:Int = width - self.count
         if toPad < 1 {return self}
