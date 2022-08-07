@@ -167,7 +167,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
     
     func updateImageDates(path: String, date: Date, fields: Set<String>) -> ExecuteState {
         let db = PostgresConnection.database()
-        var arguments:[PostgresValueConvertible?] = []
+        var arguments:[PostgresValueConvertible] = []
         var values:[String] = []
         
         var placeholders = 0
@@ -207,11 +207,13 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
                 continue
             }
         }
-        arguments.append(path)
+//        arguments.append(path)
         let valueSets = values.joined(separator: ",")
+        print("[UPDATE-DATE-SQL] UPDATE \"Image\" set \(valueSets) WHERE \"path\"=\"\(path)\"")
+        print("[UPDATE-DATE-SQL] ARGS: \(arguments)")
         do {
             try db.execute(sql: """
-            UPDATE "Image" set \(valueSets) WHERE path=\(add(&placeholders))
+            UPDATE "Image" set \(valueSets) WHERE "path"='\(path)'
             """, parameterValues: arguments)
         }catch{
             self.logger.log(error)

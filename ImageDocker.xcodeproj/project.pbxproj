@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		211CCB1CC9D5DDCDB077A2DC /* Pods_ImageDocker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82AE2A4F2692BE8252178D24 /* Pods_ImageDocker.framework */; };
+		5C007848289FA2A300919826 /* Words+DateTimeModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C007847289FA2A300919826 /* Words+DateTimeModifier.swift */; };
+		5C00784A289FB70900919826 /* Words+NotesModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C007849289FB70900919826 /* Words+NotesModifier.swift */; };
+		5C00784C289FB72B00919826 /* Words+EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C00784B289FB72B00919826 /* Words+EventManager.swift */; };
 		8E00BB8E2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E00BB8D2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift */; };
 		8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015120208F7D23009C2549 /* StackedImageViewController.swift */; };
 		8E015123208F7D34009C2549 /* StackedVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015122208F7D34009C2549 /* StackedVideoViewController.swift */; };
@@ -367,6 +370,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5C007847289FA2A300919826 /* Words+DateTimeModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+DateTimeModifier.swift"; sourceTree = "<group>"; };
+		5C007849289FB70900919826 /* Words+NotesModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+NotesModifier.swift"; sourceTree = "<group>"; };
+		5C00784B289FB72B00919826 /* Words+EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+EventManager.swift"; sourceTree = "<group>"; };
 		5D91C952D851F04098CE50A9 /* Pods-ImageDocker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ImageDocker/Pods-ImageDocker.debug.xcconfig"; sourceTree = "<group>"; };
 		735F25C54C2D63CAD538E860 /* Pods-ImageDocker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.release.xcconfig"; path = "Pods/Target Support Files/Pods-ImageDocker/Pods-ImageDocker.release.xcconfig"; sourceTree = "<group>"; };
 		82AE2A4F2692BE8252178D24 /* Pods_ImageDocker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImageDocker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -970,6 +976,9 @@
 				8E481488277DB02F0097493E /* Words+EditRepository.swift */,
 				8E48148C277DBF030097493E /* Words+ExportProfileDialog.swift */,
 				8E481496277EB7C70097493E /* Words+Tree+Device.swift */,
+				5C007847289FA2A300919826 /* Words+DateTimeModifier.swift */,
+				5C007849289FB70900919826 /* Words+NotesModifier.swift */,
+				5C00784B289FB72B00919826 /* Words+EventManager.swift */,
 			);
 			path = UI.Languages;
 			sourceTree = "<group>";
@@ -1881,6 +1890,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */,
+				5C00784A289FB70900919826 /* Words+NotesModifier.swift in Sources */,
 				8E15E73D23AC74DC0094240A /* TreeTableCellView.swift in Sources */,
 				8EF8C55E265DBD910060D2E0 /* ImageLocationEditViewController.swift in Sources */,
 				8EBA759123B55B8B00548376 /* PlacesTreeDataSource.swift in Sources */,
@@ -1905,6 +1915,7 @@
 				8E4E5B672217349600FE4B68 /* FaceDetection.swift in Sources */,
 				8EBA759F23B5CE7300548376 /* DeviceDao.swift in Sources */,
 				8EF8C55C265DBD820060D2E0 /* ImageLocationViewController.swift in Sources */,
+				5C007848289FA2A300919826 /* Words+DateTimeModifier.swift in Sources */,
 				8E4DECEB23B38A7B00F5538C /* ImageContainer.swift in Sources */,
 				8EBA75A323B5D3B900548376 /* ExportDao.swift in Sources */,
 				8EF92DF024558BB500B55046 /* PostgresRecord.swift in Sources */,
@@ -2090,6 +2101,7 @@
 				8E15E73623AC74DC0094240A /* StackHeaderViewController.swift in Sources */,
 				8E4DECE323B3881A00F5538C /* ImageDao.swift in Sources */,
 				8E7B98E1214882080019ED87 /* Alert.swift in Sources */,
+				5C00784C289FB72B00919826 /* Words+EventManager.swift in Sources */,
 				8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */,
 				8E4C38D3211828B00089502C /* EventsTreeController.swift in Sources */,
 				8E1D49D724BBF04B00353C1C /* ToggleGroup.swift in Sources */,

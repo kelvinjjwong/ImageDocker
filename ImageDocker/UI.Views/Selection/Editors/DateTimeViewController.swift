@@ -41,7 +41,22 @@ class DateTimeViewController: NSViewController {
     
     // Table
     @IBOutlet weak var table: NSTableView!
-    
+    @IBOutlet weak var tblColFilename: NSTableColumn!
+    @IBOutlet weak var tblColDatePreview: NSTableColumn!
+    @IBOutlet weak var tblColPhotoTakenDate: NSTableColumn!
+    @IBOutlet weak var tblColDateFromFilename: NSTableColumn!
+    @IBOutlet weak var tblColExifCreate: NSTableColumn!
+    @IBOutlet weak var tblColExifModify: NSTableColumn!
+    @IBOutlet weak var tblColDateTimeOriginal: NSTableColumn!
+    @IBOutlet weak var tblColFileCreate: NSTableColumn!
+    @IBOutlet weak var tblColFileModify: NSTableColumn!
+    @IBOutlet weak var tblColSoftwareModified: NSTableColumn!
+    @IBOutlet weak var tblColVideoCreate: NSTableColumn!
+    @IBOutlet weak var tblColVideoModify: NSTableColumn!
+    @IBOutlet weak var tblColTrackCreate: NSTableColumn!
+    @IBOutlet weak var tblColTrackModify: NSTableColumn!
+    @IBOutlet weak var tblColEvent: NSTableColumn!
+    @IBOutlet weak var tblColPath: NSTableColumn!
     
     // Value Date
     @IBOutlet weak var txtReferenceDate: NSTextField!
@@ -64,6 +79,13 @@ class DateTimeViewController: NSViewController {
     @IBOutlet weak var stpSelectedSecond: NSStepper!
     
     // Adjust Date
+    @IBOutlet weak var lblFixedComponents: NSTextField!
+    @IBOutlet weak var lblAdjustComponents: NSTextField!
+    @IBOutlet weak var lblValueToApply: NSTextField!
+    
+    @IBOutlet weak var lblDate: NSTextField!
+    @IBOutlet weak var lblTime: NSTextField!
+    @IBOutlet weak var btnReExtractDatetimeFromFilename: NSButton!
     
     @IBOutlet weak var btnPlusMinusDate: NSButton!
     @IBOutlet weak var chkAdjustYear: NSButton!
@@ -87,6 +109,10 @@ class DateTimeViewController: NSViewController {
     @IBOutlet weak var stpAdjustSecond: NSStepper!
     
     // Apply to
+    @IBOutlet weak var lblApplyTo: NSTextField!
+    
+    
+    
     @IBOutlet weak var chkEXIFCreateDate: NSButton!
     @IBOutlet weak var chkEXIFModifyDate: NSButton!
     @IBOutlet weak var chkEXIFDateTimeOriginal: NSButton!
@@ -212,6 +238,40 @@ class DateTimeViewController: NSViewController {
         self.chkAdjustSecond.action = #selector(DateTimeViewController.onTimeComponentsChecks(sender:))
         
         self.reinitNumbers()
+        
+        self.btnOK.title = Words.apply.word()
+        self.btnClose.title = Words.close.word()
+        
+        self.lblFixedComponents.stringValue = Words.datetime_fixed_components.word()
+        self.lblAdjustComponents.stringValue = Words.datetime_adjust_components.word()
+        self.lblDate.stringValue = Words.datetime_date.word()
+        self.lblTime.stringValue = Words.datetime_time.word()
+        self.lblApplyTo.stringValue = Words.datetime_apply_to.word()
+        self.chkPhotoTakenDate.title = Words.datetime_photoTakenDate.word()
+        self.chkEXIFCreateDate.title = Words.datetime_exif_creation_date.word()
+        self.chkEXIFModifyDate.title = Words.datetime_exif_modify_date.word()
+        self.chkEXIFDateTimeOriginal.title = Words.datetime_exif_dateTimeOriginal.word()
+        self.btnReExtractDatetimeFromFilename.title = Words.datetime_reextract_from_filename.word()
+        self.chkEarliestDate.title = Words.datetime_use_earliest_datetime.word()
+        self.chkFileCreateDate.title = Words.datetime_file_creation_date.word()
+        self.tblColFilename.title = Words.datetime_col_filename.word()
+        self.tblColDatePreview.title = Words.datetime_col_date_preview.word()
+        self.tblColPhotoTakenDate.title = Words.datetime_col_photoTakenDate.word()
+        self.tblColDateFromFilename.title = Words.datetime_col_dateFromFilename.word()
+        self.tblColExifCreate.title = Words.datetime_col_exifCreate.word()
+        self.tblColExifModify.title = Words.datetime_col_exifModify.word()
+        self.tblColDateTimeOriginal.title = Words.datetime_col_exifDateTimeOriginal.word()
+        self.tblColFileCreate.title = Words.datetime_col_fileCreate.word()
+        self.tblColFileModify.title = Words.datetime_col_fileModify.word()
+        self.tblColSoftwareModified.title = Words.datetime_col_softwareModified.word()
+        self.tblColVideoCreate.title = Words.datetime_col_videoCreate.word()
+        self.tblColVideoModify.title = Words.datetime_col_videoModify.word()
+        self.tblColTrackCreate.title = Words.datetime_col_trackCreate.word()
+        self.tblColTrackModify.title = Words.datetime_col_trackModify.word()
+        self.tblColEvent.title = Words.datetime_col_event.word()
+        self.tblColPath.title = Words.datetime_col_path.word()
+        
+        
         
     }
     
@@ -671,6 +731,8 @@ class DateTimeViewController: NSViewController {
         
     }
     
+    var dateComponents:DateComponents = DateComponents()
+    
     fileprivate func adjustDateTimeOfImage(image:ImageTimestamp) -> Date? {
         if let date = image.photoTakenDate {
             var year = Calendar.current.component(.year, from: date)
@@ -744,15 +806,15 @@ class DateTimeViewController: NSViewController {
                 }
             }
             
-            var merged = DateComponents()
-            merged.year = year
-            merged.month = month
-            merged.day = day
-            merged.hour = hour
-            merged.minute = minute
-            merged.second = second
+            self.dateComponents = DateComponents()
+            self.dateComponents.year = year
+            self.dateComponents.month = month
+            self.dateComponents.day = day
+            self.dateComponents.hour = hour
+            self.dateComponents.minute = minute
+            self.dateComponents.second = second
             
-            if let result = Calendar.current.date(from: merged) {
+            if let result = Calendar.current.date(from: self.dateComponents) {
                 return result
             }
         }
@@ -821,7 +883,7 @@ class DateTimeViewController: NSViewController {
     }
     
     
-    // MARK: - OK
+    // MARK: - OK - SAVE TO DATABASE
     
     
     fileprivate var accumulator:Accumulator?
@@ -867,14 +929,21 @@ class DateTimeViewController: NSViewController {
             self.lblMessage.stringValue = "Updated \(count) images."
         })
         
+        for image in self.images {
+            if let dateToBeApplied = self.adjustDateTimeOfImage(image: image) {
+                image.valueDate = dateToBeApplied
+            }
+        }
+        
         DispatchQueue.global().async {
             for image in self.images {
-                
                 //ExifTool.helper.patchDateForPhoto(date: image.valueDate!, url: URL(fileURLWithPath: image.path), tags: tags)
-                let state = ImageRecordDao.default.updateImageDates(path: image.path, date: image.valueDate!, fields: tags)
-                self.updateImageDates(image: image, date: image.valueDate!, fields: tags)
-                if state == .OK {
-                    count += 1
+                if let valueDate = image.valueDate {
+                    let state = ImageRecordDao.default.updateImageDates(path: image.path, date: valueDate, fields: tags)
+                    self.updateImageDates(image: image, date: valueDate, fields: tags)
+                    if state == .OK {
+                        count += 1
+                    }
                 }
                 
                 DispatchQueue.main.async {
