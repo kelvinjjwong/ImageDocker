@@ -20,6 +20,7 @@ class NotesViewController: NSViewController {
     @IBOutlet weak var lblMessage: NSTextField!
     @IBOutlet weak var btnOK: NSButton!
     
+    @IBOutlet weak var lblPrompt: NSTextField!
     
     // MARK: INIT
     
@@ -40,6 +41,12 @@ class NotesViewController: NSViewController {
     fileprivate var images:[ImageFile] = []
     
     func loadFrom(images:[ImageFile], onApplyChanges: (() -> Void)? = nil ){
+        
+        self.chkBrief.title = Words.notes_brief.word()
+        self.chkDetailed.title = Words.notes_detailed.word()
+        self.lblPrompt.stringValue = Words.notes_prompt.word()
+        self.btnOK.title = Words.notes_apply.word()
+        
         self.onCompleted = onApplyChanges
         self.images = images
         

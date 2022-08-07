@@ -66,6 +66,33 @@ class EventListViewController: NSViewController {
     
     let dateFormatter = DateFormatter()
     
+    @IBOutlet weak var lblOwner: NSTextField!
+    @IBOutlet weak var lblFamily: NSTextField!
+    @IBOutlet weak var lblAttendees: NSTextField!
+    @IBOutlet weak var lblCategory: NSTextField!
+    @IBOutlet weak var lblEvent: NSTextField!
+    @IBOutlet weak var lblActivity: NSTextField!
+    @IBOutlet weak var lblNote: NSTextField!
+    @IBOutlet weak var lblImages: NSTextField!
+    
+    @IBOutlet weak var btnUpdate: NSButton!
+    @IBOutlet weak var btnCreate: NSButton!
+    @IBOutlet weak var btnDelete: NSButton!
+    @IBOutlet weak var btnReload: NSButton!
+    
+    @IBOutlet weak var tblColCategory: NSTableColumn!
+    @IBOutlet weak var tblColOwner: NSTableColumn!
+    @IBOutlet weak var tblColFrom: NSTableColumn!
+    @IBOutlet weak var tblColTo: NSTableColumn!
+    @IBOutlet weak var tblColEvent: NSTableColumn!
+    @IBOutlet weak var tblColImages: NSTableColumn!
+    @IBOutlet weak var tblColLastUpdate: NSTableColumn!
+    @IBOutlet weak var tblColActivity1: NSTableColumn!
+    @IBOutlet weak var tblColActivity2: NSTableColumn!
+    @IBOutlet weak var tblColAttendees: NSTableColumn!
+    @IBOutlet weak var tblColNote: NSTableColumn!
+    
+    
     @IBOutlet weak var eventTable: NSTableView!
     @IBOutlet weak var eventSearcher: NSSearchField!
     @IBOutlet weak var eventName: NSTextField!
@@ -139,6 +166,32 @@ class EventListViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.lblOwner.stringValue = Words.event_owner.word()
+        self.lblFamily.stringValue = Words.event_family.word()
+        self.lblAttendees.stringValue = Words.event_attendees.word()
+        self.lblCategory.stringValue = Words.event_category.word()
+        self.lblEvent.stringValue = Words.event_name.word()
+        self.lblActivity.stringValue = Words.event_activity.word()
+        self.lblNote.stringValue = Words.event_note.word()
+        self.lblImages.stringValue = Words.event_images.word()
+        self.btnCount.title = Words.event_btn_count.word()
+        self.btnUpdate.title = Words.event_btn_update.word()
+        self.btnCreate.title = Words.event_btn_create.word()
+        self.btnImport.title = Words.event_btn_import.word()
+        self.btnDelete.title = Words.event_btn_delete.word()
+        self.btnReload.title = Words.event_btn_reload.word()
+        self.tblColCategory.title = Words.event_col_category.word()
+        self.tblColOwner.title = Words.event_col_owner.word()
+        self.tblColFrom.title = Words.event_col_from.word()
+        self.tblColTo.title = Words.event_col_to.word()
+        self.tblColEvent.title = Words.event_col_event.word()
+        self.tblColImages.title = Words.event_col_images.word()
+        self.tblColLastUpdate.title = Words.event_col_lastupdate.word()
+        self.tblColActivity1.title = Words.event_col_activity1.word()
+        self.tblColActivity2.title = Words.event_col_activity2.word()
+        self.tblColAttendees.title = Words.event_col_attendees.word()
+        self.tblColNote.title = Words.event_col_note.word()
         
         self.peopleCombo = TextListComboController(self.cmbPeople, onChange: { item in
             
