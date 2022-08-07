@@ -694,8 +694,14 @@ class ImageFolderTreeScanner {
                                                       manyChildren: devicePath.manyChildren
                         )
                         
-                        if let container = folder.containerFolder, container.parentFolder == "", container.path != repo.path {
-                            let _ = RepositoryDao.default.updateImageContainerParentFolder(path: path, parentFolder: repo.path)
+                        if let container = RepositoryDao.default.getContainer(path: path) {
+                            if container.path == repo.path {
+                                print("[REPOSITORY] Setting a ROOT repository: \(path)")
+                                let _ = RepositoryDao.default.updateImageContainerParentFolder(path: path, parentFolder: "")
+                            }else{
+                                print("[REPOSITORY] Binding a SUB container to repository: \(path) ==> \(repo.path)")
+                                let _ = RepositoryDao.default.updateImageContainerParentFolder(path: path, parentFolder: repo.path)
+                            }
                         }
                         if !containers.contains(path) {
                             containers.append(path)
