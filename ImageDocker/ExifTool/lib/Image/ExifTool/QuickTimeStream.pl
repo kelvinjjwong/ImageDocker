@@ -80,7 +80,7 @@ my %processByMetaFormat = (
 
 # data lengths for each INSV record type
 my %insvDataLen = (
-    0x300 => 56,    # accelerometer
+    0x300 => 0,     # accelerometer (could be either 20 or 56 bytes)
     0x400 => 16,    # exposure (ref 6)
     0x600 => 8,     # timestamps (ref 6)
     0x700 => 53,    # GPS
@@ -1144,13 +1144,13 @@ sub ProcessSamples($)
             }
             @$size < @$start + $samplesPerChunk and $et->WarnOnce('Sample size error'), last;
             my $sampleStart = $chunkStart;
-            for ($i=0; ; ) {
+Sample:     for ($i=0; ; ) {
                 push @$start, $sampleStart;
                 if (defined $time) {
                     until ($timeCount) {
                         if (@$stts < 2) {
                             undef $time;
-                            last;
+                            last Sample;
                         }
                         $timeCount = shift @$stts;
                         $timeDelta = shift @$stts;
@@ -1527,7 +1527,7 @@ sub ProcessFreeGPS($$$)
         $spd = $9 * $knotsToKph if length $9;
         $trk = $10 if length $10;
 
-    } elsif ($$dataPt =~ /^.{64}[\x01-\x0c]\0{3}[\x01-\x1f]\0{3}A[NS][EW]\0/s) {
+    } elsif ($$dataPt =~ /^.{64}[\x01-\x0c]\0{3}[\x01-\x1f]\0{3}A[NS][EW]\0{5}/s) {
 
         # Akaso V1 dascham
         #  0000: 00 00 80 00 66 72 65 65 47 50 53 20 78 00 00 00 [....freeGPS x...]
@@ -1624,6 +1624,9 @@ sub ProcessFreeGPS($$$)
         #  0000: 00 00 80 00 66 72 65 65 47 50 53 20 4c 00 00 00 [....freeGPS L...]
         #  0010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 [................]
         #  0020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 [................]
+        #  0030: 10 00 00 00 2d 00 00 00 14 00 00 00 11 00 00 00 [....-...........]
+        #  0040: 0c 00 00 00 1f 00 00 00 41 4e 45 00 5d 9a a9 45 [........ANE.]..E]
+        #  0050: ab 1e e5 44 ec 51 f0 40 b8 5e a5 43 00 00 00 00 [...D.Q.@.^.C....]
         # (records are same structure as Type 3 Novatek GPS in ProcessFreeGPS2() below)
         ($hr,$min,$sec,$yr,$mon,$day,$stat,$latRef,$lonRef,$lat,$lon,$spd,$trk) =
             unpack('x48V6a1a1a1x1V4', $$dataPt);
@@ -2621,8 +2624,33 @@ sub ProcessInsta360($;$)
         if ($verbose) {
             $et->VPrint(0, sprintf("Insta360 Record 0x%x (offset 0x%x, %d bytes):\n", $id, $fileEnd + $epos, $len));
         }
+        # there are 2 types of record 0x300:
+        # 1. 56 byte records
+        # 0000: 4a f7 02 00 00 00 00 00 00 00 00 00 00 1e e7 3f [J..............?]
+        # 0010: 00 00 00 00 00 b2 ef bf 00 00 00 00 00 70 c1 bf [.............p..]
+        # 0020: 00 00 00 e0 91 5c 8c bf 00 00 00 20 8f ff 87 bf [.....\..... ....]
+        # 0030: 00 00 00 00 88 7f c9 bf
+        # 2. 20 byte records
+        # 0000: c1 d8 d9 0b 00 00 00 00 f5 83 14 80 df 7f fe 7f [................]
+        # 0010: fe 7f 01 80
+        if ($id == 0x300) {
+            if ($len % 20 and not $len % 56) {
+                $dlen = 56;
+            } elsif ($len % 56 and not $len % 20) {
+                $dlen = 20;
+            } else {
+                if ($raf->Read($buff, 20) == 20) {
+                    if (substr($buff, 16, 3) eq "\0\0\0") {
+                        $dlen = 56;
+                    } else {
+                        $dlen = 20;
+                    }
+                }
+                $raf->Seek($epos, 2) or last;
+            }
+        }
         # limit the number of records we read if necessary
-        if ($insvLimit{$id} and $len > $insvLimit{$id}[1] * $dlen and
+        if ($dlen and $insvLimit{$id} and $len > $insvLimit{$id}[1] * $dlen and
             $et->Warn("Insta360 $insvLimit{$id}[0] data is huge. Processing only the first $insvLimit{$id}[1] records",2))
         {
             $len = $insvLimit{$id}[1] * $dlen;
@@ -2630,11 +2658,18 @@ sub ProcessInsta360($;$)
         $raf->Read($buff, $len) == $len or last;
         $et->VerboseDump(\$buff) if $verbose > 2;
         if ($dlen) {
-            $len % $dlen and $et->Warn(sprintf('Unexpected Insta360 record 0x%x length',$id)), last;
-            if ($id == 0x300) {
+            if ($len % $dlen) {
+                $et->Warn(sprintf('Unexpected Insta360 record 0x%x length',$id));
+            } elsif ($id == 0x300) {
                 for ($p=0; $p<$len; $p+=$dlen) {
                     $$et{DOC_NUM} = ++$$et{DOC_COUNT};
-                    my @a = map { GetDouble(\$buff, $p + 8 * $_) } 1..6;
+                    my @a;
+                    if ($dlen == 56) {
+                        @a = map { GetDouble(\$buff, $p + 8 * $_) } 1..6;
+                    } else {
+                        @a = unpack("x${p}x8v6", $buff);
+                        map { $_ = ($_ - 0x8000) / 1000 } @a;
+                    }
                     $et->HandleTag($tagTbl, TimeCode => sprintf('%.3f', Get64u(\$buff, $p) / 1000));
                     $et->HandleTag($tagTbl, Accelerometer => "@a[0..2]"); # (NC)
                     $et->HandleTag($tagTbl, AngularVelocity => "@a[3..5]"); # (NC)

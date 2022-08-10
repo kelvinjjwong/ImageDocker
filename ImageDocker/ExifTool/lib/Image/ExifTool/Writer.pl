@@ -858,7 +858,7 @@ TAG: foreach $tagInfo (@matchingTags) {
                 ($shift or ($shiftable eq '0' and $options{DelValue})))
             {
                 $err = "$wgrp1:$tag is not shiftable";
-                $verbose > 2 and print $out "$err\n";
+                $verbose and print $out "$err\n";
                 next;
             }
         }
@@ -975,7 +975,7 @@ TAG: foreach $tagInfo (@matchingTags) {
                 } else {
                     $wgrp = '';
                 }
-                foreach $wtag (keys %{$$tagInfo{WriteAlso}}) {
+                foreach $wtag (sort keys %{$$tagInfo{WriteAlso}}) {
                     my ($n,$e) = $self->SetNewValue($wgrp . $wtag, undef, Replace=>2);
                     $numSet += $n;
                 }
@@ -1123,7 +1123,7 @@ WriteAlso:
                 $wgrp = '';
             }
             local $SIG{'__WARN__'} = \&SetWarning;
-            foreach $wtag (keys %$writeAlso) {
+            foreach $wtag (sort keys %$writeAlso) {
                 my %opts = (
                     Type => 'ValueConv',
                     Protected   => $protected | 0x02,
@@ -1270,6 +1270,7 @@ sub SetNewValuesFromFile($$;@)
         GlobalTimeShift => $$options{GlobalTimeShift},
         HexTagIDs       => $$options{HexTagIDs},
         IgnoreMinorErrors=>$$options{IgnoreMinorErrors},
+        IgnoreTags      => $$options{IgnoreTags},
         Lang            => $$options{Lang},
         LargeFileSupport=> $$options{LargeFileSupport},
         List            => 1,

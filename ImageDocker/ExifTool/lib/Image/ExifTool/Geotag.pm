@@ -14,6 +14,7 @@
 #               2019/07/02 - PH Added ability to read IMU CSV files
 #               2019/11/10 - PH Also write pitch to CameraElevationAngle
 #               2020/12/01 - PH Added ability to read DJI CSV log files
+#               2022/06/21 - PH Added ability to read Google Takeout JSON files
 #
 # References:   1) http://www.topografix.com/GPX/1/1/
 #               2) http://www.gpsinformation.org/dale/nmea.htm#GSA
@@ -28,7 +29,7 @@ use vars qw($VERSION);
 use Image::ExifTool qw(:Public);
 use Image::ExifTool::GPS;
 
-$VERSION = '1.65';
+$VERSION = '1.68';
 
 sub JITTER() { return 2 }       # maximum time jitter
 
@@ -133,7 +134,7 @@ sub LoadTrackLog($$;$)
     local ($_, $/, *EXIFTOOL_TRKFILE);
     my ($et, $val) = @_;
     my ($raf, $from, $time, $isDate, $noDate, $noDateChanged, $lastDate, $dateFlarm);
-    my ($nmeaStart, $fixSecs, @fixTimes, $lastFix, %nmea, @csvHeadings);
+    my ($nmeaStart, $fixSecs, @fixTimes, $lastFix, %nmea, @csvHeadings, $sortFixes);
     my ($canCut, $cutPDOP, $cutHDOP, $cutSats, $e0, $e1, @tmp, $trackFile, $trackTime);
 
     unless (eval { require Time::Local }) {
@@ -210,13 +211,14 @@ sub LoadTrackLog($$;$)
         $raf->ReadLine($_) or last;
         # determine file format
         if (not $format) {
+            s/^\xef\xbb\xbf//;          # remove leading BOM if it exists
             if (/^<(\?xml|gpx)[\s>]/) { # look for XML or GPX header
                 $format = 'XML';
             # check for NMEA sentence
             # (must ONLY start with ones that have timestamps! eg. not GSA or PTNTHPR!)
             } elsif (/^.*\$([A-Z]{2}(RMC|GGA|GLL|ZDA)|PMGNTRK),/) {
                 $format = 'NMEA';
-                $nmeaStart = $2 || $1;    # save type of first sentence
+                $nmeaStart = $2 || $1;  # save type of first sentence
             } elsif (/^A(FLA|XSY|FIL)/) {
                 # (don't set format yet because we want to read HFDTE first)
                 $nmeaStart = 'B' ;
@@ -284,6 +286,10 @@ sub LoadTrackLog($$;$)
                     }
                 }
                 next;
+            } elsif (/"(timelineObjects|placeVisit|activitySegment|latitudeE7)":/) {
+                # Google Takeout JSON format
+                $format = 'JSON';
+                $sortFixes = 1; # (fixes are not all in order for this format)
             } else {
                 # search only first 50 lines of file for a valid fix
                 last if ++$skipped > 50;
@@ -503,6 +509,19 @@ DoneFix:    $isDate = 1;
                 $$has{track} = 1 if defined $$fix{track};
                 $$has{orient} = 1 if defined $$fix{pitch};
                 goto DoneFix;
+            }
+            next;
+        } elsif ($format eq 'JSON') {
+            # Google Takeout JSON format
+            if (/"(latitudeE7|longitudeE7|latE7|lngE7|timestamp)":\s*"?(.*?)"?,?\s*[\x0d\x0a]/) {
+                if ($1 eq 'timestamp') {
+                    $time = GetTime($2);
+                    goto DoneFix if $time and $$fix{lat} and $$fix{lon};
+                } elsif ($1 eq 'latitudeE7' or $1 eq 'latE7') {
+                    $$fix{lat} = $2 * 1e-7;
+                } else {
+                    $$fix{lon} = $2 * 1e-7;
+                }
             }
             next;
         }
@@ -750,6 +769,8 @@ DoneFix:    $isDate = 1;
         $numPoints -= $cutHDOP;
         $numPoints -= $cutSats;
     }
+    # sort fixes if necessary
+    @fixTimes = sort { $a <=> $b } @fixTimes if $sortFixes;
     # mark first fix of the track
     while (@fixTimes) {
         $fix = $$points{$fixTimes[0]} or shift(@fixTimes), next;
@@ -1408,8 +1429,8 @@ This module is used by Image::ExifTool
 This module loads GPS track logs, interpolates to determine position based
 on time, and sets new GPS values for geotagging images.  Currently supported
 formats are GPX, NMEA RMC/GGA/GLL, KML, IGC, Garmin XML and TCX, Magellan
-PMGNTRK, Honeywell PTNTHPR, Winplus Beacon text, IMU CSV, DJI CSV, and
-Bramor gEO log files.
+PMGNTRK, Honeywell PTNTHPR, Bramor gEO, Winplus Beacon text, Google Takeout
+JSON, GPS/IMU CSV, DJI CSV, ExifTool CSV log files.
 
 Methods in this module should not be called directly.  Instead, the Geotag
 feature is accessed by writing the values of the ExifTool Geotag, Geosync

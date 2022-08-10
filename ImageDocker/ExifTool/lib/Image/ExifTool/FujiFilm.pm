@@ -31,7 +31,7 @@ use vars qw($VERSION);
 use Image::ExifTool qw(:DataAccess :Utils);
 use Image::ExifTool::Exif;
 
-$VERSION = '1.80';
+$VERSION = '1.82';
 
 sub ProcessFujiDir($$$);
 sub ProcessFaceRec($$$);
@@ -689,8 +689,9 @@ my %faceCategories = (
         PrintConv => [{
             0 => 'None',
             1 => 'Optical', #PH
-            2 => 'Sensor-shift', #PH
+            2 => 'Sensor-shift', #PH (now IBIS/OIS, ref forum13708)
             3 => 'OIS Lens', #forum9815 (optical+sensor?)
+            258 => 'IBIS/OIS + DIS', #forum13708 (digital on top of IBIS/OIS)
             512 => 'Digital', #PH
         },{
             0 => 'Off',
@@ -762,6 +763,8 @@ my %faceCategories = (
         },
         PrintConvInv => '$val=~/(0x[0-9a-f]+)/i; hex $1',
     },
+    0x1447 => { Name => 'FirmwareVersion',  Writable => 'string' },
+    0x1448 => { Name => 'FirmwareVersion2', Writable => 'string' },
     0x3803 => { #forum10037
         Name => 'VideoRecordingMode',
         Groups => { 2 => 'Video' },
@@ -841,6 +844,24 @@ my %faceCategories = (
             1 => 'Face',
             2 => 'Left Eye',
             3 => 'Right Eye',
+            7 => 'Body',
+            8 => 'Head',
+            11 => 'Bike',
+            12 => 'Body of Car',
+            13 => 'Front of Car',
+            14 => 'Animal Body',
+            15 => 'Animal Head',
+            16 => 'Animal Face',
+            17 => 'Animal Left Eye',
+            18 => 'Animal Right Eye',
+            19 => 'Bird Body',
+            20 => 'Bird Head',
+            21 => 'Bird Left Eye',
+            22 => 'Bird Right Eye',
+            23 => 'Aircraft Body',
+            25 => 'Aircraft Cockpit',
+            26 => 'Train Front',
+            27 => 'Train Cockpit',
         },'REPEAT'],
     },
     # 0x4202 int8u[-1] - number of cooredinates in each rectangle? (ref 11)

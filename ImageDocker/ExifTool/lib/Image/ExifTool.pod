@@ -593,12 +593,13 @@ different when copying tags with L</SetNewValuesFromFile>.
 =item DateFormat
 
 Format for printing date/time values.  See C<strftime> in the L<POSIX>
-package for details about the format string.  If date can not be converted,
-value is left unchanged unless the StrictDate option is set.  Timezones are
-ignored.  The inverse conversion (ie. when calling L</SetNewValue>) is
-performed only if POSIX::strptime or Time::Piece is installed.  The default
-setting of undef causes date/time values to remain in standard EXIF format
-(similar to a DateFormat of "%Y:%m:%d %H:%M:%S").
+package and L<https://exiftool.org/filename.html#codes> for details about
+the format string.  If the date can not be converted, the value is left
+unchanged unless the StrictDate option is set.  Timezones are ignored.  The
+inverse conversion (ie. when calling L</SetNewValue>) is performed only if
+POSIX::strptime or Time::Piece is installed.  The default setting of undef
+causes date/time values to remain in standard EXIF format (similar to a
+DateFormat of "%Y:%m:%d %H:%M:%S").
 
 =item Duplicates
 
@@ -774,6 +775,15 @@ questionable operations to proceed (such as extracting thumbnail and preview
 images even if they don't have a recognizable header).  Minor errors and
 warnings are denoted by "[minor]" at the start of the message, or "[Minor]"
 (with a capital "M") for warnings that affect processing when ignored.
+
+=item IgnoreTags
+
+List of tag names to ignore when reading.  This may help in situations where
+memory is limited because the ignored tag values are not stored in memory.
+The tag names are case insensitive and group names and wildcards are not
+allowed.  A special tag name of "All" may be used to ignore all tags except
+those specified by the L</RequestTags> option.  Set to undef to clear the
+previous IgnoreTags list.  Default is undef.
 
 =item Lang
 
@@ -1102,10 +1112,10 @@ L</ExtractInfo>:
 Binary, Charset, CharsetEXIF, CharsetFileName, CharsetID3, CharsetIPTC,
 CharsetPhotoshop, CharsetQuickTime, CharsetRIFF, Composite, ExtendedXMP,
 ExtractEmbedded, FastScan, FixBase, HtmlDump, HtmlDumpBase,
-IgnoreMinorErrors, Lang, LargeFileSupport, MakerNotes, MDItemTags,
-NoPDFList, Password, QuickTimeUTC (enforced 1904 time zero), RequestAll,
-RequestTags, SaveFormat, SavePath, ScanForXMP, Struct, TextOut, Unknown,
-Verbose, XAttrTags and XMPAutoConv.
+IgnoreMinorErrors, IgnoreTags, Lang, LargeFileSupport, MakerNotes,
+MDItemTags, NoPDFList, Password, QuickTimeUTC (enforced 1904 time zero),
+RequestAll, RequestTags, SaveFormat, SavePath, ScanForXMP, Struct, TextOut,
+Unknown, Verbose, XAttrTags and XMPAutoConv.
 
 =item Return Value:
 

@@ -12,7 +12,7 @@ meta information extracted from or written to a file.
 =head1 TAG TABLES
 
 The tables listed below give the names of all tags recognized by ExifTool.
-They contain a total of 25764 tags, with 16462 unique tag names.
+They contain a total of 25816 tags, with 16503 unique tag names.
 
 B<Tag ID>, B<Index#> or B<Sequence> is given in the first column of each
 table.  A B<Tag ID> is the computer-readable equivalent of a tag name, and
@@ -629,6 +629,7 @@ for the official EXIF 2.32 specification.
            MakerNoteCanon            ExifIFD    Canon
            MakerNoteCasio            ExifIFD    Casio
            MakerNoteCasio2           ExifIFD    Casio Type2
+           MakerNoteDJIInfo          ExifIFD    DJI Info
            MakerNoteDJI              ExifIFD    DJI
            MakerNoteFLIR             ExifIFD    FLIR
            MakerNoteFujiFilm         ExifIFD    FujiFilm
@@ -669,6 +670,7 @@ for the official EXIF 2.32 specification.
            MakerNoteNintendo         ExifIFD    Nintendo
            MakerNoteOlympus          ExifIFD    Olympus
            MakerNoteOlympus2         ExifIFD    Olympus
+           MakerNoteOlympus3         ExifIFD    Olympus
            MakerNoteLeica            ExifIFD    Panasonic
            MakerNoteLeica2           ExifIFD    Panasonic Leica2
            MakerNoteLeica3           ExifIFD    Panasonic Leica3
@@ -853,6 +855,7 @@ for the official EXIF 2.32 specification.
            MakerNotePentax           IFD0       Pentax
            MakerNotePentax5          IFD0       Pentax
            MakerNoteRicohPentax      IFD0       Pentax
+           MakerNoteDJIInfo          IFD0       DJI Info
            DNGPrivateData            IFD0       int8u!
   0xc635   MakerNoteSafety           IFD0       int16u
   0xc640   RawImageSegmentation      -          no
@@ -6754,6 +6757,7 @@ Metadata tags that exist.
 
   Tag Name                                      Writable
   --------                                      --------
+  CreatorApp                                    no
   ManufacturerName                              no
   MediaColor                                    no
   MediaWeight                                   no
@@ -6978,6 +6982,7 @@ Tags extracted from the maker notes of iPhone images.
   0x0008   AccelerationVector                   rational64s[3]
   0x000a   HDRImageType                         int32s
   0x000b   BurstUUID                            string
+  0x000c   FocusDistanceRange                   rational64s[2]
   0x0011   MediaGroupUUID                       string
   0x0015   ImageUniqueID                        string
 
@@ -7346,6 +7351,7 @@ Unknown only to reduce the volume of the normal output.
   0x4021   MultiExp                             Canon MultiExp
   0x4024   FilterInfo                           Canon FilterInfo
   0x4025   HDRInfo                              Canon HDRInfo
+  0x4026   LogInfo                              Canon LogInfo
   0x4028   AFConfig                             Canon AFConfig
   0x403f   RawBurstModeRoll                     Canon RawBurstInfo
 
@@ -8401,16 +8407,16 @@ WB tags for the Canon G9.
 
   Index4   Tag Name                             Writable
   ------   --------                             --------
-      2    WB_GRGBLevelsAuto                    int32s[4]
-     10    WB_GRGBLevelsDaylight                int32s[4]
-     18    WB_GRGBLevelsCloudy                  int32s[4]
-     26    WB_GRGBLevelsTungsten                int32s[4]
-     34    WB_GRGBLevelsFluorescent             int32s[4]
-     42    WB_GRGBLevelsFluorHigh               int32s[4]
-     50    WB_GRGBLevelsFlash                   int32s[4]
-     58    WB_GRGBLevelsUnderwater              int32s[4]
-     66    WB_GRGBLevelsCustom1                 int32s[4]
-     74    WB_GRGBLevelsCustom2                 int32s[4]
+      2    WB_GRBGLevelsAuto                    int32s[4]
+     10    WB_GRBGLevelsDaylight                int32s[4]
+     18    WB_GRBGLevelsCloudy                  int32s[4]
+     26    WB_GRBGLevelsTungsten                int32s[4]
+     34    WB_GRBGLevelsFluorescent             int32s[4]
+     42    WB_GRBGLevelsFluorHigh               int32s[4]
+     50    WB_GRBGLevelsFlash                   int32s[4]
+     58    WB_GRBGLevelsUnderwater              int32s[4]
+     66    WB_GRBGLevelsCustom1                 int32s[4]
+     74    WB_GRBGLevelsCustom2                 int32s[4]
 
 =head3 Canon FaceDetect3 Tags
 
@@ -9514,6 +9520,18 @@ Information about creative filter settings.
   ------   --------                             --------
       1    HDR                                  int32s
       2    HDREffect                            int32s
+
+=head3 Canon LogInfo Tags
+
+  Index4   Tag Name                             Writable
+  ------   --------                             --------
+      4    CompressionFormat                    int32s
+      6    Sharpness                            int32s
+      7    Saturation                           int32s
+      8    ColorTone                            int32s
+      9    ColorSpace2                          int32s
+     10    ColorMatrix                          int32s
+     11    CanonLogVersion                      int32s
 
 =head3 Canon AFConfig Tags
 
@@ -10637,6 +10655,30 @@ These tags belong to the ExifTool XMP-drone-dji family 1 group.
   RtkStdLon                                     real
   SelfData                                      string
 
+=head3 DJI Info Tags
+
+Tags written by some DJI drones.
+
+  Tag ID               Tag Name                 Writable
+  ------               --------                 --------
+  'FlightDegree(Y,P,R)' FlightDegree            no
+  'FlightSpeed(X,Y,Z)' FlightSpeed              no
+  'GimbalDegree(Y,P,R)' GimbalDegree            no
+  'adj_dbg_info'       ADJDebugInfo             no
+  'ae_dbg_info'        AEDebugInfo              no
+  'ae_histogram_info'  AEHistogramInfo          no
+  'ae_liveview_histogram_info'
+                       AELiveViewHistogramInfo  no
+  'ae_liveview_local_histogram'
+                       AELiveViewLocalHistogram no
+  'ae_local_histogram' AELocalHistogram         no
+  'af_dbg_info'        AFDebugInfo              no
+  'awb_dbg_info'       AWBDebugInfo             no
+  'hiso'               Histogram                no
+  'hyperlapse_dbg_info' HyperlapsDebugInfo      no
+  'sensor_id'          SensorID                 no
+  'xidiri'             Xidiri                   no
+
 =head3 DJI ThermalParams Tags
 
 Thermal parameters extracted from APP4 of DJI RJPEG files from the ZH20T.
@@ -11167,6 +11209,8 @@ Tags extracted from FLIR Public image Format (FPF) files.
   0x1444   DRangePriorityAuto                   int16u
   0x1445   DRangePriorityFixed                  int16u
   0x1446   FlickerReduction                     int32u
+  0x1447   FirmwareVersion                      string
+  0x1448   FirmwareVersion2                     string
   0x3803   VideoRecordingMode                   int32u
   0x3804   PeripheralLighting                   int16u
   0x3806   VideoCompression                     int16u
@@ -13403,6 +13447,8 @@ DiMAGE X and Xt.
   ------   --------                             --------
   0x5500   BuildNumber                          string
   0x5501   SerialNumber                         string
+  0x6420   CustomRendered                       string
+  0x64d0   DriveMode                            string
   0x665e   Sensor                               string
   0x6705   ManufactureDate                      string
 
@@ -13591,6 +13637,8 @@ These tags belong to the ExifTool XMP-ast family 1 group.
   About                                         no
   GPSAltitude                                   no
   GPSAltitudeRef                                no
+  GPSImgDirection                               no
+  GPSImgDirectionRef                            no
   GPSLatitude                                   no
   GPSLatitudeRef                                no
   GPSLongitude                                  no
@@ -14317,6 +14365,7 @@ These tags are used by the Z9.
     434    FlashOutput?                         int8u
     444    FlashRemoteControl?                  int8u
     456    FlashWirelessOption?                 int8u
+    528    AFAreaMode                           int8u
     530    VRMode                               int8u
     534    BracketSet                           int8u
     536    BracketProgram                       int8u
@@ -14510,7 +14559,6 @@ Tags found in the encrypted LensData from cameras such as the Z6 and Z7.
       0    LensDataVersion                      no
       4    ExitPupilPosition                    int8u
       5    AFAperture                           int8u
-      9    FocusPosition                        int8u
      11    FocusDistance                        int8u
      12    FocalLength                          int8u
      13    LensIDNumber                         int8u
@@ -14522,10 +14570,14 @@ Tags found in the encrypted LensData from cameras such as the Z6 and Z7.
      19    MCUVersion                           int8u
      20    EffectiveMaxAperture                 int8u
      48    LensID                               int16u
+     53    LensMountType?                       int8u
      54    MaxAperture                          int16u
      56    FNumber                              int16u
      60    FocalLength                          int16u
-     79    FocusDistance                        int8u
+     76    FocusDistanceRangeWidth?             int8u
+     78    FocusDistance                        int16u~
+     86    LensDriveEnd?                        int8u
+     90    LensPositionAbsolute?                int32s
 
 =head3 Nikon LensDataUnknown Tags
 
@@ -14710,7 +14762,7 @@ These tags are used by the D4S, D750, D810, D5500, D7200 (FlashInfoVersion
       0    AFInfo2Version                       no
      62    AFImageWidth                         int16u
      64    AFImageHeight                        int16u
-     67    FocusPositionHoriontal               int8u~
+     67    FocusPositionHorizontal              int8u~
      69    FocusPositionVertical                int8u~
      70    AFAreaWidth                          int16u
      72    AFAreaHeight                         int16u
@@ -16624,6 +16676,7 @@ any information found here will be extracted, even if the tag is not listed.
   0x0306   AFFineTune                           int8u
   0x0307   AFFineTuneAdj                        int16s[3]
   0x0308   FocusBracketStepSize                 int8u
+  0x0309   AISubjectTrackingMode                int16u
   0x0400   FlashMode                            int16u
   0x0401   FlashExposureComp                    rational64s
   0x0403   FlashRemoteControl                   int16u
@@ -17415,29 +17468,30 @@ iPalm.
 Tags extracted from the PANA and LEIC user data found in MP4 videos from
 various Panasonic and Leica models.
 
-  Index1   Tag Name                             Writable
-  ------   --------                             --------
-      0    Make                                 no
-      4    Model                                no
-     12    Model                                no
-     16    JPEG-likeData                        EXIF
-     22    Model                                no
-     52    Version1                             no
-     62    Version2                             no
-     80    MakerNoteLeica5                      Panasonic Leica5
-     88    ThumbnailWidth                       no
-     90    ThumbnailHeight                      no
-     92    ThumbnailImage                       no
-   1334    ThumbnailWidth                       no
-   1338    ThumbnailHeight                      no
-   1342    ThumbnailLength                      no
-   1350    ThumbnailImage                       no
-   1358    ThumbnailWidth                       no
-   1362    ThumbnailHeight                      no
-   1366    ThumbnailLength                      no
-   1374    ThumbnailImage                       no
-  16488    ExifData                             EXIF
-  16512    ExifData                             EXIF
+  Index1       Tag Name                         Writable
+  ------       --------                         --------
+          0    Make                             no
+          4    Model                            no
+         12    Model                            no
+         16    JPEG-likeData                    EXIF
+         22    Model                            no
+         52    Version1                         no
+         62    Version2                         no
+         80    MakerNoteLeica5                  Panasonic Leica5
+         88    ThumbnailWidth                   no
+         90    ThumbnailHeight                  no
+         92    ThumbnailImage                   no
+       1334    ThumbnailWidth                   no
+       1338    ThumbnailHeight                  no
+       1342    ThumbnailLength                  no
+       1350    ThumbnailImage                   no
+       1358    ThumbnailWidth                   no
+       1362    ThumbnailHeight                  no
+       1366    ThumbnailLength                  no
+       1374    ThumbnailImage                   no
+      16488    ExifData                         EXIF
+      16512    ExifData                         EXIF
+  0x00200080   ExifData                         EXIF
 
 =head2 Pentax Tags
 
@@ -20743,39 +20797,39 @@ Tags in the encrypted SR2SubIFD
 
   Tag ID   Tag Name                             Writable
   ------   --------                             --------
-  0x7300   BlackLevel                           no
-  0x7302   WB_GRBGLevelsAuto                    no
-  0x7303   WB_GRBGLevels                        no
-  0x7310   BlackLevel                           no
-  0x7312   WB_RGGBLevelsAuto                    no
-  0x7313   WB_RGGBLevels                        no
-  0x7480   WB_RGBLevelsDaylight                 no
-  0x7481   WB_RGBLevelsCloudy                   no
-  0x7482   WB_RGBLevelsTungsten                 no
-  0x7483   WB_RGBLevelsFlash                    no
-  0x7484   WB_RGBLevels4500K                    no
-  0x7486   WB_RGBLevelsFluorescent              no
+  0x7300   BlackLevel                           int16u[4]!
+  0x7302   WB_GRBGLevelsAuto                    int16s[4]!
+  0x7303   WB_GRBGLevels                        int16s[4]!
+  0x7310   BlackLevel                           int16u[4]!
+  0x7312   WB_RGGBLevelsAuto                    int16s[4]!
+  0x7313   WB_RGGBLevels                        int16s[4]!
+  0x7480   WB_RGBLevelsDaylight                 int16s[4]!
+  0x7481   WB_RGBLevelsCloudy                   int16s[4]!
+  0x7482   WB_RGBLevelsTungsten                 int16s[4]!
+  0x7483   WB_RGBLevelsFlash                    int16s[4]!
+  0x7484   WB_RGBLevels4500K                    int16s[4]!
+  0x7486   WB_RGBLevelsFluorescent              int16s[4]!
   0x74a0   MaxApertureAtMaxFocal                no
   0x74a1   MaxApertureAtMinFocal                no
   0x74a2   MaxFocalLength                       no
   0x74a3   MinFocalLength                       no
   0x74c0   SR2DataIFD                           Sony SR2DataIFD
   0x7800   ColorMatrix                          no
-  0x7820   WB_RGBLevelsDaylight                 no
-  0x7821   WB_RGBLevelsCloudy                   no
-  0x7822   WB_RGBLevelsTungsten                 no
-  0x7823   WB_RGBLevelsFlash                    no
-  0x7824   WB_RGBLevels4500K                    no
-  0x7825   WB_RGBLevelsShade                    no
-  0x7826   WB_RGBLevelsFluorescent              no
-  0x7827   WB_RGBLevelsFluorescentP1            no
-  0x7828   WB_RGBLevelsFluorescentP2            no
-  0x7829   WB_RGBLevelsFluorescentM1            no
-  0x782a   WB_RGBLevels8500K                    no
-  0x782b   WB_RGBLevels6000K                    no
-  0x782c   WB_RGBLevels3200K                    no
-  0x782d   WB_RGBLevels2500K                    no
-  0x787f   WhiteLevel                           no
+  0x7820   WB_RGBLevelsDaylight                 int16s[3]!
+  0x7821   WB_RGBLevelsCloudy                   int16s[3]!
+  0x7822   WB_RGBLevelsTungsten                 int16s[3]!
+  0x7823   WB_RGBLevelsFlash                    int16s[3]!
+  0x7824   WB_RGBLevels4500K                    int16s[3]!
+  0x7825   WB_RGBLevelsShade                    int16s[3]!
+  0x7826   WB_RGBLevelsFluorescent              int16s[3]!
+  0x7827   WB_RGBLevelsFluorescentP1            int16s[3]!
+  0x7828   WB_RGBLevelsFluorescentP2            int16s[3]!
+  0x7829   WB_RGBLevelsFluorescentM1            int16s[3]!
+  0x782a   WB_RGBLevels8500K                    int16s[3]!
+  0x782b   WB_RGBLevels6000K                    int16s[3]!
+  0x782c   WB_RGBLevels3200K                    int16s[3]!
+  0x782d   WB_RGBLevels2500K                    int16s[3]!
+  0x787f   WhiteLevel                           int16u[3]!
   0x797d   VignettingCorrParams                 no
   0x7980   ChromaticAberrationCorrParams        no
   0x7982   DistortionCorrParams                 no
@@ -20938,6 +20992,7 @@ still proprietary) Adobe format.
            MakerNoteCanon                       Canon
            MakerNoteCasio                       Casio
            MakerNoteCasio2                      Casio Type2
+           MakerNoteDJIInfo                     DJI Info
            MakerNoteDJI                         DJI
            MakerNoteFLIR                        FLIR
            MakerNoteFujiFilm                    FujiFilm
@@ -20978,6 +21033,7 @@ still proprietary) Adobe format.
            MakerNoteNintendo                    Nintendo
            MakerNoteOlympus                     Olympus
            MakerNoteOlympus2                    Olympus
+           MakerNoteOlympus3                    Olympus
            MakerNoteLeica                       Panasonic
            MakerNoteLeica2                      Panasonic Leica2
            MakerNoteLeica3                      Panasonic Leica3
@@ -21608,28 +21664,30 @@ unrecognized Windows Compound Binary file as a FlashPix (FPX) file.  See
 L<http://graphcomp.com/info/specs/livepicture/fpx.pdf> for the FlashPix
 specification.
 
-  Tag ID                           Tag Name     Writable
-  ------                           --------     --------
-  "\x01CompObj"                    CompObj      FlashPix CompObj
-  "\x05Audio Info"                 AudioInfo    FlashPix AudioInfo
-  "\x05Data Object"                DataObject   FlashPix DataObject
+  Tag ID                          Tag Name      Writable
+  ------                          --------      --------
+  "\x01CompObj"                   CompObj       FlashPix CompObj
+  "\x05Audio Info"                AudioInfo     FlashPix AudioInfo
+  "\x05Data Object"               DataObject    FlashPix DataObject
   "\x05DocumentSummaryInformation" DocumentInfo FlashPix DocumentInfo
-  "\x05Extension List"             Extensions   FlashPix Extensions
-  "\x05Global Info"                GlobalInfo   FlashPix GlobalInfo
-  "\x05Image Contents"             Image        FlashPix Image
-  "\x05Image Info"                 ImageInfo    FlashPix ImageInfo
-  "\x05Operation"                  Operation    FlashPix Operation
-  "\x05Screen Nail"                ScreenNail   no
-  "\x05SummaryInformation"         SummaryInfo  FlashPix SummaryInfo
-  "\x05Transform"                  Transform    FlashPix Transform
-  'Audio Stream'                   AudioStream  no
-  'Contents'                       Contents     XMP
-  'Current User'                   CurrentUser  no
-  'ICC Profile 0001'               ICC_Profile  ICC_Profile
-  'Preview'                        PreviewImage no
-  'Property'                       PreviewInfo  FlashPix PreviewInfo
-  'Subimage 0000 Header'           SubimageHdr  FlashPix SubimageHdr
-  'WordDocument'                   WordDocument FlashPix WordDocument
+  "\x05Extension List"            Extensions    FlashPix Extensions
+  "\x05Global Info"               GlobalInfo    FlashPix GlobalInfo
+  "\x05Image Contents"            Image         FlashPix Image
+  "\x05Image Info"                ImageInfo     FlashPix ImageInfo
+  "\x05Operation"                 Operation     FlashPix Operation
+  "\x05Screen Nail"               ScreenNail    no
+  "\x05SummaryInformation"        SummaryInfo   FlashPix SummaryInfo
+  "\x05Transform"                 Transform     FlashPix Transform
+  'Audio Stream'                  AudioStream   no
+  'BasicFileInfo'                 BasicFileInfo no
+  'Contents'                      Contents      XMP
+  'Current User'                  CurrentUser   no
+  'ICC Profile 0001'              ICC_Profile   ICC_Profile
+  'IeImg'                         EmbeddedImage no
+  'Preview'                       PreviewImage  no
+  'Property'                      PreviewInfo   FlashPix PreviewInfo
+  'Subimage 0000 Header'          SubimageHdr   FlashPix SubimageHdr
+  'WordDocument'                  WordDocument  FlashPix WordDocument
 
 =head3 FlashPix CompObj Tags
 
@@ -23722,6 +23780,7 @@ These tags belong to the ExifTool XMP-dwc family 1 group.
   DCVerbatimLocality                            string_
   DCVerbatimLongitude                           string_
   DCVerbatimSRS                                 string_
+  DCVerticalDatum                               string_
   DCWaterBody                                   string_
   DCEvent                                       DarwinCore Event Struct
   EventDay                                      integer_
@@ -23794,7 +23853,9 @@ These tags belong to the ExifTool XMP-dwc family 1 group.
   IdentificationRemarks                         string_
   IdentificationVerificationStatus              string_
   IdentifiedBy                                  string_
+  IdentifiedByID                                string_
   TypeStatus                                    string_
+  VerbatimIdentification                        string_
   LivingSpecimen                                DarwinCore MaterialSample Struct
   LivingSpecimenMaterialSampleID                string_
   MachineObservation                            DarwinCore Event Struct
@@ -23838,8 +23899,10 @@ These tags belong to the ExifTool XMP-dwc family 1 group.
   OccurrenceAssociatedTaxa                      string_
   OccurrenceBehavior                            string_
   OccurrenceCatalogNumber                       string_
+  OccurrenceDegreeOfEstablishment               string_
   OccurrenceDisposition                         string_
   OccurrenceEstablishmentMeans                  string_
+  OccurrenceGeoreferenceVerificationStatus      string_
   OccurrenceIndividualCount                     string_
   OccurrenceIndividualID                        string_
   OccurrenceLifeStage                           string_
@@ -23850,9 +23913,11 @@ These tags belong to the ExifTool XMP-dwc family 1 group.
   OccurrenceOrganismQuantity                    string_
   OccurrenceOrganismQuantityType                string_
   OccurrenceOtherCatalogNumbers                 string_
+  OccurrencePathway                             string_
   OccurrencePreparations                        string_
   OccurrencePreviousIdentifications             string_
   OccurrenceRecordedBy                          string_
+  OccurrenceRecordedByID                        string_
   OccurrenceRecordNumber                        string_
   OccurrenceReproductiveCondition               string_
   OccurrenceSex                                 string_
@@ -23883,6 +23948,7 @@ These tags belong to the ExifTool XMP-dwc family 1 group.
   RelationshipAccordingTo                       string_
   RelationshipEstablishedDate                   date_
   RelationshipOfResource                        string_
+  RelationshipOfResourceID                      string_
   RelationshipRemarks                           string_
   ResourceID                                    string_
   ResourceRelationshipID                        string_
@@ -23890,6 +23956,7 @@ These tags belong to the ExifTool XMP-dwc family 1 group.
   TaxonAcceptedNameUsage                        string_
   TaxonAcceptedNameUsageID                      string_
   TaxonClass                                    string_
+  TaxonCultivarEpithet                          string_
   TaxonFamily                                   string_
   TaxonGenus                                    string_
   TaxonHigherClassification                     string_
@@ -23968,6 +24035,7 @@ These tags belong to the ExifTool XMP-dwc family 1 group.
   VerbatimLocality                              string
   VerbatimLongitude                             string
   VerbatimSRS                                   string
+  VerticalDatum                                 string
   WaterBody                                     string
 
 =head3 DarwinCore Event Struct
@@ -24035,7 +24103,9 @@ These tags belong to the ExifTool XMP-dwc family 1 group.
   IdentificationRemarks                         string
   IdentificationVerificationStatus              string
   IdentifiedBy                                  string
+  IdentifiedByID                                string
   TypeStatus                                    string
+  VerbatimIdentification                        string
 
 =head3 DarwinCore MeasurementOrFact Struct
 
@@ -24062,8 +24132,10 @@ These tags belong to the ExifTool XMP-dwc family 1 group.
   AssociatedTaxa                                string
   Behavior                                      string
   CatalogNumber                                 string
+  DegreeOfEstablishment                         string
   Disposition                                   string
   EstablishmentMeans                            string
+  GeoreferenceVerificationStatus                string
   IndividualCount                               string
   IndividualID                                  string
   LifeStage                                     string
@@ -24074,10 +24146,12 @@ These tags belong to the ExifTool XMP-dwc family 1 group.
   OrganismQuantity                              string
   OrganismQuantityType                          string
   OtherCatalogNumbers                           string
+  Pathway                                       string
   Preparations                                  string
   PreviousIdentifications                       string
   RecordNumber                                  string
   RecordedBy                                    string
+  RecordedByID                                  string
   ReproductiveCondition                         string
   Sex                                           string
 
@@ -24117,6 +24191,7 @@ These tags belong to the ExifTool XMP-dwc family 1 group.
   RelationshipAccordingTo                       string
   RelationshipEstablishedDate                   date
   RelationshipOfResource                        string
+  RelationshipOfResourceID                      string
   RelationshipRemarks                           string
   ResourceID                                    string
   ResourceRelationshipID                        string
@@ -24128,6 +24203,7 @@ These tags belong to the ExifTool XMP-dwc family 1 group.
   AcceptedNameUsage                             string
   AcceptedNameUsageID                           string
   Class                                         string
+  CultivarEpithet                               string
   Family                                        string
   Genus                                         string
   HigherClassification                          string
@@ -26737,9 +26813,9 @@ ExifTool extracts ID3 and Lyrics3 information from MP3, MPEG, WAV, AIFF,
 OGG, FLAC, APE, MPC and RealAudio files.  ID3v2 tags which support multiple
 languages (eg. Comment and Lyrics) are extracted by specifying the tag name,
 followed by a dash ('-'), then a 3-character ISO 639-2 language code (eg.
-"Comment-spa"). See L<http://www.id3.org/> for the official ID3
-specification and L<http://www.loc.gov/standards/iso639-2/php/code_list.php>
-for a list of ISO 639-2 language codes.
+"Comment-spa"). See L<https://id3.org/> for the official ID3 specification
+and L<http://www.loc.gov/standards/iso639-2/php/code_list.php> for a list of
+ISO 639-2 language codes.
 
   Tag Name                                      Writable
   --------                                      --------
@@ -28732,6 +28808,7 @@ MP4 metadata sample description.
   Tag ID   Tag Name                             Writable
   ------   --------                             --------
   0x0004   MetaFormat                           no
+  0x0008   MetaType                             no
   'btrt'   BitrateInfo                          QuickTime Bitrate
   'keys'   Keys                                 QuickTime Keys
 
@@ -29229,14 +29306,19 @@ Streaming metadata found in Parrot drone videos. See
 L<https://developer.parrot.com/docs/pdraw/metadata.html> for the
 specification.
 
-  Tag ID   Tag Name                             Writable
-  ------   --------                             --------
-  'P1'     ParrotV1                             Parrot V1
-  'P2'     ParrotV2                             Parrot V2
-  'P3'     ParrotV3                             Parrot V3
-  'E1'     ParrotTimeStamp                      Parrot TimeStamp
-  'E2'     ParrotFollowMe                       Parrot FollowMe
-  'E3'     ParrotAutomation                     Parrot Automation
+  Tag ID                       Tag Name         Writable
+  ------                       --------         --------
+  'P1'                         ParrotV1         Parrot V1
+  'P2'                         ParrotV2         Parrot V2
+  'P3'                         ParrotV3         Parrot V3
+  'E1'                         ParrotTimeStamp  Parrot TimeStamp
+  'E2'                         ParrotFollowMe   Parrot FollowMe
+  'E3'                         ParrotAutomation Parrot Automation
+  'application/arcore-accel'   ARCoreAccel      Parrot ARCoreAccel
+  'application/arcore-custom-event'
+                               ARCoreCustom     Parrot ARCoreCustom
+  'application/arcore-gyro'    ARCoreGyro       Parrot ARCoreGyro
+  'application/arcore-video-0' ARCoreVideo      Parrot ARCoreVideo
 
 =head3 Parrot V1 Tags
 
@@ -29363,6 +29445,36 @@ Parrot streaming metadata automation extension.
      24    GPSDestAltitude                      no
      28    AutomationAnimation                  no
      29    AutomationFlags                      no
+
+=head3 Parrot ARCoreAccel Tags
+
+ARCore accelerometer data.
+
+  Index1   Tag Name                             Writable
+  ------   --------                             --------
+      4    AccelerometerUnknown?                no
+      5    Accelerometer                        no
+
+=head3 Parrot ARCoreCustom Tags
+
+  Index1   Tag Name                             Writable
+  ------   --------                             --------
+  [no tags known]
+
+=head3 Parrot ARCoreGyro Tags
+
+ARCore accelerometer data.
+
+  Index1   Tag Name                             Writable
+  ------   --------                             --------
+      4    GyroscopeUnknown?                    no
+      5    Gyroscope                            no
+
+=head3 Parrot ARCoreVideo Tags
+
+  Index1   Tag Name                             Writable
+  ------   --------                             --------
+  [no tags known]
 
 =head2 Matroska Tags
 
@@ -37010,6 +37122,7 @@ FileName.
   NewGUID                    ExifTool           no
   Now                        ExifTool           no
   OtherImage                 File               no
+  PageCount                  File               no
   PreviewImage               File               yes
   PreviewPDF                 File               no
   PreviewPNG                 File               no
@@ -37169,14 +37282,14 @@ values, may created via the ExifTool configuration file.
   GPSDestLongitude     GPS:GPSDestLongitude     no
                        GPS:GPSDestLongitudeRef
   GPSDestLongitudeRef  XMP-exif:GPSDestLongitude no
-  GPSLatitude          GPS:GPSLatitude          no
+  GPSLatitude          GPS:GPSLatitude          yes/
                        GPS:GPSLatitudeRef
   GPSLatitude          QuickTime:GPSCoordinates no
   GPSLatitude          QuickTime:LocationInformation no
   GPSLatitude          Sony:GPSLatitude         no
                        Sony:GPSLatitudeRef
   GPSLatitudeRef       XMP-exif:GPSLatitude     no
-  GPSLongitude         GPS:GPSLongitude         no
+  GPSLongitude         GPS:GPSLongitude         yes/
                        GPS:GPSLongitudeRef
   GPSLongitude         QuickTime:GPSCoordinates no
   GPSLongitude         QuickTime:LocationInformation no
@@ -37477,6 +37590,7 @@ for more details.
                        MakerNoteCasio
                        MakerNoteCasio2
                        MakerNoteDJI
+                       MakerNoteDJIInfo
                        MakerNoteFLIR
                        MakerNoteFujiFilm
                        MakerNoteGE
@@ -37517,6 +37631,7 @@ for more details.
                        MakerNoteNintendo
                        MakerNoteOlympus
                        MakerNoteOlympus2
+                       MakerNoteOlympus3
                        MakerNoteLeica
                        MakerNoteLeica2
                        MakerNoteLeica3
