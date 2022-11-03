@@ -72,15 +72,26 @@ extension ViewController {
             }
             
             if self.splashController.decideQuit {
-                self.doQuit()
+                self.splashController.showQuit(countdown: 5, disableButton: true) {
+                    self.doQuit(withoutBackupDB: true)
+                }
             }
             
             if !dbConnected {
-                self.splashController.showQuit()
+                self.splashController.showQuit(countdown: 5, disableButton: true) {
+                    self.doQuit(withoutBackupDB: true)
+                }
             }else{
                 self.splashController.message(Words.splash_initializingUI.word(), progress: 3)
                 DispatchQueue.main.async {
                     self.initView()
+                    
+                    if self.splashController.decideQuit {
+                        
+                        self.splashController.showQuit(countdown: 5, disableButton: true) {
+                            self.doQuit(withoutBackupDB: true)
+                        }
+                    }
                 }
             }
         }
@@ -95,7 +106,10 @@ extension ViewController {
         self.showMemories()
     }
     
-    internal func doQuit() {
+    internal func doQuit(withoutBackupDB:Bool = false) {
+        if(withoutBackupDB) {
+            AppDelegate.current.terminateWithoutBackupDB = true
+        }
         NSApplication.shared.terminate(self)
     }
     

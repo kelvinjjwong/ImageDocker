@@ -297,6 +297,18 @@ struct LocalDirectory {
         return (totalSize, freeSize, mountPoint.trimmingCharacters(in: .whitespacesAndNewlines))
     }
     
+    public func getDiskMountPointVolume(path:String) -> String {
+        var isDir:ObjCBool = false
+        if path.trimmingCharacters(in: .whitespacesAndNewlines) != ""
+            && FileManager.default.fileExists(atPath: path.trimmingCharacters(in: .whitespacesAndNewlines), isDirectory: &isDir)
+            && isDir.boolValue == true {
+            var (_, _, mountPoint) = self.freeSpace(path: path)
+            return mountPoint
+        }else{
+            return ""
+        }
+    }
+    
     public func getDiskSpace(path:String, lblDiskFree:NSTextField? = nil, lblDiskOccupied:NSTextField? = nil) -> (Double, String, String, [String:String]){
         var spaceDetail:[String:String] = [:]
         var spaceFree = "0M / 0T"
@@ -346,6 +358,17 @@ struct LocalDirectory {
         }
         let sizeGB:Double = sizeAmount / 1000
         return sizeGB
+    }
+    
+    public func getRepositoryVolume(repository:ImageContainer) -> [String] {
+        var volumes:Set<String> = []
+        volumes.insert(getDiskMountPointVolume(path: repository.path))
+        volumes.insert(getDiskMountPointVolume(path: repository.storagePath))
+        volumes.insert(getDiskMountPointVolume(path: repository.repositoryPath))
+        volumes.insert(getDiskMountPointVolume(path: repository.facePath))
+        volumes.insert(getDiskMountPointVolume(path: repository.cropPath))
+        volumes.remove("")
+        return volumes.sorted()
     }
     
     public func getRepositorySpaceOccupationInGB(repository:ImageContainer, diskUsage:[String:Double]? = nil) -> (Double, Double, Double, Double, [String:Double]) {

@@ -40,9 +40,14 @@ extension Words {
         chs: "正在载入用户界面部件..."
     )
     
-    static let splash_laodingLibraries = Localize(
+    static let splash_loadingLibraries = Localize(
         eng: "Loading libraries ...",
         chs: "正在载入照片库..."
+    )
+    
+    static let splash_loadingLibraries_failed_missing_volumes = Localize(
+        eng: "Unable to load libraries, missing volume(s): %s",
+        chs: "无法载入照片库，磁盘未挂载: %s"
     )
     
     static let dbError = Localize(

@@ -16,6 +16,7 @@ final class PreferencesController: NSViewController {
     static let postgresTimestampTimezoneOffset = "+8"
     
     // MARK: - KEYS
+    fileprivate static let volumesKey = "VolumesKey"
     
     fileprivate static let languageKey = "LanguageKey"
     
@@ -1558,6 +1559,19 @@ final class PreferencesController: NSViewController {
             //Alert.invalidBaiduMapAK()
             return
         }
+    }
+    
+    class func saveVolumes(_ volumes:[String]) {
+        let defaults = UserDefaults.standard
+        defaults.set(volumes,
+                     forKey: PreferencesController.volumesKey)
+    }
+    
+    class func getVolumes() -> [String] {
+        let defaults = UserDefaults.standard
+        guard let volumes = defaults.stringArray(forKey: volumesKey) else {return []}
+        return volumes
+        
     }
     
     // MARK: - INIT SECTIONS

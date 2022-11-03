@@ -15,6 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     @IBOutlet weak var editMenu: NSMenu!
     @IBOutlet weak var windowMenu: NSMenu!
     
+    var terminateWithoutBackupDB = false
     
     let logger = ConsoleLogger(category: "AppDelegate")
     
@@ -45,25 +46,27 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         // Insert code here to tear down your application
         
         IPHONE.bridge.unmountFuse()
-        let alert = NSAlert()
-        DispatchQueue.global().async {
-            let _ = ExecutionEnvironment.default.createDatabaseBackup(suffix:"-on-exit")
-            
-            DispatchQueue.main.async {
-                alert.buttons[0].title = "Quit"
-                alert.buttons[0].isEnabled = true
-                alert.window.close()
-                exit(0)
+        if !self.terminateWithoutBackupDB {
+            let alert = NSAlert()
+            DispatchQueue.global().async {
+                let _ = ExecutionEnvironment.default.createDatabaseBackup(suffix:"-on-exit")
+                
+                DispatchQueue.main.async {
+                    alert.buttons[0].title = "Quit"
+                    alert.buttons[0].isEnabled = true
+                    alert.window.close()
+                    exit(0)
+                }
             }
+            
+            
+            alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK"))
+            alert.messageText = NSLocalizedString("Quiting application",
+                                                  comment: "Backup database in progress ...")
+            alert.buttons[0].title = "Backup database in progress ..."
+            alert.buttons[0].isEnabled = false
+            alert.runModal()
         }
-        
-        
-        alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK"))
-        alert.messageText = NSLocalizedString("Quiting application",
-                                              comment: "Backup database in progress ...")
-        alert.buttons[0].title = "Backup database in progress ..."
-        alert.buttons[0].isEnabled = false
-        alert.runModal()
     }
     
     func userNotificationCenter(_ center: NSUserNotificationCenter, shouldPresent notification: NSUserNotification) -> Bool {

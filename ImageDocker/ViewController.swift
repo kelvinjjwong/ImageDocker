@@ -253,6 +253,27 @@ class ViewController: NSViewController {
     // MARK: - INIT VIEW
     
     internal func initView() {
+        
+        let volumes_lasttime = PreferencesController.getVolumes()
+        print("volumes_lasttime: \(volumes_lasttime)")
+        let volumes_connected = self.collectVolumes()
+        print("volumes_connected: \(volumes_connected)")
+        if volumes_connected.count < volumes_lasttime.count {
+            var volumes_missing:[String] = []
+            for volume in volumes_lasttime {
+                if !volumes_connected.contains(volume) {
+                    volumes_missing.append(volume)
+                }
+            }
+            print("volumes_missing: \(volumes_missing)")
+            self.splashController.message(Words.splash_loadingLibraries_failed_missing_volumes.fill(arguments: "\(volumes_missing)"), progress: 4)
+            self.splashController.decideQuit = true
+            return
+        }else {
+            PreferencesController.saveVolumes(volumes_connected)
+            print("saved volumes_connected: \(volumes_connected)")
+        }
+        
         MessageEventCenter.default.messagePresenter = { message in
             self.popNotification(message: message)
         }
@@ -265,7 +286,6 @@ class ViewController: NSViewController {
         self.setupUIDisplays()
         
         PreferencesController.healthCheck()
-        
         
 //        self.setupFacesMenu()
         self.setupScanMenu()
@@ -282,7 +302,8 @@ class ViewController: NSViewController {
         self.resize()
         
 //        self.logger.log("Loading view - update library tree")
-        self.splashController.message(Words.splash_laodingLibraries.word(), progress: 4)
+        self.splashController.message(Words.splash_loadingLibraries.word(), progress: 4)
+        
         updateLibraryTree()
 //        self.logger.log("Loading view - update library tree: DONE")
         
@@ -355,6 +376,20 @@ class ViewController: NSViewController {
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(processDatabaseError(notification:)), name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: nil)
+    }
+    
+    func collectVolumes() -> [String] {
+        var volumes:Set<String> = []
+        let repos = RepositoryDao.default.getRepositories()
+        for repo in repos {
+            let _volumes = LocalDirectory.bridge.getRepositoryVolume(repository: repo)
+            for volume in _volumes {
+                if !volumes.contains(volume) {
+                    volumes.insert(volume)
+                }
+            }
+        }
+        return volumes.sorted()
     }
     
     @objc func processDatabaseError(notification:Notification) {

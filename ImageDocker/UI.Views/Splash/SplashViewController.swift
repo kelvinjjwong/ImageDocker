@@ -184,11 +184,43 @@ class SplashViewController: NSViewController {
         }
     }
     
-    func showQuit() {
+    func showQuit(disableButton:Bool = false) {
         DispatchQueue.main.async {
             self.btnQuit.isHidden = false
             self.btnRetry.isHidden = true
             self.btnAbort.isHidden = true
+            if disableButton {
+                self.btnQuit.isEnabled = false
+            }
+        }
+    }
+    
+    func showQuit(countdown:Int, disableButton:Bool = false, onComplete: @escaping (() -> Void)) {
+        DispatchQueue.main.async {
+            let quitTitle = self.btnQuit.title
+            self.btnQuit.isHidden = false
+            self.btnRetry.isHidden = true
+            self.btnAbort.isHidden = true
+            if disableButton {
+                self.btnQuit.isEnabled = false
+            }
+            
+            var secondsRemaining = countdown
+            
+            Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (Timer) in
+                    if secondsRemaining > 0 {
+                        print ("Countdown \(secondsRemaining) seconds")
+                        secondsRemaining -= 1
+                        DispatchQueue.main.async {
+                            self.btnQuit.title = "\(quitTitle) (\(secondsRemaining))"
+                        }
+                    } else {
+                        Timer.invalidate()
+                        DispatchQueue.main.async {
+                            onComplete()
+                        }
+                    }
+                }
         }
     }
     
