@@ -20,6 +20,9 @@ class ViewController: NSViewController {
     
     var childWindows:[String:NSWindow] = [:]
     
+    // MARK: Main Menu
+    
+    
     // MARK: Icon
     let tick:NSImage = NSImage.init(named: NSImage.menuOnStateTemplateName)!
     

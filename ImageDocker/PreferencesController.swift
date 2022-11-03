@@ -75,6 +75,12 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var txtBaiduSK: NSTextField!
     @IBOutlet weak var txtGoogleAPIKey: NSTextField!
     
+    @IBOutlet weak var boxBaiduMap: NSBox!
+    @IBOutlet weak var boxGoogleMap: NSBox!
+    @IBOutlet weak var lblBaiduMapPrompt: NSTextField!
+    @IBOutlet weak var lblGoogleMapPrompt: NSTextField!
+    
+    
     // MARK: DATABASE
     @IBOutlet weak var chkLocalLocation: NSButton!
     @IBOutlet weak var chkLocalDBServer: NSButton!
@@ -84,6 +90,8 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var btnLocalDBFileTest: NSButton!
     @IBOutlet weak var btnLocalDBFileBackup: NSButton!
     @IBOutlet weak var lblLocalDBFileMessage: NSTextField!
+    @IBOutlet weak var btnBrowseLocalDBFilePath: NSButton!
+    @IBOutlet weak var btnGotoLocalDBFilePath: NSButton!
     
     
     @IBOutlet weak var txtLocalDBServer: NSTextField!
@@ -109,11 +117,31 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var btnRemoteDBServerBackup: NSButton!
     @IBOutlet weak var lblRemoteDBServerMessage: NSTextField!
     
+    @IBOutlet weak var boxLocalSQLite: NSBox!
+    @IBOutlet weak var boxLocalPostgres: NSBox!
+    @IBOutlet weak var boxRemotePostgres: NSBox!
+    @IBOutlet weak var lblLocalSQLitePath: NSTextField!
+    
+    @IBOutlet weak var lblLocalPgServer: NSTextField!
+    @IBOutlet weak var lblLocalPgPort: NSTextField!
+    @IBOutlet weak var lblLocalPgUser: NSTextField!
+    @IBOutlet weak var lblLocalPgPassword: NSTextField!
+    @IBOutlet weak var lblLocalPgSchema: NSTextField!
+    @IBOutlet weak var lblLocalPgDatabase: NSTextField!
+    
+    @IBOutlet weak var lblRemotePgServer: NSTextField!
+    @IBOutlet weak var lblRemotePgPort: NSTextField!
+    @IBOutlet weak var lblRemotePgUser: NSTextField!
+    @IBOutlet weak var lblRemotePgPassword: NSTextField!
+    @IBOutlet weak var lblRemotePgSchema: NSTextField!
+    @IBOutlet weak var lblRemotePgDatabase: NSTextField!
+    
     
     // MARK: BACKUP
     @IBOutlet weak var lblDatabaseBackupPath: NSTextField!
     @IBOutlet weak var lblDBBackupUsedSpace: NSTextField!
     @IBOutlet weak var btnBackupNow: NSButton!
+    @IBOutlet weak var btnGotoDBBackupPath: NSButton!
     
     @IBOutlet weak var chkDeleteAllBeforeClone: NSButton!
     @IBOutlet weak var chkFromLocalDBFile: NSButton!
@@ -143,6 +171,16 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var chkPostgresInApp: NSButton!
     @IBOutlet weak var chkPostgresByBrew: NSButton!
     
+    @IBOutlet weak var boxBackup: NSBox!
+    @IBOutlet weak var boxDataClone: NSBox!
+    
+    @IBOutlet weak var lblBackupLocation: NSTextField!
+    @IBOutlet weak var btnCalculateBackupDiskSpace: NSButton!
+    @IBOutlet weak var lblDataCloneFrom: NSTextField!
+    @IBOutlet weak var lblDataCloneTo: NSTextField!
+    @IBOutlet weak var lblDataCloneToDatabase: NSTextField!
+    @IBOutlet weak var lblDataCloneToPgCmdline: NSTextField!
+    
     
     // MARK: MOBILE DEVICE
     @IBOutlet weak var txtIOSMountPoint: NSTextField!
@@ -155,6 +193,18 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var lblIfuseMessage: NSTextField!
     @IBOutlet weak var lblIdeviceIdMessage: NSTextField!
     @IBOutlet weak var lblIdeviceInfoMessage: NSTextField!
+    
+    @IBOutlet weak var boxAndroid: NSBox!
+    @IBOutlet weak var boxIOS: NSBox!
+    @IBOutlet weak var lblAndroidPathForUpload: NSTextField!
+    @IBOutlet weak var lblAndroidPromptForUpload: NSTextField!
+    @IBOutlet weak var lblIOSMountPoint: NSTextField!
+    @IBOutlet weak var lblIOSInstallGuideline: NSTextField!
+    @IBOutlet weak var btnBrowseIOSMountPoint: NSButton!
+    @IBOutlet weak var btnLocateIfusePath: NSButton!
+    @IBOutlet weak var btnLocateIdeviceIdPath: NSButton!
+    @IBOutlet weak var btnLocateIdeviceInfoPath: NSButton!
+    
     
     // MARK: FACE RECOGNITION
 //    @IBOutlet weak var txtPythonPath: NSTextField!
@@ -178,6 +228,11 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var lblMid2Memory: NSTextField!
     @IBOutlet weak var lstAmountForPagination: NSPopUpButton!
     
+    @IBOutlet weak var boxMemoryLimit: NSBox!
+    @IBOutlet weak var boxPagination: NSBox!
+    @IBOutlet weak var lblMemoryLimit: NSTextField!
+    @IBOutlet weak var lblPaginationPromptLeft: NSTextField!
+    @IBOutlet weak var lblPaginationPromptRight: NSTextField!
     
     
     
@@ -192,30 +247,13 @@ final class PreferencesController: NSViewController {
     @IBAction func onMemorySliderClicked(_ sender: NSSlider) {
         let value = self.memorySlider.intValue
         if value > 0 {
-            self.lblSelectedMemory.stringValue = "Selected \(value) GB as Peak"
+            self.lblSelectedMemory.stringValue = Words.preference_tab_performance_selected_memory.fill(arguments: "\(value)")
         }else{
-            self.lblSelectedMemory.stringValue = "Selected Unlimited"
+            self.lblSelectedMemory.stringValue = Words.preference_tab_performance_selected_memory_unlimited.word()
         }
     }
     
     // MARK: - ACTION FOR DATABASE SECTION
-    
-    @IBAction func onBrowseDatabasePathClicked(_ sender: Any) {
-        let openPanel = NSOpenPanel()
-        openPanel.canChooseDirectories  = true
-        openPanel.canChooseFiles        = false
-        openPanel.showsHiddenFiles      = false
-        openPanel.canCreateDirectories  = true
-        
-        openPanel.beginSheetModal(for: self.view.window!) { (response) -> Void in
-            guard response == NSApplication.ModalResponse.OK else {return}
-            if let path = openPanel.url?.path {
-                DispatchQueue.main.async {
-                    self.txtLocalDBFilePath.stringValue = path
-                }
-            }
-        }
-    }
     
     @IBAction func onFindDatabaseBackupClicked(_ sender: NSButton) {
         NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: self.lblDatabaseBackupPath.stringValue)])
@@ -265,17 +303,39 @@ final class PreferencesController: NSViewController {
     
     // MARK: LOCAL DB FILE
     
+    @IBAction func onBrowseDatabasePathClicked(_ sender: Any) {
+        let openPanel = NSOpenPanel()
+        openPanel.canChooseDirectories  = true
+        openPanel.canChooseFiles        = false
+        openPanel.showsHiddenFiles      = false
+        openPanel.canCreateDirectories  = true
+        
+        openPanel.beginSheetModal(for: self.view.window!) { (response) -> Void in
+            guard response == NSApplication.ModalResponse.OK else {return}
+            if let path = openPanel.url?.path {
+                DispatchQueue.main.async {
+                    self.txtLocalDBFilePath.stringValue = path
+                }
+            }
+        }
+    }
+    
+    @IBAction func onGotoLocalDBFilePathClicked(_ sender: NSButton) {
+        self.lblLocalDBFileMessage.stringValue = "TODO."
+    }
+    
+    
     @IBAction func onBackupLocalClicked(_ sender: NSButton) {
         self.btnLocalDBFileBackup.isEnabled = false
-        self.lblLocalDBFileMessage.stringValue = "Creating backup ..."
+        self.lblLocalDBFileMessage.stringValue = Words.preference_tab_creating_backup.word()
         DispatchQueue.global().async {
             let (backupFolder, status, error) = ExecutionEnvironment.default.createDatabaseBackup(.localFile, suffix: "-on-runtime")
             DispatchQueue.main.async {
                 self.btnLocalDBFileBackup.isEnabled = true
                 if status == false {
-                    self.lblLocalDBFileMessage.stringValue = "Backup failed: \(error.debugDescription)"
+                    self.lblLocalDBFileMessage.stringValue = Words.preference_tab_backup_failed.fill(arguments: "\(error.debugDescription)")
                 }else{
-                    self.lblLocalDBFileMessage.stringValue = "Created \(backupFolder)"
+                    self.lblLocalDBFileMessage.stringValue = Words.preference_tab_backup_created.fill(arguments: "\(backupFolder)")
                 }
             }
         }
@@ -289,15 +349,15 @@ final class PreferencesController: NSViewController {
     
     @IBAction func onBackupLocalServerClicked(_ sender: NSButton) {
         self.btnLocalDBServerBackup.isEnabled = false
-        self.lblLocalDBServerMessage.stringValue = "Creating backup ..."
+        self.lblLocalDBServerMessage.stringValue = Words.preference_tab_creating_backup.word()
         DispatchQueue.global().async {
             let (backupFolder, status, error) = ExecutionEnvironment.default.createDatabaseBackup(.localDBServer, suffix: "-on-runtime")
             DispatchQueue.main.async {
                 self.btnLocalDBServerBackup.isEnabled = true
                 if status == false {
-                    self.lblLocalDBServerMessage.stringValue = "Backup failed: \(error.debugDescription)"
+                    self.lblLocalDBServerMessage.stringValue = Words.preference_tab_backup_failed.fill(arguments: "\(error.debugDescription)")
                 }else{
-                    self.lblLocalDBServerMessage.stringValue = "Created \(backupFolder)"
+                    self.lblLocalDBServerMessage.stringValue = Words.preference_tab_backup_created.fill(arguments: "\(backupFolder)")
                 }
             }
         }
@@ -318,7 +378,7 @@ final class PreferencesController: NSViewController {
                 }
             }else{
                 DispatchQueue.main.async {
-                    self.lblLocalDBServerMessage.stringValue = "No schema"
+                    self.lblLocalDBServerMessage.stringValue = Words.preference_tab_backup_no_schema.word()
                 }
             }
         }
@@ -328,15 +388,15 @@ final class PreferencesController: NSViewController {
     
     @IBAction func onBackupRemoteServerClicked(_ sender: NSButton) {
         self.btnRemoteDBServerBackup.isEnabled = false
-        self.lblRemoteDBServerMessage.stringValue = "Creating backup ..."
+        self.lblRemoteDBServerMessage.stringValue = Words.preference_tab_creating_backup.word()
         DispatchQueue.global().async {
             let (backupFolder, status, error) = ExecutionEnvironment.default.createDatabaseBackup(.remoteDBServer, suffix: "-on-runtime")
             DispatchQueue.main.async {
                 self.btnRemoteDBServerBackup.isEnabled = true
                 if status == false {
-                    self.lblRemoteDBServerMessage.stringValue = "Backup failed: \(error.debugDescription)"
+                    self.lblRemoteDBServerMessage.stringValue = Words.preference_tab_backup_failed.fill(arguments: "\(error.debugDescription)")
                 }else{
-                    self.lblRemoteDBServerMessage.stringValue = "Created \(backupFolder)"
+                    self.lblRemoteDBServerMessage.stringValue = Words.preference_tab_backup_created.fill(arguments: "\(backupFolder)")
                 }
             }
         }
@@ -378,7 +438,7 @@ final class PreferencesController: NSViewController {
     func calculateBackupUsedSpace(path:String) {
         let (sizeGB, spaceFree, _, _) = LocalDirectory.bridge.getDiskSpace(path: path)
         DispatchQueue.main.async {
-            self.lblDBBackupUsedSpace.stringValue = "Used: \(Double(sizeGB).rounded(toPlaces: 2)) GB , Free: \(spaceFree)"
+            self.lblDBBackupUsedSpace.stringValue = Words.preference_tab_backup_used_space.fill(arguments: "\(Double(sizeGB).rounded(toPlaces: 2))", "\(spaceFree)")
         }
     }
     
@@ -394,15 +454,15 @@ final class PreferencesController: NSViewController {
     @IBAction func onBackupNowClicked(_ sender: NSButton) {
         // TODO: SAVE ALL FIELDS BEFORE START BACKUP
         self.btnBackupNow.isEnabled = false
-        self.lblDBBackupUsedSpace.stringValue = "Creating backup ..."
+        self.lblDBBackupUsedSpace.stringValue = Words.preference_tab_creating_backup.word()
         DispatchQueue.global().async {
             let (backupFolder, status, error) = ExecutionEnvironment.default.createDatabaseBackup(suffix: "-on-runtime")
             DispatchQueue.main.async {
                 self.btnBackupNow.isEnabled = true
                 if status == false {
-                    self.lblDBBackupUsedSpace.stringValue = "Backup failed: \(error.debugDescription)"
+                    self.lblDBBackupUsedSpace.stringValue = Words.preference_tab_backup_failed.fill(arguments: "\(error.debugDescription)")
                 }else{
-                    self.lblDBBackupUsedSpace.stringValue = "Created \(backupFolder)"
+                    self.lblDBBackupUsedSpace.stringValue = Words.preference_tab_backup_created.fill(arguments: "\(backupFolder)")
                 }
             }
         }
@@ -427,11 +487,11 @@ final class PreferencesController: NSViewController {
             guard self.tblDatabaseArchives.numberOfSelectedRows == 1 else {
                 self.scrDatabaseArchives.layer?.borderColor = NSColor.red.cgColor
                 self.scrDatabaseArchives.layer?.borderWidth = 1.0
-                self.lblDataCloneMessage.stringValue = "One row should be selected in archive table"
+                self.lblDataCloneMessage.stringValue = Words.preference_tab_data_clone_one_row_should_be_selected.word()
                 return
             }
             guard let cmd = PreferencesController.getPostgresCommandPath() else {
-                self.lblDataCloneMessage.stringValue = "Unable to locate psql command in macOS, restore aborted."
+                self.lblDataCloneMessage.stringValue = Words.preference_tab_data_clone_unable_to_locate_psql_command.word()
                 return
             }
             let database = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -439,14 +499,16 @@ final class PreferencesController: NSViewController {
             guard database != "" else{
                 self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
                 self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
-                self.lblCheckDatabaseName.stringValue = "Error: empty."
+                self.lblCheckDatabaseName.stringValue = Words.preference_tab_data_clone_empty_database_name.word()
                 return
             }
             self.logger.log(checkDatabase)
-            guard (checkDatabase == "Not exists." || checkDatabase == "Created." || checkDatabase == "Empty DB.") else{
+            guard (checkDatabase == Words.preference_tab_backup_not_exist_database.word()
+                   || checkDatabase == Words.preference_tab_backup_created_database.word()
+                   || checkDatabase == Words.preference_tab_backup_empty_database.word()) else{
                 self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
                 self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
-                self.lblDataCloneMessage.stringValue = "Please check if target database exists and empty first"
+                self.lblDataCloneMessage.stringValue = Words.preference_tab_data_clone_check_target_database_exist_empty.word()
                 return
             }
             let row = self.tblDatabaseArchives.selectedRow
@@ -462,12 +524,12 @@ final class PreferencesController: NSViewController {
                 host = PreferencesController.localDBServer()
                 port = PreferencesController.localDBPort()
                 user = PreferencesController.localDBUsername()
-                message = "Restoring archive [\(timestamp)] to local postgres database [\(database)] ..."
+                message = Words.preference_tab_backup_restoring_archive_to_local_postgres.fill(arguments: "\(timestamp)", "\(database)")
             }else if self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
                 host = PreferencesController.remoteDBServer()
                 port = PreferencesController.remoteDBPort()
                 user = PreferencesController.remoteDBUsername()
-                message = "Restoring archive [\(timestamp)] to remote postgres database [\(database)] ..."
+                message = Words.preference_tab_backup_restoring_archive_to_remote_postgres.fill(arguments: "\(timestamp)", "\(database)")
             }else{
                 self.lblDataCloneMessage.stringValue = "TODO: from backup archive to sqlite"
                 return
@@ -478,7 +540,7 @@ final class PreferencesController: NSViewController {
                 let (_, _) = PostgresConnection.default.restoreDatabase(commandPath: cmd, database: database, host: host, port: port, user: user, backupFolder: folder)
                 DispatchQueue.main.async {
                     self.toggleDatabaseClonerButtons(state: true)
-                    self.lblDataCloneMessage.stringValue = "Restore archive [\(timestamp)] to [\(database)] completed."
+                    self.lblDataCloneMessage.stringValue = Words.preference_tab_backup_restore_archive_completed.fill(arguments: "\(timestamp)", "\(database)")
                 }
             }
             
@@ -500,7 +562,7 @@ final class PreferencesController: NSViewController {
                 psw = PreferencesController.localDBPassword()
                 nopsw = PreferencesController.localDBNoPassword()
                 schema = PreferencesController.localDBSchema()
-                message = "Clone from SQLite to local postgres database ..."
+                message = Words.preference_tab_data_clone_from_sqlite_to_local_postgres.word()
             }else if self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
                 host = PreferencesController.remoteDBServer()
                 port = PreferencesController.remoteDBPort()
@@ -509,7 +571,7 @@ final class PreferencesController: NSViewController {
                 psw = PreferencesController.remoteDBPassword()
                 nopsw = PreferencesController.remoteDBNoPassword()
                 schema = PreferencesController.remoteDBSchema()
-                message = "Clone from SQLite to remote postgres database ..."
+                message = Words.preference_tab_data_clone_from_sqlite_to_remote_postgres.word()
             }else{
                 // more options?
                 return
@@ -530,14 +592,14 @@ final class PreferencesController: NSViewController {
                 }, onComplete: {
                     DispatchQueue.main.async {
                         self.toggleDatabaseClonerButtons(state: true)
-                        self.lblDataCloneMessage.stringValue = "Database clone completed."
+                        self.lblDataCloneMessage.stringValue = Words.preference_tab_data_clone_completed.word()
                     }
                 })
             }
         }else if self.toggleGroup_CloneFromDBLocation.selected == "localDBServer" {
             
             guard let cmd = PreferencesController.getPostgresCommandPath() else {
-                self.lblDataCloneMessage.stringValue = "Unable to locate psql command in macOS, restore aborted."
+                self.lblDataCloneMessage.stringValue = Words.preference_tab_data_clone_unable_to_locate_psql_command.word()
                 return
             }
             let database = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -545,14 +607,16 @@ final class PreferencesController: NSViewController {
             guard database != "" else{
                 self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
                 self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
-                self.lblCheckDatabaseName.stringValue = "Error: empty."
+                self.lblCheckDatabaseName.stringValue = Words.preference_tab_backup_empty_database.word()
                 return
             }
             self.logger.log(checkDatabase)
-            guard (checkDatabase == "Not exists." || checkDatabase == "Created." || checkDatabase == "Empty DB.") else{
+            guard (checkDatabase == Words.preference_tab_backup_not_exist_database.word()
+                   || checkDatabase == Words.preference_tab_backup_created_database.word()
+                   || checkDatabase == Words.preference_tab_backup_empty_database.word()) else{
                 self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
                 self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
-                self.lblDataCloneMessage.stringValue = "Please check if target database exists and empty first"
+                self.lblDataCloneMessage.stringValue = Words.preference_tab_data_clone_check_target_database_exist_empty.word()
                 return
             }
             var host = ""
@@ -563,12 +627,12 @@ final class PreferencesController: NSViewController {
                 host = PreferencesController.localDBServer()
                 port = PreferencesController.localDBPort()
                 user = PreferencesController.localDBUsername()
-                message = "Clone from local postgres to local postgres database ..."
+                message = Words.preference_tab_data_clone_from_local_postgres_to_local_postgres.word()
             }else if self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
                 host = PreferencesController.remoteDBServer()
                 port = PreferencesController.remoteDBPort()
                 user = PreferencesController.remoteDBUsername()
-                message = "Clone from local postgres to remote postgres database ..."
+                message = Words.preference_tab_data_clone_from_local_postgres_to_remote_postgres.word()
             }else{
                 self.lblDataCloneMessage.stringValue = "TODO from local postgres to sqlite"
                 return
@@ -587,13 +651,13 @@ final class PreferencesController: NSViewController {
                                                                       destUser: user)
                 DispatchQueue.main.async {
                     self.toggleDatabaseClonerButtons(state: true)
-                    self.lblDataCloneMessage.stringValue = "Clone from local postgres to [\(database)] completed."
+                    self.lblDataCloneMessage.stringValue = Words.preference_tab_data_clone_from_local_postgres_completed.fill(arguments: "\(database)")
                 }
             }
         }else if self.toggleGroup_CloneFromDBLocation.selected == "remoteDBServer" {
             
             guard let cmd = PreferencesController.getPostgresCommandPath() else {
-                self.lblDataCloneMessage.stringValue = "Unable to locate psql command in macOS, restore aborted."
+                self.lblDataCloneMessage.stringValue = Words.preference_tab_data_clone_unable_to_locate_psql_command.word()
                 return
             }
             let database = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -601,14 +665,16 @@ final class PreferencesController: NSViewController {
             guard database != "" else{
                 self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
                 self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
-                self.lblCheckDatabaseName.stringValue = "Error: empty."
+                self.lblCheckDatabaseName.stringValue = Words.preference_tab_backup_empty_database.word()
                 return
             }
             self.logger.log(checkDatabase)
-            guard (checkDatabase == "Not exists." || checkDatabase == "Created." || checkDatabase == "Empty DB.") else{
+            guard (checkDatabase == Words.preference_tab_backup_not_exist_database.word()
+                   || checkDatabase == Words.preference_tab_backup_created_database.word()
+                   || checkDatabase == Words.preference_tab_backup_empty_database.word()) else{
                 self.txtRestoreToDatabaseName.layer?.borderColor = NSColor.red.cgColor
                 self.txtRestoreToDatabaseName.layer?.borderWidth = 1.0
-                self.lblDataCloneMessage.stringValue = "Please check if target database exists and empty first"
+                self.lblDataCloneMessage.stringValue = Words.preference_tab_data_clone_check_target_database_exist_empty.word()
                 return
             }
             var host = ""
@@ -619,12 +685,12 @@ final class PreferencesController: NSViewController {
                 host = PreferencesController.localDBServer()
                 port = PreferencesController.localDBPort()
                 user = PreferencesController.localDBUsername()
-                message = "Clone from remote postgres to local postgres database ..."
+                message = Words.preference_tab_data_clone_from_remote_postgres_to_local_postgres.word()
             }else if self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
                 host = PreferencesController.remoteDBServer()
                 port = PreferencesController.remoteDBPort()
                 user = PreferencesController.remoteDBUsername()
-                message = "Clone from remote postgres to remote postgres database ..."
+                message = Words.preference_tab_data_clone_from_remote_postgres_to_remote_postgres.word()
             }else{
                 self.lblDataCloneMessage.stringValue = "TODO from remote postgres to sqlite"
                 return
@@ -643,7 +709,7 @@ final class PreferencesController: NSViewController {
                                                                       destUser: user)
                 DispatchQueue.main.async {
                     self.toggleDatabaseClonerButtons(state: true)
-                    self.lblDataCloneMessage.stringValue = "Clone from remote postgres to [\(database)] completed."
+                    self.lblDataCloneMessage.stringValue = Words.preference_tab_data_clone_from_remote_postgres_completed.fill(arguments: "\(database)")
                 }
             }
         }else{
@@ -710,7 +776,7 @@ final class PreferencesController: NSViewController {
         }
         let targetDatabase = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         guard targetDatabase != "" else {
-            self.lblCheckDatabaseName.stringValue = "Error: empty."
+            self.lblCheckDatabaseName.stringValue = Words.preference_tab_backup_empty_database.word()
             self.btnCreateDatabase.isHidden = true
             return
         }
@@ -728,18 +794,18 @@ final class PreferencesController: NSViewController {
                 let tables = remotedb.queryTableInfos()
                 if tables.count == 0 {
                     DispatchQueue.main.async {
-                        self.lblCheckDatabaseName.stringValue = "Empty DB."
+                        self.lblCheckDatabaseName.stringValue = Words.preference_tab_backup_empty_database.word()
                         self.btnCreateDatabase.isHidden = true
                     }
                 }else{
                     DispatchQueue.main.async {
-                        self.lblCheckDatabaseName.stringValue = "Non-Empty DB."
+                        self.lblCheckDatabaseName.stringValue = Words.preference_tab_backup_non_empty_database.word()
                         self.btnCreateDatabase.isHidden = true
                     }
                 }
             }else{
                 DispatchQueue.main.async {
-                    self.lblCheckDatabaseName.stringValue = "Not exists."
+                    self.lblCheckDatabaseName.stringValue = Words.preference_tab_backup_not_exist_database.word()
                     self.btnCreateDatabase.isHidden = false
                 }
             }
@@ -784,7 +850,7 @@ final class PreferencesController: NSViewController {
                 self.logger.log("created database \(databaseName) on \(user)@\(host):\(port)")
                 DispatchQueue.main.async {
                     self.btnCreateDatabase.isEnabled = true
-                    self.lblCheckDatabaseName.stringValue = "Created."
+                    self.lblCheckDatabaseName.stringValue = Words.preference_tab_backup_created_database.word()
                 }
             }else{
                 self.logger.log("Unable to create database \(databaseName) on \(user)@\(host):\(port)")
@@ -794,7 +860,7 @@ final class PreferencesController: NSViewController {
                 }
                 DispatchQueue.main.async {
                     self.btnCreateDatabase.isEnabled = true
-                    self.lblCheckDatabaseName.stringValue = "Failed createdb."
+                    self.lblCheckDatabaseName.stringValue = Words.preference_tab_backup_create_database_failed.word()
                 }
             }
         }
@@ -875,7 +941,7 @@ final class PreferencesController: NSViewController {
             self.toggleGroup_InstalledPostgres.selected = postgresCommandPath
             self.txtLocalDBBinPath.stringValue = postgresCommandPath
         }else{
-            self.lblDataCloneMessage.stringValue = "ERROR: Unable to find PostgreSQL from Homebrew \(path)"
+            self.lblDataCloneMessage.stringValue = Words.preference_tab_backup_installed_by_homebrew_error.fill(arguments: path)
             sender.state = .off
         }
        
@@ -887,7 +953,7 @@ final class PreferencesController: NSViewController {
             self.toggleGroup_InstalledPostgres.selected = postgresCommandPath
             self.txtLocalDBBinPath.stringValue = postgresCommandPath
         }else{
-            self.lblDataCloneMessage.stringValue = "ERROR: Unable to find PostgreSQL from PostgresApp \(path)"
+            self.lblDataCloneMessage.stringValue = Words.preference_tab_backup_installed_by_postgresapp_error.fill(arguments: path)
             sender.state = .off
         }
     }
@@ -1025,7 +1091,7 @@ final class PreferencesController: NSViewController {
             self.lblIfuseMessage.stringValue = ""
         }else{
             self.txtIfusePath.stringValue = ""
-            self.lblIfuseMessage.stringValue = "ERROR: Missing ifuse"
+            self.lblIfuseMessage.stringValue = Words.preference_tab_missing_error.fill(arguments: "ifuse")
         }
     }
     
@@ -1036,7 +1102,7 @@ final class PreferencesController: NSViewController {
             self.lblIdeviceIdMessage.stringValue = ""
         }else{
             self.txtIdeviceIdPath.stringValue = ""
-            self.lblIdeviceIdMessage.stringValue = "ERROR: Missing imobiledevice"
+            self.lblIdeviceIdMessage.stringValue = Words.preference_tab_missing_error.fill(arguments: "imobiledevice")
         }
     }
     
@@ -1047,7 +1113,7 @@ final class PreferencesController: NSViewController {
             self.lblIdeviceInfoMessage.stringValue = ""
         }else{
             self.txtIdeviceInfoPath.stringValue = ""
-            self.lblIdeviceInfoMessage.stringValue = "ERROR: Missing imobiledevice"
+            self.lblIdeviceInfoMessage.stringValue = Words.preference_tab_missing_error.fill(arguments: "imobiledevice")
         }
     }
     
@@ -1498,6 +1564,33 @@ final class PreferencesController: NSViewController {
     
     
     func initDatabaseSection() {
+        self.boxLocalSQLite.title = Words.preference_tab_database_box_local_sqlite.word()
+        self.boxLocalPostgres.title = Words.preference_tab_database_box_local_postgres.word()
+        self.boxRemotePostgres.title = Words.preference_tab_database_box_remote_postgres.word()
+        self.lblLocalSQLitePath.stringValue = Words.preference_tab_database_sqlite_location.word()
+        self.btnBrowseLocalDBFilePath.title = Words.preference_tab_database_browse.word()
+        self.btnGotoLocalDBFilePath.title = Words.preference_tab_database_goto.word()
+        self.btnLocalDBFileBackup.title = Words.preference_tab_database_backup_now.word()
+        self.btnLocalDBFileTest.title = Words.preference_tab_database_test_connect.word()
+        self.lblLocalPgServer.stringValue = Words.preference_tab_database_postgre_server.word()
+        self.lblLocalPgPort.stringValue = Words.preference_tab_database_postgre_port.word()
+        self.lblLocalPgUser.stringValue = Words.preference_tab_database_postgre_user.word()
+        self.lblLocalPgPassword.stringValue = Words.preference_tab_database_postgre_password.word()
+        self.lblLocalPgSchema.stringValue = Words.preference_tab_database_postgre_schema.word()
+        self.lblLocalPgDatabase.stringValue = Words.preference_tab_database_postgre_database.word()
+        self.chkLocalDBNoPassword.title = Words.preference_tab_database_postgre_no_password.word()
+        self.btnLocalDBServerBackup.title = Words.preference_tab_database_backup_now.word()
+        self.btnLocalDBServerTest.title = Words.preference_tab_database_test_connect.word()
+        self.lblRemotePgServer.stringValue = Words.preference_tab_database_postgre_server.word()
+        self.lblRemotePgPort.stringValue = Words.preference_tab_database_postgre_port.word()
+        self.lblRemotePgUser.stringValue = Words.preference_tab_database_postgre_user.word()
+        self.lblRemotePgPassword.stringValue = Words.preference_tab_database_postgre_password.word()
+        self.lblRemotePgSchema.stringValue = Words.preference_tab_database_postgre_schema.word()
+        self.lblRemotePgDatabase.stringValue = Words.preference_tab_database_postgre_database.word()
+        self.chkRemoteDBNoPassword.title = Words.preference_tab_database_postgre_no_password.word()
+        self.btnRemoteDBServerBackup.title = Words.preference_tab_database_backup_now.word()
+        self.btnRemoteDBTest.title = Words.preference_tab_database_test_connect.word()
+        
         txtLocalDBFilePath.stringValue = PreferencesController.databasePath()
         
         txtRemoteDBServer.stringValue = PreferencesController.remoteDBServer()
@@ -1546,6 +1639,29 @@ final class PreferencesController: NSViewController {
     }
     
     func initBackupSection() {
+        self.boxBackup.title = Words.preference_tab_backup_box_backup.word()
+        self.boxDataClone.title = Words.preference_tab_backup_box_data_clone.word()
+        self.lblBackupLocation.stringValue = Words.preference_tab_backup_box_backup_location.word()
+        self.btnBackupNow.title = Words.preference_tab_database_backup_now.word()
+        self.btnCalculateBackupDiskSpace.title = Words.preference_tab_backup_calc_disk_space.word()
+        self.btnGotoDBBackupPath.title = Words.preference_tab_database_goto.word()
+        self.lblDataCloneFrom.stringValue = Words.preference_tab_backup_from.word()
+        self.lblDataCloneTo.stringValue = Words.preference_tab_backup_to.word()
+        self.chkDeleteAllBeforeClone.title = Words.preference_tab_backup_delete_original_data.word()
+        self.btnCloneLocalToRemote.title = Words.preference_tab_backup_clone_now.word()
+        self.chkFromLocalDBFile.title = Words.preference_tab_backup_local_sqlite.word()
+        self.chkFromLocalDBServer.title = Words.preference_tab_backup_local_postgresql.word()
+        self.chkFromRemoteDBServer.title = Words.preference_tab_backup_remote_postgresql.word()
+        self.chkFromBackupArchive.title = Words.preference_tab_backup_restore_from_backup.word()
+        self.chkToLocalDBFile.title = Words.preference_tab_backup_local_sqlite.word()
+        self.chkToLocalDBServer.title = Words.preference_tab_backup_local_postgresql.word()
+        self.chkToRemoteDBServer.title = Words.preference_tab_backup_remote_postgresql.word()
+        self.lblDataCloneToDatabase.stringValue = Words.preference_tab_backup_to_database.word()
+        self.lblDataCloneToPgCmdline.stringValue = Words.preference_tab_backup_pg_cmdline.word()
+        self.chkPostgresByBrew.title = Words.preference_tab_backup_installed_by_homebrew.word()
+        self.chkPostgresInApp.title = Words.preference_tab_backup_installed_by_postgresapp.word()
+        self.btnDeleteDBArchives.title = Words.preference_tab_backup_delete_backup.word()
+        self.btnReloadDBArchives.title = Words.preference_tab_backup_reload_backup.word()
         
         self.tblDatabaseArchives.backgroundColor = NSColor.black
         self.tblDatabaseArchives.delegate = self
@@ -1611,12 +1727,22 @@ final class PreferencesController: NSViewController {
             self.toggleGroup_InstalledPostgres.selected = postgresCommandPath
             self.txtLocalDBBinPath.stringValue = postgresCommandPath
         }else{
-            self.lblDataCloneMessage.stringValue = "ERROR: Unable to find PostgreSQL from either Homebrew or PostgresApp. Please install first."
+            self.lblDataCloneMessage.stringValue = Words.preference_tab_backup_installed_error.word()
         }
         
     }
     
     func initMobileSection() {
+        self.boxAndroid.title = Words.preference_tab_mobile_box_android.word()
+        self.boxIOS.title = Words.preference_tab_mobile_box_ios.word()
+        self.lblAndroidPathForUpload.stringValue = Words.preference_tab_mobile_box_android_path.word()
+        self.lblAndroidPromptForUpload.stringValue = Words.preference_tab_mobile_box_android_prompt.word()
+        self.lblIOSMountPoint.stringValue = Words.preference_tab_mobile_box_ios_mount_point.word()
+        self.btnBrowseIOSMountPoint.title = Words.preference_tab_mobile_box_ios_browse.word()
+        self.btnLocateIfusePath.title = Words.preference_tab_mobile_box_ios_locate.word()
+        self.btnLocateIdeviceIdPath.title = Words.preference_tab_mobile_box_ios_locate.word()
+        self.btnLocateIdeviceInfoPath.title = Words.preference_tab_mobile_box_ios_locate.word()
+        
         
         txtIOSMountPoint.stringValue = PreferencesController.iosDeviceMountPoint()
         txtIfusePath.stringValue = PreferencesController.ifusePath()
@@ -1659,6 +1785,10 @@ final class PreferencesController: NSViewController {
 //    }
     
     func initGeolocationAPISection() {
+        self.boxBaiduMap.title = Words.preference_tab_geo_location_api_box_baidu.word()
+        self.boxGoogleMap.title = Words.preference_tab_geo_location_api_box_google.word()
+        self.lblBaiduMapPrompt.stringValue = Words.preference_tab_geo_location_api_prompt.word()
+        self.lblGoogleMapPrompt.stringValue = Words.preference_tab_geo_location_api_prompt.word()
         
         txtBaiduAK.stringValue = PreferencesController.baiduAK()
         txtBaiduSK.stringValue = PreferencesController.baiduSK()
@@ -1666,6 +1796,7 @@ final class PreferencesController: NSViewController {
     }
     
     func initGeneral() {
+        self.lblLanguage.stringValue = Words.preference_tab_general_ui_language.word()
         let language = PreferencesController.language()
         if language == "eng" {
             self.popupLanguage.selectItem(withTitle: "English")
@@ -1677,20 +1808,30 @@ final class PreferencesController: NSViewController {
     }
     
     func initPerformanceSection() {
+        self.boxMemoryLimit.title = Words.preference_tab_performance_box_memory_limit.word()
+        self.lblMemoryLimit.stringValue = Words.preference_tab_performance_box_memory_limit_prompt.word()
+        self.boxPagination.title = Words.preference_tab_performance_box_pagination.word()
+        self.lblMinMemory.stringValue = Words.preference_tab_performance_slide_unlimited.word()
+        self.boxPagination.title = Words.preference_tab_performance_box_pagination.word()
+        self.lblPaginationPromptLeft.stringValue = Words.preference_tab_performance_box_pagination_prompt_left.word()
+        self.lblPaginationPromptRight.stringValue = Words.preference_tab_performance_box_pagination_prompt_right.word()
         self.setupMemorySlider()
         let paginationAmount = PreferencesController.amountForPagination()
-        self.logger.log("GOT AMOUNT FOR PAGINATION \(paginationAmount)")
+//        self.logger.log("GOT AMOUNT FOR PAGINATION \(paginationAmount)")
         if paginationAmount == 0 {
-            self.lstAmountForPagination.selectItem(withTitle: "Unlimited")
+            self.lstAmountForPagination.selectItem(withTitle: Words.preference_tab_performance_pagination_unlimited.word())
         }else{
             self.lstAmountForPagination.selectItem(withTitle: "\(paginationAmount)")
         }
     }
     
+    // MARK: VIEW INIT
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Setting"
+        self.title = Words.preference_dialog_title.word()
         // Do any additional setup after loading the view.
+        self.setupTabs()
         self.initGeneral()
         self.initPerformanceSection()
         self.initDatabaseSection()
@@ -1701,6 +1842,18 @@ final class PreferencesController: NSViewController {
         
     }
     
+    func setupTabs() {
+        self.view.window?.title = Words.mainmenu_preferences.word()
+        self.btnApply.title = Words.apply.word()
+        self.tabs.tabViewItem(at: 0).label = Words.preference_tab_general.word()
+        self.tabs.tabViewItem(at: 1).label = Words.preference_tab_performance.word()
+        self.tabs.tabViewItem(at: 2).label = Words.preference_tab_database.word()
+        self.tabs.tabViewItem(at: 3).label = Words.preference_tab_backup.word()
+        self.tabs.tabViewItem(at: 4).label = Words.preference_tab_mobile.word()
+        self.tabs.tabViewItem(at: 5).label = Words.preference_tab_face_recognition.word()
+        self.tabs.tabViewItem(at: 6).label = Words.preference_tab_geo_location_api.word()
+    }
+    
     fileprivate func setupMemorySlider() {
         let totalRam = ProcessInfo.processInfo.physicalMemory / 1024 / 1024 / 1024
         self.memorySlider.maxValue = Double(totalRam)
@@ -1709,7 +1862,7 @@ final class PreferencesController: NSViewController {
         self.memorySlider.allowsTickMarkValuesOnly = true
         self.memorySlider.tickMarkPosition = .below
         self.memorySlider.altIncrementValue = 1
-        self.lblMinMemory.stringValue = "0 (Unlimited)"
+        self.lblMinMemory.stringValue = Words.preference_tab_performance_slide_unlimited.word()
         self.lblMaxMemory.stringValue = "\(totalRam) GB"
         self.lblMidMemory.stringValue = "\(totalRam / 2) GB"
         self.lblMin2Memory.stringValue = "\(totalRam / 2 - totalRam / 4) GB"
@@ -1717,9 +1870,9 @@ final class PreferencesController: NSViewController {
         self.memorySlider.intValue = Int32(PreferencesController.peakMemory())
         let value = self.memorySlider.intValue
         if value > 0 {
-            self.lblSelectedMemory.stringValue = "Selected \(value) GB as Peak"
+            self.lblSelectedMemory.stringValue = Words.preference_tab_performance_selected_memory.fill(arguments: "\(value)")
         }else{
-            self.lblSelectedMemory.stringValue = "Selected Unlimited"
+            self.lblSelectedMemory.stringValue = Words.preference_tab_performance_selected_memory_unlimited.word()
         }
         
     }

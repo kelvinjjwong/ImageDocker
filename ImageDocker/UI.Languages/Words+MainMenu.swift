@@ -10,6 +10,31 @@ import Foundation
 
 extension Words {
     
+    static let mainmenu_preferences = Localize(
+        eng: "Preferences",
+        chs: "偏好配置"
+    )
+    
+    static let mainmenu_database_and_backup = Localize(
+        eng: "Database & Backup ...",
+        chs: "数据库配置和备份"
+    )
+    
+    static let mainmenu_external_api = Localize(
+        eng: "External API ...",
+        chs: "外部 API 配置"
+    )
+    
+    static let mainmenu_quit = Localize(
+        eng: "Backup Database and Quit ImageDocker",
+        chs: "备份数据库并关闭 ImageDocker"
+    )
+    
+    static let mainmenu_about = Localize(
+        eng: "About ImageDocker",
+        chs: "关于 ImageDocker"
+    )
+    
     
     static let tasks = Localize(
         eng: "Tasks",

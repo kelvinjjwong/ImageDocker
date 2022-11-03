@@ -11,7 +11,20 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
     
+    @IBOutlet weak var mainMenu: NSMenu!
+    @IBOutlet weak var editMenu: NSMenu!
+    @IBOutlet weak var windowMenu: NSMenu!
+    
+    
     let logger = ConsoleLogger(category: "AppDelegate")
+    
+    func setupMainMenu() {
+        self.mainMenu.item(at: 0)?.title = Words.mainmenu_about.word()
+        self.mainMenu.item(at: 2)?.title = Words.mainmenu_preferences.word()
+        self.mainMenu.item(at: 3)?.title = Words.mainmenu_database_and_backup.word()
+        self.mainMenu.item(at: 4)?.title = Words.mainmenu_external_api.word()
+        self.mainMenu.item(at: 6)?.title = Words.mainmenu_quit.word()
+    }
     
     func applicationWillFinishLaunching(_ notification: Notification) {
 //        DispatchQueue.global().async {
@@ -25,6 +38,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         NSUserNotificationCenter.default.delegate = self
+        self.setupMainMenu()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
