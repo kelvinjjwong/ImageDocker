@@ -45,6 +45,11 @@ extension Words {
         chs: "正在载入照片库..."
     )
     
+    static let splash_creatingDatabaseBackup_failed_missing_volumes = Localize(
+        eng: "Unable to create database backup, missing volume: %s",
+        chs: "无法创建数据库备份，磁盘未挂载: %s"
+    )
+    
     static let splash_loadingLibraries_failed_missing_volumes = Localize(
         eng: "Unable to load libraries, missing volume(s): %s",
         chs: "无法载入照片库，磁盘未挂载: %s"

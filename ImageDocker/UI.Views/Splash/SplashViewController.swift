@@ -209,7 +209,7 @@ class SplashViewController: NSViewController {
             
             Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (Timer) in
                     if secondsRemaining > 0 {
-                        print ("Countdown \(secondsRemaining) seconds")
+                        print ("Countdown \(secondsRemaining) seconds to Quit")
                         secondsRemaining -= 1
                         DispatchQueue.main.async {
                             self.btnQuit.title = "\(quitTitle) (\(secondsRemaining))"

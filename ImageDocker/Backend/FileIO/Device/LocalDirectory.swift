@@ -309,6 +309,19 @@ struct LocalDirectory {
         }
     }
     
+    public func getSymbolicLinkDestination(path:String) -> String {
+        let url = URL(fileURLWithPath: path)
+        if let ok = try? url.checkResourceIsReachable(), ok {
+            let vals = try? url.resourceValues(forKeys: [.isSymbolicLinkKey])
+            if let islink = vals?.isSymbolicLink, islink {
+                if let dest = try? FileManager.default.destinationOfSymbolicLink(atPath: path) {
+                    return dest
+                }
+            }
+        }
+        return path
+    }
+    
     public func getDiskSpace(path:String, lblDiskFree:NSTextField? = nil, lblDiskOccupied:NSTextField? = nil) -> (Double, String, String, [String:String]){
         var spaceDetail:[String:String] = [:]
         var spaceFree = "0M / 0T"

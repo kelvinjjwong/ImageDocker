@@ -1561,13 +1561,13 @@ final class PreferencesController: NSViewController {
         }
     }
     
-    class func saveVolumes(_ volumes:[String]) {
+    class func saveRepositoryVolumes(_ volumes:[String]) {
         let defaults = UserDefaults.standard
         defaults.set(volumes,
                      forKey: PreferencesController.volumesKey)
     }
     
-    class func getVolumes() -> [String] {
+    class func getSavedRepositoryVolumes() -> [String] {
         let defaults = UserDefaults.standard
         guard let volumes = defaults.stringArray(forKey: volumesKey) else {return []}
         return volumes
