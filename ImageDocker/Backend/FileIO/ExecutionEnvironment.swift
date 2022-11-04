@@ -307,6 +307,14 @@ pip3 install face_recognition
         return PostgresConnection.default.backupDatabase(commandPath: cmd, database: database, host: host, port: port, user: user, backupPath: backupPath, suffix: suffix)
     }
     
+    func getDatabaseBackupVolume() -> String {
+        let dbUrl = URL(fileURLWithPath: PreferencesController.databasePath())
+        let dbBackupUrl = dbUrl.appendingPathComponent("DataBackup")
+        let dbBackupRealUrl = LocalDirectory.bridge.getSymbolicLinkDestination(path: dbBackupUrl.path)
+        let dbBackupVolume = LocalDirectory.bridge.getDiskMountPointVolume(path: dbBackupRealUrl)
+        return dbBackupVolume
+    }
+    
     func createDatabaseBackup(_ location:ImageDBLocation = .fromSetting, suffix:String) -> (String, Bool, Error?) {
         if (location == .fromSetting && PreferencesController.databaseLocation() == "local") || location == .localFile {
             return self.createLocalDatabaseFileBackup(suffix: suffix)

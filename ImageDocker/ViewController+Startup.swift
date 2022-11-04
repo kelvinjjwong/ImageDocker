@@ -22,12 +22,8 @@ extension ViewController {
         DispatchQueue.global().async {
             self.splashController.progressWillEnd(at: 5)
             self.splashController.message(Words.splash_creatingDatabaseBackup.word(), progress: 1)
-            
-            let dbUrl = URL(fileURLWithPath: PreferencesController.databasePath())
-            let dbBackupUrl = dbUrl.appendingPathComponent("DataBackup")
-            let dbBackupRealUrl = LocalDirectory.bridge.getSymbolicLinkDestination(path: dbBackupUrl.path)
-            let dbBackupVolume = LocalDirectory.bridge.getDiskMountPointVolume(path: dbBackupRealUrl)
-            if dbBackupVolume == "" {
+            let dbBackupRealUrl = ExecutionEnvironment.default.getDatabaseBackupVolume()
+            if dbBackupRealUrl == "" {
                 self.splashController.message(Words.splash_creatingDatabaseBackup_failed_missing_volumes.fill(arguments: dbBackupRealUrl), progress: 1)
                 self.splashController.decideQuit = true
                 self.splashController.showQuit(countdown: 8, disableButton: true) {

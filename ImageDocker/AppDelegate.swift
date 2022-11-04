@@ -46,6 +46,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         // Insert code here to tear down your application
         
         IPHONE.bridge.unmountFuse()
+        
+        if ExecutionEnvironment.default.getDatabaseBackupVolume() == "" {
+            self.terminateWithoutBackupDB = true
+        }
+        
         if !self.terminateWithoutBackupDB {
             let alert = NSAlert()
             DispatchQueue.global().async {
