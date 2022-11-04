@@ -10,6 +10,16 @@ import Foundation
 
 extension Words {
     
+    static let splash_backing_up_database = Localize(
+        eng: "Backup from [%s] to [%s] ...",
+        chs: "正在备份数据库 [%s] 到 [%s] ..."
+    )
+    
+    static let splash_connecting_database = Localize(
+        eng: "Connecting database [%s] ...",
+        chs: "正在尝试连接数据库 [%s] ..."
+    )
+    
     static let splash_prepareingFolders = Localize(
         eng: "Preparing folders ...",
         chs: "正在载入照片库文件夹..."

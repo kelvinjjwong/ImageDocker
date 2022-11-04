@@ -73,6 +73,20 @@ class SplashViewController: NSViewController {
         self.onStartup()
     }
     
+    func showSubMessage(message: String) {
+        DispatchQueue.main.async {
+            self.lblSubMessage.isHidden = false
+            self.lblSubMessage.stringValue = message
+        }
+    }
+    
+    func hideSubMessage() {
+        DispatchQueue.main.async {
+            self.lblSubMessage.stringValue = ""
+            self.lblSubMessage.isHidden = true
+        }
+    }
+    
     @objc func beginSubProgress(notification:Notification){
 //        self.logger.log("BEGIN SUB PROGRESS")
         DispatchQueue.main.async {

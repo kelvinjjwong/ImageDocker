@@ -21,8 +21,33 @@ extension ViewController {
         
         DispatchQueue.global().async {
             self.splashController.progressWillEnd(at: 5)
+            
+            IPHONE.bridge.unmountFuse()
+            
+            // current database info
+            let (_dbLocation, _dbEngine, dbServer, dbName) = PreferencesController.configuredDatabaseInfo()
+            print(_dbLocation)
+            print(_dbEngine)
+            print(dbServer)
+            print(dbName)
+            var dbEngine = ""
+            if(_dbLocation == "local") {
+                if dbEngine == "SQLite" {
+                    dbEngine = Words.preference_tab_backup_local_sqlite.word()
+                }else{
+                    dbEngine = Words.preference_tab_backup_local_postgresql.word()
+                }
+            }else{
+                dbEngine = Words.preference_tab_backup_remote_postgresql.word()
+            }
+            
+            if _dbEngine == "PostgreSQL" {
+                dbEngine = "\(dbEngine) \(dbServer)/\(dbName)"
+            }
+            // create database backup
             self.splashController.message(Words.splash_creatingDatabaseBackup.word(), progress: 1)
             let dbBackupRealUrl = ExecutionEnvironment.default.getDatabaseBackupVolume()
+            self.splashController.showSubMessage(message: Words.splash_backing_up_database.fill(arguments: dbEngine, dbBackupRealUrl))
             if dbBackupRealUrl == "" {
                 self.splashController.message(Words.splash_creatingDatabaseBackup_failed_missing_volumes.fill(arguments: dbBackupRealUrl), progress: 1)
                 self.splashController.decideQuit = true
@@ -33,15 +58,19 @@ extension ViewController {
             }
             
             let _ = ExecutionEnvironment.default.createDatabaseBackup(suffix: "-on-launch")
-
-            IPHONE.bridge.unmountFuse()
+            self.splashController.hideSubMessage()
             
+            
+            // connect to database
             
             let idleSeconds = 15
             let maxAttempt = 3
             var retry = 0
             var dbConnected = false
             var additionalMessage = ""
+            
+            
+            self.splashController.showSubMessage(message: Words.splash_connecting_database.fill(arguments: dbEngine))
             
             while(!dbConnected && retry < maxAttempt) {
                 
@@ -92,6 +121,8 @@ extension ViewController {
                     self.doQuit(withoutBackupDB: true)
                 }
             }else{
+                self.splashController.hideSubMessage()
+                
                 self.splashController.message(Words.splash_initializingUI.word(), progress: 3)
                 DispatchQueue.main.async {
                     self.initView()

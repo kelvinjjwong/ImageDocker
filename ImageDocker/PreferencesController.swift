@@ -1201,6 +1201,33 @@ final class PreferencesController: NSViewController {
     
     static let predefinedLocalDBFilePath = AppDelegate.current.applicationDocumentsDirectory.path
     
+    class func configuredDatabaseInfo() -> (String, String, String, String) {
+        var dbEngine = ""
+        var location = databaseLocation()
+        if location == "local" {
+            dbEngine = "SQLite"
+        }else if location == "localServer" {
+            dbEngine = "PostgreSQL"
+            location = "local"
+        }else if location == "network" {
+            dbEngine = "PostgreSQL"
+            location = "remote"
+        }
+        
+        var server = ""
+        var dbName = ""
+        if dbEngine == "PostgreSQL" {
+            if location == "local" {
+                server = localDBServer()
+                dbName = localDBDatabase()
+            }else {
+                server = remoteDBServer()
+                dbName = remoteDBDatabase()
+            }
+        }
+        return (location, dbEngine, server, dbName)
+    }
+    
     class func databasePath() -> String {
         let defaults = UserDefaults.standard
         guard let txt = defaults.string(forKey: databasePathKey) else {
