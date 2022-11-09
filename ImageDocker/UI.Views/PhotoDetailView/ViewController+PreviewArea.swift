@@ -169,6 +169,11 @@ extension ViewController {
         stackedImageViewController.imageDisplayer.image = image
         
         self.btnImageOptions.isEnabled = true
+        self.setupPreviewMenu()
+    }
+    
+    func degreeToRadian(_ x: CGFloat) -> CGFloat {
+        return .pi * x / 180.0
     }
     
     internal func previewImage(url:URL, isPhoto:Bool) {
@@ -191,6 +196,7 @@ extension ViewController {
             stackedImageViewController.imageDisplayer.image = url.loadImage(maxDimension: 512)
             
             self.btnImageOptions.isEnabled = true
+            self.setupPreviewMenu()
         } else {
             
             // switch to video view
@@ -199,9 +205,15 @@ extension ViewController {
             
             // show video
             stackedVideoViewController.videoDisplayer.player = AVPlayer(url: url)
+            let playerLayer = AVPlayerLayer.init(player: stackedVideoViewController.videoDisplayer.player)
+            let affineTransform = CGAffineTransform(rotationAngle: degreeToRadian(180))
+            playerLayer.setAffineTransform(affineTransform)
+            playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+            stackedVideoViewController.videoDisplayer.updateLayer()
             stackedVideoViewController.videoDisplayer.player?.play()
             
-            self.btnImageOptions.isEnabled = false
+            self.btnImageOptions.isEnabled = true
+            self.setupPreviewMenu(isVideo: true)
         }
     }
     
@@ -235,6 +247,7 @@ extension ViewController {
             }
             
             self.btnImageOptions.isEnabled = true
+            self.setupPreviewMenu()
         } else {
             
             // switch to video view
@@ -251,7 +264,8 @@ extension ViewController {
             }
             stackedVideoViewController.videoDisplayer.player?.play()
             
-            self.btnImageOptions.isEnabled = false
+            self.btnImageOptions.isEnabled = true
+            self.setupPreviewMenu(isVideo: true)
         }
     }
     

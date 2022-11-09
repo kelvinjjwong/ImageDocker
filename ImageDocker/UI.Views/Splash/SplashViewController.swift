@@ -37,7 +37,47 @@ class SplashViewController: NSViewController {
         super.init(nibName: "SplashViewController", bundle: nil)
     }
     
+    var screenDockHeight = -1
+    var screenDockPosition = "N/A"
+    
+    func onScreenDockHeightDetected(position:String, height:Int) {
+        var changed = (position != self.screenDockPosition || height != self.screenDockHeight)
+        self.screenDockHeight = height
+        self.screenDockPosition = position
+        // do on changed
+        if(changed) {
+            // ....
+        }
+    }
+    
+    func whereIsDock() {
+        
+        if let screen = self.view.window?.screen {
+            let visibleFrame = screen.visibleFrame
+            let screenFrame = screen.frame
+            
+            if (visibleFrame.origin.x > screenFrame.origin.x) {
+                self.onScreenDockHeightDetected(position: "LEFT", height: Int(visibleFrame.origin.x - screenFrame.origin.x))
+                print("[SPLASH-VIEW] Dock is positioned on the LEFT")
+                print("[SPLASH-VIEW] Dock width: \(visibleFrame.origin.x - screenFrame.origin.x)")
+            } else if (visibleFrame.origin.y > screenFrame.origin.y) {
+                self.onScreenDockHeightDetected(position: "BOTTOM", height: Int(visibleFrame.origin.y - screenFrame.origin.y))
+                print("[SPLASH-VIEW] Dock is positioned on the BOTTOM")
+                print("[SPLASH-VIEW] Dock height: \(visibleFrame.origin.y - screenFrame.origin.y)")
+            } else if (visibleFrame.size.width < screenFrame.size.width) {
+                self.onScreenDockHeightDetected(position: "RIGHT", height: Int(screenFrame.size.width - visibleFrame.size.width))
+            } else {
+                self.onScreenDockHeightDetected(position: "HIDDEN", height: 0)
+                print("[SPLASH-VIEW] Dock is HIDDEN");
+            }
+        }else {
+            self.onScreenDockHeightDetected(position: "N/A", height: -1)
+            print ("[SPLASH-VIEW] CANNOT DETECT DOCK")
+        }
+    }
+    
     override func viewDidAppear() {
+        whereIsDock()
         if !(self.view.window?.isZoomed ?? true) {
             self.view.window?.performZoom(self)
         }
@@ -46,6 +86,7 @@ class SplashViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.wantsLayer = true
+        whereIsDock()
         if !(self.view.window?.isZoomed ?? true) {
             self.view.window?.performZoom(self)
         }

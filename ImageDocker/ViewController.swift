@@ -240,7 +240,8 @@ class ViewController: NSViewController {
             self.view.window?.performZoom(self)
         }
         
-        self.logger.log("[MAIN] AFTER SIZE \(self.view.frame.size.width) x \(self.view.frame.size.height)")
+        whereIsDock()
+        
     }
     
     // MARK: - SPLASH SCREEN ON STARTUP
@@ -281,7 +282,51 @@ class ViewController: NSViewController {
         return volumes.sorted()
     }
     
+    var screenDockHeight = -1
+    var screenDockPosition = "N/A"
+    
+    func onScreenDockHeightDetected(position:String, height:Int, screenWidth:CGFloat, screenHeight:CGFloat) {
+        let changed = (position != self.screenDockPosition || height != self.screenDockHeight)
+        self.screenDockHeight = height
+        self.screenDockPosition = position
+        // do on changed
+        if(changed && position != "N/A") {
+            self.logger.log("[MAIN-VIEW] RESIZE WINDOW to \(screenWidth) x \(screenHeight)")
+            self.resize(width: screenWidth, height: screenHeight)
+            
+            
+            self.logger.log("[MAIN] AFTER SIZE \(self.view.frame.size.width) x \(self.view.frame.size.height)")
+        }
+    }
+    
+    func whereIsDock() {
+        
+        if let screen = self.view.window?.screen {
+            let visibleFrame = screen.visibleFrame
+            let screenFrame = screen.frame
+            
+            if (visibleFrame.origin.x > screenFrame.origin.x) {
+                self.onScreenDockHeightDetected(position: "LEFT", height: Int(visibleFrame.origin.x - screenFrame.origin.x), screenWidth: visibleFrame.size.width, screenHeight: visibleFrame.size.height)
+                self.logger.log("[MAIN-VIEW] Dock is positioned on the LEFT")
+                self.logger.log("[MAIN-VIEW] Dock width: \(visibleFrame.origin.x - screenFrame.origin.x)")
+            } else if (visibleFrame.origin.y > screenFrame.origin.y) {
+                self.onScreenDockHeightDetected(position: "BOTTOM", height: Int(visibleFrame.origin.y - screenFrame.origin.y), screenWidth: visibleFrame.size.width, screenHeight: visibleFrame.size.height)
+                self.logger.log("[MAIN-VIEW] Dock is positioned on the BOTTOM")
+                self.logger.log("[MAIN-VIEW] Dock height: \(visibleFrame.origin.y - screenFrame.origin.y)")
+            } else if (visibleFrame.size.width < screenFrame.size.width) {
+                self.onScreenDockHeightDetected(position: "RIGHT", height: Int(screenFrame.size.width - visibleFrame.size.width), screenWidth: visibleFrame.size.width, screenHeight: visibleFrame.size.height)
+            } else {
+                self.onScreenDockHeightDetected(position: "HIDDEN", height: 0, screenWidth: visibleFrame.size.width, screenHeight: visibleFrame.size.height)
+                self.logger.log("[MAIN-VIEW] Dock is HIDDEN");
+            }
+        }else {
+            self.onScreenDockHeightDetected(position: "N/A", height: -1, screenWidth: 0, screenHeight: 0)
+            self.logger.log ("[MAIN-VIEW] CANNOT DETECT DOCK")
+        }
+    }
+    
     internal func initView() {
+        whereIsDock()
         
         let (volumes_lasttime, volumes_connected, volumes_missing) = self.checkRepositoryVolumesMounted()
         self.logger.log("[STARTUP] volumes_lasttime: \(volumes_lasttime)")
@@ -322,7 +367,8 @@ class ViewController: NSViewController {
 //        self.logger.log("Loading view - configure editors")
         
         self.configureDarkMode()
-        self.resize()
+        whereIsDock()
+//        self.resize()
         
 //        self.logger.log("Loading view - update library tree")
         self.splashController.message(Words.splash_loadingLibraries.word(), progress: 4)
@@ -359,6 +405,9 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        whereIsDock()
+        
         self.logger.log("before splash - frame \(self.view.bounds)")
         
         self.imagesLoader = CollectionViewItemsLoader()
@@ -376,6 +425,9 @@ class ViewController: NSViewController {
         self.view.addSubview(splashController.view)
         self.addChild(splashController)
         splashController.view.frame = self.view.bounds
+        
+        
+        whereIsDock()
         
         self.btnImageOptions.isEnabled = false
         

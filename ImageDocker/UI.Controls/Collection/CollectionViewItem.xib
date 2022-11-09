@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,6 +14,7 @@
                 <outlet property="checkBox" destination="Onb-PG-8r4" id="bHB-Jv-sUi"/>
                 <outlet property="imageView" destination="FSe-ep-RM0" id="fCL-h0-ClX"/>
                 <outlet property="lblPlace" destination="9qX-pa-ugK" id="k8B-pG-7sE"/>
+                <outlet property="moreMenu" destination="tEK-js-g3a" id="tGL-gk-7ef"/>
                 <outlet property="textField" destination="HhR-2S-1Qc" id="qmv-BS-MjW"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
@@ -152,7 +153,7 @@
         <collectionViewItem id="c2X-bD-ueb" customClass="CollectionViewItem" customModule="ImageDocker" customModuleProvider="target"/>
     </objects>
     <resources>
-        <image name="NSStopProgressTemplate" width="14" height="13"/>
+        <image name="NSStopProgressTemplate" width="17" height="16"/>
         <image name="copy" width="16" height="16"/>
         <image name="more_horizontal" width="16" height="4"/>
     </resources>

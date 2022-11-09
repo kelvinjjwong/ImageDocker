@@ -18,6 +18,7 @@ class CollectionViewItem: NSCollectionViewItem {
     @IBOutlet weak var btnLook: NSButton!
     @IBOutlet weak var btnCaution: NSButton!
     @IBOutlet weak var btnMenu: NSPopUpButton!
+    @IBOutlet weak var moreMenu: NSMenu!
     
     private var checkBoxDelegate:CollectionViewItemCheckDelegate?
     private var showDuplicatesDelegate:CollectionViewItemShowDuplicatesDelegate?
@@ -100,6 +101,10 @@ class CollectionViewItem: NSCollectionViewItem {
             var degree = 0
             if let imageData = imageFile.imageData, let rotationDegree = imageData.rotation {
                 degree = rotationDegree
+//                if imageFile.isVideo {
+//                    print("video:\(imageFile.url) | rotate:\(rotationDegree)")
+//                    degree = rotationDegree + -90
+//                }
             }
             if let thumbnail = imageFile.thumbnail {
                 if degree != 0 {

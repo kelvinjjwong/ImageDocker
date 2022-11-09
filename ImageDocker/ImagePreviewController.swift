@@ -43,35 +43,81 @@ class ImagePreviewController : NSViewController {
     }
     
     @IBAction func onRotateClockwiseClicked(_ sender: NSButton) {
-        if let nsImage = self.getImageFromPreview?(),
-           let imageId = self.imageFile?.imageData?.id,
+        if let imageId = self.imageFile?.imageData?.id,
             let imageData = ImageRecordDao.default.getImage(id: imageId) {
+            let imageUrl = URL(fileURLWithPath: imageData.path)
+            let imageType = imageUrl.imageType()
             let originDegree = imageData.rotation ?? 0
             var degree = originDegree - 90
             if degree <= -360 || degree >= 360 {
                 degree = 0
             }
             self.logger.log("rotate from \(originDegree) to \(degree)")
-            self.previewImage?(nsImage.rotate(degrees: CGFloat(degree)))
             let dbState = ImageRecordDao.default.updateImageRotation(path: imageData.path, rotation: degree)
             if dbState != .OK {
                 MessageEventCenter.default.showMessage(message: "Failed to update image with rotation \(degree)")
+            }else{
+                imageData.rotation = degree
+                MessageEventCenter.default.showMessage(message: "Rotated, you may need to refresh collection.")
+                if imageType == .photo {
+                    if let nsImage = self.getImageFromPreview?() {
+                        self.previewImage?(nsImage.rotate(degrees: CGFloat(degree)))
+                    }
+                }else {
+                    self.imageFile = ImageFile(image: imageData)
+                    if let previewImage = self.previewImage, let nsimage = self.imageFile?.image {
+                        previewImage(nsimage)
+                    }else{
+                        print("cannot preview video")
+                    }
+                    //FIXME: preview rotated video
+                }
             }
+            
+        }else{
+            print("rotate clockwise:")
+            print(self.getImageFromPreview == nil)
+            print(self.getImageFromPreview?() == nil)
+            print(self.imageFile == nil)
+            print(self.imageFile?.imageData == nil)
+            print(self.imageFile?.imageData?.id == nil)
         }
     }
     
     @IBAction func onRotateCounterClockwiseClicked(_ sender: NSButton) {
-        if let nsImage = self.getImageFromPreview?(), let imageData = self.imageFile?.imageData {
+        if let imageData = self.imageFile?.imageData {
+            let imageUrl = URL(fileURLWithPath: imageData.path)
+            let imageType = imageUrl.imageType()
             let originDegree = imageData.rotation ?? 0
             var degree = originDegree + 90
             if degree <= -360 || degree >= 360 {
                 degree = 0
             }
-            self.previewImage?(nsImage.rotate(degrees: CGFloat(degree)))
             let dbState = ImageRecordDao.default.updateImageRotation(path: imageData.path, rotation: degree)
             if dbState != .OK {
                 MessageEventCenter.default.showMessage(message: "Failed to update image with rotation \(degree)")
+            }else{
+                imageData.rotation = degree
+                MessageEventCenter.default.showMessage(message: "Rotated, you may need to refresh collection.")
+                if imageType == .photo {
+                    if let nsImage = self.getImageFromPreview?() {
+                        self.previewImage?(nsImage.rotate(degrees: CGFloat(degree)))
+                    }
+                }else {
+                    self.imageFile = ImageFile(image: imageData)
+                    if let previewImage = self.previewImage, let nsimage = self.imageFile?.image {
+                        previewImage(nsimage)
+                    }else{
+                        print("cannot preview video")
+                    }
+                    //FIXME: preview rotated video
+                }
             }
+        }else{
+            print("rotate counterclockwise:")
+            print(self.imageFile == nil)
+            print(self.imageFile?.imageData == nil)
+            print(self.imageFile?.imageData?.id == nil)
         }
     }
 }

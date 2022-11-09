@@ -10,9 +10,10 @@ import Cocoa
 
 extension ViewController {
     
-    internal func setupPreviewMenu() {
+    internal func setupPreviewMenu(isVideo:Bool = false) {
+        self.btnImageOptions.menu?.items.removeAll()
         
-        self.btnImageOptions.menu?.item(at: 0)?.title = Words.imageOption.word()
+        self.btnImageOptions.menu?.addItem(withTitle: Words.imageOption.word(), action: nil, keyEquivalent: "")
         
         self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
         
@@ -74,6 +75,8 @@ extension ViewController {
             logger.log("preview menu - rescan image exif - \(url)")
             if let image = imageFile.imageData {
                 let i = ImageFile(image: image, forceReloadExif: true)
+                
+                // FIXME:
                 print(i.location.latitude)
                 print(i.location.longitude)
                 print(i.location.latitudeBD)
@@ -85,11 +88,13 @@ extension ViewController {
     
     @objc func previewMenuWriteNote(_ menuItem:NSMenuItem) {
         self.btnImageOptions.selectItem(at: 0)
+        // FIXME: write note
         logger.log("preview menu - to do function")
     }
     
     @objc func previewMenuMarkRotateDirection(_ menuItem:NSMenuItem) {
         self.btnImageOptions.selectItem(at: 0)
+        // FIXME: mark rotate direction
         logger.log("preview menu - to do function")
     }
     
