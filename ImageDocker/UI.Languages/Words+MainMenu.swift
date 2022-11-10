@@ -38,7 +38,7 @@ extension Words {
     
     static let tasks = Localize(
         eng: "Tasks",
-        chs: "多任务"
+        chs: "进行中的任务"
     )
     
     static let memories = Localize(

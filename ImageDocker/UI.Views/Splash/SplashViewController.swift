@@ -86,7 +86,7 @@ class SplashViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.wantsLayer = true
-        whereIsDock()
+//        whereIsDock()
         if !(self.view.window?.isZoomed ?? true) {
             self.view.window?.performZoom(self)
         }

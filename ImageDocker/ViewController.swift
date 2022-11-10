@@ -153,6 +153,9 @@ class ViewController: NSViewController {
     @IBOutlet weak var btnPreviousPageCollection: NSButton!
     @IBOutlet weak var btnNextPageCollection: NSButton!
     @IBOutlet weak var lblPagesCollection: NSTextField!
+    @IBOutlet weak var btnCollapseLeft: NSButton!
+    @IBOutlet weak var btnCollapseRight: NSButton!
+    @IBOutlet weak var btnCollapseBottom: NSButton!
     
     
     @IBOutlet weak var chbShowHidden: NSButton!
@@ -240,7 +243,7 @@ class ViewController: NSViewController {
             self.view.window?.performZoom(self)
         }
         
-        whereIsDock()
+//        whereIsDock()
         
     }
     
@@ -326,7 +329,7 @@ class ViewController: NSViewController {
     }
     
     internal func initView() {
-        whereIsDock()
+//        whereIsDock()
         
         let (volumes_lasttime, volumes_connected, volumes_missing) = self.checkRepositoryVolumesMounted()
         self.logger.log("[STARTUP] volumes_lasttime: \(volumes_lasttime)")
@@ -367,8 +370,8 @@ class ViewController: NSViewController {
 //        self.logger.log("Loading view - configure editors")
         
         self.configureDarkMode()
-        whereIsDock()
-//        self.resize()
+//        whereIsDock()
+        self.resize()
         
 //        self.logger.log("Loading view - update library tree")
         self.splashController.message(Words.splash_loadingLibraries.word(), progress: 4)
@@ -406,7 +409,7 @@ class ViewController: NSViewController {
         super.viewDidLoad()
         
         
-        whereIsDock()
+//        whereIsDock()
         
         self.logger.log("before splash - frame \(self.view.bounds)")
         
@@ -427,7 +430,7 @@ class ViewController: NSViewController {
         splashController.view.frame = self.view.bounds
         
         
-        whereIsDock()
+//        whereIsDock()
         
         self.btnImageOptions.isEnabled = false
         
@@ -606,10 +609,10 @@ class ViewController: NSViewController {
         let leftPanel = self.leftVerticalSplitView.arrangedSubviews[0]
         if self.leftVerticalSplitView.isSubviewCollapsed(leftPanel) {
             leftPanel.isHidden = false
-            self.btnToggleLeftPanel.image = Icons.collapseLeftPanel
+            self.btnCollapseLeft.image = Icons.collapseLeftPanel
         }else{
             leftPanel.isHidden = true
-            self.btnToggleLeftPanel.image = Icons.expandLeftPanel
+            self.btnCollapseLeft.image = Icons.expandLeftPanel
         }
     }
     
@@ -617,10 +620,10 @@ class ViewController: NSViewController {
         let bottomPanel = self.centralHorizontalSplitView.arrangedSubviews[1]
         if self.centralHorizontalSplitView.isSubviewCollapsed(bottomPanel) {
             bottomPanel.isHidden = false
-            self.btnToggleBottomPanel.image = Icons.collapseBottomPanel
+            self.btnCollapseBottom.image = Icons.collapseBottomPanel
         }else{
             bottomPanel.isHidden = true
-            self.btnToggleBottomPanel.image = Icons.expandBottomPanel
+            self.btnCollapseBottom.image = Icons.expandBottomPanel
         }
     }
     
@@ -628,10 +631,10 @@ class ViewController: NSViewController {
         let rightPanel = self.verticalSplitView.arrangedSubviews[1]
         if self.verticalSplitView.isSubviewCollapsed(rightPanel) {
             rightPanel.isHidden = false
-            self.btnToggleRightPanel.image = Icons.collapseRightPanel
+            self.btnCollapseRight.image = Icons.collapseRightPanel
         }else{
             rightPanel.isHidden = true
-            self.btnToggleRightPanel.image = Icons.expandRightPanel
+            self.btnCollapseRight.image = Icons.expandRightPanel
         }
     }
     

@@ -11,7 +11,7 @@ import Cocoa
 extension ViewController {
     
     internal func resize(width:CGFloat = 600, height:CGFloat = 500) {
-//        guard !windowInitial else {return}
+        guard !windowInitial else {return}
         let size = UIHelper.windowSize()
         
         let windowSize = NSMakeSize(size.width, size.height)
@@ -74,7 +74,7 @@ extension ViewController {
         if size.isSmallScreen {
             self.splitviewPreview.setPosition(size.height - CGFloat(565), ofDividerAt: 0)
         }else{
-            self.splitviewPreview.setPosition(size.height - CGFloat(745), ofDividerAt: 0)
+            self.splitviewPreview.setPosition(size.height - CGFloat(805), ofDividerAt: 0)
         }
     }
 }
