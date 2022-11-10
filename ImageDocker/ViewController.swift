@@ -489,8 +489,8 @@ class ViewController: NSViewController {
     }
     
     internal func setupUIDisplays() {
-        self.btnTasks.title = Words.tasks.word()
-        self.btnNotification.title = Words.notifications.word()
+        self.btnTasks.title = Words.tasks.fill(arguments: "0")
+        self.btnNotification.title = Words.notifications.fill(arguments: "0")
         self.btnMemories.title = Words.memories.word()
         self.btnCombineDuplicates.title = Words.combineDuplicates.word()
         self.btnRefreshCollectionView.title = Words.reload.word()

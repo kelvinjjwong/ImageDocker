@@ -37,13 +37,13 @@ extension Words {
     
     
     static let tasks = Localize(
-        eng: "Tasks",
-        chs: "进行中的任务"
+        eng: "Tasks (%s)",
+        chs: "后台任务 (%s)"
     )
     
     static let notifications = Localize(
-        eng: "Notification",
-        chs: "收到的消息"
+        eng: "Notification (%s)",
+        chs: "执行通知 (%s)"
     )
     
     static let memories = Localize(
