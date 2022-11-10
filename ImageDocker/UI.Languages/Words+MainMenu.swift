@@ -41,6 +41,11 @@ extension Words {
         chs: "进行中的任务"
     )
     
+    static let notifications = Localize(
+        eng: "Notification",
+        chs: "收到的消息"
+    )
+    
     static let memories = Localize(
         eng: "Memories",
         chs: "往年今日"

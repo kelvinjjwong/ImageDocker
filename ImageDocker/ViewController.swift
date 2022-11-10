@@ -34,6 +34,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var btnTasks: NSButton!
     @IBOutlet weak var btnMemories: NSButton!
     
+    @IBOutlet weak var btnNotification: NSButton!
     @IBOutlet weak var txtSearch: NSTokenField!
     
     
@@ -489,6 +490,7 @@ class ViewController: NSViewController {
     
     internal func setupUIDisplays() {
         self.btnTasks.title = Words.tasks.word()
+        self.btnNotification.title = Words.notifications.word()
         self.btnMemories.title = Words.memories.word()
         self.btnCombineDuplicates.title = Words.combineDuplicates.word()
         self.btnRefreshCollectionView.title = Words.reload.word()

@@ -31,25 +31,29 @@ extension ViewController {
     
     // legacy
     func popoverNotification(message:String) {
-        let currentMouseLocation = NSEvent.mouseLocation
-        let posX = currentMouseLocation.x
-        let posY = currentMouseLocation.y
+//        let currentMouseLocation = NSEvent.mouseLocation
+//        let posX = currentMouseLocation.x
+//        let posY = currentMouseLocation.y
         
         self.createNotificationPopover(message: message)
-        let invisibleWindow = NSWindow(contentRect: NSMakeRect(0, 0, 20, 5), styleMask: .borderless, backing: .buffered, defer: false)
-        invisibleWindow.backgroundColor = .red
-        invisibleWindow.alphaValue = 0
+//        let invisibleWindow = NSWindow(contentRect: NSMakeRect(0, 0, 20, 5), styleMask: .borderless, backing: .buffered, defer: false)
+//        invisibleWindow.backgroundColor = .red
+//        invisibleWindow.alphaValue = 0
+//
+//        invisibleWindow.setFrameOrigin(NSPoint(x: posX, y: posY))
+//        invisibleWindow.makeKeyAndOrderFront(self)
         
-        invisibleWindow.setFrameOrigin(NSPoint(x: posX, y: posY))
-        invisibleWindow.makeKeyAndOrderFront(self)
+        let cellRect = self.btnNotification.bounds
         
-        self.notificationPopover?.show(relativeTo: invisibleWindow.contentView!.frame, of: invisibleWindow.contentView!, preferredEdge: .maxY)
+        self.notificationPopover?.show(relativeTo: cellRect, of: self.btnNotification, preferredEdge: .maxX)
     }
     
     func popNotification(message:String){
         DispatchQueue.main.async {
             self.btnAlertMessage.title = message
             self.btnAlertMessage.isHidden = false
+            
+            self.popoverNotification(message: message)
         }
     }
     

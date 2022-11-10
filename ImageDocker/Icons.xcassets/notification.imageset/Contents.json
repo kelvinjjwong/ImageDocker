@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "notification_16px.png",
+      "filename" : "alert_24px.png",
       "idiom" : "universal",
       "scale" : "1x"
     },

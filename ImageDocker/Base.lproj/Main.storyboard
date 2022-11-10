@@ -223,12 +223,12 @@
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="gVf-na-PZy">
                                 <rect key="frame" x="6" y="905" width="1909" height="50"/>
                                 <subviews>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wQ3-4F-bW7">
-                                        <rect key="frame" x="1684" y="21" width="70" height="19"/>
+                                    <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="wQ3-4F-bW7">
+                                        <rect key="frame" x="1679" y="24" width="75" height="16"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="70" id="Lk7-f6-m05"/>
                                         </constraints>
-                                        <popUpButtonCell key="cell" type="roundRect" title="Faces" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="noArrow" selectedItem="Cjw-tm-gEJ" id="pos-94-t0j">
+                                        <popUpButtonCell key="cell" type="roundRect" title="Faces" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" arrowPosition="noArrow" selectedItem="Cjw-tm-gEJ" id="pos-94-t0j">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="cellTitle"/>
                                             <menu key="menu" id="Ago-NQ-F0j">
@@ -238,12 +238,12 @@
                                             </menu>
                                         </popUpButtonCell>
                                     </popUpButton>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kCb-sM-PKJ">
-                                        <rect key="frame" x="1607" y="21" width="72" height="19"/>
+                                    <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="kCb-sM-PKJ">
+                                        <rect key="frame" x="1602" y="24" width="77" height="16"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="72" id="czr-e9-fZe"/>
                                         </constraints>
-                                        <popUpButtonCell key="cell" type="roundRect" title="Export" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="noArrow" selectedItem="uGb-fx-HPZ" id="agT-XF-MJ8">
+                                        <popUpButtonCell key="cell" type="roundRect" title="Export" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" arrowPosition="noArrow" selectedItem="uGb-fx-HPZ" id="agT-XF-MJ8">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="cellTitle"/>
                                             <menu key="menu" id="itw-fF-Htw">
@@ -254,13 +254,13 @@
                                         </popUpButtonCell>
                                     </popUpButton>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zJa-km-Rrl">
-                                        <rect key="frame" x="5" y="21" width="105" height="19"/>
+                                        <rect key="frame" x="4" y="18" width="107" height="23"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="105" id="5yR-cB-FY9"/>
                                         </constraints>
-                                        <buttonCell key="cell" type="roundRect" title="Memories" bezelStyle="roundedRect" image="NSSlideshowTemplate" imagePosition="left" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oYI-I8-d8j">
+                                        <buttonCell key="cell" type="roundTextured" title="Memories" bezelStyle="texturedRounded" image="NSSlideshowTemplate" imagePosition="left" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oYI-I8-d8j">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="cellTitle"/>
+                                            <font key="font" metaFont="system"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="onMemoriesClicked:" target="XfG-lQ-9wD" id="aqf-Sb-bT6"/>
@@ -281,6 +281,41 @@
                                             </menu>
                                         </popUpButtonCell>
                                     </popUpButton>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="csF-Eh-wOF">
+                                        <rect key="frame" x="114" y="18" width="112" height="23"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="110" id="Eea-sW-tDh"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="roundTextured" title="Tasks" bezelStyle="texturedRounded" image="task" imagePosition="left" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="DRn-xF-xnG">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="textPaddingLeft">
+                                                    <real key="value" value="3"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="textPaddingTop">
+                                                    <real key="value" value="3"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="imagePaddingLeft">
+                                                    <real key="value" value="3"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="imagePaddingTop">
+                                                    <real key="value" value="3"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </buttonCell>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="horizontalPadding">
+                                                <real key="value" value="3"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="verticalPadding">
+                                                <real key="value" value="3"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="onTasksClicked:" target="XfG-lQ-9wD" id="cQk-qU-CXh"/>
+                                        </connections>
+                                    </button>
                                     <button verticalHuggingPriority="750" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SE2-Sb-Hue">
                                         <rect key="frame" x="365" y="1" width="950" height="15"/>
                                         <constraints>
@@ -322,40 +357,15 @@
                                             <action selector="onSearchAction:" target="XfG-lQ-9wD" id="Hnq-Wu-hyk"/>
                                         </connections>
                                     </tokenField>
-                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="csF-Eh-wOF">
-                                        <rect key="frame" x="115" y="21" width="110" height="19"/>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qGQ-TO-rn5">
+                                        <rect key="frame" x="229" y="18" width="107" height="23"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="110" id="Eea-sW-tDh"/>
+                                            <constraint firstAttribute="width" constant="105" id="O9f-uq-jU9"/>
                                         </constraints>
-                                        <buttonCell key="cell" type="roundRect" title="Tasks" bezelStyle="roundedRect" image="task" imagePosition="left" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="DRn-xF-xnG">
+                                        <buttonCell key="cell" type="roundTextured" title="Notification" bezelStyle="texturedRounded" image="notification" imagePosition="right" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="x7r-mX-Kkf">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="cellTitle"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="number" keyPath="textPaddingLeft">
-                                                    <real key="value" value="3"/>
-                                                </userDefinedRuntimeAttribute>
-                                                <userDefinedRuntimeAttribute type="number" keyPath="textPaddingTop">
-                                                    <real key="value" value="3"/>
-                                                </userDefinedRuntimeAttribute>
-                                                <userDefinedRuntimeAttribute type="number" keyPath="imagePaddingLeft">
-                                                    <real key="value" value="3"/>
-                                                </userDefinedRuntimeAttribute>
-                                                <userDefinedRuntimeAttribute type="number" keyPath="imagePaddingTop">
-                                                    <real key="value" value="3"/>
-                                                </userDefinedRuntimeAttribute>
-                                            </userDefinedRuntimeAttributes>
+                                            <font key="font" metaFont="system"/>
                                         </buttonCell>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="horizontalPadding">
-                                                <real key="value" value="3"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="verticalPadding">
-                                                <real key="value" value="3"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="onTasksClicked:" target="XfG-lQ-9wD" id="cQk-qU-CXh"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                                 <constraints>
@@ -371,9 +381,11 @@
                                     <constraint firstItem="SE2-Sb-Hue" firstAttribute="top" secondItem="2rl-sF-lP2" secondAttribute="bottom" constant="4" id="KEJ-O5-BXv"/>
                                     <constraint firstItem="wQ3-4F-bW7" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="N5J-8w-P2K"/>
                                     <constraint firstItem="wQ3-4F-bW7" firstAttribute="leading" secondItem="kCb-sM-PKJ" secondAttribute="trailing" constant="5" id="P03-Bp-TLY"/>
+                                    <constraint firstItem="qGQ-TO-rn5" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="WWL-Q9-QJm"/>
                                     <constraint firstItem="Bwo-eW-DeK" firstAttribute="leading" secondItem="wQ3-4F-bW7" secondAttribute="trailing" constant="3" id="ggt-Ju-SR2"/>
                                     <constraint firstItem="Bwo-eW-DeK" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="l7J-fy-SVL"/>
                                     <constraint firstAttribute="trailing" secondItem="1L2-wU-5mb" secondAttribute="trailing" constant="2" id="lY8-KH-lQ0"/>
+                                    <constraint firstItem="qGQ-TO-rn5" firstAttribute="leading" secondItem="csF-Eh-wOF" secondAttribute="trailing" constant="5" id="yQQ-9y-y8t"/>
                                     <constraint firstItem="1L2-wU-5mb" firstAttribute="leading" secondItem="Bwo-eW-DeK" secondAttribute="trailing" constant="2" id="yZ8-x9-dj8"/>
                                 </constraints>
                             </customView>
@@ -681,6 +693,7 @@
                         <outlet property="btnImageOptions" destination="Bwo-eW-DeK" id="1up-ml-dUH"/>
                         <outlet property="btnMemories" destination="zJa-km-Rrl" id="meg-5b-t0p"/>
                         <outlet property="btnNextPageCollection" destination="meR-zL-rAv" id="HX2-0B-aQR"/>
+                        <outlet property="btnNotification" destination="qGQ-TO-rn5" id="jh5-Fo-0Eb"/>
                         <outlet property="btnPreviousPageCollection" destination="IGx-sv-JYq" id="rRG-dS-OFu"/>
                         <outlet property="btnRefreshCollectionView" destination="DpT-Dg-Oeb" id="ze3-El-bMX"/>
                         <outlet property="btnTasks" destination="csF-Eh-wOF" id="6h3-Vs-dhx"/>
@@ -3255,6 +3268,7 @@ brew install ifuse</string>
         <image name="forward" width="17" height="16"/>
         <image name="hide" width="17" height="15"/>
         <image name="map" width="16" height="16"/>
+        <image name="notification" width="24" height="24"/>
         <image name="person" width="16" height="16"/>
         <image name="rotate_clockwise" width="16" height="16"/>
         <image name="rotate_counter_clockwise" width="16" height="16"/>
