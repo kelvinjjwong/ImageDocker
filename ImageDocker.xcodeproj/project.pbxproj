@@ -11,6 +11,7 @@
 		5C007848289FA2A300919826 /* Words+DateTimeModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C007847289FA2A300919826 /* Words+DateTimeModifier.swift */; };
 		5C00784A289FB70900919826 /* Words+NotesModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C007849289FB70900919826 /* Words+NotesModifier.swift */; };
 		5C00784C289FB72B00919826 /* Words+EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C00784B289FB72B00919826 /* Words+EventManager.swift */; };
+		5C15F8CF2965B86E0088C0CE /* LocalEnvironmentSetupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C15F8CE2965B86E0088C0CE /* LocalEnvironmentSetupController.swift */; };
 		5CB92EDB2912A9D600C5C42F /* Words+Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB92EDA2912A9D600C5C42F /* Words+Preferences.swift */; };
 		8E00BB8E2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E00BB8D2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift */; };
 		8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015120208F7D23009C2549 /* StackedImageViewController.swift */; };
@@ -374,6 +375,7 @@
 		5C007847289FA2A300919826 /* Words+DateTimeModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+DateTimeModifier.swift"; sourceTree = "<group>"; };
 		5C007849289FB70900919826 /* Words+NotesModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+NotesModifier.swift"; sourceTree = "<group>"; };
 		5C00784B289FB72B00919826 /* Words+EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+EventManager.swift"; sourceTree = "<group>"; };
+		5C15F8CE2965B86E0088C0CE /* LocalEnvironmentSetupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalEnvironmentSetupController.swift; sourceTree = "<group>"; };
 		5CB92EDA2912A9D600C5C42F /* Words+Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Preferences.swift"; sourceTree = "<group>"; };
 		5D91C952D851F04098CE50A9 /* Pods-ImageDocker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ImageDocker/Pods-ImageDocker.debug.xcconfig"; sourceTree = "<group>"; };
 		735F25C54C2D63CAD538E860 /* Pods-ImageDocker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.release.xcconfig"; path = "Pods/Target Support Files/Pods-ImageDocker/Pods-ImageDocker.release.xcconfig"; sourceTree = "<group>"; };
@@ -847,6 +849,7 @@
 				8EF8C55D265DBD910060D2E0 /* ImageLocationEditViewController.swift */,
 				8ED8333E27B7EA5800B31319 /* ExternalAPIController.swift */,
 				8ED8334027B9144B00B31319 /* DatabaseBackupController.swift */,
+				5C15F8CE2965B86E0088C0CE /* LocalEnvironmentSetupController.swift */,
 			);
 			path = ImageDocker;
 			sourceTree = "<group>";
@@ -2081,6 +2084,7 @@
 				8EC82EAB2121C5A200FC0899 /* AddLocalDirectoryViewController.swift in Sources */,
 				8E5D258025A2013900D531A7 /* TokenField.swift in Sources */,
 				8E4C38D72118291F0089502C /* TreeController+LibraryEntry.swift in Sources */,
+				5C15F8CF2965B86E0088C0CE /* LocalEnvironmentSetupController.swift in Sources */,
 				8EAC5F202144A60900E187E0 /* DeviceFolderViewController.swift in Sources */,
 				8EE1AB3D20D05E49001C75B0 /* EventListViewController.swift in Sources */,
 				8EB986B920B30C920075B081 /* CollectionViewItem.swift in Sources */,

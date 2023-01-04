@@ -25,6 +25,11 @@ extension Words {
         chs: "外部 API 配置"
     )
     
+    static let mainmenu_local_environment = Localize(
+        eng: "Local Environment Setup",
+        chs: "本地环境外挂配置"
+    )
+    
     static let mainmenu_quit = Localize(
         eng: "Backup Database and Quit ImageDocker",
         chs: "备份数据库并关闭 ImageDocker"

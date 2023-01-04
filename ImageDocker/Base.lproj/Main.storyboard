@@ -37,6 +37,12 @@
                                                 <segue destination="ld1-y7-yeS" kind="modal" id="M47-hv-Hqv"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Local Environment Setup" id="nO2-jt-GsO">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <segue destination="Cb1-tO-IZ5" kind="modal" id="WHX-VU-fTs"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="External API …" id="A2b-q1-Q5m">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
@@ -127,6 +133,19 @@
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1419" y="-322"/>
+        </scene>
+        <!--Local Environment Setup Controller-->
+        <scene sceneID="M7s-tY-UVq">
+            <objects>
+                <viewController id="Cb1-tO-IZ5" customClass="LocalEnvironmentSetupController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="QQL-K4-Tlc">
+                        <rect key="frame" x="0.0" y="0.0" width="750" height="666"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="x28-eX-hZp" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3153" y="-389"/>
         </scene>
         <!--ExternalAPI Controller-->
         <scene sceneID="7za-Oo-KdH">
