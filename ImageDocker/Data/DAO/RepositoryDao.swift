@@ -19,7 +19,7 @@ class RepositoryDao {
     }
     
     static var `default`:RepositoryDao {
-        let location = PreferencesController.databaseLocation()
+        let location = DatabaseBackupController.databaseLocation()
         if location == "local" {
             return RepositoryDao(RepositoryDaoGRDB())
         }else{

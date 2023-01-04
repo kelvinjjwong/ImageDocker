@@ -17,7 +17,7 @@ class ExportDao {
     }
     
     static var `default`:ExportDao {
-        let location = PreferencesController.databaseLocation()
+        let location = DatabaseBackupController.databaseLocation()
         if location == "local" {
             return ExportDao(ExportDaoGRDB())
         }else{

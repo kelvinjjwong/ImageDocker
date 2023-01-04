@@ -57,7 +57,7 @@ class ExportManager {
      */
     fileprivate func nonStop(profileId:String) -> Bool {
         
-        if PreferencesController.isSQLite() && self.suppressed {
+        if DatabaseBackupController.isSQLite() && self.suppressed {
             self.logger.log("ExportManager is suppressed.")
             TaskManager.exporting = false
             self.stopAllTasks()
