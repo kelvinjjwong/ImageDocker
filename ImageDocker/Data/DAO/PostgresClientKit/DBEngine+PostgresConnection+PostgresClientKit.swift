@@ -187,16 +187,35 @@ public final class PostgresConnection : ImageDBInterface {
         let pgdump_path = URL(fileURLWithPath: commandPath).appendingPathComponent("pg_dump").path
         let psql_path = URL(fileURLWithPath: commandPath).appendingPathComponent("psql").path
         
-        let cmd = "\(pgdump_path) -h \(srcHost) \(srcDatabase) | \(psql_path) -h \(destHost) \(destDatabase)"
+        let cmd = "\(pgdump_path) -h \(srcHost) -U \(srcUser) \"\(srcDatabase)\" | \(psql_path) -h \(destHost) -U \(destUser) \"\(destDatabase)\""
         self.logger.log(cmd)
+        let pipe = Pipe()
         let pgdump = Process("/bin/bash", ["-c", cmd])
+        pgdump.standardOutput = pipe
+        pgdump.standardError = pipe
         
         let startTime = Date()
         self.logger.log("doing pgdump clone")
         pgdump.launch()
         pgdump.waitUntilExit()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
+        let lines = string.components(separatedBy: "\n")
+        var errors:[String] = []
+        var hasError = false
+        for line in lines {
+            if line.contains("FATAL") {
+                hasError = true
+                errors.append(line)
+            }
+        }
         self.logger.timecost("end of pgdump clone", fromDate: startTime)
-        return (true, nil)
+        if !hasError {
+            return (true, nil)
+        }else{
+            return (false, fatalError(errors.joined(separator: "\n")))
+        }
     }
     
     func backupDatabase(commandPath:String, database:String, host:String, port:Int, user:String, backupPath:String, suffix:String = "-on-runtime") -> (String, Bool, Error?) {
