@@ -1280,7 +1280,7 @@ final class DatabaseBackupController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = Words.preference_dialog_title.word()
+        self.title = Words.database_backup_dialog_title.word()
         // Do any additional setup after loading the view.
         self.setupTabs()
         self.initDatabaseSection()
