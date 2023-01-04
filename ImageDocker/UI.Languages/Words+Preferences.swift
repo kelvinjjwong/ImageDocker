@@ -469,4 +469,11 @@ extension Words {
         eng: "Google Map",
         chs: "谷歌地图"
     )
+    
+    
+    
+    static let database_backup_dialog_title = Localize(
+        eng: "Database and Backup",
+        chs: "数据库配置和备份"
+    )
 }

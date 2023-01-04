@@ -16,12 +16,12 @@ extension Words {
     )
     
     static let mainmenu_database_and_backup = Localize(
-        eng: "Database & Backup ...",
+        eng: "Database & Backup",
         chs: "数据库配置和备份"
     )
     
     static let mainmenu_external_api = Localize(
-        eng: "External API ...",
+        eng: "External API",
         chs: "外部 API 配置"
     )
     
