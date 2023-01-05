@@ -480,7 +480,7 @@ brew install ifuse</string>
                                                                     <font key="font" metaFont="cellTitle"/>
                                                                 </buttonCell>
                                                                 <connections>
-                                                                    <action selector="onBaiduLinkClicked:" target="UOy-CF-cGN" id="Xkt-hQ-zNA"/>
+                                                                    <action selector="onBaiduLinkClicked:" target="q6N-YI-cAA" id="xKe-4I-yWL"/>
                                                                 </connections>
                                                             </button>
                                                         </subviews>
@@ -528,7 +528,7 @@ brew install ifuse</string>
                                                                     <font key="font" metaFont="cellTitle"/>
                                                                 </buttonCell>
                                                                 <connections>
-                                                                    <action selector="onGoogleLinkClicked:" target="UOy-CF-cGN" id="arv-gF-lB8"/>
+                                                                    <action selector="onGoogleLinkClicked:" target="q6N-YI-cAA" id="Z6k-pc-qST"/>
                                                                 </connections>
                                                             </button>
                                                         </subviews>
@@ -551,6 +551,9 @@ brew install ifuse</string>
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="onButtonApplyClick:" target="q6N-YI-cAA" id="2Fv-xg-kfG"/>
+                                </connections>
                             </button>
                         </subviews>
                         <constraints>
@@ -563,6 +566,17 @@ brew install ifuse</string>
                             <constraint firstItem="RUU-qL-6Sx" firstAttribute="leading" secondItem="WQ0-xS-7po" secondAttribute="leading" id="z57-wu-ISl"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="boxBaiduMap" destination="2s2-Eh-qXm" id="ACM-99-csg"/>
+                        <outlet property="boxGoogleMap" destination="7mv-bv-dIr" id="rG4-ab-InB"/>
+                        <outlet property="btnApply" destination="RxM-N4-T1g" id="dRg-mg-Vkd"/>
+                        <outlet property="lblBaiduMapPrompt" destination="CMW-We-d2H" id="g6V-aQ-kPI"/>
+                        <outlet property="lblGoogleMapPrompt" destination="l31-Vx-kcO" id="cQ2-Tu-pDY"/>
+                        <outlet property="tabs" destination="RUU-qL-6Sx" id="qUZ-Hv-MMN"/>
+                        <outlet property="txtBaiduAK" destination="Za6-3w-Qao" id="Lmw-bI-QcC"/>
+                        <outlet property="txtBaiduSK" destination="5af-1H-2qs" id="LAE-vL-Www"/>
+                        <outlet property="txtGoogleAPIKey" destination="kBG-lw-q0h" id="1uP-W5-ozv"/>
+                    </connections>
                 </viewController>
                 <customObject id="8kR-a0-4QH" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3134,7 +3148,7 @@ brew install ifuse</string>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="QeM-aP-zdF">
-                                                            <rect key="frame" x="11" y="1" width="31" height="17"/>
+                                                            <rect key="frame" x="11" y="1" width="32" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         </tableCellView>
                                                     </prototypeCellViews>
@@ -3152,7 +3166,7 @@ brew install ifuse</string>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="oKK-cu-PBz">
-                                                            <rect key="frame" x="45" y="1" width="79" height="17"/>
+                                                            <rect key="frame" x="46" y="1" width="79" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="pKU-BK-Kyl">
@@ -3224,7 +3238,7 @@ brew install ifuse</string>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="LZz-Pm-q22">
-                                                            <rect key="frame" x="201" y="1" width="124" height="17"/>
+                                                            <rect key="frame" x="201" y="1" width="125" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="WUz-tY-66q">
@@ -3260,7 +3274,7 @@ brew install ifuse</string>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="eKx-mS-IPG">
-                                                            <rect key="frame" x="328" y="1" width="1004" height="17"/>
+                                                            <rect key="frame" x="329" y="1" width="1004" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="bZs-sX-o57">

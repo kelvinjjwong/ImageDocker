@@ -450,6 +450,11 @@ extension Words {
         chs: "人脸识别"
     )
     
+    static let preference_tab_face_recognition_api = Localize(
+        eng: "Face Recognition API",
+        chs: "人脸识别 API"
+    )
+    
     static let preference_tab_geo_location_api = Localize(
         eng: "Geo Location API",
         chs: "地理位置 API"
