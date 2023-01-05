@@ -146,7 +146,7 @@
                                 <rect key="frame" x="-7" y="-10" width="764" height="672"/>
                                 <font key="font" metaFont="system"/>
                                 <tabViewItems>
-                                    <tabViewItem label="iOS Mount" identifier="" id="BAW-h3-Dfg">
+                                    <tabViewItem label="Mobile Device" identifier="" id="BAW-h3-Dfg">
                                         <view key="view" id="0ka-nq-d67">
                                             <rect key="frame" x="10" y="33" width="744" height="626"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -343,17 +343,8 @@ brew install ifuse</string>
                                                         <rect key="frame" x="4" y="5" width="691" height="105"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jqK-Zk-9k0">
-                                                                <rect key="frame" x="18" y="8" width="659" height="41"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" selectable="YES" title="If you do not want to upload image(s) back to their original location of original phone, images would be uploaded to this path." id="KR3-F3-85m">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
                                                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BFr-1B-qMw">
-                                                                <rect key="frame" x="225" y="63" width="413" height="22"/>
+                                                                <rect key="frame" x="116" y="63" width="522" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="DcA-2D-ZiD">
                                                                     <font key="font" metaFont="system"/>
@@ -362,9 +353,9 @@ brew install ifuse</string>
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gOr-WF-zoy">
-                                                                <rect key="frame" x="18" y="65" width="200" height="17"/>
+                                                                <rect key="frame" x="18" y="65" width="99" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Default Path for Image Upload" id="uDk-sa-eve">
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Path of ADB" id="uDk-sa-eve">
                                                                     <font key="font" metaFont="system"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -1311,7 +1302,7 @@ brew install ifuse</string>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="Y2y-q8-QWa">
                                                                     <rect key="frame" x="0.0" y="0.0" width="230" height="155"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="42" rowSizeStyle="automatic" headerView="s4r-tD-ASl" viewBased="YES" id="MhU-ve-gho">
                                                                             <rect key="frame" x="0.0" y="0.0" width="269" height="127"/>
@@ -1755,7 +1746,7 @@ brew install ifuse</string>
                                             <action selector="onTogglePreviewInnerPanel:" target="XfG-lQ-9wD" id="pho-lS-zSE"/>
                                         </connections>
                                     </button>
-                                    <tokenField verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2rl-sF-lP2">
+                                    <tokenField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2rl-sF-lP2">
                                         <rect key="frame" x="362" y="20" width="950" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="950" id="BF8-q3-VsA"/>
@@ -1794,6 +1785,7 @@ brew install ifuse</string>
                                     <constraint firstItem="wQ3-4F-bW7" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="N5J-8w-P2K"/>
                                     <constraint firstItem="wQ3-4F-bW7" firstAttribute="leading" secondItem="kCb-sM-PKJ" secondAttribute="trailing" constant="5" id="P03-Bp-TLY"/>
                                     <constraint firstItem="qGQ-TO-rn5" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="WWL-Q9-QJm"/>
+                                    <constraint firstItem="2rl-sF-lP2" firstAttribute="leading" secondItem="qGQ-TO-rn5" secondAttribute="trailing" constant="27" id="fWv-bM-ru3"/>
                                     <constraint firstItem="Bwo-eW-DeK" firstAttribute="leading" secondItem="wQ3-4F-bW7" secondAttribute="trailing" constant="3" id="ggt-Ju-SR2"/>
                                     <constraint firstItem="Bwo-eW-DeK" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="l7J-fy-SVL"/>
                                     <constraint firstAttribute="trailing" secondItem="1L2-wU-5mb" secondAttribute="trailing" constant="2" id="lY8-KH-lQ0"/>
@@ -3031,11 +3023,11 @@ brew install ifuse</string>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="oKK-cu-PBz">
-                                                            <rect key="frame" x="45" y="1" width="79" height="17"/>
+                                                            <rect key="frame" x="45" y="1" width="80" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="pKU-BK-Kyl">
-                                                                    <rect key="frame" x="0.0" y="1" width="79" height="16"/>
+                                                                    <rect key="frame" x="0.0" y="1" width="80" height="16"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="AO3-Oz-ers">
                                                                         <font key="font" metaFont="system"/>
                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -3107,7 +3099,7 @@ brew install ifuse</string>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="WUz-tY-66q">
-                                                                    <rect key="frame" x="0.0" y="1" width="125" height="16"/>
+                                                                    <rect key="frame" x="0.0" y="1" width="124" height="16"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="bcs-Y7-Fot">
                                                                         <font key="font" metaFont="system"/>
                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -3139,11 +3131,11 @@ brew install ifuse</string>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="eKx-mS-IPG">
-                                                            <rect key="frame" x="328" y="1" width="1004" height="17"/>
+                                                            <rect key="frame" x="328" y="1" width="1005" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="bZs-sX-o57">
-                                                                    <rect key="frame" x="0.0" y="1" width="1004" height="16"/>
+                                                                    <rect key="frame" x="0.0" y="1" width="1005" height="16"/>
                                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Table View Cell" id="Iiv-9x-zvf">
                                                                         <font key="font" metaFont="system"/>
                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
