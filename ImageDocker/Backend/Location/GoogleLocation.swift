@@ -15,7 +15,7 @@ class GoogleLocation {
     static let logger = ConsoleLogger(category: "GoogleLocation")
     
     fileprivate static func ak() -> String {
-        return PreferencesController.googleAPIKey()
+        return ExternalAPIController.googleAPIKey()
     }
     
     

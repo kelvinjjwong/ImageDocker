@@ -110,9 +110,9 @@ final class ExternalAPIController: NSViewController {
         self.lblBaiduMapPrompt.stringValue = Words.preference_tab_geo_location_api_prompt.word()
         self.lblGoogleMapPrompt.stringValue = Words.preference_tab_geo_location_api_prompt.word()
         
-        txtBaiduAK.stringValue = PreferencesController.baiduAK()
-        txtBaiduSK.stringValue = PreferencesController.baiduSK()
-        txtGoogleAPIKey.stringValue = PreferencesController.googleAPIKey()
+        txtBaiduAK.stringValue = ExternalAPIController.baiduAK()
+        txtBaiduSK.stringValue = ExternalAPIController.baiduSK()
+        txtGoogleAPIKey.stringValue = ExternalAPIController.googleAPIKey()
     }
     
     // MARK: VIEW INIT

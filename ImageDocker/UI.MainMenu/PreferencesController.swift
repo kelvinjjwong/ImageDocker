@@ -20,11 +20,6 @@ final class PreferencesController: NSViewController {
     
     fileprivate static let languageKey = "LanguageKey"
     
-    // MARK: GEOLOCATION API
-    fileprivate static let baiduAKKey = "BaiduAKKey"
-    fileprivate static let baiduSKKey = "BaiduSKKey"
-    fileprivate static let googleAKKey = "GoogleAPIKey"
-    
     // MARK: MOBILE DEVICE
     fileprivate static let exportToAndroidPathKey = "ExportToAndroidPath"
     fileprivate static let iosMountPointKey = "IOSMountPointKey"
@@ -51,17 +46,6 @@ final class PreferencesController: NSViewController {
     // MARK: GENERAL
     @IBOutlet weak var lblLanguage: NSTextField!
     @IBOutlet weak var popupLanguage: NSPopUpButton!
-    
-    
-    // MARK: GEOLOCATION API
-    @IBOutlet weak var txtBaiduAK: NSTextField!
-    @IBOutlet weak var txtBaiduSK: NSTextField!
-    @IBOutlet weak var txtGoogleAPIKey: NSTextField!
-    
-    @IBOutlet weak var boxBaiduMap: NSBox!
-    @IBOutlet weak var boxGoogleMap: NSBox!
-    @IBOutlet weak var lblBaiduMapPrompt: NSTextField!
-    @IBOutlet weak var lblGoogleMapPrompt: NSTextField!
     
     // MARK: MOBILE DEVICE
     @IBOutlet weak var txtIOSMountPoint: NSTextField!
@@ -225,22 +209,6 @@ final class PreferencesController: NSViewController {
 //        }
 //    }
     
-    // MARK: - ACTION FOR GEOLOCATION API SECTION
-    
-    @IBAction func onBaiduLinkClicked(_ sender: Any) {
-        if let url = URL(string: "http://lbsyun.baidu.com"),
-            NSWorkspace.shared.open(url) {
-            self.logger.log("triggered link \(url)")
-        }
-    }
-    
-    @IBAction func onGoogleLinkClicked(_ sender: Any) {
-        if let url = URL(string: "https://developers.google.com/maps/documentation/maps-static/intro"),
-            NSWorkspace.shared.open(url) {
-            self.logger.log("triggered link \(url)")
-        }
-    }
-    
     // MARK: - ACTION FOR MOBILE DEVICE SECTION
     
     @IBAction func onBrowseIOSMountPointClicked(_ sender: Any) {
@@ -351,27 +319,6 @@ final class PreferencesController: NSViewController {
 //        return txt
 //    }
     
-    // MARK: GEOLOCATION API
-    
-    
-    class func baiduAK() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: baiduAKKey) else {return ""}
-        return txt
-    }
-    
-    class func baiduSK() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: baiduSKKey) else {return ""}
-        return txt
-    }
-    
-    class func googleAPIKey() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: googleAKKey) else {return ""}
-        return txt
-    }
-    
     // MARK: IPHONE
     
     class func iosDeviceMountPoint() -> String {
@@ -446,16 +393,6 @@ final class PreferencesController: NSViewController {
         }
     }
     
-    func saveGeolocationAPISection(_ defaults:UserDefaults) {
-        
-        defaults.set(txtGoogleAPIKey.stringValue,
-                     forKey: PreferencesController.googleAKKey)
-        defaults.set(txtBaiduAK.stringValue,
-                     forKey: PreferencesController.baiduAKKey)
-        defaults.set(txtBaiduSK.stringValue,
-                     forKey: PreferencesController.baiduSKKey)
-    }
-    
 //    func saveFaceRecognitionSection(_ defaults:UserDefaults) {
 //        defaults.set(txtHomebrewPath.stringValue,
 //                     forKey: PreferencesController.homebrewKey)
@@ -500,19 +437,11 @@ final class PreferencesController: NSViewController {
         self.saveGeneralSection(defaults)
         self.savePerformanceSection(defaults)
         self.saveMobileSection(defaults)
-//        self.saveFaceRecognitionSection(defaults)
-        self.saveGeolocationAPISection(defaults)
     }
     
     // MARK: - HEALTH CHECK
     
     class func healthCheck() {
-        
-        if baiduAK() == "" || baiduSK() == "" {
-            // TODO: notify user when geolocation API missing
-            //Alert.invalidBaiduMapAK()
-            return
-        }
     }
     
     class func saveRepositoryVolumes(_ volumes:[String]) {
@@ -582,17 +511,6 @@ final class PreferencesController: NSViewController {
 //        self.lblComponentsStatus.stringValue = result
 //    }
     
-    func initGeolocationAPISection() {
-        self.boxBaiduMap.title = Words.preference_tab_geo_location_api_box_baidu.word()
-        self.boxGoogleMap.title = Words.preference_tab_geo_location_api_box_google.word()
-        self.lblBaiduMapPrompt.stringValue = Words.preference_tab_geo_location_api_prompt.word()
-        self.lblGoogleMapPrompt.stringValue = Words.preference_tab_geo_location_api_prompt.word()
-        
-        txtBaiduAK.stringValue = PreferencesController.baiduAK()
-        txtBaiduSK.stringValue = PreferencesController.baiduSK()
-        txtGoogleAPIKey.stringValue = PreferencesController.googleAPIKey()
-    }
-    
     func initGeneral() {
         self.lblLanguage.stringValue = Words.preference_tab_general_ui_language.word()
         let language = PreferencesController.language()
@@ -633,8 +551,6 @@ final class PreferencesController: NSViewController {
         self.initGeneral()
         self.initPerformanceSection()
         self.initMobileSection()
-//        self.initFaceRecognitionSection()
-        self.initGeolocationAPISection()
         
     }
     
@@ -644,8 +560,6 @@ final class PreferencesController: NSViewController {
         self.tabs.tabViewItem(at: 0).label = Words.preference_tab_general.word()
         self.tabs.tabViewItem(at: 1).label = Words.preference_tab_performance.word()
         self.tabs.tabViewItem(at: 2).label = Words.preference_tab_mobile.word()
-        self.tabs.tabViewItem(at: 3).label = Words.preference_tab_face_recognition.word()
-        self.tabs.tabViewItem(at: 4).label = Words.preference_tab_geo_location_api.word()
     }
     
     fileprivate func setupMemorySlider() {
@@ -677,10 +591,5 @@ final class PreferencesController: NSViewController {
             // Update the view, if already loaded.
         }
     }
-    
-    
-    var backupArchives:[(String, String, String, String)] = []
-    
-    var shouldLoadPostgresBackupArchives = true
 }
 
