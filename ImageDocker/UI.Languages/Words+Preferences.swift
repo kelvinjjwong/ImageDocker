@@ -355,6 +355,11 @@ extension Words {
         chs: "从局域网的 PostgreSQL 数据库 [%s] 复制完成."
     )
     
+    static let preference_tab_found_path = Localize(
+        eng: "Located: Found %s at %s",
+        chs: "找到了: %s 在 %s"
+    )
+    
     static let preference_tab_missing_error = Localize(
         eng: "ERROR: Missing %s",
         chs: "出错了: 找不到 %s"
@@ -410,6 +415,16 @@ extension Words {
         chs: "移动设备"
     )
     
+    static let preference_tab_mobile_device_connection = Localize(
+        eng: "Mobile Device Connection",
+        chs: "移动设备连接"
+    )
+    
+    static let preference_tab_exiftool = Localize(
+        eng: "ExifTool",
+        chs: "ExifTool"
+    )
+    
     static let preference_tab_mobile_box_android = Localize(
         eng: "Android Device",
         chs: "安卓设备"
@@ -442,7 +457,7 @@ extension Words {
     
     static let preference_tab_mobile_box_ios_locate = Localize(
         eng: "Locate",
-        chs: "打开文件夹"
+        chs: "查找路径"
     )
     
     static let preference_tab_face_recognition = Localize(
