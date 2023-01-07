@@ -407,12 +407,12 @@ extension Words {
     
     static let preference_tab_backup_failed = Localize(
         eng: "Backup failed: %s",
-        chs: "备份了出错了: %s"
+        chs: "备份出错了: %s"
     )
     
     static let preference_tab_mobile = Localize(
-        eng: "Mobile Device",
-        chs: "移动设备"
+        eng: "Mobile Device Transfer",
+        chs: "移动设备传输"
     )
     
     static let preference_tab_mobile_device_connection = Localize(

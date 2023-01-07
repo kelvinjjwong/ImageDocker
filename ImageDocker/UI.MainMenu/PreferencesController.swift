@@ -22,10 +22,6 @@ final class PreferencesController: NSViewController {
     
     // MARK: MOBILE DEVICE
     fileprivate static let exportToAndroidPathKey = "ExportToAndroidPath"
-    fileprivate static let iosMountPointKey = "IOSMountPointKey"
-    fileprivate static let ifuseKey = "ifuseKey"
-    fileprivate static let ideviceidKey = "ideviceidKey"
-    fileprivate static let ideviceinfoKey = "ideviceinfoKey"
     
     // MARK: FACE RECOGNITION
 //    fileprivate static let homebrewKey = "HomebrewKey"
@@ -48,27 +44,11 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var popupLanguage: NSPopUpButton!
     
     // MARK: MOBILE DEVICE
-    @IBOutlet weak var txtIOSMountPoint: NSTextField!
     @IBOutlet weak var txtExportToAndroidPath: NSTextField!
-    @IBOutlet weak var txtHomebrewPath: NSTextField!
-    @IBOutlet weak var txtIfusePath: NSTextField!
-    @IBOutlet weak var txtIdeviceIdPath: NSTextField!
-    @IBOutlet weak var txtIdeviceInfoPath: NSTextField!
-    @IBOutlet weak var lblIOSMountPointMessage: NSTextField!
-    @IBOutlet weak var lblIfuseMessage: NSTextField!
-    @IBOutlet weak var lblIdeviceIdMessage: NSTextField!
-    @IBOutlet weak var lblIdeviceInfoMessage: NSTextField!
     
     @IBOutlet weak var boxAndroid: NSBox!
-    @IBOutlet weak var boxIOS: NSBox!
     @IBOutlet weak var lblAndroidPathForUpload: NSTextField!
     @IBOutlet weak var lblAndroidPromptForUpload: NSTextField!
-    @IBOutlet weak var lblIOSMountPoint: NSTextField!
-    @IBOutlet weak var lblIOSInstallGuideline: NSTextField!
-    @IBOutlet weak var btnBrowseIOSMountPoint: NSButton!
-    @IBOutlet weak var btnLocateIfusePath: NSButton!
-    @IBOutlet weak var btnLocateIdeviceIdPath: NSButton!
-    @IBOutlet weak var btnLocateIdeviceInfoPath: NSButton!
     
     
     // MARK: FACE RECOGNITION
@@ -209,58 +189,6 @@ final class PreferencesController: NSViewController {
 //        }
 //    }
     
-    // MARK: - ACTION FOR MOBILE DEVICE SECTION
-    
-    @IBAction func onBrowseIOSMountPointClicked(_ sender: Any) {
-        let openPanel = NSOpenPanel()
-        openPanel.canChooseDirectories  = true
-        openPanel.canChooseFiles        = false
-        openPanel.showsHiddenFiles      = false
-        openPanel.canCreateDirectories  = true
-        
-        openPanel.beginSheetModal(for: self.view.window!) { (response) -> Void in
-            guard response == NSApplication.ModalResponse.OK else {return}
-            if let path = openPanel.url?.path {
-                DispatchQueue.main.async {
-                    self.txtIOSMountPoint.stringValue = path
-                }
-            }
-        }
-    }
-    
-    @IBAction func onLocateIfuseClicked(_ sender: NSButton) {
-        let path = ExecutionEnvironment.default.locate("ifuse")
-        if path != "" {
-            self.txtIfusePath.stringValue = path
-            self.lblIfuseMessage.stringValue = ""
-        }else{
-            self.txtIfusePath.stringValue = ""
-            self.lblIfuseMessage.stringValue = Words.preference_tab_missing_error.fill(arguments: "ifuse")
-        }
-    }
-    
-    @IBAction func onLocateIdeviceIdClicked(_ sender: NSButton) {
-        let path = ExecutionEnvironment.default.locate("idevice_id")
-        if path != "" {
-            self.txtIdeviceIdPath.stringValue = path
-            self.lblIdeviceIdMessage.stringValue = ""
-        }else{
-            self.txtIdeviceIdPath.stringValue = ""
-            self.lblIdeviceIdMessage.stringValue = Words.preference_tab_missing_error.fill(arguments: "imobiledevice")
-        }
-    }
-    
-    @IBAction func onLocateIdeviceInfoClicked(_ sender: NSButton) {
-        let path = ExecutionEnvironment.default.locate("ideviceinfo")
-        if path != "" {
-            self.txtIdeviceInfoPath.stringValue = path
-            self.lblIdeviceInfoMessage.stringValue = ""
-        }else{
-            self.txtIdeviceInfoPath.stringValue = ""
-            self.lblIdeviceInfoMessage.stringValue = Words.preference_tab_missing_error.fill(arguments: "imobiledevice")
-        }
-    }
-    
     // MARK: - READ SETTINGS
     
     // MARK: GENERAL
@@ -319,52 +247,6 @@ final class PreferencesController: NSViewController {
 //        return txt
 //    }
     
-    // MARK: IPHONE
-    
-    class func iosDeviceMountPoint() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: iosMountPointKey) else {
-            var isDir : ObjCBool = false
-            if FileManager.default.fileExists(atPath: "/MacStorage/mount/iPhone/", isDirectory: &isDir) {
-                if isDir.boolValue {
-                    return "/MacStorage/mount/iPhone/"
-                }else{
-                    return ""
-                }
-            }else{
-                return ""
-            }
-        }
-        var isDir : ObjCBool = false
-        if FileManager.default.fileExists(atPath: txt, isDirectory: &isDir) {
-            if isDir.boolValue {
-                return txt
-            }else{
-                return ""
-            }
-        }else{
-            return ""
-        }
-    }
-    
-    class func ideviceidPath() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: ideviceidKey) else {return ""}
-        return txt
-    }
-    
-    class func ideviceinfoPath() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: ideviceinfoKey) else {return ""}
-        return txt
-    }
-    
-    class func ifusePath() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: ifuseKey) else {return ""}
-        return txt
-    }
-    
     // MARK: ANDROID
     
     class func exportToAndroidDirectory() -> String {
@@ -405,15 +287,6 @@ final class PreferencesController: NSViewController {
 //    }
     
     func saveMobileSection(_ defaults:UserDefaults) {
-        
-        defaults.set(txtIOSMountPoint.stringValue,
-                     forKey: PreferencesController.iosMountPointKey)
-        defaults.set(txtIfusePath.stringValue,
-                     forKey: PreferencesController.ifuseKey)
-        defaults.set(txtIdeviceIdPath.stringValue,
-                     forKey: PreferencesController.ideviceidKey)
-        defaults.set(txtIdeviceInfoPath.stringValue,
-                     forKey: PreferencesController.ideviceinfoKey)
         defaults.set(txtExportToAndroidPath.stringValue,
                      forKey: PreferencesController.exportToAndroidPathKey)
     }
@@ -461,20 +334,9 @@ final class PreferencesController: NSViewController {
     
     func initMobileSection() {
         self.boxAndroid.title = Words.preference_tab_mobile_box_android.word()
-        self.boxIOS.title = Words.preference_tab_mobile_box_ios.word()
         self.lblAndroidPathForUpload.stringValue = Words.preference_tab_mobile_box_android_path.word()
         self.lblAndroidPromptForUpload.stringValue = Words.preference_tab_mobile_box_android_prompt.word()
-        self.lblIOSMountPoint.stringValue = Words.preference_tab_mobile_box_ios_mount_point.word()
-        self.btnBrowseIOSMountPoint.title = Words.preference_tab_mobile_box_ios_browse.word()
-        self.btnLocateIfusePath.title = Words.preference_tab_mobile_box_ios_locate.word()
-        self.btnLocateIdeviceIdPath.title = Words.preference_tab_mobile_box_ios_locate.word()
-        self.btnLocateIdeviceInfoPath.title = Words.preference_tab_mobile_box_ios_locate.word()
         
-        
-        txtIOSMountPoint.stringValue = PreferencesController.iosDeviceMountPoint()
-        txtIfusePath.stringValue = PreferencesController.ifusePath()
-        txtIdeviceIdPath.stringValue = PreferencesController.ideviceidPath()
-        txtIdeviceInfoPath.stringValue = PreferencesController.ideviceinfoPath()
         txtExportToAndroidPath.stringValue = PreferencesController.exportToAndroidDirectory()
     }
     

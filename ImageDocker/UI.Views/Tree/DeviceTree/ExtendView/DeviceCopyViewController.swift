@@ -273,7 +273,7 @@ class DeviceCopyViewController: NSViewController {
                 
                 
             }else if device.type == .iPhone {
-                if IPHONE.bridge.mounted(path: PreferencesController.iosDeviceMountPoint()) {
+                if IPHONE.bridge.mounted(path: LocalEnvironmentSetupController.iosDeviceMountPoint()) {
                     self.btnMount.title = Words.device_unmount.word()
                     self.paths = DeviceCopyDestination.from(deviceId: device.deviceId, deviceType: .iPhone)
                     self.emptyFileLists(paths: paths)
@@ -423,7 +423,7 @@ class DeviceCopyViewController: NSViewController {
 //                self.logger.log("NOT EXISTS PATH ON DEVICE \(path)")
             }
         }else{
-            files = IPHONE.bridge.files(mountPoint: PreferencesController.iosDeviceMountPoint(), in: path)
+            files = IPHONE.bridge.files(mountPoint: LocalEnvironmentSetupController.iosDeviceMountPoint(), in: path)
         }
         guard files.count > 0 else {
 //            self.logger.log("NO FILE FOUND in \(path)")
@@ -623,7 +623,7 @@ class DeviceCopyViewController: NSViewController {
 //        self.logger.log(self.device)
         if self.device.type == .iPhone {
 //            self.logger.log(self.btnMount.title)
-            let mountpoint = PreferencesController.iosDeviceMountPoint()
+            let mountpoint = LocalEnvironmentSetupController.iosDeviceMountPoint()
             if self.btnMount.title == Words.device_mount.word() {
 //                self.logger.log("INVOKE MOUNT")
                 IPHONE.bridge.unmount(path: mountpoint)
@@ -1146,7 +1146,7 @@ class DeviceCopyViewController: NSViewController {
                                 }
                             }
                         }else if self.device.type == .iPhone {
-                            if IPHONE.bridge.pull(mountPoint: PreferencesController.iosDeviceMountPoint(), sourcePath:path.sourcePath, from: file.path, to: destinationPathForFile) {
+                            if IPHONE.bridge.pull(mountPoint: LocalEnvironmentSetupController.iosDeviceMountPoint(), sourcePath:path.sourcePath, from: file.path, to: destinationPathForFile) {
 //                                self.logger.log("Copied \(file.path)")
                                 if file.deviceFile != nil {
                                     deviceFile.importToPath = destinationPathForFile

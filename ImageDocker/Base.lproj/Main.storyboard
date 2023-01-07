@@ -2446,191 +2446,6 @@ brew install -v --HEAD --build-from-source ideviceinstaller</string>
                                             <rect key="frame" x="10" y="33" width="744" height="566"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <box fixedFrame="YES" title="iOS Device" translatesAutoresizingMaskIntoConstraints="NO" id="B7a-R9-AeF">
-                                                    <rect key="frame" x="23" y="127" width="699" height="269"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <view key="contentView" id="DjH-St-qKB">
-                                                        <rect key="frame" x="4" y="5" width="691" height="249"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                        <subviews>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tpu-6W-qRX">
-                                                                <rect key="frame" x="20" y="171" width="34" height="17"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="ifuse" id="tB4-B6-gRB">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ggs-Yj-dLL">
-                                                                <rect key="frame" x="114" y="169" width="220" height="22"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="6xE-Wq-BgK">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rTV-lC-bbi">
-                                                                <rect key="frame" x="344" y="159" width="81" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Locate" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2xM-dX-Qfv">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onLocateIfuseClicked:" target="UOy-CF-cGN" id="RnC-tu-QbS"/>
-                                                                </connections>
-                                                            </button>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a0E-q9-O2H">
-                                                                <rect key="frame" x="20" y="212" width="78" height="17"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Mount Point" id="eEa-85-4Je">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WSf-vZ-6cw">
-                                                                <rect key="frame" x="116" y="207" width="218" height="22"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="KEY-5N-w6l">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MV6-VK-LRl">
-                                                                <rect key="frame" x="113" y="8" width="564" height="51"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" selectable="YES" id="Ogm-dg-cCr">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <string key="title">How to install:
-brew install -v --devel --fresh automake autoconf libtool wget libimobiledevice
-brew install -v --HEAD --fresh --build-from-source ideviceinstaller</string>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QFb-3D-Dip">
-                                                                <rect key="frame" x="116" y="123" width="561" height="44"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" selectable="YES" id="fS1-3a-eh7">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <string key="title">How to install: 
-brew install ifuse</string>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JTi-JU-eID">
-                                                                <rect key="frame" x="19" y="95" width="64" height="17"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="idevice_id" id="RCs-zg-qU3">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rwS-rZ-hk4">
-                                                                <rect key="frame" x="19" y="64" width="70" height="17"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="ideviceinfo" id="vXg-CV-BkL">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LIl-72-Jz9">
-                                                                <rect key="frame" x="115" y="93" width="219" height="22"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="3bq-vE-gm9">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fte-ni-XRm">
-                                                                <rect key="frame" x="115" y="62" width="219" height="22"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="ZSS-KA-f72">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FB6-gk-W32">
-                                                                <rect key="frame" x="344" y="84" width="81" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Locate" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="enb-QP-mrK">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onLocateIdeviceIdClicked:" target="UOy-CF-cGN" id="XAE-Rs-SEs"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f2c-tz-Wnj">
-                                                                <rect key="frame" x="344" y="54" width="81" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Locate" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="MBS-UZ-iSz">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onLocateIdeviceInfoClicked:" target="UOy-CF-cGN" id="ZKm-nn-y3D"/>
-                                                                </connections>
-                                                            </button>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hn7-Vf-Mhz">
-                                                                <rect key="frame" x="427" y="169" width="250" height="17"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" id="LyE-z3-lJi">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4iT-vh-aLf">
-                                                                <rect key="frame" x="429" y="95" width="248" height="17"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" id="VKS-FE-7hE">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rml-oG-jEK">
-                                                                <rect key="frame" x="431" y="65" width="246" height="17"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" id="CfP-hb-Ms8">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vjg-3k-DHa">
-                                                                <rect key="frame" x="429" y="212" width="248" height="17"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" id="F30-hC-Go1">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U1d-Oi-Sle">
-                                                                <rect key="frame" x="342" y="200" width="85" height="32"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="push" title="Browse" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="QCN-yu-rxl">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="onBrowseIOSMountPointClicked:" target="UOy-CF-cGN" id="gsF-vz-Qws"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                    </view>
-                                                </box>
                                                 <box fixedFrame="YES" title="Android Device" translatesAutoresizingMaskIntoConstraints="NO" id="XZN-Cv-RAI">
                                                     <rect key="frame" x="23" y="422" width="699" height="125"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2685,22 +2500,11 @@ brew install ifuse</string>
                     </view>
                     <connections>
                         <outlet property="boxAndroid" destination="XZN-Cv-RAI" id="kSR-xp-jeb"/>
-                        <outlet property="boxIOS" destination="B7a-R9-AeF" id="SYZ-9q-knE"/>
                         <outlet property="boxMemoryLimit" destination="vkS-WK-XSD" id="FLG-md-ugE"/>
                         <outlet property="boxPagination" destination="CjS-97-1Ra" id="naf-0N-553"/>
                         <outlet property="btnApply" destination="m5h-vp-VBe" id="M0j-7o-2P9"/>
-                        <outlet property="btnBrowseIOSMountPoint" destination="U1d-Oi-Sle" id="hRr-wn-zBn"/>
-                        <outlet property="btnLocateIdeviceIdPath" destination="FB6-gk-W32" id="Gzl-7W-tDM"/>
-                        <outlet property="btnLocateIdeviceInfoPath" destination="f2c-tz-Wnj" id="p5j-e8-yWC"/>
-                        <outlet property="btnLocateIfusePath" destination="rTV-lC-bbi" id="ucs-Ab-JDA"/>
                         <outlet property="lblAndroidPathForUpload" destination="Tk4-9a-fy4" id="DOb-Cb-KjC"/>
                         <outlet property="lblAndroidPromptForUpload" destination="RDP-8P-qEj" id="dUb-Aj-g9r"/>
-                        <outlet property="lblIOSInstallGuideline" destination="MV6-VK-LRl" id="RfL-zm-Ve1"/>
-                        <outlet property="lblIOSMountPoint" destination="a0E-q9-O2H" id="bvI-tC-EZT"/>
-                        <outlet property="lblIOSMountPointMessage" destination="vjg-3k-DHa" id="F0s-CY-dSK"/>
-                        <outlet property="lblIdeviceIdMessage" destination="4iT-vh-aLf" id="kJA-98-5qk"/>
-                        <outlet property="lblIdeviceInfoMessage" destination="rml-oG-jEK" id="nkt-Qk-tNh"/>
-                        <outlet property="lblIfuseMessage" destination="hn7-Vf-Mhz" id="vka-0u-NiZ"/>
                         <outlet property="lblLanguage" destination="roF-Y6-XSq" id="8SU-8E-qMF"/>
                         <outlet property="lblMaxMemory" destination="Q4a-Zz-phj" id="ZNL-RY-DQg"/>
                         <outlet property="lblMemoryLimit" destination="vhm-wG-2fJ" id="yqh-aX-clz"/>
@@ -2716,10 +2520,6 @@ brew install ifuse</string>
                         <outlet property="popupLanguage" destination="jmU-hC-1k6" id="ciW-Td-NDX"/>
                         <outlet property="tabs" destination="2L9-ci-i6l" id="i7B-53-DnW"/>
                         <outlet property="txtExportToAndroidPath" destination="d2m-gP-3Vb" id="2lx-Rg-ovJ"/>
-                        <outlet property="txtIOSMountPoint" destination="WSf-vZ-6cw" id="pZU-xL-RHj"/>
-                        <outlet property="txtIdeviceIdPath" destination="LIl-72-Jz9" id="2DM-pt-S4s"/>
-                        <outlet property="txtIdeviceInfoPath" destination="fte-ni-XRm" id="gHU-ki-z0j"/>
-                        <outlet property="txtIfusePath" destination="Ggs-Yj-dLL" id="KYs-vD-Ifb"/>
                     </connections>
                 </viewController>
                 <customObject id="VgO-wr-HZa" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
