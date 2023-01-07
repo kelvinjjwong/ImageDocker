@@ -155,7 +155,7 @@ extension ViewController {
 //                                        self.logger.log("action on \(collection.path)")
                                         if let container = collection.relatedObject as? ImageContainer {
                                             self.selectedImageContainer = container
-                                            if PreferencesController.amountForPagination() > 0 && container.imageCount > PreferencesController.amountForPagination() {
+                                            if Setting.performance.amountForPagination() > 0 && container.imageCount > Setting.performance.amountForPagination() {
                                                 self.btnRefreshCollectionView.title = Words.pages.word()
                                                 if container.path != "/" {
                                                     self.loadCollectionByContainer(name:container.name, url:URL(fileURLWithPath: container.path), pageSize: 200, pageNumber: 1, subdirectories: true)

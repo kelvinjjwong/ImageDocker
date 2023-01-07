@@ -12,6 +12,7 @@
 		5C00784A289FB70900919826 /* Words+NotesModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C007849289FB70900919826 /* Words+NotesModifier.swift */; };
 		5C00784C289FB72B00919826 /* Words+EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C00784B289FB72B00919826 /* Words+EventManager.swift */; };
 		5C15F8CF2965B86E0088C0CE /* LocalEnvironmentSetupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C15F8CE2965B86E0088C0CE /* LocalEnvironmentSetupController.swift */; };
+		5C51173B29695F5B00F64CF6 /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C51173A29695F5B00F64CF6 /* Setting.swift */; };
 		5CB92EDB2912A9D600C5C42F /* Words+Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB92EDA2912A9D600C5C42F /* Words+Preferences.swift */; };
 		8E00BB8E2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E00BB8D2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift */; };
 		8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015120208F7D23009C2549 /* StackedImageViewController.swift */; };
@@ -376,6 +377,7 @@
 		5C007849289FB70900919826 /* Words+NotesModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+NotesModifier.swift"; sourceTree = "<group>"; };
 		5C00784B289FB72B00919826 /* Words+EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+EventManager.swift"; sourceTree = "<group>"; };
 		5C15F8CE2965B86E0088C0CE /* LocalEnvironmentSetupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalEnvironmentSetupController.swift; sourceTree = "<group>"; };
+		5C51173A29695F5B00F64CF6 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
 		5CB92EDA2912A9D600C5C42F /* Words+Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Preferences.swift"; sourceTree = "<group>"; };
 		5D91C952D851F04098CE50A9 /* Pods-ImageDocker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ImageDocker/Pods-ImageDocker.debug.xcconfig"; sourceTree = "<group>"; };
 		735F25C54C2D63CAD538E860 /* Pods-ImageDocker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.release.xcconfig"; path = "Pods/Target Support Files/Pods-ImageDocker/Pods-ImageDocker.release.xcconfig"; sourceTree = "<group>"; };
@@ -858,6 +860,7 @@
 				8EF8C559265DBD6F0060D2E0 /* ImagePreviewController.swift */,
 				8EF8C55B265DBD820060D2E0 /* ImageLocationViewController.swift */,
 				8EF8C55D265DBD910060D2E0 /* ImageLocationEditViewController.swift */,
+				5C51173A29695F5B00F64CF6 /* Setting.swift */,
 			);
 			path = ImageDocker;
 			sourceTree = "<group>";
@@ -1954,6 +1957,7 @@
 				8EBA759D23B5CD6F00548376 /* EventDao.swift in Sources */,
 				8EF3FEEA2423509E00AF83BB /* ImageDB.swift in Sources */,
 				8EF4CE5521D77BAB00C53AFF /* People.swift in Sources */,
+				5C51173B29695F5B00F64CF6 /* Setting.swift in Sources */,
 				8E4095FD25939A0900BF717B /* ExportProfilesViewController.swift in Sources */,
 				8E8D471222279AA80091E9C3 /* FaceCollectionViewItemsLoader.swift in Sources */,
 				8E15E73C23AC74DC0094240A /* TreeDataSource.swift in Sources */,

@@ -152,7 +152,7 @@ class MemoryReleasable {
     static let `default` = MemoryReleasable()
     
     func run(when condition:(() -> Bool), shouldStop: (() -> Bool), do closure:(() -> Void)) {
-        let limitRam = PreferencesController.peakMemory() * 1024
+        let limitRam = Setting.performance.peakMemory() * 1024
         var continousWorking = true
         var attempt = 0
         while(condition()) {

@@ -18,20 +18,11 @@ final class PreferencesController: NSViewController {
     // MARK: - KEYS
     fileprivate static let volumesKey = "VolumesKey"
     
-    fileprivate static let languageKey = "LanguageKey"
-    
-    // MARK: MOBILE DEVICE
-    fileprivate static let exportToAndroidPathKey = "ExportToAndroidPath"
-    
     // MARK: FACE RECOGNITION
 //    fileprivate static let homebrewKey = "HomebrewKey"
 //    fileprivate static let pythonKey = "PythonKey"
 //    fileprivate static let faceRecognitionModelKey = "FaceRecognitionModelKey"
 //    fileprivate static let alternativeFaceModelPathKey = "AlternativeFaceModelPathKey"
-    
-    // MARK: PERFORMANCE
-    fileprivate static let memoryPeakKey = "memoryPeakKey"
-    fileprivate static let amountForPaginationKey = "amountForPaginationKey"
     
     // MARK: - UI FIELDS
     @IBOutlet weak var tabs: NSTabView!
@@ -189,37 +180,6 @@ final class PreferencesController: NSViewController {
 //        }
 //    }
     
-    // MARK: - READ SETTINGS
-    
-    // MARK: GENERAL
-    
-    class func language() -> String {
-        let defaults = UserDefaults.standard
-        let value = defaults.string(forKey: languageKey) ?? "eng"
-        return value
-    }
-    
-    // MARK: PERFORMANCE
-    
-    class func amountForPagination() -> Int {
-        let defaults = UserDefaults.standard
-        let value = defaults.integer(forKey: amountForPaginationKey)
-        return value
-    }
-    
-    class func peakMemory() -> Int {
-        
-        let totalRam = ProcessInfo.processInfo.physicalMemory / 1024 / 1024 / 1024
-        let max = Int(totalRam)
-        let mid = Int(totalRam / 2)
-        let defaults = UserDefaults.standard
-        let value = defaults.integer(forKey: memoryPeakKey)
-        if value > max {
-            return mid
-        }
-        return value
-    }
-    
     // MARK: FACE RECOGNITION
     
     
@@ -247,18 +207,10 @@ final class PreferencesController: NSViewController {
 //        return txt
 //    }
     
-    // MARK: ANDROID
-    
-    class func exportToAndroidDirectory() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: exportToAndroidPathKey) else {return ""}
-        return txt
-    }
-    
     // MARK: - SAVE SETTINGS
     
     func saveGeneralSection(_ defaults:UserDefaults) {
-        let oldValue = PreferencesController.language()
+        let oldValue = Setting.UI.language()
         
         let lang = self.popupLanguage.titleOfSelectedItem ?? "English"
         var value = "eng"
@@ -267,8 +219,7 @@ final class PreferencesController: NSViewController {
         }else if lang == "Chinese Simplified" {
             value = "chs"
         }
-        defaults.set(value,
-                     forKey: PreferencesController.languageKey)
+        Setting.UI.saveLanguage(value)
         
         if oldValue != value {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ChangeEvent.language), object: nil)
@@ -287,21 +238,12 @@ final class PreferencesController: NSViewController {
 //    }
     
     func saveMobileSection(_ defaults:UserDefaults) {
-        defaults.set(txtExportToAndroidPath.stringValue,
-                     forKey: PreferencesController.exportToAndroidPathKey)
+        Setting.mobileDeviceTransfer.saveExportToAndroidDirectory(txtExportToAndroidPath.stringValue)
     }
     
     func savePerformanceSection(_ defaults:UserDefaults) {
-        defaults.set(Int(self.memorySlider.intValue),
-                     forKey: PreferencesController.memoryPeakKey)
-        
-        var paginationAmount = 0
-        if self.lstAmountForPagination.stringValue != "Unlimited" {
-            paginationAmount = Int(self.lstAmountForPagination.titleOfSelectedItem ?? "0") ?? 0
-        }
-        self.logger.log("SET AMOUNT FOR PAGINATION AS \(paginationAmount)")
-        defaults.set(paginationAmount,
-                     forKey: PreferencesController.amountForPaginationKey)
+        Setting.performance.savePeakMemory(Int(self.memorySlider.intValue))
+        Setting.performance.saveAmountForPagination(self.lstAmountForPagination.stringValue)
     }
     
     func savePreferences() {
@@ -337,7 +279,7 @@ final class PreferencesController: NSViewController {
         self.lblAndroidPathForUpload.stringValue = Words.preference_tab_mobile_box_android_path.word()
         self.lblAndroidPromptForUpload.stringValue = Words.preference_tab_mobile_box_android_prompt.word()
         
-        txtExportToAndroidPath.stringValue = PreferencesController.exportToAndroidDirectory()
+        txtExportToAndroidPath.stringValue = Setting.mobileDeviceTransfer.exportToAndroidDirectory()
     }
     
 //    func initFaceRecognitionSection() {
@@ -375,7 +317,7 @@ final class PreferencesController: NSViewController {
     
     func initGeneral() {
         self.lblLanguage.stringValue = Words.preference_tab_general_ui_language.word()
-        let language = PreferencesController.language()
+        let language = Setting.UI.language()
         if language == "eng" {
             self.popupLanguage.selectItem(withTitle: "English")
         }else if language == "chs" {
@@ -394,7 +336,7 @@ final class PreferencesController: NSViewController {
         self.lblPaginationPromptLeft.stringValue = Words.preference_tab_performance_box_pagination_prompt_left.word()
         self.lblPaginationPromptRight.stringValue = Words.preference_tab_performance_box_pagination_prompt_right.word()
         self.setupMemorySlider()
-        let paginationAmount = PreferencesController.amountForPagination()
+        let paginationAmount = Setting.performance.amountForPagination()
 //        self.logger.log("GOT AMOUNT FOR PAGINATION \(paginationAmount)")
         if paginationAmount == 0 {
             self.lstAmountForPagination.selectItem(withTitle: Words.preference_tab_performance_pagination_unlimited.word())
@@ -437,7 +379,7 @@ final class PreferencesController: NSViewController {
         self.lblMidMemory.stringValue = "\(totalRam / 2) GB"
         self.lblMin2Memory.stringValue = "\(totalRam / 2 - totalRam / 4) GB"
         self.lblMid2Memory.stringValue = "\(totalRam / 2 + totalRam / 4) GB"
-        self.memorySlider.intValue = Int32(PreferencesController.peakMemory())
+        self.memorySlider.intValue = Int32(Setting.performance.peakMemory())
         let value = self.memorySlider.intValue
         if value > 0 {
             self.lblSelectedMemory.stringValue = Words.preference_tab_performance_selected_memory.fill(arguments: "\(value)")

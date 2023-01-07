@@ -114,7 +114,7 @@ class DeviceTreeDataSource : TreeDataSource {
     }
     
     private func loadIPhoneDevices() -> ([TreeCollection], String?) {
-        if LocalEnvironmentSetupController.iosDeviceMountPoint() == "" {
+        if Setting.localEnvironment.iosDeviceMountPoint() == "" {
             return ([], Words.device_tree_setup_mountpoint_for_ios.word())
         }
         

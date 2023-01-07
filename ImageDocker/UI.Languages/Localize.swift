@@ -19,7 +19,7 @@ class Localize {
     }
     
     func word() -> String {
-        let lang = PreferencesController.language()
+        let lang = Setting.UI.language()
         if lang == "chs" {
             return self.chs
         }else{
@@ -28,7 +28,7 @@ class Localize {
     }
     
     func word(_ placeholder:String, _ keywords:Any...) -> String {
-        let lang = PreferencesController.language()
+        let lang = Setting.UI.language()
         var template = ""
         if lang == "chs" {
             template = self.chs

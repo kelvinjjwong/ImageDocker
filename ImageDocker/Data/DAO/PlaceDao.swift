@@ -17,7 +17,7 @@ class PlaceDao {
     }
     
     static var `default`:PlaceDao {
-        let location = DatabaseBackupController.databaseLocation()
+        let location = Setting.database.databaseLocation()
         if location == "local" {
             return PlaceDao(PlaceDaoGRDB())
         }else{

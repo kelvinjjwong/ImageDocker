@@ -17,7 +17,7 @@ extension ViewController {
         
         self.txtSearch.isEnabled = false
         
-        let _ = DatabaseBackupController.predefinedLocalDBFilePath // must do in main thread
+        let _ = Setting.database.sqlite.predefinedLocalDBFilePath // must do in main thread
         
         DispatchQueue.global().async {
             self.splashController.progressWillEnd(at: 5)
@@ -25,7 +25,7 @@ extension ViewController {
             IPHONE.bridge.unmountFuse()
             
             // current database info
-            let (_dbLocation, _dbEngine, dbServer, dbName) = DatabaseBackupController.configuredDatabaseInfo()
+            let (_dbLocation, _dbEngine, dbServer, dbName) = Setting.database.configuredDatabaseInfo()
             print(_dbLocation)
             print(_dbEngine)
             print(dbServer)

@@ -12,11 +12,6 @@ final class ExternalAPIController: NSViewController {
     
     let logger = ConsoleLogger(category: "ExternalAPIController")
     
-    // MARK: GEOLOCATION API
-    fileprivate static let baiduAKKey = "BaiduAKKey"
-    fileprivate static let baiduSKKey = "BaiduSKKey"
-    fileprivate static let googleAKKey = "GoogleAPIKey"
-    
     @IBOutlet weak var tabs: NSTabView!
     
     @IBOutlet weak var btnApply: NSButton!
@@ -56,33 +51,10 @@ final class ExternalAPIController: NSViewController {
     
     // MARK: GEOLOCATION API
     
-    
-    class func baiduAK() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: baiduAKKey) else {return ""}
-        return txt
-    }
-    
-    class func baiduSK() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: baiduSKKey) else {return ""}
-        return txt
-    }
-    
-    class func googleAPIKey() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: googleAKKey) else {return ""}
-        return txt
-    }
-    
     func saveGeolocationAPISection(_ defaults:UserDefaults) {
-        
-        defaults.set(txtGoogleAPIKey.stringValue,
-                     forKey: ExternalAPIController.googleAKKey)
-        defaults.set(txtBaiduAK.stringValue,
-                     forKey: ExternalAPIController.baiduAKKey)
-        defaults.set(txtBaiduSK.stringValue,
-                     forKey: ExternalAPIController.baiduSKKey)
+        Setting.externalApi.saveBaiduAK(txtBaiduAK.stringValue)
+        Setting.externalApi.saveBaiduSK(txtBaiduSK.stringValue)
+        Setting.externalApi.saveGoogleAK(txtGoogleAPIKey.stringValue)
     }
     
     func savePreferences() {
@@ -95,7 +67,7 @@ final class ExternalAPIController: NSViewController {
     
     class func healthCheck() {
         
-        if baiduAK() == "" || baiduSK() == "" {
+        if Setting.externalApi.baiduAK() == "" || Setting.externalApi.baiduSK() == "" {
             // TODO: notify user when geolocation API missing
             //Alert.invalidBaiduMapAK()
             return
@@ -110,9 +82,9 @@ final class ExternalAPIController: NSViewController {
         self.lblBaiduMapPrompt.stringValue = Words.preference_tab_geo_location_api_prompt.word()
         self.lblGoogleMapPrompt.stringValue = Words.preference_tab_geo_location_api_prompt.word()
         
-        txtBaiduAK.stringValue = ExternalAPIController.baiduAK()
-        txtBaiduSK.stringValue = ExternalAPIController.baiduSK()
-        txtGoogleAPIKey.stringValue = ExternalAPIController.googleAPIKey()
+        txtBaiduAK.stringValue = Setting.externalApi.baiduAK()
+        txtBaiduSK.stringValue = Setting.externalApi.baiduSK()
+        txtGoogleAPIKey.stringValue = Setting.externalApi.googleAPIKey()
     }
     
     // MARK: VIEW INIT

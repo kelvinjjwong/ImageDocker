@@ -17,7 +17,7 @@ public final class ImageRecordDao {
     }
     
     static var `default`:ImageRecordDao {
-        let location = DatabaseBackupController.databaseLocation()
+        let location = Setting.database.databaseLocation()
         if location == "local" {
             return ImageRecordDao(ImageRecordDaoGRDB())
         }else{
@@ -101,7 +101,7 @@ class ImageSearchDao {
     }
     
     static var `default`:ImageSearchDao {
-        let location = DatabaseBackupController.databaseLocation()
+        let location = Setting.database.databaseLocation()
         if location == "local" {
             return ImageSearchDao(ImageSearchDaoGRDB())
         }else{
@@ -280,7 +280,7 @@ class ImageCountDao {
     }
     
     static var `default`:ImageCountDao {
-        let location = DatabaseBackupController.databaseLocation()
+        let location = Setting.database.databaseLocation()
         if location == "local" {
             return ImageCountDao(ImageCountDaoGRDB())
         }else{
@@ -393,7 +393,7 @@ class ImageDuplicationDao {
     }
     
     static var `default`:ImageDuplicationDao {
-        let location = DatabaseBackupController.databaseLocation()
+        let location = Setting.database.databaseLocation()
         if location == "local" {
             return ImageDuplicationDao(ImageDuplicateDaoGRDB())
         }else{
@@ -435,7 +435,7 @@ class ImageFaceDao {
     }
     
     static var `default`:ImageFaceDao {
-        let location = DatabaseBackupController.databaseLocation()
+        let location = Setting.database.databaseLocation()
         if location == "local" {
             return ImageFaceDao(ImageFaceDaoGRDB())
         }else{

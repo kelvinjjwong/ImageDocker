@@ -17,7 +17,7 @@ class DeviceDao {
     }
     
     static var `default`:DeviceDao {
-        let location = DatabaseBackupController.databaseLocation()
+        let location = Setting.database.databaseLocation()
         if location == "local" {
             return DeviceDao(DeviceDaoGRDB())
         }else{

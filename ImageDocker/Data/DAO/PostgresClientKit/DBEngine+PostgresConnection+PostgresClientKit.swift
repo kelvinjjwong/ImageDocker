@@ -30,10 +30,10 @@ public final class PostgresConnection : ImageDBInterface {
         }else if location == .localDBServer {
             loc = "localServer"
         }else{
-            loc = DatabaseBackupController.databaseLocation()
+            loc = Setting.database.databaseLocation()
         }
         if loc == "" {
-            loc = DatabaseBackupController.databaseLocation()
+            loc = Setting.database.databaseLocation()
         }
         
         // default value
@@ -42,28 +42,28 @@ public final class PostgresConnection : ImageDBInterface {
         }
         
         if loc == "localServer" {
-            host = DatabaseBackupController.localDBServer()
-            port = DatabaseBackupController.localDBPort()
-            user = DatabaseBackupController.localDBUsername()
-            psw = DatabaseBackupController.localDBPassword()
-            nopsw = DatabaseBackupController.localDBNoPassword()
-            schema = DatabaseBackupController.localDBSchema()
+            host = Setting.database.localPostgres.server()
+            port = Setting.database.localPostgres.port()
+            user = Setting.database.localPostgres.username()
+            psw = Setting.database.localPostgres.password()
+            nopsw = Setting.database.localPostgres.noPassword()
+            schema = Setting.database.localPostgres.schema()
             if schema == "" {
                 schema = "public"
             }
-            database = DatabaseBackupController.localDBDatabase()
+            database = Setting.database.localPostgres.database()
             
         }else if loc == "network" {
-            host = DatabaseBackupController.remoteDBServer()
-            port = DatabaseBackupController.remoteDBPort()
-            user = DatabaseBackupController.remoteDBUsername()
-            psw = DatabaseBackupController.remoteDBPassword()
-            nopsw = DatabaseBackupController.remoteDBNoPassword()
-            schema = DatabaseBackupController.remoteDBSchema()
+            host = Setting.database.remotePostgres.server()
+            port = Setting.database.remotePostgres.port()
+            user = Setting.database.remotePostgres.username()
+            psw = Setting.database.remotePostgres.password()
+            nopsw = Setting.database.remotePostgres.noPassword()
+            schema = Setting.database.remotePostgres.schema()
             if schema == "" {
                 schema = "public"
             }
-            database = DatabaseBackupController.remoteDBDatabase()
+            database = Setting.database.remotePostgres.database()
         }
         
         return PostgresConnection.database(host: host, port: port, user: user, database: database, schema: schema, password: psw, nopsw: nopsw)
@@ -250,7 +250,7 @@ public final class PostgresConnection : ImageDBInterface {
     func restoreDatabase(commandPath:String, database:String, host:String, port:Int, user:String, backupFolder:String) -> (Bool, Error?) {
         let psql_path = URL(fileURLWithPath: commandPath).appendingPathComponent("psql").path
         
-        let backupPath = URL(fileURLWithPath: DatabaseBackupController.databasePath()).appendingPathComponent("DataBackup").appendingPathComponent(backupFolder).appendingPathComponent("ImageDocker.backup.gz").path
+        let backupPath = URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup").appendingPathComponent(backupFolder).appendingPathComponent("ImageDocker.backup.gz").path
         
         let cmd = "/usr/bin/gunzip -c \(backupPath) | \(psql_path) -h \(host) \(database)"
         self.logger.log(cmd)

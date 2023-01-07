@@ -17,7 +17,7 @@ class EventDao {
     }
     
     static var `default`:EventDao {
-        let location = DatabaseBackupController.databaseLocation()
+        let location = Setting.database.databaseLocation()
         if location == "local" {
             return EventDao(EventDaoGRDB())
         }else{

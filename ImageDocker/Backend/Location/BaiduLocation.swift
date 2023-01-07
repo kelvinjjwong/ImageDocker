@@ -17,11 +17,11 @@ final class BaiduLocation {
     fileprivate static let baseurl:String = "http://api.map.baidu.com"
     
     fileprivate static func ak() -> String {
-        return ExternalAPIController.baiduAK()
+        return Setting.externalApi.baiduAK()
     }
     
     fileprivate static func sk() -> String {
-        return ExternalAPIController.baiduSK()
+        return Setting.externalApi.baiduSK()
     }
     
     fileprivate static func sn(_ queryStr:String) -> String {

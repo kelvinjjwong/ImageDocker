@@ -254,7 +254,7 @@ class TaskletManager {
     // MARK: - SINGLE THREAD MODE QUEUE TIMER
     
     func isSingleMode() -> Bool {
-        return DatabaseBackupController.isSQLite()
+        return Setting.database.isSQLite()
     }
     
     func startQueueTimer() {

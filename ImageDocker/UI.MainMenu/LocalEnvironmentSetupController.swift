@@ -12,13 +12,6 @@ final class LocalEnvironmentSetupController: NSViewController {
     
     let logger = ConsoleLogger(category: "LocalEnvironmentSetupController")
     
-    // MARK: MOBILE DEVICE
-    fileprivate static let setting_android_adb_path = "adbPathKey"
-    fileprivate static let setting_ios_mount_point = "IOSMountPointKey"
-    fileprivate static let setting_ios_ifuse_path = "ifuseKey"
-    fileprivate static let setting_ios_ideviceid_path = "ideviceidKey"
-    fileprivate static let setting_ios_ideviceinfo_path = "ideviceinfoKey"
-    
     @IBOutlet weak var tabs: NSTabView!
     
     @IBOutlet weak var btnApply: NSButton!
@@ -122,77 +115,12 @@ final class LocalEnvironmentSetupController: NSViewController {
         }
     }
     
-    // MARK: ANDROID
-    
-    class func adbPath() -> String {
-        var adbInBundle = ""
-        if let bundle = Bundle.main.url(forResource: "Mobile", withExtension: nil) {
-            adbInBundle = bundle.appendingPathComponent("adb").path
-        }
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: setting_android_adb_path) else {return adbInBundle}
-        return txt
-    }
-    
-    // MARK: IPHONE
-    
-    class func iosDeviceMountPoint() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: setting_ios_mount_point) else {
-            var isDir : ObjCBool = false
-            if FileManager.default.fileExists(atPath: "/MacStorage/mount/iPhone/", isDirectory: &isDir) {
-                if isDir.boolValue {
-                    return "/MacStorage/mount/iPhone/"
-                }else{
-                    return ""
-                }
-            }else{
-                return ""
-            }
-        }
-        var isDir : ObjCBool = false
-        if FileManager.default.fileExists(atPath: txt, isDirectory: &isDir) {
-            if isDir.boolValue {
-                return txt
-            }else{
-                return ""
-            }
-        }else{
-            return ""
-        }
-    }
-    
-    class func ideviceidPath() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: setting_ios_ideviceid_path) else {return ""}
-        return txt
-    }
-    
-    class func ideviceinfoPath() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: setting_ios_ideviceinfo_path) else {return ""}
-        return txt
-    }
-    
-    class func ifusePath() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: setting_ios_ifuse_path) else {return ""}
-        return txt
-    }
-    
     func saveMobileSection(_ defaults:UserDefaults) {
-        
-        defaults.set(txtAdbPath.stringValue,
-                     forKey: LocalEnvironmentSetupController.setting_android_adb_path)
-        
-        defaults.set(txtIOSMountPoint.stringValue,
-                     forKey: LocalEnvironmentSetupController.setting_ios_mount_point)
-        defaults.set(txtIfusePath.stringValue,
-                     forKey: LocalEnvironmentSetupController.setting_ios_ifuse_path)
-        defaults.set(txtIdeviceIdPath.stringValue,
-                     forKey: LocalEnvironmentSetupController.setting_ios_ideviceid_path)
-        defaults.set(txtIdeviceInfoPath.stringValue,
-                     forKey: LocalEnvironmentSetupController.setting_ios_ideviceinfo_path)
+        Setting.localEnvironment.saveAdbPath(txtAdbPath.stringValue)
+        Setting.localEnvironment.saveIOSMountPoint(txtIOSMountPoint.stringValue)
+        Setting.localEnvironment.saveIfusePath(txtIfusePath.stringValue)
+        Setting.localEnvironment.saveIdeviceIdPath(txtIdeviceIdPath.stringValue)
+        Setting.localEnvironment.saveIdeviceInfoPath(txtIdeviceInfoPath.stringValue)
     }
     
     func savePreferences() {
@@ -219,12 +147,12 @@ final class LocalEnvironmentSetupController: NSViewController {
         self.btnLocateIdeviceIdPath.title = Words.preference_tab_mobile_box_ios_locate.word()
         self.btnLocateIdeviceInfoPath.title = Words.preference_tab_mobile_box_ios_locate.word()
         
-        txtAdbPath.stringValue = LocalEnvironmentSetupController.adbPath()
+        txtAdbPath.stringValue = Setting.localEnvironment.adbPath()
         
-        txtIOSMountPoint.stringValue = LocalEnvironmentSetupController.iosDeviceMountPoint()
-        txtIfusePath.stringValue = LocalEnvironmentSetupController.ifusePath()
-        txtIdeviceIdPath.stringValue = LocalEnvironmentSetupController.ideviceidPath()
-        txtIdeviceInfoPath.stringValue = LocalEnvironmentSetupController.ideviceinfoPath()
+        txtIOSMountPoint.stringValue = Setting.localEnvironment.iosDeviceMountPoint()
+        txtIfusePath.stringValue = Setting.localEnvironment.ifusePath()
+        txtIdeviceIdPath.stringValue = Setting.localEnvironment.ideviceidPath()
+        txtIdeviceInfoPath.stringValue = Setting.localEnvironment.ideviceinfoPath()
     }
     
     func initExifToolSection() {

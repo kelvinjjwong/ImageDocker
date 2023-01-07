@@ -19,7 +19,7 @@ public final class ImageDB {
     static let remote = ImageDB(impl: PostgresConnection.default)
     
     static func current() -> ImageDB{
-        if DatabaseBackupController.databaseLocation() == "local" {
+        if Setting.database.databaseLocation() == "local" {
             return local
         }else{
             return remote

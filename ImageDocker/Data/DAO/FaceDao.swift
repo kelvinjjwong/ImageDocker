@@ -17,7 +17,7 @@ class FaceDao {
     }
     
     static var `default`:FaceDao {
-        let location = DatabaseBackupController.databaseLocation()
+        let location = Setting.database.databaseLocation()
         if location == "local" {
             return FaceDao(FaceDaoGRDB())
         }else{

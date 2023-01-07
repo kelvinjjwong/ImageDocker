@@ -12,24 +12,6 @@ final class DatabaseBackupController: NSViewController {
     
     let logger = ConsoleLogger(category: "DatabaseBackupController")
     
-    // MARK: DATABASE
-    fileprivate static let databasePathKey = "DatabasePathKey"
-    fileprivate static let databaseLocationKey = "DatabaseLocationKey"
-    fileprivate static let remoteDBServerKey = "RemoteDBServer"
-    fileprivate static let remoteDBPortKey = "RemoteDBPort"
-    fileprivate static let remoteDBUsernameKey = "RemoteDBUsername"
-    fileprivate static let remoteDBPasswordKey = "RemoteDBPassword"
-    fileprivate static let remoteDBSchemaKey = "RemoteDBSchema"
-    fileprivate static let remoteDBDatabaseKey = "RemoteDBDatabase"
-    fileprivate static let remoteDBNoPasswordKey = "RemoteDBNoPassword"
-    fileprivate static let localDBServerKey = "LocalDBServer"
-    fileprivate static let localDBPortKey = "LocalDBPort"
-    fileprivate static let localDBUsernameKey = "LocalDBUsername"
-    fileprivate static let localDBPasswordKey = "LocalDBPassword"
-    fileprivate static let localDBSchemaKey = "LocalDBSchema"
-    fileprivate static let localDBDatabaseKey = "LocalDBDatabase"
-    fileprivate static let localDBNoPasswordKey = "LocalDBNoPassword"
-    
     
     @IBOutlet weak var tabs: NSTabView!
     
@@ -416,14 +398,14 @@ final class DatabaseBackupController: NSViewController {
             var user = ""
             var message = ""
             if self.toggleGroup_CloneToDBLocation.selected == "localDBServer" {
-                host = DatabaseBackupController.localDBServer()
-                port = DatabaseBackupController.localDBPort()
-                user = DatabaseBackupController.localDBUsername()
+                host = Setting.database.localPostgres.server()
+                port = Setting.database.localPostgres.port()
+                user = Setting.database.localPostgres.username()
                 message = Words.preference_tab_backup_restoring_archive_to_local_postgres.fill(arguments: "\(timestamp)", "\(database)")
             }else if self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
-                host = DatabaseBackupController.remoteDBServer()
-                port = DatabaseBackupController.remoteDBPort()
-                user = DatabaseBackupController.remoteDBUsername()
+                host = Setting.database.remotePostgres.server()
+                port = Setting.database.remotePostgres.port()
+                user = Setting.database.remotePostgres.username()
                 message = Words.preference_tab_backup_restoring_archive_to_remote_postgres.fill(arguments: "\(timestamp)", "\(database)")
             }else{
                 self.lblDataCloneMessage.stringValue = "TODO: from backup archive to sqlite"
@@ -450,22 +432,22 @@ final class DatabaseBackupController: NSViewController {
             var psw = ""
             var nopsw = false
             if       self.toggleGroup_CloneToDBLocation.selected == "localDBServer" {
-                host = DatabaseBackupController.localDBServer()
-                port = DatabaseBackupController.localDBPort()
-                user = DatabaseBackupController.localDBUsername()
-                database = DatabaseBackupController.localDBDatabase()
-                psw = DatabaseBackupController.localDBPassword()
-                nopsw = DatabaseBackupController.localDBNoPassword()
-                schema = DatabaseBackupController.localDBSchema()
+                host = Setting.database.localPostgres.server()
+                port = Setting.database.localPostgres.port()
+                user = Setting.database.localPostgres.username()
+                database = Setting.database.localPostgres.database()
+                psw = Setting.database.localPostgres.password()
+                nopsw = Setting.database.localPostgres.noPassword()
+                schema = Setting.database.localPostgres.schema()
                 message = Words.preference_tab_data_clone_from_sqlite_to_local_postgres.word()
             }else if self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
-                host = DatabaseBackupController.remoteDBServer()
-                port = DatabaseBackupController.remoteDBPort()
-                user = DatabaseBackupController.remoteDBUsername()
-                database = DatabaseBackupController.remoteDBDatabase()
-                psw = DatabaseBackupController.remoteDBPassword()
-                nopsw = DatabaseBackupController.remoteDBNoPassword()
-                schema = DatabaseBackupController.remoteDBSchema()
+                host = Setting.database.remotePostgres.server()
+                port = Setting.database.remotePostgres.port()
+                user = Setting.database.remotePostgres.username()
+                database = Setting.database.remotePostgres.database()
+                psw = Setting.database.remotePostgres.password()
+                nopsw = Setting.database.remotePostgres.noPassword()
+                schema = Setting.database.remotePostgres.schema()
                 message = Words.preference_tab_data_clone_from_sqlite_to_remote_postgres.word()
             }else{
                 // more options?
@@ -519,14 +501,14 @@ final class DatabaseBackupController: NSViewController {
             var user = ""
             var message = ""
             if       self.toggleGroup_CloneToDBLocation.selected == "localDBServer" {
-                host = DatabaseBackupController.localDBServer()
-                port = DatabaseBackupController.localDBPort()
-                user = DatabaseBackupController.localDBUsername()
+                host = Setting.database.localPostgres.server()
+                port = Setting.database.localPostgres.port()
+                user = Setting.database.localPostgres.username()
                 message = Words.preference_tab_data_clone_from_local_postgres_to_local_postgres.word()
             }else if self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
-                host = DatabaseBackupController.remoteDBServer()
-                port = DatabaseBackupController.remoteDBPort()
-                user = DatabaseBackupController.remoteDBUsername()
+                host = Setting.database.remotePostgres.server()
+                port = Setting.database.remotePostgres.port()
+                user = Setting.database.remotePostgres.username()
                 message = Words.preference_tab_data_clone_from_local_postgres_to_remote_postgres.word()
             }else{
                 self.lblDataCloneMessage.stringValue = "TODO from local postgres to sqlite"
@@ -536,10 +518,10 @@ final class DatabaseBackupController: NSViewController {
             self.lblDataCloneMessage.stringValue = message
             DispatchQueue.global().async {
                 let (_, _) = PostgresConnection.default.cloneDatabase(commandPath: cmd,
-                                                                      srcDatabase: DatabaseBackupController.localDBDatabase(),
-                                                                      srcHost: DatabaseBackupController.localDBServer(),
-                                                                      srcPort: DatabaseBackupController.localDBPort(),
-                                                                      srcUser: DatabaseBackupController.localDBUsername(),
+                                                                      srcDatabase: Setting.database.localPostgres.database(),
+                                                                      srcHost: Setting.database.localPostgres.server(),
+                                                                      srcPort: Setting.database.localPostgres.port(),
+                                                                      srcUser: Setting.database.localPostgres.username(),
                                                                       destDatabase: database,
                                                                       destHost: host,
                                                                       destPort: port,
@@ -577,14 +559,14 @@ final class DatabaseBackupController: NSViewController {
             var user = ""
             var message = ""
             if       self.toggleGroup_CloneToDBLocation.selected == "localDBServer" {
-                host = DatabaseBackupController.localDBServer()
-                port = DatabaseBackupController.localDBPort()
-                user = DatabaseBackupController.localDBUsername()
+                host = Setting.database.localPostgres.server()
+                port = Setting.database.localPostgres.port()
+                user = Setting.database.localPostgres.username()
                 message = Words.preference_tab_data_clone_from_remote_postgres_to_local_postgres.word()
             }else if self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
-                host = DatabaseBackupController.remoteDBServer()
-                port = DatabaseBackupController.remoteDBPort()
-                user = DatabaseBackupController.remoteDBUsername()
+                host = Setting.database.remotePostgres.server()
+                port = Setting.database.remotePostgres.port()
+                user = Setting.database.remotePostgres.username()
                 message = Words.preference_tab_data_clone_from_remote_postgres_to_remote_postgres.word()
             }else{
                 self.lblDataCloneMessage.stringValue = "TODO from remote postgres to sqlite"
@@ -594,10 +576,10 @@ final class DatabaseBackupController: NSViewController {
             self.lblDataCloneMessage.stringValue = message
             DispatchQueue.global().async {
                 let (_, _) = PostgresConnection.default.cloneDatabase(commandPath: cmd,
-                                                                      srcDatabase: DatabaseBackupController.remoteDBDatabase(),
-                                                                      srcHost: DatabaseBackupController.remoteDBServer(),
-                                                                      srcPort: DatabaseBackupController.remoteDBPort(),
-                                                                      srcUser: DatabaseBackupController.remoteDBUsername(),
+                                                                      srcDatabase: Setting.database.remotePostgres.database(),
+                                                                      srcHost: Setting.database.remotePostgres.server(),
+                                                                      srcPort: Setting.database.remotePostgres.port(),
+                                                                      srcUser: Setting.database.remotePostgres.username(),
                                                                       destDatabase: database,
                                                                       destHost: host,
                                                                       destPort: port,
@@ -631,7 +613,7 @@ final class DatabaseBackupController: NSViewController {
                 }
             }
         }
-        let backupPath = URL(fileURLWithPath: DatabaseBackupController.databasePath()).appendingPathComponent("DataBackup")
+        let backupPath = URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup")
         DispatchQueue.global().async {
             for folder in selected {
                 let url = backupPath.appendingPathComponent(folder)
@@ -658,13 +640,13 @@ final class DatabaseBackupController: NSViewController {
         var port = 5432
         var user = ""
         if self.toggleGroup_CloneToDBLocation.selected == "localDBServer" {
-            host = DatabaseBackupController.localDBServer()
-            port = DatabaseBackupController.localDBPort()
-            user = DatabaseBackupController.localDBUsername()
+            host = Setting.database.localPostgres.server()
+            port = Setting.database.localPostgres.port()
+            user = Setting.database.localPostgres.username()
         }else if self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
-            host = DatabaseBackupController.remoteDBServer()
-            port = DatabaseBackupController.remoteDBPort()
-            user = DatabaseBackupController.remoteDBUsername()
+            host = Setting.database.remotePostgres.server()
+            port = Setting.database.remotePostgres.port()
+            user = Setting.database.remotePostgres.username()
         }else{
             self.logger.log("Selected to-database is not postgres. check db exist aborted.")
             return
@@ -722,13 +704,13 @@ final class DatabaseBackupController: NSViewController {
         var port = 5432
         var user = ""
         if self.toggleGroup_CloneToDBLocation.selected == "localDBServer" {
-            host = DatabaseBackupController.localDBServer()
-            port = DatabaseBackupController.localDBPort()
-            user = DatabaseBackupController.localDBUsername()
+            host = Setting.database.localPostgres.server()
+            port = Setting.database.localPostgres.port()
+            user = Setting.database.localPostgres.username()
         }else if self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
-            host = DatabaseBackupController.remoteDBServer()
-            port = DatabaseBackupController.remoteDBPort()
-            user = DatabaseBackupController.remoteDBUsername()
+            host = Setting.database.remotePostgres.server()
+            port = Setting.database.remotePostgres.port()
+            user = Setting.database.remotePostgres.username()
         }else{
             self.logger.log("Selected to-database is not postgres. createdb aborted.")
             return
@@ -853,249 +835,29 @@ final class DatabaseBackupController: NSViewController {
         }
     }
     
-    // MARK: DATABASE
-    
-    static let predefinedLocalDBFilePath = AppDelegate.current.applicationDocumentsDirectory.path
-    
-    class func configuredDatabaseInfo() -> (String, String, String, String) {
-        var dbEngine = ""
-        var location = databaseLocation()
-        if location == "local" {
-            dbEngine = "SQLite"
-        }else if location == "localServer" {
-            dbEngine = "PostgreSQL"
-            location = "local"
-        }else if location == "network" {
-            dbEngine = "PostgreSQL"
-            location = "remote"
-        }
-        
-        var server = ""
-        var dbName = ""
-        if dbEngine == "PostgreSQL" {
-            if location == "local" {
-                server = localDBServer()
-                dbName = localDBDatabase()
-            }else {
-                server = remoteDBServer()
-                dbName = remoteDBDatabase()
-            }
-        }
-        return (location, dbEngine, server, dbName)
-    }
-    
-    class func databasePath() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: databasePathKey) else {
-            return predefinedLocalDBFilePath
-        }
-        var isDir : ObjCBool = false
-        if FileManager.default.fileExists(atPath: txt, isDirectory: &isDir) {
-            if isDir.boolValue {
-                return txt
-            }else{
-                return predefinedLocalDBFilePath
-            }
-        }else{
-            return predefinedLocalDBFilePath
-        }
-    }
-    
-    class func databasePath(filename: String) -> String {
-        let url = URL(fileURLWithPath: databasePath()).appendingPathComponent(filename)
-        return url.path
-    }
-    
-    class func databaseLocation() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: databaseLocationKey) else {return "local"}
-        return txt
-    }
-    
-    class func isSQLite() -> Bool {
-        if databaseLocation() == "local" {
-            return true
-        }else{
-            return false
-        }
-    }
-    
-    class func remoteDBServer() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: remoteDBServerKey) else {return "127.0.0.1"}
-        return txt
-    }
-    
-    
-    class func remoteDBPort() -> Int {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: remoteDBPortKey) else {return 5432}
-        if let value = Int(txt) {
-            return value
-        }else{
-            return 5432
-        }
-    }
-    
-    
-    class func remoteDBUsername() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: remoteDBUsernameKey) else {return ""}
-        return txt
-    }
-    
-    
-    class func remoteDBPassword() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: remoteDBPasswordKey) else {return ""}
-        return txt
-    }
-    
-    
-    class func remoteDBSchema() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: remoteDBSchemaKey) else {return "public"}
-        return txt
-    }
-    
-    
-    class func remoteDBDatabase() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: remoteDBDatabaseKey) else {return ""}
-        return txt
-    }
-    
-    
-    class func remoteDBNoPassword() -> Bool {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: remoteDBNoPasswordKey) else {return true}
-        if txt == "true"  {
-            return true
-        }else{
-            return false
-        }
-    }
-    
-    class func localDBServer() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: localDBServerKey) else {return "127.0.0.1"}
-        return txt
-    }
-    
-    
-    class func localDBPort() -> Int {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: localDBPortKey) else {return 5432}
-        if let value = Int(txt) {
-            return value
-        }else{
-            return 5432
-        }
-    }
-    
-    
-    class func localDBUsername() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: localDBUsernameKey) else {return ""}
-        return txt
-    }
-    
-    
-    class func localDBPassword() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: localDBPasswordKey) else {return ""}
-        return txt
-    }
-    
-    
-    class func localDBSchema() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: localDBSchemaKey) else {return "public"}
-        return txt
-    }
-    
-    
-    class func localDBDatabase() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: localDBDatabaseKey) else {return ""}
-        return txt
-    }
-    
-    
-    class func localDBNoPassword() -> Bool {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: localDBNoPasswordKey) else {return true}
-        if txt == "true"  {
-            return true
-        }else{
-            return false
-        }
-    }
-    
     // MARK: - SAVE SETTINGS
     
     
     func saveDatabaseSection(_ defaults:UserDefaults) {
+        Setting.database.saveDatabaseLocation(self.toggleGroup_DBLocation.selected)
         
-        defaults.set(self.toggleGroup_DBLocation.selected,
-                     forKey: DatabaseBackupController.databaseLocationKey)
+        Setting.database.sqlite.saveDatabasePath(txtLocalDBFilePath.stringValue)
         
-        defaults.set(txtLocalDBFilePath.stringValue,
-                     forKey: DatabaseBackupController.databasePathKey)
+        Setting.database.localPostgres.saveHost(txtLocalDBServer.stringValue)
+        Setting.database.localPostgres.savePort(txtLocalDBPort.stringValue)
+        Setting.database.localPostgres.saveUsername(txtLocalDBUser.stringValue)
+        Setting.database.localPostgres.savePassword(txtLocalDBPassword.stringValue)
+        Setting.database.localPostgres.saveNoPassword(chkLocalDBNoPassword.state == .on)
+        Setting.database.localPostgres.saveSchema(txtLocalDBSchema.stringValue)
+        Setting.database.localPostgres.saveDatabase(txtLocalDBDatabase.stringValue)
         
-        defaults.set(txtRemoteDBServer.stringValue,
-                     forKey: DatabaseBackupController.remoteDBServerKey)
-        
-        if let _ = Int(txtRemoteDBPort.stringValue) {
-            defaults.set(txtRemoteDBPort.stringValue,
-                         forKey: DatabaseBackupController.remoteDBPortKey)
-        }else{
-            defaults.set("5432",
-                         forKey: DatabaseBackupController.remoteDBPortKey)
-        }
-        
-        defaults.set(txtRemoteDBUser.stringValue,
-                     forKey: DatabaseBackupController.remoteDBUsernameKey)
-        
-        defaults.set(txtRemoteDBPassword.stringValue,
-                     forKey: DatabaseBackupController.remoteDBPasswordKey)
-        
-        defaults.set(txtRemoteDBSchema.stringValue,
-                     forKey: DatabaseBackupController.remoteDBSchemaKey)
-        
-        defaults.set(txtRemoteDBDatabase.stringValue,
-                     forKey: DatabaseBackupController.remoteDBDatabaseKey)
-        
-        defaults.set(chkRemoteDBNoPassword.state == .on ? "true" : "false",
-                     forKey: DatabaseBackupController.remoteDBNoPasswordKey)
-        
-        
-        
-        defaults.set(txtLocalDBServer.stringValue,
-                     forKey: DatabaseBackupController.localDBServerKey)
-        
-        if let _ = Int(txtLocalDBPort.stringValue) {
-            defaults.set(txtLocalDBPort.stringValue,
-                         forKey: DatabaseBackupController.localDBPortKey)
-        }else{
-            defaults.set("5432",
-                         forKey: DatabaseBackupController.localDBPortKey)
-        }
-        
-        defaults.set(txtLocalDBUser.stringValue,
-                     forKey: DatabaseBackupController.localDBUsernameKey)
-        
-        defaults.set(txtLocalDBPassword.stringValue,
-                     forKey: DatabaseBackupController.localDBPasswordKey)
-        
-        defaults.set(txtLocalDBSchema.stringValue,
-                     forKey: DatabaseBackupController.localDBSchemaKey)
-        
-        defaults.set(txtLocalDBDatabase.stringValue,
-                     forKey: DatabaseBackupController.localDBDatabaseKey)
-        
-        defaults.set(chkLocalDBNoPassword.state == .on ? "true" : "false",
-                     forKey: DatabaseBackupController.localDBNoPasswordKey)
+        Setting.database.remotePostgres.saveHost(txtRemoteDBServer.stringValue)
+        Setting.database.remotePostgres.savePort(txtRemoteDBPort.stringValue)
+        Setting.database.remotePostgres.saveUsername(txtRemoteDBUser.stringValue)
+        Setting.database.remotePostgres.savePassword(txtRemoteDBPassword.stringValue)
+        Setting.database.remotePostgres.saveNoPassword(chkRemoteDBNoPassword.state == .on)
+        Setting.database.remotePostgres.saveSchema(txtRemoteDBSchema.stringValue)
+        Setting.database.remotePostgres.saveDatabase(txtRemoteDBDatabase.stringValue)
     }
     
     func saveBackupSection(_ defaults:UserDefaults) {
@@ -1135,16 +897,16 @@ final class DatabaseBackupController: NSViewController {
         self.btnRemoteDBServerBackup.title = Words.preference_tab_database_backup_now.word()
         self.btnRemoteDBTest.title = Words.preference_tab_database_test_connect.word()
         
-        txtLocalDBFilePath.stringValue = DatabaseBackupController.databasePath()
+        txtLocalDBFilePath.stringValue = Setting.database.sqlite.databasePath()
         
-        txtRemoteDBServer.stringValue = DatabaseBackupController.remoteDBServer()
-        txtRemoteDBPort.stringValue = "\(DatabaseBackupController.remoteDBPort())"
-        txtRemoteDBUser.stringValue = DatabaseBackupController.remoteDBUsername()
-        txtRemoteDBPassword.stringValue = DatabaseBackupController.remoteDBPassword()
-        txtRemoteDBSchema.stringValue = DatabaseBackupController.remoteDBSchema()
-        txtRemoteDBDatabase.stringValue = DatabaseBackupController.remoteDBDatabase()
+        txtRemoteDBServer.stringValue = Setting.database.remotePostgres.server()
+        txtRemoteDBPort.stringValue = "\(Setting.database.remotePostgres.port())"
+        txtRemoteDBUser.stringValue = Setting.database.remotePostgres.username()
+        txtRemoteDBPassword.stringValue = Setting.database.remotePostgres.password()
+        txtRemoteDBSchema.stringValue = Setting.database.remotePostgres.schema()
+        txtRemoteDBDatabase.stringValue = Setting.database.remotePostgres.database()
         
-        let remoteDBNoPassword = DatabaseBackupController.remoteDBNoPassword()
+        let remoteDBNoPassword = Setting.database.remotePostgres.noPassword()
         if remoteDBNoPassword {
             self.chkRemoteDBNoPassword.state = .on
             self.txtRemoteDBPassword.isEditable = false
@@ -1153,14 +915,14 @@ final class DatabaseBackupController: NSViewController {
             self.txtRemoteDBPassword.isEditable = true
         }
         
-        txtLocalDBServer.stringValue = DatabaseBackupController.localDBServer()
-        txtLocalDBPort.stringValue = "\(DatabaseBackupController.localDBPort())"
-        txtLocalDBUser.stringValue = DatabaseBackupController.localDBUsername()
-        txtLocalDBPassword.stringValue = DatabaseBackupController.localDBPassword()
-        txtLocalDBSchema.stringValue = DatabaseBackupController.localDBSchema()
-        txtLocalDBDatabase.stringValue = DatabaseBackupController.localDBDatabase()
+        txtLocalDBServer.stringValue = Setting.database.localPostgres.server()
+        txtLocalDBPort.stringValue = "\(Setting.database.localPostgres.port())"
+        txtLocalDBUser.stringValue = Setting.database.localPostgres.username()
+        txtLocalDBPassword.stringValue = Setting.database.localPostgres.password()
+        txtLocalDBSchema.stringValue = Setting.database.localPostgres.schema()
+        txtLocalDBDatabase.stringValue = Setting.database.localPostgres.database()
         
-        let localDBNoPassword = DatabaseBackupController.localDBNoPassword()
+        let localDBNoPassword = Setting.database.localPostgres.noPassword()
         if localDBNoPassword {
             self.chkLocalDBNoPassword.state = .on
             self.txtLocalDBPassword.isEditable = false
@@ -1214,7 +976,7 @@ final class DatabaseBackupController: NSViewController {
         
         self.btnCreateDatabase.isHidden = true
         
-        self.lblDatabaseBackupPath.stringValue = URL(fileURLWithPath: DatabaseBackupController.databasePath()).appendingPathComponent("DataBackup").path
+        self.lblDatabaseBackupPath.stringValue = URL(fileURLWithPath: Setting.database.sqlite.databasePath()).appendingPathComponent("DataBackup").path
         
         self.chkDeleteAllBeforeClone.state = .on
         self.chkDeleteAllBeforeClone.isEnabled = false
@@ -1249,13 +1011,13 @@ final class DatabaseBackupController: NSViewController {
             ], keysOrderred: ["localDBFile", "localDBServer", "remoteDBServer"],
                onSelect: { option in
                 if option == "localDBServer" {
-                    self.txtRestoreToDatabaseName.stringValue = DatabaseBackupController.localDBDatabase()
+                    self.txtRestoreToDatabaseName.stringValue = Setting.database.localPostgres.database()
                 }else if option == "remoteDBServer" {
-                    self.txtRestoreToDatabaseName.stringValue = DatabaseBackupController.remoteDBDatabase()
+                    self.txtRestoreToDatabaseName.stringValue = Setting.database.remotePostgres.database()
                 }
         })
         
-        self.toggleGroup_DBLocation.selected = DatabaseBackupController.databaseLocation()
+        self.toggleGroup_DBLocation.selected = Setting.database.databaseLocation()
         self.toggleGroup_CloneFromDBLocation.selected = "localDBFile"
         self.toggleGroup_CloneToDBLocation.disable(key: "localDBFile", onComplete: { nextKey in
             if nextKey == "localDBServer" || nextKey == "remoteDBServer" {
