@@ -57,7 +57,8 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
                                                eventFolderLevel: 1,
                                                folderAsBrief: false,
                                                briefFolderLevel: -1,
-                                               subContainers: 0
+                                               subContainers: 0,
+                                               repositoryId: 0
                     )
                     try container?.save(db)
                 }

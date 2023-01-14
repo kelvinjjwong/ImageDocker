@@ -27,6 +27,20 @@ public struct ColumnType: RawRepresentable, Hashable {
     /// The `INTEGER` SQL column type
     public static let integer = ColumnType("INTEGER")
     
+    public static let smallinteger = ColumnType("SMALLINTEGER")
+    
+    public static let biginteger = ColumnType("BIGINTEGER")
+    
+    // The `SERIAL` SQL column type
+    //
+    // see: https://www.postgresql.org/docs/9.2/datatype-numeric.html#DATATYPE-SERIAL
+    //
+    public static let serial = ColumnType("SERIAL")
+    
+    public static let smallserial = ColumnType("SMALLSERIAL")
+    
+    public static let bigserial = ColumnType("BIGSERIAL")
+    
     /// The `DOUBLE` SQL column type
     public static let double = ColumnType("DOUBLE")
     

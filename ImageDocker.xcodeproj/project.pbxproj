@@ -13,6 +13,13 @@
 		5C00784C289FB72B00919826 /* Words+EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C00784B289FB72B00919826 /* Words+EventManager.swift */; };
 		5C15F8CF2965B86E0088C0CE /* LocalEnvironmentSetupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C15F8CE2965B86E0088C0CE /* LocalEnvironmentSetupController.swift */; };
 		5C51173B29695F5B00F64CF6 /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C51173A29695F5B00F64CF6 /* Setting.swift */; };
+		5C51173D29698E7300F64CF6 /* ImageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C51173C29698E7300F64CF6 /* ImageRepository.swift */; };
+		5C51173F296998A900F64CF6 /* RepositoryDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C51173E296998A900F64CF6 /* RepositoryDevice.swift */; };
+		5C5117412972E78000F64CF6 /* ImageFolderTreeScanner+DirWalkthru.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5117402972E78000F64CF6 /* ImageFolderTreeScanner+DirWalkthru.swift */; };
+		5C5117432972E7B900F64CF6 /* ImageFolderTreeScanner+EXIF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5117422972E7B900F64CF6 /* ImageFolderTreeScanner+EXIF.swift */; };
+		5C5117452972E7F500F64CF6 /* ImageFolderTreeScanner+Geolocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5117442972E7F500F64CF6 /* ImageFolderTreeScanner+Geolocation.swift */; };
+		5C5117472972ED6300F64CF6 /* ImageFolderTreeScanner+DbWalkthru.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5117462972ED6300F64CF6 /* ImageFolderTreeScanner+DbWalkthru.swift */; };
+		5C5117492972EE0C00F64CF6 /* ImageFolderTreeScanner+CreateOrUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5117482972EE0C00F64CF6 /* ImageFolderTreeScanner+CreateOrUpdate.swift */; };
 		5CB92EDB2912A9D600C5C42F /* Words+Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB92EDA2912A9D600C5C42F /* Words+Preferences.swift */; };
 		8E00BB8E2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E00BB8D2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift */; };
 		8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015120208F7D23009C2549 /* StackedImageViewController.swift */; };
@@ -378,6 +385,13 @@
 		5C00784B289FB72B00919826 /* Words+EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+EventManager.swift"; sourceTree = "<group>"; };
 		5C15F8CE2965B86E0088C0CE /* LocalEnvironmentSetupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalEnvironmentSetupController.swift; sourceTree = "<group>"; };
 		5C51173A29695F5B00F64CF6 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
+		5C51173C29698E7300F64CF6 /* ImageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRepository.swift; sourceTree = "<group>"; };
+		5C51173E296998A900F64CF6 /* RepositoryDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryDevice.swift; sourceTree = "<group>"; };
+		5C5117402972E78000F64CF6 /* ImageFolderTreeScanner+DirWalkthru.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageFolderTreeScanner+DirWalkthru.swift"; sourceTree = "<group>"; };
+		5C5117422972E7B900F64CF6 /* ImageFolderTreeScanner+EXIF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageFolderTreeScanner+EXIF.swift"; sourceTree = "<group>"; };
+		5C5117442972E7F500F64CF6 /* ImageFolderTreeScanner+Geolocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageFolderTreeScanner+Geolocation.swift"; sourceTree = "<group>"; };
+		5C5117462972ED6300F64CF6 /* ImageFolderTreeScanner+DbWalkthru.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageFolderTreeScanner+DbWalkthru.swift"; sourceTree = "<group>"; };
+		5C5117482972EE0C00F64CF6 /* ImageFolderTreeScanner+CreateOrUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageFolderTreeScanner+CreateOrUpdate.swift"; sourceTree = "<group>"; };
 		5CB92EDA2912A9D600C5C42F /* Words+Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Preferences.swift"; sourceTree = "<group>"; };
 		5D91C952D851F04098CE50A9 /* Pods-ImageDocker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ImageDocker/Pods-ImageDocker.debug.xcconfig"; sourceTree = "<group>"; };
 		735F25C54C2D63CAD538E860 /* Pods-ImageDocker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.release.xcconfig"; path = "Pods/Target Support Files/Pods-ImageDocker/Pods-ImageDocker.release.xcconfig"; sourceTree = "<group>"; };
@@ -1307,6 +1321,7 @@
 			isa = PBXGroup;
 			children = (
 				8E4DECE423B38A7A00F5538C /* Image.swift */,
+				5C51173C29698E7300F64CF6 /* ImageRepository.swift */,
 				8E4DECE723B38A7B00F5538C /* ImageContainer.swift */,
 				8E4DECE523B38A7A00F5538C /* ImageEvent.swift */,
 				8E4DECE623B38A7B00F5538C /* ImagePlace.swift */,
@@ -1319,6 +1334,7 @@
 				8E4E5B77221985A400FE4B68 /* ImageFace.swift */,
 				8E9D803C2348AA550062692A /* ExportProfile.swift */,
 				8EF0C1F0277B5431001E3366 /* Face.swift */,
+				5C51173E296998A900F64CF6 /* RepositoryDevice.swift */,
 			);
 			path = DBO;
 			sourceTree = "<group>";
@@ -1462,6 +1478,11 @@
 			children = (
 				8E4C38CB2117B5190089502C /* Device */,
 				8E0EAE99209D2623008C377F /* ImageFolderTreeScanner.swift */,
+				5C5117482972EE0C00F64CF6 /* ImageFolderTreeScanner+CreateOrUpdate.swift */,
+				5C5117422972E7B900F64CF6 /* ImageFolderTreeScanner+EXIF.swift */,
+				5C5117442972E7F500F64CF6 /* ImageFolderTreeScanner+Geolocation.swift */,
+				5C5117402972E78000F64CF6 /* ImageFolderTreeScanner+DirWalkthru.swift */,
+				5C5117462972ED6300F64CF6 /* ImageFolderTreeScanner+DbWalkthru.swift */,
 				8E98B8F820D7950E00771280 /* ExportManager.swift */,
 				8E73E381223E494C00C14A90 /* ExecutionEnvironment.swift */,
 			);
@@ -1998,11 +2019,13 @@
 				8EE382F823E02585003B7153 /* Colors.swift in Sources */,
 				8E015123208F7D34009C2549 /* StackedVideoViewController.swift in Sources */,
 				8EB986BA20B30C920075B081 /* ImageFile.swift in Sources */,
+				5C51173F296998A900F64CF6 /* RepositoryDevice.swift in Sources */,
 				8EFA02F5243B3F0C00D7C355 /* DBEngine+PostgresConnection+PostgresClientKit.swift in Sources */,
 				8EFA02E9243B3E9B00D7C355 /* PostgresClientKit+ImagePlace.swift in Sources */,
 				8EEB88842090B44B00CDEC81 /* ImageDropView.swift in Sources */,
 				8EBA9DE7217477D900DACAAD /* UIHelper.swift in Sources */,
 				8E9CF30B26489D5500558423 /* Localize.swift in Sources */,
+				5C5117492972EE0C00F64CF6 /* ImageFolderTreeScanner+CreateOrUpdate.swift in Sources */,
 				8EC82EA42121C10A00FC0899 /* LocalDirectory.swift in Sources */,
 				8EF4E1F52453C05800999DD1 /* Error.swift in Sources */,
 				8EB271AC2346BE8A003BF3AF /* TaskProgressViewController.swift in Sources */,
@@ -2056,6 +2079,8 @@
 				8EF0C1F1277B5431001E3366 /* Face.swift in Sources */,
 				8E481485277DAF780097493E /* Words+Tree.swift in Sources */,
 				8EF4E1EC2453C05800999DD1 /* EncodableDBRecord.swift in Sources */,
+				5C5117452972E7F500F64CF6 /* ImageFolderTreeScanner+Geolocation.swift in Sources */,
+				5C5117472972ED6300F64CF6 /* ImageFolderTreeScanner+DbWalkthru.swift in Sources */,
 				8E3EC3B5214DB1B8004B6125 /* LunarCalendarView.swift in Sources */,
 				8EBC0182236B072F00FB6E2F /* TwoColumnTableViewController.swift in Sources */,
 				8ECA1FFD23E5784A00F56895 /* LibraryTree+CollectionView.swift in Sources */,
@@ -2081,6 +2106,7 @@
 				8E4DECE923B38A7B00F5538C /* ImageEvent.swift in Sources */,
 				8E73E382223E494C00C14A90 /* ExecutionEnvironment.swift in Sources */,
 				8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */,
+				5C5117432972E7B900F64CF6 /* ImageFolderTreeScanner+EXIF.swift in Sources */,
 				8E741946242256E2002BAAAE /* RepositoryDaoInterface.swift in Sources */,
 				8E48147F277DAE6C0097493E /* Words+MainCollectionView.swift in Sources */,
 				8EB271532337B768003BF3AF /* GRDB+Image+Statistic.swift in Sources */,
@@ -2097,6 +2123,7 @@
 				8E5D258025A2013900D531A7 /* TokenField.swift in Sources */,
 				8E4C38D72118291F0089502C /* TreeController+LibraryEntry.swift in Sources */,
 				5C15F8CF2965B86E0088C0CE /* LocalEnvironmentSetupController.swift in Sources */,
+				5C5117412972E78000F64CF6 /* ImageFolderTreeScanner+DirWalkthru.swift in Sources */,
 				8EAC5F202144A60900E187E0 /* DeviceFolderViewController.swift in Sources */,
 				8EE1AB3D20D05E49001C75B0 /* EventListViewController.swift in Sources */,
 				8EB986B920B30C920075B081 /* CollectionViewItem.swift in Sources */,
@@ -2129,6 +2156,7 @@
 				8EF4CE6121E56CF700C53AFF /* ViewController+Notification.swift in Sources */,
 				8EFA7CFF211F012A00419777 /* PlacesTreeController.swift in Sources */,
 				8EB2715B23384364003BF3AF /* ImageFile+SourceFilename.swift in Sources */,
+				5C51173D29698E7300F64CF6 /* ImageRepository.swift in Sources */,
 				8ECB51002764268C004DFDD7 /* SubContainersManageViewController.swift in Sources */,
 				8EAD03B12337299E00AAC7C6 /* GRDB+ImageContainer.swift in Sources */,
 				8E481487277DAFF10097493E /* Words+Splash.swift in Sources */,

@@ -33,10 +33,18 @@ public final class PostgresSchemaSQLGenerator : SchemaSQLGenerator {
                 return "FLOAT8"
             case .integer:
                 return "INTEGER"
+            case .smallinteger:
+                return "SMALLINTEGER"
+            case .biginteger:
+                return "BIGINTEGER"
+            case .serial:
+                return "SERIAL"
+            case .smallserial:
+                return "SMALLSERIAL"
+            case .bigserial:
+                return "BIGSERIAL"
             case .numeric:
                 return "DECIMAL"
-            case .text:
-                return "TEXT"
             default:
                 return "TEXT"
             }

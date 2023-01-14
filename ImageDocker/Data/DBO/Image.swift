@@ -121,6 +121,7 @@ public final class Image : Codable {
     var peopleIdAssign:String? = ""
     var trainingSample:Bool? = false
     var facesReviewed:Bool? = false
+    var repositoryId:Int = 0
     
     public init() {
         

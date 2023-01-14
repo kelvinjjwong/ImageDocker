@@ -12,61 +12,11 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
     let logger = ConsoleLogger(category: "RepositoryDaoPostgresCK")
     
-    func getOrCreateContainer(name: String, path: String, parentPath parentFolder: String, repositoryPath: String, homePath: String, storagePath: String, facePath: String, cropPath: String, subPath: String, manyChildren: Bool, hideByParent: Bool) -> (ImageContainer, Bool) {
-        
-        let db = PostgresConnection.database()
-        if let container = ImageContainer.fetchOne(db, parameters: ["path": path]) {
-            return (container, false)
-        }else{
-            let container = ImageContainer(name: name,
-                                       parentFolder: parentFolder,
-                                       path: path,
-                                       imageCount: 0,
-                                       repositoryPath: repositoryPath.withStash(),
-                                       homePath: homePath,
-                                       storagePath: storagePath,
-                                       facePath: facePath,
-                                       cropPath: cropPath,
-                                       subPath: subPath,
-                                       parentPath: parentFolder.replacingFirstOccurrence(of: repositoryPath.withStash(), with: ""),
-                                       hiddenByRepository: false,
-                                       hiddenByContainer: false,
-                                       deviceId: "",
-                                       manyChildren: manyChildren,
-                                       hideByParent: hideByParent,
-                                       folderAsEvent: false,
-                                       eventFolderLevel: 1,
-                                       folderAsBrief: false,
-                                       briefFolderLevel: -1,
-                                       subContainers: 0
-            )
-            container.save(db)
-            return (container, true)
-        }
-    }
+    // MARK: IMAGE REPOSITORY CRUD
     
-    func deleteContainer(path: String, deleteImage: Bool) -> ExecuteState {
+    func getRepository(repositoryPath: String) -> ImageContainer? {
         let db = PostgresConnection.database()
-        do {
-            // delete container-self
-            try db.execute(sql: """
-                DELETE FROM "ImageContainer" WHERE "path"='\(path)'
-                """)
-            // delete sub-containers
-            try db.execute(sql: """
-                DELETE FROM "ImageContainer" WHERE "path" LIKE '\(path.withStash())%'
-                """)
-            // delete images
-            if deleteImage {
-                try db.execute(sql: """
-                    DELETE FROM "Image" WHERE "path" LIKE '\(path.withStash())%'
-                    """)
-            }
-            return .OK
-        }catch{
-            self.logger.log(error)
-            return .ERROR
-        }
+        return ImageContainer.fetchOne(db, where: "(\"repositoryPath\" = $1 or \"repositoryPath\" = $2) and \"parentFolder\"=''", values: [repositoryPath.withoutStash(), repositoryPath.withStash()])
     }
     
     func deleteRepository(repositoryRoot: String) -> ExecuteState {
@@ -85,16 +35,6 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
             self.logger.log(error)
             return .ERROR
         }
-    }
-    
-    func getContainer(path: String) -> ImageContainer? {
-        let db = PostgresConnection.database()
-        return ImageContainer.fetchOne(db, parameters: ["path" : path])
-    }
-    
-    func getRepository(repositoryPath: String) -> ImageContainer? {
-        let db = PostgresConnection.database()
-        return ImageContainer.fetchOne(db, where: "(\"repositoryPath\" = $1 or \"repositoryPath\" = $2) and \"parentFolder\"=''", values: [repositoryPath.withoutStash(), repositoryPath.withStash()])
     }
     
     func getRepositories(orderBy: String, condition:SearchCondition?) -> [ImageContainer] {
@@ -179,6 +119,160 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         }
         return result
     }
+    
+    // MARK: IMAGE REPOSITORY UPDATE
+    
+    func hideRepository(repositoryRoot: String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+                update "ImageContainer" set "hiddenByRepository" = true where "path" like $1
+                """, parameterValues: ["\(repositoryRoot.withStash())%"])
+            try db.execute(sql: """
+                update "ImageContainer" set "hiddenByRepository" = true where "repositoryPath" = $1
+                """, parameterValues: ["\(repositoryRoot.withStash())"])
+            try db.execute(sql: """
+                update "Image" set "hiddenByRepository" = true where "path" like $1
+                """, parameterValues: ["\(repositoryRoot.withStash())%"])
+            try db.execute(sql: """
+                update "Image" set "hiddenByRepository" = true where "repositoryPath" = $1
+                """, parameterValues: ["\(repositoryRoot.withStash())"])
+        }catch{
+            self.logger.log(error)
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    func showRepository(repositoryRoot: String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+                update "ImageContainer" set "hiddenByRepository" = false where "path" like $1
+                """, parameterValues: ["\(repositoryRoot.withStash())%"])
+            try db.execute(sql: """
+                update "ImageContainer" set "hiddenByRepository" = false where "repositoryPath" = $1
+                """, parameterValues: ["\(repositoryRoot.withStash())"])
+            try db.execute(sql: """
+                update "Image" set "hiddenByRepository" = false where "path" like $1
+                """, parameterValues: ["\(repositoryRoot.withStash())%"])
+            try db.execute(sql: """
+                update "Image" set "hiddenByRepository" = false where "repositoryPath" = $1
+                """, parameterValues: ["\(repositoryRoot.withStash())"])
+        }catch{
+            self.logger.log(error)
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    func getLastPhotoTakenDateOfRepositories() -> [String : String] {
+        let db = PostgresConnection.database()
+        
+        final class TempRecord : PostgresCustomRecord {
+            
+            var name:String = ""
+            var lastPhotoTakenDate:String = ""
+            public init() {}
+        }
+        
+        let sql = """
+        select "name","lastPhotoTakenDate" from
+        (select "name",("path" || '/') as "repositoryPath" from "ImageContainer" where "parentFolder"='') c left join (
+        select max("photoTakenDate") as "lastPhotoTakenDate","repositoryPath" from "Image" group by "repositoryPath") i on c."repositoryPath" = i."repositoryPath"
+        where "lastPhotoTakenDate" is not null
+        order by "name"
+        """
+        var results:[String:String] = [:]
+        let records = TempRecord.fetchAll(db, sql:sql)
+        for row in records {
+            results[row.name] = row.lastPhotoTakenDate
+        }
+        return results
+    }
+    
+    // MARK: IMAGE CONTAINER CRUD
+    
+    func getOrCreateContainer(name: String, path: String, parentPath parentFolder: String, repositoryPath: String, homePath: String, storagePath: String, facePath: String, cropPath: String, subPath: String, manyChildren: Bool, hideByParent: Bool) -> (ImageContainer, Bool) {
+        
+        let db = PostgresConnection.database()
+        if let container = ImageContainer.fetchOne(db, parameters: ["path": path]) {
+            return (container, false)
+        }else{
+            let container = ImageContainer(name: name,
+                                       parentFolder: parentFolder,
+                                       path: path,
+                                       imageCount: 0,
+                                       repositoryPath: repositoryPath.withStash(),
+                                       homePath: homePath,
+                                       storagePath: storagePath,
+                                       facePath: facePath,
+                                       cropPath: cropPath,
+                                       subPath: subPath,
+                                       parentPath: parentFolder.replacingFirstOccurrence(of: repositoryPath.withStash(), with: ""),
+                                       hiddenByRepository: false,
+                                       hiddenByContainer: false,
+                                       deviceId: "",
+                                       manyChildren: manyChildren,
+                                       hideByParent: hideByParent,
+                                       folderAsEvent: false,
+                                       eventFolderLevel: 1,
+                                       folderAsBrief: false,
+                                       briefFolderLevel: -1,
+                                       subContainers: 0,
+                                       repositoryId: 0
+            )
+            container.save(db)
+            return (container, true)
+        }
+    }
+    
+    func saveImageContainer(container: ImageContainer) -> ExecuteState {
+        let db = PostgresConnection.database()
+        container.save(db)
+        return .OK
+    }
+    
+    func deleteContainer(path: String, deleteImage: Bool) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            // delete container-self
+            try db.execute(sql: """
+                DELETE FROM "ImageContainer" WHERE "path"='\(path)'
+                """)
+            // delete sub-containers
+            try db.execute(sql: """
+                DELETE FROM "ImageContainer" WHERE "path" LIKE '\(path.withStash())%'
+                """)
+            // delete images
+            if deleteImage {
+                try db.execute(sql: """
+                    DELETE FROM "Image" WHERE "path" LIKE '\(path.withStash())%'
+                    """)
+            }
+            return .OK
+        }catch{
+            self.logger.log(error)
+            return .ERROR
+        }
+    }
+    
+    func getContainer(path: String) -> ImageContainer? {
+        let db = PostgresConnection.database()
+        return ImageContainer.fetchOne(db, parameters: ["path" : path])
+    }
+    
+    func getAllContainers() -> [ImageContainer] {
+        let db = PostgresConnection.database()
+        return ImageContainer.fetchAll(db, orderBy: "\"path\"")
+    }
+    
+    func getContainers(rootPath: String) -> [ImageContainer] {
+        let db = PostgresConnection.database()
+        return ImageContainer.fetchAll(db, where: "\"path\" like $1", values: ["\(rootPath.withStash())%"])
+    }
+    
+    // MARK: SUB CONTAINER
     
     func getSubContainers(parent path: String, condition:SearchCondition?) -> [ImageContainer] {
         let db = PostgresConnection.database()
@@ -271,15 +365,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         return ImageContainer.count(db, parameters: ["parentFolder" : path])
     }
     
-    func getAllContainers() -> [ImageContainer] {
-        let db = PostgresConnection.database()
-        return ImageContainer.fetchAll(db, orderBy: "\"path\"")
-    }
-    
-    func getContainers(rootPath: String) -> [ImageContainer] {
-        let db = PostgresConnection.database()
-        return ImageContainer.fetchAll(db, where: "\"path\" like $1", values: ["\(rootPath.withStash())%"])
-    }
+    // MARK: IMAGE CONTAINER QUERIES
     
     func getAllContainerPathsOfImages(rootPath: String?) -> Set<String> {
         let db = PostgresConnection.database()
@@ -368,11 +454,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         return result
     }
     
-    func saveImageContainer(container: ImageContainer) -> ExecuteState {
-        let db = PostgresConnection.database()
-        container.save(db)
-        return .OK
-    }
+    // MARK: IMAGE CONTAINER UPDATE
     
     func updateImageContainerParentFolder(path: String, parentFolder: String) -> ExecuteState {
         let db = PostgresConnection.database()
@@ -492,75 +574,6 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
             return .ERROR
         }
         return .OK
-    }
-    
-    func hideRepository(repositoryRoot: String) -> ExecuteState {
-        let db = PostgresConnection.database()
-        do {
-            try db.execute(sql: """
-                update "ImageContainer" set "hiddenByRepository" = true where "path" like $1
-                """, parameterValues: ["\(repositoryRoot.withStash())%"])
-            try db.execute(sql: """
-                update "ImageContainer" set "hiddenByRepository" = true where "repositoryPath" = $1
-                """, parameterValues: ["\(repositoryRoot.withStash())"])
-            try db.execute(sql: """
-                update "Image" set "hiddenByRepository" = true where "path" like $1
-                """, parameterValues: ["\(repositoryRoot.withStash())%"])
-            try db.execute(sql: """
-                update "Image" set "hiddenByRepository" = true where "repositoryPath" = $1
-                """, parameterValues: ["\(repositoryRoot.withStash())"])
-        }catch{
-            self.logger.log(error)
-            return .ERROR
-        }
-        return .OK
-    }
-    
-    func showRepository(repositoryRoot: String) -> ExecuteState {
-        let db = PostgresConnection.database()
-        do {
-            try db.execute(sql: """
-                update "ImageContainer" set "hiddenByRepository" = false where "path" like $1
-                """, parameterValues: ["\(repositoryRoot.withStash())%"])
-            try db.execute(sql: """
-                update "ImageContainer" set "hiddenByRepository" = false where "repositoryPath" = $1
-                """, parameterValues: ["\(repositoryRoot.withStash())"])
-            try db.execute(sql: """
-                update "Image" set "hiddenByRepository" = false where "path" like $1
-                """, parameterValues: ["\(repositoryRoot.withStash())%"])
-            try db.execute(sql: """
-                update "Image" set "hiddenByRepository" = false where "repositoryPath" = $1
-                """, parameterValues: ["\(repositoryRoot.withStash())"])
-        }catch{
-            self.logger.log(error)
-            return .ERROR
-        }
-        return .OK
-    }
-    
-    func getLastPhotoTakenDateOfRepositories() -> [String : String] {
-        let db = PostgresConnection.database()
-        
-        final class TempRecord : PostgresCustomRecord {
-            
-            var name:String = ""
-            var lastPhotoTakenDate:String = ""
-            public init() {}
-        }
-        
-        let sql = """
-        select "name","lastPhotoTakenDate" from
-        (select "name",("path" || '/') as "repositoryPath" from "ImageContainer" where "parentFolder"='') c left join (
-        select max("photoTakenDate") as "lastPhotoTakenDate","repositoryPath" from "Image" group by "repositoryPath") i on c."repositoryPath" = i."repositoryPath"
-        where "lastPhotoTakenDate" is not null
-        order by "name"
-        """
-        var results:[String:String] = [:]
-        let records = TempRecord.fetchAll(db, sql:sql)
-        for row in records {
-            results[row.name] = row.lastPhotoTakenDate
-        }
-        return results
     }
     
 

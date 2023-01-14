@@ -593,6 +593,59 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v46") { db in
+            try db.create(table: "ImageRepository", body: { t in
+                t.column("id", .serial).primaryKey().unique().notNull()
+                t.column("name", .text).defaults(to: "")
+                t.column("homeVolume", .text).defaults(to: "")
+                t.column("homePath", .text).defaults(to: "")
+                t.column("repositoryVolume", .text).defaults(to: "")
+                t.column("repositoryPath", .text).defaults(to: "")
+                t.column("storageVolume", .text).defaults(to: "")
+                t.column("storagePath", .text).defaults(to: "")
+                t.column("faceVolume", .text).defaults(to: "")
+                t.column("facePath", .text).defaults(to: "")
+                t.column("cropVolume", .text).defaults(to: "")
+                t.column("cropPath", .text).defaults(to: "")
+                t.column("deviceId", .text).defaults(to: "")
+                t.column("useFirstFolderAsEvent", .boolean).defaults(to: false)
+                t.column("folderAsEvent", .boolean).defaults(to: false)
+                t.column("eventFolderLevel", .integer).defaults(to: 2)
+                t.column("folderAsBrief", .boolean).defaults(to: false)
+                t.column("briefFolderLevel", .integer).defaults(to: -1)
+            })
+        }
+        
+        migrator.version("v47") { db in
+            try db.create(table: "RepositoryDevice", body: { t in
+                t.column("id", .serial).primaryKey().unique().notNull()
+                t.column("repositoryId", .integer).defaults(to: 0)
+                t.column("deviceId", .text).defaults(to: "")
+                t.column("startYear", .integer).defaults(to: 0)
+                t.column("startMonth", .integer).defaults(to: 0)
+                t.column("startDay", .integer).defaults(to: 0)
+            })
+        }
+        
+        migrator.version("v48") { db in
+            try db.alter(table: "ImageContainer", body: { t in
+                t.column("repositoryId", .integer).defaults(to: 0).indexed()
+            })
+        }
+        
+        migrator.version("v49") { db in
+            try db.alter(table: "Image", body: { t in
+                t.column("repositoryId", .integer).defaults(to: 0).indexed()
+            })
+        }
+        
+        migrator.version("v50") { db in
+            try db.alter(table: "ImageContainer", body: { t in
+                t.column("id", .serial).defaults(to: 0).indexed()
+                t.column("parentId", .integer).defaults(to: 0).indexed()
+            })
+        }
+        
         do {
             try migrator.migrate(cleanVersions: dropBeforeCreate)
         }catch{
