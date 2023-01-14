@@ -33,6 +33,22 @@ class RepositoryDao {
     
     // MARK: CRUD
     
+    func createRepository(name:String,
+                                 path:String,
+                                 homePath:String,
+                                 storagePath:String,
+                                 facePath:String,
+                                 cropPath:String) -> ImageFolder {
+        self.logger.log("Creating repository with name:\(name) , path:\(path)")
+        return ImageFolder(URL(fileURLWithPath: path),
+                            name: name,
+                            repositoryPath: path,
+                            homePath: homePath,
+                            storagePath: storagePath,
+                            facePath: facePath,
+                            cropPath: cropPath)
+    }
+    
     func getOrCreateContainer(name:String,
                               path:String,
                               parentPath:String = "",

@@ -25,6 +25,22 @@ public final class ImageRecordDao {
         }
     }
     
+    func createImageIfAbsent(url:String, fileUrlToRepo:[String:ImageContainer], indicator:Accumulator? = nil) -> ExecuteState {
+        //self.logger.log("CREATING PHOTO \(url.path)")
+        if let repo = fileUrlToRepo[url]{
+//            self.logger.log(">>> Creating image \(url), repo: \(repo.repositoryPath)")
+            let image = ImageFile(url: URL(fileURLWithPath: url),
+                                  repository: repo,
+                                  indicator: indicator,
+                                  quickCreate: true
+            )
+            
+            return image.save()
+        }else{
+            return .NO_RECORD
+        }
+    }
+    
     func getOrCreatePhoto(filename:String, path:String, parentPath:String, repositoryPath:String? = nil) -> Image {
         return self.impl.getOrCreatePhoto(filename: filename, path: path, parentPath: parentPath, repositoryPath: repositoryPath)
     }

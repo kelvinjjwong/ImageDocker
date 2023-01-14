@@ -450,7 +450,7 @@ class EditRepositoryViewController: NSViewController {
         
         
         
-        let imagefolder = ImageFolderTreeScanner.default.createRepository(name: name,
+        let imagefolder = RepositoryDao.default.createRepository(name: name,
                                                 path: repositoryPath,
                                                 homePath: homePath,
                                                 storagePath: storagePath,

@@ -10,7 +10,7 @@ import Foundation
 
 extension ImageFolderTreeScanner {
     
-    
+    // in use
     func walkthruDirectoryForPaths(repository:ImageContainer, taskId:String = "", indicator:Accumulator? = nil) -> DirectoryPaths{
         let result = DirectoryPaths()
         let startingURL = URL(fileURLWithPath: repository.path)

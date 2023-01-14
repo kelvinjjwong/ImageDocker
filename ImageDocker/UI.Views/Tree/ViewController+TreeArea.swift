@@ -201,7 +201,7 @@ extension ViewController {
         //self.creatingRepository = true
 //        self.logger.log("UPDATING CONTAINERS")
         DispatchQueue.global().async {
-            ImageFolderTreeScanner.default.updateContainers(onCompleted: {
+            ImageFolderTreeScanner.default.updateAllContainersFileCount(onCompleted: {
                 
 //                self.logger.log("UPDATING CONTAINERS: DONE")
                 

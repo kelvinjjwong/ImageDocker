@@ -50,7 +50,7 @@ class ImageFolderTreeScanner {
         return count
     }
     
-    
+    // MARK: SHARED SCANNER
     fileprivate func scanRepository(repository repo:ImageContainer, excludedContainerPaths:Set<String>, step i:Int, total totalCount:Int, taskId:String = "", indicator:Accumulator? = nil) -> (Bool, Set<String>, [String:ImageContainer]) {
         
         // for return:
@@ -327,6 +327,7 @@ class ImageFolderTreeScanner {
         return (true, filesysUrls, fileUrlToRepo)
     }
     
+    // MARK: HANDLE GAP
     fileprivate func applyImportGap(dbUrls:Set<String>, filesysUrls:Set<String>, fileUrlToRepo:[String:ImageContainer], excludedContainerPaths:Set<String>, taskId:String = "",  indicator:Accumulator? = nil) -> Bool {
         self.logger.log("EXISTING DB PHOTO COUNT = \(dbUrls.count)")
         self.logger.log("EXISTING SYS PHOTO COUNT = \(filesysUrls.count)")
@@ -421,7 +422,7 @@ class ImageFolderTreeScanner {
                 }
                 
                 if !exclude {
-                    let createState = self.createImageIfAbsent(url: url, fileUrlToRepo: fileUrlToRepo, indicator: indicator)
+                    let createState = ImageRecordDao.default.createImageIfAbsent(url: url, fileUrlToRepo: fileUrlToRepo, indicator: indicator)
                     if createState == .OK {
                         DispatchQueue.main.async {
                             self.logger.log("Imported images ... (\(index)/\(urlsToAdd.count))")
@@ -578,6 +579,7 @@ class ImageFolderTreeScanner {
         return true
     }
     
+    // MARK: TASK - SCAN SINGLE REPO
     func scanSingleRepository_asTask(repository:ImageContainer, indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil) {
         let _ = TaskletManager.default.createAndStartTask(type: "IMPORT", name: repository.name
         , exec: { task in
@@ -590,7 +592,7 @@ class ImageFolderTreeScanner {
         })
     }
     
-    // entrance method
+    // MARK: ENTRY - SCAN SINGLE REPO
     func scanSingleRepository(repository:ImageContainer, taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil) -> Bool {
         
         if TaskletManager.default.isTaskStopped(id: taskId) == true { return false }
@@ -631,7 +633,7 @@ class ImageFolderTreeScanner {
         return true
     }
     
-    // entrance method
+    // MARK: ENTRY - SCAN MULTI REPOS
     func scanRepositories(taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil)  {
         
         if suppressedScan {

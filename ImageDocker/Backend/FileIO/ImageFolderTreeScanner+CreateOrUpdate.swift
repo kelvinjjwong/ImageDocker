@@ -10,40 +10,9 @@ import Foundation
 
 extension ImageFolderTreeScanner {
     
-    func createRepository(name:String,
-                                 path:String,
-                                 homePath:String,
-                                 storagePath:String,
-                                 facePath:String,
-                                 cropPath:String) -> ImageFolder {
-        self.logger.log("Creating repository with name:\(name) , path:\(path)")
-        return ImageFolder(URL(fileURLWithPath: path),
-                            name: name,
-                            repositoryPath: path,
-                            homePath: homePath,
-                            storagePath: storagePath,
-                            facePath: facePath,
-                            cropPath: cropPath)
-    }
-    
-    func createImageIfAbsent(url:String, fileUrlToRepo:[String:ImageContainer], indicator:Accumulator? = nil) -> ExecuteState {
-        //self.logger.log("CREATING PHOTO \(url.path)")
-        if let repo = fileUrlToRepo[url]{
-            self.logger.log(">>> Creating image \(url), repo: \(repo.repositoryPath)")
-            let image = ImageFile(url: URL(fileURLWithPath: url),
-                                  repository: repo,
-                                  indicator: indicator,
-                                  quickCreate: true
-            )
-            
-            return image.save()
-        }else{
-            return .NO_RECORD
-        }
-    }
     
     // TODO: this procedure keep running in background for a long long time, keep getting and counting db records, need consider performance issue, or need change data structure
-    func updateContainers(onCompleted: (() -> Void)? = nil , indicator:Accumulator? = nil) {
+    func updateAllContainersFileCount(onCompleted: (() -> Void)? = nil , indicator:Accumulator? = nil) {
         var imageFolders:[ImageFolder] = []
         let exists = RepositoryDao.default.getAllContainers()
         if exists.count > 0 {
