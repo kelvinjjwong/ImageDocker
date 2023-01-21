@@ -415,6 +415,8 @@ class ViewController: NSViewController {
         
         self.logger.log("before splash - frame \(self.view.bounds)")
         
+        NotificationCenter.default.addObserver(self, selector: #selector(changeTasksCount(notification:)), name: NSNotification.Name(rawValue: TaskletManager.NOTIFICATION_KEY_TASKCOUNT), object: nil)
+        
         self.imagesLoader = CollectionViewItemsLoader()
         
         self.btnCombineDuplicates.toolTip = Words.main_combineTooltip.word()
@@ -454,8 +456,15 @@ class ViewController: NSViewController {
         
         self.chbShowHidden.state = NSButton.StateValue.off
         
-        
         NotificationCenter.default.addObserver(self, selector: #selector(processDatabaseError(notification:)), name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: nil)
+    }
+    
+    @objc func changeTasksCount(notification:Notification) {
+        if let number = notification.object as? Int {
+            DispatchQueue.main.async {
+                self.btnTasks.title = Words.tasks.fill(arguments: "\(number)")
+            }
+        }
     }
     
     @objc func processDatabaseError(notification:Notification) {

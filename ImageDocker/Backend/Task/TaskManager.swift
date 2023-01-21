@@ -226,6 +226,8 @@ class Tasklet {
 
 class TaskletManager {
     
+    static let NOTIFICATION_KEY_TASKCOUNT = "Task_Count"
+    
     let logger = ConsoleLogger(category: "TaskletManager")
     
     static let `default` = TaskletManager()
@@ -255,6 +257,10 @@ class TaskletManager {
     
     func isSingleMode() -> Bool {
         return Setting.database.isSQLite()
+    }
+    
+    func updateTasksCountInMainWindow() {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: TaskletManager.NOTIFICATION_KEY_TASKCOUNT), object: tasks.count)
     }
     
     func startQueueTimer() {
@@ -292,12 +298,16 @@ class TaskletManager {
                                 }else{
                                     self.startExecution(task: task)
                                 }
+                                
+                                self.updateTasksCountInMainWindow()
                             }
                             
                         }else if task.state == "STOPPED" {
                             let _ = self.queue.dequeue()
+                            self.updateTasksCountInMainWindow()
                         }else if task.state == "COMPLETED" {
                             let _ = self.queue.dequeue()
+                            self.updateTasksCountInMainWindow()
                             if task.isFixedDelayJob { // queue for next run
                                 // increase task timesOfRun,
                                 task.timesOfRun += 1
@@ -482,6 +492,8 @@ class TaskletManager {
                 view.stopTask(task: task)
             }
         }
+        
+        self.updateTasksCountInMainWindow()
     }
     
     func removeTask(type:String, name:String) {
@@ -506,6 +518,8 @@ class TaskletManager {
         if let view = self.viewManager {
             view.removeTask(task: task)
         }
+        
+        self.updateTasksCountInMainWindow()
     }
     
     // MARK: - TASK's PROPERTIES
@@ -575,6 +589,8 @@ class TaskletManager {
 
             task.notifyChange()
             self.logger.log("forceComplete notifyChange \(task.name)")
+            
+            self.updateTasksCountInMainWindow()
         }
     }
     
@@ -681,6 +697,8 @@ class TaskletManager {
         }
         self.setExecution(id: task.id, exec: exec, stop: stop)
         self.startExecution(id: task.id)
+        
+        self.updateTasksCountInMainWindow()
         return task
     }
     
@@ -739,6 +757,8 @@ class TaskletManager {
                     }
                 }
             }
+            
+            self.updateTasksCountInMainWindow()
         }
     }
     
@@ -748,6 +768,8 @@ class TaskletManager {
                 self.stopTask(task: task, fromUI: fromUI)
             }
         }
+        
+        self.updateTasksCountInMainWindow()
     }
     
     func removeCompletedTasks() {
@@ -756,6 +778,8 @@ class TaskletManager {
                 self.removeTask(task: task)
             }
         }
+        
+        self.updateTasksCountInMainWindow()
     }
     
     func removeAllTasks() {
@@ -765,6 +789,8 @@ class TaskletManager {
                 self.removeTask(task: task)
             }
         }
+        
+        self.updateTasksCountInMainWindow()
     }
     
     func printAll() {
@@ -782,7 +808,7 @@ class TaskletManager {
 
 class FakeTaskletManager {
     
-    let logger = ConsoleLogger(category: "FakeTaskletManager")
+    let logger = ConsoleLogger(category: "FakeTaskletManager", includeTypes: [.debug])
     
     static let `default` = FakeTaskletManager()
     
@@ -794,11 +820,11 @@ class FakeTaskletManager {
         TaskletManager.default.setTotal(id: taskId, total: total)
         while(n <= total) {
             if TaskletManager.default.isTaskStopped(id: taskId) == true {
-                self.logger.log("stopped !!!!!!!")
+                self.logger.log(.debug, "stopped !!!!!!!")
                 return
             }
             sleep(3)
-            self.logger.log("doing step \(n)")
+            self.logger.log(.debug, "doing step \(n)")
             TaskletManager.default.updateProgress(id: taskId, message: "Doing step \(n)", increase: true)
             
             n += 1
@@ -806,17 +832,17 @@ class FakeTaskletManager {
     }
     
     func stubFixedDelayJob(task:Tasklet) {
-        self.logger.log(">>>>> start fixed delay body - \(task.name) - \(task.state)")
+        self.logger.log(.debug, ">>>>> start fixed delay body - \(task.name) - \(task.state)")
         
         var n = 0
         while(n < 10){
             
             if TaskletManager.default.isTaskStopped(id: task.id) {
-                self.logger.log("stopped fixed delay job body !!!!")
+                self.logger.log(.debug, "stopped fixed delay job body !!!!")
                 return
             }
             
-            self.logger.log("running fixed delay body - \(task.name) - \(task.state)")
+            self.logger.log(.debug, "running fixed delay body - \(task.name) - \(task.state)")
             TaskletManager.default.updateProgress(type: "TEST", name: "test5234", message: "\(Date()) running fixed delay body step \(n+1)", increase: true)
             
             sleep(5)
@@ -826,17 +852,17 @@ class FakeTaskletManager {
     }
     
     func stubFixedDelayJob1(task:Tasklet) {
-        self.logger.log(">>>>> start fixed delay body - \(task.name) - \(task.state)")
+        self.logger.log(.debug, ">>>>> start fixed delay body - \(task.name) - \(task.state)")
         
         var n = 0
         while(n < 10){
             
             if TaskletManager.default.isTaskStopped(id: task.id) {
-                self.logger.log("stopped fixed delay job body !!!!")
+                self.logger.log(.debug, "stopped fixed delay job body !!!!")
                 return
             }
             
-            self.logger.log("running fixed delay body - \(task.name) - \(task.state)")
+            self.logger.log(.debug, "running fixed delay body - \(task.name) - \(task.state)")
             TaskletManager.default.updateProgress(type: "TEST", name: "test1234", message: "\(Date()) running fixed delay body step \(n+1)", increase: true)
             
             sleep(5)
@@ -846,7 +872,7 @@ class FakeTaskletManager {
     }
     
     func rehearsal() {
-        self.logger.log("task manager rehearsal")
+        self.logger.log(.debug, "task manager rehearsal")
         
         let _ = TaskletManager.default.createAndStartTask(type: "TEST", name: "test4234", exec: { task in
             DispatchQueue.global().async {

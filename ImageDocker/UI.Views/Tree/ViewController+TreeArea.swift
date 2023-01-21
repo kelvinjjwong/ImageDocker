@@ -151,6 +151,15 @@ extension ViewController {
                                     nodeIcon: { collection in
                                         return Icons.folder
         },
+                                    nodeValue: { collection in
+            if collection.subImagesCount == 0 {
+                return "📂 \(collection.subContainersCount)"
+            }else if collection.subContainersCount == 0 {
+                return "🏞️ \(collection.subImagesCount)"
+            }else {
+                return "📂 \(collection.subContainersCount) 🏞️ \(collection.subImagesCount)"
+            }
+        },
                                     onNodeSelected: { collection in
 //                                        self.logger.log("action on \(collection.path)")
                                         if let container = collection.relatedObject as? ImageContainer {

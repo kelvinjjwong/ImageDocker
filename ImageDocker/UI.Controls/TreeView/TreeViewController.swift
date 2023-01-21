@@ -10,7 +10,7 @@ import Cocoa
 
 class TreeViewController : StackBodyViewController {
     
-    let logger = ConsoleLogger(category: "TreeViewController")
+    let logger = ConsoleLogger(category: "TreeViewController", includeTypes: [.trace])
     
     var notificationPopover:NSPopover?
     var notificationViewController:NotificationViewController!
@@ -168,9 +168,8 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate, Tr
     
     func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool {
         if let collection = item as? TreeCollection {
-            return collection.expandable
-            || collection.subContainersCount > 0
-            || (collection.subContainersCount == 0 && collection.childrenCount > 0)
+            self.logger.log(.trace, "tree node expandable:\(collection.expandable), subContainersCount:\(collection.subContainersCount), subImagesCount:\(collection.subImagesCount), name:\(collection.name)")
+            return collection.expandable || collection.subContainersCount > 0
         }
         // tree-root
         return self.trees.count > 0
@@ -220,10 +219,10 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate, Tr
                         colView.valueField?.wantsLayer = true
                         colView.valueField?.layer?.cornerRadius = 8
                         colView.valueField?.layer?.masksToBounds = true
-                        colView.valueField?.alignment = .center
+                        colView.valueField?.alignment = .left
                         colView.valueField?.backgroundColor = Colors.Tree_Badge_Background
                         colView.valueField?.textColor = Colors.Tree_Badge_Text
-                        colView.valueField?.frame.size.width = 52
+                        colView.valueField?.frame.size.width = 62
                         colView.valueField?.frame.size.height = 15
                     }
                 }

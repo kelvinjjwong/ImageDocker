@@ -60,6 +60,10 @@ class TreeCollection {
         let data = TreeCollection(collection.name)
         data.path = collection.path
         data.childrenCount = collection.childrenCount
+        data.subContainersCount = collection.subContainersCount
+        data.subImagesCount = collection.subImagesCount
+        data.hiddenImagesCount = collection.hiddenImagesCount
+        data.expandable = collection.expandable
         return data
     }
     
@@ -192,6 +196,10 @@ class StaticTreeDataSource : TreeDataSource {
             let child = TreeCollection(data.name)
             child.path = data.path
             child.childrenCount = data.children.count
+            child.subContainersCount = data.subContainersCount
+            child.subImagesCount = data.subImagesCount
+            child.hiddenImagesCount = data.hiddenImagesCount
+            child.expandable = data.expandable
             resultDataset.append(child)
         }
         self.logger.log("loaded \(resultDataset.count) children")

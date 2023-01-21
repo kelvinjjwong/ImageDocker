@@ -613,200 +613,224 @@ class RepositoryDetailViewController: NSViewController {
         
         logger.log(.debug, "repo path: \(self._repositoryPath)")
 //        let (volume, path) = _repositoryPath.getVolumeFromThisPath()
+        
+        
         if let imageRepository = RepositoryDao.default.getRepository(id: self._repositoryId) {
             let volume = imageRepository.repositoryVolume
             let path = imageRepository.repositoryPath
             logger.log(.debug, "DB record found for ImageRepository: id=\(imageRepository.id), name=\(imageRepository.name), volume=\(volume), path=\(path)")
             
-            DispatchQueue.global().async {
+            let _ = TaskletManager.default.createAndStartTask(type: "Re-Scan repository", name: "\(imageRepository.name)"
+                                                              , exec: { task in
                 
-                if let repositoryLinkedContainer = RepositoryDao.default.findContainer(repositoryId: imageRepository.id, subPath: "") {
-                    self.logger.log("ImageRepository linked with an ImageContainer, repositoryId:\(imageRepository.id), containerId:\(repositoryLinkedContainer.id)")
-                }else{
-                    self.logger.log(.warning, "Unable to find ImageRepository's linked ImageContainer record in database, repositoryId:\(imageRepository.id)")
-                    if let createdLinkedContainer = RepositoryDao.default.createEmptyImageContainerLinkToRepository(repositoryId: imageRepository.id) {
-                        self.logger.log(.info, "Created an empty ImageContainer linking to ImageRepository, repositoryId:\(imageRepository.id), containerId:\(createdLinkedContainer.id)")
+                
+                TaskletManager.default.updateProgress(id: task.id, message: "Re-Scanning folders ...", increase: false)
+                
+                DispatchQueue.global().async {
+                    
+                    if let repositoryLinkedContainer = RepositoryDao.default.findContainer(repositoryId: imageRepository.id, subPath: "") {
+                        self.logger.log("ImageRepository linked with an ImageContainer, repositoryId:\(imageRepository.id), containerId:\(repositoryLinkedContainer.id)")
                     }else{
-                        self.logger.log(.error, "Unable to create an empty ImageContainer linking to ImageRepository, repositoryId:\(imageRepository.id)")
+                        self.logger.log(.warning, "Unable to find ImageRepository's linked ImageContainer record in database, repositoryId:\(imageRepository.id)")
+                        if let createdLinkedContainer = RepositoryDao.default.createEmptyImageContainerLinkToRepository(repositoryId: imageRepository.id) {
+                            self.logger.log(.info, "Created an empty ImageContainer linking to ImageRepository, repositoryId:\(imageRepository.id), containerId:\(createdLinkedContainer.id)")
+                        }else{
+                            self.logger.log(.error, "Unable to create an empty ImageContainer linking to ImageRepository, repositoryId:\(imageRepository.id)")
+                            DispatchQueue.main.async {
+                                self.working = false
+                                self.toggleButtons(true)
+                                self.lblMessage.stringValue = "Database error: Unable to create an empty ImageContainer linking to this repository."
+                            }
+                            return
+                        }
+                    }
+                    
+                    if TaskletManager.default.isTaskStopped(id: task.id) == true {
                         DispatchQueue.main.async {
                             self.working = false
                             self.toggleButtons(true)
-                            self.lblMessage.stringValue = "Database error: Unable to create an empty ImageContainer linking to this repository."
+                            self.lblMessage.stringValue = "User stopped task: re-scan folders."
                         }
                         return
                     }
-                }
-                
-                let options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles]
-                let resourceValueKeys = [URLResourceKey.isRegularFileKey, URLResourceKey.typeIdentifierKey, URLResourceKey.isDirectoryKey]
-                if let directoryEnumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: "\(volume)\(path)"),
-                                                                       includingPropertiesForKeys: resourceValueKeys,
-                                                                       options: options,
-                                                                       errorHandler: { url, error in
-                    self.logger.log(.error, "`directoryEnumerator` error: \(error).")
-                    self.forceStop = false
-                    self.working = false
-                    self.toggleButtons(true)
-                    return true
-                }) {
-                    var urls:[NSURL] = []
-                    let startTime_loopUrls = Date()
-                    for case let url as NSURL in directoryEnumerator {
-                        urls.append(url)
-                    }
-                    let total = urls.count
-                    self.logger.timecost("[ReScanFolders][loopUrls]", fromDate: startTime_loopUrls)
-                    self.logger.log(.debug, "total urls: \(total)")
                     
-                    DispatchQueue.main.async {
-                        self.accumulator = Accumulator(target: total, indicator: self.indProgress, suspended: false, lblMessage: self.lblMessage)
-                    }
-                    
-                    var currentContainer:ImageContainer? = nil
-                    for case let url in urls {
-                        if let urlPath = url.path {
-                            
-                            guard !self.forceStop else {
-                                self.logger.log(.info, "[onReScanFoldersClicked] for-loop terminated as user clicked stop button.")
-                                DispatchQueue.main.async {
-                                    self.accumulator?.forceComplete()
+                    let options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles]
+                    let resourceValueKeys = [URLResourceKey.isRegularFileKey, URLResourceKey.typeIdentifierKey, URLResourceKey.isDirectoryKey]
+                    if let directoryEnumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: "\(volume)\(path)"),
+                                                                                includingPropertiesForKeys: resourceValueKeys,
+                                                                                options: options,
+                                                                                errorHandler: { url, error in
+                        self.logger.log(.error, "`directoryEnumerator` error: \(error).")
+                        self.forceStop = false
+                        self.working = false
+                        self.toggleButtons(true)
+                        return true
+                    }) {
+                        var urls:[NSURL] = []
+                        let startTime_loopUrls = Date()
+                        for case let url as NSURL in directoryEnumerator {
+                            urls.append(url)
+                        }
+                        let total = urls.count
+                        TaskletManager.default.setTotal(id: task.id, total: total)
+                        self.logger.timecost("[ReScanFolders][loopUrls]", fromDate: startTime_loopUrls)
+                        self.logger.log(.debug, "total urls: \(total)")
+                        
+                        DispatchQueue.main.async {
+                            self.accumulator = Accumulator(target: total, indicator: self.indProgress, suspended: false, lblMessage: self.lblMessage)
+                        }
+                        
+                        var z = 0
+                        var currentContainer:ImageContainer? = nil
+                        for case let url in urls {
+                            if let urlPath = url.path {
+                                z += 1
+                                
+                                guard (!self.forceStop) && (TaskletManager.default.isTaskStopped(id: task.id) == false) else {
+                                    self.logger.log(.info, "[onReScanFoldersClicked] for-loop terminated as user clicked stop button.")
+                                    DispatchQueue.main.async {
+                                        self.accumulator?.forceComplete()
+                                    }
+                                    break
                                 }
-                                break
-                            }
-                            
-                            let (_, subPath) = urlPath.getVolumeFromThisPath(repositoryPath: imageRepository.repositoryPath)
-                            self.logger.log(.debug, "Found subPath: \(subPath)")
-                            
-                            DispatchQueue.main.async {
-                                let _ = self.accumulator?.add("Found: \(subPath)")
-                            }
-                            
-                            do {
-                                let resourceValues = try url.resourceValues(forKeys: resourceValueKeys)
-                                if let isDirectory = resourceValues[URLResourceKey.isDirectoryKey] as? NSNumber {
-                                    if isDirectory.boolValue {
-                                        self.logger.log(.debug, "it is a folder")
+                                
+                                let (_, subPath) = urlPath.getVolumeFromThisPath(repositoryPath: imageRepository.repositoryPath)
+                                self.logger.log(.debug, "Found subPath: \(subPath)")
+                                
+                                DispatchQueue.main.async {
+                                    let _ = self.accumulator?.add("Found: \(subPath)")
+                                }
+                                TaskletManager.default.updateProgress(id: task.id, message: "Found: \(subPath) (\(z)/\(task.total))", increase: true)
+                                
+                                do {
+                                    let resourceValues = try url.resourceValues(forKeys: resourceValueKeys)
+                                    if let isDirectory = resourceValues[URLResourceKey.isDirectoryKey] as? NSNumber {
+                                        if isDirectory.boolValue {
+                                            self.logger.log(.debug, "it is a folder")
                                             
-                                        // find parent container of current container
-                                        let name = subPath.lastPartOfUrl()
-                                        let volume_repositoryPath = "\(imageRepository.repositoryVolume)\(imageRepository.repositoryPath)"
-                                        
-                                        let parentPath = subPath.parentPath()
-                                        
-                                        var parentId = 0
-                                        if let parentContainer = RepositoryDao.default.findContainer(repositoryVolume: imageRepository.repositoryVolume, repositoryPath: imageRepository.repositoryPath, subPath: parentPath) {
-                                            parentId = parentContainer.id
-                                        }
-                                        
-                                        // if image container record exist in database
-                                        if let existingContainerInDB = RepositoryDao.default.findContainer(repositoryVolume: imageRepository.repositoryVolume, repositoryPath: imageRepository.repositoryPath, subPath: subPath) {
+                                            // find parent container of current container
+                                            let name = subPath.lastPartOfUrl()
+                                            let volume_repositoryPath = "\(imageRepository.repositoryVolume)\(imageRepository.repositoryPath)"
                                             
-                                            // update repositoryId from zero
-                                            if existingContainerInDB.repositoryId == 0 {
-                                                let executeState_updateRepoId = RepositoryDao.default.updateImageContainerWithRepositoryId(containerId: existingContainerInDB.id, repositoryId: imageRepository.id)
-                                                if executeState_updateRepoId == .OK {
-                                                    self.logger.log("Updated ImageContainer.repositoryId, containerId=\(existingContainerInDB.id), repositoryId=\(imageRepository.id)")
-                                                }else{
-                                                    self.logger.log(.error, "Unable to update ImageContainer.repositoryId, containerId=\(existingContainerInDB.id), repositoryId=\(imageRepository.id)")
-                                                }
-                                                existingContainerInDB.repositoryId = imageRepository.id
+                                            let parentPath = subPath.parentPath()
+                                            
+                                            var parentId = 0
+                                            if let parentContainer = RepositoryDao.default.findContainer(repositoryVolume: imageRepository.repositoryVolume, repositoryPath: imageRepository.repositoryPath, subPath: parentPath) {
+                                                parentId = parentContainer.id
                                             }
                                             
-                                            // update parentId if need adjust
-                                            if existingContainerInDB.parentId != parentId {
-                                                let executeState_updateParentId = RepositoryDao.default.updateImageContainerWithParentId(containerId: existingContainerInDB.id, parentId: parentId)
-                                                if executeState_updateParentId == .OK {
-                                                    self.logger.log("Updated ImageContainer.parentId, containerId=\(existingContainerInDB.id), parentId=\(parentId)")
-                                                }else{
-                                                    self.logger.log(.error, "Unable to update ImageContainer.parentId, containerId=\(existingContainerInDB.id), parentId=\(parentId)")
-                                                }
-                                                existingContainerInDB.parentId = parentId
-                                            }
-                                            
-                                            currentContainer = existingContainerInDB
-                                            self.logger.log(.debug, "Found ImageContainer DB record for this subPath")
-                                        }
-                                        else{ // if image container record does not exist in database
-                                            
-                                            if let createdContainer = RepositoryDao.default.createContainer(name: name, repositoryId: imageRepository.id, parentId: parentId, subPath: subPath, repositoryPath: volume_repositoryPath) {
-                                                self.logger.log(.info, "Created ImageContainer DB record, id=\(createdContainer.id), parentId=\(createdContainer.parentId) path=\(createdContainer.path)")
-                                                currentContainer = createdContainer
-                                            }else{
-                                                self.logger.log(.error, "Cannot create ImageContainer DB record, subPath=\(subPath)")
-                                            }
-                                        }
-                                    }else{
-                                        self.logger.log(.debug, "it is a file")
-                                        if let currentContainer = currentContainer {
-                                            if let existingImageInDB = ImageRecordDao.default.findImage(repositoryVolume: imageRepository.repositoryVolume, repositoryPath: imageRepository.repositoryPath, subPath: subPath) {
+                                            // if image container record exist in database
+                                            if let existingContainerInDB = RepositoryDao.default.findContainer(repositoryVolume: imageRepository.repositoryVolume, repositoryPath: imageRepository.repositoryPath, subPath: subPath) {
                                                 
-                                                // maintenance image record with empty id
-                                                if let imageId = existingImageInDB.id, imageId != "" {
-                                                    
-                                                }else{
-                                                    self.logger.log(.warning, "Image.id is nil, try to generate UUID")
-                                                    let (executeState_generateId, imageId) = ImageRecordDao.default.generateImageIdByPath(repositoryVolume: imageRepository.repositoryVolume, repositoryPath: imageRepository.repositoryPath, subPath: subPath)
-                                                    
-                                                    if executeState_generateId == .OK {
-                                                        existingImageInDB.id = imageId
-                                                        self.logger.log(.info, "Image.id is updated with generated UUID \(imageId)")
+                                                // update repositoryId from zero
+                                                if existingContainerInDB.repositoryId == 0 {
+                                                    let executeState_updateRepoId = RepositoryDao.default.updateImageContainerWithRepositoryId(containerId: existingContainerInDB.id, repositoryId: imageRepository.id)
+                                                    if executeState_updateRepoId == .OK {
+                                                        self.logger.log("Updated ImageContainer.repositoryId, containerId=\(existingContainerInDB.id), repositoryId=\(imageRepository.id)")
                                                     }else{
-                                                        self.logger.log(.error, "Cannot update Image.id with generated UUID, subPath=\(subPath)")
+                                                        self.logger.log(.error, "Unable to update ImageContainer.repositoryId, containerId=\(existingContainerInDB.id), repositoryId=\(imageRepository.id)")
                                                     }
+                                                    existingContainerInDB.repositoryId = imageRepository.id
                                                 }
                                                 
-                                                // maintenance image record with incorrect repositoryId and/or incorrect containerId
-                                                if let imageId = existingImageInDB.id, imageId != "" {
-                                                    
-                                                    if existingImageInDB.repositoryId != imageRepository.id || existingImageInDB.containerId != currentContainer.id {
-                                                        let executeState = ImageRecordDao.default.updateImageWithContainerId(id: imageId, repositoryId: imageRepository.id, containerId: currentContainer.id)
-                                                        if executeState != .OK {
-                                                            self.logger.log(.error, "Failed to update Image with repositoryId=\(imageRepository.id), containerId=\(currentContainer.id), imageId=\(imageId): ExecuteState=\(executeState)")
-                                                        }
+                                                // update parentId if need adjust
+                                                if existingContainerInDB.parentId != parentId {
+                                                    let executeState_updateParentId = RepositoryDao.default.updateImageContainerWithParentId(containerId: existingContainerInDB.id, parentId: parentId)
+                                                    if executeState_updateParentId == .OK {
+                                                        self.logger.log("Updated ImageContainer.parentId, containerId=\(existingContainerInDB.id), parentId=\(parentId)")
+                                                    }else{
+                                                        self.logger.log(.error, "Unable to update ImageContainer.parentId, containerId=\(existingContainerInDB.id), parentId=\(parentId)")
                                                     }
+                                                    existingContainerInDB.parentId = parentId
                                                 }
                                                 
-                                            }else{
+                                                currentContainer = existingContainerInDB
+                                                self.logger.log(.debug, "Found ImageContainer DB record for this subPath")
+                                            }
+                                            else{ // if image container record does not exist in database
                                                 
-                                                if let createdImage = ImageRecordDao.default.createImage(repositoryId: imageRepository.id, containerId: currentContainer.id, repositoryVolume: imageRepository.repositoryVolume, repositoryPath: imageRepository.repositoryPath, subPath: subPath) {
-                                                    self.logger.log(.info, "Created Image DB record, id=\(createdImage.id ?? ""), repositoryId=\(imageRepository.id), containerId=\(currentContainer.id), path=\(createdImage.path)")
+                                                if let createdContainer = RepositoryDao.default.createContainer(name: name, repositoryId: imageRepository.id, parentId: parentId, subPath: subPath, repositoryPath: volume_repositoryPath) {
+                                                    self.logger.log(.info, "Created ImageContainer DB record, id=\(createdContainer.id), parentId=\(createdContainer.parentId) path=\(createdContainer.path)")
+                                                    currentContainer = createdContainer
                                                 }else{
-                                                    self.logger.log(.error, "Cannot create Image DB record, subPath=\(subPath)")
+                                                    self.logger.log(.error, "Cannot create ImageContainer DB record, subPath=\(subPath)")
                                                 }
                                             }
                                         }else{
-                                            // would not happen
-                                            self.logger.log(.error, "No container able to link to this file")
+                                            self.logger.log(.debug, "it is a file")
+                                            if let currentContainer = currentContainer {
+                                                if let existingImageInDB = ImageRecordDao.default.findImage(repositoryVolume: imageRepository.repositoryVolume, repositoryPath: imageRepository.repositoryPath, subPath: subPath) {
+                                                    
+                                                    // maintenance image record with empty id
+                                                    if let imageId = existingImageInDB.id, imageId != "" {
+                                                        
+                                                    }else{
+                                                        self.logger.log(.warning, "Image.id is nil, try to generate UUID")
+                                                        let (executeState_generateId, imageId) = ImageRecordDao.default.generateImageIdByPath(repositoryVolume: imageRepository.repositoryVolume, repositoryPath: imageRepository.repositoryPath, subPath: subPath)
+                                                        
+                                                        if executeState_generateId == .OK {
+                                                            existingImageInDB.id = imageId
+                                                            self.logger.log(.info, "Image.id is updated with generated UUID \(imageId)")
+                                                        }else{
+                                                            self.logger.log(.error, "Cannot update Image.id with generated UUID, subPath=\(subPath)")
+                                                        }
+                                                    }
+                                                    
+                                                    // maintenance image record with incorrect repositoryId and/or incorrect containerId
+                                                    if let imageId = existingImageInDB.id, imageId != "" {
+                                                        
+                                                        if existingImageInDB.repositoryId != imageRepository.id || existingImageInDB.containerId != currentContainer.id {
+                                                            let executeState = ImageRecordDao.default.updateImageWithContainerId(id: imageId, repositoryId: imageRepository.id, containerId: currentContainer.id)
+                                                            if executeState != .OK {
+                                                                self.logger.log(.error, "Failed to update Image with repositoryId=\(imageRepository.id), containerId=\(currentContainer.id), imageId=\(imageId): ExecuteState=\(executeState)")
+                                                            }
+                                                        }
+                                                    }
+                                                    
+                                                }else{
+                                                    
+                                                    if let createdImage = ImageRecordDao.default.createImage(repositoryId: imageRepository.id, containerId: currentContainer.id, repositoryVolume: imageRepository.repositoryVolume, repositoryPath: imageRepository.repositoryPath, subPath: subPath) {
+                                                        self.logger.log(.info, "Created Image DB record, id=\(createdImage.id ?? ""), repositoryId=\(imageRepository.id), containerId=\(currentContainer.id), path=\(createdImage.path)")
+                                                    }else{
+                                                        self.logger.log(.error, "Cannot create Image DB record, subPath=\(subPath)")
+                                                    }
+                                                }
+                                            }else{
+                                                // would not happen
+                                                self.logger.log(.error, "No container able to link to this file")
+                                            }
                                         }
                                     }
+                                }catch {
+                                    self.logger.log(.error, "Unexpected error occured when handling subPath: \(subPath)", error)
                                 }
-                            }catch {
-                                self.logger.log(.error, "Unexpected error occured when handling subPath: \(subPath)", error)
+                            } // end of if let urlPath
+                        } // end of for-loop
+                        
+                        
+                        DispatchQueue.main.async {
+                            self.working = false
+                            self.toggleButtons(true)
+                            if(self.forceStop) {
+                                self.lblMessage.stringValue = "Re-Scan folders is stopped by user."
+                            }else{
+                                self.lblMessage.stringValue = "Re-Scan folders completed."
                             }
-                        } // end of if let urlPath
-                    } // end of for-loop
-                    
-                    
-                    DispatchQueue.main.async {
-                        self.working = false
-                        self.toggleButtons(true)
-                        if(self.forceStop) {
-                            self.lblMessage.stringValue = "Re-Scan folders is stopped by user."
-                        }else{
-                            self.lblMessage.stringValue = "Re-Scan folders completed."
+                            self.forceStop = false
                         }
-                        self.forceStop = false
+                    } // end of if let directoryEnumerator
+                    else{
+                        DispatchQueue.main.async {
+                            self.forceStop = false
+                            self.working = false
+                            self.toggleButtons(true)
+                            self.lblMessage.stringValue = "Re-Scan folders encounter problem. Volume may be lost, or folder may be moved."
+                        }
                     }
-                } // end of if let directoryEnumerator
-                else{
-                    DispatchQueue.main.async {
-                        self.forceStop = false
-                        self.working = false
-                        self.toggleButtons(true)
-                        self.lblMessage.stringValue = "Re-Scan folders encounter problem. Volume may be lost, or folder may be moved."
-                    }
-                }
-            } // end of DispatchQueue.global.async
+                } // end of DispatchQueue.global.async
+            }, stop: {task in
+                
+            })
         }else{
             logger.log(.error, "DB record not found for ImageRepository with id: \(self._repositoryId)")
             self.forceStop = false

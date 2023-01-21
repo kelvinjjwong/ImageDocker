@@ -477,8 +477,11 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
             return ImageContainer.count(db, parameters: ["parentId": container.id])
         }else{
             self.logger.log(.warning, "Unable to find ImageRepository's linked ImageContainer record in database, repositoryId:\(repositoryId)")
-            let _ = self.createEmptyImageContainerLinkToRepository(repositoryId: repositoryId)
-            return 0
+            if let createdContainer = self.createEmptyImageContainerLinkToRepository(repositoryId: repositoryId) {
+                return ImageContainer.count(db, parameters: ["parentId": createdContainer.id])
+            }else{
+                return 0
+            }
         }
     }
     
