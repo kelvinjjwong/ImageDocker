@@ -53,6 +53,10 @@ extension People : PostgresRecord {
         return ["id"]
     }
     
+    public func autofillColumns() -> [String] {
+        return []
+    }
+    
     
 }
 
@@ -79,6 +83,10 @@ extension PeopleRelationship : PostgresRecord {
     
     public func primaryKeys() -> [String] {
         return ["subject", "object"]
+    }
+    
+    public func autofillColumns() -> [String] {
+        return []
     }
     
     

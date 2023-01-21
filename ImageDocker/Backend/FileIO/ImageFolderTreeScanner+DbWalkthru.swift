@@ -62,7 +62,7 @@ extension ImageFolderTreeScanner {
                             exclude = true
                         }else{
                             for excludedPath in excludedContainerPaths {
-                                if container.path.hasPrefix(excludedPath.withStash()) {
+                                if container.path.hasPrefix(excludedPath.withLastStash()) {
                                     exclude = true
                                     break
                                 }
@@ -105,7 +105,7 @@ extension ImageFolderTreeScanner {
                                 }
                             }
                             if let parent = imageFolder.parent {
-                                let subPath = container.path.replacingFirstOccurrence(of: parent.url.path.withStash(), with: "")
+                                let subPath = container.path.replacingFirstOccurrence(of: parent.url.path.withLastStash(), with: "")
                                 imageFolder.name = subPath
                                 
 //                                    self.logger.log("SUB PATH -> \(subPath)")
@@ -129,7 +129,7 @@ extension ImageFolderTreeScanner {
                                     var parents:[ImageFolder] = [parent]
                                     var midFolders:[ImageFolder] = []
                                     for midPath in midPaths {
-                                        if midPath.withStash() == container.path.withStash() {
+                                        if midPath.withLastStash() == container.path.withLastStash() {
                                             continue
                                         }
                                         // create imagefolder without container data

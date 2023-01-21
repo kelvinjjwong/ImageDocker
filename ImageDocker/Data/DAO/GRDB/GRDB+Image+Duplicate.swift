@@ -142,8 +142,8 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.read { db in
-                let keyword = "\(repositoryRoot.withStash())%"
-                let otherKeyword = "\(theOtherRepositoryRoot.withStash())%"
+                let keyword = "\(repositoryRoot.withLastStash())%"
+                let otherKeyword = "\(theOtherRepositoryRoot.withLastStash())%"
                 let cursor = try Image.filter(sql: "(path like ? or path like ?) and duplicatesKey is not null and duplicatesKey != '' ", arguments:[keyword, otherKeyword]).order(sql: "duplicatesKey asc, path asc").fetchCursor(db)
                 
                 while let image = try cursor.next() {

@@ -82,7 +82,7 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
     
     func countImageWithoutFace(repositoryRoot: String) -> Int {
         let db = PostgresConnection.database()
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         return Image.count(db, where: """
         "repositoryPath"=$1 and hidden=false and id not in (select distinct "imageId" from "ImageFace")
         """, parameters:[root])
@@ -90,7 +90,7 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
     
     func countImageNotYetFacialDetection(repositoryRoot: String) -> Int {
         let db = PostgresConnection.database()
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         return Image.count(db, where: """
         "repositoryPath"=$1 and hidden=false and "scanedFace"<>true and id not in (select distinct "imageId" from "ImageFace")
         """, parameters:[root])
@@ -98,7 +98,7 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
     
     func countImageWithoutId(repositoryRoot: String) -> Int {
         let db = PostgresConnection.database()
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         let keyword = "\(root)%"
         
         return Image.count(db, where: "id is null and path like $1", parameters:[keyword])
@@ -111,14 +111,14 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
     
     func countImageWithoutRepositoryPath(repositoryRoot: String) -> Int {
         let db = PostgresConnection.database()
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         let keyword = "\(root)%"
         return Image.count(db, where: "\"repositoryPath\"='' and path like $1", parameters:[keyword])
     }
     
     func countImageWithoutSubPath(repositoryRoot: String) -> Int {
         let db = PostgresConnection.database()
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         let keyword = "\(root)%"
         
         return Image.count(db, where: "\"subPath\"='' and path like $1", parameters:[keyword])
@@ -126,14 +126,14 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
     
     func countImageUnmatchedRepositoryRoot(repositoryRoot: String) -> Int {
         let db = PostgresConnection.database()
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         let keyword = "\(root)%"
         return Image.count(db, where: "\"repositoryPath\" = $1 and path not like $2", parameters:[root, keyword])
     }
     
     func countImages(repositoryRoot: String) -> Int {
         let db = PostgresConnection.database()
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         let keyword = "\(root)%"
         
         return Image.count(db, where: "path like $1", parameters:[keyword])
@@ -142,7 +142,7 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
     func countHiddenImages(repositoryRoot: String) -> Int {
         let db = PostgresConnection.database()
         
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         let keyword = "\(root)%"
         
         return Image.count(db, where: "path like $1 and hidden = true", parameters:[keyword])
@@ -151,7 +151,7 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
     func countContainersWithoutRepositoryPath(repositoryRoot: String) -> Int {
         let db = PostgresConnection.database()
         
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         let keyword = "\(root)%"
         
         return Image.count(db, where: "\"repositoryPath\" = '' and path like $1", parameters:[keyword])
@@ -160,7 +160,7 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
     func countContainersWithoutSubPath(repositoryRoot: String) -> Int {
         let db = PostgresConnection.database()
         
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         let keyword = "\(root)%"
         
         return Image.count(db, where: "\"subPath\" = '' and path like $1", parameters:[keyword])

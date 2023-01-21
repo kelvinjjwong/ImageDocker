@@ -33,49 +33,51 @@ extension ViewController {
         self.librariesViewPopover = myPopover
     }
 
-    func openRepositoryDetail(container:ImageContainer, url:URL, sender:NSButton) {
+    func openRepositoryDetail(repository:ImageRepository, sender:NSButton) {
         self.createRepositoryDetailPopover()
-        self.repositoryDetailViewController.initView(path: container.path,
+        let path = Naming.Image.generateFullAbsoluteRepositoryPath(repositoryVolume: repository.repositoryVolume, repositoryPath: repository.repositoryPath)
+        self.repositoryDetailViewController.initView(id: repository.id,
+                                                     path: path,
                                                      onShowDeviceDialog: { device in
                                                         
                                                         self.openDeviceCopyView(device: device, connected: false)
-        },
+                                                     },
                                                      onConfigure: {
             
-            let viewController = EditRepositoryViewController()
-            let window = NSWindow(contentViewController: viewController)
-            
-            let screenWidth = Int(NSScreen.main?.frame.width ?? 0)
-            let screenHeight = Int(NSScreen.main?.frame.height ?? 0)
-            let windowWidth = 980
-            let windowHeight = 820
-            let originX = (screenWidth - windowWidth) / 2
-            let originY = (screenHeight - windowHeight) / 2
-            
-            let frame = CGRect(origin: CGPoint(x: originX, y: originY), size: CGSize(width: windowWidth, height: windowHeight))
-            window.title = Words.repositoryConfiguration.word()
-            window.setFrame(frame, display: false)
-            window.makeKeyAndOrderFront(self)
-            viewController.initEdit(path: url.path, window: window)
-        },
+                                                        let viewController = EditRepositoryViewController()
+                                                        let window = NSWindow(contentViewController: viewController)
+                                                        
+                                                        let screenWidth = Int(NSScreen.main?.frame.width ?? 0)
+                                                        let screenHeight = Int(NSScreen.main?.frame.height ?? 0)
+                                                        let windowWidth = 980
+                                                        let windowHeight = 820
+                                                        let originX = (screenWidth - windowWidth) / 2
+                                                        let originY = (screenHeight - windowHeight) / 2
+                                                        
+                                                        let frame = CGRect(origin: CGPoint(x: originX, y: originY), size: CGSize(width: windowWidth, height: windowHeight))
+                                                        window.title = Words.repositoryConfiguration.word()
+                                                        window.setFrame(frame, display: false)
+                                                        window.makeKeyAndOrderFront(self)
+                                                        viewController.initEdit(path: path, window: window)
+                                                     },
                                                      onManageSubContainers: {
             
-            let viewController = SubContainersManageViewController()
-            let window = NSWindow(contentViewController: viewController)
-            
-            let screenWidth = Int(NSScreen.main?.frame.width ?? 0)
-            let screenHeight = Int(NSScreen.main?.frame.height ?? 0)
-            let windowWidth = 1600
-            let windowHeight = 820
-            let originX = (screenWidth - windowWidth) / 2
-            let originY = (screenHeight - windowHeight) / 2
-            
-            let frame = CGRect(origin: CGPoint(x: originX, y: originY), size: CGSize(width: windowWidth, height: windowHeight))
-            window.title = Words.repositoryConfiguration.word()
-            window.setFrame(frame, display: false)
-            window.makeKeyAndOrderFront(self)
-            viewController.initView(containerPath: url.path)
-        }
+                                                        let viewController = SubContainersManageViewController()
+                                                        let window = NSWindow(contentViewController: viewController)
+                                                        
+                                                        let screenWidth = Int(NSScreen.main?.frame.width ?? 0)
+                                                        let screenHeight = Int(NSScreen.main?.frame.height ?? 0)
+                                                        let windowWidth = 1600
+                                                        let windowHeight = 820
+                                                        let originX = (screenWidth - windowWidth) / 2
+                                                        let originY = (screenHeight - windowHeight) / 2
+                                                        
+                                                        let frame = CGRect(origin: CGPoint(x: originX, y: originY), size: CGSize(width: windowWidth, height: windowHeight))
+                                                        window.title = Words.repositoryConfiguration.word()
+                                                        window.setFrame(frame, display: false)
+                                                        window.makeKeyAndOrderFront(self)
+                                                        viewController.initView(containerPath: path)
+                                                     }
         )
         
         let cellRect = sender.bounds

@@ -57,5 +57,9 @@ extension ImageDeviceFile : PostgresRecord {
         return ["fileId"]
     }
     
+    public func autofillColumns() -> [String] {
+        return []
+    }
+    
     
 }

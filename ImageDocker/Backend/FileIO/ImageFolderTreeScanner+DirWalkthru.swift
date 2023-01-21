@@ -14,8 +14,8 @@ extension ImageFolderTreeScanner {
     func walkthruDirectoryForPaths(repository:ImageContainer, taskId:String = "", indicator:Accumulator? = nil) -> DirectoryPaths{
         let result = DirectoryPaths()
         let startingURL = URL(fileURLWithPath: repository.path)
-        let realPhysicalPath = startingURL.resolvingSymlinksInPath().path.withStash()
-        let repositoryPath = repository.path.withStash()
+        let realPhysicalPath = startingURL.resolvingSymlinksInPath().path.withLastStash()
+        let repositoryPath = repository.path.withLastStash()
         let options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles]
         let resourceValueKeys = [URLResourceKey.isRegularFileKey, URLResourceKey.typeIdentifierKey, URLResourceKey.isDirectoryKey]
         guard let directoryEnumerator = FileManager.default.enumerator(at: startingURL,

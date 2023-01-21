@@ -373,6 +373,17 @@ struct LocalDirectory {
         return sizeGB
     }
     
+    public func getRepositoryVolume(repository:ImageRepository) -> [String] {
+        var volumes:Set<String> = []
+        volumes.insert(getDiskMountPointVolume(path: repository.homeVolume))
+        volumes.insert(getDiskMountPointVolume(path: repository.repositoryVolume))
+        volumes.insert(getDiskMountPointVolume(path: repository.storageVolume))
+        volumes.insert(getDiskMountPointVolume(path: repository.faceVolume))
+        volumes.insert(getDiskMountPointVolume(path: repository.cropVolume))
+        volumes.remove("")
+        return volumes.sorted()
+    }
+    
     public func getRepositoryVolume(repository:ImageContainer) -> [String] {
         var volumes:Set<String> = []
         volumes.insert(getDiskMountPointVolume(path: repository.path))

@@ -93,6 +93,10 @@ class MetaInfoHolder: MetaInfoStoreDelegate {
         return self.metaInfo
     }
     
+    func clearInfos() {
+        self.metaInfo.removeAll()
+    }
+    
     func sort(by categorySequence:[String]) {
         let originalArray = self.metaInfo
         

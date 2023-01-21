@@ -178,7 +178,7 @@ extension ImageFile : LocationConsumer {
         
         imageData?.updateLocationDate = Date()
         
-        self.logger.log("UPDATE LOCATION for image \(url.path)")
+        self.logger.log("[ImageFile.consume:location] UPDATE LOCATION for image \(url.path)")
         let _ = save()
         
     }

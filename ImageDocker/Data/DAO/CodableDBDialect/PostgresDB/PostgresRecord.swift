@@ -18,6 +18,8 @@ public protocol PostgresRecord : Codable, EncodableDBRecord {
     func postgresTable() -> String
     
     func primaryKeys() -> [String]
+    
+    func autofillColumns() -> [String]
 }
 
 extension PostgresRecord {
@@ -32,7 +34,7 @@ extension PostgresRecord {
     }
     
     public func save(_ db: PostgresDB) {
-        db.save(object: self, table: self.postgresTable(), primaryKeys: self.primaryKeys())
+        db.save(object: self, table: self.postgresTable(), primaryKeys: self.primaryKeys(), autofillColumns: self.autofillColumns())
     }
     
     public func delete(_ db: PostgresDB, keyColumns:[String] = []) {
@@ -159,6 +161,10 @@ extension PostgresCustomRecord {
     }
     
     func primaryKeys() -> [String] {
+        return []
+    }
+    
+    func autofillColumns() -> [String] {
         return []
     }
 }

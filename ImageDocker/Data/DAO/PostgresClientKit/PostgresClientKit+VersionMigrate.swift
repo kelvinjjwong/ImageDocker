@@ -629,20 +629,26 @@ extension PostgresConnection {
         
         migrator.version("v48") { db in
             try db.alter(table: "ImageContainer", body: { t in
-                t.column("repositoryId", .integer).defaults(to: 0).indexed()
+                t.add("repositoryId", .integer).defaults(to: 0).indexed()
             })
         }
         
         migrator.version("v49") { db in
             try db.alter(table: "Image", body: { t in
-                t.column("repositoryId", .integer).defaults(to: 0).indexed()
+                t.add("repositoryId", .integer).defaults(to: 0).indexed()
             })
         }
         
         migrator.version("v50") { db in
             try db.alter(table: "ImageContainer", body: { t in
-                t.column("id", .serial).defaults(to: 0).indexed()
-                t.column("parentId", .integer).defaults(to: 0).indexed()
+                t.add("id", .serial).defaults(to: "nextval('\"ImageContainer_id_seq\"'::regclass)").indexed()
+                t.add("parentId", .integer).defaults(to: 0).indexed()
+            })
+        }
+        
+        migrator.version("v51") { db in
+            try db.alter(table: "Image", body: { t in
+                t.add("containerId", .integer).defaults(to: 0).indexed()
             })
         }
         

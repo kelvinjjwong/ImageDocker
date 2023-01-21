@@ -148,8 +148,8 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
     func getDuplicatedImages(repositoryRoot: String, theOtherRepositoryRoot: String) -> [String : [Image]] {
         let db = PostgresConnection.database()
         var result:[String:[Image]] = [:]
-        let keyword = "\(repositoryRoot.withStash())%"
-        let otherKeyword = "\(theOtherRepositoryRoot.withStash())%"
+        let keyword = "\(repositoryRoot.withLastStash())%"
+        let otherKeyword = "\(theOtherRepositoryRoot.withLastStash())%"
         let records = Image.fetchAll(db, where: """
             (path like $1 or path like $2) and "duplicatesKey" is not null and "duplicatesKey" != ''
             """, orderBy: "\"duplicatesKey\" asc, path asc", values: [keyword, otherKeyword])

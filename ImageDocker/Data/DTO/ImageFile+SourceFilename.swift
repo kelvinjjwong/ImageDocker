@@ -32,16 +32,17 @@ extension ImageFile {
     
     // MARK: RECOGNIZE DATETIME
     
-    func recognizeDateTimeFromFilename() {
+    func recognizeDateTimeFromFilename() -> String {
         
-        guard !isRecognizedDateTimeFromFilename else {return}
+//        guard !isRecognizedDateTimeFromFilename else {return ""}
         let dateString = Naming.DateTime.recognize(url: self.url)
         if dateString != "" {
             if self.imageData != nil {
                 self.imageData?.dateTimeFromFilename = dateString
             }
-            isRecognizedDateTimeFromFilename = true
+//            isRecognizedDateTimeFromFilename = true
         }
+        return dateString
     }
 
 }

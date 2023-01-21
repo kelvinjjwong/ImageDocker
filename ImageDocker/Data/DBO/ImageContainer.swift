@@ -13,27 +13,31 @@ public final class ImageContainer: Codable {
     //var id: Int64?      // <- the row id
     var path: String = ""
     var name: String = ""
-    var parentFolder: String = ""
-    var imageCount: Int = 0
-    var repositoryPath: String = ""
-    var homePath: String = ""
-    var storagePath: String = ""
-    var facePath: String = ""
-    var cropPath: String = ""
+    var parentFolder: String = ""   // FIXME: will deprecate
+    var imageCount: Int = 0        // COUNT
+    var repositoryPath: String = "" // FIXME: will deprecate at 2nd stage
+    var homePath: String = ""      // FIXME: will deprecate
+    var storagePath: String = ""   // FIXME: will deprecate
+    var facePath: String = ""      // FIXME: will deprecate
+    var cropPath: String = ""      // FIXME: will deprecate
     var subPath: String = ""
-    var parentPath: String = ""
+    var parentPath: String = ""    // FIXME: will deprecate
     var hiddenByRepository: Bool = false
     var hiddenByContainer: Bool = false
-    var deviceId: String = ""
+    var deviceId: String = ""      // FIXME: will deprecate
     var manyChildren: Bool = false
     var hideByParent: Bool = false
-    var useFirstFolderAsEvent: Bool = false
-    var folderAsEvent: Bool = false
-    var eventFolderLevel: Int = 0
-    var folderAsBrief: Bool = false
-    var briefFolderLevel: Int = 0
-    var subContainers: Int = 0
+    var useFirstFolderAsEvent: Bool = false // FIXME: will deprecate
+    var folderAsEvent: Bool = false  // FIXME: will deprecate
+    var eventFolderLevel: Int = 0    // FIXME: will deprecate
+    var folderAsBrief: Bool = false  // FIXME: will deprecate
+    var briefFolderLevel: Int = 0    // FIXME: will deprecate
+    var subContainers: Int = 0       // COUNT
     var repositoryId: Int = 0
+    var deviceWidth: Int = 0        // FIXME: will deprecate
+    var deviceHeight: Int = 0       // FIXME: will deprecate
+    var id: Int = 0
+    var parentId: Int = 0
     
     public init() {
         
@@ -103,6 +107,10 @@ extension ImageContainer : PostgresRecord {
     
     public func primaryKeys() -> [String] {
         return ["path"]
+    }
+    
+    public func autofillColumns() -> [String] {
+        return ["id"]
     }
     
     

@@ -122,6 +122,7 @@ public final class Image : Codable {
     var trainingSample:Bool? = false
     var facesReviewed:Bool? = false
     var repositoryId:Int = 0
+    var containerId:Int = 0
     
     public init() {
         
@@ -134,8 +135,8 @@ public final class Image : Codable {
         obj.filename = filename
         obj.path = path
         obj.containerPath = parentFolder
-        obj.repositoryPath = repositoryPath.withStash()
-        obj.subPath = path.replacingFirstOccurrence(of: repositoryPath.withStash(), with: "")
+        obj.repositoryPath = repositoryPath.withLastStash()
+        obj.subPath = path.replacingFirstOccurrence(of: repositoryPath.withLastStash(), with: "")
         return obj
     }
     
@@ -152,6 +153,10 @@ extension Image : PostgresRecord {
     
     public func primaryKeys() -> [String] {
         return ["path"]
+    }
+    
+    public func autofillColumns() -> [String] {
+        return ["id"]
     }
     
     

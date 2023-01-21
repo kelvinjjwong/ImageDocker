@@ -42,5 +42,9 @@ extension Face : PostgresRecord {
         return []
     }
     
+    public func autofillColumns() -> [String] {
+        return []
+    }
+    
     
 }

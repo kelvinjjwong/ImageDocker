@@ -34,5 +34,9 @@ extension ImagePeople : PostgresRecord {
         return ["imageId", "peopleId"]
     }
     
+    public func autofillColumns() -> [String] {
+        return []
+    }
+    
     
 }

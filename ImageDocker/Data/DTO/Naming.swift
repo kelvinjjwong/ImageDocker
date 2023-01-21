@@ -27,6 +27,23 @@ struct Naming {
 
 struct ImagePropertyRules {
     
+    func generateId() -> String {
+        return UUID().uuidString
+    }
+    
+    func generatePath(repositoryVolume:String, repositoryPath:String, subPath:String) -> String {
+        return "\(repositoryVolume.withFirstStash().removeLastStash())\(repositoryPath.withFirstStash().removeLastStash())\(subPath.withFirstStash())"
+    }
+    
+    func generateFullAbsoluteRepositoryPath(repositoryVolume:String, repositoryPath:String) -> String {
+        return "\(repositoryVolume.withFirstStash().removeLastStash())\(repositoryPath.withFirstStash().withLastStash())"
+    }
+    
+    func generateFullAbsoluteContainerPath(repositoryVolume:String, repositoryPath:String, subPath:String) -> String {
+        let imagePath = generatePath(repositoryVolume: repositoryVolume, repositoryPath: repositoryPath, subPath: subPath)
+        return imagePath.parentPath()
+    }
+    
     /// Get event from folder name in the path
     /// - parameter image: Image record
     /// - parameter folderLevel: start from 1
@@ -311,6 +328,7 @@ struct DateTimeRecognizer {
                 "IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})_comps\\.([A-Za-z0-9]{3}+)",
                 "IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})_[A-Za-z0-9]{32}_comps\\.([A-Za-z0-9]{3}+)",
                 
+                "IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})_BURST[0-9]{2}\\.([A-Za-z0-9]{3}+)",
                 "IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})_BURST[0-9]{3}\\.([A-Za-z0-9]{3}+)",
                 "IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})_BURST[0-9]{3}_COVER\\.([A-Za-z0-9]{3}+)",
                 "IMG_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{2})([0-9]{2})([0-9]{2})_[0-9]{3}_COVER\\.([A-Za-z0-9]{3}+)",

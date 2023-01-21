@@ -273,7 +273,7 @@ where p.excludeimported=1
                 for row in rows {
                     if let path = row["path"] as String? {
                         if withStash {
-                            results.insert(path.withStash())
+                            results.insert(path.withLastStash())
                         }else{
                             results.insert(path)
                         }

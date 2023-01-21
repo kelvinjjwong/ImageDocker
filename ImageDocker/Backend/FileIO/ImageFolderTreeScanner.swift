@@ -26,7 +26,7 @@ class ImageFolderTreeScanner {
         let enumerator = FileManager.default.enumerator(at: folder,
                                                         includingPropertiesForKeys: resourceKeys,
                                                         options: [.skipsHiddenFiles], errorHandler: { (url, error) -> Bool in
-                                                            self.logger.log("directoryEnumerator error at \(url): ", error)
+                                                            self.logger.log(.error, "directoryEnumerator error at \(url): ", error)
                                                             return true
         })!
         return enumerator
@@ -50,7 +50,12 @@ class ImageFolderTreeScanner {
         return count
     }
     
-    // MARK: SHARED SCANNER
+    // MARK: SHARED SCANNER new
+    func scanRepository(repository:ImageRepository) {
+        
+    }
+    
+    // MARK: SHARED SCANNER old
     fileprivate func scanRepository(repository repo:ImageContainer, excludedContainerPaths:Set<String>, step i:Int, total totalCount:Int, taskId:String = "", indicator:Accumulator? = nil) -> (Bool, Set<String>, [String:ImageContainer]) {
         
         // for return:
@@ -59,7 +64,7 @@ class ImageFolderTreeScanner {
         
         // for local use:
         var foldersysUrls:Set<String> = Set<String>()
-        let repositoryPath = repo.path.withStash()
+        let repositoryPath = repo.path.withLastStash()
         
         if suppressedScan {
             if indicator != nil {
@@ -95,7 +100,7 @@ class ImageFolderTreeScanner {
             return (false, filesysUrls, fileUrlToRepo)// continue
         }
         
-        if repo.path.withStash() != repo.repositoryPath.withStash() {
+        if repo.path.withLastStash() != repo.repositoryPath.withLastStash() {
             self.logger.log("[Repository Scan] Record is not a valid repository: path=[\(repo.path)] , it should belong to repositoryPath=[\(repo.repositoryPath)]")
             return (false, filesysUrls, fileUrlToRepo)// continue
         }
@@ -200,7 +205,7 @@ class ImageFolderTreeScanner {
                         self.logger.log("Exclude container: \(path)")
                     }else{
                         for excludedPath in excludedContainerPaths {
-                            if path.hasPrefix(excludedPath.withStash()) {
+                            if path.hasPrefix(excludedPath.withLastStash()) {
                                 exclude = true
                                 self.logger.log("Exclude container: \(path)")
                                 break
@@ -259,7 +264,7 @@ class ImageFolderTreeScanner {
                         self.logger.log("Exclude container: \(path)")
                     }else{
                         for excludedPath in excludedContainerPaths {
-                            if path.hasPrefix(excludedPath.withStash()) {
+                            if path.hasPrefix(excludedPath.withLastStash()) {
                                 exclude = true
                                 self.logger.log("Exclude container: \(path)")
                                 break
@@ -413,7 +418,7 @@ class ImageFolderTreeScanner {
                     exclude = true
                 }else{
                     for excludedPath in excludedContainerPaths {
-                        if url.hasPrefix(excludedPath.withStash()) {
+                        if url.hasPrefix(excludedPath.withLastStash()) {
                             self.logger.log("Exclude image (excluded device path): \(url)")
                             exclude = true
                             break

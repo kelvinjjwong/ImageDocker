@@ -64,5 +64,9 @@ extension ImageDevicePath : PostgresRecord {
         return ["id"]
     }
     
+    public func autofillColumns() -> [String] {
+        return []
+    }
+    
     
 }

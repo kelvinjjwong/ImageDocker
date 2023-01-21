@@ -25,10 +25,10 @@ class ImageFile {
     
     func getBackupUrl() -> URL? {
         if let img = self.imageData {
-            let pathOfRepository = img.repositoryPath.withoutStash()
+            let pathOfRepository = img.repositoryPath.removeLastStash()
             if let repo = RepositoryDao.default.getContainer(path: pathOfRepository) {
-                self.logger.log("backup url: \(repo.storagePath.withStash())\(img.subPath)")
-                return URL(fileURLWithPath: "\(repo.storagePath.withStash())\(img.subPath)")
+                self.logger.log("backup url: \(repo.storagePath.withLastStash())\(img.subPath)")
+                return URL(fileURLWithPath: "\(repo.storagePath.withLastStash())\(img.subPath)")
             }
         }
         return nil
@@ -134,6 +134,7 @@ class ImageFile {
     func hide() {
         if imageData != nil {
             imageData?.hidden = true
+            self.logger.log(.info, "[ImageFile.hide] - save image record - \(imageData?.path ?? "")")
             let _ = ImageRecordDao.default.saveImage(image: imageData!)
         }
     }
@@ -141,6 +142,7 @@ class ImageFile {
     func show() {
         if imageData != nil {
             imageData?.hidden = false
+            self.logger.log(.info, "[ImageFile.show] - save image record - \(imageData?.path ?? "")")
             let _ = ImageRecordDao.default.saveImage(image: imageData!)
         }
     }
@@ -150,6 +152,7 @@ class ImageFile {
     
     func save() -> ExecuteState{
         if self.imageData != nil {
+            self.logger.log(.info, "[ImageFile.save] - save image record - \(self.imageData?.path ?? "")")
             return ImageRecordDao.default.saveImage(image: self.imageData!)
         }else{
             return .NO_RECORD
@@ -157,6 +160,8 @@ class ImageFile {
     }
     
     // MARK: - LOADER
+    
+    var hasLoadedMetaInfoFromDatabase = false
     
     // READ FROM DATABASE
     init (image:Image, indicator:Accumulator? = nil, loadExifFromFile:Bool = true, metaInfoStore:MetaInfoStoreDelegate? = nil, sharedDB:DatabaseWriter? = nil, forceReloadExif:Bool = false) {
@@ -176,18 +181,36 @@ class ImageFile {
         self.metaInfoHolder = metaInfoStore ?? MetaInfoHolder()
         self.imageData = image
         
+        let startTime_loadMetaInfoFromDatabase = Date()
         loadMetaInfoFromDatabase()
+        self.logger.timecost("[ImageFile.init from database][loadMetaInfoFromDatabase] time cost", fromDate: startTime_loadMetaInfoFromDatabase)
         
         var needSave:Bool = false
         
         if self.imageData?.dateTimeFromFilename == nil {
-            self.recognizeDateTimeFromFilename()
-            needSave = true
+            let startTime_recognizeDateTimeFromFilename = Date()
+            let dateTimeFromFilename = self.recognizeDateTimeFromFilename()
+            if dateTimeFromFilename != "" {
+                self.logger.log(.info, "[ImageFile.init from database] needSave set to true due to dateTimeFromFilename is nil and called recognizeDateTimeFromFilename()")
+                if let imageData = self.imageData, let id = imageData.id {
+                    let executeState_updateDateTimeFromFilename = ImageRecordDao.default.updateImageDateTimeFromFilename(id: id, dateTimeFromFilename: dateTimeFromFilename)
+                    if executeState_updateDateTimeFromFilename != .OK {
+                        self.logger.log(.error, "[ImageFile.init from database] Unable to updateImageDateTimeFromFilename, id:\(id)")
+                    }
+                }else{
+                    self.logger.log(.error, "[ImageFile.init from database] Unable to updateImageDateTimeFromFilename, id is nil, path:\(image.path)")
+                }
+            }
+            self.logger.timecost("[ImageFile.init from database][recognizeDateTimeFromFilename] time cost", fromDate: startTime_recognizeDateTimeFromFilename)
         }
         
         if self.imageData?.imageSource == nil {
+            
+            let startTime_recognizeImageSource = Date()
             self.recognizeImageSource()
+            self.logger.log(.info, "[ImageFile.init from database] needSave set to true due to imageSource is nil and called recognizeImageSource()")
             needSave = true
+            self.logger.timecost("[ImageFile.init from database][recognizeImageSource] time cost", fromDate: startTime_recognizeImageSource)
         }
         
         let now = Date()
@@ -198,14 +221,18 @@ class ImageFile {
                 if let data = self.imageData {
                     if let datetime = Naming.DateTime.get(from: data), datetime < now {
                         self.storePhotoTakenDate(dateTime: datetime)
+                        self.logger.log(.info, "[ImageFile.init from database] needSave set to true due to updateExifDate is nil and called storePhotoTakenDate()")
                         needSave = true
                     }else{
                         // exif not loaded yet
                         autoreleasepool { () -> Void in
+                            let startTime_loadMetaInfo = Date()
                             self.loadMetaInfoFromOSX()
                             self.loadMetaInfoFromExif()
                             
+                            self.logger.log(.info, "[ImageFile.init from database] needSave set to true due to updateExifDate is nil and datetime is nil and called loadMetaInfoFromExif()")
                             needSave = true
+                            self.logger.timecost("[ImageFile.init from database][loadMetaInfo] time cost", fromDate: startTime_loadMetaInfo)
                         }
                     }
                 }
@@ -214,10 +241,13 @@ class ImageFile {
         
         if(forceReloadExif){
             autoreleasepool { () -> Void in
+                let startTime_loadMetaInfo = Date()
                 self.loadMetaInfoFromOSX()
                 self.loadMetaInfoFromExif()
                 
+                self.logger.log(.info, "[ImageFile.init from database] needSave set to true due to forceReloadExif is true and called loadMetaInfoFromExif()")
                 needSave = true
+                self.logger.timecost("[ImageFile.init from database][forceReloadExif] time cost", fromDate: startTime_loadMetaInfo)
             }
         }
             
@@ -230,10 +260,13 @@ class ImageFile {
 //                }
 //            }
             if self.isNeedLoadLocation() {
+                self.logger.log(.info, "[ImageFile.init from database] needSave set to true due to isNeedLoadLocation is true and called loadLocation()")
                 needSave = true
                 autoreleasepool { () -> Void in
                     //self.logger.log("LOADING LOCATION")
+                    let startTime_loadLocation = Date()
                     loadLocation(locationConsumer: self)
+                    self.logger.timecost("[ImageFile.init from database][loadLocation] time cost", fromDate: startTime_loadLocation)
                 }
             }
             
@@ -241,18 +274,24 @@ class ImageFile {
                 originalCoordinate = location.coordinate
             }
             
+            let startTime_recognizePlace = Date()
             self.recognizePlace()
+            self.logger.timecost("[ImageFile.init from database][recognizePlace] time cost", fromDate: startTime_recognizePlace)
             
             if self.imageData?.updateExifDate == nil {
                 self.imageData?.updateExifDate = Date()
             }
 //        }
         
+        self.logger.log(.trace, "[ImageFile.init from database] forceReloadExif=\(forceReloadExif), needSave=\(needSave)")
         if needSave || forceReloadExif {
+            self.logger.log(.info, "[ImageFile.init from database] save image record - \(self.imageData?.path ?? "")")
             let _ = save()
         }
         
-        self.transformDomainToMetaInfo()
+        //let startTime_transformToMetaInfo = Date()
+        //self.transformDomainToMetaInfo()
+        //self.logger.timecost("[ImageFile.init from database][transformDomainToMetaInfo] time cost", fromDate: startTime_transformToMetaInfo)
         
         self.notifyAccumulator(notifyIndicator: true)
     }
@@ -279,7 +318,7 @@ class ImageFile {
             self.imageData = ImageRecordDao.default.getOrCreatePhoto(filename: fileName,
                                                              path: url.path,
                                                              parentPath: url.deletingLastPathComponent().path,
-                                                             repositoryPath: repo.repositoryPath.withStash())
+                                                             repositoryPath: repo.repositoryPath.withLastStash())
         }else{
             self.logger.log("repo is null, getOrCreatePhoto")
             self.imageData = ImageRecordDao.default.getOrCreatePhoto(filename: fileName,
@@ -329,6 +368,7 @@ class ImageFile {
         if !quickCreate {
             self.recognizePlace() // TODO: why imageFile.quicksave no need recognize place?
             
+            self.logger.log(.info, "[ImageFile.init from url] save image record - \(url.path)")
             let _ = save()
         }
         

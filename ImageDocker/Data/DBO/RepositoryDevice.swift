@@ -36,5 +36,9 @@ extension RepositoryDevice : PostgresRecord {
         return ["id"]
     }
     
+    public func autofillColumns() -> [String] {
+        return ["id"]
+    }
+    
     
 }

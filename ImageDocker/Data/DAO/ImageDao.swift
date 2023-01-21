@@ -8,7 +8,11 @@
 
 import Foundation
 
+// MARK: IMAGE RECORD DAO
+
 public final class ImageRecordDao {
+    
+    let logger = ConsoleLogger(category: "ImageRecordDao")
     
     private let impl:ImageRecordDaoInterface
     
@@ -25,10 +29,34 @@ public final class ImageRecordDao {
         }
     }
     
+    // MARK: QUERY
+    
+    func getImage(path:String) -> Image? {
+        return self.impl.getImage(path: path)
+    }
+    
+    func getImage(id:String) -> Image? {
+        return self.impl.getImage(id: id)
+    }
+    
+    func findImage(repositoryVolume:String, repositoryPath:String, subPath:String) -> Image? {
+        return self.impl.findImage(repositoryVolume: repositoryVolume, repositoryPath: repositoryPath, subPath: subPath)
+    }
+    
+    func findImage(repositoryId:Int, subPath:String) -> Image? {
+        return self.impl.findImage(repositoryId: repositoryId, subPath: subPath)
+    }
+    
+    // MARK: CRUD
+    
+    func createImage(repositoryId:Int, containerId:Int, repositoryVolume:String, repositoryPath:String, subPath:String) -> Image? {
+        return self.impl.createImage(repositoryId: repositoryId, containerId: containerId, repositoryVolume: repositoryVolume, repositoryPath: repositoryPath, subPath: subPath)
+    }
+    
     func createImageIfAbsent(url:String, fileUrlToRepo:[String:ImageContainer], indicator:Accumulator? = nil) -> ExecuteState {
         //self.logger.log("CREATING PHOTO \(url.path)")
         if let repo = fileUrlToRepo[url]{
-//            self.logger.log(">>> Creating image \(url), repo: \(repo.repositoryPath)")
+            self.logger.log(.info, "[createImageIfAbsent] Creating image \(url), repo: \(repo.repositoryPath)")
             let image = ImageFile(url: URL(fileURLWithPath: url),
                                   repository: repo,
                                   indicator: indicator,
@@ -45,14 +73,6 @@ public final class ImageRecordDao {
         return self.impl.getOrCreatePhoto(filename: filename, path: path, parentPath: parentPath, repositoryPath: repositoryPath)
     }
     
-    func getImage(path:String) -> Image? {
-        return self.impl.getImage(path: path)
-    }
-    
-    func getImage(id:String) -> Image? {
-        return self.impl.getImage(id: id)
-    }
-    
     func saveImage(image: Image) -> ExecuteState {
         return self.impl.saveImage(image: image)
     }
@@ -60,6 +80,22 @@ public final class ImageRecordDao {
     func deletePhoto(atPath path:String, updateFlag:Bool = true) -> ExecuteState {
         return self.impl.deletePhoto(atPath: path, updateFlag: updateFlag)
     }
+    
+    // MARK: UPDATE ID
+    
+    func updateImageWithContainerId(id:String, repositoryId:Int, containerId:Int) -> ExecuteState {
+        return self.impl.updateImageWithContainerId(id: id, repositoryId: repositoryId, containerId: containerId)
+    }
+    
+    func generateImageIdByPath(repositoryVolume:String, repositoryPath:String, subPath:String) -> (ExecuteState, String) {
+        return self.impl.generateImageIdByPath(repositoryVolume: repositoryVolume, repositoryPath: repositoryPath, subPath: subPath)
+    }
+    
+    func generateImageIdByContainerIdAndSubPath(containerId:Int, subPath:String) -> (ExecuteState, String) {
+        return self.impl.generateImageIdByContainerIdAndSubPath(containerId: containerId, subPath: subPath)
+    }
+    
+    // MARK: UPDATE PATH
     
     func updateImagePaths(oldPath:String, newPath:String, repositoryPath:String, subPath:String, containerPath:String, id:String) -> ExecuteState {
         return self.impl.updateImagePaths(oldPath: oldPath, newPath: newPath, repositoryPath: repositoryPath, subPath: subPath, containerPath: containerPath, id: id)
@@ -89,13 +125,21 @@ public final class ImageRecordDao {
         return self.impl.updateImagePath(repositoryPath: repositoryPath)
     }
     
-    // MARK: - DATE
+    // MARK: UPDATE DATE
+    
+    func updateImageDateTimeFromFilename(path:String, dateTimeFromFilename:String) -> ExecuteState{
+        return self.impl.updateImageDateTimeFromFilename(path: path, dateTimeFromFilename: dateTimeFromFilename)
+    }
+    
+    func updateImageDateTimeFromFilename(id:String, dateTimeFromFilename:String) -> ExecuteState{
+        return self.impl.updateImageDateTimeFromFilename(id: id, dateTimeFromFilename: dateTimeFromFilename)
+    }
     
     func updateImageDates(path:String, date:Date, fields:Set<String>) -> ExecuteState {
         return self.impl.updateImageDates(path: path, date: date, fields: fields)
     }
     
-    // MARK: - DESCRIPTION
+    // MARK: UPDATE DESCRIPTION
     
     func storeImageDescription(path:String, shortDescription:String?, longDescription:String?) -> ExecuteState {
         return self.impl.storeImageDescription(path: path, shortDescription: shortDescription, longDescription: longDescription)
@@ -107,6 +151,9 @@ public final class ImageRecordDao {
     
     
 }
+
+// MARK: -
+// MARK: IMAGE SEARCH DAO
 
 class ImageSearchDao {
     
@@ -125,7 +172,7 @@ class ImageSearchDao {
         }
     }
     
-    // MARK: - Options
+    // MARK: QUERY FOR Options
     
     func getImageSources() -> [String:Bool]{
         return self.impl.getImageSources()
@@ -135,7 +182,7 @@ class ImageSearchDao {
         return self.impl.getCameraModel()
     }
     
-    // MARK: - MOMENTS
+    // MARK: QUERY FOR MOMENTS
     
     func getMoments(_ momentCondition:MomentCondition, year:Int = 0, month:Int = 0, condition:SearchCondition? = nil) -> [Moment] {
         return self.impl.getMoments(momentCondition, year: year, month: month, condition: condition)
@@ -167,7 +214,7 @@ class ImageSearchDao {
         return self.impl.getDatesByYear(year: year, event: event)
     }
     
-    // MARK: - COLLECTION
+    // MARK: QUERY FOR COLLECTION
     
     // get by date & place
     func getPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil , pageSize:Int = 0, pageNumber:Int = 0) -> [Image] {
@@ -179,13 +226,13 @@ class ImageSearchDao {
         return self.impl.getPhotoFiles(year: year, month: month, day: day, event: event, country: country, province: province, city: city, place: place, includeHidden: includeHidden, imageSource: imageSource, cameraModel: cameraModel, hiddenCountHandler: hiddenCountHandler, pageSize: pageSize, pageNumber: pageNumber)
     }
     
-    // MARK: - SEARCH
+    // MARK: SEARCH
     
     func searchImages(condition:SearchCondition, includeHidden:Bool = true, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil , pageSize:Int = 0, pageNumber:Int = 0) -> [Image] {
         return self.impl.searchImages(condition: condition, includeHidden: includeHidden, hiddenCountHandler: hiddenCountHandler, pageSize: pageSize, pageNumber: pageNumber)
     }
     
-    // MARK: - DATE
+    // MARK: QUERY BY DATE
     
     
     func getImagesByDate(year:Int, month:Int, day:Int, event:String? = nil) -> [Image] {
@@ -204,7 +251,7 @@ class ImageSearchDao {
         return self.impl.getImagesByHour(photoTakenDate: photoTakenDate)
     }
     
-    // MARK: - LARGER VIEW
+    // MARK: QUERY FOR LARGER VIEW
     
     func getMaxPhotoTakenYear() -> Int {
         return self.impl.getMaxPhotoTakenYear()
@@ -230,7 +277,7 @@ class ImageSearchDao {
         return self.impl.getDatesByTodayInPrevious(year: year)
     }
     
-    // MARK: - EXIF
+    // MARK: QUERY BY EXIF
     
     func getPhotoFilesWithoutExif(limit:Int? = nil) -> [Image] {
         return self.impl.getPhotoFilesWithoutExif(limit: limit)
@@ -240,7 +287,7 @@ class ImageSearchDao {
         return self.impl.getPhotoFilesWithoutExif(repositoryPath: repositoryPath, limit: limit)
     }
     
-    // MARK: - LOCATION
+    // MARK: QUERY BY LOCATION
     
     func getPhotoFilesWithoutLocation(repositoryPath:String) -> [Image] {
         return self.impl.getPhotoFilesWithoutLocation(repositoryPath: repositoryPath)
@@ -254,13 +301,13 @@ class ImageSearchDao {
         return self.impl.getPhotoFiles(after: date)
     }
     
-    // MARK: - FACE
+    // MARK: QUERY BY FACE
     
     func getImagesWithoutFace(repositoryRoot:String, includeScanned:Bool = false) -> [Image] {
         return self.impl.getImagesWithoutFace(repositoryRoot: repositoryRoot, includeScanned: includeScanned)
     }
     
-    // MARK: - PATH
+    // MARK: QUERY PATHS
     
     func getAllPhotoPaths(includeHidden:Bool = true) -> Set<String> {
         return self.impl.getAllPhotoPaths(includeHidden: includeHidden)
@@ -286,6 +333,9 @@ class ImageSearchDao {
         return self.impl.getPhotoFiles(rootPath: rootPath)
     }
 }
+
+// MARK: -
+// MARK: IMAGE COUNT DAO
 
 class ImageCountDao {
     
@@ -348,7 +398,7 @@ class ImageCountDao {
         return self.impl.countHiddenPhotoFiles(year: year, month: month, day: day, event: event, country: country, province: province, city: city, place: place, includeHidden: includeHidden, imageSource: imageSource, cameraModel: cameraModel)
     }
     
-    // MARK: - FACE
+    // MARK: COUNT BY FACE
     
     func countImageWithoutFace(repositoryRoot:String) -> Int {
         return self.impl.countImageWithoutFace(repositoryRoot: repositoryRoot)
@@ -358,13 +408,13 @@ class ImageCountDao {
         return self.impl.countImageNotYetFacialDetection(repositoryRoot: repositoryRoot)
     }
     
-    // MARK: - ID
+    // MARK: COUNT BY ID
     
     func countImageWithoutId(repositoryRoot:String) -> Int {
         return self.impl.countImageWithoutId(repositoryRoot: repositoryRoot)
     }
     
-    // MARK: - PATH
+    // MARK: COUNT BY PATH
     
     // count by path~
     func countPhotoFiles(rootPath:String) -> Int {
@@ -399,6 +449,9 @@ class ImageCountDao {
         return self.impl.countContainersWithoutSubPath(repositoryRoot: repositoryRoot)
     }
 }
+
+// MARK: -
+// MARK: IMAGE DUPLICATION DAO
 
 class ImageDuplicationDao {
     
@@ -441,6 +494,9 @@ class ImageDuplicationDao {
         return self.impl.markImageDuplicated(path: path, duplicatesKey: duplicatesKey, hide: hide)
     }
 }
+
+// MARK: -
+// MARK: IMAGE FACE DAO
 
 class ImageFaceDao {
     

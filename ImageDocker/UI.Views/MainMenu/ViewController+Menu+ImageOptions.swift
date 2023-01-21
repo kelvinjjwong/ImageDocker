@@ -210,6 +210,7 @@ extension ViewController {
 //                    self.logger.log("earliest date is \(dt) UTC")
                     self.img.storePhotoTakenDate(dateTime: dt)
                 }
+                self.logger.log(.info, "[previewMenuExtractDatetime] save image record - \(self.img.imageData?.path ?? "")")
                 let _ = self.img.save()
                 self.loadImageExif()
                 

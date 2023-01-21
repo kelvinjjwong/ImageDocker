@@ -170,7 +170,8 @@ extension ViewController {
                                         
         },
                                     moreActionOnHeader: { button in
-//                                        self.logger.log("clicked libs more button")
+                                        self.logger.log("clicked tree-library more button")
+                                        
                                         self.createLibrariesViewPopover()
                                         
                                         let cellRect = button.bounds
@@ -178,12 +179,11 @@ extension ViewController {
         },
                                     moreActionOnNode: { collection, button in
 //                                        self.logger.log("more on libs \(collection.path)")
-                                        if let container = collection.relatedObject as? ImageContainer {
-                                            if container.parentFolder == "" {
-                                                self.openRepositoryDetail(container: container, url: URL(fileURLWithPath: container.path), sender: button)
-                                            }else{
-                                                self.openContainerDetail(container: container, url: URL(fileURLWithPath: container.path), title: container.name, sender: button)
-                                            }
+                                        if let repository = collection.relatedObject as? ImageRepository {
+                                            self.openRepositoryDetail(repository: repository, sender: button)
+                                        }
+                                        else if let container = collection.relatedObject as? ImageContainer {
+                                            self.openContainerDetail(container: container, url: URL(fileURLWithPath: container.path), title: container.name, sender: button)
                                         }
         },
                                     notificationHolder: self.btnAlertMessage)

@@ -63,7 +63,7 @@ class DevicePathDetailViewController: NSViewController {
                         self.lblMessage.stringValue = "Restoring images from backup ..."
                     }
                     let localPath = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(subfolder).path
-                    if let repository = RepositoryDao.default.getContainer(path: self.repositoryPath.withoutStash()) {
+                    if let repository = RepositoryDao.default.getContainer(path: self.repositoryPath.removeLastStash()) {
                         let storagePath = URL(fileURLWithPath: repository.storagePath).appendingPathComponent(subfolder).path
                         
                         do {
@@ -239,9 +239,9 @@ class DevicePathDetailViewController: NSViewController {
                                 }
                                 for subContainer in subContainers {
                                     let sub = subContainer
-                                    sub.path = sub.path.replacingFirstOccurrence(of: oldLocalPath.withStash(), with: newLocalPath.withStash())
+                                    sub.path = sub.path.replacingFirstOccurrence(of: oldLocalPath.withLastStash(), with: newLocalPath.withLastStash())
                                     sub.parentFolder = newLocalPath
-                                    sub.subPath = sub.subPath.replacingFirstOccurrence(of: oldLocalFolder.withStash(), with: data.toSubFolder.withStash())
+                                    sub.subPath = sub.subPath.replacingFirstOccurrence(of: oldLocalFolder.withLastStash(), with: data.toSubFolder.withLastStash())
                                     let _ = RepositoryDao.default.saveImageContainer(container: sub)
                                 }
                             }
@@ -265,15 +265,15 @@ class DevicePathDetailViewController: NSViewController {
                             }
                             for image in images {
                                 let img = image
-                                img.path = img.path.replacingFirstOccurrence(of: oldLocalPath.withStash(), with: newLocalPath.withStash())
+                                img.path = img.path.replacingFirstOccurrence(of: oldLocalPath.withLastStash(), with: newLocalPath.withLastStash())
                                 if img.containerPath == oldLocalPath {
                                     // from the directory
                                     img.containerPath = newLocalPath
                                 }else{
                                     // from sub-directories
-                                    img.containerPath = img.containerPath?.replacingFirstOccurrence(of: oldLocalPath.withStash(), with: newLocalPath.withStash())
+                                    img.containerPath = img.containerPath?.replacingFirstOccurrence(of: oldLocalPath.withLastStash(), with: newLocalPath.withLastStash())
                                 }
-                                img.subPath = img.subPath.replacingFirstOccurrence(of: oldLocalFolder.withStash(), with: data.toSubFolder.withStash())
+                                img.subPath = img.subPath.replacingFirstOccurrence(of: oldLocalFolder.withLastStash(), with: data.toSubFolder.withLastStash())
                                 
                             }
                         }

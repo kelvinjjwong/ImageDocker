@@ -12,10 +12,10 @@ import GRDB
 public final class ImageRepository: Codable {
     var id: Int = 0      // <- the row id
     var name: String = ""
-    var repositoryVolume: String = ""
-    var repositoryPath: String = ""
     var homeVolume:String = ""
     var homePath: String = ""
+    var repositoryVolume: String = ""
+    var repositoryPath: String = ""
     var storageVolume:String = ""
     var storagePath: String = ""
     var faceVolume:String = ""
@@ -45,6 +45,10 @@ extension ImageRepository : PostgresRecord {
     }
     
     public func primaryKeys() -> [String] {
+        return ["id"]
+    }
+    
+    public func autofillColumns() -> [String] {
         return ["id"]
     }
     

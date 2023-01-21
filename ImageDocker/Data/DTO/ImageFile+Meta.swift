@@ -316,7 +316,7 @@ extension ImageFile {
     
     public func loadMetaInfoFromDatabase() {
         if self.imageData == nil {
-            self.logger.log("ERROR: IMAGE DATA IS NIL, unable to [loadMetaInfoFromDatabase]")
+            self.logger.log(.error, "ERROR: IMAGE DATA IS NIL, unable to [loadMetaInfoFromDatabase]")
             return
         }
         
@@ -371,12 +371,13 @@ extension ImageFile {
         }
         
         if needSave {
-            //self.logger.log("UPDATE COORD TO NON ZERO")
+            self.logger.log(.info, "[loadMetaInfoFromDatabase] UPDATE COORD TO NON ZERO - saveImage - \(photoFile.path)")
             let _ = ImageRecordDao.default.saveImage(image: photoFile)
         }
         
         //self.logger.log("COORD IS ZERO ? \(location.coordinate?.isZero) - \(fileName)")
         //self.logger.log("LOCATION LOADED")
+        hasLoadedMetaInfoFromDatabase = true
     }
     
     public func loadMetaInfoFromExif(_ force:Bool = false) {

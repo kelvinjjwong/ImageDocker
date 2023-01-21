@@ -274,7 +274,7 @@ class ViewController: NSViewController {
     
     func collectRepositoryVolumesConnected() -> [String] {
         var volumes:Set<String> = []
-        let repos = RepositoryDao.default.getRepositories()
+        let repos = RepositoryDao.default.getRepositoriesV2(orderBy: "name", condition: nil)
         for repo in repos {
             let _volumes = LocalDirectory.bridge.getRepositoryVolume(repository: repo)
             for volume in _volumes {
@@ -336,11 +336,12 @@ class ViewController: NSViewController {
         self.logger.log("[STARTUP] volumes_lasttime: \(volumes_lasttime)")
         self.logger.log("[STARTUP] volumes_connected: \(volumes_connected)")
         if volumes_missing.count > 0 {
-            self.logger.log("[STARTUP] volumes_missing: \(volumes_missing)")
-            self.logger.log("[STARTUP] decide to Quit")
+            self.logger.log(.error, "[STARTUP] volumes_missing: \(volumes_missing)")
+            self.logger.log(.warning, "[STARTUP] decide NOT to Quit")
             self.splashController.message(Words.splash_loadingLibraries_failed_missing_volumes.fill(arguments: "\(volumes_missing)"), progress: 4)
-            self.splashController.decideQuit = true
-            return
+            self.splashController.decideQuit = false
+            self.logger.log(.todo, "TODO show an alert in UI say volumes missing")
+//            return
         }else {
             PreferencesController.saveRepositoryVolumes(volumes_connected)
             self.logger.log("[STARTUP] saved volumes_connected: \(volumes_connected)")

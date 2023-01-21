@@ -317,9 +317,16 @@ extension ViewController {
     internal func loadImage(imageFile:ImageFile){
         self.img = imageFile
         self.previewImage(image: img)
-        //self.img.transformDomainToMetaInfo()
-        img.metaInfoHolder.sort(by: MetaCategorySequence)
+        
+        self.img.metaInfoHolder.clearInfos()
         self.metaInfoTableView.reloadData()
+        DispatchQueue.global().async {
+            self.img.transformDomainToMetaInfo()
+            self.img.metaInfoHolder.sort(by: MetaCategorySequence)
+            DispatchQueue.main.async {
+                self.metaInfoTableView.reloadData()
+            }
+        }
         
         self.imageLocationViewController.loadMap(image: imageFile)
         self.loadImageDescription(img)

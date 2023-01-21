@@ -8,6 +8,8 @@
 
 import Cocoa
 
+// MARK: Int
+
 extension Int {
     
     func paddingZero(_ digits:Int) -> String {
@@ -21,12 +23,16 @@ extension Int {
     }
 }
 
+// MARK: Double
+
 extension Double {
     func rounded(toPlaces places:Int) -> Double {
         let divisor = pow(10.0, Double(places))
         return (self * divisor).rounded() / divisor
     }
 }
+
+// MARK: String
 
 extension String {
     
@@ -55,6 +61,14 @@ extension String {
         return nil
     }
     
+    func contains(find: String) -> Bool{
+        return self.range(of: find) != nil
+    }
+    
+    func containsIgnoringCase(find: String) -> Bool{
+        return self.range(of: find, options: .caseInsensitive) != nil
+    }
+    
     
     func matches(for regex: String!) -> [String] {
         
@@ -81,18 +95,46 @@ extension String {
         return replacingCharacters(in: range, with: replacement)
     }
     
-    func withStash() -> String {
+    func withLastStash() -> String {
         if !self.hasSuffix("/") {
             return "\(self)/"
         }
         return self
     }
     
-    func withoutStash() -> String {
+    func withFirstStash() -> String {
+        if !self.hasPrefix("/") {
+            return "/\(self)"
+        }
+        return self
+    }
+    
+    func removeLastStash() -> String {
         if self.hasSuffix("/") {
             return self.substring(from: 0, to: -1)
         }
         return self
+    }
+    
+    func removeFirstStash() -> String {
+        if self.hasPrefix("/") {
+            return self.replacingFirstOccurrence(of: "/", with: "")
+        }
+        return self
+    }
+    
+    func lastPartOfUrl() -> String {
+        if self.contains(find: "/") {
+            let subPathParts = self.components(separatedBy: "/")
+            return subPathParts[subPathParts.count - 1]
+        }else{
+            return self
+        }
+    }
+    
+    func parentPath() -> String {
+        let p = URL(fileURLWithPath: self.withFirstStash()).deletingLastPathComponent().path
+        return p.removeFirstStash()
     }
     
     public func substring(from: Int, to: Int) -> String {
@@ -115,8 +157,8 @@ extension String {
     }
     
     func isParentOf(_ path:String) -> Bool {
-        let target = path.withStash()
-        let me = self.withStash()
+        let target = path.withLastStash()
+        let me = self.withLastStash()
         return target.starts(with: me) && target != me
     }
     
@@ -143,11 +185,40 @@ extension String {
         }
         return [str]
     }
+    
+    func getVolumeFromThisPath() -> (String, String) {
+        if self.hasPrefix("/Volumes/") {
+            let parts = self.components(separatedBy: "/")
+            let volume = "/\(parts[1])/\(parts[2])"
+            let _path = self.replacingFirstOccurrence(of: volume, with: "")
+            return (volume, _path)
+        }else{
+            return ("", self)
+        }
+    }
+    
+    func getVolumeFromThisPath(repositoryPath: String) -> (String, String) {
+        var volume = ""
+        var _path = self
+        if self.hasPrefix("/Volumes/") {
+            let parts = self.components(separatedBy: "/")
+            volume = "/\(parts[1])/\(parts[2])"
+            _path = self.replacingFirstOccurrence(of: volume, with: "")
+        }
+        if _path.hasPrefix(repositoryPath) {
+            _path = _path.replacingFirstOccurrence(of: repositoryPath, with: "")
+        }
+        return (volume, _path)
+    }
 }
+
+// MARK: -
+
+// MARK: MemoryReleasable
 
 class MemoryReleasable {
     
-    let logger = ConsoleLogger(category: "HighRamJob")
+    let logger = ConsoleLogger(category: "RAM", subCategory: "HighRamJob")
     
     static let `default` = MemoryReleasable()
     
@@ -195,7 +266,7 @@ class MemoryReleasable {
     }
 }
 
-
+// MARK: -
 
 public typealias PipeProcessTerminationHandler = ((_ out: String, _ status: OSStatus) -> Void)
 typealias ProcessTerminationHandler = ((_ process: Process) -> Void)
@@ -218,7 +289,7 @@ func | ( left: Process, right: Process) -> Process {
 }
 
 
-// MARK: - Process Extension For Piping
+// MARK: Process Extension For Piping
 public extension Process {
     
     

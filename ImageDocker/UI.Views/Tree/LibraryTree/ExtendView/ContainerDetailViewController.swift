@@ -163,8 +163,8 @@ class ContainerDetailViewController: NSViewController {
     }
     
     fileprivate func countImages() {
-        self.total = ImageCountDao.default.countImages(repositoryRoot: container.path.withStash())
-        let hiddenCount = ImageCountDao.default.countHiddenImages(repositoryRoot: container.path.withStash())
+        self.total = ImageCountDao.default.countImages(repositoryRoot: container.path.withLastStash())
+        let hiddenCount = ImageCountDao.default.countHiddenImages(repositoryRoot: container.path.withLastStash())
         self.lblTotalItems.stringValue = "\(self.total) (\(hiddenCount) \(Words.library_tree_hidden.word())"
     }
     
@@ -259,7 +259,7 @@ class ContainerDetailViewController: NSViewController {
                 if let container = RepositoryDao.default.getContainer(path: path) {
                     
                     container.parentFolder = parentContainer.path
-                    container.parentPath = URL(fileURLWithPath: container.path.replacingFirstOccurrence(of: parentContainer.path, with: "")).deletingLastPathComponent().path.withoutStash()
+                    container.parentPath = URL(fileURLWithPath: container.path.replacingFirstOccurrence(of: parentContainer.path, with: "")).deletingLastPathComponent().path.removeLastStash()
                         
                     let state = RepositoryDao.default.saveImageContainer(container: container)
                     if state == .OK {

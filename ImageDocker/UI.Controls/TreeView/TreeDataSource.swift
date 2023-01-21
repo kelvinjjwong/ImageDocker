@@ -13,8 +13,13 @@ class TreeCollection {
     let logger = ConsoleLogger(category: "TreeCollection")
     
     var name = ""
-    var childrenCount = 0
     var path = ""
+    var childrenCount = 0
+    
+    var subContainersCount = 0
+    var subImagesCount = 0
+    var hiddenImagesCount = 0
+    
     
     var subCollectionsInCollection = 0
     var itemsInCollection = 0

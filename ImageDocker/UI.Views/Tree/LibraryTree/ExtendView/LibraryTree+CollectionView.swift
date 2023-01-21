@@ -11,11 +11,11 @@ import Cocoa
 extension ViewController {
     
     fileprivate func countImagesOfContainer(container:ImageContainer) -> Int{
-        return ImageCountDao.default.countImages(repositoryRoot: container.path.withStash())
+        return ImageCountDao.default.countImages(repositoryRoot: container.path.withLastStash())
     }
     
     fileprivate func countHiddenImagesOfContainer(container:ImageContainer) -> Int {
-        return ImageCountDao.default.countHiddenImages(repositoryRoot: container.path.withStash())
+        return ImageCountDao.default.countHiddenImages(repositoryRoot: container.path.withLastStash())
     }
     
     func reloadCollectionFromImageContainer(sender:NSButton) {

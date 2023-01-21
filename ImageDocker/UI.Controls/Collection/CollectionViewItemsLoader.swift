@@ -664,7 +664,9 @@ class CollectionViewItemsLoader : NSObject {
                 return
             }
             
+            let startTime_ImageFile_init = Date()
             let imageFile = ImageFile(image: photoFile, indicator: self.indicator, loadExifFromFile: true)
+            self.logger.timecost("[transformToDomainItems][ImageFile.init from database]", fromDate: startTime_ImageFile_init)
             
             if duplicates.paths.contains(photoFile.path) {
                 imageFile.hasDuplicates = true

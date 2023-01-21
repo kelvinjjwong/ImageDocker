@@ -443,7 +443,7 @@ class DeviceCopyViewController: NSViewController {
             }
             var shouldExclude = false
             for excludePath in excludePaths {
-                if file.path.starts(with: excludePath.withStash()) {
+                if file.path.starts(with: excludePath.withLastStash()) {
                     shouldExclude = true
                 }
             }

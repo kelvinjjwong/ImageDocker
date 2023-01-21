@@ -664,7 +664,7 @@ class EditRepositoryViewController: NSViewController {
                 for image in images {
                     if image.subPath != "" {
                         let sourcePath = image.path
-                        let targetPath = "\(container.storagePath.withStash())\(image.subPath)"
+                        let targetPath = "\(container.storagePath.withLastStash())\(image.subPath)"
                         if FileManager.default.fileExists(atPath: sourcePath) && !FileManager.default.fileExists(atPath: targetPath) {
                             let containerUrl = URL(fileURLWithPath: targetPath).deletingLastPathComponent()
                             
@@ -869,8 +869,8 @@ class EditRepositoryViewController: NSViewController {
     @IBAction func onUpdateStorageImagesClicked(_ sender: NSButton) {
         guard !self.working else {return}
         if let repoContainer = self.originalContainer {
-            let originalRawPath = repoContainer.storagePath.withStash()
-            let newRawPath = self.txtStoragePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withStash()
+            let originalRawPath = repoContainer.storagePath.withLastStash()
+            let newRawPath = self.txtStoragePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withLastStash()
             
             if newRawPath == "/" {
                 self.lblStoragePathRemark.stringValue = "Path for RAW copy is empty."
@@ -906,7 +906,7 @@ class EditRepositoryViewController: NSViewController {
                         }
                         
                         for case let oldUrl as URL in oldFiles {
-                            let newFilePath = oldUrl.path.replacingFirstOccurrence(of: oldBaseUrl.path.withStash(), with: newBaseUrl.path.withStash())
+                            let newFilePath = oldUrl.path.replacingFirstOccurrence(of: oldBaseUrl.path.withLastStash(), with: newBaseUrl.path.withLastStash())
                             let newUrl = URL(fileURLWithPath: newFilePath)
                             let containerUrl = newUrl.deletingLastPathComponent()
                             if !FileManager.default.fileExists(atPath: newFilePath) { // no folder, create folder
@@ -957,9 +957,9 @@ class EditRepositoryViewController: NSViewController {
         guard !self.working else {return}
         if let repoContainer = self.originalContainer {
             
-            let originalRepoPath = repoContainer.path.withStash()
+            let originalRepoPath = repoContainer.path.withLastStash()
             let newRepoPathNoStash = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-            let newRepoPath = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withStash()
+            let newRepoPath = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withLastStash()
             
             if newRepoPath == "/" || newRepoPath == "" {
                 return
@@ -1123,8 +1123,8 @@ class EditRepositoryViewController: NSViewController {
     @IBAction func onUpdateFaceImagesClicked(_ sender: NSButton) {
         guard !self.working else {return}
         if let repoContainer = self.originalContainer {
-            let originalFacePath = repoContainer.facePath.withStash()
-            let newFacePath = self.txtFacePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withStash()
+            let originalFacePath = repoContainer.facePath.withLastStash()
+            let newFacePath = self.txtFacePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withLastStash()
             
             if newFacePath == "/" || newFacePath == originalFacePath {
                 return
@@ -1160,7 +1160,7 @@ class EditRepositoryViewController: NSViewController {
                                 let _ = self.accumulator?.add("Copying face file ...")
                             }
                             
-                            let newFilePath = oldUrl.path.replacingFirstOccurrence(of: oldBaseUrl.path.withStash(), with: newBaseUrl.path.withStash())
+                            let newFilePath = oldUrl.path.replacingFirstOccurrence(of: oldBaseUrl.path.withLastStash(), with: newBaseUrl.path.withLastStash())
                             let newUrl = URL(fileURLWithPath: newFilePath)
                             let containerUrl = newUrl.deletingLastPathComponent()
                             if !FileManager.default.fileExists(atPath: newFilePath) { // no folder, create folder
@@ -1208,8 +1208,8 @@ class EditRepositoryViewController: NSViewController {
     
     
     @IBAction func onNormalizeHiddenClicked(_ sender: NSButton) {
-        let repo = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withStash()
-        let raw = self.txtStoragePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withStash()
+        let repo = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withLastStash()
+        let raw = self.txtStoragePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withLastStash()
         guard !self.working && repo != "/" && raw != "/" else {return}
         self.working = true
         
@@ -1389,7 +1389,7 @@ class EditRepositoryViewController: NSViewController {
         if let container = self.originalContainer {
             if container.hiddenByRepository {
                 DispatchQueue.global().async {
-                    let _ = RepositoryDao.default.showRepository(repositoryRoot: container.path.withStash())
+                    let _ = RepositoryDao.default.showRepository(repositoryRoot: container.path.withLastStash())
                     self.originalContainer?.hiddenByRepository = false
                     let _ = RepositoryDao.default.saveImageContainer(container: self.originalContainer!)
                     
@@ -1402,7 +1402,7 @@ class EditRepositoryViewController: NSViewController {
                 }
             }else{
                 DispatchQueue.global().async {
-                    let _ = RepositoryDao.default.hideRepository(repositoryRoot: container.path.withStash())
+                    let _ = RepositoryDao.default.hideRepository(repositoryRoot: container.path.withLastStash())
                     self.originalContainer?.hiddenByRepository = true
                     let _ = RepositoryDao.default.saveImageContainer(container: self.originalContainer!)
                     DispatchQueue.main.async {
@@ -1622,7 +1622,7 @@ class EditRepositoryViewController: NSViewController {
             let paths = RepositoryDao.default.getAllContainerPathsOfImages(rootPath: container.repositoryPath)
             for path in paths {
                 if path == container.repositoryPath {continue}
-                let p = path.replacingFirstOccurrence(of: container.repositoryPath.withStash(), with: "")
+                let p = path.replacingFirstOccurrence(of: container.repositoryPath.withLastStash(), with: "")
                 if p == "" {continue}
                 let parts = p.components(separatedBy: "/")
                 
@@ -1765,7 +1765,7 @@ class EditRepositoryViewController: NSViewController {
             let paths = RepositoryDao.default.getAllContainerPathsOfImages(rootPath: container.repositoryPath)
             for path in paths {
                 if path == container.repositoryPath {continue}
-                let p = path.replacingFirstOccurrence(of: container.repositoryPath.withStash(), with: "")
+                let p = path.replacingFirstOccurrence(of: container.repositoryPath.withLastStash(), with: "")
                 if p == "" {continue}
                 let parts = p.components(separatedBy: "/")
                 

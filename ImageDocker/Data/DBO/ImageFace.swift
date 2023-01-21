@@ -99,5 +99,9 @@ extension ImageFace : PostgresRecord {
         return ["id"]
     }
     
+    public func autofillColumns() -> [String] {
+        return []
+    }
+    
     
 }

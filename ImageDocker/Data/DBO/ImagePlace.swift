@@ -72,5 +72,9 @@ extension ImagePlace : PostgresRecord {
         return ["name"]
     }
     
+    public func autofillColumns() -> [String] {
+        return []
+    }
+    
     
 }

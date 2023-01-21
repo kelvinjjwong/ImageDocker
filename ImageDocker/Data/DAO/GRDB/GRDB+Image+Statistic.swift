@@ -165,7 +165,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
     
     func countImageWithoutFace(repositoryRoot:String) -> Int {
         var result = 0
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
@@ -179,7 +179,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
     
     func countImageNotYetFacialDetection(repositoryRoot:String) -> Int {
         var result = 0
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
@@ -195,7 +195,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
     
     func countImageWithoutId(repositoryRoot:String) -> Int {
         var result = 0
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
@@ -228,7 +228,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
     
     func countImageWithoutRepositoryPath(repositoryRoot:String) -> Int {
         var result = 0
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
@@ -244,7 +244,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
     
     func countImageWithoutSubPath(repositoryRoot:String) -> Int {
         var result = 0
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
@@ -260,7 +260,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
     
     func countImageUnmatchedRepositoryRoot(repositoryRoot:String) -> Int {
         var result = 0
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
@@ -276,7 +276,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
     
     func countImages(repositoryRoot:String) -> Int {
         var result = 0
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
@@ -292,7 +292,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
     
     func countHiddenImages(repositoryRoot:String) -> Int {
         var result = 0
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
@@ -308,7 +308,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
     
     func countContainersWithoutRepositoryPath(repositoryRoot:String) -> Int {
         var result = 0
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
@@ -324,7 +324,7 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
     
     func countContainersWithoutSubPath(repositoryRoot:String) -> Int {
         var result = 0
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in

@@ -93,7 +93,7 @@ extension ImageRecordDaoGRDB {
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute(sql: "update Image set originPath = ? where path like ?", arguments: [rawPath, "\(path.withStash())%"])
+                try db.execute(sql: "update Image set originPath = ? where path like ?", arguments: [rawPath, "\(path.withLastStash())%"])
             }
         }catch{
             return SQLHelper.errorState(error)
@@ -105,7 +105,7 @@ extension ImageRecordDaoGRDB {
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
-                try db.execute(sql: "update Image set repositoryPath = ? where path like ?", arguments: [repositoryPath, "\(path.withStash())%"])
+                try db.execute(sql: "update Image set repositoryPath = ? where path like ?", arguments: [repositoryPath, "\(path.withLastStash())%"])
             }
         }catch{
             return SQLHelper.errorState(error)
@@ -140,6 +140,16 @@ extension ImageRecordDaoGRDB {
     
     
     // MARK: - DATE
+    
+    func updateImageDateTimeFromFilename(path:String, dateTimeFromFilename:String) -> ExecuteState{
+        self.logger.log(.todo, "TODO function for SQLite")
+        return .ERROR
+    }
+    
+    func updateImageDateTimeFromFilename(id:String, dateTimeFromFilename:String) -> ExecuteState{
+        self.logger.log(.todo, "TODO function for SQLite")
+        return .ERROR
+    }
     
     func updateImageDates(path:String, date:Date, fields:Set<String>) -> ExecuteState{
         var arguments:[Any] = []

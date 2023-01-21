@@ -398,7 +398,7 @@ select DATE('now', 'localtime')  date
     
     func getImagesWithoutFace(repositoryRoot:String, includeScanned:Bool = false) -> [Image] {
         var result:[Image] = []
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         let scannedCondition = includeScanned ? "" : " and scanedFace=0"
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
@@ -464,7 +464,7 @@ select DATE('now', 'localtime')  date
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
-                result = try Image.filter(Column("path").like("\(rootPath.withStash())%")).filter(Column("subPath") == "").fetchAll(db)
+                result = try Image.filter(Column("path").like("\(rootPath.withLastStash())%")).filter(Column("subPath") == "").fetchAll(db)
             }
         }catch{
             self.logger.log(error)
@@ -482,7 +482,7 @@ select DATE('now', 'localtime')  date
         var key:[String] = [parentPath]
         if subdirectories {
             condition = "(containerPath = ? or containerPath like ?)"
-            key.append("\(parentPath.withStash())%")
+            key.append("\(parentPath.withLastStash())%")
         }
         
         var result:[Image] = []
@@ -519,7 +519,7 @@ select DATE('now', 'localtime')  date
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
-                result = try Image.filter(Column("path").like("\(rootPath.withStash())%")).fetchAll(db)
+                result = try Image.filter(Column("path").like("\(rootPath.withLastStash())%")).fetchAll(db)
             }
         }catch{
             self.logger.log(error)

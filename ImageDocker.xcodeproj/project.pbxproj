@@ -761,7 +761,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5C15F8D02965BA180088C0CE /* UI.MainMenu */ = {
+		5C15F8D02965BA180088C0CE /* UI.SystemMenu */ = {
 			isa = PBXGroup;
 			children = (
 				8EA643F4208D6E5100C7D695 /* PreferencesController.swift */,
@@ -769,7 +769,7 @@
 				8ED8334027B9144B00B31319 /* DatabaseBackupController.swift */,
 				5C15F8CE2965B86E0088C0CE /* LocalEnvironmentSetupController.swift */,
 			);
-			path = UI.MainMenu;
+			path = UI.SystemMenu;
 			sourceTree = "<group>";
 		};
 		647EF5471AA41950F5DAFEE8 /* Pods */ = {
@@ -856,7 +856,7 @@
 				8E48147B277CB1560097493E /* Logging */,
 				8E481479277CB0AF0097493E /* UI.Languages */,
 				8E48147A277CB1110097493E /* UI.Icons_Colors */,
-				5C15F8D02965BA180088C0CE /* UI.MainMenu */,
+				5C15F8D02965BA180088C0CE /* UI.SystemMenu */,
 				8ECA1FEA23E3275E00F56895 /* UI.Views */,
 				8ECA1FE623E325C500F56895 /* UI.Controls */,
 				8E4DECED23B38D1B00F5538C /* Data */,

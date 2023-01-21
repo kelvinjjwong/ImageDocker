@@ -59,5 +59,9 @@ extension ImageDevice : PostgresRecord {
         return ["deviceId"]
     }
     
+    public func autofillColumns() -> [String] {
+        return []
+    }
+    
     
 }

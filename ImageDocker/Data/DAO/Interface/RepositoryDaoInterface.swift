@@ -10,6 +10,56 @@ import Foundation
 
 protocol RepositoryDaoInterface {
     
+    // MARK: IMAGE REPOSITORY CRUD
+    
+    func deleteRepository(repositoryRoot:String) -> ExecuteState
+    
+    // MARK: IMAGE REPOSITORY QUERY
+    
+    func findRepository(volume:String, repositoryPath: String) -> ImageRepository?
+    
+    func getRepository(id: Int) -> ImageRepository?
+    
+    func getRepository(repositoryPath:String) -> ImageContainer?
+    
+    func getRepositoriesV2(orderBy: String, condition:SearchCondition?) -> [ImageRepository]
+    
+    func getRepositories(orderBy:String, condition:SearchCondition?) -> [ImageContainer]
+    
+    func getRepositoryPaths(imagesCondition:SearchCondition) -> [String]
+    
+    // MARK: IMAGE REPOSITORY UPDATE
+    
+    func hideRepository(repositoryRoot:String) -> ExecuteState
+    
+    func showRepository(repositoryRoot:String) -> ExecuteState
+    
+    func getLastPhotoTakenDateOfRepositories() -> [String:String]
+    
+    // MARK: IMAGE CONTAINER QUERY
+    
+    func findContainer(repositoryId:Int, subPath:String) -> ImageContainer?
+    
+    func findContainer(repositoryVolume:String, repositoryPath:String, subPath:String) -> ImageContainer? 
+    
+    func getContainer(path:String) -> ImageContainer?
+    
+    func getAllContainers() -> [ImageContainer]
+    
+    func getContainers(rootPath:String) -> [ImageContainer]
+    
+    func getAllContainerPathsOfImages(rootPath:String?) -> Set<String>
+    
+    func getAllContainerPaths(rootPath:String?) -> Set<String>
+    
+    func getAllContainerPaths(repositoryPath:String?) -> Set<String>
+    
+    // MARK: IMAGE CONTAINER CRUD
+    
+    func createContainer(name: String, repositoryId: Int, parentId:Int, subPath: String, repositoryPath: String) -> ImageContainer?
+    
+    func createEmptyImageContainerLinkToRepository(repositoryId:Int) -> ImageContainer?
+    
     func getOrCreateContainer(name:String,
                               path:String,
                               parentPath parentFolder:String,
@@ -24,15 +74,17 @@ protocol RepositoryDaoInterface {
     
     func deleteContainer(path: String, deleteImage:Bool) -> ExecuteState
     
-    func deleteRepository(repositoryRoot:String) -> ExecuteState
+    func saveImageContainer(container:ImageContainer) -> ExecuteState
     
-    func getContainer(path:String) -> ImageContainer?
+    func hideContainer(path:String) -> ExecuteState
     
-    func getRepository(repositoryPath:String) -> ImageContainer?
+    func showContainer(path:String) -> ExecuteState
     
-    func getRepositories(orderBy:String, condition:SearchCondition?) -> [ImageContainer]
+    // MARK: SUB CONTAINER QUERY
     
-    func getRepositoryPaths(imagesCondition:SearchCondition) -> [String]
+    func getSubContainersSingleLevel(repositoryId:Int, condition:SearchCondition?) -> [ImageContainer]
+    
+    func getSubContainersSingleLevel(containerId:Int, condition:SearchCondition?) -> [ImageContainer]
     
     func getSubContainers(parent path:String, condition:SearchCondition?) -> [ImageContainer]
     
@@ -40,19 +92,19 @@ protocol RepositoryDaoInterface {
     
     func countSubContainers(parent path:String) -> Int
     
-    func getAllContainers() -> [ImageContainer]
+    func countSubContainers(repositoryId:Int) -> Int
     
-    func getContainers(rootPath:String) -> [ImageContainer]
+    func countSubContainers(containerId:Int) -> Int
     
-    func getAllContainerPathsOfImages(rootPath:String?) -> Set<String>
+    func countSubImages(containerId:Int) -> Int
     
-    func getAllContainerPaths(rootPath:String?) -> Set<String>
-    
-    func getAllContainerPaths(repositoryPath:String?) -> Set<String>
-    
-    func saveImageContainer(container:ImageContainer) -> ExecuteState
+    // MARK: SUB CONTAINER UPDATE
     
     func updateImageContainerSubContainers(path:String) -> Int
+    
+    func updateImageContainerWithRepositoryId(containerId:Int, repositoryId:Int) -> ExecuteState
+    
+    func updateImageContainerWithParentId(containerId:Int, parentId:Int) -> ExecuteState
     
     func updateImageContainerParentFolder(path:String, parentFolder:String) -> ExecuteState
     
@@ -63,16 +115,4 @@ protocol RepositoryDaoInterface {
     func updateImageContainerRepositoryPaths(oldPath:String, newPath:String, repositoryPath:String) -> ExecuteState
     
     func updateImageContainerToggleManyChildren(path:String, state:Bool) -> ExecuteState
-    
-    func hideContainer(path:String) -> ExecuteState
-    
-    func showContainer(path:String) -> ExecuteState
-    
-    func hideRepository(repositoryRoot:String) -> ExecuteState
-    
-    func showRepository(repositoryRoot:String) -> ExecuteState
-    
-    // MARK: - DATE
-    
-    func getLastPhotoTakenDateOfRepositories() -> [String:String]
 }

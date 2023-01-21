@@ -168,8 +168,11 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate, Tr
     
     func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool {
         if let collection = item as? TreeCollection {
-            return collection.expandable || collection.childrenCount > 0 //collection.children.count > 0
+            return collection.expandable
+            || collection.subContainersCount > 0
+            || (collection.subContainersCount == 0 && collection.childrenCount > 0)
         }
+        // tree-root
         return self.trees.count > 0
     }
 

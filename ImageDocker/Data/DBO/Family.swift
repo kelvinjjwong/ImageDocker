@@ -33,6 +33,10 @@ extension Family : PostgresRecord {
         return ["id"]
     }
     
+    public func autofillColumns() -> [String] {
+        return []
+    }
+    
     
 }
 
@@ -57,6 +61,10 @@ extension FamilyMember : PostgresRecord {
     
     public func primaryKeys() -> [String] {
         return ["familyId", "peopleId"]
+    }
+    
+    public func autofillColumns() -> [String] {
+        return []
     }
     
     
@@ -84,6 +92,10 @@ extension FamilyJoint : PostgresRecord {
     
     public func primaryKeys() -> [String] {
         return ["bigFamilyId", "smallFamilyid"]
+    }
+    
+    public func autofillColumns() -> [String] {
+        return []
     }
     
     

@@ -161,7 +161,7 @@ class DeviceDaoPostgresCK : DeviceDaoInterface {
         var results:Set<String> = []
         for row in records {
             if withStash {
-                results.insert(row.path.withStash())
+                results.insert(row.path.withLastStash())
             }else{
                 results.insert(row.path)
             }

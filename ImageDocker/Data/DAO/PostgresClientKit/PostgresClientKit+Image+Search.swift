@@ -1098,7 +1098,7 @@ order by "date"
     func getImagesWithoutFace(repositoryRoot: String, includeScanned: Bool) -> [Image] {
         let db = PostgresConnection.database()
         
-        let root = repositoryRoot.withStash()
+        let root = repositoryRoot.withLastStash()
         let scannedCondition = includeScanned ? "" : " and \"scanedFace\"=false"
         
         return Image.fetchAll(db, where: """
@@ -1142,7 +1142,7 @@ order by "date"
     
     func getPhotoFilesWithoutSubPath(rootPath: String) -> [Image] {
         let db = PostgresConnection.database()
-        return Image.fetchAll(db, where: "path like $1 and \"subPath\" = ''", values: ["\(rootPath.withStash())%"] )
+        return Image.fetchAll(db, where: "path like $1 and \"subPath\" = ''", values: ["\(rootPath.withLastStash())%"] )
     }
     
     func getPhotoFiles(parentPath: String, includeHidden: Bool, pageSize: Int, pageNumber: Int, subdirectories: Bool) -> [Image] {
@@ -1156,7 +1156,7 @@ order by "date"
         var key:[String] = [parentPath]
         if subdirectories {
             condition = "(\"containerPath\" = $1 or \"containerPath\" like $2)"
-            key.append("\(parentPath.withStash())%")
+            key.append("\(parentPath.withLastStash())%")
         }
         
 //        self.logger.log("\(condition) \(otherPredicate)")
@@ -1175,7 +1175,7 @@ order by "date"
     
     func getPhotoFiles(rootPath: String) -> [Image] {
         let db = PostgresConnection.database()
-        return Image.fetchAll(db, where: "path like $1", values: ["\(rootPath.withStash())%"])
+        return Image.fetchAll(db, where: "path like $1", values: ["\(rootPath.withLastStash())%"])
     }
     
 

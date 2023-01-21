@@ -10,15 +10,35 @@ import Foundation
 
 protocol ImageRecordDaoInterface {
     
-    func getOrCreatePhoto(filename:String, path:String, parentPath:String, repositoryPath:String?) -> Image
+    // MARK: QUERY
     
     func getImage(path:String) -> Image?
     
     func getImage(id:String) -> Image?
     
+    func findImage(repositoryVolume:String, repositoryPath:String, subPath:String) -> Image?
+    
+    func findImage(repositoryId:Int, subPath:String) -> Image?
+    
+    // MARK: CRUD
+    
+    func createImage(repositoryId:Int, containerId:Int, repositoryVolume:String, repositoryPath:String, subPath:String) -> Image?
+    
+    func getOrCreatePhoto(filename:String, path:String, parentPath:String, repositoryPath:String?) -> Image
+    
     func saveImage(image: Image) -> ExecuteState
     
     func deletePhoto(atPath path:String, updateFlag:Bool) -> ExecuteState
+    
+    // MARK: UPDATE ID
+    
+    func generateImageIdByPath(repositoryVolume:String, repositoryPath:String, subPath:String) -> (ExecuteState, String)
+    
+    func generateImageIdByContainerIdAndSubPath(containerId:Int, subPath:String) -> (ExecuteState, String)
+    
+    func updateImageWithContainerId(id:String, repositoryId:Int, containerId:Int) -> ExecuteState
+    
+    // MARK: UPDATE PATH
     
     func updateImagePaths(oldPath:String, newPath:String, repositoryPath:String, subPath:String, containerPath:String, id:String) -> ExecuteState
     
@@ -35,6 +55,10 @@ protocol ImageRecordDaoInterface {
     func updateImagePath(repositoryPath:String) -> ExecuteState
     
     // MARK: - DATE
+    
+    func updateImageDateTimeFromFilename(path:String, dateTimeFromFilename:String) -> ExecuteState
+    
+    func updateImageDateTimeFromFilename(id:String, dateTimeFromFilename:String) -> ExecuteState
     
     func updateImageDates(path:String, date:Date, fields:Set<String>) -> ExecuteState
     
