@@ -16,7 +16,7 @@ import GRDB
 
 class ImageFile {
     
-    let logger = ConsoleLogger(category: "ImageFile")
+    let logger = ConsoleLogger(category: "ImageFile", includeTypes: [])
     
     // MARK: - URL
   
@@ -192,13 +192,30 @@ class ImageFile {
             let dateTimeFromFilename = self.recognizeDateTimeFromFilename()
             if dateTimeFromFilename != "" {
                 self.logger.log(.info, "[ImageFile.init from database] needSave set to true due to dateTimeFromFilename is nil and called recognizeDateTimeFromFilename()")
-                if let imageData = self.imageData, let id = imageData.id {
-                    let executeState_updateDateTimeFromFilename = ImageRecordDao.default.updateImageDateTimeFromFilename(id: id, dateTimeFromFilename: dateTimeFromFilename)
-                    if executeState_updateDateTimeFromFilename != .OK {
-                        self.logger.log(.error, "[ImageFile.init from database] Unable to updateImageDateTimeFromFilename, id:\(id)")
+                if let imageData = self.imageData {
+                    if let id = imageData.id {
+                        let executeState_updateDateTimeFromFilename = ImageRecordDao.default.updateImageDateTimeFromFilename(id: id, dateTimeFromFilename: dateTimeFromFilename)
+                        if executeState_updateDateTimeFromFilename != .OK {
+                            self.logger.log(.error, "[ImageFile.init from database] Unable to updateImageDateTimeFromFilename, id:\(id)")
+                        }
+                    }else{
+                        self.logger.log(.error, "[ImageFile.init from database] Unable to updateImageDateTimeFromFilename, id is nil, path:\(image.path)")
+                        // generate imageId
+                        let (executeState_generateId, imageId) = ImageRecordDao.default.generateImageIdByContainerIdAndSubPath(containerId: imageData.containerId, subPath: imageData.subPath)
+                        if executeState_generateId != .OK {
+                            self.logger.log(.error, "[ImageFile.init from database] Unable to generateImageIdByContainerIdAndSubPath, containerId:\(imageData.containerId), subPath:\(imageData.subPath)")
+                        }else{
+                            self.logger.log(.info, "[ImageFile.init from database] generated UUID for image, imageId:\(imageId), containerId:\(imageData.containerId), subPath:\(imageData.subPath)")
+                            imageData.id = imageId
+                            // try again
+                            let executeState_updateDateTimeFromFilename = ImageRecordDao.default.updateImageDateTimeFromFilename(id: imageId, dateTimeFromFilename: dateTimeFromFilename)
+                            if executeState_updateDateTimeFromFilename != .OK {
+                                self.logger.log(.error, "[ImageFile.init from database] Unable to updateImageDateTimeFromFilename, id:\(imageId)")
+                            }
+                        }
                     }
-                }else{
-                    self.logger.log(.error, "[ImageFile.init from database] Unable to updateImageDateTimeFromFilename, id is nil, path:\(image.path)")
+                }else {
+                    self.logger.log(.error, "[ImageFile.init from database] Unable to updateImageDateTimeFromFilename, imageData is nil, path:\(image.path)")
                 }
             }
             self.logger.timecost("[ImageFile.init from database][recognizeDateTimeFromFilename] time cost", fromDate: startTime_recognizeDateTimeFromFilename)

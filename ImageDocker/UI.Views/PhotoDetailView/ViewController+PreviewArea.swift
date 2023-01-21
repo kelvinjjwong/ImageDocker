@@ -16,10 +16,10 @@ extension ViewController {
     @objc func onMetaTableDoubleClicked() {
         let row = self.metaInfoTableView.clickedRow
         if row >= 0 && row < self.img.metaInfoHolder.getInfos().count {
-            self.logger.log("meta double clicked row \(row)")
+            self.logger.log(.trace, "meta double clicked row \(row)")
             let info = self.img.metaInfoHolder.getInfos()[row]
             if let value = info.value {
-                self.logger.log("clicked info \(value)")
+                self.logger.log(.trace, "clicked info \(value)")
                 let pasteboard = NSPasteboard.general
                 pasteboard.declareTypes([.string], owner: nil)
                 pasteboard.setString(value, forType: .string)
@@ -177,7 +177,7 @@ extension ViewController {
     }
     
     internal func previewImage(url:URL, isPhoto:Bool) {
-        self.logger.log("previewImage(url, isPhoto) - \(url) - \(isPhoto)")
+        self.logger.log(.trace, "previewImage(url, isPhoto) - \(url) - \(isPhoto)")
         for sView in self.playerContainer.subviews {
             sView.removeFromSuperview()
         }
@@ -218,7 +218,7 @@ extension ViewController {
     }
     
     internal func previewImage(image:ImageFile) {
-        self.logger.log("previewImage(ImageFile)")
+        self.logger.log(.trace, "previewImage(ImageFile)")
         self.imagePreviewController.imageFile = image
         
         let rotation = Float(image.imageData?.rotation ?? 0)

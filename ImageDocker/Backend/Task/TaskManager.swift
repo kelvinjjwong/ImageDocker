@@ -10,7 +10,7 @@ import Foundation
 
 class TaskManager {
     
-    static let logger = ConsoleLogger(category: "TaskManager")
+    static let logger = ConsoleLogger(category: "TaskManager", includeTypes: [.debug])
     
     static var loadingImagesCollection = false
     static var scanningFileSystem = false
@@ -21,7 +21,7 @@ class TaskManager {
     static var exporting = false
     
     static func printStatus() {
-        TaskManager.logger.log("loading collection: \(loadingImagesCollection), scanning filesys: \(scanningFileSystem), reading exif: \(readingImagesExif), refreshing trees: \(refreshingTrees), exporting: \(exporting), applying selection modifies: \(applyingSelectionModifies)")
+        TaskManager.logger.log(.trace, "loading collection: \(loadingImagesCollection), scanning filesys: \(scanningFileSystem), reading exif: \(readingImagesExif), refreshing trees: \(refreshingTrees), exporting: \(exporting), applying selection modifies: \(applyingSelectionModifies)")
     }
     
     static func allowRefreshTrees() -> Bool {
@@ -93,7 +93,7 @@ struct TasksStatus {
 
 class Tasklet {
     
-    let logger = ConsoleLogger(category: "Tasklet")
+    let logger = ConsoleLogger(category: "Tasklet", includeTypes: [.debug])
     
     var type = "task"
     var id = ""
@@ -238,7 +238,7 @@ class TaskletManager {
     
     static let NOTIFICATION_KEY_TASKCOUNT = "Task_Count"
     
-    let logger = ConsoleLogger(category: "TaskletManager")
+    let logger = ConsoleLogger(category: "TaskletManager", includeTypes: [.debug])
     
     static let `default` = TaskletManager()
     
@@ -624,6 +624,7 @@ class TaskletManager {
                         self.tasksStartStopState[task.id] = false
                     }
                 }
+                self.updateTasksCountInMainWindow()
 //                self.logger.log("\(task.name) completed")
             }
         }
@@ -819,7 +820,7 @@ class TaskletManager {
 
 class FakeTaskletManager {
     
-    let logger = ConsoleLogger(category: "FakeTaskletManager", includeTypes: [.debug])
+    let logger = ConsoleLogger(category: "FakeTaskletManager", includeTypes: [])
     
     static let `default` = FakeTaskletManager()
     

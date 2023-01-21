@@ -41,6 +41,9 @@ extension ViewController {
                                             return Icons.phone
                                         }
         },
+                                    nodeValue: { collection in
+                                        return "🔌 \(collection.childrenCount)"
+        },
                                     onNodeSelected: { collection in
 //                                        self.logger.log("action on \(collection.path)")
                                         if collection.path == "Android" || collection.path == "iPhone" {
@@ -192,7 +195,7 @@ extension ViewController {
                                         
         },
                                     moreActionOnHeader: { button in
-                                        self.logger.log("clicked tree-library more button")
+                                        self.logger.log(.trace, "clicked tree-library more button")
                                         
                                         self.createLibrariesViewPopover()
                                         
@@ -222,12 +225,12 @@ extension ViewController {
     internal func updateLibraryTree() {
         //self.creatingRepository = true
 //        self.logger.log("UPDATING CONTAINERS")
-        DispatchQueue.global().async {
-            ImageFolderTreeScanner.default.updateAllContainersFileCount(onCompleted: {
+//        DispatchQueue.global().async {
+//            ImageFolderTreeScanner.default.updateAllContainersFileCount(onCompleted: {
                 
 //                self.logger.log("UPDATING CONTAINERS: DONE")
                 
-                DispatchQueue.main.async {
+//                DispatchQueue.main.async {
 //                    self.logger.log("UPDATING LIBRARY TREE")
 //                    self.saveTreeItemsExpandState()
 //                    self.refreshLibraryTree()
@@ -241,10 +244,10 @@ extension ViewController {
                     //                        self.splashController.message("Preparing UI ...", progress: 6)
                     //                    }
                     
-                }
-                
-            })
-        }
+//                }
+//
+//            })
+//        }
     }
     
     

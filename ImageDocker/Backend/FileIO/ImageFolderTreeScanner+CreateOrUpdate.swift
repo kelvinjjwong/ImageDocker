@@ -38,7 +38,7 @@ extension ImageFolderTreeScanner {
                         }else{
                             countChange = "+\(container.imageCount - count)"
                         }
-                        self.logger.log("= changing \(container.imageCount) to \(count)")  // don't delete this comment to avoid crash
+                        self.logger.log(.trace, "= changing image count of container from \(container.imageCount) to \(count), repositoryId:\(container.repositoryId), containerId:\(container.id), name:\(container.name)")  // don't delete this comment to avoid crash
                         container.imageCount = count
                         let updateState = RepositoryDao.default.saveImageContainer(container: container)
                         if indicator != nil {

@@ -11,7 +11,7 @@ import PostgresClientKit
 
 public class PostgresDB : DBExecutor {
     
-    let logger = ConsoleLogger(category: "DB", subCategory: "PostgresDB", includeTypes: [.debug])
+    let logger = ConsoleLogger(category: "DB", subCategory: "PostgresDB", includeTypes: [])
     
     private let postgresConfig: ConnectionConfiguration
     

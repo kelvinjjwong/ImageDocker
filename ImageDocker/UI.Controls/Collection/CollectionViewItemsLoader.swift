@@ -97,13 +97,13 @@ class CollectionViewItemsLoader : NSObject {
         //self.logger.log("loading folder from database: \(folderURL.path)")
         let photoFiles = walkthruDatabaseForPhotoFiles(startingURL: folderURL, includeHidden: showHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
         if photoFiles == nil || photoFiles?.count == 0 {
-            self.logger.log("LOADED nothing from entry \(folderURL.path)")
+            self.logger.log(.trace, "LOADED nothing from entry \(folderURL.path)")
             //self.logger.log("loading folder from filesystem instead: \(folderURL.path)")
             //let urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
             //setupItems(urls: urls)
             setupItems(photoFiles: [])
         }else{
-            self.logger.log("LOADED \(photoFiles?.count ?? 0) images from entry \(folderURL.path)")
+            self.logger.log(.trace, "LOADED \(photoFiles?.count ?? 0) images from entry \(folderURL.path)")
             setupItems(photoFiles: photoFiles)
         }
     }
@@ -135,7 +135,7 @@ class CollectionViewItemsLoader : NSObject {
         self.indicator = indicator
         
         //var urls: [URL] = []
-        self.logger.log("Loading photo files from db")
+        self.logger.log(.trace, "Loading photo files from db")
         let photoFiles = ImageSearchDao.default.getPhotoFiles(year: year, month: month, day: day, ignoreDate: ignoreDate,
                                                           country: country, province: province, city: city, place: place,
                                                           includeHidden: showHidden,
@@ -146,9 +146,9 @@ class CollectionViewItemsLoader : NSObject {
         //for photoFile in photoFiles {
         //    urls.append(URL(fileURLWithPath: photoFile.path!))
         //}
-        self.logger.log("Setting up items ")
+        self.logger.log(.trace, "Setting up items ")
         setupItems(photoFiles: photoFiles)
-        self.logger.log("Set up items DONE")
+        self.logger.log(.trace, "Set up items DONE")
     }
     
     // load with event, paginated
@@ -252,7 +252,7 @@ class CollectionViewItemsLoader : NSObject {
     }
     
     func reload() {
-        self.logger.log("RELOAD LAST SOURCE = \(lastRequest.loadSource ?? .unknown)")
+        self.logger.log(.trace, "RELOAD LAST SOURCE = \(lastRequest.loadSource ?? .unknown)")
         if lastRequest.loadSource == nil {
             self.reloadImages()
         }else{
@@ -391,9 +391,9 @@ class CollectionViewItemsLoader : NSObject {
         }
         
         if let photoFiles = photoFiles {
-            self.logger.log("Transforming items to domain ")
+            self.logger.log(.trace, "Transforming items to domain ")
             self.transformToDomainItems(photoFiles: photoFiles)
-            self.logger.log("Transforming items to domain: DONE ")
+            self.logger.log(.trace, "Transforming items to domain: DONE ")
         }
         
         self.loading = false
@@ -596,11 +596,11 @@ class CollectionViewItemsLoader : NSObject {
         if items.count > 0 {   // When not initial folder folder
             items.removeAll()
         }
-        self.logger.log("Loading duplicate photos from db")
+        self.logger.log(.debug, "Loading duplicate photos from db")
         // TODO: narrow the range of searching duplicate photos
         let duplicates:Duplicates = ImageDuplicationDao.default.getDuplicatePhotos()
-        self.logger.log("Found duplicates: \(duplicates.paths.count)")
-        self.logger.log("Loading duplicate photos from db: DONE")
+        self.logger.log(.debug, "Found duplicates: \(duplicates.paths.count)")
+        self.logger.log(.debug, "Loading duplicate photos from db: DONE")
         
         for url in urls {
             
@@ -610,7 +610,7 @@ class CollectionViewItemsLoader : NSObject {
             
             let imageFile = ImageFile(url: url, indicator: self.indicator)
             
-            self.logger.log("Checking duplicate for a photo")
+            self.logger.log(.trace, "Checking duplicate for a photo")
 
             if duplicates.paths.contains(url.path) {
                 imageFile.hasDuplicates = true
@@ -620,7 +620,7 @@ class CollectionViewItemsLoader : NSObject {
                 imageFile.hasDuplicates = false
                 imageFile.duplicatesKey = ""
             }
-            self.logger.log("Checking duplicate for a photo: DONE")
+            self.logger.log(.trace, "Checking duplicate for a photo: DONE")
             
             // prefetch thumbnail to improve performance of collection view
             let _ = imageFile.thumbnail
@@ -641,7 +641,7 @@ class CollectionViewItemsLoader : NSObject {
             items.removeAll()
         }
         
-        self.logger.log("Loading duplicate photos from db - START")
+        self.logger.log(.debug, "Loading duplicate photos from db - START")
         // TODO: narrow the range of searching duplicate photos
         let startTime = Date()
         let duplicates:Duplicates = ImageDuplicationDao.default.getDuplicatePhotos()
@@ -727,7 +727,7 @@ class CollectionViewItemsLoader : NSObject {
                                                                includingPropertiesForKeys: resourceValueKeys,
                                                                options: options,
                                                                errorHandler: { url, error in
-                                                                    self.logger.log("`directoryEnumerator` error: \(error).")
+                                                                    self.logger.log(.error, "`directoryEnumerator` error", error)
                                                                     return true
                                                                }
                                                               ) else { return nil }
@@ -748,7 +748,7 @@ class CollectionViewItemsLoader : NSObject {
                 urls.append(url as URL)
             }
             catch {
-                self.logger.log("Unexpected error occured: \(error).")
+                self.logger.log(.error, "Unexpected error occured", error)
             }
         }
         return urls

@@ -10,7 +10,7 @@ import Foundation
 
 class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
-    let logger = ConsoleLogger(category: "DB", subCategory: "RepositoryDaoPostgresCK", includeTypes: [.debug])
+    let logger = ConsoleLogger(category: "DB", subCategory: "RepositoryDaoPostgresCK", includeTypes: [])
     
     // MARK: IMAGE REPOSITORY CRUD
     
@@ -459,7 +459,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                                                     parentId: 0,
                                                     subPath: "",
                                                     repositoryPath: Naming.Image.generateFullAbsoluteRepositoryPath(repositoryVolume: repository.repositoryVolume, repositoryPath: repository.repositoryPath)) {
-                self.logger.log(.info, "Created an empty ImageContainer linking to ImageRepository, repositoryId:\(repositoryId), containerId:\(container.id)")
+                self.logger.log(.info, "Created an empty ImageContainer linking to ImageRepository, repositoryId:\(repositoryId), containerId:\(container.id), name:\(container.name)")
                 return container
             }else{
                 self.logger.log(.error, "Unable to create an empty ImageContainer linking to ImageRepository, repositoryId:\(repositoryId)")

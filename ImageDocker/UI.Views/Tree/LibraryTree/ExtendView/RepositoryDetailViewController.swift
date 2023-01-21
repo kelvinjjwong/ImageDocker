@@ -10,7 +10,7 @@ import Cocoa
 
 class RepositoryDetailViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "TreeExpand", subCategory: "RepositoryDetailViewController", includeTypes: [.debug, .performance])
+    let logger = ConsoleLogger(category: "TreeExpand", subCategory: "RepositoryDetailViewController", includeTypes: [])
     
     @IBOutlet weak var btnConfig: NSButton!
     @IBOutlet weak var btnManageSubContainers: NSButton!
