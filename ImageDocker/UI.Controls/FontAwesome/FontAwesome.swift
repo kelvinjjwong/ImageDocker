@@ -2,6 +2,8 @@
 //
 // source: https://github.com/qvacua/CocoaFontAwesome/blob/master/CocoaFontAwesome/FontAwesome.swift
 //
+// usage: https://github.com/qvacua/CocoaFontAwesome/blob/master/CocoaFontAwesomeDemo/AppDelegate.swift
+//
 // Copyright (c) 2014-present FontAwesome.swift contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
