@@ -81,6 +81,16 @@ class TaskManager {
     
 }
 
+struct TasksStatus {
+    var runningCount = 0
+    var totalCount = 0
+    
+    public init(running:Int, total:Int) {
+        self.runningCount = running
+        self.totalCount = total
+    }
+}
+
 class Tasklet {
     
     let logger = ConsoleLogger(category: "Tasklet")
@@ -260,7 +270,8 @@ class TaskletManager {
     }
     
     func updateTasksCountInMainWindow() {
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: TaskletManager.NOTIFICATION_KEY_TASKCOUNT), object: tasks.count)
+        let runningCount = self.tasks.count(where: { $0.state == "IN_PROGRESS" })
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: TaskletManager.NOTIFICATION_KEY_TASKCOUNT), object: TasksStatus(running: runningCount, total: self.tasks.count))
     }
     
     func startQueueTimer() {

@@ -460,9 +460,9 @@ class ViewController: NSViewController {
     }
     
     @objc func changeTasksCount(notification:Notification) {
-        if let number = notification.object as? Int {
+        if let status = notification.object as? TasksStatus {
             DispatchQueue.main.async {
-                self.btnTasks.title = Words.tasks.fill(arguments: "\(number)")
+                self.btnTasks.title = Words.tasks.fill(arguments: status.runningCount, status.totalCount)
             }
         }
     }
@@ -499,7 +499,7 @@ class ViewController: NSViewController {
     }
     
     internal func setupUIDisplays() {
-        self.btnTasks.title = Words.tasks.fill(arguments: "0")
+        self.btnTasks.title = Words.tasks.fill(arguments: 0, 0)
         self.btnNotification.title = Words.notifications.fill(arguments: "0")
         self.btnMemories.title = Words.memories.word()
         self.btnCombineDuplicates.title = Words.combineDuplicates.word()

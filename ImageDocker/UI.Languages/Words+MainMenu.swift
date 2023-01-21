@@ -42,8 +42,8 @@ extension Words {
     
     
     static let tasks = Localize(
-        eng: "Tasks (%s)",
-        chs: "后台任务 (%s)"
+        eng: "Tasks (%s/%s)",
+        chs: "后台任务 (%s/%s)"
     )
     
     static let notifications = Localize(

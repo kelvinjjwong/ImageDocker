@@ -60,7 +60,12 @@ extension ViewController {
                                     width: TREEVIEW_WIDTH,
                                     nodeValue: { collection in
                                         if let moment = collection.relatedObject as? Moment {
-                                            return "\(moment.photoCount)"
+                                            if collection.expandable {
+                                                return "📂 \(moment.photoCount)"
+                                            }else{
+                                                return "🏞️ \(moment.photoCount)"
+                                            }
+                                            
                                         }else{
                                             return "0"
                                         }
@@ -90,7 +95,11 @@ extension ViewController {
                                     width: TREEVIEW_WIDTH,
                                     nodeValue: { collection in
                                         if let moment = collection.relatedObject as? Moment {
-                                            return "\(moment.photoCount)"
+                                            if collection.expandable {
+                                                return "📂 \(moment.photoCount)"
+                                            }else{
+                                                return "🏞️ \(moment.photoCount)"
+                                            }
                                         }else{
                                             return "0"
                                         }
@@ -120,7 +129,11 @@ extension ViewController {
                                     width: TREEVIEW_WIDTH,
                                     nodeValue: { collection in
                                         if let moment = collection.relatedObject as? Moment {
-                                            return "\(moment.photoCount)"
+                                            if collection.expandable {
+                                                return "📂 \(moment.photoCount)"
+                                            }else{
+                                                return "🏞️ \(moment.photoCount)"
+                                            }
                                         }else{
                                             return "0"
                                         }
