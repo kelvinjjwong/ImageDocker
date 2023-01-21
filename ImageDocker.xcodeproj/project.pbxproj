@@ -20,6 +20,9 @@
 		5C5117452972E7F500F64CF6 /* ImageFolderTreeScanner+Geolocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5117442972E7F500F64CF6 /* ImageFolderTreeScanner+Geolocation.swift */; };
 		5C5117472972ED6300F64CF6 /* ImageFolderTreeScanner+DbWalkthru.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5117462972ED6300F64CF6 /* ImageFolderTreeScanner+DbWalkthru.swift */; };
 		5C5117492972EE0C00F64CF6 /* ImageFolderTreeScanner+CreateOrUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5117482972EE0C00F64CF6 /* ImageFolderTreeScanner+CreateOrUpdate.swift */; };
+		5C511752297C388000F64CF6 /* FontAwesome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C511751297C388000F64CF6 /* FontAwesome.swift */; };
+		5C511755297C3A8700F64CF6 /* FontAwesome in Resources */ = {isa = PBXBuildFile; fileRef = 5C511754297C3A8700F64CF6 /* FontAwesome */; };
+		5C511758297C3ABE00F64CF6 /* FontAwesomeEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C511757297C3ABE00F64CF6 /* FontAwesomeEnum.swift */; };
 		5CB92EDB2912A9D600C5C42F /* Words+Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB92EDA2912A9D600C5C42F /* Words+Preferences.swift */; };
 		8E00BB8E2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E00BB8D2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift */; };
 		8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015120208F7D23009C2549 /* StackedImageViewController.swift */; };
@@ -392,6 +395,9 @@
 		5C5117442972E7F500F64CF6 /* ImageFolderTreeScanner+Geolocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageFolderTreeScanner+Geolocation.swift"; sourceTree = "<group>"; };
 		5C5117462972ED6300F64CF6 /* ImageFolderTreeScanner+DbWalkthru.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageFolderTreeScanner+DbWalkthru.swift"; sourceTree = "<group>"; };
 		5C5117482972EE0C00F64CF6 /* ImageFolderTreeScanner+CreateOrUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageFolderTreeScanner+CreateOrUpdate.swift"; sourceTree = "<group>"; };
+		5C511751297C388000F64CF6 /* FontAwesome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontAwesome.swift; sourceTree = "<group>"; };
+		5C511754297C3A8700F64CF6 /* FontAwesome */ = {isa = PBXFileReference; lastKnownFileType = folder; path = FontAwesome; sourceTree = "<group>"; };
+		5C511757297C3ABE00F64CF6 /* FontAwesomeEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontAwesomeEnum.swift; sourceTree = "<group>"; };
 		5CB92EDA2912A9D600C5C42F /* Words+Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Preferences.swift"; sourceTree = "<group>"; };
 		5D91C952D851F04098CE50A9 /* Pods-ImageDocker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ImageDocker/Pods-ImageDocker.debug.xcconfig"; sourceTree = "<group>"; };
 		735F25C54C2D63CAD538E860 /* Pods-ImageDocker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.release.xcconfig"; path = "Pods/Target Support Files/Pods-ImageDocker/Pods-ImageDocker.release.xcconfig"; sourceTree = "<group>"; };
@@ -770,6 +776,15 @@
 				5C15F8CE2965B86E0088C0CE /* LocalEnvironmentSetupController.swift */,
 			);
 			path = UI.SystemMenu;
+			sourceTree = "<group>";
+		};
+		5C511756297C3AA500F64CF6 /* FontAwesome */ = {
+			isa = PBXGroup;
+			children = (
+				5C511751297C388000F64CF6 /* FontAwesome.swift */,
+				5C511757297C3ABE00F64CF6 /* FontAwesomeEnum.swift */,
+			);
+			path = FontAwesome;
 			sourceTree = "<group>";
 		};
 		647EF5471AA41950F5DAFEE8 /* Pods */ = {
@@ -1352,6 +1367,7 @@
 		8EBA69262090C37B00221131 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5C511754297C3A8700F64CF6 /* FontAwesome */,
 				8E4C38C92117762F0089502C /* Mobile */,
 				8EF32D112094CB2000511538 /* Icons.xcassets */,
 				8EFE763D2094B12200B7CFCA /* ImageDocker-Bridging-Header.h */,
@@ -1382,6 +1398,7 @@
 		8ECA1FE623E325C500F56895 /* UI.Controls */ = {
 			isa = PBXGroup;
 			children = (
+				5C511756297C3AA500F64CF6 /* FontAwesome */,
 				8ECA1FE723E3269F00F56895 /* CustomComboDropdown */,
 				8E08D87125DB695E009A365F /* CustomTableView */,
 				8E5D257A25A2006B00D531A7 /* Extensions */,
@@ -1831,6 +1848,7 @@
 				8E27F04225DC0291003B585F /* ImageMapView.xib in Resources */,
 				8E3EC3B6214DB1B8004B6125 /* LunarCalendarView.xib in Resources */,
 				8EF32D122094CB2000511538 /* Icons.xcassets in Resources */,
+				5C511755297C3A8700F64CF6 /* FontAwesome in Resources */,
 				8E15E73F23AC74DC0094240A /* TreeViewController.xib in Resources */,
 				8EC82EAC2121C5A200FC0899 /* AddLocalDirectoryViewController.xib in Resources */,
 				8E4095F8259397FC00BF717B /* ExportProfileItem.storyboard in Resources */,
@@ -1970,6 +1988,7 @@
 				8E08D87025DB6932009A365F /* TextListComboController.swift in Sources */,
 				8E174B6E208F851100FFE7C7 /* ExifTool.swift in Sources */,
 				8EF4E1F42453C05800999DD1 /* PostgresDB.swift in Sources */,
+				5C511758297C3ABE00F64CF6 /* FontAwesomeEnum.swift in Sources */,
 				8E15E73E23AC74DC0094240A /* TreeViewController.swift in Sources */,
 				8EFA7CFB211D713700419777 /* ImageDevice.swift in Sources */,
 				8E69D53624B331AD0075A05D /* MomentsTreeHeaderMoreViewController.swift in Sources */,
@@ -2168,6 +2187,7 @@
 				8EFA02F3243B3EF500D7C355 /* PostgresClientKit+VersionMigrate.swift in Sources */,
 				8EB2717D2340D8D5003BF3AF /* ViewController+TreeArea.swift in Sources */,
 				8EB271892340EDC5003BF3AF /* ViewController+SelectionArea+AssignEvent.swift in Sources */,
+				5C511752297C388000F64CF6 /* FontAwesome.swift in Sources */,
 				8E9CF30D26489EAA00558423 /* Words.swift in Sources */,
 				8E3FA92323535C5800B677A3 /* MemoriesViewController.swift in Sources */,
 				8EFA02EB243B3EA900D7C355 /* PostgresClientKit+ImageEvent.swift in Sources */,

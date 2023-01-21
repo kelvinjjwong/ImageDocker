@@ -16,7 +16,7 @@ import AVKit
 
 class ViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "MAIN", subCategory: "VIEW")
+    let logger = ConsoleLogger(category: "MAIN", subCategory: "VIEW", includeTypes: [])
     
     var childWindows:[String:NSWindow] = [:]
     
@@ -332,6 +332,12 @@ class ViewController: NSViewController {
     internal func initView() {
 //        whereIsDock()
         
+//        if let faUrl = URL.fontURL(for: "Font Awesome 5 Free-Solid-900") {
+//            self.logger.log(.debug, "fa url: \(faUrl)")
+//        }else{
+//            self.logger.log(.error, "Unable to load fontawesome")
+//        }
+        
         let (volumes_lasttime, volumes_connected, volumes_missing) = self.checkRepositoryVolumesMounted()
         self.logger.log("[STARTUP] volumes_lasttime: \(volumes_lasttime)")
         self.logger.log("[STARTUP] volumes_connected: \(volumes_connected)")
@@ -403,13 +409,12 @@ class ViewController: NSViewController {
         self.lastExportPhotos = Date()
         
         self.startSchedules()
-        
+//        self.logger.log(.debug, "")
 //        self.logger.log("Loading view: DONE")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
 //        whereIsDock()
         
