@@ -81,7 +81,7 @@ class CollectionViewItemsLoader : NSObject {
         return self.loading
     }
 
-    
+    // from repository / container // FIXME: use container id instead
     func load(from folderURL: URL, indicator:Accumulator? = nil, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false) {
         loading = true
         

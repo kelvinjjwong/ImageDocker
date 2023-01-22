@@ -57,6 +57,7 @@ extension ViewController {
         self.loadCollectionByContainer(name: container.name, url:URL(fileURLWithPath: container.path), pageSize: pageSize, pageNumber: pageNumber, subdirectories: true)
     }
     
+    // FIXME: use container id instead
     internal func loadCollectionByContainer(name:String, url:URL, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){
         
         loadCollection {

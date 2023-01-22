@@ -333,6 +333,7 @@ class ImageFolderTreeScanner {
     }
     
     // MARK: HANDLE GAP
+    // TODO: deprecate this function
     fileprivate func applyImportGap(dbUrls:Set<String>, filesysUrls:Set<String>, fileUrlToRepo:[String:ImageContainer], excludedContainerPaths:Set<String>, taskId:String = "",  indicator:Accumulator? = nil) -> Bool {
         self.logger.log("EXISTING DB PHOTO COUNT = \(dbUrls.count)")
         self.logger.log("EXISTING SYS PHOTO COUNT = \(filesysUrls.count)")
@@ -598,6 +599,12 @@ class ImageFolderTreeScanner {
     }
     
     // MARK: ENTRY - SCAN SINGLE REPO
+    // FIXME: use "Re-Scan repository" function instead
+    // TODO: deprecate "import-gap"
+    ///
+    /// Scan a repository, discover not-recorded image files, create Image record in database accordingly;
+    /// discover recorded-but-deleted files/folders, delete them from database accordingly
+    ///
     func scanSingleRepository(repository:ImageContainer, taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil) -> Bool {
         
         if TaskletManager.default.isTaskStopped(id: taskId) == true { return false }
@@ -639,6 +646,12 @@ class ImageFolderTreeScanner {
     }
     
     // MARK: ENTRY - SCAN MULTI REPOS
+    // FIXME: use "Re-Scan repository" function instead
+    // TODO: deprecate "import-gap"
+    ///
+    /// Scan multiple repository, discover not-recorded image files, create Image record in database accordingly;
+    /// discover recorded-but-deleted files/folders, delete them from database accordingly
+    ///
     func scanRepositories(taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil)  {
         
         if suppressedScan {
