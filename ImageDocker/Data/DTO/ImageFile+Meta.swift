@@ -18,6 +18,7 @@ let MetaCategorySequence:[String] = ["Location", "DateTime", "Camera", "Lens", "
 
 extension ImageFile {
     
+    /// - Tag: ImageFile.transformDomainToMetaInfo()
     func transformDomainToMetaInfo() {
         if let photoFile = self.imageData {
 //            self.logger.log("meta -> repo -> \(photoFile.repositoryPath)")
@@ -177,6 +178,7 @@ extension ImageFile {
     ///
     /// If image propertied can not be accessed or if needed properties
     /// do not exist the file is assumed to be a non-image file
+    /// - Tag: ImageFile.loadMetaInfoFromOSX()
     internal func loadMetaInfoFromOSX() {
         if self.isVideo == true { return }
         
@@ -314,6 +316,7 @@ extension ImageFile {
         }
     }
     
+    /// - Tag: ImageFile.loadMetaInfoFromDatabase()
     public func loadMetaInfoFromDatabase() {
         if self.imageData == nil {
             self.logger.log(.error, "ERROR: IMAGE DATA IS NIL, unable to [loadMetaInfoFromDatabase]")
@@ -380,6 +383,8 @@ extension ImageFile {
         hasLoadedMetaInfoFromDatabase = true
     }
     
+    
+    /// - Tag: ImageFile.loadMetaInfoFromExif()
     public func loadMetaInfoFromExif(_ force:Bool = false) {
         guard !(force || isStandalone || isLoadedExif) else {return}
         

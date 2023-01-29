@@ -164,6 +164,7 @@ class RepositoryDetailViewController: NSViewController {
         self.btnRefreshData.isHidden = !state
     }
     
+    /// - Tag: RepositoryDetailViewController.initView(id)
     func initView(id:Int,
                   path:String,
                   onShowDeviceDialog: @escaping ((PhoneDevice) -> Void),
@@ -320,6 +321,7 @@ class RepositoryDetailViewController: NSViewController {
     }
     
     
+    /// - Tag: RepositoryDetailViewController.onEditableDetailClicked()
     @IBAction func onEditableDetailClicked(_ sender: NSButton) {
         if let output = self.repoSpace["console_output"] {
             self.scrollDetail.hasVerticalScroller = true
@@ -332,6 +334,7 @@ class RepositoryDetailViewController: NSViewController {
         }
     }
     
+    /// - Tag: RepositoryDetailViewController.onBackupDetailClicked()
     @IBAction func onBackupDetailClicked(_ sender: NSButton) {
         if let output = self.backupSpace["console_output"] {
             self.scrollDetail.hasVerticalScroller = true
@@ -344,6 +347,7 @@ class RepositoryDetailViewController: NSViewController {
         }
     }
     
+    /// - Tag: RepositoryDetailViewController.onCropDetailClicked()
     @IBAction func onCropDetailClicked(_ sender: NSButton) {
         if let output = self.faceSpace["console_output"] {
             self.scrollDetail.hasVerticalScroller = true
@@ -356,6 +360,7 @@ class RepositoryDetailViewController: NSViewController {
         }
     }
     
+    /// - Tag: RepositoryDetailViewController.onDropInClicked()
     @IBAction func onDropInClicked(_ sender: NSButton) {
         if let repository = RepositoryDao.default.getRepository(repositoryPath: self._repositoryPath),
             let device = DeviceDao.default.getDevice(deviceId: repository.deviceId),
@@ -396,6 +401,7 @@ class RepositoryDetailViewController: NSViewController {
         }
     }
     
+    /// - Tag: RepositoryDetailViewController.onImportClicked()
     @IBAction func onImportClicked(_ sender: NSButton) {
         if let repository = RepositoryDao.default.getRepository(repositoryPath: self._repositoryPath) {
             self.toggleButtons(false)
@@ -473,6 +479,7 @@ class RepositoryDetailViewController: NSViewController {
         self.forceStop = true
     }
     
+    /// - Tag: RepositoryDetailViewController.onFindParentClicked()
     @IBAction func onFindParentClicked(_ sender: NSButton) {
         if(self.lblNewPath.isHidden){
             self.toggleNewPath(true)
@@ -484,6 +491,7 @@ class RepositoryDetailViewController: NSViewController {
         self.findNewContainer(path: newUrl.path)
     }
     
+    /// - Tag: RepositoryDetailViewController.findNewContainer()
     private func findNewContainer(path:String){
         if let newContainer = RepositoryDao.default.getContainer(path: path) {
             self.lblNewContainerName.stringValue = newContainer.name
@@ -494,6 +502,7 @@ class RepositoryDetailViewController: NSViewController {
         }
     }
     
+    /// - Tag: RepositoryDetailViewController.onPickParentClicked()
     @IBAction func onPickParentClicked(_ sender: NSButton) {
         
         let buttonTitle = self.btnPickParent.title
@@ -577,6 +586,7 @@ class RepositoryDetailViewController: NSViewController {
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     
+    /// - Tag: RepositoryDetailViewController.onRefreshDataClicked()
     @IBAction func onRefreshDataClicked(_ sender: NSButton) {
         let buttonTitle = self.btnRefreshData.title
         self.btnRefreshData.title = Words.library_tree_updating.word()
@@ -600,6 +610,7 @@ class RepositoryDetailViewController: NSViewController {
         }
     }
     
+    /// - Tag: RepositoryDetailViewController.onReScanFoldersClicked()
     @IBAction func onReScanFoldersClicked(_ sender: NSButton) {
         
         if(self.working) {

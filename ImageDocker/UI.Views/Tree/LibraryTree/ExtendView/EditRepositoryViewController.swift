@@ -350,6 +350,7 @@ class EditRepositoryViewController: NSViewController {
     
     // MARK: - STATISTIC
     
+    /// - Tag: EditRepositoryViewController.stat()
     fileprivate func stat() {
         if let container = self.originalContainer {
             let path = container.path
@@ -406,6 +407,7 @@ class EditRepositoryViewController: NSViewController {
     
     // MARK: - ACTION BUTTON - SAVE / OK
     
+    /// - Tag: EditRepositoryViewController.saveNewRepository()
     fileprivate func saveNewRepository() {
         let name = self.txtName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         let homePath = self.txtHomePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -468,6 +470,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    /// - Tag: EditRepositoryViewController.onOKClicked()
     @IBAction func onOKClicked(_ sender: Any) {
         
         if let container = self.originalContainer { // edit
@@ -506,6 +509,7 @@ class EditRepositoryViewController: NSViewController {
     
     // MARK: - ACTION BUTTON - RESTORE TO ORIGIN
     
+    /// - Tag: EditRepositoryViewController.onRestoreOriginalClicked()
     @IBAction func onRestoreOriginalClicked(_ sender: NSButton) {
         if let container = self.originalContainer {
             self.emptyStorageTextFields()
@@ -518,6 +522,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    /// - Tag: EditRepositoryViewController.onRestoreOriginalFacePathClicked()
     @IBAction func onRestoreOriginalFacePathClicked(_ sender: NSButton) {
         
         if let container = self.originalContainer {
@@ -529,6 +534,7 @@ class EditRepositoryViewController: NSViewController {
     
     // MARK: - ACTION BUTTON - FOLLOW HOME PATH
     
+    /// - Tag: EditRepositoryViewController.onFollowHomePathClicked()
     @IBAction func onFollowHomePathClicked(_ sender: NSButton) {
         
         if self.txtHomePath.stringValue == "" {
@@ -564,6 +570,7 @@ class EditRepositoryViewController: NSViewController {
         self.txtStoragePath.stringValue = storage.path
     }
     
+    /// - Tag: EditRepositoryViewController.onFacePathFollowHomeClicked()
     @IBAction func onFacePathFollowHomeClicked(_ sender: NSButton) {
         
         if self.txtHomePath.stringValue == "" {
@@ -599,6 +606,7 @@ class EditRepositoryViewController: NSViewController {
     
     // MARK: - ACTION BUTTON - COPY IMAGES FROM EDITABLE TO RAW STORAGE
     
+    /// - Tag: EditRepositoryViewController.onCopyToRawClicked()
     @IBAction func onCopyToRawClicked(_ sender: NSButton) {
         if let container = self.originalContainer {
             if container.repositoryPath == "" {
@@ -697,6 +705,7 @@ class EditRepositoryViewController: NSViewController {
     
     // MARK: - ACTION BUTTON - OPEN DIALOG
     
+    /// - Tag: EditRepositoryViewController.onBrowseHomePath()
     @IBAction func onBrowseHomePath(_ sender: NSButton) {
         if let win = self.window {
         
@@ -716,6 +725,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    /// - Tag: EditRepositoryViewController.onBrowseStoragePathClicked()
     @IBAction func onBrowseStoragePathClicked(_ sender: NSButton) {
         if let win = self.window {
             
@@ -735,6 +745,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    /// - Tag: EditRepositoryViewController.onBrowseRepositoryPathClicked()
     @IBAction func onBrowseRepositoryPathClicked(_ sender: NSButton) {
         if let win = self.window {
             
@@ -754,6 +765,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    /// - Tag: EditRepositoryViewController.onBrowseFacePathClicked()
     @IBAction func onBrowseFacePathClicked(_ sender: NSButton) {
         if let win = self.window {
             
@@ -773,6 +785,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    /// - Tag: EditRepositoryViewController.onBrowseCropPath()
     @IBAction func onBrowseCropPath(_ sender: NSButton) {
         if let win = self.window {
             
@@ -794,6 +807,7 @@ class EditRepositoryViewController: NSViewController {
     
     // MARK: - ACTION BUTTON - VIEW IN FINDER
     
+    /// - Tag: EditRepositoryViewController.onFindHomePath()
     @IBAction func onFindHomePath(_ sender: NSButton) {
         if self.txtHomePath.stringValue == "" {
             self.lblHomePathRemark.stringValue = "Please assign path for home of this repository."
@@ -808,6 +822,7 @@ class EditRepositoryViewController: NSViewController {
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     
+    /// - Tag: EditRepositoryViewController.onFindStoragePathClicked()
     @IBAction func onFindStoragePathClicked(_ sender: NSButton) {
         if self.txtStoragePath.stringValue == "" {
             self.lblStoragePathRemark.stringValue = "Please assign path for storing RAW copies."
@@ -822,6 +837,7 @@ class EditRepositoryViewController: NSViewController {
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     
+    /// - Tag: EditRepositoryViewController.onFindRepositoryPathClicked()
     @IBAction func onFindRepositoryPathClicked(_ sender: NSButton) {
         if self.txtRepository.stringValue == "" {
             self.lblRepositoryPathRemark.stringValue = "Please assign path for storing modifies."
@@ -836,6 +852,7 @@ class EditRepositoryViewController: NSViewController {
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     
+    /// - Tag: EditRepositoryViewController.onFindFaceRepositoryPathClicked()
     @IBAction func onFindFaceRepositoryPathClicked(_ sender: NSButton) {
         if self.txtFacePath.stringValue == "" {
             self.lblFacePathRemark.stringValue = "Please assign path for storing recognized pictures."
@@ -850,6 +867,7 @@ class EditRepositoryViewController: NSViewController {
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     
+    /// - Tag: EditRepositoryViewController.onFindCropPath()
     @IBAction func onFindCropPath(_ sender: NSButton) {
         if self.txtCropPath.stringValue == "" {
             self.lblCropPathRemark.stringValue = "Please assign path for storing faces within pictures."
@@ -866,6 +884,7 @@ class EditRepositoryViewController: NSViewController {
     
     // MARK: - ACTION BUTTON - UPDATE IMAGES
     
+    /// - Tag: EditRepositoryViewController.onUpdateStorageImagesClicked()
     @IBAction func onUpdateStorageImagesClicked(_ sender: NSButton) {
         guard !self.working else {return}
         if let repoContainer = self.originalContainer {
@@ -953,6 +972,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    /// - Tag: EditRepositoryViewController.onUpdateRepositoryImagesClicked()
     @IBAction func onUpdateRepositoryImagesClicked(_ sender: NSButton) {
         guard !self.working else {return}
         if let repoContainer = self.originalContainer {
@@ -1120,6 +1140,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    /// - Tag: EditRepositoryViewController.onUpdateFaceImagesClicked()
     @IBAction func onUpdateFaceImagesClicked(_ sender: NSButton) {
         guard !self.working else {return}
         if let repoContainer = self.originalContainer {
@@ -1201,12 +1222,14 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    /// - Tag: EditRepositoryViewController.onUpdateCropImagesClicked()
     @IBAction func onUpdateCropImagesClicked(_ sender: NSButton) {
         // TODO: DEMISE
        
     }
     
     
+    /// - Tag: EditRepositoryViewController.onNormalizeHiddenClicked()
     @IBAction func onNormalizeHiddenClicked(_ sender: NSButton) {
         let repo = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withLastStash()
         let raw = self.txtStoragePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withLastStash()
@@ -1312,6 +1335,7 @@ class EditRepositoryViewController: NSViewController {
     
     // MARK: - ACTION BUTTON - DELETE RECORDS
     
+    /// - Tag: EditRepositoryViewController.onRemoveClicked()
     @IBAction func onRemoveClicked(_ sender: NSButton) {
         if let container = self.originalContainer {
             if Alert.dialogOKCancel(question: "Remove all records and image-records of this repository from database ?", text: container.path) {
@@ -1335,6 +1359,7 @@ class EditRepositoryViewController: NSViewController {
     
     // MARK: - ACTION BUTTON - DEVICE INFO AREA
     
+    /// - Tag: EditRepositoryViewController.onLoadDevicesClicked()
     @IBAction func onLoadDevicesClicked(_ sender: NSButton) {
         self.createDevicesPopover()
         self.devicesViewController.initView()
@@ -1343,6 +1368,7 @@ class EditRepositoryViewController: NSViewController {
         self.devicesPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
     }
     
+    /// - Tag: EditRepositoryViewController.onCompareDevicePathClicked()
     @IBAction func onCompareDevicePathClicked(_ sender: NSButton) {
         let deviceId = self.lblDeviceId.stringValue
         if deviceId != "" {
@@ -1364,12 +1390,14 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    /// - Tag: EditRepositoryViewController.onCleanDeviceClicked()
     @IBAction func onCleanDeviceClicked(_ sender: NSButton) {
         self.lblDeviceId.stringValue = ""
         self.lblDeviceName.stringValue = ""
         self.linkDeviceToRepository(deviceId: "", deviceName: "")
     }
     
+    /// - Tag: EditRepositoryViewController.linkDeviceToRepository()
     fileprivate func linkDeviceToRepository(deviceId: String, deviceName:String){
         if let container = self.originalContainer {
             let repo = container
@@ -1385,6 +1413,7 @@ class EditRepositoryViewController: NSViewController {
     
     // MARK: - ACTION BUTTON - SHOW HIDE IMAGES
     
+    /// - Tag: EditRepositoryViewController.onShowHideClicked()
     @IBAction func onShowHideClicked(_ sender: NSButton) {
         if let container = self.originalContainer {
             if container.hiddenByRepository {
@@ -1416,6 +1445,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    /// - Tag: EditRepositoryViewController.onFollowDevicePathsClicked()
     @IBAction func onFollowDevicePathsClicked(_ sender: NSButton) {
         let deviceId = self.lblDeviceId.stringValue
         if deviceId != "" {
@@ -1429,6 +1459,7 @@ class EditRepositoryViewController: NSViewController {
     
     // MARK: - FIND FACES
     
+    /// - Tag: EditRepositoryViewController.onFindFacesClicked()
     @IBAction func onFindFacesClicked(_ sender: NSButton) {
 //        guard !self.working else {
 //            self.logger.log("other task is running. abort this task.")
@@ -1514,6 +1545,7 @@ class EditRepositoryViewController: NSViewController {
     fileprivate var continousWorkingAttempt = 0
     fileprivate var continousWorkingRemain = 0
     
+    /// - Tag: EditRepositoryViewController.onUpdateEmptyBriefClicked()
     @IBAction func onUpdateEmptyBriefClicked(_ sender: NSButton) {
         self.lblMessage.stringValue = "Updating images..."
         self.btnUpdateEmptyBrief.isEnabled = false
@@ -1549,6 +1581,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    /// - Tag: EditRepositoryViewController.onUpdateAllBriefClicked()
     @IBAction func onUpdateAllBriefClicked(_ sender: NSButton) {
         self.lblMessage.stringValue = "Updating images..."
         self.btnUpdateEmptyBrief.isEnabled = false
@@ -1581,6 +1614,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    /// - Tag: EditRepositoryViewController.getBriefFolderLevelFromSelection()
     private func getBriefFolderLevelFromSelection() -> Int {
         var lv = -1
         let selectedLevel = self.lstBriefFolderLevel.indexOfSelectedItem
@@ -1598,6 +1632,7 @@ class EditRepositoryViewController: NSViewController {
         return lv
     }
     
+    /// - Tag: EditRepositoryViewController.setBriefFolderLevelSelection()
     private func setBriefFolderLevelSelection(_ value:Int) {
         if value == -1 {
             self.lstBriefFolderLevel.selectItem(at: 0)
@@ -1613,6 +1648,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    /// - Tag: EditRepositoryViewController.onPreviewBriefFolders()
     @IBAction func onPreviewBriefFolders(_ sender: NSButton) {
         let amount = 100
         let lv = self.getBriefFolderLevelFromSelection()
@@ -1689,6 +1725,7 @@ class EditRepositoryViewController: NSViewController {
     
     // MARK: - UPDATE EVENT
     
+    /// - Tag: EditRepositoryViewController.onUpdateEmptyEventClicked()
     @IBAction func onUpdateEmptyEventClicked(_ sender: NSButton) {
         self.lblMessage.stringValue = "Updating images..."
         self.btnUpdateEmptyBrief.isEnabled = false
@@ -1724,6 +1761,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    /// - Tag: EditRepositoryViewController.onUpdateAllEventsClicked()
     @IBAction func onUpdateAllEventsClicked(_ sender: NSButton) {
         self.lblMessage.stringValue = "Updating images..."
         self.btnUpdateEmptyBrief.isEnabled = false
@@ -1756,6 +1794,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    /// - Tag: EditRepositoryViewController.onPreviewEventFolders()
     @IBAction func onPreviewEventFolders(_ sender: NSButton) {
         let amount = 50
         let level = self.lstEventFolderLevel.indexOfSelectedItem
@@ -1848,6 +1887,7 @@ class EditRepositoryViewController: NSViewController {
 
 extension EditRepositoryViewController : DeviceListDelegate {
     
+    /// - Tag: EditRepositoryViewController.displayDeviceInfo()
     fileprivate func displayDeviceInfo(deviceId: String, updateDB:Bool = false) {
         
         if let device = DeviceDao.default.getDevice(deviceId: deviceId) {

@@ -131,6 +131,7 @@ class ImageFile {
         return imageData?.hidden == true
     }
     
+    /// - Tag: ImageFile.hide()
     func hide() {
         if imageData != nil {
             imageData?.hidden = true
@@ -139,6 +140,7 @@ class ImageFile {
         }
     }
     
+    /// - Tag: ImageFile.show()
     func show() {
         if imageData != nil {
             imageData?.hidden = false
@@ -150,6 +152,7 @@ class ImageFile {
     
     // MARK: - UPDATE
     
+    /// - Tag: ImageFile.save()
     func save() -> ExecuteState{
         if self.imageData != nil {
             self.logger.log(.info, "[ImageFile.save] - save image record - \(self.imageData?.path ?? "")")
@@ -164,6 +167,7 @@ class ImageFile {
     var hasLoadedMetaInfoFromDatabase = false
     
     // READ FROM DATABASE
+    /// - Tag: ImageFile.init(image)
     init (image:Image, indicator:Accumulator? = nil, loadExifFromFile:Bool = true, metaInfoStore:MetaInfoStoreDelegate? = nil, sharedDB:DatabaseWriter? = nil, forceReloadExif:Bool = false) {
         exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"
         exifDateFormatWithTimezone.dateFormat = "yyyy:MM:dd HH:mm:ssxxx"
@@ -314,6 +318,7 @@ class ImageFile {
     }
 
     // IMPORT FROM FILE SYSTEM
+    /// - Tag: ImageFile.init(url)
     init (url: URL, repository:ImageContainer? = nil, indicator:Accumulator? = nil, metaInfoStore:MetaInfoStoreDelegate? = nil, quickCreate:Bool = false, sharedDB:DatabaseWriter? = nil) {
         exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"
         exifDateFormatWithTimezone.dateFormat = "yyyy:MM:dd HH:mm:ssxxx"
