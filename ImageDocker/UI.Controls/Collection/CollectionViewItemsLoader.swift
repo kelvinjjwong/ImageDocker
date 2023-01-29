@@ -232,8 +232,8 @@ class CollectionViewItemsLoader : NSObject {
     fileprivate func reloadImages() {
         var images:[Image] = []
         for imageFile in self.items {
-            if let oldImage = imageFile.imageData {
-                if let image = ImageRecordDao.default.getImage(path: oldImage.path) {
+            if let oldImage = imageFile.imageData, let imageId = oldImage.id {
+                if let image = ImageRecordDao.default.getImage(id: imageId) {
                     images.append(image)
                 }
             }

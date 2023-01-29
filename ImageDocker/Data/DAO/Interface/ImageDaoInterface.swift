@@ -12,23 +12,69 @@ protocol ImageRecordDaoInterface {
     
     // MARK: QUERY
     
+    /// - parameter path: Something like /Volumes/repository/sub/container/filename.ext
+    /// - important: replaced by *getImage(id:)*
+    /// - returns: A database record of Image if exists, otherwise return nil
+    /// - attention: to be deprecated
     func getImage(path:String) -> Image?
     
+    /// A usual way to find a database record of Image by Image.id
+    /// - parameter id: a UUID
+    /// - returns: A database record of Image if exists, otherwise return nil
+    /// - since: 2023.1.21
+    /// - version: 2023.1.21
     func getImage(id:String) -> Image?
     
+    /// An alternative way to find a database record of Image by paths
+    /// - parameter repositoryVolume: Something like /Volumes/Machintosh
+    /// - parameter repositoryPath: Something like /repository/base/path
+    /// - parameter subPath: Something like Camera/filename.ext
+    /// - returns: A database record of Image if exists, otherwise return nil
+    /// - since: 2023.1.21
+    /// - version: 2023.1.21
     func findImage(repositoryVolume:String, repositoryPath:String, subPath:String) -> Image?
     
+    /// A usual way to find a database record of Image by ImageRepository.id
+    /// - parameter repositoryId:
+    /// - parameter subPath:
+    /// - returns: A database record of Image if exists, otherwise return nil
+    /// - since: 2023.1.21
+    /// - version: 2023.1.21
     func findImage(repositoryId:Int, subPath:String) -> Image?
     
     // MARK: CRUD
     
+    /// - parameter repositoryId: **mandatory** Integer id of ImageRepository.id
+    /// - parameter containerId: **mandatory** Integer id of ImageContainer.id
+    /// - parameter repositoryVolume: **optional** Something like /Volumes/Machintosh
+    /// - parameter repositoryPath: **optional** Something like /repository/base/path
+    /// - parameter subPath: **mandatory** Something like Camera/filename.ext
+    /// - attention: so far we are still using String type *path* as primary key, in future we should use UUID *id* as primary key instead
+    /// - returns: A database record of Image if successfully creates, otherwise return nil
+    /// - version: 2023.1.21
     func createImage(repositoryId:Int, containerId:Int, repositoryVolume:String, repositoryPath:String, subPath:String) -> Image?
     
+    /// Get a database record of Image if exists, otherwise create a new database record for it
+    /// - returns: a database record of Image
+    /// - attention: will deprecate
+    /// - version: 2019.12.27
     func getOrCreatePhoto(filename:String, path:String, parentPath:String, repositoryPath:String?) -> Image
     
+    
+    /// Update every fields of a database record of Image
+    /// - version: 2019.12.27
     func saveImage(image: Image) -> ExecuteState
     
+    /// Delete a database record of Image by Image.path
+    /// - important: will deprecate
+    /// - version: 2019.12.27
     func deletePhoto(atPath path:String, updateFlag:Bool) -> ExecuteState
+    
+    
+    /// Delete a database record of Image by Image.id
+    /// - since: 2023.1.29
+    /// - version: 2023.1.29
+    func deleteImage(id:String) -> ExecuteState
     
     // MARK: UPDATE ID
     
@@ -36,22 +82,30 @@ protocol ImageRecordDaoInterface {
     
     func generateImageIdByContainerIdAndSubPath(containerId:Int, subPath:String) -> (ExecuteState, String)
     
+    /// - attention: will deprecate
     func updateImageWithContainerId(id:String, repositoryId:Int, containerId:Int) -> ExecuteState
     
     // MARK: UPDATE PATH
     
+    /// - attention: will deprecate
     func updateImagePaths(oldPath:String, newPath:String, repositoryPath:String, subPath:String, containerPath:String, id:String) -> ExecuteState
     
+    /// - attention: will deprecate
     func updateImageRawBase(oldRawPath:String, newRawPath:String) -> ExecuteState
     
+    /// - attention: will deprecate
     func updateImageRawBase(repositoryPath:String, rawPath:String) -> ExecuteState
     
+    /// - attention: will deprecate
     func updateImageRawBase(pathStartsWith path:String, rawPath:String) -> ExecuteState
     
+    /// - attention: will deprecate
     func updateImageRepositoryBase(pathStartsWith path:String, repositoryPath:String) -> ExecuteState
     
+    /// - attention: will deprecate
     func updateImageRepositoryBase(oldRepositoryPath:String, newRepository:String) -> ExecuteState
     
+    /// - attention: will deprecate
     func updateImagePath(repositoryPath:String) -> ExecuteState
     
     // MARK: - DATE

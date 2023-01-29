@@ -89,8 +89,8 @@ class CollectionViewItem: NSCollectionViewItem {
     }
     
     func reloadFromDatabase(){
-        if let oldImage = self.imageFile?.imageData  {
-            if let image = ImageRecordDao.default.getImage(path: oldImage.path) {
+        if let oldImage = self.imageFile?.imageData, let imageId = oldImage.id  {
+            if let image = ImageRecordDao.default.getImage(id: imageId) {
                 self.imageFile = ImageFile(image: image)
             }
         }
