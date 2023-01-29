@@ -141,10 +141,11 @@ public final class ImageRecordDao {
     
     /// Delete a database record of Image by Image.path
     /// - caller:
-    ///   - ImageFolderTreeScanner.applyImportGap(...)
+    ///   - ImageFolderTreeScanner.[applyImportGap(dbUrls:filesysUrls:fileUrlToRepo:excludedContainerPaths:taskId:indicator:)](x-source-tag://applyImportGap(dbUrls,filesysUrls,fileUrlToRepo))
     /// - since: 2019.12.27
     /// - version: 2019.12.27
-    /// - attention: will deprecate
+    /// - attention: will be deprecated
+    /// - note: should be replaced by [deleteImage(id:)](x-source-tag://deleteImage(id))
     /// - Tag: deletePhoto(path)
     func deletePhoto(atPath path:String, updateFlag:Bool = true) -> ExecuteState {
         return self.impl.deletePhoto(atPath: path, updateFlag: updateFlag)
@@ -182,7 +183,8 @@ public final class ImageRecordDao {
     
     /// - caller:
     ///   - EditRepositoryViewController.onUpdateRepositoryImagesClicked()
-    /// - attention: will deprecate
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: updateImagePaths(oldPath)
     func updateImagePaths(oldPath:String, newPath:String, repositoryPath:String, subPath:String, containerPath:String, id:String) -> ExecuteState {
         return self.impl.updateImagePaths(oldPath: oldPath, newPath: newPath, repositoryPath: repositoryPath, subPath: subPath, containerPath: containerPath, id: id)
@@ -190,42 +192,48 @@ public final class ImageRecordDao {
     
     /// - caller:
     ///   - EditRepositoryViewController.onUpdateStorageImagesClicked()
-    /// - attention: will deprecate
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: updateImageRawBase(oldRawPath)
     func updateImageRawBase(oldRawPath:String, newRawPath:String) -> ExecuteState {
         return self.impl.updateImageRawBase(oldRawPath: oldRawPath, newRawPath: newRawPath)
     }
     
     /// - caller: NONE
-    /// - attention: will deprecate
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: updateImageRawBase(repositoryPath)
     func updateImageRawBase(repositoryPath:String, rawPath:String) -> ExecuteState {
         return self.impl.updateImageRawBase(repositoryPath: repositoryPath, rawPath: rawPath)
     }
     
     /// - caller: NONE
-    /// - attention: will deprecate
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: updateImageRawBase(pathStartsWith)
     func updateImageRawBase(pathStartsWith path:String, rawPath:String) -> ExecuteState {
         return self.impl.updateImageRawBase(pathStartsWith: path, rawPath: rawPath)
     }
     
     /// - caller: NONE
-    /// - attention: will deprecate
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: updateImageRepositoryBase(pathStartsWith)
     func updateImageRepositoryBase(pathStartsWith path:String, repositoryPath:String) -> ExecuteState {
         return self.impl.updateImageRepositoryBase(pathStartsWith: path, repositoryPath: repositoryPath)
     }
     
     /// - caller: NONE
-    /// - attention: will deprecate
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: updateImageRepositoryBase(oldRepositoryPath)
     func updateImageRepositoryBase(oldRepositoryPath:String, newRepository:String) -> ExecuteState {
         return self.impl.updateImageRepositoryBase(oldRepositoryPath: oldRepositoryPath, newRepository: newRepository)
     }
     
     /// - caller: NONE
-    /// - attention: will deprecate
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: updateImagePath(repositoryPath)
     func updateImagePath(repositoryPath:String) -> ExecuteState {
         return self.impl.updateImagePath(repositoryPath: repositoryPath)
@@ -234,6 +242,8 @@ public final class ImageRecordDao {
     // MARK: UPDATE DATE
     
     /// - caller: NONE
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: updateImageDateTimeFromFilename(path)
     func updateImageDateTimeFromFilename(path:String, dateTimeFromFilename:String) -> ExecuteState{
         return self.impl.updateImageDateTimeFromFilename(path: path, dateTimeFromFilename: dateTimeFromFilename)
@@ -248,6 +258,8 @@ public final class ImageRecordDao {
     
     /// - caller:
     ///   - DateTimeViewController.onOKClicked()
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: updateImageDates(path)
     func updateImageDates(path:String, date:Date, fields:Set<String>) -> ExecuteState {
         return self.impl.updateImageDates(path: path, date: date, fields: fields)
@@ -257,6 +269,8 @@ public final class ImageRecordDao {
     
     /// - caller:
     ///   - NotesViewController.onOKClicked()
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: storeImageDescription(path)
     func storeImageDescription(path:String, shortDescription:String?, longDescription:String?) -> ExecuteState {
         return self.impl.storeImageDescription(path: path, shortDescription: shortDescription, longDescription: longDescription)
@@ -265,6 +279,8 @@ public final class ImageRecordDao {
     /// - caller:
     ///   - ImagePreviewController.onRotateClickwiseClicked()
     ///   - ImagePreviewController.onRotateCounterClockerwiseClicked()
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: updateImageRotation(path)
     func updateImageRotation(path:String, rotation:Int) -> ExecuteState {
         return self.impl.updateImageRotation(path: path, rotation: rotation)
@@ -472,6 +488,8 @@ class ImageSearchDao {
     
     /// - caller:
     ///   - ImageFolderTreeScanner.scanPhotosToLoadExif(repository:taskId:...)
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: getPhotoFilesWithoutExif(repositoryPath)
     func getPhotoFilesWithoutExif(repositoryPath:String, limit:Int? = nil) -> [Image] {
         return self.impl.getPhotoFilesWithoutExif(repositoryPath: repositoryPath, limit: limit)
@@ -481,6 +499,8 @@ class ImageSearchDao {
     
     /// - caller:
     ///   - ImageFolderTreeScanner.scanPhotosToLoadExif(repository:taskId:...)
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: getPhotoFilesWithoutLocation(repositoryPath)
     func getPhotoFilesWithoutLocation(repositoryPath:String) -> [Image] {
         return self.impl.getPhotoFilesWithoutLocation(repositoryPath: repositoryPath)
@@ -519,14 +539,16 @@ class ImageSearchDao {
     
     /// - caller:
     ///   - ImageFolderTreeScanner.scanSingleRepository(repository:taskId:indicator:)
-    /// - attention: will deprecate
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: getAllPhotoPaths(repositoryPath)
     func getAllPhotoPaths(repositoryPath:String, includeHidden:Bool = true) -> Set<String> {
         return self.impl.getAllPhotoPaths(repositoryPath:repositoryPath, includeHidden: includeHidden)
     }
     
     /// - caller: NONE
-    /// - attention: will deprecate
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: getPhotoFilesWithoutSubPath(rootPath)
     func getPhotoFilesWithoutSubPath(rootPath:String) -> [Image] {
         return self.impl.getPhotoFilesWithoutSubPath(rootPath: rootPath)
@@ -535,7 +557,8 @@ class ImageSearchDao {
     /// - caller:
     ///   - CollectionViewItemsLoader.walkthruDatabaseForFileurls
     ///   - CollectionViewItemsLoader.walkthruDatabaseForPhotoFiles
-    /// - attention: will deprecate
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: getPhotoFiles(parentPath)
     func getPhotoFiles(parentPath:String, includeHidden:Bool = true, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false) -> [Image] {
         return self.impl.getPhotoFiles(parentPath: parentPath, includeHidden: includeHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
@@ -547,7 +570,8 @@ class ImageSearchDao {
     ///   - EditRepositoryViewController.onUpdateAllEventsClicked()
     ///   - EditRepositoryViewController.onUpdateEmptyBriefClicked()
     ///   - EditRepositoryViewController.onUpdateEmptyEventClicked()
-    /// - attention: will deprecate
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: getImages(repositoryPath)
     func getImages(repositoryPath:String) -> [Image] {
         return self.impl.getImages(repositoryPath: repositoryPath)
@@ -556,7 +580,8 @@ class ImageSearchDao {
     /// - caller:
     ///   - DevicePathDetailViewController.onupdateClicked()
     ///   - EditRepositoryViewController.onUpdateRepositoryImagesClicked()
-    /// - attention: will deprecate
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: getPhotoFiles(rootPath)
     func getPhotoFiles(rootPath:String) -> [Image] {
         return self.impl.getPhotoFiles(rootPath: rootPath)
@@ -592,6 +617,8 @@ class ImageCountDao {
     
     /// - caller:
     ///   - RepositoryDetailViewController.initView(id:path:...)
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: countImagesShouldImport(rawStoragePath)
     func countImagesShouldImport(rawStoragePath:String, deviceId:String) -> Int {
         return self.impl.countImagesShouldImport(rawStoragePath: rawStoragePath, deviceId: deviceId)
@@ -599,6 +626,8 @@ class ImageCountDao {
     
     /// - caller:
     ///   - RepositoryDetailViewController.initView(id:path:...)
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: countImportedAsEditable(repositoryPath)
     func countImportedAsEditable(repositoryPath:String) -> Int {
         return self.impl.countImportedAsEditable(repositoryPath: repositoryPath)
@@ -606,6 +635,8 @@ class ImageCountDao {
     
     /// - caller:
     ///   - RepositoryDetailViewController.initView(id:path:...)
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: countExtractedExif(repositoryPath)
     func countExtractedExif(repositoryPath:String) -> Int {
         return self.impl.countExtractedExif(repositoryPath: repositoryPath)
@@ -613,6 +644,8 @@ class ImageCountDao {
     
     /// - caller:
     ///   - RepositoryDetailViewController.initView(id:path:...)
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: countRecognizedLocation(repositoryPath)
     func countRecognizedLocation(repositoryPath:String) -> Int {
         return self.impl.countRecognizedLocation(repositoryPath: repositoryPath)
@@ -620,6 +653,8 @@ class ImageCountDao {
     
     /// - caller:
     ///   - RepositoryDetailViewController.initView(id:path:...)
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: countRecognizedFaces(repositoryPath)
     func countRecognizedFaces(repositoryPath:String) -> Int {
         return self.impl.countRecognizedFaces(repositoryPath: repositoryPath)
@@ -663,6 +698,8 @@ class ImageCountDao {
     
     /// - caller:
     ///   - EditRepositoryViewController.stat()
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: countImageWithoutFace(repositoryRoot)
     func countImageWithoutFace(repositoryRoot:String) -> Int {
         return self.impl.countImageWithoutFace(repositoryRoot: repositoryRoot)
@@ -670,6 +707,8 @@ class ImageCountDao {
     
     /// - caller:
     ///   - EditRepositoryViewController.stat()
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: countImageNotYetFacialDetection(repositoryRoot)
     func countImageNotYetFacialDetection(repositoryRoot:String) -> Int {
         return self.impl.countImageNotYetFacialDetection(repositoryRoot: repositoryRoot)
@@ -680,6 +719,8 @@ class ImageCountDao {
     /// - caller:
     ///   - EditRepositoryViewController.stat()
     ///   - EditRepositoryViewController.onUpdateRepositoryImagesClicked()
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: countImageWithoutId(repositoryRoot)
     func countImageWithoutId(repositoryRoot:String) -> Int {
         return self.impl.countImageWithoutId(repositoryRoot: repositoryRoot)
@@ -690,6 +731,8 @@ class ImageCountDao {
     /// count by path~
     /// - caller:
     ///   - ImageFolderTreeScanner.updateAllContainersFileCount()
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: countPhotoFiles(rootPath)
     func countPhotoFiles(rootPath:String) -> Int {
         return self.impl.countPhotoFiles(rootPath: rootPath)
@@ -698,6 +741,8 @@ class ImageCountDao {
     /// - caller:
     ///   - EditRepositoryViewController.stat()
     ///   - EditRepositoryViewController.onUpdateRepositoryImagesClicked()
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: countImageWithoutRepositoryPath(repositoryRoot)
     func countImageWithoutRepositoryPath(repositoryRoot:String) -> Int {
         return self.impl.countImageWithoutRepositoryPath(repositoryRoot: repositoryRoot)
@@ -706,6 +751,8 @@ class ImageCountDao {
     /// - caller:
     ///   - EditRepositoryViewController.stat()
     ///   - EditRepositoryViewController.onUpdateRepositoryImagesClicked()
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: countImageWithoutSubPath(repositoryRoot)
     func countImageWithoutSubPath(repositoryRoot:String) -> Int {
         return self.impl.countImageWithoutSubPath(repositoryRoot: repositoryRoot)
@@ -714,6 +761,8 @@ class ImageCountDao {
     /// - caller:
     ///   - EditRepositoryViewController.stat()
     ///   - EditRepositoryViewController.onUpdateRepositoryImagesClicked()
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: countImageUnmatchedRepositoryRoot(repositoryRoot)
     func countImageUnmatchedRepositoryRoot(repositoryRoot:String) -> Int {
         return self.impl.countImageUnmatchedRepositoryRoot(repositoryRoot: repositoryRoot)
@@ -723,6 +772,8 @@ class ImageCountDao {
     ///   - ContainerDetailViewController.countImages()
     ///   - EditRepositoryViewController.stat()
     ///   - ViewController.countImagesOfContainer(container:)
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: countImages(repositoryRoot)
     func countImages(repositoryRoot:String) -> Int {
         return self.impl.countImages(repositoryRoot: repositoryRoot)
@@ -731,6 +782,8 @@ class ImageCountDao {
     /// - caller:
     ///   - ContainerDetailViewController.countImages()
     ///   - ViewController.countHiddenImagesOfContainer(container:)
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: countHiddenImages(repositoryRoot)
     func countHiddenImages(repositoryRoot:String) -> Int {
         return self.impl.countHiddenImages(repositoryRoot: repositoryRoot)
@@ -739,6 +792,8 @@ class ImageCountDao {
     /// - caller:
     ///   - EditRepositoryViewController.stat()
     ///   - EditRepositoryViewContoller.onUpdateRepositoryImagesClicked()
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: countContainersWithoutRepositoryPath(repositoryRoot)
     func countContainersWithoutRepositoryPath(repositoryRoot:String) -> Int {
         return self.impl.countContainersWithoutRepositoryPath(repositoryRoot: repositoryRoot)
@@ -747,6 +802,8 @@ class ImageCountDao {
     /// - caller:
     ///   - EditRepositoryViewController.stat()
     ///   - EditRepositoryViewContoller.onUpdateRepositoryImagesClicked()
+    /// - attention: will be deprecated
+    /// - version: legacy version
     /// - Tag: countContainersWithoutSubPath(repositoryRoot)
     func countContainersWithoutSubPath(repositoryRoot:String) -> Int {
         return self.impl.countContainersWithoutSubPath(repositoryRoot: repositoryRoot)
