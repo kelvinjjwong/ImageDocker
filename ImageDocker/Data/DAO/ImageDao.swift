@@ -31,10 +31,14 @@ public final class ImageRecordDao {
     
     // MARK: QUERY
     
+    /// - caller:
+    ///   - SelectionViewController.combineCheckedImages()
+    ///   - SelectionViewController.markCheckedImageAsDuplicatedChief()
+    ///   - ViewController.onCollectionViewItemShowDuplicate()
     /// - parameter path: Something like /Volumes/repository/sub/container/filename.ext
-    /// - important: replaced by *getImage(id:)*
     /// - returns: A database record of Image if exists, otherwise return nil
     /// - attention: to be deprecated
+    /// - version: should be replaced by [getImage(id:)](x-source-tag://getImage(id))
     /// - Tag: getImage(path)
     func getImage(path:String) -> Image? {
         return self.impl.getImage(path: path)
@@ -51,6 +55,7 @@ public final class ImageRecordDao {
     }
     
     /// A usual way to find a database record of Image by ImageRepository.id
+    /// - caller: NONE
     /// - parameter repositoryId: ImageRepository.id
     /// - parameter subPath: Something like Camera/filename.ext
     /// - returns: A database record of Image if exists, otherwise return nil
@@ -62,6 +67,8 @@ public final class ImageRecordDao {
     }
     
     /// An alternative way to find a database record of Image by paths
+    /// - caller:
+    ///   - RepositoryDetailViewController.[onReScanFoldersClicked()](x-source-tag://RepositoryDetailViewController.onReScanFoldersClicked())
     /// - parameter repositoryVolume: Something like /Volumes/Machintosh
     /// - parameter repositoryPath: Something like /repository/base/path
     /// - parameter subPath: Something like Camera/filename.ext
@@ -75,6 +82,8 @@ public final class ImageRecordDao {
     
     // MARK: CRUD
     
+    /// - caller:
+    ///   - RepositoryDetailViewController.[onReScanFoldersClicked()](x-source-tag://RepositoryDetailViewController.onReScanFoldersClicked())
     /// - parameter repositoryId: **mandatory** Integer id of ImageRepository.id
     /// - parameter containerId: **mandatory** Integer id of ImageContainer.id
     /// - parameter repositoryVolume: **optional** Something like /Volumes/Machintosh
@@ -114,7 +123,7 @@ public final class ImageRecordDao {
     
     /// Get a database record of Image if exists, otherwise create a new database record for it
     /// - caller:
-    ///   - ImageFile.init(url:repository:...)
+    ///   - ImageFile.[init(url:repository:...)](x-source-tag://ImageFile.init(url))
     /// - returns: a database record of Image
     /// - attention: will deprecate
     /// - version: 2019.12.27
@@ -145,7 +154,7 @@ public final class ImageRecordDao {
     /// - since: 2019.12.27
     /// - version: 2019.12.27
     /// - attention: will be deprecated
-    /// - note: should be replaced by [deleteImage(id:)](x-source-tag://deleteImage(id))
+    /// - version: should be replaced by [deleteImage(id:)](x-source-tag://deleteImage(id))
     /// - Tag: deletePhoto(path)
     func deletePhoto(atPath path:String, updateFlag:Bool = true) -> ExecuteState {
         return self.impl.deletePhoto(atPath: path, updateFlag: updateFlag)

@@ -11,6 +11,7 @@ import GRDB
 
 class RepositoryDaoGRDB : RepositoryDaoInterface {
     
+    
     let logger = ConsoleLogger(category: "DB", subCategory: "RepositoryDaoGRDB")
     
     func findRepository(volume:String, repositoryPath: String) -> ImageRepository? {
@@ -126,6 +127,21 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
             return SQLHelper.errorState(error)
         }
         return .OK
+    }
+    
+    func deleteRepository(id: Int) -> ExecuteState {
+        self.logger.log(.todo, "TODO function for SQLite")
+        return .ERROR
+    }
+    
+    func hideRepository(id: Int) -> ExecuteState {
+        self.logger.log(.todo, "TODO function for SQLite")
+        return .ERROR
+    }
+    
+    func showRepository(id: Int) -> ExecuteState {
+        self.logger.log(.todo, "TODO function for SQLite")
+        return .ERROR
     }
     
     // MARK: - REPOSITORY QUERY

@@ -317,7 +317,11 @@ class ImageFile {
         self.notifyAccumulator(notifyIndicator: true)
     }
 
-    // IMPORT FROM FILE SYSTEM
+    /// IMPORT FROM FILE SYSTEM
+    /// - caller:
+    ///   - ImageRecordDao.[createImageIfAbsent(url)](x-source-tag://createImageIfAbsent(url))
+    ///   - CollectionViewItemsLoader.[transformToDomainItems(urls)](x-source-tag://CollectionViewItemsLoader.transformToDomainItems(urls))
+    ///   - ViewController.loadImage()
     /// - Tag: ImageFile.init(url)
     init (url: URL, repository:ImageContainer? = nil, indicator:Accumulator? = nil, metaInfoStore:MetaInfoStoreDelegate? = nil, quickCreate:Bool = false, sharedDB:DatabaseWriter? = nil) {
         exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"

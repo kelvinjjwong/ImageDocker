@@ -10,6 +10,7 @@ import Foundation
 
 class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
+    
     let logger = ConsoleLogger(category: "DB", subCategory: "RepositoryDaoPostgresCK", includeTypes: [])
     
     // MARK: IMAGE REPOSITORY CRUD
@@ -40,6 +41,29 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
             try db.execute(sql: """
                 delete from "Image" where "repositoryPath" = $1
                 """, parameterValues: ["\(repositoryRoot.withLastStash())"])
+            return .OK
+        }catch{
+            self.logger.log(error)
+            return .ERROR
+        }
+    }
+    
+    func deleteRepository(id: Int) -> ExecuteState {
+        
+        let db = PostgresConnection.database()
+        do {
+            // delete images
+            try db.execute(sql: """
+                delete from "Image" where "repositoryId" = $1
+                """, parameterValues: [id])
+            // delete containers
+            try db.execute(sql: """
+                delete from "ImageContainer" where "repositoryId" = $1
+                """, parameterValues: [id])
+            // delete self
+            try db.execute(sql: """
+                delete from "ImageRepository" where "id" = $1
+                """, parameterValues: [id])
             return .OK
         }catch{
             self.logger.log(error)
@@ -167,6 +191,50 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
             try db.execute(sql: """
                 update "Image" set "hiddenByRepository" = true where "repositoryPath" = $1
                 """, parameterValues: ["\(repositoryRoot.withLastStash())"])
+        }catch{
+            self.logger.log(error)
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    func hideRepository(id: Int) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+                update "ImageContainer" set "hiddenByRepository" = true where "id" = $1
+                """, parameterValues: [id])
+            try db.execute(sql: """
+                update "ImageContainer" set "hiddenByRepository" = true where "id" = $1
+                """, parameterValues: [id])
+            try db.execute(sql: """
+                update "Image" set "hiddenByRepository" = true where "id" = $1
+                """, parameterValues: [id])
+            try db.execute(sql: """
+                update "Image" set "hiddenByRepository" = true where "id" = $1
+                """, parameterValues: [id])
+        }catch{
+            self.logger.log(error)
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    func showRepository(id: Int) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+                update "ImageContainer" set "hiddenByRepository" = false where "id" = $1
+                """, parameterValues: [id])
+            try db.execute(sql: """
+                update "ImageContainer" set "hiddenByRepository" = false where "id" = $1
+                """, parameterValues: [id])
+            try db.execute(sql: """
+                update "Image" set "hiddenByRepository" = false where "id" = $1
+                """, parameterValues: [id])
+            try db.execute(sql: """
+                update "Image" set "hiddenByRepository" = false where "id" = $1
+                """, parameterValues: [id])
         }catch{
             self.logger.log(error)
             return .ERROR
