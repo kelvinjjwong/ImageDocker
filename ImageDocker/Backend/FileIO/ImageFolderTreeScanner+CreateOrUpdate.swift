@@ -12,6 +12,8 @@ extension ImageFolderTreeScanner {
     
     
     // TODO: this procedure keep running in background for a long long time, keep getting and counting db records, need consider performance issue, or need change data structure
+    /// - caller: NONE
+    ///   - ViewController.updateLibraryTree()
     func updateAllContainersFileCount(onCompleted: (() -> Void)? = nil , indicator:Accumulator? = nil) {
         var imageFolders:[ImageFolder] = []
         let exists = RepositoryDao.default.getAllContainers()

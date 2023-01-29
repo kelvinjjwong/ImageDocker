@@ -220,6 +220,39 @@ extension String {
     }
 }
 
+// MARK: URL
+
+extension URL {
+    func walkthruDirectory(resourceKeys: [URLResourceKey] = []) -> FileManager.DirectoryEnumerator{
+        let enumerator = FileManager.default.enumerator(at: self,
+                                                        includingPropertiesForKeys: resourceKeys,
+                                                        options: [.skipsHiddenFiles], errorHandler: { (url, error) -> Bool in
+            print("directory walkthru error, url:\(url)")
+            print(error)
+            return true
+        })!
+        return enumerator
+    }
+    
+    func isImageFile() -> Bool {
+        if Naming.FileType.recognize(from: self) != .other {
+            return true
+        }
+        return false
+    }
+    
+    func countImagesInFolder() -> Int {
+        var count:Int = 0
+        let enumeratorFiles = self.walkthruDirectory()
+        for case let file as URL in enumeratorFiles {
+            if file.isImageFile() {
+                count += 1
+            }
+        }
+        return count
+    }
+}
+
 // MARK: -
 
 // MARK: MemoryReleasable

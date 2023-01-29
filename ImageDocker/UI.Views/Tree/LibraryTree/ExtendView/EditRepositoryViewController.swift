@@ -916,7 +916,7 @@ class EditRepositoryViewController: NSViewController {
                     let oldFullUrl = oldBaseUrl.resolvingSymlinksInPath()
                     let newFullUrl = newBaseUrl.resolvingSymlinksInPath()
                     if newFullUrl.path != oldFullUrl.path { // physically inequal, need copy files
-                        let oldFiles = ImageFolderTreeScanner.default.walkthruDirectory(at: oldBaseUrl)
+                        let oldFiles = oldBaseUrl.walkthruDirectory()
                         
                         let total = oldFiles.allObjects.count
                         
@@ -1167,7 +1167,7 @@ class EditRepositoryViewController: NSViewController {
                     
                     // copy physical files
                     if newFullUrl.path != oldFullUrl.path { // physically inequal, need copy files
-                        let oldFiles = ImageFolderTreeScanner.default.walkthruDirectory(at: oldBaseUrl)
+                        let oldFiles = oldBaseUrl.walkthruDirectory()
                         
                         let total = oldFiles.allObjects.count
                         

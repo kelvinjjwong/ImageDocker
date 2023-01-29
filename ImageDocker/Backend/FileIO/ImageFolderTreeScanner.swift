@@ -22,40 +22,13 @@ class ImageFolderTreeScanner {
     static let `default` = ImageFolderTreeScanner()
     var suppressedScan:Bool = false
     
-    func walkthruDirectory(at folder:URL, resourceKeys: [URLResourceKey] = []) -> FileManager.DirectoryEnumerator{
-        let enumerator = FileManager.default.enumerator(at: folder,
-                                                        includingPropertiesForKeys: resourceKeys,
-                                                        options: [.skipsHiddenFiles], errorHandler: { (url, error) -> Bool in
-                                                            self.logger.log(.error, "directoryEnumerator error at \(url): ", error)
-                                                            return true
-        })!
-        return enumerator
-    }
-    
-    func isImageFile(_ file: URL) -> Bool {
-        if Naming.FileType.recognize(from: file) != .other {
-            return true
-        }
-        return false
-    }
-    
-    func countImagesInFolder(_ folder: URL) -> Int {
-        var count:Int = 0
-        let enumeratorFiles = self.walkthruDirectory(at: folder)
-        for case let file as URL in enumeratorFiles {
-            if isImageFile(file) {
-                count += 1
-            }
-        }
-        return count
-    }
-    
     // MARK: SHARED SCANNER new
     func scanRepository(repository:ImageRepository) {
         
     }
     
     // MARK: SHARED SCANNER old
+    /// - Tag: ImageFolderTreeScanner.scanRepository(imageContainer)
     fileprivate func scanRepository(repository repo:ImageContainer, excludedContainerPaths:Set<String>, step i:Int, total totalCount:Int, taskId:String = "", indicator:Accumulator? = nil) -> (Bool, Set<String>, [String:ImageContainer]) {
         
         // for return:
