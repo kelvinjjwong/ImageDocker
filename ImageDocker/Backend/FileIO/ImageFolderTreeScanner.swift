@@ -23,13 +23,13 @@ class ImageFolderTreeScanner {
     var suppressedScan:Bool = false
     
     // MARK: SHARED SCANNER new
+    /// - Tag: ImageFolderTreeScanner.scanRepository(ImageRepository)
     func scanRepository(repository:ImageRepository) {
         
     }
     
     // MARK: SHARED SCANNER old
     /// - caller:
-    ///   - ImageFolderTreeScanner.[scanRepositories(taskId)](x-source-tag://ImageFolderTreeScanner.scanRepositories(taskId))
     ///   - ImageFolderTreeScanner.[scanSingleRepository(ImageContainer,taskId)](x-source-tag://ImageFolderTreeScanner.scanSingleRepository(ImageContainer,taskId))
     /// - Tag: ImageFolderTreeScanner.scanRepository(ImageContainer)
     fileprivate func scanRepository(repository repo:ImageContainer, excludedContainerPaths:Set<String>, step i:Int, total totalCount:Int, taskId:String = "", indicator:Accumulator? = nil) -> (Bool, Set<String>, [String:ImageContainer]) {
@@ -311,7 +311,6 @@ class ImageFolderTreeScanner {
     // MARK: HANDLE GAP
     // TODO: deprecate this function
     /// - caller: NONE
-    ///   - ImageFolderTreeScanner.[scanRepositories(taskId)](x-source-tag://ImageFolderTreeScanner.scanRepositories(taskId))
     ///   - ImageFolderTreeScanner.[scanSingleRepository(ImageContainer,taskId)](x-source-tag://ImageFolderTreeScanner.scanSingleRepository(ImageContainer,taskId))
     /// - Tag: applyImportGap(dbUrls,filesysUrls,fileUrlToRepo)
     fileprivate func applyImportGap(dbUrls:Set<String>, filesysUrls:Set<String>, fileUrlToRepo:[String:ImageContainer], excludedContainerPaths:Set<String>, taskId:String = "",  indicator:Accumulator? = nil) -> Bool {
@@ -632,87 +631,4 @@ class ImageFolderTreeScanner {
         return true
     }
     
-    // MARK: ENTRY - SCAN MULTI REPOS
-    // FIXME: use "Re-Scan repository" function instead
-    // TODO: deprecate "import-gap"
-    ///
-    /// Scan multiple repository, discover not-recorded image files, create Image record in database accordingly;
-    /// discover recorded-but-deleted files/folders, delete them from database accordingly
-    ///
-    /// - caller:
-    ///   - ViewController.[startScanRepositories()](x-source-tag://ViewController.startScanRepositories())
-    /// - Tag: ImageFolderTreeScanner.scanRepositories(taskId)
-    func scanRepositories(taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil)  {
-        
-        if suppressedScan {
-            if indicator != nil {
-                indicator?.forceComplete()
-            }
-            return
-        }
-        
-        if TaskletManager.default.isTaskStopped(id: taskId) == true { return }
-        
-        if indicator != nil {
-            indicator?.display(message: Words.progress_loading_repoistories_from_db.word())
-        }
-        
-        TaskletManager.default.updateProgress(id: taskId, message: Words.progress_loading_repoistories_from_db.word(), increase: false)
-        
-        let repositories = RepositoryDao.default.getRepositories()
-        self.logger.log("REPO COUNT = \(repositories.count)")
-        
-        if indicator != nil {
-            indicator?.display(message: Words.progress_scanning_n_repoistories.fill(arguments: repositories.count))
-        }
-        
-        TaskletManager.default.updateProgress(id: taskId, message: Words.progress_scanning_n_repoistories.fill(arguments: repositories.count), increase: false)
-        
-        let excludedContainerPaths = DeviceDao.default.getExcludedImportedContainerPaths()
-        
-        var filesysUrls:Set<String> = Set<String>()
-        var fileUrlToRepo:[String:ImageContainer] = [:]
-        let totalCount = repositories.count
-        var i = 0
-        for repo in repositories {
-            
-            i += 1
-            let (isContinue, repoFileSysUrls, repoFileUrlToRepo) = self.scanRepository(repository: repo, excludedContainerPaths: excludedContainerPaths, step: i, total: totalCount, indicator: indicator)
-            
-            filesysUrls = filesysUrls.union(repoFileSysUrls)
-            fileUrlToRepo = fileUrlToRepo.merging(repoFileUrlToRepo, uniquingKeysWith: { (container1, container2) -> ImageContainer in
-                return container1
-            })
-            
-            if !isContinue {
-                return
-            }
-        } // end of loop repositories
-        
-//        self.logger.log("CHECK REPO: CHECK TO BE ADDED AND REMOVED")
-//        if indicator != nil {
-//            indicator?.display(message: Words.checking_gap_between_db_and_filesys.word())
-//        }
-//
-//        TaskletManager.default.updateProgress(id: taskId, message: Words.checking_gap_between_db_and_filesys.word(), increase: false)
-//
-//        let dbUrls = ImageSearchDao.default.getAllPhotoPaths()
-//        let shouldContinue = self.applyImportGap(dbUrls: dbUrls, filesysUrls: filesysUrls, fileUrlToRepo: fileUrlToRepo, excludedContainerPaths: excludedContainerPaths, indicator: indicator)
-//
-//        if !shouldContinue {
-//            return
-//        }
-        
-        self.logger.log("TRIGGER ON DATA CHANGED EVENT AFTER FINISHED SCANNING REPOSITORIES")
-        if indicator != nil {
-            indicator?.display(message: Words.filesys_scan_repository_scan_done.word())
-            indicator?.dataChanged()
-        }
-        
-        TaskletManager.default.updateProgress(id: taskId, message: Words.filesys_scan_repository_scan_done.word(), increase: false)
-        
-        if onCompleted != nil {
-            onCompleted!()
-        }
-    }
 }

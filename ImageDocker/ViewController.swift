@@ -384,7 +384,7 @@ class ViewController: NSViewController {
 //        self.logger.log("Loading view - update library tree")
         self.splashController.message(Words.splash_loadingLibraries.word(), progress: 4)
         
-        updateLibraryTree()
+//        updateLibraryTree()
 //        self.logger.log("Loading view - update library tree: DONE")
         
 //        self.deviceCopyWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "DeviceCopyWindowController")) as? NSWindowController

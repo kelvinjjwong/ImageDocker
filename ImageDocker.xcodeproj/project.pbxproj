@@ -201,7 +201,6 @@
 		8EB271892340EDC5003BF3AF /* ViewController+SelectionArea+AssignEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271882340EDC5003BF3AF /* ViewController+SelectionArea+AssignEvent.swift */; };
 		8EB2718B2340EE18003BF3AF /* ViewController+SelectionArea+ExportSelected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2718A2340EE18003BF3AF /* ViewController+SelectionArea+ExportSelected.swift */; };
 		8EB2718D2340EE4C003BF3AF /* ViewController+SelectionArea+WriteNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2718C2340EE4C003BF3AF /* ViewController+SelectionArea+WriteNote.swift */; };
-		8EB2718F2340EE95003BF3AF /* ViewController+TreeArea+Scan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2718E2340EE95003BF3AF /* ViewController+TreeArea+Scan.swift */; };
 		8EB271912340EED2003BF3AF /* ViewController+TreeArea+Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271902340EED2003BF3AF /* ViewController+TreeArea+Filter.swift */; };
 		8EB271932340EF6F003BF3AF /* ViewController+Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271922340EF6F003BF3AF /* ViewController+Schedule.swift */; };
 		8EB271972340F1FF003BF3AF /* ViewController+TaskProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271962340F1FF003BF3AF /* ViewController+TaskProgress.swift */; };
@@ -587,7 +586,6 @@
 		8EB271882340EDC5003BF3AF /* ViewController+SelectionArea+AssignEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+SelectionArea+AssignEvent.swift"; sourceTree = "<group>"; };
 		8EB2718A2340EE18003BF3AF /* ViewController+SelectionArea+ExportSelected.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+SelectionArea+ExportSelected.swift"; sourceTree = "<group>"; };
 		8EB2718C2340EE4C003BF3AF /* ViewController+SelectionArea+WriteNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+SelectionArea+WriteNote.swift"; sourceTree = "<group>"; };
-		8EB2718E2340EE95003BF3AF /* ViewController+TreeArea+Scan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+TreeArea+Scan.swift"; sourceTree = "<group>"; };
 		8EB271902340EED2003BF3AF /* ViewController+TreeArea+Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+TreeArea+Filter.swift"; sourceTree = "<group>"; };
 		8EB271922340EF6F003BF3AF /* ViewController+Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Schedule.swift"; sourceTree = "<group>"; };
 		8EB271962340F1FF003BF3AF /* ViewController+TaskProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+TaskProgress.swift"; sourceTree = "<group>"; };
@@ -1294,7 +1292,6 @@
 			children = (
 				8EB2717C2340D8D5003BF3AF /* ViewController+TreeArea.swift */,
 				8EB271902340EED2003BF3AF /* ViewController+TreeArea+Filter.swift */,
-				8EB2718E2340EE95003BF3AF /* ViewController+TreeArea+Scan.swift */,
 				8ECA1FF523E5250200F56895 /* SampleTree */,
 				8EFA7D01211F93C000419777 /* DTO */,
 				8EB27173233E17AF003BF3AF /* MomentsTree */,
@@ -1954,7 +1951,6 @@
 				8E85B7D220B91ED1005A9845 /* SelectionCollectionViewController.swift in Sources */,
 				8E7419442422526F002BAAAE /* ImageDaoInterface.swift in Sources */,
 				8E481497277EB7C70097493E /* Words+Tree+Device.swift in Sources */,
-				8EB2718F2340EE95003BF3AF /* ViewController+TreeArea+Scan.swift in Sources */,
 				8E00BB8E2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift in Sources */,
 				8EF4CE5E21D8026800C53AFF /* EditRepositoryViewController.swift in Sources */,
 				8EB2715F23384469003BF3AF /* ImageFile+Meta.swift in Sources */,
