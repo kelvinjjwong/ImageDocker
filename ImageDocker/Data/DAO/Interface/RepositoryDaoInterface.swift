@@ -14,6 +14,8 @@ protocol RepositoryDaoInterface {
     
     func deleteRepository(repositoryRoot:String) -> ExecuteState
     
+    func deleteRepository(id:Int) -> ExecuteState
+    
     // MARK: IMAGE REPOSITORY QUERY
     
     func findRepository(volume:String, repositoryPath: String) -> ImageRepository?
@@ -32,7 +34,11 @@ protocol RepositoryDaoInterface {
     
     func hideRepository(repositoryRoot:String) -> ExecuteState
     
+    func hideRepository(id:Int) -> ExecuteState
+    
     func showRepository(repositoryRoot:String) -> ExecuteState
+    
+    func showRepository(id:Int) -> ExecuteState
     
     func getLastPhotoTakenDateOfRepositories() -> [String:String]
     
