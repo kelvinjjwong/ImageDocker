@@ -28,7 +28,10 @@ class ImageFolderTreeScanner {
     }
     
     // MARK: SHARED SCANNER old
-    /// - Tag: ImageFolderTreeScanner.scanRepository(imageContainer)
+    /// - caller:
+    ///   - ImageFolderTreeScanner.[scanRepositories(taskId)](x-source-tag://ImageFolderTreeScanner.scanRepositories(taskId))
+    ///   - ImageFolderTreeScanner.[scanSingleRepository(ImageContainer,taskId)](x-source-tag://ImageFolderTreeScanner.scanSingleRepository(ImageContainer,taskId))
+    /// - Tag: ImageFolderTreeScanner.scanRepository(ImageContainer)
     fileprivate func scanRepository(repository repo:ImageContainer, excludedContainerPaths:Set<String>, step i:Int, total totalCount:Int, taskId:String = "", indicator:Accumulator? = nil) -> (Bool, Set<String>, [String:ImageContainer]) {
         
         // for return:
@@ -307,6 +310,9 @@ class ImageFolderTreeScanner {
     
     // MARK: HANDLE GAP
     // TODO: deprecate this function
+    /// - caller:
+    ///   - ImageFolderTreeScanner.[scanRepositories(taskId)](x-source-tag://ImageFolderTreeScanner.scanRepositories(taskId))
+    ///   - ImageFolderTreeScanner.[scanSingleRepository(ImageContainer,taskId)](x-source-tag://ImageFolderTreeScanner.scanSingleRepository(ImageContainer,taskId))
     /// - Tag: applyImportGap(dbUrls,filesysUrls,fileUrlToRepo)
     fileprivate func applyImportGap(dbUrls:Set<String>, filesysUrls:Set<String>, fileUrlToRepo:[String:ImageContainer], excludedContainerPaths:Set<String>, taskId:String = "",  indicator:Accumulator? = nil) -> Bool {
         self.logger.log("EXISTING DB PHOTO COUNT = \(dbUrls.count)")
@@ -560,6 +566,9 @@ class ImageFolderTreeScanner {
     }
     
     // MARK: TASK - SCAN SINGLE REPO
+    /// - caller:
+    ///   - RepositoryDetailViewController.onImportClicked()
+    /// - Tag: ImageFolderTreeScanner.scanSingleRepository_asTask(ImageContainer)
     func scanSingleRepository_asTask(repository:ImageContainer, indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil) {
         let _ = TaskletManager.default.createAndStartTask(type: "IMPORT", name: repository.name
         , exec: { task in
@@ -579,6 +588,9 @@ class ImageFolderTreeScanner {
     /// Scan a repository, discover not-recorded image files, create Image record in database accordingly;
     /// discover recorded-but-deleted files/folders, delete them from database accordingly
     ///
+    /// - caller:
+    ///   - ImageFolderTreeScanner.[scanSingleRepository_asTask(ImageContainer,taskId)](x-source-tag://ImageFolderTreeScanner.scanSingleRepository_asTask(ImageContainer))
+    /// - Tag: ImageFolderTreeScanner.scanSingleRepository(ImageContainer,taskId)
     func scanSingleRepository(repository:ImageContainer, taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil) -> Bool {
         
         if TaskletManager.default.isTaskStopped(id: taskId) == true { return false }
@@ -626,6 +638,9 @@ class ImageFolderTreeScanner {
     /// Scan multiple repository, discover not-recorded image files, create Image record in database accordingly;
     /// discover recorded-but-deleted files/folders, delete them from database accordingly
     ///
+    /// - caller:
+    ///   - ViewController.startScanRepositories()
+    /// - Tag: ImageFolderTreeScanner.scanRepositories(taskId)
     func scanRepositories(taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil)  {
         
         if suppressedScan {
