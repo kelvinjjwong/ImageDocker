@@ -50,8 +50,18 @@ public final class ImageRecordDao {
         return self.impl.getImage(id: id)
     }
     
+    /// A usual way to find a database record of Image by ImageRepository.id
+    /// - parameter repositoryId: ImageRepository.id
+    /// - parameter subPath: Something like Camera/filename.ext
+    /// - returns: A database record of Image if exists, otherwise return nil
+    /// - since: 2023.1.21
+    /// - version: 2023.1.21
+    /// - Tag: findImage(repositoryId)
+    func findImage(repositoryId:Int, subPath:String) -> Image? {
+        return self.impl.findImage(repositoryId: repositoryId, subPath: subPath)
+    }
+    
     /// An alternative way to find a database record of Image by paths
-    /// - seeAlso: 1234
     /// - parameter repositoryVolume: Something like /Volumes/Machintosh
     /// - parameter repositoryPath: Something like /repository/base/path
     /// - parameter subPath: Something like Camera/filename.ext
@@ -61,17 +71,6 @@ public final class ImageRecordDao {
     /// - Tag: findImage(repositoryVolume)
     func findImage(repositoryVolume:String, repositoryPath:String, subPath:String) -> Image? {
         return self.impl.findImage(repositoryVolume: repositoryVolume, repositoryPath: repositoryPath, subPath: subPath)
-    }
-    
-    /// A usual way to find a database record of Image by ImageRepository.id
-    /// - parameter repositoryId:
-    /// - parameter subPath:
-    /// - returns: A database record of Image if exists, otherwise return nil
-    /// - since: 2023.1.21
-    /// - version: 2023.1.21
-    /// - Tag: findImage(repositoryId)
-    func findImage(repositoryId:Int, subPath:String) -> Image? {
-        return self.impl.findImage(repositoryId: repositoryId, subPath: subPath)
     }
     
     // MARK: CRUD
@@ -91,7 +90,7 @@ public final class ImageRecordDao {
     
     /// Create a database record of Image if not exists, during the procedure of handling import-gaps
     /// - caller
-    ///   - ImageFolderTreeScanner.applyImportGap(dbUrls:filesysUrls:fileUrlToRepo:excludedContainerPaths:taskId:indicator:)
+    ///   - ImageFolderTreeScanner.[applyImportGap(dbUrls:filesysUrls:fileUrlToRepo:excludedContainerPaths:taskId:indicator:)](x-source-tag://applyImportGap(dbUrls,filesysUrls,fileUrlToRepo))
     /// - attention: will deprecate
     /// - warning: should deprecate caller first
     /// - since: 2019.4.5

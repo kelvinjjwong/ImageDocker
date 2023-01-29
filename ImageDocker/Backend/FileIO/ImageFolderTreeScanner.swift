@@ -334,6 +334,7 @@ class ImageFolderTreeScanner {
     
     // MARK: HANDLE GAP
     // TODO: deprecate this function
+    /// - Tag: applyImportGap(dbUrls,filesysUrls,fileUrlToRepo)
     fileprivate func applyImportGap(dbUrls:Set<String>, filesysUrls:Set<String>, fileUrlToRepo:[String:ImageContainer], excludedContainerPaths:Set<String>, taskId:String = "",  indicator:Accumulator? = nil) -> Bool {
         self.logger.log("EXISTING DB PHOTO COUNT = \(dbUrls.count)")
         self.logger.log("EXISTING SYS PHOTO COUNT = \(filesysUrls.count)")
