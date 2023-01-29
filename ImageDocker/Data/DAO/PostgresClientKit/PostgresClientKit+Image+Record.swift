@@ -11,6 +11,7 @@ import PostgresClientKit
 
 class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
     
+    
     let logger = ConsoleLogger(category: "ImageRecordDaoPostgresCK")
     
     // MARK: QUERY
@@ -76,13 +77,34 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         return .OK
     }
     
+    func deleteImage(id: String, updateFlag: Bool) -> ExecuteState {
+        
+        let db = PostgresConnection.database()
+        if updateFlag {
+            do {
+                try db.execute(sql: """
+                update "Image" set "delFlag" = $1 where id = $2
+                """, parameterValues: [true, id])
+            }catch{
+                self.logger.log(.error, "[deletePhoto]", error)
+                return .ERROR
+            }
+            return .OK
+        }else{
+            let image = Image()
+            image.id = id
+            image.delete(db)
+            return .OK
+        }
+    }
+    
     func deletePhoto(atPath path: String, updateFlag: Bool) -> ExecuteState {
         let db = PostgresConnection.database()
         if updateFlag {
             do {
                 try db.execute(sql: """
-                update "Image" set "delFlag" = $1
-                """, parameterValues: [true])
+                update "Image" set "delFlag" = $1 where path = $2
+                """, parameterValues: [true, path])
             }catch{
                 self.logger.log(.error, "[deletePhoto]", error)
                 return .ERROR

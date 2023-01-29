@@ -11,6 +11,8 @@ import GRDB
 
 class ImageRecordDaoGRDB : ImageRecordDaoInterface {
     
+    
+    
     let logger = ConsoleLogger(category: "DB", subCategory: "ImageRecordDaoGRDB")
     
     
@@ -78,6 +80,11 @@ class ImageRecordDaoGRDB : ImageRecordDaoInterface {
             self.logger.log(error)
         }
         return image!
+    }
+    
+    func deleteImage(id: String, updateFlag: Bool) -> ExecuteState {
+        self.logger.log(.todo, "TODO function for SQLite")
+        return .ERROR
     }
     
     // MARK: UPDATE ID

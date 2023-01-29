@@ -74,7 +74,7 @@ protocol ImageRecordDaoInterface {
     /// Delete a database record of Image by Image.id
     /// - since: 2023.1.29
     /// - version: 2023.1.29
-    func deleteImage(id:String) -> ExecuteState
+    func deleteImage(id:String, updateFlag: Bool) -> ExecuteState
     
     // MARK: UPDATE ID
     

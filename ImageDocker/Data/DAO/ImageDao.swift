@@ -144,8 +144,8 @@ public final class ImageRecordDao {
     /// - since: 2023.1.29
     /// - version: 2023.1.29
     /// - Tag: deleteImage(id)
-    func deleteImage(id:String) -> ExecuteState {
-        return self.impl.deleteImage(id: id)
+    func deleteImage(id:String, updateFlag: Bool) -> ExecuteState {
+        return self.impl.deleteImage(id: id, updateFlag: updateFlag)
     }
     
     /// Delete a database record of Image by Image.path

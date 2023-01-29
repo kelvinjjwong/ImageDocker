@@ -11,6 +11,7 @@ import Foundation
 class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
     
+    
     let logger = ConsoleLogger(category: "DB", subCategory: "RepositoryDaoPostgresCK", includeTypes: [])
     
     // MARK: IMAGE REPOSITORY CRUD
@@ -347,6 +348,51 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         let db = PostgresConnection.database()
         container.save(db)
         return .OK
+    }
+    
+    
+    func getContainer(id: Int) -> ImageContainer? {
+        let db = PostgresConnection.database()
+        return ImageContainer.fetchOne(db, parameters: ["id" : id])
+    }
+    
+    func getContainers(repositoryId: Int) -> [ImageContainer] {
+        let db = PostgresConnection.database()
+        return ImageContainer.fetchAll(db, parameters: ["repositoryId" : repositoryId])
+    }
+    
+    func deleteContainer(id: Int, deleteImage: Bool) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            // delete images and sub-containers' images
+            if deleteImage {
+                try db.execute(sql: """
+                    WITH RECURSIVE c AS (
+                       SELECT \(id) AS id
+                       UNION ALL
+                       SELECT sa.id
+                       FROM "ImageContainer" AS sa
+                          JOIN c ON c.id = sa."parentId"
+                    )
+                    DELETE FROM "Image" WHERE "containerId" in (select id from c)
+                    """)
+            }
+            // delete container-self and sub-containers
+            try db.execute(sql: """
+                WITH RECURSIVE c AS (
+                   SELECT \(id) AS id
+                   UNION ALL
+                   SELECT sa.id
+                   FROM "ImageContainer" AS sa
+                      JOIN c ON c.id = sa."parentId"
+                )
+                DELETE FROM "ImageContainer" WHERE id in (select id in c)
+                """)
+            return .OK
+        }catch{
+            self.logger.log(error)
+            return .ERROR
+        }
     }
     
     func deleteContainer(path: String, deleteImage: Bool) -> ExecuteState {
@@ -781,6 +827,22 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         return .OK
     }
     
+    func hideContainer(id: Int) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+                update "ImageContainer" set "hiddenByContainer" = true where "id" = $1
+                """, parameterValues: [id])
+            try db.execute(sql: """
+                update "Image" set "hiddenByContainer" = true where "id" = $1
+                """, parameterValues:[id])
+        }catch{
+            self.logger.log(error)
+            return .ERROR
+        }
+        return .OK
+    }
+    
     func showContainer(path: String) -> ExecuteState {
         let db = PostgresConnection.database()
         do {
@@ -790,6 +852,22 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
             try db.execute(sql: """
                 update "Image" set "hiddenByContainer" = false where "path" like $1
                 """, parameterValues:["\(path.withLastStash())%"])
+        }catch{
+            self.logger.log(error)
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    func showContainer(id: Int) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+                update "ImageContainer" set "hiddenByContainer" = false where "id" = $1
+                """, parameterValues: [id])
+            try db.execute(sql: """
+                update "Image" set "hiddenByContainer" = false where "id" = $1
+                """, parameterValues:[id])
         }catch{
             self.logger.log(error)
             return .ERROR

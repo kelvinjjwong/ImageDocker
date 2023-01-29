@@ -12,6 +12,7 @@ import GRDB
 class RepositoryDaoGRDB : RepositoryDaoInterface {
     
     
+    
     let logger = ConsoleLogger(category: "DB", subCategory: "RepositoryDaoGRDB")
     
     func findRepository(volume:String, repositoryPath: String) -> ImageRepository? {
@@ -24,6 +25,37 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
         // TODO: todo DAO for SQLite
         self.logger.log(.todo, "todo DAO for SQLite")
         return nil
+    }
+    
+    
+    func getContainer(id: Int) -> ImageContainer? {
+        
+        self.logger.log(.todo, "todo DAO for SQLite")
+        return nil
+    }
+    
+    func getContainers(repositoryId: Int) -> [ImageContainer] {
+        
+        self.logger.log(.todo, "todo DAO for SQLite")
+        return []
+    }
+    
+    func deleteContainer(id: Int, deleteImage: Bool) -> ExecuteState {
+        
+        self.logger.log(.todo, "todo DAO for SQLite")
+        return .ERROR
+    }
+    
+    func hideContainer(id: Int) -> ExecuteState {
+        
+        self.logger.log(.todo, "todo DAO for SQLite")
+        return .ERROR
+    }
+    
+    func showContainer(id: Int) -> ExecuteState {
+        
+        self.logger.log(.todo, "todo DAO for SQLite")
+        return .ERROR
     }
     
     // MARK: - CREATE
