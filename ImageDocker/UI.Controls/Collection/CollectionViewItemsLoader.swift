@@ -81,7 +81,10 @@ class CollectionViewItemsLoader : NSObject {
         return self.loading
     }
 
-    // from repository / container // FIXME: use container id instead
+    /// from repository / container
+    /// - caller:
+    ///   - CollectionViewItemsLoader.reload()
+    ///   - ViewController.loadCollectionByContainer(name,url)
     func load(from folderURL: URL, indicator:Accumulator? = nil, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false) {
         loading = true
         
@@ -322,49 +325,12 @@ class CollectionViewItemsLoader : NSObject {
         return nil
     }
     
+    /// - Tag: CollectionViewItemsLoader.clean()
     func clean() {
-        setupItems(urls: nil)
-    }
-
-    func setupItems(urls: [URL]?, cleanViewBeforeLoading:Bool = true) {
-        
-        if items.count > 0 {
-            items.removeAll()
-        }
-        
-        if cleanViewBeforeLoading {
-            for section in sections {
-                section.items.removeAll()
-            }
-            sections.removeAll()
-            
-            numberOfSections = 0
-            sections = [CollectionViewSection]()
-        }
-            
-        guard urls != nil && (urls?.count)! > 0 else {return}
-        
-        if indicator != nil {
-            indicator?.reset()
-            indicator?.setTarget((urls?.count)!)
-        }
-
-        if let urls = urls {
-            self.transformToDomainItems(urls: urls)
-        }
-        //self.reorganizeItems(considerPlaces: true)
-
-        self.loading = false
-        
-        if self.cancelling {
-            self.cancelling = false
-            if self.onCancelCompleted != nil {
-                self.onCancelCompleted!()
-            }
-            return
-        }
+        setupItems(photoFiles: nil)
     }
     
+    /// - Tag: CollectionViewItemsLoader.setupItems(images)
     func setupItems(photoFiles: [Image]?, cleanViewBeforeLoading:Bool = true){
         if items.count > 0 {
             items.removeAll()
@@ -586,51 +552,10 @@ class CollectionViewItemsLoader : NSObject {
         }
         return true
     }
-  
-    private func transformToDomainItems(urls: [URL]) {
-        
-        if self.cancelling {
-            return
-        }
-        
-        if items.count > 0 {   // When not initial folder folder
-            items.removeAll()
-        }
-        self.logger.log(.debug, "Loading duplicate photos from db")
-        // TODO: narrow the range of searching duplicate photos
-        let duplicates:Duplicates = ImageDuplicationDao.default.getDuplicatePhotos()
-        self.logger.log(.debug, "Found duplicates: \(duplicates.paths.count)")
-        self.logger.log(.debug, "Loading duplicate photos from db: DONE")
-        
-        for url in urls {
-            
-            if self.cancelling {
-                return
-            }
-            
-            let imageFile = ImageFile(url: url, indicator: self.indicator)
-            
-            self.logger.log(.trace, "Checking duplicate for a photo")
-
-            if duplicates.paths.contains(url.path) {
-                imageFile.hasDuplicates = true
-                imageFile.duplicatesKey = duplicates.pathToKey[url.path] ?? ""
-                //self.logger.log(imageFile.duplicatesKey)
-            }else {
-                imageFile.hasDuplicates = false
-                imageFile.duplicatesKey = ""
-            }
-            self.logger.log(.trace, "Checking duplicate for a photo: DONE")
-            
-            // prefetch thumbnail to improve performance of collection view
-            let _ = imageFile.thumbnail
-            
-            items.append(imageFile)
-        }
-        //ModelStore.save()
-        //self.logger.log("TRANSFORMED TO ITEMS \(urls.count)")
-    }
     
+    /// - caller:
+    ///   - CollectionViewItemsLoader.setupItems(images)
+    /// - Tag: CollectionViewItemsLoader.transformToDomainItems(images)
     private func transformToDomainItems(photoFiles: [Image]){
         
         if self.cancelling {
@@ -684,6 +609,8 @@ class CollectionViewItemsLoader : NSObject {
         }
     }
     
+    /// - caller: NONE
+    /// - Tag: CollectionViewItemsLoader.walkthruDatabaseForFileUrls(startingURL)
     private func walkthruDatabaseForFileUrls(startingURL: URL, includeHidden:Bool = true) -> [URL]? {
         
         if self.cancelling {
@@ -702,6 +629,9 @@ class CollectionViewItemsLoader : NSObject {
         return urls
     }
     
+    /// - caller:
+    ///   - CollectionViewItemsLoader.load(fromUrl)
+    /// - Tag: CollectionViewItemsLoader.walkthruDatabaseForPhotoFiles(startingURL)
     private func walkthruDatabaseForPhotoFiles(startingURL: URL, includeHidden:Bool = true, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false) -> [Image]? {
         
         if self.cancelling {
@@ -711,6 +641,8 @@ class CollectionViewItemsLoader : NSObject {
         return ImageSearchDao.default.getPhotoFiles(parentPath: startingURL.path, includeHidden: includeHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
     }
   
+    /// - caller: NONE
+    /// - Tag: CollectionViewItemsLoader.walkthruDirectoryForFileUrls(startingURL)
     private func walkthruDirectoryForFileUrls(startingURL: URL) -> [URL]? {
         
         if self.cancelling {
