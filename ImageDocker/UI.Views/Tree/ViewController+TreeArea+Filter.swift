@@ -10,6 +10,7 @@ import Cocoa
 
 extension ViewController {
     
+    /// not-used
     internal func createFilterPopover(){
         var myPopover = self.filterPopover
         if(myPopover == nil){

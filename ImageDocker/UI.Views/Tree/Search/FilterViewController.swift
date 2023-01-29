@@ -8,6 +8,7 @@
 
 import Cocoa
 
+/// not-used
 class FilterViewController: NSViewController {
     
     let logger = ConsoleLogger(category: "FilterViewController")
