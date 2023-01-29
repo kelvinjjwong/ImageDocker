@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// - caller: NONE
 public final class SQLiteDataSource {
     
     static let `default` = SQLiteDataSource()

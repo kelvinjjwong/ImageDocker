@@ -20,6 +20,7 @@ struct SQLHelper {
     
     static let logger = ConsoleLogger(category: "SQLHelper")
     
+    /// - caller: NONE
     static func appendSqlTextCondition(_ column:String, value:String?, where statement:inout String, args arguments:inout [String]) {
         if value == nil || value == "" {
             statement = "\(statement) AND (\(column)='' OR \(column) IS NULL)"

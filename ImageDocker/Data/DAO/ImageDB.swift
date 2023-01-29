@@ -18,6 +18,8 @@ public final class ImageDB {
     
     static let remote = ImageDB(impl: PostgresConnection.default)
     
+    /// - caller:
+    ///   - ViewController.doStartWork()
     static func current() -> ImageDB{
         if Setting.database.databaseLocation() == "local" {
             return local
