@@ -269,8 +269,8 @@ extension ViewController {
         DispatchQueue.global().async {
             if let imageFile = self.img {
                 let url = imageFile.url
-                if FileManager.default.fileExists(atPath: url.path) {
-                    if let backupUrl = imageFile.backupUrl, FileManager.default.fileExists(atPath: backupUrl.path) {
+                if url.path.isFileExists() {
+                    if let backupUrl = imageFile.backupUrl, backupUrl.path.isFileExists() {
                         
                         let uuid = UUID().uuidString
                         let filename = imageFile.fileName

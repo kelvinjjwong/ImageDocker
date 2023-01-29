@@ -161,24 +161,12 @@ class DevicePathDetailViewController: NSViewController {
                 let oldLocalPath = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(oldLocalFolder).path
                 let newLocalPath = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(data.toSubFolder).path
                 
-                var isDir:ObjCBool = false
-                var existNewPath = false
-                if FileManager.default.fileExists(atPath: newLocalPath, isDirectory: &isDir) {
-                    if isDir.boolValue {
-                        existNewPath = true
-                    }
-                }
-                if !existNewPath {
-                    do {
-                        try FileManager.default.createDirectory(atPath: newLocalPath, withIntermediateDirectories: true, attributes: nil)
-                        existNewPath = true
-                    }catch{
-                        existNewPath = false
+                if !newLocalPath.isDirectoryExists() {
+                    if !newLocalPath.mkdirs(logger: self.logger) {
                         self.logger.log("Unable to create directory for new local folder [\(data.toSubFolder)] at: \(newLocalPath)")
-                        self.logger.log(error)
                     }
                 }
-                if !existNewPath {
+                if !newLocalPath.isDirectoryExists() {
                     DispatchQueue.main.async {
                         self.lblMessage.stringValue = "Failed to change local folder: unable to access."
                     }
@@ -186,16 +174,8 @@ class DevicePathDetailViewController: NSViewController {
 //                    self.logger.log("TODO: UPDATE RELATED physical directory of IMAGE DEVICE FILES")
                     
                     //UPDATE RELATED physical directory of IMAGE DEVICE FILES
-                    var renamedLocalFolder = false
-                    do {
-                        try FileManager.default.moveItem(atPath: oldLocalPath, toPath: newLocalPath)
-                        renamedLocalFolder = true
-                    }catch{
-                        renamedLocalFolder = false
+                    if !oldLocalPath.moveFile(to: newLocalPath, logger: self.logger) {
                         self.logger.log("Unable to change local folder: failed to move/rename folder")
-                        self.logger.log(error)
-                    }
-                    if !renamedLocalFolder {
                         DispatchQueue.main.async {
                             self.lblMessage.stringValue = "Failed to change local folder: unable to rename folder."
                         }

@@ -98,13 +98,8 @@ struct SQLiteDatabaseSetting {
         guard let txt = defaults.string(forKey: databasePathKey) else {
             return predefinedLocalDBFilePath
         }
-        var isDir : ObjCBool = false
-        if FileManager.default.fileExists(atPath: txt, isDirectory: &isDir) {
-            if isDir.boolValue {
-                return txt
-            }else{
-                return predefinedLocalDBFilePath
-            }
+        if txt.isDirectoryExists() {
+            return txt
         }else{
             return predefinedLocalDBFilePath
         }
@@ -322,25 +317,9 @@ struct LocalEnvironmentSetting {
     
     func iosDeviceMountPoint() -> String {
         let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: setting_ios_mount_point) else {
-            var isDir : ObjCBool = false
-            if FileManager.default.fileExists(atPath: "/MacStorage/mount/iPhone/", isDirectory: &isDir) {
-                if isDir.boolValue {
-                    return "/MacStorage/mount/iPhone/"
-                }else{
-                    return ""
-                }
-            }else{
-                return ""
-            }
-        }
-        var isDir : ObjCBool = false
-        if FileManager.default.fileExists(atPath: txt, isDirectory: &isDir) {
-            if isDir.boolValue {
-                return txt
-            }else{
-                return ""
-            }
+        let txt = defaults.string(forKey: setting_ios_mount_point) ?? "/MacStorage/mount/iPhone/"
+        if txt.isDirectoryExists() {
+            return txt
         }else{
             return ""
         }

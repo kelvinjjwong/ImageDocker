@@ -18,7 +18,25 @@ enum LogType: String{
     case performance
 }
 
-class ConsoleLogger {
+protocol Logger {
+    func timecost(_ message:String, fromDate:Date)
+    func log(_ message:String)
+    func log(_ logType:LogType, _ message:String)
+    func log(_ message:Int)
+    func log(_ logType:LogType, _ message:Int)
+    func log(_ message:Double)
+    func log(_ logType:LogType, _ message:Double)
+    func log(_ message:Float)
+    func log(_ logType:LogType, _ message:Float)
+    func log(_ message:Any)
+    func log(_ logType:LogType, _ message:Any)
+    func log(_ message:Error)
+    func log(_ logType:LogType, _ message:Error)
+    func log(_ message:String, _ error:Error)
+    func log(_ logType:LogType, _ message:String, _ error:Error)
+}
+
+class ConsoleLogger : Logger {
     
     private let dtFormatter = ISO8601DateFormatter()
     

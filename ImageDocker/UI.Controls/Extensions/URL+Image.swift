@@ -24,7 +24,7 @@ public extension URL {
         
         var imgSrc:CGImageSource? = CGImageSourceCreateWithURL(url as CFURL, nil)
         if imgSrc == nil {
-            if FileManager.default.fileExists(atPath: url.path) {
+            if self.path.isFileExists() {
                 if let img = NSImage(byReferencingFile: url.path) {
                     imgSrc = CGImageSourceCreateWithData(img.tiffRepresentation! as CFData , nil)
                 }
@@ -36,7 +36,6 @@ public extension URL {
         let imgRef = imgSrc!
         
         if let imgProps = CGImageSourceCopyPropertiesAtIndex(imgRef, 0, nil) as NSDictionary?, let orientation = imgProps[kCGImagePropertyOrientation as String]  {
-            print("\(Date()) [URL] ==== photo orientation = \(orientation)")
             if let _ = orientation as? CGImagePropertyOrientation {
                 //self.logger.log(ori)
             }

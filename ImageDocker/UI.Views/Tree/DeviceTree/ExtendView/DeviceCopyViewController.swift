@@ -712,23 +712,13 @@ class DeviceCopyViewController: NSViewController {
             return false
         }
         
-        var isDir:ObjCBool = false
-        if FileManager.default.fileExists(atPath: storagePath, isDirectory: &isDir) {
-            if isDir.boolValue == false {
-                self.lblMessage.stringValue = "ERROR: Path for Raw Copy is not a directory!"
-                return false
-            }
-        }else{
-            self.lblMessage.stringValue = "ERROR: Path for Raw Copy does not exist!"
+        if !storagePath.isDirectoryExists() {
+            self.lblMessage.stringValue = "ERROR: Path for Raw Copy is not a directory!"
             return false
         }
-        if FileManager.default.fileExists(atPath: repositoryPath, isDirectory: &isDir) {
-            if isDir.boolValue == false {
-                self.lblMessage.stringValue = "ERROR: Path for Repository is not a directory!"
-                return false
-            }
-        }else{
-            self.lblMessage.stringValue = "ERROR: Path for Repository does not exist!"
+        
+        if !repositoryPath.isDirectoryExists() {
+            self.lblMessage.stringValue = "ERROR: Path for Repository is not a directory!"
             return false
         }
         return true
@@ -778,7 +768,7 @@ class DeviceCopyViewController: NSViewController {
                             let oldFilePath = URL(fileURLWithPath: oldImportToPath).appendingPathComponent(filename)
                             let newFilePath = URL(fileURLWithPath: storagePath).appendingPathComponent(localFilePath)
                             let newFolderPath = newFilePath.deletingLastPathComponent()
-                            if !FileManager.default.fileExists(atPath: newFilePath.path) {
+                            if !newFilePath.path.isFileExists() {
                                 
                                 DispatchQueue.main.async {
                                     self.lblMessage.stringValue = "Copying to new RAW storage: \(localFilePath)"
@@ -828,7 +818,7 @@ class DeviceCopyViewController: NSViewController {
                             let oldFilePath = URL(fileURLWithPath: oldRepositoryPath).appendingPathComponent(localFilePath)
                             let newFilePath = URL(fileURLWithPath: repositoryPath).appendingPathComponent(localFilePath)
                             let newFolderPath = newFilePath.deletingLastPathComponent()
-                            if !FileManager.default.fileExists(atPath: newFilePath.path) {
+                            if !newFilePath.path.isFileExists() {
                                 
                                 DispatchQueue.main.async {
                                     self.lblMessage.stringValue = "Copying to new repository: \(localFilePath)"
@@ -1086,11 +1076,8 @@ class DeviceCopyViewController: NSViewController {
                     }
                 }
                 var destinationPath = URL(fileURLWithPath: destination).appendingPathComponent(subFolder).path
-                if !FileManager.default.fileExists(atPath: destinationPath) {
-                    do {
-                        try FileManager.default.createDirectory(atPath: destinationPath, withIntermediateDirectories: true, attributes: nil)
-                    }catch{
-                        self.logger.log(error)
+                if !destinationPath.isFileExists() {
+                    if !destinationPath.mkdirs(logger: self.logger) {
                         destinationPath = destination
                     }
                 }
@@ -1104,11 +1091,8 @@ class DeviceCopyViewController: NSViewController {
                     if file.folder != "" {
                         destinationPathForFile = URL(fileURLWithPath: destinationPath).appendingPathComponent(file.folder).path
                         
-                        if !FileManager.default.fileExists(atPath: destinationPathForFile) {
-                            do {
-                                try FileManager.default.createDirectory(atPath: destinationPathForFile, withIntermediateDirectories: true, attributes: nil)
-                            }catch{
-                                self.logger.log(error)
+                        if !destinationPathForFile.isFileExists() {
+                            if !destinationPathForFile.mkdirs(logger: self.logger) {
                                 destinationPathForFile = destinationPath
                             }
                         }
@@ -1164,16 +1148,12 @@ class DeviceCopyViewController: NSViewController {
                         
                         var needSaveFile:Bool = false
                         let destinationFile = URL(fileURLWithPath: destinationPathForFile).appendingPathComponent(file.filename).path
-                        if FileManager.default.fileExists(atPath: destinationFile) {
+                        if destinationFile.isFileExists() {
                             // exist file, avoid copy
                             needSaveFile = true
                         }else{ // not exist, copy file
-                            do{
-                                try FileManager.default.copyItem(atPath: file.onDevicePath, toPath: destinationFile)
-                                
+                            if file.onDevicePath.copyFile(to: destinationFile, logger: self.logger) {
                                 needSaveFile = true
-                            }catch{
-                                self.logger.log(error)
                             }
                         }
                         if needSaveFile {
@@ -1272,11 +1252,9 @@ class DeviceCopyViewController: NSViewController {
                 logger.log("Error occured when trying to create folder \(repositoryFolderUrl.path)", error)
             }
             // copy files from raw folder to repository folder if it wasn't copied
-            if !FileManager.default.fileExists(atPath: repositoryFileUrl.path) {
-                do {
-                    try FileManager.default.copyItem(atPath: importedFileUrl.path, toPath: repositoryFileUrl.path)
-                }catch{
-                    logger.log("Error occured when trying to copy file from \(importedFileUrl.path) to \(repositoryFileUrl.path)", error)
+            if !repositoryFileUrl.path.isFileExists() {
+                if !importedFileUrl.path.copyFile(to: repositoryFileUrl.path, logger: self.logger) {
+                    logger.log("Error occured when trying to copy file from \(importedFileUrl.path) to \(repositoryFileUrl.path)")
                 }
             }
             

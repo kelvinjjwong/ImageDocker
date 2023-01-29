@@ -93,7 +93,7 @@ struct ExecutionEnvironment {
         for path in paths {
             let p = URL(fileURLWithPath: path).appendingPathComponent(command).path
             //self.logger.log(p)
-            if FileManager.default.fileExists(atPath: p) {
+            if p.isFileExists() {
                 return p
             }
         }
@@ -205,9 +205,9 @@ struct ExecutionEnvironment {
     
     func findPostgresCommand(from paths:[String]) -> String? {
         for path in paths {
-            if FileManager.default.fileExists(atPath: URL(fileURLWithPath: path).appendingPathComponent("psql").path)
-                && FileManager.default.fileExists(atPath: URL(fileURLWithPath: path).appendingPathComponent("pg_dump").path)
-                && FileManager.default.fileExists(atPath: URL(fileURLWithPath: path).appendingPathComponent("createdb").path)
+            if URL(fileURLWithPath: path).appendingPathComponent("psql").path.isFileExists()
+                && URL(fileURLWithPath: path).appendingPathComponent("pg_dump").path.isFileExists()
+                && URL(fileURLWithPath: path).appendingPathComponent("createdb").path.isFileExists()
             {
                 return path
             }

@@ -33,6 +33,7 @@ class SubContainersManageViewController: NSViewController {
         self.loadSubContainers(parentPath: containerPath)
     }
     
+    /// - Tag: SubContainesManageViewController.loadSubContainers(parentPath)
     func loadSubContainers(parentPath: String) {
         var containers:[[String:String]] = []
         if let _ = RepositoryDao.default.getContainer(path: parentPath) {

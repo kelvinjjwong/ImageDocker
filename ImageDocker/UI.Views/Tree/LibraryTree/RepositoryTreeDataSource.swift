@@ -105,6 +105,7 @@ class RepositoryTreeDataSource : TreeDataSource {
         return nodes
     }
     
+    /// - Tag: RepositoryTreeDataSource.loadSubContainers(parentPath)
     func loadSubContainers(parentPath: String, condition:SearchCondition? = nil) -> [TreeCollection] {
         var nodes:[TreeCollection] = []
         self.logger.log("load sub containers from database - START - parentFolder: \(parentPath.removeLastStash())")

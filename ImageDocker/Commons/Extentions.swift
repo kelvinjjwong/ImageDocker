@@ -218,6 +218,59 @@ extension String {
         }
         return (volume, _path)
     }
+    
+    func isDirectoryExists() -> Bool {
+        var isDir:ObjCBool = false
+        if FileManager.default.fileExists(atPath: self, isDirectory: &isDir) {
+            if isDir.boolValue == true {
+                return true
+            }
+        }
+        return false
+    }
+    
+    func isFileExists() -> Bool {
+        if FileManager.default.fileExists(atPath: self) {
+            return true
+        }
+        return false
+    }
+    
+    func mkdirs(logger:Logger? = nil) -> Bool {
+        do {
+            try FileManager.default.createDirectory(atPath: self, withIntermediateDirectories: true, attributes: nil)
+        }catch{
+            if let logger = logger {
+                logger.log(error)
+            }
+            return false
+        }
+        return true
+    }
+    
+    func copyFile(to targetFilePath:String, logger:Logger? = nil) -> Bool{
+        do{
+            try FileManager.default.copyItem(atPath: self, toPath: targetFilePath)
+        }catch{
+            if let logger = logger {
+                logger.log(error)
+            }
+            return false
+        }
+        return true
+    }
+    
+    func moveFile(to targetFilePath:String, logger:Logger? = nil) -> Bool {
+        do {
+            try FileManager.default.moveItem(atPath: self, toPath: targetFilePath)
+        }catch{
+            if let logger = logger {
+                logger.log(error)
+            }
+            return false
+        }
+        return true
+    }
 }
 
 // MARK: URL

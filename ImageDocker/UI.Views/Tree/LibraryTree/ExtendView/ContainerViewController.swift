@@ -89,7 +89,7 @@ class ContainerViewController: NSViewController {
     
     @IBAction func onGotoClicked(_ sender: NSButton) {
         if let container = self.container {
-            if FileManager.default.fileExists(atPath: container.path) {
+            if container.path.isDirectoryExists() {
                 let url = URL(fileURLWithPath: container.path)
                 NSWorkspace.shared.activateFileViewerSelecting([url])
             }else{

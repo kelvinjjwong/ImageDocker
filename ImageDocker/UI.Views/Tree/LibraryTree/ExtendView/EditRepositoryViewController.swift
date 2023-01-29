@@ -385,21 +385,17 @@ class EditRepositoryViewController: NSViewController {
     // MARK: - HELPER
     
     fileprivate func checkDirectory(path:String, messageBox:NSTextField) -> Bool {
-        var isDir:ObjCBool = false
         var pass = true
         let trimPath = path.trimmingCharacters(in: .whitespacesAndNewlines)
-        if FileManager.default.fileExists(atPath: trimPath, isDirectory: &isDir) { // exist as a file
-            if isDir.boolValue == false {
+        if trimPath.isFileExists() {
+            if !trimPath.isDirectoryExists() {
                 pass = false
                 messageBox.stringValue = "Path is occupied by a file. You need a folder."
             }
-        }else{ // not exist
-            do {
-                try FileManager.default.createDirectory(atPath: trimPath, withIntermediateDirectories: true, attributes: nil)
-            }catch{
+        }else{
+            if !trimPath.mkdirs(logger: self.logger) {
                 pass = false
                 messageBox.stringValue = "Unable to create directory at \(path)"
-                self.logger.log(error)
             }
         }
         return pass

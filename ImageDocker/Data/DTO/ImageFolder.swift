@@ -32,6 +32,7 @@ class ImageFolder : NSObject {
     }
     
     /// Create a normal ImageFolder from container data
+    /// - Tag:  ImageFolder.init(url)
     convenience init(_ url:URL,
          name:String,
          repositoryPath:String,

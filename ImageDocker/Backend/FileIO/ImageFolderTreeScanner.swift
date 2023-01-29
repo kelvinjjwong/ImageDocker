@@ -57,13 +57,7 @@ class ImageFolderTreeScanner {
         
         TaskletManager.default.updateProgress(id: taskId, message: Words.scanning_repository.fill(arguments: i, totalCount), increase: false)
         
-        var repoExistInFileSys = false
-        var isDir:ObjCBool = false
-        if FileManager.default.fileExists(atPath: repo.path, isDirectory: &isDir) {
-            if isDir.boolValue == true {
-                repoExistInFileSys = true
-            }
-        }
+        var repoExistInFileSys = repo.path.isDirectoryExists()
         
         if !repoExistInFileSys {
             self.logger.log("[Repository Scan] Repository does not exist in FileSys: [\(repo.path)]")

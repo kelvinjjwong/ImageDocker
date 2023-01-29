@@ -64,7 +64,6 @@ class RepositoryDao {
     /// - caller:
     ///   - EditRepositoryViewController.onRemoveClicked()
     /// - version: future version
-    /// - note: should replace [deleteRepository(repositoryRoot:)](x-source-tag://deleteRepository(repositoryRoot))
     /// - Tag: deleteRepository(id)
     func deleteRepository(id:Int) -> ExecuteState {
         return self.impl.deleteRepository(id: id)
@@ -73,7 +72,7 @@ class RepositoryDao {
     /// - caller:
     ///   - EditRepositoryViewController.onShowHideClicked()
     /// - version: legacy version
-    /// - note: should be replaced by hideRepository(id:)
+    /// - note: should be replaced by [hideRepository(id:)](x-source-tag://hideRepository(id))
     /// - Tag: hideRepository(repositoryRoot)
     func hideRepository(repositoryRoot:String) -> ExecuteState{
         return self.impl.hideRepository(repositoryRoot: repositoryRoot)
@@ -91,7 +90,7 @@ class RepositoryDao {
     /// - caller:
     ///   - EditRepositoryViewController.onShowHideClicked()
     /// - version: legacy version
-    /// - note: should be replaced by showRepository(id:)
+    /// - note: should be replaced by [showRepository(id:)](x-source-tag://showRepository(id))
     /// - Tag: showRepository(repositoryRoot)
     func showRepository(repositoryRoot:String) -> ExecuteState{
         return self.impl.showRepository(repositoryRoot: repositoryRoot)
@@ -108,6 +107,7 @@ class RepositoryDao {
     
     // MARK: IMAGE REPOSITORY QUERY
     
+    /// - caller: NONE
     /// - Tag: findRepository(volume)
     func findRepository(volume:String, repositoryPath: String) -> ImageRepository? {
         return self.impl.findRepository(volume: volume, repositoryPath: repositoryPath)
@@ -118,6 +118,14 @@ class RepositoryDao {
         return self.impl.getRepository(id: id)
     }
     
+    /// - caller:
+    ///   - ImageFile.transformDomainToMetaInfo()
+    ///   - RepositoryDetailViewController.initView(id)
+    ///   - RepositoryDetailViewController.onDropInClicked()
+    ///   - RepositoryDetailViewController.onExifClicked()
+    ///   - RepositoryDetailViewController.onImportClicked()
+    ///   - RepositoryDetailViewController.onLocationClicked()
+    /// - version: should be replaced by [getRepository(id:)](x-source-tag://getRepository(id))
     /// - Tag: getRepository(repositoryPath)
     func getRepository(repositoryPath:String) -> ImageContainer? {
         return self.impl.getRepository(repositoryPath: repositoryPath)
@@ -128,16 +136,24 @@ class RepositoryDao {
         return self.impl.getRepositoriesV2(orderBy: orderBy, condition: condition)
     }
     
+    /// - caller:
+    ///   - ExportConfigurationViewController.loadRepositories()
+    ///   - LibrariesViewController.onCalculateClicked()
+    /// - version: should be replaced by [getRepositoriesV2(orderBy)](x-source-tag://getRepositoriesV2(orderBy))
     /// - Tag: getRepositories(orderBy)
     func getRepositories(orderBy:String = "path", condition:SearchCondition? = nil) -> [ImageContainer] {
         return self.impl.getRepositories(orderBy: orderBy, condition: condition)
     }
     
+    /// not-used
+    /// - caller: NONE
     /// - Tag: getRepositoryPaths(imagesCondition)
     func getRepositoryPaths(imagesCondition:SearchCondition) -> [String] {
         return self.impl.getRepositoryPaths(imagesCondition: imagesCondition)
     }
     
+    /// - caller:
+    ///   - LibrariesViewController.onCalculateClicked()
     /// - Tag: getLastPhotoTakenDateOfRepositories()
     func getLastPhotoTakenDateOfRepositories() -> [String:String] {
         return self.impl.getLastPhotoTakenDateOfRepositories()
@@ -145,16 +161,22 @@ class RepositoryDao {
     
     // MARK: IMAGE CONTAINER CRUD
     
+    /// - caller:
+    ///   - RepositoryDetailViewController.onReScanFoldersClicked()
     /// - Tag: createContainer()
     func createContainer(name: String, repositoryId: Int, parentId:Int, subPath: String, repositoryPath: String) -> ImageContainer? {
         return self.impl.createContainer(name: name, repositoryId: repositoryId, parentId: parentId, subPath: subPath, repositoryPath: repositoryPath)
     }
     
+    /// - caller:
+    ///   - RepositoryDetailViewController.onReScanFoldersClicked()
     /// - Tag: createEmptyImageContainerLinkToRepository(repositoryId)
     func createEmptyImageContainerLinkToRepository(repositoryId:Int) -> ImageContainer? {
         return self.impl.createEmptyImageContainerLinkToRepository(repositoryId: repositoryId)
     }
     
+    /// - caller:
+    ///   - ImageFolder.[init(url)](x-source-tag://ImageFolder.init(url))
     /// - Tag: getOrCreateContainer()
     func getOrCreateContainer(name:String,
                               path:String,
@@ -181,43 +203,76 @@ class RepositoryDao {
         return self.impl.saveImageContainer(container: container)
     }
     
+    /// - version: should be replaced by [deleteContainer(id)](x-source-tag://deleteContainer(id))
     /// - Tag: deleteContainer(path)
     func deleteContainer(path: String, deleteImage:Bool = false) -> ExecuteState {
         return self.impl.deleteContainer(path: path, deleteImage: deleteImage)
     }
     
+    /// - Tag: deleteContainer(id)
+    func deleteContainer(id:Int, deleteImage:Bool = false) -> ExecuteState {
+        return self.impl.deleteRepository(id: id)
+    }
+    
+    /// - version: should be replaced by [hideContainer(id)](x-source-tag://hideContainer(id))
     /// - Tag: hideContainer(path)
     func hideContainer(path:String) -> ExecuteState{
         return self.impl.hideContainer(path: path)
     }
     
+    /// - Tag: hideContainer(id)
+    func hideContainer(id:Int) -> ExecuteState {
+        return self.impl.hideContainer(id: id)
+    }
+    
+    /// - version: should be replaced by [showContainer(id)](x-source-tag://showContainer(id))
     /// - Tag: showContainer(path)
     func showContainer(path:String) -> ExecuteState{
         return self.impl.showContainer(path: path)
     }
     
+    /// - Tag: showContainer(id)
+    func showContainer(id:Int) -> ExecuteState {
+        return self.showContainer(id: id)
+    }
+    
     // MARK: IMAGE CONTAINER QUERY
     
+    /// - caller:
+    ///   - RepositoryDetailViewController.onReScanFoldersClicked()
     /// - Tag: findContainer(repositoryId)
     func findContainer(repositoryId:Int, subPath:String) -> ImageContainer? {
         return self.impl.findContainer(repositoryId: repositoryId, subPath: subPath)
     }
     
+    /// - caller:
+    ///   - RepositoryDetailViewController.onReScanFoldersClicked()
     /// - Tag: findContainer(repositoryVolume)
     func findContainer(repositoryVolume:String, repositoryPath:String, subPath:String) -> ImageContainer? {
         return self.impl.findContainer(repositoryVolume: repositoryVolume, repositoryPath: repositoryPath, subPath: subPath)
     }
     
+    /// - version: should be replaced by [getContainer(id)](x-source-tag://getContainer(id))
     /// - Tag: getContainer(path)
     func getContainer(path:String) -> ImageContainer? {
         return self.impl.getContainer(path: path)
     }
     
+    /// - Tag: getContainer(id)
+    func getContainer(id:Int) -> ImageContainer? {
+        return self.impl.getContainer(id: id)
+    }
+    
+    /// - caller:
+    ///   - EditRepositoryViewController.onPreviewBriefFolders()
+    ///   - EditRepositoryViewController.onPreviewEventFolders()
     /// - Tag: getAllContainerPathsOfImages(rootPath)
     func getAllContainerPathsOfImages(rootPath:String? = nil) -> Set<String> {
         return self.impl.getAllContainerPathsOfImages(rootPath: rootPath)
     }
     
+    /// not-used
+    /// - caller: NONE
     /// - Tag: getAllContainerPaths(rootPath)
     func getAllContainerPaths(rootPath:String? = nil) -> Set<String> {
         return self.impl.getAllContainerPaths(rootPath: rootPath)
@@ -228,11 +283,22 @@ class RepositoryDao {
         return self.impl.getAllContainers()
     }
     
+    /// - caller:
+    ///   - DevicePathDetailViewController.onUpdateClicked()
+    ///   - EditRepositoryViewController.onUpdateRepositoryImagesClicked()
+    /// - version: should be replaced by [getContainers(repositoryId)](x-source-tag://getContainers(repositoryId))
     /// - Tag: getContainers(rootPath)
     func getContainers(rootPath:String) -> [ImageContainer] {
         return self.impl.getContainers(rootPath: rootPath)
     }
     
+    /// - Tag: getContainers(repositoryId)
+    func getContainers(repositoryId:Int) -> [ImageContainer] {
+        return self.impl.getContainers(repositoryId: repositoryId)
+    }
+    
+    /// - caller:
+    ///   - ImageFolderTreeScanner.[scanRepository(ImageContainer)](x-source-tag://ImageFolderTreeScanner.scanRepository(ImageContainer))
     /// - Tag: getAllContainerPaths(repositoryPath)
     func getAllContainerPaths(repositoryPath:String? = nil) -> Set<String> {
         return self.impl.getAllContainerPaths(repositoryPath: repositoryPath)
@@ -250,16 +316,23 @@ class RepositoryDao {
         return self.impl.getSubContainersSingleLevel(containerId: containerId, condition: condition)
     }
     
+    /// not-used
+    /// - caller: NONE
     /// - Tag: getSubContainerPaths(path)
     func getSubContainerPaths(parent path:String, imagesCondition:SearchCondition) -> [String] {
         return self.impl.getSubContainerPaths(parent: path, imagesCondition: imagesCondition)
     }
     
+    /// - caller:
+    ///   - RepositoryTreeDataSource.[loadSubContainers(parentPath)](x-source-tag://RepositoryTreeDataSource.loadSubContainers(parentPath))
+    ///   - SubContainesManageViewController.[loadSubContainers(parentPath)](x-source-tag://SubContainesManageViewController.loadSubContainers(parentPath))
     /// - Tag: getSubContainers(path)
     func getSubContainers(parent path:String, condition:SearchCondition? = nil) -> [ImageContainer] {
         return self.impl.getSubContainers(parent: path, condition: condition)
     }
     
+    /// not-used
+    /// - caller: NONE
     /// - Tag: countSubContainers(path)
     func countSubContainers(parent path:String) -> Int {
         return self.impl.countSubContainers(parent: path)
@@ -282,6 +355,7 @@ class RepositoryDao {
     
     // MARK: GET PARENT CONTAINER
     
+    /// not-used
     /// - Tag: getParentContainer(thisContainer)
     func getParentContainer(thisContainer: ImageContainer) -> ImageContainer? {
         if thisContainer.parentFolder != "" {
@@ -292,6 +366,7 @@ class RepositoryDao {
         return nil
     }
     
+    /// not-used
     /// - Tag: getParentContainer(thisPath)
     func getParentContainer(thisPath: String) -> ImageContainer? {
         if let thisContainer = self.getContainer(path: thisPath) {
@@ -302,11 +377,13 @@ class RepositoryDao {
     
     // MARK: UPDATE SUB CONTAINERS AMOUNT
     
+    /// not-used
     /// - Tag: updateParentContainerSubContainers(parentPath)
     func updateParentContainerSubContainers(parentPath:String) -> Int {
         return self.updateImageContainerSubContainers(path: parentPath)
     }
     
+    /// not-used
     /// - Tag: updateParentContainerSubContainers(thisPath)
     func updateParentContainerSubContainers(thisPath:String) -> Int {
         if let parentContainer = self.getParentContainer(thisPath: thisPath){
@@ -315,6 +392,7 @@ class RepositoryDao {
         return -1
     }
     
+    /// not-used
     /// - Tag: updateImageContainerSubContainers(path)
     func updateImageContainerSubContainers(path:String) -> Int {
         return self.impl.updateImageContainerSubContainers(path: path)

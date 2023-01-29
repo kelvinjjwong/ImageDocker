@@ -204,6 +204,7 @@ class ContainerDetailViewController: NSViewController {
         self.logger.log("divided pages \(self.pages)")
     }
     
+    /// deprecate
     @IBAction func onFindParentFolder(_ sender: NSButton) {
         if(self.lblNewPath.isHidden){
             self.toggleNewPath(true)
@@ -225,6 +226,7 @@ class ContainerDetailViewController: NSViewController {
         }
     }
     
+    /// deprecate
     @IBAction func onGoUpClicked(_ sender: NSButton) {
         let url = URL(fileURLWithPath: self.lblNewPath.stringValue)
         let newUrl = url.deletingLastPathComponent()
@@ -236,6 +238,7 @@ class ContainerDetailViewController: NSViewController {
         }
     }
     
+    /// deprecate
     @IBAction func onRestoreParentClicked(_ sender: NSButton) {
         let url = URL(fileURLWithPath: self.lblPath.stringValue)
         let newUrl = url.deletingLastPathComponent()
@@ -243,6 +246,7 @@ class ContainerDetailViewController: NSViewController {
         self.findNewContainer(path: newUrl.path)
     }
     
+    /// deprecate
     @IBAction func onPickParentFolderClicked(_ sender: NSButton) {
         
         let buttonTitle = self.btnPickParentFolder.title
@@ -303,6 +307,7 @@ class ContainerDetailViewController: NSViewController {
         }
     }
     
+    /// deprecate
     @IBAction func onRefreshDataClicked(_ sender: NSButton) {
         let buttonTitle = self.btnRefreshData.title
         self.btnRefreshData.title = Words.library_tree_updating.word()

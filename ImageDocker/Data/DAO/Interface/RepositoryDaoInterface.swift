@@ -50,9 +50,13 @@ protocol RepositoryDaoInterface {
     
     func getContainer(path:String) -> ImageContainer?
     
+    func getContainer(id:Int) -> ImageContainer? 
+    
     func getAllContainers() -> [ImageContainer]
     
     func getContainers(rootPath:String) -> [ImageContainer]
+    
+    func getContainers(repositoryId:Int) -> [ImageContainer]
     
     func getAllContainerPathsOfImages(rootPath:String?) -> Set<String>
     
@@ -78,13 +82,19 @@ protocol RepositoryDaoInterface {
                               manyChildren:Bool,
                               hideByParent:Bool) -> (ImageContainer, Bool)
     
+    func saveImageContainer(container:ImageContainer) -> ExecuteState
+    
     func deleteContainer(path: String, deleteImage:Bool) -> ExecuteState
     
-    func saveImageContainer(container:ImageContainer) -> ExecuteState
+    func deleteContainer(id:Int, deleteImage:Bool) -> ExecuteState
     
     func hideContainer(path:String) -> ExecuteState
     
+    func hideContainer(id:Int) -> ExecuteState
+    
     func showContainer(path:String) -> ExecuteState
+    
+    func showContainer(id:Int) -> ExecuteState
     
     // MARK: SUB CONTAINER QUERY
     

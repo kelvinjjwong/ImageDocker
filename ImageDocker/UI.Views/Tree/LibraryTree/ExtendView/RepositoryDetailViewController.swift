@@ -502,6 +502,7 @@ class RepositoryDetailViewController: NSViewController {
         }
     }
     
+    /// deprecate
     /// - Tag: RepositoryDetailViewController.onPickParentClicked()
     @IBAction func onPickParentClicked(_ sender: NSButton) {
         
@@ -586,6 +587,7 @@ class RepositoryDetailViewController: NSViewController {
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     
+    /// deprecate
     /// - Tag: RepositoryDetailViewController.onRefreshDataClicked()
     @IBAction func onRefreshDataClicked(_ sender: NSButton) {
         let buttonTitle = self.btnRefreshData.title

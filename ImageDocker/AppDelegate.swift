@@ -94,16 +94,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let appSupportURL = urls[urls.count - 1]
         let url = appSupportURL.appendingPathComponent("ImageDocker")
-        var isDir : ObjCBool = false
         
-        let _  = FileManager.default.fileExists(atPath: url.path, isDirectory: &isDir)
-        
-        if !isDir.boolValue {
-            do {
-                try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
-            }catch{
+        if !url.path.isDirectoryExists() {
+            if !url.path.mkdirs(logger: logger) {
                 self.logger.log("Unable to create application directory")
-                self.logger.log(error)
             }
         }
         
