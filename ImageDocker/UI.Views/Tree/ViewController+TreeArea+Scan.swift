@@ -10,6 +10,10 @@ import Cocoa
 
 extension ViewController {
     
+    /// not-used
+    /// - caller:
+    ///   - ViewController.onScanEnabled()
+    /// - Tag: ViewController.startScanRepositories()
     internal func startScanRepositories(){
         DispatchQueue.global().async {
             ExportManager.default.disable()
@@ -43,6 +47,7 @@ extension ViewController {
         }
     }
     
+    /// not-used
     internal func onScanEnabled() {
 //        self.logger.log("enabled scan")
         self.suppressedScan = false
@@ -55,6 +60,7 @@ extension ViewController {
         self.startScanRepositories()
     }
     
+    /// not-used
     internal func onScanDisabled() {
 //        self.logger.log("disabled scan")
         self.suppressedScan = true
@@ -64,6 +70,7 @@ extension ViewController {
 //        self.btnScanState.isHidden = true
     }
     
+    /// not-used
     internal func startScanRepositoriesToLoadExif(){
         if TaskManager.allowReadImagesExif() {
             DispatchQueue.global().async {

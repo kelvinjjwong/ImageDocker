@@ -310,7 +310,7 @@ class ImageFolderTreeScanner {
     
     // MARK: HANDLE GAP
     // TODO: deprecate this function
-    /// - caller:
+    /// - caller: NONE
     ///   - ImageFolderTreeScanner.[scanRepositories(taskId)](x-source-tag://ImageFolderTreeScanner.scanRepositories(taskId))
     ///   - ImageFolderTreeScanner.[scanSingleRepository(ImageContainer,taskId)](x-source-tag://ImageFolderTreeScanner.scanSingleRepository(ImageContainer,taskId))
     /// - Tag: applyImportGap(dbUrls,filesysUrls,fileUrlToRepo)
@@ -590,6 +590,7 @@ class ImageFolderTreeScanner {
     ///
     /// - caller:
     ///   - ImageFolderTreeScanner.[scanSingleRepository_asTask(ImageContainer,taskId)](x-source-tag://ImageFolderTreeScanner.scanSingleRepository_asTask(ImageContainer))
+    /// - version: should be replaced by [RepositoryDetailViewController.onReScanFoldersClicked()](x-source-tag://RepositoryDetailViewController.onReScanFoldersClicked())
     /// - Tag: ImageFolderTreeScanner.scanSingleRepository(ImageContainer,taskId)
     func scanSingleRepository(repository:ImageContainer, taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil) -> Bool {
         
@@ -602,20 +603,20 @@ class ImageFolderTreeScanner {
         let excludedContainerPaths = DeviceDao.default.getExcludedImportedContainerPaths()
         let (_, repoFileSysUrls, repoFileUrlToRepo) = self.scanRepository(repository: repository, excludedContainerPaths: excludedContainerPaths, step: 1, total: 1, taskId: taskId, indicator: indicator)
         
-        self.logger.log("CHECK REPO: CHECK TO BE ADDED AND REMOVED")
-        if indicator != nil { indicator?.display(message: Words.checking_gap_between_db_and_filesys.word()) }
-        
-        TaskletManager.default.updateProgress(id: taskId, message: Words.filesys_scan_loading_all_images_from_db.word(), increase: false)
-        
-        let dbUrls = ImageSearchDao.default.getAllPhotoPaths(repositoryPath: repository.repositoryPath)
-        
-        TaskletManager.default.updateProgress(id: taskId, message: Words.checking_gap_between_db_and_filesys.word(), increase: false)
-        
-        let shouldContinue = self.applyImportGap(dbUrls: dbUrls, filesysUrls: repoFileSysUrls, fileUrlToRepo: repoFileUrlToRepo, excludedContainerPaths: excludedContainerPaths, taskId: taskId, indicator: indicator)
-        
-        if !shouldContinue {
-            return false
-        }
+//        self.logger.log("CHECK REPO: CHECK TO BE ADDED AND REMOVED")
+//        if indicator != nil { indicator?.display(message: Words.checking_gap_between_db_and_filesys.word()) }
+//
+//        TaskletManager.default.updateProgress(id: taskId, message: Words.filesys_scan_loading_all_images_from_db.word(), increase: false)
+//
+//        let dbUrls = ImageSearchDao.default.getAllPhotoPaths(repositoryPath: repository.repositoryPath)
+//
+//        TaskletManager.default.updateProgress(id: taskId, message: Words.checking_gap_between_db_and_filesys.word(), increase: false)
+//
+//        let shouldContinue = self.applyImportGap(dbUrls: dbUrls, filesysUrls: repoFileSysUrls, fileUrlToRepo: repoFileUrlToRepo, excludedContainerPaths: excludedContainerPaths, taskId: taskId, indicator: indicator)
+//
+//        if !shouldContinue {
+//            return false
+//        }
         
         self.logger.log("TRIGGER ON DATA CHANGED EVENT AFTER FINISHED SCANNING REPOSITORIES")
         if indicator != nil {
@@ -639,7 +640,7 @@ class ImageFolderTreeScanner {
     /// discover recorded-but-deleted files/folders, delete them from database accordingly
     ///
     /// - caller:
-    ///   - ViewController.startScanRepositories()
+    ///   - ViewController.[startScanRepositories()](x-source-tag://ViewController.startScanRepositories())
     /// - Tag: ImageFolderTreeScanner.scanRepositories(taskId)
     func scanRepositories(taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil)  {
         
@@ -688,19 +689,19 @@ class ImageFolderTreeScanner {
             }
         } // end of loop repositories
         
-        self.logger.log("CHECK REPO: CHECK TO BE ADDED AND REMOVED")
-        if indicator != nil {
-            indicator?.display(message: Words.checking_gap_between_db_and_filesys.word())
-        }
-        
-        TaskletManager.default.updateProgress(id: taskId, message: Words.checking_gap_between_db_and_filesys.word(), increase: false)
-        
-        let dbUrls = ImageSearchDao.default.getAllPhotoPaths()
-        let shouldContinue = self.applyImportGap(dbUrls: dbUrls, filesysUrls: filesysUrls, fileUrlToRepo: fileUrlToRepo, excludedContainerPaths: excludedContainerPaths, indicator: indicator)
-        
-        if !shouldContinue {
-            return
-        }
+//        self.logger.log("CHECK REPO: CHECK TO BE ADDED AND REMOVED")
+//        if indicator != nil {
+//            indicator?.display(message: Words.checking_gap_between_db_and_filesys.word())
+//        }
+//
+//        TaskletManager.default.updateProgress(id: taskId, message: Words.checking_gap_between_db_and_filesys.word(), increase: false)
+//
+//        let dbUrls = ImageSearchDao.default.getAllPhotoPaths()
+//        let shouldContinue = self.applyImportGap(dbUrls: dbUrls, filesysUrls: filesysUrls, fileUrlToRepo: fileUrlToRepo, excludedContainerPaths: excludedContainerPaths, indicator: indicator)
+//
+//        if !shouldContinue {
+//            return
+//        }
         
         self.logger.log("TRIGGER ON DATA CHANGED EVENT AFTER FINISHED SCANNING REPOSITORIES")
         if indicator != nil {
