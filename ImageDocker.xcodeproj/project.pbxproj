@@ -774,6 +774,14 @@
 			path = UI.SystemMenu;
 			sourceTree = "<group>";
 		};
+		5C25892429E96236008DE450 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				82AE2A4F2692BE8252178D24 /* Pods_ImageDocker.framework */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		5C511756297C3AA500F64CF6 /* FontAwesome */ = {
 			isa = PBXGroup;
 			children = (
@@ -789,7 +797,6 @@
 				F9A3074C49DC33F99A4B6837 /* Pods-ImageDocker.debug.xcconfig */,
 				43F4DB37AE4F50079C5833F3 /* Pods-ImageDocker.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -846,6 +853,7 @@
 				8E0AFA3A208BDEA000CE8B68 /* Products */,
 				BF292D703FDC467A9B710F29 /* Frameworks */,
 				891C048F0A2717E11DC7AB76 /* Pods */,
+				5C25892429E96236008DE450 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2329,7 +2337,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -2385,7 +2393,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
