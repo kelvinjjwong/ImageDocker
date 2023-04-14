@@ -560,7 +560,7 @@ class ImageFolderTreeScanner {
     
     // MARK: TASK - SCAN SINGLE REPO
     /// - caller:
-    ///   - RepositoryDetailViewController.onImportClicked()
+    ///   - RepositoryDetailViewController.[onImportClicked()](x-source-tag://RepositoryDetailViewController.onImportClicked())
     /// - Tag: ImageFolderTreeScanner.scanSingleRepository_asTask(ImageContainer)
     func scanSingleRepository_asTask(repository:ImageContainer, indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil) {
         let _ = TaskletManager.default.createAndStartTask(type: "IMPORT", name: repository.name

@@ -15,6 +15,7 @@ class TreeCollection {
     var name = ""
     var path = ""
     var childrenCount = 0
+    var connectedCount = 0
     
     var subContainersCount = 0
     var subImagesCount = 0

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		211CCB1CC9D5DDCDB077A2DC /* Pods_ImageDocker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82AE2A4F2692BE8252178D24 /* Pods_ImageDocker.framework */; };
+		061B8A9A21C94180D64C2094 /* Pods_ImageDocker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CAB26875AD800636E87CA876 /* Pods_ImageDocker.framework */; };
 		5C007848289FA2A300919826 /* Words+DateTimeModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C007847289FA2A300919826 /* Words+DateTimeModifier.swift */; };
 		5C00784A289FB70900919826 /* Words+NotesModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C007849289FB70900919826 /* Words+NotesModifier.swift */; };
 		5C00784C289FB72B00919826 /* Words+EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C00784B289FB72B00919826 /* Words+EventManager.swift */; };
@@ -382,6 +382,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		43F4DB37AE4F50079C5833F3 /* Pods-ImageDocker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.release.xcconfig"; path = "Target Support Files/Pods-ImageDocker/Pods-ImageDocker.release.xcconfig"; sourceTree = "<group>"; };
 		5C007847289FA2A300919826 /* Words+DateTimeModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+DateTimeModifier.swift"; sourceTree = "<group>"; };
 		5C007849289FB70900919826 /* Words+NotesModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+NotesModifier.swift"; sourceTree = "<group>"; };
 		5C00784B289FB72B00919826 /* Words+EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+EventManager.swift"; sourceTree = "<group>"; };
@@ -398,8 +399,6 @@
 		5C511754297C3A8700F64CF6 /* FontAwesome */ = {isa = PBXFileReference; lastKnownFileType = folder; path = FontAwesome; sourceTree = "<group>"; };
 		5C511757297C3ABE00F64CF6 /* FontAwesomeEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontAwesomeEnum.swift; sourceTree = "<group>"; };
 		5CB92EDA2912A9D600C5C42F /* Words+Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Preferences.swift"; sourceTree = "<group>"; };
-		5D91C952D851F04098CE50A9 /* Pods-ImageDocker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ImageDocker/Pods-ImageDocker.debug.xcconfig"; sourceTree = "<group>"; };
-		735F25C54C2D63CAD538E860 /* Pods-ImageDocker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.release.xcconfig"; path = "Pods/Target Support Files/Pods-ImageDocker/Pods-ImageDocker.release.xcconfig"; sourceTree = "<group>"; };
 		82AE2A4F2692BE8252178D24 /* Pods_ImageDocker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImageDocker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E00BB8D2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Menu+ImageOptions.swift"; sourceTree = "<group>"; };
 		8E015120208F7D23009C2549 /* StackedImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedImageViewController.swift; sourceTree = "<group>"; };
@@ -733,9 +732,8 @@
 		8EFAF1FE20CAE422007A7783 /* Moment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moment.swift; sourceTree = "<group>"; };
 		8EFE763B2094AF6B00B7CFCA /* TreeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeController.swift; sourceTree = "<group>"; };
 		8EFE763D2094B12200B7CFCA /* ImageDocker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ImageDocker-Bridging-Header.h"; sourceTree = "<group>"; };
-		B479F2387DA097A86444200D /* Pods_ImageDocker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImageDocker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D7145076C66463FEEE891BB9 /* Pods-ImageDocker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ImageDocker/Pods-ImageDocker.debug.xcconfig"; sourceTree = "<group>"; };
-		E1C548BE0FF4031E723C91D3 /* Pods-ImageDocker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.release.xcconfig"; path = "Pods/Target Support Files/Pods-ImageDocker/Pods-ImageDocker.release.xcconfig"; sourceTree = "<group>"; };
+		CAB26875AD800636E87CA876 /* Pods_ImageDocker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImageDocker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F9A3074C49DC33F99A4B6837 /* Pods-ImageDocker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageDocker.debug.xcconfig"; path = "Target Support Files/Pods-ImageDocker/Pods-ImageDocker.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -744,7 +742,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8ECB50FA2761F6C3004DFDD7 /* WebKit.framework in Frameworks */,
-				211CCB1CC9D5DDCDB077A2DC /* Pods_ImageDocker.framework in Frameworks */,
+				061B8A9A21C94180D64C2094 /* Pods_ImageDocker.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -785,15 +783,14 @@
 			path = FontAwesome;
 			sourceTree = "<group>";
 		};
-		647EF5471AA41950F5DAFEE8 /* Pods */ = {
+		891C048F0A2717E11DC7AB76 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				5D91C952D851F04098CE50A9 /* Pods-ImageDocker.debug.xcconfig */,
-				735F25C54C2D63CAD538E860 /* Pods-ImageDocker.release.xcconfig */,
-				D7145076C66463FEEE891BB9 /* Pods-ImageDocker.debug.xcconfig */,
-				E1C548BE0FF4031E723C91D3 /* Pods-ImageDocker.release.xcconfig */,
+				F9A3074C49DC33F99A4B6837 /* Pods-ImageDocker.debug.xcconfig */,
+				43F4DB37AE4F50079C5833F3 /* Pods-ImageDocker.release.xcconfig */,
 			);
 			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		8E03FD4E2455892F0092C5C7 /* CommonEntity */ = {
@@ -847,8 +844,8 @@
 				8E0AFA4E208BDEA100CE8B68 /* ImageDockerTests */,
 				8E0AFA59208BDEA100CE8B68 /* ImageDockerUITests */,
 				8E0AFA3A208BDEA000CE8B68 /* Products */,
-				647EF5471AA41950F5DAFEE8 /* Pods */,
 				BF292D703FDC467A9B710F29 /* Frameworks */,
+				891C048F0A2717E11DC7AB76 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1712,8 +1709,7 @@
 			children = (
 				8EB8D6FD22E456160096DD75 /* WebKit.framework */,
 				8E2CF36F20AED2FE00A93375 /* CollectionView.framework */,
-				B479F2387DA097A86444200D /* Pods_ImageDocker.framework */,
-				82AE2A4F2692BE8252178D24 /* Pods_ImageDocker.framework */,
+				CAB26875AD800636E87CA876 /* Pods_ImageDocker.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1725,12 +1721,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8E0AFA5F208BDEA100CE8B68 /* Build configuration list for PBXNativeTarget "ImageDocker" */;
 			buildPhases = (
-				963155A48571EEDEF1647D3A /* [CP] Check Pods Manifest.lock */,
+				975D0840D6665E8461B7AA4A /* [CP] Check Pods Manifest.lock */,
 				8E0AFA35208BDEA000CE8B68 /* Sources */,
 				8E0AFA36208BDEA000CE8B68 /* Frameworks */,
 				8E0AFA37208BDEA000CE8B68 /* Resources */,
-				464CFED52B2005412BD014B3 /* [CP] Embed Pods Frameworks */,
 				8ECB50F92761F6C0004DFDD7 /* Embed Frameworks */,
+				26D12066167A45437F882260 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1900,7 +1896,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		464CFED52B2005412BD014B3 /* [CP] Embed Pods Frameworks */ = {
+		26D12066167A45437F882260 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1917,16 +1913,20 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ImageDocker/Pods-ImageDocker-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		963155A48571EEDEF1647D3A /* [CP] Check Pods Manifest.lock */ = {
+		975D0840D6665E8461B7AA4A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			inputFileListPaths = (
 			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-ImageDocker-checkManifestLockResult.txt",
 			);
@@ -2396,7 +2396,7 @@
 		};
 		8E0AFA60208BDEA100CE8B68 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D7145076C66463FEEE891BB9 /* Pods-ImageDocker.debug.xcconfig */;
+			baseConfigurationReference = F9A3074C49DC33F99A4B6837 /* Pods-ImageDocker.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -2420,7 +2420,7 @@
 		};
 		8E0AFA61208BDEA100CE8B68 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E1C548BE0FF4031E723C91D3 /* Pods-ImageDocker.release.xcconfig */;
+			baseConfigurationReference = 43F4DB37AE4F50079C5833F3 /* Pods-ImageDocker.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

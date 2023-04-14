@@ -38,14 +38,14 @@ class RepositoryDetailViewController: NSViewController {
     @IBOutlet weak var indExif: NSLevelIndicator!
     @IBOutlet weak var indLocation: NSLevelIndicator!
     @IBOutlet weak var indFaces: NSLevelIndicator!
-    @IBOutlet weak var btnDropIn: NSButton!
-    @IBOutlet weak var btnImport: NSButton!
-    @IBOutlet weak var btnExif: NSButton!
-    @IBOutlet weak var btnLocation: NSButton!
-    @IBOutlet weak var btnFaces: NSButton!
+    @IBOutlet weak var btnDropIn: NSButton!  /// - Tag: RepositoryDetailViewController.btnDropIn
+    @IBOutlet weak var btnImport: NSButton! /// - Tag: RepositoryDetailViewController.btnImport
+    @IBOutlet weak var btnExif: NSButton! /// - Tag: RepositoryDetailViewController.btnExif
+    @IBOutlet weak var btnLocation: NSButton! /// - Tag: RepositoryDetailViewController.btnLocation
+    @IBOutlet weak var btnFaces: NSButton! /// - Tag: RepositoryDetailViewController.btnFaces
     @IBOutlet weak var lblMessage: NSTextField!
     @IBOutlet weak var indProgress: NSProgressIndicator!
-    @IBOutlet weak var btnStop: NSButton!
+    @IBOutlet weak var btnStop: NSButton! /// - Tag: RepositoryDetailViewController.btnStop
     @IBOutlet weak var lblShouldImport: NSTextField!
     @IBOutlet weak var indShouldImport: NSLevelIndicator!
     @IBOutlet weak var lblPath: NSTextField!
@@ -53,13 +53,13 @@ class RepositoryDetailViewController: NSViewController {
     @IBOutlet weak var lblNewPath: NSTextField!
     @IBOutlet weak var lblNewContainerName: NSTextField!
     
-    @IBOutlet weak var btnFindParent: NSButton!
-    @IBOutlet weak var btnPickParent: NSButton!
-    @IBOutlet weak var btnPickGoUp: NSButton!
-    @IBOutlet weak var btnPickGoDown: NSButton!
-    @IBOutlet weak var btnGotoPath: NSButton!
+    @IBOutlet weak var btnFindParent: NSButton!  /// - Tag: RepositoryDetailViewController.btnFindParent
+    @IBOutlet weak var btnPickParent: NSButton!  /// - Tag: RepositoryDetailViewController.btnPickParent
+    @IBOutlet weak var btnPickGoUp: NSButton!  /// - Tag: RepositoryDetailViewController.btnPickGoUp
+    @IBOutlet weak var btnPickGoDown: NSButton!  /// - Tag: RepositoryDetailViewController.btnPickGoDown
+    @IBOutlet weak var btnGotoPath: NSButton!  /// - Tag: RepositoryDetailViewController.btnGotoPath
     
-    @IBOutlet weak var btnRefreshData: NSButton!
+    @IBOutlet weak var btnRefreshData: NSButton!  /// - Tag: RepositoryDetailViewController.btnRefreshData
     
     
     @IBOutlet weak var boxImageRecords: NSBox!
@@ -78,9 +78,9 @@ class RepositoryDetailViewController: NSViewController {
     @IBOutlet weak var lblCaptionFreeOnEditableStorage: NSTextField!
     @IBOutlet weak var lblCaptionFreeOnBackupStorage: NSTextField!
     @IBOutlet weak var lblCaptionFreeOnFacesStorage: NSTextField!
-    @IBOutlet weak var btnDetailOfEditableStorage: NSButton!
-    @IBOutlet weak var btnDetailOfBackupStorage: NSButton!
-    @IBOutlet weak var btnDetailOfFacesStorage: NSButton!
+    @IBOutlet weak var btnDetailOfEditableStorage: NSButton!  /// - Tag: RepositoryDetailViewController.btnDetailOfEditableStorage
+    @IBOutlet weak var btnDetailOfBackupStorage: NSButton!  /// - Tag: RepositoryDetailViewController.btnDetailOfBackupStorage
+    @IBOutlet weak var btnDetailOfFacesStorage: NSButton!  /// - Tag: RepositoryDetailViewController.btnDetailOfFacesStorage
     
     @IBOutlet weak var lblCaptionFolder: NSTextField!
     
@@ -401,28 +401,10 @@ class RepositoryDetailViewController: NSViewController {
         }
     }
     
+    /// - parameter sender: [button](x-source-tag://RepositoryDetailViewController.btnImport)
     /// - Tag: RepositoryDetailViewController.onImportClicked()
     @IBAction func onImportClicked(_ sender: NSButton) {
-        if let repository = RepositoryDao.default.getRepository(repositoryPath: self._repositoryPath) {
-            self.toggleButtons(false)
-            let indicator = Accumulator(target: 1000,
-                                        indicator: self.indProgress,
-                                        suspended: true,
-                                        lblMessage: self.lblMessage,
-                                        presetAddingMessage: Words.importingImages.word(),
-                                        onCompleted: { data in
-                                            self.logger.log("====== COMPLETED SCAN single REPO \(repository.name)")
-                                            self.toggleButtons(true)
-            },
-                                        onDataChanged: {
-                                            self.logger.log("====== DATE CHANGED when SCAN single REPO \(repository.name)")
-            })
-            
-            ImageFolderTreeScanner.default.scanSingleRepository_asTask(repository: repository, indicator: indicator, onCompleted: {
-                self.logger.log(">>>> onCompleted")
-                self.toggleButtons(true)
-            })
-        }
+        self.scanImageRepository()
     }
     
     @IBAction func onExifClicked(_ sender: NSButton) {
@@ -614,7 +596,10 @@ class RepositoryDetailViewController: NSViewController {
     
     /// - Tag: RepositoryDetailViewController.onReScanFoldersClicked()
     @IBAction func onReScanFoldersClicked(_ sender: NSButton) {
-        
+        self.scanImageRepository()
+    }
+    
+    private func scanImageRepository() {
         if(self.working) {
             self.logger.log(.error, "Another long task is working.")
             return
@@ -852,6 +837,30 @@ class RepositoryDetailViewController: NSViewController {
         }
     }
     
+    /// to be deprecated
+    /// - version: legacy version
+    private func scanImageRepository_legacy() {
+        if let repository = RepositoryDao.default.getRepository(repositoryPath: self._repositoryPath) {
+            self.toggleButtons(false)
+            let indicator = Accumulator(target: 1000,
+                                        indicator: self.indProgress,
+                                        suspended: true,
+                                        lblMessage: self.lblMessage,
+                                        presetAddingMessage: Words.importingImages.word(),
+                                        onCompleted: { data in
+                                            self.logger.log("====== COMPLETED SCAN single REPO \(repository.name)")
+                                            self.toggleButtons(true)
+            },
+                                        onDataChanged: {
+                                            self.logger.log("====== DATE CHANGED when SCAN single REPO \(repository.name)")
+            })
+            
+            ImageFolderTreeScanner.default.scanSingleRepository_asTask(repository: repository, indicator: indicator, onCompleted: {
+                self.logger.log(">>>> onCompleted")
+                self.toggleButtons(true)
+            })
+        }
+    }
     
     
 }

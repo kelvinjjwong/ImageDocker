@@ -259,11 +259,13 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate, Tr
                 let (treeNodes, message) = self.collectionLoader!(item, condition)
                 
                 if treeNodes.count > 0 {
+                    self.logger.log("loaded \(treeNodes.count) child nodes")
                     DispatchQueue.main.async {
+                        self.logger.log("adding children to tree node")
                         item.removeAllChildren()
                         let startTime = Date()
                         for node in treeNodes {
-                            //self.logger.log("rendering tree node \(node.name)")
+//                            self.logger.log("adding tree node \(node.name)")
                             item.addChild(collection: node)
                         }
                         self.logger.timecost("tree collection insertion", fromDate: startTime)

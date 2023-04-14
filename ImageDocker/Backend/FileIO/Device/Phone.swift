@@ -88,11 +88,11 @@ struct PhoneDevice {
     // present as title in tree node
     func represent() -> String {
         var summary = ""
-        if totalSize != "" {
-            summary = "\(availSize) / \(totalSize), used \(usedPercent)"
-        }else {
+//        if totalSize != "" {
+//            summary = "\(availSize) / \(totalSize), used \(usedPercent)"
+//        }else {
             summary = deviceId
-        }
+//        }
         if name != "" {
             let recognizedModel = Naming.Camera.recognize(maker: manufacture, model: model)
             return "\(name) (\(manufacture) \(recognizedModel)) [\(summary)]"

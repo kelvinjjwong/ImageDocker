@@ -42,17 +42,32 @@ extension ViewController {
                                         }
         },
                                     nodeValue: { collection in
-                                        return "🔌 \(collection.childrenCount)"
+                                        if collection.path == "Android" || collection.path == "iPhone" {
+                                            return "📲 \(collection.childrenCount) 🔌 \(collection.connectedCount)"
+                                        }else{
+                                            if let state = collection.relatedObjectState {
+                                                if state == 1 {
+                                                    return "🟢"
+                                                }else {
+                                                    return "⚫️"
+                                                }
+                                            }else{
+                                                return "⚫️"
+                                            }
+                                        }
         },
                                     onNodeSelected: { collection in
 //                                        self.logger.log("action on \(collection.path)")
                                         if collection.path == "Android" || collection.path == "iPhone" {
+                                            self.logger.log("expand device tree")
                                             self.stackedTreeView.expand(tree: Words.nav_cat_devices.word(), path: collection.path)
                                         }else{
                                             if let id = collection.relatedObjectId,
                                                 let device = self.deviceTreeDataSource.getDeviceById(id),
                                                 let state = collection.relatedObjectState {
                                                 self.openDeviceCopyView(device: device, connected: state == 1)
+                                            }else{
+                                                self.logger.log("device collection id is nil")
                                             }
                                         }
         },

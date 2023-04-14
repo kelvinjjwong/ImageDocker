@@ -15,6 +15,30 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     
     let logger = ConsoleLogger(category: "DB", subCategory: "RepositoryDaoGRDB")
     
+    func createRepository(name:String,
+                          homeVolume:String, homePath:String,
+                          repositoryVolume:String, repositoryPath:String,
+                          storageVolume:String, storagePath:String,
+                          faceVolume:String, facePath:String,
+                          cropVolume:String, cropPath:String) -> ImageRepository? {
+        self.logger.log(.todo, "todo DAO for SQLite")
+        return nil
+    }
+    
+    func updateRepository(id:Int, name:String,
+                          homeVolume:String, homePath:String,
+                          repositoryVolume:String, repositoryPath:String,
+                          storageVolume:String, storagePath:String,
+                          faceVolume:String, facePath:String,
+                          cropVolume:String, cropPath:String
+    ){
+        self.logger.log(.todo, "todo DAO for SQLite")
+    }
+    
+    func linkRepositoryToDevice(id:Int, deviceId:String) {
+        self.logger.log(.todo, "todo DAO for SQLite")
+    }
+    
     func findRepository(volume:String, repositoryPath: String) -> ImageRepository? {
         // TODO: todo DAO for SQLite
         self.logger.log(.todo, "todo DAO for SQLite")

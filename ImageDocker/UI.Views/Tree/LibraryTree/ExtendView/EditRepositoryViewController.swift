@@ -12,6 +12,7 @@ class EditRepositoryViewController: NSViewController {
     
     let logger = ConsoleLogger(category: "REPO", subCategory: "CONFIG")
     
+    private var originalRepositoryId:Int = 0
     private var originalContainer:ImageContainer? = nil
     
     // MARK: - FIELDS
@@ -232,6 +233,7 @@ class EditRepositoryViewController: NSViewController {
         self.emptyGeneralTextFields()
         self.emptyStorageTextFields()
         self.emptyFaceTextFields()
+        self.originalRepositoryId = 0
         self.originalContainer = nil
         self.btnOK.title = Words.save.word()
         self.lblMessage.stringValue = ""
@@ -277,14 +279,18 @@ class EditRepositoryViewController: NSViewController {
         self.emptyStorageTextFields()
         self.emptyFaceTextFields()
         self.lblMessage.stringValue = ""
-        if let container = RepositoryDao.default.getContainer(path: path) {
+        let (repositoryVolume, repositoryPath) = path.removeLastStash().getVolumeFromThisPath()
+        if let repository = RepositoryDao.default.findRepository(volume: repositoryVolume, repositoryPath: repositoryPath) {
+            
+            let container = RepositoryDao.default.getContainer(path: path.removeLastStash())
+            self.originalRepositoryId = repository.id
             self.originalContainer = container
-            self.txtName.stringValue = container.name
-            self.txtHomePath.stringValue = container.homePath
-            self.txtStoragePath.stringValue = container.storagePath
-            self.txtRepository.stringValue = container.path
-            self.txtFacePath.stringValue = container.facePath
-            self.txtCropPath.stringValue = container.cropPath
+            self.txtName.stringValue = repository.name
+            self.txtHomePath.stringValue = "\(repository.homeVolume)\(repository.homePath)"
+            self.txtRepository.stringValue = "\(repository.repositoryVolume)\(repository.repositoryPath)"
+            self.txtStoragePath.stringValue = "\(repository.storageVolume)\(repository.storagePath)"
+            self.txtFacePath.stringValue = "\(repository.faceVolume)\(repository.facePath)"
+            self.txtCropPath.stringValue = "\(repository.cropVolume)\(repository.cropPath)"
             self.btnFaceBackToOrigin.isHidden = false
             self.btnNormalize.isHidden = false
 //            self.btnFindFaces.isHidden = false
@@ -303,22 +309,22 @@ class EditRepositoryViewController: NSViewController {
             
             self.btnBrowseRepositoryPath.title = Words.moveTo.word()
             
-            if container.homePath == "" {
+            if repository.homePath == "" {
                 self.btnBrowseHomePath.title = Words.assign.word()
             }else{
                 self.btnBrowseHomePath.title = Words.moveTo.word()
             }
-            if container.storagePath == "" {
+            if repository.storagePath == "" {
                 self.btnBrowseStoragePath.title = Words.assign.word()
             }else{
                 self.btnBrowseStoragePath.title = Words.moveTo.word()
             }
-            if container.facePath == "" {
+            if repository.facePath == "" {
                 self.btnBrowseFacePath.title = Words.assign.word()
             }else{
                 self.btnBrowseFacePath.title = Words.moveTo.word()
             }
-            if container.cropPath == "" {
+            if repository.cropPath == "" {
                 self.btnBrowseCropPath.title = Words.assign.word()
             }else{
                 self.btnBrowseCropPath.title = Words.moveTo.word()
@@ -326,23 +332,24 @@ class EditRepositoryViewController: NSViewController {
             
             self.stat()
             
-            if container.hiddenByRepository {
+            if let container = container, container.hiddenByRepository {
                 self.btnShowHide.title = Words.enableRepository.word()
             }else{
                 self.btnShowHide.title = Words.disableRepository.word()
             }
             
-            if container.deviceId != "" {
-                self.displayDeviceInfo(deviceId: container.deviceId)
+            if repository.deviceId != "" {
+                self.displayDeviceInfo(deviceId: repository.deviceId)
             }
             
-            self.lstEventFolderLevel.selectItem(at: container.eventFolderLevel - 1)
-            self.chkFolderAsEvent.state = container.folderAsEvent ? .on : .off
-            self.chkFolderAsBrief.state = container.folderAsBrief ? .on : .off
+            self.lstEventFolderLevel.selectItem(at: repository.eventFolderLevel - 1)
+            self.chkFolderAsEvent.state = repository.folderAsEvent ? .on : .off
+            self.chkFolderAsBrief.state = repository.folderAsBrief ? .on : .off
             
-            self.setBriefFolderLevelSelection(container.briefFolderLevel)
+            self.setBriefFolderLevelSelection(repository.briefFolderLevel)
             
         }else{
+            self.originalRepositoryId = 0
             self.originalContainer = nil
             self.lblMessage.stringValue = "\(Words.cannotFindRepositoryPath.word()) [\(path)]"
         }
@@ -491,8 +498,27 @@ class EditRepositoryViewController: NSViewController {
             origin.eventFolderLevel = (self.lstEventFolderLevel.indexOfSelectedItem + 1)
             origin.folderAsBrief = (self.chkFolderAsBrief.state == .on)
             origin.briefFolderLevel = self.getBriefFolderLevelFromSelection()
+            
+            let repositoryPath = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            let storagePath = self.txtStoragePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            let facePath = self.txtFacePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            let cropPath = self.txtCropPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            let (homeVolume, _homePath) = homePath.getVolumeFromThisPath()
+            let (repositoryVolume, _repositoryPath) = repositoryPath.getVolumeFromThisPath()
+            let (storageVolume, _storagePath) = storagePath.getVolumeFromThisPath()
+            let (faceVolume, _facePath) = facePath.getVolumeFromThisPath()
+            let (cropVolume, _cropPath) = cropPath.getVolumeFromThisPath()
+            
+            RepositoryDao.default.updateRepository(id: self.originalRepositoryId, name: name,
+                                                   homeVolume: homeVolume, homePath: _homePath,
+                                                   repositoryVolume: repositoryVolume, repositoryPath: _repositoryPath,
+                                                   storageVolume: storageVolume, storagePath: _storagePath,
+                                                   faceVolume: faceVolume, facePath: _facePath,
+                                                   cropVolume: cropVolume, cropPath: _cropPath)
+            
             let _ = RepositoryDao.default.saveImageContainer(container: origin)
-            self.lblMessage.stringValue = "General info updated."
+            self.lblMessage.stringValue = "Info updated."
             
         }else{ // new
             self.saveNewRepository()
@@ -1404,6 +1430,11 @@ class EditRepositoryViewController: NSViewController {
             }else{
                 self.lblMessage.stringValue = "\(state) - Updated link between repository and device [\(deviceId) - \(deviceName)]."
             }
+        }
+        if originalRepositoryId > 0 {
+            RepositoryDao.default.linkRepositoryToDevice(id: originalRepositoryId, deviceId: deviceId)
+        }else{
+            self.lblMessage.stringValue = "ImageRepositoryId is nil - Unable to link repository with device in database."
         }
     }
     

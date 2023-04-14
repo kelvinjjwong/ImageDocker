@@ -31,6 +31,67 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         return ImageContainer.fetchOne(db, where: "(\"repositoryPath\" = $1 or \"repositoryPath\" = $2) and \"parentFolder\"=''", values: [repositoryPath.removeLastStash(), repositoryPath.withLastStash()])
     }
     
+    func createRepository(name:String,
+                          homeVolume:String, homePath:String,
+                          repositoryVolume:String, repositoryPath:String,
+                          storageVolume:String, storagePath:String,
+                          faceVolume:String, facePath:String,
+                          cropVolume:String, cropPath:String) -> ImageRepository? {
+        if let exist = self.findRepository(volume: repositoryVolume, repositoryPath: repositoryPath) {
+            return exist
+        }else{
+            let imageRepository = ImageRepository()
+            imageRepository.name = name
+            imageRepository.homeVolume = homeVolume
+            imageRepository.homePath = homePath
+            imageRepository.repositoryVolume = repositoryVolume
+            imageRepository.repositoryPath = repositoryPath
+            imageRepository.storageVolume = storageVolume
+            imageRepository.storagePath = storagePath
+            imageRepository.faceVolume = faceVolume
+            imageRepository.facePath = facePath
+            imageRepository.cropVolume = cropVolume
+            imageRepository.cropPath = cropPath
+            let db = PostgresConnection.database()
+            imageRepository.save(db)
+            return self.findRepository(volume: repositoryVolume, repositoryPath: repositoryPath)
+        }
+        
+    }
+    
+    func updateRepository(id:Int, name:String,
+                          homeVolume:String, homePath:String,
+                          repositoryVolume:String, repositoryPath:String,
+                          storageVolume:String, storagePath:String,
+                          faceVolume:String, facePath:String,
+                          cropVolume:String, cropPath:String
+    ) {
+        if let imageRepository = self.getRepository(id: id) {
+            imageRepository.name = name
+            imageRepository.homeVolume = homeVolume
+            imageRepository.homePath = homePath
+            imageRepository.repositoryVolume = repositoryVolume
+            imageRepository.repositoryPath = repositoryPath
+            imageRepository.storageVolume = storageVolume
+            imageRepository.storagePath = storagePath
+            imageRepository.faceVolume = faceVolume
+            imageRepository.facePath = facePath
+            imageRepository.cropVolume = cropVolume
+            imageRepository.cropPath = cropPath
+            let db = PostgresConnection.database()
+            imageRepository.save(db)
+        }
+        
+    }
+    
+    func linkRepositoryToDevice(id:Int, deviceId:String) {
+        if let imageRepository = self.getRepository(id: id) {
+            imageRepository.deviceId = deviceId
+            let db = PostgresConnection.database()
+            imageRepository.save(db)
+        }
+    }
+    
     func deleteRepository(repositoryRoot: String) -> ExecuteState {
         let db = PostgresConnection.database()
         do {

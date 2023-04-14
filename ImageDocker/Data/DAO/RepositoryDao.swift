@@ -43,13 +43,64 @@ class RepositoryDao {
                                  facePath:String,
                                  cropPath:String) -> ImageFolder {
         self.logger.log("Creating repository with name:\(name) , path:\(path)")
-        return ImageFolder(URL(fileURLWithPath: path),
+        
+        let (homeVolume, _homePath) = homePath.getVolumeFromThisPath()
+        let (repositoryVolume, _repositoryPath) = path.getVolumeFromThisPath()
+        let (storageVolume, _storagePath) = storagePath.getVolumeFromThisPath()
+        let (faceVolume, _facePath) = facePath.getVolumeFromThisPath()
+        let (cropVolume, _cropPath) = cropPath.getVolumeFromThisPath()
+        
+        let imageRepository = self.impl.createRepository(name: name,
+                                   homeVolume: homeVolume, homePath: _homePath,
+                                   repositoryVolume: repositoryVolume, repositoryPath: _repositoryPath,
+                                   storageVolume: storageVolume, storagePath: _storagePath,
+                                   faceVolume: faceVolume, facePath: _facePath,
+                                   cropVolume: cropVolume, cropPath: _cropPath)
+        
+        if let repositoryId = imageRepository?.id {
+            self.logger.log("Created ImageRepository with id: \(repositoryId)")
+        }
+        
+        let imageFolder = ImageFolder(URL(fileURLWithPath: path),
                             name: name,
                             repositoryPath: path,
                             homePath: homePath,
                             storagePath: storagePath,
                             facePath: facePath,
                             cropPath: cropPath)
+        
+        if let repositoryId = imageRepository?.id {
+            if let imageContainer = imageFolder.containerFolder, repositoryId > 0 {
+                imageContainer.repositoryId = repositoryId
+                RepositoryDao.default.saveImageContainer(container: imageContainer)
+            }else{
+                self.logger.log(.error, "new imageContainer is nil")
+            }
+            
+        }else{
+            self.logger.log(.error, "new repositoryId is nil")
+        }
+        
+        return imageFolder
+    }
+    
+    func updateRepository(id:Int, name:String,
+                          homeVolume:String, homePath:String,
+                          repositoryVolume:String, repositoryPath:String,
+                          storageVolume:String, storagePath:String,
+                          faceVolume:String, facePath:String,
+                          cropVolume:String, cropPath:String
+    ) {
+        self.impl.updateRepository(id: id, name: name,
+                                   homeVolume: homeVolume, homePath: homePath,
+                                   repositoryVolume: repositoryVolume, repositoryPath: repositoryPath,
+                                   storageVolume: storageVolume, storagePath: storagePath,
+                                   faceVolume: faceVolume, facePath: facePath,
+                                   cropVolume: cropVolume, cropPath: cropPath)
+    }
+    
+    func linkRepositoryToDevice(id:Int, deviceId:String) {
+        self.impl.linkRepositoryToDevice(id: id, deviceId: deviceId)
     }
     
     /// - caller:

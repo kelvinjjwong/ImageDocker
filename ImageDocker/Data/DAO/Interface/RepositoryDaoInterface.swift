@@ -12,6 +12,23 @@ protocol RepositoryDaoInterface {
     
     // MARK: IMAGE REPOSITORY CRUD
     
+    func createRepository(name:String,
+                          homeVolume:String, homePath:String,
+                          repositoryVolume:String, repositoryPath:String,
+                          storageVolume:String, storagePath:String,
+                          faceVolume:String, facePath:String,
+                          cropVolume:String, cropPath:String) -> ImageRepository?
+    
+    func updateRepository(id:Int, name:String,
+                          homeVolume:String, homePath:String,
+                          repositoryVolume:String, repositoryPath:String,
+                          storageVolume:String, storagePath:String,
+                          faceVolume:String, facePath:String,
+                          cropVolume:String, cropPath:String
+    )
+    
+    func linkRepositoryToDevice(id:Int, deviceId:String)
+    
     func deleteRepository(repositoryRoot:String) -> ExecuteState
     
     func deleteRepository(id:Int) -> ExecuteState

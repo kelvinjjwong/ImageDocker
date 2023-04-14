@@ -21,15 +21,43 @@ class DeviceTreeDataSource : TreeDataSource {
         }
         
         if collection == nil {
-            let android = TreeCollection("Android")
-            let iphone = TreeCollection("iPhone")
+            let android = TreeCollection("Android", id: "DEV_ANDROID", object: PhoneDevice(type: .Android, deviceId: "", manufacture: "", model: ""))
+            android.expandable = true
+            let registeredAndroidCount = self.countDevicesFromDatabase(type: "Android")
+            android.subImagesCount = registeredAndroidCount
+            android.childrenCount = registeredAndroidCount
+            let iphone = TreeCollection("iPhone", id: "DEV_IPHONE", object: PhoneDevice(type: .iPhone, deviceId: "", manufacture: "", model: ""))
+            iphone.expandable = true
+            let registeredIphoneCount = self.countDevicesFromDatabase(type: "iPhone")
+            iphone.subImagesCount = registeredIphoneCount
+            iphone.childrenCount = registeredIphoneCount
             return ([android, iphone], nil)
         }else{
             if let col = collection {
                 if col.name == "Android" {
-                    return self.loadAndroidDevices()
+                    let androids = self.loadAndroidDevices()
+                    var connectedAndroid = 0
+                    for devi in androids.0 {
+                        if let state = devi.relatedObjectState {
+                            if state == 1 {
+                                connectedAndroid += 1
+                            }
+                        }
+                    }
+                    col.connectedCount = connectedAndroid
+                    return androids
                 }else if col.name == "iPhone" {
-                    return self.loadIPhoneDevices()
+                    let iphones = self.loadIPhoneDevices()
+                    var connectedIphones = 0
+                    for devi in iphones.0 {
+                        if let state = devi.relatedObjectState {
+                            if state == 1 {
+                                connectedIphones += 1
+                            }
+                        }
+                    }
+                    col.connectedCount = connectedIphones
+                    return iphones
                 }
             }
         }
@@ -49,7 +77,13 @@ class DeviceTreeDataSource : TreeDataSource {
     }
     
     private func convertToTreeNode(device: PhoneDevice, connected: Bool) -> TreeCollection {
+        self.logger.log("convert to tree node: \(device) , connected=\(connected)")
         return TreeCollection(device.represent(), id: device.deviceId, object: device, state: connected ? 1 : 0)
+    }
+    
+    private func countDevicesFromDatabase(type: String) -> Int {
+        let devs = DeviceDao.default.getDevices(type: type)
+        return devs.count
     }
     
     private func loadDevicesFromDatabase(type: String) -> ([ImageDevice], [String]) {
@@ -70,7 +104,7 @@ class DeviceTreeDataSource : TreeDataSource {
         
         // devices those connected
         let devices:[String] = Android.bridge.devices()
-//        self.logger.log("android device count: \(devices.count)")
+        self.logger.log("connected android device count: \(devices.count)")
         self.cleanCachedDeviceIds(type: .Android)
         if devices.count > 0 {
             for deviceId in devices {
@@ -130,7 +164,7 @@ class DeviceTreeDataSource : TreeDataSource {
         
         // devices those connected
         let devices:[String] = IPHONE.bridge.devices()
-        logger.log("iphone device count: \(devices.count)")
+        logger.log("connected iphone device count: \(devices.count)")
         self.cleanCachedDeviceIds(type: .iPhone)
         if devices.count > 0 {
             if let device:PhoneDevice = IPHONE.bridge.device() {
