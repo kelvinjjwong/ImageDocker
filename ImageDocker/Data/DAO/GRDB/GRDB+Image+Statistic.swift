@@ -28,21 +28,9 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
         return result
     }
     
-    func countImagesShouldImport(rawStoragePath:String, deviceId:String) -> Int {
-        var result = 0
-        do {
-            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
-            try db.read { db in
-                result = try Image.filter(sql: """
-                importToPath in (
-                select ? || toSubFolder from ImageDevicePath  where deviceId=? and exclude=0 and excludeImported=0
-                )
-                """, arguments:[rawStoragePath, deviceId]).fetchCount(db)
-            }
-        }catch{
-            self.logger.log(error)
-        }
-        return result
+    func countImagesShouldImport(deviceId:String) -> Int {
+        self.logger.log(.todo, "todo function for sqlite")
+        return 0
     }
     
     func countImportedAsEditable(repositoryPath:String) -> Int {
@@ -58,6 +46,11 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
         return result
     }
     
+    func countImportedAsEditable(deviceId:String) -> Int {
+        self.logger.log(.todo, "todo function for sqlite")
+        return 0
+    }
+    
     func countExtractedExif(repositoryPath:String) -> Int {
         var result = 0
         do {
@@ -69,6 +62,11 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
             self.logger.log(error)
         }
         return result
+    }
+    
+    func countExtractedExif(repositoryId:Int) -> Int {
+        self.logger.log(.todo, "todo function for sqlite")
+        return 0
     }
     
     func countRecognizedLocation(repositoryPath:String) -> Int {
@@ -84,6 +82,11 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
         return result
     }
     
+    func countRecognizedLocation(repositoryId:Int) -> Int {
+        self.logger.log(.todo, "todo function for sqlite")
+        return 0
+    }
+    
     func countRecognizedFaces(repositoryPath:String) -> Int {
         var result = 0
         do {
@@ -95,6 +98,11 @@ class ImageCountDaoGRDB : ImageCountDaoInterface {
             self.logger.log(error)
         }
         return result
+    }
+    
+    func countRecognizedFaces(repositoryId:Int) -> Int {
+        self.logger.log(.todo, "todo function for sqlite")
+        return 0
     }
 
     // count by date & place

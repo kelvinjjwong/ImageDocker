@@ -629,8 +629,8 @@ class ImageCountDao {
     /// - attention: will be deprecated
     /// - version: legacy version
     /// - Tag: countImagesShouldImport(rawStoragePath)
-    func countImagesShouldImport(rawStoragePath:String, deviceId:String) -> Int {
-        return self.impl.countImagesShouldImport(rawStoragePath: rawStoragePath, deviceId: deviceId)
+    func countImagesShouldImport(deviceId:String) -> Int {
+        return self.impl.countImagesShouldImport(deviceId: deviceId)
     }
     
     /// - caller:
@@ -642,6 +642,10 @@ class ImageCountDao {
         return self.impl.countImportedAsEditable(repositoryPath: repositoryPath)
     }
     
+    func countImportedAsEditable(deviceId:String) -> Int {
+        return self.impl.countImportedAsEditable(deviceId: deviceId)
+    }
+    
     /// - caller:
     ///   - RepositoryDetailViewController.initView(id:path:...)
     /// - attention: will be deprecated
@@ -649,6 +653,10 @@ class ImageCountDao {
     /// - Tag: countExtractedExif(repositoryPath)
     func countExtractedExif(repositoryPath:String) -> Int {
         return self.impl.countExtractedExif(repositoryPath: repositoryPath)
+    }
+    
+    func countExtractedExif(repositoryId:Int) -> Int {
+        return self.impl.countExtractedExif(repositoryId: repositoryId)
     }
     
     /// - caller:
@@ -660,6 +668,10 @@ class ImageCountDao {
         return self.impl.countRecognizedLocation(repositoryPath: repositoryPath)
     }
     
+    func countRecognizedLocation(repositoryId:Int) -> Int {
+        return self.impl.countRecognizedLocation(repositoryId: repositoryId)
+    }
+    
     /// - caller:
     ///   - RepositoryDetailViewController.initView(id:path:...)
     /// - attention: will be deprecated
@@ -667,6 +679,10 @@ class ImageCountDao {
     /// - Tag: countRecognizedFaces(repositoryPath)
     func countRecognizedFaces(repositoryPath:String) -> Int {
         return self.impl.countRecognizedFaces(repositoryPath: repositoryPath)
+    }
+    
+    func countRecognizedFaces(repositoryId:Int) -> Int {
+        return self.impl.countRecognizedFaces(repositoryId: repositoryId)
     }
     
     /// count by date & place

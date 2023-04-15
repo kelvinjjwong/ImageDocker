@@ -229,7 +229,7 @@ class RepositoryDetailViewController: NSViewController {
         
         
         DispatchQueue.global().async {
-            if let repository = RepositoryDao.default.getRepository(repositoryPath: path) {
+            if let repository = RepositoryDao.default.getRepository(id: self._repositoryId) {
                 
                 var isAndroid = false
                 if repository.deviceId != "" {
@@ -238,11 +238,12 @@ class RepositoryDetailViewController: NSViewController {
                 }
                 
                 let countCopiedFromDevice = ImageCountDao.default.countCopiedFromDevice(deviceId: repository.deviceId)
-                let countShouldImport = isAndroid ? ( ImageCountDao.default.countImagesShouldImport(rawStoragePath: repository.storagePath.withLastStash(), deviceId: repository.deviceId) ) : countCopiedFromDevice
-                let countImported = ImageCountDao.default.countImportedAsEditable(repositoryPath: repository.repositoryPath)
-                let countExtractedExif = ImageCountDao.default.countExtractedExif(repositoryPath: repository.repositoryPath)
-                let countRecognizedLocation = ImageCountDao.default.countRecognizedLocation(repositoryPath: repository.repositoryPath)
-                let countRecognizedFaces = ImageCountDao.default.countRecognizedFaces(repositoryPath: repository.repositoryPath)
+                let countShouldImport = ImageCountDao.default.countImagesShouldImport(deviceId: repository.deviceId)
+//                let countImported = ImageCountDao.default.countImportedAsEditable(repositoryPath: "\(repository.repositoryVolume)\(repository.repositoryPath)")
+                let countImported = ImageCountDao.default.countImportedAsEditable(deviceId: repository.deviceId)
+                let countExtractedExif = ImageCountDao.default.countExtractedExif(repositoryId: repository.id)
+                let countRecognizedLocation = ImageCountDao.default.countRecognizedLocation(repositoryId: repository.id)
+                let countRecognizedFaces = ImageCountDao.default.countRecognizedFaces(repositoryId: repository.id)
                 
                 DispatchQueue.main.async {
                     self.lblCopiedFromDevice.stringValue = "\(countCopiedFromDevice)"
@@ -285,15 +286,15 @@ class RepositoryDetailViewController: NSViewController {
             }
         }
         DispatchQueue.global().async {
-            if let repository = RepositoryDao.default.getRepository(repositoryPath: path) {
+            if let repository = RepositoryDao.default.getRepository(id: self._repositoryId) {
                 
-                let (repoSize, _, _, repoDetail) = LocalDirectory.bridge.getDiskSpace(path: repository.repositoryPath, lblDiskFree: self.lblRepoFree, lblDiskOccupied: self.lblEditableStorageSpace)
+                let (repoSize, _, _, repoDetail) = LocalDirectory.bridge.getDiskSpace(path: "\(repository.repositoryVolume)\(repository.repositoryPath)", lblDiskFree: self.lblRepoFree, lblDiskOccupied: self.lblEditableStorageSpace)
                 self.repoSpace = repoDetail
                 
-                let (backupSize, _, _, backupDetail) = LocalDirectory.bridge.getDiskSpace(path: repository.storagePath, lblDiskFree: self.lblBackupFree, lblDiskOccupied: self.lblBackupSpace)
+                let (backupSize, _, _, backupDetail) = LocalDirectory.bridge.getDiskSpace(path: "\(repository.storageVolume)\(repository.storagePath)", lblDiskFree: self.lblBackupFree, lblDiskOccupied: self.lblBackupSpace)
                 self.backupSpace = backupDetail
                 
-                let (faceSize, _, _, faceDetail) = LocalDirectory.bridge.getDiskSpace(path: repository.cropPath, lblDiskFree: self.lblCropFree, lblDiskOccupied: self.lblCropSpace)
+                let (faceSize, _, _, faceDetail) = LocalDirectory.bridge.getDiskSpace(path: "\(repository.cropVolume)\(repository.cropPath)", lblDiskFree: self.lblCropFree, lblDiskOccupied: self.lblCropSpace)
                 self.faceSpace = faceDetail
                 
                 let totalSizeGB:Double = repoSize + backupSize + faceSize

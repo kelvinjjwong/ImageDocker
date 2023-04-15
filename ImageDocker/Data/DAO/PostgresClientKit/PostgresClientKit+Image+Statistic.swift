@@ -10,6 +10,8 @@ import Foundation
 
 class ImageCountDaoPostgresCK : ImageCountDaoInterface {
     
+    let logger = ConsoleLogger(category: "ImageCountDao", subCategory: "Postgres", includeTypes: [])
+    
     func countCopiedFromDevice(deviceId:String) -> Int {
         let db = PostgresConnection.database()
         return ImageDeviceFile.count(db, where: """
@@ -17,13 +19,25 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         """, parameters:[deviceId])
     }
     
-    func countImagesShouldImport(rawStoragePath:String, deviceId:String) -> Int {
+    func countImagesShouldImport(deviceId:String) -> Int {
         let db = PostgresConnection.database()
-        return ImageDeviceFile.count(db, where: """
-        "importToPath" in (
-        select '\(rawStoragePath)' || "toSubFolder" from "ImageDevicePath"  where "deviceId"='\(deviceId)' and "exclude"=false and "excludeImported"=false
+//        let sql = """
+//        "importToPath" in (
+//        select '\(rawStoragePath)' || "toSubFolder" from "ImageDevicePath"  where "deviceId"='\(deviceId)' and "exclude"=false and "excludeImported"=false
+//        )
+//        """
+        let sql = """
+        select count(1) from "ImageDeviceFile" where "deviceId"='\(deviceId)'
+                                          and "importToPath" || '/' || "importAsFilename" not in
+        (
+        select r."storageVolume" || r."storagePath" || '/' || i."subPath"
+        from "Image" i
+        left join "ImageRepository" r on i."repositoryId" = r.id
+        where r."deviceId"='\(deviceId)'
         )
-        """)
+        """
+        self.logger.log("\(sql)")
+        return db.count(sql: sql)
     }
     
     func countImportedAsEditable(repositoryPath:String) -> Int {
@@ -34,11 +48,34 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         
     }
     
+    func countImportedAsEditable(deviceId:String) -> Int {
+        let sql = """
+        select count(1) from "ImageDeviceFile" where "deviceId"='\(deviceId)'
+                                          and "importToPath" || '/' || "importAsFilename" in
+        (
+        select r."storageVolume" || r."storagePath" || '/' || i."subPath"
+        from "Image" i
+        left join "ImageRepository" r on i."repositoryId" = r.id
+        where r."deviceId"='\(deviceId)'
+        )
+        """
+        let db = PostgresConnection.database()
+        self.logger.log("\(sql)")
+        return db.count(sql: sql)
+    }
+    
     func countExtractedExif(repositoryPath:String) -> Int {
         let db = PostgresConnection.database()
         return Image.count(db, where: """
         "exifCreateDate" is not null and "repositoryPath"=$1
         """, parameters:[repositoryPath])
+    }
+    
+    func countExtractedExif(repositoryId:Int) -> Int {
+        let db = PostgresConnection.database()
+        return Image.count(db, where: """
+        "exifCreateDate" is not null and "repositoryId"=$1
+        """, parameters:[repositoryId])
     }
     
     func countRecognizedLocation(repositoryPath:String) -> Int {
@@ -48,11 +85,25 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         """, parameters:[repositoryPath])
     }
     
+    func countRecognizedLocation(repositoryId:Int) -> Int {
+        let db = PostgresConnection.database()
+        return Image.count(db, where: """
+        ("address" is not null or "assignAddress" is not null) and "repositoryId"=$1
+        """, parameters:[repositoryId])
+    }
+    
     func countRecognizedFaces(repositoryPath:String) -> Int {
         let db = PostgresConnection.database()
         return Image.count(db, where: """
         "recognizedFace"=true and "repositoryPath"=$1
         """, parameters:[repositoryPath])
+    }
+    
+    func countRecognizedFaces(repositoryId:Int) -> Int {
+        let db = PostgresConnection.database()
+        return Image.count(db, where: """
+        "recognizedFace"=true and "repositoryId"=$1
+        """, parameters:[repositoryId])
     }
     
     func countPhotoFiles(year: Int, month: Int, day: Int, ignoreDate: Bool, country: String, province: String, city: String, place: String?, includeHidden: Bool, imageSource: [String]?, cameraModel: [String]?) -> Int {

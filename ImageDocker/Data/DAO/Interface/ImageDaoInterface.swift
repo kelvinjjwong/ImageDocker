@@ -226,15 +226,23 @@ protocol ImageCountDaoInterface {
     
     func countCopiedFromDevice(deviceId:String) -> Int
     
-    func countImagesShouldImport(rawStoragePath:String, deviceId:String) -> Int
+    func countImagesShouldImport(deviceId:String) -> Int
     
     func countImportedAsEditable(repositoryPath:String) -> Int
     
+    func countImportedAsEditable(deviceId:String) -> Int
+    
     func countExtractedExif(repositoryPath:String) -> Int
+    
+    func countExtractedExif(repositoryId:Int) -> Int
     
     func countRecognizedLocation(repositoryPath:String) -> Int
     
+    func countRecognizedLocation(repositoryId:Int) -> Int
+    
     func countRecognizedFaces(repositoryPath:String) -> Int
+    
+    func countRecognizedFaces(repositoryId:Int) -> Int
     
     // count by date & place
     func countPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool, country:String, province:String, city:String, place:String?, includeHidden:Bool, imageSource:[String]?, cameraModel:[String]?) -> Int

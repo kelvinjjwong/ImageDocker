@@ -49,10 +49,10 @@ extension ViewController {
                                                 if state == 1 {
                                                     return "🟢"
                                                 }else {
-                                                    return "⚫️"
+                                                    return ""
                                                 }
                                             }else{
-                                                return "⚫️"
+                                                return ""
                                             }
                                         }
         },

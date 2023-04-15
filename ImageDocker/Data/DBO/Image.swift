@@ -123,6 +123,8 @@ public final class Image : Codable {
     var facesReviewed:Bool? = false
     var repositoryId:Int = 0
     var containerId:Int = 0
+    var deviceId:String = ""
+    var deviceFileId:String = ""
     
     public init() {
         
