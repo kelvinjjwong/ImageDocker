@@ -302,7 +302,8 @@ struct LocalDirectory {
         if path.trimmingCharacters(in: .whitespacesAndNewlines) != ""
             && FileManager.default.fileExists(atPath: path.trimmingCharacters(in: .whitespacesAndNewlines), isDirectory: &isDir)
             && isDir.boolValue == true {
-            var (_, _, mountPoint) = self.freeSpace(path: path)
+            let (totalSize, freeSize, mountPoint) = self.freeSpace(path: path)
+            self.logger.log("mount point: \(mountPoint) - total:\(totalSize), free:\(freeSize)")
             return mountPoint
         }else{
             return ""
@@ -373,27 +374,52 @@ struct LocalDirectory {
         return sizeGB
     }
     
-    public func getRepositoryVolume(repository:ImageRepository) -> [String] {
+    public func getRepositoryVolume(repository:ImageRepository) -> ([String], [String]) {
         var volumes:Set<String> = []
-        volumes.insert(getDiskMountPointVolume(path: repository.homeVolume))
-        volumes.insert(getDiskMountPointVolume(path: repository.repositoryVolume))
-        volumes.insert(getDiskMountPointVolume(path: repository.storageVolume))
-        volumes.insert(getDiskMountPointVolume(path: repository.faceVolume))
-        volumes.insert(getDiskMountPointVolume(path: repository.cropVolume))
-        volumes.remove("")
-        return volumes.sorted()
+        var missingVolumes:Set<String> = []
+        let mountpoint_home = getDiskMountPointVolume(path: repository.homeVolume)
+        let mountpoint_repository = getDiskMountPointVolume(path: repository.repositoryVolume)
+        let mountpoint_storage = getDiskMountPointVolume(path: repository.storageVolume)
+        let mountpoint_face = getDiskMountPointVolume(path: repository.faceVolume)
+        let mountpoint_crop = getDiskMountPointVolume(path: repository.cropVolume)
+        if mountpoint_home != "" {
+            volumes.insert(mountpoint_home)
+        }else{
+            missingVolumes.insert(mountpoint_home)
+        }
+        if mountpoint_repository != "" {
+            volumes.insert(mountpoint_repository)
+        }else{
+            missingVolumes.insert(mountpoint_repository)
+        }
+        if mountpoint_storage != "" {
+            volumes.insert(mountpoint_storage)
+        }else{
+            missingVolumes.insert(mountpoint_storage)
+        }
+        if mountpoint_face != "" {
+            volumes.insert(mountpoint_face)
+        }else{
+            missingVolumes.insert(mountpoint_face)
+        }
+        if mountpoint_crop != "" {
+            volumes.insert(mountpoint_crop)
+        }else{
+            missingVolumes.insert(mountpoint_crop)
+        }
+        return (volumes.sorted(), missingVolumes.sorted())
     }
     
-    public func getRepositoryVolume(repository:ImageContainer) -> [String] {
-        var volumes:Set<String> = []
-        volumes.insert(getDiskMountPointVolume(path: repository.path))
-        volumes.insert(getDiskMountPointVolume(path: repository.storagePath))
-        volumes.insert(getDiskMountPointVolume(path: repository.repositoryPath))
-        volumes.insert(getDiskMountPointVolume(path: repository.facePath))
-        volumes.insert(getDiskMountPointVolume(path: repository.cropPath))
-        volumes.remove("")
-        return volumes.sorted()
-    }
+//    public func getRepositoryVolume(repository:ImageContainer) -> [String] {
+//        var volumes:Set<String> = []
+//        volumes.insert(getDiskMountPointVolume(path: repository.path))
+//        volumes.insert(getDiskMountPointVolume(path: repository.storagePath))
+//        volumes.insert(getDiskMountPointVolume(path: repository.repositoryPath))
+//        volumes.insert(getDiskMountPointVolume(path: repository.facePath))
+//        volumes.insert(getDiskMountPointVolume(path: repository.cropPath))
+//        volumes.remove("")
+//        return volumes.sorted()
+//    }
     
     public func getRepositorySpaceOccupationInGB(repository:ImageContainer, diskUsage:[String:Double]? = nil) -> (Double, Double, Double, Double, [String:Double]) {
         var usage:[String:Double] = [:]

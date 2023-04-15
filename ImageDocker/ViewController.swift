@@ -259,31 +259,31 @@ class ViewController: NSViewController {
     
     func checkRepositoryVolumesMounted() -> ([String], [String], [String]) {
         let volumes_lasttime = PreferencesController.getSavedRepositoryVolumes()
-        let volumes_connected = self.collectRepositoryVolumesConnected()
-        var volumes_missing:[String] = []
-        if volumes_connected.count < volumes_lasttime.count {
-            for volume in volumes_lasttime {
-                if !volumes_connected.contains(volume) {
-                    volumes_missing.append(volume)
-                }
-            }
-        }
+        let (volumes_connected, volumes_missing) = self.collectRepositoryVolumesConnected()
         return (volumes_lasttime, volumes_connected, volumes_missing)
         
     }
     
-    func collectRepositoryVolumesConnected() -> [String] {
-        var volumes:Set<String> = []
+    func collectRepositoryVolumesConnected() -> ([String],[String]) {
+        var _connectedVolumes:Set<String> = []
+        var _missingVolumes:Set<String> = []
         let repos = RepositoryDao.default.getRepositoriesV2(orderBy: "name", condition: nil)
         for repo in repos {
-            let _volumes = LocalDirectory.bridge.getRepositoryVolume(repository: repo)
-            for volume in _volumes {
-                if !volumes.contains(volume) {
-                    volumes.insert(volume)
+            let (connectedVolumes, missingVolumes) = LocalDirectory.bridge.getRepositoryVolume(repository: repo)
+            for volume in connectedVolumes {
+                if !_connectedVolumes.contains(volume) {
+                    _connectedVolumes.insert(volume)
+                }
+            }
+            for volume in missingVolumes {
+                if !_missingVolumes.contains(volume) {
+                    _missingVolumes.insert(volume)
                 }
             }
         }
-        return volumes.sorted()
+        let connected:[String] = Array(_connectedVolumes)
+        let missing:[String] = Array(_missingVolumes)
+        return (connected, missing)
     }
     
     var screenDockHeight = -1
