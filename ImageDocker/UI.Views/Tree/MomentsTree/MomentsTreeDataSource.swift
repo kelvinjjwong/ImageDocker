@@ -20,7 +20,7 @@ class MomentsTreeDataSource : TreeDataSource {
         return collection
     }
     
-    func loadChildren(_ collection: TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?) {
+    func loadChildren(_ collection: TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?, String?) {
         var nodes:[TreeCollection] = []
         var datas:[Moment] = []
         
@@ -41,7 +41,7 @@ class MomentsTreeDataSource : TreeDataSource {
                 nodes.append(node)
             }
         }
-        return (nodes, nil)
+        return (nodes, nil, nil)
     }
     
     func findNode(path: String) -> TreeCollection? {

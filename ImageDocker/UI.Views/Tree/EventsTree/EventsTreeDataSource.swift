@@ -78,11 +78,11 @@ class EventsTreeDataSource : TreeDataSource {
         return node
     }
     
-    func loadChildren(_ collection: TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?) {
+    func loadChildren(_ collection: TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?, String?) {
         
         if collection == nil {
             let moments = ImageSearchDao.default.getImageEvents(condition: condition)
-            return (self.convertEventsToTreeCollections(moments), nil)
+            return (self.convertEventsToTreeCollections(moments), nil, nil)
         }else{
             if let parentNode = collection, let parent = parentNode.relatedObject as? Moment {
                 if parent.event != "" {
@@ -92,7 +92,7 @@ class EventsTreeDataSource : TreeDataSource {
                         let node = self.convertDateToTreeCollection(moment)
                         nodes.append(node)
                     }
-                    return (nodes, nil)
+                    return (nodes, nil, nil)
                 }else{
 //                    self.logger.log("parent event is empty")
                 }
@@ -101,7 +101,7 @@ class EventsTreeDataSource : TreeDataSource {
 //                self.logger.log("EventsTreeDS: no related object")
             }
         }
-        return ([], nil)
+        return ([], nil, nil)
     }
     
     func findNode(path: String) -> TreeCollection? {

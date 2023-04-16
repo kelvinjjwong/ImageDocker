@@ -115,7 +115,7 @@ class TreeCollection {
 
 protocol TreeDataSource {
     
-    func loadChildren(_ collection:TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?)
+    func loadChildren(_ collection:TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?, String?)
     func findNode(path: String) -> TreeCollection?
     func filter(keyword: String)
     func findNode(keyword: String) -> TreeCollection?
@@ -175,7 +175,7 @@ class StaticTreeDataSource : TreeDataSource {
         return result
     }
     
-    func loadChildren(_ collection:TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?) {
+    func loadChildren(_ collection:TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?, String?) {
         
         if let condition = condition, !condition.isEmpty() {
             // TODO: search images first
@@ -204,7 +204,7 @@ class StaticTreeDataSource : TreeDataSource {
             resultDataset.append(child)
         }
         self.logger.log("loaded \(resultDataset.count) children")
-        return (resultDataset, nil)
+        return (resultDataset, nil, nil)
     }
     
     internal func findNode(path: String) -> TreeCollection? {

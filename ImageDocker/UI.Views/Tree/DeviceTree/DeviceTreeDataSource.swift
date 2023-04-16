@@ -14,7 +14,7 @@ class DeviceTreeDataSource : TreeDataSource {
     
     private var deviceIdToDevice : [String : PhoneDevice] = [String : PhoneDevice] ()
     
-    func loadChildren(_ collection: TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?) {
+    func loadChildren(_ collection: TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?, String?) {
         
         if let condition = condition, !condition.isEmpty() {
             // TODO: search ImageDeviceFile first ??
@@ -31,7 +31,7 @@ class DeviceTreeDataSource : TreeDataSource {
             let registeredIphoneCount = self.countDevicesFromDatabase(type: "iPhone")
             iphone.subImagesCount = registeredIphoneCount
             iphone.childrenCount = registeredIphoneCount
-            return ([android, iphone], nil)
+            return ([android, iphone], nil, nil)
         }else{
             if let col = collection {
                 if col.name == "Android" {
@@ -61,7 +61,7 @@ class DeviceTreeDataSource : TreeDataSource {
                 }
             }
         }
-        return ([], nil)
+        return ([], nil, nil)
     }
     
     func findNode(path: String) -> TreeCollection? {
@@ -97,7 +97,7 @@ class DeviceTreeDataSource : TreeDataSource {
         return (devs, deviceIds)
     }
     
-    private func loadAndroidDevices() -> ([TreeCollection], String?) {
+    private func loadAndroidDevices() -> ([TreeCollection], String?, String?) {
         var nodes:[TreeCollection] = []
         
         var (devs, deviceIds) = self.loadDevicesFromDatabase(type: "Android")
@@ -144,18 +144,18 @@ class DeviceTreeDataSource : TreeDataSource {
             
         }
         logger.log("loader loaded count \(nodes.count)")
-        return (nodes, message)
+        return (nodes, message, "Android")
     }
     
-    private func loadIPhoneDevices() -> ([TreeCollection], String?) {
+    private func loadIPhoneDevices() -> ([TreeCollection], String?, String?) {
         if Setting.localEnvironment.iosDeviceMountPoint() == "" {
-            return ([], Words.device_tree_setup_mountpoint_for_ios.word())
+            return ([], Words.device_tree_setup_mountpoint_for_ios.word(), "iPhone")
         }
         
         if !IPHONE.bridge.validCommands() {
 //                self.showTreeNodeButton(collection: collection, image: NSImage(named: .caution))
             
-            return ([], Words.device_tree_ifuse_not_installed.word())
+            return ([], Words.device_tree_ifuse_not_installed.word(), "iPhone")
         }
         
         var nodes:[TreeCollection] = []
@@ -184,7 +184,7 @@ class DeviceTreeDataSource : TreeDataSource {
                 }
             }else{
                 logger.log("Unable to connect to ios device: \(devices[0])")
-                return ([], Words.device_tree_unable_to_connect_ios.word())
+                return ([], Words.device_tree_unable_to_connect_ios.word(), "iPhone")
             }
         }
         // devices those not connected
@@ -208,7 +208,7 @@ class DeviceTreeDataSource : TreeDataSource {
             message = Words.device_tree_no_ios_connected.word()
         }
         logger.log("loader loaded count \(nodes.count)")
-        return (nodes, message)
+        return (nodes, message, "iPhone")
     }
     
     private func cleanCachedDeviceIds(type:MobileType){

@@ -113,11 +113,11 @@ class PlacesTreeDataSource : TreeDataSource {
         return node
     }
     
-    func loadChildren(_ collection: TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?) {
+    func loadChildren(_ collection: TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?, String?) {
         
         if collection == nil {
             let moments = ImageSearchDao.default.getMomentsByPlace(.PLACE, condition: condition)
-            return (self.convertPlacesToTreeCollections(moments), nil)
+            return (self.convertPlacesToTreeCollections(moments), nil, nil)
         }else{
             if let parentNode = collection, let parent = parentNode.relatedObject as? Moment {
                 if parent.place != "" {
@@ -137,7 +137,7 @@ class PlacesTreeDataSource : TreeDataSource {
                         let node = self.convertDateToTreeCollection(moment)
                         nodes.append(node)
                     }
-                    return (nodes, nil)
+                    return (nodes, nil, nil)
                 }else{
 //                    self.logger.log("parent place is empty")
                 }
@@ -146,7 +146,7 @@ class PlacesTreeDataSource : TreeDataSource {
 //                self.logger.log("PlacesTreeDS: no related object")
             }
         }
-        return ([], nil)
+        return ([], nil, nil)
     }
     
     func findNode(path: String) -> TreeCollection? {

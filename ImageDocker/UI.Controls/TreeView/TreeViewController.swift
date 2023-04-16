@@ -22,7 +22,7 @@ class TreeViewController : StackBodyViewController {
     @IBOutlet weak var outlineView: TreeOutlineView!
     @IBOutlet weak var scrollView: NSScrollView!
     
-    var collectionLoader:((TreeCollection?, SearchCondition) -> ([TreeCollection], String?))?
+    var collectionLoader:((TreeCollection?, SearchCondition) -> ([TreeCollection], String?, String?))?
     var collectionIcon:((TreeCollection) -> NSImage)?
     var collectionTitle:((TreeCollection) -> String)?
     var collectionValue:((TreeCollection) -> String)?
@@ -68,11 +68,15 @@ class TreeViewController : StackBodyViewController {
         let condition = SearchCondition.get(from: stackItemContainer!.header.searchCondition, separator: "|") // search includes hidden images
         DispatchQueue.global().async {
             if self.collectionLoader != nil {
-                let (treeNodes, message) = self.collectionLoader!(nil, condition)
+                let (treeNodes, message, messageType) = self.collectionLoader!(nil, condition)
                 self.trees = treeNodes
                 
                 if let msg = message {
-                    MessageEventCenter.default.showMessage(type: "TREE", name: "NODES", message: msg)
+                    if let msgType = messageType {
+                        MessageEventCenter.default.showMessage(type: "TREE", name: msgType, message: msg)
+                    }else{
+                        MessageEventCenter.default.showMessage(type: "TREE", name: "NODES", message: msg)
+                    }
                 }
             }
             DispatchQueue.main.async {
@@ -256,7 +260,7 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate, Tr
         let condition = SearchCondition.get(from: self.stackItemContainer!.header.searchCondition, separator: "|") // search includes hidden images
         DispatchQueue.global().async {
             if self.collectionLoader != nil {
-                let (treeNodes, message) = self.collectionLoader!(item, condition)
+                let (treeNodes, message, messageType) = self.collectionLoader!(item, condition)
                 
                 if treeNodes.count > 0 {
                     self.logger.log("loaded \(treeNodes.count) child nodes")
@@ -276,7 +280,11 @@ extension TreeViewController: NSOutlineViewDataSource, NSOutlineViewDelegate, Tr
                     self.logger.log("loaded 0 child nodes")
                 }
                 if let msg = message {
-                    MessageEventCenter.default.showMessage(type: "TREE", name: "EXPAND", message: msg)
+                    if let msgType = messageType {
+                        MessageEventCenter.default.showMessage(type: "TREE", name: msgType, message: msg)
+                    }else{
+                        MessageEventCenter.default.showMessage(type: "TREE", name: "EXPAND", message: msg)
+                    }
                 }
             }
         }

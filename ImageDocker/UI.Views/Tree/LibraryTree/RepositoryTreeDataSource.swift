@@ -36,19 +36,19 @@ class RepositoryTreeDataSource : TreeDataSource {
         return node
     }
     
-    func loadChildren(_ collection: TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?) {
+    func loadChildren(_ collection: TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?, String?) {
         
         if collection == nil {
-            return (self.loadRepositories(condition: condition), nil)
+            return (self.loadRepositories(condition: condition), nil, nil)
         }else{
             if let repository = collection?.relatedObject as? ImageRepository {
                 let path = Naming.Image.generateFullAbsoluteRepositoryPath(repositoryVolume: repository.repositoryVolume, repositoryPath: repository.repositoryPath)
-                return (self.loadSubContainers(repositoryId: repository.id), nil)  //.loadSubContainers(parentPath: path, condition: condition), nil)
+                return (self.loadSubContainers(repositoryId: repository.id), nil, nil)  //.loadSubContainers(parentPath: path, condition: condition), nil)
             }else if let container = collection?.relatedObject as? ImageContainer {
-                    return (self.loadSubContainers(containerId: container.id), nil) //.loadSubContainers(parentPath: container.path, condition: condition), nil)
+                    return (self.loadSubContainers(containerId: container.id), nil, nil) //.loadSubContainers(parentPath: container.path, condition: condition), nil)
             }
         }
-        return ([], nil)
+        return ([], nil, nil)
     }
     
     func loadRepositories(condition:SearchCondition? = nil) -> [TreeCollection] {
