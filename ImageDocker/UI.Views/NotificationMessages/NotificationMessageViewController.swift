@@ -79,7 +79,7 @@ class NotificationMessageViewController: NSViewController {
         self.notificationMessages.append(notificationMessage)
         self.messagesView[notificationMessage.id] = viewController
         //task.state = "READY"
-        stackView.addArrangedSubview(viewController.view)
+        stackView.insertArrangedSubview(viewController.view, at: 0)
         //addChildViewController(viewController)
         return true
     }
