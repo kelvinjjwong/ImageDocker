@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -48,7 +47,7 @@
                     </scroller>
                 </scrollView>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UtA-Mg-ywW">
-                    <rect key="frame" x="1" y="164" width="116" height="32"/>
+                    <rect key="frame" x="0.0" y="165" width="118" height="32"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="104" id="uQe-x1-QNl"/>
                     </constraints>
@@ -61,7 +60,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aoJ-ky-WbA">
-                    <rect key="frame" x="438" y="164" width="198" height="32"/>
+                    <rect key="frame" x="437" y="165" width="200" height="32"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="186" id="IGK-DL-KGN"/>
                     </constraints>
@@ -74,7 +73,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zSt-lJ-vPB">
-                    <rect key="frame" x="296" y="164" width="132" height="32"/>
+                    <rect key="frame" x="295" y="165" width="134" height="32"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="120" id="4S7-Vr-633"/>
                     </constraints>
@@ -103,7 +102,7 @@
         </customView>
     </objects>
     <resources>
-        <image name="NSStopProgressFreestandingTemplate" width="14" height="14"/>
+        <image name="NSStopProgressFreestandingTemplate" width="20" height="20"/>
         <image name="broom" width="16" height="16"/>
     </resources>
 </document>

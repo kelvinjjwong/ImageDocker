@@ -74,8 +74,13 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var scrollviewMetaInfoTable: NSScrollView!
     
+    // MARK: - NOTIFICATION MESSAGES
+    
     var notificationPopover:NSPopover?
     var notificationViewController:NotificationViewController!
+    
+    var notificationMessagesPopover:NSPopover?
+    var notificationMessageViewController:NotificationMessageViewController!
     
     // MARK: - TASK
     
@@ -356,6 +361,7 @@ class ViewController: NSViewController {
         MessageEventCenter.default.messagePresenter = { message in
             self.popNotification(message: message)
         }
+        
         self.hideNotification()
 //        self.logger.log("Loading view - preview zone")
         self.configurePreview()
@@ -411,6 +417,17 @@ class ViewController: NSViewController {
         self.startSchedules()
 //        self.logger.log(.debug, "")
 //        self.logger.log("Loading view: DONE")
+        
+        
+        
+        NotificationMessageManager.default.createNotificationMessage(type: "HealthCheck", name: "Volumes_Connected", message: "Volumes connected: \(volumes_connected)")
+        if volumes_missing.count > 0 {
+            NotificationMessageManager.default.createNotificationMessage(type: "HealthCheck", name: "Volumes_Missing", message: "Volumes missing: \(volumes_missing)")
+        }else{
+            NotificationMessageManager.default.createNotificationMessage(type: "HealthCheck", name: "Volumes_Missing", message: "Volumes missing: none")
+        }
+        
+        NotificationMessageManager.default.printAll()
     }
     
     override func viewDidLoad() {
@@ -421,6 +438,8 @@ class ViewController: NSViewController {
         self.logger.log("before splash - frame \(self.view.bounds)")
         
         NotificationCenter.default.addObserver(self, selector: #selector(changeTasksCount(notification:)), name: NSNotification.Name(rawValue: TaskletManager.NOTIFICATION_KEY_TASKCOUNT), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(changeNotificationMessagesCount(notification:)), name: NSNotification.Name(rawValue: NotificationMessageManager.NOTIFICATION_KEY_MESSAGECOUNT), object: nil)
         
         self.imagesLoader = CollectionViewItemsLoader()
         
@@ -472,9 +491,17 @@ class ViewController: NSViewController {
         }
     }
     
+    @objc func changeNotificationMessagesCount(notification:Notification) {
+        if let status = notification.object as? NotificationMessagesStatus {
+            DispatchQueue.main.async {
+                self.btnNotification.title = Words.notifications.fill(arguments: status.totalCount)
+            }
+        }
+    }
+    
     @objc func processDatabaseError(notification:Notification) {
         if let error = notification.object as? Error {
-            MessageEventCenter.default.showMessage(message: "\(Words.dbError.word()): \(error)")
+            MessageEventCenter.default.showMessage(type: "ERROR", name:"DATABASE", message: "\(Words.dbError.word()): \(error)")
         }
     }
     
@@ -621,6 +648,13 @@ class ViewController: NSViewController {
     @IBAction func onTasksClicked(_ sender: NSButton) {
         self.popTasks(sender)
     }
+    
+    @IBAction func onNotificationMessagesClicked(_ sender: NSButton) {
+        
+        NotificationMessageManager.default.printAll()
+        self.popNotifications(sender)
+    }
+    
     
     @IBAction func onToggleLeftPanel(_ sender: NSButton) {
         let leftPanel = self.leftVerticalSplitView.arrangedSubviews[0]

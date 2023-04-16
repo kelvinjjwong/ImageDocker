@@ -146,7 +146,7 @@ protocol CollectionViewItemPreviewMessageDelegate {
 
 extension ViewController : CollectionViewItemPreviewMessageDelegate {
     func onCollectionViewItemPreviewMessage(description:String) {
-        MessageEventCenter.default.showMessage(message: description)
+        MessageEventCenter.default.showMessage(type: "IMAGE", name: "DESCRIPTION", message: description)
     }
 }
 

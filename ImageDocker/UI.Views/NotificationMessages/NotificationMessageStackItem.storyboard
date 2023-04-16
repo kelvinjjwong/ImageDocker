@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Notifications View Controller-->
+        <scene sceneID="2Kh-8g-KiL">
+            <objects>
+                <viewController storyboardIdentifier="NotificationMessages" id="Pqe-KO-oQE" customClass="NotificationsViewController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="gVK-GJ-1eZ">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="120"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="BfZ-oQ-RfO">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="120"/>
+                                <subviews>
+                                    <box title="Message" translatesAutoresizingMaskIntoConstraints="NO" id="4KH-9N-64X">
+                                        <rect key="frame" x="17" y="6" width="566" height="104"/>
+                                        <view key="contentView" id="8Yg-aS-eY3">
+                                            <rect key="frame" x="4" y="5" width="558" height="84"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gtX-mx-oUe">
+                                                    <rect key="frame" x="8" y="24" width="434" height="50"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="50" id="rb2-ez-R8V"/>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="tdL-J2-aEE"/>
+                                                    </constraints>
+                                                    <textFieldCell key="cell" allowsUndo="NO" title="Label" id="gob-dw-iK1">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oXq-4R-tsh">
+                                                    <rect key="frame" x="443" y="50" width="114" height="32"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="100" id="KqF-lD-P93"/>
+                                                    </constraints>
+                                                    <buttonCell key="cell" type="push" title="Remove" bezelStyle="rounded" image="NSStopProgressFreestandingTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="768-AI-Jfb">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="onRemoveClicked:" target="Pqe-KO-oQE" id="2MM-L1-ubB"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="oXq-4R-tsh" firstAttribute="leading" secondItem="gtX-mx-oUe" secondAttribute="trailing" constant="10" id="N6b-14-vst"/>
+                                                <constraint firstAttribute="trailing" secondItem="oXq-4R-tsh" secondAttribute="trailing" constant="8" id="QYi-74-Xzg"/>
+                                                <constraint firstItem="gtX-mx-oUe" firstAttribute="top" secondItem="8Yg-aS-eY3" secondAttribute="top" constant="10" id="SqN-AO-SlZ"/>
+                                                <constraint firstItem="oXq-4R-tsh" firstAttribute="top" secondItem="8Yg-aS-eY3" secondAttribute="top" constant="7" id="TmE-6V-2y0"/>
+                                                <constraint firstItem="gtX-mx-oUe" firstAttribute="leading" secondItem="8Yg-aS-eY3" secondAttribute="leading" constant="10" id="eaj-23-aj5"/>
+                                            </constraints>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="450" id="E8q-I0-wtV"/>
+                                            <constraint firstAttribute="height" constant="100" id="iGf-Jx-7Qc"/>
+                                        </constraints>
+                                    </box>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="4KH-9N-64X" firstAttribute="leading" secondItem="BfZ-oQ-RfO" secondAttribute="leading" constant="20" id="BRM-yk-H53"/>
+                                    <constraint firstItem="4KH-9N-64X" firstAttribute="top" secondItem="BfZ-oQ-RfO" secondAttribute="top" constant="10" id="Ilc-aR-tjC"/>
+                                    <constraint firstAttribute="bottom" secondItem="4KH-9N-64X" secondAttribute="bottom" constant="10" id="r05-My-nGs"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="500" id="sg1-HB-ZGl"/>
+                                    <constraint firstAttribute="trailing" secondItem="4KH-9N-64X" secondAttribute="trailing" constant="20" id="ukF-OM-iY8"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="120" id="yY1-5l-5CA"/>
+                                </constraints>
+                            </customView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="BfZ-oQ-RfO" secondAttribute="trailing" id="QeR-gP-c2c"/>
+                            <constraint firstItem="BfZ-oQ-RfO" firstAttribute="top" secondItem="gVK-GJ-1eZ" secondAttribute="top" id="ZDv-mX-oOH"/>
+                            <constraint firstAttribute="bottom" secondItem="BfZ-oQ-RfO" secondAttribute="bottom" id="lEB-JO-c9I"/>
+                            <constraint firstItem="BfZ-oQ-RfO" firstAttribute="leading" secondItem="gVK-GJ-1eZ" secondAttribute="leading" id="r0V-dB-Paf"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="box" destination="4KH-9N-64X" id="EcR-VX-qUi"/>
+                        <outlet property="btnRemove" destination="oXq-4R-tsh" id="HsW-0w-cAc"/>
+                        <outlet property="lblMessage" destination="gtX-mx-oUe" id="Kfg-u4-sDm"/>
+                    </connections>
+                </viewController>
+                <customObject id="bZc-rI-mgg" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="109" y="72"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="NSStopProgressFreestandingTemplate" width="20" height="20"/>
+    </resources>
+</document>

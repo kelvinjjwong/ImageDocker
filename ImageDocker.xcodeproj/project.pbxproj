@@ -23,6 +23,12 @@
 		5C511752297C388000F64CF6 /* FontAwesome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C511751297C388000F64CF6 /* FontAwesome.swift */; };
 		5C511755297C3A8700F64CF6 /* FontAwesome in Resources */ = {isa = PBXBuildFile; fileRef = 5C511754297C3A8700F64CF6 /* FontAwesome */; };
 		5C511758297C3ABE00F64CF6 /* FontAwesomeEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C511757297C3ABE00F64CF6 /* FontAwesomeEnum.swift */; };
+		5CA18B4629EB23EE00C5502E /* ViewController+NotificationMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA18B4529EB23EE00C5502E /* ViewController+NotificationMessage.swift */; };
+		5CA18B4929EB250B00C5502E /* NotificationMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA18B4729EB250B00C5502E /* NotificationMessageViewController.swift */; };
+		5CA18B4A29EB250B00C5502E /* NotificationMessageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5CA18B4829EB250B00C5502E /* NotificationMessageViewController.xib */; };
+		5CA18B5429EB294300C5502E /* NotificationMessageStackItem.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CA18B5329EB294300C5502E /* NotificationMessageStackItem.storyboard */; };
+		5CA18B5629EB296000C5502E /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA18B5529EB296000C5502E /* NotificationsViewController.swift */; };
+		5CA18B5929EB735D00C5502E /* NotificationMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA18B5829EB735D00C5502E /* NotificationMessageManager.swift */; };
 		5CB92EDB2912A9D600C5C42F /* Words+Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB92EDA2912A9D600C5C42F /* Words+Preferences.swift */; };
 		8E00BB8E2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E00BB8D2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift */; };
 		8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015120208F7D23009C2549 /* StackedImageViewController.swift */; };
@@ -398,6 +404,12 @@
 		5C511751297C388000F64CF6 /* FontAwesome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontAwesome.swift; sourceTree = "<group>"; };
 		5C511754297C3A8700F64CF6 /* FontAwesome */ = {isa = PBXFileReference; lastKnownFileType = folder; path = FontAwesome; sourceTree = "<group>"; };
 		5C511757297C3ABE00F64CF6 /* FontAwesomeEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontAwesomeEnum.swift; sourceTree = "<group>"; };
+		5CA18B4529EB23EE00C5502E /* ViewController+NotificationMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+NotificationMessage.swift"; sourceTree = "<group>"; };
+		5CA18B4729EB250B00C5502E /* NotificationMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationMessageViewController.swift; sourceTree = "<group>"; };
+		5CA18B4829EB250B00C5502E /* NotificationMessageViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotificationMessageViewController.xib; sourceTree = "<group>"; };
+		5CA18B5329EB294300C5502E /* NotificationMessageStackItem.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = NotificationMessageStackItem.storyboard; sourceTree = "<group>"; };
+		5CA18B5529EB296000C5502E /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
+		5CA18B5829EB735D00C5502E /* NotificationMessageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationMessageManager.swift; sourceTree = "<group>"; };
 		5CB92EDA2912A9D600C5C42F /* Words+Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Preferences.swift"; sourceTree = "<group>"; };
 		82AE2A4F2692BE8252178D24 /* Pods_ImageDocker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImageDocker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E00BB8D2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Menu+ImageOptions.swift"; sourceTree = "<group>"; };
@@ -789,6 +801,26 @@
 				5C511757297C3ABE00F64CF6 /* FontAwesomeEnum.swift */,
 			);
 			path = FontAwesome;
+			sourceTree = "<group>";
+		};
+		5CA18B4429EB235500C5502E /* NotificationMessages */ = {
+			isa = PBXGroup;
+			children = (
+				5CA18B4529EB23EE00C5502E /* ViewController+NotificationMessage.swift */,
+				5CA18B4729EB250B00C5502E /* NotificationMessageViewController.swift */,
+				5CA18B4829EB250B00C5502E /* NotificationMessageViewController.xib */,
+				5CA18B5329EB294300C5502E /* NotificationMessageStackItem.storyboard */,
+				5CA18B5529EB296000C5502E /* NotificationsViewController.swift */,
+			);
+			path = NotificationMessages;
+			sourceTree = "<group>";
+		};
+		5CA18B5729EB730300C5502E /* NotificationMessage */ = {
+			isa = PBXGroup;
+			children = (
+				5CA18B5829EB735D00C5502E /* NotificationMessageManager.swift */,
+			);
+			path = NotificationMessage;
 			sourceTree = "<group>";
 		};
 		891C048F0A2717E11DC7AB76 /* Pods */ = {
@@ -1313,6 +1345,7 @@
 		8EB986AC20B223550075B081 /* Backend */ = {
 			isa = PBXGroup;
 			children = (
+				5CA18B5729EB730300C5502E /* NotificationMessage */,
 				8ECA1FEE23E328B500F56895 /* FileIO */,
 				8ECA1FED23E3288B00F56895 /* Exif */,
 				8ECA1FEC23E3287400F56895 /* Face */,
@@ -1448,6 +1481,7 @@
 		8ECA1FEA23E3275E00F56895 /* UI.Views */ = {
 			isa = PBXGroup;
 			children = (
+				5CA18B4429EB235500C5502E /* NotificationMessages */,
 				8E08D87325DBD2E0009A365F /* MainMenu */,
 				8E08D87225DBD20B009A365F /* MainCollection */,
 				8EB271A92346B151003BF3AF /* TaskProgress */,
@@ -1854,6 +1888,7 @@
 				8EC82EAC2121C5A200FC0899 /* AddLocalDirectoryViewController.xib in Resources */,
 				8E4095F8259397FC00BF717B /* ExportProfileItem.storyboard in Resources */,
 				8E8D4716222991230091E9C3 /* FaceCollectionViewItem.xib in Resources */,
+				5CA18B4A29EB250B00C5502E /* NotificationMessageViewController.xib in Resources */,
 				8E0AFA41208BDEA100CE8B68 /* Assets.xcassets in Resources */,
 				8E3FA91D235310AA00B677A3 /* MemoriesViews.storyboard in Resources */,
 				8EBC0183236B072F00FB6E2F /* TwoColumnTableViewController.xib in Resources */,
@@ -1883,6 +1918,7 @@
 				8EB271A623418503003BF3AF /* ExportProfileItemConfig.storyboard in Resources */,
 				8E9D8045234990A00062692A /* DeviceCopyView.storyboard in Resources */,
 				8E4095FE25939A0900BF717B /* ExportProfilesViewController.xib in Resources */,
+				5CA18B5429EB294300C5502E /* NotificationMessageStackItem.storyboard in Resources */,
 				8EB271A423413CE7003BF3AF /* ExportConfigurationViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2006,6 +2042,7 @@
 				8E8D471222279AA80091E9C3 /* FaceCollectionViewItemsLoader.swift in Sources */,
 				8E15E73C23AC74DC0094240A /* TreeDataSource.swift in Sources */,
 				8EFA02E1243B3E5200D7C355 /* PostgresClientKit+Image+Statistic.swift in Sources */,
+				5CA18B5929EB735D00C5502E /* NotificationMessageManager.swift in Sources */,
 				8ECA1FFB23E5751300F56895 /* LibraryTree+ExtendView.swift in Sources */,
 				8E9CF30F2648D42500558423 /* ChangeEvent.swift in Sources */,
 				8E95739A20EBEBD7003BD651 /* FilterViewController.swift in Sources */,
@@ -2044,6 +2081,7 @@
 				8EB986BA20B30C920075B081 /* ImageFile.swift in Sources */,
 				5C51173F296998A900F64CF6 /* RepositoryDevice.swift in Sources */,
 				8EFA02F5243B3F0C00D7C355 /* DBEngine+PostgresConnection+PostgresClientKit.swift in Sources */,
+				5CA18B5629EB296000C5502E /* NotificationsViewController.swift in Sources */,
 				8EFA02E9243B3E9B00D7C355 /* PostgresClientKit+ImagePlace.swift in Sources */,
 				8EEB88842090B44B00CDEC81 /* ImageDropView.swift in Sources */,
 				8EBA9DE7217477D900DACAAD /* UIHelper.swift in Sources */,
@@ -2127,6 +2165,7 @@
 				8E8D471022213A330091E9C3 /* PeopleFace.swift in Sources */,
 				8EF4E1F72453C05800999DD1 /* SchemaVersionMigration.swift in Sources */,
 				8E4DECE923B38A7B00F5538C /* ImageEvent.swift in Sources */,
+				5CA18B4629EB23EE00C5502E /* ViewController+NotificationMessage.swift in Sources */,
 				8E73E382223E494C00C14A90 /* ExecutionEnvironment.swift in Sources */,
 				8EB321CD20FA42AB00D8C71D /* Duplicate.swift in Sources */,
 				5C5117432972E7B900F64CF6 /* ImageFolderTreeScanner+EXIF.swift in Sources */,
@@ -2220,6 +2259,7 @@
 				8E3EC3B4214DB1B8004B6125 /* LunarSolarConverter.swift in Sources */,
 				8EB271572337B9C3003BF3AF /* GRDB+Image+Search.swift in Sources */,
 				8EF8C562266329160060D2E0 /* MessageEventCenter.swift in Sources */,
+				5CA18B4929EB250B00C5502E /* NotificationMessageViewController.swift in Sources */,
 				8EB271A823418C68003BF3AF /* ExportProfileViewController.swift in Sources */,
 				8EB27170233E15B0003BF3AF /* TreeController+LibrarySectionMenu.swift in Sources */,
 				8EBA9DDF216F8BB100DACAAD /* NotesViewController.swift in Sources */,

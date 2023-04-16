@@ -35,4 +35,11 @@ class MessageEventCenter {
     func showMessage(message:String){
         NotificationCenter.default.post(name: MessageType.GLOBAL_NOTIFICATION, object: message)
     }
+    
+    func showMessage(type:String, name:String, message:String){
+        NotificationCenter.default.post(name: MessageType.GLOBAL_NOTIFICATION, object: message)
+        DispatchQueue.main.async {
+            NotificationMessageManager.default.createNotificationMessage(type: type, name: name, message: message)
+        }
+    }
 }

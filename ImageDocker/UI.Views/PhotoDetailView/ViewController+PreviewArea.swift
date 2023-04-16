@@ -24,7 +24,7 @@ extension ViewController {
                 pasteboard.declareTypes([.string], owner: nil)
                 pasteboard.setString(value, forType: .string)
                 
-                MessageEventCenter.default.showMessage(message: Words.copied_meta_value_to_pasteboard.word())
+                MessageEventCenter.default.showMessage(type: "IMAGE", name: "META_COPIER", message: Words.copied_meta_value_to_pasteboard.word())
             }
             
         }

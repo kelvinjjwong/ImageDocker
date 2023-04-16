@@ -10,6 +10,11 @@ import Foundation
 
 extension Words {
     
+    static let notifications_no_message = Localize(
+        eng: "No message.",
+        chs: "没有消息通知."
+    )
+    
     static let library_tree_calculate_space = Localize (
         eng: "Calculate Space Occupation",
         chs: "统计磁盘空间占用"

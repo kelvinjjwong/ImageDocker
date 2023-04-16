@@ -55,10 +55,10 @@ class ImagePreviewController : NSViewController {
             self.logger.log("rotate from \(originDegree) to \(degree)")
             let dbState = ImageRecordDao.default.updateImageRotation(path: imageData.path, rotation: degree)
             if dbState != .OK {
-                MessageEventCenter.default.showMessage(message: "Failed to update image with rotation \(degree)")
+                MessageEventCenter.default.showMessage(type: "IMAGE", name:"ROTATE", message: "Failed to update image with rotation \(degree)")
             }else{
                 imageData.rotation = degree
-                MessageEventCenter.default.showMessage(message: "Rotated, you may need to refresh collection.")
+                MessageEventCenter.default.showMessage(type: "IMAGE", name:"ROTATE", message: "Rotated, you may need to refresh collection.")
                 if imageType == .photo {
                     if let nsImage = self.getImageFromPreview?() {
                         self.previewImage?(nsImage.rotate(degrees: CGFloat(degree)))
@@ -95,10 +95,10 @@ class ImagePreviewController : NSViewController {
             }
             let dbState = ImageRecordDao.default.updateImageRotation(path: imageData.path, rotation: degree)
             if dbState != .OK {
-                MessageEventCenter.default.showMessage(message: "Failed to update image with rotation \(degree)")
+                MessageEventCenter.default.showMessage(type: "IMAGE", name:"ROTATE", message: "Failed to update image with rotation \(degree)")
             }else{
                 imageData.rotation = degree
-                MessageEventCenter.default.showMessage(message: "Rotated, you may need to refresh collection.")
+                MessageEventCenter.default.showMessage(type: "IMAGE", name:"ROTATE", message: "Rotated, you may need to refresh collection.")
                 if imageType == .photo {
                     if let nsImage = self.getImageFromPreview?() {
                         self.previewImage?(nsImage.rotate(degrees: CGFloat(degree)))
