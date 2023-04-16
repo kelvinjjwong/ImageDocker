@@ -409,7 +409,7 @@ class DeviceCopyViewController: NSViewController {
         }
     }
     
-    fileprivate func loadFromOnDevicePath(path:String, reloadFileList:Bool = false, checksumMode:ChecksumMode = .Rough, excludePaths:[String]){
+    fileprivate func loadFromOnDevicePath(path:String, devicePath:ImageDevicePath?, reloadFileList:Bool = false, checksumMode:ChecksumMode = .Rough, excludePaths:[String]){
         
         DispatchQueue.main.async {
             self.deviceFiles_filtered[path] = []
@@ -478,6 +478,15 @@ class DeviceCopyViewController: NSViewController {
                 }
             }
             
+            if deviceFile.devicePathId == "" {
+                // new record, need save
+                deviceFile.fileMD5 = f.fileMD5
+                if let devicePath = devicePath {
+                    deviceFile.devicePathId = devicePath.id
+                }
+                DeviceDao.default.saveDeviceFile(file: deviceFile)
+            }
+            
             DispatchQueue.main.async {
                 self.deviceFiles_fulllist[path]!.append(f)
                 if checksumMode == .Rough {
@@ -508,7 +517,7 @@ class DeviceCopyViewController: NSViewController {
     func loadFromPath(path: DeviceCopyDestination, reloadFileList:Bool = false, checksumMode:ChecksumMode = .Rough, excludePaths:[String]) {
         
         if path.type == .onDevice {
-            loadFromOnDevicePath(path: path.sourcePath, reloadFileList: reloadFileList, checksumMode: checksumMode, excludePaths: excludePaths)
+            loadFromOnDevicePath(path: path.sourcePath, devicePath: path.data, reloadFileList: reloadFileList, checksumMode: checksumMode, excludePaths: excludePaths)
         }else if path.type == .localDirectory {
             loadFromLocalPath(path: path.sourcePath, pretendPath: path.toSubFolder, reloadFileList:reloadFileList)
         }

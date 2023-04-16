@@ -9,7 +9,7 @@
 import Foundation
 import GRDB
 
-struct ImageDeviceFile : Codable {
+public final class ImageDeviceFile : Codable {
     
     var fileId:String?
     var deviceId:String?
@@ -22,26 +22,27 @@ struct ImageDeviceFile : Codable {
     var importToPath:String?
     var importAsFilename:String?
     var localFilePath:String?
+    var devicePathId:String = ""
+    var importedImageId:String = ""
+    
+    public init() {
+        
+    }
     
     static func new(fileId:String, deviceId:String, path:String, filename:String, fileDateTime:String, fileSize:String) -> ImageDeviceFile {
-        return ImageDeviceFile(
-            fileId: fileId,
-            deviceId: deviceId,
-            filename: filename,
-            path: path,
-            fileDateTime: fileDateTime,
-            fileSize: fileSize,
-            fileMD5: nil,
-            importDate: nil,
-            importToPath: nil,
-            importAsFilename: nil,
-            localFilePath: nil
-        )
+        let obj = ImageDeviceFile()
+        obj.fileId = fileId
+        obj.deviceId = deviceId
+        obj.filename = filename
+        obj.path = path
+        obj.fileDateTime = fileDateTime
+        obj.fileSize = fileSize
+        return obj
     }
 }
 
 extension ImageDeviceFile: FetchableRecord, MutablePersistableRecord, TableRecord {
-    mutating func didInsert(with rowID: Int64, for column: String?) {
+    public func didInsert(with rowID: Int64, for column: String?) {
         // Update id after insertion
         //id = rowID
     }
@@ -49,11 +50,11 @@ extension ImageDeviceFile: FetchableRecord, MutablePersistableRecord, TableRecor
 
 
 extension ImageDeviceFile : PostgresRecord {
-    func postgresTable() -> String {
+    public func postgresTable() -> String {
         return "ImageDeviceFile"
     }
     
-    func primaryKeys() -> [String] {
+    public func primaryKeys() -> [String] {
         return ["fileId"]
     }
     

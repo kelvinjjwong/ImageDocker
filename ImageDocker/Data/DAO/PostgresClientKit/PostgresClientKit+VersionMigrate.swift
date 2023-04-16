@@ -659,6 +659,13 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v53") { db in
+            try db.alter(table: "ImageDeviceFile", body: { t in
+                t.add("devicePathId", .text).defaults(to: "").indexed()
+                t.add("importedImageId", .text).defaults(to: "").indexed()
+            })
+        }
+        
         do {
             try migrator.migrate(cleanVersions: dropBeforeCreate)
         }catch{

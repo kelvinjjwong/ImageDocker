@@ -36,7 +36,7 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         where r."deviceId"='\(deviceId)'
         )
         """
-        self.logger.log("\(sql)")
+        self.logger.log("[countImagesShouldImport] \(sql)")
         return db.count(sql: sql)
     }
     
@@ -60,7 +60,7 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         )
         """
         let db = PostgresConnection.database()
-        self.logger.log("\(sql)")
+        self.logger.log("[countImportedAsEditable] \(sql)")
         return db.count(sql: sql)
     }
     
