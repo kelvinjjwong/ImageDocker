@@ -55,7 +55,11 @@ class NotificationsViewController : NSViewController {
     }
     
     func updateTimeElapsed() {
-        self.box.title = "\(self.id) (\(self.displayTimeElapsed(self.notificationMessage.time)))"
+        if self.isNoMessage {
+            self.box.title = self.id
+        }else{
+            self.box.title = "\(self.id) (\(self.displayTimeElapsed(self.notificationMessage.time)))"
+        }
     }
     
     func displayTimeElapsed(_ time:Date) -> String {
@@ -68,7 +72,7 @@ class NotificationsViewController : NSViewController {
         let relativeDate = formatter.localizedString(for: time, relativeTo: Date.now)
 
         // print it out
-        print("Relative date is: \(relativeDate)")
+//        print("Relative date is: \(relativeDate)")
         return relativeDate
     }
     

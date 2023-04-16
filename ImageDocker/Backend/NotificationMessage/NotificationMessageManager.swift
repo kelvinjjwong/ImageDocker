@@ -183,7 +183,7 @@ class NotificationMessageManager {
         for notificationMessage in notificationMessages {
             if notificationMessage.msgid == notification.name.rawValue {
                 
-                self.logger.log("onNotificationMessageChanged: \(notificationMessage.id)")
+//                self.logger.log("onNotificationMessageChanged: \(notificationMessage.id)")
                 //self.logger.log("=== onTaskChanged - \(task.taskid) - \(task.state)")
                 //self.logger.log("viewManager is nil ? \(viewManager == nil)")
                 if let stackViewManager = viewManager {
