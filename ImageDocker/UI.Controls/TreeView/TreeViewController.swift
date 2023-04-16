@@ -65,7 +65,9 @@ class TreeViewController : StackBodyViewController {
     
     // show roots
     func show() {
+        self.logger.log("show tree: \(self.stackTitle)")
         let condition = SearchCondition.get(from: stackItemContainer!.header.searchCondition, separator: "|") // search includes hidden images
+        self.logger.log("[\(self.stackTitle)] condition: \(condition)")
         DispatchQueue.global().async {
             if self.collectionLoader != nil {
                 let (treeNodes, message, messageType) = self.collectionLoader!(nil, condition)
@@ -78,6 +80,8 @@ class TreeViewController : StackBodyViewController {
                         MessageEventCenter.default.showMessage(type: "TREE", name: "NODES", message: msg)
                     }
                 }
+            }else{
+                self.logger.log(.error, "[\(self.stackTitle)] collectionLoader is nil")
             }
             DispatchQueue.main.async {
                 self.outlineView.reloadData()

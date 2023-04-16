@@ -20,11 +20,11 @@ extension ViewController {
                 DispatchQueue.main.async {
                     
                     if self.momentsTreeCategory == "MOMENTS" {
-                        self.stackedTreeView.reloadTree("Moments")
+                        self.stackedTreeView.reloadTree(Words.nav_cat_moments.word())
                     }else if self.momentsTreeCategory == "EVENTS" {
-                        self.stackedTreeView.reloadTree("Events")
+                        self.stackedTreeView.reloadTree(Words.nav_cat_events.word())
                     }else if self.momentsTreeCategory == "PLACES" {
-                        self.stackedTreeView.reloadTree("Places")
+                        self.stackedTreeView.reloadTree(Words.nav_cat_places.word())
                     }
                 }
             })

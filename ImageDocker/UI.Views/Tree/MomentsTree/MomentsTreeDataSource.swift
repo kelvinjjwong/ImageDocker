@@ -10,6 +10,8 @@ import Foundation
 
 class MomentsTreeDataSource : TreeDataSource {
     
+    let logger = ConsoleLogger(category: "Tree", subCategory: "Moments", includeTypes: [.trace])
+    
     func convertToTreeCollection(_ data:Moment) -> TreeCollection {
         let collection = TreeCollection(data.represent, id: data.id, object: data)
         if data.year == 0 && data.month == 0 && data.day == 0 {
@@ -21,6 +23,7 @@ class MomentsTreeDataSource : TreeDataSource {
     }
     
     func loadChildren(_ collection: TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?, String?) {
+        self.logger.log(.trace, "loadChildren of collection \(collection) with condition: \(condition)")
         var nodes:[TreeCollection] = []
         var datas:[Moment] = []
         

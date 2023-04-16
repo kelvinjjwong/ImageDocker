@@ -96,8 +96,10 @@ class StackedTreeViewController: NSViewController, StackItemHost {
 //            self.logger.log("selected \(collection.path)")
 //        }
         treeView.collectionAction = moreActionOnNode
-            
         
+        self.trees.append(treeView)
+        self.nameToTrees[title] = treeView
+        self.logger.log("[\(title)] is just mapped in nameToTrees[]")
         
         // MARK: stack body
         
@@ -148,8 +150,6 @@ class StackedTreeViewController: NSViewController, StackItemHost {
         // load data
         treeView.show()
         
-        self.trees.append(treeView)
-        self.nameToTrees[title] = treeView
         
     }
     
@@ -189,8 +189,11 @@ class StackedTreeViewController: NSViewController, StackItemHost {
     }
     
     func reloadTree(_ title:String) {
+        self.logger.log("reloadTree: \(title)")
         if let tree = self.nameToTrees[title] {
             tree.show()
+        }else{
+            self.logger.log(.error, "[\(title)] is missing in nameToTrees[]")
         }
     }
     
