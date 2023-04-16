@@ -66,6 +66,7 @@ class GoogleLocation {
                 
             }else{
                 GoogleLocation.logger.log(error ?? "unknown error")
+                NotificationMessageManager.default.createNotificationMessage(type: "GoogleMap", name: address, message: "\(error)")
             }
         }
         
@@ -186,6 +187,7 @@ class GoogleLocation {
                 }
             }else{
                 GoogleLocation.logger.log(error ?? "")
+                NotificationMessageManager.default.createNotificationMessage(type: "GoogleMap", name: address, message: "\(error)")
                 locationConsumer.alert(status: -1, message: "Unexpected ERROR!", popup: false)
                 if textConsumer != nil {
                     textConsumer?.alert(status: -1, message: "Unexpected ERROR!", popup: false)

@@ -374,7 +374,7 @@ extension ImageFile {
         }
         
         if needSave {
-            self.logger.log(.info, "[loadMetaInfoFromDatabase] UPDATE COORD TO NON ZERO - saveImage - \(photoFile.path)")
+            self.logger.log(.trace, "[loadMetaInfoFromDatabase] UPDATE COORD TO NON ZERO - saveImage - \(photoFile.path)")
             let _ = ImageRecordDao.default.saveImage(image: photoFile)
         }
         

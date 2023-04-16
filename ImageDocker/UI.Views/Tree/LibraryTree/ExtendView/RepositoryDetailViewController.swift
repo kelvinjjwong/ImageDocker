@@ -363,7 +363,7 @@ class RepositoryDetailViewController: NSViewController {
     
     /// - Tag: RepositoryDetailViewController.onDropInClicked()
     @IBAction func onDropInClicked(_ sender: NSButton) {
-        if let repository = RepositoryDao.default.getRepository(repositoryPath: self._repositoryPath),
+        if let repository = RepositoryDao.default.getRepository(id: self._repositoryId),
             let device = DeviceDao.default.getDevice(deviceId: repository.deviceId),
             let deviceType = device.type {
             
@@ -462,6 +462,7 @@ class RepositoryDetailViewController: NSViewController {
         self.forceStop = true
     }
     
+    // deprecated
     /// - Tag: RepositoryDetailViewController.onFindParentClicked()
     @IBAction func onFindParentClicked(_ sender: NSButton) {
         if(self.lblNewPath.isHidden){
@@ -474,6 +475,7 @@ class RepositoryDetailViewController: NSViewController {
         self.findNewContainer(path: newUrl.path)
     }
     
+    // deprecated
     /// - Tag: RepositoryDetailViewController.findNewContainer()
     private func findNewContainer(path:String){
         if let newContainer = RepositoryDao.default.getContainer(path: path) {
@@ -547,6 +549,7 @@ class RepositoryDetailViewController: NSViewController {
         }
     }
     
+    // deprecated
     @IBAction func onPickGoUpClicked(_ sender: NSButton) {
         let url = URL(fileURLWithPath: self.lblNewPath.stringValue)
         let newUrl = url.deletingLastPathComponent()
@@ -558,6 +561,7 @@ class RepositoryDetailViewController: NSViewController {
         }
     }
     
+    // deprecated
     @IBAction func onPickGoDownClicked(_ sender: NSButton) {
         let url = URL(fileURLWithPath: self.lblPath.stringValue)
         let newUrl = url.deletingLastPathComponent()
@@ -600,7 +604,9 @@ class RepositoryDetailViewController: NSViewController {
         self.scanImageRepository()
     }
     
+    // currently using
     private func scanImageRepository() {
+        self.logger.log("scanImageRepository")
         if(self.working) {
             self.logger.log(.error, "Another long task is working.")
             return
@@ -838,30 +844,8 @@ class RepositoryDetailViewController: NSViewController {
         }
     }
     
-    /// to be deprecated
-    /// - version: legacy version
-    private func scanImageRepository_legacy() {
-        if let repository = RepositoryDao.default.getRepository(repositoryPath: self._repositoryPath) {
-            self.toggleButtons(false)
-            let indicator = Accumulator(target: 1000,
-                                        indicator: self.indProgress,
-                                        suspended: true,
-                                        lblMessage: self.lblMessage,
-                                        presetAddingMessage: Words.importingImages.word(),
-                                        onCompleted: { data in
-                                            self.logger.log("====== COMPLETED SCAN single REPO \(repository.name)")
-                                            self.toggleButtons(true)
-            },
-                                        onDataChanged: {
-                                            self.logger.log("====== DATE CHANGED when SCAN single REPO \(repository.name)")
-            })
-            
-            ImageFolderTreeScanner.default.scanSingleRepository_asTask(repository: repository, indicator: indicator, onCompleted: {
-                self.logger.log(">>>> onCompleted")
-                self.toggleButtons(true)
-            })
-        }
+    private func scanImageRepository_Exif() {
+        
     }
-    
     
 }

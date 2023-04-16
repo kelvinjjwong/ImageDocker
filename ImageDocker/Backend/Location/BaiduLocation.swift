@@ -79,6 +79,8 @@ final class BaiduLocation {
                         coordinateConsumer.alert(status: status, message: message)
                     }
                 }
+            }else{
+                NotificationMessageManager.default.createNotificationMessage(type: "BaiduMap", name: address, message: "\(error)")
             }
         }
         task.resume()
@@ -147,6 +149,8 @@ final class BaiduLocation {
                 }
                 
             }else{
+                
+                NotificationMessageManager.default.createNotificationMessage(type: "BaiduMap", name: "\(coordinateBD)", message: "\(error)")
                 locationConsumer.alert(status: -1, message: "Unexpected ERROR!", popup: false)
                 if textConsumer != nil {
                     textConsumer?.alert(status: -1, message: "Unexpected ERROR!", popup: false)

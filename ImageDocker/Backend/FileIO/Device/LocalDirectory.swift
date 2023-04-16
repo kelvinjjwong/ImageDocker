@@ -303,7 +303,7 @@ struct LocalDirectory {
             && FileManager.default.fileExists(atPath: path.trimmingCharacters(in: .whitespacesAndNewlines), isDirectory: &isDir)
             && isDir.boolValue == true {
             let (totalSize, freeSize, mountPoint) = self.freeSpace(path: path)
-            self.logger.log("mount point: \(mountPoint) - total:\(totalSize), free:\(freeSize)")
+            self.logger.log(.trace, "get volume of path: \(path) - volume: \(mountPoint) - total:\(totalSize), free:\(freeSize)")
             return mountPoint
         }else{
             return ""
@@ -333,7 +333,7 @@ struct LocalDirectory {
             var diskFree = ""
             var diskTotal = ""
             (diskTotal, diskFree, mountPoint) = self.freeSpace(path: path)
-            self.logger.log("[LOCAL DIRECTORY] mountpoint \(mountPoint)")
+            self.logger.log(.trace, "get disk space of mountpoint \(mountPoint)")
             if diskTotal != "" && diskFree != "" {
                 spaceFree = "\(diskFree) / \(diskTotal)"
                 if let lbl = lblDiskFree {
