@@ -46,12 +46,30 @@ class NotificationsViewController : NSViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        self.box.title = self.id
+        self.updateTimeElapsed()
         self.lblMessage.stringValue = self.message
         if self.isNoMessage {
             self.btnRemove.isHidden = true
         }
         
+    }
+    
+    func updateTimeElapsed() {
+        self.box.title = "\(self.id) (\(self.displayTimeElapsed(self.notificationMessage.time)))"
+    }
+    
+    func displayTimeElapsed(_ time:Date) -> String {
+
+        // ask for the full relative date
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .full
+
+        // get exampleDate relative to the current date
+        let relativeDate = formatter.localizedString(for: time, relativeTo: Date.now)
+
+        // print it out
+        print("Relative date is: \(relativeDate)")
+        return relativeDate
     }
     
     @IBAction func onRemoveClicked(_ sender: NSButton) {

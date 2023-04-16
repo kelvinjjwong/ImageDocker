@@ -15,6 +15,7 @@ extension ViewController {
             if let notificationMessage = obj as? NotificationMessage {
 //                DispatchQueue.main.async {
 //                    // do to
+                self.logger.log("notificationMessageObserver: \(notificationMessage.id)")
 //                }
             }
             

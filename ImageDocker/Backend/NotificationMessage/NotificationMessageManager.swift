@@ -38,7 +38,7 @@ class NotificationMessage {
     }
     
     @objc func onNotificationMessageChanged(notification: NSNotification) {
-        TaskletManager.default.onTaskChanged(notification: notification)
+        NotificationMessageManager.default.onNotificationMessageChanged(notification: notification)
     }
     
     func changeListener(selector:Selector){
@@ -168,7 +168,7 @@ class NotificationMessageManager {
             let msg = NotificationMessage(type:type, name:name)
             msg.message = message
             msg.state = "READY"
-//            msg.changeListener(selector: #selector(self.onTaskChanged))
+            msg.changeListener(selector: #selector(self.onNotificationMessageChanged))
             self.notificationMessages.append(msg)
             if let view = self.viewManager {
                 let _ = view.addMessage(notificationMessage: msg)
@@ -182,11 +182,15 @@ class NotificationMessageManager {
     @objc func onNotificationMessageChanged(notification: NSNotification) {
         for notificationMessage in notificationMessages {
             if notificationMessage.msgid == notification.name.rawValue {
+                
+                self.logger.log("onNotificationMessageChanged: \(notificationMessage.id)")
                 //self.logger.log("=== onTaskChanged - \(task.taskid) - \(task.state)")
                 //self.logger.log("viewManager is nil ? \(viewManager == nil)")
-                if let view = viewManager {
-                    DispatchQueue.main.async {
-                        // do nothing
+                if let stackViewManager = viewManager {
+                    if let viewController = stackViewManager.messagesView[notificationMessage.id] {
+                        DispatchQueue.main.async {
+                            viewController.updateTimeElapsed()
+                        }
                     }
                 }
                 break
