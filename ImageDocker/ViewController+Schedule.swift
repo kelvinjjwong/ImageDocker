@@ -11,6 +11,15 @@ import Cocoa
 extension ViewController {
     
     internal func startSchedules() {
+        self.centralNotificationFadeOutTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
+            if let lastCentralNotificationTime = self.lastCentralNotificationTime {
+                let diffSeconds = Date().timeIntervalSinceReferenceDate - lastCentralNotificationTime.timeIntervalSinceReferenceDate
+                if diffSeconds > 10 {
+                    self.hideNotification()
+                }
+            }
+        })
+        
 //        self.scanLocationChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
 //            guard TaskManager.allowRefreshTrees() else {return}
 //            self.logger.log("SCANING LOCATION CHANGE")

@@ -58,6 +58,8 @@ class ViewController: NSViewController {
     
     
     // MARK: - Timer
+    var lastCentralNotificationTime:Date?
+    var centralNotificationFadeOutTimer:Timer!
     var scanLocationChangeTimer:Timer!
     var lastCheckLocationChange:Date?
     var scanPhotoTakenDateChangeTimer:Timer!

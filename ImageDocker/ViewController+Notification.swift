@@ -52,6 +52,7 @@ extension ViewController {
         DispatchQueue.main.async {
             self.btnAlertMessage.title = message
             self.btnAlertMessage.isHidden = false
+            self.lastCentralNotificationTime = Date()
             
             self.popoverNotification(message: message)
         }
@@ -59,6 +60,7 @@ extension ViewController {
     
     func hideNotification() {
         self.btnAlertMessage.isHidden = true
+        self.lastCentralNotificationTime = nil
     }
     
     
