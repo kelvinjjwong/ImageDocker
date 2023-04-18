@@ -42,21 +42,22 @@ struct Android {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         pipe.fileHandleForReading.closeFile()
-        self.logger.log(string)
+//        self.logger.log(string)
         if string.range(of: "* failed to start daemon") != nil || string.range(of: "error: cannot connect to daemon") != nil {
             return []
         }
         let lines = string.components(separatedBy: "\n")
         for line in lines {
-            self.logger.log(line)
+//            self.logger.log(line)
             if line.range(of: "device usb") != nil {
-                self.logger.log(line)
+//                self.logger.log(line)
                 let parts = line.components(separatedBy: " ")
                 if parts[0] != "" {
                     result.append(parts[0])
                 }
             }
         }
+//        self.logger.log(result)
         return result
     }
     

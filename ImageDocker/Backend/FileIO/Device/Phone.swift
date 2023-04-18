@@ -87,6 +87,10 @@ struct PhoneDevice {
     
     // present as title in tree node
     func represent() -> String {
+        return PhoneDevice.represent(deviceId: deviceId, name: name, manufacture: manufacture, model: model, type: type)
+    }
+    
+    static func represent(deviceId:String, name:String, manufacture:String, model:String, type:MobileType) -> String {
         var summary = ""
 //        if totalSize != "" {
 //            summary = "\(availSize) / \(totalSize), used \(usedPercent)"

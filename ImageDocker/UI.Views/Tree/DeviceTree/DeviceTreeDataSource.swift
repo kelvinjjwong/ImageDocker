@@ -14,6 +14,137 @@ class DeviceTreeDataSource : TreeDataSource {
     
     private var deviceIdToDevice : [String : PhoneDevice] = [String : PhoneDevice] ()
     
+    // TODO: should reload timely
+    var registered_android_id_names:[String:String] = [:]
+    var registered_iphone_id_names:[String:String] = [:]
+    
+    var deviceConnectivityStatus:[String:Bool] = [:]
+    
+    var androidConnectivityTimer:Timer?
+    var iphoneConnectivityTimer:Timer?
+    
+    func loadRegisteredDevices() {
+        if self.registered_android_id_names.isEmpty {
+            // TODO: should reload timely
+            let registeredDevices = DeviceDao.default.getDevices(type: "Android")
+            for registeredDevice in registeredDevices {
+                if let id = registeredDevice.deviceId {
+                    
+                    self.registered_android_id_names[id] = PhoneDevice.represent(
+                        deviceId: id,
+                        name: registeredDevice.name ?? "",
+                        manufacture: registeredDevice.manufacture ?? "",
+                        model: registeredDevice.marketName ?? registeredDevice.model ?? "",
+                        type: .Android
+                    )
+                }
+            }
+        }
+        if self.registered_iphone_id_names.isEmpty {
+            // TODO: should reload timely
+            let registeredDevices = DeviceDao.default.getDevices(type: "iPhone")
+            for registeredDevice in registeredDevices {
+                if let id = registeredDevice.deviceId {
+                    
+                    self.registered_iphone_id_names[id] = PhoneDevice.represent(
+                        deviceId: id,
+                        name: registeredDevice.name ?? "",
+                        manufacture: registeredDevice.manufacture ?? "",
+                        model: registeredDevice.marketName ?? registeredDevice.model ?? "",
+                        type: .iPhone
+                    )
+                }
+            }
+        }
+    }
+    
+    func startConnectivityTest() {
+//        self.logger.log("start connectivity test timer")
+        self.androidConnectivityTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
+                DispatchQueue.global().async {
+                    self.loadRegisteredDevices()
+
+                    let connectedDeviceIds:[String] = Android.bridge.devices()
+//                    self.logger.log("connected android phones: \(connectedDeviceIds)")
+                    for deviceId in self.registered_android_id_names.keys {
+
+                        let connectivityStatus = connectedDeviceIds.contains(deviceId)
+
+                        // initial
+                        if self.deviceConnectivityStatus[deviceId] == nil {
+
+                            self.deviceConnectivityStatus[deviceId] = connectivityStatus
+                            
+                            if connectivityStatus {
+                                if let represent = self.registered_android_id_names[deviceId] {
+                                    MessageEventCenter.default.showMessage(type: "Device Connected", name: "Android", message: "\(represent) connected")
+                                }
+                            }
+
+                        }else{
+                            // status change listener
+
+                            if let oldStatus = self.deviceConnectivityStatus[deviceId], oldStatus != connectivityStatus {
+                                
+                                self.deviceConnectivityStatus[deviceId] = connectivityStatus
+
+                                if let represent = self.registered_android_id_names[deviceId] {
+                                    if connectivityStatus {
+                                        MessageEventCenter.default.showMessage(type: "Device Connected", name: "Android", message: "\(represent) connected")
+                                    }else{
+                                        MessageEventCenter.default.showMessage(type: "Device Disconnected", name: "Android", message: "\(represent) disconnected")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+            })
+        
+        self.iphoneConnectivityTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
+                DispatchQueue.global().async {
+                    self.loadRegisteredDevices()
+                    
+                    let connectedDeviceIds:[String] = IPHONE.bridge.devices()
+//                    self.logger.log("connected android phones: \(connectedDeviceIds)")
+                    for deviceId in self.registered_iphone_id_names.keys {
+
+                        let connectivityStatus = connectedDeviceIds.contains(deviceId)
+
+                        // initial
+                        if self.deviceConnectivityStatus[deviceId] == nil {
+
+                            self.deviceConnectivityStatus[deviceId] = connectivityStatus
+                            
+                            if connectivityStatus {
+                                if let represent = self.registered_iphone_id_names[deviceId] {
+                                    MessageEventCenter.default.showMessage(type: "Device Connected", name: "iPhonesa", message: "\(represent) connected")
+                                }
+                            }
+
+                        }else{
+                            // status change listener
+
+                            if let oldStatus = self.deviceConnectivityStatus[deviceId], oldStatus != connectivityStatus {
+                                
+                                self.deviceConnectivityStatus[deviceId] = connectivityStatus
+
+                                if let represent = self.registered_iphone_id_names[deviceId] {
+                                    if connectivityStatus {
+                                        MessageEventCenter.default.showMessage(type: "Device Connected", name: "iPhone", message: "\(represent) connected")
+                                    }else{
+                                        MessageEventCenter.default.showMessage(type: "Device Disconnected", name: "iPhone", message: "\(represent) disconnected")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+            })
+    }
+    
     func loadChildren(_ collection: TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?, String?) {
         
         if let condition = condition, !condition.isEmpty() {
@@ -31,6 +162,7 @@ class DeviceTreeDataSource : TreeDataSource {
             let registeredIphoneCount = self.countDevicesFromDatabase(type: "iPhone")
             iphone.subImagesCount = registeredIphoneCount
             iphone.childrenCount = registeredIphoneCount
+            
             return ([android, iphone], nil, nil)
         }else{
             if let col = collection {

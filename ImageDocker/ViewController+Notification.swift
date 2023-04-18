@@ -45,7 +45,7 @@ extension ViewController {
         
         let cellRect = self.btnNotification.bounds
         
-        self.notificationPopover?.show(relativeTo: cellRect, of: self.btnNotification, preferredEdge: .maxX)
+        self.notificationPopover?.show(relativeTo: cellRect, of: self.btnNotification, preferredEdge: .maxY)
     }
     
     func popNotification(message:String){

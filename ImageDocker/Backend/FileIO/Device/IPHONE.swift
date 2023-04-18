@@ -199,6 +199,7 @@ struct IPHONE {
         if string.starts(with: "ERROR: Could not connect to lockdownd") {
             self.logger.log("Please unlock the screen of iOS device")
             self.logger.log("If failed again, refer to https://github.com/libimobiledevice/libimobiledevice/issues/717 , please reinstall libimobiledevice and ideviceinstaller by brew")
+            MessageEventCenter.default.showMessage(type: "Device Error", name: "iPhone", message: "Please unlock screen of iOS device, otherwise may need to reinstall ideviceinfo by Homebrew")
             return nil
         }
         if string.starts(with: "ERROR") || string.starts(with: "No device found") || string.range(of: "Input/output error") != nil {
