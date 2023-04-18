@@ -23,7 +23,7 @@ extension ViewController {
         
         let screenWidth = Int(NSScreen.main?.frame.width ?? 0)
         let screenHeight = Int(NSScreen.main?.frame.height ?? 0)
-        let windowWidth = 850
+        let windowWidth = 1050
         let windowHeight = 620
         let originX = (screenWidth - windowWidth) / 2
         let originY = (screenHeight - windowHeight) / 2

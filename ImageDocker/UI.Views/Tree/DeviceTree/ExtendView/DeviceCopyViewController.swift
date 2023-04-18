@@ -114,6 +114,7 @@ class DeviceCopyViewController: NSViewController {
     @IBOutlet weak var lblStorage: NSTextField!
     @IBOutlet weak var lblModelName: NSTextField!
     
+    @IBOutlet weak var btnBulkUpdate: NSButton!
     
     
     
@@ -1372,6 +1373,10 @@ class DeviceCopyViewController: NSViewController {
             selectedPath = nil
             tblSourcePath.reloadData()
         }
+    }
+    
+    // for debug only
+    @IBAction func onBulkUpdateClicked(_ sender: NSButton) {
     }
     
     // MARK: - POPOVER - DEVICE PATH DETAIL
