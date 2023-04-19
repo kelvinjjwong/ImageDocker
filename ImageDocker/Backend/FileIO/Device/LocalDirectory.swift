@@ -27,7 +27,7 @@ struct LocalDirectory {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         //command.waitUntilExit()
@@ -60,7 +60,7 @@ struct LocalDirectory {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         //command.waitUntilExit()
@@ -102,7 +102,7 @@ struct LocalDirectory {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         //command.waitUntilExit()
@@ -130,7 +130,7 @@ struct LocalDirectory {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         //command.waitUntilExit()
@@ -182,7 +182,7 @@ struct LocalDirectory {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         //command.waitUntilExit()
@@ -215,7 +215,7 @@ struct LocalDirectory {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         //command.waitUntilExit()
@@ -246,6 +246,43 @@ struct LocalDirectory {
         return result
     }
     
+    func mountpoints() -> [String] {
+        var volumes:[String] = []
+        let pipe = Pipe()
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = pipe
+            command.launchPath = "/bin/df"
+            command.arguments = ["-bH"]
+            do {
+                try command.run()
+            }catch{
+                self.logger.log(.error, error)
+            }
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            let string:String = String(data: data, encoding: String.Encoding.utf8)!
+            pipe.fileHandleForReading.closeFile()
+            
+            let lines = string.components(separatedBy: "\n")
+            for line in lines {
+                if line == "" || line.hasPrefix("Filesystem") {continue}
+                let cols = line.components(separatedBy: " ")
+                for col in cols {
+                    if col == "" || col == " " {
+                        continue
+                    }
+                    if col == "/" || col.starts(with: "/Volumes/") {
+                        
+                    }
+                    //self.logger.log("col -> \(col)")
+                    volumes.append(col)
+                }
+            }
+        }
+        return volumes
+    }
+    
     func freeSpace(path: String) -> (String, String, String) {
 //        self.logger.log("getting free space of \(path)")
         let pipe = Pipe()
@@ -259,7 +296,7 @@ struct LocalDirectory {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         //command.waitUntilExit()
@@ -374,37 +411,37 @@ struct LocalDirectory {
         return sizeGB
     }
     
-    public func getRepositoryVolume(repository:ImageRepository) -> ([String], [String]) {
+    public func getRepositoryVolume(repository:ImageRepository, volumes:[String]) -> ([String], [String]) {
         var volumes:Set<String> = []
         var missingVolumes:Set<String> = []
-        let mountpoint_home = getDiskMountPointVolume(path: repository.homeVolume)
-        let mountpoint_repository = getDiskMountPointVolume(path: repository.repositoryVolume)
-        let mountpoint_storage = getDiskMountPointVolume(path: repository.storageVolume)
-        let mountpoint_face = getDiskMountPointVolume(path: repository.faceVolume)
-        let mountpoint_crop = getDiskMountPointVolume(path: repository.cropVolume)
-        if mountpoint_home != "" {
+        let mountpoint_home = repository.homeVolume
+        let mountpoint_repository = repository.repositoryVolume
+        let mountpoint_storage = repository.storageVolume
+        let mountpoint_face = repository.faceVolume
+        let mountpoint_crop = repository.cropVolume
+        if mountpoint_home != "" && volumes.contains(mountpoint_home) {
             volumes.insert(mountpoint_home)
-        }else{
+        }else if mountpoint_home != ""{
             missingVolumes.insert(mountpoint_home)
         }
-        if mountpoint_repository != "" {
+        if mountpoint_repository != "" && volumes.contains(mountpoint_repository) {
             volumes.insert(mountpoint_repository)
-        }else{
+        }else if mountpoint_repository != ""{
             missingVolumes.insert(mountpoint_repository)
         }
-        if mountpoint_storage != "" {
+        if mountpoint_storage != "" && volumes.contains(mountpoint_storage) {
             volumes.insert(mountpoint_storage)
-        }else{
+        }else if mountpoint_storage != ""{
             missingVolumes.insert(mountpoint_storage)
         }
-        if mountpoint_face != "" {
+        if mountpoint_face != "" && volumes.contains(mountpoint_face) {
             volumes.insert(mountpoint_face)
-        }else{
+        }else if mountpoint_face != ""{
             missingVolumes.insert(mountpoint_face)
         }
-        if mountpoint_crop != "" {
+        if mountpoint_crop != "" && volumes.contains(mountpoint_crop) {
             volumes.insert(mountpoint_crop)
-        }else{
+        }else if mountpoint_crop != ""{
             missingVolumes.insert(mountpoint_crop)
         }
         return (volumes.sorted(), missingVolumes.sorted())

@@ -275,8 +275,11 @@ class ViewController: NSViewController {
         var _connectedVolumes:Set<String> = []
         var _missingVolumes:Set<String> = []
         let repos = RepositoryDao.default.getRepositoriesV2(orderBy: "name", condition: nil)
+        let volumes = LocalDirectory.bridge.mountpoints()
         for repo in repos {
-            let (connectedVolumes, missingVolumes) = LocalDirectory.bridge.getRepositoryVolume(repository: repo)
+            let (connectedVolumes, missingVolumes) = LocalDirectory.bridge.getRepositoryVolume(repository: repo, volumes: volumes)
+            self.logger.log("[connected volumes] \(connectedVolumes)")
+            self.logger.log("[missing   volumes] \(missingVolumes)")
             for volume in connectedVolumes {
                 if !_connectedVolumes.contains(volume) {
                     _connectedVolumes.insert(volume)
@@ -288,8 +291,14 @@ class ViewController: NSViewController {
                 }
             }
         }
-        let connected:[String] = Array(_connectedVolumes)
-        let missing:[String] = Array(_missingVolumes)
+        var connected:[String] = []
+        for v in _connectedVolumes.sorted() {
+            connected.append(v)
+        }
+        var missing:[String] = []
+        for v in _missingVolumes.sorted() {
+            missing.append(v)
+        }
         return (connected, missing)
     }
     
@@ -425,18 +434,26 @@ class ViewController: NSViewController {
 //        self.logger.log("Loading view: DONE")
         
         
-        
-        NotificationMessageManager.default.createNotificationMessage(
-            type: Words.notification_title_healthcheck.word(),
-            name: Words.notification_volume_connected.word(),
-            message: Words.notification_which_volume_connected.fill(arguments: "\(volumes_connected)")
-        )
+        if volumes_connected.count > 0 {
+            NotificationMessageManager.default.createNotificationMessage(
+                type: Words.notification_title_healthcheck.word(),
+                name: Words.notification_volume_connected.word(),
+                message: Words.notification_which_volume_connected.fill(arguments: "\(volumes_connected)")
+            )
+        }else{
+            NotificationMessageManager.default.createNotificationMessage(
+                type: Words.notification_title_healthcheck.word(),
+                name: Words.notification_volume_connected.word(),
+                message: Words.notification_none_volume_connected.word()
+            )
+        }
         if volumes_missing.count > 0 {
             NotificationMessageManager.default.createNotificationMessage(
                 type: Words.notification_title_healthcheck.word(),
                 name: Words.notification_volume_missing.word(),
                 message: Words.notification_which_volume_missing.fill(arguments: "\(volumes_missing)")
             )
+            MessageEventCenter.default.showMessage(message: Words.notification_which_volume_missing.fill(arguments: "\(volumes_missing)"))
         }else{
             NotificationMessageManager.default.createNotificationMessage(
                 type: Words.notification_title_healthcheck.word(),

@@ -45,6 +45,11 @@ extension Words {
         chs: "已连接所有必需的磁盘"
     )
     
+    static let notification_none_volume_connected = Localize (
+        eng: "nothing connected",
+        chs: "没有连接所有必需的磁盘"
+    )
+    
     static let device_tree_need_debug_mode = Localize (
         eng: "Enable [DEBUG MODE] in [Settings >> System >> Developer Options] if you've connected your phone via USB.",
         chs: "请通过 USB 连接移动设备，并确保移动设备已启用 [USB 调试模式]，通常在 [设置 >> 系统和更新 >> 开发人员选项]"
