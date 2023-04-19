@@ -336,15 +336,7 @@ class ViewController: NSViewController {
         }
     }
     
-    internal func initView() {
-//        whereIsDock()
-        
-//        if let faUrl = URL.fontURL(for: "Font Awesome 5 Free-Solid-900") {
-//            self.logger.log(.debug, "fa url: \(faUrl)")
-//        }else{
-//            self.logger.log(.error, "Unable to load fontawesome")
-//        }
-        
+    func checkMissingVolumes() -> ([String], [String]) {
         let (volumes_lasttime, volumes_connected, volumes_missing) = self.checkRepositoryVolumesMounted()
         self.logger.log("[STARTUP] volumes_lasttime: \(volumes_lasttime)")
         self.logger.log("[STARTUP] volumes_connected: \(volumes_connected)")
@@ -353,12 +345,24 @@ class ViewController: NSViewController {
             self.logger.log(.warning, "[STARTUP] decide NOT to Quit")
             self.splashController.message(Words.splash_loadingLibraries_failed_missing_volumes.fill(arguments: "\(volumes_missing)"), progress: 4)
             self.splashController.decideQuit = false
-            self.logger.log(.todo, "TODO show an alert in UI say volumes missing")
 //            return
         }else {
             PreferencesController.saveRepositoryVolumes(volumes_connected)
             self.logger.log("[STARTUP] saved volumes_connected: \(volumes_connected)")
         }
+        return (volumes_connected, volumes_missing)
+    }
+    
+    internal func initView() {
+//        whereIsDock()
+        
+//        if let faUrl = URL.fontURL(for: "Font Awesome 5 Free-Solid-900") {
+//            self.logger.log(.debug, "fa url: \(faUrl)")
+//        }else{
+//            self.logger.log(.error, "Unable to load fontawesome")
+//        }
+        let (volumes_connected, volumes_missing) = self.checkMissingVolumes()
+        
         
         MessageEventCenter.default.messagePresenter = { message in
             self.popNotification(message: message)
@@ -422,11 +426,23 @@ class ViewController: NSViewController {
         
         
         
-        NotificationMessageManager.default.createNotificationMessage(type: "HealthCheck", name: "Volumes_Connected", message: "Volumes connected: \(volumes_connected)")
+        NotificationMessageManager.default.createNotificationMessage(
+            type: Words.notification_title_healthcheck.word(),
+            name: Words.notification_volume_connected.word(),
+            message: Words.notification_which_volume_connected.fill(arguments: "\(volumes_connected)")
+        )
         if volumes_missing.count > 0 {
-            NotificationMessageManager.default.createNotificationMessage(type: "HealthCheck", name: "Volumes_Missing", message: "Volumes missing: \(volumes_missing)")
+            NotificationMessageManager.default.createNotificationMessage(
+                type: Words.notification_title_healthcheck.word(),
+                name: Words.notification_volume_missing.word(),
+                message: Words.notification_which_volume_missing.fill(arguments: "\(volumes_missing)")
+            )
         }else{
-            NotificationMessageManager.default.createNotificationMessage(type: "HealthCheck", name: "Volumes_Missing", message: "Volumes missing: none")
+            NotificationMessageManager.default.createNotificationMessage(
+                type: Words.notification_title_healthcheck.word(),
+                name: Words.notification_volume_missing.word(),
+                message: Words.notification_none_volume_missing.word()
+            )
         }
         
         NotificationMessageManager.default.printAll()

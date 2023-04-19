@@ -77,7 +77,11 @@ class DeviceTreeDataSource : TreeDataSource {
                             
                             if connectivityStatus {
                                 if let represent = self.registered_android_id_names[deviceId] {
-                                    MessageEventCenter.default.showMessage(type: "Device Connected", name: "Android", message: "\(represent) connected")
+                                    MessageEventCenter.default.showMessage(
+                                        type: Words.notification_volume_connected.word(),
+                                        name: "Android",
+                                        message: Words.notification_which_volume_connected.fill(arguments: represent)
+                                    )
                                 }
                             }
 
@@ -90,9 +94,17 @@ class DeviceTreeDataSource : TreeDataSource {
 
                                 if let represent = self.registered_android_id_names[deviceId] {
                                     if connectivityStatus {
-                                        MessageEventCenter.default.showMessage(type: "Device Connected", name: "Android", message: "\(represent) connected")
+                                        MessageEventCenter.default.showMessage(
+                                            type: Words.notification_volume_connected.word(),
+                                            name: "Android",
+                                            message: Words.notification_which_volume_connected.fill(arguments: represent)
+                                        )
                                     }else{
-                                        MessageEventCenter.default.showMessage(type: "Device Disconnected", name: "Android", message: "\(represent) disconnected")
+                                        MessageEventCenter.default.showMessage(
+                                            type: Words.notification_volume_missing.word(),
+                                            name: "Android",
+                                            message: Words.notification_which_volume_missing.fill(arguments: represent)
+                                        )
                                     }
                                 }
                             }
@@ -119,7 +131,11 @@ class DeviceTreeDataSource : TreeDataSource {
                             
                             if connectivityStatus {
                                 if let represent = self.registered_iphone_id_names[deviceId] {
-                                    MessageEventCenter.default.showMessage(type: "Device Connected", name: "iPhonesa", message: "\(represent) connected")
+                                    MessageEventCenter.default.showMessage(
+                                        type: Words.notification_volume_connected.word(),
+                                        name: "iPhone",
+                                        message: Words.notification_which_volume_connected.fill(arguments: represent)
+                                    )
                                 }
                             }
 
@@ -132,9 +148,17 @@ class DeviceTreeDataSource : TreeDataSource {
 
                                 if let represent = self.registered_iphone_id_names[deviceId] {
                                     if connectivityStatus {
-                                        MessageEventCenter.default.showMessage(type: "Device Connected", name: "iPhone", message: "\(represent) connected")
+                                        MessageEventCenter.default.showMessage(
+                                            type: Words.notification_volume_connected.word(),
+                                            name: "iPhone",
+                                            message: Words.notification_which_volume_connected.fill(arguments: represent)
+                                        )
                                     }else{
-                                        MessageEventCenter.default.showMessage(type: "Device Disconnected", name: "iPhone", message: "\(represent) disconnected")
+                                        MessageEventCenter.default.showMessage(
+                                            type: Words.notification_volume_missing.word(),
+                                            name: "iPhone",
+                                            message: Words.notification_which_volume_missing.fill(arguments: represent)
+                                        )
                                     }
                                 }
                             }

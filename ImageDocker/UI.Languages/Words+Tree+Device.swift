@@ -10,6 +10,41 @@ import Foundation
 
 extension Words {
     
+    static let notification_title_tree = Localize (
+        eng: "General",
+        chs: "照片库"
+    )
+    
+    static let notification_title_healthcheck = Localize (
+        eng: "Health Check",
+        chs: "启动自检"
+    )
+    
+    static let notification_volume_connected = Localize (
+        eng: "Volumes Connected",
+        chs: "已连接的磁盘"
+    )
+    
+    static let notification_volume_missing = Localize (
+        eng: "Volumes Missing",
+        chs: "断开连接的磁盘"
+    )
+    
+    static let notification_which_volume_connected = Localize (
+        eng: "%s connected",
+        chs: "%s 已连接"
+    )
+    
+    static let notification_which_volume_missing = Localize (
+        eng: "%s missing",
+        chs: "%s 已断开连接"
+    )
+    
+    static let notification_none_volume_missing = Localize (
+        eng: "nothing missing",
+        chs: "已连接所有必需的磁盘"
+    )
+    
     static let device_tree_need_debug_mode = Localize (
         eng: "Enable [DEBUG MODE] in [Settings >> System >> Developer Options] if you've connected your phone via USB.",
         chs: "请通过 USB 连接移动设备，并确保移动设备已启用 [USB 调试模式]，通常在 [设置 >> 系统和更新 >> 开发人员选项]"
