@@ -273,10 +273,8 @@ struct LocalDirectory {
                         continue
                     }
                     if col == "/" || col.starts(with: "/Volumes/") {
-                        
+                        volumes.append(col)
                     }
-                    //self.logger.log("col -> \(col)")
-                    volumes.append(col)
                 }
             }
         }
@@ -412,7 +410,7 @@ struct LocalDirectory {
     }
     
     public func getRepositoryVolume(repository:ImageRepository, volumes:[String]) -> ([String], [String]) {
-        var volumes:Set<String> = []
+        var connectedVolumes:Set<String> = []
         var missingVolumes:Set<String> = []
         let mountpoint_home = repository.homeVolume
         let mountpoint_repository = repository.repositoryVolume
@@ -420,31 +418,31 @@ struct LocalDirectory {
         let mountpoint_face = repository.faceVolume
         let mountpoint_crop = repository.cropVolume
         if mountpoint_home != "" && volumes.contains(mountpoint_home) {
-            volumes.insert(mountpoint_home)
+            connectedVolumes.insert(mountpoint_home)
         }else if mountpoint_home != ""{
             missingVolumes.insert(mountpoint_home)
         }
         if mountpoint_repository != "" && volumes.contains(mountpoint_repository) {
-            volumes.insert(mountpoint_repository)
+            connectedVolumes.insert(mountpoint_repository)
         }else if mountpoint_repository != ""{
             missingVolumes.insert(mountpoint_repository)
         }
         if mountpoint_storage != "" && volumes.contains(mountpoint_storage) {
-            volumes.insert(mountpoint_storage)
+            connectedVolumes.insert(mountpoint_storage)
         }else if mountpoint_storage != ""{
             missingVolumes.insert(mountpoint_storage)
         }
         if mountpoint_face != "" && volumes.contains(mountpoint_face) {
-            volumes.insert(mountpoint_face)
+            connectedVolumes.insert(mountpoint_face)
         }else if mountpoint_face != ""{
             missingVolumes.insert(mountpoint_face)
         }
         if mountpoint_crop != "" && volumes.contains(mountpoint_crop) {
-            volumes.insert(mountpoint_crop)
+            connectedVolumes.insert(mountpoint_crop)
         }else if mountpoint_crop != ""{
             missingVolumes.insert(mountpoint_crop)
         }
-        return (volumes.sorted(), missingVolumes.sorted())
+        return (connectedVolumes.sorted(), missingVolumes.sorted())
     }
     
 //    public func getRepositoryVolume(repository:ImageContainer) -> [String] {

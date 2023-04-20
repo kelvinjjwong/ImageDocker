@@ -20,6 +20,7 @@ class DeviceTreeDataSource : TreeDataSource {
     
     var deviceConnectivityStatus:[String:Bool] = [:]
     
+    var volumesConnectivityTimer:Timer?
     var androidConnectivityTimer:Timer?
     var iphoneConnectivityTimer:Timer?
     
@@ -30,13 +31,17 @@ class DeviceTreeDataSource : TreeDataSource {
             for registeredDevice in registeredDevices {
                 if let id = registeredDevice.deviceId {
                     
-                    self.registered_android_id_names[id] = PhoneDevice.represent(
-                        deviceId: id,
-                        name: registeredDevice.name ?? "",
-                        manufacture: registeredDevice.manufacture ?? "",
-                        model: registeredDevice.marketName ?? registeredDevice.model ?? "",
-                        type: .Android
-                    )
+                    do {
+                        self.registered_android_id_names[id] = PhoneDevice.represent(
+                            deviceId: id,
+                            name: registeredDevice.name ?? "",
+                            manufacture: registeredDevice.manufacture ?? "",
+                            model: registeredDevice.marketName ?? registeredDevice.model ?? "",
+                            type: .Android
+                        )
+                    }catch{
+                        self.logger.log(.error, error)
+                    }
                 }
             }
         }
@@ -46,13 +51,17 @@ class DeviceTreeDataSource : TreeDataSource {
             for registeredDevice in registeredDevices {
                 if let id = registeredDevice.deviceId {
                     
-                    self.registered_iphone_id_names[id] = PhoneDevice.represent(
-                        deviceId: id,
-                        name: registeredDevice.name ?? "",
-                        manufacture: registeredDevice.manufacture ?? "",
-                        model: registeredDevice.marketName ?? registeredDevice.model ?? "",
-                        type: .iPhone
-                    )
+                    do {
+                        self.registered_iphone_id_names[id] = PhoneDevice.represent(
+                            deviceId: id,
+                            name: registeredDevice.name ?? "",
+                            manufacture: registeredDevice.manufacture ?? "",
+                            model: registeredDevice.marketName ?? registeredDevice.model ?? "",
+                            type: .iPhone
+                        )
+                    }catch{
+                        self.logger.log(.error, error)
+                    }
                 }
             }
         }
@@ -60,6 +69,56 @@ class DeviceTreeDataSource : TreeDataSource {
     
     func startConnectivityTest() {
 //        self.logger.log("start connectivity test timer")
+        
+        self.volumesConnectivityTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
+            DispatchQueue.global().async {
+                let registeredVolumes = PreferencesController.getSavedRepositoryVolumes()
+                let mountedVolumes = LocalDirectory.bridge.mountpoints()
+                
+                var volumes_change_to_be_connected:[String] = []
+                var volumes_change_to_be_disconnected:[String] = []
+                
+                for registeredVolume in registeredVolumes {
+                    let connectivityStatus = mountedVolumes.contains(registeredVolume)
+                    
+                    // initial
+                    if self.deviceConnectivityStatus[registeredVolume] == nil {
+
+                        self.deviceConnectivityStatus[registeredVolume] = connectivityStatus
+
+                    }else{
+                        // status change listener
+                        
+                        if let oldStatus = self.deviceConnectivityStatus[registeredVolume], oldStatus != connectivityStatus {
+                            
+                            self.deviceConnectivityStatus[registeredVolume] = connectivityStatus
+                            
+                            if connectivityStatus {
+                                volumes_change_to_be_connected.append(registeredVolume)
+                                
+                            }else{
+                                volumes_change_to_be_disconnected.append(registeredVolume)
+                            }
+                        }
+                    }
+                }
+                if !volumes_change_to_be_connected.isEmpty {
+                    MessageEventCenter.default.showMessage(
+                        type: Words.notification_volume_connected.word(),
+                        name: "Disk",
+                        message: Words.notification_which_volume_connected.fill(arguments: "\(volumes_change_to_be_connected)")
+                    )
+                }
+                if !volumes_change_to_be_disconnected.isEmpty {
+                    MessageEventCenter.default.showMessage(
+                        type: Words.notification_volume_missing.word(),
+                        name: "Disk",
+                        message: Words.notification_which_volume_missing.fill(arguments: "\(volumes_change_to_be_disconnected)")
+                    )
+                }
+            }
+        })
+        
         self.androidConnectivityTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
                 DispatchQueue.global().async {
                     self.loadRegisteredDevices()

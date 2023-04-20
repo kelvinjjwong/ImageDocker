@@ -276,6 +276,7 @@ class ViewController: NSViewController {
         var _missingVolumes:Set<String> = []
         let repos = RepositoryDao.default.getRepositoriesV2(orderBy: "name", condition: nil)
         let volumes = LocalDirectory.bridge.mountpoints()
+        self.logger.log("mounted volumes: \(volumes)")
         for repo in repos {
             let (connectedVolumes, missingVolumes) = LocalDirectory.bridge.getRepositoryVolume(repository: repo, volumes: volumes)
             self.logger.log("[connected volumes] \(connectedVolumes)")
