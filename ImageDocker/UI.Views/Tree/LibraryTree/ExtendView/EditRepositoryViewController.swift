@@ -16,6 +16,18 @@ class EditRepositoryViewController: NSViewController {
     private var originalContainer:ImageContainer? = nil
     
     // MARK: - FIELDS
+    
+    @IBOutlet weak var lblSubFolderLabel: NSTextField!
+    @IBOutlet weak var lblSubFolderLevel: NSTextField!
+    @IBOutlet weak var lblInitialBrief: NSTextField!
+    @IBOutlet weak var lblInitialEvent: NSTextField!
+    @IBOutlet weak var lblDevice: NSTextField!
+    @IBOutlet weak var lblCropsImagesPath: NSTextField!
+    @IBOutlet weak var lblFacesImagesPath: NSTextField!
+    @IBOutlet weak var lblRawImagesPath: NSTextField!
+    @IBOutlet weak var lblEditableImagesPath: NSTextField!
+    @IBOutlet weak var lblHomePath: NSTextField!
+    @IBOutlet weak var lblName: NSTextField!
     @IBOutlet weak var txtName: NSTextField!
     @IBOutlet weak var txtHomePath: NSTextField!
     @IBOutlet weak var txtStoragePath: NSTextField!
@@ -115,6 +127,18 @@ class EditRepositoryViewController: NSViewController {
     
     func setupUIDisplay() {
 //        self.btnFindFaces.title = Words.findFaces.word()
+        self.lblName.stringValue = Words.repository_name.word()
+        self.lblHomePath.stringValue = Words.repository_home_path.word()
+        self.lblEditableImagesPath.stringValue = Words.repository_editable_images_path.word()
+        self.lblRawImagesPath.stringValue = Words.repository_raw_images_path.word()
+        self.lblFacesImagesPath.stringValue = Words.repository_faces_images_path.word()
+        self.lblCropsImagesPath.stringValue = Words.repository_crops_images_path.word()
+        self.boxRepository.title = Words.repository_box_store_images.word()
+        self.boxFaces.title = Words.repository_box_store_faces.word()
+        self.boxDevice.title = Words.repository_box_link_to_device.word()
+        self.lblInitialEvent.stringValue = Words.repository_initial_event.word()
+        self.lblInitialBrief.stringValue = Words.repository_initial_brief.word()
+        
         self.btnOK.title = Words.saveRepository.word()
         self.btnStat.title = Words.stat.word()
         self.btnRemove.title = Words.deleteAllImages.word()

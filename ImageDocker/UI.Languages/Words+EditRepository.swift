@@ -10,6 +10,61 @@ import Foundation
 
 extension Words {
     
+    static let repository_name = Localize(
+        eng: "Name",
+        chs: "照片库名称"
+    )
+    
+    static let repository_box_store_images = Localize(
+        eng: "Where to store images?",
+        chs: "照片存储的位置"
+    )
+    
+    static let repository_box_store_faces = Localize(
+        eng: "Where to store faces?",
+        chs: "人物脸孔存储的位置"
+    )
+    
+    static let repository_box_link_to_device = Localize(
+        eng: "Link to",
+        chs: "照片来源的设备"
+    )
+    
+    static let repository_initial_event = Localize(
+        eng: "Initial Event",
+        chs: "活动的初值策略"
+    )
+    
+    static let repository_initial_brief = Localize(
+        eng: "Initial Brief",
+        chs: "描述的初值策略"
+    )
+    
+    static let repository_home_path = Localize(
+        eng: "Home",
+        chs: "主文件夹"
+    )
+    
+    static let repository_editable_images_path = Localize(
+        eng: "Editable Images",
+        chs: "可修改的照片的存储点"
+    )
+    
+    static let repository_raw_images_path = Localize(
+        eng: "Raw Images",
+        chs: "不可修改的照片的存储"
+    )
+    
+    static let repository_faces_images_path = Localize(
+        eng: "Faces",
+        chs: "人物脸孔的存储点"
+    )
+    
+    static let repository_crops_images_path = Localize(
+        eng: "Crops",
+        chs: "剪切的存储点"
+    )
+    
     static let save = Localize(
         eng: "Save",
         chs: "保存"
