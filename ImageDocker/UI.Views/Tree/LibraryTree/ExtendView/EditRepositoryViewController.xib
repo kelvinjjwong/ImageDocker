@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -145,11 +144,11 @@ DQ
                 <box title="Where to store images?" translatesAutoresizingMaskIntoConstraints="NO" id="MhF-2x-aZh">
                     <rect key="frame" x="7" y="491" width="953" height="204"/>
                     <view key="contentView" id="3Ye-tw-1C5">
-                        <rect key="frame" x="3" y="3" width="947" height="183"/>
+                        <rect key="frame" x="4" y="5" width="945" height="181"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="drY-Sc-iZY">
-                                <rect key="frame" x="131" y="78" width="424" height="16"/>
+                                <rect key="frame" x="131" y="76" width="424" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="420" id="mZn-l5-fZr"/>
                                 </constraints>
@@ -160,7 +159,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RxF-NY-aEE">
-                                <rect key="frame" x="11" y="50" width="124" height="16"/>
+                                <rect key="frame" x="11" y="48" width="124" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="Zdm-h6-ULI"/>
                                 </constraints>
@@ -171,7 +170,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="brY-bZ-qwy">
-                                <rect key="frame" x="133" y="47" width="420" height="21"/>
+                                <rect key="frame" x="133" y="45" width="420" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="420" id="EHm-rT-4UT"/>
                                 </constraints>
@@ -182,7 +181,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ea1-EZ-sbH">
-                                <rect key="frame" x="556" y="40" width="114" height="32"/>
+                                <rect key="frame" x="556" y="38" width="114" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="Dhk-Ui-VF1"/>
                                 </constraints>
@@ -195,7 +194,7 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="l8N-qh-KJv">
-                                <rect key="frame" x="666" y="40" width="134" height="32"/>
+                                <rect key="frame" x="666" y="38" width="134" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="sfJ-Cs-LtE"/>
                                 </constraints>
@@ -208,7 +207,7 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cKP-dv-5LC">
-                                <rect key="frame" x="798" y="40" width="154" height="32"/>
+                                <rect key="frame" x="798" y="38" width="154" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="140" id="EDO-en-1vw"/>
                                 </constraints>
@@ -221,7 +220,7 @@ DQ
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GzF-IB-mLY">
-                                <rect key="frame" x="131" y="27" width="424" height="16"/>
+                                <rect key="frame" x="131" y="25" width="424" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="420" id="Jab-AS-NJ4"/>
                                 </constraints>
@@ -232,7 +231,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1x5-fF-WCK">
-                                <rect key="frame" x="11" y="107" width="124" height="16"/>
+                                <rect key="frame" x="11" y="105" width="124" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="JxN-0W-2cx"/>
                                 </constraints>
@@ -243,7 +242,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PRS-m5-bry">
-                                <rect key="frame" x="133" y="102" width="420" height="21"/>
+                                <rect key="frame" x="133" y="100" width="420" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="420" id="6VB-il-NXi"/>
                                 </constraints>
@@ -254,7 +253,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="41T-t0-5ul">
-                                <rect key="frame" x="556" y="96" width="114" height="32"/>
+                                <rect key="frame" x="556" y="94" width="114" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="XDb-Tv-qg9"/>
                                 </constraints>
@@ -267,7 +266,7 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bKg-bx-AcA">
-                                <rect key="frame" x="666" y="96" width="134" height="32"/>
+                                <rect key="frame" x="666" y="94" width="134" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="fj2-aJ-iDE"/>
                                 </constraints>
@@ -280,7 +279,7 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jly-Zj-465">
-                                <rect key="frame" x="798" y="96" width="154" height="32"/>
+                                <rect key="frame" x="798" y="94" width="154" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="140" id="J1e-CB-bWT"/>
                                 </constraints>
@@ -293,7 +292,7 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oHH-xV-dox">
-                                <rect key="frame" x="815" y="146" width="134" height="32"/>
+                                <rect key="frame" x="813" y="144" width="134" height="32"/>
                                 <buttonCell key="cell" type="push" title="Follow Home" bezelStyle="rounded" image="NSPathTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Dhq-Ya-1vJ">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -303,7 +302,7 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FIP-B4-5Qh">
-                                <rect key="frame" x="406" y="146" width="273" height="32"/>
+                                <rect key="frame" x="404" y="144" width="273" height="32"/>
                                 <buttonCell key="cell" type="push" title="Copy Editable Images to Raw Storage" bezelStyle="rounded" image="NSGoBackTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aCp-Dm-JsB">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -313,10 +312,10 @@ DQ
                                 </connections>
                             </button>
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="0mS-1t-LTR">
-                                <rect key="frame" x="10" y="138" width="927" height="5"/>
+                                <rect key="frame" x="10" y="136" width="925" height="5"/>
                             </box>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2oL-qg-bW1">
-                                <rect key="frame" x="680" y="146" width="134" height="32"/>
+                                <rect key="frame" x="678" y="144" width="134" height="32"/>
                                 <buttonCell key="cell" type="push" title="Back To Origin" bezelStyle="rounded" image="NSGoBackTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="sud-qh-Qap">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -326,7 +325,7 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nno-c9-KhA">
-                                <rect key="frame" x="3" y="146" width="243" height="32"/>
+                                <rect key="frame" x="3" y="144" width="243" height="32"/>
                                 <buttonCell key="cell" type="push" title="Normalize Hidden of Duplicates" bezelStyle="rounded" image="NSRefreshFreestandingTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="6cb-v3-gAN">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -382,11 +381,11 @@ DQ
                 <box title="Where to store faces?" translatesAutoresizingMaskIntoConstraints="NO" id="Dc8-PY-mI1">
                     <rect key="frame" x="7" y="291" width="953" height="194"/>
                     <view key="contentView" id="lNq-bV-B3X">
-                        <rect key="frame" x="3" y="3" width="947" height="173"/>
+                        <rect key="frame" x="4" y="5" width="945" height="171"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NxG-Kl-1b6">
-                                <rect key="frame" x="15" y="97" width="124" height="16"/>
+                                <rect key="frame" x="15" y="95" width="124" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="ZbD-2U-dVL"/>
                                 </constraints>
@@ -397,7 +396,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1o1-eH-g9W">
-                                <rect key="frame" x="137" y="92" width="420" height="21"/>
+                                <rect key="frame" x="137" y="90" width="420" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="420" id="eeq-b9-LGs"/>
                                 </constraints>
@@ -408,7 +407,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dTc-ib-aC3">
-                                <rect key="frame" x="560" y="86" width="114" height="32"/>
+                                <rect key="frame" x="560" y="84" width="114" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="lAM-dQ-BMd"/>
                                 </constraints>
@@ -421,7 +420,7 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="U3b-XQ-9Nn">
-                                <rect key="frame" x="670" y="86" width="134" height="32"/>
+                                <rect key="frame" x="670" y="84" width="134" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="69D-Pe-pM6"/>
                                 </constraints>
@@ -434,7 +433,7 @@ DQ
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jf4-JO-Lg1">
-                                <rect key="frame" x="15" y="41" width="124" height="16"/>
+                                <rect key="frame" x="15" y="39" width="124" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="uYc-Sl-CXk"/>
                                 </constraints>
@@ -445,7 +444,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8xr-bD-YkL">
-                                <rect key="frame" x="137" y="36" width="420" height="21"/>
+                                <rect key="frame" x="137" y="34" width="420" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="420" id="Iko-ZK-Ra6"/>
                                 </constraints>
@@ -456,7 +455,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BB4-n4-XXi">
-                                <rect key="frame" x="560" y="31" width="114" height="32"/>
+                                <rect key="frame" x="560" y="29" width="114" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="maW-KP-Bso"/>
                                 </constraints>
@@ -469,7 +468,7 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="on0-OW-NIP">
-                                <rect key="frame" x="670" y="31" width="134" height="32"/>
+                                <rect key="frame" x="670" y="29" width="134" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="kEB-P0-OL3"/>
                                 </constraints>
@@ -482,7 +481,7 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QW4-yN-LpB">
-                                <rect key="frame" x="802" y="86" width="154" height="32"/>
+                                <rect key="frame" x="802" y="84" width="154" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="140" id="SIG-gy-nPa"/>
                                 </constraints>
@@ -495,7 +494,7 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LWe-xa-RXn">
-                                <rect key="frame" x="802" y="31" width="154" height="32"/>
+                                <rect key="frame" x="802" y="29" width="154" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="140" id="oNm-LF-smg"/>
                                 </constraints>
@@ -508,7 +507,7 @@ DQ
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Yub-ky-K56">
-                                <rect key="frame" x="135" y="68" width="424" height="16"/>
+                                <rect key="frame" x="135" y="66" width="424" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="420" id="d0G-qK-E3m"/>
                                 </constraints>
@@ -519,7 +518,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="10g-ir-81L">
-                                <rect key="frame" x="135" y="12" width="424" height="16"/>
+                                <rect key="frame" x="135" y="10" width="424" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="420" id="Ejg-36-M1T"/>
                                 </constraints>
@@ -530,7 +529,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MY0-Xi-ccs">
-                                <rect key="frame" x="815" y="136" width="134" height="32"/>
+                                <rect key="frame" x="813" y="134" width="134" height="32"/>
                                 <buttonCell key="cell" type="push" title="Follow Home" bezelStyle="rounded" image="NSPathTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="EDn-Yi-e7A">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -540,7 +539,7 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HKA-dS-v0W">
-                                <rect key="frame" x="680" y="136" width="134" height="32"/>
+                                <rect key="frame" x="678" y="134" width="134" height="32"/>
                                 <buttonCell key="cell" type="push" title="Back To Origin" bezelStyle="rounded" image="NSGoBackTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TX2-Gt-res">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -550,7 +549,7 @@ DQ
                                 </connections>
                             </button>
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="4Wg-Jf-XxF">
-                                <rect key="frame" x="10" y="128" width="927" height="5"/>
+                                <rect key="frame" x="10" y="126" width="925" height="5"/>
                             </box>
                         </subviews>
                         <constraints>
@@ -596,11 +595,11 @@ DQ
                 <box title="Link To" translatesAutoresizingMaskIntoConstraints="NO" id="SEe-Q5-bnd">
                     <rect key="frame" x="7" y="98" width="953" height="184"/>
                     <view key="contentView" id="skm-2x-uIh">
-                        <rect key="frame" x="3" y="3" width="947" height="166"/>
+                        <rect key="frame" x="4" y="5" width="945" height="164"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6LH-kI-GNt">
-                                <rect key="frame" x="13" y="130" width="124" height="16"/>
+                                <rect key="frame" x="13" y="128" width="124" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="It3-uo-3pX"/>
                                 </constraints>
@@ -611,7 +610,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2xC-qr-6HM">
-                                <rect key="frame" x="137" y="130" width="204" height="16"/>
+                                <rect key="frame" x="137" y="128" width="204" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="HIm-pE-tVK"/>
                                 </constraints>
@@ -622,7 +621,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bgp-KA-mtx">
-                                <rect key="frame" x="347" y="130" width="324" height="16"/>
+                                <rect key="frame" x="347" y="128" width="324" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="320" id="Atq-pI-i1b"/>
                                 </constraints>
@@ -633,7 +632,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dbe-O3-1d8">
-                                <rect key="frame" x="744" y="119" width="126" height="32"/>
+                                <rect key="frame" x="742" y="117" width="126" height="32"/>
                                 <buttonCell key="cell" type="push" title="Check Paths" bezelStyle="rounded" image="NSMenuOnStateTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7GH-1t-cDV">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -643,7 +642,7 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JpR-WU-qRl">
-                                <rect key="frame" x="868" y="119" width="86" height="32"/>
+                                <rect key="frame" x="866" y="117" width="86" height="32"/>
                                 <buttonCell key="cell" type="push" title="Clean" bezelStyle="rounded" image="NSStopProgressFreestandingTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8HQ-wG-cLj">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -653,7 +652,7 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BGH-GR-ms6">
-                                <rect key="frame" x="669" y="119" width="77" height="32"/>
+                                <rect key="frame" x="667" y="117" width="77" height="32"/>
                                 <buttonCell key="cell" type="push" title="Link" bezelStyle="rounded" image="link" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="V64-Ig-MnA">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -663,7 +662,7 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uMI-HK-8jM">
-                                <rect key="frame" x="663" y="84" width="291" height="32"/>
+                                <rect key="frame" x="661" y="82" width="291" height="32"/>
                                 <buttonCell key="cell" type="push" title="Let paths of Repository follow Device's" bezelStyle="rounded" image="NSPathTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jCJ-Vj-J9v">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -673,7 +672,7 @@ DQ
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tzb-Jt-ksj">
-                                <rect key="frame" x="13" y="52" width="74" height="16"/>
+                                <rect key="frame" x="13" y="50" width="74" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="70" id="n6D-rT-Ic8"/>
                                 </constraints>
@@ -684,7 +683,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="R3E-Os-NmK">
-                                <rect key="frame" x="621" y="41" width="173" height="32"/>
+                                <rect key="frame" x="621" y="39" width="173" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="159" id="dst-E8-Uz6"/>
                                 </constraints>
@@ -697,14 +696,14 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aYz-ju-NSb">
-                                <rect key="frame" x="98" y="48" width="217" height="18"/>
+                                <rect key="frame" x="98" y="46" width="217" height="18"/>
                                 <buttonCell key="cell" type="check" title="Use folder name as event name" bezelStyle="regularSquare" imagePosition="left" inset="2" id="WEs-3a-c0K">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="M4Y-xa-Rlf">
-                                <rect key="frame" x="348" y="50" width="102" height="16"/>
+                                <rect key="frame" x="348" y="48" width="102" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Sub folder level:" id="UVU-Wg-hQV">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -712,7 +711,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mys-ji-CSW">
-                                <rect key="frame" x="460" y="44" width="48" height="25"/>
+                                <rect key="frame" x="460" y="42" width="48" height="25"/>
                                 <popUpButtonCell key="cell" type="push" title="I" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="0hi-Vr-EbG" id="lhn-IP-K08">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
@@ -726,7 +725,7 @@ DQ
                                 </popUpButtonCell>
                             </popUpButton>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1pu-kj-QmS">
-                                <rect key="frame" x="537" y="41" width="82" height="32"/>
+                                <rect key="frame" x="537" y="39" width="82" height="32"/>
                                 <buttonCell key="cell" type="push" title="Preview" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xrH-oI-QnT">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -736,7 +735,7 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9Oa-4A-Umw">
-                                <rect key="frame" x="794" y="41" width="150" height="32"/>
+                                <rect key="frame" x="792" y="39" width="150" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="136" id="xNm-d8-xz3"/>
                                 </constraints>
@@ -749,10 +748,10 @@ DQ
                                 </connections>
                             </button>
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="SEp-Tg-48w">
-                                <rect key="frame" x="15" y="76" width="917" height="5"/>
+                                <rect key="frame" x="15" y="74" width="915" height="5"/>
                             </box>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ETk-f0-MiF">
-                                <rect key="frame" x="13" y="23" width="69" height="16"/>
+                                <rect key="frame" x="13" y="21" width="69" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Initial Brief" id="YBY-3X-4vF">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -760,14 +759,14 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ST2-Ti-2Bo">
-                                <rect key="frame" x="97" y="16" width="225" height="18"/>
+                                <rect key="frame" x="97" y="14" width="225" height="18"/>
                                 <buttonCell key="cell" type="check" title="Use folder name as image's brief" bezelStyle="regularSquare" imagePosition="left" inset="2" id="eIK-VJ-dx7">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Y9I-uW-JXa">
-                                <rect key="frame" x="347" y="21" width="103" height="16"/>
+                                <rect key="frame" x="347" y="19" width="103" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Sub folder label:" id="g14-cS-QH6">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -775,7 +774,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HtH-w0-Ajs">
-                                <rect key="frame" x="459" y="15" width="77" height="25"/>
+                                <rect key="frame" x="459" y="13" width="77" height="25"/>
                                 <popUpButtonCell key="cell" type="push" title="Last 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Roc-1T-3Pk" id="beb-7T-uc7">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
@@ -792,7 +791,7 @@ DQ
                                 </popUpButtonCell>
                             </popUpButton>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PVx-ry-Ghf">
-                                <rect key="frame" x="537" y="11" width="82" height="32"/>
+                                <rect key="frame" x="537" y="9" width="82" height="32"/>
                                 <buttonCell key="cell" type="push" title="Preview" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8tu-dg-TcX">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -802,7 +801,7 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4aA-zj-Ajw">
-                                <rect key="frame" x="621" y="11" width="173" height="32"/>
+                                <rect key="frame" x="621" y="9" width="173" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="159" id="RQs-x9-dH8"/>
                                 </constraints>
@@ -815,7 +814,7 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uyC-7s-Wt1">
-                                <rect key="frame" x="794" y="11" width="150" height="32"/>
+                                <rect key="frame" x="792" y="9" width="150" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="136" id="uc1-fI-UUr"/>
                                 </constraints>
@@ -1011,14 +1010,14 @@ DQ
         </view>
     </objects>
     <resources>
-        <image name="NSGoBackTemplate" width="10" height="14"/>
-        <image name="NSMenuOnStateTemplate" width="14" height="13"/>
-        <image name="NSPathTemplate" width="19" height="12"/>
-        <image name="NSQuickLookTemplate" width="21" height="13"/>
-        <image name="NSRefreshFreestandingTemplate" width="15" height="15"/>
-        <image name="NSRevealFreestandingTemplate" width="15" height="15"/>
-        <image name="NSStopProgressFreestandingTemplate" width="15" height="15"/>
-        <image name="NSStopProgressTemplate" width="14" height="13"/>
+        <image name="NSGoBackTemplate" width="12" height="17"/>
+        <image name="NSMenuOnStateTemplate" width="18" height="17"/>
+        <image name="NSPathTemplate" width="25" height="15"/>
+        <image name="NSQuickLookTemplate" width="26" height="17"/>
+        <image name="NSRefreshFreestandingTemplate" width="20" height="20"/>
+        <image name="NSRevealFreestandingTemplate" width="20" height="20"/>
+        <image name="NSStopProgressFreestandingTemplate" width="20" height="20"/>
+        <image name="NSStopProgressTemplate" width="17" height="16"/>
         <image name="folderOpen" width="24" height="24"/>
         <image name="link" width="16" height="16"/>
     </resources>

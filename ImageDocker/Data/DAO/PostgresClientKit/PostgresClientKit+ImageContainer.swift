@@ -681,12 +681,12 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         var sql = ""
         if let root = rootPath {
             sql = """
-            select distinct "containerPath" from "Image" where ("repositoryPath" = $1 or "repositoryPath" = $2) order by "containerpath"
+            select distinct "containerPath" from "Image" where ("repositoryPath" = $1 or "repositoryPath" = $2) order by "containerPath"
             """
             records = TempRecord.fetchAll(db, sql: sql, values: [root.withLastStash(), root.removeLastStash()])
         }else{
             sql = """
-            select distinct "containerpath" from "image" order by "containerpath"
+            select distinct "containerPath" from "image" order by "containerPath"
             """
             records = TempRecord.fetchAll(db, sql: sql)
         }
@@ -763,7 +763,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "ImageContainer" set "repositoryId" = $1 where "id" = $2
                 """, parameterValues: [repositoryId, containerId])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
             return .ERROR
         }
@@ -777,7 +777,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "ImageContainer" set "parentId" = $1 where "id" = $2
                 """, parameterValues: [parentId, containerId])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
             return .ERROR
         }
@@ -791,7 +791,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "ImageContainer" set "parentFolder" = $1 where "path" = $2
                 """, parameterValues: [path, parentFolder])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
             return .ERROR
         }
@@ -805,7 +805,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "ImageContainer" set "hideByParent" = \(hideByParent ? "true" : "false") where "path" = $1
                 """, parameterValues: [path])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
             return .ERROR
         }
