@@ -90,7 +90,7 @@ class EventDaoGRDB : EventDaoInterface {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 if stmtName != "" {
-                    result = try ImageEvent.filter(stmtName).order(Column("name").asc).fetchAll(db)
+                    result = try ImageEvent.filter(key: stmtName).order(Column("name").asc).fetchAll(db)
                 }else{
                     result = try ImageEvent.order(Column("name").asc).fetchAll(db)
                 }
@@ -111,7 +111,7 @@ class EventDaoGRDB : EventDaoInterface {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 if stmtCategory != "" {
-                    result = try ImageEvent.filter(stmtCategory).order(Column("name").asc).fetchAll(db)
+                    result = try ImageEvent.filter(key: stmtCategory).order(Column("name").asc).fetchAll(db)
                 }else{
                     result = try ImageEvent.order(Column("name").asc).fetchAll(db)
                 }

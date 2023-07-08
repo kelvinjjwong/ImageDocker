@@ -224,13 +224,13 @@ https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip</stri
                                                     </constraints>
                                                 </box>
                                                 <box title="iOS Device" translatesAutoresizingMaskIntoConstraints="NO" id="2Uq-Lb-XDw">
-                                                    <rect key="frame" x="23" y="32" width="699" height="354"/>
+                                                    <rect key="frame" x="23" y="12" width="699" height="384"/>
                                                     <view key="contentView" id="bui-j0-iKz">
-                                                        <rect key="frame" x="4" y="5" width="691" height="334"/>
+                                                        <rect key="frame" x="4" y="5" width="691" height="364"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9E9-ED-tlP">
-                                                                <rect key="frame" x="18" y="242" width="138" height="16"/>
+                                                                <rect key="frame" x="18" y="272" width="138" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="134" id="8Cb-Sx-4Yi"/>
                                                                 </constraints>
@@ -241,7 +241,7 @@ https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip</stri
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cm6-C8-DeR">
-                                                                <rect key="frame" x="164" y="238" width="428" height="21"/>
+                                                                <rect key="frame" x="164" y="268" width="428" height="21"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="428" id="zdM-va-ygL"/>
                                                                 </constraints>
@@ -252,7 +252,7 @@ https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip</stri
                                                                 </textFieldCell>
                                                             </textField>
                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dzC-ds-BoO">
-                                                                <rect key="frame" x="593" y="230" width="85" height="32"/>
+                                                                <rect key="frame" x="593" y="260" width="85" height="32"/>
                                                                 <buttonCell key="cell" type="push" title="Locate" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Tot-kB-gWd">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
@@ -262,7 +262,7 @@ https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip</stri
                                                                 </connections>
                                                             </button>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3P0-sK-bCp">
-                                                                <rect key="frame" x="18" y="298" width="138" height="16"/>
+                                                                <rect key="frame" x="18" y="328" width="138" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="134" id="Scm-Z5-QCJ"/>
                                                                 </constraints>
@@ -273,7 +273,7 @@ https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip</stri
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qkV-BE-Pmv">
-                                                                <rect key="frame" x="164" y="293" width="428" height="21"/>
+                                                                <rect key="frame" x="164" y="323" width="428" height="21"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="428" id="zOO-7w-Eph"/>
                                                                 </constraints>
@@ -284,7 +284,7 @@ https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip</stri
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gr4-nh-oJ7">
-                                                                <rect key="frame" x="18" y="186" width="139" height="16"/>
+                                                                <rect key="frame" x="18" y="216" width="139" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="135" id="TNW-PT-6RE"/>
                                                                 </constraints>
@@ -295,7 +295,7 @@ https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip</stri
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6Bi-bh-lHJ">
-                                                                <rect key="frame" x="18" y="130" width="139" height="16"/>
+                                                                <rect key="frame" x="18" y="160" width="139" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="135" id="8TP-0X-CoK"/>
                                                                 </constraints>
@@ -306,7 +306,7 @@ https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip</stri
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MSQ-DN-wUC">
-                                                                <rect key="frame" x="165" y="181" width="428" height="21"/>
+                                                                <rect key="frame" x="165" y="211" width="428" height="21"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="428" id="ZQ0-kH-ovs"/>
                                                                 </constraints>
@@ -317,7 +317,7 @@ https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip</stri
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kan-Ci-YW8">
-                                                                <rect key="frame" x="163" y="124" width="428" height="21"/>
+                                                                <rect key="frame" x="163" y="154" width="428" height="21"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="428" id="js1-5Z-5XV"/>
                                                                 </constraints>
@@ -328,7 +328,7 @@ https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip</stri
                                                                 </textFieldCell>
                                                             </textField>
                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mWy-mj-XJt">
-                                                                <rect key="frame" x="594" y="175" width="84" height="32"/>
+                                                                <rect key="frame" x="594" y="205" width="84" height="32"/>
                                                                 <buttonCell key="cell" type="push" title="Locate" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="A2X-T3-cx2">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
@@ -338,7 +338,7 @@ https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip</stri
                                                                 </connections>
                                                             </button>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lhs-oC-UmE">
-                                                                <rect key="frame" x="162" y="212" width="431" height="16"/>
+                                                                <rect key="frame" x="162" y="242" width="431" height="16"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" id="KeM-eQ-mqc">
                                                                     <font key="font" metaFont="system"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -346,7 +346,7 @@ https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip</stri
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9F3-hf-SZd">
-                                                                <rect key="frame" x="162" y="155" width="431" height="16"/>
+                                                                <rect key="frame" x="162" y="185" width="431" height="16"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" id="YC0-kH-y0h">
                                                                     <font key="font" metaFont="system"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -354,7 +354,7 @@ https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip</stri
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5X4-wH-IYF">
-                                                                <rect key="frame" x="162" y="98" width="431" height="16"/>
+                                                                <rect key="frame" x="162" y="128" width="431" height="16"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" id="plv-xo-Gog">
                                                                     <font key="font" metaFont="system"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -362,7 +362,7 @@ https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip</stri
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SXB-hR-iDh">
-                                                                <rect key="frame" x="162" y="269" width="431" height="16"/>
+                                                                <rect key="frame" x="162" y="299" width="431" height="16"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" id="wpO-W4-hN6">
                                                                     <font key="font" metaFont="system"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -370,7 +370,7 @@ https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip</stri
                                                                 </textFieldCell>
                                                             </textField>
                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hhk-60-jqD">
-                                                                <rect key="frame" x="593" y="285" width="85" height="32"/>
+                                                                <rect key="frame" x="593" y="315" width="85" height="32"/>
                                                                 <buttonCell key="cell" type="push" title="Browse" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zzM-YD-rKB">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
@@ -380,7 +380,7 @@ https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip</stri
                                                                 </connections>
                                                             </button>
                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sFd-5j-WGq">
-                                                                <rect key="frame" x="592" y="119" width="86" height="32"/>
+                                                                <rect key="frame" x="592" y="149" width="86" height="32"/>
                                                                 <buttonCell key="cell" type="push" title="Locate" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="va9-gc-Ztw">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
@@ -389,12 +389,15 @@ https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip</stri
                                                                     <action selector="onLocateIdeviceInfoClicked:" target="Cb1-tO-IZ5" id="Qai-8G-1p0"/>
                                                                 </connections>
                                                             </button>
-                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Pgt-3U-VrS">
-                                                                <rect key="frame" x="163" y="29" width="510" height="64"/>
+                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pgt-3U-VrS">
+                                                                <rect key="frame" x="163" y="8" width="510" height="112"/>
                                                                 <textFieldCell key="cell" selectable="YES" id="H3Q-pt-W1K">
                                                                     <font key="font" metaFont="system"/>
                                                                     <string key="title">How to install:
-brew install ifuse 
+1. Install macFuse from: https://github.com/osxfuse/osxfuse/releases
+2. Restart macOS
+3. Run below commands in Console:
+brew install gromgit/fuse/ifuse-mac 
 brew install -v automake autoconf libtool wget libimobiledevice
 brew install -v --HEAD --build-from-source ideviceinstaller</string>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -449,12 +452,12 @@ brew install -v --HEAD --build-from-source ideviceinstaller</string>
                                                         </constraints>
                                                     </view>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="350" id="Svm-3I-bYk"/>
+                                                        <constraint firstAttribute="height" constant="380" id="Svm-3I-bYk"/>
                                                     </constraints>
                                                 </box>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="2Uq-Lb-XDw" firstAttribute="top" secondItem="c1e-hX-ICd" secondAttribute="bottom" constant="30" id="8Ve-Hk-2TS"/>
+                                                <constraint firstItem="2Uq-Lb-XDw" firstAttribute="top" secondItem="c1e-hX-ICd" secondAttribute="bottom" constant="20" id="8Ve-Hk-2TS"/>
                                                 <constraint firstAttribute="trailing" secondItem="c1e-hX-ICd" secondAttribute="trailing" constant="25" id="DNz-ys-FLL"/>
                                                 <constraint firstItem="c1e-hX-ICd" firstAttribute="top" secondItem="0ka-nq-d67" secondAttribute="top" constant="20" id="JJd-TH-Ziu"/>
                                                 <constraint firstItem="2Uq-Lb-XDw" firstAttribute="leading" secondItem="0ka-nq-d67" secondAttribute="leading" constant="26" id="PnX-vZ-yDK"/>
@@ -2938,7 +2941,7 @@ brew install -v --HEAD --build-from-source ideviceinstaller</string>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="QeM-aP-zdF">
-                                                            <rect key="frame" x="11" y="1" width="31" height="17"/>
+                                                            <rect key="frame" x="11" y="1" width="32" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         </tableCellView>
                                                     </prototypeCellViews>
@@ -2956,7 +2959,7 @@ brew install -v --HEAD --build-from-source ideviceinstaller</string>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="oKK-cu-PBz">
-                                                            <rect key="frame" x="45" y="1" width="80" height="17"/>
+                                                            <rect key="frame" x="46" y="1" width="79" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="pKU-BK-Kyl">
@@ -3028,11 +3031,11 @@ brew install -v --HEAD --build-from-source ideviceinstaller</string>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="LZz-Pm-q22">
-                                                            <rect key="frame" x="201" y="1" width="124" height="17"/>
+                                                            <rect key="frame" x="201" y="1" width="125" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="WUz-tY-66q">
-                                                                    <rect key="frame" x="0.0" y="1" width="124" height="16"/>
+                                                                    <rect key="frame" x="0.0" y="1" width="125" height="16"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="bcs-Y7-Fot">
                                                                         <font key="font" metaFont="system"/>
                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -3064,7 +3067,7 @@ brew install -v --HEAD --build-from-source ideviceinstaller</string>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="eKx-mS-IPG">
-                                                            <rect key="frame" x="328" y="1" width="1005" height="17"/>
+                                                            <rect key="frame" x="329" y="1" width="1004" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="bZs-sX-o57">

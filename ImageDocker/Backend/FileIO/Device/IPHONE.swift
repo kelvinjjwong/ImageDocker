@@ -51,6 +51,14 @@ struct IPHONE {
     }
     
     func devices() -> [String]{
+        if ideviceid.path == "" {
+            self.logger.log(.error, "ideviceid path is empty !!!")
+            return []
+        }
+        if !ideviceid.path.isFileExists() {
+            self.logger.log(.error, "ideviceid has not installed !!!")
+            return []
+        }
         var result:[String] = []
         let pipe = Pipe()
         autoreleasepool { () -> Void in
@@ -76,6 +84,14 @@ struct IPHONE {
     
     func mount(path:String) -> Bool{
         self.logger.log("START TO MOUNT")
+        if ifuse.path == "" {
+            self.logger.log(.error, "ifuse path is empty !!!")
+            return false
+        }
+        if !ifuse.path.isFileExists() {
+            self.logger.log(.error, "ifuse has not installed !!!")
+            return false
+        }
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let command = Process()
@@ -104,6 +120,14 @@ struct IPHONE {
     }
     
     func unmountFuse(){
+        if ifuse.path == "" {
+            self.logger.log(.error, "umount path is empty !!!")
+            return
+        }
+        if !ifuse.path.isFileExists() {
+            self.logger.log(.error, "umount has not installed !!!")
+            return
+        }
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let command = Process()
@@ -126,6 +150,14 @@ struct IPHONE {
     }
     
     func unmount(path:String){
+        if ifuse.path == "" {
+            self.logger.log(.error, "umount path is empty !!!")
+            return
+        }
+        if !ifuse.path.isFileExists() {
+            self.logger.log(.error, "umount has not installed !!!")
+            return
+        }
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let command = Process()
@@ -182,6 +214,14 @@ struct IPHONE {
     }
     
     func device() -> PhoneDevice? {
+        if ideviceinfo.path == "" {
+            self.logger.log(.error, "ideviceinfo path is empty !!!")
+            return nil
+        }
+        if !ideviceinfo.path.isFileExists() {
+            self.logger.log(.error, "ideviceinfo has not installed !!!")
+            return nil
+        }
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let command = Process()

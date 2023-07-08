@@ -51,7 +51,7 @@ extension ViewController {
             if dbBackupRealUrl == "" {
                 self.splashController.message(Words.splash_creatingDatabaseBackup_failed_missing_volumes.fill(arguments: dbBackupRealUrl), progress: 1)
                 self.splashController.decideQuit = true
-                self.splashController.showQuit(countdown: 8, disableButton: true) {
+                self.splashController.showQuit(countdown: 120, disableButton: false) {
                     self.doQuit(withoutBackupDB: true)
                 }
                 return

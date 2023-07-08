@@ -28,6 +28,14 @@ struct Android {
     }
     
     func devices() -> [String]{
+        if adb.path == "" {
+            self.logger.log(.error, "adb path is empty !!!")
+            return []
+        }
+        if !adb.path.isFileExists() {
+            self.logger.log(.error, "adb has not installed !!!")
+            return []
+        }
         var result:[String] = []
         let pipe = Pipe()
         autoreleasepool { () -> Void in
@@ -62,6 +70,14 @@ struct Android {
     }
     
     func device(id:String) -> PhoneDevice? {
+        if adb.path == "" {
+            self.logger.log(.error, "adb path is empty !!!")
+            return nil
+        }
+        if !adb.path.isFileExists() {
+            self.logger.log(.error, "adb has not installed !!!")
+            return nil
+        }
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let command = Process()
@@ -125,6 +141,14 @@ struct Android {
     }
     
     func memory(device:PhoneDevice) -> PhoneDevice {
+        if adb.path == "" {
+            self.logger.log(.error, "adb path is empty !!!")
+            return PhoneDevice(type: .Unknown, deviceId: "n/a", manufacture: "n/a", model: "n/a")
+        }
+        if !adb.path.isFileExists() {
+            self.logger.log(.error, "adb has not installed !!!")
+            return PhoneDevice(type: .Unknown, deviceId: "n/a", manufacture: "n/a", model: "n/a")
+        }
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let command = Process()
@@ -167,6 +191,14 @@ struct Android {
     }
     
     func existsFile(device id: String, path: String) -> Bool {
+        if adb.path == "" {
+            self.logger.log(.error, "adb path is empty !!!")
+            return false
+        }
+        if !adb.path.isFileExists() {
+            self.logger.log(.error, "adb has not installed !!!")
+            return false
+        }
         self.logger.log("checking if exists \(id) \(path)")
         let pipe = Pipe()
         autoreleasepool { () -> Void in
@@ -196,6 +228,14 @@ struct Android {
     
     func exists(device id: String, path: String) -> Bool {
         self.logger.log("checking if exists \(id) \(path)")
+        if adb.path == "" {
+            self.logger.log(.error, "adb path is empty !!!")
+            return false
+        }
+        if !adb.path.isFileExists() {
+            self.logger.log(.error, "adb has not installed !!!")
+            return false
+        }
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let command = Process()
@@ -223,6 +263,14 @@ struct Android {
     }
     
     func files(device id: String, in path: String) -> [PhoneFile] {
+        if adb.path == "" {
+            self.logger.log(.error, "adb path is empty !!!")
+            return []
+        }
+        if !adb.path.isFileExists() {
+            self.logger.log(.error, "adb has not installed !!!")
+            return []
+        }
         self.logger.log("getting files from \(id) \(path)")
         var result:[PhoneFile] = []
         let pipe = Pipe()
@@ -264,6 +312,14 @@ struct Android {
     }
     
     func md5(device id: String, fileWithPath:String) -> String{
+        if adb.path == "" {
+            self.logger.log(.error, "adb path is empty !!!")
+            return ""
+        }
+        if !adb.path.isFileExists() {
+            self.logger.log(.error, "adb has not installed !!!")
+            return ""
+        }
         let pipe = Pipe()
         autoreleasepool { () -> Void in
         let command = Process()
@@ -288,6 +344,14 @@ struct Android {
     }
     
     func md5(device id: String, path:String, filename:String) -> String{
+        if adb.path == "" {
+            self.logger.log(.error, "adb path is empty !!!")
+            return ""
+        }
+        if !adb.path.isFileExists() {
+            self.logger.log(.error, "adb has not installed !!!")
+            return ""
+        }
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let command = Process()
@@ -312,6 +376,14 @@ struct Android {
     }
     
     func pull(device id: String, in folderPath:String, to targetPath:String) -> String{
+        if adb.path == "" {
+            self.logger.log(.error, "adb path is empty !!!")
+            return ""
+        }
+        if !adb.path.isFileExists() {
+            self.logger.log(.error, "adb has not installed !!!")
+            return ""
+        }
         let pipe = Pipe()
         autoreleasepool { () -> Void in
         let command = Process()
@@ -334,6 +406,14 @@ struct Android {
     
     func pull(device id: String, from filePath:String, to targetPath:String) -> (Bool, Error?){
         self.logger.log("pulling from \(filePath) to \(targetPath)")
+        if adb.path == "" {
+            self.logger.log(.error, "adb path is empty !!!")
+            return (false, nil)
+        }
+        if !adb.path.isFileExists() {
+            self.logger.log(.error, "adb has not installed !!!")
+            return (false, nil)
+        }
         let pipe = Pipe()
         var err:Error?
         autoreleasepool { () -> Void in
@@ -360,6 +440,14 @@ struct Android {
     }
     
     func push(device id: String, from filePath:String, to remoteFolder:String) -> (String, Error?){
+        if adb.path == "" {
+            self.logger.log(.error, "adb path is empty !!!")
+            return ("", nil)
+        }
+        if !adb.path.isFileExists() {
+            self.logger.log(.error, "adb has not installed !!!")
+            return ("", nil)
+        }
         let pipe = Pipe()
         var err:Error?
         autoreleasepool { () -> Void in
@@ -387,6 +475,14 @@ struct Android {
     
     
     func mkdir(device id: String, path:String){
+        if adb.path == "" {
+            self.logger.log(.error, "adb path is empty !!!")
+            return
+        }
+        if !adb.path.isFileExists() {
+            self.logger.log(.error, "adb has not installed !!!")
+            return
+        }
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let command = Process()
@@ -407,6 +503,14 @@ struct Android {
     
     func folders(device id: String, in path: String) -> [String] {
         self.logger.log("getting folders from \(path)")
+        if adb.path == "" {
+            self.logger.log(.error, "adb path is empty !!!")
+            return []
+        }
+        if !adb.path.isFileExists() {
+            self.logger.log(.error, "adb has not installed !!!")
+            return []
+        }
         var result:[String] = []
         let pipe = Pipe()
         autoreleasepool { () -> Void in
@@ -432,6 +536,14 @@ struct Android {
     
     fileprivate func filenamesForReference(device id: String, in path: String, recursive:Bool=false) -> [String:[String]] {
         self.logger.log("getting folders from \(path)")
+        if adb.path == "" {
+            self.logger.log(.error, "adb path is empty !!!")
+            return [:]
+        }
+        if !adb.path.isFileExists() {
+            self.logger.log(.error, "adb has not installed !!!")
+            return [:]
+        }
         var result:[String:[String]] = [:]
         let param = recursive ? " -tR" : ""
         let pipe = Pipe()
@@ -483,6 +595,14 @@ struct Android {
     
     func filenames(device id: String, in path: String) -> [String] {
         self.logger.log("getting folders from \(path)")
+        if adb.path == "" {
+            self.logger.log(.error, "adb path is empty !!!")
+            return []
+        }
+        if !adb.path.isFileExists() {
+            self.logger.log(.error, "adb has not installed !!!")
+            return []
+        }
         var result:[String] = []
         let pipe = Pipe()
         autoreleasepool { () -> Void in
@@ -515,6 +635,14 @@ struct Android {
     }
     
     func deleteFile(device id: String, path:String) -> Bool{
+        if adb.path == "" {
+            self.logger.log(.error, "adb path is empty !!!")
+            return false
+        }
+        if !adb.path.isFileExists() {
+            self.logger.log(.error, "adb has not installed !!!")
+            return false
+        }
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let command = Process()

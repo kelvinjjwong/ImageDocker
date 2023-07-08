@@ -8,7 +8,7 @@ target 'ImageDocker' do
 
   # Pods for ImageDocker
   pod 'CryptoSwift', '1.4.0'
-  pod 'SwiftyJSON'
-  pod 'GRDB.swift', '4.9.0'
-  pod 'PostgresClientKit', '~> 1.0'
+#  pod 'SwiftyJSON'
+  pod 'GRDB.swift'
+  pod 'PostgresClientKit'
 end

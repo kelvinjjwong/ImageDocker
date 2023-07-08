@@ -10,7 +10,7 @@ import Foundation
 import Cocoa
 import AppKit
 import CoreLocation
-import SwiftyJSON
+//import SwiftyJSON
 import AVFoundation
 import GRDB
 

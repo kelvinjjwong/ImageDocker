@@ -89,7 +89,7 @@ class PlaceDaoGRDB : PlaceDaoInterface {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             try db.read { db in
                 if stmt != "" {
-                    result = try ImagePlace.filter(stmt).order(Column("name").asc).fetchAll(db)
+                    result = try ImagePlace.filter(key: stmt).order(Column("name").asc).fetchAll(db)
                 }else{
                     result = try ImagePlace.order(Column("name").asc).fetchAll(db)
                 }

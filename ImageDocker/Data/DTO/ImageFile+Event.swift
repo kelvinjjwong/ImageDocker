@@ -9,10 +9,10 @@
 import Foundation
 import Cocoa
 import AppKit
-import CoreLocation
-import SwiftyJSON
-import AVFoundation
-import GRDB
+//import CoreLocation
+//import SwiftyJSON
+//import AVFoundation
+//import GRDB
 
 extension ImageFile {
     

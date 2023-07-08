@@ -9,7 +9,7 @@
 import Cocoa
 import CryptoSwift
 import CoreLocation
-import SwiftyJSON
+//import SwiftyJSON
 import WebKit
 import AVFoundation
 import AVKit

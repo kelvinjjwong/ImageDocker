@@ -34,6 +34,14 @@ struct ExifTool {
         // need install exiftool to macos first
         // https://exiftool.org
         // verification: "which exiftool"
+        if mainUrl.path == "" {
+            self.logger.log(.error, "exiftool path is empty !!!")
+            return ""
+        }
+        if !mainUrl.path.isFileExists() {
+            self.logger.log(.error, "exiftool has not installed !!!")
+            return ""
+        }
         
         let pipe = Pipe()
         let pipe2 = Pipe()
@@ -61,6 +69,14 @@ struct ExifTool {
     }
     
     func getUnformattedExif(url:URL) -> String{
+        if mainUrl.path == "" {
+            self.logger.log(.error, "exiftool path is empty !!!")
+            return ""
+        }
+        if !mainUrl.path.isFileExists() {
+            self.logger.log(.error, "exiftool has not installed !!!")
+            return ""
+        }
         let pipe = Pipe()
         
         autoreleasepool { () -> Void in
@@ -79,6 +95,14 @@ struct ExifTool {
     }
     
     func patchDateForVideos(date:Date, urls:[URL], tags:Set<String>) {
+        if mainUrl.path == "" {
+            self.logger.log(.error, "exiftool path is empty !!!")
+            return
+        }
+        if !mainUrl.path.isFileExists() {
+            self.logger.log(.error, "exiftool has not installed !!!")
+            return
+        }
         let dateFormatter:DateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let dateString:String = dateFormatter.string(from: date)
@@ -113,6 +137,14 @@ struct ExifTool {
     
     func patchDateForVideo(date:Date, url:URL, tags:Set<String>) {
         self.logger.log("Changing date time for: \(url.path)")
+        if mainUrl.path == "" {
+            self.logger.log(.error, "exiftool path is empty !!!")
+            return
+        }
+        if !mainUrl.path.isFileExists() {
+            self.logger.log(.error, "exiftool has not installed !!!")
+            return
+        }
         
         let dateFormatter:DateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -144,6 +176,14 @@ struct ExifTool {
     }
     
     func patchDateForPhotos(date:Date, urls:[URL], tags:Set<String>) {
+        if mainUrl.path == "" {
+            self.logger.log(.error, "exiftool path is empty !!!")
+            return
+        }
+        if !mainUrl.path.isFileExists() {
+            self.logger.log(.error, "exiftool has not installed !!!")
+            return
+        }
         let dateFormatter:DateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let dateString:String = dateFormatter.string(from: date)
@@ -175,6 +215,14 @@ struct ExifTool {
     
     func patchDateForPhoto(date:Date, url:URL, tags:Set<String>) {
         self.logger.log("Changing date time for: \(url.path)")
+        if mainUrl.path == "" {
+            self.logger.log(.error, "exiftool path is empty !!!")
+            return
+        }
+        if !mainUrl.path.isFileExists() {
+            self.logger.log(.error, "exiftool has not installed !!!")
+            return
+        }
         
         let dateFormatter:DateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -204,6 +252,14 @@ struct ExifTool {
     }
     
     func patchGPSCoordinateForImages(latitude:Double, longitude:Double, urls:[URL]){
+        if mainUrl.path == "" {
+            self.logger.log(.error, "exiftool path is empty !!!")
+            return
+        }
+        if !mainUrl.path.isFileExists() {
+            self.logger.log(.error, "exiftool has not installed !!!")
+            return
+        }
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let exiftool = Process()
@@ -228,6 +284,14 @@ struct ExifTool {
     
     func patchGPSCoordinateForImage(latitude:Double, longitude:Double, url:URL){
         self.logger.log("Changing GPS coordinate for: \(url.path)")
+        if mainUrl.path == "" {
+            self.logger.log(.error, "exiftool path is empty !!!")
+            return
+        }
+        if !mainUrl.path.isFileExists() {
+            self.logger.log(.error, "exiftool has not installed !!!")
+            return
+        }
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let exiftool = Process()
@@ -250,6 +314,14 @@ struct ExifTool {
     
     func patchImageDescription(description:String, url:URL) {
         self.logger.log("Changing ImageDescription for: \(url.path)")
+        if mainUrl.path == "" {
+            self.logger.log(.error, "exiftool path is empty !!!")
+            return
+        }
+        if !mainUrl.path.isFileExists() {
+            self.logger.log(.error, "exiftool has not installed !!!")
+            return
+        }
         
         autoreleasepool { () -> Void in
             let pipe = Pipe()
@@ -275,6 +347,14 @@ struct ExifTool {
     
     func assignKeyValueForImage(key:String, value:String, url:URL){
         self.logger.log("Assigning \(key) -> \(value) for: \(url.path)")
+        if mainUrl.path == "" {
+            self.logger.log(.error, "exiftool path is empty !!!")
+            return
+        }
+        if !mainUrl.path.isFileExists() {
+            self.logger.log(.error, "exiftool has not installed !!!")
+            return
+        }
         let pipe = Pipe()
         autoreleasepool { () -> Void in
             let exiftool = Process()
@@ -295,6 +375,14 @@ struct ExifTool {
     }
     
     func getImageDescription(url:URL) -> String {
+        if mainUrl.path == "" {
+            self.logger.log(.error, "exiftool path is empty !!!")
+            return ""
+        }
+        if !mainUrl.path.isFileExists() {
+            self.logger.log(.error, "exiftool has not installed !!!")
+            return ""
+        }
         let pipe = Pipe()
         var string = ""
         autoreleasepool { () -> Void in
