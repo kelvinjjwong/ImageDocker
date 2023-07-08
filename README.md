@@ -3,8 +3,11 @@
 A desktop application help organize pictures and videos between cameras/mobile devices and Plex Media Server.
 
 Built for  ![Platform](https://img.shields.io/badge/platforms-macOS%2013%20Ventura+-ff7711.svg)
+
 Built with ![swift](https://img.shields.io/badge/Swift-5-blue) ![xcode](https://img.shields.io/badge/Xcode-14.3-blue) ![CocoaPods](https://img.shields.io/badge/CocoaPods-1.12.1-blue)
+
 Require for ExifTool       ![perl](https://img.shields.io/badge/Perl-5.18-blue)
+
 Require for face detection ![python](https://img.shields.io/badge/Python-3.7+-blue)
 
 
