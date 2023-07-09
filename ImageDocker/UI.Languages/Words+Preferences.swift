@@ -20,6 +20,31 @@ extension Words {
         chs: "通用"
     )
     
+    static let preference_tab_general_box_logging = Localize(
+        eng: "Logging",
+        chs: "运行日志"
+    )
+    
+    static let preference_tab_general_log_path = Localize(
+        eng: "Directory of log files:",
+        chs: "日志存储的文件夹:"
+    )
+    
+    static let preference_tab_general_log_path_browse = Localize(
+        eng: "Browse",
+        chs: "选择..."
+    )
+    
+    static let preference_tab_general_log_path_reveal_in_finder = Localize(
+        eng: "Reveal in Finder",
+        chs: "在 Finder 中查阅"
+    )
+    
+    static let preference_tab_general_latest_logs = Localize(
+        eng: "Latest logs:",
+        chs: "最近的记录:"
+    )
+    
     static let preference_tab_general_ui_language = Localize(
         eng: "User interface language:",
         chs: "用户界面语言:"

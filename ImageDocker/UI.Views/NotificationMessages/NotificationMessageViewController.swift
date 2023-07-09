@@ -36,6 +36,8 @@ class NotificationMessageViewController: NSViewController {
         view.wantsLayer = true
         stackView.setHuggingPriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
         
+        self.btnRemoveAll.title = Words.notification_remove_all.word()
+        
         self.addNoMessageNotice()
         
         NotificationMessageManager.default.bindToView(view: self).loadMessages()

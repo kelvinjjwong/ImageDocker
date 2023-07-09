@@ -35,6 +35,10 @@ class TaskProgressViewController: NSViewController {
         view.wantsLayer = true
         stackView.setHuggingPriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
         
+        self.btnRemoveAll.title = Words.notification_remove_all.word()
+        self.btnRemoveCompleted.title = Words.task_remove_completed.word()
+        self.btnStopAll.title = Words.task_stop_all.word()
+        
         self.addNoTaskNotice()
         
         TaskletManager.default.bindToView(view: self).loadTasks()

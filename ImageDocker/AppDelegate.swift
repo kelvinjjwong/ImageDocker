@@ -97,7 +97,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         
         if !url.path.isDirectoryExists() {
             if !url.path.mkdirs(logger: logger) {
-                self.logger.log("Unable to create application directory")
+                self.logger.log(.error, "Unable to create application directory")
             }
         }
         

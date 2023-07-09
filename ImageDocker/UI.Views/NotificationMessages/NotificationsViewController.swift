@@ -46,6 +46,7 @@ class NotificationsViewController : NSViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        self.btnRemove.title = Words.notification_remove.word()
         self.updateTimeElapsed()
         self.lblMessage.stringValue = self.message
         if self.isNoMessage {

@@ -49,6 +49,7 @@ class ProgressViewController : NSViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        self.btnStop.title = Words.task_stop.word()
         self.box.title = self.id
         self.lblMessage.stringValue = self.message
         if self.isNoTask {

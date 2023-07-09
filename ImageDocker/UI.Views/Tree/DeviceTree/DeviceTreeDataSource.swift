@@ -182,6 +182,7 @@ class DeviceTreeDataSource : TreeDataSource {
                     for deviceId in self.registered_iphone_id_names.keys {
 
                         let connectivityStatus = connectedDeviceIds.contains(deviceId)
+//                        print(connectivityStatus)
 
                         // initial
                         if self.deviceConnectivityStatus[deviceId] == nil {

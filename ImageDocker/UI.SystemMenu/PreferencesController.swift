@@ -34,6 +34,13 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var lblLanguage: NSTextField!
     @IBOutlet weak var popupLanguage: NSPopUpButton!
     
+    @IBOutlet weak var boxLogging: NSBox!
+    @IBOutlet weak var lblLogPath: NSTextField!
+    @IBOutlet weak var txtLogPath: NSTextField!
+    @IBOutlet weak var btnBrowseLogPath: NSButton!
+    @IBOutlet weak var btnOpenLogPath: NSButton!
+    
+    
     // MARK: MOBILE DEVICE
     @IBOutlet weak var txtExportToAndroidPath: NSTextField!
     
@@ -77,6 +84,35 @@ final class PreferencesController: NSViewController {
         self.savePreferences()
         self.dismiss(sender)
     }
+    
+    // MARK: - ACTION FOR GENERAL SECTION
+    
+    @IBAction func onBrowseLogPath(_ sender: NSButton) {
+        let openPanel = NSOpenPanel()
+        openPanel.canChooseDirectories  = true
+        openPanel.canChooseFiles        = false
+        openPanel.showsHiddenFiles      = false
+        openPanel.canCreateDirectories  = true
+        
+        openPanel.beginSheetModal(for: self.view.window!) { (response) -> Void in
+            guard response == NSApplication.ModalResponse.OK else {return}
+            if let path = openPanel.url?.path {
+                DispatchQueue.main.async {
+                    self.txtLogPath.stringValue = path
+                }
+            }
+        }
+    }
+    
+    @IBAction func onOpenLogPathClicked(_ sender: NSButton) {
+        let path = self.txtLogPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        if path != "" && path.isDirectoryExists() {
+            let url = URL(fileURLWithPath: path.withLastStash())
+            NSWorkspace.shared.activateFileViewerSelecting([url])
+        }
+    }
+    
+    
     
     // MARK: - ACTION FOR PERFORMANCE SECTION
     
@@ -224,6 +260,11 @@ final class PreferencesController: NSViewController {
         if oldValue != value {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ChangeEvent.language), object: nil)
         }
+        
+        let logPath = self.txtLogPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        if logPath != "" && logPath.isDirectoryExists() {
+            Setting.logging.saveLogPath(logPath)
+        }
     }
     
 //    func saveFaceRecognitionSection(_ defaults:UserDefaults) {
@@ -325,6 +366,13 @@ final class PreferencesController: NSViewController {
         }else{
             self.popupLanguage.selectItem(withTitle: "English")
         }
+        
+        self.boxLogging.title = Words.preference_tab_general_box_logging.word()
+        self.lblLogPath.stringValue = Words.preference_tab_general_log_path.word()
+        self.btnBrowseLogPath.title = Words.preference_tab_general_log_path_browse.word()
+        self.btnOpenLogPath.title = Words.preference_tab_general_log_path_reveal_in_finder.word()
+        
+        self.txtLogPath.stringValue = Setting.logging.logPath()
     }
     
     func initPerformanceSection() {

@@ -11,11 +11,56 @@ import Foundation
 struct Setting {
     
     static let UI = UserInterfaceSetting()
+    static let logging = LoggingSetting()
     static let database = DatabaseSetting()
     static let performance = PerformanceSetting()
     static let mobileDeviceTransfer = MobileDeviceTransferSetting()
     static let externalApi = ExternalAPISetting()
     static let localEnvironment = LocalEnvironmentSetting()
+}
+
+struct LoggingSetting {
+    fileprivate let logPathKey = "LogPathKey"
+    
+    
+    
+    func loggingDirectory() -> URL {
+        // The directory the application uses to store the Core Data store file. This code uses a directory named "com.apple.toolsQA.CocoaApp_CD" in the user's Application Support directory.
+        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let appSupportURL = urls[urls.count - 1]
+        let url = appSupportURL.appendingPathComponent("ImageDocker").appendingPathComponent("log")
+        
+        if !url.path.isDirectoryExists() {
+            if !url.path.mkdirs() {
+                print("ERROR: Unable to create logging directory")
+            }
+        }
+        
+        return url
+    }
+    
+    func loggingFilename() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd_HH-mm"
+        let datePart = dateFormatter.string(from: Date())
+        return "\(datePart).log"
+    }
+    
+    
+    func logPath() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: logPathKey) else {return loggingDirectory().path }
+        return txt
+    }
+    
+    func logFileFullPath() -> String {
+        return "\(logPath())/\(loggingFilename())"
+    }
+    
+    func saveLogPath(_ value:String) {
+        let defaults = UserDefaults.standard
+        defaults.set(value, forKey: logPathKey)
+    }
 }
 
 struct DatabaseSetting {
