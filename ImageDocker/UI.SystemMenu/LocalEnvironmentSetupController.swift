@@ -24,6 +24,7 @@ final class LocalEnvironmentSetupController: NSViewController {
     @IBOutlet weak var txtAdbPath: NSTextField!
     @IBOutlet weak var lblAdbMessage: NSTextField!
     @IBOutlet weak var btnBrowseAdbPath: NSButton!
+    @IBOutlet weak var lblAdbInstruction: NSTextField!
     
     @IBOutlet weak var txtIOSMountPoint: NSTextField!
     @IBOutlet weak var txtIfusePath: NSTextField!
@@ -39,6 +40,16 @@ final class LocalEnvironmentSetupController: NSViewController {
     @IBOutlet weak var btnLocateIfusePath: NSButton!
     @IBOutlet weak var btnLocateIdeviceIdPath: NSButton!
     @IBOutlet weak var btnLocateIdeviceInfoPath: NSButton!
+    @IBOutlet weak var lblMacFuseInstruction: NSTextField!
+    
+    // MARK: EXIFTOOL
+    @IBOutlet weak var boxExifTool: NSBox!
+    @IBOutlet weak var lblExifToolPath: NSTextField!
+    @IBOutlet weak var txtExifToolPath: NSTextField!
+    @IBOutlet weak var btnBrowseExifToolPath: NSButton!
+    @IBOutlet weak var lblExifToolMessage: NSTextField!
+    @IBOutlet weak var lblExifToolInstruction: NSTextField!
+    
     
     // MARK: - SAVE BUTTON
     @IBAction func onButtonApplyClick(_ sender: NSButton) {
@@ -121,7 +132,46 @@ final class LocalEnvironmentSetupController: NSViewController {
         Setting.localEnvironment.saveIfusePath(txtIfusePath.stringValue)
         Setting.localEnvironment.saveIdeviceIdPath(txtIdeviceIdPath.stringValue)
         Setting.localEnvironment.saveIdeviceInfoPath(txtIdeviceInfoPath.stringValue)
+        Setting.localEnvironment.saveExifToolPath(txtExifToolPath.stringValue)
     }
+    
+    // MARK: - ACTION FOR EXIFTOOL SECTION
+    @IBAction func onBrowseExifToolClicked(_ sender: NSButton) {
+        let openPanel = NSOpenPanel()
+        openPanel.canChooseDirectories  = true
+        openPanel.canChooseFiles        = false
+        openPanel.showsHiddenFiles      = false
+        openPanel.canCreateDirectories  = true
+        
+        openPanel.beginSheetModal(for: self.view.window!) { (response) -> Void in
+            guard response == NSApplication.ModalResponse.OK else {return}
+            if let path = openPanel.url?.path {
+                DispatchQueue.main.async {
+                    self.txtExifToolPath.stringValue = path
+                }
+            }
+        }
+    }
+    
+    func checkExifToolPath() {
+        let _path = self.txtExifToolPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        if _path != "" && _path.isFileExists() {
+            self.lblExifToolMessage.stringValue = Words.preference_tab_found_path.fill(arguments: "exiftool", _path)
+        }else{
+            let path = ExecutionEnvironment.default.locate("exiftool")
+            if path != "" {
+                self.txtExifToolPath.stringValue = path
+                self.lblExifToolMessage.stringValue = Words.preference_tab_found_path.fill(arguments: "exiftool", path)
+                Setting.localEnvironment.saveExifToolPath(path)
+            }else{
+                self.txtExifToolPath.stringValue = ""
+                self.lblExifToolMessage.stringValue = Words.preference_tab_missing_error.fill(arguments: "exiftool")
+            }
+        }
+    }
+    
+    
+    // MARK: - SAVE ALL TABS
     
     func savePreferences() {
         let defaults = UserDefaults.standard
@@ -156,6 +206,15 @@ final class LocalEnvironmentSetupController: NSViewController {
     }
     
     func initExifToolSection() {
+        self.boxExifTool.title = Words.preference_tab_exiftool_box_location.word()
+        
+        self.lblExifToolPath.stringValue = Words.preference_tab_exiftool_box_exiftool_path.word()
+        self.btnBrowseExifToolPath.title = Words.preference_tab_mobile_box_ios_browse.word()
+        self.lblExifToolInstruction.stringValue = Words.preference_tab_exiftool_box_exiftool_instruction.word()
+        
+        txtExifToolPath.stringValue = Setting.localEnvironment.exiftoolPath()
+        
+        self.checkExifToolPath()
         
     }
     

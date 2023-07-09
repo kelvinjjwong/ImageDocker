@@ -10,23 +10,35 @@ import Foundation
 import AppKit
 
 /// manage GeoTag's use of exiftool
-struct ExifTool {
+class ExifTool {
     
     let logger = ConsoleLogger(category: "ExifTool")
     
     /// singleton instance of this class
     static let helper = ExifTool()
     
-    // URL of the embedded version of ExifTool
+    // URL of ExifTool
     var mainUrl: URL
     
     // Verify access to the embedded version of ExifTool
     init() {
-        if let exiftoolUrl = Bundle.main.url(forResource: "ExifTool", withExtension: nil) {
-            mainUrl = exiftoolUrl.appendingPathComponent("exiftool")
-            print("[EXIFTOOL-INIT] Detected ExifTool commandline at \(mainUrl.path)")
+        let exiftoolUrl = Setting.localEnvironment.exiftoolPath()
+        if exiftoolUrl != "" && exiftoolUrl.isFileExists() {
+            mainUrl = URL(fileURLWithPath: exiftoolUrl)
+            self.logger.log("[EXIFTOOL-INIT] Detected ExifTool commandline exists at \(mainUrl.path)")
         } else {
-            fatalError("The Application Bundle is corrupt.")
+            mainUrl = URL(fileURLWithPath: "")
+            self.logger.log(.error, "[EXIFTOOL-INIT] ExifTool command path has not setup or does not exist.")
+        }
+    }
+    
+    func reinitMainUrlIfEmpty() {
+        if mainUrl.path == "" {
+            let exiftoolUrl = Setting.localEnvironment.exiftoolPath()
+            if exiftoolUrl != "" && exiftoolUrl.isFileExists() {
+                self.mainUrl = URL(fileURLWithPath: exiftoolUrl)
+                self.logger.log("[EXIFTOOL-INIT] Detected ExifTool commandline exists at \(mainUrl.path)")
+            }
         }
     }
     
@@ -34,6 +46,7 @@ struct ExifTool {
         // need install exiftool to macos first
         // https://exiftool.org
         // verification: "which exiftool"
+        self.reinitMainUrlIfEmpty()
         if mainUrl.path == "" {
             self.logger.log(.error, "exiftool path is empty !!!")
             return ""
@@ -69,6 +82,7 @@ struct ExifTool {
     }
     
     func getUnformattedExif(url:URL) -> String{
+        self.reinitMainUrlIfEmpty()
         if mainUrl.path == "" {
             self.logger.log(.error, "exiftool path is empty !!!")
             return ""
@@ -95,6 +109,7 @@ struct ExifTool {
     }
     
     func patchDateForVideos(date:Date, urls:[URL], tags:Set<String>) {
+        self.reinitMainUrlIfEmpty()
         if mainUrl.path == "" {
             self.logger.log(.error, "exiftool path is empty !!!")
             return
@@ -137,6 +152,7 @@ struct ExifTool {
     
     func patchDateForVideo(date:Date, url:URL, tags:Set<String>) {
         self.logger.log("Changing date time for: \(url.path)")
+        self.reinitMainUrlIfEmpty()
         if mainUrl.path == "" {
             self.logger.log(.error, "exiftool path is empty !!!")
             return
@@ -176,6 +192,7 @@ struct ExifTool {
     }
     
     func patchDateForPhotos(date:Date, urls:[URL], tags:Set<String>) {
+        self.reinitMainUrlIfEmpty()
         if mainUrl.path == "" {
             self.logger.log(.error, "exiftool path is empty !!!")
             return
@@ -215,6 +232,7 @@ struct ExifTool {
     
     func patchDateForPhoto(date:Date, url:URL, tags:Set<String>) {
         self.logger.log("Changing date time for: \(url.path)")
+        self.reinitMainUrlIfEmpty()
         if mainUrl.path == "" {
             self.logger.log(.error, "exiftool path is empty !!!")
             return
@@ -252,6 +270,7 @@ struct ExifTool {
     }
     
     func patchGPSCoordinateForImages(latitude:Double, longitude:Double, urls:[URL]){
+        self.reinitMainUrlIfEmpty()
         if mainUrl.path == "" {
             self.logger.log(.error, "exiftool path is empty !!!")
             return
@@ -284,6 +303,7 @@ struct ExifTool {
     
     func patchGPSCoordinateForImage(latitude:Double, longitude:Double, url:URL){
         self.logger.log("Changing GPS coordinate for: \(url.path)")
+        self.reinitMainUrlIfEmpty()
         if mainUrl.path == "" {
             self.logger.log(.error, "exiftool path is empty !!!")
             return
@@ -314,6 +334,7 @@ struct ExifTool {
     
     func patchImageDescription(description:String, url:URL) {
         self.logger.log("Changing ImageDescription for: \(url.path)")
+        self.reinitMainUrlIfEmpty()
         if mainUrl.path == "" {
             self.logger.log(.error, "exiftool path is empty !!!")
             return
@@ -347,6 +368,7 @@ struct ExifTool {
     
     func assignKeyValueForImage(key:String, value:String, url:URL){
         self.logger.log("Assigning \(key) -> \(value) for: \(url.path)")
+        self.reinitMainUrlIfEmpty()
         if mainUrl.path == "" {
             self.logger.log(.error, "exiftool path is empty !!!")
             return
@@ -375,6 +397,7 @@ struct ExifTool {
     }
     
     func getImageDescription(url:URL) -> String {
+        self.reinitMainUrlIfEmpty()
         if mainUrl.path == "" {
             self.logger.log(.error, "exiftool path is empty !!!")
             return ""

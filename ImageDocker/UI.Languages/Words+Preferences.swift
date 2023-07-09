@@ -435,6 +435,11 @@ extension Words {
         chs: "苹果设备"
     )
     
+    static let preference_tab_exiftool_box_location = Localize(
+        eng: "ExifTool Command Package",
+        chs: "ExifTool 命令行工具包"
+    )
+    
     static let preference_tab_mobile_box_android_path = Localize(
         eng: "Default Path for Image Upload",
         chs: "照片上传到设备上的这个文件夹"
@@ -458,6 +463,24 @@ extension Words {
     static let preference_tab_mobile_box_ios_locate = Localize(
         eng: "Locate",
         chs: "查找路径"
+    )
+    
+    static let preference_tab_exiftool_box_exiftool_path = Localize(
+        eng: "Location of exiftool:",
+        chs: "exiftool 命令的位置:"
+    )
+    
+    static let preference_tab_exiftool_box_exiftool_instruction = Localize(
+        eng: """
+You can download latest ExifTool from: https://exiftool.org
+
+After install or unzip somewhere, please put the path of "exiftool executable file" to text field above.
+""",
+        chs: """
+您可以在这个网站: https://exiftool.org 下载最新版本的 ExifTool
+
+安装或者解包以后，请将 exiftool 可执行文件的路径填入上面的文本框内。
+"""
     )
     
     static let preference_tab_face_recognition = Localize(

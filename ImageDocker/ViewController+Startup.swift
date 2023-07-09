@@ -22,6 +22,7 @@ extension ViewController {
         DispatchQueue.global().async {
             self.splashController.progressWillEnd(at: 5)
             
+            let exiftool = ExifTool.helper
             IPHONE.bridge.unmountFuse()
             
             // current database info

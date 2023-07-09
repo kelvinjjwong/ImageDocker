@@ -234,7 +234,6 @@
 		8EB986BF20B30C920075B081 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB986B820B30C920075B081 /* HeaderView.swift */; };
 		8EB986C620B6EBC40075B081 /* DarkTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB986C520B6EBC40075B081 /* DarkTableView.swift */; };
 		8EB9C0112507736000507CA7 /* DataStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB9C0102507735F00507CA7 /* DataStructures.swift */; };
-		8EBA69252090C2AA00221131 /* ExifTool in Resources */ = {isa = PBXBuildFile; fileRef = 8EBA69242090C2AA00221131 /* ExifTool */; };
 		8EBA692A2090C87D00221131 /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA69292090C87D00221131 /* Extentions.swift */; };
 		8EBA692C2090DB0300221131 /* DropPlaceCommons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA692B2090DB0300221131 /* DropPlaceCommons.swift */; };
 		8EBA692E2090DB4B00221131 /* VideoDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBA692D2090DB4B00221131 /* VideoDropView.swift */; };
@@ -626,7 +625,6 @@
 		8EB986B820B30C920075B081 /* HeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		8EB986C520B6EBC40075B081 /* DarkTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkTableView.swift; sourceTree = "<group>"; };
 		8EB9C0102507735F00507CA7 /* DataStructures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStructures.swift; sourceTree = "<group>"; };
-		8EBA69242090C2AA00221131 /* ExifTool */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ExifTool; sourceTree = "<group>"; };
 		8EBA69292090C87D00221131 /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
 		8EBA692B2090DB0300221131 /* DropPlaceCommons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropPlaceCommons.swift; sourceTree = "<group>"; };
 		8EBA692D2090DB4B00221131 /* VideoDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDropView.swift; sourceTree = "<group>"; };
@@ -1411,7 +1409,6 @@
 				8E0AFA40208BDEA100CE8B68 /* Assets.xcassets */,
 				8E0AFA46208BDEA100CE8B68 /* ImageDocker.entitlements */,
 				8E0AFA45208BDEA100CE8B68 /* Info.plist */,
-				8EBA69242090C2AA00221131 /* ExifTool */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1878,7 +1875,6 @@
 				8E4C38CA211776300089502C /* Mobile in Resources */,
 				8EC5BA2F21775571001510AF /* TheaterCollectionViewItem.xib in Resources */,
 				8E8D47272236733B0091E9C3 /* OneColumnTableViewController.xib in Resources */,
-				8EBA69252090C2AA00221131 /* ExifTool in Resources */,
 				8EAC5F212144A60900E187E0 /* DeviceFolderViewController.xib in Resources */,
 				8E69D53724B331AD0075A05D /* MomentsTreeHeaderMoreViewController.xib in Resources */,
 				8EB986BB20B30C920075B081 /* HeaderView.xib in Resources */,

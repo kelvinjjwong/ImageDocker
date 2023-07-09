@@ -300,6 +300,9 @@ struct LocalEnvironmentSetting {
     fileprivate let setting_ios_ideviceid_path = "ideviceidKey"
     fileprivate let setting_ios_ideviceinfo_path = "ideviceinfoKey"
     
+    // MARK: EXIFTOOL
+    fileprivate let setting_exiftool_path = "exiftoolPathKey"
+    
     
     // MARK: ANDROID
     
@@ -343,6 +346,12 @@ struct LocalEnvironmentSetting {
         return txt
     }
     
+    func exiftoolPath() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: setting_exiftool_path) else {return ""}
+        return txt
+    }
+    
     func saveAdbPath(_ value:String) {
         let defaults = UserDefaults.standard
         defaults.set(value, forKey: setting_android_adb_path)
@@ -366,6 +375,11 @@ struct LocalEnvironmentSetting {
     func saveIdeviceInfoPath(_ value:String) {
         let defaults = UserDefaults.standard
         defaults.set(value, forKey: setting_ios_ideviceinfo_path)
+    }
+    
+    func saveExifToolPath(_ value:String) {
+        let defaults = UserDefaults.standard
+        defaults.set(value, forKey: setting_exiftool_path)
     }
 }
 

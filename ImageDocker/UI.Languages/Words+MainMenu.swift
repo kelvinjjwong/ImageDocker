@@ -21,17 +21,17 @@ extension Words {
     )
     
     static let mainmenu_external_api = Localize(
-        eng: "External API",
-        chs: "外部 API 配置"
+        eng: "Geo API Keys",
+        chs: "地图 API 密钥"
     )
     
     static let mainmenu_local_environment = Localize(
-        eng: "Local Environment Setup",
-        chs: "本地环境外挂配置"
+        eng: "Environment and Mount",
+        chs: "运行环境和挂载点"
     )
     
     static let mainmenu_quit = Localize(
-        eng: "Backup Database and Quit ImageDocker",
+        eng: "Backup Database and Quit",
         chs: "备份数据库并关闭 ImageDocker"
     )
     

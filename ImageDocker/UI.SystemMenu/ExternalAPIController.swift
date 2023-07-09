@@ -102,7 +102,6 @@ final class ExternalAPIController: NSViewController {
         self.view.window?.title = Words.mainmenu_external_api.word()
         self.btnApply.title = Words.apply.word()
         self.tabs.tabViewItem(at: 0).label = Words.preference_tab_geo_location_api.word()
-        self.tabs.tabViewItem(at: 1).label = Words.preference_tab_face_recognition_api.word()
     }
     
     
