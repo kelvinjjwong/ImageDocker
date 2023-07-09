@@ -6,9 +6,7 @@ Built for  ![Platform](https://img.shields.io/badge/platforms-macOS%2013%20Ventu
 
 Built with ![swift](https://img.shields.io/badge/Swift-5-blue) ![xcode](https://img.shields.io/badge/Xcode-14.3-blue) ![CocoaPods](https://img.shields.io/badge/CocoaPods-1.12.1-blue)
 
-Require for ExifTool       ![perl](https://img.shields.io/badge/Perl-5.18-blue)
-
-Require for face detection ![python](https://img.shields.io/badge/Python-3.7+-blue)
+Require    ![python](https://img.shields.io/badge/Python-3.7+-blue) for face detection (need user install)
 
 
 ## Major objectives
@@ -51,20 +49,26 @@ v0.9.3
 - [ACBTokenField](https://github.com/akhilcb/ACBTokenField) ([The MIT License](https://github.com/akhilcb/ACBTokenField/blob/master/LICENSE))
 - [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) ([The MIT License](https://github.com/SwiftyJSON/SwiftyJSON/blob/master/LICENSE))
 - [CryptoSwift](https://github.com/krzyzanowskim/CryptoSwift) ([License](https://github.com/krzyzanowskim/CryptoSwift/blob/master/LICENSE))
+
+## Need user install separately
+
 - [ExifTool](https://www.sno.phy.queensu.ca/~phil/exiftool/): to load EXIF info from images ([Perl License](https://www.sno.phy.queensu.ca/~phil/exiftool/#license))
 - [Android Debug Bridge](https://developer.android.com/studio/command-line/adb): to detect and access Android devices ([License](https://developer.android.com/license))
+- [macFUSE](https://github.com/libimobiledevice/ifuse): to access iOS devices ([LGPL License](https://github.com/libimobiledevice/ifuse/blob/master/COPYING))
+- [libimobiledevice](https://github.com/libimobiledevice/libimobiledevice): to detect and pair iOS devices ([LGPL License](https://github.com/libimobiledevice/libimobiledevice/blob/master/COPYING))
 - [dlib](https://github.com/davisking/dlib): to help recognize faces
 - [face_recognition](https://github.com/ageitgey/face_recognition): to help recognize faces ([The MIT License](https://github.com/ageitgey/face_recognition/blob/master/LICENSE))
-- [libimobiledevice](https://github.com/libimobiledevice/libimobiledevice): to detect and pair iOS devices ([LGPL License](https://github.com/libimobiledevice/libimobiledevice/blob/master/COPYING))
-- [ifuse](https://github.com/libimobiledevice/ifuse): to access iOS devices ([LGPL License](https://github.com/libimobiledevice/ifuse/blob/master/COPYING))
-- [Baidu Map API](http://lbsyun.baidu.com): to recognize geolocation inside China, and to display maps ([License](http://lbsyun.baidu.com/index.php?title=open/law))
-- [Google Map API](https://developers.google.com/maps/documentation/): to recognize geolocation outside China ([License](https://developers.google.com/terms/site-policies))
+
+## Need user apply separately
+
+- [Baidu Map API Key](http://lbsyun.baidu.com): to recognize geolocation inside China, and to display maps ([License](http://lbsyun.baidu.com/index.php?title=open/law))
+- [Google Map API Key](https://developers.google.com/maps/documentation/): to recognize geolocation outside China ([License](https://developers.google.com/terms/site-policies))
 
 ## Prerequisite
 
 - Personal AP key of Baidu Map API is required for displaying maps and recognizing geolocations inside China
 - Personal AP key of Google Map API is required for recognizing geolocations outside China
-- OSX Fuse or iFuse should be installed before user try to load photos from iOS devices by ImageDocker
+- macFUSE should be installed before user try to load photos from iOS devices by ImageDocker
 - Android device needs to enable USB debug mode before connecting to computer via USB, so that Android Debug Bridge can access the files in the device. It would be better install [HandShaker](https://formulae.brew.sh/cask/handshaker) for easier transfer images from Android device to computer, although this application has been discontinued.
 
 ## PLEASE NOTE
