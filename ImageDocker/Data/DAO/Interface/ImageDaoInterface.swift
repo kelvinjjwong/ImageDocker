@@ -213,7 +213,7 @@ protocol ImageSearchDaoInterface {
     
     func getPhotoFilesWithoutSubPath(rootPath:String) -> [Image]
     
-    func getPhotoFiles(parentPath:String, includeHidden:Bool, pageSize:Int, pageNumber:Int, subdirectories:Bool) -> [Image]
+    func getPhotoFiles(parentPath:String, repositoryId:Int?, repositoryVolume:String?, rawVolume:String?, includeHidden:Bool, pageSize:Int, pageNumber:Int, subdirectories:Bool) -> [Image]
     
     func getImages(repositoryPath:String) -> [Image]
     

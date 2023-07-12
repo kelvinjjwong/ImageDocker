@@ -19,8 +19,6 @@ class EditRepositoryViewController: NSViewController {
     
     @IBOutlet weak var lblSubFolderLabel: NSTextField!
     @IBOutlet weak var lblSubFolderLevel: NSTextField!
-    @IBOutlet weak var lblInitialBrief: NSTextField!
-    @IBOutlet weak var lblInitialEvent: NSTextField!
     @IBOutlet weak var lblDevice: NSTextField!
     @IBOutlet weak var lblCropsImagesPath: NSTextField!
     @IBOutlet weak var lblFacesImagesPath: NSTextField!
@@ -87,6 +85,19 @@ class EditRepositoryViewController: NSViewController {
     @IBOutlet weak var btnUpdateEmptyBrief: NSButton!
     @IBOutlet weak var btnUpdateAllBrief: NSButton!
     
+    // MARK: - DROP DOWN LISTS
+    @IBOutlet weak var lstVolumesOfEditableImages: NSComboBox!
+    @IBOutlet weak var lstVolumesOfRawImages: NSComboBox!
+    @IBOutlet weak var lstVolumesOfFaces: NSComboBox!
+    @IBOutlet weak var lstVolumesOfCrops: NSComboBox!
+    @IBOutlet weak var lstVolumesOfHome: NSComboBox!
+    
+    var volumesOfEditableImagesListController : TextListViewPopupController!
+    var volumesOfRawImagesListController : TextListViewPopupController!
+    var volumesOfFacesListController : TextListViewPopupController!
+    var volumesOfCropsListController : TextListViewPopupController!
+    var volumesOfHomeListController : TextListViewPopupController!
+    
     
     private var window:NSWindow? = nil
     
@@ -122,8 +133,49 @@ class EditRepositoryViewController: NSViewController {
             // do nothing
         }
         
+        
+        self.volumesOfEditableImagesListController = TextListViewPopupController(self.lstVolumesOfEditableImages)
+        self.volumesOfRawImagesListController = TextListViewPopupController(self.lstVolumesOfRawImages)
+        self.volumesOfFacesListController = TextListViewPopupController(self.lstVolumesOfFaces)
+        self.volumesOfCropsListController = TextListViewPopupController(self.lstVolumesOfCrops)
+        self.volumesOfHomeListController = TextListViewPopupController(self.lstVolumesOfHome)
+        
+        self.refreshMountedVolumes()
+        
         self.setupUIDisplay()
     }
+    
+    // MARK: - refresh volumes drop down
+    
+    func refreshMountedVolumes(dropdown list:TextListViewPopupController, append items:[String] = []) {
+        var mountedVolumes = LocalDirectory.bridge.listMountedVolumes()
+        
+        for item in items {
+            if !mountedVolumes.contains(item) {
+                mountedVolumes.append(item)
+            }
+        }
+        list.load(mountedVolumes)
+    }
+    
+    func refreshMountedVolumes(append items:[String] = []) {
+        
+        var mountedVolumes = LocalDirectory.bridge.listMountedVolumes()
+        
+        for item in items {
+            if !mountedVolumes.contains(item) {
+                mountedVolumes.append(item)
+            }
+        }
+        
+        self.volumesOfEditableImagesListController.load(mountedVolumes)
+        self.volumesOfRawImagesListController.load(mountedVolumes)
+        self.volumesOfFacesListController.load(mountedVolumes)
+        self.volumesOfCropsListController.load(mountedVolumes)
+        self.volumesOfHomeListController.load(mountedVolumes)
+    }
+    
+    // MARK: - setup UI / toggle buttons
     
     func setupUIDisplay() {
 //        self.btnFindFaces.title = Words.findFaces.word()
@@ -136,8 +188,6 @@ class EditRepositoryViewController: NSViewController {
         self.boxRepository.title = Words.repository_box_store_images.word()
         self.boxFaces.title = Words.repository_box_store_faces.word()
         self.boxDevice.title = Words.repository_box_link_to_device.word()
-        self.lblInitialEvent.stringValue = Words.repository_initial_event.word()
-        self.lblInitialBrief.stringValue = Words.repository_initial_brief.word()
         
         self.btnOK.title = Words.saveRepository.word()
         self.btnStat.title = Words.stat.word()
@@ -222,6 +272,8 @@ class EditRepositoryViewController: NSViewController {
         
     }
     
+    // MARK: - clean fields
+    
     fileprivate func emptyGeneralTextFields() {
             self.txtName.stringValue = ""
             self.lblNameRemark.stringValue = ""
@@ -241,6 +293,9 @@ class EditRepositoryViewController: NSViewController {
             self.btnCopyToRaw.isHidden = true
             self.btnUpdateStorageImages.isHidden = true
             self.btnUpdateRepositoryImages.isHidden = true
+        
+        self.lstVolumesOfEditableImages.selectItem(withObjectValue: "")
+        self.lstVolumesOfRawImages.selectItem(withObjectValue: "")
     }
     
     fileprivate func emptyFaceTextFields() {
@@ -250,6 +305,9 @@ class EditRepositoryViewController: NSViewController {
             self.lblCropPathRemark.stringValue = ""
             self.btnUpdateFaceImages.isHidden = true
             self.btnUpdateCropImages.isHidden = true
+        
+        self.lstVolumesOfFaces.selectItem(withObjectValue: "")
+        self.lstVolumesOfCrops.selectItem(withObjectValue: "")
     }
     
     fileprivate func freshNew() {
@@ -290,13 +348,29 @@ class EditRepositoryViewController: NSViewController {
         self.lstBriefFolderLevel.selectItem(at: 0)
     }
     
+    // - MARK: get / set volume and path
+    
+    func setVolumeAndPath(path: String, volumeDropdown list: NSComboBox, volumeController: TextListViewPopupController, pathField text: NSTextField) {
+        let (volume, path) = path.getVolumeFromThisPath()
+        
+        self.refreshMountedVolumes(dropdown: volumeController, append: [volume])
+        list.selectItem(withObjectValue: volume)
+        text.stringValue = path
+    }
+    
+    func getVolumePath(dropdown list:NSComboBox, text:NSTextField) -> String {
+        return "\(list.objectValueOfSelectedItem ?? "")\(text.stringValue)".trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+    // - MARK: init view
+    
     func initNew(window:NSWindow, onOK: (() -> Void)? = nil) {
         self.onCompleted = onOK
         self.window = window
         freshNew()
     }
     
-    func initEdit(path:String, window:NSWindow, onOK: (() -> Void)? = nil) {
+    func initEdit(id:Int, path:String, window:NSWindow, onOK: (() -> Void)? = nil) {
         self.onCompleted = onOK
         self.window = window
         self.emptyGeneralTextFields()
@@ -304,17 +378,32 @@ class EditRepositoryViewController: NSViewController {
         self.emptyFaceTextFields()
         self.lblMessage.stringValue = ""
         let (repositoryVolume, repositoryPath) = path.removeLastStash().getVolumeFromThisPath()
-        if let repository = RepositoryDao.default.findRepository(volume: repositoryVolume, repositoryPath: repositoryPath) {
+        if let repository = RepositoryDao.default.getRepository(id: id) {
             
-            let container = RepositoryDao.default.getContainer(path: path.removeLastStash())
+//            let container = RepositoryDao.default.getContainer(path: path.removeLastStash()) // fix: change to get by id
+            let container = RepositoryDao.default.getRepositoryLinkingContainer(repositoryId: repository.id)
             self.originalRepositoryId = repository.id
             self.originalContainer = container
             self.txtName.stringValue = repository.name
-            self.txtHomePath.stringValue = "\(repository.homeVolume)\(repository.homePath)"
-            self.txtRepository.stringValue = "\(repository.repositoryVolume)\(repository.repositoryPath)"
-            self.txtStoragePath.stringValue = "\(repository.storageVolume)\(repository.storagePath)"
-            self.txtFacePath.stringValue = "\(repository.faceVolume)\(repository.facePath)"
-            self.txtCropPath.stringValue = "\(repository.cropVolume)\(repository.cropPath)"
+            self.txtHomePath.stringValue = "\(repository.homePath)"
+            self.txtRepository.stringValue = "\(repository.repositoryPath)"
+            self.txtStoragePath.stringValue = "\(repository.storagePath)"
+            self.txtFacePath.stringValue = "\(repository.facePath)"
+            self.txtCropPath.stringValue = "\(repository.cropPath)"
+            
+            self.refreshMountedVolumes(append: [
+                repository.homeVolume,
+                repository.repositoryVolume,
+                repository.storageVolume,
+                repository.faceVolume,
+                repository.cropVolume
+            ])
+            self.lstVolumesOfEditableImages.selectItem(withObjectValue: repository.repositoryVolume)
+            self.lstVolumesOfRawImages.selectItem(withObjectValue: repository.storageVolume)
+            self.lstVolumesOfFaces.selectItem(withObjectValue: repository.faceVolume)
+            self.lstVolumesOfCrops.selectItem(withObjectValue: repository.cropVolume)
+            self.lstVolumesOfHome.selectItem(withObjectValue: repository.homeVolume)
+            
             self.btnFaceBackToOrigin.isHidden = false
             self.btnNormalize.isHidden = false
 //            self.btnFindFaces.isHidden = false
@@ -375,7 +464,7 @@ class EditRepositoryViewController: NSViewController {
         }else{
             self.originalRepositoryId = 0
             self.originalContainer = nil
-            self.lblMessage.stringValue = "\(Words.cannotFindRepositoryPath.word()) [\(path)]"
+            self.lblMessage.stringValue = "\(Words.cannotFindRepositoryPath.word()) [id:\(id)][path:\(path)]"
         }
     }
     
@@ -418,62 +507,68 @@ class EditRepositoryViewController: NSViewController {
     fileprivate func checkDirectory(path:String, messageBox:NSTextField) -> Bool {
         var pass = true
         let trimPath = path.trimmingCharacters(in: .whitespacesAndNewlines)
-        if trimPath.isFileExists() {
-            if !trimPath.isDirectoryExists() {
-                pass = false
-                messageBox.stringValue = "Path is occupied by a file. You need a folder."
+        if trimPath.isVolumeExists() {
+            if trimPath.isFileExists() {
+                if !trimPath.isDirectoryExists() {
+                    pass = false
+                    messageBox.stringValue = "Path is occupied by a file. You need a folder."
+                }
+            }else{
+                let (created, error) = trimPath.mkdirs(logger: self.logger)
+                if !created {
+                    pass = false
+                    messageBox.stringValue = "Unable to create directory at \(path) - \(error)"
+                }
             }
+            return pass
         }else{
-            if !trimPath.mkdirs(logger: self.logger) {
-                pass = false
-                messageBox.stringValue = "Unable to create directory at \(path)"
-            }
+            messageBox.stringValue = "Volume is not mounted, please mount it first."
+            return false
         }
-        return pass
     }
     
-    // MARK: - ACTION BUTTON - SAVE / OK
+    // MARK: - ACTION - SAVE NEW
     
     /// - Tag: EditRepositoryViewController.saveNewRepository()
     fileprivate func saveNewRepository() {
         let name = self.txtName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        let homePath = self.txtHomePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        let storagePath = self.txtStoragePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        let facePath = self.txtFacePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        let cropPath = self.txtCropPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        let repositoryPath = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        let homePath = self.getVolumePath(dropdown: self.lstVolumesOfHome, text: self.txtHomePath)
+        let storagePath = self.getVolumePath(dropdown: self.lstVolumesOfRawImages, text: self.txtStoragePath)
+        let facePath = self.getVolumePath(dropdown: self.lstVolumesOfFaces, text: self.txtFacePath)
+        let cropPath = self.getVolumePath(dropdown: self.lstVolumesOfCrops, text: self.txtCropPath)
+        let repositoryPath = self.getVolumePath(dropdown: self.lstVolumesOfEditableImages, text: self.txtRepository)
         let deviceId = self.lblDeviceId.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         if name == "" {
             self.lblNameRemark.stringValue = "Please give me a name."
         }
-        if self.txtHomePath.stringValue == "" {
+        if homePath == "" || self.txtHomePath.stringValue == "" {
             self.lblHomePathRemark.stringValue = "Please assign path for home of this repository."
         }
-        if self.txtStoragePath.stringValue == "" {
+        if storagePath == "" || self.txtStoragePath.stringValue == "" {
             self.lblStoragePathRemark.stringValue = "Please assign path for storing RAW copies."
         }
-        if self.txtRepository.stringValue == "" {
+        if repositoryPath == "" || self.txtRepository.stringValue == "" {
             self.lblRepositoryPathRemark.stringValue = "Please assign path for storing modifies."
         }
-        if self.txtFacePath.stringValue == "" {
+        if facePath == "" || self.txtFacePath.stringValue == "" {
             self.lblFacePathRemark.stringValue = "Please assign path for storing recognized pictures."
         }
-        if self.txtCropPath.stringValue == "" {
+        if cropPath == "" || self.txtCropPath.stringValue == "" {
             self.lblCropPathRemark.stringValue = "Please assign path for storing faces within pictures."
         }
-        guard self.txtName.stringValue != ""
-            && self.txtHomePath.stringValue != ""
-            && self.txtStoragePath.stringValue != ""
-            && self.txtRepository.stringValue != ""
-            && self.txtFacePath.stringValue != ""
-            && self.txtCropPath.stringValue != ""
+        guard name != ""
+            && homePath != ""
+            && storagePath != ""
+            && repositoryPath != ""
+            && facePath != ""
+            && cropPath != ""
             else {return}
         var pass = true
-        pass = pass && self.checkDirectory(path: self.txtHomePath.stringValue, messageBox: self.lblHomePathRemark)
-        pass = pass && self.checkDirectory(path: self.txtStoragePath.stringValue, messageBox: self.lblStoragePathRemark)
-        pass = pass && self.checkDirectory(path: self.txtRepository.stringValue, messageBox: self.lblRepositoryPathRemark)
-        pass = pass && self.checkDirectory(path: self.txtFacePath.stringValue, messageBox: self.lblFacePathRemark)
-        pass = pass && self.checkDirectory(path: self.txtCropPath.stringValue, messageBox: self.lblCropPathRemark)
+        pass = pass && self.checkDirectory(path: homePath, messageBox: self.lblHomePathRemark)
+        pass = pass && self.checkDirectory(path: storagePath, messageBox: self.lblStoragePathRemark)
+        pass = pass && self.checkDirectory(path: repositoryPath, messageBox: self.lblRepositoryPathRemark)
+        pass = pass && self.checkDirectory(path: facePath, messageBox: self.lblFacePathRemark)
+        pass = pass && self.checkDirectory(path: cropPath, messageBox: self.lblCropPathRemark)
         
         guard pass else {return}
         
@@ -497,22 +592,24 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    // MARK: - ACTION - SAVE EXISTS
+    
     /// - Tag: EditRepositoryViewController.onOKClicked()
     @IBAction func onOKClicked(_ sender: Any) {
         
         if let container = self.originalContainer { // edit
             let name = self.txtName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-            let homePath = self.txtHomePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            let homePath = self.getVolumePath(dropdown: self.lstVolumesOfHome, text: self.txtHomePath)
             if name == "" {
                 self.lblNameRemark.stringValue = "Please give me a name."
                 return
             }
-            if self.txtHomePath.stringValue == "" {
+            if homePath == "" || self.txtHomePath.stringValue == "" {
                 self.lblHomePathRemark.stringValue = "Please assign path for home of this repository."
                 return
             }
             var pass = true
-            pass = pass && self.checkDirectory(path: self.txtHomePath.stringValue, messageBox: self.lblHomePathRemark)
+            pass = pass && self.checkDirectory(path: homePath, messageBox: self.lblHomePathRemark)
             guard pass else {return}
             
             let origin = container
@@ -523,10 +620,10 @@ class EditRepositoryViewController: NSViewController {
             origin.folderAsBrief = (self.chkFolderAsBrief.state == .on)
             origin.briefFolderLevel = self.getBriefFolderLevelFromSelection()
             
-            let repositoryPath = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-            let storagePath = self.txtStoragePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-            let facePath = self.txtFacePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-            let cropPath = self.txtCropPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            let storagePath = self.getVolumePath(dropdown: self.lstVolumesOfRawImages, text: self.txtStoragePath)
+            let facePath = self.getVolumePath(dropdown: self.lstVolumesOfFaces, text: self.txtFacePath)
+            let cropPath = self.getVolumePath(dropdown: self.lstVolumesOfCrops, text: self.txtCropPath)
+            let repositoryPath = self.getVolumePath(dropdown: self.lstVolumesOfEditableImages, text: self.txtRepository)
             
             let (homeVolume, _homePath) = homePath.getVolumeFromThisPath()
             let (repositoryVolume, _repositoryPath) = repositoryPath.getVolumeFromThisPath()
@@ -553,16 +650,25 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
-    // MARK: - ACTION BUTTON - RESTORE TO ORIGIN
+    // MARK: - ACTION - RESTORE/ORIGIN
     
     /// - Tag: EditRepositoryViewController.onRestoreOriginalClicked()
     @IBAction func onRestoreOriginalClicked(_ sender: NSButton) {
         if let container = self.originalContainer {
             self.emptyStorageTextFields()
             self.txtName.stringValue = container.name
-            self.txtHomePath.stringValue = container.homePath
-            self.txtStoragePath.stringValue = container.storagePath
-            self.txtRepository.stringValue = container.path
+            self.setVolumeAndPath(path: container.homePath,
+                                  volumeDropdown: self.lstVolumesOfHome,
+                                  volumeController: self.volumesOfHomeListController,
+                                  pathField: self.txtHomePath)
+            self.setVolumeAndPath(path: container.path,
+                                  volumeDropdown: self.lstVolumesOfEditableImages,
+                                  volumeController: self.volumesOfEditableImagesListController,
+                                  pathField: self.txtRepository)
+            self.setVolumeAndPath(path: container.storagePath,
+                                  volumeDropdown: self.lstVolumesOfRawImages,
+                                  volumeController: self.volumesOfRawImagesListController,
+                                  pathField: self.txtStoragePath)
             self.btnRestoreOriginal.isHidden = false
             self.btnCopyToRaw.isHidden = false
         }
@@ -573,26 +679,36 @@ class EditRepositoryViewController: NSViewController {
         
         if let container = self.originalContainer {
             self.emptyFaceTextFields()
-            self.txtFacePath.stringValue = container.facePath
-            self.txtCropPath.stringValue = container.cropPath
+            
+            self.setVolumeAndPath(path: container.facePath,
+                                  volumeDropdown: self.lstVolumesOfFaces,
+                                  volumeController: self.volumesOfFacesListController,
+                                  pathField: self.self.txtFacePath)
+            self.setVolumeAndPath(path: container.cropPath,
+                                  volumeDropdown: self.lstVolumesOfCrops,
+                                  volumeController: self.volumesOfCropsListController,
+                                  pathField: self.txtCropPath)
         }
     }
     
-    // MARK: - ACTION BUTTON - FOLLOW HOME PATH
+    // MARK: - ACTION - FOLLOW HOME
     
     /// - Tag: EditRepositoryViewController.onFollowHomePathClicked()
     @IBAction func onFollowHomePathClicked(_ sender: NSButton) {
         
-        if self.txtHomePath.stringValue == "" {
+        
+        let homePath = self.getVolumePath(dropdown: self.lstVolumesOfHome, text: self.txtHomePath)
+        
+        if homePath == "" || self.txtHomePath.stringValue == "" {
             self.lblHomePathRemark.stringValue = "Please assign path for home of this repository."
             return
         }
         
-        if !self.checkDirectory(path: self.txtHomePath.stringValue, messageBox: self.lblHomePathRemark) {
+        if !self.checkDirectory(path: homePath, messageBox: self.lblHomePathRemark) {
             return
         }
         
-        let home = URL(fileURLWithPath: self.txtHomePath.stringValue)
+        let home = URL(fileURLWithPath: homePath)
         let storage = home.appendingPathComponent("import")
         let repository = home.appendingPathComponent("repository")
         
@@ -612,22 +728,31 @@ class EditRepositoryViewController: NSViewController {
             }
         }
         
-        self.txtRepository.stringValue = repository.path
-        self.txtStoragePath.stringValue = storage.path
+        self.setVolumeAndPath(path: repository.path,
+                              volumeDropdown: self.lstVolumesOfEditableImages,
+                              volumeController: self.volumesOfEditableImagesListController,
+                              pathField: self.txtRepository)
+        
+        self.setVolumeAndPath(path: storage.path,
+                              volumeDropdown: self.lstVolumesOfRawImages,
+                              volumeController: self.volumesOfRawImagesListController,
+                              pathField: self.txtStoragePath)
     }
     
     /// - Tag: EditRepositoryViewController.onFacePathFollowHomeClicked()
     @IBAction func onFacePathFollowHomeClicked(_ sender: NSButton) {
         
-        if self.txtHomePath.stringValue == "" {
+        let homePath = self.getVolumePath(dropdown: self.lstVolumesOfHome, text: self.txtHomePath)
+        
+        if homePath == "" || self.txtHomePath.stringValue == "" {
             self.lblHomePathRemark.stringValue = "Please assign path for home of this repository."
             return
         }
         
-        if !self.checkDirectory(path: self.txtHomePath.stringValue, messageBox: self.lblHomePathRemark) {
+        if !self.checkDirectory(path: homePath, messageBox: self.lblHomePathRemark) {
             return
         }
-        let home = URL(fileURLWithPath: self.txtHomePath.stringValue)
+        let home = URL(fileURLWithPath: homePath)
         let face = home.appendingPathComponent("faces")
         let crop = home.appendingPathComponent("crop")
         
@@ -646,11 +771,41 @@ class EditRepositoryViewController: NSViewController {
                 self.lblCropPathRemark.stringValue = "original: \(container.cropPath)"
             }
         }
-        self.txtFacePath.stringValue = face.path
-        self.txtCropPath.stringValue = crop.path
+        
+        self.setVolumeAndPath(path: face.path,
+                              volumeDropdown: self.lstVolumesOfFaces,
+                              volumeController: self.volumesOfFacesListController,
+                              pathField: self.txtFacePath)
+        
+        self.setVolumeAndPath(path: crop.path,
+                              volumeDropdown: self.lstVolumesOfCrops,
+                              volumeController: self.volumesOfCropsListController,
+                              pathField: self.txtCropPath)
     }
     
-    // MARK: - ACTION BUTTON - COPY IMAGES FROM EDITABLE TO RAW STORAGE
+    /// - Tag: EditRepositoryViewController.onFollowDevicePathsClicked()
+    @IBAction func onFollowDevicePathsClicked(_ sender: NSButton) {
+        let deviceId = self.lblDeviceId.stringValue
+        if deviceId != "" {
+            if let device = DeviceDao.default.getDevice(deviceId: deviceId) {
+                
+                self.setVolumeAndPath(path: device.homePath ?? "",
+                                      volumeDropdown: self.lstVolumesOfHome,
+                                      volumeController: self.volumesOfHomeListController,
+                                      pathField: self.txtHomePath)
+                self.setVolumeAndPath(path: device.repositoryPath ?? "",
+                                      volumeDropdown: self.lstVolumesOfEditableImages,
+                                      volumeController: self.volumesOfEditableImagesListController,
+                                      pathField: self.txtRepository)
+                self.setVolumeAndPath(path: device.storagePath ?? "",
+                                      volumeDropdown: self.lstVolumesOfRawImages,
+                                      volumeController: self.volumesOfRawImagesListController,
+                                      pathField: self.txtStoragePath)
+            }
+        }
+    }
+    
+    // MARK: - ACTION - EDITABLE->RAW
     
     /// - Tag: EditRepositoryViewController.onCopyToRawClicked()
     @IBAction func onCopyToRawClicked(_ sender: NSButton) {
@@ -664,14 +819,14 @@ class EditRepositoryViewController: NSViewController {
                 return
             }
             var isDir:ObjCBool = false
-            if !FileManager.default.fileExists(atPath: container.repositoryPath, isDirectory: &isDir) {
+            if !FileManager.default.fileExists(atPath: container.repositoryPath, isDirectory: &isDir) { // FIXME: separate volume
                 self.lblMessage.stringValue = "ERROR: Path for storing editable images doesn't exist. Please re-assign it and save first."
                 return
             }else if isDir.boolValue == false {
                 self.lblMessage.stringValue = "ERROR: Path for storing editable images must be a directory. Please re-assign it and save first."
                 return
             }
-            if !FileManager.default.fileExists(atPath: container.storagePath, isDirectory: &isDir) {
+            if !FileManager.default.fileExists(atPath: container.storagePath, isDirectory: &isDir) { // FIXME: separate volume
                 self.lblMessage.stringValue = "ERROR: Path for storing raw images doesn't exist. Please re-assign it and save first."
                 return
             }else if isDir.boolValue == false {
@@ -700,7 +855,7 @@ class EditRepositoryViewController: NSViewController {
             }
             
             DispatchQueue.global().async {
-                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)
+                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath) // FIXME: separate volume
                 
                 if images.count == 0 {
                     DispatchQueue.main.async {
@@ -749,7 +904,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
-    // MARK: - ACTION BUTTON - OPEN DIALOG
+    // MARK: - ACTION - OPEN/BROWSE
     
     /// - Tag: EditRepositoryViewController.onBrowseHomePath()
     @IBAction func onBrowseHomePath(_ sender: NSButton) {
@@ -765,7 +920,11 @@ class EditRepositoryViewController: NSViewController {
                 guard response == NSApplication.ModalResponse.OK else {return}
                 if let url = openPanel.url {
                     self.lblHomePathRemark.stringValue = "previous: \(self.txtHomePath.stringValue)"
-                    self.txtHomePath.stringValue = url.path
+                    
+                    self.setVolumeAndPath(path: url.path,
+                                          volumeDropdown: self.lstVolumesOfHome,
+                                          volumeController: self.volumesOfHomeListController,
+                                          pathField: self.txtHomePath)
                 }
             }
         }
@@ -785,7 +944,11 @@ class EditRepositoryViewController: NSViewController {
                 guard response == NSApplication.ModalResponse.OK else {return}
                 if let url = openPanel.url {
                     self.lblStoragePathRemark.stringValue = "previous: \(self.txtStoragePath.stringValue)"
-                    self.txtStoragePath.stringValue = url.path
+                    
+                    self.setVolumeAndPath(path: url.path,
+                                          volumeDropdown: self.lstVolumesOfRawImages,
+                                          volumeController: self.volumesOfRawImagesListController,
+                                          pathField: self.txtStoragePath)
                 }
             }
         }
@@ -805,7 +968,11 @@ class EditRepositoryViewController: NSViewController {
                 guard response == NSApplication.ModalResponse.OK else {return}
                 if let url = openPanel.url {
                     self.lblRepositoryPathRemark.stringValue = "previous: \(self.txtRepository.stringValue)"
-                    self.txtRepository.stringValue = url.path
+                    
+                    self.setVolumeAndPath(path: url.path,
+                                          volumeDropdown: self.lstVolumesOfEditableImages,
+                                          volumeController: self.volumesOfEditableImagesListController,
+                                          pathField: self.txtRepository)
                 }
             }
         }
@@ -825,7 +992,11 @@ class EditRepositoryViewController: NSViewController {
                 guard response == NSApplication.ModalResponse.OK else {return}
                 if let url = openPanel.url {
                     self.lblFacePathRemark.stringValue = "previous: \(self.txtFacePath.stringValue)"
-                    self.txtFacePath.stringValue = url.path
+                    
+                    self.setVolumeAndPath(path: url.path,
+                                          volumeDropdown: self.lstVolumesOfFaces,
+                                          volumeController: self.volumesOfFacesListController,
+                                          pathField: self.txtFacePath)
                 }
             }
         }
@@ -845,97 +1016,113 @@ class EditRepositoryViewController: NSViewController {
                 guard response == NSApplication.ModalResponse.OK else {return}
                 if let url = openPanel.url {
                     self.lblCropPathRemark.stringValue = "previous: \(self.txtCropPath.stringValue)"
-                    self.txtCropPath.stringValue = url.path
+                    
+                    self.setVolumeAndPath(path: url.path,
+                                          volumeDropdown: self.lstVolumesOfCrops,
+                                          volumeController: self.volumesOfCropsListController,
+                                          pathField: self.txtCropPath)
                 }
             }
         }
     }
     
-    // MARK: - ACTION BUTTON - VIEW IN FINDER
+    // MARK: - ACTION - VIEW IN FINDER
     
     /// - Tag: EditRepositoryViewController.onFindHomePath()
     @IBAction func onFindHomePath(_ sender: NSButton) {
-        if self.txtHomePath.stringValue == "" {
+        let homePath = self.getVolumePath(dropdown: self.lstVolumesOfHome, text: self.txtHomePath)
+        
+        if homePath == "" || self.txtHomePath.stringValue == "" {
             self.lblHomePathRemark.stringValue = "Please assign path for home of this repository."
             return
         }
         
-        if !self.checkDirectory(path: self.txtHomePath.stringValue, messageBox: self.lblHomePathRemark) {
+        if !self.checkDirectory(path: homePath, messageBox: self.lblHomePathRemark) {
             return
         }
         
-        let url = URL(fileURLWithPath: self.txtHomePath.stringValue)
+        let url = URL(fileURLWithPath: homePath)
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     
     /// - Tag: EditRepositoryViewController.onFindStoragePathClicked()
     @IBAction func onFindStoragePathClicked(_ sender: NSButton) {
-        if self.txtStoragePath.stringValue == "" {
+        let storagePath = self.getVolumePath(dropdown: self.lstVolumesOfRawImages, text: self.txtStoragePath)
+        
+        if storagePath == "" || self.txtStoragePath.stringValue == "" {
             self.lblStoragePathRemark.stringValue = "Please assign path for storing RAW copies."
             return
         }
         
-        if !self.checkDirectory(path: self.txtStoragePath.stringValue, messageBox: self.lblStoragePathRemark) {
+        if !self.checkDirectory(path: storagePath, messageBox: self.lblStoragePathRemark) {
             return
         }
         
-        let url = URL(fileURLWithPath: self.txtStoragePath.stringValue)
+        let url = URL(fileURLWithPath: storagePath)
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     
     /// - Tag: EditRepositoryViewController.onFindRepositoryPathClicked()
     @IBAction func onFindRepositoryPathClicked(_ sender: NSButton) {
-        if self.txtRepository.stringValue == "" {
+        let repositoryPath = self.getVolumePath(dropdown: self.lstVolumesOfEditableImages, text: self.txtRepository)
+        
+        if repositoryPath == "" || self.txtRepository.stringValue == "" {
             self.lblRepositoryPathRemark.stringValue = "Please assign path for storing modifies."
             return
         }
         
-        if !self.checkDirectory(path: self.txtRepository.stringValue, messageBox: self.lblRepositoryPathRemark) {
+        if !self.checkDirectory(path: repositoryPath, messageBox: self.lblRepositoryPathRemark) {
             return
         }
         
-        let url = URL(fileURLWithPath: self.txtRepository.stringValue)
+        let url = URL(fileURLWithPath: repositoryPath)
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     
     /// - Tag: EditRepositoryViewController.onFindFaceRepositoryPathClicked()
     @IBAction func onFindFaceRepositoryPathClicked(_ sender: NSButton) {
-        if self.txtFacePath.stringValue == "" {
+        
+        let facesPath = self.getVolumePath(dropdown: self.lstVolumesOfFaces, text: self.txtFacePath)
+        
+        if facesPath == "" || self.txtFacePath.stringValue == "" {
             self.lblFacePathRemark.stringValue = "Please assign path for storing recognized pictures."
             return
         }
         
-        if !self.checkDirectory(path: self.txtFacePath.stringValue, messageBox: self.lblFacePathRemark) {
+        if !self.checkDirectory(path: facesPath, messageBox: self.lblFacePathRemark) {
             return
         }
         
-        let url = URL(fileURLWithPath: self.txtFacePath.stringValue)
+        let url = URL(fileURLWithPath: facesPath)
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     
     /// - Tag: EditRepositoryViewController.onFindCropPath()
     @IBAction func onFindCropPath(_ sender: NSButton) {
-        if self.txtCropPath.stringValue == "" {
+        
+        let cropsPath = self.getVolumePath(dropdown: self.lstVolumesOfCrops, text: self.txtCropPath)
+        
+        if cropsPath == "" || self.txtCropPath.stringValue == "" {
             self.lblCropPathRemark.stringValue = "Please assign path for storing faces within pictures."
             return
         }
         
-        if !self.checkDirectory(path: self.txtCropPath.stringValue, messageBox: self.lblCropPathRemark) {
+        if !self.checkDirectory(path: cropsPath, messageBox: self.lblCropPathRemark) {
             return
         }
         
-        let url = URL(fileURLWithPath: self.txtCropPath.stringValue)
+        let url = URL(fileURLWithPath: cropsPath)
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     
-    // MARK: - ACTION BUTTON - UPDATE IMAGES
+    // MARK: - ACTION - FIX RAW
     
     /// - Tag: EditRepositoryViewController.onUpdateStorageImagesClicked()
     @IBAction func onUpdateStorageImagesClicked(_ sender: NSButton) {
         guard !self.working else {return}
         if let repoContainer = self.originalContainer {
-            let originalRawPath = repoContainer.storagePath.withLastStash()
-            let newRawPath = self.txtStoragePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withLastStash()
+            let originalRawPath = repoContainer.storagePath.withLastStash() // FIXME: separate volume
+            let newRawPath = self.txtStoragePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withLastStash() // FIXME: separate volume
             
             if newRawPath == "/" {
                 self.lblStoragePathRemark.stringValue = "Path for RAW copy is empty."
@@ -996,13 +1183,13 @@ class EditRepositoryViewController: NSViewController {
                 }
                 
                 // TODO: should be demised in future to improve performance
-                let _ = ImageRecordDao.default.updateImageRawBase(pathStartsWith: originalRawPath, rawPath: newRawPath)
+                let _ = ImageRecordDao.default.updateImageRawBase(pathStartsWith: originalRawPath, rawPath: newRawPath) // FIXME: separate volume
                 
-                let _ = ImageRecordDao.default.updateImageRawBase(oldRawPath: originalRawPath, newRawPath: newRawPath)
+                let _ = ImageRecordDao.default.updateImageRawBase(oldRawPath: originalRawPath, newRawPath: newRawPath) // FIXME: separate volume
                 
                 // save repo's path
                 let repo = repoContainer
-                repo.storagePath = newRawPath
+                repo.storagePath = newRawPath // FIXME: separate volume
                 let _ = RepositoryDao.default.saveImageContainer(container: repo)
                 self.originalContainer = repo
                 
@@ -1018,14 +1205,16 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    // MARK: - ACTION - FIX IMAGES
+    
     /// - Tag: EditRepositoryViewController.onUpdateRepositoryImagesClicked()
     @IBAction func onUpdateRepositoryImagesClicked(_ sender: NSButton) {
         guard !self.working else {return}
         if let repoContainer = self.originalContainer {
             
-            let originalRepoPath = repoContainer.path.withLastStash()
-            let newRepoPathNoStash = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-            let newRepoPath = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withLastStash()
+            let originalRepoPath = repoContainer.path.withLastStash() // FIXME: separate volume
+            let newRepoPathNoStash = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines) // FIXME: separate volume
+            let newRepoPath = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withLastStash() // FIXME: separate volume
             
             if newRepoPath == "/" || newRepoPath == "" {
                 return
@@ -1036,13 +1225,13 @@ class EditRepositoryViewController: NSViewController {
             self.lblMessage.stringValue = "Checking for update ..."
             
             if newRepoPath == originalRepoPath {
-                let imagesWithoutRepoPath = ImageCountDao.default.countImageWithoutRepositoryPath(repositoryRoot: originalRepoPath)
-                let imagesWithoutSubPath = ImageCountDao.default.countImageWithoutSubPath(repositoryRoot: originalRepoPath)
-                let imagesWithoutId = ImageCountDao.default.countImageWithoutId(repositoryRoot: originalRepoPath)
-                let imagesUnmatchedRepoPath = ImageCountDao.default.countImageUnmatchedRepositoryRoot(repositoryRoot: originalRepoPath)
+                let imagesWithoutRepoPath = ImageCountDao.default.countImageWithoutRepositoryPath(repositoryRoot: originalRepoPath) // FIXME: separate volume
+                let imagesWithoutSubPath = ImageCountDao.default.countImageWithoutSubPath(repositoryRoot: originalRepoPath) // FIXME: separate volume
+                let imagesWithoutId = ImageCountDao.default.countImageWithoutId(repositoryRoot: originalRepoPath) // FIXME: separate volume
+                let imagesUnmatchedRepoPath = ImageCountDao.default.countImageUnmatchedRepositoryRoot(repositoryRoot: originalRepoPath) // FIXME: separate volume
                 
-                let containersWithoutRepoPath = ImageCountDao.default.countContainersWithoutRepositoryPath(repositoryRoot: originalRepoPath)
-                let containersWithoutSubPath = ImageCountDao.default.countContainersWithoutSubPath(repositoryRoot: originalRepoPath)
+                let containersWithoutRepoPath = ImageCountDao.default.countContainersWithoutRepositoryPath(repositoryRoot: originalRepoPath) // FIXME: separate volume
+                let containersWithoutSubPath = ImageCountDao.default.countContainersWithoutSubPath(repositoryRoot: originalRepoPath) // FIXME: separate volume
                 
                 logger.log("No-repo:\(imagesWithoutRepoPath) No-sub:\(imagesWithoutSubPath) No-id:\(imagesWithoutId) Unmatch-repo:\(imagesUnmatchedRepoPath) container-no-repo:\(containersWithoutRepoPath) container-no-sub:\(containersWithoutSubPath)")
                 logger.log("continue if one of above larger than zero")
@@ -1112,7 +1301,7 @@ class EditRepositoryViewController: NSViewController {
                         }
                         
                         // fix empty repository path
-                        let containerPath = containerUrl.path
+                        let containerPath = containerUrl.path // FIXME: separate volume
                         
                         // fix empty sub path
                         let subPath = image.path.replacingFirstOccurrence(of: originalRepoPath, with: "")
@@ -1124,7 +1313,7 @@ class EditRepositoryViewController: NSViewController {
                         // fix empty id
                         let id = image.id ?? UUID().uuidString
                         
-                        let _ = ImageRecordDao.default.updateImagePaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath, subPath: subPath, containerPath: containerPath, id: id)
+                        let _ = ImageRecordDao.default.updateImagePaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath, subPath: subPath, containerPath: containerPath, id: id) // FIXME: separate volume
                     }
                 }
                 
@@ -1134,7 +1323,7 @@ class EditRepositoryViewController: NSViewController {
                     self.lblMessage.stringValue = "Loading sub-folders ..."
                 }
                 
-                let subContainers = RepositoryDao.default.getContainers(rootPath: originalRepoPath)
+                let subContainers = RepositoryDao.default.getContainers(rootPath: originalRepoPath) // FIXME: separate volume
                 
                 let total = subContainers.count
                 
@@ -1156,10 +1345,10 @@ class EditRepositoryViewController: NSViewController {
                     if sub.parentPath == "" {
                         sub.parentPath = URL(fileURLWithPath: sub.path).deletingLastPathComponent().path.replacingFirstOccurrence(of: originalRepoPath, with: "")
                     }
-                    sub.repositoryPath = newRepoPath
+                    sub.repositoryPath = newRepoPath // FIXME: separate volume
                     sub.parentFolder = sub.parentFolder.replacingFirstOccurrence(of: repoContainer.path, with: newRepoPathNoStash) // without stash
-                    sub.path = sub.path.replacingFirstOccurrence(of: originalRepoPath, with: newRepoPath)
-                    let _ = RepositoryDao.default.updateImageContainerPaths(oldPath: oldPath, newPath: sub.path, repositoryPath: sub.repositoryPath, parentFolder: sub.parentFolder, subPath: sub.subPath)
+                    sub.path = sub.path.replacingFirstOccurrence(of: originalRepoPath, with: newRepoPath) // FIXME: separate volume
+                    let _ = RepositoryDao.default.updateImageContainerPaths(oldPath: oldPath, newPath: sub.path, repositoryPath: sub.repositoryPath, parentFolder: sub.parentFolder, subPath: sub.subPath) // FIXME: separate volume
                 }
                 
                 // save repo's path
@@ -1171,7 +1360,7 @@ class EditRepositoryViewController: NSViewController {
                 self.originalContainer = repo
                 
                 DispatchQueue.main.async {
-                    self.initEdit(path: newPath, window: self.window!) // reload repository data to form
+                    self.initEdit(id: repo.repositoryId, path: newPath, window: self.window!) // reload repository data to form
                     
                     self.toggleButtons(true)
                     //self.lblMessage.stringValue = "Repository updated."
@@ -1190,8 +1379,8 @@ class EditRepositoryViewController: NSViewController {
     @IBAction func onUpdateFaceImagesClicked(_ sender: NSButton) {
         guard !self.working else {return}
         if let repoContainer = self.originalContainer {
-            let originalFacePath = repoContainer.facePath.withLastStash()
-            let newFacePath = self.txtFacePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withLastStash()
+            let originalFacePath = repoContainer.facePath.withLastStash() // FIXME: separate volume
+            let newFacePath = self.txtFacePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withLastStash() // FIXME: separate volume
             
             if newFacePath == "/" || newFacePath == originalFacePath {
                 return
@@ -1251,7 +1440,7 @@ class EditRepositoryViewController: NSViewController {
                 
                 // save repo's path
                 let repo = repoContainer
-                repo.facePath = newFacePath
+                repo.facePath = newFacePath // FIXME: separate volume
                 let _ = RepositoryDao.default.saveImageContainer(container: repo)
                 self.originalContainer = repo
                 
@@ -1274,11 +1463,12 @@ class EditRepositoryViewController: NSViewController {
        
     }
     
+    // MARK: - ACTION - FIX HIDDEN
     
     /// - Tag: EditRepositoryViewController.onNormalizeHiddenClicked()
     @IBAction func onNormalizeHiddenClicked(_ sender: NSButton) {
-        let repo = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withLastStash()
-        let raw = self.txtStoragePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withLastStash()
+        let repo = self.getVolumePath(dropdown: self.lstVolumesOfEditableImages, text: self.txtRepository)
+        let raw = self.getVolumePath(dropdown: self.lstVolumesOfRawImages, text: self.txtStoragePath)
         guard !self.working && repo != "/" && raw != "/" else {return}
         self.working = true
         
@@ -1307,7 +1497,7 @@ class EditRepositoryViewController: NSViewController {
         DispatchQueue.global().async {
             self.logger.log("loading duplicates from database")
             
-            let duplicates = ImageDuplicationDao.default.getDuplicatedImages(repositoryRoot: repo, theOtherRepositoryRoot: raw)
+            let duplicates = ImageDuplicationDao.default.getDuplicatedImages(repositoryRoot: repo, theOtherRepositoryRoot: raw) // FIXME: separate volume
             self.logger.log("loaded duplicates \(duplicates.count)")
             
             count = duplicates.count
@@ -1379,7 +1569,7 @@ class EditRepositoryViewController: NSViewController {
         
     }
     
-    // MARK: - ACTION BUTTON - DELETE RECORDS
+    // MARK: - ACTION - DELETE RECORDS
     
     /// - Tag: EditRepositoryViewController.onRemoveClicked()
     @IBAction func onRemoveClicked(_ sender: NSButton) {
@@ -1388,7 +1578,7 @@ class EditRepositoryViewController: NSViewController {
                 
                 self.toggleButtons(false)
                 DispatchQueue.global().async {
-                    let _ = RepositoryDao.default.deleteRepository(repositoryRoot: container.path)
+                    let _ = RepositoryDao.default.deleteRepository(repositoryRoot: container.path) // FIXME: separate volume
                     
                     DispatchQueue.main.async {
                         
@@ -1403,7 +1593,7 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
-    // MARK: - ACTION BUTTON - DEVICE INFO AREA
+    // MARK: - ACTION - DEVICE INFO
     
     /// - Tag: EditRepositoryViewController.onLoadDevicesClicked()
     @IBAction func onLoadDevicesClicked(_ sender: NSButton) {
@@ -1414,6 +1604,8 @@ class EditRepositoryViewController: NSViewController {
         self.devicesPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
     }
     
+    // MARK: - ACTION - COMPARE PATH
+    
     /// - Tag: EditRepositoryViewController.onCompareDevicePathClicked()
     @IBAction func onCompareDevicePathClicked(_ sender: NSButton) {
         let deviceId = self.lblDeviceId.stringValue
@@ -1422,13 +1614,13 @@ class EditRepositoryViewController: NSViewController {
                 let homePath = device.homePath ?? ""
                 let repoPath = device.repositoryPath ?? ""
                 let rawPath = device.storagePath ?? ""
-                if self.txtHomePath.stringValue != homePath {
+                if self.txtHomePath.stringValue != homePath {// FIXME: separate volume
                     self.lblHomePathRemark.stringValue = "Different w/ device: [\(homePath)]"
                 }
-                if self.txtRepository.stringValue != repoPath {
+                if self.txtRepository.stringValue != repoPath {// FIXME: separate volume
                     self.lblRepositoryPathRemark.stringValue = "Different w/ device: [\(repoPath)]"
                 }
-                if self.txtStoragePath.stringValue != rawPath {
+                if self.txtStoragePath.stringValue != rawPath {// FIXME: separate volume
                     self.lblStoragePathRemark.stringValue = "Different w/ device: [\(rawPath)]"
                 }
             }
@@ -1456,20 +1648,20 @@ class EditRepositoryViewController: NSViewController {
             }
         }
         if originalRepositoryId > 0 {
-            RepositoryDao.default.linkRepositoryToDevice(id: originalRepositoryId, deviceId: deviceId)
+            RepositoryDao.default.linkRepositoryToDevice(id: originalRepositoryId, deviceId: deviceId)// FIXME: separate volume
         }else{
             self.lblMessage.stringValue = "ImageRepositoryId is nil - Unable to link repository with device in database."
         }
     }
     
-    // MARK: - ACTION BUTTON - SHOW HIDE IMAGES
+    // MARK: - ACTION - SHOW/HIDE
     
     /// - Tag: EditRepositoryViewController.onShowHideClicked()
     @IBAction func onShowHideClicked(_ sender: NSButton) {
         if let container = self.originalContainer {
             if container.hiddenByRepository {
                 DispatchQueue.global().async {
-                    let _ = RepositoryDao.default.showRepository(repositoryRoot: container.path.withLastStash())
+                    let _ = RepositoryDao.default.showRepository(repositoryRoot: container.path.withLastStash())// FIXME: separate volume
                     self.originalContainer?.hiddenByRepository = false
                     let _ = RepositoryDao.default.saveImageContainer(container: self.originalContainer!)
                     
@@ -1482,7 +1674,7 @@ class EditRepositoryViewController: NSViewController {
                 }
             }else{
                 DispatchQueue.global().async {
-                    let _ = RepositoryDao.default.hideRepository(repositoryRoot: container.path.withLastStash())
+                    let _ = RepositoryDao.default.hideRepository(repositoryRoot: container.path.withLastStash())// FIXME: separate volume
                     self.originalContainer?.hiddenByRepository = true
                     let _ = RepositoryDao.default.saveImageContainer(container: self.originalContainer!)
                     DispatchQueue.main.async {
@@ -1496,105 +1688,12 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
-    /// - Tag: EditRepositoryViewController.onFollowDevicePathsClicked()
-    @IBAction func onFollowDevicePathsClicked(_ sender: NSButton) {
-        let deviceId = self.lblDeviceId.stringValue
-        if deviceId != "" {
-            if let device = DeviceDao.default.getDevice(deviceId: deviceId) {
-                self.txtHomePath.stringValue = device.homePath ?? ""
-                self.txtRepository.stringValue = device.repositoryPath ?? ""
-                self.txtStoragePath.stringValue = device.storagePath ?? ""
-            }
-        }
-    }
-    
-    // MARK: - FIND FACES
-    
-    /// - Tag: EditRepositoryViewController.onFindFacesClicked()
-    @IBAction func onFindFacesClicked(_ sender: NSButton) {
-//        guard !self.working else {
-//            self.logger.log("other task is running. abort this task.")
-//            return
-//        }
-//        if let repository = self.originalContainer {
-//            
-//            if repository.cropPath == "" {
-//                self.logger.log("ERROR: Crop path is empty, please assign it first: \(repository.path)")
-//                self.lblMessage.stringValue = "ERROR: Crop path is empty, please assign it first"
-//                return
-//            }
-//            
-//            // ensure base crop path exists
-//            var isDir:ObjCBool = false
-//            if FileManager.default.fileExists(atPath: repository.cropPath, isDirectory: &isDir) {
-//                if !isDir.boolValue {
-//                    self.logger.log("ERROR: Crop path of repository is not a directory: \(repository.cropPath)")
-//                    self.lblMessage.stringValue = "ERROR: Crop path of repository is not a directory"
-//                    return
-//                }
-//            }
-//            
-//            
-//            let limitRam = PreferencesController.peakMemory() * 1024
-//            self.stopByExceedLimit = false
-//            
-//            self.accumulator = Accumulator(target: 100, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage,
-//                                           onCompleted: { data in
-//                                                DispatchQueue.main.async {
-//                                                    let count = data["count"] ?? 0
-//                                                    let total = data["total"] ?? 0
-//                                                    let detectedCount = data["detectedCount"] ?? 0
-//                                                    self.continousWorkingRemain = total - count
-//                                                    var msg = "Total \(total) images. Processed \(count) images. Found \(detectedCount) images with face(s)."
-//                                                    if self.stopByExceedLimit {
-//                                                        msg += " Stopped since total size exceeds memory limitation \(limitRam) MB"
-//                                                        if self.continousWorkingRemain > 0 {
-//                                                            msg += ", cleaning memory..."
-//                                                        }
-//                                                    }
-//                                                    self.logger.log(msg)
-//                                                    self.working = false
-//                                                    self.logger.log(">>> REMAIN \(self.continousWorkingRemain)")
-//                                                    if self.continousWorkingRemain <= 0 {
-//                                                        self.toggleButtons(true)
-//                                                        self.logger.log(">>> DONE")
-//                                                        msg = "Total \(total) images. Processed \(count) images. Found \(detectedCount) images with face(s)."
-//                                                        self.continousWorking = false
-//                                                    }
-//                                                    
-//                                                    self.lblMessage.stringValue = msg
-//                                                }
-//                                            },
-//                                            startupMessage: "Loading images from database ..."
-//                                            )
-//            
-//            DispatchQueue.global().async {
-//                self.continousWorkingRemain = 1
-//                self.continousWorking = true
-//                self.continousWorkingAttempt = 0
-//                
-//                let images = ImageSearchDao.default.getImagesWithoutFace(repositoryRoot: repository.path.withStash())
-//                
-//                self.accumulator?.cleanData()
-//                
-//                while(self.continousWorkingRemain > 0){
-//                    if !self.working {
-//                        self.logger.log(">>> RE-TRIGGER")
-//                        self.continousWorkingAttempt += 1
-//                        self.logger.log(">>> TRIGGER SCANNER ATTEMPT=\(self.continousWorkingAttempt), REMAIN=\(self.continousWorkingRemain)")
-//                        self.scanFaces(from: images, in: repository)
-//                    }
-//                    self.logger.log(">>> SLEEP, REMAIN \(self.continousWorkingRemain)")
-//                    sleep(10)
-//                }
-//            }
-//        }
-    }
-    
     fileprivate var stopByExceedLimit = false
     fileprivate var continousWorking = false
     fileprivate var continousWorkingAttempt = 0
     fileprivate var continousWorkingRemain = 0
+    
+    // MARK: - ACTION - FIX BRIEF
     
     /// - Tag: EditRepositoryViewController.onUpdateEmptyBriefClicked()
     @IBAction func onUpdateEmptyBriefClicked(_ sender: NSButton) {
@@ -1605,7 +1704,7 @@ class EditRepositoryViewController: NSViewController {
         self.btnUpdateAllEvents.isEnabled = false
         DispatchQueue.global().async {
             if let container = self.originalContainer {
-                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)
+                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)// FIXME: separate volume
                 let level = self.getBriefFolderLevelFromSelection()
                 let total = images.count
                 var i = 0
@@ -1641,7 +1740,7 @@ class EditRepositoryViewController: NSViewController {
         self.btnUpdateAllEvents.isEnabled = false
         DispatchQueue.global().async {
             if let container = self.originalContainer {
-                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)
+                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)// FIXME: separate volume
                 let level = self.getBriefFolderLevelFromSelection()
                 let total = images.count
                 var i = 0
@@ -1706,7 +1805,7 @@ class EditRepositoryViewController: NSViewController {
         var array:[String] = []
         if let container = self.originalContainer {
             var folders:Set<String> = []
-            let paths = RepositoryDao.default.getAllContainerPathsOfImages(rootPath: container.repositoryPath)
+            let paths = RepositoryDao.default.getAllContainerPathsOfImages(rootPath: container.repositoryPath)// FIXME: separate volume
             for path in paths {
                 if path == container.repositoryPath {continue}
                 let p = path.replacingFirstOccurrence(of: container.repositoryPath.withLastStash(), with: "")
@@ -1730,7 +1829,7 @@ class EditRepositoryViewController: NSViewController {
             array = folders.sorted()
         }else{
             var folders:Set<String> = []
-            let path = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            let path = self.getVolumePath(dropdown: self.lstVolumesOfEditableImages, text: self.txtRepository)
             if path != "" {
                 let paths = LocalDirectory.bridge.folders(in: path, unlimitedDepth: true)
                 for p in paths {
@@ -1774,7 +1873,7 @@ class EditRepositoryViewController: NSViewController {
     }
     
     
-    // MARK: - UPDATE EVENT
+    // MARK: - ACTION - FIX EVENT
     
     /// - Tag: EditRepositoryViewController.onUpdateEmptyEventClicked()
     @IBAction func onUpdateEmptyEventClicked(_ sender: NSButton) {
@@ -1785,7 +1884,7 @@ class EditRepositoryViewController: NSViewController {
         self.btnUpdateAllEvents.isEnabled = false
         DispatchQueue.global().async {
             if let container = self.originalContainer {
-                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)
+                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)// FIXME: separate volume
                 let level = self.lstEventFolderLevel.indexOfSelectedItem + 1
                 let total = images.count
                 var i = 0
@@ -1821,7 +1920,7 @@ class EditRepositoryViewController: NSViewController {
         self.btnUpdateAllEvents.isEnabled = false
         DispatchQueue.global().async {
             if let container = self.originalContainer {
-                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)
+                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)// FIXME: separate volume
                 let level = self.lstEventFolderLevel.indexOfSelectedItem + 1
                 let total = images.count
                 var i = 0
@@ -1852,7 +1951,7 @@ class EditRepositoryViewController: NSViewController {
         var array:[String] = []
         if let container = self.originalContainer {
             var folders:Set<String> = []
-            let paths = RepositoryDao.default.getAllContainerPathsOfImages(rootPath: container.repositoryPath)
+            let paths = RepositoryDao.default.getAllContainerPathsOfImages(rootPath: container.repositoryPath)// FIXME: separate volume
             for path in paths {
                 if path == container.repositoryPath {continue}
                 let p = path.replacingFirstOccurrence(of: container.repositoryPath.withLastStash(), with: "")
@@ -1871,7 +1970,7 @@ class EditRepositoryViewController: NSViewController {
             array = folders.sorted()
         }else{
             var folders:Set<String> = []
-            let path = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            let path = self.getVolumePath(dropdown: self.lstVolumesOfEditableImages, text: self.txtRepository)
             if path != "" {
                 let paths = LocalDirectory.bridge.folders(in: path, unlimitedDepth: true)
                 for p in paths {
@@ -1912,7 +2011,8 @@ class EditRepositoryViewController: NSViewController {
     
     
     
-    // MARK: - DEVICES LIST Popover
+    // MARK: - DEVICE LIST Popover
+    
     var devicesPopover:NSPopover?
     var devicesViewController:DeviceListViewController!
     
@@ -1933,6 +2033,89 @@ class EditRepositoryViewController: NSViewController {
             myPopover!.behavior = NSPopover.Behavior.transient
         }
         self.devicesPopover = myPopover
+    }
+    
+    // MARK: - FIND FACES
+    
+    /// - Tag: EditRepositoryViewController.onFindFacesClicked()
+    @IBAction func onFindFacesClicked(_ sender: NSButton) {
+//        guard !self.working else {
+//            self.logger.log("other task is running. abort this task.")
+//            return
+//        }
+//        if let repository = self.originalContainer {
+//
+//            if repository.cropPath == "" {
+//                self.logger.log("ERROR: Crop path is empty, please assign it first: \(repository.path)")
+//                self.lblMessage.stringValue = "ERROR: Crop path is empty, please assign it first"
+//                return
+//            }
+//
+//            // ensure base crop path exists
+//            var isDir:ObjCBool = false
+//            if FileManager.default.fileExists(atPath: repository.cropPath, isDirectory: &isDir) {
+//                if !isDir.boolValue {
+//                    self.logger.log("ERROR: Crop path of repository is not a directory: \(repository.cropPath)")
+//                    self.lblMessage.stringValue = "ERROR: Crop path of repository is not a directory"
+//                    return
+//                }
+//            }
+//
+//
+//            let limitRam = PreferencesController.peakMemory() * 1024
+//            self.stopByExceedLimit = false
+//
+//            self.accumulator = Accumulator(target: 100, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblMessage,
+//                                           onCompleted: { data in
+//                                                DispatchQueue.main.async {
+//                                                    let count = data["count"] ?? 0
+//                                                    let total = data["total"] ?? 0
+//                                                    let detectedCount = data["detectedCount"] ?? 0
+//                                                    self.continousWorkingRemain = total - count
+//                                                    var msg = "Total \(total) images. Processed \(count) images. Found \(detectedCount) images with face(s)."
+//                                                    if self.stopByExceedLimit {
+//                                                        msg += " Stopped since total size exceeds memory limitation \(limitRam) MB"
+//                                                        if self.continousWorkingRemain > 0 {
+//                                                            msg += ", cleaning memory..."
+//                                                        }
+//                                                    }
+//                                                    self.logger.log(msg)
+//                                                    self.working = false
+//                                                    self.logger.log(">>> REMAIN \(self.continousWorkingRemain)")
+//                                                    if self.continousWorkingRemain <= 0 {
+//                                                        self.toggleButtons(true)
+//                                                        self.logger.log(">>> DONE")
+//                                                        msg = "Total \(total) images. Processed \(count) images. Found \(detectedCount) images with face(s)."
+//                                                        self.continousWorking = false
+//                                                    }
+//
+//                                                    self.lblMessage.stringValue = msg
+//                                                }
+//                                            },
+//                                            startupMessage: "Loading images from database ..."
+//                                            )
+//
+//            DispatchQueue.global().async {
+//                self.continousWorkingRemain = 1
+//                self.continousWorking = true
+//                self.continousWorkingAttempt = 0
+//
+//                let images = ImageSearchDao.default.getImagesWithoutFace(repositoryRoot: repository.path.withStash())
+//
+//                self.accumulator?.cleanData()
+//
+//                while(self.continousWorkingRemain > 0){
+//                    if !self.working {
+//                        self.logger.log(">>> RE-TRIGGER")
+//                        self.continousWorkingAttempt += 1
+//                        self.logger.log(">>> TRIGGER SCANNER ATTEMPT=\(self.continousWorkingAttempt), REMAIN=\(self.continousWorkingRemain)")
+//                        self.scanFaces(from: images, in: repository)
+//                    }
+//                    self.logger.log(">>> SLEEP, REMAIN \(self.continousWorkingRemain)")
+//                    sleep(10)
+//                }
+//            }
+//        }
     }
 }
 

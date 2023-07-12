@@ -183,7 +183,7 @@ class RepositoryDao {
     }
     
     /// - Tag: getRepositoriesV2(orderBy)
-    func getRepositoriesV2(orderBy: String = "path", condition:SearchCondition?) -> [ImageRepository] {
+    func getRepositoriesV2(orderBy: String = "name", condition:SearchCondition? = nil) -> [ImageRepository] {
         return self.impl.getRepositoriesV2(orderBy: orderBy, condition: condition)
     }
     
@@ -312,6 +312,10 @@ class RepositoryDao {
     /// - Tag: getContainer(id)
     func getContainer(id:Int) -> ImageContainer? {
         return self.impl.getContainer(id: id)
+    }
+    
+    func getRepositoryLinkingContainer(repositoryId:Int) -> ImageContainer? {
+        return self.impl.getRepositoryLinkingContainer(repositoryId: repositoryId)
     }
     
     /// - caller:

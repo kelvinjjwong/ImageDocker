@@ -30,7 +30,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var btnAlertMessage: NSButton!
     
     @IBOutlet weak var btnExport: NSPopUpButton!
-    @IBOutlet weak var btnFaces: NSPopUpButton!
+//    @IBOutlet weak var btnFaces: NSPopUpButton!
     @IBOutlet weak var btnTasks: NSButton!
     @IBOutlet weak var btnMemories: NSButton!
     

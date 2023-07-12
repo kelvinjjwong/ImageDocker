@@ -96,8 +96,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         let url = appSupportURL.appendingPathComponent("ImageDocker")
         
         if !url.path.isDirectoryExists() {
-            if !url.path.mkdirs(logger: logger) {
-                self.logger.log(.error, "Unable to create application directory")
+            let (created, error) = url.path.mkdirs(logger: logger)
+            if !created {
+                self.logger.log(.error, "Unable to create application directory - \(error)")
             }
         }
         

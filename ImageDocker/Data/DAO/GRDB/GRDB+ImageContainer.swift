@@ -58,6 +58,11 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
         return nil
     }
     
+    func getRepositoryLinkingContainer(repositoryId:Int) -> ImageContainer? {
+        self.logger.log(.todo, "todo DAO for SQLite")
+        return nil
+    }
+    
     func getContainers(repositoryId: Int) -> [ImageContainer] {
         
         self.logger.log(.todo, "todo DAO for SQLite")

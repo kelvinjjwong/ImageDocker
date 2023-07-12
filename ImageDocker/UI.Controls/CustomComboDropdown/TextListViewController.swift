@@ -11,31 +11,66 @@ import Cocoa
 class TextListViewPopupController {
     
     var items:[String] = []
-    weak var combobox:NSPopUpButton!
+    fileprivate var isPopupButton = true
+    weak var popupButton:NSPopUpButton!
+    weak var combobox:NSComboBox!
     
-    init(_ listView:NSPopUpButton){
+    init(){
+    }
+    
+    convenience init(_ listView:NSPopUpButton) {
+        self.init()
+        self.isPopupButton = true
+        self.popupButton = listView
+        self.combobox = NSComboBox()
+    }
+    
+    convenience init(_ listView:NSComboBox) {
+        self.init()
+        self.isPopupButton = false
+        self.popupButton = NSPopUpButton()
         self.combobox = listView
+        
     }
     
     func load(_ items:[String]){
         self.items = items
-        self.combobox.removeAllItems()
-        self.combobox.addItems(withTitles: items)
+        if self.isPopupButton {
+            self.popupButton.removeAllItems()
+            self.popupButton.addItems(withTitles: items)
+        }else{
+            self.combobox.removeAllItems()
+            self.combobox.addItems(withObjectValues: items)
+        }
     }
     
     func select(_ value:String){
-        self.combobox.selectItem(withTitle: value)
+        if self.isPopupButton {
+            self.popupButton.selectItem(withTitle: value)
+            
+        }else{
+            self.combobox.selectItem(withObjectValue: value)
+        }
     }
     
     func clean() {
         self.items = []
-        self.combobox.removeAllItems()
+        
+        if self.isPopupButton {
+            self.popupButton.removeAllItems()
+        }else{
+            self.combobox.removeAllItems()
+        }
     }
     
     func indexOfSelectedItem() -> Int? {
         if self.items.count == 0 {
             return nil
         }
-        return self.combobox.indexOfSelectedItem
+        if self.isPopupButton {
+            return self.popupButton.indexOfSelectedItem
+        }else{
+            return self.combobox.indexOfSelectedItem
+        }
     }
 }

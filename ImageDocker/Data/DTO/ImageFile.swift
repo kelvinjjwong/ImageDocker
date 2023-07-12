@@ -48,7 +48,7 @@ class ImageFile {
     
     var imageData:Image?
     
-    lazy var thumbnail:NSImage? = self.setThumbnail(self.url as URL)
+    lazy var thumbnail:NSImage? = self.setThumbnail(self.url)
     
     lazy var image: NSImage = self.loadPreview()
     
@@ -166,14 +166,29 @@ class ImageFile {
     
     var hasLoadedMetaInfoFromDatabase = false
     
+    var repositoryId:Int? = nil
+    var repositoryVolume:String? = nil
+    var rawVolume:String? = nil
+    
     // READ FROM DATABASE
     /// - Tag: ImageFile.init(image)
-    init (image:Image, indicator:Accumulator? = nil, loadExifFromFile:Bool = true, metaInfoStore:MetaInfoStoreDelegate? = nil, sharedDB:DatabaseWriter? = nil, forceReloadExif:Bool = false) {
+    init (image:Image, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, indicator:Accumulator? = nil, loadExifFromFile:Bool = true, metaInfoStore:MetaInfoStoreDelegate? = nil, sharedDB:DatabaseWriter? = nil, forceReloadExif:Bool = false) {
         exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"
         exifDateFormatWithTimezone.dateFormat = "yyyy:MM:dd HH:mm:ssxxx"
         
+        self.repositoryId = repositoryId
+        self.repositoryVolume = repositoryVolume
+        self.rawVolume = rawVolume
+        
         self.indicator = indicator
-        self.url = URL(fileURLWithPath: image.path)
+        
+        if let repositoryVolume = repositoryVolume {
+            let (_, path) = image.path.getVolumeFromThisPath()
+            let fullPath = "\(repositoryVolume)\(path)"
+            self.url = URL(fileURLWithPath: fullPath)
+        }else{
+            self.url = URL(fileURLWithPath: image.path)
+        }
         self.fileName = image.filename
         self.location = Location()
         

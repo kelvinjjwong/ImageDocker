@@ -31,8 +31,9 @@ struct LoggingSetting {
         let url = appSupportURL.appendingPathComponent("ImageDocker").appendingPathComponent("log")
         
         if !url.path.isDirectoryExists() {
-            if !url.path.mkdirs() {
-                print("ERROR: Unable to create logging directory")
+            let (created, error) = url.path.mkdirs()
+            if !created {
+                print("ERROR: Unable to create logging directory - \(error)")
             }
         }
         

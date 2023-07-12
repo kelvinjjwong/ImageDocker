@@ -162,7 +162,8 @@ class DevicePathDetailViewController: NSViewController {
                 let newLocalPath = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(data.toSubFolder).path
                 
                 if !newLocalPath.isDirectoryExists() {
-                    if !newLocalPath.mkdirs(logger: self.logger) {
+                    let (created, error) = newLocalPath.mkdirs(logger: self.logger)
+                    if !created {
                         self.logger.log("Unable to create directory for new local folder [\(data.toSubFolder)] at: \(newLocalPath)")
                     }
                 }
@@ -174,10 +175,11 @@ class DevicePathDetailViewController: NSViewController {
 //                    self.logger.log("TODO: UPDATE RELATED physical directory of IMAGE DEVICE FILES")
                     
                     //UPDATE RELATED physical directory of IMAGE DEVICE FILES
-                    if !oldLocalPath.moveFile(to: newLocalPath, logger: self.logger) {
-                        self.logger.log("Unable to change local folder: failed to move/rename folder")
+                    let (created, error) = oldLocalPath.moveFile(to: newLocalPath, logger: self.logger)
+                    if !created {
+                        self.logger.log("Unable to change local folder: failed to move/rename folder - \(error)")
                         DispatchQueue.main.async {
-                            self.lblMessage.stringValue = "Failed to change local folder: unable to rename folder."
+                            self.lblMessage.stringValue = "Failed to change local folder: unable to rename folder - \(error)"
                         }
                     }else{
 //                        self.logger.log("TODO: UPDATE RELATED importToPath of IMAGE DEVICE FILES")

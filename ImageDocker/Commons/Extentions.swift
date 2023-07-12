@@ -219,6 +219,13 @@ extension String {
         return (volume, _path)
     }
     
+    func isVolumeExists() -> Bool {
+        let (volume, _) = self.getVolumeFromThisPath()
+        let mountedVolumes = LocalDirectory.bridge.listMountedVolumes()
+        
+        return mountedVolumes.contains(volume)
+    }
+    
     func isDirectoryExists() -> Bool {
         var isDir:ObjCBool = false
         if FileManager.default.fileExists(atPath: self, isDirectory: &isDir) {
@@ -236,40 +243,40 @@ extension String {
         return false
     }
     
-    func mkdirs(logger:Logger? = nil) -> Bool {
+    func mkdirs(logger:Logger? = nil) -> (Bool, Error?) {
         do {
             try FileManager.default.createDirectory(atPath: self, withIntermediateDirectories: true, attributes: nil)
         }catch{
             if let logger = logger {
                 logger.log(error)
             }
-            return false
+            return (false, error)
         }
-        return true
+        return (true, nil)
     }
     
-    func copyFile(to targetFilePath:String, logger:Logger? = nil) -> Bool{
+    func copyFile(to targetFilePath:String, logger:Logger? = nil) -> (Bool, Error?){
         do{
             try FileManager.default.copyItem(atPath: self, toPath: targetFilePath)
         }catch{
             if let logger = logger {
                 logger.log(error)
             }
-            return false
+            return (false, error)
         }
-        return true
+        return (true, nil)
     }
     
-    func moveFile(to targetFilePath:String, logger:Logger? = nil) -> Bool {
+    func moveFile(to targetFilePath:String, logger:Logger? = nil) -> (Bool, Error?) {
         do {
             try FileManager.default.moveItem(atPath: self, toPath: targetFilePath)
         }catch{
             if let logger = logger {
                 logger.log(error)
             }
-            return false
+            return (false, error)
         }
-        return true
+        return (true, nil)
     }
 }
 

@@ -472,7 +472,7 @@ select DATE('now', 'localtime')  date
         return result
     }
     
-    func getPhotoFiles(parentPath:String, includeHidden:Bool = true, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false) -> [Image] {
+    func getPhotoFiles(parentPath:String, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, includeHidden:Bool = true, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false) -> [Image] {
         var otherPredicate:String = ""
         if !includeHidden {
             otherPredicate = " AND (hidden is null || hidden = 0)"

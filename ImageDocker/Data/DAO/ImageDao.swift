@@ -569,8 +569,8 @@ class ImageSearchDao {
     /// - attention: will be deprecated
     /// - version: legacy version
     /// - Tag: getPhotoFiles(parentPath)
-    func getPhotoFiles(parentPath:String, includeHidden:Bool = true, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false) -> [Image] {
-        return self.impl.getPhotoFiles(parentPath: parentPath, includeHidden: includeHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
+    func getPhotoFiles(parentPath:String, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, includeHidden:Bool = true, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false) -> [Image] {
+        return self.impl.getPhotoFiles(parentPath: parentPath, repositoryId: repositoryId, repositoryVolume: repositoryVolume, rawVolume: rawVolume, includeHidden: includeHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
     }
     
     /// - caller:

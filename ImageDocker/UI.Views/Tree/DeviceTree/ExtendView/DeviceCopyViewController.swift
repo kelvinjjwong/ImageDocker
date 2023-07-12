@@ -1087,7 +1087,8 @@ class DeviceCopyViewController: NSViewController {
                 }
                 var destinationPath = URL(fileURLWithPath: destination).appendingPathComponent(subFolder).path
                 if !destinationPath.isFileExists() {
-                    if !destinationPath.mkdirs(logger: self.logger) {
+                    let (created, error) = destinationPath.mkdirs(logger: self.logger)
+                    if !created {
                         destinationPath = destination
                     }
                 }
@@ -1102,7 +1103,8 @@ class DeviceCopyViewController: NSViewController {
                         destinationPathForFile = URL(fileURLWithPath: destinationPath).appendingPathComponent(file.folder).path
                         
                         if !destinationPathForFile.isFileExists() {
-                            if !destinationPathForFile.mkdirs(logger: self.logger) {
+                            let (created, error) = destinationPathForFile.mkdirs(logger: self.logger)
+                            if !created {
                                 destinationPathForFile = destinationPath
                             }
                         }
@@ -1162,8 +1164,11 @@ class DeviceCopyViewController: NSViewController {
                             // exist file, avoid copy
                             needSaveFile = true
                         }else{ // not exist, copy file
-                            if file.onDevicePath.copyFile(to: destinationFile, logger: self.logger) {
+                            let (copied, error) = file.onDevicePath.copyFile(to: destinationFile, logger: self.logger)
+                            if copied {
                                 needSaveFile = true
+                            }else{
+                                self.logger.log(.error, "unable to copy file from \(file.onDevicePath) to \(destinationFile) - \(error)")
                             }
                         }
                         if needSaveFile {
@@ -1263,8 +1268,9 @@ class DeviceCopyViewController: NSViewController {
             }
             // copy files from raw folder to repository folder if it wasn't copied
             if !repositoryFileUrl.path.isFileExists() {
-                if !importedFileUrl.path.copyFile(to: repositoryFileUrl.path, logger: self.logger) {
-                    logger.log("Error occured when trying to copy file from \(importedFileUrl.path) to \(repositoryFileUrl.path)")
+                let (copied, error) = importedFileUrl.path.copyFile(to: repositoryFileUrl.path, logger: self.logger)
+                if !copied {
+                    logger.log("Error occured when trying to copy file from \(importedFileUrl.path) to \(repositoryFileUrl.path) - \(error)")
                 }
             }
             

@@ -11,10 +11,12 @@ import Cocoa
 extension ViewController {
     
     fileprivate func countImagesOfContainer(container:ImageContainer) -> Int{
+//        self.logger.log("countImagesOfContainer(container:\(container.id)")
         return ImageCountDao.default.countImages(repositoryRoot: container.path.withLastStash())
     }
     
     fileprivate func countHiddenImagesOfContainer(container:ImageContainer) -> Int {
+//        self.logger.log("countHiddenImagesOfContainer(container:\(container.id)")
         return ImageCountDao.default.countHiddenImages(repositoryRoot: container.path.withLastStash())
     }
     
@@ -46,23 +48,31 @@ extension ViewController {
         }
     }
     
-    internal func loadCollectionByContainer(container:ImageContainer, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){
-        
+    internal func loadCollectionByContainer(container:ImageContainer, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){
+        self.logger.log("loadCollectionByContainer(container:\(container.id), repositoryId:\(repositoryId ?? -999999), repositoryVolume:\(repositoryVolume ?? "nil"), rawVolume:\(rawVolume ?? "nil"), pageSize:\(pageSize), pageNumber:\(pageNumber), subdirectories:\(subdirectories)")
         var totalRecords = self.countImagesOfContainer(container: container)
         if self.chbShowHidden.state == .off {
             totalRecords -= self.countHiddenImagesOfContainer(container: container)
         }
         self.changePaginationState(currentPage: pageNumber, pageSize: pageSize, totalRecords: totalRecords)
         
-        self.loadCollectionByContainer(name: container.name, url:URL(fileURLWithPath: container.path), pageSize: pageSize, pageNumber: pageNumber, subdirectories: true)
+        self.loadCollectionByContainer(name: container.name,
+                                       url:URL(fileURLWithPath: container.path),
+                                       repositoryId: repositoryId,
+                                       repositoryVolume: repositoryVolume,
+                                       rawVolume: rawVolume,
+                                       pageSize: pageSize, pageNumber: pageNumber, subdirectories: true)
     }
     
     // FIXME: use container id instead
-    internal func loadCollectionByContainer(name:String, url:URL, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){
-        
+    internal func loadCollectionByContainer(name:String, url:URL, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){
+        self.logger.log("loadCollectionByContainer(name:\(name), url:\(url), repositoryId:\(repositoryId ?? -999999), repositoryVolume:\(repositoryVolume ?? "nil"), rawVolume:\(rawVolume ?? "nil"), pageSize:\(pageSize), pageNumber:\(pageNumber), subdirectories:\(subdirectories)")
         loadCollection {
             self.imagesLoader.load(
                 from: url,
+                repositoryId: repositoryId,
+                repositoryVolume: repositoryVolume,
+                rawVolume: rawVolume,
                 indicator:self.collectionLoadingIndicator,
                 pageSize: pageSize,
                 pageNumber: pageNumber,

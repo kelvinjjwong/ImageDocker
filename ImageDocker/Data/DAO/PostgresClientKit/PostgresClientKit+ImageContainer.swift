@@ -417,6 +417,11 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         return ImageContainer.fetchOne(db, parameters: ["id" : id])
     }
     
+    func getRepositoryLinkingContainer(repositoryId:Int) -> ImageContainer? {
+        let db = PostgresConnection.database()
+        return ImageContainer.fetchOne(db, parameters: ["repositoryId" : repositoryId, "parentId" : 0])
+    }
+    
     func getContainers(repositoryId: Int) -> [ImageContainer] {
         let db = PostgresConnection.database()
         return ImageContainer.fetchAll(db, parameters: ["repositoryId" : repositoryId])
@@ -618,11 +623,13 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
     func countSubContainers(parent path: String) -> Int {
         let db = PostgresConnection.database()
+        self.logger.log("countSubContainers(parent:\(path))")
         return ImageContainer.count(db, parameters: ["parentFolder" : path])
     }
     
     func countSubContainers(containerId:Int) -> Int {
         let db = PostgresConnection.database()
+        self.logger.log("countSubContainers(containerId:\(containerId))")
         return ImageContainer.count(db, parameters: ["parentId": containerId])
     }
     
@@ -648,10 +655,11 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
     func countSubContainers(repositoryId:Int) -> Int {
         let db = PostgresConnection.database()
+        self.logger.log("countSubContainers(repositoryId:\(repositoryId))")
         if let container = ImageContainer.fetchOne(db, parameters: ["repositoryId": repositoryId, "parentId": 0]) {
             return ImageContainer.count(db, parameters: ["parentId": container.id])
         }else{
-            self.logger.log(.warning, "Unable to find ImageRepository's linked ImageContainer record in database, repositoryId:\(repositoryId)")
+            self.logger.log(.error, "Unable to find ImageRepository's linked ImageContainer record in database, repositoryId:\(repositoryId)")
             if let createdContainer = self.createEmptyImageContainerLinkToRepository(repositoryId: repositoryId) {
                 return ImageContainer.count(db, parameters: ["parentId": createdContainer.id])
             }else{
@@ -662,6 +670,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
     func countSubImages(containerId:Int) -> Int {
         let db = PostgresConnection.database()
+        self.logger.log("countSubImages(containerId:\(containerId))")
         return Image.count(db, parameters: ["containerId": containerId])
     }
     

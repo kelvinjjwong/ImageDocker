@@ -50,6 +50,9 @@ struct CollectionViewLastRequest {
     var pageNumber = 0
     var subdirectories = false
     var searchCondition:SearchCondition? = nil
+    var repositoryId:Int? = nil
+    var repositoryVolume:String? = nil
+    var rawVolume:String? = nil
 }
 
 class CollectionViewItemsLoader : NSObject {
@@ -85,7 +88,7 @@ class CollectionViewItemsLoader : NSObject {
     /// - caller:
     ///   - CollectionViewItemsLoader.reload()
     ///   - ViewController.loadCollectionByContainer(name,url)
-    func load(from folderURL: URL, indicator:Accumulator? = nil, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false) {
+    func load(from folderURL: URL, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, indicator:Accumulator? = nil, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false) {
         loading = true
         
         lastRequest.loadSource = .repository
@@ -94,11 +97,14 @@ class CollectionViewItemsLoader : NSObject {
         lastRequest.pageSize = pageSize
         lastRequest.pageNumber = pageNumber
         lastRequest.subdirectories = subdirectories
+        lastRequest.repositoryId = repositoryId
+        lastRequest.repositoryVolume = repositoryVolume
+        lastRequest.rawVolume = rawVolume
         
         self.indicator = indicator
         //let urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
         //self.logger.log("loading folder from database: \(folderURL.path)")
-        let photoFiles = walkthruDatabaseForPhotoFiles(startingURL: folderURL, includeHidden: showHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
+        let photoFiles = walkthruDatabaseForPhotoFiles(startingURL: folderURL, repositoryId: repositoryId, repositoryVolume: repositoryVolume, rawVolume: rawVolume, includeHidden: showHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
         if photoFiles == nil || photoFiles?.count == 0 {
             self.logger.log(.trace, "LOADED nothing from entry \(folderURL.path)")
             //self.logger.log("loading folder from filesystem instead: \(folderURL.path)")
@@ -107,7 +113,7 @@ class CollectionViewItemsLoader : NSObject {
             setupItems(photoFiles: [])
         }else{
             self.logger.log(.trace, "LOADED \(photoFiles?.count ?? 0) images from entry \(folderURL.path)")
-            setupItems(photoFiles: photoFiles)
+            setupItems(photoFiles: photoFiles, repositoryId: repositoryId, repositoryVolume: repositoryVolume, rawVolume: rawVolume)
         }
     }
     
@@ -331,7 +337,7 @@ class CollectionViewItemsLoader : NSObject {
     }
     
     /// - Tag: CollectionViewItemsLoader.setupItems(images)
-    func setupItems(photoFiles: [Image]?, cleanViewBeforeLoading:Bool = true){
+    func setupItems(photoFiles images: [Image]?, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil,  cleanViewBeforeLoading:Bool = true){
         if items.count > 0 {
             items.removeAll()
         }
@@ -346,19 +352,19 @@ class CollectionViewItemsLoader : NSObject {
             sections = [CollectionViewSection]()
         }
         
-        guard photoFiles != nil && (photoFiles?.count)! > 0 else {
+        guard images != nil && (images?.count)! > 0 else {
             self.loading = false
             return
         }
         
         if indicator != nil {
             indicator?.reset()
-            indicator?.setTarget((photoFiles?.count)!)
+            indicator?.setTarget((images?.count)!)
         }
         
-        if let photoFiles = photoFiles {
+        if let images = images {
             self.logger.log(.trace, "Transforming items to domain ")
-            self.transformToDomainItems(photoFiles: photoFiles)
+            self.transformToDomainItems(images: images, repositoryId: repositoryId, repositoryVolume: repositoryVolume, rawVolume: rawVolume)
             self.logger.log(.trace, "Transforming items to domain: DONE ")
         }
         
@@ -556,7 +562,7 @@ class CollectionViewItemsLoader : NSObject {
     /// - caller:
     ///   - CollectionViewItemsLoader.setupItems(images)
     /// - Tag: CollectionViewItemsLoader.transformToDomainItems(images)
-    private func transformToDomainItems(photoFiles: [Image]){
+    private func transformToDomainItems(images: [Image], repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil){
         
         if self.cancelling {
             return
@@ -580,7 +586,7 @@ class CollectionViewItemsLoader : NSObject {
 //        }
         //self.logger.log("Loading duplicate photos from db: DONE")
         
-        for photoFile in photoFiles {
+        for image in images {
             
             if self.cancelling {
                 if self.indicator != nil {
@@ -590,12 +596,34 @@ class CollectionViewItemsLoader : NSObject {
             }
             
             let startTime_ImageFile_init = Date()
-            let imageFile = ImageFile(image: photoFile, indicator: self.indicator, loadExifFromFile: true)
+            
+            var _repositoryId = repositoryId
+            var _repositoryVolume = repositoryVolume
+            var _rawVolume = rawVolume
+            
+            if repositoryId == nil || repositoryVolume == nil {
+                
+                if image.repositoryId != 0 {
+                    _repositoryId = image.repositoryId
+                    if let repository = RepositoryDao.default.getRepository(id: image.repositoryId) {
+                        _repositoryVolume = repository.repositoryVolume
+                        _rawVolume = repository.storageVolume
+                    }
+                }else {
+                    // FIXME: if image.repository == 0 ?
+                }
+            }
+            
+            let imageFile = ImageFile(image: image,
+                                      repositoryId: repositoryId,
+                                      repositoryVolume: _repositoryVolume,
+                                      rawVolume: _rawVolume,
+                                      indicator: self.indicator, loadExifFromFile: true)
             self.logger.timecost("[transformToDomainItems][ImageFile.init from database]", fromDate: startTime_ImageFile_init)
             
-            if duplicates.paths.contains(photoFile.path) {
+            if duplicates.paths.contains(image.path) {
                 imageFile.hasDuplicates = true
-                imageFile.duplicatesKey = duplicates.pathToKey[photoFile.path] ?? ""
+                imageFile.duplicatesKey = duplicates.pathToKey[image.path] ?? ""
                 //self.logger.log(imageFile.duplicatesKey)
             }else {
                 imageFile.hasDuplicates = false
@@ -632,7 +660,7 @@ class CollectionViewItemsLoader : NSObject {
     /// - caller:
     ///   - CollectionViewItemsLoader.load(fromUrl)
     /// - Tag: CollectionViewItemsLoader.walkthruDatabaseForPhotoFiles(startingURL)
-    private func walkthruDatabaseForPhotoFiles(startingURL: URL, includeHidden:Bool = true, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false) -> [Image]? {
+    private func walkthruDatabaseForPhotoFiles(startingURL: URL, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, includeHidden:Bool = true, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false) -> [Image]? {
         
         if self.cancelling {
             return nil

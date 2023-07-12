@@ -195,17 +195,28 @@ extension ViewController {
 //                                        self.logger.log("action on \(collection.path)")
                                         if let container = collection.relatedObject as? ImageContainer {
                                             self.selectedImageContainer = container
-                                            if Setting.performance.amountForPagination() > 0 && container.imageCount > Setting.performance.amountForPagination() {
-                                                self.btnRefreshCollectionView.title = Words.pages.word()
-                                                if container.path != "/" {
-                                                    self.loadCollectionByContainer(name:container.name, url:URL(fileURLWithPath: container.path), pageSize: 200, pageNumber: 1, subdirectories: true)
+                                            self.logger.log("[TREE-onNodeSelected] container.id:\(container.id), repositoryId:\(container.repositoryId)")
+                                            if let repository = RepositoryDao.default.getRepository(id: container.repositoryId) {
+                                                if Setting.performance.amountForPagination() > 0 && container.imageCount > Setting.performance.amountForPagination() {
+                                                    self.btnRefreshCollectionView.title = Words.pages.word()
+                                                    if container.path != "/" {
+                                                        self.loadCollectionByContainer(name:container.name,
+                                                                                       url:URL(fileURLWithPath: container.path),
+                                                                                       repositoryId: repository.id,
+                                                                                       repositoryVolume: repository.repositoryVolume,
+                                                                                       rawVolume: repository.storageVolume,
+                                                                                       pageSize: 200, pageNumber: 1, subdirectories: true)
+                                                    }else{
+    //                                                    self.logger.log("WARN: collection url is null")
+                                                    }
                                                 }else{
-//                                                    self.logger.log("WARN: collection url is null")
+                                                    self.btnRefreshCollectionView.title = Words.reload.word()
+                                                    self.loadCollectionByContainer(name:container.name, url:URL(fileURLWithPath: container.path))
                                                 }
                                             }else{
-                                                self.btnRefreshCollectionView.title = Words.reload.word()
-                                                self.loadCollectionByContainer(name:container.name, url:URL(fileURLWithPath: container.path))
+                                                self.logger.log(.error, "[TREE-onNodeSelected] Unable to get repository by id for container id:\(container.id)")
                                             }
+                                            
                                         }
                                         
         },

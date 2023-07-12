@@ -33,9 +33,9 @@ public final class ImageContainer: Codable {
     var folderAsBrief: Bool = false  // FIXME: will deprecate
     var briefFolderLevel: Int = 0    // FIXME: will deprecate
     var subContainers: Int = 0       // COUNT
-    var repositoryId: Int = 0
     var deviceWidth: Int = 0        // FIXME: will deprecate
     var deviceHeight: Int = 0       // FIXME: will deprecate
+    var repositoryId: Int = 0
     var id: Int = 0
     var parentId: Int = 0
     

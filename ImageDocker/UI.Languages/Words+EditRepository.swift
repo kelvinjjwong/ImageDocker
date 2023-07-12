@@ -141,13 +141,13 @@ extension Words {
     )
     
     static let moveTo = Localize(
-        eng: "Move...",
-        chs: "移动到..."
+        eng: "Choose",
+        chs: "选择..."
     )
     
     static let updateRepositoryName = Localize(
         eng: "Update Name & Home",
-        chs: "保存名称和根路径"
+        chs: "保存名称和路径"
     )
     
     static let editRepository = Localize(
@@ -182,12 +182,12 @@ extension Words {
     
     static let update = Localize(
         eng: "Update",
-        chs: "保存新设定"
+        chs: "保存新存储点"
     )
     
     static let backToOrigin = Localize(
         eng: "Back to Origin",
-        chs: "恢复到原本设定"
+        chs: "恢复到原存储点"
     )
     
     static let followHome = Localize(

@@ -636,7 +636,7 @@ class RepositoryDetailViewController: NSViewController {
                     if let repositoryLinkedContainer = RepositoryDao.default.findContainer(repositoryId: imageRepository.id, subPath: "") {
                         self.logger.log("ImageRepository linked with an ImageContainer, repositoryId:\(imageRepository.id), containerId:\(repositoryLinkedContainer.id)")
                     }else{
-                        self.logger.log(.warning, "Unable to find ImageRepository's linked ImageContainer record in database, repositoryId:\(imageRepository.id)")
+                        self.logger.log(.error, "Unable to find ImageRepository's linked ImageContainer record in database, repositoryId:\(imageRepository.id)")
                         if let createdLinkedContainer = RepositoryDao.default.createEmptyImageContainerLinkToRepository(repositoryId: imageRepository.id) {
                             self.logger.log(.info, "Created an empty ImageContainer linking to ImageRepository, repositoryId:\(imageRepository.id), containerId:\(createdLinkedContainer.id)")
                         }else{

@@ -77,7 +77,7 @@ class LibrariesViewController: NSViewController {
             let (lastImportDates, notyetScanDevices) = DeviceDao.default.getLastImportDateOfDevices()
             let lastPhotoTakenDates = RepositoryDao.default.getLastPhotoTakenDateOfRepositories()
             
-            let repos = RepositoryDao.default.getRepositories().sorted(by: { (left, right) -> Bool in
+            let repos = RepositoryDao.default.getRepositoriesV2().sorted(by: { (left, right) -> Bool in
                 return left.name < right.name
             })
             var totalTotal = 0.0

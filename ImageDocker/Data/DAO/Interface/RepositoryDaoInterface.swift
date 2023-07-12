@@ -67,7 +67,9 @@ protocol RepositoryDaoInterface {
     
     func getContainer(path:String) -> ImageContainer?
     
-    func getContainer(id:Int) -> ImageContainer? 
+    func getContainer(id:Int) -> ImageContainer?
+    
+    func getRepositoryLinkingContainer(repositoryId:Int) -> ImageContainer?
     
     func getAllContainers() -> [ImageContainer]
     

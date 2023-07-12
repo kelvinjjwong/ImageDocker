@@ -49,8 +49,8 @@ extension ViewController {
                                                         
                                                         let screenWidth = Int(NSScreen.main?.frame.width ?? 0)
                                                         let screenHeight = Int(NSScreen.main?.frame.height ?? 0)
-                                                        let windowWidth = 1080
-                                                        let windowHeight = 820
+                                                        let windowWidth = 1180
+                                                        let windowHeight = 656
                                                         let originX = (screenWidth - windowWidth) / 2
                                                         let originY = (screenHeight - windowHeight) / 2
                                                         
@@ -58,7 +58,7 @@ extension ViewController {
                                                         window.title = Words.repositoryConfiguration.word()
                                                         window.setFrame(frame, display: false)
                                                         window.makeKeyAndOrderFront(self)
-                                                        viewController.initEdit(path: path, window: window)
+                                                        viewController.initEdit(id: repository.id, path: path, window: window)
                                                      },
                                                      onManageSubContainers: {
             
@@ -67,8 +67,8 @@ extension ViewController {
                                                         
                                                         let screenWidth = Int(NSScreen.main?.frame.width ?? 0)
                                                         let screenHeight = Int(NSScreen.main?.frame.height ?? 0)
-                                                        let windowWidth = 1600
-                                                        let windowHeight = 820
+                                                        let windowWidth = 1800
+                                                        let windowHeight = 656
                                                         let originX = (screenWidth - windowWidth) / 2
                                                         let originY = (screenHeight - windowHeight) / 2
                                                         

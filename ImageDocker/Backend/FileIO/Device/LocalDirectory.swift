@@ -281,6 +281,36 @@ struct LocalDirectory {
         return volumes
     }
     
+    func listMountedVolumes() -> [String] {
+        let pipe = Pipe()
+        autoreleasepool { () -> Void in
+            let command = Process()
+            command.standardOutput = pipe
+            command.standardError = pipe
+            command.currentDirectoryPath = "/Volumes/"
+            command.launchPath = "/bin/ls"
+            command.arguments = ["-1", "/Volumes/"]
+            do {
+                try command.run()
+            }catch{
+                self.logger.log(.error, error)
+            }
+        }
+        //command.waitUntilExit()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
+        
+        var result:[String] = []
+        let lines = string.components(separatedBy: "\n")
+        for line in lines {
+            if line == "" {continue}
+            
+            result.append("/Volumes/\(line)")
+        }
+        return result
+    }
+    
     func freeSpace(path: String) -> (String, String, String) {
 //        self.logger.log("getting free space of \(path)")
         let pipe = Pipe()
@@ -456,12 +486,12 @@ struct LocalDirectory {
 //        return volumes.sorted()
 //    }
     
-    public func getRepositorySpaceOccupationInGB(repository:ImageContainer, diskUsage:[String:Double]? = nil) -> (Double, Double, Double, Double, [String:Double]) {
+    public func getRepositorySpaceOccupationInGB(repository:ImageRepository, diskUsage:[String:Double]? = nil) -> (Double, Double, Double, Double, [String:Double]) {
         var usage:[String:Double] = [:]
         if let u = diskUsage {
             usage = u
         }
-        let (repoSize, _, repoDisk, _) = self.getDiskSpace(path: repository.repositoryPath)
+        let (repoSize, _, repoDisk, _) = self.getDiskSpace(path: "\(repository.repositoryVolume)\(repository.repositoryPath)")
         let repoDiskUsed = usage[repoDisk]
         if repoDiskUsed == nil {
             usage[repoDisk] = repoSize
@@ -469,7 +499,7 @@ struct LocalDirectory {
             usage[repoDisk] = repoDiskUsed! + repoSize
         }
         
-        let (backupSize, _, backupDisk, _) = self.getDiskSpace(path: repository.storagePath)
+        let (backupSize, _, backupDisk, _) = self.getDiskSpace(path: "\(repository.storageVolume)\(repository.storagePath)")
         let backupDiskUsed = usage[backupDisk]
         if backupDiskUsed == nil {
             usage[backupDisk] = backupSize
@@ -477,7 +507,7 @@ struct LocalDirectory {
             usage[backupDisk] = backupDiskUsed! + backupSize
         }
         
-        let (faceSize, _, faceDisk, _) = self.getDiskSpace(path: repository.cropPath)
+        let (faceSize, _, faceDisk, _) = self.getDiskSpace(path: "\(repository.faceVolume)\(repository.facePath)")
         let faceDiskUsed = usage[faceDisk]
         if faceDiskUsed == nil {
             usage[faceDisk] = faceSize

@@ -1145,7 +1145,8 @@ order by "date"
         return Image.fetchAll(db, where: "path like $1 and \"subPath\" = ''", values: ["\(rootPath.withLastStash())%"] )
     }
     
-    func getPhotoFiles(parentPath: String, includeHidden: Bool, pageSize: Int, pageNumber: Int, subdirectories: Bool) -> [Image] {
+    // FIXME: separate volume and path, get by id rather than path
+    func getPhotoFiles(parentPath: String, repositoryId:Int?, repositoryVolume:String?, rawVolume:String?, includeHidden: Bool, pageSize: Int, pageNumber: Int, subdirectories: Bool) -> [Image] {
         let db = PostgresConnection.database()
         var otherPredicate:String = ""
         if !includeHidden {

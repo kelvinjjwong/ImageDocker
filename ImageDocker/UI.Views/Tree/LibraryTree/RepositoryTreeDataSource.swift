@@ -24,7 +24,7 @@ class RepositoryTreeDataSource : TreeDataSource {
     }
     
     func convertToTreeNode(_ container:ImageContainer) -> TreeCollection {
-        self.logger.log(.trace, "convert container to tree node - containerId:\(container.id), parentId:\(container.parentId) path:\(container.path)")
+        self.logger.log(.info, "convert container to tree node - containerId:\(container.id), repositoryId:\(container.repositoryId), parentId:\(container.parentId) path:\(container.path)")
         let node = TreeCollection(container.name, id: "CONT_\(container.id)", object: container)
         let subContainersCount = RepositoryDao.default.countSubContainers(containerId: container.id)
         let subImagesCount = RepositoryDao.default.countSubImages(containerId: container.id)
@@ -80,6 +80,7 @@ class RepositoryTreeDataSource : TreeDataSource {
         
         let startTime2 = Date()
         for container in containers {
+            container.repositoryId = repositoryId
             self.logger.log(.trace, "converting sub container to tree node - \(container.path)")
             let node = self.convertToTreeNode(container)
             nodes.append(node)
