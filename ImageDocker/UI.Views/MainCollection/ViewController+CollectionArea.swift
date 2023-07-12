@@ -135,7 +135,7 @@ extension ViewController {
         //self.logger.log("selected image file: \(filename)")
         //let url:URL = (self.selectedImageFolder?.url.appendingPathComponent(imageFile.fileName, isDirectory: false))!
         DispatchQueue.main.async {
-            self.loadImage(imageFile: imageFile)
+            self.loadImageMetaAndPreview(imageFile: imageFile)
         }
     }
     

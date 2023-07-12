@@ -96,6 +96,12 @@ class CollectionViewItem: NSCollectionViewItem {
         }
     }
     
+    func reRenderItem() {
+        if let imageFile = self.imageFile {
+            self.renderControls(imageFile)
+        }
+    }
+    
     fileprivate func renderControls(_ imageFile:ImageFile) {
         DispatchQueue.main.async {
             var degree = 0
@@ -248,7 +254,8 @@ class CollectionViewItem: NSCollectionViewItem {
     fileprivate func previewEditableVersion() {
         if let imageFile = self.imageFile, let url = self.imageFile?.url, FileManager.default.fileExists(atPath: url.path) {
             if self.previewDelegate != nil {
-                self.previewDelegate?.onCollectionViewItemPreview(url: url, isPhoto: imageFile.isPhoto)
+//                self.previewDelegate?.onCollectionViewItemPreview(url: url, isPhoto: imageFile.isPhoto)
+                self.previewDelegate?.onCollectionViewItemPreview(imageFile: imageFile, isRawVersion: false)
                 self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Performing preview of selected image's editable version")
             }
         }else{
@@ -259,7 +266,8 @@ class CollectionViewItem: NSCollectionViewItem {
     fileprivate func previewBackupVersion() {
         if let imageFile = self.imageFile, let url = self.imageFile?.backupUrl, FileManager.default.fileExists(atPath: url.path) {
             if self.previewDelegate != nil {
-                self.previewDelegate?.onCollectionViewItemPreview(url: url, isPhoto: imageFile.isPhoto)
+//                self.previewDelegate?.onCollectionViewItemPreview(url: url, isPhoto: imageFile.isPhoto)
+                self.previewDelegate?.onCollectionViewItemPreview(imageFile: imageFile, isRawVersion: true)
                 self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Performing preview of selected image's backup version")
             }
         }else{

@@ -54,6 +54,8 @@ class DeviceTreeDataSource : TreeDataSource {
                 if let id = registeredDevice.deviceId {
                     
                     do {
+                        self.logger.log("[DEVICE][iPhone] assigning id:\(id) to registered device: \(registeredDevice.name)")
+                        self.registered_iphone_id_names[id] = ""
                         self.registered_iphone_id_names[id] = PhoneDevice.represent(
                             deviceId: id,
                             name: registeredDevice.name ?? "",

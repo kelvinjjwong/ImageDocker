@@ -42,7 +42,7 @@ extension ViewController {
         self.btnImageOptions.menu?.addItem(withTitle: Words.turn90clockwise.word(), action: #selector(previewMenuTurnRight(_:)), keyEquivalent: "")
         self.btnImageOptions.menu?.addItem(withTitle: Words.turn90counterClockwise.word(), action: #selector(previewMenuTurnLeft(_:)), keyEquivalent: "")
         self.btnImageOptions.menu?.addItem(withTitle: Words.turnUpsideDown.word(), action: #selector(previewMenuTurnUpsideDown(_:)), keyEquivalent: "")
-        self.btnImageOptions.menu?.addItem(withTitle: Words.saveImageDirection.word(), action: #selector(previewMenuMarkRotateDirection(_:)), keyEquivalent: "")
+//        self.btnImageOptions.menu?.addItem(withTitle: Words.saveImageDirection.word(), action: #selector(previewMenuMarkRotateDirection(_:)), keyEquivalent: "")
         
         self.btnImageOptions.menu?.addItem(NSMenuItem.separator())
         
@@ -92,31 +92,25 @@ extension ViewController {
         logger.log("preview menu - to do function")
     }
     
-    @objc func previewMenuMarkRotateDirection(_ menuItem:NSMenuItem) {
-        self.btnImageOptions.selectItem(at: 0)
-        // FIXME: mark rotate direction
-        logger.log("preview menu - to do function")
-    }
+//    @objc func previewMenuMarkRotateDirection(_ menuItem:NSMenuItem) {
+//        self.btnImageOptions.selectItem(at: 0)
+//        // FIXME: mark rotate direction
+//        logger.log("preview menu - to do function")
+//    }
     
     @objc func previewMenuTurnRight(_ menuItem:NSMenuItem) {
         self.btnImageOptions.selectItem(at: 0)
-        if let img = self.getImageFromPreview() {
-            self.previewImage(image: img.rotate(degrees: -90))
-        }
+        self.imagePreviewController.rotateImage(rotateDegree: -90)
     }
     
     @objc func previewMenuTurnLeft(_ menuItem:NSMenuItem) {
         self.btnImageOptions.selectItem(at: 0)
-        if let img = self.getImageFromPreview() {
-            self.previewImage(image: img.rotate(degrees: 90))
-        }
+        self.imagePreviewController.rotateImage(rotateDegree: +90)
     }
     
     @objc func previewMenuTurnUpsideDown(_ menuItem:NSMenuItem) {
         self.btnImageOptions.selectItem(at: 0)
-        if let img = self.getImageFromPreview() {
-            self.previewImage(image: img.rotate(degrees: 180))
-        }
+        self.imagePreviewController.rotateImage(rotateDegree: +180)
     }
     
     fileprivate func copyDateToBatchEditor(value:String, name:String) {

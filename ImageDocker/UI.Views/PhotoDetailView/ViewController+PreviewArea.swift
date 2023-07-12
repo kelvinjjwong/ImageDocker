@@ -54,8 +54,8 @@ extension ViewController {
             return self.getImageFromPreview()
         }
         
-        self.imagePreviewController.previewImage = { nsImage in
-            self.previewImage(image: nsImage)
+        self.imagePreviewController.previewImage = { imageFile in
+            self.previewImage(image: imageFile)
         }
         
         self.imagePreviewController.zoomOutImage = { imageFile in
@@ -141,19 +141,24 @@ extension ViewController {
         
     }
     
+    // DropPlaceDelegate
     // shared among different open-channels
     internal func processImageUrls(urls:[URL]){
         
         if urls.count == 0 {return}
-        loadImage(urls[0])
+        loadImageMetaAndPreview(urls[0])
     }
     
     internal func getImageFromPreview() -> NSImage? {
         return stackedImageViewController.imageDisplayer.image
     }
     
+    internal func getImageFileFromPreview() -> ImageFile? {
+        return self.imagePreviewController.imageFile
+    }
+    
     internal func previewImage(image:NSImage) {
-        self.logger.log("previewImage(NSImage)")
+        self.logger.log(.info, "previewImage(NSImage)")
         for sView in self.playerContainer.subviews {
             sView.removeFromSuperview()
         }
@@ -177,7 +182,7 @@ extension ViewController {
     }
     
     internal func previewImage(url:URL, isPhoto:Bool) {
-        self.logger.log(.trace, "previewImage(url, isPhoto) - \(url) - \(isPhoto)")
+        self.logger.log(.info, "previewImage(url, isPhoto) - \(url) - \(isPhoto)")
         for sView in self.playerContainer.subviews {
             sView.removeFromSuperview()
         }
@@ -217,10 +222,9 @@ extension ViewController {
         }
     }
     
-    internal func previewImage(image:ImageFile) {
+    internal func previewImage(image:ImageFile, isRawVersion:Bool = false) { // FIXME: functions for preview RawVersion
         self.logger.log(.trace, "previewImage(ImageFile)")
         self.imagePreviewController.imageFile = image
-        
         let rotation = Float(image.imageData?.rotation ?? 0)
         
         
@@ -269,7 +273,7 @@ extension ViewController {
         }
     }
     
-    internal func loadImage(_ url:URL){
+    internal func loadImageMetaAndPreview(_ url:URL){
         
         // init meta data
         //self.metaInfo = [MetaInfo]()
@@ -314,7 +318,7 @@ extension ViewController {
         }
     }
     
-    internal func loadImage(imageFile:ImageFile){
+    internal func loadImageMetaAndPreview(imageFile:ImageFile){
         self.img = imageFile
         self.previewImage(image: img)
         
