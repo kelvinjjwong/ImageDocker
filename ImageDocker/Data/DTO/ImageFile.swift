@@ -25,10 +25,9 @@ class ImageFile {
     
     func getBackupUrl() -> URL? {
         if let img = self.imageData {
-            let pathOfRepository = img.repositoryPath.removeLastStash()
-            if let repo = RepositoryDao.default.getContainer(path: pathOfRepository) {
-                self.logger.log("backup url: \(repo.storagePath.withLastStash())\(img.subPath)")
-                return URL(fileURLWithPath: "\(repo.storagePath.withLastStash())\(img.subPath)")
+            if let repo = RepositoryDao.default.getRepository(id: img.repositoryId) {
+                self.logger.log("backup url: \(repo.storageVolume)\(repo.storagePath.withLastStash())\(img.subPath)")
+                return URL(fileURLWithPath: "\(repo.storageVolume)\(repo.storagePath.withLastStash())\(img.subPath)")
             }
         }
         return nil
