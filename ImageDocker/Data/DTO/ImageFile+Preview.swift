@@ -94,6 +94,16 @@ extension ImageFile {
         
         return url.loadImage(maxDimension: 512)
     }
+    
+    internal func loadBackupVersionPreview() -> NSImage {
+        if self.isVideo == true { return NSImage(size: NSMakeRect(0, 0, 0, 0).size) }
+        if let backupUrl = self.getBackupUrl() {
+            return backupUrl.loadImage(maxDimension: 512)
+        }else{
+            self.logger.log(.error, "[ImageFile][loadBackupVersionPreview] Unable to getBackupUrl of image id:\(self.imageData?.id ?? ""), repositoryId:\(self.imageData?.repositoryId ?? -999999)")
+            return url.loadImage(maxDimension: 512)
+        }
+    }
 }
 
 

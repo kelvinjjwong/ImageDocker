@@ -222,7 +222,7 @@ extension ViewController {
         }
     }
     
-    internal func previewImage(image:ImageFile, isRawVersion:Bool = false) { // FIXME: functions for preview RawVersion
+    internal func previewImage(image:ImageFile, isRawVersion:Bool = false) {
         self.logger.log(.trace, "previewImage(ImageFile)")
         self.imagePreviewController.imageFile = image
         let rotation = Float(image.imageData?.rotation ?? 0)
@@ -245,9 +245,17 @@ extension ViewController {
             
             // show image
             if rotation == 0 {
-                stackedImageViewController.imageDisplayer.image = image.image
+                if isRawVersion {
+                    stackedImageViewController.imageDisplayer.image = image.loadBackupVersionPreview()
+                }else{
+                    stackedImageViewController.imageDisplayer.image = image.image
+                }
             }else{
-                stackedImageViewController.imageDisplayer.image = image.image.rotate(degrees: CGFloat(rotation))
+                if isRawVersion {
+                    stackedImageViewController.imageDisplayer.image = image.loadBackupVersionPreview().rotate(degrees: CGFloat(rotation))
+                }else{
+                    stackedImageViewController.imageDisplayer.image = image.image.rotate(degrees: CGFloat(rotation))
+                }
             }
             
             self.btnImageOptions.isEnabled = true
@@ -260,10 +268,13 @@ extension ViewController {
             self.playerContainer.addSubview(stackedVideoViewController.view)
             
             // show video
-            if rotation == 0 {
-                stackedVideoViewController.videoDisplayer.player = AVPlayer(url: image.url)
+            if isRawVersion {
+                stackedVideoViewController.videoDisplayer.player = AVPlayer(url: image.getBackupUrl() ?? url)
             }else{
                 stackedVideoViewController.videoDisplayer.player = AVPlayer(url: image.url)
+            }
+            if rotation != 0 {
+            }else{
                 stackedVideoViewController.view.frameCenterRotation = CGFloat(rotation)
             }
             stackedVideoViewController.videoDisplayer.player?.play()

@@ -26,10 +26,11 @@ class ImageFile {
     func getBackupUrl() -> URL? {
         if let img = self.imageData {
             if let repo = RepositoryDao.default.getRepository(id: img.repositoryId) {
-                self.logger.log("backup url: \(repo.storageVolume)\(repo.storagePath.withLastStash())\(img.subPath)")
+                self.logger.log("[getBackupUrl] backup url: \(repo.storageVolume)\(repo.storagePath.withLastStash())\(img.subPath)")
                 return URL(fileURLWithPath: "\(repo.storageVolume)\(repo.storagePath.withLastStash())\(img.subPath)")
             }
         }
+        self.logger.log(.error, "[getBackupUrl] Unable to get raw version url of image id:\(self.imageData?.id ?? ""), repositoryId:\(self.imageData?.repositoryId ?? -999999)")
         return nil
     }
     

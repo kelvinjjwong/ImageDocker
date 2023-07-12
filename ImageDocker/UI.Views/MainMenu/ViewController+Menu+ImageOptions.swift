@@ -76,7 +76,7 @@ extension ViewController {
             if let image = imageFile.imageData {
                 let i = ImageFile(image: image, forceReloadExif: true)
                 
-                // FIXME:
+                // FIXME: function for rescan exif
                 print(i.location.latitude)
                 print(i.location.longitude)
                 print(i.location.latitudeBD)
@@ -91,12 +91,6 @@ extension ViewController {
         // FIXME: write note
         logger.log("preview menu - to do function")
     }
-    
-//    @objc func previewMenuMarkRotateDirection(_ menuItem:NSMenuItem) {
-//        self.btnImageOptions.selectItem(at: 0)
-//        // FIXME: mark rotate direction
-//        logger.log("preview menu - to do function")
-//    }
     
     @objc func previewMenuTurnRight(_ menuItem:NSMenuItem) {
         self.btnImageOptions.selectItem(at: 0)
