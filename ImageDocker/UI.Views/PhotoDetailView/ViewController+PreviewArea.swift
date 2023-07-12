@@ -269,7 +269,7 @@ extension ViewController {
             
             // show video
             if isRawVersion {
-                stackedVideoViewController.videoDisplayer.player = AVPlayer(url: image.getBackupUrl() ?? url)
+                stackedVideoViewController.videoDisplayer.player = AVPlayer(url: image.getBackupUrl() ?? image.url)
             }else{
                 stackedVideoViewController.videoDisplayer.player = AVPlayer(url: image.url)
             }

@@ -233,8 +233,7 @@ extension ViewController {
     
     @objc func previewMenuPreviewEditableVersion(_ menuItem:NSMenuItem) {
         self.btnImageOptions.selectItem(at: 0)
-        let url = self.img.url
-        self.previewImage(url: url, isPhoto: self.img.isPhoto)
+        self.previewImage(image: self.img, isRawVersion: false)
         DispatchQueue.main.async {
             self.lblImageDescription.stringValue = Words.editableVersion.word()
         }
@@ -244,7 +243,7 @@ extension ViewController {
     @objc func previewMenuPreviewBackupVersion(_ menuItem:NSMenuItem) {
         self.btnImageOptions.selectItem(at: 0)
         if let url = self.img.backupUrl {
-            self.previewImage(url: url, isPhoto: self.img.isPhoto)
+            self.previewImage(image: self.img, isRawVersion: true)
             DispatchQueue.main.async {
                 self.lblImageDescription.stringValue = Words.backupVersion.word()
             }
