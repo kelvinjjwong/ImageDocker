@@ -13,6 +13,7 @@ class ImageRecordDaoGRDB : ImageRecordDaoInterface {
     
     
     
+    
     let logger = ConsoleLogger(category: "DB", subCategory: "ImageRecordDaoGRDB")
     
     
@@ -102,6 +103,12 @@ class ImageRecordDaoGRDB : ImageRecordDaoInterface {
     func generateImageIdByContainerIdAndSubPath(containerId:Int, subPath:String) -> (ExecuteState, String) {
         self.logger.log(.todo, "TODO function for SQLite")
         return (.ERROR, "")
+    }
+    
+    
+    func updateImagePaths(id: String, newPath: String, repositoryPath: String, subPath: String, containerPath: String) -> ExecuteState {
+        self.logger.log(.todo, "TODO function for SQLite")
+        return .ERROR
     }
     
 }
