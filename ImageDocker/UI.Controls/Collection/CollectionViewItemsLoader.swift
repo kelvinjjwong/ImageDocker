@@ -34,6 +34,7 @@ struct CollectionViewLastRequest {
     var loadSource:CollectionViewLoadSource? = nil
     var lastLoadSource:CollectionViewLoadSource? = nil
     var indicator:Accumulator? = nil
+    var containerId:Int? = nil
     var folderURL:URL? = nil
     var year:Int? = nil
     var month:Int? = nil
@@ -84,11 +85,13 @@ class CollectionViewItemsLoader : NSObject {
         return self.loading
     }
 
+    /// DEPRECATED
     /// from repository / container
     /// - caller:
     ///   - CollectionViewItemsLoader.reload()
     ///   - ViewController.loadCollectionByContainer(name,url)
     func load(from folderURL: URL, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, indicator:Accumulator? = nil, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false) {
+        self.logger.log("[load(from folderURL)] folderURL:\(folderURL)")
         loading = true
         
         lastRequest.loadSource = .repository
@@ -104,7 +107,7 @@ class CollectionViewItemsLoader : NSObject {
         self.indicator = indicator
         //let urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
         //self.logger.log("loading folder from database: \(folderURL.path)")
-        let photoFiles = walkthruDatabaseForPhotoFiles(startingURL: folderURL, repositoryId: repositoryId, repositoryVolume: repositoryVolume, rawVolume: rawVolume, includeHidden: showHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories) // FIXME: use repositoryId and containerId instead
+        let photoFiles = walkthruDatabaseForPhotoFiles(startingURL: folderURL, repositoryId: repositoryId, repositoryVolume: repositoryVolume, rawVolume: rawVolume, includeHidden: showHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
         if photoFiles == nil || photoFiles?.count == 0 {
             self.logger.log(.trace, "LOADED nothing from entry \(folderURL.path)")
             //self.logger.log("loading folder from filesystem instead: \(folderURL.path)")
@@ -117,12 +120,43 @@ class CollectionViewItemsLoader : NSObject {
         }
     }
     
+    func load(containerId: Int, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, indicator:Accumulator? = nil, pageSize:Int = 0, pageNumber:Int = 0) {
+        self.logger.log("[load(containerId)] containerId:\(containerId)")
+        loading = true
+        
+        lastRequest.loadSource = .repository
+        lastRequest.containerId = containerId
+//        lastRequest.folderURL = folderURL
+        lastRequest.indicator = indicator
+        lastRequest.pageSize = pageSize
+        lastRequest.pageNumber = pageNumber
+        lastRequest.repositoryId = repositoryId
+        lastRequest.repositoryVolume = repositoryVolume
+        lastRequest.rawVolume = rawVolume
+        
+        self.indicator = indicator
+        //let urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
+        //self.logger.log("loading folder from database: \(folderURL.path)")
+        let photoFiles = walkthruDatabaseForPhotoFiles(containerId: containerId, includeHidden: showHidden, pageSize: pageSize, pageNumber: pageNumber)
+        if photoFiles == nil || photoFiles?.count == 0 {
+            self.logger.log(.trace, "LOADED nothing from container id:\(containerId)")
+            //self.logger.log("loading folder from filesystem instead: \(folderURL.path)")
+            //let urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
+            //setupItems(urls: urls)
+            setupItems(photoFiles: [])
+        }else{
+            self.logger.log(.trace, "LOADED \(photoFiles?.count ?? 0) images from container id:\(containerId)")
+            setupItems(photoFiles: photoFiles, repositoryId: repositoryId, repositoryVolume: repositoryVolume, rawVolume: rawVolume)
+        }
+    }
+    
     // load without event, paginated
     func load(year:Int, month:Int, day:Int, ignoreDate:Bool = false,
               country:String = "", province:String = "", city:String = "", place:String?,
               filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil,
               indicator:Accumulator? = nil,
               pageSize:Int = 0, pageNumber:Int = 0) {
+        self.logger.log("[load(year,month,day,country,province,city)] year:\(year) month:\(month) day:\(day) country:\(country) province:\(province) city:\(city)")
         loading = true
         
         lastRequest.loadSource = .moment
@@ -167,6 +201,7 @@ class CollectionViewItemsLoader : NSObject {
               filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil,
               indicator:Accumulator? = nil,
               pageSize:Int = 0, pageNumber:Int = 0) {
+        self.logger.log("[load(year,month,day,EVENT,country,province,city)] year:\(year) month:\(month) day:\(day) event:\(event) country:\(country) province:\(province) city:\(city)")
         loading = true
         
         lastRequest.loadSource = .event
@@ -214,6 +249,7 @@ class CollectionViewItemsLoader : NSObject {
     func search(conditions:SearchCondition,
               indicator:Accumulator? = nil,
               pageSize:Int = 0, pageNumber:Int = 0) {
+        self.logger.log("[search(conditions)]")
         loading = true
         
         lastRequest.lastLoadSource = lastRequest.loadSource
@@ -261,7 +297,7 @@ class CollectionViewItemsLoader : NSObject {
     }
     
     func reload() {
-        self.logger.log(.trace, "RELOAD LAST SOURCE = \(lastRequest.loadSource ?? .unknown)")
+        self.logger.log("[reload] LAST SOURCE = \(lastRequest.loadSource ?? .unknown)")
         if lastRequest.loadSource == nil {
             self.reloadImages()
         }else{
@@ -270,10 +306,13 @@ class CollectionViewItemsLoader : NSObject {
             }
             
             if lastRequest.loadSource == .repository {
-                self.load(from: lastRequest.folderURL!,
+                self.load(containerId: lastRequest.containerId!,
                           indicator: lastRequest.indicator,
-                          pageSize: lastRequest.pageSize, pageNumber: lastRequest.pageNumber,
-                          subdirectories: lastRequest.subdirectories)
+                          pageSize: lastRequest.pageSize, pageNumber: lastRequest.pageNumber)
+//                self.load(from: lastRequest.folderURL!,
+//                          indicator: lastRequest.indicator,
+//                          pageSize: lastRequest.pageSize, pageNumber: lastRequest.pageNumber,
+//                          subdirectories: lastRequest.subdirectories)
             }else if lastRequest.loadSource == .moment {
                 self.load(year: lastRequest.year!, month: lastRequest.month!, day: lastRequest.day!, ignoreDate: lastRequest.ignoreDate,
                           country:lastRequest.country, province:lastRequest.province, city:lastRequest.city,
@@ -637,26 +676,7 @@ class CollectionViewItemsLoader : NSObject {
         }
     }
     
-    /// - caller: NONE
-    /// - Tag: CollectionViewItemsLoader.walkthruDatabaseForFileUrls(startingURL)
-    private func walkthruDatabaseForFileUrls(startingURL: URL, includeHidden:Bool = true) -> [URL]? {
-        
-        if self.cancelling {
-            return nil
-        }
-        
-        var urls: [URL] = []
-        for photoFile in ImageSearchDao.default.getPhotoFiles(parentPath: startingURL.path, includeHidden: includeHidden) {
-            
-            if self.cancelling {
-                return nil
-            }
-            
-            urls.append(URL(fileURLWithPath: photoFile.path))
-        }
-        return urls
-    }
-    
+    /// DEPRECATED
     /// - caller:
     ///   - CollectionViewItemsLoader.load(fromUrl)
     /// - Tag: CollectionViewItemsLoader.walkthruDatabaseForPhotoFiles(startingURL)
@@ -666,53 +686,16 @@ class CollectionViewItemsLoader : NSObject {
             return nil
         }
         
-        return ImageSearchDao.default.getPhotoFiles(parentPath: startingURL.path, includeHidden: includeHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories) // FIXME: use repositoryId and containerId instead
+        return ImageSearchDao.default.getPhotoFiles(parentPath: startingURL.path, includeHidden: includeHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
     }
-  
-    /// - caller: NONE
-    /// - Tag: CollectionViewItemsLoader.walkthruDirectoryForFileUrls(startingURL)
-    private func walkthruDirectoryForFileUrls(startingURL: URL) -> [URL]? {
-        
+    
+    private func walkthruDatabaseForPhotoFiles(containerId:Int, includeHidden:Bool = true, pageSize:Int = 0, pageNumber:Int = 0) -> [Image]? {
         if self.cancelling {
             return nil
         }
-
-        let options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles,
-                                                                .skipsSubdirectoryDescendants,
-                                                                .skipsPackageDescendants]
-        let fileManager = FileManager.default
-        let resourceValueKeys = [URLResourceKey.isRegularFileKey, URLResourceKey.typeIdentifierKey]
-
-        guard let directoryEnumerator = fileManager.enumerator(at: startingURL as URL,
-                                                               includingPropertiesForKeys: resourceValueKeys,
-                                                               options: options,
-                                                               errorHandler: { url, error in
-                                                                    self.logger.log(.error, "`directoryEnumerator` error", error)
-                                                                    return true
-                                                               }
-                                                              ) else { return nil }
-
-        var urls: [URL] = []
-        for case let url as NSURL in directoryEnumerator {
-            
-            if self.cancelling {
-                return nil
-            }
-            
-            do {
-                let resourceValues = try url.resourceValues(forKeys: resourceValueKeys)
-                guard let isRegularFileResourceValue = resourceValues[URLResourceKey.isRegularFileKey] as? NSNumber else { continue }
-                guard isRegularFileResourceValue.boolValue else { continue }
-                guard let fileType = resourceValues[URLResourceKey.typeIdentifierKey] as? String else { continue }
-                guard (UTTypeConformsTo(fileType as CFString, kUTTypeImage) || UTTypeConformsTo(fileType as CFString, kUTTypeMovie)) else { continue }
-                urls.append(url as URL)
-            }
-            catch {
-                self.logger.log(.error, "Unexpected error occured", error)
-            }
-        }
-        return urls
+        return ImageSearchDao.default.getPhotoFiles(containerId: containerId, includeHidden: includeHidden, pageSize: pageSize, pageNumber: pageNumber)
     }
+  
   
     // get number of items in section
     func numberOfItems(in section: Int) -> Int {

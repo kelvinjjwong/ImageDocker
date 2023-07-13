@@ -199,19 +199,21 @@ extension ViewController {
                                             if let repository = RepositoryDao.default.getRepository(id: container.repositoryId) {
                                                 if Setting.performance.amountForPagination() > 0 && container.imageCount > Setting.performance.amountForPagination() {
                                                     self.btnRefreshCollectionView.title = Words.pages.word()
-                                                    if container.path != "/" {
-                                                        self.loadCollectionByContainer(name:container.name,
-                                                                                       url:URL(fileURLWithPath: container.path),
-                                                                                       repositoryId: repository.id,
-                                                                                       repositoryVolume: repository.repositoryVolume,
-                                                                                       rawVolume: repository.storageVolume,
-                                                                                       pageSize: 200, pageNumber: 1, subdirectories: true)
-                                                    }else{
-    //                                                    self.logger.log("WARN: collection url is null")
-                                                    }
+                                                    self.loadCollectionByContainer(name: container.name, containerId: container.id, repositoryId: repository.id, repositoryVolume: repository.repositoryVolume, rawVolume: repository.storageVolume, pageSize: 200, pageNumber: 1)
+//                                                    if container.path != "/" {
+//                                                        self.loadCollectionByContainer(name:container.name,
+//                                                                                       url:URL(fileURLWithPath: container.path),
+//                                                                                       repositoryId: repository.id,
+//                                                                                       repositoryVolume: repository.repositoryVolume,
+//                                                                                       rawVolume: repository.storageVolume,
+//                                                                                       pageSize: 200, pageNumber: 1, subdirectories: true)
+//                                                    }else{
+//    //                                                    self.logger.log("WARN: collection url is null")
+//                                                    }
                                                 }else{
                                                     self.btnRefreshCollectionView.title = Words.reload.word()
-                                                    self.loadCollectionByContainer(name:container.name, url:URL(fileURLWithPath: container.path))
+                                                    self.loadCollectionByContainer(name: container.name, containerId: container.id, repositoryId: repository.id, repositoryVolume: repository.repositoryVolume, rawVolume: repository.storageVolume)
+//                                                    self.loadCollectionByContainer(name:container.name, url:URL(fileURLWithPath: container.path))
                                                 }
                                             }else{
                                                 self.logger.log(.error, "[TREE-onNodeSelected] Unable to get repository by id for container id:\(container.id)")
@@ -234,7 +236,7 @@ extension ViewController {
                                             self.openRepositoryDetail(repository: repository, sender: button)
                                         }
                                         else if let container = collection.relatedObject as? ImageContainer {
-                                            self.openContainerDetail(container: container, url: URL(fileURLWithPath: container.path), title: container.name, sender: button)
+                                            self.openContainerDetail(container: container, title: container.name, sender: button)
                                         }
         },
                                     notificationHolder: self.btnAlertMessage)

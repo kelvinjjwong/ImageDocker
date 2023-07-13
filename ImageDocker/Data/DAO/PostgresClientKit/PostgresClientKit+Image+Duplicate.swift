@@ -166,6 +166,25 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
         return result
     }
     
+    func getDuplicatedImages(repositoryId:Int) -> [String : [Image]] {
+        let db = PostgresConnection.database()
+        var result:[String:[Image]] = [:]
+        let records = Image.fetchAll(db, where: """
+            "repositoryId"=$1 and "duplicatesKey" is not null and "duplicatesKey" != ''
+            """, orderBy: "\"duplicatesKey\" asc, path asc", values: [repositoryId])
+        for image in records {
+            if let key = image.duplicatesKey, key != "" {
+                //self.logger.log("found \(key) - \(image.path)")
+                if let _ = result[key] {
+                    result[key]?.append(image)
+                }else{
+                    result[key] = [image]
+                }
+            }
+        }
+        return result
+    }
+    
     func getChiefImageOfDuplicatedSet(duplicatesKey: String) -> Image? {
         let db = PostgresConnection.database()
         return Image.fetchOne(db, where: "hidden=false and \"duplicatesKey\"='\(duplicatesKey)'")

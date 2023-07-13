@@ -1145,7 +1145,7 @@ order by "date"
         return Image.fetchAll(db, where: "path like $1 and \"subPath\" = ''", values: ["\(rootPath.withLastStash())%"] )
     }
     
-    // FIXME: separate volume and path, get by id rather than path
+    /// DEPRECATED
     func getPhotoFiles(parentPath: String, repositoryId:Int?, repositoryVolume:String?, rawVolume:String?, includeHidden: Bool, pageSize: Int, pageNumber: Int, subdirectories: Bool) -> [Image] {
         let db = PostgresConnection.database()
         var otherPredicate:String = ""
@@ -1159,6 +1159,29 @@ order by "date"
             condition = "(\"containerPath\" = $1 or \"containerPath\" like $2)"
             key.append("\(parentPath.withLastStash())%")
         }
+        
+//        self.logger.log("\(condition) \(otherPredicate)")
+        
+        if pageSize > 0 && pageNumber > 0 {
+            return Image.fetchAll(db, where: "\(condition) \(otherPredicate)", orderBy: "\"photoTakenDate\", filename", values: key, offset: pageSize * (pageNumber - 1), limit: pageSize)
+        }else{
+            return Image.fetchAll(db, where: "\(condition) \(otherPredicate)", orderBy: "\"photoTakenDate\", filename", values: key)
+        }
+    }
+    
+    func getPhotoFiles(containerId:Int, includeHidden: Bool, pageSize: Int, pageNumber: Int) -> [Image] {
+        let db = PostgresConnection.database()
+        var otherPredicate:String = ""
+        if !includeHidden {
+            otherPredicate = " AND (\"hidden\" is null or \"hidden\" = false)"
+        }
+        
+        var condition = "\"containerId\" = \(containerId)"
+        var key:[String] = []
+//        if subdirectories {
+//            condition = "(\"containerPath\" = $1 or \"containerPath\" like $2)"
+//            key.append("\(parentPath.withLastStash())%")
+//        }
         
 //        self.logger.log("\(condition) \(otherPredicate)")
         

@@ -563,6 +563,7 @@ class ImageSearchDao {
         return self.impl.getPhotoFilesWithoutSubPath(rootPath: rootPath)
     }
     
+    /// DEPRECATED
     /// - caller:
     ///   - CollectionViewItemsLoader.walkthruDatabaseForFileurls
     ///   - CollectionViewItemsLoader.walkthruDatabaseForPhotoFiles
@@ -571,6 +572,10 @@ class ImageSearchDao {
     /// - Tag: getPhotoFiles(parentPath)
     func getPhotoFiles(parentPath:String, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, includeHidden:Bool = true, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false) -> [Image] {
         return self.impl.getPhotoFiles(parentPath: parentPath, repositoryId: repositoryId, repositoryVolume: repositoryVolume, rawVolume: rawVolume, includeHidden: includeHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
+    }
+    
+    func getPhotoFiles(containerId:Int, includeHidden: Bool = true, pageSize: Int = 0, pageNumber: Int = 0) -> [Image] {
+        return self.impl.getPhotoFiles(containerId: containerId, includeHidden: includeHidden, pageSize: pageSize, pageNumber: pageNumber)
     }
     
     /// - caller:
@@ -888,6 +893,10 @@ class ImageDuplicationDao {
     /// - Tag: getDuplicatedImages(repositoryRoot)
     func getDuplicatedImages(repositoryRoot:String, theOtherRepositoryRoot:String) -> [String:[Image]] {
         return self.impl.getDuplicatedImages(repositoryRoot: repositoryRoot, theOtherRepositoryRoot: theOtherRepositoryRoot)
+    }
+    
+    func getDuplicatedImages(repositoryId:Int) -> [String : [Image]] {
+        return self.impl.getDuplicatedImages(repositoryId: repositoryId)
     }
     
     /// - caller:

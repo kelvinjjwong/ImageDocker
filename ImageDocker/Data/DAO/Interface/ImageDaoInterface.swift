@@ -215,6 +215,8 @@ protocol ImageSearchDaoInterface {
     
     func getPhotoFiles(parentPath:String, repositoryId:Int?, repositoryVolume:String?, rawVolume:String?, includeHidden:Bool, pageSize:Int, pageNumber:Int, subdirectories:Bool) -> [Image]
     
+    func getPhotoFiles(containerId:Int, includeHidden: Bool, pageSize: Int, pageNumber: Int) -> [Image]
+    
     func getImages(repositoryPath:String) -> [Image]
     
     func getImages(repositoryId:Int) -> [Image]
@@ -299,6 +301,8 @@ protocol ImageDuplicationDaoInterface {
     func getDuplicatePhotos(forceReload:Bool) -> Duplicates
     
     func getDuplicatedImages(repositoryRoot:String, theOtherRepositoryRoot:String) -> [String:[Image]]
+    
+    func getDuplicatedImages(repositoryId:Int) -> [String : [Image]]
     
     func getChiefImageOfDuplicatedSet(duplicatesKey:String) -> Image?
     

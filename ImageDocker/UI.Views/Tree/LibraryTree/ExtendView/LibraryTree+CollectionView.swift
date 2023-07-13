@@ -57,26 +57,38 @@ extension ViewController {
         self.changePaginationState(currentPage: pageNumber, pageSize: pageSize, totalRecords: totalRecords)
         
         self.loadCollectionByContainer(name: container.name,
-                                       url:URL(fileURLWithPath: container.path),
+                                       containerId: container.id,
+                                       //url:URL(fileURLWithPath: container.path),
                                        repositoryId: repositoryId,
                                        repositoryVolume: repositoryVolume,
                                        rawVolume: rawVolume,
-                                       pageSize: pageSize, pageNumber: pageNumber, subdirectories: true)
+                                       pageSize: pageSize, pageNumber: pageNumber)
     }
     
-    // FIXME: use container id instead
-    internal func loadCollectionByContainer(name:String, url:URL, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){
-        self.logger.log("loadCollectionByContainer(name:\(name), url:\(url), repositoryId:\(repositoryId ?? -999999), repositoryVolume:\(repositoryVolume ?? "nil"), rawVolume:\(rawVolume ?? "nil"), pageSize:\(pageSize), pageNumber:\(pageNumber), subdirectories:\(subdirectories)")
+    internal func loadCollectionByContainer(name:String, containerId:Int, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){
+        self.logger.log("loadCollectionByContainer(name:\(name), containerId:\(containerId), repositoryId:\(repositoryId ?? -999999), repositoryVolume:\(repositoryVolume ?? "nil"), rawVolume:\(rawVolume ?? "nil"), pageSize:\(pageSize), pageNumber:\(pageNumber), subdirectories:\(subdirectories)")
         loadCollection {
-            self.imagesLoader.load(
-                from: url,
+            self.imagesLoader.load(containerId:containerId,
                 repositoryId: repositoryId,
                 repositoryVolume: repositoryVolume,
                 rawVolume: rawVolume,
                 indicator:self.collectionLoadingIndicator,
                 pageSize: pageSize,
-                pageNumber: pageNumber,
-                subdirectories: subdirectories)
+                pageNumber: pageNumber)
         }
     }
+    
+//    internal func loadCollectionByContainer(name:String, url:URL, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){
+//        self.logger.log("loadCollectionByContainer(name:\(name), url:\(url), repositoryId:\(repositoryId ?? -999999), repositoryVolume:\(repositoryVolume ?? "nil"), rawVolume:\(rawVolume ?? "nil"), pageSize:\(pageSize), pageNumber:\(pageNumber), subdirectories:\(subdirectories)")
+//        loadCollection {
+//            self.imagesLoader.load(from: url,
+//                repositoryId: repositoryId,
+//                repositoryVolume: repositoryVolume,
+//                rawVolume: rawVolume,
+//                indicator:self.collectionLoadingIndicator,
+//                pageSize: pageSize,
+//                pageNumber: pageNumber,
+//                subdirectories: subdirectories)
+//        }
+//    }
 }

@@ -472,6 +472,11 @@ select DATE('now', 'localtime')  date
         return result
     }
     
+    func getPhotoFiles(containerId:Int, includeHidden: Bool, pageSize: Int, pageNumber: Int) -> [Image] {
+        self.logger.log("to do function for SQLite")
+        return []
+    }
+    
     func getPhotoFiles(parentPath:String, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, includeHidden:Bool = true, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false) -> [Image] {
         var otherPredicate:String = ""
         if !includeHidden {

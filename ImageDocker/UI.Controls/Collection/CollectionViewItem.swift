@@ -114,12 +114,12 @@ class CollectionViewItem: NSCollectionViewItem {
             }
             if let thumbnail = imageFile.thumbnail {
                 if degree != 0 {
-                    if imageFile.isPhoto {
+//                    if imageFile.isPhoto {
                         self.logger.log("[renderControls] thumbnail rotate to \(degree) degree for \(imageFile.url)")
                         self.imageView?.image = thumbnail.rotate(degrees: CGFloat(degree))
-                    }else{
-                        self.imageView?.image = thumbnail
-                    }
+//                    }else{
+//                        self.imageView?.image = thumbnail
+//                    }
                 }else{
                     self.imageView?.image = thumbnail
                 }

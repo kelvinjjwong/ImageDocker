@@ -1192,7 +1192,7 @@ class EditRepositoryViewController: NSViewController {
                     let oldFullUrl = oldBaseUrl.resolvingSymlinksInPath()
                     let newFullUrl = newBaseUrl.resolvingSymlinksInPath()
                     if newFullUrl.path != oldFullUrl.path { // physically inequal, need copy files
-                        let oldFiles = oldBaseUrl.walkthruDirectory()  // FIXME: use repository id instead, load from database instead
+                        let oldFiles = oldBaseUrl.walkthruDirectory()  // FIXME: load from database instead?
                         
                         let total = oldFiles.allObjects.count
                         
@@ -1301,7 +1301,7 @@ class EditRepositoryViewController: NSViewController {
             DispatchQueue.global().async {
             
                 // save images' path, save images' repository path to new repository path (base path)
-                let images = ImageSearchDao.default.getPhotoFiles(rootPath: originalRepoPath) // FIXME: use repository id instead
+                let images = ImageSearchDao.default.getImages(repositoryId: repoContainer.repositoryId)
                 
                 if images.count > 0 {
                     
@@ -1362,7 +1362,7 @@ class EditRepositoryViewController: NSViewController {
                     self.lblMessage.stringValue = "Loading sub-folders ..."
                 }
                 
-                let subContainers = RepositoryDao.default.getContainers(rootPath: originalRepoPath) // FIXME: use repositoryId instead
+                let subContainers = RepositoryDao.default.getContainers(repositoryId: repoContainer.repositoryId)
                 
                 let total = subContainers.count
                 
@@ -1569,7 +1569,7 @@ class EditRepositoryViewController: NSViewController {
         DispatchQueue.global().async {
             self.logger.log("loading duplicates from database")
             
-            let duplicates = ImageDuplicationDao.default.getDuplicatedImages(repositoryRoot: repo, theOtherRepositoryRoot: raw) // FIXME: use repository id instead
+            let duplicates = ImageDuplicationDao.default.getDuplicatedImages(repositoryId: self.originalRepositoryId)
             self.logger.log("loaded duplicates \(duplicates.count)")
             
             count = duplicates.count
@@ -1650,7 +1650,7 @@ class EditRepositoryViewController: NSViewController {
                 
                 self.toggleButtons(false)
                 DispatchQueue.global().async {
-                    let _ = RepositoryDao.default.deleteRepository(repositoryRoot: container.path) // FIXME: use repository id instead
+                    let _ = RepositoryDao.default.deleteRepository(id: container.repositoryId)
                     
                     DispatchQueue.main.async {
                         
@@ -1737,7 +1737,7 @@ class EditRepositoryViewController: NSViewController {
         if let container = self.originalContainer {
             if container.hiddenByRepository {
                 DispatchQueue.global().async {
-                    let _ = RepositoryDao.default.showRepository(repositoryRoot: container.path.withLastStash())// FIXME: use repositoryId instead
+                    let _ = RepositoryDao.default.showRepository(id: container.repositoryId)
                     self.originalContainer?.hiddenByRepository = false
                     let _ = RepositoryDao.default.saveImageContainer(container: self.originalContainer!)
                     
@@ -1750,7 +1750,7 @@ class EditRepositoryViewController: NSViewController {
                 }
             }else{
                 DispatchQueue.global().async {
-                    let _ = RepositoryDao.default.hideRepository(repositoryRoot: container.path.withLastStash())// FIXME: use repositoryId instead
+                    let _ = RepositoryDao.default.hideRepository(id: container.repositoryId)
                     self.originalContainer?.hiddenByRepository = true
                     let _ = RepositoryDao.default.saveImageContainer(container: self.originalContainer!)
                     DispatchQueue.main.async {
@@ -1780,7 +1780,7 @@ class EditRepositoryViewController: NSViewController {
         self.btnUpdateAllEvents.isEnabled = false
         DispatchQueue.global().async {
             if let container = self.originalContainer {
-                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)// FIXME: use repositoryId instead
+                let images = ImageSearchDao.default.getImages(repositoryId: container.repositoryId)
                 let level = self.getBriefFolderLevelFromSelection()
                 let total = images.count
                 var i = 0
@@ -1816,7 +1816,7 @@ class EditRepositoryViewController: NSViewController {
         self.btnUpdateAllEvents.isEnabled = false
         DispatchQueue.global().async {
             if let container = self.originalContainer {
-                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)// FIXME: use repositoryId instead
+                let images = ImageSearchDao.default.getImages(repositoryId: container.repositoryId)
                 let level = self.getBriefFolderLevelFromSelection()
                 let total = images.count
                 var i = 0
@@ -1960,7 +1960,7 @@ class EditRepositoryViewController: NSViewController {
         self.btnUpdateAllEvents.isEnabled = false
         DispatchQueue.global().async {
             if let container = self.originalContainer {
-                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)// FIXME: use repositoryId instead
+                let images = ImageSearchDao.default.getImages(repositoryId: container.repositoryId)
                 let level = self.lstEventFolderLevel.indexOfSelectedItem + 1
                 let total = images.count
                 var i = 0
@@ -1996,7 +1996,7 @@ class EditRepositoryViewController: NSViewController {
         self.btnUpdateAllEvents.isEnabled = false
         DispatchQueue.global().async {
             if let container = self.originalContainer {
-                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)// FIXME: use repositoryId instead
+                let images = ImageSearchDao.default.getImages(repositoryId: container.repositoryId)
                 let level = self.lstEventFolderLevel.indexOfSelectedItem + 1
                 let total = images.count
                 var i = 0

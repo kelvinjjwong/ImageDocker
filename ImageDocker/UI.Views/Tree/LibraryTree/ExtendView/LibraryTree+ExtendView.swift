@@ -84,12 +84,15 @@ extension ViewController {
         self.repositoryDetailPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxX)
     }
     
-    func openContainerDetail(container:ImageContainer, url:URL, title:String, sender:NSButton) {
+    func openContainerDetail(container:ImageContainer, title:String, sender:NSButton) {
         self.createContainerDetailPopover()
         self.containerDetailViewController.initView(container, onLoad: { pageSize, pageNumber in
-            self.logger.log("CALLED ONLOAD \(pageSize) \(pageNumber)")
-            self.loadCollectionByContainer(name:title, url:url,
-                                           pageSize: pageSize, pageNumber: pageNumber, subdirectories: true)
+            self.logger.log("[openContainerDetail(container)] container.id:\(container.id) pageSize:\(pageSize) pageNumber:\(pageNumber)")
+            if let repository = RepositoryDao.default.getRepository(id: container.repositoryId) {
+                self.loadCollectionByContainer(name: container.name, containerId: container.id, repositoryId: repository.id, repositoryVolume: repository.repositoryVolume, rawVolume: repository.storageVolume, pageSize: pageSize, pageNumber: pageNumber)
+            }
+//            self.loadCollectionByContainer(name:title, url:url,
+//                                           pageSize: pageSize, pageNumber: pageNumber, subdirectories: true)
         })
         
         let cellRect = sender.bounds

@@ -165,6 +165,32 @@ SELECT photoTakenYear,photoTakenMonth,photoTakenDay,photoTakenDate,place,photoCo
         return result
     }
     
+    func getDuplicatedImages(repositoryId:Int) -> [String : [Image]] {
+        var result:[String:[Image]] = [:]
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            let _ = try db.read { db in
+                let cursor = try Image.filter(sql: "(repositoryId = ?) and duplicatesKey is not null and duplicatesKey != '' ", arguments:[repositoryId]).order(sql: "duplicatesKey asc, path asc").fetchCursor(db)
+                
+                while let image = try cursor.next() {
+                    if let key = image.duplicatesKey, key != "" {
+                        //self.logger.log("found \(key) - \(image.path)")
+                        if let _ = result[key] {
+                            result[key]?.append(image)
+                        }else{
+                            result[key] = [image]
+                        }
+                    }
+                }
+            }
+            
+            
+        }catch{
+            self.logger.log(error)
+        }
+        return result
+    }
+    
     func getChiefImageOfDuplicatedSet(duplicatesKey:String) -> Image?{
         var result:Image? = nil
         do {
