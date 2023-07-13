@@ -514,6 +514,32 @@ select DATE('now', 'localtime')  date
         return result
     }
     
+    func getImages(repositoryId:Int) -> [Image] {
+        var result:[Image] = []
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "repositoryId = ?", arguments:[repositoryId]).order(sql: "path asc").fetchAll(db)
+            }
+        }catch{
+            self.logger.log(error)
+        }
+        return result
+    }
+    
+    func getImages(containerId:Int) -> [Image] {
+        var result:[Image] = []
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.read { db in
+                result = try Image.filter(sql: "containerId = ?", arguments:[containerId]).order(sql: "path asc").fetchAll(db)
+            }
+        }catch{
+            self.logger.log(error)
+        }
+        return result
+    }
+    
     func getPhotoFiles(rootPath:String) -> [Image] {
         var result:[Image] = []
         do {

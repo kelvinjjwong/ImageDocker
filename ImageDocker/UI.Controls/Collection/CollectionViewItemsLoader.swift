@@ -104,7 +104,7 @@ class CollectionViewItemsLoader : NSObject {
         self.indicator = indicator
         //let urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
         //self.logger.log("loading folder from database: \(folderURL.path)")
-        let photoFiles = walkthruDatabaseForPhotoFiles(startingURL: folderURL, repositoryId: repositoryId, repositoryVolume: repositoryVolume, rawVolume: rawVolume, includeHidden: showHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
+        let photoFiles = walkthruDatabaseForPhotoFiles(startingURL: folderURL, repositoryId: repositoryId, repositoryVolume: repositoryVolume, rawVolume: rawVolume, includeHidden: showHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories) // FIXME: use repositoryId and containerId instead
         if photoFiles == nil || photoFiles?.count == 0 {
             self.logger.log(.trace, "LOADED nothing from entry \(folderURL.path)")
             //self.logger.log("loading folder from filesystem instead: \(folderURL.path)")
@@ -610,7 +610,7 @@ class CollectionViewItemsLoader : NSObject {
                         _rawVolume = repository.storageVolume
                     }
                 }else {
-                    // FIXME: if image.repository == 0 ?
+                    self.logger.log(.error, "[transformToDomainItems] image.repository == 0, image.id:\(image.id ?? "")")
                 }
             }
             
@@ -666,7 +666,7 @@ class CollectionViewItemsLoader : NSObject {
             return nil
         }
         
-        return ImageSearchDao.default.getPhotoFiles(parentPath: startingURL.path, includeHidden: includeHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
+        return ImageSearchDao.default.getPhotoFiles(parentPath: startingURL.path, includeHidden: includeHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories) // FIXME: use repositoryId and containerId instead
     }
   
     /// - caller: NONE

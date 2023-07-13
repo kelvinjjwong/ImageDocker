@@ -818,19 +818,37 @@ class EditRepositoryViewController: NSViewController {
                 self.lblMessage.stringValue = "ERROR: Path for storing raw images cannot be empty. Please assign it and save first."
                 return
             }
-            var isDir:ObjCBool = false
-            if !FileManager.default.fileExists(atPath: container.repositoryPath, isDirectory: &isDir) { // FIXME: separate volume
-                self.lblMessage.stringValue = "ERROR: Path for storing editable images doesn't exist. Please re-assign it and save first."
-                return
-            }else if isDir.boolValue == false {
-                self.lblMessage.stringValue = "ERROR: Path for storing editable images must be a directory. Please re-assign it and save first."
+            if container.repositoryId == 0 {
+                self.logger.log(.error, "[onCopyToRawClicked] container.repository == 0, container.id:\(container.id)")
+                self.lblMessage.stringValue = "ERROR: Repository is not linked to this container."
                 return
             }
-            if !FileManager.default.fileExists(atPath: container.storagePath, isDirectory: &isDir) { // FIXME: separate volume
-                self.lblMessage.stringValue = "ERROR: Path for storing raw images doesn't exist. Please re-assign it and save first."
+            var repositoryVolume = ""
+            var rawVolume = ""
+            if let repository = RepositoryDao.default.getRepository(id: container.repositoryId) {
+                repositoryVolume = repository.repositoryVolume
+                rawVolume = repository.storageVolume
+            }
+            if repositoryVolume == "" || !repositoryVolume.isVolumeExists() {
+                self.logger.log(.error, "[onCopyToRawClicked] Volume disk of editable images is empty or not mounted, volume:\(repositoryVolume), container.id:\(container.id), repositoryId:\(container.repositoryId)")
+                self.lblMessage.stringValue = "ERROR: Volume disk of editable images is empty or not mounted."
                 return
-            }else if isDir.boolValue == false {
-                self.lblMessage.stringValue = "ERROR: Path for storing raw images must be a directory. Please re-assign it and save first."
+            }
+            if rawVolume == "" || !rawVolume.isVolumeExists() {
+                self.logger.log(.error, "[onCopyToRawClicked] Volume disk of raw images is empty or not mounted, volume:\(rawVolume), container.id:\(container.id), repositoryId:\(container.repositoryId)")
+                self.lblMessage.stringValue = "ERROR: Volume disk of raw images is empty or not mounted."
+                return
+            }
+            let (_, _repositoryPath) = container.repositoryPath.getVolumeFromThisPath()
+            let (_, _rawPath) = container.storagePath.getVolumeFromThisPath()
+            let repositoryPath = "\(repositoryVolume)\(_repositoryPath)"
+            let rawPath = "\(rawVolume)\(_rawPath)"
+            if !repositoryPath.isDirectoryExists() {
+                self.lblMessage.stringValue = "ERROR: Path for storing editable images doesn't exist. Please re-assign it and save first."
+                return
+            }
+            if !rawPath.isDirectoryExists() {
+                self.lblMessage.stringValue = "ERROR: Path for storing raw images doesn't exist. Please re-assign it and save first."
                 return
             }
             
@@ -855,7 +873,7 @@ class EditRepositoryViewController: NSViewController {
             }
             
             DispatchQueue.global().async {
-                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath) // FIXME: separate volume
+                let images = ImageSearchDao.default.getImages(repositoryId: container.repositoryId)
                 
                 if images.count == 0 {
                     DispatchQueue.main.async {
@@ -872,8 +890,8 @@ class EditRepositoryViewController: NSViewController {
                 
                 for image in images {
                     if image.subPath != "" {
-                        let sourcePath = image.path
-                        let targetPath = "\(container.storagePath.withLastStash())\(image.subPath)"
+                        let sourcePath = "\(repositoryPath.withLastStash())\(image.subPath)"
+                        let targetPath = "\(rawPath.withLastStash())\(image.subPath)"
                         if FileManager.default.fileExists(atPath: sourcePath) && !FileManager.default.fileExists(atPath: targetPath) {
                             let containerUrl = URL(fileURLWithPath: targetPath).deletingLastPathComponent()
                             
@@ -1115,21 +1133,46 @@ class EditRepositoryViewController: NSViewController {
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     
-    // MARK: - ACTION - FIX RAW
+    // MARK: - ACTION - CHANGE RAW PATH
     
     /// - Tag: EditRepositoryViewController.onUpdateStorageImagesClicked()
     @IBAction func onUpdateStorageImagesClicked(_ sender: NSButton) {
         guard !self.working else {return}
         if let repoContainer = self.originalContainer {
-            let originalRawPath = repoContainer.storagePath.withLastStash() // FIXME: separate volume
-            let newRawPath = self.txtStoragePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withLastStash() // FIXME: separate volume
             
-            if newRawPath == "/" {
-                self.lblStoragePathRemark.stringValue = "Path for RAW copy is empty."
+            var originalRawVolume = ""
+            if let repository = RepositoryDao.default.getRepository(id: repoContainer.repositoryId) {
+                originalRawVolume = repository.storageVolume
+            }
+            if originalRawVolume == "" || !originalRawVolume.isVolumeExists() {
+                self.lblStoragePathRemark.stringValue = "Original volume disk of raw version is empty or not mounted: \(originalRawVolume)"
+                return
+            }
+            
+            let (_, _originalRawPath) = repoContainer.storagePath.getVolumeFromThisPath()
+            
+            let originalRawPath = "\(originalRawVolume)\(_originalRawPath)".withLastStash()
+            
+            if !originalRawPath.isDirectoryExists() {
+                self.lblStoragePathRemark.stringValue = "Original path of raw version does not exist: \(originalRawPath)"
+                return
+            }
+            
+            let newRawPath = self.getVolumePath(dropdown: self.lstVolumesOfRawImages, text: self.txtStoragePath).withLastStash()
+            
+            let (newRawVolume, _) = newRawPath.getVolumeFromThisPath()
+            
+            if !newRawVolume.isVolumeExists() {
+                self.lblStoragePathRemark.stringValue = "New volume disk of raw version is empty or not mounted: \(newRawVolume)"
+                return
+            }
+            
+            if newRawPath == "" || !newRawPath.isDirectoryExists() {
+                self.lblStoragePathRemark.stringValue = "New path of raw version does not exist: \(newRawPath)"
                 return
             }
             if newRawPath == originalRawPath {
-                self.lblStoragePathRemark.stringValue = "Path for RAW copy has no change."
+                self.lblStoragePathRemark.stringValue = "Path of raw version has no change."
                 return
             }
             
@@ -1149,7 +1192,7 @@ class EditRepositoryViewController: NSViewController {
                     let oldFullUrl = oldBaseUrl.resolvingSymlinksInPath()
                     let newFullUrl = newBaseUrl.resolvingSymlinksInPath()
                     if newFullUrl.path != oldFullUrl.path { // physically inequal, need copy files
-                        let oldFiles = oldBaseUrl.walkthruDirectory()
+                        let oldFiles = oldBaseUrl.walkthruDirectory()  // FIXME: use repository id instead, load from database instead
                         
                         let total = oldFiles.allObjects.count
                         
@@ -1183,13 +1226,13 @@ class EditRepositoryViewController: NSViewController {
                 }
                 
                 // TODO: should be demised in future to improve performance
-                let _ = ImageRecordDao.default.updateImageRawBase(pathStartsWith: originalRawPath, rawPath: newRawPath) // FIXME: separate volume
+                let _ = ImageRecordDao.default.updateImageRawBase(pathStartsWith: originalRawPath, rawPath: newRawPath) // FIXME: use id instead
                 
-                let _ = ImageRecordDao.default.updateImageRawBase(oldRawPath: originalRawPath, newRawPath: newRawPath) // FIXME: separate volume
+                let _ = ImageRecordDao.default.updateImageRawBase(oldRawPath: originalRawPath, newRawPath: newRawPath) // FIXME: use id instead?
                 
                 // save repo's path
                 let repo = repoContainer
-                repo.storagePath = newRawPath // FIXME: separate volume
+                repo.storagePath = newRawPath
                 let _ = RepositoryDao.default.saveImageContainer(container: repo)
                 self.originalContainer = repo
                 
@@ -1205,51 +1248,47 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
-    // MARK: - ACTION - FIX IMAGES
+    // MARK: - ACTION - CHANGE REPO PATH
     
     /// - Tag: EditRepositoryViewController.onUpdateRepositoryImagesClicked()
     @IBAction func onUpdateRepositoryImagesClicked(_ sender: NSButton) {
         guard !self.working else {return}
         if let repoContainer = self.originalContainer {
             
-            let originalRepoPath = repoContainer.path.withLastStash() // FIXME: separate volume
-            let newRepoPathNoStash = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines) // FIXME: separate volume
-            let newRepoPath = self.txtRepository.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withLastStash() // FIXME: separate volume
             
-            if newRepoPath == "/" || newRepoPath == "" {
+            var originalRepoVolume = ""
+            if let repository = RepositoryDao.default.getRepository(id: repoContainer.repositoryId) {
+                originalRepoVolume = repository.repositoryVolume
+            }
+            if originalRepoVolume == "" || !originalRepoVolume.isVolumeExists() {
+                self.lblRepositoryPathRemark.stringValue = "Original volume disk of editable version is empty or not mounted: \(originalRepoVolume)"
                 return
             }
             
-            var go = false
+            let (_, _originalRepoPath) = repoContainer.repositoryPath.getVolumeFromThisPath()
             
-            self.lblMessage.stringValue = "Checking for update ..."
+            let originalRepoPath = "\(originalRepoVolume)\(_originalRepoPath)".withLastStash()
             
-            if newRepoPath == originalRepoPath {
-                let imagesWithoutRepoPath = ImageCountDao.default.countImageWithoutRepositoryPath(repositoryRoot: originalRepoPath) // FIXME: separate volume
-                let imagesWithoutSubPath = ImageCountDao.default.countImageWithoutSubPath(repositoryRoot: originalRepoPath) // FIXME: separate volume
-                let imagesWithoutId = ImageCountDao.default.countImageWithoutId(repositoryRoot: originalRepoPath) // FIXME: separate volume
-                let imagesUnmatchedRepoPath = ImageCountDao.default.countImageUnmatchedRepositoryRoot(repositoryRoot: originalRepoPath) // FIXME: separate volume
-                
-                let containersWithoutRepoPath = ImageCountDao.default.countContainersWithoutRepositoryPath(repositoryRoot: originalRepoPath) // FIXME: separate volume
-                let containersWithoutSubPath = ImageCountDao.default.countContainersWithoutSubPath(repositoryRoot: originalRepoPath) // FIXME: separate volume
-                
-                logger.log("No-repo:\(imagesWithoutRepoPath) No-sub:\(imagesWithoutSubPath) No-id:\(imagesWithoutId) Unmatch-repo:\(imagesUnmatchedRepoPath) container-no-repo:\(containersWithoutRepoPath) container-no-sub:\(containersWithoutSubPath)")
-                logger.log("continue if one of above larger than zero")
-                
-                if imagesWithoutRepoPath > 0 || imagesWithoutSubPath > 0 || imagesWithoutId > 0 || imagesUnmatchedRepoPath > 0 || containersWithoutRepoPath > 0 ||  containersWithoutSubPath > 0 {
-                    go = true
-                }
-                if imagesWithoutRepoPath == 0 && imagesWithoutSubPath == 0 && imagesWithoutId == 0 && imagesUnmatchedRepoPath == 0 && containersWithoutRepoPath == 0 &&  containersWithoutSubPath == 0 {
-                    go = true
-                }
-            }else{
-                // change place
-                logger.log("repo changed place")
-                go = true
+            if !originalRepoPath.isDirectoryExists() {
+                self.lblRepositoryPathRemark.stringValue = "Original path of editable version does not exist: \(originalRepoPath)"
+                return
             }
-            guard go else {
-                self.lblMessage.stringValue = ""
-                logger.log("abort")
+            
+            let newRepoPath = self.getVolumePath(dropdown: self.lstVolumesOfEditableImages, text: self.txtRepository).withLastStash()
+            
+            let (newRepoVolume, _) = newRepoPath.getVolumeFromThisPath()
+            
+            if !newRepoVolume.isVolumeExists() {
+                self.lblStoragePathRemark.stringValue = "New volume disk of editable version is empty or not mounted: \(newRepoVolume)"
+                return
+            }
+            
+            if newRepoPath == "" || !newRepoPath.isDirectoryExists() {
+                self.lblRepositoryPathRemark.stringValue = "New path of editable version does not exist: \(newRepoPath)"
+                return
+            }
+            if newRepoPath == originalRepoPath {
+                self.lblRepositoryPathRemark.stringValue = "Path of editable version has no change."
                 return
             }
             
@@ -1262,7 +1301,7 @@ class EditRepositoryViewController: NSViewController {
             DispatchQueue.global().async {
             
                 // save images' path, save images' repository path to new repository path (base path)
-                let images = ImageSearchDao.default.getPhotoFiles(rootPath: originalRepoPath)
+                let images = ImageSearchDao.default.getPhotoFiles(rootPath: originalRepoPath) // FIXME: use repository id instead
                 
                 if images.count > 0 {
                     
@@ -1301,7 +1340,7 @@ class EditRepositoryViewController: NSViewController {
                         }
                         
                         // fix empty repository path
-                        let containerPath = containerUrl.path // FIXME: separate volume
+                        let containerPath = containerUrl.path
                         
                         // fix empty sub path
                         let subPath = image.path.replacingFirstOccurrence(of: originalRepoPath, with: "")
@@ -1313,7 +1352,7 @@ class EditRepositoryViewController: NSViewController {
                         // fix empty id
                         let id = image.id ?? UUID().uuidString
                         
-                        let _ = ImageRecordDao.default.updateImagePaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath, subPath: subPath, containerPath: containerPath, id: id) // FIXME: separate volume
+                        let _ = ImageRecordDao.default.updateImagePaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath, subPath: subPath, containerPath: containerPath, id: id) // FIXME: use repositoryId instead
                     }
                 }
                 
@@ -1323,7 +1362,7 @@ class EditRepositoryViewController: NSViewController {
                     self.lblMessage.stringValue = "Loading sub-folders ..."
                 }
                 
-                let subContainers = RepositoryDao.default.getContainers(rootPath: originalRepoPath) // FIXME: separate volume
+                let subContainers = RepositoryDao.default.getContainers(rootPath: originalRepoPath) // FIXME: use repositoryId instead
                 
                 let total = subContainers.count
                 
@@ -1345,18 +1384,18 @@ class EditRepositoryViewController: NSViewController {
                     if sub.parentPath == "" {
                         sub.parentPath = URL(fileURLWithPath: sub.path).deletingLastPathComponent().path.replacingFirstOccurrence(of: originalRepoPath, with: "")
                     }
-                    sub.repositoryPath = newRepoPath // FIXME: separate volume
-                    sub.parentFolder = sub.parentFolder.replacingFirstOccurrence(of: repoContainer.path, with: newRepoPathNoStash) // without stash
-                    sub.path = sub.path.replacingFirstOccurrence(of: originalRepoPath, with: newRepoPath) // FIXME: separate volume
-                    let _ = RepositoryDao.default.updateImageContainerPaths(oldPath: oldPath, newPath: sub.path, repositoryPath: sub.repositoryPath, parentFolder: sub.parentFolder, subPath: sub.subPath) // FIXME: separate volume
+                    sub.repositoryPath = newRepoPath
+                    sub.parentFolder = sub.parentFolder.replacingFirstOccurrence(of: repoContainer.path, with: newRepoPath.removeLastStash()) // without stash
+                    sub.path = sub.path.replacingFirstOccurrence(of: originalRepoPath, with: newRepoPath)
+                    let _ = RepositoryDao.default.updateImageContainerPaths(oldPath: oldPath, newPath: sub.path, repositoryPath: sub.repositoryPath, parentFolder: sub.parentFolder, subPath: sub.subPath) // FIXME: use repositoryId instead
                 }
                 
                 // save repo's path
                 let repo = repoContainer
                 let oldPath = repo.path
-                let newPath = newRepoPathNoStash
+                let newPath = newRepoPath.removeLastStash()
                 repo.repositoryPath = newRepoPath
-                let _ = RepositoryDao.default.updateImageContainerRepositoryPaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath)
+                let _ = RepositoryDao.default.updateImageContainerRepositoryPaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath) // FIXME: use repositoryId instead
                 self.originalContainer = repo
                 
                 DispatchQueue.main.async {
@@ -1375,14 +1414,47 @@ class EditRepositoryViewController: NSViewController {
         }
     }
     
+    // MARK: - ACTION - CHANGE FACE PATH
+    
     /// - Tag: EditRepositoryViewController.onUpdateFaceImagesClicked()
     @IBAction func onUpdateFaceImagesClicked(_ sender: NSButton) {
         guard !self.working else {return}
         if let repoContainer = self.originalContainer {
-            let originalFacePath = repoContainer.facePath.withLastStash() // FIXME: separate volume
-            let newFacePath = self.txtFacePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).withLastStash() // FIXME: separate volume
             
-            if newFacePath == "/" || newFacePath == originalFacePath {
+            
+            var originalFaceVolume = ""
+            if let repository = RepositoryDao.default.getRepository(id: repoContainer.repositoryId) {
+                originalFaceVolume = repository.faceVolume
+            }
+            if originalFaceVolume == "" || !originalFaceVolume.isVolumeExists() {
+                self.lblFacePathRemark.stringValue = "Original volume disk of faces is empty or not mounted: \(originalFaceVolume)"
+                return
+            }
+            
+            let (_, _originalFacePath) = repoContainer.facePath.getVolumeFromThisPath()
+            
+            let originalFacePath = "\(originalFaceVolume)\(_originalFacePath)".withLastStash()
+            
+            if !originalFacePath.isDirectoryExists() {
+                self.lblFacePathRemark.stringValue = "Original path of faces does not exist: \(originalFacePath)"
+                return
+            }
+            
+            let newFacePath = self.getVolumePath(dropdown: self.lstVolumesOfFaces, text: self.txtFacePath).withLastStash()
+            
+            let (newFaceVolume, _) = newFacePath.getVolumeFromThisPath()
+            
+            if !newFaceVolume.isVolumeExists() {
+                self.lblFacePathRemark.stringValue = "New volume disk of faces is empty or not mounted: \(newFaceVolume)"
+                return
+            }
+            
+            if newFacePath == "" || !newFacePath.isDirectoryExists() {
+                self.lblFacePathRemark.stringValue = "New path of faces does not exist: \(newFacePath)"
+                return
+            }
+            if newFacePath == originalFacePath {
+                self.lblFacePathRemark.stringValue = "Path of faces has no change."
                 return
             }
             
@@ -1440,7 +1512,7 @@ class EditRepositoryViewController: NSViewController {
                 
                 // save repo's path
                 let repo = repoContainer
-                repo.facePath = newFacePath // FIXME: separate volume
+                repo.facePath = newFacePath
                 let _ = RepositoryDao.default.saveImageContainer(container: repo)
                 self.originalContainer = repo
                 
@@ -1497,7 +1569,7 @@ class EditRepositoryViewController: NSViewController {
         DispatchQueue.global().async {
             self.logger.log("loading duplicates from database")
             
-            let duplicates = ImageDuplicationDao.default.getDuplicatedImages(repositoryRoot: repo, theOtherRepositoryRoot: raw) // FIXME: separate volume
+            let duplicates = ImageDuplicationDao.default.getDuplicatedImages(repositoryRoot: repo, theOtherRepositoryRoot: raw) // FIXME: use repository id instead
             self.logger.log("loaded duplicates \(duplicates.count)")
             
             count = duplicates.count
@@ -1578,7 +1650,7 @@ class EditRepositoryViewController: NSViewController {
                 
                 self.toggleButtons(false)
                 DispatchQueue.global().async {
-                    let _ = RepositoryDao.default.deleteRepository(repositoryRoot: container.path) // FIXME: separate volume
+                    let _ = RepositoryDao.default.deleteRepository(repositoryRoot: container.path) // FIXME: use repository id instead
                     
                     DispatchQueue.main.async {
                         
@@ -1608,20 +1680,24 @@ class EditRepositoryViewController: NSViewController {
     
     /// - Tag: EditRepositoryViewController.onCompareDevicePathClicked()
     @IBAction func onCompareDevicePathClicked(_ sender: NSButton) {
+        
         let deviceId = self.lblDeviceId.stringValue
         if deviceId != "" {
             if let device = DeviceDao.default.getDevice(deviceId: deviceId) {
-                let homePath = device.homePath ?? ""
-                let repoPath = device.repositoryPath ?? ""
-                let rawPath = device.storagePath ?? ""
-                if self.txtHomePath.stringValue != homePath {// FIXME: separate volume
-                    self.lblHomePathRemark.stringValue = "Different w/ device: [\(homePath)]"
+                let deviceHomePath = device.homePath ?? ""
+                let deviceRepoPath = device.repositoryPath ?? ""
+                let deviceRawPath = device.storagePath ?? ""
+                let repoHomePath = self.getVolumePath(dropdown: self.lstVolumesOfHome, text: self.txtHomePath)
+                let repoRepoPath = self.getVolumePath(dropdown: self.lstVolumesOfEditableImages, text: self.txtRepository)
+                let repoRawPath = self.getVolumePath(dropdown: self.lstVolumesOfRawImages, text: self.txtStoragePath)
+                if deviceHomePath != repoHomePath {
+                    self.lblHomePathRemark.stringValue = "Different with device setting: [\(deviceHomePath)]"
                 }
-                if self.txtRepository.stringValue != repoPath {// FIXME: separate volume
-                    self.lblRepositoryPathRemark.stringValue = "Different w/ device: [\(repoPath)]"
+                if deviceRepoPath != repoRepoPath {
+                    self.lblRepositoryPathRemark.stringValue = "Different with device setting: [\(deviceRepoPath)]"
                 }
-                if self.txtStoragePath.stringValue != rawPath {// FIXME: separate volume
-                    self.lblStoragePathRemark.stringValue = "Different w/ device: [\(rawPath)]"
+                if deviceRawPath != repoRawPath {
+                    self.lblStoragePathRemark.stringValue = "Different with device setting: [\(deviceRawPath)]"
                 }
             }
             
@@ -1637,10 +1713,10 @@ class EditRepositoryViewController: NSViewController {
     
     /// - Tag: EditRepositoryViewController.linkDeviceToRepository()
     fileprivate func linkDeviceToRepository(deviceId: String, deviceName:String){
-        if let container = self.originalContainer {
+        if let container = self.originalContainer { // FIXME: demise?
             let repo = container
             repo.deviceId = deviceId
-            let state = RepositoryDao.default.saveImageContainer(container: repo)
+            let state = RepositoryDao.default.saveImageContainer(container: repo) // FIXME: link to ImageRepository.id
             if state != .OK {
                 self.lblMessage.stringValue = "\(state) - Unable to link repository with device in database."
             }else{
@@ -1648,7 +1724,7 @@ class EditRepositoryViewController: NSViewController {
             }
         }
         if originalRepositoryId > 0 {
-            RepositoryDao.default.linkRepositoryToDevice(id: originalRepositoryId, deviceId: deviceId)// FIXME: separate volume
+            RepositoryDao.default.linkRepositoryToDevice(id: originalRepositoryId, deviceId: deviceId)
         }else{
             self.lblMessage.stringValue = "ImageRepositoryId is nil - Unable to link repository with device in database."
         }
@@ -1661,7 +1737,7 @@ class EditRepositoryViewController: NSViewController {
         if let container = self.originalContainer {
             if container.hiddenByRepository {
                 DispatchQueue.global().async {
-                    let _ = RepositoryDao.default.showRepository(repositoryRoot: container.path.withLastStash())// FIXME: separate volume
+                    let _ = RepositoryDao.default.showRepository(repositoryRoot: container.path.withLastStash())// FIXME: use repositoryId instead
                     self.originalContainer?.hiddenByRepository = false
                     let _ = RepositoryDao.default.saveImageContainer(container: self.originalContainer!)
                     
@@ -1674,7 +1750,7 @@ class EditRepositoryViewController: NSViewController {
                 }
             }else{
                 DispatchQueue.global().async {
-                    let _ = RepositoryDao.default.hideRepository(repositoryRoot: container.path.withLastStash())// FIXME: separate volume
+                    let _ = RepositoryDao.default.hideRepository(repositoryRoot: container.path.withLastStash())// FIXME: use repositoryId instead
                     self.originalContainer?.hiddenByRepository = true
                     let _ = RepositoryDao.default.saveImageContainer(container: self.originalContainer!)
                     DispatchQueue.main.async {
@@ -1704,7 +1780,7 @@ class EditRepositoryViewController: NSViewController {
         self.btnUpdateAllEvents.isEnabled = false
         DispatchQueue.global().async {
             if let container = self.originalContainer {
-                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)// FIXME: separate volume
+                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)// FIXME: use repositoryId instead
                 let level = self.getBriefFolderLevelFromSelection()
                 let total = images.count
                 var i = 0
@@ -1740,7 +1816,7 @@ class EditRepositoryViewController: NSViewController {
         self.btnUpdateAllEvents.isEnabled = false
         DispatchQueue.global().async {
             if let container = self.originalContainer {
-                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)// FIXME: separate volume
+                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)// FIXME: use repositoryId instead
                 let level = self.getBriefFolderLevelFromSelection()
                 let total = images.count
                 var i = 0
@@ -1805,7 +1881,7 @@ class EditRepositoryViewController: NSViewController {
         var array:[String] = []
         if let container = self.originalContainer {
             var folders:Set<String> = []
-            let paths = RepositoryDao.default.getAllContainerPathsOfImages(rootPath: container.repositoryPath)// FIXME: separate volume
+            let paths = RepositoryDao.default.getAllContainerPathsOfImages(rootPath: container.repositoryPath)// FIXME: use repositoryId instead
             for path in paths {
                 if path == container.repositoryPath {continue}
                 let p = path.replacingFirstOccurrence(of: container.repositoryPath.withLastStash(), with: "")
@@ -1884,7 +1960,7 @@ class EditRepositoryViewController: NSViewController {
         self.btnUpdateAllEvents.isEnabled = false
         DispatchQueue.global().async {
             if let container = self.originalContainer {
-                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)// FIXME: separate volume
+                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)// FIXME: use repositoryId instead
                 let level = self.lstEventFolderLevel.indexOfSelectedItem + 1
                 let total = images.count
                 var i = 0
@@ -1920,7 +1996,7 @@ class EditRepositoryViewController: NSViewController {
         self.btnUpdateAllEvents.isEnabled = false
         DispatchQueue.global().async {
             if let container = self.originalContainer {
-                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)// FIXME: separate volume
+                let images = ImageSearchDao.default.getImages(repositoryPath: container.repositoryPath)// FIXME: use repositoryId instead
                 let level = self.lstEventFolderLevel.indexOfSelectedItem + 1
                 let total = images.count
                 var i = 0
@@ -1951,7 +2027,7 @@ class EditRepositoryViewController: NSViewController {
         var array:[String] = []
         if let container = self.originalContainer {
             var folders:Set<String> = []
-            let paths = RepositoryDao.default.getAllContainerPathsOfImages(rootPath: container.repositoryPath)// FIXME: separate volume
+            let paths = RepositoryDao.default.getAllContainerPathsOfImages(rootPath: container.repositoryPath)// FIXME: use repositoryId instead
             for path in paths {
                 if path == container.repositoryPath {continue}
                 let p = path.replacingFirstOccurrence(of: container.repositoryPath.withLastStash(), with: "")

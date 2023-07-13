@@ -217,6 +217,10 @@ protocol ImageSearchDaoInterface {
     
     func getImages(repositoryPath:String) -> [Image]
     
+    func getImages(repositoryId:Int) -> [Image]
+    
+    func getImages(containerId:Int) -> [Image]
+    
     func getPhotoFiles(rootPath:String) -> [Image]
 }
 

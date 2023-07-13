@@ -502,7 +502,6 @@ class CalendarCell:NSButton
             //solar
             let solarFont = NSFont(name: self.font!.fontName, size: 15)!
             var textColor: NSColor!
-            // FIXME: If you need to add some limitation
             if (self.afterToday() || (!self.isInLimitedDate())) {
                 textColor = NSColor.gray
                 self.isEnabled = false

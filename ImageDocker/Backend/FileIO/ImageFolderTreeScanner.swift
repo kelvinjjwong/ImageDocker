@@ -251,7 +251,7 @@ class ImageFolderTreeScanner {
                     TaskletManager.default.updateProgress(id: taskId, message: Words.getting_parent_folder.fill(arguments: j, kall), increase: false)
                     
                     if !exclude {
-                        if let parentFolder = path.getNearestParent(from: containers) { //FIXME: has bug here
+                        if let parentFolder = path.getNearestParent(from: containers) { //FIXME: deprecate
                             self.logger.log("### FIND PARENT >>> \(path) >>> parent folder: \(parentFolder)")
                             
                             let _ = RepositoryDao.default.updateImageContainerParentFolder(path: path, parentFolder: parentFolder)

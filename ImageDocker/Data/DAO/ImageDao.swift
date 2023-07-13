@@ -586,6 +586,14 @@ class ImageSearchDao {
         return self.impl.getImages(repositoryPath: repositoryPath)
     }
     
+    func getImages(repositoryId:Int) -> [Image] {
+        return self.impl.getImages(repositoryId: repositoryId)
+    }
+    
+    func getImages(containerId:Int) -> [Image] {
+        return self.impl.getImages(containerId: containerId)
+    }
+    
     /// - caller:
     ///   - DevicePathDetailViewController.onupdateClicked()
     ///   - EditRepositoryViewController.onUpdateRepositoryImagesClicked()

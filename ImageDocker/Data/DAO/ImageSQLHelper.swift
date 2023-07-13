@@ -192,9 +192,8 @@ struct SQLHelper {
         if city != "" {
             placeWhere += " AND (city = '\(city)' OR \"assignCity\" = '\(city)')"
         }
-        // FIXME
         if (place == nil || place == ""){
-            
+            self.logger.log(.error, "[_generateSQLStatementForPhotoFiles] place is nil or empty")
 //            if country == "" && province == "" && city == "" {
 //                placeWhere += " AND (place = '' OR place is null OR \"assignPlace\" = '' OR \"assignPlace\" is null)"
 //            }else{

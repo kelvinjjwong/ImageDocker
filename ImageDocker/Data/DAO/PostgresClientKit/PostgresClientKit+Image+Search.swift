@@ -1174,6 +1174,16 @@ order by "date"
         return Image.fetchAll(db, where: "\"repositoryPath\" = $1", orderBy: "path", values: [repositoryPath])
     }
     
+    func getImages(repositoryId: Int) -> [Image] {
+        let db = PostgresConnection.database()
+        return Image.fetchAll(db, where: "\"repositoryId\" = $1", orderBy: "path", values: [repositoryId])
+    }
+    
+    func getImages(containerId: Int) -> [Image] {
+        let db = PostgresConnection.database()
+        return Image.fetchAll(db, where: "\"containerId\" = $1", orderBy: "path", values: [containerId])
+    }
+    
     func getPhotoFiles(rootPath: String) -> [Image] {
         let db = PostgresConnection.database()
         return Image.fetchAll(db, where: "path like $1", values: ["\(rootPath.withLastStash())%"])
