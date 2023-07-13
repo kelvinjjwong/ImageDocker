@@ -19,7 +19,7 @@ struct Setting {
     static let localEnvironment = LocalEnvironmentSetting()
 }
 
-struct LoggingSetting {
+class LoggingSetting {
     fileprivate let logPathKey = "LogPathKey"
     
     
@@ -42,7 +42,7 @@ struct LoggingSetting {
     
     func loggingFilename() -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd_HH-mm"
+        dateFormatter.dateFormat = "yyyy-MM-dd_HHmm"
         let datePart = dateFormatter.string(from: Date())
         return "\(datePart).log"
     }
@@ -54,8 +54,13 @@ struct LoggingSetting {
         return txt
     }
     
+    fileprivate var _logFileFullPath = ""
+    
     func logFileFullPath() -> String {
-        return "\(logPath())/\(loggingFilename())"
+        if self._logFileFullPath == "" {
+            self._logFileFullPath = "\(logPath())/\(loggingFilename())"
+        }
+        return self._logFileFullPath
     }
     
     func saveLogPath(_ value:String) {

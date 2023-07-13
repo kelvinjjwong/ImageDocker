@@ -1225,7 +1225,7 @@ class EditRepositoryViewController: NSViewController {
                     }
                 }
                 
-                // TODO: should be demised in future to improve performance
+                // FIXME: should be demised in future to improve performance
                 let _ = ImageRecordDao.default.updateImageRawBase(pathStartsWith: originalRawPath, rawPath: newRawPath) // FIXME: use id instead
                 
                 let _ = ImageRecordDao.default.updateImageRawBase(oldRawPath: originalRawPath, newRawPath: newRawPath) // FIXME: use id instead?
