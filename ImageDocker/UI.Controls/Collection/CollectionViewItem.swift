@@ -254,9 +254,7 @@ class CollectionViewItem: NSCollectionViewItem {
     fileprivate func previewEditableVersion() {
         if let imageFile = self.imageFile, let url = self.imageFile?.url, FileManager.default.fileExists(atPath: url.path) {
             if self.previewDelegate != nil {
-//                self.previewDelegate?.onCollectionViewItemPreview(url: url, isPhoto: imageFile.isPhoto)
                 self.previewDelegate?.onCollectionViewItemPreview(imageFile: imageFile, isRawVersion: false)
-                self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Performing preview of selected image's editable version")
             }
         }else{
             self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Selected image's editable version does not exist")
@@ -266,9 +264,7 @@ class CollectionViewItem: NSCollectionViewItem {
     fileprivate func previewBackupVersion() {
         if let imageFile = self.imageFile, let url = self.imageFile?.backupUrl, FileManager.default.fileExists(atPath: url.path) {
             if self.previewDelegate != nil {
-//                self.previewDelegate?.onCollectionViewItemPreview(url: url, isPhoto: imageFile.isPhoto)
                 self.previewDelegate?.onCollectionViewItemPreview(imageFile: imageFile, isRawVersion: true)
-                self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Performing preview of selected image's backup version")
             }
         }else{
             self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Selected image's backup version does not exist")

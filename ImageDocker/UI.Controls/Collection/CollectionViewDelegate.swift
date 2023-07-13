@@ -129,17 +129,21 @@ extension ViewController : NSCollectionViewDelegate {
 // MARK: - PREVIEW
 
 protocol CollectionViewItemPreviewDelegate {
-    func onCollectionViewItemPreview(url:URL, isPhoto:Bool)
     func onCollectionViewItemPreview(imageFile: ImageFile, isRawVersion:Bool)
 }
 
 extension ViewController : CollectionViewItemPreviewDelegate {
-    func onCollectionViewItemPreview(url:URL, isPhoto:Bool) {
-        self.previewImage(url: url, isPhoto: isPhoto) // FIXME: use previewImage(ImageFile) instead
-    }
     
     func onCollectionViewItemPreview(imageFile: ImageFile, isRawVersion:Bool) {
+        self.loadImageMetaAndPreview(imageFile: imageFile)
         self.previewImage(image: imageFile, isRawVersion: isRawVersion)
+        DispatchQueue.main.async {
+            if isRawVersion {
+                self.lblImageDescription.stringValue = Words.backupVersion.word()
+            }else{
+                self.lblImageDescription.stringValue = Words.editableVersion.word()
+            }
+        }
     }
 }
 
