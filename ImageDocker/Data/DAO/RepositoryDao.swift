@@ -326,6 +326,10 @@ class RepositoryDao {
         return self.impl.getAllContainerPathsOfImages(rootPath: rootPath)
     }
     
+    func getAllContainerPathsOfImages(repositoryId:Int?) -> Set<String> {
+        return self.impl.getAllContainerPathsOfImages(repositoryId: repositoryId)
+    }
+    
     /// not-used
     /// - caller: NONE
     /// - Tag: getAllContainerPaths(rootPath)
@@ -477,9 +481,17 @@ class RepositoryDao {
         return self.impl.updateImageContainerPaths(oldPath: oldPath, newPath: newPath, repositoryPath: repositoryPath, parentFolder: parentFolder, subPath: subPath)
     }
     
+    func updateImageContainerPaths(containerId:Int, newPath:String, repositoryPath:String, parentFolder:String, subPath:String) -> ExecuteState {
+        return self.impl.updateImageContainerPaths(containerId: containerId, newPath: newPath, repositoryPath: repositoryPath, parentFolder: parentFolder, subPath: subPath)
+    }
+    
     /// - Tag: updateImageContainerRepositoryPaths(oldPath)
     func updateImageContainerRepositoryPaths(oldPath:String, newPath:String, repositoryPath:String) -> ExecuteState {
         return self.impl.updateImageContainerRepositoryPaths(oldPath: oldPath, newPath: newPath, repositoryPath: repositoryPath)
+    }
+    
+    func updateImageContainerRepositoryPaths(containerId:Int, newPath:String, repositoryPath:String) -> ExecuteState {
+        return self.impl.updateImageContainerRepositoryPaths(containerId: containerId, newPath: newPath, repositoryPath: repositoryPath)
     }
     
     

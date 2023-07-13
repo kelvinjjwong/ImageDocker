@@ -87,8 +87,12 @@ protocol ImageRecordDaoInterface {
     
     // MARK: UPDATE PATH
     
+    // FIXME: deprecate this function
     /// - attention: will deprecate
     func updateImagePaths(oldPath:String, newPath:String, repositoryPath:String, subPath:String, containerPath:String, id:String) -> ExecuteState
+    
+    // FIXME: deprecate this function
+    func updateImagePaths(id:String, newPath:String, repositoryPath:String, subPath:String, containerPath:String) -> ExecuteState
     
     /// - attention: will deprecate
     func updateImageRawBase(oldRawPath:String, newRawPath:String) -> ExecuteState

@@ -190,6 +190,7 @@ public final class ImageRecordDao {
     
     // MARK: UPDATE PATH
     
+    /// DEPRECATED
     /// - caller:
     ///   - EditRepositoryViewController.onUpdateRepositoryImagesClicked()
     /// - attention: will be deprecated
@@ -199,6 +200,12 @@ public final class ImageRecordDao {
         return self.impl.updateImagePaths(oldPath: oldPath, newPath: newPath, repositoryPath: repositoryPath, subPath: subPath, containerPath: containerPath, id: id)
     }
     
+    /// DEPRECATED
+    func updateImagePaths(id:String, newPath:String, repositoryPath:String, subPath:String, containerPath:String) -> ExecuteState {
+        return self.impl.updateImagePaths(id: id, newPath: newPath, repositoryPath: repositoryPath, subPath: subPath, containerPath: containerPath)
+    }
+    
+    /// DEPRECATED
     /// - caller:
     ///   - EditRepositoryViewController.onUpdateStorageImagesClicked()
     /// - attention: will be deprecated
@@ -208,6 +215,7 @@ public final class ImageRecordDao {
         return self.impl.updateImageRawBase(oldRawPath: oldRawPath, newRawPath: newRawPath)
     }
     
+    /// DEPRECATED
     /// - caller: NONE
     /// - attention: will be deprecated
     /// - version: legacy version
@@ -216,6 +224,7 @@ public final class ImageRecordDao {
         return self.impl.updateImageRawBase(repositoryPath: repositoryPath, rawPath: rawPath)
     }
     
+    /// DEPRECATED
     /// - caller: NONE
     /// - attention: will be deprecated
     /// - version: legacy version
@@ -224,6 +233,7 @@ public final class ImageRecordDao {
         return self.impl.updateImageRawBase(pathStartsWith: path, rawPath: rawPath)
     }
     
+    /// DEPRECATED
     /// - caller: NONE
     /// - attention: will be deprecated
     /// - version: legacy version
@@ -232,6 +242,7 @@ public final class ImageRecordDao {
         return self.impl.updateImageRepositoryBase(pathStartsWith: path, repositoryPath: repositoryPath)
     }
     
+    /// DEPRECATED
     /// - caller: NONE
     /// - attention: will be deprecated
     /// - version: legacy version
@@ -240,6 +251,7 @@ public final class ImageRecordDao {
         return self.impl.updateImageRepositoryBase(oldRepositoryPath: oldRepositoryPath, newRepository: newRepository)
     }
     
+    /// DEPRECATED
     /// - caller: NONE
     /// - attention: will be deprecated
     /// - version: legacy version

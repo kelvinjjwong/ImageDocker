@@ -1225,11 +1225,6 @@ class EditRepositoryViewController: NSViewController {
                     }
                 }
                 
-                // FIXME: should be demised in future to improve performance
-                let _ = ImageRecordDao.default.updateImageRawBase(pathStartsWith: originalRawPath, rawPath: newRawPath) // FIXME: use id instead
-                
-                let _ = ImageRecordDao.default.updateImageRawBase(oldRawPath: originalRawPath, newRawPath: newRawPath) // FIXME: use id instead?
-                
                 // save repo's path
                 let repo = repoContainer
                 repo.storagePath = newRawPath
@@ -1350,9 +1345,14 @@ class EditRepositoryViewController: NSViewController {
                         let oldPath = image.path
                         
                         // fix empty id
-                        let id = image.id ?? UUID().uuidString
-                        
-                        let _ = ImageRecordDao.default.updateImagePaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath, subPath: subPath, containerPath: containerPath, id: id) // FIXME: use repositoryId instead
+                        if let imageId = image.id {
+                            let _ = ImageRecordDao.default.updateImagePaths(id: imageId, newPath: newPath, repositoryPath: newRepoPath, subPath: subPath, containerPath: containerPath)
+                        }else {
+                            // old logic, can be demised in future
+                            let id = image.id ?? UUID().uuidString
+                            
+                            let _ = ImageRecordDao.default.updateImagePaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath, subPath: subPath, containerPath: containerPath, id: id)
+                        }
                     }
                 }
                 
@@ -1387,7 +1387,8 @@ class EditRepositoryViewController: NSViewController {
                     sub.repositoryPath = newRepoPath
                     sub.parentFolder = sub.parentFolder.replacingFirstOccurrence(of: repoContainer.path, with: newRepoPath.removeLastStash()) // without stash
                     sub.path = sub.path.replacingFirstOccurrence(of: originalRepoPath, with: newRepoPath)
-                    let _ = RepositoryDao.default.updateImageContainerPaths(oldPath: oldPath, newPath: sub.path, repositoryPath: sub.repositoryPath, parentFolder: sub.parentFolder, subPath: sub.subPath) // FIXME: use repositoryId instead
+                    
+                    let _ = RepositoryDao.default.updateImageContainerPaths(containerId: subContainer.id, newPath: sub.path, repositoryPath: sub.repositoryPath, parentFolder: sub.parentFolder, subPath: sub.subPath)
                 }
                 
                 // save repo's path
@@ -1395,7 +1396,9 @@ class EditRepositoryViewController: NSViewController {
                 let oldPath = repo.path
                 let newPath = newRepoPath.removeLastStash()
                 repo.repositoryPath = newRepoPath
-                let _ = RepositoryDao.default.updateImageContainerRepositoryPaths(oldPath: oldPath, newPath: newPath, repositoryPath: newRepoPath) // FIXME: use repositoryId instead
+                
+                let _ = RepositoryDao.default.updateImageContainerRepositoryPaths(containerId: repoContainer.id, newPath: newPath, repositoryPath: newRepoPath)
+                
                 self.originalContainer = repo
                 
                 DispatchQueue.main.async {
@@ -1716,7 +1719,7 @@ class EditRepositoryViewController: NSViewController {
         if let container = self.originalContainer { // FIXME: demise?
             let repo = container
             repo.deviceId = deviceId
-            let state = RepositoryDao.default.saveImageContainer(container: repo) // FIXME: link to ImageRepository.id
+            let state = RepositoryDao.default.saveImageContainer(container: repo)
             if state != .OK {
                 self.lblMessage.stringValue = "\(state) - Unable to link repository with device in database."
             }else{
@@ -1726,6 +1729,7 @@ class EditRepositoryViewController: NSViewController {
         if originalRepositoryId > 0 {
             RepositoryDao.default.linkRepositoryToDevice(id: originalRepositoryId, deviceId: deviceId)
         }else{
+            self.logger.log(.error, "[linkDeviceToRepository] repository id is nil, unable to link repository with device \(deviceId) [\(deviceName)]")
             self.lblMessage.stringValue = "ImageRepositoryId is nil - Unable to link repository with device in database."
         }
     }
@@ -1881,7 +1885,7 @@ class EditRepositoryViewController: NSViewController {
         var array:[String] = []
         if let container = self.originalContainer {
             var folders:Set<String> = []
-            let paths = RepositoryDao.default.getAllContainerPathsOfImages(rootPath: container.repositoryPath)// FIXME: use repositoryId instead
+            let paths = RepositoryDao.default.getAllContainerPathsOfImages(repositoryId: container.repositoryId)
             for path in paths {
                 if path == container.repositoryPath {continue}
                 let p = path.replacingFirstOccurrence(of: container.repositoryPath.withLastStash(), with: "")
@@ -2027,7 +2031,7 @@ class EditRepositoryViewController: NSViewController {
         var array:[String] = []
         if let container = self.originalContainer {
             var folders:Set<String> = []
-            let paths = RepositoryDao.default.getAllContainerPathsOfImages(rootPath: container.repositoryPath)// FIXME: use repositoryId instead
+            let paths = RepositoryDao.default.getAllContainerPathsOfImages(repositoryId: container.repositoryId)
             for path in paths {
                 if path == container.repositoryPath {continue}
                 let p = path.replacingFirstOccurrence(of: container.repositoryPath.withLastStash(), with: "")

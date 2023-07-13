@@ -389,6 +389,36 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
         return result
     }
     
+    
+    func getAllContainerPathsOfImages(repositoryId:Int? = nil) -> Set<String> {
+        var result:Set<String> = []
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            try db.read { db in
+                if let repositoryId = repositoryId {
+                    let sql = "select distinct containerpath from image where repositoryId = ? order by containerpath"
+                    let cursor = try Row.fetchCursor(db, sql: sql, arguments:[repositoryId])
+                    while let container = try cursor.next() {
+                        if let path = container["containerpath"] {
+                            result.insert("\(path)")
+                        }
+                    }
+                }else{
+                    let sql = "select distinct containerpath from image order by containerpath"
+                    let cursor = try Row.fetchCursor(db, sql: sql)
+                    while let container = try cursor.next() {
+                        if let path = container["containerpath"] {
+                            result.insert("\(path)")
+                        }
+                    }
+                }
+            }
+        }catch{
+            self.logger.log(error)
+        }
+        return result
+    }
+    
     func getAllContainerPaths(rootPath:String? = nil) -> Set<String> {
         var result:Set<String> = []
         do {
@@ -513,11 +543,36 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
         return .OK
     }
     
+    func updateImageContainerPaths(containerId:Int, newPath:String, repositoryPath:String, parentFolder:String, subPath:String) -> ExecuteState{
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            let _ = try db.write { db in
+                //self.logger.log("UPDATE CONTAINER old path = \(oldPath) with new path = \(newPath)")
+                try db.execute(sql: "update ImageContainer set path = ?, repositoryPath = ?, parentFolder = ?, subPath = ? where containerId = ?", arguments: [newPath, repositoryPath.withLastStash(), parentFolder, subPath, containerId])
+            }
+        }catch{
+            return SQLHelper.errorState(error)
+        }
+        return .OK
+    }
+    
     func updateImageContainerRepositoryPaths(oldPath:String, newPath:String, repositoryPath:String) -> ExecuteState {
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()
             let _ = try db.write { db in
                 try db.execute(sql: "update ImageContainer set path = ?, repositoryPath = ? where path = ?", arguments: [newPath, repositoryPath.withLastStash(), oldPath])
+            }
+        }catch{
+            return SQLHelper.errorState(error)
+        }
+        return .OK
+    }
+    
+    func updateImageContainerRepositoryPaths(containerId:Int, newPath:String, repositoryPath:String) -> ExecuteState {
+        do {
+            let db = try SQLiteConnectionGRDB.default.sharedDBPool()
+            let _ = try db.write { db in
+                try db.execute(sql: "update ImageContainer set path = ?, repositoryPath = ? where id = ?", arguments: [newPath, repositoryPath.withLastStash(), containerId])
             }
         }catch{
             return SQLHelper.errorState(error)

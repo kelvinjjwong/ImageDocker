@@ -79,6 +79,8 @@ protocol RepositoryDaoInterface {
     
     func getAllContainerPathsOfImages(rootPath:String?) -> Set<String>
     
+    func getAllContainerPathsOfImages(repositoryId: Int?) -> Set<String>
+    
     func getAllContainerPaths(rootPath:String?) -> Set<String>
     
     func getAllContainerPaths(repositoryPath:String?) -> Set<String>
@@ -147,7 +149,11 @@ protocol RepositoryDaoInterface {
     
     func updateImageContainerPaths(oldPath:String, newPath:String, repositoryPath:String, parentFolder:String, subPath:String) -> ExecuteState
     
+    func updateImageContainerPaths(containerId:Int, newPath:String, repositoryPath:String, parentFolder:String, subPath:String) -> ExecuteState
+    
     func updateImageContainerRepositoryPaths(oldPath:String, newPath:String, repositoryPath:String) -> ExecuteState
+    
+    func updateImageContainerRepositoryPaths(containerId:Int, newPath:String, repositoryPath:String) -> ExecuteState
     
     func updateImageContainerToggleManyChildren(path:String, state:Bool) -> ExecuteState
 }

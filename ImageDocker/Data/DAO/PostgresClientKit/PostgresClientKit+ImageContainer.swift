@@ -705,6 +705,35 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         return result
     }
     
+    func getAllContainerPathsOfImages(repositoryId: Int?) -> Set<String> {
+        let db = PostgresConnection.database()
+        var result:Set<String> = []
+        
+        final class TempRecord : PostgresCustomRecord {
+            
+            var containerpath:String = ""
+            public init() {}
+        }
+        
+        var records:[TempRecord] = []
+        var sql = ""
+        if let repositoryId = repositoryId {
+            sql = """
+            select distinct "containerPath" from "Image" where "repositoryId"=\(repositoryId) order by "containerPath"
+            """
+            records = TempRecord.fetchAll(db, sql: sql)
+        }else{
+            sql = """
+            select distinct "containerPath" from "image" order by "containerPath"
+            """
+            records = TempRecord.fetchAll(db, sql: sql)
+        }
+        for row in records {
+            result.insert("\(row.containerpath)")
+        }
+        return result
+    }
+    
     func getAllContainerPaths(rootPath: String?) -> Set<String> {
         let db = PostgresConnection.database()
         var result:Set<String> = []
@@ -834,12 +863,38 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         return .OK
     }
     
+    func updateImageContainerPaths(containerId: Int, newPath: String, repositoryPath: String, parentFolder: String, subPath: String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+                update "ImageContainer" set "path" = $1, "repositoryPath" = $2, "parentFolder" = $3, "subPath" = $4 where id = $5
+                """, parameterValues: [newPath, repositoryPath.withLastStash(), parentFolder, subPath, containerId])
+        }catch{
+            self.logger.log(error)
+            return .ERROR
+        }
+        return .OK
+    }
+    
     func updateImageContainerRepositoryPaths(oldPath: String, newPath: String, repositoryPath: String) -> ExecuteState {
         let db = PostgresConnection.database()
         do {
             try db.execute(sql: """
                 update "ImageContainer" set "path" = $1, "repositoryPath" = $2 where "path" = $3
                 """, parameterValues: [newPath, repositoryPath.withLastStash(), oldPath])
+        }catch{
+            self.logger.log(error)
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    func updateImageContainerRepositoryPaths(containerId: Int, newPath: String, repositoryPath: String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+                update "ImageContainer" set "path" = $1, "repositoryPath" = $2 where id = $3
+                """, parameterValues: [newPath, repositoryPath.withLastStash(), containerId])
         }catch{
             self.logger.log(error)
             return .ERROR

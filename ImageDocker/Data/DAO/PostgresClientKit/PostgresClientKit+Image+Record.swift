@@ -168,19 +168,36 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
     // MARK: UPDATE PATH
     
     func updateImagePaths(oldPath: String, newPath: String, repositoryPath: String, subPath: String, containerPath: String, id: String) -> ExecuteState {
+        self.logger.log("[updateImagePaths(oldPath,newPath,repositoryPath,subPath,containerPath,id)]")
         let db = PostgresConnection.database()
         do {
             try db.execute(sql: """
             update "Image" set path = $1, "repositoryPath" = $2, "subPath" = $3, "containerPath" = $4, id = $5 where path = $6
             """, parameterValues: [newPath, repositoryPath, subPath, containerPath, id, oldPath])
         }catch{
-            self.logger.log(.error, "[updateImagePaths]", error)
+            self.logger.log(.error, "[updateImagePaths(oldPath,newPath,repositoryPath,subPath,containerPath,id)]", error)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
             return .ERROR
         }
         return .OK
     }
     
+    func updateImagePaths(id: String, newPath: String, repositoryPath: String, subPath: String, containerPath: String) -> ExecuteState {
+        self.logger.log("[updateImagePaths(id,newPath,repositoryPath,subPath,containerPath)]")
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+            update "Image" set path = $1, "repositoryPath" = $2, "subPath" = $3, "containerPath" = $4 where id = $5
+            """, parameterValues: [newPath, repositoryPath, subPath, containerPath, id])
+        }catch{
+            self.logger.log(.error, "[updateImagePaths(id,newPath,repositoryPath,subPath,containerPath)]", error)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    /// DEPRECATED
     func updateImageRawBase(oldRawPath: String, newRawPath: String) -> ExecuteState {
         let db = PostgresConnection.database()
         
@@ -196,6 +213,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         return .OK
     }
     
+    /// DEPRECATED
     func updateImageRawBase(repositoryPath: String, rawPath: String) -> ExecuteState {
         let db = PostgresConnection.database()
         
@@ -211,6 +229,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         return .OK
     }
     
+    /// DEPRECATED
     func updateImageRawBase(pathStartsWith path: String, rawPath: String) -> ExecuteState {
         let db = PostgresConnection.database()
         
@@ -226,6 +245,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         return .OK
     }
     
+    /// DEPRECATED
     func updateImageRepositoryBase(pathStartsWith path: String, repositoryPath: String) -> ExecuteState {
         let db = PostgresConnection.database()
         
@@ -241,6 +261,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         return .OK
     }
     
+    /// DEPRECATED
     func updateImageRepositoryBase(oldRepositoryPath: String, newRepository: String) -> ExecuteState {
         let db = PostgresConnection.database()
         
@@ -256,6 +277,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         return .OK
     }
     
+    /// FIXME: deprecate this function
     func updateImagePath(repositoryPath: String) -> ExecuteState {
         let db = PostgresConnection.database()
         
