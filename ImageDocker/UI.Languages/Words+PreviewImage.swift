@@ -12,7 +12,7 @@ extension Words {
     
     
     static let imageOption = Localize(
-        eng: "Image Options",
+        eng: "More Ops",
         chs: "更多修改选项"
     )
     
@@ -33,12 +33,12 @@ extension Words {
     
     static let findEditableVersionFromFinder = Localize(
         eng: "Find editable version from Finder",
-        chs: "检视可修改版本的文件"
+        chs: "在 Finder 检视可修改版本的文件"
     )
     
     static let findBackupVersionFromFinder = Localize(
         eng: "Find backup version from Finder",
-        chs: "检视原始版本的文件"
+        chs: "在 Finder 检视原始版本的文件"
     )
     
     static let pickDateTimeFromDateTimeOriginal = Localize(

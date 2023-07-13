@@ -1851,7 +1851,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                 <rect key="frame" x="6" y="905" width="1909" height="50"/>
                                 <subviews>
                                     <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="kCb-sM-PKJ">
-                                        <rect key="frame" x="1670" y="24" width="77" height="16"/>
+                                        <rect key="frame" x="1690" y="24" width="77" height="16"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="72" id="czr-e9-fZe"/>
                                         </constraints>
@@ -1879,16 +1879,16 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                         </connections>
                                     </button>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bwo-eW-DeK">
-                                        <rect key="frame" x="1757" y="21" width="120" height="19"/>
+                                        <rect key="frame" x="1777" y="21" width="100" height="19"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="120" id="iZi-bX-YOp"/>
+                                            <constraint firstAttribute="width" constant="100" id="iZi-bX-YOp"/>
                                         </constraints>
-                                        <popUpButtonCell key="cell" type="recessed" title="Image Options" bezelStyle="recessed" imagePosition="left" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="noArrow" selectedItem="JwR-85-znV" id="1fj-Hz-wRV">
+                                        <popUpButtonCell key="cell" type="recessed" title="More Ops" bezelStyle="recessed" imagePosition="leading" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="noArrow" selectedItem="JwR-85-znV" id="1fj-Hz-wRV">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                             <font key="font" metaFont="systemBold" size="12"/>
                                             <menu key="menu" id="mRd-a1-CL9">
                                                 <items>
-                                                    <menuItem title="Image Options" state="on" image="NSListViewTemplate" id="JwR-85-znV"/>
+                                                    <menuItem title="More Ops" state="on" image="NSListViewTemplate" id="JwR-85-znV"/>
                                                 </items>
                                             </menu>
                                         </popUpButtonCell>
@@ -3087,7 +3087,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="oKK-cu-PBz">
-                                                            <rect key="frame" x="46" y="1" width="79" height="17"/>
+                                                            <rect key="frame" x="45.5" y="1" width="79" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="pKU-BK-Kyl">
@@ -3195,7 +3195,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="eKx-mS-IPG">
-                                                            <rect key="frame" x="329" y="1" width="1004" height="17"/>
+                                                            <rect key="frame" x="328.5" y="1" width="1004" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="bZs-sX-o57">
