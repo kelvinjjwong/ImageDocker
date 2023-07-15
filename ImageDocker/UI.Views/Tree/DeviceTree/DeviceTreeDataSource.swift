@@ -14,6 +14,8 @@ class DeviceTreeDataSource : TreeDataSource {
     
     private var deviceIdToDevice : [String : PhoneDevice] = [String : PhoneDevice] ()
     
+    var isLoading = false
+    
     // TODO: should reload timely
     var registered_android_id_names:[String:String] = [:]
     var registered_iphone_id_names:[String:String] = [:]
@@ -25,6 +27,10 @@ class DeviceTreeDataSource : TreeDataSource {
     var iphoneConnectivityTimer:Timer?
     
     func loadRegisteredDevices() {
+        guard !self.isLoading else {return}
+        
+        self.isLoading = true
+        
         if self.registered_android_id_names.isEmpty {
             // TODO: should reload timely
             let registeredDevices = DeviceDao.default.getDevices(type: "Android")
@@ -32,7 +38,7 @@ class DeviceTreeDataSource : TreeDataSource {
                 if let id = registeredDevice.deviceId {
                     
                     do {
-                        self.logger.log("[DEVICE][Android] assigning id:\(id) to registered device: \(registeredDevice.name)")
+                        self.logger.log("[DEVICE][Android] assigning id:\(id) to registered device: \(registeredDevice.name ?? "")")
                         self.registered_android_id_names[id] = ""
                         self.registered_android_id_names[id] = PhoneDevice.represent(
                             deviceId: id,
@@ -54,7 +60,7 @@ class DeviceTreeDataSource : TreeDataSource {
                 if let id = registeredDevice.deviceId {
                     
                     do {
-                        self.logger.log("[DEVICE][iPhone] assigning id:\(id) to registered device: \(registeredDevice.name)")
+                        self.logger.log("[DEVICE][iPhone] assigning id:\(id) to registered device: \(registeredDevice.name ?? "")")
                         self.registered_iphone_id_names[id] = ""
                         self.registered_iphone_id_names[id] = PhoneDevice.represent(
                             deviceId: id,
@@ -69,6 +75,7 @@ class DeviceTreeDataSource : TreeDataSource {
                 }
             }
         }
+        self.isLoading = false
     }
     
     func startConnectivityTest() {
