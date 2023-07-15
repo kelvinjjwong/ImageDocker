@@ -63,7 +63,7 @@ extension StackItemHost {
     
     func show(_ stackItem: StackItemContainer, animated: Bool) {
         
-        // TODO: close others first
+        // FIXME: close others first
         
         if stackItem.header.beforeExpand != nil {
             stackItem.header.beforeExpand!()

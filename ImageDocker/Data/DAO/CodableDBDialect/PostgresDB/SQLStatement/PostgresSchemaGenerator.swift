@@ -156,7 +156,7 @@ public final class PostgresSchemaSQLGenerator : SchemaSQLGenerator {
                     cols.append(sql)
                     cols.append(bulkUpdateSql)
                     
-                    // TODO: add UPDATE TABLE SQL for the new column with default value
+                    // FIXME: add UPDATE TABLE SQL for the new column with default value
                 }
                 if let primaryKey = column.isPrimaryKey() {
                     let name = self.getConstraintName(type: "pk", table: definition.getName(), column: column.getName())

@@ -178,7 +178,7 @@ class StaticTreeDataSource : TreeDataSource {
     func loadChildren(_ collection:TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?, String?) {
         
         if let condition = condition, !condition.isEmpty() {
-            // TODO: search images first
+            // FIXME: search images first
         }
         
         var resultDataset:[TreeCollection] = []

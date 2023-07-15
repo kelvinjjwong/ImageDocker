@@ -43,7 +43,7 @@ extension SelectionViewController {
 //            self.imagesLoader.reorganizeItems(considerPlaces: true)
 //            self.collectionView.reloadData()
             
-            //TODO TO DO FUNCTION
+            // FIXME: refresh tree
             //self.refreshTree()
             self.logger.log("TO DO FUNCTION")
         })

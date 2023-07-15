@@ -66,11 +66,15 @@ final class ExternalAPIController: NSViewController {
     // MARK: - HEALTH CHECK
     
     class func healthCheck() {
-        
-        if Setting.externalApi.baiduAK() == "" || Setting.externalApi.baiduSK() == "" {
-            // TODO: notify user when geolocation API missing
-            //Alert.invalidBaiduMapAK()
-            return
+        if Setting.externalApi.googleAPIKey() == "" {
+            if Setting.externalApi.baiduAK() == "" || Setting.externalApi.baiduSK() == "" {
+                MessageEventCenter.default.showMessage(
+                    type: Words.notification_type_geolocation.word(),
+                    name: "Geolocation",
+                    message: Words.notification_geo_api_missing.word()
+                )
+                return
+            }
         }
     }
     

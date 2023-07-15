@@ -612,7 +612,7 @@ class CollectionViewItemsLoader : NSObject {
         }
         
         self.logger.log(.debug, "Loading duplicate photos from db - START")
-        // TODO: narrow the range of searching duplicate photos
+        // FIXME: narrow the range of searching duplicate photos
         let startTime = Date()
         let duplicates:Duplicates = ImageDuplicationDao.default.getDuplicatePhotos()
         let timeCost = Date().timeIntervalSince(startTime)

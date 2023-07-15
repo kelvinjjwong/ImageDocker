@@ -407,7 +407,7 @@ class ImageFile {
         }
         
         if !quickCreate {
-            self.recognizePlace() // TODO: why imageFile.quicksave no need recognize place?
+            self.recognizePlace()
             
             self.logger.log(.info, "[ImageFile.init from url] save image record - \(url.path)")
             let _ = save()

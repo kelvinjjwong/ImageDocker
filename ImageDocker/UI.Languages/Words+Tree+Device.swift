@@ -20,6 +20,16 @@ extension Words {
         chs: "启动自检"
     )
     
+    static let notification_type_geolocation = Localize (
+        eng: "Geolocation",
+        chs: "地图"
+    )
+    
+    static let notification_geo_api_missing = Localize (
+        eng: "Geolocation API Key Missing",
+        chs: "地理位置 API 密钥缺失"
+    )
+    
     static let notification_volume_connected = Localize (
         eng: "Volumes Connected",
         chs: "已连接的磁盘"

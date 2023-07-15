@@ -277,7 +277,7 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
         \(pagination)
         """
         
-        // TODO: after profile.lastExportEndTime
+        // FIXME: after profile.lastExportEndTime
         
         self.logger.log("sql for export images:")
         self.logger.log(sql)

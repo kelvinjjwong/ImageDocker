@@ -90,11 +90,11 @@ class TreeViewController : StackBodyViewController {
     }
     
     func filter(keyword:String) {
-        // TODO filter
+        // FIXME: filter
     }
     
     func findNode(keyword:String) {
-        // TODO find node
+        // FIXME: find node
     }
     
     func find(path:String) -> TreeCollection? {

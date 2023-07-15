@@ -16,7 +16,6 @@ class DeviceTreeDataSource : TreeDataSource {
     
     var isLoading = false
     
-    // TODO: should reload timely
     var registered_android_id_names:[String:String] = [:]
     var registered_iphone_id_names:[String:String] = [:]
     
@@ -32,7 +31,7 @@ class DeviceTreeDataSource : TreeDataSource {
         self.isLoading = true
         
         if self.registered_android_id_names.isEmpty {
-            // TODO: should reload timely
+            
             let registeredDevices = DeviceDao.default.getDevices(type: "Android")
             for registeredDevice in registeredDevices {
                 if let id = registeredDevice.deviceId {
@@ -54,7 +53,7 @@ class DeviceTreeDataSource : TreeDataSource {
             }
         }
         if self.registered_iphone_id_names.isEmpty {
-            // TODO: should reload timely
+            
             let registeredDevices = DeviceDao.default.getDevices(type: "iPhone")
             for registeredDevice in registeredDevices {
                 if let id = registeredDevice.deviceId {
@@ -243,7 +242,7 @@ class DeviceTreeDataSource : TreeDataSource {
     func loadChildren(_ collection: TreeCollection?, condition:SearchCondition?) -> ([TreeCollection], String?, String?) {
         
         if let condition = condition, !condition.isEmpty() {
-            // TODO: search ImageDeviceFile first ??
+            // FIXME: search ImageDeviceFile first ??
         }
         
         if collection == nil {

@@ -1534,7 +1534,7 @@ class EditRepositoryViewController: NSViewController {
     
     /// - Tag: EditRepositoryViewController.onUpdateCropImagesClicked()
     @IBAction func onUpdateCropImagesClicked(_ sender: NSButton) {
-        // TODO: DEMISE
+        // FIXME: DEMISE
        
     }
     

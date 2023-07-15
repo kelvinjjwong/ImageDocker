@@ -170,7 +170,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
                     date = firstYear
                 }
                 
-                // TODO: add people / family's nickname to folder name
+                // FIXME: add people / family's nickname to folder name
                 let result = "\(event) \(date) \(place)".trimmingCharacters(in: .whitespacesAndNewlines)
                 DispatchQueue.main.async {
                     self.txtFolderName.stringValue = result

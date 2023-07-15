@@ -304,7 +304,6 @@ class MemoriesViewController : NSViewController {
     }
     
     @IBAction func onMenuClicked(_ sender: NSButton) {
-        // TODO: menus: export to local folder, share to facebook, larger view, open in tree
         if self.onLoadMainCollection != nil {
             self.onLoadMainCollection!(self.selectYear, self.selectMonth, self.selectDay)
         }

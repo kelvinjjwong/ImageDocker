@@ -21,7 +21,7 @@ extension ViewController {
                 self.filterImageSource = imageSources
                 self.filterCameraModel = cameraModels
                 
-                //TODO TO DO FUNCTION
+                // FIXME: TO DO FUNCTION
                 //self.refreshTree()
                 self.logger.log("TO DO FUNCTION")
             })
