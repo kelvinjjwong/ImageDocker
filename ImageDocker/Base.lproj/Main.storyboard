@@ -2093,20 +2093,89 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                     <constraint firstAttribute="width" constant="150" id="lXt-MZ-I4h"/>
                                                                                 </constraints>
                                                                             </progressIndicator>
-                                                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DpT-Dg-Oeb">
-                                                                                <rect key="frame" x="1250" y="32" width="74" height="23"/>
+                                                                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gkw-tO-uG9">
+                                                                                <rect key="frame" x="744" y="5" width="97" height="25"/>
                                                                                 <constraints>
-                                                                                    <constraint firstAttribute="height" constant="20" id="Gmp-RZ-apS"/>
-                                                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="SPU-3L-Anh"/>
+                                                                                    <constraint firstAttribute="height" constant="22" id="WXq-VJ-o8B"/>
+                                                                                    <constraint firstAttribute="width" constant="95" id="yDU-mD-v5y"/>
                                                                                 </constraints>
-                                                                                <buttonCell key="cell" type="roundTextured" title="Reload" bezelStyle="texturedRounded" image="NSRefreshTemplate" imagePosition="left" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="XGb-ik-U2U">
+                                                                                <popUpButtonCell key="cell" type="roundTextured" title="Combine" bezelStyle="texturedRounded" imagePosition="leading" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" selectedItem="qDQ-0w-bFr" id="Lbn-50-OcH">
                                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                                    <font key="font" metaFont="system"/>
-                                                                                </buttonCell>
+                                                                                    <font key="font" metaFont="menu"/>
+                                                                                    <menu key="menu" id="4RJ-3g-5cq">
+                                                                                        <items>
+                                                                                            <menuItem title="Combine" state="on" image="combine" hidden="YES" id="qDQ-0w-bFr"/>
+                                                                                            <menuItem title="Combine duplicated images in this collection only" id="J53-DU-cm5"/>
+                                                                                            <menuItem title="Combine duplicated images in all libraries" id="8jd-qX-Y5y"/>
+                                                                                        </items>
+                                                                                    </menu>
+                                                                                </popUpButtonCell>
                                                                                 <connections>
-                                                                                    <action selector="onRefreshCollectionButtonClicked:" target="XfG-lQ-9wD" id="Mi6-Nw-XuV"/>
+                                                                                    <action selector="onCombineDuplicatesButtonClicked:" target="XfG-lQ-9wD" id="Mfq-f0-6Pn"/>
                                                                                 </connections>
-                                                                            </button>
+                                                                            </popUpButton>
+                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FEn-eU-9g8">
+                                                                                <rect key="frame" x="848" y="10" width="54" height="16"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="width" constant="50" id="CDw-qq-94f"/>
+                                                                                </constraints>
+                                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Source:" id="HyK-by-TP1">
+                                                                                    <font key="font" metaFont="system"/>
+                                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                </textFieldCell>
+                                                                            </textField>
+                                                                            <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="HbV-Xb-Z18">
+                                                                                <rect key="frame" x="905" y="10" width="80" height="16"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="width" constant="75" id="elY-cW-lLq"/>
+                                                                                </constraints>
+                                                                                <popUpButtonCell key="cell" type="roundTextured" title="** any **" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" imageScaling="proportionallyDown" inset="2" selectedItem="chV-em-nFg" id="2Z7-J9-xdV">
+                                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                                    <font key="font" metaFont="menu"/>
+                                                                                    <menu key="menu" id="UH0-LC-1ur">
+                                                                                        <items>
+                                                                                            <menuItem title="** any **" id="chV-em-nFg">
+                                                                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                                                                            </menuItem>
+                                                                                            <menuItem title="Camera" state="on" id="Y3O-nD-aR9"/>
+                                                                                            <menuItem title="Screenshot" id="UuE-bT-aHV"/>
+                                                                                            <menuItem title="Weixin" id="nh8-t6-xV3"/>
+                                                                                        </items>
+                                                                                    </menu>
+                                                                                </popUpButtonCell>
+                                                                            </popUpButton>
+                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vg5-PV-cEJ">
+                                                                                <rect key="frame" x="993" y="10" width="54" height="16"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="width" constant="50" id="ig2-vi-y4J"/>
+                                                                                </constraints>
+                                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Owner:" id="xzy-Yi-LLw">
+                                                                                    <font key="font" metaFont="system"/>
+                                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                </textFieldCell>
+                                                                            </textField>
+                                                                            <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="TPF-4r-u7W">
+                                                                                <rect key="frame" x="1050" y="10" width="80" height="16"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="width" constant="75" id="bLS-LG-Unu"/>
+                                                                                </constraints>
+                                                                                <popUpButtonCell key="cell" type="roundTextured" title="** any **" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" imageScaling="proportionallyDown" inset="2" selectedItem="bED-xu-Xgw" id="7Bq-bM-oFr">
+                                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                                    <font key="font" metaFont="menu"/>
+                                                                                    <menu key="menu" id="KJs-7V-FFk">
+                                                                                        <items>
+                                                                                            <menuItem title="** any **" id="bED-xu-Xgw">
+                                                                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                                                                            </menuItem>
+                                                                                            <menuItem title="Kelvin" state="on" id="BIP-cj-Mtx"/>
+                                                                                            <menuItem title="Anna" id="UfE-jh-fHh"/>
+                                                                                            <menuItem title="Mama" id="Ywk-ra-Ec2"/>
+                                                                                        </items>
+                                                                                    </menu>
+                                                                                </popUpButtonCell>
+                                                                            </popUpButton>
                                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eaf-Jq-heG">
                                                                                 <rect key="frame" x="1138" y="9" width="50" height="18"/>
                                                                                 <buttonCell key="cell" type="check" title="ALL" bezelStyle="regularSquare" imagePosition="left" inset="2" id="dsb-eu-8Qc">
@@ -2131,20 +2200,6 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                     <action selector="onCheckShowHiddenClicked:" target="XfG-lQ-9wD" id="jVY-G7-CHF"/>
                                                                                 </connections>
                                                                             </button>
-                                                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TnC-Zw-AaP">
-                                                                                <rect key="frame" x="1298" y="2" width="25" height="32"/>
-                                                                                <constraints>
-                                                                                    <constraint firstAttribute="width" constant="25" id="1WU-1H-4dt"/>
-                                                                                    <constraint firstAttribute="height" constant="32" id="edq-b7-r8L"/>
-                                                                                </constraints>
-                                                                                <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="collapse_bottom" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="Va8-BN-vkW">
-                                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                                    <font key="font" metaFont="system"/>
-                                                                                </buttonCell>
-                                                                                <connections>
-                                                                                    <action selector="onToggleBottomPanel:" target="XfG-lQ-9wD" id="JbZ-Ow-ev5"/>
-                                                                                </connections>
-                                                                            </button>
                                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gcd-el-CBK">
                                                                                 <rect key="frame" x="1273" y="2" width="25" height="32"/>
                                                                                 <constraints>
@@ -2159,27 +2214,20 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                     <action selector="onToggleRightPanel:" target="XfG-lQ-9wD" id="LqF-uW-2oX"/>
                                                                                 </connections>
                                                                             </button>
-                                                                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gkw-tO-uG9">
-                                                                                <rect key="frame" x="744" y="5" width="97" height="25"/>
+                                                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TnC-Zw-AaP">
+                                                                                <rect key="frame" x="1298" y="2" width="25" height="32"/>
                                                                                 <constraints>
-                                                                                    <constraint firstAttribute="height" constant="22" id="WXq-VJ-o8B"/>
-                                                                                    <constraint firstAttribute="width" constant="95" id="yDU-mD-v5y"/>
+                                                                                    <constraint firstAttribute="width" constant="25" id="1WU-1H-4dt"/>
+                                                                                    <constraint firstAttribute="height" constant="32" id="edq-b7-r8L"/>
                                                                                 </constraints>
-                                                                                <popUpButtonCell key="cell" type="roundTextured" title="Combine" bezelStyle="texturedRounded" imagePosition="leading" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" selectedItem="qDQ-0w-bFr" id="Lbn-50-OcH">
+                                                                                <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="collapse_bottom" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="Va8-BN-vkW">
                                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                                    <font key="font" metaFont="menu"/>
-                                                                                    <menu key="menu" id="4RJ-3g-5cq">
-                                                                                        <items>
-                                                                                            <menuItem title="Combine" state="on" image="combine" hidden="YES" id="qDQ-0w-bFr"/>
-                                                                                            <menuItem title="Combine duplicated images in this collection only" id="J53-DU-cm5"/>
-                                                                                            <menuItem title="Combine duplicated images in all libraries" id="8jd-qX-Y5y"/>
-                                                                                        </items>
-                                                                                    </menu>
-                                                                                </popUpButtonCell>
+                                                                                    <font key="font" metaFont="system"/>
+                                                                                </buttonCell>
                                                                                 <connections>
-                                                                                    <action selector="onCombineDuplicatesButtonClicked:" target="XfG-lQ-9wD" id="Mfq-f0-6Pn"/>
+                                                                                    <action selector="onToggleBottomPanel:" target="XfG-lQ-9wD" id="JbZ-Ow-ev5"/>
                                                                                 </connections>
-                                                                            </popUpButton>
+                                                                            </button>
                                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y4Q-Fa-phr">
                                                                                 <rect key="frame" x="6" y="36" width="64" height="16"/>
                                                                                 <constraints>
@@ -2224,73 +2272,13 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                 </textFieldCell>
                                                                             </textField>
-                                                                            <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="zeK-nY-3Hv">
-                                                                                <rect key="frame" x="1071" y="36" width="80" height="16"/>
-                                                                                <constraints>
-                                                                                    <constraint firstAttribute="width" constant="75" id="ZG6-tV-TnV"/>
-                                                                                </constraints>
-                                                                                <popUpButtonCell key="cell" type="roundTextured" title="200" bezelStyle="texturedRounded" alignment="right" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" selectedItem="ciG-9u-PKg" id="3Hu-B4-8e6">
+                                                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="goW-dm-Y0v">
+                                                                                <rect key="frame" x="655" y="32" width="33" height="23"/>
+                                                                                <buttonCell key="cell" type="roundTextured" title="&lt;&lt;" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UDk-2p-aCP">
                                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                                    <font key="font" metaFont="menu"/>
-                                                                                    <menu key="menu" id="H17-9B-oVJ">
-                                                                                        <items>
-                                                                                            <menuItem title="200" state="on" id="ciG-9u-PKg"/>
-                                                                                            <menuItem title="500" id="iGl-li-U1C"/>
-                                                                                            <menuItem title="1000" id="6SQ-le-acn"/>
-                                                                                        </items>
-                                                                                    </menu>
-                                                                                </popUpButtonCell>
-                                                                            </popUpButton>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OcT-m6-Zwk">
-                                                                                <rect key="frame" x="1159" y="36" width="84" height="16"/>
-                                                                                <constraints>
-                                                                                    <constraint firstAttribute="width" constant="80" id="29i-dj-iIk"/>
-                                                                                </constraints>
-                                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="张照片 / 每页" id="ybA-xd-vOP">
                                                                                     <font key="font" metaFont="system"/>
-                                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                                </textFieldCell>
-                                                                            </textField>
-                                                                            <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="Wne-ht-bBi">
-                                                                                <rect key="frame" x="951" y="36" width="55" height="16"/>
-                                                                                <constraints>
-                                                                                    <constraint firstAttribute="width" constant="50" id="53p-Pc-w0x"/>
-                                                                                </constraints>
-                                                                                <popUpButtonCell key="cell" type="roundTextured" title="1" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" selectedItem="Gxf-1P-kz6" id="G3z-WL-4ZQ">
-                                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                                    <font key="font" metaFont="menu"/>
-                                                                                    <menu key="menu" id="aLN-R4-OEx">
-                                                                                        <items>
-                                                                                            <menuItem title="1" state="on" id="Gxf-1P-kz6"/>
-                                                                                            <menuItem title="2" id="gqI-cg-2KW"/>
-                                                                                            <menuItem title="3" id="tbm-8d-Q0H"/>
-                                                                                        </items>
-                                                                                    </menu>
-                                                                                </popUpButtonCell>
-                                                                            </popUpButton>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tAk-7x-fNS">
-                                                                                <rect key="frame" x="1009" y="36" width="19" height="16"/>
-                                                                                <constraints>
-                                                                                    <constraint firstAttribute="width" constant="15" id="itJ-a3-5hl"/>
-                                                                                </constraints>
-                                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="页" id="vph-ok-Cuz">
-                                                                                    <font key="font" metaFont="system"/>
-                                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                                </textFieldCell>
-                                                                            </textField>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MGR-a9-hoo">
-                                                                                <rect key="frame" x="916" y="36" width="37" height="16"/>
-                                                                                <constraints>
-                                                                                    <constraint firstAttribute="width" constant="33" id="ybR-7R-dUP"/>
-                                                                                </constraints>
-                                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Page" id="T5m-V3-XzV">
-                                                                                    <font key="font" metaFont="system"/>
-                                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                                </textFieldCell>
-                                                                            </textField>
+                                                                                </buttonCell>
+                                                                            </button>
                                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IGx-sv-JYq">
                                                                                 <rect key="frame" x="696" y="32" width="27" height="23"/>
                                                                                 <constraints>
@@ -2328,13 +2316,6 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                     <action selector="onNextPageCollectionClicked:" target="XfG-lQ-9wD" id="vDQ-1v-HNO"/>
                                                                                 </connections>
                                                                             </button>
-                                                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="goW-dm-Y0v">
-                                                                                <rect key="frame" x="655" y="32" width="33" height="23"/>
-                                                                                <buttonCell key="cell" type="roundTextured" title="&lt;&lt;" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UDk-2p-aCP">
-                                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                                    <font key="font" metaFont="system"/>
-                                                                                </buttonCell>
-                                                                            </button>
                                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KwM-6o-UdW">
                                                                                 <rect key="frame" x="836" y="32" width="33" height="23"/>
                                                                                 <buttonCell key="cell" type="roundTextured" title="&gt;&gt;" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="YfI-WN-a7E">
@@ -2342,68 +2323,87 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                     <font key="font" metaFont="system"/>
                                                                                 </buttonCell>
                                                                             </button>
-                                                                            <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="TPF-4r-u7W">
-                                                                                <rect key="frame" x="1050" y="10" width="80" height="16"/>
+                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MGR-a9-hoo">
+                                                                                <rect key="frame" x="916" y="36" width="37" height="16"/>
                                                                                 <constraints>
-                                                                                    <constraint firstAttribute="width" constant="75" id="bLS-LG-Unu"/>
+                                                                                    <constraint firstAttribute="width" constant="33" id="ybR-7R-dUP"/>
                                                                                 </constraints>
-                                                                                <popUpButtonCell key="cell" type="roundTextured" title="** any **" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" imageScaling="proportionallyDown" inset="2" selectedItem="bED-xu-Xgw" id="7Bq-bM-oFr">
-                                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                                    <font key="font" metaFont="menu"/>
-                                                                                    <menu key="menu" id="KJs-7V-FFk">
-                                                                                        <items>
-                                                                                            <menuItem title="** any **" id="bED-xu-Xgw">
-                                                                                                <modifierMask key="keyEquivalentModifierMask"/>
-                                                                                            </menuItem>
-                                                                                            <menuItem title="Kelvin" state="on" id="BIP-cj-Mtx"/>
-                                                                                            <menuItem title="Anna" id="UfE-jh-fHh"/>
-                                                                                            <menuItem title="Mama" id="Ywk-ra-Ec2"/>
-                                                                                        </items>
-                                                                                    </menu>
-                                                                                </popUpButtonCell>
-                                                                            </popUpButton>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vg5-PV-cEJ">
-                                                                                <rect key="frame" x="993" y="10" width="54" height="16"/>
-                                                                                <constraints>
-                                                                                    <constraint firstAttribute="width" constant="50" id="ig2-vi-y4J"/>
-                                                                                </constraints>
-                                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Owner:" id="xzy-Yi-LLw">
+                                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Page" id="T5m-V3-XzV">
                                                                                     <font key="font" metaFont="system"/>
                                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                 </textFieldCell>
                                                                             </textField>
-                                                                            <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="HbV-Xb-Z18">
-                                                                                <rect key="frame" x="905" y="10" width="80" height="16"/>
+                                                                            <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="Wne-ht-bBi">
+                                                                                <rect key="frame" x="951" y="36" width="55" height="16"/>
                                                                                 <constraints>
-                                                                                    <constraint firstAttribute="width" constant="75" id="elY-cW-lLq"/>
+                                                                                    <constraint firstAttribute="width" constant="50" id="53p-Pc-w0x"/>
                                                                                 </constraints>
-                                                                                <popUpButtonCell key="cell" type="roundTextured" title="** any **" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" imageScaling="proportionallyDown" inset="2" selectedItem="chV-em-nFg" id="2Z7-J9-xdV">
+                                                                                <popUpButtonCell key="cell" type="roundTextured" title="1" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" selectedItem="Gxf-1P-kz6" id="G3z-WL-4ZQ">
                                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                                     <font key="font" metaFont="menu"/>
-                                                                                    <menu key="menu" id="UH0-LC-1ur">
+                                                                                    <menu key="menu" id="aLN-R4-OEx">
                                                                                         <items>
-                                                                                            <menuItem title="** any **" id="chV-em-nFg">
-                                                                                                <modifierMask key="keyEquivalentModifierMask"/>
-                                                                                            </menuItem>
-                                                                                            <menuItem title="Camera" state="on" id="Y3O-nD-aR9"/>
-                                                                                            <menuItem title="Screenshot" id="UuE-bT-aHV"/>
-                                                                                            <menuItem title="Weixin" id="nh8-t6-xV3"/>
+                                                                                            <menuItem title="1" state="on" id="Gxf-1P-kz6"/>
+                                                                                            <menuItem title="2" id="gqI-cg-2KW"/>
+                                                                                            <menuItem title="3" id="tbm-8d-Q0H"/>
                                                                                         </items>
                                                                                     </menu>
                                                                                 </popUpButtonCell>
                                                                             </popUpButton>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FEn-eU-9g8">
-                                                                                <rect key="frame" x="848" y="10" width="54" height="16"/>
+                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tAk-7x-fNS">
+                                                                                <rect key="frame" x="1009" y="36" width="19" height="16"/>
                                                                                 <constraints>
-                                                                                    <constraint firstAttribute="width" constant="50" id="CDw-qq-94f"/>
+                                                                                    <constraint firstAttribute="width" constant="15" id="itJ-a3-5hl"/>
                                                                                 </constraints>
-                                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Source:" id="HyK-by-TP1">
+                                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="页" id="vph-ok-Cuz">
                                                                                     <font key="font" metaFont="system"/>
                                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                 </textFieldCell>
                                                                             </textField>
+                                                                            <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="zeK-nY-3Hv">
+                                                                                <rect key="frame" x="1071" y="36" width="80" height="16"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="width" constant="75" id="ZG6-tV-TnV"/>
+                                                                                </constraints>
+                                                                                <popUpButtonCell key="cell" type="roundTextured" title="200" bezelStyle="texturedRounded" alignment="right" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" selectedItem="ciG-9u-PKg" id="3Hu-B4-8e6">
+                                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                                    <font key="font" metaFont="menu"/>
+                                                                                    <menu key="menu" id="H17-9B-oVJ">
+                                                                                        <items>
+                                                                                            <menuItem title="200" state="on" id="ciG-9u-PKg"/>
+                                                                                            <menuItem title="500" id="iGl-li-U1C"/>
+                                                                                            <menuItem title="1000" id="6SQ-le-acn"/>
+                                                                                        </items>
+                                                                                    </menu>
+                                                                                </popUpButtonCell>
+                                                                            </popUpButton>
+                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OcT-m6-Zwk">
+                                                                                <rect key="frame" x="1159" y="36" width="84" height="16"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="width" constant="80" id="29i-dj-iIk"/>
+                                                                                </constraints>
+                                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="张照片 / 每页" id="ybA-xd-vOP">
+                                                                                    <font key="font" metaFont="system"/>
+                                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                </textFieldCell>
+                                                                            </textField>
+                                                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DpT-Dg-Oeb">
+                                                                                <rect key="frame" x="1250" y="32" width="74" height="23"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="height" constant="20" id="Gmp-RZ-apS"/>
+                                                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="SPU-3L-Anh"/>
+                                                                                </constraints>
+                                                                                <buttonCell key="cell" type="roundTextured" title="Reload" bezelStyle="texturedRounded" image="NSRefreshTemplate" imagePosition="left" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="XGb-ik-U2U">
+                                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                                    <font key="font" metaFont="system"/>
+                                                                                </buttonCell>
+                                                                                <connections>
+                                                                                    <action selector="onRefreshCollectionButtonClicked:" target="XfG-lQ-9wD" id="Mi6-Nw-XuV"/>
+                                                                                </connections>
+                                                                            </button>
                                                                         </subviews>
                                                                         <constraints>
                                                                             <constraint firstItem="KSX-ze-NbD" firstAttribute="top" secondItem="hPS-73-3KO" secondAttribute="top" constant="7" id="1UV-RJ-Rs5"/>
