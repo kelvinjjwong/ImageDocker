@@ -20,7 +20,7 @@ extension PostgresRowValueProtocol {
     
     static func decode(from row: PostgresRow, atUncheckedIndex index: Int) -> Self {
         //print("column size: \(row.values.count), decode index: \(index)")
-        let dbValue = row.values[index].postgresValue
+        let dbValue = row.values[index].postgresValue // FIXME: should change to postgresValue? to identify nil?
         //self.logger.log("decoding table [\(row.table)] column: \(row.columnNames[index])")
         //self.logger.log(" >> value to be decoded: \(dbValue.rawValue ?? "nil")")
         if let value = fromPostgresValue(dbValue) {

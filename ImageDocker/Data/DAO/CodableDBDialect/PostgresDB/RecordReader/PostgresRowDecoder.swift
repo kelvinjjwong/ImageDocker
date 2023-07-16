@@ -123,6 +123,7 @@ private struct _RowDecoder<R: Decodable>: Decoder {
         func decode(_ type: Date.Type,   forKey key: Key) throws -> Date   { return decoder.row[key.stringValue] }
         // swiftlint:enable comma
         
+        // MARK: - major decodeIfPresent
         func decodeIfPresent<T>(_ type: T.Type, forKey key: Key) throws -> T? where T: Decodable {
             let row = decoder.row
             let keyName = key.stringValue
@@ -145,6 +146,7 @@ private struct _RowDecoder<R: Decodable>: Decoder {
             return nil
         }
         
+        // MARK: - secondary decode
         func decode<T>(_ type: T.Type, forKey key: Key) throws -> T where T: Decodable {
             let row = decoder.row
             let keyName = key.stringValue

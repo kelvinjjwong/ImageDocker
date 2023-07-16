@@ -19,11 +19,12 @@ public final class ImageDeviceFile : Codable {
     var fileSize:String?
     var fileMD5:String?
     var importDate:String?
-    var importToPath:String?
+    var importToPath:String? // FIXME: demise
     var importAsFilename:String?
     var localFilePath:String?
     var devicePathId:String = ""
     var importedImageId:String = ""
+    // FIXME: add field - repositoryId
     
     public init() {
         

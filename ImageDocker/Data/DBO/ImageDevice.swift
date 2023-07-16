@@ -16,10 +16,11 @@ struct ImageDevice : Codable {
     var manufacture:String?
     var model:String?
     var name:String?
-    var storagePath:String?
+    var storagePath:String? // FIXME: demise
     var marketName:String?
-    var repositoryPath:String?
-    var homePath:String?
+    var repositoryPath:String? // FIXME: demise
+    var homePath:String? // FIXME: demise
+    // FIXME: add field - repositoryId
     
     static func databaseTableName() -> String
     {
