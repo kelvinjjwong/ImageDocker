@@ -151,7 +151,7 @@ public class PostgresDB : DBExecutor {
             var result:[T] = []
             for row in cursor {
                 let columns = try row.get().columns
-                let row = PostgresRow(columnNames: columnNames, values: columns)
+                let row = PostgresRow.read(object, types: [], values: columns) // PostgresRow(columnNames: columnNames, values: columns)
                 row.table = table
                 if let obj:T = try PostgresRowDecoder().decodeIfPresent(from: row) {
                     result.append(obj)
@@ -199,7 +199,7 @@ public class PostgresDB : DBExecutor {
             var result:[T] = []
             for row in cursor {
                 let columns = try row.get().columns
-                let row = PostgresRow(columnNames: columnNames, values: columns)
+                let row = PostgresRow.read(object, types: [], values: columns) // PostgresRow(columnNames: columnNames, values: columns)
                 row.table = table
                 if let obj:T = try PostgresRowDecoder().decodeIfPresent(from: row) {
                     result.append(obj)
@@ -241,7 +241,7 @@ public class PostgresDB : DBExecutor {
             var result:[T] = []
             for row in cursor {
                 let columns = try row.get().columns
-                let row = PostgresRow(columnNames: columnNames, values: columns)
+                let row = PostgresRow.read(object, types: [], values: columns) // PostgresRow(columnNames: columnNames, values: columns)
                 row.table = table
                 if let obj:T = try PostgresRowDecoder().decodeIfPresent(from: row) {
                     result.append(obj)
