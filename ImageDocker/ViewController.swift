@@ -147,26 +147,55 @@ class ViewController: NSViewController {
     var treeLoadingIndicator:Accumulator?
     
     
-    @IBOutlet weak var chbSelectAll: NSButton!
     
     
-    // MARK: - Collection View for browsing
+    // MARK: - Collection View
     
     @IBOutlet weak var collectionView: NSCollectionView!
-    @IBOutlet weak var collectionProgressIndicator: NSProgressIndicator!
+    
+    // MARK: - Collection Pages
+    @IBOutlet weak var lblCaptionTotalRecords: NSTextField!
+    @IBOutlet weak var lblTotalRecords: NSTextField!
+    @IBOutlet weak var lblCaptionShowRecords: NSTextField!
+    @IBOutlet weak var lblShowRecords: NSTextField!
+    
+    @IBOutlet weak var btnFirstPageCollection: NSButton!
+    @IBOutlet weak var btnPreviousPageCollection: NSButton!
+    @IBOutlet weak var lblPagesCollection: NSTextField!
+    @IBOutlet weak var btnNextPageCollection: NSButton!
+    @IBOutlet weak var btnLastPageCollection: NSButton!
+    
+    @IBOutlet weak var lblPageCollection: NSTextField!
+    @IBOutlet weak var popJumpPage: NSPopUpButton!
+    @IBOutlet weak var lblPage2Collection: NSTextField!
+    
+    @IBOutlet weak var popPageSizeCollection: NSPopUpButton!
+    @IBOutlet weak var lblPageSizeCollection: NSTextField!
+    
+    @IBOutlet weak var btnRefreshCollectionView: NSButton!
+    
+    // MARK: - Collection Progress
     
     @IBOutlet weak var indicatorMessage: NSTextField!
-    @IBOutlet weak var btnRefreshCollectionView: NSButton!
+    @IBOutlet weak var collectionProgressIndicator: NSProgressIndicator!
+    
+    // MARK: - Collection Filters
     @IBOutlet weak var btnCombineDuplicates: NSPopUpButton!
-    @IBOutlet weak var btnPreviousPageCollection: NSButton!
-    @IBOutlet weak var btnNextPageCollection: NSButton!
-    @IBOutlet weak var lblPagesCollection: NSTextField!
+    
+    @IBOutlet weak var lblFilterSource: NSTextField!
+    @IBOutlet weak var popFilterSource: NSPopUpButton!
+    @IBOutlet weak var lblFilterOwner: NSTextField!
+    @IBOutlet weak var popFilterOwner: NSPopUpButton!
+    @IBOutlet weak var chbSelectAll: NSButton!
+    @IBOutlet weak var chbShowHidden: NSButton!
+    
+    // MARK: - Panel Collapse
+    
     @IBOutlet weak var btnCollapseLeft: NSButton!
     @IBOutlet weak var btnCollapseRight: NSButton!
     @IBOutlet weak var btnCollapseBottom: NSButton!
     
     
-    @IBOutlet weak var chbShowHidden: NSButton!
     
     var imagesLoader:CollectionViewItemsLoader!
     var collectionLoadingIndicator:Accumulator?
@@ -591,15 +620,42 @@ class ViewController: NSViewController {
     
     // MARK: - Tree Node Controls
     
-    var filterImageSource:[String] = []
-    var filterCameraModel:[String] = []
+    var filterImageSource:[String] = [] // FIXME: demise
+    var filterCameraModel:[String] = [] // FIXME: demise
     
-    // MARK: - Collection View Controls
+    // MARK: - Collection Pages
+    
+    func initPages(_ lastRequest:CollectionViewLastRequest){
+        if self.collectionPaginationController == nil {
+            self.collectionPaginationController = CollectionPaginationController(lastRequest,
+                                                                                 lblCaptionTotalRecords: self.lblCaptionTotalRecords,
+                                                                                 lblTotalRecords: self.lblTotalRecords,
+                                                                                 lblCaptionShowRecords: self.lblCaptionShowRecords,
+                                                                                 lblShowRecords: self.lblShowRecords,
+                                                                                 lblCaptionOnPage1: self.lblPageCollection,
+                                                                                 lstJumpOnPage: self.popJumpPage,
+                                                                                 lblCaptionOnPage2: self.lblPage2Collection,
+                                                                                 lstPageSize: self.popPageSizeCollection,
+                                                                                 lblCaptionPageSize: self.lblPageSizeCollection,
+                                                                                 btnFirstPage: self.btnFirstPageCollection,
+                                                                                 btnPreviousPage: self.btnPreviousPageCollection,
+                                                                                 lblPageNumber: self.lblPagesCollection,
+                                                                                 btnNextPage: self.btnNextPageCollection,
+                                                                                 btnLastPage: self.btnLastPageCollection,
+                                                                                 btnLoadPage: self.btnRefreshCollectionView,
+                                                                                 onCountTotal: <#T##(() -> Int)##(() -> Int)##() -> Int#>,
+                                                                                 onCountHidden: <#T##(() -> Int)##(() -> Int)##() -> Int#>,
+                                                                                 onLoad: <#T##((Int, Int) -> Void)##((Int, Int) -> Void)##(_ pageSize: Int, _ pageNumber: Int) -> Void#>,
+                                                                                 onPaginationStateChanges: <#T##((Int, Int) -> Void)##((Int, Int) -> Void)##(Int, Int) -> Void#>
+            )
+        }
+    }
+    
+    var collectionPaginationController:CollectionPaginationController?
     
     var isCollectionPaginated:Bool = false
     
-    @IBAction func onRefreshCollectionButtonClicked(_ sender: NSButton) {
-        self.refreshCollection(sender)
+    @IBAction func onFirstPageCollectionClicked(_ sender: NSButton) {
     }
     
     @IBAction func onPreviousPageCollectionClicked(_ sender: NSButton) {
@@ -608,6 +664,13 @@ class ViewController: NSViewController {
     
     @IBAction func onNextPageCollectionClicked(_ sender: NSButton) {
         self.nextPageCollection()
+    }
+    
+    @IBAction func onLastPageCollectionClicked(_ sender: NSButton) {
+    }
+    
+    @IBAction func onRefreshCollectionButtonClicked(_ sender: NSButton) {
+        self.refreshCollection(sender)
     }
     
     var currentPageOfCollection = 0
@@ -636,6 +699,7 @@ class ViewController: NSViewController {
         }
     }
     
+    // MARK: - Collection Filters
     
     @IBAction func onCombineDuplicatesButtonClicked(_ sender: NSPopUpButton) {
         let i = sender.indexOfSelectedItem
@@ -690,6 +754,8 @@ class ViewController: NSViewController {
         NotificationMessageManager.default.printAll()
         self.popNotifications(sender)
     }
+    
+    // MARK: - Panel Collapse
     
     
     @IBAction func onToggleLeftPanel(_ sender: NSButton) {

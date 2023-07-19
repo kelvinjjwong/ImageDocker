@@ -84,41 +84,6 @@ class CollectionViewItemsLoader : NSObject {
     func isLoading() -> Bool {
         return self.loading
     }
-
-    /// DEPRECATED
-    /// from repository / container
-    /// - caller:
-    ///   - CollectionViewItemsLoader.reload()
-    ///   - ViewController.loadCollectionByContainer(name,url)
-    func load(from folderURL: URL, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, indicator:Accumulator? = nil, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false) {
-        self.logger.log("[load(from folderURL)] folderURL:\(folderURL)")
-        loading = true
-        
-        lastRequest.loadSource = .repository
-        lastRequest.folderURL = folderURL
-        lastRequest.indicator = indicator
-        lastRequest.pageSize = pageSize
-        lastRequest.pageNumber = pageNumber
-        lastRequest.subdirectories = subdirectories
-        lastRequest.repositoryId = repositoryId
-        lastRequest.repositoryVolume = repositoryVolume
-        lastRequest.rawVolume = rawVolume
-        
-        self.indicator = indicator
-        //let urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
-        //self.logger.log("loading folder from database: \(folderURL.path)")
-        let photoFiles = walkthruDatabaseForPhotoFiles(startingURL: folderURL, repositoryId: repositoryId, repositoryVolume: repositoryVolume, rawVolume: rawVolume, includeHidden: showHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
-        if photoFiles == nil || photoFiles?.count == 0 {
-            self.logger.log(.trace, "LOADED nothing from entry \(folderURL.path)")
-            //self.logger.log("loading folder from filesystem instead: \(folderURL.path)")
-            //let urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
-            //setupItems(urls: urls)
-            setupItems(photoFiles: [])
-        }else{
-            self.logger.log(.trace, "LOADED \(photoFiles?.count ?? 0) images from entry \(folderURL.path)")
-            setupItems(photoFiles: photoFiles, repositoryId: repositoryId, repositoryVolume: repositoryVolume, rawVolume: rawVolume)
-        }
-    }
     
     func load(containerId: Int, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, indicator:Accumulator? = nil, pageSize:Int = 0, pageNumber:Int = 0) {
         self.logger.log("[load(containerId)] containerId:\(containerId)")

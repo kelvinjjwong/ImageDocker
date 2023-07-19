@@ -2278,6 +2278,9 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                                     <font key="font" metaFont="system"/>
                                                                                 </buttonCell>
+                                                                                <connections>
+                                                                                    <action selector="onFirstPageCollectionClicked:" target="XfG-lQ-9wD" id="CQo-ml-QF5"/>
+                                                                                </connections>
                                                                             </button>
                                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IGx-sv-JYq">
                                                                                 <rect key="frame" x="701" y="32" width="27" height="23"/>
@@ -2322,6 +2325,9 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                                     <font key="font" metaFont="system"/>
                                                                                 </buttonCell>
+                                                                                <connections>
+                                                                                    <action selector="onLastPageCollectionClicked:" target="XfG-lQ-9wD" id="ZvL-8J-eXl"/>
+                                                                                </connections>
                                                                             </button>
                                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MGR-a9-hoo">
                                                                                 <rect key="frame" x="916" y="36" width="37" height="16"/>
@@ -2531,7 +2537,9 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <outlet property="btnCollapseRight" destination="gcd-el-CBK" id="0cL-gL-Nxv"/>
                         <outlet property="btnCombineDuplicates" destination="Gkw-tO-uG9" id="p8M-jW-YwA"/>
                         <outlet property="btnExport" destination="kCb-sM-PKJ" id="eIT-29-eiQ"/>
+                        <outlet property="btnFirstPageCollection" destination="goW-dm-Y0v" id="bxv-Nd-YLq"/>
                         <outlet property="btnImageOptions" destination="Bwo-eW-DeK" id="1up-ml-dUH"/>
+                        <outlet property="btnLastPageCollection" destination="KwM-6o-UdW" id="hnl-EF-sj8"/>
                         <outlet property="btnMemories" destination="zJa-km-Rrl" id="meg-5b-t0p"/>
                         <outlet property="btnNextPageCollection" destination="meR-zL-rAv" id="HX2-0B-aQR"/>
                         <outlet property="btnNotification" destination="qGQ-TO-rn5" id="jh5-Fo-0Eb"/>
@@ -2546,8 +2554,21 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <outlet property="collectionView" destination="9AE-Hz-zmu" id="ItR-cT-i85"/>
                         <outlet property="imgPhoto" destination="9Na-U8-3R2" id="b6k-Ma-bp4"/>
                         <outlet property="indicatorMessage" destination="kAZ-Sm-Ax7" id="QkM-9I-20Z"/>
+                        <outlet property="lblCaptionShowRecords" destination="p3j-jw-0Ce" id="hxe-2o-LJ0"/>
+                        <outlet property="lblCaptionTotalRecords" destination="y4Q-Fa-phr" id="bhV-PI-i10"/>
+                        <outlet property="lblFilterOwner" destination="Vg5-PV-cEJ" id="oco-A2-ba2"/>
+                        <outlet property="lblFilterSource" destination="FEn-eU-9g8" id="jkF-uq-qjg"/>
+                        <outlet property="lblPage2Collection" destination="tAk-7x-fNS" id="kdA-j4-jlv"/>
+                        <outlet property="lblPageCollection" destination="MGR-a9-hoo" id="msi-mI-br8"/>
+                        <outlet property="lblPageSizeCollection" destination="OcT-m6-Zwk" id="sKn-Ny-Fjc"/>
                         <outlet property="lblPagesCollection" destination="uR6-jc-2Z7" id="IYF-Mk-ffx"/>
+                        <outlet property="lblShowRecords" destination="2yz-uX-aUJ" id="CM8-Zd-axj"/>
+                        <outlet property="lblTotalRecords" destination="KSX-ze-NbD" id="Gog-Jz-xpV"/>
                         <outlet property="leftVerticalSplitView" destination="lZJ-XP-YJ8" id="Ky7-8V-BfT"/>
+                        <outlet property="popFilterOwner" destination="TPF-4r-u7W" id="C1z-SN-2x0"/>
+                        <outlet property="popFilterSource" destination="HbV-Xb-Z18" id="nyS-gf-OPb"/>
+                        <outlet property="popJumpPage" destination="Wne-ht-bBi" id="6Og-T2-XzQ"/>
+                        <outlet property="popPageSizeCollection" destination="zeK-nY-3Hv" id="9l4-mm-ZF4"/>
                         <outlet property="splitviewPreview" destination="giR-in-kR4" id="kmu-km-TA6"/>
                         <outlet property="stackedTreeCanvasView" destination="CKk-CL-9gu" id="fFJ-OQ-hgD"/>
                         <outlet property="txtSearch" destination="2rl-sF-lP2" id="Mxg-RW-YIV"/>

@@ -15,6 +15,57 @@ extension Words {
         chs: "载入图片和录像 ..."
     )
     
+    
+    static let collection_pagination_total = Localize (
+        eng: "Total:",
+        chs: "照片总数:"
+    )
+    
+    static let collection_pagination_shows = Localize (
+        eng: "Shows:",
+        chs: "展示记录:"
+    )
+    
+    static let collection_pagination_on_page1 = Localize (
+        eng: "Page",
+        chs: "第"
+    )
+    
+    static let collection_pagination_on_page2 = Localize (
+        eng: "",
+        chs: "页"
+    )
+    
+    static let collection_pagination_items_per_page = Localize (
+        eng: "items / page",
+        chs: "张照片 / 每页"
+    )
+    
+    static let collection_pagination_first_page = Localize (
+        eng: "<<",
+        chs: "<<"
+    )
+    
+    static let collection_pagination_previous_page = Localize (
+        eng: "<",
+        chs: "<"
+    )
+    
+    static let collection_pagination_next_page = Localize (
+        eng: ">",
+        chs: ">"
+    )
+    
+    static let collection_pagination_last_page = Localize (
+        eng: ">>",
+        chs: ">>"
+    )
+    
+    static let collection_pagination_reload = Localize (
+        eng: "Reload",
+        chs: "重新载入"
+    )
+    
     static let pages = Localize(
         eng: "Pages...",
         chs: "分页..."
