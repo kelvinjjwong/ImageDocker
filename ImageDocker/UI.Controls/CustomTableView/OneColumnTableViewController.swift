@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class OneColumnTableViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "OneColumnTableViewController")
+    let logger = LoggerFactory.get(category: "OneColumnTableViewController")
     
     
     @IBOutlet weak var table: NSTableView!

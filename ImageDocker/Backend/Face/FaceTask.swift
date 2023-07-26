@@ -8,9 +8,10 @@
 
 //import Foundation
 //
+import LoggerFactory
 class FaceTask {
 
-    let logger = ConsoleLogger(category: "FaceTask")
+    let logger = LoggerFactory.get(category: "FaceTask")
 
     static let `default` = FaceTask()
 

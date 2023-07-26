@@ -8,10 +8,12 @@
 
 import Foundation
 import PostgresClientKit
+import LoggerFactory
+import PostgresModelFactory
 
 public final class PostgresConnection : ImageDBInterface {
     
-    let logger = ConsoleLogger(category: "DB", subCategory: "Postgres")
+    let logger = LoggerFactory.get(category: "DB", subCategory: "Postgres")
     
     static let `default` = PostgresConnection()
     

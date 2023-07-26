@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 public final class ToggleGroup {
     
-    let logger = ConsoleLogger(category: "ToggleGroup")
+    let logger = LoggerFactory.get(category: "ToggleGroup")
     
     private var keysOrderred:[String] = []
     

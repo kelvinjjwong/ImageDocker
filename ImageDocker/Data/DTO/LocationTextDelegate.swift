@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class LocationTextDelegate : LocationConsumer {
     
-    let logger = ConsoleLogger(category: "LocationTextDelegate")
+    let logger = LoggerFactory.get(category: "LocationTextDelegate")
     
     var textField:NSTextField?
     

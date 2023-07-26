@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class EditRepositoryViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "REPO", subCategory: "CONFIG")
+    let logger = LoggerFactory.get(category: "REPO", subCategory: "CONFIG")
     
     private var originalRepositoryId:Int = 0
     private var originalContainer:ImageContainer? = nil

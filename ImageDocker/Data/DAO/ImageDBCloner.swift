@@ -7,10 +7,12 @@
 //
 
 import Foundation
+import LoggerFactory
+import PostgresModelFactory
 
 public final class ImageDBCloner {
     
-    let logger = ConsoleLogger(category: "ImageDBCloner")
+    let logger = LoggerFactory.get(category: "ImageDBCloner")
     
     static let `default` = ImageDBCloner()
     

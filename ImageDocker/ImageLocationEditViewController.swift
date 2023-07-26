@@ -8,10 +8,11 @@
 
 import Cocoa
 import WebKit
+import LoggerFactory
 
 class ImageLocationEditViewController : NSViewController {
     
-    let logger = ConsoleLogger(category: "ImageLocationEditViewController")
+    let logger = LoggerFactory.get(category: "ImageLocationEditViewController")
     
     // MARK: Icon
     let tick:NSImage = NSImage.init(named: NSImage.menuOnStateTemplateName)!

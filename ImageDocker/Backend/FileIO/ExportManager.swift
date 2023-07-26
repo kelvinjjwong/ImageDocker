@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class ExportManager {
     
-    let logger = ConsoleLogger(category: "ExportManager")
+    let logger = LoggerFactory.get(category: "ExportManager")
     
     static let `default` = ExportManager()
     

@@ -8,10 +8,11 @@
 
 
 import Cocoa
+import LoggerFactory
 
 class CollectionViewItem: NSCollectionViewItem {
     
-    let logger = ConsoleLogger(category: "CollectionViewItem")
+    let logger = LoggerFactory.get(category: "CollectionViewItem")
   
     @IBOutlet weak var checkBox: NSButton!
     @IBOutlet weak var lblPlace: NSTextField!

@@ -7,12 +7,14 @@
 //
 
 import Foundation
+import LoggerFactory
+import PostgresModelFactory
 
 class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
     
     
-    let logger = ConsoleLogger(category: "DB", subCategory: "RepositoryDaoPostgresCK", includeTypes: [])
+    let logger = LoggerFactory.get(category: "DB", subCategory: "RepositoryDaoPostgresCK", includeTypes: [])
     
     // MARK: IMAGE REPOSITORY CRUD
     

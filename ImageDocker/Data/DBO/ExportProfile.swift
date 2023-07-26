@@ -8,6 +8,7 @@
 
 import Foundation
 import GRDB
+import PostgresModelFactory
 
 public final class ExportProfile : Codable {
     var id: String = ""

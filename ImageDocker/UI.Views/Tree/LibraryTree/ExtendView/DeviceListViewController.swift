@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 protocol DeviceListDelegate {
     func selectDevice(deviceId:String)
@@ -14,7 +15,7 @@ protocol DeviceListDelegate {
 
 class DeviceListViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "DEVICE", subCategory: "LIST")
+    let logger = LoggerFactory.get(category: "DEVICE", subCategory: "LIST")
     
     var selectionDelegate:DeviceListDelegate?
     var devices:[ImageDevice] = []

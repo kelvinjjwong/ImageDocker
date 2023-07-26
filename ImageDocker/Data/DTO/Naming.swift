@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import LoggerFactory
 
 enum ImageType : Int {
     case photo
@@ -96,7 +97,7 @@ struct ImagePropertyRules {
 
 struct FileTypeRecognizer {
     
-    let logger = ConsoleLogger(category: "FileTypeRecognizer")
+    let logger = LoggerFactory.get(category: "FileTypeRecognizer")
     
     let photoExts:[String] = ["jpg", "jpeg", "png", "heic"]
     let videoExts:[String] = ["mov", "mp4", "mpeg", "mts", "m2ts"]

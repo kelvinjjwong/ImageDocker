@@ -9,14 +9,14 @@
 import Cocoa
 import CryptoSwift
 import CoreLocation
-//import SwiftyJSON
+import LoggerFactory
 import WebKit
 import AVFoundation
 import AVKit
 
 class ViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "MAIN", subCategory: "VIEW", includeTypes: [])
+    let logger = LoggerFactory.get(category: "MAIN", subCategory: "VIEW", includeTypes: [])
     
     var childWindows:[String:NSWindow] = [:]
     
@@ -627,8 +627,7 @@ class ViewController: NSViewController {
     
     func initPages(_ lastRequest:CollectionViewLastRequest){
         if self.collectionPaginationController == nil {
-            self.collectionPaginationController = CollectionPaginationController(lastRequest,
-                                                                                 lblCaptionTotalRecords: self.lblCaptionTotalRecords,
+            self.collectionPaginationController = CollectionPaginationController(lblCaptionTotalRecords: self.lblCaptionTotalRecords,
                                                                                  lblTotalRecords: self.lblTotalRecords,
                                                                                  lblCaptionShowRecords: self.lblCaptionShowRecords,
                                                                                  lblShowRecords: self.lblShowRecords,
@@ -642,12 +641,9 @@ class ViewController: NSViewController {
                                                                                  lblPageNumber: self.lblPagesCollection,
                                                                                  btnNextPage: self.btnNextPageCollection,
                                                                                  btnLastPage: self.btnLastPageCollection,
-                                                                                 btnLoadPage: self.btnRefreshCollectionView,
-                                                                                 onCountTotal: <#T##(() -> Int)##(() -> Int)##() -> Int#>,
-                                                                                 onCountHidden: <#T##(() -> Int)##(() -> Int)##() -> Int#>,
-                                                                                 onLoad: <#T##((Int, Int) -> Void)##((Int, Int) -> Void)##(_ pageSize: Int, _ pageNumber: Int) -> Void#>,
-                                                                                 onPaginationStateChanges: <#T##((Int, Int) -> Void)##((Int, Int) -> Void)##(Int, Int) -> Void#>
+                                                                                 btnLoadPage: self.btnRefreshCollectionView
             )
+            // FIXME: self.collectionPaginationController.initview()
         }
     }
     

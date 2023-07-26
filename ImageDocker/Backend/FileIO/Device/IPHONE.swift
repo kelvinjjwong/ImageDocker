@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import LoggerFactory
 
 struct IPHONE {
     
-    let logger = ConsoleLogger(category: "IPHONE")
+    let logger = LoggerFactory.get(category: "IPHONE")
     
     /// singleton instance of this class
     static let bridge = IPHONE()

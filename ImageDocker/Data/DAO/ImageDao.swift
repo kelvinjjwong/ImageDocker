@@ -7,12 +7,13 @@
 //
 
 import Foundation
+import LoggerFactory
 
 // MARK: IMAGE RECORD DAO
 
 public final class ImageRecordDao {
     
-    let logger = ConsoleLogger(category: "ImageRecordDao")
+    let logger = LoggerFactory.get(category: "ImageRecordDao")
     
     private let impl:ImageRecordDaoInterface
     

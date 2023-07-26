@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import LoggerFactory
 
 enum ExecuteState : Int {
     case OK
@@ -18,7 +19,7 @@ enum ExecuteState : Int {
 
 struct SQLHelper {
     
-    static let logger = ConsoleLogger(category: "SQLHelper")
+    static let logger = LoggerFactory.get(category: "SQLHelper")
     
     /// - caller: NONE
     static func appendSqlTextCondition(_ column:String, value:String?, where statement:inout String, args arguments:inout [String]) {

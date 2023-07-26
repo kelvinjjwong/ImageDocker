@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import LoggerFactory
 
 
 protocol FileSystemHandler {
@@ -25,7 +26,7 @@ public enum FileExistState:Int{
 
 class ComputerFileManager : FileSystemHandler {
     
-    let logger = ConsoleLogger(category: "ComputerFileManager")
+    let logger = LoggerFactory.get(category: "ComputerFileManager")
     
     static let `default` = ComputerFileManager()
     func createDirectory(atPath path:String) -> Bool {
@@ -99,7 +100,7 @@ class ComputerFileManager : FileSystemHandler {
 
 class AndroidFileManager : FileSystemHandler {
     
-    let logger = ConsoleLogger(category: "AndroidFileManager")
+    let logger = LoggerFactory.get(category: "AndroidFileManager")
     
     private var deviceId:String
     

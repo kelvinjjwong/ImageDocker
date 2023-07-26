@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import LoggerFactory
 
 struct SearchCondition {
     
-    static let logger = ConsoleLogger(category: "SearchCondition")
+    static let logger = LoggerFactory.get(category: "SearchCondition")
     
     var years:[Int]
     var months:[Int]

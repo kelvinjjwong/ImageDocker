@@ -7,10 +7,12 @@
 //
 
 import Cocoa
+import LoggerFactory
+import PostgresModelFactory
 
 final class DatabaseBackupController: NSViewController {
     
-    let logger = ConsoleLogger(category: "DatabaseBackupController")
+    let logger = LoggerFactory.get(category: "DatabaseBackupController")
     
     
     @IBOutlet weak var tabs: NSTabView!

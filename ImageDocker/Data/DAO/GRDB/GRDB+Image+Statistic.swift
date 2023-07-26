@@ -8,10 +8,11 @@
 
 import Foundation
 import GRDB
+import LoggerFactory
 
 class ImageCountDaoGRDB : ImageCountDaoInterface {
     
-    let logger = ConsoleLogger(category: "ImageCountDaoGRDB")
+    let logger = LoggerFactory.get(category: "ImageCountDaoGRDB")
     
     // MARK: - COLLECTION
     

@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class ExportConfigurationViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "ExportConfigurationViewController")
+    let logger = LoggerFactory.get(category: "ExportConfigurationViewController")
     
     // MARK: - CONTROLS
     

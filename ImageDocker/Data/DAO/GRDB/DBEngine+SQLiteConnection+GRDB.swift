@@ -8,10 +8,12 @@
 
 import Foundation
 import GRDB
+import LoggerFactory
+import PostgresModelFactory
 
 public final class SQLiteConnectionGRDB : ImageDBInterface {
     
-    let logger = ConsoleLogger(category: "SQLiteConnectionGRDB")
+    let logger = LoggerFactory.get(category: "SQLiteConnectionGRDB")
     
     static let `default` = SQLiteConnectionGRDB()
     

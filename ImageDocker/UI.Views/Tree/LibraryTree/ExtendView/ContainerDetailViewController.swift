@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class ContainerDetailViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "CONTAINER", subCategory: "DETAIL")
+    let logger = LoggerFactory.get(category: "CONTAINER", subCategory: "DETAIL")
     
     // MARK: PROPERTIES
     @IBOutlet weak var lblPath: NSTextField!

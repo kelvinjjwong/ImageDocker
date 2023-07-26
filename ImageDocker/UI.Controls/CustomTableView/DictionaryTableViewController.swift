@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class DictionaryTableViewController: NSObject {
     
-    let logger = ConsoleLogger(category: "DictionaryTableViewController")
+    let logger = LoggerFactory.get(category: "DictionaryTableViewController")
 
     var checkboxes:[String:NSButton] = [:]
     var items:[[String:String]] = []

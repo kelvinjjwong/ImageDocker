@@ -7,11 +7,12 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 /// not-used
 class FilterViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "FilterViewController")
+    let logger = LoggerFactory.get(category: "FilterViewController")
     
     // MARK: Tables
     

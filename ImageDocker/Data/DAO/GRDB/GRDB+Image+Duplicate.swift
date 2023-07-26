@@ -8,10 +8,11 @@
 
 import Foundation
 import GRDB
+import LoggerFactory
 
 class ImageDuplicateDaoGRDB : ImageDuplicationDaoInterface {
     
-    let logger = ConsoleLogger(category: "ImageDuplicateDaoGRDB")
+    let logger = LoggerFactory.get(category: "ImageDuplicateDaoGRDB")
     
     static var _duplicates:Duplicates? = nil
     

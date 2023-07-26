@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 //protocol FaceCategoryListSelectionDelegate {
 //    func select(_ category:String)
@@ -14,7 +15,7 @@ import Cocoa
 
 class SingleColumnTableViewController: NSObject {
     
-    let logger = ConsoleLogger(category: "SingleColumnTableViewController")
+    let logger = LoggerFactory.get(category: "SingleColumnTableViewController")
     
 //    var selectionDelegate:FaceCategoryListSelectionDelegate?
     var items:[String] = []

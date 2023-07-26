@@ -7,12 +7,13 @@
 //
 
 import Foundation
+import LoggerFactory
 //import SwiftyJSON
 
 
 class GoogleLocation {
     
-    static let logger = ConsoleLogger(category: "GoogleLocation")
+    static let logger = LoggerFactory.get(category: "GoogleLocation")
     
     fileprivate static func ak() -> String {
         return Setting.externalApi.googleAPIKey()

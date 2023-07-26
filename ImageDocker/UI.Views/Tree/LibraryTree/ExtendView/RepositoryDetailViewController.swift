@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class RepositoryDetailViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "TreeExpand", subCategory: "RepositoryDetailViewController", includeTypes: [])
+    let logger = LoggerFactory.get(category: "TreeExpand", subCategory: "RepositoryDetailViewController", includeTypes: [])
     
     @IBOutlet weak var btnConfig: NSButton!
     @IBOutlet weak var btnManageSubContainers: NSButton!

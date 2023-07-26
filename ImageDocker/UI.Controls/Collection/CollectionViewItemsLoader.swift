@@ -8,10 +8,11 @@
 
 
 import Cocoa
+import LoggerFactory
 
 class CollectionViewSection {
     
-    let logger = ConsoleLogger(category: "CollectionViewSection")
+    let logger = LoggerFactory.get(category: "CollectionViewSection")
     
     var title:String
     var items: [ImageFile]
@@ -58,7 +59,7 @@ struct CollectionViewLastRequest {
 
 class CollectionViewItemsLoader : NSObject {
     
-    let logger = ConsoleLogger(category: "CollectionViewItemsLoader")
+    let logger = LoggerFactory.get(category: "CollectionViewItemsLoader")
   
     private var items = [ImageFile]()
     var numberOfSections = 1

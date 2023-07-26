@@ -7,13 +7,11 @@
 //
 
 import Cocoa
-
-
-import Cocoa
+import LoggerFactory
 
 class NotificationMessageViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "NotificationMessage")
+    let logger = LoggerFactory.get(category: "NotificationMessage")
     
     @IBOutlet weak var stackView: NSStackView!
     @IBOutlet weak var btnRemoveAll: NSButton!

@@ -9,6 +9,7 @@
 import Foundation
 import AppKit
 import Vision
+import LoggerFactory
 
 struct FaceClip {
     var filename:String
@@ -29,7 +30,7 @@ struct FaceClip {
 @available(OSX 10.13, *)
 class FaceDetection {
     
-    let logger = ConsoleLogger(category: "FaceDetection")
+    let logger = LoggerFactory.get(category: "FaceDetection")
     
     fileprivate let CropSize:Int = 200
     

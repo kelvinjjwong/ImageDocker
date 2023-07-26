@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import LoggerFactory
 
 class RepositoryDao {
     
-    let logger = ConsoleLogger(category: "RepositoryDao")
+    let logger = LoggerFactory.get(category: "RepositoryDao")
     
     private let impl:RepositoryDaoInterface
     

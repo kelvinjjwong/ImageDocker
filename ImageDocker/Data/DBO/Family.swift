@@ -8,6 +8,7 @@
 
 import Foundation
 import GRDB
+import PostgresModelFactory
 
 public final class Family : Codable {
     //var id: Int64?      // <- the row id

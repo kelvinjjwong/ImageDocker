@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class StackedTreeViewController: NSViewController, StackItemHost {
     
-    let logger = ConsoleLogger(category: "StackedTreeViewController")
+    let logger = LoggerFactory.get(category: "StackedTreeViewController")
     
     @IBOutlet weak var stack: CustomStackView!
     

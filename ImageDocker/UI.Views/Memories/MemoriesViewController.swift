@@ -9,10 +9,11 @@
 import Cocoa
 import Quartz
 import Carbon.HIToolbox
+import LoggerFactory
 
 class MemoriesViewController : NSViewController {
     
-    let logger = ConsoleLogger(category: "MemoriesViewController")
+    let logger = LoggerFactory.get(category: "MemoriesViewController")
     
     @IBOutlet weak var lblToday: NSTextField!
     @IBOutlet weak var lblDescription: NSTextField!

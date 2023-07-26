@@ -8,13 +8,14 @@
 
 import Foundation
 import GRDB
+import LoggerFactory
 
 class ImageRecordDaoGRDB : ImageRecordDaoInterface {
     
     
     
     
-    let logger = ConsoleLogger(category: "DB", subCategory: "ImageRecordDaoGRDB")
+    let logger = LoggerFactory.get(category: "DB", subCategory: "ImageRecordDaoGRDB")
     
     
     // MARK: - QUERY

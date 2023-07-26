@@ -8,10 +8,11 @@
 
 import Foundation
 import GRDB
+import LoggerFactory
 
 class ImageSearchDaoGRDB : ImageSearchDaoInterface {
     
-    let logger = ConsoleLogger(category: "ImageSearchDaoGRDB")
+    let logger = LoggerFactory.get(category: "ImageSearchDaoGRDB")
     
     // MARK: - COLLECTION
     

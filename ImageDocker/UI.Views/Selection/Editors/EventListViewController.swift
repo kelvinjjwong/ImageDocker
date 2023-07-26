@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 protocol EventListRefreshDelegate {
     func refreshEventList()
@@ -15,7 +16,7 @@ protocol EventListRefreshDelegate {
 
 class EventListViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "EventListViewController")
+    let logger = LoggerFactory.get(category: "EventListViewController")
     
     var refreshDelegate:EventListRefreshDelegate?
     

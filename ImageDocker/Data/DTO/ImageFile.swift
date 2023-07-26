@@ -13,10 +13,11 @@ import CoreLocation
 //import SwiftyJSON
 import AVFoundation
 import GRDB
+import LoggerFactory
 
 class ImageFile {
     
-    let logger = ConsoleLogger(category: "ImageFile", includeTypes: [])
+    let logger = LoggerFactory.get(category: "ImageFile", includeTypes: [])
     
     // MARK: - URL
   

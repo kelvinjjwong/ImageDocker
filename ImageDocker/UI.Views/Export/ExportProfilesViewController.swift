@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class ExportProfilesViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "ExportProfilesViewController")
+    let logger = LoggerFactory.get(category: "ExportProfilesViewController")
     
     @IBOutlet weak var stackView: NSStackView!
     private var window:NSWindow? = nil

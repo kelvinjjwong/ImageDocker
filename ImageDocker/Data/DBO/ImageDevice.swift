@@ -8,6 +8,7 @@
 
 import Foundation
 import GRDB
+import PostgresModelFactory
 
 struct ImageDevice : Codable {
     

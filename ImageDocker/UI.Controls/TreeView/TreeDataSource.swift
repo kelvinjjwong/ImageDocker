@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class TreeCollection {
     
-    let logger = ConsoleLogger(category: "TreeCollection")
+    let logger = LoggerFactory.get(category: "TreeCollection")
     
     var name = ""
     var path = ""
@@ -125,7 +126,7 @@ protocol TreeDataSource {
 // sample only
 class StaticTreeDataSource : TreeDataSource {
     
-    let logger = ConsoleLogger(category: "StaticTreeDataSource")
+    let logger = LoggerFactory.get(category: "StaticTreeDataSource")
     
     internal var tree_datas:[TreeCollection] = []
     internal var flattable_all:[TreeCollection] = []

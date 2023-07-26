@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 final class LocalEnvironmentSetupController: NSViewController {
     
-    let logger = ConsoleLogger(category: "LocalEnvironmentSetupController")
+    let logger = LoggerFactory.get(category: "LocalEnvironmentSetupController")
     
     @IBOutlet weak var tabs: NSTabView!
     

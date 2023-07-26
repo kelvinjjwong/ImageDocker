@@ -7,12 +7,13 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 
 // reference accumulator
 class Accumulator : NSObject {
     
-    let logger = ConsoleLogger(category: "Accumulator")
+    let logger = LoggerFactory.get(category: "Accumulator")
     
     var _target:Int
     private var count:Int = 0

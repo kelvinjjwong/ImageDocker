@@ -8,10 +8,11 @@
 
 import Foundation
 import GRDB
+import LoggerFactory
 
 class FaceDaoGRDB : FaceDaoInterface {
     
-    let logger = ConsoleLogger(category: "FaceDaoGRDB")
+    let logger = LoggerFactory.get(category: "FaceDaoGRDB")
 
     // MARK: - FAMILY
     

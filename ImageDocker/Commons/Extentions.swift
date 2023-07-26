@@ -7,6 +7,13 @@
 //
 
 import Cocoa
+import LoggerFactory
+
+@usableFromInline
+func add(_ value: inout Int) -> String {
+    value += 1
+    return "$\(value)"
+}
 
 // MARK: Collection / Array
 
@@ -345,7 +352,7 @@ extension URL {
 
 class MemoryReleasable {
     
-    let logger = ConsoleLogger(category: "RAM", subCategory: "HighRamJob")
+    let logger = LoggerFactory.get(category: "RAM", subCategory: "HighRamJob")
     
     static let `default` = MemoryReleasable()
     

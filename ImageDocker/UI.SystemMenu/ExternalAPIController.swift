@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 final class ExternalAPIController: NSViewController {
     
-    let logger = ConsoleLogger(category: "ExternalAPIController")
+    let logger = LoggerFactory.get(category: "ExternalAPIController")
     
     @IBOutlet weak var tabs: NSTabView!
     

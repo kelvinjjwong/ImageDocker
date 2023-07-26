@@ -9,10 +9,11 @@
 import Cocoa
 import Quartz
 import Carbon.HIToolbox
+import LoggerFactory
 
 class TheaterViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "TheaterViewController")
+    let logger = LoggerFactory.get(category: "TheaterViewController")
     
     // MARK: CONTROLS
     

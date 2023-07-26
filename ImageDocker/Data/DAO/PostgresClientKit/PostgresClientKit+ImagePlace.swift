@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import LoggerFactory
 
 class PlaceDaoPostgresCK : PlaceDaoInterface {
     
-    let logger = ConsoleLogger(category: "PlaceDaoPostgresCK")
+    let logger = LoggerFactory.get(category: "PlaceDaoPostgresCK")
     
     func getOrCreatePlace(name: String, location: Location) -> ImagePlace {
         let db = PostgresConnection.database()

@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class DateTimeViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "DateTimeViewController")
+    let logger = LoggerFactory.get(category: "DateTimeViewController")
     
     
     var images:[ImageTimestamp] = []

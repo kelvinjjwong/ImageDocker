@@ -7,12 +7,14 @@
 //
 
 import Foundation
+import LoggerFactory
+import PostgresModelFactory
 
 class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
     
     static var _duplicates:Duplicates? = nil
     
-    let logger = ConsoleLogger(category: "DB", subCategory: "PostgresClientKit+Image+Duplicate")
+    let logger = LoggerFactory.get(category: "DB", subCategory: "PostgresClientKit+Image+Duplicate")
     
     func reloadDuplicatePhotos() {
         let db = PostgresConnection.database()

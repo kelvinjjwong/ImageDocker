@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 enum ChecksumMode : Int {
     case Rough
@@ -60,7 +61,7 @@ struct DeviceCopyDestination {
 
 class DeviceCopyViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "DEVICE", subCategory: "COPY")
+    let logger = LoggerFactory.get(category: "DEVICE", subCategory: "COPY")
     
     let dateFormatter = DateFormatter()
     

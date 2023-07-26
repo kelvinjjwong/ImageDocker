@@ -8,6 +8,7 @@
 
 import Foundation
 import GRDB
+import LoggerFactory
 
 class DirectoryPaths : NSObject {
     var filesysUrls:Set<String> = Set<String>()
@@ -17,7 +18,7 @@ class DirectoryPaths : NSObject {
 
 class ImageFolderTreeScanner {
     
-    let logger = ConsoleLogger(category: "ImageFolderTreeScanner", includeTypes: [.debug, .trace])
+    let logger = LoggerFactory.get(category: "ImageFolderTreeScanner", includeTypes: [.debug, .trace])
     
     static let `default` = ImageFolderTreeScanner()
     var suppressedScan:Bool = false

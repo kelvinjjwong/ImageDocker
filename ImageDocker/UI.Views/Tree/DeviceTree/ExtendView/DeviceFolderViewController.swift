@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
     
-    let logger = ConsoleLogger(category: "DEVICE", subCategory: "FOLDER")
+    let logger = LoggerFactory.get(category: "DEVICE", subCategory: "FOLDER")
     
     // MARK: - PROPERTIES
     

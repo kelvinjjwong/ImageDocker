@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import LoggerFactory
 
 class MomentsTreeDataSource : TreeDataSource {
     
-    let logger = ConsoleLogger(category: "Tree", subCategory: "Moments", includeTypes: [.trace])
+    let logger = LoggerFactory.get(category: "Tree", subCategory: "Moments", includeTypes: [.trace])
     
     func convertToTreeCollection(_ data:Moment) -> TreeCollection {
         let collection = TreeCollection(data.represent, id: data.id, object: data)

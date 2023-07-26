@@ -8,11 +8,12 @@
 
 import Foundation
 import WebKit
+import LoggerFactory
 //import SwiftyJSON
 
 final class BaiduLocation {
     
-    static let logger = ConsoleLogger(category: "BaiduLocation")
+    static let logger = LoggerFactory.get(category: "BaiduLocation")
     
     fileprivate static let baseurl:String = "http://api.map.baidu.com"
     

@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import LoggerFactory
 
 class RepositoryTreeDataSource : TreeDataSource {
     
-    let logger = ConsoleLogger(category: "RepositoryTreeDataSource", includeTypes: [])
+    let logger = LoggerFactory.get(category: "RepositoryTreeDataSource", includeTypes: [])
     
     func convertToTreeNode(_ repository:ImageRepository) -> TreeCollection {
         self.logger.log(.trace, "convert repository to tree node - repositoryId:\(repository.id)")

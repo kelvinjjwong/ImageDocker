@@ -8,6 +8,7 @@
 
 import Cocoa
 import WebKit
+import LoggerFactory
 
 enum LocationAPI : Int {
     case google
@@ -22,7 +23,7 @@ protocol PlaceListRefreshDelegate {
 
 class PlaceListViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "PlaceListViewController")
+    let logger = LoggerFactory.get(category: "PlaceListViewController")
     
     let tick:NSImage = NSImage.init(named: NSImage.menuOnStateTemplateName)!
     

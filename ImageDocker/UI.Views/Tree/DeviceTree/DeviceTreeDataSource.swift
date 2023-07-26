@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import LoggerFactory
 
 class DeviceTreeDataSource : TreeDataSource {
     
-    let logger = ConsoleLogger(category: "TREE", subCategory: "DEVICE")
+    let logger = LoggerFactory.get(category: "TREE", subCategory: "DEVICE")
     
     private var deviceIdToDevice : [String : PhoneDevice] = [String : PhoneDevice] ()
     

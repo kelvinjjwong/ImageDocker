@@ -30,7 +30,7 @@
 //
 //struct FaceRecognitionOpenCV {
 //    
-//    let logger = ConsoleLogger(category: "FaceRecognitionOpenCV")
+//    let logger = LoggerFactory.get(category: "FaceRecognitionOpenCV")
 //    
 //    fileprivate var workingPath: URL
 //    

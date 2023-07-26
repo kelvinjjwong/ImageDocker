@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class FaceCollectionViewSection {
     var title:String
@@ -20,7 +21,7 @@ class FaceCollectionViewSection {
 
 class FaceCollectionViewItemsLoader: NSObject {
     
-    let logger = ConsoleLogger(category: "FaceCollectionViewItemsLoader")
+    let logger = LoggerFactory.get(category: "FaceCollectionViewItemsLoader")
     
     private var items:[PeopleFace] = []
     var numberOfSections = 0

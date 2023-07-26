@@ -7,8 +7,8 @@ target 'ImageDocker' do
   use_frameworks!
 
   # Pods for ImageDocker
+  pod 'LoggerFactory', '1.0.3'
+  pod 'PostgresModelFactory', '1.0.2'
   pod 'CryptoSwift', '1.4.0'
-#  pod 'SwiftyJSON'
   pod 'GRDB.swift'
-  pod 'PostgresClientKit'
 end

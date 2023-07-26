@@ -8,10 +8,11 @@
 
 import Foundation
 import GRDB
+import LoggerFactory
 
 class PlaceDaoGRDB : PlaceDaoInterface {
     
-    let logger = ConsoleLogger(category: "PlaceDaoGRDB")
+    let logger = LoggerFactory.get(category: "PlaceDaoGRDB")
     
     // MARK: - CREATE
     

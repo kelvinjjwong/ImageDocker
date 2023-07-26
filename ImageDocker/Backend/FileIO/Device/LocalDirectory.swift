@@ -8,10 +8,11 @@
 
 import Foundation
 import Cocoa
+import LoggerFactory
 
 struct LocalDirectory {
     
-    let logger = ConsoleLogger(category: "LocalDirectory")
+    let logger = LoggerFactory.get(category: "LocalDirectory")
     
     static let bridge = LocalDirectory()
     

@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class DevicePathDetailViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "DevicePathDetailViewController")
+    let logger = LoggerFactory.get(category: "DevicePathDetailViewController")
     
     // MARK: CONTROLS
     @IBOutlet weak var lblPath: NSTextField!

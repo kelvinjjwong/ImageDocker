@@ -7,10 +7,12 @@
 //
 
 import Foundation
+import LoggerFactory
+import PostgresModelFactory
 
 class ExportDaoPostgresCK : ExportDaoInterface {
     
-    let logger = ConsoleLogger(category: "ExportDaoPostgresCK")
+    let logger = LoggerFactory.get(category: "ExportDaoPostgresCK")
     
     // MARK: - PROFILE CRUD
     

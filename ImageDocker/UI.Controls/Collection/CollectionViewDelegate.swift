@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 extension ViewController {
     
@@ -396,7 +397,7 @@ extension ViewController : PlacesCompletionEvent {
 
 class MetaConsumer : LocationConsumer {
     
-    let logger = ConsoleLogger(category: "MetaConsumer")
+    let logger = LoggerFactory.get(category: "MetaConsumer")
     
     
     var imageFile:ImageFile

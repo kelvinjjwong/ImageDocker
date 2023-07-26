@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
@@ -17,7 +18,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     var terminateWithoutBackupDB = false
     
-    let logger = ConsoleLogger(category: "AppDelegate")
+    let logger = LoggerFactory.get(category: "AppDelegate")
     
     func setupMainMenu() {
         self.mainMenu.item(at: 0)?.title = Words.mainmenu_about.word()

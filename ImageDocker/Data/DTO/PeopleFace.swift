@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class PeopleFace {
     
-    let logger = ConsoleLogger(category: "PeopleFace")
+    let logger = LoggerFactory.get(category: "PeopleFace")
     
     // MARK: SIZE
     

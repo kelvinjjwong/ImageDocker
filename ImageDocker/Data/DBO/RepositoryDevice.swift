@@ -8,6 +8,7 @@
 
 import Foundation
 import GRDB
+import PostgresModelFactory
 
 public final class RepositoryDevice: Codable {
     var id: Int = 0      // <- the row id

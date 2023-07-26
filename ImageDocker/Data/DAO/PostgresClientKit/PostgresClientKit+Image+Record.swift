@@ -8,11 +8,12 @@
 
 import Foundation
 import PostgresClientKit
+import LoggerFactory
 
 class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
     
     
-    let logger = ConsoleLogger(category: "ImageRecordDaoPostgresCK")
+    let logger = LoggerFactory.get(category: "ImageRecordDaoPostgresCK")
     
     // MARK: QUERY
     

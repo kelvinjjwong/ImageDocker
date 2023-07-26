@@ -8,10 +8,11 @@
 
 import Foundation
 import GRDB
+import LoggerFactory
 
 class EventDaoGRDB : EventDaoInterface {
     
-    let logger = ConsoleLogger(category: "EventDaoGRDB")
+    let logger = LoggerFactory.get(category: "EventDaoGRDB")
     
     
     // MARK: - CREATE

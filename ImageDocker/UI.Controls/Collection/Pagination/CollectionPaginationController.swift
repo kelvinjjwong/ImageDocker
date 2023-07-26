@@ -8,10 +8,11 @@
 
 import Foundation
 import Cocoa
+import LoggerFactory
 
 class CollectionPaginationController {
     
-    let logger = ConsoleLogger(category: "Collection", subCategory: "Page")
+    let logger = LoggerFactory.get(category: "Collection", subCategory: "Page")
     
     
     // MARK: PROPERTIES
@@ -43,10 +44,11 @@ class CollectionPaginationController {
     fileprivate var currentPage = 0
     fileprivate var totalPages = 0
     fileprivate var pageSize = 0
-    fileprivate var onLoad: ((_ pageSize:Int, _ pageNumber:Int) -> Void)!
-    fileprivate var onCountTotal: (() -> Int)!
-    fileprivate var onCountHidden: (() -> Int)!
-    fileprivate var onPaginationStateChanges: ((Int, Int) -> Void)! // currentPage, totalPages
+    fileprivate var onLoad: ((_ pageSize:Int, _ pageNumber:Int) -> Void)?
+    fileprivate var onCountTotal: (() -> Int)?
+    fileprivate var onCountHidden: (() -> Int)?
+    fileprivate var onPaginationStateChanges: ((Int, Int) -> Void)? // currentPage, totalPages
+    fileprivate var onPaginationSizeChanges: ((Int, Int, Int) -> Void)? // currentPage, pageSize, totalRecords
     
     init(
     
@@ -69,12 +71,7 @@ class CollectionPaginationController {
          btnNextPage: NSButton,
          btnLastPage: NSButton,
     
-         btnLoadPage: NSButton,
-         
-         onCountTotal: @escaping (() -> Int),
-         onCountHidden: @escaping (() -> Int),
-         onLoad: @escaping ((_ pageSize:Int, _ pageNumber:Int) -> Void),
-         onPaginationStateChanges: @escaping ((Int, Int) -> Void)
+         btnLoadPage: NSButton
     ) {
         
         self.lblCaptionTotalRecords = lblCaptionTotalRecords
@@ -98,19 +95,22 @@ class CollectionPaginationController {
         
         self.btnLoadPage = btnLoadPage
         
-        self.onCountTotal = onCountTotal
-        self.onCountHidden = onCountHidden
-        self.onLoad = onLoad
-        self.onPaginationStateChanges = onPaginationStateChanges
     }
     
     func initView(_ lastRequest:CollectionViewLastRequest,
                   onCountTotal: @escaping (() -> Int),
                   onCountHidden: @escaping (() -> Int),
                   onLoad: @escaping ((_ pageSize:Int, _ pageNumber:Int) -> Void),
-                  onPaginationStateChanges: @escaping ((Int, Int) -> Void)) {
+                  onPaginationStateChanges: @escaping ((Int, Int) -> Void),
+                  onPaginationSizeChanges: @escaping ((Int, Int, Int) -> Void)
+    ) {
         
         self.lastRequest = lastRequest
+        self.onCountTotal = onCountTotal
+        self.onCountHidden = onCountHidden
+        self.onLoad = onLoad
+        self.onPaginationSizeChanges = onPaginationSizeChanges
+        self.onPaginationStateChanges = onPaginationStateChanges
         
         self.lblCaptionTotalRecords.stringValue = Words.collection_pagination_total.word()
         self.lblCaptionShowRecords.stringValue = Words.collection_pagination_shows.word()
@@ -132,8 +132,13 @@ class CollectionPaginationController {
     }
     
     fileprivate func countImages() {
-        self.total = self.onCountTotal()
-        let hiddenCount = self.onCountHidden()
+        if let onCountTotal = self.onCountTotal {
+            self.total = onCountTotal()
+        }
+        var hiddenCount = 0
+        if let onCountHidden = self.onCountHidden {
+            hiddenCount = onCountHidden()
+        }
         self.lblTotalRecords.stringValue = "\(self.total) (\(hiddenCount) \(Words.library_tree_hidden.word()))"
     }
     
@@ -170,31 +175,39 @@ class CollectionPaginationController {
             end = total
         }
         self.lblShowRecords.stringValue = "\(start) - \(end)"
-        self.onPaginationStateChanges(
-            self.currentPage,
-            self.pages
-        )
+        if let onPaginationStateChanges = self.onPaginationStateChanges {
+            onPaginationStateChanges(
+                self.currentPage,
+                self.pages
+            )
+        }
         self.logger.log("divided pages \(self.pages)")
     }
     
     func onFirstPage() {
         self.currentPage = 1
         self.calculatePages()
-        self.onLoad(self.pageSize, self.currentPage)
+        if let onLoad = self.onLoad {
+            onLoad(self.pageSize, self.currentPage)
+        }
     }
     
     func onPreviousPage() {
         self.countImages()
         self.currentPage -= 1
         self.calculatePages()
-        self.onLoad(self.pageSize, self.currentPage)
+        if let onLoad = self.onLoad {
+            onLoad(self.pageSize, self.currentPage)
+        }
     }
     
     func onNextPage() {
         self.countImages()
         self.currentPage += 1
         self.calculatePages()
-        self.onLoad(self.pageSize, self.currentPage)
+        if let onLoad = self.onLoad {
+            onLoad(self.pageSize, self.currentPage)
+        }
         
     }
     
@@ -202,7 +215,9 @@ class CollectionPaginationController {
         self.countImages()
         self.currentPage = self.pages
         self.calculatePages()
-        self.onLoad(self.pageSize, self.currentPage)
+        if let onLoad = self.onLoad {
+            onLoad(self.pageSize, self.currentPage)
+        }
     }
     
 }

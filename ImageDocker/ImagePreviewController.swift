@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class ImagePreviewController : NSViewController {
     
-    let logger = ConsoleLogger(category: "ImagePreviewController")
+    let logger = LoggerFactory.get(category: "ImagePreviewController")
     
     @IBOutlet weak var playerContainer: NSView!
     @IBOutlet weak var lblDescription: NSTextField!

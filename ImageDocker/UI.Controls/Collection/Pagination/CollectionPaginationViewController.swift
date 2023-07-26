@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class CollectionPaginationViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "CollectionPaginationViewController")
+    let logger = LoggerFactory.get(category: "CollectionPaginationViewController")
     
     // MARK: PROPERTIES
     

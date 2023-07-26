@@ -7,10 +7,12 @@
 //
 
 import Foundation
+import LoggerFactory
+import PostgresModelFactory
 
 class ImageFaceDaoPostgresCK : ImageFaceDaoInterface {
     
-    let logger = ConsoleLogger(category: "ImageFaceDaoPostgresCK")
+    let logger = LoggerFactory.get(category: "ImageFaceDaoPostgresCK")
     
     func updateImageScannedFace(imageId: String, facesCount: Int) -> ExecuteState {
         let db = PostgresConnection.database()
@@ -43,7 +45,7 @@ class ImageFaceDaoPostgresCK : ImageFaceDaoInterface {
 
 class FaceDaoPostgresCK : FaceDaoInterface {
     
-    let logger = ConsoleLogger(category: "FaceDaoPostgresCK")
+    let logger = LoggerFactory.get(category: "FaceDaoPostgresCK")
     
     func getFamilies() -> [Family] {
         let db = PostgresConnection.database()

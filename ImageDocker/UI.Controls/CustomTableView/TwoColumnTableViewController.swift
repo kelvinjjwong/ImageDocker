@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class TwoColumnTableViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "TwoColumnTableViewController")
+    let logger = LoggerFactory.get(category: "TwoColumnTableViewController")
 
     @IBOutlet weak var table: NSTableView!
     var items:[(String, String, String)] = []

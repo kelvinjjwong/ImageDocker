@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class StackHeaderViewController : NSViewController, StackItemHeader {
     
-    let logger = ConsoleLogger(category: "StackHeaderViewController")
+    let logger = LoggerFactory.get(category: "StackHeaderViewController")
     
     @IBOutlet weak var headerTextField: NSTextField!
     @IBOutlet weak var showHideButton: NSButton!

@@ -8,12 +8,13 @@
 
 import Foundation
 import GRDB
+import LoggerFactory
 
 class RepositoryDaoGRDB : RepositoryDaoInterface {
     
     
     
-    let logger = ConsoleLogger(category: "DB", subCategory: "RepositoryDaoGRDB")
+    let logger = LoggerFactory.get(category: "DB", subCategory: "RepositoryDaoGRDB")
     
     func createRepository(name:String,
                           homeVolume:String, homePath:String,

@@ -8,10 +8,11 @@
 
 import Foundation
 import GRDB
+import LoggerFactory
 
 class ExportDaoGRDB : ExportDaoInterface {
     
-    let logger = ConsoleLogger(category: "ExportDaoGRDB")
+    let logger = LoggerFactory.get(category: "ExportDaoGRDB")
     
     // MARK: - PROFILE CRUD
     

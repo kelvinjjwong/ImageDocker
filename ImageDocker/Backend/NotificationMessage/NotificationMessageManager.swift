@@ -7,11 +7,12 @@
 //
 
 import Foundation
+import LoggerFactory
 
 
 class NotificationMessage {
     
-    let logger = ConsoleLogger(category: "NotificationMessage", includeTypes: [.debug])
+    let logger = LoggerFactory.get(category: "NotificationMessage", includeTypes: [.debug])
     
     var type = "notification"
     var id = ""
@@ -72,7 +73,7 @@ class NotificationMessageManager {
     
     static let NOTIFICATION_KEY_MESSAGECOUNT = "Notification_Message_Count"
     
-    let logger = ConsoleLogger(category: "NotificationMessageManager", includeTypes: [.debug])
+    let logger = LoggerFactory.get(category: "NotificationMessageManager", includeTypes: [.debug])
     
     static let `default` = NotificationMessageManager()
     

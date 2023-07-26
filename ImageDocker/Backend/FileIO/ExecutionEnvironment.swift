@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import LoggerFactory
 
 struct ExecutionEnvironment {
     
-    let logger = ConsoleLogger(category: "ExecutionEnvironment")
+    let logger = LoggerFactory.get(category: "ExecutionEnvironment")
     
     static let `default` = ExecutionEnvironment()
     

@@ -8,10 +8,12 @@
 
 import Foundation
 import PostgresClientKit
+import LoggerFactory
+import PostgresModelFactory
 
 class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
     
-    let logger = ConsoleLogger(category: "ImageSearchDao", subCategory: "Postgres")
+    let logger = LoggerFactory.get(category: "ImageSearchDao", subCategory: "Postgres")
     
     func getAllPlacesAndDates(imageSource: [String]?, cameraModel: [String]?) -> [Moment] {
         let db = PostgresConnection.database()

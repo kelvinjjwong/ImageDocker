@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PostgresModelFactory
 
 extension PostgresConnection {
     

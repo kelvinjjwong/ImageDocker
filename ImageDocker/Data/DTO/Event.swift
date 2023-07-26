@@ -8,6 +8,7 @@
 
 import Foundation
 import GRDB
+import LoggerFactory
 
 class Event {
     
@@ -84,7 +85,7 @@ class Event {
 }
 
 class Events {
-    let logger = ConsoleLogger(category: "Events")
+    let logger = LoggerFactory.get(category: "Events")
     var events:[Event] = [Event] ()
     
     func read(_ datas:[Row]) -> [Event]{

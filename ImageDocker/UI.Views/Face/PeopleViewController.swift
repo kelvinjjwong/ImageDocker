@@ -10,7 +10,7 @@
 //
 //class PeopleViewController: NSViewController {
 //
-//    let logger = ConsoleLogger(category: "PeopleViewController")
+//    let logger = LoggerFactory.get(category: "PeopleViewController")
 //
 //    // MARK: CONSTANTS
 //

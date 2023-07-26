@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 final class PreferencesController: NSViewController {
     
-    let logger = ConsoleLogger(category: "PreferencesController")
+    let logger = LoggerFactory.get(category: "PreferencesController")
     
     // Postgres DB date timezone offset (hours)
     static let postgresTimestampTimezoneOffset = "+8"

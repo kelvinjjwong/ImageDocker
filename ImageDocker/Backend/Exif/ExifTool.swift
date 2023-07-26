@@ -8,11 +8,12 @@
 
 import Foundation
 import AppKit
+import LoggerFactory
 
 /// manage GeoTag's use of exiftool
 class ExifTool {
     
-    let logger = ConsoleLogger(category: "ExifTool")
+    let logger = LoggerFactory.get(category: "ExifTool")
     
     /// singleton instance of this class
     static let helper = ExifTool()

@@ -8,6 +8,7 @@
 
 import Foundation
 import GRDB
+import PostgresModelFactory
 
 public final class ImageContainer: Codable {
     //var id: Int64?      // <- the row id

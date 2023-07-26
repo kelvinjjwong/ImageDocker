@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class SelectionViewController : NSViewController {
     
-    let logger = ConsoleLogger(category: "SelectionViewController")
+    let logger = LoggerFactory.get(category: "SelectionViewController")
     
     var collectionViewController : SelectionCollectionViewController!
     

@@ -7,10 +7,12 @@
 //
 
 import Foundation
+import LoggerFactory
+import PostgresModelFactory
 
 class EventDaoPostgresCK : EventDaoInterface {
     
-    let logger = ConsoleLogger(category: "EventDaoPostgresCK")
+    let logger = LoggerFactory.get(category: "EventDaoPostgresCK")
     
     func getOrCreateEvent(name: String) -> ImageEvent {
         let db = PostgresConnection.database()

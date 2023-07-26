@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class ContainerViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "CONTAINER", subCategory: "VIEW")
+    let logger = LoggerFactory.get(category: "CONTAINER", subCategory: "VIEW")
     
     var container:ImageContainer? = nil
     

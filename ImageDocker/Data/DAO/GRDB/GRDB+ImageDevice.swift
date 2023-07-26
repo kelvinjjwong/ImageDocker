@@ -8,10 +8,11 @@
 
 import Foundation
 import GRDB
+import LoggerFactory
 
 class DeviceDaoGRDB : DeviceDaoInterface {
     
-    let logger = ConsoleLogger(category: "DeviceDaoGRDB")
+    let logger = LoggerFactory.get(category: "DeviceDaoGRDB")
     // MARK: - DEVICES
     
     func getDevices() -> [ImageDevice] {

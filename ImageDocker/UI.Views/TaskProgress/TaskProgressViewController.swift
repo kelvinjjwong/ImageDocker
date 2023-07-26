@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class TaskProgressViewController: NSViewController {
     
-    let logger = ConsoleLogger(category: "TASK")
+    let logger = LoggerFactory.get(category: "TASK")
     
     @IBOutlet weak var stackView: NSStackView!
     @IBOutlet weak var btnStopAll: NSButton!
