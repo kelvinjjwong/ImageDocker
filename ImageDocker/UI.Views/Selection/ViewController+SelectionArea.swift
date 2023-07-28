@@ -36,7 +36,7 @@ extension ViewController {
         }
         
         self.selectionViewController.selectAllInMainCollectionView = { state in
-            self.chbSelectAll.state = state ? .on : .off
+//            self.chbSelectAll.state = state ? .on : .off
         }
     }
 }

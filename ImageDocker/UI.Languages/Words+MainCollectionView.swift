@@ -67,13 +67,13 @@ extension Words {
     )
     
     static let pages = Localize(
-        eng: "Pages...",
-        chs: "分页..."
+        eng: "",
+        chs: ""
     )
     
     static let reload = Localize(
-        eng: "RELOAD",
-        chs: "重新载入"
+        eng: "",
+        chs: ""
     )
     
     static let combineDuplicates = Localize(

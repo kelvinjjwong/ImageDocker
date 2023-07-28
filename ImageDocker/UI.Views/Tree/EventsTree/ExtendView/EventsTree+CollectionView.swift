@@ -55,9 +55,9 @@ extension ViewController {
         self.selectedMoment = moment
         
         var totalRecords = self.countImagesOfEvent(moment: moment)
-        if self.chbShowHidden.state == .off {
-            totalRecords -= self.countHiddenImagesOfEvent(moment: moment)
-        }
+//        if self.chbShowHidden.state == .off {
+//            totalRecords -= self.countHiddenImagesOfEvent(moment: moment)
+//        }
         self.changePaginationState(currentPage: pageNumber, pageSize: pageSize, totalRecords: totalRecords)
         
         loadCollection {

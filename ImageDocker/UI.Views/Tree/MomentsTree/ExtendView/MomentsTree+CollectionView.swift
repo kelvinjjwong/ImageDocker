@@ -45,9 +45,9 @@ extension ViewController {
 
         var totalRecords = self.countImagesOfMoment(moment: moment)
 //        self.logger.log("total records including hidden: \(totalRecords)")
-        if self.chbShowHidden.state == .off {
-            totalRecords -= self.countHiddenImagesOfMoment(moment: moment)
-        }
+//        if self.chbShowHidden.state == .off {
+//            totalRecords -= self.countHiddenImagesOfMoment(moment: moment)
+//        }
 //        self.logger.log("total records excluding hidden: \(totalRecords)")
         self.changePaginationState(currentPage: pageNumber, pageSize: pageSize, totalRecords: totalRecords)
         

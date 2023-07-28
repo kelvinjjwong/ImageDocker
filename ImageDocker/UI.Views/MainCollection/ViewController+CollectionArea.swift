@@ -35,36 +35,36 @@ extension ViewController {
     internal func hideToolbarOfCollectionView() {
         self.btnRefreshCollectionView.isHidden = true
         self.btnCombineDuplicates.isHidden = true
-        self.chbSelectAll.isHidden = true
-        self.chbShowHidden.isHidden = true
+//        self.chbSelectAll.isHidden = true
+//        self.chbShowHidden.isHidden = true
     }
     
     internal func showToolbarOfCollectionView() {
         self.btnRefreshCollectionView.isHidden = false
         self.btnCombineDuplicates.isHidden = false
-        self.chbSelectAll.isHidden = false
-        self.chbShowHidden.isHidden = false
+//        self.chbSelectAll.isHidden = false
+//        self.chbShowHidden.isHidden = false
     }
     
     
     
     internal func disableCollectionViewControls() {
         self.btnRefreshCollectionView.isEnabled = false
-        self.chbSelectAll.isEnabled = false
-        self.chbShowHidden.isEnabled = false
+//        self.chbSelectAll.isEnabled = false
+//        self.chbShowHidden.isEnabled = false
         self.btnCombineDuplicates.isEnabled = false
     }
     
     
     internal func enableCollectionViewControls() {
         self.btnRefreshCollectionView.isEnabled = true
-        self.chbSelectAll.isEnabled = true
-        self.chbShowHidden.isEnabled = true
+//        self.chbSelectAll.isEnabled = true
+//        self.chbShowHidden.isEnabled = true
         self.btnCombineDuplicates.isEnabled = true
     }
     
     internal func switchShowHideState() {
-        self.imagesLoader.showHidden = self.chbShowHidden.state == .on
+        self.imagesLoader.showHidden = false // self.chbShowHidden.state == .on
         
         TaskManager.loadingImagesCollection = true
         
@@ -162,7 +162,7 @@ extension ViewController {
         self.imagesLoader.clean()
         collectionView.reloadData()
         
-        self.imagesLoader.showHidden = self.chbShowHidden.state == .on
+        self.imagesLoader.showHidden = false // self.chbShowHidden.state == .on
         
         DispatchQueue.global().async {
             self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {data in

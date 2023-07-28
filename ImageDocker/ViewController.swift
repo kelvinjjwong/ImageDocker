@@ -186,8 +186,8 @@ class ViewController: NSViewController {
     @IBOutlet weak var popFilterSource: NSPopUpButton!
     @IBOutlet weak var lblFilterOwner: NSTextField!
     @IBOutlet weak var popFilterOwner: NSPopUpButton!
-    @IBOutlet weak var chbSelectAll: NSButton!
-    @IBOutlet weak var chbShowHidden: NSButton!
+//    @IBOutlet weak var chbSelectAll: NSButton!
+//    @IBOutlet weak var chbShowHidden: NSButton!
     
     // MARK: - Panel Collapse
     
@@ -537,13 +537,13 @@ class ViewController: NSViewController {
 //        self.logger.log("Loading view - configure dark mode")
         
         self.imagesLoader.hiddenCountHandler = { hiddenCount in
-            DispatchQueue.main.async {
-                self.chbShowHidden.title = "\(Words.hidden.word()) (\(hiddenCount))"
-//                self.logger.log("hidden: \(hiddenCount)")
-            }
+//            DispatchQueue.main.async {
+//                self.chbShowHidden.title = "\(Words.hidden.word()) (\(hiddenCount))"
+////                self.logger.log("hidden: \(hiddenCount)")
+//            }
         }
         
-        self.chbShowHidden.state = NSButton.StateValue.off
+//        self.chbShowHidden.state = NSButton.StateValue.off
         
         NotificationCenter.default.addObserver(self, selector: #selector(processDatabaseError(notification:)), name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: nil)
     }
@@ -586,7 +586,7 @@ class ViewController: NSViewController {
         self.addressSearcher.drawsBackground = true
         self.btnChoiceMapService.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
-        self.chbShowHidden.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+//        self.chbShowHidden.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
         
         self.collectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -601,8 +601,8 @@ class ViewController: NSViewController {
         self.btnMemories.title = Words.memories.word()
         self.btnCombineDuplicates.title = Words.combineDuplicates.word()
         self.btnRefreshCollectionView.title = Words.reload.word()
-        self.chbShowHidden.title = Words.hidden.word()
-        self.chbSelectAll.title = Words.selectAll.word()
+//        self.chbShowHidden.title = Words.hidden.word()
+//        self.chbSelectAll.title = Words.selectAll.word()
     }
     
     internal var startupAggregateFlag: Int = 0 {
@@ -704,16 +704,16 @@ class ViewController: NSViewController {
     
     
     @IBAction func onCheckSelectAllClicked(_ sender: NSButton) {
-        if self.chbSelectAll.state == .on {
-            self.imagesLoader.checkAll()
-        }else{
-            self.imagesLoader.uncheckAll()
-        }
+//        if self.chbSelectAll.state == .on {
+//            self.imagesLoader.checkAll()
+//        }else{
+//            self.imagesLoader.uncheckAll()
+//        }
     }
     
     
     @IBAction func onCheckShowHiddenClicked(_ sender: NSButton) {
-        self.switchShowHideState()
+//        self.switchShowHideState()
     }
     
     // MARK: - FACE

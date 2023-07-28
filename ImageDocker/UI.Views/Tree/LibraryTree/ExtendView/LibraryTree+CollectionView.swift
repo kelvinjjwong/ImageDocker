@@ -51,9 +51,9 @@ extension ViewController {
     internal func loadCollectionByContainer(container:ImageContainer, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){
         self.logger.log("loadCollectionByContainer(container:\(container.id), repositoryId:\(repositoryId ?? -999999), repositoryVolume:\(repositoryVolume ?? "nil"), rawVolume:\(rawVolume ?? "nil"), pageSize:\(pageSize), pageNumber:\(pageNumber), subdirectories:\(subdirectories)")
         var totalRecords = self.countImagesOfContainer(container: container)
-        if self.chbShowHidden.state == .off {
-            totalRecords -= self.countHiddenImagesOfContainer(container: container)
-        }
+//        if self.chbShowHidden.state == .off {
+//            totalRecords -= self.countHiddenImagesOfContainer(container: container)
+//        }
         self.changePaginationState(currentPage: pageNumber, pageSize: pageSize, totalRecords: totalRecords)
         
         self.loadCollectionByContainer(name: container.name,
