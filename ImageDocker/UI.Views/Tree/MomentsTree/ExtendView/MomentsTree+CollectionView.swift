@@ -32,7 +32,7 @@ extension ViewController {
                         self.loadCollectionByMoment(moment:moment, pageSize: pageSize, pageNumber: pageNumber)
             },
                       onPaginationStateChanges: { currentPage, totalPages in
-                      self.changePaginationState(currentPage: currentPage, totalPages: totalPages)
+                        self.collectionPaginationController?.changePaginationState(currentPage: currentPage, totalPages: totalPages)
                         
             })
         
@@ -40,21 +40,33 @@ extension ViewController {
         self.collectionPaginationPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxX)
     }
     
+    // 1
     func loadCollectionByMoment(moment:Moment, pageSize:Int = 0, pageNumber:Int = 0){
+        self.logger.log("loadCollectionByMoment(moment, pageSize, pageNumber)")
         self.selectedMoment = moment
 
         var totalRecords = self.countImagesOfMoment(moment: moment)
+        
+        self.collectionPaginationController?.initCounter(onCountTotal: {
+            return self.countImagesOfMoment(moment: moment)
+        }, onCountHidden: {
+            return self.countHiddenImagesOfMoment(moment: moment)
+        })
+        self.collectionPaginationController?.initLoader(onLoad: { pageSize, pageNumber in
+            self.loadCollectionByMoment(year: moment.year, month: moment.month, day: moment.day, pageSize: pageSize, pageNumber: pageNumber)
+        })
 //        self.logger.log("total records including hidden: \(totalRecords)")
 //        if self.chbShowHidden.state == .off {
 //            totalRecords -= self.countHiddenImagesOfMoment(moment: moment)
 //        }
 //        self.logger.log("total records excluding hidden: \(totalRecords)")
-        self.changePaginationState(currentPage: pageNumber, pageSize: pageSize, totalRecords: totalRecords)
-        
-        self.loadCollectionByMoment(year: moment.year, month: moment.month, day: moment.day, pageSize: pageSize, pageNumber: pageNumber)
+        self.collectionPaginationController?.changePaginationState(currentPage: pageNumber, pageSize: pageSize, totalRecords: totalRecords)
+        self.collectionPaginationController?.reload()
     }
     
+    // 2
     func loadCollectionByMoment(year:Int, month:Int, day:Int, pageSize:Int = 0, pageNumber:Int = 0){
+        self.logger.log("loadCollectionByMoment(year, month, day, pageSize, pageNumber)")
         //guard !self.scaningRepositories && !self.creatingRepository else {return}
 //        self.logger.log("select \(year) \(month) \(day)")
         

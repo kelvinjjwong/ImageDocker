@@ -157,8 +157,6 @@ extension ViewController {
     
     internal func prepareToolbarsOnStartup() {
         DispatchQueue.main.async {
-            self.showToolbarOfCollectionView()
-            
             
             if self.startingUp {
                 self.splashController.message(Words.splash_preparingUI.word(), progress: 5)

@@ -12,12 +12,12 @@ extension ViewController {
     
     fileprivate func countImagesOfContainer(container:ImageContainer) -> Int{
 //        self.logger.log("countImagesOfContainer(container:\(container.id)")
-        return ImageCountDao.default.countImages(repositoryRoot: container.path.withLastStash())
+        return ImageCountDao.default.countImages(repositoryRoot: container.path.withLastStash()) // FIXME: use id instead
     }
     
     fileprivate func countHiddenImagesOfContainer(container:ImageContainer) -> Int {
 //        self.logger.log("countHiddenImagesOfContainer(container:\(container.id)")
-        return ImageCountDao.default.countHiddenImages(repositoryRoot: container.path.withLastStash())
+        return ImageCountDao.default.countHiddenImages(repositoryRoot: container.path.withLastStash()) // FIXME: use id instead
     }
     
     func reloadCollectionFromImageContainer(sender:NSButton) {
@@ -38,7 +38,7 @@ extension ViewController {
                             self.loadCollectionByContainer(container: container, pageSize: pageSize, pageNumber: pageNumber, subdirectories: true)
                 },
                           onPaginationStateChanges: {currentPage, totalPages in
-                          self.changePaginationState(currentPage: currentPage, totalPages: totalPages)
+                            self.collectionPaginationController?.changePaginationState(currentPage: currentPage, totalPages: totalPages)
                 })
             
             let cellRect = sender.bounds
@@ -54,15 +54,23 @@ extension ViewController {
 //        if self.chbShowHidden.state == .off {
 //            totalRecords -= self.countHiddenImagesOfContainer(container: container)
 //        }
-        self.changePaginationState(currentPage: pageNumber, pageSize: pageSize, totalRecords: totalRecords)
+        self.collectionPaginationController?.initCounter(onCountTotal: {
+            return self.countImagesOfContainer(container: container)
+        }, onCountHidden: {
+            return self.countHiddenImagesOfContainer(container: container)
+        })
+        self.collectionPaginationController?.initLoader(onLoad: { pageSize, pageNumber in
+            self.loadCollectionByContainer(name: container.name,
+                                           containerId: container.id,
+                                           //url:URL(fileURLWithPath: container.path),
+                                           repositoryId: repositoryId,
+                                           repositoryVolume: repositoryVolume,
+                                           rawVolume: rawVolume,
+                                           pageSize: pageSize, pageNumber: pageNumber)
+        })
+        self.collectionPaginationController?.changePaginationState(currentPage: pageNumber, pageSize: pageSize, totalRecords: totalRecords)
+        self.collectionPaginationController?.reload()
         
-        self.loadCollectionByContainer(name: container.name,
-                                       containerId: container.id,
-                                       //url:URL(fileURLWithPath: container.path),
-                                       repositoryId: repositoryId,
-                                       repositoryVolume: repositoryVolume,
-                                       rawVolume: rawVolume,
-                                       pageSize: pageSize, pageNumber: pageNumber)
     }
     
     internal func loadCollectionByContainer(name:String, containerId:Int, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){

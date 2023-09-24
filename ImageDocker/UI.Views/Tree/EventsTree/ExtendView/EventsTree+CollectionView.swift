@@ -41,7 +41,7 @@ extension ViewController {
                         self.loadCollectionByEvent(moment:moment, pageSize: pageSize, pageNumber: pageNumber)
             },
                       onPaginationStateChanges: { currentPage, totalPages in
-                      self.changePaginationState(currentPage: currentPage, totalPages: totalPages)
+                        self.collectionPaginationController?.changePaginationState(currentPage: currentPage, totalPages: totalPages)
                         
             })
         
@@ -51,25 +51,35 @@ extension ViewController {
     
     // MARK: CLICK ACTION
     
+    // 1
     func loadCollectionByEvent(moment:Moment, pageSize:Int = 0, pageNumber:Int = 0) {
         self.selectedMoment = moment
         
         var totalRecords = self.countImagesOfEvent(moment: moment)
+        
+        self.collectionPaginationController?.initCounter(onCountTotal: {
+            return self.countImagesOfEvent(moment: moment)
+        }, onCountHidden: {
+            return self.countHiddenImagesOfEvent(moment: moment)
+        })
 //        if self.chbShowHidden.state == .off {
 //            totalRecords -= self.countHiddenImagesOfEvent(moment: moment)
 //        }
-        self.changePaginationState(currentPage: pageNumber, pageSize: pageSize, totalRecords: totalRecords)
+        self.collectionPaginationController?.initLoader(onLoad: { pageSize, pageNumber in
+            self.loadCollection {
+                self.imagesLoader.load(year: moment.year, month: moment.month, day: moment.day,
+                                       event: moment.event,
+                                       place: moment.place,
+                                       filterImageSource: self.filterImageSource,
+                                       filterCameraModel: self.filterCameraModel,
+                                       indicator:self.collectionLoadingIndicator,
+                                       pageSize: pageSize,
+                                       pageNumber: pageNumber)
+            }
+        })
+        self.collectionPaginationController?.changePaginationState(currentPage: pageNumber, pageSize: pageSize, totalRecords: totalRecords)
+        self.collectionPaginationController?.reload()
         
-        loadCollection {
-            self.imagesLoader.load(year: moment.year, month: moment.month, day: moment.day,
-                                   event: moment.event,
-                                   place: moment.place,
-                                   filterImageSource: self.filterImageSource,
-                                   filterCameraModel: self.filterCameraModel,
-                                   indicator:self.collectionLoadingIndicator,
-                                   pageSize: pageSize,
-                                   pageNumber: pageNumber)
-        }
     }
     
 }

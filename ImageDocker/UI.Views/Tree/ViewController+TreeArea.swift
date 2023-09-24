@@ -17,7 +17,6 @@ extension ViewController {
         //self.sourceList.backgroundColor = NSColor.darkGray
         
 //        self.hideToolbarOfTree()
-        self.hideToolbarOfCollectionView()
 //        self.treeIndicator.isEnabled = false
 //        self.treeIndicator.isHidden = true
 //        self.treeIndicator.doubleValue = 0.0

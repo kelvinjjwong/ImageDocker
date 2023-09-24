@@ -154,25 +154,22 @@ class ViewController: NSViewController {
     @IBOutlet weak var collectionView: NSCollectionView!
     
     // MARK: - Collection Pages
-    @IBOutlet weak var lblCaptionTotalRecords: NSTextField!
-    @IBOutlet weak var lblTotalRecords: NSTextField!
-    @IBOutlet weak var lblCaptionShowRecords: NSTextField!
-    @IBOutlet weak var lblShowRecords: NSTextField!
+    @IBOutlet weak var collectionPaginationView: NSView!
     
-    @IBOutlet weak var btnFirstPageCollection: NSButton!
-    @IBOutlet weak var btnPreviousPageCollection: NSButton!
-    @IBOutlet weak var lblPagesCollection: NSTextField!
-    @IBOutlet weak var btnNextPageCollection: NSButton!
-    @IBOutlet weak var btnLastPageCollection: NSButton!
+    @IBOutlet weak var lblShowRecords: NSTextField! // how many records are shown
+    @IBOutlet weak var lblHiddenRecords: NSTextField! // how many records are hidden
     
-    @IBOutlet weak var lblPageCollection: NSTextField!
-    @IBOutlet weak var popJumpPage: NSPopUpButton!
-    @IBOutlet weak var lblPage2Collection: NSTextField!
     
-    @IBOutlet weak var popPageSizeCollection: NSPopUpButton!
-    @IBOutlet weak var lblPageSizeCollection: NSTextField!
+    @IBOutlet weak var btnFirstPageCollection: NSButton! // first page
+    @IBOutlet weak var btnPreviousPageCollection: NSButton! // previous page
+    @IBOutlet weak var lblPagesCollection: NSTextField! // current page / total pages
+    @IBOutlet weak var btnNextPageCollection: NSButton! // next page
+    @IBOutlet weak var btnLastPageCollection: NSButton! // last page
     
-    @IBOutlet weak var btnRefreshCollectionView: NSButton!
+    @IBOutlet weak var popPageSizeCollection: NSPopUpButton! // page size drop down list
+    @IBOutlet weak var lblPageSizeCollection: NSTextField! // per page
+    
+    @IBOutlet weak var btnRefreshCollectionView: NSButton! // reload
     
     // MARK: - Collection Progress
     
@@ -180,12 +177,10 @@ class ViewController: NSViewController {
     @IBOutlet weak var collectionProgressIndicator: NSProgressIndicator!
     
     // MARK: - Collection Filters
-    @IBOutlet weak var btnCombineDuplicates: NSPopUpButton!
     
-    @IBOutlet weak var lblFilterSource: NSTextField!
-    @IBOutlet weak var popFilterSource: NSPopUpButton!
-    @IBOutlet weak var lblFilterOwner: NSTextField!
-    @IBOutlet weak var popFilterOwner: NSPopUpButton!
+    @IBOutlet weak var btnFilter: NSButton! // filter
+    @IBOutlet weak var btnCombineDuplicates: NSPopUpButton! // duplication ops
+    
 //    @IBOutlet weak var chbSelectAll: NSButton!
 //    @IBOutlet weak var chbShowHidden: NSButton!
     
@@ -251,7 +246,7 @@ class ViewController: NSViewController {
     
     
     var collectionPaginationPopover:NSPopover?
-    var collectionPaginationViewController:CollectionPaginationViewController!
+    var collectionPaginationViewController:CollectionPaginationViewController! // popover panel
     
     var stackedTreeView:StackedTreeViewController!
     
@@ -625,26 +620,26 @@ class ViewController: NSViewController {
     
     // MARK: - Collection Pages
     
-    func initPages(_ lastRequest:CollectionViewLastRequest){
+    func initPaginationController(){
         if self.collectionPaginationController == nil {
-            self.collectionPaginationController = CollectionPaginationController(lblCaptionTotalRecords: self.lblCaptionTotalRecords,
-                                                                                 lblTotalRecords: self.lblTotalRecords,
-                                                                                 lblCaptionShowRecords: self.lblCaptionShowRecords,
+            self.collectionPaginationController = CollectionPaginationController(panel: self.collectionPaginationView,
                                                                                  lblShowRecords: self.lblShowRecords,
-                                                                                 lblCaptionOnPage1: self.lblPageCollection,
-                                                                                 lstJumpOnPage: self.popJumpPage,
-                                                                                 lblCaptionOnPage2: self.lblPage2Collection,
+                                                                                 lblHiddenRecords: self.lblHiddenRecords,
+                                                                                 
                                                                                  lstPageSize: self.popPageSizeCollection,
                                                                                  lblCaptionPageSize: self.lblPageSizeCollection,
+                                                                                 
                                                                                  btnFirstPage: self.btnFirstPageCollection,
                                                                                  btnPreviousPage: self.btnPreviousPageCollection,
                                                                                  lblPageNumber: self.lblPagesCollection,
                                                                                  btnNextPage: self.btnNextPageCollection,
                                                                                  btnLastPage: self.btnLastPageCollection,
+                                                                                 
                                                                                  btnLoadPage: self.btnRefreshCollectionView
             )
-            // FIXME: self.collectionPaginationController.initview()
         }
+        
+        // FIXME: self.collectionPaginationController.initview()
     }
     
     var collectionPaginationController:CollectionPaginationController?
@@ -652,48 +647,36 @@ class ViewController: NSViewController {
     var isCollectionPaginated:Bool = false
     
     @IBAction func onFirstPageCollectionClicked(_ sender: NSButton) {
+        self.collectionPaginationController?.onFirstPage()
     }
     
     @IBAction func onPreviousPageCollectionClicked(_ sender: NSButton) {
-        self.previousPageCollection()
+        self.logger.log("clicked previous page")
+        self.collectionPaginationController?.onPreviousPage()
+        self.loadCollection {
+            self.imagesLoader.previousPage()
+        }
     }
     
     @IBAction func onNextPageCollectionClicked(_ sender: NSButton) {
-        self.nextPageCollection()
+        self.logger.log("clicked next page")
+        self.collectionPaginationController?.onNextPage()
+        self.loadCollection {
+            self.imagesLoader.nextPage()
+        }
     }
     
     @IBAction func onLastPageCollectionClicked(_ sender: NSButton) {
+        self.collectionPaginationController?.onLastPage()
     }
     
     @IBAction func onRefreshCollectionButtonClicked(_ sender: NSButton) {
+        self.logger.log("reload collection view button clicked")
         self.refreshCollection(sender)
     }
     
     var currentPageOfCollection = 0
     var totalPagesOfCollection = 0
-    
-    internal func changePaginationState(currentPage:Int, pageSize:Int, totalRecords:Int) {
-        var pages = totalRecords / pageSize
-        if totalRecords > (pages * pageSize) {
-            pages += 1
-        }
-//        self.logger.log("totalrecords: \(totalRecords), pageSize:\(pageSize), pages:\(pages)")
-        self.changePaginationState(currentPage: currentPage, totalPages: pages)
-    }
-    
-    internal func changePaginationState(currentPage:Int, totalPages:Int){
-//        self.logger.log("page: \(currentPage), total: \(totalPages)")
-        self.currentPageOfCollection = currentPage
-        self.totalPagesOfCollection = totalPages
-        self.lblPagesCollection.stringValue = "\(currentPage) / \(totalPages)"
-        self.btnPreviousPageCollection.isHidden = !(currentPage > 1)
-        self.btnNextPageCollection.isHidden = !(currentPage < totalPages)
-        if totalPages > 1 {
-            self.btnRefreshCollectionView.title = Words.pages.word()
-        }else{
-            self.btnRefreshCollectionView.title = Words.reload.word()
-        }
-    }
     
     // MARK: - Collection Filters
     

@@ -36,11 +36,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 //        }
     }
     
-    
+    func defaultLoggingFilename() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd_HHmm"
+        let datePart = dateFormatter.string(from: Date())
+        return "\(datePart).log"
+    }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         NSUserNotificationCenter.default.delegate = self
+        LoggerFactory.append(logWriter: ConsoleLogger())
+        LoggerFactory.append(logWriter: FileLogger(pathOfFolder: self.applicationDocumentsDirectory.appending(component: "log").appending(component: self.defaultLoggingFilename()).path))
         self.setupMainMenu()
     }
 

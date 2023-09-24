@@ -252,6 +252,11 @@ class CollectionViewItemsLoader : NSObject {
         setupItems(photoFiles: images)
     }
     
+    func firstPage() {
+        lastRequest.pageNumber = 1
+        self.reload()
+    }
+    
     func nextPage() {
         lastRequest.pageNumber += 1
         self.reload()
@@ -260,6 +265,10 @@ class CollectionViewItemsLoader : NSObject {
     func previousPage() {
         lastRequest.pageNumber -= 1
         self.reload()
+    }
+    
+    func lastPage() {
+        self.logger.log(.error, "TODO lastPage")
     }
     
     func reload() {

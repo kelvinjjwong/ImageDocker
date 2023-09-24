@@ -11,10 +11,11 @@ import Cocoa
 extension ViewController {
     
     internal func configureCollectionView() {
-        self.btnPreviousPageCollection.isHidden = true
-        self.btnNextPageCollection.isHidden = true
-        self.lblPagesCollection.stringValue = ""
-        collectionProgressIndicator.isHidden = true
+        
+        self.initPaginationController()
+        self.collectionPaginationController?.hide()
+        self.collectionProgressIndicator.isHidden = true
+        
         let flowLayout = NSCollectionViewFlowLayout()
         flowLayout.itemSize = NSSize(width: 180.0, height: 150.0)
         flowLayout.sectionInset = NSEdgeInsets(top: 10.0, left: 20, bottom: 10.0, right: 20.0)
@@ -32,34 +33,16 @@ extension ViewController {
         collectionView.reloadData()
     }
     
-    internal func hideToolbarOfCollectionView() {
-        self.btnRefreshCollectionView.isHidden = true
-        self.btnCombineDuplicates.isHidden = true
-//        self.chbSelectAll.isHidden = true
-//        self.chbShowHidden.isHidden = true
-    }
-    
-    internal func showToolbarOfCollectionView() {
-        self.btnRefreshCollectionView.isHidden = false
-        self.btnCombineDuplicates.isHidden = false
-//        self.chbSelectAll.isHidden = false
-//        self.chbShowHidden.isHidden = false
-    }
-    
-    
-    
     internal func disableCollectionViewControls() {
-        self.btnRefreshCollectionView.isEnabled = false
-//        self.chbSelectAll.isEnabled = false
-//        self.chbShowHidden.isEnabled = false
+        self.collectionPaginationController?.disable()
+        self.btnFilter.isEnabled = false
         self.btnCombineDuplicates.isEnabled = false
     }
     
     
     internal func enableCollectionViewControls() {
-        self.btnRefreshCollectionView.isEnabled = true
-//        self.chbSelectAll.isEnabled = true
-//        self.chbShowHidden.isEnabled = true
+        self.collectionPaginationController?.enable()
+        self.btnFilter.isEnabled = true
         self.btnCombineDuplicates.isEnabled = true
     }
     
@@ -88,20 +71,21 @@ extension ViewController {
     }
     
     internal func previousPageCollection() {
-        self.changePaginationState(currentPage: self.currentPageOfCollection - 1, totalPages: self.totalPagesOfCollection)
+        self.collectionPaginationController?.changePaginationState(currentPage: self.currentPageOfCollection - 1, totalPages: self.totalPagesOfCollection)
         self.loadCollection {
             self.imagesLoader.previousPage()
         }
     }
     
     internal func nextPageCollection() {
-        self.changePaginationState(currentPage: self.currentPageOfCollection + 1, totalPages: self.totalPagesOfCollection)
+        self.collectionPaginationController?.changePaginationState(currentPage: self.currentPageOfCollection + 1, totalPages: self.totalPagesOfCollection)
         self.loadCollection {
             self.imagesLoader.nextPage()
         }
     }
     
     internal func refreshCollection(_ sender: NSButton) {
+        self.logger.log("refreshCollection(sender) clicked")
         if self.imagesLoader.lastRequest.loadSource == .repository && self.imagesLoader.lastRequest.pageNumber > 0 && self.imagesLoader.lastRequest.pageSize > 0 {
 //            self.logger.log("clicked repo collection reload button")
             self.reloadCollectionFromImageContainer(sender: sender)
@@ -140,6 +124,7 @@ extension ViewController {
     }
     
     internal func refreshCollection(){
+        self.logger.log("refreshCollection() clicked")
         DispatchQueue.global().async {
             if self.imagesLoader.isLoading() {
                 self.imagesLoader.cancel(onCancelled: {
