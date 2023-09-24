@@ -71,17 +71,19 @@ extension ViewController {
     }
     
     internal func previousPageCollection() {
-        self.collectionPaginationController?.changePaginationState(currentPage: self.currentPageOfCollection - 1, totalPages: self.totalPagesOfCollection)
-        self.loadCollection {
-            self.imagesLoader.previousPage()
-        }
+        print("## previousPageCollection")
+//        self.collectionPaginationController?.changePaginationState(currentPage: self.currentPageOfCollection - 1, totalPages: self.totalPagesOfCollection)
+//        self.loadCollection {
+//            self.imagesLoader.previousPage()
+//        }
     }
     
     internal func nextPageCollection() {
-        self.collectionPaginationController?.changePaginationState(currentPage: self.currentPageOfCollection + 1, totalPages: self.totalPagesOfCollection)
-        self.loadCollection {
-            self.imagesLoader.nextPage()
-        }
+        print("## nextPageCollection")
+//        self.collectionPaginationController?.changePaginationState(currentPage: self.currentPageOfCollection + 1, totalPages: self.totalPagesOfCollection)
+//        self.loadCollection {
+//            self.imagesLoader.nextPage()
+//        }
     }
     
     internal func refreshCollection(_ sender: NSButton) {

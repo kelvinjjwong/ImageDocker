@@ -33,16 +33,15 @@ class CollectionPaginationController {
     var btnLoadPage: NSButton! // reload
     
     fileprivate var lastRequest:CollectionViewLastRequest!
-    fileprivate var total = 0
-    fileprivate var pages = 0
+    fileprivate var totalRecords = 0
+    fileprivate var showRecords = 0
+    fileprivate var hiddenRecords = 0
     fileprivate var currentPage = 0
     fileprivate var totalPages = 0
     fileprivate var pageSize = 0
     fileprivate var onLoad: ((_ pageSize:Int, _ pageNumber:Int) -> Void)?
     fileprivate var onCountTotal: (() -> Int)?
     fileprivate var onCountHidden: (() -> Int)?
-    fileprivate var onPaginationStateChanges: ((_ currentPage:Int, _ totalPages:Int) -> Void)? // currentPage, totalPages
-    fileprivate var onPaginationSizeChanges: ((_ currentPage:Int, _ pageSize:Int, _ totalRecords:Int) -> Void)? // currentPage, pageSize, totalRecords
     
     init(
          panel: NSView,
@@ -77,6 +76,22 @@ class CollectionPaginationController {
         
     }
     
+    func initPageSize(pageSize:Int) {
+        if pageSize > 0 {
+            self.pageSize = pageSize
+        }else{
+            self.pageSize = 200
+        }
+    }
+    
+    func initPageNumber(pageNumber:Int) {
+        if pageNumber > 0 {
+            self.currentPage = pageNumber
+        }else{
+            self.currentPage = 1
+        }
+    }
+    
     func initCounter(
         onCountTotal: @escaping (() -> Int),
         onCountHidden: @escaping (() -> Int)
@@ -85,38 +100,26 @@ class CollectionPaginationController {
         self.onCountHidden = onCountHidden
     }
     
-    func initChangeHandler(
-        onPaginationStateChanges: @escaping ((_ currentPage:Int, _ totalPages:Int) -> Void),
-        onPaginationSizeChanges: @escaping ((_ currentPage:Int, _ pageSize:Int, _ totalRecords:Int) -> Void)
-    ) {
-        self.onPaginationSizeChanges = onPaginationSizeChanges
-        self.onPaginationStateChanges = onPaginationStateChanges
-    }
-    
     func initLoader(onLoad: @escaping ((_ pageSize:Int, _ pageNumber:Int) -> Void)) {
         self.onLoad = onLoad
     }
     
-    func initView(_ lastRequest:CollectionViewLastRequest,
-                  onCountTotal: @escaping (() -> Int),
-                  onCountHidden: @escaping (() -> Int),
-                  onLoad: @escaping ((_ pageSize:Int, _ pageNumber:Int) -> Void),
-                  onPaginationStateChanges: @escaping ((Int, Int) -> Void),
-                  onPaginationSizeChanges: @escaping ((Int, Int, Int) -> Void)
-    ) {
-        
-        self.lastRequest = lastRequest
-        self.onCountTotal = onCountTotal
-        self.onCountHidden = onCountHidden
-        self.onLoad = onLoad
-        self.onPaginationSizeChanges = onPaginationSizeChanges
-        self.onPaginationStateChanges = onPaginationStateChanges
-        
-        self.lblCaptionPageSize.stringValue = Words.collection_pagination_items_per_page.word()
-        
-        self.countImages()
-        self.calculatePages()
-    }
+//    func initView(_ lastRequest:CollectionViewLastRequest,
+//                  onCountTotal: @escaping (() -> Int),
+//                  onCountHidden: @escaping (() -> Int),
+//                  onLoad: @escaping ((_ pageSize:Int, _ pageNumber:Int) -> Void)
+//    ) {
+//
+//        self.lastRequest = lastRequest
+//        self.onCountTotal = onCountTotal
+//        self.onCountHidden = onCountHidden
+//        self.onLoad = onLoad
+//
+//        self.lblCaptionPageSize.stringValue = Words.collection_pagination_items_per_page.word()
+//
+//        self.countImages()
+//        self.calculatePages()
+//    }
     
     func hide() {
         self.panel.isHidden = true
@@ -142,30 +145,6 @@ class CollectionPaginationController {
         self.btnLoadPage.isEnabled = true
     }
     
-    
-    // 1
-    func changePaginationState(currentPage:Int, pageSize:Int, totalRecords:Int) {
-        self.logger.log("changePaginationState(currentPage,pageSize,totalRecords)")
-        var pages = totalRecords / pageSize
-        if totalRecords > (pages * pageSize) {
-            pages += 1
-        }
-        self.pageSize = pageSize
-        self.countImages()
-        self.logger.log("totalrecords: \(totalRecords), pageSize:\(pageSize), pages:\(pages)")
-        self.changePaginationState(currentPage: currentPage, totalPages: pages)
-    }
-    
-    // 2
-    func changePaginationState(currentPage:Int, totalPages:Int){
-        self.logger.log("changePaginationState(currentPage,totalPages)")
-        self.logger.log("current-page: \(currentPage), total-pages: \(totalPages)")
-        self.currentPage = currentPage
-        self.totalPages = totalPages
-        self.togglePaginationButtons()
-        self.show()
-    }
-    
     func togglePaginationButtons() {
         
         self.lblPageNumber.stringValue = "\(currentPage) / \(totalPages)"
@@ -183,31 +162,32 @@ class CollectionPaginationController {
     
     fileprivate func countImages() {
         if let onCountTotal = self.onCountTotal {
-            self.total = onCountTotal()
+            self.totalRecords = onCountTotal()
         }
-        var hiddenCount = 0
+        self.hiddenRecords = 0
         if let onCountHidden = self.onCountHidden {
-            hiddenCount = onCountHidden()
+            self.hiddenRecords = onCountHidden()
         }
-        let showCount = self.total - hiddenCount
-        self.lblShowRecords.stringValue = "\(showCount)"
-        self.lblHiddenRecords.stringValue = "\(hiddenCount)"
+        self.showRecords = self.totalRecords - self.hiddenRecords
+        self.lblShowRecords.stringValue = "\(self.showRecords)"
+        self.lblHiddenRecords.stringValue = "\(self.hiddenRecords)"
     }
     
-    fileprivate func calculatePages() {
+    fileprivate func calculatePages(_ includeHidden:Bool = false) {
+        let _totalRecordsToCalculate = includeHidden ? self.totalRecords : self.showRecords
         
+        self.pageSize = 200
         if let selectedSize = self.lstPageSize.titleOfSelectedItem {
             self.pageSize = Int(selectedSize) ?? 200
         }
-        
-        self.pages = self.total / self.pageSize
-        if self.pages * self.pageSize < self.total {
-            self.pages += 1
+        self.totalPages = _totalRecordsToCalculate / self.pageSize
+        if self.totalPages * self.pageSize < _totalRecordsToCalculate {
+            self.totalPages += 1
         }
         if self.currentPage <= 0 {
             self.currentPage = 1
-        }else if self.currentPage > self.pages {
-            self.currentPage = self.pages
+        }else if self.currentPage > self.totalPages {
+            self.currentPage = self.totalPages
         }
 //        let start = pageSize * (currentPage - 1) + 1
 //        var end = pageSize * currentPage
@@ -219,53 +199,42 @@ class CollectionPaginationController {
         self.togglePaginationButtons()
         
         self.lblPageNumber.stringValue = "\(self.currentPage) / \(self.totalPages)"
-        if let onPaginationStateChanges = self.onPaginationStateChanges {
-            onPaginationStateChanges(
-                self.currentPage,
-                self.pages
-            )
-        }
-//        self.logger.log("divided pages \(self.pages)")
     }
     
     func onFirstPage() {
-        print("btn -> onFirstPage")
         self.countImages()
         self.currentPage = 1
-        self.calculatePages()
         self.reload()
     }
     
     func onPreviousPage() {
-        print("btn -> onPreviousPage")
         self.countImages()
         self.currentPage -= 1
-        print("gotoPage = \(currentPage)")
-        self.calculatePages()
         self.reload()
     }
     
     func onNextPage() {
-        print("btn -> onNextPage")
         self.countImages()
         self.currentPage += 1
-        print("gotoPage = \(currentPage)")
-        self.calculatePages()
         self.reload()
         
     }
     
     func onLastPage() {
-        print("btn -> onLastPage")
         self.countImages()
-        self.currentPage = self.pages
-        print("gotoPage = \(currentPage)")
-        self.calculatePages()
+        self.currentPage = self.totalPages
+        self.reload()
+    }
+    
+    func load() {
+        self.countImages()
         self.reload()
     }
     
     func reload() {
-        print("btn -> reload")
+        self.calculatePages()
+        self.togglePaginationButtons()
+        self.show()
         if let onLoad = self.onLoad {
             onLoad(self.pageSize, self.currentPage)
         }

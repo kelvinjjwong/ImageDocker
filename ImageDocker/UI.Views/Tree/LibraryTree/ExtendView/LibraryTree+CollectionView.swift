@@ -21,39 +21,39 @@ extension ViewController {
     }
     
     func reloadCollectionFromImageContainer(sender:NSButton) {
-        
-        if let container = self.selectedImageContainer {
-            self.createCollectionPaginationPopover()
-            self.collectionPaginationViewController
-                .initView(self.imagesLoader.lastRequest,
-                          onCountTotal: {
-                            return self.countImagesOfContainer(container: container)
-                },
-                          onCountHidden: {
-                            return self.countHiddenImagesOfContainer(container: container)
-                },
-                          onLoad: { pageSize, pageNumber in
-                    self.logger.log("CALLED ONLOAD \(pageSize) \(pageNumber)")
-                            
-                            self.loadCollectionByContainer(container: container, pageSize: pageSize, pageNumber: pageNumber, subdirectories: true)
-                },
-                          onPaginationStateChanges: {currentPage, totalPages in
-                            self.collectionPaginationController?.changePaginationState(currentPage: currentPage, totalPages: totalPages)
-                })
-            
-            let cellRect = sender.bounds
-            self.collectionPaginationPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .minY)
-        }else{
-            logger.log("no folder selected \(self.selectedImageFolder == nil)")
-        }
+        print("## reloadCollectionFromImageContainer")
+        self.collectionPaginationController?.reload()
+//        if let container = self.selectedImageContainer {
+//            self.createCollectionPaginationPopover()
+//            self.collectionPaginationViewController
+//                .initView(self.imagesLoader.lastRequest,
+//                          onCountTotal: {
+//                            return self.countImagesOfContainer(container: container)
+//                },
+//                          onCountHidden: {
+//                            return self.countHiddenImagesOfContainer(container: container)
+//                },
+//                          onLoad: { pageSize, pageNumber in
+//                    self.logger.log("CALLED ONLOAD \(pageSize) \(pageNumber)")
+//
+//                            self.loadCollectionByContainer(container: container, pageSize: pageSize, pageNumber: pageNumber, subdirectories: true)
+//                },
+//                          onPaginationStateChanges: {currentPage, totalPages in
+//                            self.collectionPaginationController?.changePaginationState(currentPage: currentPage, totalPages: totalPages)
+//                })
+//
+//            let cellRect = sender.bounds
+//            self.collectionPaginationPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .minY)
+//        }else{
+//            logger.log("no folder selected \(self.selectedImageFolder == nil)")
+//        }
     }
     
     internal func loadCollectionByContainer(container:ImageContainer, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){
         self.logger.log("loadCollectionByContainer(container:\(container.id), repositoryId:\(repositoryId ?? -999999), repositoryVolume:\(repositoryVolume ?? "nil"), rawVolume:\(rawVolume ?? "nil"), pageSize:\(pageSize), pageNumber:\(pageNumber), subdirectories:\(subdirectories)")
-        var totalRecords = self.countImagesOfContainer(container: container)
-//        if self.chbShowHidden.state == .off {
-//            totalRecords -= self.countHiddenImagesOfContainer(container: container)
-//        }
+        
+        self.collectionPaginationController?.initPageSize(pageSize: pageSize)
+        self.collectionPaginationController?.initPageNumber(pageNumber: pageNumber)
         self.collectionPaginationController?.initCounter(onCountTotal: {
             return self.countImagesOfContainer(container: container)
         }, onCountHidden: {
@@ -68,8 +68,7 @@ extension ViewController {
                                            rawVolume: rawVolume,
                                            pageSize: pageSize, pageNumber: pageNumber)
         })
-        self.collectionPaginationController?.changePaginationState(currentPage: pageNumber, pageSize: pageSize, totalRecords: totalRecords)
-        self.collectionPaginationController?.reload()
+        self.collectionPaginationController?.load()
         
     }
     

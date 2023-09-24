@@ -33,25 +33,27 @@ extension ViewController {
     }
 
     func reloadPlaceCollection(moment:Moment, sender:NSButton) {
-        self.createCollectionPaginationPopover()
-        self.collectionPaginationViewController
-            .initView(self.imagesLoader.lastRequest,
-                      onCountTotal: {
-                        return self.countImagesOfPlace(moment: moment)
-            },
-                      onCountHidden: {
-                        return self.countHiddenImagesOfPlace(moment: moment)
-            },
-                      onLoad: { pageSize, pageNumber in
-                        self.loadCollectionByPlace(moment:moment, pageSize: pageSize, pageNumber: pageNumber)
-            },
-                      onPaginationStateChanges: { currentPage, totalPages in
-                        self.collectionPaginationController?.changePaginationState(currentPage: currentPage, totalPages: totalPages)
-                        
-            })
-        
-        let cellRect = sender.bounds
-        self.collectionPaginationPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxX)
+        print("## reloadPlaceCollection")
+        self.collectionPaginationController?.reload()
+//        self.createCollectionPaginationPopover()
+//        self.collectionPaginationViewController
+//            .initView(self.imagesLoader.lastRequest,
+//                      onCountTotal: {
+//                        return self.countImagesOfPlace(moment: moment)
+//            },
+//                      onCountHidden: {
+//                        return self.countHiddenImagesOfPlace(moment: moment)
+//            },
+//                      onLoad: { pageSize, pageNumber in
+//                        self.loadCollectionByPlace(moment:moment, pageSize: pageSize, pageNumber: pageNumber)
+//            },
+//                      onPaginationStateChanges: { currentPage, totalPages in
+//                        self.collectionPaginationController?.changePaginationState(currentPage: currentPage, totalPages: totalPages)
+//                        
+//            })
+//        
+//        let cellRect = sender.bounds
+//        self.collectionPaginationPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxX)
     }
     
     // MARK: CLICK ACTION
@@ -62,8 +64,8 @@ extension ViewController {
             
         self.selectedMoment = moment
         
-        var totalRecords = self.countImagesOfPlace(moment: moment)
-        
+        self.collectionPaginationController?.initPageSize(pageSize: pageSize)
+        self.collectionPaginationController?.initPageNumber(pageNumber: pageNumber)
         self.collectionPaginationController?.initCounter(onCountTotal: {
             return self.countImagesOfPlace(moment: moment)
         }, onCountHidden: {
@@ -87,11 +89,7 @@ extension ViewController {
                     pageNumber: pageNumber)
             }
         })
-//        if self.chbShowHidden.state == .off {
-//            totalRecords -= self.countHiddenImagesOfPlace(moment: moment)
-//        }
-        self.collectionPaginationController?.changePaginationState(currentPage: pageNumber, pageSize: pageSize, totalRecords: totalRecords)
-        self.collectionPaginationController?.reload()
+        self.collectionPaginationController?.load()
         
     }
     
