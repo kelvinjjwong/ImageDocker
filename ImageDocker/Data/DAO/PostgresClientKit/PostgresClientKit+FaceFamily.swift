@@ -196,7 +196,12 @@ class FaceDaoPostgresCK : FaceDaoInterface {
     
     func getPeople() -> [People] {
         let db = PostgresConnection.database()
-        return People.fetchAll(db, orderBy: "name")
+        return People.fetchAll(db, orderBy: "\"coreMember\" desc, \"name\"")
+    }
+    
+    func getCoreMembers() -> [People] {
+        let db = PostgresConnection.database()
+        return People.fetchAll(db, parameters: ["coreMember": true], orderBy: "name")
     }
     
     func getPeopleIds(inFamilyQuotedSeparated:String, db: PostgresDB) -> [String] {
@@ -278,6 +283,17 @@ class FaceDaoPostgresCK : FaceDaoInterface {
         let db = PostgresConnection.database()
         do {
             try db.execute(sql: "delete from \"People\" where id = $1", parameterValues: [id])
+        }catch{
+            self.logger.log(error)
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    func updatePersonIsCoreMember(id:String, isCoreMember:Bool) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: "update \"People\" set \"coreMember\"='\(isCoreMember ? "t" : "f")' where id = $1", parameterValues: [id])
         }catch{
             self.logger.log(error)
             return .ERROR

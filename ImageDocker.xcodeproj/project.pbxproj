@@ -281,6 +281,11 @@
 		8EE1AB3D20D05E49001C75B0 /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */; };
 		8EE1AB3E20D05E49001C75B0 /* EventListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */; };
 		8EE382F823E02585003B7153 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE382F723E02585003B7153 /* Colors.swift */; };
+		8EE709D72AC0699400503447 /* PeopleManageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE709D52AC0699400503447 /* PeopleManageViewController.swift */; };
+		8EE709D82AC0699400503447 /* PeopleManageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EE709D62AC0699400503447 /* PeopleManageViewController.xib */; };
+		8EE709DB2AC08C3200503447 /* CollectionFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE709D92AC08C3200503447 /* CollectionFilterViewController.swift */; };
+		8EE709DC2AC08C3200503447 /* CollectionFilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EE709DA2AC08C3200503447 /* CollectionFilterViewController.xib */; };
+		8EE709DE2AC0917900503447 /* CollectionFilterPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE709DD2AC0917900503447 /* CollectionFilterPopover.swift */; };
 		8EEB88842090B44B00CDEC81 /* ImageDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEB88832090B44B00CDEC81 /* ImageDropView.swift */; };
 		8EEE58502465471A007219AB /* SQLiteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEE584F2465471A007219AB /* SQLiteDataSource.swift */; };
 		8EEE585224654760007219AB /* ImageDBInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEE585124654760007219AB /* ImageDBInterface.swift */; };
@@ -652,6 +657,11 @@
 		8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListViewController.swift; sourceTree = "<group>"; };
 		8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventListViewController.xib; sourceTree = "<group>"; };
 		8EE382F723E02585003B7153 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		8EE709D52AC0699400503447 /* PeopleManageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleManageViewController.swift; sourceTree = "<group>"; };
+		8EE709D62AC0699400503447 /* PeopleManageViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PeopleManageViewController.xib; sourceTree = "<group>"; };
+		8EE709D92AC08C3200503447 /* CollectionFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionFilterViewController.swift; sourceTree = "<group>"; };
+		8EE709DA2AC08C3200503447 /* CollectionFilterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionFilterViewController.xib; sourceTree = "<group>"; };
+		8EE709DD2AC0917900503447 /* CollectionFilterPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionFilterPopover.swift; sourceTree = "<group>"; };
 		8EEB88832090B44B00CDEC81 /* ImageDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDropView.swift; sourceTree = "<group>"; };
 		8EEE584F2465471A007219AB /* SQLiteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteDataSource.swift; sourceTree = "<group>"; };
 		8EEE585124654760007219AB /* ImageDBInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDBInterface.swift; sourceTree = "<group>"; };
@@ -1107,6 +1117,8 @@
 				8E8D47172229AC220091E9C3 /* FaceIconCollectionViewController.swift */,
 				8E8D47192229AC430091E9C3 /* FaceCollectionViewController.swift */,
 				8E9D8042234988DD0062692A /* PeopleFaceViewItems.storyboard */,
+				8EE709D52AC0699400503447 /* PeopleManageViewController.swift */,
+				8EE709D62AC0699400503447 /* PeopleManageViewController.xib */,
 			);
 			path = Face;
 			sourceTree = "<group>";
@@ -1195,6 +1207,9 @@
 				8EEF07202260D0E1000520B7 /* CollectionPaginationViewController.swift */,
 				8EEF07212260D0E1000520B7 /* CollectionPaginationViewController.xib */,
 				8E41348F2A64B59A00258755 /* CollectionPaginationController.swift */,
+				8EE709D92AC08C3200503447 /* CollectionFilterViewController.swift */,
+				8EE709DA2AC08C3200503447 /* CollectionFilterViewController.xib */,
+				8EE709DD2AC0917900503447 /* CollectionFilterPopover.swift */,
 			);
 			path = Pagination;
 			sourceTree = "<group>";
@@ -1765,12 +1780,14 @@
 				8E0AFA41208BDEA100CE8B68 /* Assets.xcassets in Resources */,
 				8E3FA91D235310AA00B677A3 /* MemoriesViews.storyboard in Resources */,
 				8EBC0183236B072F00FB6E2F /* TwoColumnTableViewController.xib in Resources */,
+				8EE709DC2AC08C3200503447 /* CollectionFilterViewController.xib in Resources */,
 				8ECB51012764268C004DFDD7 /* SubContainersManageViewController.xib in Resources */,
 				8E9D8039234884040062692A /* EditRepositoryViewController.xib in Resources */,
 				8E15E73A23AC74DC0094240A /* StackedTreeViewController.xib in Resources */,
 				8E98B8F120D0EE3300771280 /* PlaceListViewController.xib in Resources */,
 				8EEF071F225FCF8E000520B7 /* ContainerDetailViewController.xib in Resources */,
 				8EB271AD2346BE8A003BF3AF /* TaskProgressViewController.xib in Resources */,
+				8EE709D82AC0699400503447 /* PeopleManageViewController.xib in Resources */,
 				8EE1AB3E20D05E49001C75B0 /* EventListViewController.xib in Resources */,
 				8E0AFA44208BDEA100CE8B68 /* Main.storyboard in Resources */,
 				8E95739B20EBEBD7003BD651 /* FilterViewController.xib in Resources */,
@@ -1861,6 +1878,7 @@
 			files = (
 				8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */,
 				5C00784A289FB70900919826 /* Words+NotesModifier.swift in Sources */,
+				8EE709DB2AC08C3200503447 /* CollectionFilterViewController.swift in Sources */,
 				8E15E73D23AC74DC0094240A /* TreeTableCellView.swift in Sources */,
 				8EF8C55E265DBD910060D2E0 /* ImageLocationEditViewController.swift in Sources */,
 				8EBA759123B55B8B00548376 /* PlacesTreeDataSource.swift in Sources */,
@@ -1915,6 +1933,7 @@
 				8EFA02E1243B3E5200D7C355 /* PostgresClientKit+Image+Statistic.swift in Sources */,
 				5CA18B5929EB735D00C5502E /* NotificationMessageManager.swift in Sources */,
 				8ECA1FFB23E5751300F56895 /* LibraryTree+ExtendView.swift in Sources */,
+				8EE709DE2AC0917900503447 /* CollectionFilterPopover.swift in Sources */,
 				8E9CF30F2648D42500558423 /* ChangeEvent.swift in Sources */,
 				8E95739A20EBEBD7003BD651 /* FilterViewController.swift in Sources */,
 				8E27F2A5259DD79C003D48BE /* TreeOutlineView.swift in Sources */,
@@ -1973,6 +1992,7 @@
 				8EBA692C2090DB0300221131 /* DropPlaceCommons.swift in Sources */,
 				8E69D53924B333510075A05D /* MomentsTree+ExtendView.swift in Sources */,
 				8E8D471A2229AC430091E9C3 /* FaceCollectionViewController.swift in Sources */,
+				8EE709D72AC0699400503447 /* PeopleManageViewController.swift in Sources */,
 				8ECA1FF723E5252B00F56895 /* SampleTreeDataSource.swift in Sources */,
 				8EB27159233842E4003BF3AF /* ImageFile+Preview.swift in Sources */,
 				8E48148D277DBF030097493E /* Words+ExportProfileDialog.swift in Sources */,

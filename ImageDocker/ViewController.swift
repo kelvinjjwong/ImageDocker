@@ -44,6 +44,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var btnTogglePreviewPanel: NSButton!
     
     
+    @IBOutlet weak var btnPeople: NSButton!
     @IBOutlet weak var btnImageOptions: NSPopUpButton!
     
     // MARK: Layout
@@ -180,6 +181,10 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var btnFilter: NSButton! // filter
     @IBOutlet weak var btnCombineDuplicates: NSPopUpButton! // duplication ops
+    
+    
+    var collectionFilterPopover:NSPopover?
+    var collectionFilterViewController:CollectionFilterViewController!
     
 //    @IBOutlet weak var chbSelectAll: NSButton!
 //    @IBOutlet weak var chbShowHidden: NSButton!
@@ -596,6 +601,8 @@ class ViewController: NSViewController {
         self.btnMemories.title = Words.memories.word()
         self.btnCombineDuplicates.title = Words.combineDuplicates.word()
         self.btnRefreshCollectionView.title = Words.reload.word()
+        
+        self.btnPeople.title = Words.peopleManage.word()
 //        self.chbShowHidden.title = Words.hidden.word()
 //        self.chbSelectAll.title = Words.selectAll.word()
     }
@@ -780,6 +787,28 @@ class ViewController: NSViewController {
             metaTablePanel.isHidden = true
             self.btnTogglePreviewPanel.image = Icons.expandPreviewPanel
         }
+    }
+    
+    @IBAction func onPeopleClicked(_ sender: NSButton) {
+        let viewController = PeopleManageViewController()
+        let window = NSWindow(contentViewController: viewController)
+        
+        let screenWidth = Int(NSScreen.main?.frame.width ?? 0)
+        let screenHeight = Int(NSScreen.main?.frame.height ?? 0)
+        let windowWidth = 800
+        let windowHeight = 650
+        let originX = (screenWidth - windowWidth) / 2
+        let originY = (screenHeight - windowHeight) / 2
+        
+        let frame = CGRect(origin: CGPoint(x: originX, y: originY), size: CGSize(width: windowWidth, height: windowHeight))
+        window.title = Words.peopleManage.word()
+        window.setFrame(frame, display: false)
+        window.makeKeyAndOrderFront(self)
+        viewController.initView()
+    }
+    
+    @IBAction func onCollectionFilterClicked(_ sender: NSButton) {
+        self.popoverCollectionFilter()
     }
     
     

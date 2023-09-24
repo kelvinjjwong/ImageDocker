@@ -19,6 +19,7 @@ public final class People : Codable {
     var iconCropPath:String = ""
     var iconSubPath:String = ""
     var iconFilename:String = ""
+    var coreMember:Bool = false
     
     public init() {
         

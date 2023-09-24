@@ -36,6 +36,8 @@ protocol FaceDaoInterface {
     
     func getPeople() -> [People]
     
+    func getCoreMembers() -> [People]
+    
     func getPeople(inFamilyQuotedSeparated:String, exclude:Bool) -> [People]
     
     func getPeople(except:String) -> [People]
@@ -49,4 +51,6 @@ protocol FaceDaoInterface {
     func updatePersonIconImage(id:String, repositoryPath:String, cropPath:String, subPath:String, filename:String) -> Bool
     
     func deletePerson(id:String) -> ExecuteState
+    
+    func updatePersonIsCoreMember(id:String, isCoreMember:Bool) -> ExecuteState
 }

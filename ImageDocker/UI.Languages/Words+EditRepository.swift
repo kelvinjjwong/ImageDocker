@@ -125,6 +125,11 @@ extension Words {
         chs: "照片未识别人脸"
     )
     
+    static let peopleManage = Localize(
+        eng: "People",
+        chs: "人物"
+    )
+    
     static let repositoryConfiguration = Localize(
         eng: "Repository Configuration",
         chs: "照片库设定"

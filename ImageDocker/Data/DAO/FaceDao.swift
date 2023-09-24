@@ -73,6 +73,10 @@ class FaceDao {
         return self.impl.getPeople()
     }
     
+    func getCoreMembers() -> [People] {
+        return self.impl.getCoreMembers()
+    }
+    
     func getPeople(inFamilyQuotedSeparated:String, exclude:Bool = false) -> [People] {
         return self.impl.getPeople(inFamilyQuotedSeparated: inFamilyQuotedSeparated, exclude: exclude)
     }
@@ -99,6 +103,10 @@ class FaceDao {
     
     func deletePerson(id:String) -> ExecuteState {
         return self.impl.deletePerson(id: id)
+    }
+    
+    func updatePersonIsCoreMember(id:String, isCoreMember:Bool) -> ExecuteState {
+        return self.impl.updatePersonIsCoreMember(id: id, isCoreMember: isCoreMember)
     }
     
 }

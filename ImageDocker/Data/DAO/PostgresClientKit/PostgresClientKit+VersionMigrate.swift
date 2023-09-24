@@ -667,6 +667,12 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v54") { db in
+            try db.alter(table: "People", body: { t in
+                t.add("coreMember", .boolean).defaults(to: false).indexed()
+            })
+        }
+        
         do {
             try migrator.migrate(cleanVersions: dropBeforeCreate)
         }catch{

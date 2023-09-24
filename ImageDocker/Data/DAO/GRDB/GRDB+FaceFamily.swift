@@ -211,6 +211,10 @@ class FaceDaoGRDB : FaceDaoInterface {
         return obj
     }
     
+    func getCoreMembers() -> [People] {
+        return []
+    }
+    
     func getPeopleIds(inFamilyQuotedSeparated:String, db: DatabaseWriter) -> [String] {
         var peopleIds:[String] = []
         do{
@@ -333,6 +337,10 @@ class FaceDaoGRDB : FaceDaoInterface {
             return SQLHelper.errorState(error)
         }
         return .OK
+    }
+    
+    func updatePersonIsCoreMember(id:String, isCoreMember:Bool) -> ExecuteState {
+        return .ERROR
     }
     
 }

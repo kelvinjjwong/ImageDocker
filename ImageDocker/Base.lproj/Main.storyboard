@@ -1982,8 +1982,22 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                             <action selector="onNotificationMessagesClicked:" target="XfG-lQ-9wD" id="uLI-OW-d72"/>
                                         </connections>
                                     </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5UN-DP-f9q">
+                                        <rect key="frame" x="1612" y="25" width="68" height="15"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="68" id="YUo-op-VUG"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="roundRect" title="People" bezelStyle="roundedRect" image="smile" imagePosition="leading" alignment="center" imageScaling="proportionallyDown" inset="2" id="aRP-zC-JAc">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="cellTitle"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onPeopleClicked:" target="XfG-lQ-9wD" id="e1A-Pz-1uc"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="kCb-sM-PKJ" firstAttribute="leading" secondItem="5UN-DP-f9q" secondAttribute="trailing" constant="15" id="0O5-Ra-pOu"/>
                                     <constraint firstAttribute="height" constant="50" id="0rZ-ZR-afb"/>
                                     <constraint firstItem="Bwo-eW-DeK" firstAttribute="leading" secondItem="kCb-sM-PKJ" secondAttribute="trailing" constant="10" id="1SV-VN-KSn"/>
                                     <constraint firstItem="csF-Eh-wOF" firstAttribute="leading" secondItem="zJa-km-Rrl" secondAttribute="trailing" constant="5" id="3xL-e8-wwM"/>
@@ -2001,6 +2015,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                     <constraint firstAttribute="trailing" secondItem="1L2-wU-5mb" secondAttribute="trailing" constant="2" id="lY8-KH-lQ0"/>
                                     <constraint firstItem="qGQ-TO-rn5" firstAttribute="leading" secondItem="csF-Eh-wOF" secondAttribute="trailing" constant="5" id="yQQ-9y-y8t"/>
                                     <constraint firstItem="1L2-wU-5mb" firstAttribute="leading" secondItem="Bwo-eW-DeK" secondAttribute="trailing" constant="2" id="yZ8-x9-dj8"/>
+                                    <constraint firstItem="5UN-DP-f9q" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="zb9-rU-qHE"/>
                                 </constraints>
                             </customView>
                             <splitView arrangesAllSubviews="NO" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lfc-6c-aMy">
@@ -2296,6 +2311,9 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                                             <font key="font" metaFont="systemBold" size="12"/>
                                                                                         </buttonCell>
+                                                                                        <connections>
+                                                                                            <action selector="onCollectionFilterClicked:" target="XfG-lQ-9wD" id="vQb-VD-hVN"/>
+                                                                                        </connections>
                                                                                     </button>
                                                                                 </subviews>
                                                                                 <constraints>
@@ -2423,6 +2441,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <outlet property="btnMemories" destination="zJa-km-Rrl" id="meg-5b-t0p"/>
                         <outlet property="btnNextPageCollection" destination="meR-zL-rAv" id="HX2-0B-aQR"/>
                         <outlet property="btnNotification" destination="qGQ-TO-rn5" id="jh5-Fo-0Eb"/>
+                        <outlet property="btnPeople" destination="5UN-DP-f9q" id="ukx-5o-VBZ"/>
                         <outlet property="btnPreviousPageCollection" destination="IGx-sv-JYq" id="rRG-dS-OFu"/>
                         <outlet property="btnRefreshCollectionView" destination="DpT-Dg-Oeb" id="ze3-El-bMX"/>
                         <outlet property="btnTasks" destination="csF-Eh-wOF" id="6h3-Vs-dhx"/>
@@ -3746,6 +3765,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
         <image name="notification" width="24" height="24"/>
         <image name="rotate_clockwise" width="16" height="16"/>
         <image name="rotate_counter_clockwise" width="16" height="16"/>
+        <image name="smile" width="15" height="15"/>
         <image name="task" width="12" height="16"/>
         <image name="trash" width="16" height="16"/>
         <image name="view" width="16" height="16"/>
