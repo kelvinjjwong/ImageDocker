@@ -18,6 +18,10 @@ class EditRepositoryViewController: NSViewController {
     
     // MARK: - FIELDS
     
+    @IBOutlet weak var lblOwner: NSTextField!
+    @IBOutlet weak var ddlOwner: NSPopUpButton!
+    
+    
     @IBOutlet weak var lblSubFolderLabel: NSTextField!
     @IBOutlet weak var lblSubFolderLevel: NSTextField!
     @IBOutlet weak var lblDevice: NSTextField!
@@ -93,6 +97,7 @@ class EditRepositoryViewController: NSViewController {
     @IBOutlet weak var lstVolumesOfCrops: NSComboBox!
     @IBOutlet weak var lstVolumesOfHome: NSComboBox!
     
+    var ownerListController : TextListViewPopupController!
     var volumesOfEditableImagesListController : TextListViewPopupController!
     var volumesOfRawImagesListController : TextListViewPopupController!
     var volumesOfFacesListController : TextListViewPopupController!
@@ -134,16 +139,32 @@ class EditRepositoryViewController: NSViewController {
             // do nothing
         }
         
-        
+        self.ownerListController = TextListViewPopupController(self.ddlOwner)
         self.volumesOfEditableImagesListController = TextListViewPopupController(self.lstVolumesOfEditableImages)
         self.volumesOfRawImagesListController = TextListViewPopupController(self.lstVolumesOfRawImages)
         self.volumesOfFacesListController = TextListViewPopupController(self.lstVolumesOfFaces)
         self.volumesOfCropsListController = TextListViewPopupController(self.lstVolumesOfCrops)
         self.volumesOfHomeListController = TextListViewPopupController(self.lstVolumesOfHome)
         
+        self.refreshCoreMembers(selectedValue: "")
         self.refreshMountedVolumes()
         
         self.setupUIDisplay()
+    }
+    
+    func refreshCoreMembers(selectedValue:String) {
+        var items:[String] = []
+        items.append(Words.owner_public_shared.word())
+        let coreMembers = FaceDao.default.getCoreMembers()
+        for m in coreMembers {
+            items.append(m.shortName ?? m.name)
+        }
+        self.ownerListController.load(items)
+        if items.contains(selectedValue) {
+            self.ownerListController.select(selectedValue)
+        }else{
+            self.ownerListController.select(Words.owner_public_shared.word())
+        }
     }
     
     // MARK: - refresh volumes drop down
@@ -283,6 +304,8 @@ class EditRepositoryViewController: NSViewController {
             
             self.lblDeviceId.stringValue = ""
             self.lblDeviceName.stringValue = ""
+        
+        self.ddlOwner.selectItem(withTitle: Words.owner_public_shared.word())
     }
     
     fileprivate func emptyStorageTextFields() {
@@ -391,6 +414,8 @@ class EditRepositoryViewController: NSViewController {
             self.txtStoragePath.stringValue = "\(repository.storagePath)"
             self.txtFacePath.stringValue = "\(repository.facePath)"
             self.txtCropPath.stringValue = "\(repository.cropPath)"
+            
+            self.refreshCoreMembers(selectedValue: repository.owner)
             
             self.refreshMountedVolumes(append: [
                 repository.homeVolume,
@@ -532,6 +557,8 @@ class EditRepositoryViewController: NSViewController {
     
     /// - Tag: EditRepositoryViewController.saveNewRepository()
     fileprivate func saveNewRepository() {
+        let ownerName = self.ddlOwner.titleOfSelectedItem ?? Words.owner_public_shared.word()
+        
         let name = self.txtName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         let homePath = self.getVolumePath(dropdown: self.lstVolumesOfHome, text: self.txtHomePath)
         let storagePath = self.getVolumePath(dropdown: self.lstVolumesOfRawImages, text: self.txtStoragePath)
@@ -576,6 +603,7 @@ class EditRepositoryViewController: NSViewController {
         
         
         let imagefolder = RepositoryDao.default.createRepository(name: name,
+                                                                 owner: ownerName,
                                                 path: repositoryPath,
                                                 homePath: homePath,
                                                 storagePath: storagePath,
@@ -599,6 +627,8 @@ class EditRepositoryViewController: NSViewController {
     @IBAction func onOKClicked(_ sender: Any) {
         
         if let container = self.originalContainer { // edit
+            let ownerName = self.ddlOwner.titleOfSelectedItem ?? Words.owner_public_shared.word()
+            
             let name = self.txtName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
             let homePath = self.getVolumePath(dropdown: self.lstVolumesOfHome, text: self.txtHomePath)
             if name == "" {
@@ -633,6 +663,7 @@ class EditRepositoryViewController: NSViewController {
             let (cropVolume, _cropPath) = cropPath.getVolumeFromThisPath()
             
             RepositoryDao.default.updateRepository(id: self.originalRepositoryId, name: name,
+                                                   owner: ownerName,
                                                    homeVolume: homeVolume, homePath: _homePath,
                                                    repositoryVolume: repositoryVolume, repositoryPath: _repositoryPath,
                                                    storageVolume: storageVolume, storagePath: _storagePath,

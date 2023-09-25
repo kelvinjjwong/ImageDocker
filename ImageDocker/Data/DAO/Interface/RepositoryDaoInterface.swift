@@ -13,6 +13,7 @@ protocol RepositoryDaoInterface {
     // MARK: IMAGE REPOSITORY CRUD
     
     func createRepository(name:String,
+                          owner:String,
                           homeVolume:String, homePath:String,
                           repositoryVolume:String, repositoryPath:String,
                           storageVolume:String, storagePath:String,
@@ -20,6 +21,7 @@ protocol RepositoryDaoInterface {
                           cropVolume:String, cropPath:String) -> ImageRepository?
     
     func updateRepository(id:Int, name:String,
+                          owner:String, 
                           homeVolume:String, homePath:String,
                           repositoryVolume:String, repositoryPath:String,
                           storageVolume:String, storagePath:String,

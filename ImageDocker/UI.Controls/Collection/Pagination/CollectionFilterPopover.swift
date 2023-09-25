@@ -15,7 +15,7 @@ extension ViewController {
         var myPopover = self.collectionFilterPopover
         if(myPopover == nil){
             
-            let frame = CGRect(origin: .zero, size: CGSize(width: 600, height: 300))
+            let frame = CGRect(origin: .zero, size: CGSize(width: 600, height: 350))
             self.collectionFilterViewController = CollectionFilterViewController()
             self.collectionFilterViewController.view.frame = frame
             

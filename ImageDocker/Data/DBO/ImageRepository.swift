@@ -29,6 +29,7 @@ public final class ImageRepository: Codable {
     var eventFolderLevel: Int = 0
     var folderAsBrief: Bool = false
     var briefFolderLevel: Int = 0
+    var owner: String = ""
     
     public init() {
         

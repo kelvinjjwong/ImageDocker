@@ -38,6 +38,7 @@ class RepositoryDao {
     ///   - EditRepositoryViewController.saveNewRepository()
     /// - Tag: createRepository()
     func createRepository(name:String,
+                          owner:String,
                                  path:String,
                                  homePath:String,
                                  storagePath:String,
@@ -52,6 +53,7 @@ class RepositoryDao {
         let (cropVolume, _cropPath) = cropPath.getVolumeFromThisPath()
         
         let imageRepository = self.impl.createRepository(name: name,
+                                                         owner: owner,
                                    homeVolume: homeVolume, homePath: _homePath,
                                    repositoryVolume: repositoryVolume, repositoryPath: _repositoryPath,
                                    storageVolume: storageVolume, storagePath: _storagePath,
@@ -86,6 +88,7 @@ class RepositoryDao {
     }
     
     func updateRepository(id:Int, name:String,
+                          owner: String,
                           homeVolume:String, homePath:String,
                           repositoryVolume:String, repositoryPath:String,
                           storageVolume:String, storagePath:String,
@@ -93,6 +96,7 @@ class RepositoryDao {
                           cropVolume:String, cropPath:String
     ) {
         self.impl.updateRepository(id: id, name: name,
+                                   owner: owner,
                                    homeVolume: homeVolume, homePath: homePath,
                                    repositoryVolume: repositoryVolume, repositoryPath: repositoryPath,
                                    storageVolume: storageVolume, storagePath: storagePath,

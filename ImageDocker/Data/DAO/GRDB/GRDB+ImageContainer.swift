@@ -17,6 +17,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     let logger = LoggerFactory.get(category: "DB", subCategory: "RepositoryDaoGRDB")
     
     func createRepository(name:String,
+                          owner:String,
                           homeVolume:String, homePath:String,
                           repositoryVolume:String, repositoryPath:String,
                           storageVolume:String, storagePath:String,
@@ -27,6 +28,7 @@ class RepositoryDaoGRDB : RepositoryDaoInterface {
     }
     
     func updateRepository(id:Int, name:String,
+                          owner:String,
                           homeVolume:String, homePath:String,
                           repositoryVolume:String, repositoryPath:String,
                           storageVolume:String, storagePath:String,

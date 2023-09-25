@@ -34,6 +34,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     }
     
     func createRepository(name:String,
+                          owner:String,
                           homeVolume:String, homePath:String,
                           repositoryVolume:String, repositoryPath:String,
                           storageVolume:String, storagePath:String,
@@ -44,6 +45,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         }else{
             let imageRepository = ImageRepository()
             imageRepository.name = name
+            imageRepository.owner = owner
             imageRepository.homeVolume = homeVolume
             imageRepository.homePath = homePath
             imageRepository.repositoryVolume = repositoryVolume
@@ -62,6 +64,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     }
     
     func updateRepository(id:Int, name:String,
+                          owner: String,
                           homeVolume:String, homePath:String,
                           repositoryVolume:String, repositoryPath:String,
                           storageVolume:String, storagePath:String,
@@ -70,6 +73,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     ) {
         if let imageRepository = self.getRepository(id: id) {
             imageRepository.name = name
+            imageRepository.owner = owner
             imageRepository.homeVolume = homeVolume
             imageRepository.homePath = homePath
             imageRepository.repositoryVolume = repositoryVolume

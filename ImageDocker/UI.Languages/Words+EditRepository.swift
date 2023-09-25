@@ -289,4 +289,9 @@ extension Words {
         eng: "Use folder name as image's brief",
         chs: "使用文件夹名称作为照片描述"
     )
+    
+    static let owner_public_shared = Localize(
+        eng: "Shared",
+        chs: "公共"
+    )
 }

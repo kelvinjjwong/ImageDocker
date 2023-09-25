@@ -673,6 +673,12 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v55") { db in
+            try db.alter(table: "ImageRepository", body: { t in
+                t.add("owner", .text).defaults(to: "").indexed()
+            })
+        }
+        
         do {
             try migrator.migrate(cleanVersions: dropBeforeCreate)
         }catch{
