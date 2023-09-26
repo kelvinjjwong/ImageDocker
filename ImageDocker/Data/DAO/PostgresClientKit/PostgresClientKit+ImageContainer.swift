@@ -1006,5 +1006,22 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         return .OK
     }
     
+    func getOwners() -> [String] {
+        var result:[String] = []
+        let sql = """
+select distinct "owner" from "ImageRepository" order by "owner"
+"""
+        final class TempRecord : PostgresCustomRecord {
+            var owner:String = ""
+            public init() {}
+        }
+        let db = PostgresConnection.database()
+        let records = TempRecord.fetchAll(db, sql: sql)
+        for row in records {
+            result.append(row.owner)
+        }
+        return result
+    }
+    
 
 }

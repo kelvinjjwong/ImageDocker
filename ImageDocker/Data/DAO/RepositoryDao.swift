@@ -511,4 +511,10 @@ class RepositoryDao {
     func updateImageContainerToggleManyChildren(path:String, state:Bool) -> ExecuteState {
         return self.impl.updateImageContainerToggleManyChildren(path: path, state: state)
     }
+    
+    
+    
+    func getOwners() -> [String] {
+        return self.impl.getOwners()
+    }
 }

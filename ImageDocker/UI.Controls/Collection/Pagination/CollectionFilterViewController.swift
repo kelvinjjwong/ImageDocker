@@ -51,12 +51,12 @@ class CollectionFilterViewController: NSViewController {
     
     func loadPeople() -> [[String:String]] {
         var values:[[String:String]] = []
-        let members = FaceDao.default.getCoreMembers()
-        for c in members {
+        let members = RepositoryDao.default.getOwners()
+        for name in members {
             var item:[String:String] = [:]
             item["check"] = "false"
-            item["id"] = c.id
-            item["name"] = c.shortName
+            item["id"] = name
+            item["name"] = name
             values.append(item)
         }
         return values

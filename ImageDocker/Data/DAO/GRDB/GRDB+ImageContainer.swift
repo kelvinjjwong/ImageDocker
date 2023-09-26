@@ -681,4 +681,8 @@ order by name
         
         return results
     }
+    
+    func getOwners() -> [String] {
+        return []
+    }
 }
