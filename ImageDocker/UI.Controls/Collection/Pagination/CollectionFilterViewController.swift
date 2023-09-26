@@ -7,8 +7,36 @@
 //
 
 import Cocoa
+import LoggerFactory
+
+class CollectionFilter {
+    
+    var repositoryOwners:[String] = []
+    var eventCategories:[String] = []
+    var imageSources:[String] = []
+    var includeHidden = false
+    var includePhoto = true
+    var includeVideo = true
+    
+    public init() { }
+    
+    public func represent() -> String {
+        return """
+{
+    repositoryOwners: \(self.repositoryOwners),
+    eventCategories: \(self.eventCategories),
+    imageSources: \(self.imageSources),
+    includeHidden: \(self.includeHidden),
+    includePhoto: \(self.includePhoto),
+    includeVideo: \(self.includeVideo)
+}
+"""
+    }
+}
 
 class CollectionFilterViewController: NSViewController {
+    
+    let logger = LoggerFactory.get(category: "Collection", subCategory: "Filter", includeTypes: [.trace, .debug])
     
     @IBOutlet weak var boxSource: NSBox!
     @IBOutlet weak var boxEvent: NSBox!
@@ -17,6 +45,10 @@ class CollectionFilterViewController: NSViewController {
     @IBOutlet weak var tblEventCategory: NSTableView!
     @IBOutlet weak var tblSource: NSTableView!
     @IBOutlet weak var chkHidden: NSButton!
+    @IBOutlet weak var chkPhoto: NSButton!
+    @IBOutlet weak var chkVideo: NSButton!
+    @IBOutlet weak var btnApply: NSButton!
+    @IBOutlet weak var btnRemove: NSButton!
     
     var peopleTableController : DictionaryTableViewController!
     
@@ -24,8 +56,67 @@ class CollectionFilterViewController: NSViewController {
     
     var sourceTableController : DictionaryTableViewController!
     
+    var persist:((CollectionFilter) -> Void)? = nil
+    var loadPreset:(() -> CollectionFilter)? = nil // TODO: load preset in viewDidLoad
+    
     
     func initView() {
+    }
+    
+    func persistFilter() {
+        let filter = CollectionFilter()
+        filter.repositoryOwners = self.peopleTableController.getCheckedItems(column: "name")
+        filter.imageSources = self.sourceTableController.getCheckedItems(column: "name")
+        filter.eventCategories = self.eventCategoryTableController.getCheckedItems(column: "name")
+        filter.includeHidden = self.chkHidden.state == .on
+        filter.includePhoto = self.chkPhoto.state == .on
+        filter.includeVideo = self.chkVideo.state == .on
+        self.persist?(filter)
+    }
+    
+    func setFilter(_ filter:CollectionFilter) {
+        self.peopleTableController.uncheckAll()
+        self.sourceTableController.uncheckAll()
+        self.eventCategoryTableController.uncheckAll()
+        self.peopleTableController.setCheckedItems(column: "name", from: filter.repositoryOwners)
+        self.sourceTableController.setCheckedItems(column: "name", from: filter.imageSources)
+        self.eventCategoryTableController.setCheckedItems(column: "name", from: filter.eventCategories)
+        self.chkHidden.state = filter.includeHidden ? .on : .off
+        self.chkPhoto.state = filter.includePhoto ? .on : .off
+        self.chkVideo.state = filter.includeVideo ? .on : .off
+    }
+    
+    @IBAction func onHiddenClicked(_ sender: NSButton) {
+        self.persistFilter()
+    }
+    
+    @IBAction func onPhotoClicked(_ sender: NSButton) {
+        self.persistFilter()
+    }
+    
+    @IBAction func onVideoClicked(_ sender: NSButton) {
+        self.persistFilter()
+    }
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do view setup here.
+        self.peopleTableController = DictionaryTableViewController(self.tblPeople)
+        self.eventCategoryTableController = DictionaryTableViewController(self.tblEventCategory)
+        self.sourceTableController = DictionaryTableViewController(self.tblSource)
+        
+        self.peopleTableController.onCheck = { id, state in
+            self.persistFilter()
+        }
+        
+        self.eventCategoryTableController.onCheck = { id, state in
+            self.persistFilter()
+        }
+        
+        self.sourceTableController.onCheck = { id, state in
+            self.persistFilter()
+        }
         
         self.peopleTableController.load(self.loadPeople(), afterLoaded: {
         })
@@ -37,24 +128,17 @@ class CollectionFilterViewController: NSViewController {
         })
     }
     
-    @IBAction func onHiddenClicked(_ sender: NSButton) {
-    }
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do view setup here.
-        self.peopleTableController = DictionaryTableViewController(self.tblPeople)
-        self.eventCategoryTableController = DictionaryTableViewController(self.tblEventCategory)
-        self.sourceTableController = DictionaryTableViewController(self.tblSource)
-    }
-    
-    func loadPeople() -> [[String:String]] {
+    func loadPeople(selected:[String] = []) -> [[String:String]] {
+        self.logger.log(.trace, "[loadPeople] selected:\(selected)")
         var values:[[String:String]] = []
         let members = RepositoryDao.default.getOwners()
         for name in members {
             var item:[String:String] = [:]
-            item["check"] = "false"
+            if selected.contains(name) {
+                item["check"] = "true"
+            }else{
+                item["check"] = "false"
+            }
             item["id"] = name
             item["name"] = name
             values.append(item)
@@ -62,12 +146,17 @@ class CollectionFilterViewController: NSViewController {
         return values
     }
     
-    func loadEventCategory() -> [[String:String]] {
+    func loadEventCategory(selected:[String] = []) -> [[String:String]] {
+        self.logger.log(.trace, "[loadEventCategory] selected:\(selected)")
         var values:[[String:String]] = []
         let cats = EventDao.default.getEventCategories()
         for c in cats {
             var item:[String:String] = [:]
-            item["check"] = "false"
+            if selected.contains(c) {
+                item["check"] = "true"
+            }else{
+                item["check"] = "false"
+            }
             item["id"] = c
             item["name"] = c
             values.append(item)
@@ -75,45 +164,32 @@ class CollectionFilterViewController: NSViewController {
         return values
     }
     
-    func loadSource() -> [[String:String]] {
+    func loadSource(selected:[String] = []) -> [[String:String]] {
+        self.logger.log(.trace, "[loadSource] selected:\(selected)")
         var values:[[String:String]] = []
-//        let cats = EventDao.default.getEventCategories()
-//        for c in cats {
-//            var item:[String:String] = [:]
-//            item["check"] = "false"
-//            item["id"] = c
-//            item["name"] = c
-//            values.append(item)
-//        }
-        if true{
+        let imageSources = ImageSearchDao.default.getImageSources()
+        for (imageSource, _) in imageSources {
             var item:[String:String] = [:]
-            item["check"] = "false"
-            item["id"] = "Camera"
-            item["name"] = "Camera"
-            values.append(item)
-        }
-        if true{
-            var item:[String:String] = [:]
-            item["check"] = "false"
-            item["id"] = "Weixin"
-            item["name"] = "Weixin"
-            values.append(item)
-        }
-        if true{
-            var item:[String:String] = [:]
-            item["check"] = "false"
-            item["id"] = "QQ"
-            item["name"] = "QQ"
-            values.append(item)
-        }
-        if true{
-            var item:[String:String] = [:]
-            item["check"] = "false"
-            item["id"] = "ScreenShot"
-            item["name"] = "ScreenShot"
+            if selected.contains(imageSource) {
+                item["check"] = "true"
+            }else{
+                item["check"] = "false"
+            }
+            item["id"] = imageSource
+            item["name"] = imageSource
             values.append(item)
         }
         return values
     }
+    
+    @IBAction func onApplyClicked(_ sender: NSButton) {
+        self.persistFilter()
+    }
+    
+    @IBAction func onRemoveClicked(_ sender: NSButton) {
+        self.setFilter(CollectionFilter())
+        self.persistFilter()
+    }
+    
     
 }

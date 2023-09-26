@@ -176,14 +176,14 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         var results:[String:Bool] = [:]
         let db = PostgresConnection.database()
         final class TempRecord : PostgresCustomRecord {
-            var imageSource: String = ""
+            var imageSource: String? = ""
             public init() {}
         }
         let records = TempRecord.fetchAll(db, sql: """
-            SELECT DISTINCT imageSource FROM Image
+            SELECT DISTINCT "imageSource" FROM "Image"
             """)
         for row in records {
-            let src = row.imageSource
+            let src = row.imageSource ?? ""
             if src != "" {
                 results[src] = false
             }
@@ -200,7 +200,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
             public init() {}
         }
         let records = TempRecord.fetchAll(db, sql: """
-            SELECT DISTINCT cameraMaker,cameraModel FROM Image
+            SELECT DISTINCT "cameraMaker","cameraModel" FROM "Image"
             """)
         for row in records {
             let name1 = row.cameraMaker

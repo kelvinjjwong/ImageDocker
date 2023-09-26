@@ -179,6 +179,7 @@ class ViewController: NSViewController {
     
     // MARK: - Collection Filters
     
+    var collectionFilter:CollectionFilter = CollectionFilter()
     @IBOutlet weak var btnFilter: NSButton! // filter
     @IBOutlet weak var btnCombineDuplicates: NSPopUpButton! // duplication ops
     

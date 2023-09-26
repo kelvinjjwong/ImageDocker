@@ -11,7 +11,11 @@
                 <outlet property="boxEvent" destination="3pX-RS-Hfu" id="C76-RL-hQJ"/>
                 <outlet property="boxRepository" destination="rkv-fL-aSs" id="uFX-sE-8z2"/>
                 <outlet property="boxSource" destination="8J3-oX-zOV" id="Ho7-kw-2fv"/>
+                <outlet property="btnApply" destination="y56-B9-Hb4" id="9ri-sW-hpD"/>
+                <outlet property="btnRemove" destination="tdV-wK-PqI" id="nRy-7F-L88"/>
                 <outlet property="chkHidden" destination="Z5V-Eq-DD8" id="1hR-9r-zfQ"/>
+                <outlet property="chkPhoto" destination="fG8-AO-PdD" id="cij-pr-1XI"/>
+                <outlet property="chkVideo" destination="2Pw-2p-zUr" id="XIb-DX-uUI"/>
                 <outlet property="tblEventCategory" destination="Z1g-0f-IwU" id="mzC-Ry-s02"/>
                 <outlet property="tblPeople" destination="Cob-Dq-HU9" id="9Eh-PC-oge"/>
                 <outlet property="tblSource" destination="RkV-oa-DVj" id="Noc-pa-5JL"/>
@@ -263,6 +267,9 @@
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="onPhotoClicked:" target="-2" id="sJg-hA-Rhv"/>
+                    </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2Pw-2p-zUr">
                     <rect key="frame" x="327" y="69" width="82" height="18"/>
@@ -273,6 +280,9 @@
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="onVideoClicked:" target="-2" id="vG4-k7-9Iv"/>
+                    </connections>
                 </button>
                 <box title="Source" translatesAutoresizingMaskIntoConstraints="NO" id="8J3-oX-zOV">
                     <rect key="frame" x="7" y="92" width="206" height="124"/>
@@ -393,6 +403,9 @@
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="onApplyClicked:" target="-2" id="tjb-6I-8aj"/>
+                    </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tdV-wK-PqI">
                     <rect key="frame" x="286" y="13" width="141" height="32"/>
@@ -403,6 +416,9 @@
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="onRemoveClicked:" target="-2" id="uat-9V-D4y"/>
+                    </connections>
                 </button>
             </subviews>
             <constraints>

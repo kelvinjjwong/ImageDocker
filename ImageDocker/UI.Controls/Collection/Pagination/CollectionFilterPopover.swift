@@ -10,6 +10,10 @@ import Cocoa
 
 extension ViewController {
     
+    func persistCollectionFilter(filter: CollectionFilter) {
+        print(filter.represent())
+    }
+    
     
     func createCollectionFilterPopover(){
         var myPopover = self.collectionFilterPopover
@@ -17,6 +21,7 @@ extension ViewController {
             
             let frame = CGRect(origin: .zero, size: CGSize(width: 600, height: 350))
             self.collectionFilterViewController = CollectionFilterViewController()
+            self.collectionFilterViewController.persist = self.persistCollectionFilter(filter:)
             self.collectionFilterViewController.view.frame = frame
             
             myPopover = NSPopover()
@@ -26,6 +31,7 @@ extension ViewController {
             myPopover!.behavior = NSPopover.Behavior.transient
         }
         self.collectionFilterPopover = myPopover
+        
     }
     
     func popoverCollectionFilter() {
