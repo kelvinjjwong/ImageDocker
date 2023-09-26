@@ -779,6 +779,7 @@ class ViewController: NSViewController {
         let rightPanel = self.verticalSplitView.arrangedSubviews[1]
         rightPanel.isHidden = true
         self.btnCollapseRight.image = Icons.expandRightPanel
+        self.btnTogglePreviewPanel.isEnabled = false
     }
     
     @IBAction func onToggleRightPanel(_ sender: NSButton) {
@@ -786,9 +787,11 @@ class ViewController: NSViewController {
         if self.verticalSplitView.isSubviewCollapsed(rightPanel) {
             rightPanel.isHidden = false
             self.btnCollapseRight.image = Icons.collapseRightPanel
+            self.btnTogglePreviewPanel.isEnabled = true
         }else{
             rightPanel.isHidden = true
             self.btnCollapseRight.image = Icons.expandRightPanel
+            self.btnTogglePreviewPanel.isEnabled = false
         }
     }
     

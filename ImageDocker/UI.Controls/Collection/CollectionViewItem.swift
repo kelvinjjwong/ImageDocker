@@ -27,6 +27,9 @@ class CollectionViewItem: NSCollectionViewItem {
     private var previewDelegate:CollectionViewItemPreviewDelegate?
     private var previewMessageDelegate:CollectionViewItemPreviewMessageDelegate?
     
+    var onSelected:(() -> Void)? = nil
+    var onUnselected:(() -> Void)? = nil
+    
     var sectionIndex:Int?
     
     func setCheckBoxDelegate(_ delegate:CollectionViewItemCheckDelegate){
@@ -160,6 +163,12 @@ class CollectionViewItem: NSCollectionViewItem {
   
     func setHighlight(selected: Bool) {
         view.layer?.borderWidth = selected ? 5.0 : 0.0
+        
+        if selected {
+            onSelected?()
+        }else{
+            onUnselected?()
+        }
     }
     
     func check(checkBySection:Bool = false){

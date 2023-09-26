@@ -67,6 +67,17 @@ extension ViewController : NSCollectionViewDataSource {
     func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
         return imagesLoader.numberOfItems(in: section)
     }
+    
+    func onSelectedCollectionItem() {
+        self.btnImageOptions.isEnabled = true
+    }
+    
+    func onUnselectedCollectionItem() {
+        let rightPanel = self.verticalSplitView.arrangedSubviews[1]
+        if rightPanel.isHidden {
+            self.btnImageOptions.isEnabled = false
+        }
+    }
   
     func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
         let item = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "CollectionViewItem"), for: indexPath)
@@ -76,6 +87,8 @@ extension ViewController : NSCollectionViewDataSource {
         collectionViewItem.setQuickLookDelegate(self)
         collectionViewItem.setPreviewDelegate(self)
         collectionViewItem.setPreviewMessageDelegate(self)
+        collectionViewItem.onSelected = self.onSelectedCollectionItem
+        collectionViewItem.onUnselected = self.onUnselectedCollectionItem
         collectionViewItem.sectionIndex = indexPath.section
 
         let imageFile = imagesLoader.item(for: indexPath as NSIndexPath)

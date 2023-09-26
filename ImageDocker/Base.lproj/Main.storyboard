@@ -1983,18 +1983,53 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5UN-DP-f9q">
-                                        <rect key="frame" x="1612" y="25" width="68" height="15"/>
+                                        <rect key="frame" x="1611" y="18" width="70" height="23"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="68" id="YUo-op-VUG"/>
                                         </constraints>
-                                        <buttonCell key="cell" type="roundRect" title="People" bezelStyle="roundedRect" image="smile" imagePosition="leading" alignment="center" imageScaling="proportionallyDown" inset="2" id="aRP-zC-JAc">
+                                        <buttonCell key="cell" type="roundTextured" title="People" bezelStyle="texturedRounded" image="smile" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aRP-zC-JAc">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="cellTitle"/>
+                                            <font key="font" metaFont="system"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="onPeopleClicked:" target="XfG-lQ-9wD" id="e1A-Pz-1uc"/>
                                         </connections>
                                     </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MGB-Ps-tLI">
+                                        <rect key="frame" x="1320" y="17" width="25" height="26"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="25" id="4Ya-wl-y1U"/>
+                                            <constraint firstAttribute="height" constant="25" id="7YM-AB-m7I"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="recessed" title="Button" bezelStyle="recessed" image="checklist" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nJA-Dv-Jim">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="systemBold" size="12"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onCollectionFilterClicked:" target="XfG-lQ-9wD" id="vQb-VD-hVN"/>
+                                        </connections>
+                                    </button>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gkw-tO-uG9">
+                                        <rect key="frame" x="1349" y="17" width="32" height="25"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="22" id="WXq-VJ-o8B"/>
+                                            <constraint firstAttribute="width" constant="30" id="yDU-mD-v5y"/>
+                                        </constraints>
+                                        <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" selectedItem="qDQ-0w-bFr" id="Lbn-50-OcH">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="menu"/>
+                                            <menu key="menu" id="4RJ-3g-5cq">
+                                                <items>
+                                                    <menuItem state="on" image="copy_link" hidden="YES" id="qDQ-0w-bFr"/>
+                                                    <menuItem title="Combine duplicated images in this collection only" id="J53-DU-cm5"/>
+                                                    <menuItem title="Combine duplicated images in all libraries" id="8jd-qX-Y5y"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <connections>
+                                            <action selector="onCombineDuplicatesButtonClicked:" target="XfG-lQ-9wD" id="Mfq-f0-6Pn"/>
+                                        </connections>
+                                    </popUpButton>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="kCb-sM-PKJ" firstAttribute="leading" secondItem="5UN-DP-f9q" secondAttribute="trailing" constant="15" id="0O5-Ra-pOu"/>
@@ -2002,8 +2037,10 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                     <constraint firstItem="Bwo-eW-DeK" firstAttribute="leading" secondItem="kCb-sM-PKJ" secondAttribute="trailing" constant="10" id="1SV-VN-KSn"/>
                                     <constraint firstItem="csF-Eh-wOF" firstAttribute="leading" secondItem="zJa-km-Rrl" secondAttribute="trailing" constant="5" id="3xL-e8-wwM"/>
                                     <constraint firstItem="zJa-km-Rrl" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="4IP-Tf-ie0"/>
+                                    <constraint firstItem="MGB-Ps-tLI" firstAttribute="leading" secondItem="2rl-sF-lP2" secondAttribute="trailing" constant="8" symbolic="YES" id="5IR-Kb-b6c"/>
                                     <constraint firstItem="2rl-sF-lP2" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="9" id="8PV-2V-37g"/>
                                     <constraint firstItem="SE2-Sb-Hue" firstAttribute="leading" secondItem="gVf-na-PZy" secondAttribute="leading" constant="365" id="Aya-AU-vCP"/>
+                                    <constraint firstItem="Gkw-tO-uG9" firstAttribute="leading" secondItem="MGB-Ps-tLI" secondAttribute="trailing" constant="5" id="B6d-Q1-M6r"/>
                                     <constraint firstItem="zJa-km-Rrl" firstAttribute="leading" secondItem="gVf-na-PZy" secondAttribute="leading" constant="5" id="DPL-cO-Vsq"/>
                                     <constraint firstItem="kCb-sM-PKJ" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="FGP-eu-grF"/>
                                     <constraint firstItem="1L2-wU-5mb" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="I4z-MF-74z"/>
@@ -2013,6 +2050,8 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                     <constraint firstItem="2rl-sF-lP2" firstAttribute="leading" secondItem="qGQ-TO-rn5" secondAttribute="trailing" constant="27" id="fWv-bM-ru3"/>
                                     <constraint firstItem="Bwo-eW-DeK" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="l7J-fy-SVL"/>
                                     <constraint firstAttribute="trailing" secondItem="1L2-wU-5mb" secondAttribute="trailing" constant="2" id="lY8-KH-lQ0"/>
+                                    <constraint firstItem="MGB-Ps-tLI" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="7" id="pPB-Pa-OGA"/>
+                                    <constraint firstItem="Gkw-tO-uG9" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="9" id="ptV-qy-aEz"/>
                                     <constraint firstItem="qGQ-TO-rn5" firstAttribute="leading" secondItem="csF-Eh-wOF" secondAttribute="trailing" constant="5" id="yQQ-9y-y8t"/>
                                     <constraint firstItem="1L2-wU-5mb" firstAttribute="leading" secondItem="Bwo-eW-DeK" secondAttribute="trailing" constant="2" id="yZ8-x9-dj8"/>
                                     <constraint firstItem="5UN-DP-f9q" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="zb9-rU-qHE"/>
@@ -2139,27 +2178,6 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="OOm-kj-kbe">
                                                                                 <rect key="frame" x="400" y="0.0" width="882" height="32"/>
                                                                                 <subviews>
-                                                                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gkw-tO-uG9">
-                                                                                        <rect key="frame" x="602" y="2" width="32" height="25"/>
-                                                                                        <constraints>
-                                                                                            <constraint firstAttribute="height" constant="22" id="WXq-VJ-o8B"/>
-                                                                                            <constraint firstAttribute="width" constant="30" id="yDU-mD-v5y"/>
-                                                                                        </constraints>
-                                                                                        <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" selectedItem="qDQ-0w-bFr" id="Lbn-50-OcH">
-                                                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                                            <font key="font" metaFont="menu"/>
-                                                                                            <menu key="menu" id="4RJ-3g-5cq">
-                                                                                                <items>
-                                                                                                    <menuItem state="on" image="copy_link" hidden="YES" id="qDQ-0w-bFr"/>
-                                                                                                    <menuItem title="Combine duplicated images in this collection only" id="J53-DU-cm5"/>
-                                                                                                    <menuItem title="Combine duplicated images in all libraries" id="8jd-qX-Y5y"/>
-                                                                                                </items>
-                                                                                            </menu>
-                                                                                        </popUpButtonCell>
-                                                                                        <connections>
-                                                                                            <action selector="onCombineDuplicatesButtonClicked:" target="XfG-lQ-9wD" id="Mfq-f0-6Pn"/>
-                                                                                        </connections>
-                                                                                    </popUpButton>
                                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="goW-dm-Y0v">
                                                                                         <rect key="frame" x="662" y="10" width="15" height="14"/>
                                                                                         <buttonCell key="cell" type="inline" title="|&lt;" bezelStyle="inline" alignment="center" imageScaling="proportionallyDown" inset="2" id="UDk-2p-aCP">
@@ -2301,23 +2319,8 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                         </textFieldCell>
                                                                                     </textField>
-                                                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MGB-Ps-tLI">
-                                                                                        <rect key="frame" x="635" y="2" width="25" height="26"/>
-                                                                                        <constraints>
-                                                                                            <constraint firstAttribute="width" constant="25" id="4Ya-wl-y1U"/>
-                                                                                            <constraint firstAttribute="height" constant="25" id="7YM-AB-m7I"/>
-                                                                                        </constraints>
-                                                                                        <buttonCell key="cell" type="recessed" title="Button" bezelStyle="recessed" image="checklist" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nJA-Dv-Jim">
-                                                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                                            <font key="font" metaFont="systemBold" size="12"/>
-                                                                                        </buttonCell>
-                                                                                        <connections>
-                                                                                            <action selector="onCollectionFilterClicked:" target="XfG-lQ-9wD" id="vQb-VD-hVN"/>
-                                                                                        </connections>
-                                                                                    </button>
                                                                                 </subviews>
                                                                                 <constraints>
-                                                                                    <constraint firstItem="Gkw-tO-uG9" firstAttribute="top" secondItem="OOm-kj-kbe" secondAttribute="top" constant="6" id="0a6-iZ-Urs"/>
                                                                                     <constraint firstItem="uR6-jc-2Z7" firstAttribute="top" secondItem="OOm-kj-kbe" secondAttribute="top" constant="7" id="0vW-Zg-jga"/>
                                                                                     <constraint firstItem="KwM-6o-UdW" firstAttribute="leading" secondItem="meR-zL-rAv" secondAttribute="trailing" constant="2" id="1FF-aS-7ji"/>
                                                                                     <constraint firstItem="2F4-1d-k3W" firstAttribute="leading" secondItem="KSX-ze-NbD" secondAttribute="trailing" constant="2" id="331-Cn-Sqr"/>
@@ -2327,18 +2330,15 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                     <constraint firstItem="DpT-Dg-Oeb" firstAttribute="leading" secondItem="OcT-m6-Zwk" secondAttribute="trailing" constant="2" id="93O-qY-RvN"/>
                                                                                     <constraint firstItem="zeK-nY-3Hv" firstAttribute="top" secondItem="OOm-kj-kbe" secondAttribute="top" constant="8" id="CR0-Wl-cJb"/>
                                                                                     <constraint firstItem="goW-dm-Y0v" firstAttribute="top" secondItem="OOm-kj-kbe" secondAttribute="top" constant="8" id="MLB-iD-odU"/>
-                                                                                    <constraint firstItem="Gkw-tO-uG9" firstAttribute="leading" secondItem="8qW-nP-5yA" secondAttribute="trailing" constant="2" id="PDs-BY-8o8"/>
                                                                                     <constraint firstItem="KwM-6o-UdW" firstAttribute="top" secondItem="OOm-kj-kbe" secondAttribute="top" constant="8" id="Upf-Jb-PHP"/>
                                                                                     <constraint firstItem="8qW-nP-5yA" firstAttribute="leading" secondItem="2F4-1d-k3W" secondAttribute="trailing" constant="2" id="UxP-BG-rpQ"/>
                                                                                     <constraint firstAttribute="trailing" secondItem="DpT-Dg-Oeb" secondAttribute="trailing" constant="2" id="XnC-Xv-bZn"/>
                                                                                     <constraint firstItem="KSX-ze-NbD" firstAttribute="leading" secondItem="OLG-fC-WRE" secondAttribute="trailing" constant="2" id="bIg-XU-KCA"/>
                                                                                     <constraint firstItem="OcT-m6-Zwk" firstAttribute="top" secondItem="OOm-kj-kbe" secondAttribute="top" constant="8" id="deV-pz-LR4"/>
                                                                                     <constraint firstItem="IGx-sv-JYq" firstAttribute="leading" secondItem="goW-dm-Y0v" secondAttribute="trailing" constant="2" id="djz-1O-9cb"/>
-                                                                                    <constraint firstItem="goW-dm-Y0v" firstAttribute="leading" secondItem="MGB-Ps-tLI" secondAttribute="trailing" constant="2" id="eU7-ml-EeY"/>
-                                                                                    <constraint firstItem="MGB-Ps-tLI" firstAttribute="top" secondItem="OOm-kj-kbe" secondAttribute="top" constant="4" id="f9m-Su-b28"/>
+                                                                                    <constraint firstItem="goW-dm-Y0v" firstAttribute="leading" secondItem="8qW-nP-5yA" secondAttribute="trailing" constant="61" id="e5I-0S-F26"/>
                                                                                     <constraint firstItem="KSX-ze-NbD" firstAttribute="top" secondItem="OOm-kj-kbe" secondAttribute="top" constant="8" id="hk7-8l-lA5"/>
                                                                                     <constraint firstItem="OLG-fC-WRE" firstAttribute="top" secondItem="OOm-kj-kbe" secondAttribute="top" constant="8" id="jLc-L8-ETh"/>
-                                                                                    <constraint firstItem="MGB-Ps-tLI" firstAttribute="leading" secondItem="Gkw-tO-uG9" secondAttribute="trailing" constant="2" id="mTR-FZ-NUf"/>
                                                                                     <constraint firstItem="DpT-Dg-Oeb" firstAttribute="top" secondItem="OOm-kj-kbe" secondAttribute="top" constant="7" id="onn-2G-6BY"/>
                                                                                     <constraint firstItem="2F4-1d-k3W" firstAttribute="top" secondItem="OOm-kj-kbe" secondAttribute="top" constant="9" id="pNA-dB-kac"/>
                                                                                     <constraint firstItem="meR-zL-rAv" firstAttribute="top" secondItem="OOm-kj-kbe" secondAttribute="top" constant="8" id="pYQ-ZJ-Fiv"/>
@@ -3226,7 +3226,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="oKK-cu-PBz">
-                                                            <rect key="frame" x="46" y="1" width="79" height="17"/>
+                                                            <rect key="frame" x="45.5" y="1" width="79" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="pKU-BK-Kyl">
@@ -3334,7 +3334,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="eKx-mS-IPG">
-                                                            <rect key="frame" x="329" y="1" width="1004" height="17"/>
+                                                            <rect key="frame" x="328.5" y="1" width="1004" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="bZs-sX-o57">
@@ -3755,7 +3755,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
         <image name="collapse_right" width="24" height="24"/>
         <image name="combine" width="16" height="16"/>
         <image name="copy" width="16" height="16"/>
-        <image name="copy_link" width="26" height="26"/>
+        <image name="copy_link" width="24" height="24"/>
         <image name="ding" width="13" height="15"/>
         <image name="download" width="16" height="16"/>
         <image name="edit" width="16" height="15"/>

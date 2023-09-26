@@ -35,14 +35,14 @@ extension ViewController {
     
     internal func disableCollectionViewControls() {
         self.collectionPaginationController?.disable()
-        self.btnFilter.isEnabled = false
+//        self.btnFilter.isEnabled = false
         self.btnCombineDuplicates.isEnabled = false
     }
     
     
     internal func enableCollectionViewControls() {
         self.collectionPaginationController?.enable()
-        self.btnFilter.isEnabled = true
+//        self.btnFilter.isEnabled = true
         self.btnCombineDuplicates.isEnabled = true
     }
     
