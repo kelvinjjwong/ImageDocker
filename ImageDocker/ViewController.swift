@@ -432,6 +432,9 @@ class ViewController: NSViewController {
 //        whereIsDock()
         self.resize()
         
+        self.toggleOffBottomPanel()
+        self.toggleOffRightPanel()
+        
 //        self.logger.log("Loading view - update library tree")
         self.splashController.message(Words.splash_loadingLibraries.word(), progress: 4)
         
@@ -755,6 +758,12 @@ class ViewController: NSViewController {
         }
     }
     
+    func toggleOffBottomPanel() {
+        let bottomPanel = self.centralHorizontalSplitView.arrangedSubviews[1]
+        bottomPanel.isHidden = true
+        self.btnCollapseBottom.image = Icons.expandBottomPanel
+    }
+    
     @IBAction func onToggleBottomPanel(_ sender: NSButton) {
         let bottomPanel = self.centralHorizontalSplitView.arrangedSubviews[1]
         if self.centralHorizontalSplitView.isSubviewCollapsed(bottomPanel) {
@@ -764,6 +773,12 @@ class ViewController: NSViewController {
             bottomPanel.isHidden = true
             self.btnCollapseBottom.image = Icons.expandBottomPanel
         }
+    }
+    
+    func toggleOffRightPanel() {
+        let rightPanel = self.verticalSplitView.arrangedSubviews[1]
+        rightPanel.isHidden = true
+        self.btnCollapseRight.image = Icons.expandRightPanel
     }
     
     @IBAction func onToggleRightPanel(_ sender: NSButton) {

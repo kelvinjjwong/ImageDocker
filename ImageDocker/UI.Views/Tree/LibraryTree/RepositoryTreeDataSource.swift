@@ -13,6 +13,29 @@ class RepositoryTreeDataSource : TreeDataSource {
     
     let logger = LoggerFactory.get(category: "RepositoryTreeDataSource", includeTypes: [])
     
+    func containsNode(id:String, in nodes:[TreeCollection]) -> Bool {
+        return self.findNode(id: id, in: nodes) != nil
+    }
+    
+    func findNode(id:String, in nodes:[TreeCollection]) -> TreeCollection? {
+        for n in nodes {
+            if let nodeId = n.relatedObjectId {
+                if nodeId.contains(find: "_\(id)") {
+                    return n
+                }
+            }
+        }
+        return nil
+    }
+    
+    func convertToTreeNode(owner:String) -> TreeCollection {
+        let id = "OWNER_\(owner)"
+        let node = TreeCollection(owner, id:id, object: owner)
+        node.childrenCount = 0
+        node.subContainersCount = 0
+        return node
+    }
+    
     func convertToTreeNode(_ repository:ImageRepository) -> TreeCollection {
         self.logger.log(.trace, "convert repository to tree node - repositoryId:\(repository.id)")
         let id = "REPO_\(repository.id)"
@@ -56,7 +79,7 @@ class RepositoryTreeDataSource : TreeDataSource {
         var nodes:[TreeCollection] = []
         self.logger.log("load repositories from database - START")
         let startTime = Date()
-        let containers = RepositoryDao.default.getRepositoriesV2(orderBy: "name", condition: condition)
+        let containers = RepositoryDao.default.getRepositoriesV2(orderBy: "owner, name", condition: condition)
         self.logger.timecost("load repositories from database - DONE", fromDate: startTime)
         if containers.count == 0 {
 //            self.logger.log(">>> no repository is loaded for tree")
@@ -64,9 +87,18 @@ class RepositoryTreeDataSource : TreeDataSource {
         let startTime2 = Date()
         for container in containers {
 //            self.logger.log(">>> loaded repo for tree: \(container.name)")
-            self.logger.log(.trace, "converting repository to tree node - id:\(container.id)")
+            self.logger.log(.trace, "converting repository to tree node - id:\(container.id) , owner:\(container.owner)")
+            
+            let ownerNode = self.findNode(id: container.owner, in: nodes) ?? self.convertToTreeNode(owner: container.owner)
+            if !self.containsNode(id: container.owner, in: nodes) {
+                nodes.append(ownerNode)
+            }
+            
             let node = self.convertToTreeNode(container)
-            nodes.append(node)
+            ownerNode.children.append(node)
+            
+            ownerNode.childrenCount = ownerNode.children.count
+            ownerNode.subContainersCount = ownerNode.children.count
         }
         self.logger.timecost("convert image repository to TreeNode(s)", fromDate: startTime2)
         return nodes
