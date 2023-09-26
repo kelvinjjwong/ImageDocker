@@ -11,7 +11,7 @@ import Cocoa
 extension ViewController {
     
     func persistCollectionFilter(filter: CollectionFilter) {
-        print(filter.represent())
+        self.logger.log(.trace, filter.represent())
     }
     
     

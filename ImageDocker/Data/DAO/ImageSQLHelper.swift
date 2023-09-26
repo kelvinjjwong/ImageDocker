@@ -316,6 +316,7 @@ struct SQLHelper {
     }
     
     static func generateSQLStatementForSearchingPhotoFiles(condition:SearchCondition, includeHidden:Bool = true, quoteColumn:Bool = false) -> (String, String) {
+        // TODO: handle condition.filter
         
         var hiddenFlagStatement = ""
         

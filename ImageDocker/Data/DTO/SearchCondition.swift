@@ -25,6 +25,7 @@ struct SearchCondition {
     var filenames:[String]
     var any:[String]
     var includeHidden:Bool
+    var filter:CollectionFilter
     
     func isEmpty() -> Bool {
         return years.isEmpty
@@ -40,7 +41,7 @@ struct SearchCondition {
             && any.isEmpty
     }
     
-    static func get(from query:String, separator:String = " | ", includeHidden:Bool = false) -> SearchCondition {
+    static func get(from query:String, separator:String = " | ", includeHidden:Bool = false, filter:CollectionFilter = CollectionFilter()) -> SearchCondition {
         var years:[Int] = []
         var months:[Int] = []
         var days:[Int] = []
@@ -126,7 +127,8 @@ struct SearchCondition {
                         folders: folders,
                         filenames: filenames,
                         any: any,
-                        includeHidden: includeHidden)
+                        includeHidden: includeHidden,
+                        filter: filter)
     }
     
     // MARK: - Menu for completion string
