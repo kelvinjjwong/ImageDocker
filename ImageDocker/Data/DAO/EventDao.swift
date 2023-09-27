@@ -76,4 +76,8 @@ class EventDao {
     func importEventsFromImages() {
         return self.impl.importEventsFromImages()
     }
+    
+    func getEventsByCategories(categories:[String]) -> [String] {
+        return self.impl.getEventsByCategories(categories: categories)
+    }
 }

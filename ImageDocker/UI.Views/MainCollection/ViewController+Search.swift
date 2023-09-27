@@ -26,7 +26,7 @@ extension ViewController {
 //        self.logger.log("======== process main search === \(self.txtSearch.tokenStringValue)")
         let keywords = self.txtSearch.tokenStringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         if keywords != "" {
-            let conditions = SearchCondition.get(from: keywords, includeHidden: (false), filter: self.collectionFilter) //self.chbShowHidden.state == .on
+            let conditions = SearchCondition.get(from: keywords, includeHidden: (false), filter: ViewController.collectionFilter) //self.chbShowHidden.state == .on
             
             loadCollection {
                 self.imagesLoader.search(
@@ -52,7 +52,7 @@ extension ViewController {
         }
         runningSearch = true
         if keyword != "" {
-            let condition = SearchCondition.get(from: keyword, filter: self.collectionFilter)
+            let condition = SearchCondition.get(from: keyword, filter: ViewController.collectionFilter)
             
             loadCollection {
                 self.imagesLoader.search(

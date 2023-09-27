@@ -145,7 +145,7 @@ class CollectionViewItemsLoader : NSObject {
         
         //var urls: [URL] = []
         self.logger.log(.trace, "Loading photo files from db")
-        let photoFiles = ImageSearchDao.default.getPhotoFiles(year: year, month: month, day: day, ignoreDate: ignoreDate,
+        let photoFiles = ImageSearchDao.default.getPhotoFiles(filter: ViewController.collectionFilter, year: year, month: month, day: day, ignoreDate: ignoreDate,
                                                           country: country, province: province, city: city, place: place,
                                                           includeHidden: showHidden,
                                                           imageSource: filterImageSource, cameraModel: filterCameraModel,
@@ -189,7 +189,7 @@ class CollectionViewItemsLoader : NSObject {
         self.indicator = indicator
         
         //var urls: [URL] = []
-        let photoFiles = ImageSearchDao.default.getPhotoFiles(year: year, month: month, day: day,
+        let photoFiles = ImageSearchDao.default.getPhotoFiles(filter: ViewController.collectionFilter, year: year, month: month, day: day,
                                                           event: event,
                                                           country: country, province: province, city: city, place:place,
                                                           includeHidden: showHidden,

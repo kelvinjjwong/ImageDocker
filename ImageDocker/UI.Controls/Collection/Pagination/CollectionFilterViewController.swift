@@ -32,6 +32,18 @@ class CollectionFilter {
 }
 """
     }
+    
+    public func getRepositoryIds() -> [Int] {
+        return RepositoryDao.default.getRepositoryIdsByOwners(owners: self.repositoryOwners)
+    }
+    
+    public func getEvents() -> [String] {
+        return EventDao.default.getEventsByCategories(categories: self.eventCategories)
+    }
+    
+    public func getImageSources() -> [String] {
+        return self.imageSources
+    }
 }
 
 class CollectionFilterViewController: NSViewController {

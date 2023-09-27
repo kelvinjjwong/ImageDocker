@@ -328,5 +328,22 @@ class EventDaoPostgresCK : EventDaoInterface {
             }
         }
     }
+    
+    func getEventsByCategories(categories:[String]) -> [String] {
+        var result:[String] = []
+        let sql = """
+select "name" from "ImageEvent" where "category" in (\(categories.joinedSingleQuoted(separator: ","))) order by "name"
+"""
+        final class TempRecord : PostgresCustomRecord {
+            var name:String = ""
+            public init() {}
+        }
+        let db = PostgresConnection.database()
+        let records = TempRecord.fetchAll(db, sql: sql)
+        for row in records {
+            result.append(row.name)
+        }
+        return result
+    }
 
 }

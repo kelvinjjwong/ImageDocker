@@ -158,10 +158,10 @@ protocol ImageSearchDaoInterface {
     // MARK: - COLLECTION
     
     // get by date & place
-    func getPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool, country:String, province:String, city:String, place:String?, includeHidden:Bool, imageSource:[String]?, cameraModel:[String]?, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? , pageSize:Int, pageNumber:Int) -> [Image]
+    func getPhotoFiles(filter:CollectionFilter, year:Int, month:Int, day:Int, ignoreDate:Bool, country:String, province:String, city:String, place:String?, includeHidden:Bool, imageSource:[String]?, cameraModel:[String]?, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? , pageSize:Int, pageNumber:Int) -> [Image]
     
     // get by date & event & place
-    func getPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String, province:String, city:String, place:String, includeHidden:Bool, imageSource:[String]?, cameraModel:[String]?, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)?, pageSize:Int, pageNumber:Int) -> [Image]
+    func getPhotoFiles(filter:CollectionFilter, year:Int, month:Int, day:Int, event:String, country:String, province:String, city:String, place:String, includeHidden:Bool, imageSource:[String]?, cameraModel:[String]?, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)?, pageSize:Int, pageNumber:Int) -> [Image]
     
     // MARK: - SEARCH
     func searchImages(condition:SearchCondition, includeHidden:Bool, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)?, pageSize:Int, pageNumber:Int) -> [Image]

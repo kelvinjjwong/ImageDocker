@@ -331,4 +331,8 @@ select distinct activity2 as act from ImageEvent where category='\(category)' ac
             self.logger.log(error)
         }
     }
+    
+    func getEventsByCategories(categories:[String]) -> [String] {
+        return []
+    }
 }

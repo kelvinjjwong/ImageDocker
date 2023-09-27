@@ -517,4 +517,12 @@ class RepositoryDao {
     func getOwners() -> [String] {
         return self.impl.getOwners()
     }
+    
+    func getRepositoryIdsByOwner(owner:String) -> [Int] {
+        return self.impl.getRepositoryIdsByOwner(owner: owner)
+    }
+    
+    func getRepositoryIdsByOwners(owners:[String]) -> [Int] {
+        return self.impl.getRepositoryIdsByOwners(owners: owners)
+    }
 }

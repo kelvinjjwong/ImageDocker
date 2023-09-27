@@ -1023,5 +1023,39 @@ select distinct "owner" from "ImageRepository" order by "owner"
         return result
     }
     
+    func getRepositoryIdsByOwner(owner:String) -> [Int] {
+        var result:[Int] = []
+        let sql = """
+select "id" from "ImageRepository" where "owner"='\(owner)' order by "name"
+"""
+        final class TempRecord : PostgresCustomRecord {
+            var id:Int = 0
+            public init() {}
+        }
+        let db = PostgresConnection.database()
+        let records = TempRecord.fetchAll(db, sql: sql)
+        for row in records {
+            result.append(row.id)
+        }
+        return result
+    }
+    
+    func getRepositoryIdsByOwners(owners:[String]) -> [Int] {
+        var result:[Int] = []
+        let sql = """
+select "id" from "ImageRepository" where "owner" in (\(owners.joinedSingleQuoted(separator: ","))) order by "name"
+"""
+        final class TempRecord : PostgresCustomRecord {
+            var id:Int = 0
+            public init() {}
+        }
+        let db = PostgresConnection.database()
+        let records = TempRecord.fetchAll(db, sql: sql)
+        for row in records {
+            result.append(row.id)
+        }
+        return result
+    }
+    
 
 }

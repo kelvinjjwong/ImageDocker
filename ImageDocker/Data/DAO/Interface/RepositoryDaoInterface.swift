@@ -160,4 +160,8 @@ protocol RepositoryDaoInterface {
     func updateImageContainerToggleManyChildren(path:String, state:Bool) -> ExecuteState
     
     func getOwners() -> [String]
+    
+    func getRepositoryIdsByOwner(owner:String) -> [Int]
+    
+    func getRepositoryIdsByOwners(owners:[String]) -> [Int]
 }

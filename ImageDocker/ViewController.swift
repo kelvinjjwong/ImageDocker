@@ -16,7 +16,7 @@ import AVKit
 
 class ViewController: NSViewController {
     
-    let logger = LoggerFactory.get(category: "MAIN", subCategory: "VIEW", includeTypes: [])
+    let logger = LoggerFactory.get(category: "MAIN", subCategory: "VIEW", includeTypes: [.trace])
     
     var childWindows:[String:NSWindow] = [:]
     
@@ -179,7 +179,7 @@ class ViewController: NSViewController {
     
     // MARK: - Collection Filters
     
-    var collectionFilter:CollectionFilter = CollectionFilter()
+    static var collectionFilter:CollectionFilter = CollectionFilter()
     @IBOutlet weak var btnFilter: NSButton! // filter
     @IBOutlet weak var btnCombineDuplicates: NSPopUpButton! // duplication ops
     

@@ -3226,7 +3226,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="oKK-cu-PBz">
-                                                            <rect key="frame" x="45.5" y="1" width="79" height="17"/>
+                                                            <rect key="frame" x="46" y="1" width="79" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="pKU-BK-Kyl">
@@ -3334,7 +3334,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="eKx-mS-IPG">
-                                                            <rect key="frame" x="328.5" y="1" width="1004" height="17"/>
+                                                            <rect key="frame" x="329" y="1" width="1004" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="bZs-sX-o57">

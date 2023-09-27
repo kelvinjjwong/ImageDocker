@@ -35,4 +35,6 @@ protocol EventDaoInterface {
     func countImagesOfEvent(event:String) -> Int
     
     func importEventsFromImages()
+    
+    func getEventsByCategories(categories:[String]) -> [String]
 }

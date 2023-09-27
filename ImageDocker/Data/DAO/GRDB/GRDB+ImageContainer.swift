@@ -685,4 +685,12 @@ order by name
     func getOwners() -> [String] {
         return []
     }
+    
+    func getRepositoryIdsByOwner(owner:String) -> [Int] {
+        return []
+    }
+    
+    func getRepositoryIdsByOwners(owners:[String]) -> [Int] {
+        return []
+    }
 }

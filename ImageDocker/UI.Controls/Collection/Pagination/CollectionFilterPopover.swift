@@ -12,6 +12,9 @@ extension ViewController {
     
     func persistCollectionFilter(filter: CollectionFilter) {
         self.logger.log(.trace, filter.represent())
+        ViewController.collectionFilter = filter
+//        self.refreshCollection(self.btnRefreshCollectionView)
+        self.collectionPaginationController?.onFirstPage()
     }
     
     
