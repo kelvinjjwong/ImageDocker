@@ -99,8 +99,8 @@ struct FileTypeRecognizer {
     
     let logger = LoggerFactory.get(category: "FileTypeRecognizer")
     
-    let photoExts:[String] = ["jpg", "jpeg", "png", "heic"]
-    let videoExts:[String] = ["mov", "mp4", "mpeg", "mts", "m2ts"]
+    static let photoExts:[String] = ["jpg", "jpeg", "png", "heic"]
+    static let videoExts:[String] = ["mov", "mp4", "mpeg", "mts", "m2ts"]
     
     let allowed:Set<String> = ["jpg", "jpeg", "mp4", "mov", "mpg", "mpeg", "png", "heic", "mts", "m2ts", "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "vcf", "amr"]
     
@@ -127,9 +127,9 @@ struct FileTypeRecognizer {
     
     func recognize(from filename: String) -> ImageType {
         let fileExt:String = (filename.split(separator: Character(".")).last?.lowercased()) ?? filename
-        if self.photoExts.contains(fileExt) {
+        if FileTypeRecognizer.photoExts.contains(fileExt) {
             return.photo
-        }else if self.videoExts.contains(fileExt) {
+        }else if FileTypeRecognizer.videoExts.contains(fileExt) {
             return.video
         }
         return .other

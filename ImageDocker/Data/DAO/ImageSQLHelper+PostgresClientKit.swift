@@ -39,8 +39,16 @@ extension SQLHelper {
         
         var sqlArgs:[PostgresValueConvertible] = []
         
-        SQLHelper.inPostgresArray(field: "imageSource", array: imageSource, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
-        SQLHelper.inPostgresArray(field: "cameraModel", array: cameraModel, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
+//        SQLHelper.inPostgresArray(field: "imageSource", array: imageSource, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
+//        SQLHelper.inPostgresArray(field: "cameraModel", array: cameraModel, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
+        
+        if !filter.includePhoto {
+            stmtWithoutHiddenWhere += " and lower((regexp_split_to_array(filename, '\\.'))[array_upper(regexp_split_to_array(filename, '\\.'), 1)]) not in (\(FileTypeRecognizer.photoExts.joinedSingleQuoted(separator: ",")))"
+        }
+        
+        if !filter.includeVideo {
+            stmtWithoutHiddenWhere += " and lower((regexp_split_to_array(filename, '\\.'))[array_upper(regexp_split_to_array(filename, '\\.'), 1)]) not in (\(FileTypeRecognizer.videoExts.joinedSingleQuoted(separator: ",")))"
+        }
         
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
         let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=true"
@@ -63,7 +71,16 @@ extension SQLHelper {
         }
         
 //        SQLHelper.inPostgresArray(field: "imageSource", array: imageSource, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
-        SQLHelper.inPostgresArray(field: "cameraModel", array: cameraModel, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
+//        SQLHelper.inPostgresArray(field: "cameraModel", array: cameraModel, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
+        
+        if !filter.includePhoto {
+            stmtWithoutHiddenWhere += " and lower((regexp_split_to_array(filename, '\\.'))[array_upper(regexp_split_to_array(filename, '\\.'), 1)]) not in (\(FileTypeRecognizer.photoExts.joinedSingleQuoted(separator: ","))"
+        }
+        
+        if !filter.includeVideo {
+            stmtWithoutHiddenWhere += " and lower((regexp_split_to_array(filename, '\\.'))[array_upper(regexp_split_to_array(filename, '\\.'), 1)]) not in (\(FileTypeRecognizer.videoExts.joinedSingleQuoted(separator: ","))"
+        }
+        
         
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
         let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=true"
