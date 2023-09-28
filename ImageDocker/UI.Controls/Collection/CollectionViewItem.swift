@@ -108,6 +108,7 @@ class CollectionViewItem: NSCollectionViewItem {
     
     fileprivate func renderControls(_ imageFile:ImageFile) {
         DispatchQueue.main.async {
+            self.setupMenu()
             var degree = 0
             if let imageData = imageFile.imageData, let rotationDegree = imageData.rotation {
                 degree = rotationDegree
@@ -206,6 +207,14 @@ class CollectionViewItem: NSCollectionViewItem {
     }
     
     var mouseLocation:NSPoint? = nil
+    
+    func setupMenu() {
+        self.moreMenu.item(at: 1)?.title = Words.library_tree_reveal_in_finder.word()
+        self.moreMenu.item(at: 3)?.title = Words.previewEditableVersion.word()
+        self.moreMenu.item(at: 4)?.title = Words.previewBackupVersion.word()
+        self.moreMenu.item(at: 5)?.title = Words.largeView.word()
+        self.moreMenu.item(at: 7)?.title = Words.replaceImageWithBackupVersion.word()
+    }
     
     @IBAction func onPopUpButtonClicked(_ sender: NSPopUpButton) {
         
