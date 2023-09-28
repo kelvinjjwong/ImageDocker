@@ -41,6 +41,8 @@ class ViewController: NSViewController {
     @IBOutlet weak var btnToggleLeftPanel: NSButton!
     @IBOutlet weak var btnToggleBottomPanel: NSButton!
     @IBOutlet weak var btnToggleRightPanel: NSButton!
+    @IBOutlet weak var btnToggleRightPanel2: NSButton!
+    
     @IBOutlet weak var btnTogglePreviewPanel: NSButton!
     
     
@@ -780,23 +782,43 @@ class ViewController: NSViewController {
         let rightPanel = self.verticalSplitView.arrangedSubviews[1]
         rightPanel.isHidden = true
         self.btnCollapseRight.image = Icons.expandRightPanel
-        self.btnTogglePreviewPanel.isEnabled = false
     }
+    
+    @IBAction func onToggleRightPanel2(_ sender: NSButton) {
+        let rightPanel = self.verticalSplitView.arrangedSubviews[1]
+        if self.verticalSplitView.isSubviewCollapsed(rightPanel) {
+            rightPanel.isHidden = false
+            self.btnCollapseRight.image = Icons.collapseRightPanel
+            self.btnToggleRightPanel2.image = Icons.collapseRightPanel
+        }else{
+            rightPanel.isHidden = true
+            self.btnCollapseRight.image = Icons.expandRightPanel
+            self.btnToggleRightPanel2.image = Icons.expandRightPanel
+        }
+    }
+    
     
     @IBAction func onToggleRightPanel(_ sender: NSButton) {
         let rightPanel = self.verticalSplitView.arrangedSubviews[1]
         if self.verticalSplitView.isSubviewCollapsed(rightPanel) {
             rightPanel.isHidden = false
             self.btnCollapseRight.image = Icons.collapseRightPanel
-            self.btnTogglePreviewPanel.isEnabled = true
+            self.btnToggleRightPanel2.image = Icons.collapseRightPanel
         }else{
             rightPanel.isHidden = true
             self.btnCollapseRight.image = Icons.expandRightPanel
-            self.btnTogglePreviewPanel.isEnabled = false
+            self.btnToggleRightPanel2.image = Icons.expandRightPanel
         }
     }
     
     @IBAction func onTogglePreviewInnerPanel(_ sender: NSButton) {
+        let rightPanel = self.verticalSplitView.arrangedSubviews[1]
+        if rightPanel.isHidden || self.verticalSplitView.isSubviewCollapsed(rightPanel) {
+            rightPanel.isHidden = false
+            self.btnCollapseRight.image = Icons.collapseRightPanel
+            self.btnToggleRightPanel2.image = Icons.collapseRightPanel
+        }
+        
         let metaTablePanel = self.splitviewPreview.arrangedSubviews[0]
         if self.splitviewPreview.isSubviewCollapsed(metaTablePanel) {
             metaTablePanel.isHidden = false

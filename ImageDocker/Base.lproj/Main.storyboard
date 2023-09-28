@@ -1851,7 +1851,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                 <rect key="frame" x="6" y="905" width="1909" height="50"/>
                                 <subviews>
                                     <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="kCb-sM-PKJ">
-                                        <rect key="frame" x="1690" y="24" width="77" height="16"/>
+                                        <rect key="frame" x="1660" y="24" width="77" height="16"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="72" id="czr-e9-fZe"/>
                                         </constraints>
@@ -1879,7 +1879,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                         </connections>
                                     </button>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bwo-eW-DeK">
-                                        <rect key="frame" x="1777" y="21" width="100" height="19"/>
+                                        <rect key="frame" x="1747" y="21" width="100" height="19"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="100" id="iZi-bX-YOp"/>
                                         </constraints>
@@ -1943,7 +1943,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1L2-wU-5mb">
-                                        <rect key="frame" x="1879" y="24" width="28" height="16"/>
+                                        <rect key="frame" x="1849" y="24" width="28" height="16"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="28" id="Pf2-x0-glH"/>
                                         </constraints>
@@ -1983,7 +1983,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5UN-DP-f9q">
-                                        <rect key="frame" x="1611" y="18" width="70" height="23"/>
+                                        <rect key="frame" x="1581" y="18" width="70" height="23"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="68" id="YUo-op-VUG"/>
                                         </constraints>
@@ -2030,6 +2030,20 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                             <action selector="onCombineDuplicatesButtonClicked:" target="XfG-lQ-9wD" id="Mfq-f0-6Pn"/>
                                         </connections>
                                     </popUpButton>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qW9-CO-kS6">
+                                        <rect key="frame" x="1882" y="16" width="25" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="25" id="Tw6-yL-JrK"/>
+                                            <constraint firstAttribute="height" constant="32" id="oym-zP-b3U"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="inline" title="Button" bezelStyle="inline" image="collapse_right" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="0GR-nT-wV1">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystemBold"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="onToggleRightPanel2:" target="XfG-lQ-9wD" id="zH0-Ub-vce"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="kCb-sM-PKJ" firstAttribute="leading" secondItem="5UN-DP-f9q" secondAttribute="trailing" constant="15" id="0O5-Ra-pOu"/>
@@ -2039,6 +2053,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                     <constraint firstItem="zJa-km-Rrl" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="4IP-Tf-ie0"/>
                                     <constraint firstItem="MGB-Ps-tLI" firstAttribute="leading" secondItem="2rl-sF-lP2" secondAttribute="trailing" constant="8" symbolic="YES" id="5IR-Kb-b6c"/>
                                     <constraint firstItem="2rl-sF-lP2" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="9" id="8PV-2V-37g"/>
+                                    <constraint firstAttribute="trailing" secondItem="qW9-CO-kS6" secondAttribute="trailing" constant="2" id="Alr-Y6-XVi"/>
                                     <constraint firstItem="SE2-Sb-Hue" firstAttribute="leading" secondItem="gVf-na-PZy" secondAttribute="leading" constant="365" id="Aya-AU-vCP"/>
                                     <constraint firstItem="Gkw-tO-uG9" firstAttribute="leading" secondItem="MGB-Ps-tLI" secondAttribute="trailing" constant="5" id="B6d-Q1-M6r"/>
                                     <constraint firstItem="zJa-km-Rrl" firstAttribute="leading" secondItem="gVf-na-PZy" secondAttribute="leading" constant="5" id="DPL-cO-Vsq"/>
@@ -2047,11 +2062,12 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                     <constraint firstItem="csF-Eh-wOF" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="K5o-tc-nMl"/>
                                     <constraint firstItem="SE2-Sb-Hue" firstAttribute="top" secondItem="2rl-sF-lP2" secondAttribute="bottom" constant="4" id="KEJ-O5-BXv"/>
                                     <constraint firstItem="qGQ-TO-rn5" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="WWL-Q9-QJm"/>
+                                    <constraint firstItem="qW9-CO-kS6" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="2" id="ana-KT-iiV"/>
                                     <constraint firstItem="2rl-sF-lP2" firstAttribute="leading" secondItem="qGQ-TO-rn5" secondAttribute="trailing" constant="27" id="fWv-bM-ru3"/>
                                     <constraint firstItem="Bwo-eW-DeK" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="l7J-fy-SVL"/>
-                                    <constraint firstAttribute="trailing" secondItem="1L2-wU-5mb" secondAttribute="trailing" constant="2" id="lY8-KH-lQ0"/>
                                     <constraint firstItem="MGB-Ps-tLI" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="7" id="pPB-Pa-OGA"/>
                                     <constraint firstItem="Gkw-tO-uG9" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="9" id="ptV-qy-aEz"/>
+                                    <constraint firstItem="qW9-CO-kS6" firstAttribute="leading" secondItem="1L2-wU-5mb" secondAttribute="trailing" constant="5" id="xIa-5Q-EhI"/>
                                     <constraint firstItem="qGQ-TO-rn5" firstAttribute="leading" secondItem="csF-Eh-wOF" secondAttribute="trailing" constant="5" id="yQQ-9y-y8t"/>
                                     <constraint firstItem="1L2-wU-5mb" firstAttribute="leading" secondItem="Bwo-eW-DeK" secondAttribute="trailing" constant="2" id="yZ8-x9-dj8"/>
                                     <constraint firstItem="5UN-DP-f9q" firstAttribute="top" secondItem="gVf-na-PZy" secondAttribute="top" constant="10" id="zb9-rU-qHE"/>
@@ -2446,6 +2462,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <outlet property="btnRefreshCollectionView" destination="DpT-Dg-Oeb" id="ze3-El-bMX"/>
                         <outlet property="btnTasks" destination="csF-Eh-wOF" id="6h3-Vs-dhx"/>
                         <outlet property="btnTogglePreviewPanel" destination="1L2-wU-5mb" id="V0u-cf-TZc"/>
+                        <outlet property="btnToggleRightPanel2" destination="qW9-CO-kS6" id="BW3-qv-4Ap"/>
                         <outlet property="centralHorizontalSplitView" destination="X01-1a-Mbk" id="f2Y-3h-0eu"/>
                         <outlet property="collectionPaginationView" destination="OOm-kj-kbe" id="Z4w-7H-rSK"/>
                         <outlet property="collectionProgressIndicator" destination="Sab-MP-Qfo" id="tTT-fa-2Dw"/>
