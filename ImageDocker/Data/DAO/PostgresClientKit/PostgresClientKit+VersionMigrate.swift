@@ -679,6 +679,12 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v56") { db in
+            try db.alter(table: "Family", body: { t in
+                t.add("owner", .text).defaults(to: "").indexed()
+            })
+        }
+        
         do {
             try migrator.migrate(cleanVersions: dropBeforeCreate)
         }catch{

@@ -22,6 +22,8 @@ protocol FaceDaoInterface {
     
     func deleteFamily(id:String) -> ExecuteState
     
+    func getFamilyMembers() -> [FamilyMember]
+    
     // MARK: - RELATIONSHIP
     
     func getRelationship(primary:String, secondary:String) -> (String, String)

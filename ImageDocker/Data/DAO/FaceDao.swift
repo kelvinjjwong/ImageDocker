@@ -49,6 +49,10 @@ class FaceDao {
         return self.impl.deleteFamily(id: id)
     }
     
+    func getFamilyMembers() -> [FamilyMember] {
+        return self.impl.getFamilyMembers()
+    }
+    
     // MARK: - RELATIONSHIP
     
     func getRelationship(primary:String, secondary:String) -> (String, String) {

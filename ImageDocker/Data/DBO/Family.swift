@@ -14,6 +14,7 @@ public final class Family : Codable {
     //var id: Int64?      // <- the row id
     var id: String = ""
     var name: String = ""
+    var owner: String = ""
     var category: String?
     
     public init() {

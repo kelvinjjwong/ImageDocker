@@ -143,6 +143,11 @@ class FaceDaoPostgresCK : FaceDaoInterface {
         return .OK
     }
     
+    func getFamilyMembers() -> [FamilyMember] {
+        let db = PostgresConnection.database()
+        return FamilyMember.fetchAll(db)
+    }
+    
     func getRelationship(primary: String, secondary: String) -> (String, String) {
         var value1 = ""
         var value2 = ""

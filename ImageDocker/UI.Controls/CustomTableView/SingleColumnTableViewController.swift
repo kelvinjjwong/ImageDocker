@@ -18,6 +18,9 @@ class SingleColumnTableViewController: NSObject {
     let logger = LoggerFactory.get(category: "SingleColumnTableViewController")
     
 //    var selectionDelegate:FaceCategoryListSelectionDelegate?
+    var isJSON:Bool = false
+    var jsonKey:String = "value"
+    
     var items:[String] = []
     var onClick:((String) -> Void)? = nil
     
@@ -29,6 +32,7 @@ class SingleColumnTableViewController: NSObject {
     
     init(_ table:NSTableView) {
         self.table = table
+        self.table.setDraggingSourceOperationMask(.copy, forLocal: false)
     }
     
     func load(_ items:[String]) {
@@ -88,7 +92,12 @@ extension SingleColumnTableViewController: NSTableViewDelegate {
         if let id = tableColumn?.identifier {
             switch id {
             case NSUserInterfaceItemIdentifier("value"):
-                value = item
+                if self.isJSON {
+                    let json = JSON.init(parseJSON: item)
+                    value = json[self.jsonKey].stringValue
+                }else{
+                    value = item
+                }
                 
             default:
                 break
@@ -120,6 +129,10 @@ extension SingleColumnTableViewController: NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
         lastSelectedRow = row
         return true
+    }
+    
+    func tableView(_ tableView: NSTableView, pasteboardWriterForRow row: Int) -> NSPasteboardWriting? {
+        return self.items[row] as NSString
     }
 }
 

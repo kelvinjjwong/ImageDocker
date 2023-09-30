@@ -140,7 +140,7 @@
                                                 <constraint firstAttribute="width" constant="64" id="F9f-Ie-ye7"/>
                                             </constraints>
                                             <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="IPU-TN-XG2">
-                                                <rect key="frame" x="1" y="194" width="62" height="15"/>
+                                                <rect key="frame" x="1" y="192" width="62" height="15"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="Hd7-9n-6Ko">
@@ -205,7 +205,7 @@
                                                 <constraint firstAttribute="width" constant="73" id="Y6c-xV-hes"/>
                                             </constraints>
                                             <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Uw2-Gj-hzI">
-                                                <rect key="frame" x="1" y="194" width="71" height="15"/>
+                                                <rect key="frame" x="1" y="192" width="71" height="15"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="LEZ-WE-0oy">

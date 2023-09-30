@@ -61,6 +61,7 @@
 		8E27F04225DC0291003B585F /* ImageMapView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E27F04025DC0291003B585F /* ImageMapView.xib */; };
 		8E27F2A5259DD79C003D48BE /* TreeOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E27F2A4259DD79C003D48BE /* TreeOutlineView.swift */; };
 		8E31C37F2120A22600002546 /* DeviceShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E31C37E2120A22600002546 /* DeviceShell.swift */; };
+		8E3614FD2AC5933B001DF482 /* Words+People.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3614FC2AC5933B001DF482 /* Words+People.swift */; };
 		8E36B067217920B400646EA5 /* MonthListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E36B066217920B400646EA5 /* MonthListController.swift */; };
 		8E36B069217920C000646EA5 /* DayListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E36B068217920C000646EA5 /* DayListController.swift */; };
 		8E36B06C21792EDC00646EA5 /* CustomRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E36B06B21792EDC00646EA5 /* CustomRowView.swift */; };
@@ -438,6 +439,7 @@
 		8E27F2A4259DD79C003D48BE /* TreeOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeOutlineView.swift; sourceTree = "<group>"; };
 		8E2CF36F20AED2FE00A93375 /* CollectionView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CollectionView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E31C37E2120A22600002546 /* DeviceShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceShell.swift; sourceTree = "<group>"; };
+		8E3614FC2AC5933B001DF482 /* Words+People.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+People.swift"; sourceTree = "<group>"; };
 		8E36B066217920B400646EA5 /* MonthListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthListController.swift; sourceTree = "<group>"; };
 		8E36B068217920C000646EA5 /* DayListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayListController.swift; sourceTree = "<group>"; };
 		8E36B06B21792EDC00646EA5 /* CustomRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRowView.swift; sourceTree = "<group>"; };
@@ -1007,6 +1009,7 @@
 			children = (
 				8E9CF30A26489D5500558423 /* Localize.swift */,
 				8E9CF30C26489EAA00558423 /* Words.swift */,
+				8E3614FC2AC5933B001DF482 /* Words+People.swift */,
 				8E481486277DAFF10097493E /* Words+Splash.swift */,
 				8E481480277DAE940097493E /* Words+MainMenu.swift */,
 				8E48147E277DAE6C0097493E /* Words+MainCollectionView.swift */,
@@ -2032,6 +2035,7 @@
 				8E31C37F2120A22600002546 /* DeviceShell.swift in Sources */,
 				8EC82EAE21283ED000FC0899 /* DirectoryViewDelegate.swift in Sources */,
 				8EF4CE6421E56DC100C53AFF /* NotificationViewController.swift in Sources */,
+				8E3614FD2AC5933B001DF482 /* Words+People.swift in Sources */,
 				8EB986BF20B30C920075B081 /* HeaderView.swift in Sources */,
 				8EF125AC2216ECC500C423CA /* ContainerViewController.swift in Sources */,
 				8E85B7D420BA2AD7005A9845 /* DarkSplitView.swift in Sources */,

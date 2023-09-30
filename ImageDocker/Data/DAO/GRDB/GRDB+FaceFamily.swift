@@ -118,6 +118,10 @@ class FaceDaoGRDB : FaceDaoInterface {
         return .OK
     }
     
+    func getFamilyMembers() -> [FamilyMember] {
+        return []
+    }
+    
     // MARK: - RELATIONSHIP
     
     func getRelationship(primary:String, secondary:String) -> (String, String) {
