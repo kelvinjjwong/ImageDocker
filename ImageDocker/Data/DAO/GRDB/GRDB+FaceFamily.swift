@@ -16,6 +16,10 @@ class FaceDaoGRDB : FaceDaoInterface {
 
     // MARK: - FAMILY
     
+    func getFamily(id:String) -> Family? {
+        return nil
+    }
+    
     func getFamilies() -> [Family] {
         var result:[Family] = []
         do {
@@ -74,7 +78,7 @@ class FaceDaoGRDB : FaceDaoInterface {
         return .OK
     }
     
-    func saveFamily(familyId:String?=nil, name:String, type:String) -> String? {
+    func saveFamily(familyId:String?=nil, name:String, type:String, owner:String) -> String? {
         var recordId:String? = ""
         do {
             let db = try SQLiteConnectionGRDB.default.sharedDBPool()

@@ -10,6 +10,8 @@ import Foundation
 
 protocol FaceDaoInterface {
     
+    func getFamily(id:String) -> Family?
+    
     func getFamilies() -> [Family]
     
     func getFamilies(peopleId:String) -> [String]
@@ -18,7 +20,7 @@ protocol FaceDaoInterface {
     
     func deleteFamilyMember(peopleId:String, familyId:String) -> ExecuteState
     
-    func saveFamily(familyId:String?, name:String, type:String) -> String?
+    func saveFamily(familyId:String?, name:String, type:String, owner:String) -> String?
     
     func deleteFamily(id:String) -> ExecuteState
     

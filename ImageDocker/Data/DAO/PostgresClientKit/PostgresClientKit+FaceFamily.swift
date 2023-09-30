@@ -47,6 +47,11 @@ class FaceDaoPostgresCK : FaceDaoInterface {
     
     let logger = LoggerFactory.get(category: "FaceDaoPostgresCK")
     
+    func getFamily(id:String) -> Family? {
+        let db = PostgresConnection.database()
+        return Family.fetchOne(db, parameters: ["id" : id])
+    }
+    
     func getFamilies() -> [Family] {
         let db = PostgresConnection.database()
         return Family.fetchAll(db, orderBy: "name")
@@ -97,7 +102,7 @@ class FaceDaoPostgresCK : FaceDaoInterface {
         return .OK
     }
     
-    func saveFamily(familyId: String?, name: String, type: String) -> String? {
+    func saveFamily(familyId: String?, name: String, type: String, owner:String) -> String? {
         let db = PostgresConnection.database()
         var recordId:String? = ""
         
@@ -111,7 +116,7 @@ class FaceDaoPostgresCK : FaceDaoInterface {
                 let rows = TempRecord.fetchAll(db, sql: "SELECT id FROM \"Family\" WHERE id='\(id)'")
                 if rows.count > 0 {
                     recordId = id
-                    try db.execute(sql: "UPDATE \"Family\" SET name='\(name)',category='\(type)' WHERE id='\(id)'")
+                    try db.execute(sql: "UPDATE \"Family\" SET name='\(name)',category='\(type)',owner='\(owner)' WHERE id='\(id)'")
                 }else{
                     needInsert = true
                 }
@@ -120,7 +125,7 @@ class FaceDaoPostgresCK : FaceDaoInterface {
             }
             if needInsert {
                 recordId = UUID().uuidString
-                try db.execute(sql: "INSERT INTO \"Family\" (id, name, category) VALUES ('\(recordId!)','\(name)','\(type)')")
+                try db.execute(sql: "INSERT INTO \"Family\" (id, name, category, owner) VALUES ('\(recordId!)','\(name)','\(type)','\(owner)')")
             }
         }catch{
             self.logger.log(error)

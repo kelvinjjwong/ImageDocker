@@ -25,6 +25,10 @@ class FaceDao {
         }
     }
     
+    func getFamily(id:String) -> Family? {
+        return self.impl.getFamily(id: id)
+    }
+    
     func getFamilies() -> [Family] {
         return self.impl.getFamilies()
     }
@@ -41,8 +45,8 @@ class FaceDao {
         return self.impl.deleteFamilyMember(peopleId: peopleId, familyId: familyId)
     }
     
-    func saveFamily(familyId:String?=nil, name:String, type:String) -> String? {
-        return self.impl.saveFamily(familyId: familyId, name: name, type: type)
+    func saveFamily(familyId:String?=nil, name:String, type:String, owner:String) -> String? {
+        return self.impl.saveFamily(familyId: familyId, name: name, type: type, owner:owner)
     }
     
     func deleteFamily(id:String) -> ExecuteState {
@@ -51,24 +55,6 @@ class FaceDao {
     
     func getFamilyMembers() -> [FamilyMember] {
         return self.impl.getFamilyMembers()
-    }
-    
-    // MARK: - RELATIONSHIP
-    
-    func getRelationship(primary:String, secondary:String) -> (String, String) {
-        return self.impl.getRelationship(primary: primary, secondary: secondary)
-    }
-    
-    func getRelationships(peopleId:String) -> [[String:String]] {
-        return self.impl.getRelationships(peopleId: peopleId)
-    }
-    
-    func saveRelationship(primary:String, secondary:String, callName:String) -> ExecuteState {
-        return self.impl.saveRelationship(primary: primary, secondary: secondary, callName: callName)
-    }
-    
-    func getRelationships() -> [PeopleRelationship] {
-        return self.impl.getRelationships()
     }
     
     // MARK: - PEOPLE
@@ -113,4 +99,22 @@ class FaceDao {
         return self.impl.updatePersonIsCoreMember(id: id, isCoreMember: isCoreMember)
     }
     
+    
+    // MARK: - RELATIONSHIP
+    
+    func getRelationship(primary:String, secondary:String) -> (String, String) {
+        return self.impl.getRelationship(primary: primary, secondary: secondary)
+    }
+    
+    func getRelationships(peopleId:String) -> [[String:String]] {
+        return self.impl.getRelationships(peopleId: peopleId)
+    }
+    
+    func saveRelationship(primary:String, secondary:String, callName:String) -> ExecuteState {
+        return self.impl.saveRelationship(primary: primary, secondary: secondary, callName: callName)
+    }
+    
+    func getRelationships() -> [PeopleRelationship] {
+        return self.impl.getRelationships()
+    }
 }

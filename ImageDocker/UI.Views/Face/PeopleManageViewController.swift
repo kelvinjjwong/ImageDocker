@@ -21,6 +21,9 @@ class PeopleGroup {
     var name:String = ""
     var parent:CoreMember? = nil
     var members:[PeopleGroupMember] = []
+    
+    
+    fileprivate static let default_group_category = "亲友"
 }
 
 class PeopleGroupMember {
@@ -33,6 +36,7 @@ class PeopleGroupMember {
 }
 
 class PeopleManageViewController: NSViewController {
+    
     
     fileprivate var selectedPeopleId = ""
     
@@ -168,7 +172,7 @@ class PeopleManageViewController: NSViewController {
             coreMember.nickname = m.shortName ?? m.name
             coreMember.groups = []
             
-            if let fam = families[coreMember.nickname] {
+            if let fam = families[coreMember.id] {
                 for f in fam {
                     let group = PeopleGroup()
                     group.id = f.id
@@ -274,7 +278,11 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
             
             item.groups.append(peopleGroup)
             
-            // TODO: save to db, append group to core member
+            // save to db, append group to core member
+            if let persisted_groupId = FaceDao.default.saveFamily(name: peopleGroup.name, type: PeopleGroup.default_group_category, owner: item.id) {
+                peopleGroup.id = persisted_groupId
+            }
+            
             
             if let table = self.table {
                 table.deselectAll(nil)
@@ -296,7 +304,24 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
                 let newGroupName = self.textField?.stringValue ?? item.name
                 
                 if newGroupName != item.name {
-                    // TODO: save to db, change group name
+                    // save to db, change group name
+                    if let family = FaceDao.default.getFamily(id: item.id) {
+                        family.name = newGroupName
+                        let _ = FaceDao.default.saveFamily(familyId: family.id, name: family.name, type: family.category ?? PeopleGroup.default_group_category, owner: family.owner)
+                        
+                        if let coreMember = item.parent {
+                            for peopleGroup in coreMember.groups {
+                                if peopleGroup.id == item.id {
+                                    peopleGroup.name = newGroupName
+                                }
+                            }
+                        }
+                        
+                        if let table = self.table {
+                            table.deselectAll(nil)
+                            table.reloadData()
+                        }
+                    }
                 }
                 
             }else{
@@ -307,7 +332,8 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
                         return group.id == item.id
                     }
                     
-                    // TODO: save to db, delete group and all group members
+                    // save to db, delete group and all group members
+                    let _ = FaceDao.default.deleteFamily(id: item.id)
                     
                     if let table = self.table {
                         table.deselectAll(nil)
@@ -326,7 +352,8 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
                     return member.id == item.id
                 }
                 
-                // TODO: save to db, delete group member
+                // save to db, delete group member
+                let _ = FaceDao.default.deleteFamilyMember(peopleId: item.id, familyId: peopleGroup.id)
                 
                 if let table = self.table {
                     table.deselectAll(nil)
@@ -450,10 +477,13 @@ extension PeopleManageViewController: NSOutlineViewDataSource {
                     }){
                         newMember.parent = peopleGroup
                         peopleGroup.members.append(newMember)
+                        
+                        // save to db, append group member
+                        let _ = FaceDao.default.saveFamilyMember(peopleId: newMember.id, familyId: peopleGroup.id)
+                        
                         self.treeView.deselectAll(nil)
                         self.treeView.reloadData()
                         self.treeView.expandItem(nil, expandChildren: true)
-                        // TODO: save to db, append group member
                     }
                     break
                 }
