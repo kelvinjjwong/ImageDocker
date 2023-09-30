@@ -39,21 +39,7 @@ class ExportConfigurationViewController: NSViewController {
     
     var repositoryTableController : DictionaryTableViewController!
     
-    @IBOutlet weak var chkEvents: NSButton!
-    @IBOutlet weak var chkIncludeEvent: NSButton!
-    @IBOutlet weak var chkExcludeEvent: NSButton!
-    @IBOutlet weak var tblEvent: NSTableView!
-    
-    var eventTableController : DictionaryTableViewController!
-    
     var eventCategoriesTableController : DictionaryTableViewController!
-    
-    @IBOutlet weak var chkPeople: NSButton!
-    @IBOutlet weak var chkIncludePeople: NSButton!
-    @IBOutlet weak var chkExcludePeople: NSButton!
-    @IBOutlet weak var tblPeople: NSTableView!
-    
-    var peopleTableController : DictionaryTableViewController!
     
     @IBOutlet weak var chkFamilies: NSButton!
     @IBOutlet weak var chkIncludeFamily: NSButton!
@@ -94,9 +80,7 @@ class ExportConfigurationViewController: NSViewController {
     @IBOutlet weak var boxName: NSBox!
     @IBOutlet weak var boxAction: NSBox!
     @IBOutlet weak var boxRepositories: NSBox!
-    @IBOutlet weak var boxEvents: NSBox!
     @IBOutlet weak var boxFamilies: NSBox!
-    @IBOutlet weak var boxPeople: NSBox!
     
     
     @IBOutlet weak var boxEventCategories: NSBox!
@@ -145,10 +129,6 @@ class ExportConfigurationViewController: NSViewController {
         
         self.boxRepositories.title = Words.export_profile_repositories.word()
         self.chkRepository.title = Words.export_profile_has_limit.word()
-        self.boxEvents.title = Words.export_profile_events.word()
-        self.chkEvents.title = Words.export_profile_has_limit.word()
-        self.boxPeople.title = Words.export_profile_people.word()
-        self.chkPeople.title = Words.export_profile_has_limit.word()
         self.boxFamilies.title = Words.export_profile_families.word()
         self.chkFamilies.title = Words.export_profile_has_limit.word()
         self.boxEventCategories.title = Words.export_profile_event_categories.word()
@@ -156,10 +136,6 @@ class ExportConfigurationViewController: NSViewController {
         
         self.chkIncludeRepository.title = Words.export_profile_include.word()
         self.chkExcludeRepository.title = Words.export_profile_exclude.word()
-        self.chkIncludeEvent.title = Words.export_profile_include.word()
-        self.chkExcludeEvent.title = Words.export_profile_exclude.word()
-        self.chkIncludePeople.title = Words.export_profile_include.word()
-        self.chkExcludePeople.title = Words.export_profile_exclude.word()
         self.chkIncludeFamily.title = Words.export_profile_include.word()
         self.chkExcludeFamily.title = Words.export_profile_exclude.word()
         self.chkIncludeEventCategories.title = Words.export_profile_include.word()
@@ -240,13 +216,7 @@ class ExportConfigurationViewController: NSViewController {
         self.eventCategoriesTableController.load(self.loadEventCategories(), afterLoaded: {
         })
         
-        self.eventTableController.load(self.loadEvents(), afterLoaded: {
-        })
-        
         self.familyTableController.load(self.loadFamilies(), afterLoaded: {
-        })
-        
-        self.peopleTableController.load(self.loadPeople(), afterLoaded: {
         })
     }
     
@@ -268,9 +238,7 @@ class ExportConfigurationViewController: NSViewController {
         
         self.toggleRepository(true, uncheckAll: true)
         self.toggleEventCategory(true, uncheckAll: true)
-        self.toggleEvent(true, uncheckAll: true)
         self.toggleFamily(true, uncheckAll: true)
-        self.togglePeople(true, uncheckAll: true)
     }
     
     private func fillFields(profile:ExportProfile) {
@@ -328,49 +296,6 @@ class ExportConfigurationViewController: NSViewController {
             self.toggleGroup_EventCategory.enable()
         }
         
-        self.chkEvents.state = profile.specifyEvent ? .on : .off
-        let events = profile.events
-        self.logger.log("events: \(events)")
-        if events.hasPrefix("include:") {
-            self.toggleGroup_Event.selected = "include"
-            let value = events.replacingFirstOccurrence(of: "include:", with: "")
-            self.logger.log("event: \(value)")
-            self.eventTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
-        }else if events.hasPrefix("exclude:") {
-            self.toggleGroup_Event.selected = "exclude"
-            let value = events.replacingFirstOccurrence(of: "exclude:", with: "")
-            self.logger.log("event: \(value)")
-            self.eventTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
-        }
-        if !profile.specifyEvent {
-            self.eventTableController.disableCheckboxes()
-            self.toggleGroup_Event.disable()
-        }else{
-            self.eventTableController.enableCheckboxes()
-            self.toggleGroup_Event.enable()
-        }
-        
-        self.chkPeople.state = profile.specifyPeople ? .on : .off
-        let people = profile.people
-        if people.hasPrefix("include:") {
-            self.toggleGroup_People.selected = "include"
-            let value = people.replacingFirstOccurrence(of: "include:", with: "")
-            self.logger.log("people: \(value)")
-            self.peopleTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
-        }else if people.hasPrefix("exclude:") {
-            self.toggleGroup_People.selected = "exclude"
-            let value = people.replacingFirstOccurrence(of: "exclude:", with: "")
-            self.logger.log("people: \(value)")
-            self.peopleTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
-        }
-        if !profile.specifyPeople {
-            self.peopleTableController.disableCheckboxes()
-            self.toggleGroup_People.disable()
-        }else{
-            self.peopleTableController.enableCheckboxes()
-            self.toggleGroup_People.enable()
-        }
-        
         self.chkFamilies.state = profile.specifyFamily ? .on : .off
         let family = profile.family
         if family.hasPrefix("include:") {
@@ -398,9 +323,7 @@ class ExportConfigurationViewController: NSViewController {
         self.cleanFields()
         self.repositoryTableController.uncheckAll()
         self.eventCategoriesTableController.uncheckAll()
-        self.eventTableController.uncheckAll()
         self.familyTableController.uncheckAll()
-        self.peopleTableController.uncheckAll()
     }
     
     
@@ -443,28 +366,6 @@ class ExportConfigurationViewController: NSViewController {
         }
         self.logger.log("selected category: \(eventCategories)")
         
-        if self.chkEvents.state == .on {
-            let checked = self.eventTableController.getCheckedItemAsQuotedString(column: "name", separator: ",")
-            if checked != "" {
-                if self.chkIncludeEvent.state == .on {
-                    events = "include:\(checked)"
-                }else if self.chkExcludeEvent.state == .on {
-                    events = "exclude:\(checked)"
-                }
-            }
-        }
-        
-        if self.chkPeople.state == .on {
-            let checked = self.peopleTableController.getCheckedItemAsQuotedString(column: "name", separator: ",")
-            if checked != "" {
-                if self.chkIncludePeople.state == .on {
-                    people = "include:\(checked)"
-                }else if self.chkExcludePeople.state == .on {
-                    people = "exclude:\(checked)"
-                }
-            }
-        }
-        
         if self.chkFamilies.state == .on {
             let checked = self.familyTableController.getCheckedItemAsQuotedString(column: "name", separator: ",")
             if checked != "" {
@@ -479,8 +380,6 @@ class ExportConfigurationViewController: NSViewController {
         profile.name = name
         profile.directory = path
         profile.duplicateStrategy = fileDuplicated
-        profile.specifyPeople = self.chkPeople.state == .on
-        profile.specifyEvent = self.chkEvents.state == .on
         profile.specifyRepository = self.chkRepository.state == .on
         profile.specifyFamily = self.chkFamilies.state == .on
         profile.people = people
@@ -762,25 +661,6 @@ class ExportConfigurationViewController: NSViewController {
         return familyNames
     }
     
-    func loadPeople(families:String? = nil, exclude:Bool = false) -> [[String:String]] {
-        var peopleNames:[[String:String]] = []
-        var people:[People] = []
-        if let families = families {
-            people = FaceDao.default.getPeople(inFamilyQuotedSeparated: families, exclude: exclude)
-        }else{
-            people = FaceDao.default.getPeople()
-        }
-        for person in people {
-            var item:[String:String] = [:]
-            item["check"] = "false"
-            item["name"] = person.name
-            item["shortName"] = person.shortName ?? person.name
-            item["id"] = person.id
-            peopleNames.append(item)
-        }
-        return peopleNames
-    }
-    
     func loadEventCategories() -> [[String:String]] {
         var eventCategoryNames:[[String:String]] = []
         let eventCategories = EventDao.default.getEventCategories()
@@ -792,24 +672,6 @@ class ExportConfigurationViewController: NSViewController {
             eventCategoryNames.append(item)
         }
         return eventCategoryNames
-    }
-    
-    func loadEvents(categories:String? = nil, exclude:Bool = false) -> [[String:String]] {
-        var eventNames:[[String:String]] = []
-        var events:[ImageEvent] = []
-        if let categories = categories {
-            events = EventDao.default.getEvents(categoriesQuotedSeparated: categories, exclude: exclude)
-        }else{
-            events = EventDao.default.getEvents()
-        }
-        for event in events {
-            var item:[String:String] = [:]
-            item["check"] = "false"
-            item["name"] = event.name
-            item["id"] = event.name
-            eventNames.append(item)
-        }
-        return eventNames
     }
     
     // MARK: - TOGGLE GROUP - INIT
@@ -829,20 +691,6 @@ class ExportConfigurationViewController: NSViewController {
         
 //        self.toggleGroup_EventCategory.selected = "include"
         
-        self.toggleGroup_Event = ToggleGroup([
-            "include" : self.chkIncludeEvent,
-            "exclude" : self.chkExcludeEvent
-        ], keysOrderred: ["include", "exclude"], defaultValue: "include")
-        
-//        self.toggleGroup_Event.selected = "include"
-        
-        self.toggleGroup_People = ToggleGroup([
-            "include" : self.chkIncludePeople,
-            "exclude" : self.chkExcludePeople
-        ], keysOrderred: ["include", "exclude"], defaultValue: "include")
-        
-//        self.toggleGroup_People.selected = "include"
-        
         self.toggleGroup_Family = ToggleGroup([
             "include" : self.chkIncludeFamily,
             "exclude" : self.chkExcludeFamily
@@ -852,26 +700,18 @@ class ExportConfigurationViewController: NSViewController {
         
         self.repositoryTableController = DictionaryTableViewController(self.tblRepository)
         
-        self.eventTableController = DictionaryTableViewController(self.tblEvent)
-        
         self.eventCategoriesTableController = DictionaryTableViewController(self.tblEventCategories)
         self.eventCategoriesTableController.onCheck = { id, state in
             
             let categories = self.eventCategoriesTableController.getCheckedItemAsSingleQuotedString(column: "name", separator: ",")
             self.logger.log("event category checked: \(categories)")
-            
-            self.eventTableController.load(self.loadEvents(categories: categories, exclude: (self.chkExcludeEventCategories.state == .on)))
         }
-        
-        self.peopleTableController = DictionaryTableViewController(self.tblPeople)
         
         self.familyTableController = DictionaryTableViewController(self.tblFamily)
         self.familyTableController.onCheck = { id, state in
             
             let families = self.familyTableController.getCheckedItemAsSingleQuotedString(column: "id", separator: ",")
             self.logger.log("family checked: \(families)")
-            
-            self.peopleTableController.load(self.loadPeople(families: families, exclude: (self.chkExcludeFamily.state == .on)))
         }
     }
     
@@ -911,19 +751,6 @@ class ExportConfigurationViewController: NSViewController {
         self.toggleRepository(sender.state == .on)
     }
     
-    func toggleEvent(_ state:Bool, uncheckAll:Bool = false) {
-        self.toggleBox(state: state,
-                       uncheckAll: uncheckAll,
-                       checkBox: self.chkEvents,
-                       toggleGroup: self.toggleGroup_Event,
-                       tableController: self.eventTableController)
-    }
-    
-    
-    @IBAction func onCheckEventsClicked(_ sender: NSButton) {
-        self.toggleEvent(sender.state == .on)
-    }
-    
     func toggleEventCategory(_ state:Bool, uncheckAll:Bool = false) {
         self.toggleBox(state: state,
                        uncheckAll: uncheckAll,
@@ -934,18 +761,6 @@ class ExportConfigurationViewController: NSViewController {
     
     @IBAction func onCheckEventCategoryClicked(_ sender: NSButton) {
         self.toggleEventCategory(sender.state == .on)
-    }
-    
-    func togglePeople(_ state:Bool, uncheckAll:Bool = false) {
-        self.toggleBox(state: state,
-                       uncheckAll: uncheckAll,
-                       checkBox: self.chkPeople,
-                       toggleGroup: self.toggleGroup_People,
-                       tableController: self.peopleTableController)
-    }
-    
-    @IBAction func onCheckPeopleClicked(_ sender: NSButton) {
-        self.togglePeople(sender.state == .on)
     }
     
     func toggleFamily(_ state:Bool, uncheckAll:Bool = false) {

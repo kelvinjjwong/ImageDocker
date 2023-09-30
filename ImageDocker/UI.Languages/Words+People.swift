@@ -40,4 +40,9 @@ extension Words {
         chs: "亲友团"
     )
     
+    static let whose_family_group = Localize(
+        eng: "%s's %s",
+        chs: "%s的%s"
+    )
+    
 }

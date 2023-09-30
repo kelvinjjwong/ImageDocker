@@ -19,9 +19,7 @@ class ExportProfileViewController : NSViewController {
     @IBOutlet weak var lblEXIFPatching: NSTextField!
     @IBOutlet weak var lblSubFolder: NSTextField!
     @IBOutlet weak var lblFileNaming: NSTextField!
-    @IBOutlet weak var lblPeople: NSTextField!
     @IBOutlet weak var lblEventCategory: NSTextField!
-    @IBOutlet weak var lblEvent: NSTextField!
     @IBOutlet weak var lblFamilies: NSTextField!
     
     @IBOutlet weak var boxProfile: NSBox!
@@ -33,9 +31,7 @@ class ExportProfileViewController : NSViewController {
     @IBOutlet weak var lblProfileSubFolder: NSTextField!
     @IBOutlet weak var lblProfileFilenameDuplicated: NSTextField!
     @IBOutlet weak var lblProfileFamilies: NSTextField!
-    @IBOutlet weak var lblProfilePeople: NSTextField!
     @IBOutlet weak var lblProfileEventCategory: NSTextField!
-    @IBOutlet weak var lblProfileEvent: NSTextField!
     
     var onEdit: (() -> Void)? = nil
     
@@ -62,9 +58,7 @@ class ExportProfileViewController : NSViewController {
         self.lblProfileSubFolder.stringValue = Words.export_profile_item_sub_folder.word()
         self.lblProfileFilenameDuplicated.stringValue = Words.export_profile_item_duplicated_filename_strategy.word()
         self.lblProfileFamilies.stringValue = Words.export_profile_families.word()
-        self.lblProfilePeople.stringValue = Words.export_profile_people.word()
         self.lblProfileEventCategory.stringValue = Words.export_profile_event_categories.word()
-        self.lblProfileEvent.stringValue = Words.export_profile_events.word()
         
         self.btnEdit.title = Words.export_profile_item_edit.word()
         self.btnDelete.title = Words.export_profile_item_delete.word()
@@ -113,16 +107,6 @@ class ExportProfileViewController : NSViewController {
             }
             self.lblEventCategory.stringValue = eventCategories
             
-            var events = Words.export_profile_item_no_limit.word()
-            if !profile.specifyEvent || profile.events == "" {
-                events = Words.export_profile_item_any_event.word()
-            }else{
-                events = profile.events
-                    .replacingOccurrences(of: "include:", with: "\(Words.export_profile_include.word()):")
-                    .replacingOccurrences(of: "exclude:", with: "\(Words.export_profile_exclude.word()):")
-            }
-            self.lblEvent.stringValue = events
-            
             var family = Words.export_profile_item_no_limit.word()
             if !profile.specifyFamily || profile.family == "" {
                 family = Words.export_profile_item_any_family.word()
@@ -132,16 +116,6 @@ class ExportProfileViewController : NSViewController {
                     .replacingOccurrences(of: "exclude:", with: "\(Words.export_profile_exclude):")
             }
             self.lblFamilies.stringValue = family
-            
-            var people = Words.export_profile_item_no_limit.word()
-            if !profile.specifyPeople || profile.people == "" {
-                people = Words.export_profile_item_any_people.word()
-            }else{
-                people = profile.people
-                    .replacingOccurrences(of: "include:", with: "\(Words.export_profile_include.word()):")
-                    .replacingOccurrences(of: "exclude:", with: "\(Words.export_profile_exclude.word()):")
-            }
-            self.lblPeople.stringValue = people
         }
     }
     
