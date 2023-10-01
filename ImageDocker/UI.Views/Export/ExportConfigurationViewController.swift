@@ -167,7 +167,7 @@ class ExportConfigurationViewController: NSViewController {
         
         self.btnCalculate.title = Words.export_profile_calculate_images.word()
         self.btnCopySQLToClipboard.title = Words.export_profile_copy_sql_to_clipboard.word()
-        self.btnExport.title = Words.export_profile_export.word()
+        self.btnExport.title = Words.export_profile_rehearsal_export.word()
         self.btnRehearsal.title = Words.export_profile_rehearsal.word()
         self.lstRehearsalAmount.item(at: 0)?.title = Words.export_profile_rehearsal_n_images.fill(arguments: "10")
         self.lstRehearsalAmount.item(at: 1)?.title = Words.export_profile_rehearsal_n_images.fill(arguments: "100")

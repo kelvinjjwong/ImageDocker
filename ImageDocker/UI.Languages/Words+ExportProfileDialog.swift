@@ -229,6 +229,11 @@ extension Words {
         chs: "执行导出"
     )
     
+    static let export_profile_rehearsal_export = Localize (
+        eng: "Export",
+        chs: "演练导出"
+    )
+    
     static let export_profile_rehearsal = Localize (
         eng: "Rehearsal",
         chs: "演练"
