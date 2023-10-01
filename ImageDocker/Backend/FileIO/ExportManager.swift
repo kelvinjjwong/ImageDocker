@@ -269,7 +269,7 @@ class ExportManager {
                             try FileManager.default.removeItem(atPath: exportedPath.path)
                         }catch{
                             self.logger.log(.warning, "[\(imagePath)] WARN: Unable to delete previous exported file: \(exportedPath.path)")
-                            self.logger.log(error)
+                            self.logger.log(.error, error)
                         }
                     }
                 }
@@ -279,8 +279,8 @@ class ExportManager {
                 do {
                     try FileManager.default.removeItem(atPath: "\(fullTargetFilePath.path)")
                 }catch{
-                    self.logger.log("[\(imagePath)] WARN: Unable to delete previous exported file: \(fullTargetFilePath.path)")
-                    self.logger.log(error)
+                    self.logger.log(.warning, "[\(imagePath)] WARN: Unable to delete previous exported file: \(fullTargetFilePath.path)")
+                    self.logger.log(.error, error)
                 }
             }
             do {
@@ -290,7 +290,7 @@ class ExportManager {
                 self.logger.log("[\(imagePath)] Copied file to [\(fullTargetFilePath.path)]")
             }catch {
                 self.logger.log(.error, "[\(imagePath)] Unable to copy file to: [\(fullTargetFilePath.path)] ")
-                self.logger.log(error)
+                self.logger.log(.error, error)
                 copied = false
                 errorMessage = error.localizedDescription
             }
@@ -343,7 +343,7 @@ class ExportManager {
         let enumerator = FileManager.default.enumerator(at: URL(fileURLWithPath: profile.directory),
                                                         includingPropertiesForKeys: [.isDirectoryKey, .isReadableKey, .isWritableKey ],
                                                         options: [.skipsHiddenFiles], errorHandler: { (url, error) -> Bool in
-                                                            self.logger.log("directoryEnumerator error at \(url): ", error)
+                                                            self.logger.log(.error, "directoryEnumerator error at \(url): ", error)
                                                             return true
         })!
         
@@ -367,8 +367,8 @@ class ExportManager {
                     }
                 }
             }catch{
-                self.logger.log("Error reading url properties for \(file.path)")
-                self.logger.log(error)
+                self.logger.log(.error, "Error reading url properties for \(file.path)")
+                self.logger.log(.error, error)
             }
         }
         
@@ -393,8 +393,8 @@ class ExportManager {
                 do {
                     try FileManager.default.removeItem(atPath: uselessFile)
                 }catch {
-                    self.logger.log("Cannot delete invalid exported file \(uselessFile)")
-                    self.logger.log(error)
+                    self.logger.log(.error, "Cannot delete invalid exported file \(uselessFile)")
+                    self.logger.log(.error, error)
                 }
             }
         }
@@ -409,8 +409,8 @@ class ExportManager {
                     try FileManager.default.removeItem(atPath: folder)
                 }
             }catch{
-                self.logger.log("  Cannot delete empty exported folder \(folder)")
-                self.logger.log(error)
+                self.logger.log(.error, "  Cannot delete empty exported folder \(folder)")
+                self.logger.log(.error, error)
             }
         }
         
@@ -455,8 +455,8 @@ class ExportManager {
                 do {
                     try FileManager.default.removeItem(atPath: path.path)
                 }catch {
-                    self.logger.log("Unable to delete invalid exported file \(path.path)")
-                    self.logger.log(error)
+                    self.logger.log(.error, "Unable to delete invalid exported file \(path.path)")
+                    self.logger.log(.error, error)
                 }
             }
         }

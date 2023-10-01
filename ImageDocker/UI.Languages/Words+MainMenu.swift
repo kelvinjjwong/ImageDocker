@@ -40,6 +40,11 @@ extension Words {
         chs: "关于 ImageDocker"
     )
     
+    static let mainmenu_logfile = Localize(
+        eng: "Log File",
+        chs: "日志文件"
+    )
+    
     
     static let tasks = Localize(
         eng: "Tasks (%s/%s)",
