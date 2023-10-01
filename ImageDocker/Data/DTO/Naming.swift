@@ -783,7 +783,7 @@ struct NamingForExporting {
     }
     
     func buildExportSubFolder(image:Image, profile:ExportProfile, triggerTime:Date) -> (String, String){
-        let exportToPath = profile.directory
+        let exportToPath = "\(profile.targetVolume)\(profile.directory)"
         
         if profile.subFolder == "NONE" {
             return (exportToPath, "")

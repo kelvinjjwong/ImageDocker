@@ -107,23 +107,24 @@ class ExportManager {
     // MARK: - EXPORT PROFILE NOW
     
     private func createDirectory(profile:ExportProfile) -> (Bool, String) {
+        let directory = "\(profile.targetVolume)\(profile.directory)"
         var isDir:ObjCBool = false
-        if FileManager.default.fileExists(atPath: profile.directory, isDirectory: &isDir) {
+        if FileManager.default.fileExists(atPath: directory, isDirectory: &isDir) {
             if isDir.boolValue == false {
-                return (false, "INACCESSIBLE DIRECTORY \(profile.directory)")
+                return (false, "INACCESSIBLE DIRECTORY \(directory)")
             }
         }else{
             do {
-                try FileManager.default.createDirectory(atPath: profile.directory, withIntermediateDirectories: true, attributes: nil)
+                try FileManager.default.createDirectory(atPath: directory, withIntermediateDirectories: true, attributes: nil)
             }catch{
-                return (false, "UNABLE TO CREATE DIRECTORY \(profile.directory)")
+                return (false, "UNABLE TO CREATE DIRECTORY \(directory)")
             }
-            if FileManager.default.fileExists(atPath: profile.directory, isDirectory: &isDir) {
+            if FileManager.default.fileExists(atPath: directory, isDirectory: &isDir) {
                 if isDir.boolValue == false {
-                    return (false, "UNABLE TO CREATE DIRECTORY \(profile.directory)")
+                    return (false, "UNABLE TO CREATE DIRECTORY \(directory)")
                 }
             }else{
-                return (false, "UNABLE TO CREATE DIRECTORY \(profile.directory)")
+                return (false, "UNABLE TO CREATE DIRECTORY \(directory)")
             }
         }
         return (true, "")
