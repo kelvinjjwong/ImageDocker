@@ -93,22 +93,15 @@ class ExportProfileItemController : NSViewController {
             patching = patching.substring(from: 0, to: -2)
             self.lblEXIFPatching.stringValue = patching
             
-            var people = ""
-            if !profile.specifyPeople || profile.people == "" {
-                people = Words.export_profile_item_any_people.word()
+            var eventCategories = ""
+            if !(profile.specifyEventCategory ?? false) || profile.eventCategories == "" {
+                eventCategories = Words.export_profile_item_any_event_category.word()
             }else{
-                people = profile.people
+                eventCategories = (profile.eventCategories ?? "")
                     .replacingOccurrences(of: "include:", with: "\(Words.export_profile_include.word()):")
                     .replacingOccurrences(of: "exclude:", with: "\(Words.export_profile_exclude.word()):")
             }
-            var events = ""
-            if !profile.specifyEvent || profile.events == "" {
-                events = Words.export_profile_item_any_event.word()
-            }else{
-                events = profile.events
-                    .replacingOccurrences(of: "include:", with: "\(Words.export_profile_include.word()):")
-                    .replacingOccurrences(of: "exclude:", with: "\(Words.export_profile_exclude.word()):")
-            }
+            
             var family = ""
             if !profile.specifyFamily || profile.family == "" {
                 family = Words.export_profile_item_any_family.word()
@@ -117,7 +110,7 @@ class ExportProfileItemController : NSViewController {
                     .replacingOccurrences(of: "include:", with: "\(Words.export_profile_include.word()):")
                     .replacingOccurrences(of: "exclude:", with: "\(Words.export_profile_exclude.word()):")
             }
-            self.lblDescription.stringValue = "\(Words.export_profile_people.word()) \(people) ; \(Words.export_profile_events.word()) \(events) ; \(Words.export_profile_families.word()) \(family)"
+            self.lblDescription.stringValue = "\(Words.export_profile_families.word()) \(family); \(Words.export_profile_event_categories.word()) \(eventCategories)"
             self.lblMessage.stringValue = ""
             self.btnStop.isHidden = true
         }
