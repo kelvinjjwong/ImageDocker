@@ -260,10 +260,10 @@ extension DictionaryTableViewController: NSTableViewDelegate {
                 colView.textField?.lineBreakMode = .byClipping
                 if row == tableView.selectedRow {
                     lastSelectedRow = row
-                    colView.textField?.textColor = NSColor.yellow
+//                    colView.textField?.textColor = NSColor.yellow
                 } else {
                     lastSelectedRow = nil
-                    colView.textField?.textColor = nil
+//                    colView.textField?.textColor = nil
                 }
             }
             return colView
