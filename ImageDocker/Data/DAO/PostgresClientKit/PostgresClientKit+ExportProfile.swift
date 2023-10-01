@@ -220,7 +220,7 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
     
     func generateImageQuerySQL(isCount:Bool, profile:ExportProfile, pageSize:Int?, pageNumber:Int?) -> String {
         
-        let repoFilterSQL = self.generateImageQuerySQLPart(tableAlias: "c", tableColumn: "name", profileSetting: profile.repositoryPath)
+        let repoFilterSQL = self.generateImageQuerySQLPart(tableAlias: "r", tableColumn: "owner", profileSetting: profile.repositoryPath)
         let eventFilterSQL = self.generateImageQuerySQLPart(tableAlias: "i", tableColumn: "event", profileSetting: profile.events)
         
         let eventCategories = profile.eventCategories ?? ""
@@ -252,30 +252,27 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
         let _ = """
         select i.*
         from "Image" i
-        left join "ImageContainer" c on i."repositoryPath" = c."repositoryPath"
+        left join "ImageRepository" r on i."repositoryId" = r."id"
         left join "ImageEvent" e on i."event" = e."name"
         where i.hidden = 'f' and i."hiddenByContainer" = 'f' and i."hiddenByRepository" = 'f'
         and i."photoTakenYear" > 0
-        and c."name" in ('Who''s iphone6', 'Who''s iPhone8')
-        and i.event in ('boating','swimming')
+        and r."owner" in ('kelvin_wong')
         and e.category in ('trip','party')
-        and "recognizedPeopleIds" similar to '%(,someone,|,anotherone,)%'
         """
+        
+        // TODO: add family filter to export SQL
         let sql = """
         select \(columns)
         from "Image" i
-        left join "ImageContainer" c on i."repositoryPath" = c."repositoryPath"
+        left join "ImageRepository" r on i."repositoryId" = r."id"
         \(eventCategoryJoinSQL)
         where i.hidden = 'f' and i."hiddenByContainer" = 'f' and i."hiddenByRepository" = 'f'
         and i."photoTakenYear" > 0
         \(repoFilterSQL)
-        \(eventFilterSQL)
         \(eventCategoryFilterSQL)
         \(orderSQL)
         \(pagination)
         """
-        
-        // FIXME: after profile.lastExportEndTime
         
         self.logger.log("sql for export images:")
         self.logger.log(sql)

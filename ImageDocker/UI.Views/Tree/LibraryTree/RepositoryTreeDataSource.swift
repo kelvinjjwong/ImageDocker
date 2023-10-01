@@ -28,9 +28,9 @@ class RepositoryTreeDataSource : TreeDataSource {
         return nil
     }
     
-    func convertToTreeNode(owner:String) -> TreeCollection {
-        let id = "OWNER_\(owner)"
-        let node = TreeCollection(owner, id:id, object: owner)
+    func convertToTreeNode(ownerId:String, ownerName:String) -> TreeCollection {
+        let id = "OWNER_\(ownerId)"
+        let node = TreeCollection(ownerName, id:id, object: ownerId)
         node.childrenCount = 0
         node.subContainersCount = 0
         return node
@@ -79,6 +79,14 @@ class RepositoryTreeDataSource : TreeDataSource {
         var nodes:[TreeCollection] = []
         self.logger.log("load repositories from database - START")
         let startTime = Date()
+        
+        var coreMembers:[String:String] = [:]
+        coreMembers["shared"] = Words.owner_public_shared.word()
+        var ppl = FaceDao.default.getCoreMembers()
+        for p in ppl {
+            coreMembers[p.id] = p.shortName ?? p.name
+        }
+        
         let containers = RepositoryDao.default.getRepositoriesV2(orderBy: "owner, name", condition: condition)
         self.logger.timecost("load repositories from database - DONE", fromDate: startTime)
         if containers.count == 0 {
@@ -89,7 +97,7 @@ class RepositoryTreeDataSource : TreeDataSource {
 //            self.logger.log(">>> loaded repo for tree: \(container.name)")
             self.logger.log(.trace, "converting repository to tree node - id:\(container.id) , owner:\(container.owner)")
             
-            let ownerNode = self.findNode(id: container.owner, in: nodes) ?? self.convertToTreeNode(owner: container.owner)
+            let ownerNode = self.findNode(id: container.owner, in: nodes) ?? self.convertToTreeNode(ownerId: container.owner, ownerName: coreMembers[container.owner] ?? container.owner)
             if !self.containsNode(id: container.owner, in: nodes) {
                 nodes.append(ownerNode)
             }
