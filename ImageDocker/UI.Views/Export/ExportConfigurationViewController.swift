@@ -27,6 +27,9 @@ class ExportConfigurationViewController: NSViewController {
     @IBOutlet weak var txtName: NSTextField!
     @IBOutlet weak var txtDirectory: NSTextField!
     
+    @IBOutlet weak var ddlTargetVolume: NSComboBox!
+    
+    
     @IBOutlet weak var btnClean: NSButton!
     @IBOutlet weak var btnSave: NSButton!
     @IBOutlet weak var btnAssign: NSButton!
@@ -177,6 +180,8 @@ class ExportConfigurationViewController: NSViewController {
         self.loadStackItems()
     }
     
+    private var volumesListController : TextListViewPopupController!
+    
     private var toggleGroup_Repository:ToggleGroup!
     private var toggleGroup_Event:ToggleGroup!
     private var toggleGroup_EventCategory:ToggleGroup!
@@ -189,12 +194,26 @@ class ExportConfigurationViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.volumesListController = TextListViewPopupController(self.ddlTargetVolume)
         self.init_toggles()
         
         view.wantsLayer = true
         stackView.setHuggingPriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
         
         self.logger.log("view did load")
+    }
+    
+    func refreshMountedVolumes(append items:[String] = []) {
+        
+        var mountedVolumes = LocalDirectory.bridge.listMountedVolumes()
+        
+        for item in items {
+            if !mountedVolumes.contains(item) {
+                mountedVolumes.append(item)
+            }
+        }
+        
+        self.volumesListController.load(mountedVolumes)
     }
     
     private func loadStackItems() {
@@ -210,7 +229,9 @@ class ExportConfigurationViewController: NSViewController {
     // MARK: - CLEAN FIELDS
     
     private func reloadTables() {
-        self.repositoryTableController.load(self.loadRepositories(), afterLoaded: {
+        self.refreshMountedVolumes()
+        
+        self.repositoryTableController.load(self.loadRepositoryOwners(), afterLoaded: {
         })
         
         self.eventCategoriesTableController.load(self.loadEventCategories(), afterLoaded: {
@@ -245,6 +266,9 @@ class ExportConfigurationViewController: NSViewController {
         self.isNewRecord = false
         self.editingId = profile.id
         self.txtName.stringValue = profile.name
+        
+        self.volumesListController.select(profile.targetVolume)
+        
         self.txtDirectory.stringValue = profile.directory
         self.chkPatchImageDescription.state = profile.patchImageDescription ? .on : .off
         self.chkPatchGeolocation.state = profile.patchGeolocation ? .on : .off
@@ -259,12 +283,12 @@ class ExportConfigurationViewController: NSViewController {
             self.toggleGroup_Repository.selected = "include"
             let value = repos.replacingFirstOccurrence(of: "include:", with: "")
             self.logger.log("repo: \(value)")
-            self.repositoryTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
+            self.repositoryTableController.setCheckedItems(column: "id", from: value, separator: ",", quoted: true)
         }else if repos.hasPrefix("exclude:") {
             self.toggleGroup_Repository.selected = "exclude"
             let value = repos.replacingFirstOccurrence(of: "exclude:", with: "")
             self.logger.log("repo: \(value)")
-            self.repositoryTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
+            self.repositoryTableController.setCheckedItems(column: "id", from: value, separator: ",", quoted: true)
         }
         if !profile.specifyRepository {
             self.repositoryTableController.disableCheckboxes()
@@ -302,12 +326,12 @@ class ExportConfigurationViewController: NSViewController {
             self.toggleGroup_Family.selected = "include"
             let value = family.replacingFirstOccurrence(of: "include:", with: "")
             self.logger.log("family: \(value)")
-            self.familyTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
+            self.familyTableController.setCheckedItems(column: "id", from: value, separator: ",", quoted: true)
         }else if family.hasPrefix("exclude:") {
             self.toggleGroup_Family.selected = "exclude"
             let value = family.replacingFirstOccurrence(of: "exclude:", with: "")
             self.logger.log("family: \(value)")
-            self.familyTableController.setCheckedItems(column: "name", from: value, separator: ",", quoted: true)
+            self.familyTableController.setCheckedItems(column: "id", from: value, separator: ",", quoted: true)
         }
         if !profile.specifyFamily {
             self.familyTableController.disableCheckboxes()
@@ -331,20 +355,21 @@ class ExportConfigurationViewController: NSViewController {
     
     private func fillProfileFromForm(profile:ExportProfile) -> ExportProfile {
         let name = self.txtName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        let targetVolume = self.ddlTargetVolume.stringValue
+        
         let path = self.txtDirectory.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         let fileNaming = self.getFileNamingStrategy()
         let fileDuplicated = self.getFilenameDuplicatedStrategy()
         let subfolder = self.getSubFolderStrategy()
         
         // convert checkboxes to string
-        var people = ""
         var eventCategories = ""
-        var events = ""
         var repos = ""
         var family = ""
         
         if self.chkRepository.state == .on {
-            let checked = self.repositoryTableController.getCheckedItemAsQuotedString(column: "name", separator: ",")
+            let checked = self.repositoryTableController.getCheckedItemAsQuotedString(column: "id", separator: ",")
             if checked != "" {
                 if self.chkIncludeRepository.state == .on {
                     repos = "include:\(checked)"
@@ -367,7 +392,7 @@ class ExportConfigurationViewController: NSViewController {
         self.logger.log("selected category: \(eventCategories)")
         
         if self.chkFamilies.state == .on {
-            let checked = self.familyTableController.getCheckedItemAsQuotedString(column: "name", separator: ",")
+            let checked = self.familyTableController.getCheckedItemAsQuotedString(column: "id", separator: ",")
             if checked != "" {
                 if self.chkIncludeFamily.state == .on {
                     family = "include:\(checked)"
@@ -378,12 +403,11 @@ class ExportConfigurationViewController: NSViewController {
         }
         
         profile.name = name
+        profile.targetVolume = targetVolume
         profile.directory = path
         profile.duplicateStrategy = fileDuplicated
         profile.specifyRepository = self.chkRepository.state == .on
         profile.specifyFamily = self.chkFamilies.state == .on
-        profile.people = people
-        profile.events = events
         profile.repositoryPath = repos
         profile.family = family
         profile.patchImageDescription = self.chkPatchImageDescription.state == .on
@@ -403,13 +427,10 @@ class ExportConfigurationViewController: NSViewController {
         
         var profile = ExportDao.default.getOrCreateExportProfile(id: self.editingId,
                                                                  name: form.name,
+                                                                 targetVolume: form.targetVolume,
                                                                  directory: form.directory,
                                                                  repositoryPath: form.repositoryPath,
-                                                                 specifyPeople: form.specifyPeople,
-                                                                 specifyEvent: form.specifyEvent,
                                                                  specifyRepository: form.specifyRepository,
-                                                                 people: form.people,
-                                                                 events: form.events,
                                                                  duplicateStrategy: form.duplicateStrategy,
                                                                  fileNaming: form.fileNaming,
                                                                  subFolder: form.subFolder,
@@ -424,14 +445,11 @@ class ExportConfigurationViewController: NSViewController {
         if !self.isNewRecord {
             let status = ExportDao.default.updateExportProfile(id: self.editingId,
                                                                name: form.name,
+                                                               targetVolume: form.targetVolume,
                                                                directory: form.directory,
                                                                duplicateStrategy: form.duplicateStrategy,
-                                                               specifyPeople: form.specifyPeople,
-                                                               specifyEvent: form.specifyEvent,
                                                                specifyRepository: form.specifyRepository,
                                                                specifyFamily: form.specifyFamily,
-                                                               people: form.people,
-                                                               events: form.events,
                                                                repositoryPath: form.repositoryPath,
                                                                family: form.family,
                                                                patchImageDescription: form.patchImageDescription,
@@ -473,7 +491,11 @@ class ExportConfigurationViewController: NSViewController {
         viewController.initView(profile: profile,
                                 onEdit: {
                                     self.cleanFields()
-                                    self.fillFields(profile: profile)
+            if let persisted_profile = ExportDao.default.getExportProfile(id: profile.id) {
+                self.fillFields(profile: persisted_profile)
+            }else{
+                self.fillFields(profile: profile)
+            }
         }, onDelete: {
             if Alert.dialogOKCancel(question: "DELETE PROFILE", text: "Do you confirm to delete profile [\(profile.name)] ?") {
                 self.logger.log("proceed delete")
@@ -634,27 +656,36 @@ class ExportConfigurationViewController: NSViewController {
     
     // MARK: - TOGGLE GROUP - DATA LOADER
     
-    func loadRepositories() -> [[String:String]] {
-        var repoPaths:[[String:String]] = []
-        let repos = RepositoryDao.default.getRepositories()
-        for repo in repos {
+    func loadRepositoryOwners() -> [[String:String]] {
+        var list:[[String:String]] = []
+        let coreMembers = FaceDao.default.getCoreMembers()
+        for coreMember in coreMembers {
             var item:[String:String] = [:]
             item["check"] = "false"
-            item["name"] = repo.name
-            item["path"] = repo.path
-            item["id"] = repo.path
-            repoPaths.append(item)
+            item["name"] = coreMember.shortName ?? coreMember.name
+            item["id"] = coreMember.id
+            list.append(item)
         }
-        return repoPaths
+        var shared:[String:String] = [:]
+        shared["check"] = "false"
+        shared["name"] = Words.owner_public_shared.word()
+        shared["id"] = "shared"
+        list.append(shared)
+        return list
     }
     
     func loadFamilies() -> [[String:String]] {
+        var coreMemberIdToName:[String:String] = [:]
         var familyNames:[[String:String]] = []
+        let coreMembers = FaceDao.default.getCoreMembers()
+        for coreMember in coreMembers {
+            coreMemberIdToName[coreMember.id] = coreMember.shortName ?? coreMember.name
+        }
         let families = FaceDao.default.getFamilies()
         for family in families {
             var item:[String:String] = [:]
             item["check"] = "false"
-            item["name"] = family.name
+            item["name"] = Words.whose_family_group.fill(arguments: coreMemberIdToName[family.owner] ?? "", family.name)
             item["id"] = family.id
             familyNames.append(item)
         }
@@ -783,28 +814,12 @@ class ExportConfigurationViewController: NSViewController {
         self.toggleGroup_Repository.selected = "exclude"
     }
     
-    @IBAction func onIncludeEventClicked(_ sender: NSButton) {
-        self.toggleGroup_Event.selected = "include"
-    }
-    
-    @IBAction func onExcludeEventClicked(_ sender: NSButton) {
-        self.toggleGroup_Event.selected = "exclude"
-    }
-    
     @IBAction func onIncludeEventCategoryClicked(_ sender: NSButton) {
         self.toggleGroup_EventCategory.selected = "include"
     }
     
     @IBAction func onExcludeEventCategoryClicked(_ sender: NSButton) {
         self.toggleGroup_EventCategory.selected = "exclude"
-    }
-    
-    @IBAction func onIncludePeopleClicked(_ sender: NSButton) {
-        self.toggleGroup_People.selected = "include"
-    }
-    
-    @IBAction func onExcludePeopleClicked(_ sender: NSButton) {
-        self.toggleGroup_People.selected = "exclude"
     }
     
     @IBAction func onIncludeFamilyClicked(_ sender: NSButton) {

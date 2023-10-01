@@ -119,7 +119,7 @@ class DictionaryTableViewController: NSObject {
         if quoted == true {
             for value in separated {
                 let length = value.lengthOfBytes(using: .utf8)
-                if length > 2 {
+                if length > 0 {
                     let newValue = value.replacingOccurrences(of: "\"", with: "")
                     self.logger.log("unquoted: \(newValue)")
                     array.append(newValue)
@@ -183,8 +183,9 @@ extension DictionaryTableViewController: NSTableViewDelegate {
     
     @objc @IBAction func onCheckboxClicked(sender:NSButton) {
         //self.logger.log("checkbox clicked \(sender.identifier?.rawValue ?? "")")
+//        print(sender.identifier?.rawValue)
         let id = sender.identifier?.rawValue.replacingFirstOccurrence(of: "checkbox_", with: "") ?? ""
-        if id != "" {
+//        if id != "" {
             var index = -1
             for i in 0..<items.count {
                 let item = items[i]
@@ -207,7 +208,7 @@ extension DictionaryTableViewController: NSTableViewDelegate {
             if self.onCheck != nil {
                 self.onCheck!(id, sender.state == .on)
             }
-        }
+//        }
     }
     
     // return view for requested column.

@@ -13,6 +13,7 @@ import PostgresModelFactory
 public final class ExportProfile : Codable {
     var id: String = ""
     var name: String = ""
+    var targetVolume: String = ""
     var directory: String = ""
     var duplicateStrategy: String = ""
     var specifyPeople: Bool = false
@@ -39,6 +40,7 @@ public final class ExportProfile : Codable {
     
     public init(id:String,
                 name:String,
+                targetVolume:String,
                 directory:String,
                 repositoryPath:String,
                 specifyPeople:Bool,
@@ -60,6 +62,7 @@ public final class ExportProfile : Codable {
                 specifyEventCategory:Bool) {
         self.id = id
         self.name = name
+        self.targetVolume = targetVolume
         self.directory = directory
         self.repositoryPath = repositoryPath
         self.specifyPeople = specifyPeople

@@ -685,6 +685,12 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v57") { db in
+            try db.alter(table: "ExportProfile", body: { t in
+                t.add("targetVolume", .text).defaults(to: "").indexed()
+            })
+        }
+        
         do {
             try migrator.migrate(cleanVersions: dropBeforeCreate)
         }catch{

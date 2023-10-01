@@ -18,13 +18,10 @@ class ExportDaoGRDB : ExportDaoInterface {
     
     func getOrCreateExportProfile(id:String,
                                   name:String,
+                                  targetVolume: String,
                                   directory: String,
                                   repositoryPath: String,
-                                  specifyPeople: Bool,
-                                  specifyEvent: Bool,
                                   specifyRepository: Bool,
-                                  people: String,
-                                  events: String,
                                   duplicateStrategy: String,
                                   fileNaming: String,
                                   subFolder: String,
@@ -47,13 +44,14 @@ class ExportDaoGRDB : ExportDaoInterface {
                     profile = ExportProfile(
                         id: id,
                         name: name,
+                        targetVolume: targetVolume,
                         directory: directory,
                         repositoryPath: repositoryPath,
-                        specifyPeople: specifyPeople,
-                        specifyEvent: specifyEvent,
+                        specifyPeople: false,
+                        specifyEvent: false,
                         specifyRepository: specifyRepository,
-                        people: people,
-                        events: events,
+                        people: "",
+                        events: "",
                         duplicateStrategy: duplicateStrategy,
                         fileNaming: fileNaming,
                         subFolder: subFolder,
@@ -78,14 +76,11 @@ class ExportDaoGRDB : ExportDaoInterface {
     
     func updateExportProfile(id:String,
                              name:String,
+                             targetVolume: String,
                              directory: String,
                              duplicateStrategy: String,
-                             specifyPeople: Bool,
-                             specifyEvent: Bool,
                              specifyRepository: Bool,
                              specifyFamily: Bool,
-                             people: String,
-                             events: String,
                              repositoryPath: String,
                              family: String,
                              patchImageDescription:Bool,
@@ -100,14 +95,15 @@ class ExportDaoGRDB : ExportDaoInterface {
             try db.write { db in
                 if var profile = try ExportProfile.fetchOne(db, key: id) {
                     profile.name = name
+                    profile.targetVolume = targetVolume
                     profile.directory = directory
                     profile.duplicateStrategy = duplicateStrategy
                     profile.specifyRepository = specifyRepository
-                    profile.specifyEvent = specifyEvent
-                    profile.specifyPeople = specifyPeople
+                    profile.specifyEvent = false
+                    profile.specifyPeople = false
                     profile.specifyFamily = specifyFamily
-                    profile.people = people
-                    profile.events = events
+                    profile.people = ""
+                    profile.events = ""
                     profile.repositoryPath = repositoryPath
                     profile.family = family
                     profile.patchImageDescription = patchImageDescription

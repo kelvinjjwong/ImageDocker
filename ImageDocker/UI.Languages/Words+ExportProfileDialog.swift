@@ -26,8 +26,8 @@ extension Words {
     )
     
     static let export_profile_name_and_path = Localize (
-        eng: "Name & Path",
-        chs: "预设组合的命名和目标"
+        eng: "General",
+        chs: "概要"
     )
     
     static let export_profile_action = Localize (
@@ -72,7 +72,7 @@ extension Words {
     
     static let export_profile_families = Localize (
         eng: "Families:",
-        chs: "家庭或组织:"
+        chs: "亲友或组织:"
     )
     
     static let export_profile_file_naming = Localize (
@@ -158,12 +158,12 @@ extension Words {
     
     static let export_profile_sub_folder = Localize (
         eng: "Sub Folder",
-        chs: "次级文件夹命名规则"
+        chs: "文件夹命名规则"
     )
     
     static let export_profile_sub_folder_no_subfolder = Localize (
         eng: "No sub-folder",
-        chs: "不使用次级文件夹存储文件"
+        chs: "不使用文件夹存储文件"
     )
     
     static let export_profile_sub_folder_year_month_event = Localize (
@@ -250,7 +250,7 @@ extension Words {
     
     static let export_profile_item_sub_folder = Localize (
         eng: "Sub Folder:",
-        chs: "次级文件夹命名:"
+        chs: "文件夹命名:"
     )
     
     static let export_profile_item_file_naming = Localize (
@@ -305,7 +305,7 @@ extension Words {
     
     static let export_profile_item_edit = Localize (
         eng: "Edit",
-        chs: "修改"
+        chs: "选择"
     )
     
     static let export_profile_item_delete = Localize (

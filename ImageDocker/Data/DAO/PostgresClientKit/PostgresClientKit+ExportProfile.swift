@@ -18,13 +18,10 @@ class ExportDaoPostgresCK : ExportDaoInterface {
     
     func getOrCreateExportProfile(id: String,
                                   name: String,
+                                  targetVolume: String,
                                   directory: String,
                                   repositoryPath: String,
-                                  specifyPeople: Bool,
-                                  specifyEvent: Bool,
                                   specifyRepository: Bool,
-                                  people: String,
-                                  events: String,
                                   duplicateStrategy: String,
                                   fileNaming: String,
                                   subFolder: String,
@@ -43,13 +40,14 @@ class ExportDaoPostgresCK : ExportDaoInterface {
             let profile = ExportProfile(
                 id: id,
                 name: name,
+                targetVolume: targetVolume,
                 directory: directory,
                 repositoryPath: repositoryPath,
-                specifyPeople: specifyPeople,
-                specifyEvent: specifyEvent,
+                specifyPeople: false,
+                specifyEvent: false,
                 specifyRepository: specifyRepository,
-                people: people,
-                events: events,
+                people: "",
+                events: "",
                 duplicateStrategy: duplicateStrategy,
                 fileNaming: fileNaming,
                 subFolder: subFolder,
@@ -70,14 +68,11 @@ class ExportDaoPostgresCK : ExportDaoInterface {
     
     func updateExportProfile(id: String,
                              name: String,
+                             targetVolume: String,
                              directory: String,
                              duplicateStrategy: String,
-                             specifyPeople: Bool,
-                             specifyEvent: Bool,
                              specifyRepository: Bool,
                              specifyFamily: Bool,
-                             people: String,
-                             events: String,
                              repositoryPath: String,
                              family: String,
                              patchImageDescription:Bool,
@@ -90,14 +85,15 @@ class ExportDaoPostgresCK : ExportDaoInterface {
         let db = PostgresConnection.database()
         if let profile = ExportProfile.fetchOne(db, parameters: ["id" : id]) {
             profile.name = name
+            profile.targetVolume = targetVolume
             profile.directory = directory
             profile.duplicateStrategy = duplicateStrategy
             profile.specifyRepository = specifyRepository
-            profile.specifyEvent = specifyEvent
-            profile.specifyPeople = specifyPeople
+            profile.specifyEvent = false
+            profile.specifyPeople = false
             profile.specifyFamily = specifyFamily
-            profile.people = people
-            profile.events = events
+            profile.people = ""
+            profile.events = ""
             profile.repositoryPath = repositoryPath
             profile.family = family
             profile.patchImageDescription = patchImageDescription

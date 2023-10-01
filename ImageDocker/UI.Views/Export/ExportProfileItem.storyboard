@@ -42,6 +42,7 @@
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="system"/>
                                                     </buttonCell>
+                                                    <color key="bezelColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                                                     <connections>
                                                         <action selector="onStopClicked:" target="AGa-gA-zdU" id="uIw-DV-rMY"/>
                                                     </connections>
@@ -55,6 +56,7 @@
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="system"/>
                                                     </buttonCell>
+                                                    <color key="bezelColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                                                     <connections>
                                                         <action selector="onExportClicked:" target="AGa-gA-zdU" id="gH8-5T-cN7"/>
                                                     </connections>
