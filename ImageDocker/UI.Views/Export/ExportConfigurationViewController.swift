@@ -80,6 +80,9 @@ class ExportConfigurationViewController: NSViewController {
     @IBOutlet weak var btnRehearsal: NSButton!
     @IBOutlet weak var btnExport: NSButton!
     
+    @IBOutlet weak var btnLogFile: NSButton!
+    
+    
     @IBOutlet weak var boxName: NSBox!
     @IBOutlet weak var boxAction: NSBox!
     @IBOutlet weak var boxRepositories: NSBox!
@@ -126,7 +129,7 @@ class ExportConfigurationViewController: NSViewController {
         self.lblProfileToRepository.stringValue = Words.export_profile_to_directory.word()
         
         self.btnSave.title = Words.export_profile_save.word()
-        self.btnClean.title = Words.export_profile_new.word()
+        self.btnClean.title = Words.export_profile_clean_fields.word()
         self.btnAssign.title = Words.export_profile_assign_to_directory.word()
         self.btnGoto.title = Words.export_profile_goto_to_directory.word()
         
@@ -174,8 +177,12 @@ class ExportConfigurationViewController: NSViewController {
         self.reloadTables()
         self.cleanFields()
         
-        self.txtName.stringValue = "Auto Profile - \(Date())"
-        self.txtDirectory.stringValue = "/Volumes/PhotoStorage/Images.export/"
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let date = dateFormatter.string(from: Date())
+        self.txtName.stringValue = Words.export_auto_profile.fill(arguments: "\(date)")
+        self.ddlTargetVolume.selectItem(at: 0)
+        self.txtDirectory.stringValue = "/Images.export/"
         
         self.loadStackItems()
     }
@@ -183,9 +190,7 @@ class ExportConfigurationViewController: NSViewController {
     private var volumesListController : TextListViewPopupController!
     
     private var toggleGroup_Repository:ToggleGroup!
-    private var toggleGroup_Event:ToggleGroup!
     private var toggleGroup_EventCategory:ToggleGroup!
-    private var toggleGroup_People:ToggleGroup!
     private var toggleGroup_Family:ToggleGroup!
     
     
@@ -241,6 +246,67 @@ class ExportConfigurationViewController: NSViewController {
         })
     }
     
+    private func toggleButtons(state: Bool) {
+        self.txtName.isEditable = state
+        self.ddlTargetVolume.isEditable = state
+        self.ddlTargetVolume.isSelectable = state
+        self.txtDirectory.isEditable = state
+        
+        self.btnSave.isEnabled = state
+        self.btnAssign.isEnabled = state
+        self.btnClean.isEnabled = state
+        self.btnCalculate.isEnabled = state
+        self.btnRehearsal.isEnabled = state
+        
+        self.btnExport.isEnabled = state
+        self.btnCopySQLToClipboard.isEnabled = state
+        
+        self.chkRepository.isEnabled = state
+        self.chkFamilies.isEnabled = state
+        self.chkEventCategories.isEnabled = state
+        
+        if state {
+            self.repositoryTableController.enableCheckboxes()
+            self.familyTableController.enableCheckboxes()
+            self.eventCategoriesTableController.enableCheckboxes()
+            
+            self.toggleGroup_Repository.enable()
+            self.toggleGroup_Family.enable()
+            self.toggleGroup_EventCategory.enable()
+            
+        }else{
+            self.repositoryTableController.disableCheckboxes()
+            self.familyTableController.disableCheckboxes()
+            self.eventCategoriesTableController.disableCheckboxes()
+            
+            self.toggleGroup_Repository.disable()
+            self.toggleGroup_Family.disable()
+            self.toggleGroup_EventCategory.disable()
+        }
+        
+        self.chkPatchGeolocation.isEnabled = state
+        self.chkPatchDateTime.isEnabled = state
+        self.chkPatchImageDescription.isEnabled = state
+        
+        self.chkOriginFilename.isEnabled = state
+        self.chkDateTimeFilename.isEnabled = state
+        self.chkDateTimeBriefFilename.isEnabled = state
+        
+        self.chkNoSubFolder.isEnabled = state
+        self.chkEventSubFolder.isEnabled = state
+        self.chkDateEventSubFolder.isEnabled = state
+        self.chkExportDateTimeSubFolder.isEnabled = state
+        
+        self.chkOverwriteDuplicate.isEnabled = state
+        self.chkDeviceModelSuffix.isEnabled = state
+        self.chkNumberSuffix.isEnabled = state
+        self.chkDeviceNameSuffix.isEnabled = state
+        
+        for vc in self.profileStackItems.values {
+            vc.toggleButtons(state: state)
+        }
+    }
+    
     private func cleanFields() {
         self.isNewRecord = true
         let dateFormatter = DateFormatter()
@@ -260,10 +326,15 @@ class ExportConfigurationViewController: NSViewController {
         self.toggleRepository(true, uncheckAll: true)
         self.toggleEventCategory(true, uncheckAll: true)
         self.toggleFamily(true, uncheckAll: true)
+        
+        self.btnExport.isEnabled = false
     }
     
     private func fillFields(profile:ExportProfile) {
         self.isNewRecord = false
+        
+        self.btnExport.isEnabled = true
+        
         self.editingId = profile.id
         self.txtName.stringValue = profile.name
         
@@ -532,19 +603,25 @@ class ExportConfigurationViewController: NSViewController {
             openPanel.beginSheetModal(for: win) { (response) -> Void in
                 guard response == NSApplication.ModalResponse.OK else {return}
                 if let url = openPanel.url {
-                    self.txtDirectory.stringValue = url.path
+                    let (vol, path) = url.path.getVolumeFromThisPath()
+                    self.ddlTargetVolume.stringValue = vol
+                    self.txtDirectory.stringValue = path
                 }
             }
         }
     }
     
     @IBAction func onGotoDirectoryClicked(_ sender: NSButton) {
+        if self.ddlTargetVolume.stringValue == "" {
+            Alert.show(message: "Please assign directory first.")
+            return
+        }
         if self.txtDirectory.stringValue == "" {
             Alert.show(message: "Please assign directory first.")
             return
         }
         
-        let url = URL(fileURLWithPath: self.txtDirectory.stringValue)
+        let url = URL(fileURLWithPath: "\(self.ddlTargetVolume.stringValue)\(self.txtDirectory.stringValue)")
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     
@@ -553,7 +630,7 @@ class ExportConfigurationViewController: NSViewController {
     private func getRehearsalAmount() -> Int? {
         var amount:Int? = nil
         if let selection = self.lstRehearsalAmount.titleOfSelectedItem {
-            let number = selection.components(separatedBy: " ")[0]
+            let number = selection.components(separatedBy: " ")[1]
             if number == "10" {
                 amount = 10
             }else if number == "100" {
@@ -581,6 +658,7 @@ class ExportConfigurationViewController: NSViewController {
     
     @IBAction func onExportClicked(_ sender: NSButton) {
         // real export with file i/o and amount limitation
+        self.toggleButtons(state: false)
         
         let profile = self.getProfile()
         let amount = self.getRehearsalAmount()
@@ -588,7 +666,8 @@ class ExportConfigurationViewController: NSViewController {
         DispatchQueue.global().async {
             let (state, message) = ExportManager.default.withMessageBox(self.lblCalculate).export(profile: profile, rehearsal: false, limit: amount)
             DispatchQueue.main.async {
-
+                self.toggleButtons(state: true)
+                
                 if state == true {
                     self.lblCalculate.stringValue = message
                 }else{
@@ -601,6 +680,7 @@ class ExportConfigurationViewController: NSViewController {
     
     @IBAction func onRehearsalClicked(_ sender: NSButton) {
         // rehearsal export (query from db, no file i/o)
+        self.toggleButtons(state: false)
         
         let profile = self.getProfile()
         let amount = self.getRehearsalAmount()
@@ -608,7 +688,8 @@ class ExportConfigurationViewController: NSViewController {
         DispatchQueue.global().async {
             let (state, message) = ExportManager.default.withMessageBox(self.lblCalculate).export(profile: profile, rehearsal: true, limit: amount)
             DispatchQueue.main.async {
-
+                self.toggleButtons(state: true)
+                
                 if state == true {
                     self.lblCalculate.stringValue = message
                 }else{
@@ -1075,6 +1156,11 @@ class ExportConfigurationViewController: NSViewController {
                 sender.state = .on
             }
         }
+    }
+    
+    @IBAction func onLogFileClicked(_ sender: NSButton) {
+        let url = URL(fileURLWithPath: AppDelegate.current.logFilePath())
+        NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     
     

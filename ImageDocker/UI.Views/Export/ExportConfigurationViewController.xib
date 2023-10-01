@@ -23,6 +23,7 @@
                 <outlet property="btnCopySQLToClipboard" destination="jIu-gh-Rz0" id="op9-Gq-icd"/>
                 <outlet property="btnExport" destination="aRg-nu-KNC" id="5hP-yl-SIh"/>
                 <outlet property="btnGoto" destination="GJa-qz-wH4" id="SEM-Qk-cYZ"/>
+                <outlet property="btnLogFile" destination="Hre-Ie-vnv" id="EBo-w3-fDM"/>
                 <outlet property="btnRehearsal" destination="CRY-eq-UaW" id="pJZ-Je-605"/>
                 <outlet property="btnSave" destination="Btt-76-DEE" id="Fpe-Oo-Np6"/>
                 <outlet property="chkDateEventSubFolder" destination="X3B-lY-Z62" id="Mct-iW-aS9"/>
@@ -246,7 +247,7 @@
                                             </connections>
                                         </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wC2-0l-112">
-                                            <rect key="frame" x="8" y="19" width="311" height="16"/>
+                                            <rect key="frame" x="8" y="19" width="552" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" id="PRx-cL-Mf2">
                                                 <font key="font" metaFont="system"/>
@@ -296,7 +297,7 @@
                                             </popUpButtonCell>
                                         </popUpButton>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jIu-gh-Rz0">
-                                            <rect key="frame" x="653" y="12" width="179" height="32"/>
+                                            <rect key="frame" x="654" y="12" width="178" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="Copy SQL to Clipboard" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LFJ-kO-xNn">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -304,6 +305,18 @@
                                             </buttonCell>
                                             <connections>
                                                 <action selector="onCopySQLClicked:" target="-2" id="jeF-U9-O3c"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hre-Ie-vnv">
+                                            <rect key="frame" x="559" y="12" width="100" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Log File" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="piy-J4-mzO">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <color key="bezelColor" name="systemPurpleColor" catalog="System" colorSpace="catalog"/>
+                                            <connections>
+                                                <action selector="onLogFileClicked:" target="-2" id="E2U-5W-12B"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -526,9 +539,9 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lG5-iQ-i7b">
-                                            <rect key="frame" x="559" y="52" width="90" height="32"/>
+                                            <rect key="frame" x="559" y="52" width="131" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="push" title="New" bezelStyle="rounded" image="broom" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="saX-dH-qXQ">
+                                            <buttonCell key="cell" type="push" title="Clean Fields" bezelStyle="rounded" image="broom" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="saX-dH-qXQ">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -602,7 +615,7 @@
                                                                     </tableCellView>
                                                                 </prototypeCellViews>
                                                             </tableColumn>
-                                                            <tableColumn identifier="name" width="382" minWidth="40" maxWidth="1000" id="t7U-Iq-oac">
+                                                            <tableColumn identifier="name" width="353" minWidth="40" maxWidth="1000" id="t7U-Iq-oac">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -615,11 +628,11 @@
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                 <prototypeCellViews>
                                                                     <tableCellView id="QoC-cA-FCB">
-                                                                        <rect key="frame" x="49" y="1" width="386" height="17"/>
+                                                                        <rect key="frame" x="49" y="1" width="357" height="17"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
                                                                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IxQ-56-RSI">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="386" height="17"/>
+                                                                                <rect key="frame" x="0.0" y="0.0" width="357" height="17"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                                 <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="ffQ-9x-A32">
                                                                                     <font key="font" metaFont="system"/>

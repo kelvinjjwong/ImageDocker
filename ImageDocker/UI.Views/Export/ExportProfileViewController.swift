@@ -146,4 +146,9 @@ class ExportProfileViewController : NSViewController {
         }
     }
     
+    func toggleButtons(state: Bool) {
+        self.btnEdit.isEnabled = state
+        self.btnDelete.isEnabled = state
+    }
+    
 }

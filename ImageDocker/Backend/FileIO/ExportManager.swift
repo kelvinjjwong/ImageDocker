@@ -88,7 +88,7 @@ class ExportManager {
         let generatedImageDescription = Naming.Export.getNewDescription(image: image)
         ExifTool.helper.patchImageDescription(description: generatedImageDescription, url: URL(fileURLWithPath: targetFullFilePath))
 
-        self.logger.log("Change ImageDescription for \(image.path) : DONE")
+        self.logger.log("Change ImageDescription for image.id: \(image.id) : DONE")
     }
     
     private func patchImageDateTime(image:Image, profile:ExportProfile, targetFilePath:String) {
@@ -220,7 +220,12 @@ class ExportManager {
             return false
         }
         
-        let pathUrl = URL(fileURLWithPath: image.path)
+        var imagePath = ""
+        if let repository = RepositoryDao.default.getRepository(id: image.repositoryId) {
+            imagePath = "\(repository.repositoryVolume)\(repository.repositoryPath)\(image.subPath.withFirstStash())"
+        }
+        
+        let pathUrl = URL(fileURLWithPath: imagePath)
         let fileExt = pathUrl.pathExtension.lowercased()
         
         // invalid file-ext
@@ -229,8 +234,8 @@ class ExportManager {
         }
         
         // invalid source file
-        if !FileManager.default.fileExists(atPath: image.path) {
-            self.logger.log("Source image not found in file system: \(image.path)")
+        if imagePath == "" || !FileManager.default.fileExists(atPath: imagePath) {
+            self.logger.log("[\(imagePath)] Source image not found in file system")
             return false
         }
         
@@ -242,9 +247,10 @@ class ExportManager {
         let fullTargetPath = URL(fileURLWithPath: basePath).appendingPathComponent(subfolder)
         let fullTargetFilePath = fullTargetPath.appendingPathComponent(targetFilename)
         
-        self.logger.log("Copy file [\(image.path)] to [\(fullTargetFilePath)]")
+        self.logger.log("[\(imagePath)] Will copy file to [\(fullTargetFilePath)]")
         
         if rehearsal {
+            self.logger.log("[\(imagePath)] Rehearsal not really copy file.")
             return true
         }
         
@@ -262,25 +268,28 @@ class ExportManager {
                         do {
                             try FileManager.default.removeItem(atPath: exportedPath.path)
                         }catch{
-                            self.logger.log("WARN: Unable to delete previous exported file: \(exportedPath.path)")
+                            self.logger.log(.warning, "[\(imagePath)] WARN: Unable to delete previous exported file: \(exportedPath.path)")
                             self.logger.log(error)
                         }
                     }
                 }
             }
             if FileManager.default.fileExists(atPath: "\(fullTargetFilePath.path)") {
+                self.logger.log("[\(imagePath)] Destination file exists, try delete: \(fullTargetFilePath.path)")
                 do {
                     try FileManager.default.removeItem(atPath: "\(fullTargetFilePath.path)")
                 }catch{
-                    self.logger.log("WARN: Unable to delete previous exported file: \(fullTargetFilePath.path)")
+                    self.logger.log("[\(imagePath)] WARN: Unable to delete previous exported file: \(fullTargetFilePath.path)")
                     self.logger.log(error)
                 }
             }
             do {
-                try FileManager.default.copyItem(atPath: image.path, toPath: "\(fullTargetFilePath.path)")
+                self.logger.log("[\(imagePath)] Copying file to [\(fullTargetFilePath.path)]")
+                try FileManager.default.copyItem(atPath: imagePath, toPath: "\(fullTargetFilePath.path)")
                 copied = true
+                self.logger.log("[\(imagePath)] Copied file to [\(fullTargetFilePath.path)]")
             }catch {
-                self.logger.log("Unable to copy from: [\(image.path)] to: [\(fullTargetFilePath.path)] ")
+                self.logger.log(.error, "[\(imagePath)] Unable to copy file to: [\(fullTargetFilePath.path)] ")
                 self.logger.log(error)
                 copied = false
                 errorMessage = error.localizedDescription
@@ -304,13 +313,13 @@ class ExportManager {
             // generate MD5
             let md5 = self.generateImageMD5(path: fullTargetFilePath.path)
             
-            self.logger.log("Copy file [\(image.path)] to [\(fullTargetFilePath.path)] DONE.")
+            self.logger.log("[\(imagePath)] Copy file to [\(fullTargetFilePath.path)] DONE.")
             
-            let _ = ExportDao.default.storeImageExportSuccess(imageId: image.id ?? image.path, profileId: profile.id, repositoryPath: image.repositoryPath, subfolder: subfolder, filename: targetFilename, exportedMD5: md5)
+            let _ = ExportDao.default.storeImageExportSuccess(imageId: image.id ?? imagePath, profileId: profile.id, repositoryPath: image.repositoryPath, subfolder: subfolder, filename: targetFilename, exportedMD5: md5)
             // TODO handle db interrupt error
             return true
         }else{
-            let _ = ExportDao.default.storeImageExportFail(imageId: image.id ?? image.path, profileId: profile.id, repositoryPath: image.repositoryPath, subfolder: subfolder, filename: targetFilename, failMessage: errorMessage)
+            let _ = ExportDao.default.storeImageExportFail(imageId: image.id ?? imagePath, profileId: profile.id, repositoryPath: image.repositoryPath, subfolder: subfolder, filename: targetFilename, failMessage: errorMessage)
             // TODO handle db interrupt error
             
             return false

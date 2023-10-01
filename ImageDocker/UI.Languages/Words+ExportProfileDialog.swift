@@ -10,6 +10,12 @@ import Foundation
 
 extension Words {
     
+    
+    static let export_auto_profile = Localize (
+        eng: "Auto Profile - %s",
+        chs: "新的配置 %s"
+    )
+    
     static let export_profile_include = Localize (
         eng: "include",
         chs: "包含"
@@ -193,9 +199,9 @@ extension Words {
         chs: "保存"
     )
     
-    static let export_profile_new = Localize (
-        eng: "New",
-        chs: "新建"
+    static let export_profile_clean_fields = Localize (
+        eng: "Clean Fields",
+        chs: "清除已填已选"
     )
     
     static let export_profile_assign_to_directory = Localize (

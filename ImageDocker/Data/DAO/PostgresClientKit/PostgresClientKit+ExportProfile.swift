@@ -207,12 +207,30 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
     func generateImageQuerySQLPart(tableAlias:String, tableColumn:String, profileSetting:String) -> String {
         var SQL = ""
         if profileSetting.starts(with: "include:") {
+            
+            var nullSQL = ""
+            let options = profileSetting.replacingFirstOccurrence(of: "include:", with: "").split(separator: ",")
+            if options.contains("\"\"") {
+                nullSQL = """
+            \(tableAlias)."\(tableColumn)" is null or
+            """
+            }
+            
             SQL = """
-            and \(tableAlias)."\(tableColumn)" in (\(profileSetting.replacingFirstOccurrence(of: "include:", with: "").replacingOccurrences(of: "'", with: "''").replacingOccurrences(of: "\"", with: "'")))
+            and (\(nullSQL) \(tableAlias)."\(tableColumn)" in (\(profileSetting.replacingFirstOccurrence(of: "include:", with: "").replacingOccurrences(of: "'", with: "''").replacingOccurrences(of: "\"", with: "'"))) )
             """
         }else if profileSetting.starts(with: "exclude:"){
+            
+            var nullSQL = ""
+            let options = profileSetting.replacingFirstOccurrence(of: "exclude:", with: "").split(separator: ",")
+            if options.contains("\"\"") {
+                nullSQL = """
+            \(tableAlias)."\(tableColumn)" is not null and
+            """
+            }
+            
             SQL = """
-            and ( \(tableAlias)."\(tableColumn)" is null or \(tableAlias)."\(tableColumn)" not in (\(profileSetting.replacingFirstOccurrence(of: "exclude:", with: "").replacingOccurrences(of: "'", with: "''").replacingOccurrences(of: "\"", with: "'"))) )
+            and ( \(nullSQL) \(tableAlias)."\(tableColumn)" not in (\(profileSetting.replacingFirstOccurrence(of: "exclude:", with: "").replacingOccurrences(of: "'", with: "''").replacingOccurrences(of: "\"", with: "'"))) )
             """
         }
         return SQL
