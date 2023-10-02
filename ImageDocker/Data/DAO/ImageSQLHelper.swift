@@ -247,27 +247,6 @@ struct SQLHelper {
         return (stmtWithoutHiddenWhere, hiddenWhere)
     }
     
-    // sql by date & place
-    static func generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String, String, [Any]) {
-        
-        var (stmtWithoutHiddenWhere, hiddenWhere) = _generateSQLStatementForPhotoFiles(filter: ViewController.collectionFilter, year: year, month: month, day: day, ignoreDate: ignoreDate, country: country, province: province, city: city, place: place, includeHidden: includeHidden, imageSource: imageSource, cameraModel: cameraModel)
-        
-        var sqlArgs:[Any] = []
-        
-        SQLHelper.inArray(field: "imageSource", array: imageSource, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
-        SQLHelper.inArray(field: "cameraModel", array: cameraModel, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
-        
-        let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
-        let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=true"
-        
-        
-        SQLHelper.logger.log("[GRDB Image] Generated SQL statement for all: \(stmt)")
-        SQLHelper.logger.log("[GRDB Image] Generated SQL statement for hidden: \(stmtHidden)")
-        SQLHelper.logger.log("[GRDB Image] SQL args: \(sqlArgs)")
-        
-        return (stmt, stmtHidden, sqlArgs)
-    }
-    
     internal static func _generateSQLStatementForPhotoFiles(filter:CollectionFilter, year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String, String, Bool) {
         
         SQLHelper.logger.log("[Shared Image List] SQL conditions: year=\(year) | month=\(month) | day=\(day) | event=\(event) | country=\(country) | province=\(province) | city=\(city) | place=\(place) | includeHidden=\(includeHidden) | filter=\(filter.represent())")
@@ -311,29 +290,6 @@ struct SQLHelper {
         }
         
         return (stmtWithoutHiddenWhere, hiddenWhere, hasEvent)
-    }
-    
-    // sql by date & event & place
-    static func generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String, String, [Any]) {
-        
-        var (stmtWithoutHiddenWhere, hiddenWhere, hasEvent) = _generateSQLStatementForPhotoFiles(filter: ViewController.collectionFilter, year: year, month: month, day: day, event: event, country: country, province: province, city: city, place: place, includeHidden: includeHidden, imageSource: imageSource, cameraModel: cameraModel)
-        
-        var sqlArgs:[Any] = []
-        if hasEvent {
-            sqlArgs.append(event)
-        }
-        
-        SQLHelper.inArray(field: "imageSource", array: imageSource, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
-        SQLHelper.inArray(field: "cameraModel", array: cameraModel, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
-        
-        let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
-        let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=true"
-        
-        SQLHelper.logger.log("[GRDB Image -> Searching] Generated SQL statement for all: \(stmt)")
-        SQLHelper.logger.log("[GRDB Image -> Searching] Generated SQL statement for hidden: \(stmtHidden)")
-        SQLHelper.logger.log("[GRDB Image -> Searching] SQL args: \(sqlArgs)")
-        
-        return (stmt, stmtHidden, sqlArgs)
     }
     
     static func generateSQLStatementForSearchingPhotoFiles(condition:SearchCondition, includeHidden:Bool = true, quoteColumn:Bool = false) -> (String, String) {
