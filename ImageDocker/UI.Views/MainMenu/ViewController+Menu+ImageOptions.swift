@@ -271,8 +271,8 @@ extension ViewController {
 
                             MessageEventCenter.default.showMessage(type: "IMAGE", name: "RESTORE_BACKUP", message: Words.info_doneReplacedImageToBackupVersion.word())
                         }catch{
-                            self.logger.log("Unable to restore backup image from [\(backupUrl.path)] to [url.path]")
-                            self.logger.log(error)
+                            self.logger.log(.error, "Unable to restore backup image from [\(backupUrl.path)] to [url.path]")
+                            self.logger.log(.error, error)
 
                             MessageEventCenter.default.showMessage(type: "IMAGE", name: "RESTORE_BACKUP", message: Words.error_replaceImageToBackupVersion.word())
                             
@@ -282,14 +282,14 @@ extension ViewController {
                                 try FileManager.default.moveItem(atPath: tmpPath, toPath: url.path)
                             }catch{
                                 MessageEventCenter.default.showMessage(type: "IMAGE", name: "RESTORE_BACKUP", message: "Unable to restore original editable version from [\(tmpPath)] to [\(url.path)]")
-                                self.logger.log(error)
+                                self.logger.log(.error, error)
                             }
                         }
                         do {
                             try FileManager.default.removeItem(atPath: tmpPath)
                             try FileManager.default.removeItem(atPath: tmpFolder)
                         }catch{
-                            self.logger.log(error)
+                            self.logger.log(.error, error)
                         }
                     }else{
                         MessageEventCenter.default.showMessage(type: "IMAGE", name: "RESTORE_BACKUP", message: Words.error_imageMissingBackupVersion.word())

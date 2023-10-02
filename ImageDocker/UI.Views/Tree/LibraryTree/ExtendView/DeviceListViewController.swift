@@ -90,10 +90,10 @@ extension DeviceListViewController: NSTableViewDelegate {
             colView.textField?.lineBreakMode = .byWordWrapping
             if row == tableView.selectedRow {
                 lastSelectedRow = row
-                colView.textField?.textColor = NSColor.yellow
+//                colView.textField?.textColor = NSColor.yellow
             } else {
                 lastSelectedRow = nil
-                colView.textField?.textColor = nil
+//                colView.textField?.textColor = nil
             }
             return colView
         }

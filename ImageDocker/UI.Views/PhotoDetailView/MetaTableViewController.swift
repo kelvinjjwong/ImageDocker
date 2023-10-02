@@ -85,10 +85,10 @@ extension ViewController: NSTableViewDelegate {
                 colView.textField?.lineBreakMode = .byWordWrapping
                 if row == tableView.selectedRow {
                     lastSelectedMetaInfoRow = row
-                    colView.textField?.textColor = NSColor.yellow
+//                    colView.textField?.textColor = NSColor.yellow
                 } else {
                     lastSelectedMetaInfoRow = nil
-                    colView.textField?.textColor = nil
+//                    colView.textField?.textColor = nil
                 }
             }
          /*

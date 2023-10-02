@@ -224,9 +224,9 @@ extension LibrariesViewController: NSTableViewDelegate {
             colView.textField?.stringValue = value;
             colView.textField?.lineBreakMode = .byWordWrapping
             if row == tableView.selectedRow {
-                colView.textField?.textColor = NSColor.yellow
+//                colView.textField?.textColor = NSColor.yellow
             } else {
-                colView.textField?.textColor = nil
+//                colView.textField?.textColor = nil
             }
             /*
              if let tooltip = tip {
