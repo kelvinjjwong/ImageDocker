@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import GRDB
+//import GRDB
 import PostgresModelFactory
 
 public final class Family : Codable {
@@ -22,9 +22,9 @@ public final class Family : Codable {
     }
 }
 
-extension Family: FetchableRecord, MutablePersistableRecord, TableRecord {
-    
-}
+//extension Family: FetchableRecord, MutablePersistableRecord, TableRecord {
+//
+//}
 
 extension Family : PostgresRecord {
     public func postgresTable() -> String {
@@ -52,9 +52,9 @@ public final class FamilyMember : Codable {
     }
 }
 
-extension FamilyMember: FetchableRecord, MutablePersistableRecord, TableRecord {
-
-}
+//extension FamilyMember: FetchableRecord, MutablePersistableRecord, TableRecord {
+//
+//}
 
 extension FamilyMember : PostgresRecord {
     public func postgresTable() -> String {
@@ -82,9 +82,9 @@ public final class FamilyJoint : Codable {
     }
 }
 
-extension FamilyJoint: FetchableRecord, MutablePersistableRecord, TableRecord {
-
-}
+//extension FamilyJoint: FetchableRecord, MutablePersistableRecord, TableRecord {
+//
+//}
 
 
 extension FamilyJoint : PostgresRecord {

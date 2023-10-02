@@ -10,5 +10,5 @@ target 'ImageDocker' do
   pod 'LoggerFactory', '1.0.3'
   pod 'PostgresModelFactory', '1.0.2'
   pod 'CryptoSwift', '1.4.0'
-  pod 'GRDB.swift'
+  # pod 'GRDB.swift'
 end

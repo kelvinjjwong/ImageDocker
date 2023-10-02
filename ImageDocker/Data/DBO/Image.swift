@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import GRDB
+//import GRDB
 import PostgresModelFactory
 
 public final class Image : Codable {
@@ -145,9 +145,9 @@ public final class Image : Codable {
     
 }
 
-extension Image: FetchableRecord, MutablePersistableRecord, TableRecord {
-
-}
+//extension Image: FetchableRecord, MutablePersistableRecord, TableRecord {
+//
+//}
 
 extension Image : PostgresRecord {
     public func postgresTable() -> String {

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import GRDB
+//import GRDB
 import PostgresModelFactory
 
 public final class ImageDevicePath : Codable {
@@ -51,9 +51,9 @@ public final class ImageDevicePath : Codable {
     }
 }
 
-extension ImageDevicePath: FetchableRecord, MutablePersistableRecord, TableRecord {
-
-}
+//extension ImageDevicePath: FetchableRecord, MutablePersistableRecord, TableRecord {
+//
+//}
 
 
 extension ImageDevicePath : PostgresRecord {

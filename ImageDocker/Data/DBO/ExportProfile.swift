@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import GRDB
+//import GRDB
 import PostgresModelFactory
 
 public final class ExportProfile : Codable {
@@ -85,9 +85,9 @@ public final class ExportProfile : Codable {
     }
 }
 
-extension ExportProfile: FetchableRecord, MutablePersistableRecord, TableRecord {
-    
-}
+//extension ExportProfile: FetchableRecord, MutablePersistableRecord, TableRecord {
+//    
+//}
 
 
 

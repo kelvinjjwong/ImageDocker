@@ -12,7 +12,7 @@ import AppKit
 import CoreLocation
 //import SwiftyJSON
 import AVFoundation
-import GRDB
+//import GRDB
 
 let MetaCategorySequence:[String] = ["Location", "DateTime", "Camera", "Lens", "EXIF", "Video", "Audio", "Coordinate", "Software", "Event", "Repository", "Device", "System"]
 

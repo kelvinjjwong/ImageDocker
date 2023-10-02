@@ -12,7 +12,7 @@ import AppKit
 import CoreLocation
 //import SwiftyJSON
 import AVFoundation
-import GRDB
+//import GRDB
 import LoggerFactory
 
 class ImageFile {
@@ -173,7 +173,7 @@ class ImageFile {
     
     // READ FROM DATABASE
     /// - Tag: ImageFile.init(image)
-    init (image:Image, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, indicator:Accumulator? = nil, loadExifFromFile:Bool = true, metaInfoStore:MetaInfoStoreDelegate? = nil, sharedDB:DatabaseWriter? = nil, forceReloadExif:Bool = false) {
+    init (image:Image, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, indicator:Accumulator? = nil, loadExifFromFile:Bool = true, metaInfoStore:MetaInfoStoreDelegate? = nil, forceReloadExif:Bool = false) {
         exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"
         exifDateFormatWithTimezone.dateFormat = "yyyy:MM:dd HH:mm:ssxxx"
         
@@ -339,7 +339,7 @@ class ImageFile {
     ///   - CollectionViewItemsLoader.[transformToDomainItems(urls)](x-source-tag://CollectionViewItemsLoader.transformToDomainItems(urls))
     ///   - ViewController.loadImage()
     /// - Tag: ImageFile.init(url)
-    init (url: URL, repository:ImageContainer? = nil, indicator:Accumulator? = nil, metaInfoStore:MetaInfoStoreDelegate? = nil, quickCreate:Bool = false, sharedDB:DatabaseWriter? = nil) {
+    init (url: URL, repository:ImageContainer? = nil, indicator:Accumulator? = nil, metaInfoStore:MetaInfoStoreDelegate? = nil, quickCreate:Bool = false) {
         exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"
         exifDateFormatWithTimezone.dateFormat = "yyyy:MM:dd HH:mm:ssxxx"
         

@@ -12,7 +12,7 @@ import AppKit
 import CoreLocation
 //import SwiftyJSON
 import AVFoundation
-import GRDB
+//import GRDB
 
 extension ImageFile {
     // MARK: CHOOSE PHOTO TAKEN DATE

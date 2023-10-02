@@ -19,7 +19,7 @@ class DeviceDao {
     static var `default`:DeviceDao {
         let location = Setting.database.databaseLocation()
         if location == "local" {
-            return DeviceDao(DeviceDaoGRDB())
+            return DeviceDao(DeviceDaoPostgresCK())
         }else{
             return DeviceDao(DeviceDaoPostgresCK())
         }

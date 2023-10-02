@@ -24,7 +24,7 @@ public final class ImageRecordDao {
     static var `default`:ImageRecordDao {
         let location = Setting.database.databaseLocation()
         if location == "local" {
-            return ImageRecordDao(ImageRecordDaoGRDB())
+            return ImageRecordDao(ImageRecordDaoPostgresCK())
         }else{
             return ImageRecordDao(ImageRecordDaoPostgresCK())
         }
@@ -325,7 +325,7 @@ class ImageSearchDao {
     static var `default`:ImageSearchDao {
         let location = Setting.database.databaseLocation()
         if location == "local" {
-            return ImageSearchDao(ImageSearchDaoGRDB())
+            return ImageSearchDao(ImageSearchDaoPostgresCK())
         }else{
             return ImageSearchDao(ImageSearchDaoPostgresCK())
         }
@@ -637,7 +637,7 @@ class ImageCountDao {
     static var `default`:ImageCountDao {
         let location = Setting.database.databaseLocation()
         if location == "local" {
-            return ImageCountDao(ImageCountDaoGRDB())
+            return ImageCountDao(ImageCountDaoPostgresCK())
         }else{
             return ImageCountDao(ImageCountDaoPostgresCK())
         }
@@ -875,7 +875,7 @@ class ImageDuplicationDao {
     static var `default`:ImageDuplicationDao {
         let location = Setting.database.databaseLocation()
         if location == "local" {
-            return ImageDuplicationDao(ImageDuplicateDaoGRDB())
+            return ImageDuplicationDao(ImageDuplicateDaoPostgresCK())
         }else{
             return ImageDuplicationDao(ImageDuplicateDaoPostgresCK())
         }
@@ -953,7 +953,7 @@ class ImageFaceDao {
     static var `default`:ImageFaceDao {
         let location = Setting.database.databaseLocation()
         if location == "local" {
-            return ImageFaceDao(ImageFaceDaoGRDB())
+            return ImageFaceDao(ImageFaceDaoPostgresCK())
         }else{
             return ImageFaceDao(ImageFaceDaoPostgresCK())
         }

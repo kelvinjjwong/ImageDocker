@@ -19,7 +19,7 @@ class PlaceDao {
     static var `default`:PlaceDao {
         let location = Setting.database.databaseLocation()
         if location == "local" {
-            return PlaceDao(PlaceDaoGRDB())
+            return PlaceDao(PlaceDaoPostgresCK())
         }else{
             return PlaceDao(PlaceDaoPostgresCK())
         }

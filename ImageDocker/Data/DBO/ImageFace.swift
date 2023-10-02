@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import GRDB
+//import GRDB
 import PostgresModelFactory
 
 public final class ImageFace : Codable {
@@ -86,9 +86,9 @@ public final class ImageFace : Codable {
     }
 }
 
-extension ImageFace: FetchableRecord, MutablePersistableRecord, TableRecord {
-
-}
+//extension ImageFace: FetchableRecord, MutablePersistableRecord, TableRecord {
+//
+//}
 
 
 extension ImageFace : PostgresRecord {

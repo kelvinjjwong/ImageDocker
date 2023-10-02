@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import GRDB
+//import GRDB
 import PostgresModelFactory
 
 public final class ImageContainer: Codable {
@@ -96,9 +96,9 @@ public final class ImageContainer: Codable {
     }
 }
 
-extension ImageContainer: FetchableRecord, MutablePersistableRecord, TableRecord {
-
-}
+//extension ImageContainer: FetchableRecord, MutablePersistableRecord, TableRecord {
+//
+//}
 
 
 extension ImageContainer : PostgresRecord {

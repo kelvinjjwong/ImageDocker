@@ -14,7 +14,7 @@ public final class ImageDB {
     
     let impl:ImageDBInterface
     
-    static let local = ImageDB(impl: SQLiteConnectionGRDB.default)
+    static let local = ImageDB(impl: PostgresConnection.default)
     
     static let remote = ImageDB(impl: PostgresConnection.default)
     

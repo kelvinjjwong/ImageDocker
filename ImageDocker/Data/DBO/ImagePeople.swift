@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import GRDB
+//import GRDB
 import PostgresModelFactory
 
 public final class ImagePeople : Codable {
@@ -21,9 +21,9 @@ public final class ImagePeople : Codable {
     }
 }
 
-extension ImagePeople: FetchableRecord, MutablePersistableRecord, TableRecord {
-
-}
+//extension ImagePeople: FetchableRecord, MutablePersistableRecord, TableRecord {
+//
+//}
 
 
 extension ImagePeople : PostgresRecord {

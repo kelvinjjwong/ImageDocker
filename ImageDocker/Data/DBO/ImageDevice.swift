@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import GRDB
+//import GRDB
 import PostgresModelFactory
 
 struct ImageDevice : Codable {
@@ -43,12 +43,12 @@ struct ImageDevice : Codable {
     }
 }
 
-extension ImageDevice: FetchableRecord, MutablePersistableRecord, TableRecord {
-    mutating func didInsert(with rowID: Int64, for column: String?) {
-        // Update id after insertion
-        //id = rowID
-    }
-}
+//extension ImageDevice: FetchableRecord, MutablePersistableRecord, TableRecord {
+//    mutating func didInsert(with rowID: Int64, for column: String?) {
+//        // Update id after insertion
+//        //id = rowID
+//    }
+//}
 
 
 

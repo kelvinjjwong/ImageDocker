@@ -162,7 +162,6 @@
 		8E9CF30D26489EAA00558423 /* Words.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9CF30C26489EAA00558423 /* Words.swift */; };
 		8E9CF30F2648D42500558423 /* ChangeEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9CF30E2648D42500558423 /* ChangeEvent.swift */; };
 		8E9D8039234884040062692A /* EditRepositoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E9D8038234884040062692A /* EditRepositoryViewController.xib */; };
-		8E9D803B2348A9EE0062692A /* GRDB+ExportProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9D803A2348A9EE0062692A /* GRDB+ExportProfile.swift */; };
 		8E9D803D2348AA550062692A /* ExportProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9D803C2348AA550062692A /* ExportProfile.swift */; };
 		8E9D803F23495E9B0062692A /* TheaterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E9D803E23495E9B0062692A /* TheaterViewController.xib */; };
 		8E9D804123495F100062692A /* LargeViewItems.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E9D804023495F100062692A /* LargeViewItems.storyboard */; };
@@ -174,18 +173,6 @@
 		8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA643F4208D6E5100C7D695 /* PreferencesController.swift */; };
 		8EAC5F202144A60900E187E0 /* DeviceFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAC5F1E2144A60900E187E0 /* DeviceFolderViewController.swift */; };
 		8EAC5F212144A60900E187E0 /* DeviceFolderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EAC5F1F2144A60900E187E0 /* DeviceFolderViewController.xib */; };
-		8EAD03AF2337290E00AAC7C6 /* GRDB+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03AE2337290E00AAC7C6 /* GRDB+Image.swift */; };
-		8EAD03B12337299E00AAC7C6 /* GRDB+ImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B02337299E00AAC7C6 /* GRDB+ImageContainer.swift */; };
-		8EAD03B323372BC800AAC7C6 /* GRDB+ImagePlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B223372BC800AAC7C6 /* GRDB+ImagePlace.swift */; };
-		8EAD03B523372C0100AAC7C6 /* GRDB+ImageEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B423372C0100AAC7C6 /* GRDB+ImageEvent.swift */; };
-		8EAD03B723372C4600AAC7C6 /* GRDB+ImageDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B623372C4600AAC7C6 /* GRDB+ImageDevice.swift */; };
-		8EAD03B923372C8C00AAC7C6 /* GRDB+FaceFamily.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03B823372C8C00AAC7C6 /* GRDB+FaceFamily.swift */; };
-		8EAD03BB23372CF100AAC7C6 /* GRDB+VersionMigrate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03BA23372CF100AAC7C6 /* GRDB+VersionMigrate.swift */; };
-		8EAD03BD23372D5E00AAC7C6 /* GRDB+Image+Meta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD03BC23372D5E00AAC7C6 /* GRDB+Image+Meta.swift */; };
-		8EB271512337B6E4003BF3AF /* GRDB+Image+Duplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271502337B6E4003BF3AF /* GRDB+Image+Duplicate.swift */; };
-		8EB271532337B768003BF3AF /* GRDB+Image+Statistic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271522337B768003BF3AF /* GRDB+Image+Statistic.swift */; };
-		8EB271552337B8BC003BF3AF /* GRDB+Image+Update.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271542337B8BC003BF3AF /* GRDB+Image+Update.swift */; };
-		8EB271572337B9C3003BF3AF /* GRDB+Image+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB271562337B9C3003BF3AF /* GRDB+Image+Search.swift */; };
 		8EB27159233842E4003BF3AF /* ImageFile+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB27158233842E4003BF3AF /* ImageFile+Preview.swift */; };
 		8EB2715B23384364003BF3AF /* ImageFile+SourceFilename.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2715A23384364003BF3AF /* ImageFile+SourceFilename.swift */; };
 		8EB2715D23384401003BF3AF /* ImageFile+PhotoTakenDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2715C23384401003BF3AF /* ImageFile+PhotoTakenDate.swift */; };
@@ -307,7 +294,6 @@
 		8EF32D122094CB2000511538 /* Icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8EF32D112094CB2000511538 /* Icons.xcassets */; };
 		8EF3FEE724231C0400AF83BB /* ImageSQLHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF3FEE624231C0400AF83BB /* ImageSQLHelper.swift */; };
 		8EF3FEEA2423509E00AF83BB /* ImageDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF3FEE92423509E00AF83BB /* ImageDB.swift */; };
-		8EF3FEEC24235B0C00AF83BB /* DBEngine+SQLiteConnection+GRDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF3FEEB24235B0C00AF83BB /* DBEngine+SQLiteConnection+GRDB.swift */; };
 		8EF4CE5521D77BAB00C53AFF /* People.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE5421D77BAB00C53AFF /* People.swift */; };
 		8EF4CE5721D77BD600C53AFF /* Family.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE5621D77BD600C53AFF /* Family.swift */; };
 		8EF4CE5921D77BEA00C53AFF /* ImagePeople.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE5821D77BEA00C53AFF /* ImagePeople.swift */; };
@@ -540,7 +526,6 @@
 		8E9CF30C26489EAA00558423 /* Words.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Words.swift; sourceTree = "<group>"; };
 		8E9CF30E2648D42500558423 /* ChangeEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeEvent.swift; sourceTree = "<group>"; };
 		8E9D8038234884040062692A /* EditRepositoryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditRepositoryViewController.xib; sourceTree = "<group>"; };
-		8E9D803A2348A9EE0062692A /* GRDB+ExportProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+ExportProfile.swift"; sourceTree = "<group>"; };
 		8E9D803C2348AA550062692A /* ExportProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportProfile.swift; sourceTree = "<group>"; };
 		8E9D803E23495E9B0062692A /* TheaterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TheaterViewController.xib; sourceTree = "<group>"; };
 		8E9D804023495F100062692A /* LargeViewItems.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LargeViewItems.storyboard; sourceTree = "<group>"; };
@@ -552,18 +537,6 @@
 		8EA643F4208D6E5100C7D695 /* PreferencesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesController.swift; sourceTree = "<group>"; };
 		8EAC5F1E2144A60900E187E0 /* DeviceFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceFolderViewController.swift; sourceTree = "<group>"; };
 		8EAC5F1F2144A60900E187E0 /* DeviceFolderViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeviceFolderViewController.xib; sourceTree = "<group>"; };
-		8EAD03AE2337290E00AAC7C6 /* GRDB+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+Image.swift"; sourceTree = "<group>"; };
-		8EAD03B02337299E00AAC7C6 /* GRDB+ImageContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+ImageContainer.swift"; sourceTree = "<group>"; };
-		8EAD03B223372BC800AAC7C6 /* GRDB+ImagePlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+ImagePlace.swift"; sourceTree = "<group>"; };
-		8EAD03B423372C0100AAC7C6 /* GRDB+ImageEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+ImageEvent.swift"; sourceTree = "<group>"; };
-		8EAD03B623372C4600AAC7C6 /* GRDB+ImageDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+ImageDevice.swift"; sourceTree = "<group>"; };
-		8EAD03B823372C8C00AAC7C6 /* GRDB+FaceFamily.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+FaceFamily.swift"; sourceTree = "<group>"; };
-		8EAD03BA23372CF100AAC7C6 /* GRDB+VersionMigrate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+VersionMigrate.swift"; sourceTree = "<group>"; };
-		8EAD03BC23372D5E00AAC7C6 /* GRDB+Image+Meta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+Image+Meta.swift"; sourceTree = "<group>"; };
-		8EB271502337B6E4003BF3AF /* GRDB+Image+Duplicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+Image+Duplicate.swift"; sourceTree = "<group>"; };
-		8EB271522337B768003BF3AF /* GRDB+Image+Statistic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+Image+Statistic.swift"; sourceTree = "<group>"; };
-		8EB271542337B8BC003BF3AF /* GRDB+Image+Update.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+Image+Update.swift"; sourceTree = "<group>"; };
-		8EB271562337B9C3003BF3AF /* GRDB+Image+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GRDB+Image+Search.swift"; sourceTree = "<group>"; };
 		8EB27158233842E4003BF3AF /* ImageFile+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageFile+Preview.swift"; sourceTree = "<group>"; };
 		8EB2715A23384364003BF3AF /* ImageFile+SourceFilename.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageFile+SourceFilename.swift"; sourceTree = "<group>"; };
 		8EB2715C23384401003BF3AF /* ImageFile+PhotoTakenDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageFile+PhotoTakenDate.swift"; sourceTree = "<group>"; };
@@ -684,7 +657,6 @@
 		8EF32D112094CB2000511538 /* Icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icons.xcassets; sourceTree = "<group>"; };
 		8EF3FEE624231C0400AF83BB /* ImageSQLHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSQLHelper.swift; sourceTree = "<group>"; };
 		8EF3FEE92423509E00AF83BB /* ImageDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDB.swift; sourceTree = "<group>"; };
-		8EF3FEEB24235B0C00AF83BB /* DBEngine+SQLiteConnection+GRDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DBEngine+SQLiteConnection+GRDB.swift"; sourceTree = "<group>"; };
 		8EF4CE5421D77BAB00C53AFF /* People.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = People.swift; sourceTree = "<group>"; };
 		8EF4CE5621D77BD600C53AFF /* Family.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Family.swift; sourceTree = "<group>"; };
 		8EF4CE5821D77BEA00C53AFF /* ImagePeople.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePeople.swift; sourceTree = "<group>"; };
@@ -970,27 +942,6 @@
 			path = Editors;
 			sourceTree = "<group>";
 		};
-		8E3EC3BA214DC120004B6125 /* GRDB */ = {
-			isa = PBXGroup;
-			children = (
-				8EF3FEEB24235B0C00AF83BB /* DBEngine+SQLiteConnection+GRDB.swift */,
-				8EAD03AE2337290E00AAC7C6 /* GRDB+Image.swift */,
-				8EB271562337B9C3003BF3AF /* GRDB+Image+Search.swift */,
-				8EB271542337B8BC003BF3AF /* GRDB+Image+Update.swift */,
-				8EB271522337B768003BF3AF /* GRDB+Image+Statistic.swift */,
-				8EB271502337B6E4003BF3AF /* GRDB+Image+Duplicate.swift */,
-				8EAD03BC23372D5E00AAC7C6 /* GRDB+Image+Meta.swift */,
-				8EAD03B02337299E00AAC7C6 /* GRDB+ImageContainer.swift */,
-				8EAD03B223372BC800AAC7C6 /* GRDB+ImagePlace.swift */,
-				8EAD03B423372C0100AAC7C6 /* GRDB+ImageEvent.swift */,
-				8EAD03B623372C4600AAC7C6 /* GRDB+ImageDevice.swift */,
-				8EAD03B823372C8C00AAC7C6 /* GRDB+FaceFamily.swift */,
-				8E9D803A2348A9EE0062692A /* GRDB+ExportProfile.swift */,
-				8EAD03BA23372CF100AAC7C6 /* GRDB+VersionMigrate.swift */,
-			);
-			path = GRDB;
-			sourceTree = "<group>";
-		};
 		8E3FA91B2352904B00B677A3 /* Memories */ = {
 			isa = PBXGroup;
 			children = (
@@ -1071,7 +1022,6 @@
 				8EF92DF32460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift */,
 				8EEE584F2465471A007219AB /* SQLiteDataSource.swift */,
 				8E97ECFA243B2C980013EFD3 /* PostgresClientKit */,
-				8E3EC3BA214DC120004B6125 /* GRDB */,
 			);
 			path = DAO;
 			sourceTree = "<group>";
@@ -1947,7 +1897,6 @@
 				8E481483277DAEDE0097493E /* Words+PreviewImage.swift in Sources */,
 				8ED8334127B9144B00B31319 /* DatabaseBackupController.swift in Sources */,
 				8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */,
-				8EAD03B523372C0100AAC7C6 /* GRDB+ImageEvent.swift in Sources */,
 				8E3FA9252355047400B677A3 /* MemoriesCollectionViewController.swift in Sources */,
 				8E74194E24225719002BAAAE /* FaceDaoInterface.swift in Sources */,
 				8E4C38D9211829410089502C /* DeviceTreeController.swift in Sources */,
@@ -2010,17 +1959,14 @@
 				8EBA692E2090DB4B00221131 /* VideoDropView.swift in Sources */,
 				8E8D47222233DCD30091E9C3 /* DictionaryTableViewController.swift in Sources */,
 				8EF8C55A265DBD6F0060D2E0 /* ImagePreviewController.swift in Sources */,
-				8EAD03BB23372CF100AAC7C6 /* GRDB+VersionMigrate.swift in Sources */,
 				8ECA200623E5B09200F56895 /* PlacesTree+CollectionView.swift in Sources */,
 				8E0BFD412A5900DD00F8D466 /* SwiftJSON.swift in Sources */,
 				8EFA7CF9211A36F700419777 /* DeviceCopyViewController.swift in Sources */,
-				8EB271552337B8BC003BF3AF /* GRDB+Image+Update.swift in Sources */,
 				8EBA9DE32173C8F000DACAAD /* TheaterViewController.swift in Sources */,
 				8E4C38CD2117B5340089502C /* Phone.swift in Sources */,
 				8E15E74123AC7B310094240A /* Icons.swift in Sources */,
 				8EB27169233BB408003BF3AF /* RepositoryDetailViewController.swift in Sources */,
 				8E74195024225728002BAAAE /* ExportDaoInterface.swift in Sources */,
-				8EAD03B323372BC800AAC7C6 /* GRDB+ImagePlace.swift in Sources */,
 				8EEE58502465471A007219AB /* SQLiteDataSource.swift in Sources */,
 				8EB271852340E9C6003BF3AF /* ViewController+SelectionArea+ReplacePlace.swift in Sources */,
 				8EFE763C2094AF6B00B7CFCA /* TreeController.swift in Sources */,
@@ -2054,7 +2000,6 @@
 				5C5117432972E7B900F64CF6 /* ImageFolderTreeScanner+EXIF.swift in Sources */,
 				8E741946242256E2002BAAAE /* RepositoryDaoInterface.swift in Sources */,
 				8E48147F277DAE6C0097493E /* Words+MainCollectionView.swift in Sources */,
-				8EB271532337B768003BF3AF /* GRDB+Image+Statistic.swift in Sources */,
 				8EF92DF42460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift in Sources */,
 				8E98B8F720D6044900771280 /* Event.swift in Sources */,
 				8E3FA9202353310600B677A3 /* MemoryCollectionViewItem.swift in Sources */,
@@ -2063,7 +2008,6 @@
 				8E481491277DF6400097493E /* Words+Tree+Events.swift in Sources */,
 				8E4134902A64B59A00258755 /* CollectionPaginationController.swift in Sources */,
 				8E4C38D12117B56A0089502C /* IPHONE.swift in Sources */,
-				8EAD03B723372C4600AAC7C6 /* GRDB+ImageDevice.swift in Sources */,
 				8E8D4715222991230091E9C3 /* FaceCollectionViewItem.swift in Sources */,
 				8EC82EAB2121C5A200FC0899 /* AddLocalDirectoryViewController.swift in Sources */,
 				8E5D258025A2013900D531A7 /* TokenField.swift in Sources */,
@@ -2076,8 +2020,6 @@
 				8E481481277DAE940097493E /* Words+MainMenu.swift in Sources */,
 				8EBA759B23B5CC5300548376 /* PlaceDao.swift in Sources */,
 				8EFA02DD243B3E2D00D7C355 /* PostgresClientKit+Image+Search.swift in Sources */,
-				8EAD03BD23372D5E00AAC7C6 /* GRDB+Image+Meta.swift in Sources */,
-				8E9D803B2348A9EE0062692A /* GRDB+ExportProfile.swift in Sources */,
 				8EF4CE5921D77BEA00C53AFF /* ImagePeople.swift in Sources */,
 				8E481499278A3C8E0097493E /* CellPhoneResolution.swift in Sources */,
 				8EB986BC20B30C920075B081 /* CollectionViewDelegate.swift in Sources */,
@@ -2103,9 +2045,7 @@
 				8EB2715B23384364003BF3AF /* ImageFile+SourceFilename.swift in Sources */,
 				5C51173D29698E7300F64CF6 /* ImageRepository.swift in Sources */,
 				8ECB51002764268C004DFDD7 /* SubContainersManageViewController.swift in Sources */,
-				8EAD03B12337299E00AAC7C6 /* GRDB+ImageContainer.swift in Sources */,
 				8E481487277DAFF10097493E /* Words+Splash.swift in Sources */,
-				8EAD03B923372C8C00AAC7C6 /* GRDB+FaceFamily.swift in Sources */,
 				8E4DECEA23B38A7B00F5538C /* ImagePlace.swift in Sources */,
 				8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */,
 				8EBA759723B55BCA00548376 /* RepositoryTreeDataSource.swift in Sources */,
@@ -2121,7 +2061,6 @@
 				8E74194A242256FE002BAAAE /* EventDaoInterface.swift in Sources */,
 				8EB2716D233E0729003BF3AF /* LibrariesViewController.swift in Sources */,
 				8EFA02EF243B3ECE00D7C355 /* PostgresClientKit+FaceFamily.swift in Sources */,
-				8EF3FEEC24235B0C00AF83BB /* DBEngine+SQLiteConnection+GRDB.swift in Sources */,
 				8E4C38CF2117B54D0089502C /* Android.swift in Sources */,
 				8E27F04125DC0291003B585F /* ImageMapView.swift in Sources */,
 				8EB2718D2340EE4C003BF3AF /* ViewController+SelectionArea+WriteNote.swift in Sources */,
@@ -2137,7 +2076,6 @@
 				8EC20B322281C0B8000F4819 /* FaceTask.swift in Sources */,
 				8EB271A323413CE7003BF3AF /* ExportConfigurationViewController.swift in Sources */,
 				8E3EC3B4214DB1B8004B6125 /* LunarSolarConverter.swift in Sources */,
-				8EB271572337B9C3003BF3AF /* GRDB+Image+Search.swift in Sources */,
 				8EF8C562266329160060D2E0 /* MessageEventCenter.swift in Sources */,
 				5CA18B4929EB250B00C5502E /* NotificationMessageViewController.swift in Sources */,
 				8EB271A823418C68003BF3AF /* ExportProfileViewController.swift in Sources */,
@@ -2155,9 +2093,7 @@
 				8E4095FA2593982200BF717B /* ExportProfileItemController.swift in Sources */,
 				8E8D471C22315F540091E9C3 /* SingleColumnTableViewController.swift in Sources */,
 				8EB271932340EF6F003BF3AF /* ViewController+Schedule.swift in Sources */,
-				8EAD03AF2337290E00AAC7C6 /* GRDB+Image.swift in Sources */,
 				8EB2719F23412FE8003BF3AF /* ViewController+Menu+Export.swift in Sources */,
-				8EB271512337B6E4003BF3AF /* GRDB+Image+Duplicate.swift in Sources */,
 				8EEE585224654760007219AB /* ImageDBInterface.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

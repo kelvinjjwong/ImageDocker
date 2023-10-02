@@ -99,7 +99,7 @@ class FaceCollectionViewItemsLoader: NSObject {
         var keys:Set<String> = []
         for item in section.items {
             if let date = item.data.imageDate {
-                keys.insert(date.databaseValue.description)
+                keys.insert(date.description)
             }else{
                 keys.insert(item.personName)
             }
@@ -112,9 +112,9 @@ class FaceCollectionViewItemsLoader: NSObject {
         for key in sortedKeys {
             for item in section.items {
                 if let date = item.data.imageDate {
-                    if date.databaseValue.description == key {
+//                    if date == key {
                         sortedItems.append(item)
-                    }
+//                    }
                 }else{
                     if item.personName == key {
                         sortedItems.append(item)

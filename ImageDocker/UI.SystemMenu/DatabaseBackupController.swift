@@ -994,20 +994,20 @@ final class DatabaseBackupController: NSViewController {
             ])
         
         self.toggleGroup_DBLocation = ToggleGroup([
-            "local"       : self.chkLocalLocation,
+//            "local"       : self.chkLocalLocation,
             "localServer" : self.chkLocalDBServer,
             "network"     : self.chkNetworkLocation
         ], keysOrderred: ["local", "localServer", "network"])
         
         self.toggleGroup_CloneFromDBLocation = ToggleGroup([
-            "localDBFile"   :self.chkFromLocalDBFile,
+//            "localDBFile"   :self.chkFromLocalDBFile,
             "localDBServer" :self.chkFromLocalDBServer,
             "remoteDBServer":self.chkFromRemoteDBServer,
             "backupArchive" :self.chkFromBackupArchive
             ], keysOrderred: ["localDBFile", "localDBServer", "remoteDBServer", "backupArchive"])
         
         self.toggleGroup_CloneToDBLocation = ToggleGroup([
-            "localDBFile"   :self.chkToLocalDBFile,
+//            "localDBFile"   :self.chkToLocalDBFile,
             "localDBServer" :self.chkToLocalDBServer,
             "remoteDBServer":self.chkToRemoteDBServer
             ], keysOrderred: ["localDBFile", "localDBServer", "remoteDBServer"],
@@ -1020,13 +1020,13 @@ final class DatabaseBackupController: NSViewController {
         })
         
         self.toggleGroup_DBLocation.selected = Setting.database.databaseLocation()
-        self.toggleGroup_CloneFromDBLocation.selected = "localDBFile"
+        self.toggleGroup_CloneFromDBLocation.selected = "localDBServer"
         self.toggleGroup_CloneToDBLocation.disable(key: "localDBFile", onComplete: { nextKey in
             if nextKey == "localDBServer" || nextKey == "remoteDBServer" {
                 self.loadBackupArchives(postgres: true)
             }
         })
-        self.toggleGroup_CloneToDBLocation.selected = "localDBServer"
+        self.toggleGroup_CloneToDBLocation.selected = "remoteDBServer"
         self.toggleCreatePostgresDatabase(state: true)
         
         self.loadBackupArchives(postgres: true)

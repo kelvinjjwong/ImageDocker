@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import GRDB
+//import GRDB
 import PostgresModelFactory
 
 public final class ImageEvent : Codable {
@@ -49,9 +49,9 @@ public final class ImageEvent : Codable {
     }
 }
 
-extension ImageEvent: FetchableRecord, MutablePersistableRecord, TableRecord {
-
-}
+//extension ImageEvent: FetchableRecord, MutablePersistableRecord, TableRecord {
+//
+//}
 
 
 extension ImageEvent : PostgresRecord {

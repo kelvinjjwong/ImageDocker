@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import GRDB
+//import GRDB
 import PostgresModelFactory
 
 public final class RepositoryDevice: Codable {
@@ -23,9 +23,9 @@ public final class RepositoryDevice: Codable {
     }
 }
 
-extension RepositoryDevice: FetchableRecord, MutablePersistableRecord, TableRecord {
-
-}
+//extension RepositoryDevice: FetchableRecord, MutablePersistableRecord, TableRecord {
+//
+//}
 
 
 extension RepositoryDevice : PostgresRecord {

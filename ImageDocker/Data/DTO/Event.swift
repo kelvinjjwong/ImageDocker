@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import GRDB
+//import GRDB
 import LoggerFactory
 
 class Event {
@@ -88,49 +88,4 @@ class Events {
     let logger = LoggerFactory.get(category: "Events")
     var events:[Event] = [Event] ()
     
-    func read(_ datas:[Row]) -> [Event]{
-        self.logger.log(datas.count)
-        for data in datas {
-            let event = data["event"] as? String ?? ""
-            //self.logger.log(event)
-            let year = data["photoTakenYear"] as Int? ?? 0
-            //self.logger.log("year")
-            let month = data["photoTakenMonth"] as Int? ?? 0
-            //self.logger.log("month")
-            let day = data["photoTakenDay"] as Int? ?? 0
-            //self.logger.log("day")
-            let photoCount = data["photoCount"] as Int? ?? 0
-            //self.logger.log("count")
-            let place = data["place"] as? String ?? ""
-            
-            //self.logger.log("Got \(event)-\(year)-\(month)-\(day)-\(place)")
-            var eventEntry:Event
-            var monthEntry:Event
-            
-            if events.firstIndex(where: {$0.event == event}) == nil {
-                eventEntry = Event(event: event)
-                events.append(eventEntry)
-            }else{
-                eventEntry = events.first(where: {$0.event == event})!
-            }
-            eventEntry.photoCount += photoCount
-            
-            if eventEntry.children.firstIndex(where: {$0.year == year && $0.month == month}) == nil {
-                monthEntry = Event(month: month, ofYear: year, event:event, place: place)
-                
-                eventEntry.children.append(monthEntry)
-            }else {
-                monthEntry = eventEntry.children.first(where: {$0.year == year && $0.month == month})!
-            }
-            monthEntry.photoCount += photoCount
-            
-            let dayEntry:Event = Event(day: day, ofMonth: month, ofYear: year, event:event, place: place)
-            dayEntry.photoCount = photoCount
-            
-            monthEntry.children.append(dayEntry)
-            
-            
-        }
-        return events
-    }
 }

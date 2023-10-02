@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import GRDB
+//import GRDB
 
 class ImageFolder : NSObject {
     
@@ -42,8 +42,7 @@ class ImageFolder : NSObject {
          cropPath:String,
          countOfImages:Int = 0,
          manyChildren:Bool = false,
-         withContainer:Bool = true,
-         sharedDB:DatabaseWriter? = nil){
+         withContainer:Bool = true){
         
         self.init()
         

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import GRDB
+//import GRDB
 import PostgresModelFactory
 
 public final class ImageDeviceFile : Codable {
@@ -43,12 +43,12 @@ public final class ImageDeviceFile : Codable {
     }
 }
 
-extension ImageDeviceFile: FetchableRecord, MutablePersistableRecord, TableRecord {
-    public func didInsert(with rowID: Int64, for column: String?) {
-        // Update id after insertion
-        //id = rowID
-    }
-}
+//extension ImageDeviceFile: FetchableRecord, MutablePersistableRecord, TableRecord {
+//    public func didInsert(with rowID: Int64, for column: String?) {
+//        // Update id after insertion
+//        //id = rowID
+//    }
+//}
 
 
 extension ImageDeviceFile : PostgresRecord {

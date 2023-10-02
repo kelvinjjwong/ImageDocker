@@ -19,7 +19,7 @@ class FaceDao {
     static var `default`:FaceDao {
         let location = Setting.database.databaseLocation()
         if location == "local" {
-            return FaceDao(FaceDaoGRDB())
+            return FaceDao(FaceDaoPostgresCK())
         }else{
             return FaceDao(FaceDaoPostgresCK())
         }

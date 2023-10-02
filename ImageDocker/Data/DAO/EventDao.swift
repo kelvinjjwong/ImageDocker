@@ -19,7 +19,7 @@ class EventDao {
     static var `default`:EventDao {
         let location = Setting.database.databaseLocation()
         if location == "local" {
-            return EventDao(EventDaoGRDB())
+            return EventDao(EventDaoPostgresCK())
         }else{
             return EventDao(EventDaoPostgresCK())
         }

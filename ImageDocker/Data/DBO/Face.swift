@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import GRDB
+//import GRDB
 import PostgresModelFactory
 
 public final class Face : Codable {
@@ -30,9 +30,9 @@ public final class Face : Codable {
     
 }
 
-extension Face: FetchableRecord, MutablePersistableRecord, TableRecord {
-
-}
+//extension Face: FetchableRecord, MutablePersistableRecord, TableRecord {
+//
+//}
 
 extension Face : PostgresRecord {
     public func postgresTable() -> String {
