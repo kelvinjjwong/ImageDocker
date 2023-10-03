@@ -122,7 +122,7 @@ class CollectionViewItemsLoader : NSObject {
               filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil,
               indicator:Accumulator? = nil,
               pageSize:Int = 0, pageNumber:Int = 0) {
-        self.logger.log("[load(year,month,day,country,province,city)] year:\(year) month:\(month) day:\(day) country:\(country) province:\(province) city:\(city)")
+        self.logger.log("[load(year,month,day,country,province,city)] year:\(year) month:\(month) day:\(day) country:\(country) province:\(province) city:\(city) pageSize:\(pageSize) pageNumber:\(pageNumber)")
         loading = true
         
         lastRequest.loadSource = .moment
@@ -167,7 +167,7 @@ class CollectionViewItemsLoader : NSObject {
               filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil,
               indicator:Accumulator? = nil,
               pageSize:Int = 0, pageNumber:Int = 0) {
-        self.logger.log("[load(year,month,day,EVENT,country,province,city)] year:\(year) month:\(month) day:\(day) event:\(event) country:\(country) province:\(province) city:\(city)")
+        self.logger.log("[load(year,month,day,EVENT,country,province,city)] year:\(year) month:\(month) day:\(day) event:\(event) country:\(country) province:\(province) city:\(city) pageSize:\(pageSize) pageNumber:\(pageNumber)")
         loading = true
         
         lastRequest.loadSource = .event

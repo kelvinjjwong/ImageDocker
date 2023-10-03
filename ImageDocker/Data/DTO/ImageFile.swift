@@ -420,9 +420,6 @@ class ImageFile {
 
     }
     
-    deinit {
-    }
-    
     // MARK: - PROGRESS INDICATOR
     
     internal var indicator:Accumulator?

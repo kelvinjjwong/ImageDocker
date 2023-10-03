@@ -666,17 +666,17 @@ class ViewController: NSViewController {
     @IBAction func onPreviousPageCollectionClicked(_ sender: NSButton) {
         self.logger.log("clicked previous page")
         self.collectionPaginationController?.onPreviousPage()
-        self.loadCollection {
-            self.imagesLoader.previousPage()
-        }
+//        self.loadCollection {
+//            self.imagesLoader.previousPage()
+//        }
     }
     
     @IBAction func onNextPageCollectionClicked(_ sender: NSButton) {
         self.logger.log("clicked next page")
         self.collectionPaginationController?.onNextPage()
-        self.loadCollection {
-            self.imagesLoader.nextPage()
-        }
+//        self.loadCollection {
+//            self.imagesLoader.nextPage()
+//        }
     }
     
     @IBAction func onLastPageCollectionClicked(_ sender: NSButton) {

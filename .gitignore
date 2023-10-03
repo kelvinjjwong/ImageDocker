@@ -1,5 +1,7 @@
 Pods/
 Podfile.lock
+Release/
+Snapshots/
 IDEFindNavigatorScopes.plist
 ImageDocker.xcworkspace/xcuserdata/*.xcuserdatad/
 ImageDocker.xcworkspace/xcuserdata/*.xcuserdatad/UserInterfaceState.xcuserstate
