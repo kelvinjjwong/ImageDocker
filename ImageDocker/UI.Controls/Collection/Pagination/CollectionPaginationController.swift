@@ -226,6 +226,14 @@ class CollectionPaginationController {
         self.reload()
     }
     
+    func onReload() {
+        self.countImages()
+        if self.totalPages < self.currentPage {
+            self.currentPage = self.totalPages
+        }
+        self.reload()
+    }
+    
     func load() {
         self.countImages()
         self.reload()

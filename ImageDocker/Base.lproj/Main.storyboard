@@ -1530,7 +1530,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="Y2y-q8-QWa">
                                                                     <rect key="frame" x="0.0" y="0.0" width="230" height="155"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="42" rowSizeStyle="automatic" headerView="s4r-tD-ASl" viewBased="YES" id="MhU-ve-gho">
                                                                             <rect key="frame" x="0.0" y="0.0" width="269" height="127"/>
@@ -1848,14 +1848,14 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" wantsLayer="YES" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="1920" height="955"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1909" height="955"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="gVf-na-PZy">
-                                <rect key="frame" x="6" y="905" width="1909" height="50"/>
+                                <rect key="frame" x="6" y="905" width="1898" height="50"/>
                                 <subviews>
                                     <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="kCb-sM-PKJ">
-                                        <rect key="frame" x="1660" y="24" width="77" height="16"/>
+                                        <rect key="frame" x="1649" y="24" width="77" height="16"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="72" id="czr-e9-fZe"/>
                                         </constraints>
@@ -1883,7 +1883,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                         </connections>
                                     </button>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bwo-eW-DeK">
-                                        <rect key="frame" x="1747" y="21" width="100" height="19"/>
+                                        <rect key="frame" x="1736" y="21" width="100" height="19"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="100" id="iZi-bX-YOp"/>
                                         </constraints>
@@ -1947,7 +1947,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1L2-wU-5mb">
-                                        <rect key="frame" x="1849" y="24" width="28" height="16"/>
+                                        <rect key="frame" x="1838" y="24" width="28" height="16"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="28" id="Pf2-x0-glH"/>
                                         </constraints>
@@ -1987,7 +1987,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5UN-DP-f9q">
-                                        <rect key="frame" x="1581" y="18" width="70" height="23"/>
+                                        <rect key="frame" x="1570" y="18" width="70" height="23"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="68" id="YUo-op-VUG"/>
                                         </constraints>
@@ -2035,7 +2035,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                         </connections>
                                     </popUpButton>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qW9-CO-kS6">
-                                        <rect key="frame" x="1882" y="16" width="25" height="32"/>
+                                        <rect key="frame" x="1871" y="16" width="25" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="25" id="Tw6-yL-JrK"/>
                                             <constraint firstAttribute="height" constant="32" id="oym-zP-b3U"/>
@@ -2078,35 +2078,35 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                 </constraints>
                             </customView>
                             <splitView arrangesAllSubviews="NO" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lfc-6c-aMy">
-                                <rect key="frame" x="0.0" y="0.0" width="1920" height="905"/>
+                                <rect key="frame" x="0.0" y="0.0" width="1909" height="905"/>
                                 <subviews>
                                     <splitView fixedFrame="YES" arrangesAllSubviews="NO" dividerStyle="thin" id="X01-1a-Mbk">
-                                        <rect key="frame" x="0.0" y="0.0" width="1328" height="905"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="1320" height="905"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <subviews>
                                             <customView misplaced="YES" id="UN4-9k-Mje">
-                                                <rect key="frame" x="0.0" y="0.0" width="1328" height="686"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="1320" height="686"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <splitView arrangesAllSubviews="NO" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lZJ-XP-YJ8">
-                                                        <rect key="frame" x="0.0" y="5" width="1334" height="671"/>
+                                                        <rect key="frame" x="0.0" y="5" width="1323" height="671"/>
                                                         <subviews>
                                                             <customView fixedFrame="YES" id="CKk-CL-9gu">
                                                                 <rect key="frame" x="0.0" y="0.0" width="0.0" height="671"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </customView>
                                                             <customView id="m9M-hY-L99">
-                                                                <rect key="frame" x="1" y="0.0" width="1333" height="671"/>
+                                                                <rect key="frame" x="1" y="0.0" width="1322" height="671"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <subviews>
                                                                     <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KZW-eM-F1C">
-                                                                        <rect key="frame" x="0.0" y="35" width="1333" height="636"/>
+                                                                        <rect key="frame" x="0.0" y="35" width="1322" height="636"/>
                                                                         <clipView key="contentView" copiesOnScroll="NO" id="WeQ-Og-l1c">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="1333" height="636"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="1322" height="636"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <subviews>
-                                                                                <collectionView selectable="YES" id="9AE-Hz-zmu">
-                                                                                    <rect key="frame" x="0.0" y="0.0" width="1333" height="636"/>
+                                                                                <collectionView selectable="YES" allowsMultipleSelection="YES" id="9AE-Hz-zmu">
+                                                                                    <rect key="frame" x="0.0" y="0.0" width="1322" height="636"/>
                                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                                                                     <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="2" minimumLineSpacing="2" id="bQa-hH-76j">
                                                                                         <size key="itemSize" width="50" height="50"/>
@@ -2132,7 +2132,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                         </scroller>
                                                                     </scrollView>
                                                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="hPS-73-3KO">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="1333" height="34"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="1322" height="34"/>
                                                                         <subviews>
                                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VUz-d7-oP2">
                                                                                 <rect key="frame" x="5" y="0.0" width="25" height="32"/>
@@ -2149,7 +2149,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 </connections>
                                                                             </button>
                                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TnC-Zw-AaP">
-                                                                                <rect key="frame" x="1282" y="0.0" width="25" height="32"/>
+                                                                                <rect key="frame" x="1271" y="0.0" width="25" height="32"/>
                                                                                 <constraints>
                                                                                     <constraint firstAttribute="width" constant="25" id="1WU-1H-4dt"/>
                                                                                     <constraint firstAttribute="height" constant="32" id="edq-b7-r8L"/>
@@ -2163,7 +2163,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 </connections>
                                                                             </button>
                                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gcd-el-CBK">
-                                                                                <rect key="frame" x="1307" y="0.0" width="25" height="32"/>
+                                                                                <rect key="frame" x="1296" y="0.0" width="25" height="32"/>
                                                                                 <constraints>
                                                                                     <constraint firstAttribute="width" constant="25" id="PAD-WD-WQ6"/>
                                                                                     <constraint firstAttribute="height" constant="32" id="lZB-Vv-0pf"/>
@@ -2196,10 +2196,10 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                 </constraints>
                                                                             </progressIndicator>
                                                                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="OOm-kj-kbe">
-                                                                                <rect key="frame" x="400" y="0.0" width="882" height="32"/>
+                                                                                <rect key="frame" x="400" y="0.0" width="871" height="32"/>
                                                                                 <subviews>
                                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="goW-dm-Y0v">
-                                                                                        <rect key="frame" x="662" y="10" width="15" height="14"/>
+                                                                                        <rect key="frame" x="651" y="10" width="15" height="14"/>
                                                                                         <buttonCell key="cell" type="inline" title="|&lt;" bezelStyle="inline" alignment="center" imageScaling="proportionallyDown" inset="2" id="UDk-2p-aCP">
                                                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                                             <font key="font" metaFont="smallSystemBold"/>
@@ -2209,7 +2209,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                         </connections>
                                                                                     </button>
                                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IGx-sv-JYq">
-                                                                                        <rect key="frame" x="679" y="10" width="20" height="14"/>
+                                                                                        <rect key="frame" x="668" y="10" width="20" height="14"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" constant="20" id="ZBi-2B-wJR"/>
                                                                                         </constraints>
@@ -2222,7 +2222,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                         </connections>
                                                                                     </button>
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uR6-jc-2Z7">
-                                                                                        <rect key="frame" x="699" y="9" width="44" height="16"/>
+                                                                                        <rect key="frame" x="688" y="9" width="44" height="16"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" constant="40" id="QU5-Rs-auk"/>
                                                                                         </constraints>
@@ -2233,7 +2233,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                         </textFieldCell>
                                                                                     </textField>
                                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="meR-zL-rAv">
-                                                                                        <rect key="frame" x="743" y="10" width="20" height="14"/>
+                                                                                        <rect key="frame" x="732" y="10" width="20" height="14"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" constant="20" id="JsJ-9k-Ggr"/>
                                                                                         </constraints>
@@ -2246,7 +2246,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                         </connections>
                                                                                     </button>
                                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KwM-6o-UdW">
-                                                                                        <rect key="frame" x="765" y="10" width="15" height="14"/>
+                                                                                        <rect key="frame" x="754" y="10" width="15" height="14"/>
                                                                                         <buttonCell key="cell" type="inline" title="&gt;|" bezelStyle="inline" alignment="center" imageScaling="proportionallyDown" inset="2" id="YfI-WN-a7E">
                                                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                                             <font key="font" metaFont="smallSystemBold"/>
@@ -2256,7 +2256,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                         </connections>
                                                                                     </button>
                                                                                     <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="zeK-nY-3Hv">
-                                                                                        <rect key="frame" x="777" y="8" width="50" height="16"/>
+                                                                                        <rect key="frame" x="766" y="8" width="50" height="16"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" constant="45" id="ZG6-tV-TnV"/>
                                                                                         </constraints>
@@ -2273,7 +2273,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                         </popUpButtonCell>
                                                                                     </popUpButton>
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OcT-m6-Zwk">
-                                                                                        <rect key="frame" x="827" y="8" width="29" height="16"/>
+                                                                                        <rect key="frame" x="816" y="8" width="29" height="16"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" constant="25" id="29i-dj-iIk"/>
                                                                                         </constraints>
@@ -2284,7 +2284,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                         </textFieldCell>
                                                                                     </textField>
                                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DpT-Dg-Oeb">
-                                                                                        <rect key="frame" x="855" y="3" width="26" height="23"/>
+                                                                                        <rect key="frame" x="844" y="3" width="26" height="23"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="height" constant="20" id="Gmp-RZ-apS"/>
                                                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="SPU-3L-Anh"/>
@@ -2298,7 +2298,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                         </connections>
                                                                                     </button>
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KSX-ze-NbD">
-                                                                                        <rect key="frame" x="485" y="8" width="54" height="16"/>
+                                                                                        <rect key="frame" x="474" y="8" width="54" height="16"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" constant="50" id="fSu-gG-Zh3"/>
                                                                                         </constraints>
@@ -2309,7 +2309,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                         </textFieldCell>
                                                                                     </textField>
                                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OLG-fC-WRE">
-                                                                                        <rect key="frame" x="460" y="8" width="25" height="16"/>
+                                                                                        <rect key="frame" x="449" y="8" width="25" height="16"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" constant="25" id="SZd-gC-4jh"/>
                                                                                         </constraints>
@@ -2319,7 +2319,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                         </buttonCell>
                                                                                     </button>
                                                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2F4-1d-k3W">
-                                                                                        <rect key="frame" x="539" y="8" width="25" height="15"/>
+                                                                                        <rect key="frame" x="528" y="8" width="25" height="15"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" constant="25" id="3c7-5c-vFx"/>
                                                                                         </constraints>
@@ -2329,7 +2329,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                         </buttonCell>
                                                                                     </button>
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8qW-nP-5yA">
-                                                                                        <rect key="frame" x="564" y="8" width="39" height="16"/>
+                                                                                        <rect key="frame" x="553" y="8" width="39" height="16"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" constant="35" id="dvP-Sq-hdD"/>
                                                                                         </constraints>
@@ -2412,7 +2412,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                 </constraints>
                                             </customView>
                                             <customView fixedFrame="YES" id="FmM-ai-OgV">
-                                                <rect key="frame" x="0.0" y="687" width="1328" height="218"/>
+                                                <rect key="frame" x="0.0" y="687" width="1320" height="218"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </customView>
                                         </subviews>
@@ -2422,7 +2422,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                         </holdingPriorities>
                                     </splitView>
                                     <splitView misplaced="YES" arrangesAllSubviews="NO" dividerStyle="thin" id="giR-in-kR4" customClass="DarkSplitView" customModule="ImageDocker" customModuleProvider="target">
-                                        <rect key="frame" x="1329" y="0.0" width="591" height="905"/>
+                                        <rect key="frame" x="1321" y="0.0" width="588" height="905"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="580" id="EzJ-zO-2Bj"/>

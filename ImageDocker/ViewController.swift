@@ -685,7 +685,8 @@ class ViewController: NSViewController {
     
     @IBAction func onRefreshCollectionButtonClicked(_ sender: NSButton) {
         self.logger.log("reload collection view button clicked")
-        self.refreshCollection(sender)
+        self.collectionPaginationController?.onReload()
+        //self.refreshCollection(sender)
     }
     
     var currentPageOfCollection = 0
@@ -776,12 +777,18 @@ class ViewController: NSViewController {
             bottomPanel.isHidden = true
             self.btnCollapseBottom.image = Icons.expandBottomPanel
         }
+        DispatchQueue.main.async {
+            self.selectionViewController.view.frame = self.bottomView.bounds
+        }
     }
     
     func toggleOffRightPanel() {
         let rightPanel = self.verticalSplitView.arrangedSubviews[1]
         rightPanel.isHidden = true
         self.btnCollapseRight.image = Icons.expandRightPanel
+        DispatchQueue.main.async {
+            self.selectionViewController.view.frame = self.bottomView.bounds
+        }
     }
     
     @IBAction func onToggleRightPanel2(_ sender: NSButton) {
@@ -794,6 +801,9 @@ class ViewController: NSViewController {
             rightPanel.isHidden = true
             self.btnCollapseRight.image = Icons.expandRightPanel
             self.btnToggleRightPanel2.image = Icons.expandRightPanel
+        }
+        DispatchQueue.main.async {
+            self.selectionViewController.view.frame = self.bottomView.bounds
         }
     }
     
@@ -808,6 +818,9 @@ class ViewController: NSViewController {
             rightPanel.isHidden = true
             self.btnCollapseRight.image = Icons.expandRightPanel
             self.btnToggleRightPanel2.image = Icons.expandRightPanel
+        }
+        DispatchQueue.main.async {
+            self.selectionViewController.view.frame = self.bottomView.bounds
         }
     }
     
