@@ -125,6 +125,8 @@ protocol ImageRecordDaoInterface {
     func storeImageDescription(path:String, shortDescription:String?, longDescription:String?) -> ExecuteState
     
     func updateImageRotation(path:String, rotation:Int) -> ExecuteState
+    
+    func storeImageFamily(imageId:String, familyId:String, ownerId:String, familyName: String, owner: String) -> ExecuteState
 }
 
 protocol ImageSearchDaoInterface {

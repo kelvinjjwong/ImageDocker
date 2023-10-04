@@ -298,6 +298,10 @@ public final class ImageRecordDao {
         return self.impl.storeImageDescription(path: path, shortDescription: shortDescription, longDescription: longDescription)
     }
     
+    func storeImageFamily(imageId:String, familyId:String, ownerId:String, familyName: String, owner: String) -> ExecuteState {
+        return self.impl.storeImageFamily(imageId: imageId, familyId: familyId, ownerId: ownerId, familyName: familyName, owner: owner)
+    }
+    
     /// - caller:
     ///   - ImagePreviewController.onRotateClickwiseClicked()
     ///   - ImagePreviewController.onRotateCounterClockerwiseClicked()

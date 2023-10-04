@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -306,6 +306,7 @@
 		8EF4CE6421E56DC100C53AFF /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF4CE6221E56DC100C53AFF /* NotificationViewController.swift */; };
 		8EF4CE6521E56DC100C53AFF /* NotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EF4CE6321E56DC100C53AFF /* NotificationViewController.xib */; };
 		8EF500CD209A804100C9805F /* ImageFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF500CC209A804100C9805F /* ImageFolder.swift */; };
+		8EF64AE92ACE2FA10042B8CC /* ImageFamily.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF64AE82ACE2FA10042B8CC /* ImageFamily.swift */; };
 		8EF8C558265D9B770060D2E0 /* ImageMetaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF8C557265D9B770060D2E0 /* ImageMetaViewController.swift */; };
 		8EF8C55A265DBD6F0060D2E0 /* ImagePreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF8C559265DBD6F0060D2E0 /* ImagePreviewController.swift */; };
 		8EF8C55C265DBD820060D2E0 /* ImageLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF8C55B265DBD820060D2E0 /* ImageLocationViewController.swift */; };
@@ -673,6 +674,7 @@
 		8EF4CE6221E56DC100C53AFF /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		8EF4CE6321E56DC100C53AFF /* NotificationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotificationViewController.xib; sourceTree = "<group>"; };
 		8EF500CC209A804100C9805F /* ImageFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFolder.swift; sourceTree = "<group>"; };
+		8EF64AE82ACE2FA10042B8CC /* ImageFamily.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFamily.swift; sourceTree = "<group>"; };
 		8EF8C557265D9B770060D2E0 /* ImageMetaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageMetaViewController.swift; sourceTree = "<group>"; };
 		8EF8C559265DBD6F0060D2E0 /* ImagePreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewController.swift; sourceTree = "<group>"; };
 		8EF8C55B265DBD820060D2E0 /* ImageLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLocationViewController.swift; sourceTree = "<group>"; };
@@ -1301,6 +1303,7 @@
 				5C51173C29698E7300F64CF6 /* ImageRepository.swift */,
 				8E4DECE723B38A7B00F5538C /* ImageContainer.swift */,
 				8E4DECE523B38A7A00F5538C /* ImageEvent.swift */,
+				8EF64AE82ACE2FA10042B8CC /* ImageFamily.swift */,
 				8E4DECE623B38A7B00F5538C /* ImagePlace.swift */,
 				8EFA7CFA211D713700419777 /* ImageDevice.swift */,
 				8EFA7CFC211D72B300419777 /* ImageDeviceFile.swift */,
@@ -1999,6 +2002,7 @@
 				8EF125AC2216ECC500C423CA /* ContainerViewController.swift in Sources */,
 				8E85B7D420BA2AD7005A9845 /* DarkSplitView.swift in Sources */,
 				8EF500CD209A804100C9805F /* ImageFolder.swift in Sources */,
+				8EF64AE92ACE2FA10042B8CC /* ImageFamily.swift in Sources */,
 				8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */,
 				8EB271912340EED2003BF3AF /* ViewController+TreeArea+Filter.swift in Sources */,
 				8EB271972340F1FF003BF3AF /* ViewController+TaskProgress.swift in Sources */,

@@ -691,6 +691,17 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v58") { db in
+            try db.create(table: "ImageFamily", body: { t in
+                t.column("id", .serial).primaryKey().unique().notNull()
+                t.column("imageId", .text).defaults(to: "").indexed()
+                t.column("familyId", .text).defaults(to: "").indexed()
+                t.column("ownerId", .text).defaults(to: "").indexed()
+                t.column("familyName", .text).defaults(to: "")
+                t.column("owner", .text).defaults(to: "")
+            })
+        }
+        
         do {
             try migrator.migrate(cleanVersions: dropBeforeCreate)
         }catch{

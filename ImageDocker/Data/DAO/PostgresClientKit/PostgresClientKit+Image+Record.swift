@@ -412,6 +412,36 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         return .OK
     }
     
+    func storeImageFamily(imageId:String, familyId:String, ownerId:String, familyName: String, owner: String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        
+        if let record = ImageFamily.fetchOne(db, parameters: ["imageId": imageId, "familyId:": familyId]) {
+            
+            do {
+                try db.execute(sql: """
+            UPDATE "ImageFamily" SET "imageId" = $1, "familyId" = $2, "ownerId" = $3, "familyName" = $4, "owner" = $5 WHERE "id" = $6
+            """, parameterValues: [imageId, familyId, ownerId, familyName, owner, record.id])
+            }catch{
+                self.logger.log(.error, "[storeImageFamily]", error)
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+                return .ERROR
+            }
+            
+        }else{
+            
+            do {
+                try db.execute(sql: """
+            INSERT "ImageFamily" ("imageId", "familyId", "ownerId", "familyName", "owner") VALUES ($1, $2, $3, $4, $5)
+            """, parameterValues: [imageId, familyId, ownerId, familyName, owner])
+            }catch{
+                self.logger.log(.error, "[storeImageFamily]", error)
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+                return .ERROR
+            }
+        }
+        return .OK
+    }
+    
     // MARK: UPDATE ROTATION
     
     func updateImageRotation(path:String, rotation:Int) -> ExecuteState{

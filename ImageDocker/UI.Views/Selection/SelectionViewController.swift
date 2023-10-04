@@ -99,6 +99,7 @@ class SelectionViewController : NSViewController {
         self.btnDuplicates.image = Icons.duplicates
         self.btnDuplicates.item(at: 0)?.image = Icons.duplicates
         self.selectionCheckAllBox.title = Words.selectAll.word()
+        self.btnPeople.title = Words.peopleManage.word()
     }
     
     func openDatePicker(with referenceDate:String? = nil) {

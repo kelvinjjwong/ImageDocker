@@ -12,6 +12,7 @@ class CoreMember {
     var id:String = ""
     var name:String = ""
     var nickname:String = ""
+    var isChecked = false
     
     var groups:[PeopleGroup] = []
 }
@@ -21,6 +22,7 @@ class PeopleGroup {
     var name:String = ""
     var parent:CoreMember? = nil
     var members:[PeopleGroupMember] = []
+    var isChecked = false
     
     
     fileprivate static let default_group_category = "亲友"
@@ -33,6 +35,7 @@ class PeopleGroupMember {
     var groupId:String = ""
     var groupName:String = ""
     var parent:PeopleGroup? = nil
+    var isChecked = false
 }
 
 class PeopleManageViewController: NSViewController {
@@ -251,16 +254,23 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
     var isEditing = false
     var table:NSTableView? = nil
     var nodeData:Any? = nil
+    var isChecked = false
     
     @IBAction func onCheckClicked(_ sender: NSButton) {
         if let item = nodeData as? CoreMember {
             print("checkbox: core member: \(item.nickname) , state: \(sender.state == .on)")
+            self.isChecked = (sender.state == .on)
+            item.isChecked = (sender.state == .on)
         }
         if let item = nodeData as? PeopleGroup {
             print("checkbox: people group: \(item.name) , state: \(sender.state == .on)")
+            self.isChecked = (sender.state == .on)
+            item.isChecked = (sender.state == .on)
         }
         if let item = nodeData as? PeopleGroupMember {
             print("checkbox: people: \(item.id) , state: \(sender.state == .on)")
+            self.isChecked = (sender.state == .on)
+            item.isChecked = (sender.state == .on)
         }
     }
     

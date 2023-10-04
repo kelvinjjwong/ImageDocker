@@ -16,7 +16,7 @@ extension SelectionViewController {
         var myPopover = self.peopleSelectionPopover
         if(myPopover == nil){
             
-            let frame = CGRect(origin: .zero, size: CGSize(width: 600, height: 350))
+            let frame = CGRect(origin: .zero, size: CGSize(width: 300, height: 350))
             self.peopleSelectionViewController = PeopleSelectionViewController()
             self.peopleSelectionViewController.view.frame = frame
             
