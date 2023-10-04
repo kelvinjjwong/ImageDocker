@@ -114,6 +114,7 @@
 		8E4E5B6922195BFF00FE4B68 /* FaceRecognition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B6822195BFF00FE4B68 /* FaceRecognition.swift */; };
 		8E4E5B78221985A400FE4B68 /* ImageFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B77221985A400FE4B68 /* ImageFace.swift */; };
 		8E4E5B7F221F3D1800FE4B68 /* PeopleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B7E221F3D1800FE4B68 /* PeopleViewController.swift */; };
+		8E5B767F2ACCFD4900AD8D03 /* Words+Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5B767E2ACCFD4900AD8D03 /* Words+Export.swift */; };
 		8E5D257C25A200A200D531A7 /* NSImage+Rotate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5D257B25A200A200D531A7 /* NSImage+Rotate.swift */; };
 		8E5D257E25A200FB00D531A7 /* URL+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5D257D25A200FB00D531A7 /* URL+Image.swift */; };
 		8E5D258025A2013900D531A7 /* TokenField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5D257F25A2013900D531A7 /* TokenField.swift */; };
@@ -478,6 +479,7 @@
 		8E4E5B6822195BFF00FE4B68 /* FaceRecognition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceRecognition.swift; sourceTree = "<group>"; };
 		8E4E5B77221985A400FE4B68 /* ImageFace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFace.swift; sourceTree = "<group>"; };
 		8E4E5B7E221F3D1800FE4B68 /* PeopleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleViewController.swift; sourceTree = "<group>"; };
+		8E5B767E2ACCFD4900AD8D03 /* Words+Export.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Export.swift"; sourceTree = "<group>"; };
 		8E5D257B25A200A200D531A7 /* NSImage+Rotate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+Rotate.swift"; sourceTree = "<group>"; };
 		8E5D257D25A200FB00D531A7 /* URL+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Image.swift"; sourceTree = "<group>"; };
 		8E5D257F25A2013900D531A7 /* TokenField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenField.swift; sourceTree = "<group>"; };
@@ -961,6 +963,7 @@
 			children = (
 				8E9CF30A26489D5500558423 /* Localize.swift */,
 				8E9CF30C26489EAA00558423 /* Words.swift */,
+				8E5B767E2ACCFD4900AD8D03 /* Words+Export.swift */,
 				8E3614FC2AC5933B001DF482 /* Words+People.swift */,
 				8E481486277DAFF10097493E /* Words+Splash.swift */,
 				8E481480277DAE940097493E /* Words+MainMenu.swift */,
@@ -2033,6 +2036,7 @@
 				8EB271992340F22F003BF3AF /* ViewController+Search.swift in Sources */,
 				8E15E73623AC74DC0094240A /* StackHeaderViewController.swift in Sources */,
 				8E4DECE323B3881A00F5538C /* ImageDao.swift in Sources */,
+				8E5B767F2ACCFD4900AD8D03 /* Words+Export.swift in Sources */,
 				8E7B98E1214882080019ED87 /* Alert.swift in Sources */,
 				5C00784C289FB72B00919826 /* Words+EventManager.swift in Sources */,
 				8EA1A05F208DFBB8000C3B97 /* MetaTableViewController.swift in Sources */,

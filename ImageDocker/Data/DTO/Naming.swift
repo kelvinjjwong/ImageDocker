@@ -625,7 +625,7 @@ struct NamingForExporting {
     let targetFileSystemHandler = ComputerFileManager()
     
     init() {
-        self.dateFormatter.dateFormat = "MM月dd日HH点mm分ss"
+        self.dateFormatter.dateFormat = "yyyy年MM月dd日HH点mm分ss"
     }
     
     func getOriginalDescription(image photo:Image) -> String{
@@ -811,7 +811,7 @@ struct NamingForExporting {
             if let _ = image.photoTakenDate {
                 let year = "\(image.photoTakenYear ?? 0)"
                 let month = image.photoTakenMonth! < 10 ? "0\(image.photoTakenMonth ?? 0)" : "\(image.photoTakenMonth ?? 0)"
-                datepart = "\(year)年/\(month)月"
+                datepart = "\(year)年/\(year)年\(month)月"
                 if let event = image.event {
                     eventpart = " (\(event))"
                 }
