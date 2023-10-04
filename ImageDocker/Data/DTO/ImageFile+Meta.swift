@@ -22,8 +22,13 @@ extension ImageFile {
     func transformDomainToMetaInfo() {
         if let photoFile = self.imageData {
 //            self.logger.log("meta -> repo -> \(photoFile.repositoryPath)")
-            if let repo = RepositoryDao.default.getRepository(repositoryPath: photoFile.repositoryPath) {
+            metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "", title: "ImageId", value: photoFile.id))
+            metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "", title: "OriginMD5", value: photoFile.originalMD5))
+            metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "", title: "ExportMD5", value: photoFile.exportedMD5))
+            metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "", title: "id", value: "\(photoFile.repositoryId)"))
+            if let repo = RepositoryDao.default.getRepository(id: photoFile.repositoryId) {
 //                self.logger.log("got repo \(repo.name)")
+                metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "", title: "Owner", value: repo.owner))
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "", title: "Name", value: repo.name))
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "", title: "SubPath", value: photoFile.subPath))
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "Device", subCategory: "", title: "Id", value: repo.deviceId))
@@ -36,9 +41,8 @@ extension ImageFile {
                     }
                 }
             }
+            metaInfoHolder.setMetaInfo(MetaInfo(category: "Repository", subCategory: "File", title: "Filename", value: url.lastPathComponent))
             if photoFile.imageWidth != 0 && photoFile.imageHeight != 0 {
-                metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Filename", value: url.lastPathComponent))
-                metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "File", title: "Full path", value: url.path.replacingOccurrences(of: url.lastPathComponent, with: "")))
                 metaInfoHolder.setMetaInfo(MetaInfo(category: "System", subCategory: "", title: "Size", value: "\(photoFile.imageWidth ?? 0) x \(photoFile.imageHeight ?? 0)"))
             }
             
@@ -52,7 +56,7 @@ extension ImageFile {
             metaInfoHolder.setMetaInfo(MetaInfo(category: "Software", subCategory: "", title: "Name", value: photoFile.softwareName))
             
             if let imgSrc = photoFile.imageSource {
-                metaInfoHolder.setMetaInfo(MetaInfo(category: "Software", subCategory: "", title: "Source", value: imgSrc))
+                metaInfoHolder.setMetaInfo(MetaInfo(category: "Device", subCategory: "", title: "Source", value: imgSrc))
             }
             if photoFile.dateTimeFromFilename != nil {
                 self.metaInfoHolder.setMetaInfo(MetaInfo(category: "DateTime", title: "From Filename", value: photoFile.dateTimeFromFilename))

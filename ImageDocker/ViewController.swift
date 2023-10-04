@@ -193,9 +193,6 @@ class ViewController: NSViewController {
     var collectionFilterPopover:NSPopover?
     var collectionFilterViewController:CollectionFilterViewController!
     
-//    @IBOutlet weak var chbSelectAll: NSButton!
-//    @IBOutlet weak var chbShowHidden: NSButton!
-    
     // MARK: - Panel Collapse
     
     @IBOutlet weak var btnCollapseLeft: NSButton!
@@ -270,8 +267,6 @@ class ViewController: NSViewController {
     
     // MARK: Concurrency Indicators
     
-    //var scaningRepositories:Bool = false
-    //var creatingRepository:Bool = false
     var suppressedExport:Bool = false
     var suppressedScan:Bool = false
     
@@ -409,11 +404,6 @@ class ViewController: NSViewController {
         print(dockHeight)
         print(NSStatusBar.system.thickness)
         
-//        if let faUrl = URL.fontURL(for: "Font Awesome 5 Free-Solid-900") {
-//            self.logger.log(.debug, "fa url: \(faUrl)")
-//        }else{
-//            self.logger.log(.error, "Unable to load fontawesome")
-//        }
         let (volumes_connected, volumes_missing) = self.checkMissingVolumes()
         
         
@@ -422,63 +412,34 @@ class ViewController: NSViewController {
         }
         
         self.hideNotification()
-//        self.logger.log("Loading view - preview zone")
         self.configurePreview()
-//        self.logger.log("Loading view - selection view")
         self.configureSelectionView()
         
         self.setupUIDisplays()
         
         PreferencesController.healthCheck()
         
-//        self.setupFacesMenu()
         self.setupScanMenu()
         self.setupExportMenu()
         self.setupPreviewMenu()
-        
-//        self.logger.log("Loading view - configure tree")
-        configureTree()
-//        self.logger.log("Loading view - configure collection view")
-        configureCollectionView()
-//        self.logger.log("Loading view - configure editors")
+        self.configureTree()
+        self.configureCollectionView()
         
         self.configureDarkMode()
-//        whereIsDock()
         self.resize()
         
         self.toggleOffBottomPanel()
         self.toggleOffRightPanel()
         
-//        self.logger.log("Loading view - update library tree")
         self.splashController.message(Words.splash_loadingLibraries.word(), progress: 4)
         
-//        updateLibraryTree()
-//        self.logger.log("Loading view - update library tree: DONE")
-        
-//        self.deviceCopyWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "DeviceCopyWindowController")) as? NSWindowController
-        
-//        self.theaterWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "TheaterWindowController")) as? NSWindowController
-        
-//        self.repositoryWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "EditRepositoryWindowController")) as? NSWindowController
-        
-//        self.containerWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "ContainerViewerWindowController")) as? NSWindowController
-        
-//        self.peopleWindowController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "PeopleWindowController")) as? NSWindowController
-        
-        
-        
-        
         self.suppressedScan = true
-//        self.btnScanState.image = NSImage(named: NSImage.Name.statusNone)
-//        self.btnScanState.isHidden = true
         
         ExportManager.default.suppressed = true
         self.suppressedExport = true
         self.lastExportPhotos = Date()
         
         self.startSchedules()
-//        self.logger.log(.debug, "")
-//        self.logger.log("Loading view: DONE")
         
         
         if volumes_connected.count > 0 {
@@ -534,33 +495,12 @@ class ViewController: NSViewController {
         }, onCompleted: {
             self.didStartWork()
         })
-        //splashController.view.frame = self.view.frame
         self.view.addSubview(splashController.view)
         self.addChild(splashController)
         splashController.view.frame = self.view.bounds
         
-        
-//        whereIsDock()
-        
         self.btnImageOptions.isEnabled = false
-        
-//        self.logger.log("Loading view")
-        
-        //self.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        
-        //progressIndicator.isDisplayedWhenStopped = false
         collectionProgressIndicator.isDisplayedWhenStopped = false
-        
-//        self.logger.log("Loading view - configure dark mode")
-        
-        self.imagesLoader.hiddenCountHandler = { hiddenCount in
-//            DispatchQueue.main.async {
-//                self.chbShowHidden.title = "\(Words.hidden.word()) (\(hiddenCount))"
-////                self.logger.log("hidden: \(hiddenCount)")
-//            }
-        }
-        
-//        self.chbShowHidden.state = NSButton.StateValue.off
         
         NotificationCenter.default.addObserver(self, selector: #selector(processDatabaseError(notification:)), name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: nil)
     }
@@ -588,8 +528,8 @@ class ViewController: NSViewController {
     }
     
     func configureDarkMode() {
-        view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        view.layer?.backgroundColor = Colors.DeepDarkGray.cgColor
+        self.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.view.layer?.backgroundColor = Colors.DeepDarkGray.cgColor
         self.btnCopyLocation.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnManagePlaces.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnReplaceLocation.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -602,9 +542,6 @@ class ViewController: NSViewController {
         self.addressSearcher.backgroundColor = Colors.DarkGray
         self.addressSearcher.drawsBackground = true
         self.btnChoiceMapService.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        
-//        self.chbShowHidden.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        
         
         self.collectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         
@@ -621,8 +558,6 @@ class ViewController: NSViewController {
         self.btnRefreshCollectionView.title = Words.reload.word()
         
         self.btnPeople.title = Words.peopleManage.word()
-//        self.chbShowHidden.title = Words.hidden.word()
-//        self.chbSelectAll.title = Words.selectAll.word()
     }
     
     internal var startupAggregateFlag: Int = 0 {
@@ -665,8 +600,6 @@ class ViewController: NSViewController {
                                                                                  btnLoadPage: self.btnRefreshCollectionView
             )
         }
-        
-        // FIXME: self.collectionPaginationController.initview()
     }
     
     var collectionPaginationController:CollectionPaginationController?
@@ -680,17 +613,11 @@ class ViewController: NSViewController {
     @IBAction func onPreviousPageCollectionClicked(_ sender: NSButton) {
         self.logger.log("clicked previous page")
         self.collectionPaginationController?.onPreviousPage()
-//        self.loadCollection {
-//            self.imagesLoader.previousPage()
-//        }
     }
     
     @IBAction func onNextPageCollectionClicked(_ sender: NSButton) {
         self.logger.log("clicked next page")
         self.collectionPaginationController?.onNextPage()
-//        self.loadCollection {
-//            self.imagesLoader.nextPage()
-//        }
     }
     
     @IBAction func onLastPageCollectionClicked(_ sender: NSButton) {
@@ -700,7 +627,6 @@ class ViewController: NSViewController {
     @IBAction func onRefreshCollectionButtonClicked(_ sender: NSButton) {
         self.logger.log("reload collection view button clicked")
         self.collectionPaginationController?.onReload()
-        //self.refreshCollection(sender)
     }
     
     var currentPageOfCollection = 0
@@ -713,29 +639,11 @@ class ViewController: NSViewController {
         self.selectCombineMenuInCollectionArea(i)
     }
     
-    
-    @IBAction func onCheckSelectAllClicked(_ sender: NSButton) {
-//        if self.chbSelectAll.state == .on {
-//            self.imagesLoader.checkAll()
-//        }else{
-//            self.imagesLoader.uncheckAll()
-//        }
-    }
-    
-    
-    @IBAction func onCheckShowHiddenClicked(_ sender: NSButton) {
-//        self.switchShowHideState()
-    }
-    
     // MARK: - FACE
     
     var runningFaceTask = false
     
     var stopFacesTask = false
-    
-    @IBAction func onStopClicked(_ sender: NSButton) {
-        self.stopFacesTask = true
-    }
     
     // MARK: - SEARCH
     
