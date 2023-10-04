@@ -285,7 +285,7 @@ final class PreferencesController: NSViewController {
     
     func savePerformanceSection(_ defaults:UserDefaults) {
         Setting.performance.savePeakMemory(Int(self.memorySlider.intValue))
-        Setting.performance.saveAmountForPagination(self.lstAmountForPagination.stringValue)
+        Setting.performance.saveAmountForPagination(self.lstAmountForPagination.titleOfSelectedItem ?? Words.preference_tab_performance_pagination_unlimited.word())
     }
     
     func savePreferences() {
@@ -387,6 +387,7 @@ final class PreferencesController: NSViewController {
         self.setupMemorySlider()
         let paginationAmount = Setting.performance.amountForPagination()
 //        self.logger.log("GOT AMOUNT FOR PAGINATION \(paginationAmount)")
+        self.lstAmountForPagination.item(at: 0)?.title = Words.preference_tab_performance_pagination_unlimited.word()
         if paginationAmount == 0 {
             self.lstAmountForPagination.selectItem(withTitle: Words.preference_tab_performance_pagination_unlimited.word())
         }else{

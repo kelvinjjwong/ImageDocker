@@ -311,7 +311,7 @@ struct PerformanceSetting {
     
     func saveAmountForPagination(_ value:String) {
         var paginationAmount = 0
-        if value != "Unlimited" {
+        if value != Words.preference_tab_performance_pagination_unlimited.word() {
             paginationAmount = Int(value) ?? 0
         }
         let defaults = UserDefaults.standard

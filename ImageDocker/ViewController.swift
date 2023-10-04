@@ -401,6 +401,13 @@ class ViewController: NSViewController {
     
     internal func initView() {
 //        whereIsDock()
+        print(self.view.window?.screen?.frame)
+        print(self.view.window?.screen?.visibleFrame)
+        let dockLeft = self.view.window?.screen?.visibleFrame.origin.x ?? 0 - (self.view.window?.screen?.frame.origin.x ?? 0)
+        let dockHeight = self.view.window?.screen?.visibleFrame.origin.y ?? 0 - (self.view.window?.screen?.frame.origin.y ?? 0)
+        let dockRight = self.view.window?.screen?.frame.size.width ?? 0 - (self.view.window?.screen?.visibleFrame.size.width ?? 0)
+        print(dockHeight)
+        print(NSStatusBar.system.thickness)
         
 //        if let faUrl = URL.fontURL(for: "Font Awesome 5 Free-Solid-900") {
 //            self.logger.log(.debug, "fa url: \(faUrl)")
