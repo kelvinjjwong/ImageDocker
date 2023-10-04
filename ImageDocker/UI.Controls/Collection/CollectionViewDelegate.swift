@@ -113,6 +113,9 @@ extension ViewController : NSCollectionViewDataSource {
         let numberOfItemsInSection = imagesLoader.numberOfItems(in: indexPath.section)
         view.imageCount.stringValue = Words.n_images.fill(arguments: numberOfItemsInSection)
         
+        view.wantsLayer = true
+        view.layer?.backgroundColor = Colors.MidGray.cgColor
+        
         return view
     }
   

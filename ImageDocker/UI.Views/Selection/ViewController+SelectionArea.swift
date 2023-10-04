@@ -17,6 +17,8 @@ extension ViewController {
         self.bottomView.addSubview(self.selectionViewController.view)
         self.selectionViewController.initView()
         
+        self.centralHorizontalSplitView.setPosition((self.view.window?.screen?.visibleFrame.height ?? 0) - 305, ofDividerAt: 0)
+        
         self.selectionViewController.isSmallScreen = {
             return self.smallScreen
         }

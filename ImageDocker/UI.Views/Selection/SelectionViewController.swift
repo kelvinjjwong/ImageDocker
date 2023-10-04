@@ -21,6 +21,7 @@ class SelectionViewController : NSViewController {
     @IBOutlet weak var comboEventList: NSComboBox!
     @IBOutlet weak var btnAssignEvent: NSButton!
     @IBOutlet weak var btnManageEvents: NSButton!
+    @IBOutlet weak var btnPeople: NSButton!
     @IBOutlet weak var btnDatePicker: NSButton!
     @IBOutlet weak var btnNotes: NSButton!
     @IBOutlet weak var btnDuplicates: NSPopUpButton!
@@ -53,6 +54,9 @@ class SelectionViewController : NSViewController {
     
     var copyToDevicePopover:NSPopover? = nil
     var deviceFolderViewController:DeviceFolderViewController!
+    
+    var peopleSelectionPopover:NSPopover? = nil
+    var peopleSelectionViewController:PeopleSelectionViewController!
     
     
     required init?(coder: NSCoder) {
@@ -116,6 +120,11 @@ class SelectionViewController : NSViewController {
         let cellRect = sender.bounds
         self.eventPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
     }
+    
+    @IBAction func onButtonPeopleClicked(_ sender: NSButton) {
+        self.openPeopleSelection(sender)
+    }
+    
     
     @IBAction func onButtonDatePickerClicked(_ sender: NSButton) {
         self.openDatePicker(sender)
@@ -209,6 +218,7 @@ class SelectionViewController : NSViewController {
         self.selectionCheckAllBox.isHidden = true
         self.btnRemoveSelection.isHidden = true
         self.btnRemoveAllSelection.isHidden = true
+        self.btnPeople.isHidden = true
     }
     
     func showSelectionToolbar() {
@@ -219,6 +229,7 @@ class SelectionViewController : NSViewController {
         self.selectionCheckAllBox.isHidden = false
         self.btnRemoveSelection.isHidden = false
         self.btnRemoveAllSelection.isHidden = false
+        self.btnPeople.isHidden = false
         
     }
     

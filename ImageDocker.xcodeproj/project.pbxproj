@@ -115,6 +115,9 @@
 		8E4E5B78221985A400FE4B68 /* ImageFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B77221985A400FE4B68 /* ImageFace.swift */; };
 		8E4E5B7F221F3D1800FE4B68 /* PeopleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4E5B7E221F3D1800FE4B68 /* PeopleViewController.swift */; };
 		8E5B767F2ACCFD4900AD8D03 /* Words+Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5B767E2ACCFD4900AD8D03 /* Words+Export.swift */; };
+		8E5B76822ACD45CB00AD8D03 /* PeopleSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5B76802ACD45CB00AD8D03 /* PeopleSelectionViewController.swift */; };
+		8E5B76832ACD45CB00AD8D03 /* PeopleSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E5B76812ACD45CB00AD8D03 /* PeopleSelectionViewController.xib */; };
+		8E5B76852ACD499400AD8D03 /* ViewController+SelectionArea+PeopleSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5B76842ACD499400AD8D03 /* ViewController+SelectionArea+PeopleSelection.swift */; };
 		8E5D257C25A200A200D531A7 /* NSImage+Rotate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5D257B25A200A200D531A7 /* NSImage+Rotate.swift */; };
 		8E5D257E25A200FB00D531A7 /* URL+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5D257D25A200FB00D531A7 /* URL+Image.swift */; };
 		8E5D258025A2013900D531A7 /* TokenField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5D257F25A2013900D531A7 /* TokenField.swift */; };
@@ -480,6 +483,9 @@
 		8E4E5B77221985A400FE4B68 /* ImageFace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFace.swift; sourceTree = "<group>"; };
 		8E4E5B7E221F3D1800FE4B68 /* PeopleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleViewController.swift; sourceTree = "<group>"; };
 		8E5B767E2ACCFD4900AD8D03 /* Words+Export.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Export.swift"; sourceTree = "<group>"; };
+		8E5B76802ACD45CB00AD8D03 /* PeopleSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleSelectionViewController.swift; sourceTree = "<group>"; };
+		8E5B76812ACD45CB00AD8D03 /* PeopleSelectionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PeopleSelectionViewController.xib; sourceTree = "<group>"; };
+		8E5B76842ACD499400AD8D03 /* ViewController+SelectionArea+PeopleSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+SelectionArea+PeopleSelection.swift"; sourceTree = "<group>"; };
 		8E5D257B25A200A200D531A7 /* NSImage+Rotate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+Rotate.swift"; sourceTree = "<group>"; };
 		8E5D257D25A200FB00D531A7 /* URL+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Image.swift"; sourceTree = "<group>"; };
 		8E5D257F25A2013900D531A7 /* TokenField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenField.swift; sourceTree = "<group>"; };
@@ -941,6 +947,9 @@
 				8EB2718C2340EE4C003BF3AF /* ViewController+SelectionArea+WriteNote.swift */,
 				8EBA9DDD216F8BB100DACAAD /* NotesViewController.swift */,
 				8EBA9DDE216F8BB100DACAAD /* NotesViewController.xib */,
+				8E5B76842ACD499400AD8D03 /* ViewController+SelectionArea+PeopleSelection.swift */,
+				8E5B76802ACD45CB00AD8D03 /* PeopleSelectionViewController.swift */,
+				8E5B76812ACD45CB00AD8D03 /* PeopleSelectionViewController.xib */,
 			);
 			path = Editors;
 			sourceTree = "<group>";
@@ -1737,6 +1746,7 @@
 				8E3FA91D235310AA00B677A3 /* MemoriesViews.storyboard in Resources */,
 				8EBC0183236B072F00FB6E2F /* TwoColumnTableViewController.xib in Resources */,
 				8EE709DC2AC08C3200503447 /* CollectionFilterViewController.xib in Resources */,
+				8E5B76832ACD45CB00AD8D03 /* PeopleSelectionViewController.xib in Resources */,
 				8ECB51012764268C004DFDD7 /* SubContainersManageViewController.xib in Resources */,
 				8E9D8039234884040062692A /* EditRepositoryViewController.xib in Resources */,
 				8E15E73A23AC74DC0094240A /* StackedTreeViewController.xib in Resources */,
@@ -2083,11 +2093,13 @@
 				8EF8C562266329160060D2E0 /* MessageEventCenter.swift in Sources */,
 				5CA18B4929EB250B00C5502E /* NotificationMessageViewController.swift in Sources */,
 				8EB271A823418C68003BF3AF /* ExportProfileViewController.swift in Sources */,
+				8E5B76852ACD499400AD8D03 /* ViewController+SelectionArea+PeopleSelection.swift in Sources */,
 				8EB27170233E15B0003BF3AF /* TreeController+LibrarySectionMenu.swift in Sources */,
 				8EBA9DDF216F8BB100DACAAD /* NotesViewController.swift in Sources */,
 				8EEF0728226215E7000520B7 /* SplashViewController.swift in Sources */,
 				8EC5BA2E21775571001510AF /* TheaterCollectionViewItem.swift in Sources */,
 				5CB92EDB2912A9D600C5C42F /* Words+Preferences.swift in Sources */,
+				8E5B76822ACD45CB00AD8D03 /* PeopleSelectionViewController.swift in Sources */,
 				8E48148B277DB0570097493E /* Words+SelectionView.swift in Sources */,
 				8E48147D277DAE260097493E /* Words+DeviceCopyDialog.swift in Sources */,
 				8EFAF1FB20BFFC8A007A7783 /* MetaInfoHolder.swift in Sources */,

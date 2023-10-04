@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22154"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -30,19 +31,19 @@
                 </imageView>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Onb-PG-8r4">
                     <rect key="frame" x="458" y="3" width="24" height="24"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="20" id="anO-S6-ZoW"/>
-                        <constraint firstAttribute="height" constant="20" id="qMK-TZ-wek"/>
-                    </constraints>
                     <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" inset="2" id="4ve-NN-mFG">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="20" id="anO-S6-ZoW"/>
+                        <constraint firstAttribute="height" constant="20" id="qMK-TZ-wek"/>
+                    </constraints>
                     <connections>
                         <action selector="onCheckBoxClicked:" target="-2" id="u6A-qM-mub"/>
                     </connections>
                 </button>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9qX-pa-ugK">
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9qX-pa-ugK">
                     <rect key="frame" x="18" y="8" width="444" height="15"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="15" id="PTF-RK-Eoj"/>
@@ -53,7 +54,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HhR-2S-1Qc">
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HhR-2S-1Qc">
                     <rect key="frame" x="18" y="23" width="444" height="15"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="15" id="I4k-G6-XJA"/>
@@ -66,38 +67,34 @@
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AeO-Uo-9h3">
                     <rect key="frame" x="0.0" y="19.5" width="19.5" height="23"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="19" id="bXl-2A-csj"/>
-                        <constraint firstAttribute="height" constant="19" id="y9e-gW-qm1"/>
-                    </constraints>
                     <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSStopProgressTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="1SI-aU-iJ3">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="19" id="bXl-2A-csj"/>
+                        <constraint firstAttribute="height" constant="19" id="y9e-gW-qm1"/>
+                    </constraints>
                     <connections>
                         <action selector="onButtonLookClicked:" target="-2" id="NGR-h8-uc2"/>
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Id9-mY-ETc">
                     <rect key="frame" x="463" y="25" width="12" height="12"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="12" id="bI2-9s-J5J"/>
-                        <constraint firstAttribute="width" constant="12" id="c5p-fG-JSk"/>
-                    </constraints>
                     <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="copy" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="SdX-tV-EEy">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="12" id="bI2-9s-J5J"/>
+                        <constraint firstAttribute="width" constant="12" id="c5p-fG-JSk"/>
+                    </constraints>
                     <connections>
                         <action selector="onDuplicatesClicked:" target="-2" id="03e-IQ-x24"/>
                     </connections>
                 </button>
                 <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="HcE-Zh-rv4">
                     <rect key="frame" x="-10" y="3" width="30" height="19"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="25" id="bH2-qx-dkq"/>
-                        <constraint firstAttribute="height" constant="19" id="tqO-X8-wzX"/>
-                    </constraints>
                     <popUpButtonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" autoenablesItems="NO" id="x4F-Td-KzV">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="menu"/>
@@ -122,6 +119,10 @@
                             </items>
                         </menu>
                     </popUpButtonCell>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="25" id="bH2-qx-dkq"/>
+                        <constraint firstAttribute="height" constant="19" id="tqO-X8-wzX"/>
+                    </constraints>
                     <connections>
                         <action selector="onPopUpButtonClicked:" target="-2" id="7ck-ss-Dqs"/>
                     </connections>

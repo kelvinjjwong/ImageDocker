@@ -24,9 +24,9 @@ class HeaderView: NSView, NSCollectionViewElement {
   
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
-        NSColor(calibratedWhite: 0.1, alpha: 0.8).set()
+//        NSColor(calibratedWhite: 0.1, alpha: 0.8).set()
         
-        __NSRectFillUsingOperation(dirtyRect, NSCompositingOperation.sourceOver)
+//        __NSRectFillUsingOperation(dirtyRect, NSCompositingOperation.sourceOver)
     }
     
     

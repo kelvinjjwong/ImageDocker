@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22154"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -13,7 +14,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="290" height="36"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DlM-mi-Io7">
+                            <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DlM-mi-Io7">
                                 <rect key="frame" x="22" y="10" width="69" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="65" id="4K1-Wv-kwA"/>
@@ -36,18 +37,18 @@
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WxK-wB-ai7">
                                 <rect key="frame" x="253" y="8" width="36" height="19"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="36" id="9Yo-eD-PBk"/>
-                                </constraints>
                                 <buttonCell key="cell" type="recessed" title="Button" bezelStyle="recessed" image="more_horizontal" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="RPM-U6-VHv">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="systemBold" size="12"/>
                                 </buttonCell>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="36" id="9Yo-eD-PBk"/>
+                                </constraints>
                                 <connections>
                                     <action selector="onMoreClicked:" target="pdi-cw-Syh" id="VGl-Kk-u5y"/>
                                 </connections>
                             </button>
-                            <tokenField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JMM-YR-IPg">
+                            <tokenField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JMM-YR-IPg">
                                 <rect key="frame" x="99" y="9" width="149" height="18"/>
                                 <tokenFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" drawsBackground="YES" allowsEditingTextAttributes="YES" usesSingleLineMode="YES" id="kTx-eE-7TQ">
                                     <font key="font" metaFont="system"/>
