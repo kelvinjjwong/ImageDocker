@@ -73,8 +73,8 @@ extension ViewController {
         stackedVideoViewController.parentController = self
         stackedImageViewController.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
         stackedVideoViewController.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
-        stackedVideoViewController.view.layer?.backgroundColor = Colors.DarkGray.cgColor
-        stackedImageViewController.view.layer?.backgroundColor = Colors.DarkGray.cgColor
+        stackedVideoViewController.view.layer?.backgroundColor = Colors.DeepDarkGray.cgColor
+        stackedImageViewController.view.layer?.backgroundColor = Colors.DeepDarkGray.cgColor
         
         self.addChild(stackedImageViewController)
         self.addChild(stackedVideoViewController)
@@ -82,8 +82,8 @@ extension ViewController {
         stackedImageViewController.view.frame = self.playerContainer.bounds
         self.playerContainer.addSubview(stackedImageViewController.view)
         self.playerContainer.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
-        self.playerContainer.layer?.borderColor = Colors.DarkGray.cgColor
-        self.playerContainer.layer?.backgroundColor = Colors.DarkGray.cgColor
+        self.playerContainer.layer?.borderColor = Colors.DeepDarkGray.cgColor
+        self.playerContainer.layer?.backgroundColor = Colors.DeepDarkGray.cgColor
         
         self.imageLocationViewController = (storyboard?.instantiateController(withIdentifier: "ImageLocationViewController") as! ImageLocationViewController)
         self.splitviewPreview.addArrangedSubview(imageLocationViewController.view)

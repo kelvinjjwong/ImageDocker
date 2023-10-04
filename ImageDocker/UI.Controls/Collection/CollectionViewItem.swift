@@ -84,7 +84,7 @@ class CollectionViewItem: NSCollectionViewItem {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.wantsLayer = true
-        view.layer?.backgroundColor = (backgroundColor ?? Colors.DarkGray).cgColor
+        view.layer?.backgroundColor = (backgroundColor ?? Colors.DeepDarkGray).cgColor
         view.layer?.borderWidth = 0.0
         view.layer?.borderColor = NSColor(calibratedRed: 0.0, green: 0.5, blue: 1.0, alpha: 1.0).cgColor // Aqua
 

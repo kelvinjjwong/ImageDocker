@@ -1145,7 +1145,7 @@ extension DatabaseBackupController : NSTableViewDelegate, NSTableViewDataSource{
     }
     
     func tableView(_ tableView: NSTableView, didAdd rowView: NSTableRowView, forRow row: Int) {
-        rowView.backgroundColor = Colors.DarkGray
+        rowView.backgroundColor = Colors.DeepDarkGray
     }
     
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {

@@ -2470,6 +2470,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <outlet property="centralHorizontalSplitView" destination="X01-1a-Mbk" id="f2Y-3h-0eu"/>
                         <outlet property="collectionPaginationView" destination="OOm-kj-kbe" id="Z4w-7H-rSK"/>
                         <outlet property="collectionProgressIndicator" destination="Sab-MP-Qfo" id="tTT-fa-2Dw"/>
+                        <outlet property="collectionToolbarPanelView" destination="hPS-73-3KO" id="EfZ-nr-9hh"/>
                         <outlet property="collectionView" destination="9AE-Hz-zmu" id="ItR-cT-i85"/>
                         <outlet property="imgPhoto" destination="9Na-U8-3R2" id="b6k-Ma-bp4"/>
                         <outlet property="indicatorMessage" destination="kAZ-Sm-Ax7" id="QkM-9I-20Z"/>
@@ -2482,6 +2483,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <outlet property="popPageSizeCollection" destination="zeK-nY-3Hv" id="9l4-mm-ZF4"/>
                         <outlet property="splitviewPreview" destination="giR-in-kR4" id="kmu-km-TA6"/>
                         <outlet property="stackedTreeCanvasView" destination="CKk-CL-9gu" id="fFJ-OQ-hgD"/>
+                        <outlet property="topToolbarPanelView" destination="gVf-na-PZy" id="Kdq-Cp-WBe"/>
                         <outlet property="txtSearch" destination="2rl-sF-lP2" id="Mxg-RW-YIV"/>
                         <outlet property="verticalSplitView" destination="lfc-6c-aMy" id="CMf-mh-Bqf"/>
                     </connections>

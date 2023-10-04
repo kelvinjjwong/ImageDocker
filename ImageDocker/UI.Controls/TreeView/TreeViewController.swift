@@ -60,6 +60,7 @@ class TreeViewController : StackBodyViewController {
         self.outlineView.dataSource = self
         self.outlineView.delegate = self
         self.outlineView.clickDelegate = self
+        self.outlineView.backgroundColor = Colors.DeepDarkGray
     }
     
     private var trees:[TreeCollection] = []

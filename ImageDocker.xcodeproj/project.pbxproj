@@ -901,6 +901,7 @@
 		8E15E72E23AC74DB0094240A /* TreeView */ = {
 			isa = PBXGroup;
 			children = (
+				8E15E72823AC74DB0094240A /* StackView */,
 				8E15E72F23AC74DB0094240A /* StackedTreeViewController.xib */,
 				8E15E73023AC74DB0094240A /* StackedTreeViewController.swift */,
 				8E15E73123AC74DB0094240A /* TreeDataSource.swift */,
@@ -1356,7 +1357,6 @@
 				8EB986AD20B223740075B081 /* Preview */,
 				8EB986A820B21AEC0075B081 /* Collection */,
 				8E15E72E23AC74DB0094240A /* TreeView */,
-				8E15E72823AC74DB0094240A /* StackView */,
 				8E1D49D624BBF04B00353C1C /* ToggleGroup.swift */,
 				8EBA9DE6217477D900DACAAD /* UIHelper.swift */,
 			);

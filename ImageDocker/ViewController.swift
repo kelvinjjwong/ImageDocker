@@ -26,6 +26,9 @@ class ViewController: NSViewController {
     // MARK: Icon
     let tick:NSImage = NSImage.init(named: NSImage.menuOnStateTemplateName)!
     
+    
+    @IBOutlet weak var topToolbarPanelView: NSView!
+    
     // MARK: TOP BAR
     @IBOutlet weak var btnAlertMessage: NSButton!
     
@@ -151,6 +154,7 @@ class ViewController: NSViewController {
     
     
     
+    @IBOutlet weak var collectionToolbarPanelView: NSView!
     
     // MARK: - Collection View
     
@@ -578,7 +582,7 @@ class ViewController: NSViewController {
     
     func configureDarkMode() {
         view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        view.layer?.backgroundColor = Colors.DarkGray.cgColor
+        view.layer?.backgroundColor = Colors.DeepDarkGray.cgColor
         self.btnCopyLocation.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnManagePlaces.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnReplaceLocation.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -602,6 +606,7 @@ class ViewController: NSViewController {
     }
     
     internal func setupUIDisplays() {
+        self.topToolbarPanelView.layer?.backgroundColor = Colors.DeepDarkGray.cgColor
         self.btnTasks.title = Words.tasks.fill(arguments: 0, 0)
         self.btnNotification.title = Words.notifications.fill(arguments: "0")
         self.btnMemories.title = Words.memories.word()
@@ -634,6 +639,8 @@ class ViewController: NSViewController {
     // MARK: - Collection Pages
     
     func initPaginationController(){
+        self.collectionToolbarPanelView.layer?.backgroundColor = Colors.DeepDarkGray.cgColor
+        
         if self.collectionPaginationController == nil {
             self.collectionPaginationController = CollectionPaginationController(panel: self.collectionPaginationView,
                                                                                  lblShowRecords: self.lblShowRecords,

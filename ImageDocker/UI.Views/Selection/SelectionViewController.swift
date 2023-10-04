@@ -76,7 +76,7 @@ class SelectionViewController : NSViewController {
         self.btnAssignEvent.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnManageEvents.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.comboEventList.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.comboEventList.backgroundColor = Colors.DarkGray
+        self.comboEventList.backgroundColor = Colors.DeepDarkGray
         self.btnBatchEditorToolbarSwitcher.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.selectionCheckAllBox.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.selectionCollectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -185,9 +185,9 @@ class SelectionViewController : NSViewController {
         
         // view layout
         selectionCollectionView.wantsLayer = true
-        selectionCollectionView.backgroundColors = [Colors.DarkGray]
-        selectionCollectionView.layer?.backgroundColor = Colors.DarkGray.cgColor
-        selectionCollectionView.layer?.borderColor = Colors.DarkGray.cgColor
+        selectionCollectionView.backgroundColors = [Colors.DeepDarkGray]
+        selectionCollectionView.layer?.backgroundColor = Colors.DeepDarkGray.cgColor
+        selectionCollectionView.layer?.borderColor = Colors.DeepDarkGray.cgColor
         
         // data model
 //        self.selectionCollectionView = collectionViewController.collectionView
