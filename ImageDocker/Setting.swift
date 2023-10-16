@@ -20,6 +20,9 @@ struct Setting {
 }
 
 class LoggingSetting {
+    
+    // MARK: LOG
+    
     fileprivate let logPathKey = "LogPathKey"
     
     
@@ -70,6 +73,9 @@ class LoggingSetting {
 }
 
 struct DatabaseSetting {
+    
+    // MARK: DATABASE
+    
     fileprivate let databaseLocationKey = "DatabaseLocationKey"
     
     fileprivate static let remoteDBServerKey = "RemoteDBServer"
@@ -142,6 +148,8 @@ struct DatabaseSetting {
 struct SQLiteDatabaseSetting {
     fileprivate let databasePathKey = "DatabasePathKey"
     
+    // MARK: SQLITE
+    
     let predefinedLocalDBFilePath = AppDelegate.current.applicationDocumentsDirectory.path
     
     func databasePath() -> String {
@@ -170,6 +178,8 @@ struct SQLiteDatabaseSetting {
 
 struct PostgresDatabaseSetting {
     var hostKey:String, portKey:String, userKey:String, passwordKey:String, noPasswordKey:String, schemaKey:String, databaseKey:String
+    
+    // MARK: POSTGRES
     
     func server() -> String {
         let defaults = UserDefaults.standard
@@ -272,6 +282,8 @@ struct UserInterfaceSetting {
     
     fileprivate let languageKey = "LanguageKey"
     
+    // MARK: LANGUAGE
+    
     func language() -> String {
         let defaults = UserDefaults.standard
         let value = defaults.string(forKey: languageKey) ?? "eng"
@@ -289,6 +301,8 @@ struct PerformanceSetting {
     
     fileprivate let memoryPeakKey = "memoryPeakKey"
     fileprivate let amountForPaginationKey = "amountForPaginationKey"
+    
+    // MARK: PERFORMANCE
     
     func amountForPagination() -> Int {
         let defaults = UserDefaults.standard
@@ -344,15 +358,15 @@ struct MobileDeviceTransferSetting {
 
 struct LocalEnvironmentSetting {
     
+    // MARK: LOCAL DISK
+    fileprivate let setting_localdisk_mount_points = "localDiskMountPointsKey"
+    
     // MARK: MOBILE DEVICE
     fileprivate let setting_android_adb_path = "adbPathKey"
     fileprivate let setting_ios_mount_point = "IOSMountPointKey"
     fileprivate let setting_ios_ifuse_path = "ifuseKey"
     fileprivate let setting_ios_ideviceid_path = "ideviceidKey"
     fileprivate let setting_ios_ideviceinfo_path = "ideviceinfoKey"
-    
-    // MARK: EXIFTOOL
-    fileprivate let setting_exiftool_path = "exiftoolPathKey"
     
     
     // MARK: ANDROID
@@ -367,6 +381,11 @@ struct LocalEnvironmentSetting {
         return txt
     }
     
+    func saveAdbPath(_ value:String) {
+        let defaults = UserDefaults.standard
+        defaults.set(value, forKey: setting_android_adb_path)
+    }
+    
     // MARK: IPHONE
     
     func iosDeviceMountPoint() -> String {
@@ -379,10 +398,20 @@ struct LocalEnvironmentSetting {
         }
     }
     
+    func saveIOSMountPoint(_ value:String) {
+        let defaults = UserDefaults.standard
+        defaults.set(value, forKey: setting_ios_mount_point)
+    }
+    
     func ideviceidPath() -> String {
         let defaults = UserDefaults.standard
         guard let txt = defaults.string(forKey: setting_ios_ideviceid_path) else {return ""}
         return txt
+    }
+    
+    func saveIdeviceIdPath(_ value:String) {
+        let defaults = UserDefaults.standard
+        defaults.set(value, forKey: setting_ios_ideviceid_path)
     }
     
     func ideviceinfoPath() -> String {
@@ -391,26 +420,15 @@ struct LocalEnvironmentSetting {
         return txt
     }
     
+    func saveIdeviceInfoPath(_ value:String) {
+        let defaults = UserDefaults.standard
+        defaults.set(value, forKey: setting_ios_ideviceinfo_path)
+    }
+    
     func ifusePath() -> String {
         let defaults = UserDefaults.standard
         guard let txt = defaults.string(forKey: setting_ios_ifuse_path) else {return ""}
         return txt
-    }
-    
-    func exiftoolPath() -> String {
-        let defaults = UserDefaults.standard
-        guard let txt = defaults.string(forKey: setting_exiftool_path) else {return ""}
-        return txt
-    }
-    
-    func saveAdbPath(_ value:String) {
-        let defaults = UserDefaults.standard
-        defaults.set(value, forKey: setting_android_adb_path)
-    }
-    
-    func saveIOSMountPoint(_ value:String) {
-        let defaults = UserDefaults.standard
-        defaults.set(value, forKey: setting_ios_mount_point)
     }
     
     func saveIfusePath(_ value:String) {
@@ -418,14 +436,13 @@ struct LocalEnvironmentSetting {
         defaults.set(value, forKey: setting_ios_ifuse_path)
     }
     
-    func saveIdeviceIdPath(_ value:String) {
-        let defaults = UserDefaults.standard
-        defaults.set(value, forKey: setting_ios_ideviceid_path)
-    }
+    // MARK: EXIFTOOL
+    fileprivate let setting_exiftool_path = "exiftoolPathKey"
     
-    func saveIdeviceInfoPath(_ value:String) {
+    func exiftoolPath() -> String {
         let defaults = UserDefaults.standard
-        defaults.set(value, forKey: setting_ios_ideviceinfo_path)
+        guard let txt = defaults.string(forKey: setting_exiftool_path) else {return ""}
+        return txt
     }
     
     func saveExifToolPath(_ value:String) {
