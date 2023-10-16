@@ -34,6 +34,13 @@ extension SelectionViewController {
         
         let cellRect = sender.bounds
         self.peopleSelectionPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
-        self.peopleSelectionViewController.initView()
+        self.peopleSelectionViewController.initView(images: self.collectionViewController.imagesLoader.getItems(),
+                                                    onApplyChanges: {
+                                                      self.collectionViewController.imagesLoader.reload()
+                                                      self.collectionViewController.imagesLoader.reorganizeItems()
+                                                      self.selectionCollectionView.reloadData()
+                                                      
+                                                      self.reloadMainCollectionView?()
+                  })
     }
 }

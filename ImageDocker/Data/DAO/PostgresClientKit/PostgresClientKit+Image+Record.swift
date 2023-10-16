@@ -415,7 +415,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
     func storeImageFamily(imageId:String, familyId:String, ownerId:String, familyName: String, owner: String) -> ExecuteState {
         let db = PostgresConnection.database()
         
-        if let record = ImageFamily.fetchOne(db, parameters: ["imageId": imageId, "familyId:": familyId]) {
+        if let record = ImageFamily.fetchOne(db, parameters: ["imageId": imageId, "familyId": familyId]) {
             
             do {
                 try db.execute(sql: """
@@ -431,7 +431,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             
             do {
                 try db.execute(sql: """
-            INSERT "ImageFamily" ("imageId", "familyId", "ownerId", "familyName", "owner") VALUES ($1, $2, $3, $4, $5)
+            INSERT INTO "ImageFamily" ("imageId", "familyId", "ownerId", "familyName", "owner") VALUES ($1, $2, $3, $4, $5)
             """, parameterValues: [imageId, familyId, ownerId, familyName, owner])
             }catch{
                 self.logger.log(.error, "[storeImageFamily]", error)

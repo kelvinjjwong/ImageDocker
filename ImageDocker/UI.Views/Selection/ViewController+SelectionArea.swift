@@ -24,9 +24,10 @@ extension ViewController {
         }
         
         self.selectionViewController.reloadMainCollectionView = {
-            self.imagesLoader.reload()
-            self.imagesLoader.reorganizeItems(considerPlaces: true)
-            self.collectionView.reloadData()
+//            self.imagesLoader.reload()
+//            self.imagesLoader.reorganizeItems(considerPlaces: true)
+//            self.collectionView.reloadData()
+            self.collectionPaginationController?.onReload()
         }
         
         self.selectionViewController.selectImage = { image in

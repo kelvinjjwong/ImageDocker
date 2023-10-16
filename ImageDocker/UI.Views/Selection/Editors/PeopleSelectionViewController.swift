@@ -42,6 +42,8 @@ class PeopleSelectionViewController: NSViewController {
         
         self.onApplyChanges = onApplyChanges
         self.images = images
+        
+        self.progressIndicator.isHidden = true
     }
     
     func loadPeopleGroups() -> [CoreMember] {
