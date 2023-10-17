@@ -17,6 +17,17 @@ final class LocalEnvironmentSetupController: NSViewController {
     
     @IBOutlet weak var btnApply: NSButton!
     
+    // MARK: LOCAL DISK
+    
+    @IBOutlet weak var lblLocalMountPointPrompt: NSTextField!
+    @IBOutlet weak var txtPathForLocalMountPoint: NSTextField!
+    @IBOutlet weak var btnAddLocalMountPoint: NSButton!
+    @IBOutlet weak var tblLocalMountPoints: NSTableView!
+    @IBOutlet weak var lblLocalMountPoint: NSTextField!
+    
+    var localMountPointsTableController : DictionaryTableViewController!
+    
+    
     // MARK: MOBILE DEVICE
     
     @IBOutlet weak var boxAndroid: NSBox!
@@ -57,6 +68,24 @@ final class LocalEnvironmentSetupController: NSViewController {
         self.savePreferences()
         self.dismiss(sender)
     }
+    
+    // MARK: - ACTION FOR LOCAL DISK SECTION
+    
+    @IBAction func onAddLocalMountPointClicked(_ sender: NSButton) {
+        let newPath = self.txtPathForLocalMountPoint.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        if newPath != "" {
+            var records = Setting.localEnvironment.localDiskMountPoints()
+            if !records.contains(newPath) {
+                records.append(newPath)
+            }
+            Setting.localEnvironment.saveLocalDiskMountPoints(records)
+            
+            // reload table view
+            self.localMountPointsTableController.load(self.loadLocalMountPoints(), afterLoaded: {
+            })
+        }
+    }
+    
     
     // MARK: - ACTION FOR MOBILE DEVICE SECTION
     
@@ -187,6 +216,43 @@ final class LocalEnvironmentSetupController: NSViewController {
     
     // MARK: - INIT SECTIONS
     
+    func initLocalDiskSection() {
+        self.localMountPointsTableController = DictionaryTableViewController(self.tblLocalMountPoints)
+        self.localMountPointsTableController.actionIcon = Icons.remove
+        self.localMountPointsTableController.onAction = { id in
+            
+            var records = Setting.localEnvironment.localDiskMountPoints()
+            if let idx = records.firstIndex(of: id) {
+                records.remove(at: idx)
+            }
+            Setting.localEnvironment.saveLocalDiskMountPoints(records)
+            
+            // reload table view
+            self.localMountPointsTableController.load(self.loadLocalMountPoints(), afterLoaded: {
+            })
+        }
+        
+        self.txtPathForLocalMountPoint.stringValue = ""
+        self.localMountPointsTableController.load(self.loadLocalMountPoints(), afterLoaded: {
+        })
+    }
+    
+    func loadLocalMountPoints() -> [[String:String]] {
+        var records:[[String:String]] = []
+        let localMountPoints = Setting.localEnvironment.localDiskMountPoints()
+        for p in localMountPoints {
+            var record:[String:String] = [:]
+            record["id"] = p
+            record["value"] = p
+            record["check"] = "false"
+            
+            let dest = LocalDirectory.bridge.getSymbolicLinkDestination(path: p)
+            record["destination"] = dest
+            records.append(record)
+        }
+        return records
+    }
+    
     func initMobileSection() {
         self.boxAndroid.title = Words.preference_tab_mobile_box_android.word()
         self.boxIOS.title = Words.preference_tab_mobile_box_ios.word()
@@ -230,6 +296,7 @@ final class LocalEnvironmentSetupController: NSViewController {
         self.title = Words.mainmenu_local_environment.word()
         // Do any additional setup after loading the view.
         self.setupTabs()
+        self.initLocalDiskSection()
         self.initMobileSection()
         self.initExifToolSection()
         self.initFaceRecognitionSection()
@@ -238,9 +305,10 @@ final class LocalEnvironmentSetupController: NSViewController {
     func setupTabs() {
         self.view.window?.title = Words.mainmenu_local_environment.word()
         self.btnApply.title = Words.apply.word()
-        self.tabs.tabViewItem(at: 0).label = Words.preference_tab_mobile_device_connection.word()
-        self.tabs.tabViewItem(at: 1).label = Words.preference_tab_exiftool.word()
-        self.tabs.tabViewItem(at: 2).label = Words.preference_tab_face_recognition.word()
+        self.tabs.tabViewItem(at: 0).label = Words.preference_tab_local_disk.word()
+        self.tabs.tabViewItem(at: 1).label = Words.preference_tab_mobile_device_connection.word()
+        self.tabs.tabViewItem(at: 2).label = Words.preference_tab_exiftool.word()
+        self.tabs.tabViewItem(at: 3).label = Words.preference_tab_face_recognition.word()
     }
     
     

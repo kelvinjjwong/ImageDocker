@@ -23,6 +23,34 @@ extension Collection {
     }
 }
 
+extension String {
+    func toJSONArray() -> [JSON] {
+        if let data = self.data(using: .utf8) {
+            do {
+                let json = try JSON(data: data)
+                return json.array ?? []
+            }catch{
+                print(error)
+            }
+        }
+        return []
+    }
+}
+
+extension Array {
+    func toJSONString() -> String {
+        let json = JSON(self)
+        let jsonString = json.rawString(.utf8, options: [.fragmentsAllowed, .withoutEscapingSlashes]) ?? "[]"
+        return jsonString
+    }
+    
+    func appending<S>(_ newElements: S) -> [Element] where Element == S.Element, S : Sequence  {
+        var arr = self
+        arr.append(contentsOf: newElements)
+        return arr
+    }
+}
+
 // MARK: Int
 
 extension Int {
@@ -208,6 +236,13 @@ extension String {
             let _path = self.replacingFirstOccurrence(of: volume, with: "")
             return (volume, _path)
         }else{
+            let userDefinedMountPoints = Setting.localEnvironment.localDiskMountPoints()
+            for mountpoint in userDefinedMountPoints {
+                if self.hasPrefix(mountpoint) {
+                    let _path = self.replacingFirstOccurrence(of: mountpoint.removeLastStash(), with: "")
+                    return (mountpoint.removeLastStash(), _path)
+                }
+            }
             return ("", self)
         }
     }

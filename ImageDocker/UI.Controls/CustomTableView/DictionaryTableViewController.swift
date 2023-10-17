@@ -17,6 +17,8 @@ class DictionaryTableViewController: NSObject {
     var items:[[String:String]] = []
     var onClick:(([String:String]) -> Void)? = nil
     var onCheck:((String, Bool) -> Void)? = nil
+    var onAction:((String) -> Void)? = nil
+    var actionIcon:NSImage? = nil
     
     // MARK: CONTROLS
     
@@ -181,6 +183,27 @@ class DictionaryTableViewController: NSObject {
 
 extension DictionaryTableViewController: NSTableViewDelegate {
     
+    @objc @IBAction func onActionClicked(sender:NSButton) {
+        let id = sender.identifier?.rawValue.replacingFirstOccurrence(of: "action_", with: "") ?? ""
+        
+        var index = -1
+        for i in 0..<items.count {
+            let item = items[i]
+            if item["id"] == id {
+                index = i
+                break
+                
+            }
+        }
+        
+        if index >= 0 {
+            var edititem = items[index]
+            
+            self.logger.log("actioned: \(edititem)")
+            self.onAction?(id)
+        }
+    }
+    
     @objc @IBAction func onCheckboxClicked(sender:NSButton) {
         //self.logger.log("checkbox clicked \(sender.identifier?.rawValue ?? "")")
 //        print(sender.identifier?.rawValue)
@@ -223,19 +246,24 @@ extension DictionaryTableViewController: NSTableViewDelegate {
         //var tip: String? = nil
         if let id = tableColumn?.identifier {
             var isAction = false
+            var isCheckbox = false
             if id == NSUserInterfaceItemIdentifier("checkbox") {
-                isAction = true
+                isCheckbox = true
             }else{
-                for key in item.keys {
-                    if id == NSUserInterfaceItemIdentifier(key) {
-                        value = item[key] ?? ""
-                        //self.logger.log("LOOP RESULT: \(key), \(value)")
-                        break
+                if id == NSUserInterfaceItemIdentifier("action") {
+                    isAction = true
+                }else{
+                    for key in item.keys {
+                        if id == NSUserInterfaceItemIdentifier(key) {
+                            value = item[key] ?? ""
+                            //self.logger.log("LOOP RESULT: \(key), \(value)")
+                            break
+                        }
                     }
                 }
             }
             let colView = tableView.makeView(withIdentifier: id, owner: nil) as! NSTableCellView
-            if isAction {
+            if isCheckbox {
                 colView.subviews.removeAll()
                 
                 let id = "checkbox_\(item["id"] ?? UUID().uuidString)"
@@ -256,14 +284,35 @@ extension DictionaryTableViewController: NSTableViewDelegate {
                 
                 colView.addSubview(button)
             }else{
-                colView.textField?.stringValue = value;
-                colView.textField?.lineBreakMode = .byClipping
-                if row == tableView.selectedRow {
-                    lastSelectedRow = row
-//                    colView.textField?.textColor = NSColor.yellow
-                } else {
-                    lastSelectedRow = nil
-//                    colView.textField?.textColor = nil
+                if isAction {
+                    colView.subviews.removeAll()
+                    
+                    let id = "action_\(item["id"] ?? UUID().uuidString)"
+                    
+                    let button:NSButton = NSButton(frame: NSRect(x: 0, y: 0, width: 22, height: 18))
+                    button.setButtonType(.momentaryChange)
+                    button.action = #selector(DictionaryTableViewController.onActionClicked(sender:))
+                    button.identifier = NSUserInterfaceItemIdentifier(id)
+                    button.target = self
+                    if let icon = self.actionIcon {
+                        button.image = icon
+                        button.imagePosition = .imageOnly
+                    }else{
+                        button.title = "X"
+                        button.imagePosition = .noImage
+                    }
+                    
+                    colView.addSubview(button)
+                }else{
+                    colView.textField?.stringValue = value;
+                    colView.textField?.lineBreakMode = .byClipping
+                    if row == tableView.selectedRow {
+                        lastSelectedRow = row
+                        //                    colView.textField?.textColor = NSColor.yellow
+                    } else {
+                        lastSelectedRow = nil
+                        //                    colView.textField?.textColor = nil
+                    }
                 }
             }
             return colView

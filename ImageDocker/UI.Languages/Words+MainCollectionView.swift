@@ -100,4 +100,14 @@ extension Words {
         eng: "Combine duplicated images to the 1st image",
         chs: "合并重复的照片到以第一张为主"
     )
+    
+    static let section_others = Localize(
+        eng: "Others",
+        chs: "其他"
+    )
+    
+    static let section_SAR = Localize(
+        eng: "SAR",
+        chs: "特别行政区"
+    )
 }

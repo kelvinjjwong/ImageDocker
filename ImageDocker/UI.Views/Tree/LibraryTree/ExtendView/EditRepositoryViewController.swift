@@ -147,21 +147,36 @@ class EditRepositoryViewController: NSViewController {
         self.volumesOfHomeListController = TextListViewPopupController(self.lstVolumesOfHome)
         
         self.refreshCoreMembers(selectedValue: "")
-        self.refreshMountedVolumes()
+        self.refreshMountedVolumes(append: Setting.localEnvironment.localDiskMountPoints())
         
         self.setupUIDisplay()
     }
     
+    var owners:[String:String] = [:]
+    
     func refreshCoreMembers(selectedValue:String) {
+        self.owners.removeAll()
         var items:[String] = []
+        var ids:[String] = []
+        
+        ids.append("shared")
         items.append(Words.owner_public_shared.word())
+        self.owners[Words.owner_public_shared.word()] = "shared"
+        
         let coreMembers = FaceDao.default.getCoreMembers()
         for m in coreMembers {
+            ids.append(m.id)
             items.append(m.shortName ?? m.name)
+            self.owners[m.shortName ?? m.name] = m.id
         }
         self.ownerListController.load(items)
-        if items.contains(selectedValue) {
-            self.ownerListController.select(selectedValue)
+        
+        if ids.contains(selectedValue) {
+            if let option = owners.first(where: { key, value in
+                return value == selectedValue
+            }) {
+                self.ownerListController.select(option.key)
+            }
         }else{
             self.ownerListController.select(Words.owner_public_shared.word())
         }
@@ -189,6 +204,7 @@ class EditRepositoryViewController: NSViewController {
                 mountedVolumes.append(item)
             }
         }
+        mountedVolumes.sort()
         
         self.volumesOfEditableImagesListController.load(mountedVolumes)
         self.volumesOfRawImagesListController.load(mountedVolumes)
@@ -391,6 +407,7 @@ class EditRepositoryViewController: NSViewController {
     func initNew(window:NSWindow, onOK: (() -> Void)? = nil) {
         self.onCompleted = onOK
         self.window = window
+        
         freshNew()
     }
     
@@ -417,13 +434,16 @@ class EditRepositoryViewController: NSViewController {
             
             self.refreshCoreMembers(selectedValue: repository.owner)
             
+            let userDefinedMountPoints = Setting.localEnvironment.localDiskMountPoints()
+            
             self.refreshMountedVolumes(append: [
                 repository.homeVolume,
                 repository.repositoryVolume,
                 repository.storageVolume,
                 repository.faceVolume,
                 repository.cropVolume
-            ])
+            ].appending(userDefinedMountPoints))
+            
             self.lstVolumesOfEditableImages.selectItem(withObjectValue: repository.repositoryVolume)
             self.lstVolumesOfRawImages.selectItem(withObjectValue: repository.storageVolume)
             self.lstVolumesOfFaces.selectItem(withObjectValue: repository.faceVolume)
@@ -533,7 +553,7 @@ class EditRepositoryViewController: NSViewController {
     fileprivate func checkDirectory(path:String, messageBox:NSTextField) -> Bool {
         var pass = true
         let trimPath = path.trimmingCharacters(in: .whitespacesAndNewlines)
-        if trimPath.isVolumeExists() {
+        if trimPath.isDirectoryExists() || trimPath.isVolumeExists() {
             if trimPath.isFileExists() {
                 if !trimPath.isDirectoryExists() {
                     pass = false
@@ -558,6 +578,7 @@ class EditRepositoryViewController: NSViewController {
     /// - Tag: EditRepositoryViewController.saveNewRepository()
     fileprivate func saveNewRepository() {
         let ownerName = self.ddlOwner.titleOfSelectedItem ?? Words.owner_public_shared.word()
+        let ownerId = self.owners[ownerName] ?? ownerName
         
         let name = self.txtName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         let homePath = self.getVolumePath(dropdown: self.lstVolumesOfHome, text: self.txtHomePath)
@@ -603,7 +624,7 @@ class EditRepositoryViewController: NSViewController {
         
         
         let imagefolder = RepositoryDao.default.createRepository(name: name,
-                                                                 owner: ownerName,
+                                                                 owner: ownerId,
                                                 path: repositoryPath,
                                                 homePath: homePath,
                                                 storagePath: storagePath,
@@ -628,6 +649,7 @@ class EditRepositoryViewController: NSViewController {
         
         if let container = self.originalContainer { // edit
             let ownerName = self.ddlOwner.titleOfSelectedItem ?? Words.owner_public_shared.word()
+            let ownerId = self.owners[ownerName] ?? ownerName
             
             let name = self.txtName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
             let homePath = self.getVolumePath(dropdown: self.lstVolumesOfHome, text: self.txtHomePath)
@@ -663,7 +685,7 @@ class EditRepositoryViewController: NSViewController {
             let (cropVolume, _cropPath) = cropPath.getVolumeFromThisPath()
             
             RepositoryDao.default.updateRepository(id: self.originalRepositoryId, name: name,
-                                                   owner: ownerName,
+                                                   owner: ownerId,
                                                    homeVolume: homeVolume, homePath: _homePath,
                                                    repositoryVolume: repositoryVolume, repositoryPath: _repositoryPath,
                                                    storageVolume: storageVolume, storagePath: _storagePath,

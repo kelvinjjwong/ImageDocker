@@ -440,6 +440,11 @@ extension Words {
         chs: "移动设备传输"
     )
     
+    static let preference_tab_local_disk = Localize(
+        eng: "Local Disk",
+        chs: "存储挂载点"
+    )
+    
     static let preference_tab_mobile_device_connection = Localize(
         eng: "Mobile Device Connection",
         chs: "移动设备连接"

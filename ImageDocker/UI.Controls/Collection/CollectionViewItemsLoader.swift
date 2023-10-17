@@ -548,7 +548,7 @@ class CollectionViewItemsLoader : NSObject {
             var title:String = item.photoTakenDateString(dateFormat, forceUpdate: true)
             
             if title == "" {
-                title = "Others"
+                title = Words.section_others.word()
             }
             
             if item.event != "" {
@@ -556,7 +556,7 @@ class CollectionViewItemsLoader : NSObject {
             }
             
             if self.considerPlaces && item.place != "" {
-                title = title + " @ " + item.place.replacingOccurrences(of: "特别行政区", with: "") // TDOO: put these to preference dialog
+                title = title + " @ " + item.place.replacingOccurrences(of: Words.section_SAR.word(), with: "") // TDOO: put these to preference dialog
             }
             let section:CollectionViewSection = self.getSection(title: title)!
             section.items.append(item)
@@ -579,6 +579,7 @@ class CollectionViewItemsLoader : NSObject {
         }
     }
     
+    // get or create section
     func getSection(title: String, createIfNotExist:Bool = true) -> CollectionViewSection? {
         for section in self.sections {
             if section.title == title {
@@ -639,6 +640,10 @@ class CollectionViewItemsLoader : NSObject {
     func titleOfSection(_ section: Int) -> String {
         guard sections.count > section else {return ""}
         return sections[section].title
+    }
+    
+    func collectPeopleGroups(_ section: Int) {
+        
     }
     
     // MARK: - Check

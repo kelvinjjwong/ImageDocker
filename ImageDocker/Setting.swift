@@ -361,6 +361,22 @@ struct LocalEnvironmentSetting {
     // MARK: LOCAL DISK
     fileprivate let setting_localdisk_mount_points = "localDiskMountPointsKey"
     
+    func localDiskMountPoints() -> [String] {
+        var list:[String] = []
+        let defaults = UserDefaults.standard
+        let txt = defaults.string(forKey: setting_localdisk_mount_points) ?? "[]"
+        
+        for jsonObject in txt.toJSONArray() {
+            list.append(jsonObject.rawString() ?? "")
+        }
+        return list
+    }
+    
+    func saveLocalDiskMountPoints(_ values:[String]) {
+        let defaults = UserDefaults.standard
+        defaults.set(values.toJSONString(), forKey: setting_localdisk_mount_points)
+    }
+    
     // MARK: MOBILE DEVICE
     fileprivate let setting_android_adb_path = "adbPathKey"
     fileprivate let setting_ios_mount_point = "IOSMountPointKey"

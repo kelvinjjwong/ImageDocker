@@ -47,8 +47,8 @@ class PlacesTreeDataSource : TreeDataSource {
                     place = country
                 }
             }
-            gov = gov.replacingOccurrences(of: "特别行政区", with: "")
-            place = place.replacingOccurrences(of: "特别行政区", with: "")
+            gov = gov.replacingOccurrences(of: Words.section_SAR.word(), with: "")
+            place = place.replacingOccurrences(of: Words.section_SAR.word(), with: "")
             
             moment.gov = gov
             moment.place = place

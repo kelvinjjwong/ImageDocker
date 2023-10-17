@@ -145,7 +145,7 @@ class CollectionViewItem: NSCollectionViewItem {
             lblPlace.stringValue = imageFile.place
         }
         
-        checkBox.state = NSButton.StateValue.off
+        checkBox.state = NSButton.StateValue.off // FIXME: should base on ImageFile.checked state
         
         if imageFile.isHidden {
             self.btnLook.image = NSImage(named: NSImage.stopProgressTemplateName)
