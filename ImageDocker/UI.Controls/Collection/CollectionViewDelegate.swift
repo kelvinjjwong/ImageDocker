@@ -109,7 +109,40 @@ extension ViewController : NSCollectionViewDataSource {
         view.setCheckBoxDelegate(self)
         view.sectionIndex = indexPath.section
         
-        view.sectionTitle.stringValue = imagesLoader.titleOfSection(indexPath.section)
+        let title = imagesLoader.titleOfSection(indexPath.section)
+        let place = imagesLoader.placeOfSection(indexPath.section)
+        let peopleGroups = imagesLoader.peopleGroupsOfSection(indexPath.section)
+        
+        view.sectionTitle.stringValue = "\(title)"
+        
+        if place != "" && peopleGroups != "" {
+            view.lblPlace.stringValue = place
+            view.iconPlace.image = Icons.places
+            
+            view.lblPeople.stringValue = peopleGroups
+            view.iconPeople.image = Icons.people
+            
+            view.lblSummary.stringValue = ""
+            view.iconSummary.image = nil
+        }else {
+            if place != "" {
+                view.lblSummary.stringValue = place
+                view.iconSummary.image = Icons.places
+            }else if peopleGroups != "" {
+                view.lblSummary.stringValue = peopleGroups
+                view.iconSummary.image = Icons.people
+            }else{
+                view.lblSummary.stringValue = ""
+                view.iconSummary.image = nil
+            }
+            
+            view.lblPlace.stringValue = ""
+            view.iconPlace.image = nil
+            
+            view.lblPeople.stringValue = ""
+            view.iconPeople.image = nil
+        }
+        
         let numberOfItemsInSection = imagesLoader.numberOfItems(in: indexPath.section)
         view.imageCount.stringValue = Words.n_images.fill(arguments: numberOfItemsInSection)
         

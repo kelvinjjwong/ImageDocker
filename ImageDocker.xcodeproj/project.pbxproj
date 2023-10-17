@@ -279,6 +279,9 @@
 		8EE709DC2AC08C3200503447 /* CollectionFilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EE709DA2AC08C3200503447 /* CollectionFilterViewController.xib */; };
 		8EE709DE2AC0917900503447 /* CollectionFilterPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE709DD2AC0917900503447 /* CollectionFilterPopover.swift */; };
 		8EEB88842090B44B00CDEC81 /* ImageDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEB88832090B44B00CDEC81 /* ImageDropView.swift */; };
+		8EECD8EE2ADE5AAE009F6571 /* PostgresClientKit+ImageFamily.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EECD8ED2ADE5AAE009F6571 /* PostgresClientKit+ImageFamily.swift */; };
+		8EECD8F02ADE5ADC009F6571 /* ImageFamilyDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EECD8EF2ADE5ADC009F6571 /* ImageFamilyDao.swift */; };
+		8EECD8F22ADE5AF3009F6571 /* ImageFamilyDaoInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EECD8F12ADE5AF3009F6571 /* ImageFamilyDaoInterface.swift */; };
 		8EEE58502465471A007219AB /* SQLiteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEE584F2465471A007219AB /* SQLiteDataSource.swift */; };
 		8EEE585224654760007219AB /* ImageDBInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEE585124654760007219AB /* ImageDBInterface.swift */; };
 		8EEF071A2256C9D9000520B7 /* DevicePathDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEF07182256C9D9000520B7 /* DevicePathDetailViewController.swift */; };
@@ -647,6 +650,9 @@
 		8EE709DA2AC08C3200503447 /* CollectionFilterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionFilterViewController.xib; sourceTree = "<group>"; };
 		8EE709DD2AC0917900503447 /* CollectionFilterPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionFilterPopover.swift; sourceTree = "<group>"; };
 		8EEB88832090B44B00CDEC81 /* ImageDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDropView.swift; sourceTree = "<group>"; };
+		8EECD8ED2ADE5AAE009F6571 /* PostgresClientKit+ImageFamily.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostgresClientKit+ImageFamily.swift"; sourceTree = "<group>"; };
+		8EECD8EF2ADE5ADC009F6571 /* ImageFamilyDao.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFamilyDao.swift; sourceTree = "<group>"; };
+		8EECD8F12ADE5AF3009F6571 /* ImageFamilyDaoInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFamilyDaoInterface.swift; sourceTree = "<group>"; };
 		8EEE584F2465471A007219AB /* SQLiteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteDataSource.swift; sourceTree = "<group>"; };
 		8EEE585124654760007219AB /* ImageDBInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDBInterface.swift; sourceTree = "<group>"; };
 		8EEF07182256C9D9000520B7 /* DevicePathDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePathDetailViewController.swift; sourceTree = "<group>"; };
@@ -1027,6 +1033,7 @@
 				8EF3FEE92423509E00AF83BB /* ImageDB.swift */,
 				8E1D49D424BBE47700353C1C /* ImageDBCloner.swift */,
 				8E4DECE223B3881A00F5538C /* ImageDao.swift */,
+				8EECD8EF2ADE5ADC009F6571 /* ImageFamilyDao.swift */,
 				8EBA759823B5695900548376 /* RepositoryDao.swift */,
 				8EBA759A23B5CC5300548376 /* PlaceDao.swift */,
 				8EBA759C23B5CD6F00548376 /* EventDao.swift */,
@@ -1106,6 +1113,7 @@
 			children = (
 				8EEE585124654760007219AB /* ImageDBInterface.swift */,
 				8E7419432422526F002BAAAE /* ImageDaoInterface.swift */,
+				8EECD8F12ADE5AF3009F6571 /* ImageFamilyDaoInterface.swift */,
 				8E741945242256E2002BAAAE /* RepositoryDaoInterface.swift */,
 				8E741947242256F0002BAAAE /* PlaceDaoInterface.swift */,
 				8E741949242256FE002BAAAE /* EventDaoInterface.swift */,
@@ -1141,6 +1149,7 @@
 				8EFA02E8243B3E9B00D7C355 /* PostgresClientKit+ImagePlace.swift */,
 				8EFA02EA243B3EA900D7C355 /* PostgresClientKit+ImageEvent.swift */,
 				8EFA02EC243B3EB800D7C355 /* PostgresClientKit+ImageDevice.swift */,
+				8EECD8ED2ADE5AAE009F6571 /* PostgresClientKit+ImageFamily.swift */,
 				8EFA02EE243B3ECE00D7C355 /* PostgresClientKit+FaceFamily.swift */,
 				8EFA02F0243B3EDF00D7C355 /* PostgresClientKit+ExportProfile.swift */,
 				8EFA02F2243B3EF500D7C355 /* PostgresClientKit+VersionMigrate.swift */,
@@ -1865,6 +1874,7 @@
 				8EF125A92214590000C423CA /* DeviceListViewController.swift in Sources */,
 				8E4DECE823B38A7B00F5538C /* Image.swift in Sources */,
 				8E98B8F920D7950E00771280 /* ExportManager.swift in Sources */,
+				8EECD8F22ADE5AF3009F6571 /* ImageFamilyDaoInterface.swift in Sources */,
 				8ED8333F27B7EA5800B31319 /* ExternalAPIController.swift in Sources */,
 				8EB271B12346BEC3003BF3AF /* ProgresViewController.swift in Sources */,
 				8E74194C2422570A002BAAAE /* DeviceDaoInterface.swift in Sources */,
@@ -2009,6 +2019,7 @@
 				8E481489277DB02F0097493E /* Words+EditRepository.swift in Sources */,
 				8E7B98DF2147E7880019ED87 /* FileSystemHandler.swift in Sources */,
 				8E4E5B78221985A400FE4B68 /* ImageFace.swift in Sources */,
+				8EECD8EE2ADE5AAE009F6571 /* PostgresClientKit+ImageFamily.swift in Sources */,
 				8E8D471022213A330091E9C3 /* PeopleFace.swift in Sources */,
 				8E4DECE923B38A7B00F5538C /* ImageEvent.swift in Sources */,
 				5CA18B4629EB23EE00C5502E /* ViewController+NotificationMessage.swift in Sources */,
@@ -2076,6 +2087,7 @@
 				8E3FA92323535C5800B677A3 /* MemoriesViewController.swift in Sources */,
 				8EFA02EB243B3EA900D7C355 /* PostgresClientKit+ImageEvent.swift in Sources */,
 				8EB986C620B6EBC40075B081 /* DarkTableView.swift in Sources */,
+				8EECD8F02ADE5ADC009F6571 /* ImageFamilyDao.swift in Sources */,
 				8E74194A242256FE002BAAAE /* EventDaoInterface.swift in Sources */,
 				8EB2716D233E0729003BF3AF /* LibrariesViewController.swift in Sources */,
 				8EFA02EF243B3ECE00D7C355 /* PostgresClientKit+FaceFamily.swift in Sources */,

@@ -14,6 +14,15 @@ class HeaderView: NSView, NSCollectionViewElement {
     @IBOutlet weak var imageCount: NSTextField!
     @IBOutlet weak var checkBox: NSButton!
     
+    @IBOutlet weak var iconPlace: NSImageView!
+    @IBOutlet weak var iconPeople: NSImageView!
+    @IBOutlet weak var lblPlace: NSTextField!
+    @IBOutlet weak var lblPeople: NSTextField!
+    
+    @IBOutlet weak var iconSummary: NSImageView!
+    @IBOutlet weak var lblSummary: NSTextField!
+    
+    
     var sectionIndex:Int?
     
     private var checkBoxDelegate:CollectionViewHeaderCheckDelegate?

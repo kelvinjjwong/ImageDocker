@@ -15,6 +15,9 @@ class CollectionViewSection {
     let logger = LoggerFactory.get(category: "CollectionViewSection")
     
     var title:String
+    var place:String = ""
+    var peopleGroups:String = ""
+    
     var items: [ImageFile]
     
     init(_ title:String){
@@ -539,6 +542,7 @@ class CollectionViewItemsLoader : NSObject {
     }
     
     private func collectDomainItemToMultipleSection(_ dateFormat:String = "yyyy-MM-dd") {
+        print(">>> collectDomainItemToMultipleSection")
         for section in sections {
             section.items.removeAll()
         }
@@ -555,12 +559,14 @@ class CollectionViewItemsLoader : NSObject {
                 title = title + " " + item.event
             }
             
+            var place = ""
             if self.considerPlaces && item.place != "" {
-                title = title + " @ " + item.place.replacingOccurrences(of: Words.section_SAR.word(), with: "") // TDOO: put these to preference dialog
+                place = item.place.replacingOccurrences(of: Words.section_SAR.word(), with: "") // TDOO: put these to preference dialog
             }
-            let section:CollectionViewSection = self.getSection(title: title)!
+            let section:CollectionViewSection = self.getSection(title: title, place: place)!
             section.items.append(item)
         }
+        print("sections count: \(sections.count)")
         
         if sections.count > 0 && dateFormat == "yyyy-MM-dd" && isOnlyOneDateSection() {
             sections.removeAll()
@@ -577,18 +583,36 @@ class CollectionViewItemsLoader : NSObject {
             
             self.numberOfSections = sections.count
         }
+        
+        // collect people groups
+        for section in sections {
+            let groups = self.collectPeopleGroups(section)
+            if !groups.isEmpty {
+                section.peopleGroups = groups.joined(separator: ", ")
+            }else{
+                section.peopleGroups = ""
+            }
+        }
+        
+        print("sections count: \(sections.count)")
     }
     
     // get or create section
-    func getSection(title: String, createIfNotExist:Bool = true) -> CollectionViewSection? {
+    func getSection(title: String, place:String = "", peopleGroups:String = "", createIfNotExist:Bool = true) -> CollectionViewSection? {
         for section in self.sections {
-            if section.title == title {
+            if section.title == title.trimmingCharacters(in: .whitespacesAndNewlines)
+                && section.place == place.trimmingCharacters(in: .whitespacesAndNewlines) {
                 return section
             }
         }
         if createIfNotExist {
-            let section:CollectionViewSection = CollectionViewSection(title)
+            let section:CollectionViewSection = CollectionViewSection(title.trimmingCharacters(in: .whitespacesAndNewlines))
+            
+            section.place = place.trimmingCharacters(in: .whitespacesAndNewlines)
+            section.peopleGroups = peopleGroups.trimmingCharacters(in: .whitespacesAndNewlines)
+            
             self.sections.append(section)
+            print("section added: \(title) @ \(place)")
             return section
         }else{
             return nil
@@ -642,8 +666,31 @@ class CollectionViewItemsLoader : NSObject {
         return sections[section].title
     }
     
-    func collectPeopleGroups(_ section: Int) {
+    func placeOfSection(_ section: Int) -> String {
+        guard sections.count > section else {return ""}
+        return sections[section].place
+    }
+    
+    func peopleGroupsOfSection(_ section: Int) -> String {
+        guard sections.count > section else {return ""}
+        return sections[section].peopleGroups
+    }
+    
+    func collectPeopleGroups(_ section: CollectionViewSection) -> [String] {
         
+        var list:[String] = []
+        for imageFile in section.items {
+            if let image = imageFile.imageData, let imageId = image.id {
+                let groups = ImageFamilyDao.default.getFamilies(imageId: imageId)
+                for g in groups {
+                    let group = Words.whose_family_group.fill(arguments: g.owner, g.familyName)
+                    if !list.contains(group) {
+                        list.append(group)
+                    }
+                }
+            }
+        }
+        return list
     }
     
     // MARK: - Check
@@ -693,24 +740,9 @@ class CollectionViewItemsLoader : NSObject {
     
     private func sortSections() {
         
-        var titles = [String]()
-        for section in sections {
-            titles.append(section.title)
+        sections.sort { s1, s2 in
+            return s1.title < s2.title && s1.place < s2.place
         }
-        
-        let sortedTitles = titles.sorted()
-        
-        var sortedSections = [CollectionViewSection]()
-        
-        for title in sortedTitles {
-            for section in sections {
-                if section.title == title {
-                    sortedSections.append(section)
-                }
-            }
-        }
-        
-        self.sections = sortedSections
     }
     
     private func sortItems(in section:CollectionViewSection) {

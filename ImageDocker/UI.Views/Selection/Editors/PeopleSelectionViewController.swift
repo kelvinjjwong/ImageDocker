@@ -106,15 +106,15 @@ class PeopleSelectionViewController: NSViewController {
                     group.members = []
                     
                     
-                    if let groupMembers = familyIdToPeople[f.id] {
-                        group.members = groupMembers
-                        
-                        for pgm in group.members {
-                            pgm.groupId = group.id
-                            pgm.groupName = group.name
-                            pgm.parent = group
-                        }
-                    }
+//                    if let groupMembers = familyIdToPeople[f.id] {
+//                        group.members = groupMembers
+//                        
+//                        for pgm in group.members {
+//                            pgm.groupId = group.id
+//                            pgm.groupName = group.name
+//                            pgm.parent = group
+//                        }
+//                    }
                     coreMember.groups.append(group)
                 }
             }
