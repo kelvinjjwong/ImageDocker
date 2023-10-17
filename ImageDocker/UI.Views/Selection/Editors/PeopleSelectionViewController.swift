@@ -328,6 +328,7 @@ extension PeopleSelectionViewController : NSOutlineViewDelegate {
             cell.imageView!.image = Icons.person
             cell.checkbox.isEnabled = false
             cell.checkbox.isHidden = true
+            cell.checkbox.state = .off
             cell.removeButton.isEnabled = true
             cell.removeButton.isHidden = false
             cell.removeButton.image = NSImage.init(named: NSImage.addTemplateName)
@@ -341,6 +342,7 @@ extension PeopleSelectionViewController : NSOutlineViewDelegate {
             cell.imageView!.image = Icons.people
             cell.checkbox.isEnabled = true
             cell.checkbox.isHidden = false
+            cell.checkbox.state = .off
             cell.removeButton.isEnabled = false
             cell.removeButton.isHidden = true
             cell.removeButton.image = Icons.remove
@@ -354,6 +356,7 @@ extension PeopleSelectionViewController : NSOutlineViewDelegate {
             cell.imageView!.image = Icons.smile
             cell.checkbox.isEnabled = false
             cell.checkbox.isHidden = true
+            cell.checkbox.state = .off
             cell.removeButton.isEnabled = false
             cell.removeButton.isHidden = true
             cell.removeButton.image = Icons.remove
