@@ -22,6 +22,9 @@ class HeaderView: NSView, NSCollectionViewElement {
     @IBOutlet weak var iconSummary: NSImageView!
     @IBOutlet weak var lblSummary: NSTextField!
     
+    var title = ""
+    var place = ""
+    var peopleGroups = ""
     
     var sectionIndex:Int?
     
@@ -41,36 +44,28 @@ class HeaderView: NSView, NSCollectionViewElement {
     
     
     func check(ignoreDelegate:Bool = false){
-        checkBox.state = NSButton.StateValue.on
+        checkBox.state = .on
         if checkBoxDelegate != nil && !ignoreDelegate {
             checkBoxDelegate?.onCollectionViewHeaderCheck(self)
         }
     }
     
     func uncheck(ignoreDelegate:Bool = false){
-        checkBox.state = NSButton.StateValue.off
+        checkBox.state = .off
         if checkBoxDelegate != nil && !ignoreDelegate {
             checkBoxDelegate?.onCollectionViewHeaderUncheck(self)
         }
     }
     
     func isChecked() -> Bool {
-        if checkBox.state == NSButton.StateValue.on {
-            return true
-        }else {
-            return false
-        }
+        return checkBox.state == .on
     }
     
     @IBAction func onCheckBoxClicked(_ sender: NSButton) {
         if isChecked() {
-            if checkBoxDelegate != nil {
-                checkBoxDelegate?.onCollectionViewHeaderCheck(self)
-            }
+            checkBoxDelegate?.onCollectionViewHeaderCheck(self)
         }else{
-            if checkBoxDelegate != nil {
-                checkBoxDelegate?.onCollectionViewHeaderUncheck(self)
-            }
+            checkBoxDelegate?.onCollectionViewHeaderUncheck(self)
         }
     }
 }

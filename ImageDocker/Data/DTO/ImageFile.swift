@@ -116,6 +116,16 @@ class ImageFile {
     
     // MARK: - COLLECTION
     
+    var isChecked = false
+    
+    func check() {
+        self.isChecked = true
+    }
+    func uncheck() {
+        self.isChecked = false
+    }
+    
+    var collectionCheckBox:NSButton?
     var collectionViewItem:CollectionViewItem?
     var threaterCollectionViewItem:TheaterCollectionViewItem?
     var memoryCollectionViewItem:MemoryCollectionViewItem?

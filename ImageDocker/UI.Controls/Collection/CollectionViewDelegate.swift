@@ -94,8 +94,9 @@ extension ViewController : NSCollectionViewDataSource {
         let imageFile = imagesLoader.item(for: indexPath as NSIndexPath)
         DispatchQueue.main.async {
             collectionViewItem.imageFile = imageFile
+            imageFile.collectionViewItem = collectionViewItem
+            imageFile.collectionCheckBox = collectionViewItem.checkBox
         }
-        imageFile.collectionViewItem = collectionViewItem
         
         let isItemSelected = collectionView.selectionIndexPaths.contains(indexPath)
         collectionViewItem.setHighlight(selected: isItemSelected)
@@ -112,6 +113,10 @@ extension ViewController : NSCollectionViewDataSource {
         let title = imagesLoader.titleOfSection(indexPath.section)
         let place = imagesLoader.placeOfSection(indexPath.section)
         let peopleGroups = imagesLoader.peopleGroupsOfSection(indexPath.section)
+        
+        view.title = title
+        view.place = place
+        view.peopleGroups = peopleGroups
         
         view.sectionTitle.stringValue = "\(title)"
         
@@ -312,17 +317,14 @@ extension ViewController : CollectionViewItemCheckDelegate {
     
     func checkSectionIfAllItemsChecked(_ item: CollectionViewItem) {
         if let indexPath = collectionView.indexPath(for: item) {
-            let section = collectionView.supplementaryView(forElementKind: NSCollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: indexPath.section))
-            
-            if section != nil {
+            if let section = collectionView.supplementaryView(forElementKind: NSCollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: indexPath.section)) {
                 
                 let section = section as! HeaderView
             
                 var shouldCheckSection:Bool = true
-                let sec = imagesLoader.getSection(title: section.sectionTitle.stringValue, createIfNotExist: false)
-                if sec != nil {
+                if let sec = imagesLoader.getSection(title: section.sectionTitle.stringValue, createIfNotExist: false) {
                     
-                    for item in (sec?.items)! {
+                    for item in sec.items {
                         if let i=item.collectionViewItem, !i.isChecked() {
                             shouldCheckSection = false
                             break
@@ -341,18 +343,15 @@ extension ViewController : CollectionViewItemCheckDelegate {
     
     func uncheckSectionIfAllItemsUnchecked(_ item: CollectionViewItem) {
         if let indexPath = collectionView.indexPath(for: item) {
-            let section = collectionView.supplementaryView(forElementKind: NSCollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: indexPath.section))
-            
-            if section != nil {
+            if let section = collectionView.supplementaryView(forElementKind: NSCollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: indexPath.section)) {
                 
                 let section = section as! HeaderView
                 
                 //self.logger.log("section title: \(section.sectionTitle.stringValue)")
                 var shouldUncheckSection:Bool = true
-                let sec = imagesLoader.getSection(title: section.sectionTitle.stringValue, createIfNotExist: false)
-                if sec != nil {
+                if let sec = imagesLoader.getSection(title: section.sectionTitle.stringValue, createIfNotExist: false) {
                     
-                    for item in (sec?.items)! {
+                    for item in sec.items {
                         if let i = item.collectionViewItem, i.isChecked() {
                             shouldUncheckSection = false
                             break
@@ -408,20 +407,40 @@ protocol CollectionViewHeaderCheckDelegate {
 
 extension ViewController : CollectionViewHeaderCheckDelegate {
     func onCollectionViewHeaderCheck(_ header: HeaderView) {
-        let section = self.imagesLoader.getSection(title: header.sectionTitle.stringValue, createIfNotExist: false)
-        if section != nil {
-            for item in (section?.items)! {
-                item.collectionViewItem?.check(checkBySection: true)
+        if let section = self.imagesLoader.getSection(title: header.title, place: header.place, peopleGroups: header.peopleGroups, createIfNotExist: false) {
+            
+            for item in section.items {
+                if let imageFile = self.imagesLoader.getItem(id: item.imageData?.id ?? item.url.path()) {
+                    imageFile.check()
+                    DispatchQueue.main.async {
+                        imageFile.collectionCheckBox?.state = .on
+                    }
+                    
+                    self.selectionViewController.collectionViewController.imagesLoader.addItem(imageFile)
+                }
             }
+            
+            self.selectionViewController.collectionViewController.imagesLoader.reorganizeItems()
+            self.selectionViewController.selectionCollectionView.reloadData()
         }
     }
     
     func onCollectionViewHeaderUncheck(_ header: HeaderView) {
-        let section = self.imagesLoader.getSection(title: header.sectionTitle.stringValue, createIfNotExist: false)
-        if section != nil {
-            for item in (section?.items)! {
-                item.collectionViewItem?.uncheck(checkBySection: true)
+        if let section = self.imagesLoader.getSection(title: header.title, place: header.place, peopleGroups: header.peopleGroups, createIfNotExist: false) {
+            for item in section.items {
+                if let imageFile = self.imagesLoader.getItem(id: item.imageData?.id ?? item.url.path()) {
+                    imageFile.uncheck()
+                    DispatchQueue.main.async {
+                        imageFile.collectionCheckBox?.state = .off
+                    }
+                    
+                    self.selectionViewController.collectionViewController.imagesLoader.removeItem(imageFile)
+                }
             }
+            
+            self.selectionViewController.collectionViewController.imagesLoader.reorganizeItems()
+            self.selectionViewController.selectionCollectionView.reloadData()
+            
         }
         
     }

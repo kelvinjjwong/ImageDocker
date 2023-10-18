@@ -145,14 +145,13 @@ class CollectionViewItem: NSCollectionViewItem {
             lblPlace.stringValue = imageFile.place
         }
         
-        checkBox.state = NSButton.StateValue.off // FIXME: should base on ImageFile.checked state
         
         if imageFile.isHidden {
             self.btnLook.image = NSImage(named: NSImage.stopProgressTemplateName)
-            self.btnLook.toolTip = "Hidden"
+//            self.btnLook.toolTip = "Hidden"
         }else {
             self.btnLook.image = NSImage(named: NSImage.quickLookTemplateName)
-            self.btnLook.toolTip = "Visible"
+//            self.btnLook.toolTip = "Visible"
         }
         
         if !self.isControlsHidden {
@@ -160,6 +159,7 @@ class CollectionViewItem: NSCollectionViewItem {
         }
         btnCaution.toolTip = imageFile.hasDuplicates ? "duplicates" : ""
         
+        checkBox.state = imageFile.isChecked ? .on : .off // should base on ImageFile.checked state
     }
   
     func setHighlight(selected: Bool) {
@@ -173,21 +173,17 @@ class CollectionViewItem: NSCollectionViewItem {
     }
     
     func check(checkBySection:Bool = false){
-        checkBox.state = NSButton.StateValue.on
-        if checkBoxDelegate != nil {
-            checkBoxDelegate?.onCollectionViewItemCheck(self, checkBySection: checkBySection)
-        }
+        self.checkBox.state = .on
+        self.checkBoxDelegate?.onCollectionViewItemCheck(self, checkBySection: checkBySection)
     }
     
     func uncheck(checkBySection:Bool = false){
-        checkBox.state = NSButton.StateValue.off
-        if checkBoxDelegate != nil {
-            checkBoxDelegate?.onCollectionViewItemUncheck(self, checkBySection: checkBySection)
-        }
+        self.checkBox.state = .off
+        self.checkBoxDelegate?.onCollectionViewItemUncheck(self, checkBySection: checkBySection)
     }
     
     func isChecked() -> Bool {
-        if checkBox.state == NSButton.StateValue.on {
+        if checkBox.state == .on {
             return true
         }else {
             return false
@@ -196,10 +192,12 @@ class CollectionViewItem: NSCollectionViewItem {
     
     @IBAction func onCheckBoxClicked(_ sender: NSButton) {
         if isChecked() {
+            self.imageFile?.check()
             if checkBoxDelegate != nil {
                 checkBoxDelegate?.onCollectionViewItemCheck(self, checkBySection: false)
             }
         }else{
+            self.imageFile?.uncheck()
             if checkBoxDelegate != nil {
                 checkBoxDelegate?.onCollectionViewItemUncheck(self, checkBySection: false)
             }

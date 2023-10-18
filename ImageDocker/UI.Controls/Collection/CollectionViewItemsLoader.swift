@@ -332,15 +332,18 @@ class CollectionViewItemsLoader : NSObject {
     // MARK: - Add / Remove Item
     
     func addItem(_ imageFile:ImageFile){
-        let i = items.firstIndex(where: { $0.url == imageFile.url })
+        let i = items.firstIndex(where: { ($0.imageData?.id ?? $0.url.path()) == (imageFile.imageData?.id ?? imageFile.url.path()) })
         if i == nil {
             items.append(imageFile)
         }
     }
     
     func removeItem(_ imageFile:ImageFile){
-        if let i = items.firstIndex(where: { $0.url == imageFile.url }) {
+        print("CollectionViewItemsLoader.removeItem \(imageFile.imageData?.id ?? "?")")
+        if let i = items.firstIndex(where: { ($0.imageData?.id ?? $0.url.path()) == (imageFile.imageData?.id ?? imageFile.url.path()) }) {
             items.remove(at: i)
+        }else{
+            print("CollectionViewItemsLoader.removeItem not found item")
         }
     }
     
@@ -358,6 +361,12 @@ class CollectionViewItemsLoader : NSObject {
             return nil
         }
         return sections[section].items[index]
+    }
+    
+    func getItem(id:String) -> ImageFile? {
+        return items.first { i in
+            return (i.imageData?.id ?? i.url.path()) == id
+        }
     }
     
     func getItem(path:String) -> ImageFile?{
@@ -542,7 +551,6 @@ class CollectionViewItemsLoader : NSObject {
     }
     
     private func collectDomainItemToMultipleSection(_ dateFormat:String = "yyyy-MM-dd") {
-        print(">>> collectDomainItemToMultipleSection")
         for section in sections {
             section.items.removeAll()
         }
@@ -566,7 +574,6 @@ class CollectionViewItemsLoader : NSObject {
             let section:CollectionViewSection = self.getSection(title: title, place: place)!
             section.items.append(item)
         }
-        print("sections count: \(sections.count)")
         
         if sections.count > 0 && dateFormat == "yyyy-MM-dd" && isOnlyOneDateSection() {
             sections.removeAll()
@@ -594,7 +601,6 @@ class CollectionViewItemsLoader : NSObject {
             }
         }
         
-        print("sections count: \(sections.count)")
     }
     
     // get or create section
@@ -612,7 +618,6 @@ class CollectionViewItemsLoader : NSObject {
             section.peopleGroups = peopleGroups.trimmingCharacters(in: .whitespacesAndNewlines)
             
             self.sections.append(section)
-            print("section added: \(title) @ \(place)")
             return section
         }else{
             return nil
@@ -716,17 +721,10 @@ class CollectionViewItemsLoader : NSObject {
     }
     
     func getCheckedItems() -> [ImageFile] {
-        //self.logger.log("testing checked")
         var result:[ImageFile] = []
-        //self.logger.log("sections count: \(sections.count) ")
         for section in sections {
-            //self.logger.log("items count: \(section.items.count)")
             for item in section.items {
-                
-                //self.logger.log("viewItem is null? \(item.collectionViewItem == nil)")
-                //self.logger.log("imageFile is null? \(item.collectionViewItem == nil ||  item.collectionViewItem?.imageFile == nil)")
                 if let viewItem = item.collectionViewItem, let imageFile = viewItem.imageFile {
-                    //self.logger.log("checked? \(viewItem.isChecked())")
                     if viewItem.isChecked() {
                         result.append(imageFile)
                     }
