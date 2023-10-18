@@ -17,6 +17,7 @@ class DateTimeViewController: NSViewController {
     var images:[ImageTimestamp] = []
     let tableDateFormatter = DateFormatter()
     let tableDateTimeFormatter = DateFormatter()
+    let exifDateTimeFormatter = DateFormatter()
     
     
     
@@ -80,6 +81,12 @@ class DateTimeViewController: NSViewController {
     @IBOutlet weak var stpSelectedSecond: NSStepper!
     
     // Adjust Date
+    
+    @IBOutlet weak var lblBoldOr: NSTextField!
+    @IBOutlet weak var chkAssignADateToAll: NSButton!
+    @IBOutlet weak var chkChangeByThemselves: NSButton!
+    
+    
     @IBOutlet weak var lblFixedComponents: NSTextField!
     @IBOutlet weak var lblAdjustComponents: NSTextField!
     @IBOutlet weak var lblValueToApply: NSTextField!
@@ -120,6 +127,13 @@ class DateTimeViewController: NSViewController {
     @IBOutlet weak var chkFileCreateDate: NSButton!
     @IBOutlet weak var chkPhotoTakenDate: NSButton!
     
+    @IBOutlet weak var chkPickPhotoTakenDate: NSButton!
+    @IBOutlet weak var chkPickEXIFCreateDate: NSButton!
+    @IBOutlet weak var chkPickEXIFModifyDate: NSButton!
+    @IBOutlet weak var chkPickEXIFDateTimeOriginal: NSButton!
+    @IBOutlet weak var chkPickFileCreateDate: NSButton!
+    
+    
     
     @IBOutlet weak var chkEarliestDate: NSButton!
     
@@ -129,6 +143,10 @@ class DateTimeViewController: NSViewController {
     
     // OK button
     @IBOutlet weak var btnOK: NSButton!
+    
+
+    private var toggleGroup_OneToAllOrOneByOne:ToggleGroup!
+    private var toggleGroup_PickADate:ToggleGroup!
     
     
     // MARK: - INIT
@@ -178,8 +196,82 @@ class DateTimeViewController: NSViewController {
         self.chkAdjustSecond.isEnabled = enable
         self.txtAdjustSecond.isEnabled = enable
         self.stpAdjustSecond.isEnabled = enable
-
     }
+    
+    func toggleApplyToDate(_ enable:Bool) {
+        
+        self.chkEXIFCreateDate.isEnabled = enable
+        self.chkEXIFModifyDate.isEnabled = enable
+        self.chkEXIFDateTimeOriginal.isEnabled = enable
+        self.chkFileCreateDate.isEnabled = enable
+        self.chkPhotoTakenDate.isEnabled = enable
+        
+        self.btnReExtractDatetimeFromFilename.isEnabled = enable
+        self.chkEarliestDate.isEnabled = enable
+        
+    }
+    
+    func toggleChangeByPick(_ enable:Bool) {
+        
+        self.chkPickEXIFCreateDate.isEnabled = enable
+        self.chkPickEXIFModifyDate.isEnabled = enable
+        self.chkPickEXIFDateTimeOriginal.isEnabled = enable
+        self.chkPickFileCreateDate.isEnabled = enable
+        self.chkPickPhotoTakenDate.isEnabled = enable
+        
+    }
+    
+    @IBAction func onOneToAllClicked(_ sender: NSButton) {
+        self.toggleGroup_OneToAllOrOneByOne.selected = "oneToAll"
+        
+        self.toggleCalendarAdjustment(true)
+        self.toggleApplyToDate(true)
+        self.toggleChangeByPick(false)
+    }
+    
+    @IBAction func onOneByOneClicked(_ sender: NSButton) {
+        self.toggleGroup_OneToAllOrOneByOne.selected = "oneByOne"
+        
+        self.toggleCalendarAdjustment(false)
+        self.toggleApplyToDate(false)
+        self.toggleChangeByPick(true)
+    }
+    
+    @IBAction func onPickDateInFilenameClicked(_ sender: NSButton) {
+        self.toggleGroup_PickADate.selected = "DateInFilename"
+        if self.chkChangeByThemselves.state == .on {
+            self.applyToTable(applyCalendar: false, source: .DateInFilename)
+        }
+    }
+    
+    @IBAction func onPickEXIFCreateDateClicked(_ sender: NSButton) {
+        self.toggleGroup_PickADate.selected = "EXIFCreateDate"
+        if self.chkChangeByThemselves.state == .on {
+            self.applyToTable(applyCalendar: false, source: .EXIFCreateDate)
+        }
+    }
+    
+    @IBAction func onPickEXIFModificationDateClicked(_ sender: NSButton) {
+        self.toggleGroup_PickADate.selected = "EXIFModifyDate"
+        if self.chkChangeByThemselves.state == .on {
+            self.applyToTable(applyCalendar: false, source: .EXIFModifyDate)
+        }
+    }
+    
+    @IBAction func onPickEXIFDateTimeOriginalClicked(_ sender: NSButton) {
+        self.toggleGroup_PickADate.selected = "EXIFDateTimeOriginal"
+        if self.chkChangeByThemselves.state == .on {
+            self.applyToTable(applyCalendar: false, source: .EXIFDateTimeOriginal)
+        }
+    }
+    
+    @IBAction func onPickFileCreationDateClicked(_ sender: NSButton) {
+        self.toggleGroup_PickADate.selected = "FileCreateDate"
+        if self.chkChangeByThemselves.state == .on {
+            self.applyToTable(applyCalendar: false, source: .FileCreationDate)
+        }
+    }
+    
     
     private func addMonth(_ date:Date, adjust:Int) -> Date {
         let year = Calendar.current.component(.year, from: date)
@@ -211,6 +303,7 @@ class DateTimeViewController: NSViewController {
         super.viewDidLoad()
         tableDateFormatter.dateFormat = "yyyy-MM-dd"
         tableDateTimeFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        self.exifDateTimeFormatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
         
         self.calendarDateFormatter = DateFormatter()
         self.calendarDateFormatter.dateFormat = "yyyy-MM-dd"
@@ -229,6 +322,27 @@ class DateTimeViewController: NSViewController {
         self.table.dataSource = self
         self.table.delegate = self
         
+        self.toggleGroup_OneToAllOrOneByOne = ToggleGroup([
+            "oneToAll" : self.chkAssignADateToAll,
+            "oneByOne" : self.chkChangeByThemselves
+        ], keysOrderred: ["oneToAll", "oneByOne"])
+        
+        self.toggleGroup_PickADate = ToggleGroup([
+            "DateInFilename"      : self.chkPickPhotoTakenDate,
+            "EXIFCreateDate"      : self.chkPickEXIFCreateDate,
+            "EXIFModifyDate"      : self.chkPickEXIFModifyDate,
+            "EXIFDateTimeOriginal": self.chkPickEXIFDateTimeOriginal,
+            "FileCreateDate"      : self.chkPickFileCreateDate
+        ], keysOrderred: ["DateInFilename", "EXIFCreateDate", "EXIFModifyDate", "EXIFDateTimeOriginal", "FileCreateDate"])
+        
+        self.toggleGroup_PickADate.selected = "EXIFCreateDate"
+        self.toggleGroup_OneToAllOrOneByOne.selected = "oneByOne"
+        
+        self.toggleCalendarAdjustment(false)
+        self.toggleApplyToDate(false)
+        self.toggleChangeByPick(true)
+        
+        
         self.chkSelectedDate.action = #selector(DateTimeViewController.onDateComponentsChecks(sender:))
         self.chkAdjustYear.action = #selector(DateTimeViewController.onDateComponentsChecks(sender:))
         self.chkAdjustMonth.action = #selector(DateTimeViewController.onDateComponentsChecks(sender:))
@@ -240,6 +354,10 @@ class DateTimeViewController: NSViewController {
         
         self.reinitNumbers()
         
+        self.chkAssignADateToAll.title = Words.datetime_assign_a_date_to_all.word()
+        self.chkChangeByThemselves.title = Words.datetime_change_by_themselves.word()
+        self.lblBoldOr.stringValue = Words.datetime_or.word()
+        
         self.btnOK.title = Words.apply.word()
         self.btnClose.title = Words.close.word()
         
@@ -248,16 +366,26 @@ class DateTimeViewController: NSViewController {
         self.lblDate.stringValue = Words.datetime_date.word()
         self.lblTime.stringValue = Words.datetime_time.word()
         self.lblApplyTo.stringValue = Words.datetime_apply_to.word()
+        self.lblValueToApply.stringValue = Words.datetime_value_to_apply.word()
+        
         self.chkPhotoTakenDate.title = Words.datetime_photoTakenDate.word()
         self.chkEXIFCreateDate.title = Words.datetime_exif_creation_date.word()
         self.chkEXIFModifyDate.title = Words.datetime_exif_modify_date.word()
         self.chkEXIFDateTimeOriginal.title = Words.datetime_exif_dateTimeOriginal.word()
+        self.chkFileCreateDate.title = Words.datetime_file_creation_date.word()
+        
+        self.chkPickPhotoTakenDate.title = Words.datetime_col_dateFromFilename.word()
+        self.chkPickEXIFCreateDate.title = Words.datetime_exif_creation_date.word()
+        self.chkPickEXIFModifyDate.title = Words.datetime_exif_modify_date.word()
+        self.chkPickEXIFDateTimeOriginal.title = Words.datetime_exif_dateTimeOriginal.word()
+        self.chkPickFileCreateDate.title = Words.datetime_file_creation_date.word()
+        
+        
         self.btnReExtractDatetimeFromFilename.title = Words.datetime_reextract_from_filename.word()
         self.chkEarliestDate.title = Words.datetime_use_earliest_datetime.word()
-        self.chkFileCreateDate.title = Words.datetime_file_creation_date.word()
         self.tblColFilename.title = Words.datetime_col_filename.word()
         self.tblColDatePreview.title = Words.datetime_col_date_preview.word()
-        self.tblColPhotoTakenDate.title = Words.datetime_col_photoTakenDate.word()
+        self.tblColPhotoTakenDate.title = ">> \(Words.datetime_col_photoTakenDate.word()) <<"
         self.tblColDateFromFilename.title = Words.datetime_col_dateFromFilename.word()
         self.tblColExifCreate.title = Words.datetime_col_exifCreate.word()
         self.tblColExifModify.title = Words.datetime_col_exifModify.word()
@@ -273,7 +401,7 @@ class DateTimeViewController: NSViewController {
         self.tblColPath.title = Words.datetime_col_path.word()
         
         
-        
+        self.progressIndicator.isHidden = true
     }
     
     fileprivate var onBeforeChanges: (() -> Void)? = nil
@@ -299,13 +427,21 @@ class DateTimeViewController: NSViewController {
         self.lblMessage.stringValue = ""
         
         self.chkEarliestDate.state = .on
-        self.toggleCalendarAdjustment(true)
-        self.applyToTable(applyCalendar: false)
         
         if let value = referenceDate {
             self.setFixedDate(value: value)
-            self.toggleCalendarAdjustment(true)
         }
+        
+        self.toggleGroup_OneToAllOrOneByOne.selected = "oneByOne"
+        self.toggleGroup_PickADate.selected = "EXIFCreateDate"
+        
+        self.toggleCalendarAdjustment(false)
+        self.toggleApplyToDate(false)
+        self.toggleChangeByPick(true)
+        
+        self.progressIndicator.isHidden = true
+        
+        self.applyToTable(applyCalendar: false, source: .EXIFCreateDate)
     }
     
     private func reinitNumbers() {
@@ -713,20 +849,53 @@ class DateTimeViewController: NSViewController {
         self.applyToTable()
     }
     
-    fileprivate func applyToTable(applyCalendar:Bool = true) {
-        for image in self.images {
-            if self.chkEarliestDate.state == .on {
-                image.valueDate = self.getEarliestDate(image)
-            }else{
-                image.valueDate = self.adjustDateTimeOfImage(image: image)
+    fileprivate enum ApplyDateSource : Int {
+        case DateInFilename
+        case EXIFCreateDate
+        case EXIFModifyDate
+        case EXIFDateTimeOriginal
+        case FileCreationDate
+        case OneToAll
+    }
+    
+    fileprivate func applyToTable(applyCalendar:Bool = true, source:ApplyDateSource = .OneToAll) {
+        DispatchQueue.global().async {
+            
+            for image in self.images {
+                if source == .OneToAll {
+                    if self.chkEarliestDate.state == .on {
+                        image.valueDate = self.getEarliestDate(image)
+                    }else{
+                        image.valueDate = self.adjustDateTimeOfImage(image: image)
+                    }
+                }else if source == .DateInFilename{
+                    if image.filenameDate != "" {
+                        if let dt = self.exifDateTimeFormatter.date(from: image.filenameDate) {
+                            image.valueDate = dt
+                        }
+                    }
+                }else if source == .EXIFCreateDate {
+                    image.valueDate = image.exifCreateDate
+                }else if source == .EXIFModifyDate {
+                    image.valueDate = image.exifModifyDate
+                }else if source == .EXIFDateTimeOriginal {
+                    image.valueDate = image.dateTimeOriginal
+                }else if source == .FileCreationDate {
+                    image.valueDate = image.fileCreateDate
+                }else{
+                    image.valueDate = nil
+                }
             }
-        }
-        self.table.reloadData()
-        if applyCalendar {
-            if let first = self.images[self.lastSelectedRow ?? 0].valueDate {
-                self.calendarView.date = first
-                self.calendarView.selectedDate = first
-                self.calendarView.originDate = self.images[self.lastSelectedRow ?? 0].photoTakenDate!
+            DispatchQueue.main.async {
+                self.table.reloadData()
+                if applyCalendar {
+                    if let first = self.images[self.lastSelectedRow ?? 0].valueDate {
+                        self.calendarView.date = first
+                        self.calendarView.selectedDate = first
+                        self.calendarView.originDate = self.images[self.lastSelectedRow ?? 0].photoTakenDate!
+                    }
+                }
+                
             }
         }
         
@@ -909,7 +1078,7 @@ class DateTimeViewController: NSViewController {
         }
         
         var tags:Set<String> = []
-        if self.chkPhotoTakenDate.state == .on {
+        if self.chkChangeByThemselves.state == .on || (self.chkAssignADateToAll.state == .on && self.chkPhotoTakenDate.state == .on) {
             tags.insert("PhotoTakenDate")
         }
         if self.chkEXIFCreateDate.state == .on {
@@ -931,8 +1100,34 @@ class DateTimeViewController: NSViewController {
         })
         
         for image in self.images {
-            if let dateToBeApplied = self.adjustDateTimeOfImage(image: image) {
-                image.valueDate = dateToBeApplied
+            if self.toggleGroup_OneToAllOrOneByOne.selected == "oneToAll" {
+                if let dateToBeApplied = self.adjustDateTimeOfImage(image: image) {
+                    image.valueDate = dateToBeApplied
+                }
+            }else{
+                if self.toggleGroup_PickADate.selected == "DateInFilename" {
+                    if image.filenameDate != "" {
+                        if let dt = self.exifDateTimeFormatter.date(from: image.filenameDate) {
+                            image.valueDate = dt
+                        }
+                    }
+                }else if self.toggleGroup_PickADate.selected == "EXIFCreateDate" {
+                    if image.exifCreateDate != nil {
+                        image.valueDate = image.exifCreateDate
+                    }
+                }else if self.toggleGroup_PickADate.selected == "EXIFModifyDate" {
+                    if image.exifModifyDate != nil {
+                        image.valueDate = image.exifModifyDate
+                    }
+                }else if self.toggleGroup_PickADate.selected == "EXIFDateTimeOriginal" {
+                    if image.dateTimeOriginal != nil {
+                        image.valueDate = image.dateTimeOriginal
+                    }
+                }else if self.toggleGroup_PickADate.selected == "FileCreateDate" {
+                    if image.fileCreateDate != nil {
+                        image.valueDate = image.fileCreateDate
+                    }
+                }
             }
         }
         

@@ -20,19 +20,34 @@ extension Words {
         chs: "关闭"
     )
     
+    static let datetime_or = Localize(
+        eng: "OR",
+        chs: "或"
+    )
+    
+    static let datetime_assign_a_date_to_all = Localize(
+        eng: "Assign a date to All",
+        chs: "为所有照片指定同一个日期时间"
+    )
+    
+    static let datetime_change_by_themselves = Localize(
+        eng: "Change by Themselves",
+        chs: "为每个照片单独指定日期时间"
+    )
+    
     static let datetime_fixed_components = Localize(
         eng: "Fixed Components",
-        chs: "指定"
+        chs: "指定："
     )
     
     static let datetime_adjust_components = Localize(
         eng: "Adjust Components",
-        chs: "调节"
+        chs: "附加："
     )
     
     static let datetime_value_to_apply = Localize(
-        eng: "Value to apply",
-        chs: "经过计算的日期"
+        eng: "Value to Apply",
+        chs: "最终将要替换成："
     )
     
     static let datetime_reextract_from_filename = Localize(

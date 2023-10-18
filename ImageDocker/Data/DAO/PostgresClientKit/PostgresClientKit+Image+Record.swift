@@ -338,15 +338,17 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             if field == "PhotoTakenDate" {
                 
                 values.append("""
-                    "photoTakenDate" = \(add(&placeholders)), "photoTakenYear" = \(add(&placeholders)), "photoTakenMonth" = \(add(&placeholders)), "photoTakenDay" = \(add(&placeholders))
+                    "photoTakenDate" = \(add(&placeholders)), "photoTakenYear" = \(add(&placeholders)), "photoTakenMonth" = \(add(&placeholders)), "photoTakenDay" = \(add(&placeholders)), "photoTakenHour" = \(add(&placeholders))
                     """)
                 arguments.append(date)
                 let year = Calendar.current.component(.year, from: date)
                 let month = Calendar.current.component(.month, from: date)
                 let day = Calendar.current.component(.day, from: date)
+                let hour = Calendar.current.component(.hour, from: date)
                 arguments.append(year)
                 arguments.append(month)
                 arguments.append(day)
+                arguments.append(hour)
                 continue
             }
             if field == "DateTimeOriginal" {
