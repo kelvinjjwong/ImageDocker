@@ -322,5 +322,26 @@ class FaceDaoPostgresCK : FaceDaoInterface {
         return .OK
     }
     
+    func getRepositoryOwnerColors() -> [Int:String] {
+        var list:[Int:String] = [:]
+        
+        final class TempRecord : PostgresCustomRecord {
+            var repositoryId:Int = 0
+            var ownerId:String = ""
+            var ownerColor:String = ""
+            public init() {}
+        }
+        let db = PostgresConnection.database()
+        let records = TempRecord.fetchAll(db, sql: """
+        select r."id" as "repositoryId",COALESCE(p."id", 'shared') as "ownerId", COALESCE(p."coreMemberColor", '2E2E2E') as "ownerColor" from "ImageRepository" as r LEFT JOIN "People" as p on r.owner = p.id ORDER BY "repositoryId"
+        """)
+        if records.count > 0 {
+            for record in records {
+                list[record.repositoryId] = record.ownerColor
+            }
+        }
+        return list
+    }
+    
 
 }

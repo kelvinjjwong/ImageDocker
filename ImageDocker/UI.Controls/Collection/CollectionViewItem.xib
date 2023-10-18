@@ -12,6 +12,7 @@
                 <outlet property="btnLook" destination="AeO-Uo-9h3" id="WII-Tf-ah3"/>
                 <outlet property="btnMenu" destination="HcE-Zh-rv4" id="45u-yk-0A7"/>
                 <outlet property="checkBox" destination="Onb-PG-8r4" id="bHB-Jv-sUi"/>
+                <outlet property="colorLine" destination="vlF-03-icb" id="xtz-vN-L9y"/>
                 <outlet property="imageView" destination="FSe-ep-RM0" id="fCL-h0-ClX"/>
                 <outlet property="lblPlace" destination="9qX-pa-ugK" id="k8B-pG-7sE"/>
                 <outlet property="moreMenu" destination="tEK-js-g3a" id="tGL-gk-7ef"/>
@@ -127,10 +128,22 @@
                         <action selector="onPopUpButtonClicked:" target="-2" id="7ck-ss-Dqs"/>
                     </connections>
                 </popUpButton>
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vlF-03-icb">
+                    <rect key="frame" x="37" y="2" width="408" height="2"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="2" id="HJw-BM-gQj"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="xpT-iw-Yqy">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
             </subviews>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="9qX-pa-ugK" secondAttribute="bottom" constant="8" id="2MH-Yx-k6X"/>
                 <constraint firstItem="9qX-pa-ugK" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" id="2z6-mz-65p"/>
+                <constraint firstItem="vlF-03-icb" firstAttribute="leading" secondItem="AeO-Uo-9h3" secondAttribute="trailing" constant="20" id="9Dc-iW-WC1"/>
                 <constraint firstAttribute="bottom" secondItem="Id9-mY-ETc" secondAttribute="bottom" constant="25" id="CMj-4p-jod"/>
                 <constraint firstItem="FSe-ep-RM0" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="Cac-fe-lhi"/>
                 <constraint firstAttribute="bottom" secondItem="HcE-Zh-rv4" secondAttribute="bottom" constant="3" id="DKB-A6-8a3"/>
@@ -146,7 +159,9 @@
                 <constraint firstAttribute="trailing" secondItem="Id9-mY-ETc" secondAttribute="trailing" constant="5" id="oh0-yJ-iw8"/>
                 <constraint firstItem="FSe-ep-RM0" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="sjp-Lb-bll"/>
                 <constraint firstItem="AeO-Uo-9h3" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="tzO-OO-1Ne"/>
+                <constraint firstAttribute="bottom" secondItem="vlF-03-icb" secondAttribute="bottom" constant="2" id="vY0-rD-7nk"/>
                 <constraint firstItem="HhR-2S-1Qc" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" id="y4F-IE-8V6"/>
+                <constraint firstItem="Id9-mY-ETc" firstAttribute="leading" secondItem="vlF-03-icb" secondAttribute="trailing" constant="20" id="yKT-ad-au9"/>
             </constraints>
             <point key="canvasLocation" x="139" y="114"/>
         </customView>

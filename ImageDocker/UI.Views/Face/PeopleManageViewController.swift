@@ -84,8 +84,6 @@ class PeopleManageViewController: NSViewController {
         self.setupView()
         self.peopleListController = SingleColumnTableViewController(self.tblPeopleList)
         self.peopleListController.onClick = { value in
-//            self.onFaceCategoryClicked(value)
-            print("selected \(value)")
             let json = JSON.init(parseJSON: value)
             if let person = FaceDao.default.getPerson(id: json["id"].stringValue) {
                 self.selectedPeopleId = person.id
@@ -133,7 +131,6 @@ class PeopleManageViewController: NSViewController {
     }
     
     func onColorCoreMemberChanged(_ sender: NSColorWell) {
-        print("color changed to \(sender.color.toHex() ?? "?")")
         if let _ = FaceDao.default.getPerson(id: self.selectedPeopleId) {
             let _ = FaceDao.default.updatePersonCoreMemberColor(id: self.selectedPeopleId, hexColor: sender.color.toHex() ?? "")
         }

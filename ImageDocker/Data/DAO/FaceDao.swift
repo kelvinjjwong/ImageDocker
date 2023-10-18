@@ -103,6 +103,10 @@ class FaceDao {
         return self.impl.updatePersonCoreMemberColor(id: id, hexColor: hexColor)
     }
     
+    func getRepositoryOwnerColors() -> [Int:String] {
+        return self.impl.getRepositoryOwnerColors()
+    }
+    
     
     // MARK: - RELATIONSHIP
     

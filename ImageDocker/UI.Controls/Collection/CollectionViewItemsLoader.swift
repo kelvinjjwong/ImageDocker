@@ -422,6 +422,8 @@ class CollectionViewItemsLoader : NSObject {
 //        }
         //self.logger.log("Loading duplicate photos from db: DONE")
         
+        let repositoryColorMapping = FaceDao.default.getRepositoryOwnerColors()
+        
         for image in images {
             
             if self.cancelling {
@@ -451,7 +453,7 @@ class CollectionViewItemsLoader : NSObject {
             }
             
             let imageFile = ImageFile(image: image,
-                                      repositoryId: repositoryId,
+                                      repositoryId: _repositoryId,
                                       repositoryVolume: _repositoryVolume,
                                       rawVolume: _rawVolume,
                                       indicator: self.indicator, loadExifFromFile: true)
@@ -465,6 +467,8 @@ class CollectionViewItemsLoader : NSObject {
                 imageFile.hasDuplicates = false
                 imageFile.duplicatesKey = ""
             }
+            
+            imageFile.repositoryColor = repositoryColorMapping[image.repositoryId] ?? "2E2E2E"
             
             // prefetch thumbnail to improve performance of collection view
             let _ = imageFile.thumbnail

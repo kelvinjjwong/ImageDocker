@@ -49,6 +49,8 @@ class ImageFile {
     
     var imageData:Image?
     
+    var repositoryColor:String = ""
+    
     lazy var thumbnail:NSImage? = self.setThumbnail(self.url)
     
     lazy var image: NSImage = self.loadPreview()

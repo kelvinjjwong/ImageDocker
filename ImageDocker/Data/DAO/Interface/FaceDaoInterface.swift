@@ -59,4 +59,6 @@ protocol FaceDaoInterface {
     func updatePersonIsCoreMember(id:String, isCoreMember:Bool) -> ExecuteState
     
     func updatePersonCoreMemberColor(id:String, hexColor:String) -> ExecuteState
+    
+    func getRepositoryOwnerColors() -> [Int:String]
 }

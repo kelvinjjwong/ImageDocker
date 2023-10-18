@@ -20,6 +20,8 @@ class CollectionViewItem: NSCollectionViewItem {
     @IBOutlet weak var btnCaution: NSButton!
     @IBOutlet weak var btnMenu: NSPopUpButton!
     @IBOutlet weak var moreMenu: NSMenu!
+    @IBOutlet weak var colorLine: NSTextField!
+    
     
     private var checkBoxDelegate:CollectionViewItemCheckDelegate?
     private var showDuplicatesDelegate:CollectionViewItemShowDuplicatesDelegate?
@@ -160,6 +162,9 @@ class CollectionViewItem: NSCollectionViewItem {
         btnCaution.toolTip = imageFile.hasDuplicates ? "duplicates" : ""
         
         checkBox.state = imageFile.isChecked ? .on : .off // should base on ImageFile.checked state
+        
+        self.colorLine.drawsBackground = true
+        self.colorLine.backgroundColor = NSColor(hex: imageFile.repositoryColor)
     }
   
     func setHighlight(selected: Bool) {
