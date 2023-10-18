@@ -702,6 +702,12 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v59") { db in
+            try db.alter(table: "People", body: { t in
+                t.add("coreMemberColor", .text).defaults(to: "").indexed()
+            })
+        }
+        
         do {
             try migrator.migrate(cleanVersions: dropBeforeCreate)
         }catch{

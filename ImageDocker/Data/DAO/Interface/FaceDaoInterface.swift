@@ -57,4 +57,6 @@ protocol FaceDaoInterface {
     func deletePerson(id:String) -> ExecuteState
     
     func updatePersonIsCoreMember(id:String, isCoreMember:Bool) -> ExecuteState
+    
+    func updatePersonCoreMemberColor(id:String, hexColor:String) -> ExecuteState
 }

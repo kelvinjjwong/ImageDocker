@@ -311,5 +311,16 @@ class FaceDaoPostgresCK : FaceDaoInterface {
         return .OK
     }
     
+    func updatePersonCoreMemberColor(id:String, hexColor:String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: "update \"People\" set \"coreMemberColor\"= $1 where id = $2", parameterValues: [hexColor, id])
+        }catch{
+            self.logger.log(error)
+            return .ERROR
+        }
+        return .OK
+    }
+    
 
 }

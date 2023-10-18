@@ -99,6 +99,10 @@ class FaceDao {
         return self.impl.updatePersonIsCoreMember(id: id, isCoreMember: isCoreMember)
     }
     
+    func updatePersonCoreMemberColor(id:String, hexColor:String) -> ExecuteState {
+        return self.impl.updatePersonCoreMemberColor(id: id, hexColor: hexColor)
+    }
+    
     
     // MARK: - RELATIONSHIP
     

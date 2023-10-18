@@ -53,6 +53,7 @@ class PeopleManageViewController: NSViewController {
     @IBOutlet weak var txtNickName: NSTextField!
     
     @IBOutlet weak var chkCoreMember: NSButton!
+    @IBOutlet weak var colorCoreMember: NSColorWell!
     
     @IBOutlet weak var tblPeopleList: NSTableView!
     
@@ -74,6 +75,8 @@ class PeopleManageViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
+        self.colorCoreMember.isHidden = true
+        
         self.treeView.dataSource = self
         self.treeView.delegate = self
         self.treeView.registerForDraggedTypes([.string])
@@ -83,7 +86,8 @@ class PeopleManageViewController: NSViewController {
         self.peopleListController.onClick = { value in
 //            self.onFaceCategoryClicked(value)
             print("selected \(value)")
-            if let person = FaceDao.default.getPerson(name: value) {
+            let json = JSON.init(parseJSON: value)
+            if let person = FaceDao.default.getPerson(id: json["id"].stringValue) {
                 self.selectedPeopleId = person.id
                 self.txtId.stringValue = person.id
                 self.txtName.stringValue = person.name
@@ -91,10 +95,20 @@ class PeopleManageViewController: NSViewController {
                 
                 if person.coreMember {
                     self.chkCoreMember.state = .on
+                    self.colorCoreMember.isHidden = false
+                    if person.coreMemberColor != "" {
+                        let color = NSColor(hex: person.coreMemberColor)
+                        self.colorCoreMember.color = color
+                    }else{
+                        self.colorCoreMember.color = Colors.DarkGray
+                    }
                 }else{
                     self.chkCoreMember.state = .off
+                    self.colorCoreMember.color = Colors.DarkGray
+                    self.colorCoreMember.isHidden = true
                 }
                 self.chkCoreMember.isEnabled = true
+                
             }else{
                 self.selectedPeopleId = ""
                 self.txtId.stringValue = ""
@@ -115,7 +129,16 @@ class PeopleManageViewController: NSViewController {
                 self.reloadPeople()
             }
         }
+        self.colorCoreMember.isHidden = ( sender.state == .off )
     }
+    
+    func onColorCoreMemberChanged(_ sender: NSColorWell) {
+        print("color changed to \(sender.color.toHex() ?? "?")")
+        if let _ = FaceDao.default.getPerson(id: self.selectedPeopleId) {
+            let _ = FaceDao.default.updatePersonCoreMemberColor(id: self.selectedPeopleId, hexColor: sender.color.toHex() ?? "")
+        }
+    }
+    
     
     func initView() {
         self.reloadPeople()
@@ -242,6 +265,24 @@ class PeopleManageViewController: NSViewController {
         super.init(coder: coder)
     }
     
+    override func viewDidAppear() {
+        super.viewDidAppear()
+
+        self.colorCoreMember.addObserver(self, forKeyPath: "color", options: .new, context: nil)
+
+    }
+
+    override func viewDidDisappear(){
+        super.viewDidDisappear()
+
+        self.colorCoreMember.removeObserver(self, forKeyPath:"color")
+    }
+
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if let keyPath = keyPath, keyPath == "color" {
+            self.onColorCoreMemberChanged(self.colorCoreMember)
+        }
+    }
 }
 
 

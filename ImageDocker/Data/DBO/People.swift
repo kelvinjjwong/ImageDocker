@@ -20,6 +20,7 @@ public final class People : Codable {
     var iconSubPath:String = ""
     var iconFilename:String = ""
     var coreMember:Bool = false
+    var coreMemberColor:String = ""
     
     public init() {
         

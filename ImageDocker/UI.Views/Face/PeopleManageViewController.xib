@@ -12,6 +12,7 @@
                 <outlet property="boxBio" destination="SVs-C2-vsm" id="hUq-g6-5R6"/>
                 <outlet property="boxMemberOf" destination="yUr-Ml-mmE" id="LQw-10-gU5"/>
                 <outlet property="chkCoreMember" destination="BFv-YO-lHJ" id="f8O-kB-UKe"/>
+                <outlet property="colorCoreMember" destination="Wyd-6w-cQM" id="PfJ-zW-mzh"/>
                 <outlet property="lblId" destination="n3U-21-aBf" id="rJv-c4-2ya"/>
                 <outlet property="lblName" destination="fC1-Dx-fbP" id="2oD-o0-GTn"/>
                 <outlet property="lblNickName" destination="d1v-9J-HRT" id="4Vv-S3-bgB"/>
@@ -215,14 +216,24 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
+                            <colorWell wellStyle="minimal" translatesAutoresizingMaskIntoConstraints="NO" id="Wyd-6w-cQM">
+                                <rect key="frame" x="144" y="372" width="29" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="23" id="IIn-rb-h1i"/>
+                                    <constraint firstAttribute="height" constant="20" id="ZEe-1o-JfM"/>
+                                </constraints>
+                                <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </colorWell>
                         </subviews>
                         <constraints>
                             <constraint firstItem="BFv-YO-lHJ" firstAttribute="top" secondItem="gLl-LV-Mmc" secondAttribute="top" constant="13" id="4oq-q0-XxL"/>
                             <constraint firstAttribute="bottom" secondItem="qkh-uZ-tih" secondAttribute="bottom" constant="20" symbolic="YES" id="6LP-4P-dTN"/>
                             <constraint firstItem="qkh-uZ-tih" firstAttribute="top" secondItem="BFv-YO-lHJ" secondAttribute="bottom" constant="15" id="JJg-1B-eNj"/>
+                            <constraint firstItem="Wyd-6w-cQM" firstAttribute="leading" secondItem="BFv-YO-lHJ" secondAttribute="trailing" constant="18" id="JVO-FL-VgB"/>
                             <constraint firstItem="qkh-uZ-tih" firstAttribute="leading" secondItem="gLl-LV-Mmc" secondAttribute="leading" constant="11" id="fZw-uj-S0G"/>
                             <constraint firstAttribute="trailing" secondItem="qkh-uZ-tih" secondAttribute="trailing" constant="10" id="hGs-iP-TiC"/>
                             <constraint firstItem="BFv-YO-lHJ" firstAttribute="leading" secondItem="gLl-LV-Mmc" secondAttribute="leading" constant="22" id="hP1-sJ-YBd"/>
+                            <constraint firstItem="Wyd-6w-cQM" firstAttribute="top" secondItem="gLl-LV-Mmc" secondAttribute="top" constant="11" id="qm7-1g-kk8"/>
                         </constraints>
                     </view>
                 </box>
