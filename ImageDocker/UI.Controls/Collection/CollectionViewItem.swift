@@ -167,10 +167,13 @@ class CollectionViewItem: NSCollectionViewItem {
         self.colorLine.backgroundColor = NSColor(hex: imageFile.repositoryColor)
     }
   
-    func setHighlight(selected: Bool) {
+    func setHighlight(selected: Bool, isMultipleSelection:Bool = false) {
         view.layer?.borderWidth = selected ? 5.0 : 0.0
         
         if selected {
+            if isMultipleSelection {
+                self.check()
+            }
             onSelected?()
         }else{
             onUnselected?()

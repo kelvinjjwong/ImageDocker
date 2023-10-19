@@ -12,10 +12,11 @@ import LoggerFactory
 extension ViewController {
     
     func highlightItems(selected: Bool, atIndexPaths: Set<IndexPath>) {
+        let isMultipleSelection = atIndexPaths.count > 1
         for indexPath in atIndexPaths {
             guard let item = collectionView.item(at: indexPath) else {continue}
             let viewItem = item as! CollectionViewItem
-            viewItem.setHighlight(selected: selected)
+            viewItem.setHighlight(selected: selected, isMultipleSelection: isMultipleSelection)
             if selected {
                 //self.logger.log("SELECTED IMAGE COORD IS ZERO ? \(viewItem.imageFile?.location.coordinate?.isZero) - \(viewItem.imageFile?.fileName)")
                 self.selectImageFile(viewItem.imageFile!)
