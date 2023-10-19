@@ -44,7 +44,7 @@
                         <action selector="onCheckBoxClicked:" target="-2" id="u6A-qM-mub"/>
                     </connections>
                 </button>
-                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9qX-pa-ugK">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9qX-pa-ugK">
                     <rect key="frame" x="18" y="8" width="444" height="15"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="15" id="PTF-RK-Eoj"/>
@@ -55,7 +55,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HhR-2S-1Qc">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HhR-2S-1Qc">
                     <rect key="frame" x="18" y="23" width="444" height="15"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="15" id="I4k-G6-XJA"/>
@@ -128,7 +128,7 @@
                         <action selector="onPopUpButtonClicked:" target="-2" id="7ck-ss-Dqs"/>
                     </connections>
                 </popUpButton>
-                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vlF-03-icb">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vlF-03-icb">
                     <rect key="frame" x="37" y="2" width="408" height="2"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="2" id="HJw-BM-gQj"/>
