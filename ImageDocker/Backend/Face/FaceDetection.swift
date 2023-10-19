@@ -84,7 +84,7 @@ class FaceDetection {
         do {
             try FileManager.default.createDirectory(atPath: cropsPath.path, withIntermediateDirectories: true, attributes: nil)
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             self.logger.log("ERROR: Cannot create directory for storing crops at path: \(cropsPath.path)")
             return
         }
@@ -133,8 +133,8 @@ class FaceDetection {
                         do {
                             try data?.write(to: tempURL)
                         }catch{
-                            self.logger.log("Unable to save big size crop to temporary file: \(tempURL.path)")
-                            self.logger.log(error)
+                            self.logger.log(.error, "Unable to save big size crop to temporary file: \(tempURL.path)")
+                            self.logger.log(.error, error)
                         }
                         
                         if let image = self.createThumbnail(from: tempURL, size: CropSize) {
@@ -144,8 +144,8 @@ class FaceDetection {
                                     do {
                                         try cgData?.write(to: faceURL)
                                     }catch{
-                                        self.logger.log("Unable to save resized crop to file: \(faceURL.path)")
-                                        self.logger.log(error)
+                                        self.logger.log(.error, "Unable to save resized crop to file: \(faceURL.path)")
+                                        self.logger.log(.error, error)
                                     }
                                 }
                             }
@@ -153,8 +153,8 @@ class FaceDetection {
                         do {
                             try FileManager.default.removeItem(at: tempURL)
                         }catch{
-                            self.logger.log("Unable to delete temporary file: \(tempURL.path)")
-                            self.logger.log(error)
+                            self.logger.log(.error, "Unable to delete temporary file: \(tempURL.path)")
+                            self.logger.log(.error, error)
                         }
                         
                         
@@ -162,7 +162,7 @@ class FaceDetection {
                         do {
                             try data?.write(to: faceURL)
                         }catch{
-                            self.logger.log(error)
+                            self.logger.log(.error, error)
                         }
                     }
                     

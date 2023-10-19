@@ -21,7 +21,7 @@ class ImageFaceDaoPostgresCK : ImageFaceDaoInterface {
             update "Image" set "scanedFace"=true, "facesCount"=$1 where id=$2
             """, parameterValues: [facesCount, imageId])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK
@@ -34,7 +34,7 @@ class ImageFaceDaoPostgresCK : ImageFaceDaoInterface {
             update "Image" set "recognizedFace"=true,"recognizedPeopleIds"=$1 where id=$2
             """, parameterValues: [recognizedPeopleIds,imageId])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK
@@ -113,14 +113,14 @@ class FaceDaoPostgresCK : FaceDaoInterface {
                     var id:String = ""
                     public init() {}
                 }
-                let rows = TempRecord.fetchAll(db, sql: "SELECT id FROM \"Family\" WHERE id='\(id)'")
+                let rows = TempRecord.fetchAll(db, sql: "SELECT \"id\" FROM \"Family\" WHERE \"id\"='\(id)'")
                 if rows.count > 0 {
                     recordId = id
                     try db.execute(sql: """
-        UPDATE "Family" SET name='\(name)',category='\(type)',owner='\(owner)' WHERE id='\(id)'
+        UPDATE "Family" SET name='\(name)',category='\(type)',owner='\(owner)' WHERE "id"='\(id)'
         """)
                     try db.execute(sql: """
-        UPDATE "ImageFamily" set "familyName"='\(name)' WHERE familyId='\(id)'
+        UPDATE "ImageFamily" set "familyName"='\(name)' WHERE "familyId"='\(id)'
         """)
                 }else{
                     needInsert = true
@@ -133,7 +133,7 @@ class FaceDaoPostgresCK : FaceDaoInterface {
                 try db.execute(sql: "INSERT INTO \"Family\" (id, name, category, owner) VALUES ('\(recordId!)','\(name)','\(type)','\(owner)')")
             }
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             recordId = nil
         }
         return recordId
@@ -147,7 +147,7 @@ class FaceDaoPostgresCK : FaceDaoInterface {
             try db.execute(sql: "DELETE FROM \"FamilyJoint\" WHERE \"bigFamilyId\"='\(id)'")
             try db.execute(sql: "DELETE FROM \"Family\" WHERE id='\(id)'")
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK
@@ -198,7 +198,7 @@ class FaceDaoPostgresCK : FaceDaoInterface {
                 try db.execute(sql: "INSERT INTO \"PeopleRelationship\" (subject, object, \"callName\") VALUES ('\(primary)','\(secondary)','\(callName)')")
             }
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK
@@ -306,7 +306,7 @@ class FaceDaoPostgresCK : FaceDaoInterface {
         do {
             try db.execute(sql: "delete from \"People\" where id = $1", parameterValues: [id])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK
@@ -317,7 +317,7 @@ class FaceDaoPostgresCK : FaceDaoInterface {
         do {
             try db.execute(sql: "update \"People\" set \"coreMember\"='\(isCoreMember ? "t" : "f")' where id = $1", parameterValues: [id])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK
@@ -328,7 +328,7 @@ class FaceDaoPostgresCK : FaceDaoInterface {
         do {
             try db.execute(sql: "update \"People\" set \"coreMemberColor\"= $1 where id = $2", parameterValues: [hexColor, id])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK

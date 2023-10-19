@@ -71,7 +71,7 @@ class PlaceDaoPostgresCK : PlaceDaoInterface {
             oldPlace.name = oldName
             oldPlace.delete(db)
         }catch {
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK

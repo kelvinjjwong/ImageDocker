@@ -111,7 +111,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 """, parameterValues: ["\(repositoryRoot.withLastStash())"])
             return .OK
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
     }
@@ -134,7 +134,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 """, parameterValues: [id])
             return .OK
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
     }
@@ -260,7 +260,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "Image" set "hiddenByRepository" = true where "repositoryPath" = $1
                 """, parameterValues: ["\(repositoryRoot.withLastStash())"])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK
@@ -282,7 +282,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "Image" set "hiddenByRepository" = true where "id" = $1
                 """, parameterValues: [id])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK
@@ -304,7 +304,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "Image" set "hiddenByRepository" = false where "id" = $1
                 """, parameterValues: [id])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK
@@ -326,7 +326,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "Image" set "hiddenByRepository" = false where "repositoryPath" = $1
                 """, parameterValues: ["\(repositoryRoot.withLastStash())"])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK
@@ -462,7 +462,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 """)
             return .OK
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
     }
@@ -486,7 +486,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
             }
             return .OK
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
     }
@@ -863,7 +863,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "ImageContainer" set "path" = $1, "repositoryPath" = $2, "parentFolder" = $3, "subPath" = $4 where "path" = $5
                 """, parameterValues: [newPath, repositoryPath.withLastStash(), parentFolder, subPath, oldPath])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK
@@ -876,7 +876,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "ImageContainer" set "path" = $1, "repositoryPath" = $2, "parentFolder" = $3, "subPath" = $4 where id = $5
                 """, parameterValues: [newPath, repositoryPath.withLastStash(), parentFolder, subPath, containerId])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK
@@ -889,7 +889,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "ImageContainer" set "path" = $1, "repositoryPath" = $2 where "path" = $3
                 """, parameterValues: [newPath, repositoryPath.withLastStash(), oldPath])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK
@@ -902,7 +902,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "ImageContainer" set "path" = $1, "repositoryPath" = $2 where id = $3
                 """, parameterValues: [newPath, repositoryPath.withLastStash(), containerId])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK
@@ -918,7 +918,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "ImageContainer" set "hideByParent" = \(state ? "true" : "false") where "path" like $1
                 """, parameterValues: ["\(path.withLastStash())%"])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK
@@ -933,7 +933,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "ImageContainer" set "subContainers" = \(subContainers) where "path" = $1
                 """, parameterValues: [path])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return subContainers
         }
         return subContainers
@@ -952,7 +952,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "Image" set "hiddenByContainer" = true where "path" like $1
                 """, parameterValues:["\(path.withLastStash())%"])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK
@@ -968,7 +968,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "Image" set "hiddenByContainer" = true where "id" = $1
                 """, parameterValues:[id])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK
@@ -984,7 +984,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "Image" set "hiddenByContainer" = false where "path" like $1
                 """, parameterValues:["\(path.withLastStash())%"])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK
@@ -1000,7 +1000,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 update "Image" set "hiddenByContainer" = false where "id" = $1
                 """, parameterValues:[id])
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK

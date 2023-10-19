@@ -30,7 +30,7 @@ struct ExecutionEnvironment {
             do {
                 try cmd.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
             //cmd.terminate()
             
@@ -56,7 +56,7 @@ struct ExecutionEnvironment {
             do {
                 try cmd.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
             //cmd.terminate()
             
@@ -115,7 +115,7 @@ struct ExecutionEnvironment {
             do {
                 try cmd.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
             //cmd.terminate()
             
@@ -149,7 +149,7 @@ struct ExecutionEnvironment {
             do {
                 try cmd.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
             //cmd.terminate()
             
@@ -183,7 +183,7 @@ struct ExecutionEnvironment {
             do {
                 try cmd.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
             //cmd.terminate()
             
@@ -269,7 +269,7 @@ pip3 install face_recognition
                     try fileManager.copyItem(at: dbFileWAL, to: backupUrl.appendingPathComponent("ImageDocker.sqlite-wal"))
                 }
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
                 return (backupFolder, false, error)
             }
         }

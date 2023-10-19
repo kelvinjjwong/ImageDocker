@@ -34,7 +34,7 @@ class ComputerFileManager : FileSystemHandler {
             try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
         }catch{
             self.logger.log("Cannot create directory: \(path)")
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return false
         }
         return true
@@ -62,7 +62,7 @@ class ComputerFileManager : FileSystemHandler {
             try FileManager.default.removeItem(atPath: path)
         }catch {
             self.logger.log("Cannot delete original copy: \(path)")
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return false
         }
         return true

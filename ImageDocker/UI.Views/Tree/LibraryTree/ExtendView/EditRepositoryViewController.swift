@@ -952,13 +952,13 @@ class EditRepositoryViewController: NSViewController {
                             do {
                                 try FileManager.default.createDirectory(at: containerUrl, withIntermediateDirectories: true, attributes: nil)
                             }catch{
-                                self.logger.log(error)
+                                self.logger.log(.error, error)
                             }
                             do { // copy file
                                 try FileManager.default.copyItem(atPath: sourcePath, toPath: targetPath)
                                 copiedCount += 1
                             }catch{
-                                self.logger.log(error)
+                                self.logger.log(.error, error)
                                 errorCount += 1
                             }
                         }
@@ -1262,12 +1262,12 @@ class EditRepositoryViewController: NSViewController {
                                 do {
                                     try FileManager.default.createDirectory(at: containerUrl, withIntermediateDirectories: true, attributes: nil)
                                 }catch{
-                                    self.logger.log(error)
+                                    self.logger.log(.error, error)
                                 }
                                 do { // copy file
                                     try FileManager.default.copyItem(at: oldUrl, to: newUrl)
                                 }catch{
-                                    self.logger.log(error)
+                                    self.logger.log(.error, error)
                                 }
                             }
                             
@@ -1378,12 +1378,12 @@ class EditRepositoryViewController: NSViewController {
                                 do {
                                     try FileManager.default.createDirectory(at: containerUrl, withIntermediateDirectories: true, attributes: nil)
                                 }catch{
-                                    self.logger.log(error)
+                                    self.logger.log(.error, error)
                                 }
                                 do { // no file in new place, copy file
                                     try FileManager.default.copyItem(at: oldUrl, to: newUrl)
                                 }catch{
-                                    self.logger.log(error)
+                                    self.logger.log(.error, error)
                                 }
                             }
                         }
@@ -1552,12 +1552,12 @@ class EditRepositoryViewController: NSViewController {
                                 do {
                                     try FileManager.default.createDirectory(at: containerUrl, withIntermediateDirectories: true, attributes: nil)
                                 }catch{
-                                    self.logger.log(error)
+                                    self.logger.log(.error, error)
                                 }
                                 do { // copy file
                                     try FileManager.default.copyItem(at: oldUrl, to: newUrl)
                                 }catch{
-                                    self.logger.log(error)
+                                    self.logger.log(.error, error)
                                 }
                             }
                         }

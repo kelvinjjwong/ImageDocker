@@ -317,23 +317,23 @@ class CollectionViewItem: NSCollectionViewItem {
                         try FileManager.default.copyItem(atPath: backupUrl.path, toPath: url.path)
                         self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Done replace selected image with backup version")
                     }catch{
-                        self.logger.log("Unable to restore backup image from [\(backupUrl.path)] to [url.path]")
-                        self.logger.log(error)
+                        self.logger.log(.error, "Unable to restore backup image from [\(backupUrl.path)] to [url.path]")
+                        self.logger.log(.error, error)
                         self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Failed to replace selected image with backup version.")
                         self.logger.log("Restoring original editable version from \(tmpPath)")
                         do {
                             try FileManager.default.removeItem(atPath: url.path)
                             try FileManager.default.moveItem(atPath: tmpPath, toPath: url.path)
                         }catch{
-                            self.logger.log("Unable to restore original editable version from [\(tmpPath)] to [\(url.path)]")
-                            self.logger.log(error)
+                            self.logger.log(.error, "Unable to restore original editable version from [\(tmpPath)] to [\(url.path)]")
+                            self.logger.log(.error, error)
                         }
                     }
                     do {
                         try FileManager.default.removeItem(atPath: tmpPath)
                         try FileManager.default.removeItem(atPath: tmpFolder)
                     }catch{
-                        self.logger.log(error)
+                        self.logger.log(.error, error)
                     }
                 }else{
                     self.previewMessageDelegate?.onCollectionViewItemPreviewMessage(description: "Selected image's backup version does not exist")

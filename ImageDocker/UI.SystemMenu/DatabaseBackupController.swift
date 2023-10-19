@@ -625,7 +625,7 @@ final class DatabaseBackupController: NSViewController {
                     try FileManager.default.removeItem(at: url)
                 }catch{
                     self.logger.log("Unable to delete backup archive: \(url.path)")
-                    self.logger.log(error)
+                    self.logger.log(.error, error)
                 }
             }
             self.loadBackupArchives()
@@ -735,7 +735,7 @@ final class DatabaseBackupController: NSViewController {
                 self.logger.log("Unable to create database \(databaseName) on \(user)@\(host):\(port)")
                 self.logger.log(pgError)
                 if let error = err {
-                    self.logger.log(error)
+                    self.logger.log(.error, error)
                 }
                 DispatchQueue.main.async {
                     self.btnCreateDatabase.isEnabled = true

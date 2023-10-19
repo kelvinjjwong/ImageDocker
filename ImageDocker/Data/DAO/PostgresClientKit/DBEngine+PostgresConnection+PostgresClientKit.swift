@@ -96,8 +96,8 @@ public final class PostgresConnection : ImageDBInterface {
             try PostgresConnection.database().execute(sql: "SELECT NOW()")
             return (true, nil)
         }catch{
-            self.logger.log("Error at testDatabase()")
-            self.logger.log(error)
+            self.logger.log(.error, "Error at testDatabase()")
+            self.logger.log(.error, error)
             return (false, error)
         }
     }
@@ -107,8 +107,8 @@ public final class PostgresConnection : ImageDBInterface {
             try db.execute(sql: "SELECT NOW()")
             return (true, nil)
         }catch{
-            self.logger.log("[DB][Postgres] Error at testDatabase(db)")
-            self.logger.log(error)
+            self.logger.log(.error, "[DB][Postgres] Error at testDatabase(db)")
+            self.logger.log(.error, error)
             return (false, error)
         }
     }
@@ -132,7 +132,7 @@ public final class PostgresConnection : ImageDBInterface {
                 status = true
             }catch{
                 err = error
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
             
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
@@ -232,7 +232,7 @@ public final class PostgresConnection : ImageDBInterface {
             try FileManager.default.createDirectory(at: backupfolder, withIntermediateDirectories: true, attributes: nil)
         }catch{
             self.logger.log("Unable to create backup folder \(backupfolder.path)")
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return (folder, false, error)
         }
         let filepath = backupfolder.appendingPathComponent(filename)

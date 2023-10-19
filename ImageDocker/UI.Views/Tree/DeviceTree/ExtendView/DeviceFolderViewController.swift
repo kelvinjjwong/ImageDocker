@@ -422,7 +422,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
                     do {
                         try FileManager.default.createDirectory(atPath: destinationPath.path, withIntermediateDirectories: true, attributes: nil)
                     }catch{
-                        self.logger.log(error)
+                        self.logger.log(.error, error)
                         DispatchQueue.main.async {
                             self.lblProgressMessage.stringValue = "UNABLE TO CREATE FOLDER, PLEASE CHANGE ANOTHER PLACE"
                         }
@@ -449,7 +449,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
                                 try FileManager.default.copyItem(at: image.url, to: fileUrl)
                                 copiedCount += 1
                             }catch{
-                                self.logger.log(error)
+                                self.logger.log(.error, error)
                             }
                         }else{
 //                            self.logger.log("EXPORTING FROM \(image.url.path) TO \(device.deviceId):\(destinationPath.path)")

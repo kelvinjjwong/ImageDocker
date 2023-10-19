@@ -711,7 +711,7 @@ extension PostgresConnection {
         do {
             try migrator.migrate(cleanVersions: dropBeforeCreate)
         }catch{
-            self.logger.log(error)
+            self.logger.log(.error, error)
         }
     }
 }

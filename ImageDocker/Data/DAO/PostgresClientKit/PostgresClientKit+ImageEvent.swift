@@ -238,7 +238,7 @@ class EventDaoPostgresCK : EventDaoInterface {
             event.name = oldName
             event.delete(db)
         }catch {
-            self.logger.log(error)
+            self.logger.log(.error, error)
             return .ERROR
         }
         return .OK
@@ -264,7 +264,7 @@ class EventDaoPostgresCK : EventDaoInterface {
             UPDATE "ImageEvent" SET "imageCount"=$1,"lastUpdateTime"=now() WHERE "name"=$2
             """, parameterValues: [result, event])
         }catch {
-            self.logger.log(error)
+            self.logger.log(.error, error)
         }
         
         final class TempRecord : PostgresCustomRecord {
@@ -297,7 +297,7 @@ class EventDaoPostgresCK : EventDaoInterface {
             UPDATE "ImageEvent" SET "startDate"=$1,"endDate"=$2, "lastUpdateTime"=now() WHERE "name"=$3
             """, parameterValues: [minDate, maxDate, event])
         }catch {
-            self.logger.log(error)
+            self.logger.log(.error, error)
         }
         
         return result

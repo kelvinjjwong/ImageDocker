@@ -103,7 +103,7 @@ struct IPHONE {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         self.logger.log("RUN MOUNT")
@@ -139,7 +139,7 @@ struct IPHONE {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         //        command.launch()
@@ -169,7 +169,7 @@ struct IPHONE {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
 //        command.launch()
@@ -193,7 +193,7 @@ struct IPHONE {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
 //        command.launch()
@@ -316,7 +316,7 @@ struct IPHONE {
                 }
                 return true
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
                 return false
             }
         }else{
@@ -376,7 +376,7 @@ struct IPHONE {
                     try fileManager.createDirectory(at: targetFileFolder, withIntermediateDirectories: true, attributes: nil)
                 }catch{
                     self.logger.log("Unable to create target path: \(targetFileFolder.path)")
-                    self.logger.log(error)
+                    self.logger.log(.error, error)
                 }
             }
             if !fileManager.fileExists(atPath: targetFilePath.path) {
@@ -385,7 +385,7 @@ struct IPHONE {
                     try fileManager.copyItem(at: mountedDeviceFilePath, to: targetFilePath)
                     return true
                 }catch{
-                    self.logger.log(error)
+                    self.logger.log(.error, error)
                     return false
                 }
             }else{
@@ -410,7 +410,7 @@ struct IPHONE {
                 try fileManager.copyItem(at: localUrl, to: remoteUrl)
                 return true
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
                 return false
             }
         }else{
@@ -433,7 +433,7 @@ struct IPHONE {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         //command.waitUntilExit()
@@ -471,7 +471,7 @@ struct IPHONE {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         //command.waitUntilExit()
@@ -510,7 +510,7 @@ struct IPHONE {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         //command.waitUntilExit()
@@ -540,7 +540,7 @@ struct IPHONE {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         //command.waitUntilExit()
@@ -593,7 +593,7 @@ struct IPHONE {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         //command.waitUntilExit()

@@ -381,7 +381,7 @@ select count(1) from "ExportLog" where "profileId"='\(profile.id)'
                 INSERT INTO "ExportLog" ("imageId", "profileId", "lastExportTime", "repositoryPath", "subfolder", "filename", "exportedMd5", "state", "failMessage") VALUES ($1, $2, now(), $3, $4, $5, $6, 't', '')
                 """, parameterValues: [imageId, profileId, repositoryPath, subfolder, filename, exportedMD5])
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
                 return .ERROR
             }
         }else{
@@ -391,7 +391,7 @@ select count(1) from "ExportLog" where "profileId"='\(profile.id)'
                 UPDATE "ExportLog" set "lastExportTime" = now(), "repositoryPath" = $1, "subfolder" = $2, "filename" = $3, "exportedMd5" = $4, "state" = 't', "failMessage" = '' WHERE "imageId"=$5 and "profileId"=$6
                 """, parameterValues: [repositoryPath, subfolder, filename, exportedMD5, imageId, profileId])
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
                 return .ERROR
             }
         }

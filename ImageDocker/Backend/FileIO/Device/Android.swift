@@ -213,7 +213,7 @@ struct Android {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         //command.waitUntilExit()
@@ -249,7 +249,7 @@ struct Android {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         //command.waitUntilExit()
@@ -286,7 +286,7 @@ struct Android {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         //command.waitUntilExit()
@@ -395,7 +395,7 @@ struct Android {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
@@ -426,7 +426,7 @@ struct Android {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
                 err = error
             }
         }
@@ -460,7 +460,7 @@ struct Android {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
                 err = error
             }
         }
@@ -494,7 +494,7 @@ struct Android {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
@@ -523,7 +523,7 @@ struct Android {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         //command.waitUntilExit()
@@ -557,7 +557,7 @@ struct Android {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         //command.waitUntilExit()
@@ -615,7 +615,7 @@ struct Android {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         //command.waitUntilExit()
@@ -654,7 +654,7 @@ struct Android {
             do {
                 try command.run()
             }catch{
-                self.logger.log(error)
+                self.logger.log(.error, error)
             }
         }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
