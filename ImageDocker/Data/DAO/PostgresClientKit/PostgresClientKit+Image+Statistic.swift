@@ -107,28 +107,28 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         """, parameters:[repositoryId])
     }
     
-    func countPhotoFiles(year: Int, month: Int, day: Int, ignoreDate: Bool, country: String, province: String, city: String, place: String?, includeHidden: Bool, imageSource: [String]?, cameraModel: [String]?) -> Int {
+    func countPhotoFiles(year: Int, month: Int, day: Int, ignoreDate: Bool, country: String, province: String, city: String, place: String?, includeHidden: Bool) -> Int {
         let db = PostgresConnection.database()
-        let (stmt, _, sqlArgs) = SQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: ViewController.collectionFilter, year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
+        let (stmt, _, sqlArgs) = SQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: ViewController.collectionFilter, year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place, includeHidden:includeHidden)
         
         return db.count(sql: "select count(1) from \"Image\" where \(stmt)", parameterValues: sqlArgs)
     }
     
-    func countHiddenPhotoFiles(year: Int, month: Int, day: Int, ignoreDate: Bool, country: String, province: String, city: String, place: String?, includeHidden: Bool, imageSource: [String]?, cameraModel: [String]?) -> Int {
+    func countHiddenPhotoFiles(year: Int, month: Int, day: Int, ignoreDate: Bool, country: String, province: String, city: String, place: String?, includeHidden: Bool) -> Int {
         let db = PostgresConnection.database()
-        let (_, stmtHidden, sqlArgs) = SQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: ViewController.collectionFilter, year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
+        let (_, stmtHidden, sqlArgs) = SQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: ViewController.collectionFilter, year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place, includeHidden:includeHidden)
         return db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)", parameterValues: sqlArgs)
     }
     
-    func countPhotoFiles(year: Int, month: Int, day: Int, event: String, country: String, province: String, city: String, place: String, includeHidden: Bool, imageSource: [String]?, cameraModel: [String]?) -> Int {
+    func countPhotoFiles(year: Int, month: Int, day: Int, event: String, country: String, province: String, city: String, place: String, includeHidden: Bool) -> Int {
         let db = PostgresConnection.database()
-        let (stmt, _, sqlArgs) = SQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: ViewController.collectionFilter, year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
+        let (stmt, _, sqlArgs) = SQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: ViewController.collectionFilter, year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place, includeHidden:includeHidden)
         return db.count(sql: "select count(1) from \"Image\" where \(stmt)", parameterValues: sqlArgs)
     }
     
-    func countHiddenPhotoFiles(year: Int, month: Int, day: Int, event: String, country: String, province: String, city: String, place: String, includeHidden: Bool, imageSource: [String]?, cameraModel: [String]?) -> Int {
+    func countHiddenPhotoFiles(year: Int, month: Int, day: Int, event: String, country: String, province: String, city: String, place: String, includeHidden: Bool) -> Int {
         let db = PostgresConnection.database()
-        let (_, stmtHidden, sqlArgs) = SQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: ViewController.collectionFilter, year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
+        let (_, stmtHidden, sqlArgs) = SQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: ViewController.collectionFilter, year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place, includeHidden:includeHidden)
         return db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)", parameterValues: sqlArgs)
     }
     

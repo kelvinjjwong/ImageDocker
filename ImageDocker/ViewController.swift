@@ -220,9 +220,6 @@ class ViewController: NSViewController {
     var placePopover:NSPopover?
     var placeViewController:PlaceListViewController!
     
-    var filterPopover:NSPopover?
-    var filterViewController:FilterViewController!
-    
     @IBOutlet weak var comboPlaceList: NSComboBox!
     
     // MARK: - Device Copy Dialog
@@ -573,12 +570,6 @@ class ViewController: NSViewController {
     @IBAction func onAlertMessageClicked(_ sender: NSButton) {
         self.hideNotification()
     }
-    
-    
-    // MARK: - Tree Node Controls
-    
-    var filterImageSource:[String] = [] // FIXME: demise
-    var filterCameraModel:[String] = [] // FIXME: demise
     
     // MARK: - Collection Pages
     

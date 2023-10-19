@@ -90,11 +90,11 @@ extension ViewController {
         self.logger.log("refreshCollection(sender) clicked")
         if self.imagesLoader.lastRequest.loadSource == .repository && self.imagesLoader.lastRequest.pageNumber > 0 && self.imagesLoader.lastRequest.pageSize > 0 {
 //            self.logger.log("clicked repo collection reload button")
-            self.reloadCollectionFromImageContainer(sender: sender)
+            self.collectionPaginationController?.reload()
         }else if self.imagesLoader.lastRequest.loadSource == .moment && self.imagesLoader.lastRequest.pageNumber > 0 && self.imagesLoader.lastRequest.pageSize > 0 {
             if self.imagesLoader.lastRequest.place == nil {
                 if let moment = self.selectedMoment {
-                    self.reloadMomentCollection(moment: moment, sender: sender)
+                    self.collectionPaginationController?.reload()
                 }else{
 //                    self.logger.log("no selected moment")
                 }

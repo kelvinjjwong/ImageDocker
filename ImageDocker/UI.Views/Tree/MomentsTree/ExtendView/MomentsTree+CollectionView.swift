@@ -11,35 +11,11 @@ import Cocoa
 extension ViewController {
     
     fileprivate func countImagesOfMoment(moment:Moment) -> Int {
-        return ImageCountDao.default.countPhotoFiles(year: moment.year, month: moment.month, day: moment.day, place: nil, imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
+        return ImageCountDao.default.countPhotoFiles(year: moment.year, month: moment.month, day: moment.day, place: nil)
     }
     
     fileprivate func countHiddenImagesOfMoment(moment:Moment) -> Int {
-        return ImageCountDao.default.countHiddenPhotoFiles(year: moment.year, month: moment.month, day: moment.day, place: nil, imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
-    }
-    
-    func reloadMomentCollection(moment:Moment, sender:NSButton) {
-        print("## reloadMomentCollection")
-        self.collectionPaginationController?.reload()
-//        self.createCollectionPaginationPopover()
-//        self.collectionPaginationViewController
-//            .initView(self.imagesLoader.lastRequest,
-//                      onCountTotal: {
-//                        return self.countImagesOfMoment(moment: moment)
-//            },
-//                      onCountHidden: {
-//                        return self.countHiddenImagesOfMoment(moment: moment)
-//            },
-//                      onLoad: { pageSize, pageNumber in
-//                        self.loadCollectionByMoment(moment:moment, pageSize: pageSize, pageNumber: pageNumber)
-//            },
-//                      onPaginationStateChanges: { currentPage, totalPages in
-//                        self.collectionPaginationController?.changePaginationState(currentPage: currentPage, totalPages: totalPages)
-//                        
-//            })
-//        
-//        let cellRect = sender.bounds
-//        self.collectionPaginationPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxX)
+        return ImageCountDao.default.countHiddenPhotoFiles(year: moment.year, month: moment.month, day: moment.day, place: nil)
     }
     
     // 1
@@ -72,8 +48,6 @@ extension ViewController {
                 month: month,
                 day: day,
                 place: nil,
-                filterImageSource: self.filterImageSource,
-                filterCameraModel: self.filterCameraModel,
                 indicator:self.collectionLoadingIndicator,
                 pageSize: pageSize,
                 pageNumber: pageNumber)

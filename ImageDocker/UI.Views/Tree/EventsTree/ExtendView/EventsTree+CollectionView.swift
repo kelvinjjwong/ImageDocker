@@ -15,16 +15,13 @@ extension ViewController {
                                                      month: moment.month,
                                                      day: moment.day,
                                                      event: moment.event,
-                                                     place: moment.place,
-                                                     imageSource: self.filterImageSource,
-                                                     cameraModel: self.filterCameraModel
+                                                     place: moment.place
         )
     }
     
     fileprivate func countHiddenImagesOfEvent(moment:Moment) -> Int {
         return ImageCountDao.default.countHiddenPhotoFiles(year: moment.year, month: moment.month, day: moment.day,
-        event: moment.event, place: moment.place,
-        imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
+        event: moment.event, place: moment.place)
     }
     
     func reloadEventCollection(moment:Moment, sender:NSButton) {
@@ -73,8 +70,6 @@ extension ViewController {
                 self.imagesLoader.load(year: moment.year, month: moment.month, day: moment.day,
                                        event: moment.event,
                                        place: moment.place,
-                                       filterImageSource: self.filterImageSource,
-                                       filterCameraModel: self.filterCameraModel,
                                        indicator:self.collectionLoadingIndicator,
                                        pageSize: pageSize,
                                        pageNumber: pageNumber)

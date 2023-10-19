@@ -15,13 +15,9 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
     
     let logger = LoggerFactory.get(category: "ImageSearchDao", subCategory: "Postgres")
     
-    func getAllPlacesAndDates(imageSource: [String]?, cameraModel: [String]?) -> [Moment] {
+    func getAllPlacesAndDates() -> [Moment] {
         let db = PostgresConnection.database()
         var sqlArgs:[PostgresValueConvertible] = []
-        var imageSourceWhere = ""
-        var cameraModelWhere = ""
-        SQLHelper.inPostgresArray(field: "imageSource", array: imageSource, where: &imageSourceWhere, args: &sqlArgs)
-        SQLHelper.inPostgresArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs)
         
         let sql = """
         SELECT "country", "province", "city", "place", "photoTakenYear", "photoTakenMonth", "photoTakenDay", count(path) as "photoCount" FROM
@@ -30,7 +26,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         UNION
         SELECT "assignCountry" as country, "assignProvince" as province, "assignCity" as city, "assignPlace" as place, "photoTakenYear", "photoTakenMonth", "photoTakenDay", path, "imageSource","cameraModel" from "Image" WHERE "assignCountry" is not null and "assignProvince" is not null and "assignCity" is not null
         ) t
-        WHERE 1=1 \(imageSourceWhere) \(cameraModelWhere)
+        WHERE 1=1
         GROUP BY country,province,city,place,"photoTakenYear","photoTakenMonth","photoTakenDay" ORDER BY country,province,city,place,"photoTakenYear" DESC,"photoTakenMonth" DESC,"photoTakenDay" DESC
         """
         
@@ -290,18 +286,14 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         return result
     }
     
-    func getAllMoments(imageSource: [String]?, cameraModel: [String]?) -> [Moment] {
+    func getAllMoments() -> [Moment] {
         let db = PostgresConnection.database()
         var sqlArgs:[PostgresValueConvertible] = []
-        var imageSourceWhere = ""
-        var cameraModelWhere = ""
-        SQLHelper.inPostgresArray(field: "imageSource", array: imageSource, where: &imageSourceWhere, args: &sqlArgs)
-        SQLHelper.inPostgresArray(field: "cameraModel", array: cameraModel, where: &cameraModelWhere, args: &sqlArgs)
         
         let sql = """
         SELECT "photoTakenYear", "photoTakenMonth", "photoTakenDay", count(path) as "photoCount" FROM
         (SELECT COALESCE("photoTakenYear",0) AS "photoTakenYear", COALESCE("photoTakenMonth",0) AS "photoTakenMonth", COALESCE("photoTakenDay",0) AS "photoTakenDay", path, "imageSource", "cameraModel" from "Image") t
-        WHERE 1=1 \(imageSourceWhere) \(cameraModelWhere) GROUP BY "photoTakenYear","photoTakenMonth","photoTakenDay" ORDER BY "photoTakenYear" DESC,"photoTakenMonth" DESC,"photoTakenDay" DESC
+        WHERE 1=1 GROUP BY "photoTakenYear","photoTakenMonth","photoTakenDay" ORDER BY "photoTakenYear" DESC,"photoTakenMonth" DESC,"photoTakenDay" DESC
         """
 //        self.logger.log(sql)
         final class TempRecord : PostgresCustomRecord {
@@ -791,10 +783,10 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         return result
     }
     
-    func getPhotoFiles(filter:CollectionFilter, year: Int, month: Int, day: Int, ignoreDate: Bool, country: String, province: String, city: String, place: String?, includeHidden: Bool, imageSource: [String]?, cameraModel: [String]?, hiddenCountHandler: ((Int) -> Void)?, pageSize: Int, pageNumber: Int) -> [Image] {
+    func getPhotoFiles(filter:CollectionFilter, year: Int, month: Int, day: Int, ignoreDate: Bool, country: String, province: String, city: String, place: String?, includeHidden: Bool, hiddenCountHandler: ((Int) -> Void)?, pageSize: Int, pageNumber: Int) -> [Image] {
         let db = PostgresConnection.database()
         self.logger.log("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
-        let (stmt, stmtHidden, sqlArgs) = SQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter, year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
+        let (stmt, stmtHidden, sqlArgs) = SQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter, year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place, includeHidden:includeHidden)
         
 //        self.logger.log(stmt)
 //        self.logger.log(stmtHidden)
@@ -818,10 +810,10 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         
     }
     
-    func getPhotoFiles(filter:CollectionFilter, year: Int, month: Int, day: Int, event: String, country: String, province: String, city: String, place: String, includeHidden: Bool, imageSource: [String]?, cameraModel: [String]?, hiddenCountHandler: ((Int) -> Void)?, pageSize: Int, pageNumber: Int) -> [Image] {
+    func getPhotoFiles(filter:CollectionFilter, year: Int, month: Int, day: Int, event: String, country: String, province: String, city: String, place: String, includeHidden: Bool, hiddenCountHandler: ((Int) -> Void)?, pageSize: Int, pageNumber: Int) -> [Image] {
         let db = PostgresConnection.database()
         self.logger.log("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
-        let (stmt, stmtHidden, sqlArgs) = SQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter, year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place, includeHidden:includeHidden, imageSource:imageSource, cameraModel:cameraModel)
+        let (stmt, stmtHidden, sqlArgs) = SQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter, year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place, includeHidden:includeHidden)
         
         var result:[Image] = []
         let hiddenCount = db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)", parameterValues: sqlArgs)

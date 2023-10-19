@@ -131,7 +131,7 @@ protocol ImageRecordDaoInterface {
 
 protocol ImageSearchDaoInterface {
     
-    func getAllPlacesAndDates(imageSource: [String]?, cameraModel: [String]?) -> [Moment]
+    func getAllPlacesAndDates() -> [Moment]
     
     // MARK: - Options
     
@@ -143,7 +143,7 @@ protocol ImageSearchDaoInterface {
     
     func getMoments(_ momentCondition:MomentCondition, year:Int, month:Int, condition:SearchCondition?) -> [Moment]
     
-    func getAllMoments(imageSource:[String]?, cameraModel:[String]?) -> [Moment]
+    func getAllMoments() -> [Moment]
     
     // MARK: - PLACES
     
@@ -160,10 +160,10 @@ protocol ImageSearchDaoInterface {
     // MARK: - COLLECTION
     
     // get by date & place
-    func getPhotoFiles(filter:CollectionFilter, year:Int, month:Int, day:Int, ignoreDate:Bool, country:String, province:String, city:String, place:String?, includeHidden:Bool, imageSource:[String]?, cameraModel:[String]?, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? , pageSize:Int, pageNumber:Int) -> [Image]
+    func getPhotoFiles(filter:CollectionFilter, year:Int, month:Int, day:Int, ignoreDate:Bool, country:String, province:String, city:String, place:String?, includeHidden:Bool, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? , pageSize:Int, pageNumber:Int) -> [Image]
     
     // get by date & event & place
-    func getPhotoFiles(filter:CollectionFilter, year:Int, month:Int, day:Int, event:String, country:String, province:String, city:String, place:String, includeHidden:Bool, imageSource:[String]?, cameraModel:[String]?, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)?, pageSize:Int, pageNumber:Int) -> [Image]
+    func getPhotoFiles(filter:CollectionFilter, year:Int, month:Int, day:Int, event:String, country:String, province:String, city:String, place:String, includeHidden:Bool, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)?, pageSize:Int, pageNumber:Int) -> [Image]
     
     // MARK: - SEARCH
     func searchImages(condition:SearchCondition, includeHidden:Bool, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)?, pageSize:Int, pageNumber:Int) -> [Image]
@@ -257,16 +257,16 @@ protocol ImageCountDaoInterface {
     func countRecognizedFaces(repositoryId:Int) -> Int
     
     // count by date & place
-    func countPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool, country:String, province:String, city:String, place:String?, includeHidden:Bool, imageSource:[String]?, cameraModel:[String]?) -> Int
+    func countPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool, country:String, province:String, city:String, place:String?, includeHidden:Bool) -> Int
     
     // count by date & place
-    func countHiddenPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool, country:String, province:String, city:String, place:String?, includeHidden:Bool, imageSource:[String]?, cameraModel:[String]?) -> Int
+    func countHiddenPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool, country:String, province:String, city:String, place:String?, includeHidden:Bool) -> Int
     
     // count by date & event & place
-    func countPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String, province:String, city:String, place:String, includeHidden:Bool, imageSource:[String]?, cameraModel:[String]?) -> Int
+    func countPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String, province:String, city:String, place:String, includeHidden:Bool) -> Int
     
     // count by date & event & place
-    func countHiddenPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String, province:String, city:String, place:String, includeHidden:Bool, imageSource:[String]?, cameraModel:[String]?) -> Int
+    func countHiddenPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String, province:String, city:String, place:String, includeHidden:Bool) -> Int
     
     // MARK: - FACE
     

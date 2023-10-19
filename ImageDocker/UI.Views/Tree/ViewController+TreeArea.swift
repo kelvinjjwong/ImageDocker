@@ -101,7 +101,7 @@ extension ViewController {
                                     moreActionOnNode: { collection, button in
 //                                        self.logger.log("more on moments \(collection.path)")
                                         if let moment = collection.relatedObject as? Moment {
-                                            self.reloadMomentCollection(moment:moment, sender:button)
+                                            self.collectionPaginationController?.reload()
                                         }
         },
                                     notificationHolder: self.btnAlertMessage)

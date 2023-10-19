@@ -154,8 +154,6 @@
 		8E8D47262236733B0091E9C3 /* OneColumnTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D47242236733B0091E9C3 /* OneColumnTableViewController.swift */; };
 		8E8D47272236733B0091E9C3 /* OneColumnTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E8D47252236733B0091E9C3 /* OneColumnTableViewController.xib */; };
 		8E8D47292236F63C0091E9C3 /* TablePopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D47282236F63C0091E9C3 /* TablePopover.swift */; };
-		8E95739A20EBEBD7003BD651 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E95739820EBEBD7003BD651 /* FilterViewController.swift */; };
-		8E95739B20EBEBD7003BD651 /* FilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E95739920EBEBD7003BD651 /* FilterViewController.xib */; };
 		8E98B8F020D0EE3300771280 /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E98B8EE20D0EE3300771280 /* PlaceListViewController.swift */; };
 		8E98B8F120D0EE3300771280 /* PlaceListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E98B8EF20D0EE3300771280 /* PlaceListViewController.xib */; };
 		8E98B8F320D5C90600771280 /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E98B8F220D5C90600771280 /* WindowController.swift */; };
@@ -526,8 +524,6 @@
 		8E8D47242236733B0091E9C3 /* OneColumnTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneColumnTableViewController.swift; sourceTree = "<group>"; };
 		8E8D47252236733B0091E9C3 /* OneColumnTableViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OneColumnTableViewController.xib; sourceTree = "<group>"; };
 		8E8D47282236F63C0091E9C3 /* TablePopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TablePopover.swift; sourceTree = "<group>"; };
-		8E95739820EBEBD7003BD651 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
-		8E95739920EBEBD7003BD651 /* FilterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FilterViewController.xib; sourceTree = "<group>"; };
 		8E98B8EE20D0EE3300771280 /* PlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
 		8E98B8EF20D0EE3300771280 /* PlaceListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaceListViewController.xib; sourceTree = "<group>"; };
 		8E98B8F220D5C90600771280 /* WindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowController.swift; sourceTree = "<group>"; };
@@ -1274,7 +1270,6 @@
 				8EB27171233E1796003BF3AF /* EventsTree */,
 				8EB27165233BB274003BF3AF /* DeviceTree */,
 				8EB27164233BB244003BF3AF /* LibraryTree */,
-				8EE1AB3A20D05E0C001C75B0 /* Search */,
 				8EFE763B2094AF6B00B7CFCA /* TreeController.swift */,
 			);
 			path = Tree;
@@ -1566,15 +1561,6 @@
 			path = ExtendView;
 			sourceTree = "<group>";
 		};
-		8EE1AB3A20D05E0C001C75B0 /* Search */ = {
-			isa = PBXGroup;
-			children = (
-				8E95739820EBEBD7003BD651 /* FilterViewController.swift */,
-				8E95739920EBEBD7003BD651 /* FilterViewController.xib */,
-			);
-			path = Search;
-			sourceTree = "<group>";
-		};
 		8EEF0725226215C8000520B7 /* Splash */ = {
 			isa = PBXGroup;
 			children = (
@@ -1768,7 +1754,6 @@
 				8EE709D82AC0699400503447 /* PeopleManageViewController.xib in Resources */,
 				8EE1AB3E20D05E49001C75B0 /* EventListViewController.xib in Resources */,
 				8E0AFA44208BDEA100CE8B68 /* Main.storyboard in Resources */,
-				8E95739B20EBEBD7003BD651 /* FilterViewController.xib in Resources */,
 				8EB2716A233BB408003BF3AF /* RepositoryDetailViewController.xib in Resources */,
 				8EB986BE20B30C920075B081 /* CollectionViewItem.xib in Resources */,
 				8E9D804123495F100062692A /* LargeViewItems.storyboard in Resources */,
@@ -1914,7 +1899,6 @@
 				8ECA1FFB23E5751300F56895 /* LibraryTree+ExtendView.swift in Sources */,
 				8EE709DE2AC0917900503447 /* CollectionFilterPopover.swift in Sources */,
 				8E9CF30F2648D42500558423 /* ChangeEvent.swift in Sources */,
-				8E95739A20EBEBD7003BD651 /* FilterViewController.swift in Sources */,
 				8E27F2A5259DD79C003D48BE /* TreeOutlineView.swift in Sources */,
 				8EF3FEE724231C0400AF83BB /* ImageSQLHelper.swift in Sources */,
 				8E8D47292236F63C0091E9C3 /* TablePopover.swift in Sources */,

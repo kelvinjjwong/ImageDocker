@@ -131,7 +131,6 @@ class CollectionViewItemsLoader : NSObject {
     // load without event, paginated
     func load(year:Int, month:Int, day:Int, ignoreDate:Bool = false,
               country:String = "", province:String = "", city:String = "", place:String?,
-              filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil,
               indicator:Accumulator? = nil,
               pageSize:Int = 0, pageNumber:Int = 0) {
         self.logger.log("[load(year,month,day,country,province,city)] year:\(year) month:\(month) day:\(day) country:\(country) province:\(province) city:\(city) pageSize:\(pageSize) pageNumber:\(pageNumber)")
@@ -147,8 +146,6 @@ class CollectionViewItemsLoader : NSObject {
         lastRequest.city = city
         lastRequest.place = place
         lastRequest.indicator = indicator
-        lastRequest.imageSource = filterImageSource
-        lastRequest.cameraModel = filterCameraModel
         lastRequest.pageSize = pageSize
         lastRequest.pageNumber = pageNumber
         lastRequest.subdirectories = false
@@ -160,7 +157,6 @@ class CollectionViewItemsLoader : NSObject {
         let photoFiles = ImageSearchDao.default.getPhotoFiles(filter: ViewController.collectionFilter, year: year, month: month, day: day, ignoreDate: ignoreDate,
                                                           country: country, province: province, city: city, place: place,
                                                           includeHidden: showHidden,
-                                                          imageSource: filterImageSource, cameraModel: filterCameraModel,
                                                           hiddenCountHandler: self.hiddenCountHandler,
                                                           pageSize: pageSize, pageNumber: pageNumber)
         //self.logger.log("GOT PHOTOS for year:\(year) month:\(month) day:\(day) place:\(place) count \(photoFiles.count)")
@@ -176,7 +172,6 @@ class CollectionViewItemsLoader : NSObject {
     func load(year:Int, month:Int, day:Int,
               event:String,
               country:String = "", province:String = "", city:String = "", place:String,
-              filterImageSource:[String]? = nil, filterCameraModel:[String]? = nil,
               indicator:Accumulator? = nil,
               pageSize:Int = 0, pageNumber:Int = 0) {
         self.logger.log("[load(year,month,day,EVENT,country,province,city)] year:\(year) month:\(month) day:\(day) event:\(event) country:\(country) province:\(province) city:\(city) pageSize:\(pageSize) pageNumber:\(pageNumber)")
@@ -192,8 +187,6 @@ class CollectionViewItemsLoader : NSObject {
         lastRequest.place = place
         lastRequest.event = event
         lastRequest.indicator = indicator
-        lastRequest.imageSource = filterImageSource
-        lastRequest.cameraModel = filterCameraModel
         lastRequest.pageSize = pageSize
         lastRequest.pageNumber = pageNumber
         lastRequest.subdirectories = false
@@ -205,7 +198,6 @@ class CollectionViewItemsLoader : NSObject {
                                                           event: event,
                                                           country: country, province: province, city: city, place:place,
                                                           includeHidden: showHidden,
-                                                          imageSource: filterImageSource, cameraModel: filterCameraModel,
                                                           hiddenCountHandler: self.hiddenCountHandler,
                                                           pageSize: pageSize, pageNumber: pageNumber)
         //self.logger.log("GOT PHOTOS for year:\(year) month:\(month) day:\(day) event:\(event) place:\(place) count \(photoFiles.count)")
@@ -289,14 +281,12 @@ class CollectionViewItemsLoader : NSObject {
                 self.load(year: lastRequest.year!, month: lastRequest.month!, day: lastRequest.day!, ignoreDate: lastRequest.ignoreDate,
                           country:lastRequest.country, province:lastRequest.province, city:lastRequest.city,
                           place: lastRequest.place,
-                          filterImageSource: lastRequest.imageSource, filterCameraModel: lastRequest.cameraModel,
                           indicator: lastRequest.indicator,
                           pageSize: lastRequest.pageSize, pageNumber: lastRequest.pageNumber)
             }else if lastRequest.loadSource == .event {
                 self.load(year: lastRequest.year!, month: lastRequest.month!, day: lastRequest.day!,
                           event: lastRequest.event!,
                           place: lastRequest.place!,
-                          filterImageSource: lastRequest.imageSource, filterCameraModel: lastRequest.cameraModel,
                           indicator: lastRequest.indicator,
                           pageSize: lastRequest.pageSize, pageNumber: lastRequest.pageNumber)
             }else if lastRequest.loadSource == .search, let condition = lastRequest.searchCondition {

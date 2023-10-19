@@ -18,8 +18,7 @@ extension ViewController {
                                                     country: moment.countryData == "" ? (moment.gov == "未知国家" ? "" : moment.gov) : moment.countryData,
                                                     province: moment.provinceData,
                                                     city: moment.cityData,
-                                                    place: moment.placeData == "" ? (moment.place == "未知地点" ? "" : moment.place) : moment.placeData,
-                                                    imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
+                                                    place: moment.placeData == "" ? (moment.place == "未知地点" ? "" : moment.place) : moment.placeData)
     }
     
     fileprivate func countHiddenImagesOfPlace(moment:Moment) -> Int {
@@ -28,8 +27,7 @@ extension ViewController {
                                                             country: moment.countryData == "" ? (moment.gov == "未知国家" ? "" : moment.gov) : moment.countryData,
                                                             province: moment.provinceData,
                                                             city: moment.cityData,
-                                                            place: moment.placeData == "" ? (moment.place == "未知地点" ? "" : moment.place) : moment.placeData,
-                                                            imageSource: self.filterImageSource, cameraModel: self.filterCameraModel)
+                                                            place: moment.placeData == "" ? (moment.place == "未知地点" ? "" : moment.place) : moment.placeData)
     }
 
     func reloadPlaceCollection(moment:Moment, sender:NSButton) {
@@ -82,8 +80,6 @@ extension ViewController {
                     province: moment.provinceData,
                     city: moment.cityData,
                     place: moment.placeData,
-                    filterImageSource: self.filterImageSource,
-                    filterCameraModel: self.filterCameraModel,
                     indicator:self.collectionLoadingIndicator,
                     pageSize: pageSize,
                     pageNumber: pageNumber)
