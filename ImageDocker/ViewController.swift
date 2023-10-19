@@ -20,6 +20,8 @@ class ViewController: NSViewController {
     
     var childWindows:[String:NSWindow] = [:]
     
+    var centralSplitViewDelegate:CentralSplitViewDelegate!
+    
     // MARK: Main Menu
     
     

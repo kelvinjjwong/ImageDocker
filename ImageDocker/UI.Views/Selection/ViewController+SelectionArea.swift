@@ -13,7 +13,7 @@ extension ViewController {
     
     func configureSelectionView() {
         self.centralHorizontalSplitView.setPosition((self.view.window?.screen?.visibleFrame.height ?? 0) - 315, ofDividerAt: 0)
-        self.centralHorizontalSplitView.delegate = self
+       
         
         self.selectionViewController = (storyboard?.instantiateController(withIdentifier: "SelectionViewController") as! SelectionViewController)
         self.addChild(self.selectionViewController)
@@ -48,10 +48,16 @@ extension ViewController {
     }
 }
 
-extension ViewController : NSSplitViewDelegate {
+class CentralSplitViewDelegate : NSObject, NSSplitViewDelegate {
+    
+    fileprivate var view:ViewController
+    
+    public init(view: ViewController) {
+        self.view = view
+    }
     
     func splitViewDidResizeSubviews(_ notification: Notification) {
-        self.selectionViewController.view.frame = self.bottomView.bounds
+        self.view.selectionViewController.view.frame = self.view.bottomView.bounds
     }
     
 }

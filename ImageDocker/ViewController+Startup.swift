@@ -143,6 +143,9 @@ extension ViewController {
         self.view.subviews.removeLast()
         self.startingUp = false
         self.logger.log("FINISHED STARTUP WORK")
+        
+        self.centralSplitViewDelegate = CentralSplitViewDelegate(view: self)
+        self.centralHorizontalSplitView.delegate = self.centralSplitViewDelegate
 
         self.configureMainSearchBar()
         self.showMemories()
