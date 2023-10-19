@@ -116,7 +116,12 @@ class FaceDaoPostgresCK : FaceDaoInterface {
                 let rows = TempRecord.fetchAll(db, sql: "SELECT id FROM \"Family\" WHERE id='\(id)'")
                 if rows.count > 0 {
                     recordId = id
-                    try db.execute(sql: "UPDATE \"Family\" SET name='\(name)',category='\(type)',owner='\(owner)' WHERE id='\(id)'")
+                    try db.execute(sql: """
+        UPDATE "Family" SET name='\(name)',category='\(type)',owner='\(owner)' WHERE id='\(id)'
+        """)
+                    try db.execute(sql: """
+        UPDATE "ImageFamily" set "familyName"='\(name)' WHERE familyId='\(id)'
+        """)
                 }else{
                     needInsert = true
                 }
@@ -272,6 +277,13 @@ class FaceDaoPostgresCK : FaceDaoInterface {
         person.name = name
         person.shortName = shortName
         person.save(db)
+        do {
+            try db.execute(sql: """
+        UPDATE "ImageFamily" set "owner"='\(shortName)' WHERE "ownerId"='\(id)'
+        """)
+        }catch{
+            self.logger.log(.error, "Unable to update people name in ImageFamily table: \(error)")
+        }
         return .OK
     }
     

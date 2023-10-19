@@ -312,7 +312,7 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
         }
     }
     
-    @IBAction func onRemoveClicked(_ sender: NSButton) {
+    @IBAction func onRemoveClicked(_ sender: NSButton) { // on update or remove, shared button
         if let item = nodeData as? CoreMember {
             print("add empty people group for: \(item.nickname)")
             let idx = item.groups.count + 1
