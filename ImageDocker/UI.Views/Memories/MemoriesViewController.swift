@@ -348,9 +348,10 @@ class MemoriesViewController : NSViewController {
         if self.previewView == nil {
             self.preview.wantsLayer = true
             self.preview.subviews.removeAll()
-            previewView = QLPreviewView(frame: NSRect(x: 0, y: 0, width:
-                self.preview.visibleRect.width, height:
-                self.preview.visibleRect.height), style: .normal)
+//            previewView = QLPreviewView(frame: NSRect(x: 0, y: 0, width:
+//                self.preview.visibleRect.width, height:
+//                self.preview.visibleRect.height), style: .normal)
+            previewView = QLPreviewView(frame: self.preview.bounds, style: .normal)
             previewView?.wantsLayer = true
             previewView?.autostarts = true
             previewView?.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)

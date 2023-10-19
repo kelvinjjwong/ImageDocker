@@ -368,9 +368,12 @@ class TheaterViewController: NSViewController {
     
     private func previewImage(image:ImageFile){
         self.preview.subviews.removeAll()
-        let previewView = QLPreviewView(frame: NSRect(x: 0, y: 0, width:
-            self.preview.visibleRect.width, height:
-            self.preview.visibleRect.height), style: .normal)
+//        let previewView = QLPreviewView(frame: NSRect(x: 0, 
+//                                                      y: 0,
+//                                                      width: self.preview.visibleRect.width,
+//                                                      height: self.preview.visibleRect.height),
+//                                        style: .normal)
+        let previewView = QLPreviewView(frame: self.preview.bounds, style: .normal)
         
         let quickLookItem = TheaterQuickLookItem()
         quickLookItem.previewItemURL = image.url

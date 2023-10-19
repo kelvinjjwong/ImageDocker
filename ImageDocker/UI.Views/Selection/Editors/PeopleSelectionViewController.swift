@@ -368,6 +368,10 @@ extension PeopleSelectionViewController : NSOutlineViewDelegate {
 
     }
     
+    func outlineView(_ outlineView: NSOutlineView, heightOfRowByItem item: Any) -> CGFloat {
+        return CGFloat(20)
+    }
+    
     func outlineView(_ outlineView: NSOutlineView, isGroupItem item: Any) -> Bool {
 //        if let _ = item as? CoreMember {
 //            return true
