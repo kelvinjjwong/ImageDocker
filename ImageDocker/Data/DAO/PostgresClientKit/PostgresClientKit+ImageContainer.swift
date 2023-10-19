@@ -680,6 +680,12 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         return Image.count(db, parameters: ["containerId": containerId])
     }
     
+    func countSubHiddenImages(containerId:Int) -> Int {
+        let db = PostgresConnection.database()
+        self.logger.log("countSubHiddenImages(containerId:\(containerId))")
+        return Image.count(db, parameters: ["containerId": containerId, "hidden": true])
+    }
+    
     // MARK: IMAGE CONTAINER QUERIES
     
     func getAllContainerPathsOfImages(rootPath: String?) -> Set<String> {

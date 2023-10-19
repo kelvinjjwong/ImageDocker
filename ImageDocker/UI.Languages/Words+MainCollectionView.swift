@@ -110,4 +110,9 @@ extension Words {
         eng: "SAR",
         chs: "特别行政区"
     )
+    
+    static let collection_organizing_images = Localize(
+        eng: "Organizing images ...",
+        chs: "正在整理照片 ..."
+    )
 }

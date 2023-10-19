@@ -417,6 +417,11 @@ class RepositoryDao {
         return self.impl.countSubImages(containerId: containerId)
     }
     
+    /// - Tag: countSubHiddenImages(containerId)
+    func countSubHiddenImages(containerId:Int) -> Int {
+        return self.impl.countSubHiddenImages(containerId: containerId)
+    }
+    
     // MARK: GET PARENT CONTAINER
     
     /// not-used

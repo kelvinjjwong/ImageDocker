@@ -481,7 +481,7 @@ class MetaConsumer : LocationConsumer {
     }
     
     private func checkComplete(){
-        if accumulator != nil && (accumulator?.add("Organizing images ..."))! {
+        if accumulator != nil && (accumulator?.add(Words.collection_organizing_images.word()))! {
             if self.onCompleteHandler != nil {
                 //self.logger.log("ON COMPLETE")
                 onCompleteHandler?.onPlacesCompleted()

@@ -10,6 +10,7 @@ import Cocoa
 
 extension ViewController {
     
+    // RepositoryDao.default.countSubImages(containerId: container.id)
     fileprivate func countImagesOfContainer(container:ImageContainer) -> Int{
 //        self.logger.log("countImagesOfContainer(container:\(container.id)")
         return ImageCountDao.default.countImages(repositoryRoot: container.path.withLastStash()) // FIXME: use id instead
@@ -74,15 +75,28 @@ extension ViewController {
     
     internal func loadCollectionByContainer(name:String, containerId:Int, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){
         self.logger.log("loadCollectionByContainer(name:\(name), containerId:\(containerId), repositoryId:\(repositoryId ?? -999999), repositoryVolume:\(repositoryVolume ?? "nil"), rawVolume:\(rawVolume ?? "nil"), pageSize:\(pageSize), pageNumber:\(pageNumber), subdirectories:\(subdirectories)")
-        loadCollection {
-            self.imagesLoader.load(containerId:containerId,
-                repositoryId: repositoryId,
-                repositoryVolume: repositoryVolume,
-                rawVolume: rawVolume,
-                indicator:self.collectionLoadingIndicator,
-                pageSize: pageSize,
-                pageNumber: pageNumber)
-        }
+        
+        self.collectionPaginationController?.initPageSize(pageSize: pageSize)
+        self.collectionPaginationController?.initPageNumber(pageNumber: pageNumber)
+        self.collectionPaginationController?.initCounter(onCountTotal: {
+            return RepositoryDao.default.countSubImages(containerId: containerId)
+        }, onCountHidden: {
+            return RepositoryDao.default.countSubHiddenImages(containerId: containerId)
+        })
+        self.collectionPaginationController?.initLoader(onLoad: { pageSize, pageNumber in
+            self.loadCollection {
+                self.imagesLoader.load(containerId:containerId,
+                    repositoryId: repositoryId,
+                    repositoryVolume: repositoryVolume,
+                    rawVolume: rawVolume,
+                    indicator:self.collectionLoadingIndicator,
+                    pageSize: pageSize,
+                    pageNumber: pageNumber)
+            }
+        })
+        self.collectionPaginationController?.load()
+        
+        
     }
     
 //    internal func loadCollectionByContainer(name:String, url:URL, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false){

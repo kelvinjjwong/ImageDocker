@@ -137,6 +137,8 @@ protocol RepositoryDaoInterface {
     
     func countSubImages(containerId:Int) -> Int
     
+    func countSubHiddenImages(containerId:Int) -> Int
+    
     // MARK: SUB CONTAINER UPDATE
     
     func updateImageContainerSubContainers(path:String) -> Int
