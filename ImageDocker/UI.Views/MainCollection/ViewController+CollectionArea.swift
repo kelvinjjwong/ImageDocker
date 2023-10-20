@@ -28,7 +28,6 @@ extension ViewController {
         collectionView.layer?.borderColor = Colors.DeepDarkGray.cgColor
         
         imagesLoader.singleSectionMode = false
-        imagesLoader.showHidden = false
         imagesLoader.clean()
         collectionView.reloadData()
     }
@@ -46,98 +45,12 @@ extension ViewController {
         self.btnCombineDuplicates.isEnabled = true
     }
     
-    internal func switchShowHideState() {
-        self.imagesLoader.showHidden = false // self.chbShowHidden.state == .on
-        
-        TaskManager.loadingImagesCollection = true
-        
-        self.imagesLoader.clean()
-        collectionView.reloadData()
-        
-        DispatchQueue.global().async {
-            if self.imagesLoader.isLoading(){
-                self.imagesLoader.cancel(onCancelled: {
-                    self.imagesLoader.reload()
-                    self.refreshCollectionView()
-                    TaskManager.loadingImagesCollection = false
-                })
-            }else{
-                self.imagesLoader.reload()
-                self.refreshCollectionView()
-                TaskManager.loadingImagesCollection = false
-            }
-            
-        }
-    }
-    
-    internal func previousPageCollection() {
-        print("## previousPageCollection")
-//        self.collectionPaginationController?.changePaginationState(currentPage: self.currentPageOfCollection - 1, totalPages: self.totalPagesOfCollection)
-//        self.loadCollection {
-//            self.imagesLoader.previousPage()
-//        }
-    }
-    
-    internal func nextPageCollection() {
-        print("## nextPageCollection")
-//        self.collectionPaginationController?.changePaginationState(currentPage: self.currentPageOfCollection + 1, totalPages: self.totalPagesOfCollection)
-//        self.loadCollection {
-//            self.imagesLoader.nextPage()
-//        }
-    }
-    
-    internal func refreshCollection(_ sender: NSButton) {
-        self.logger.log("refreshCollection(sender) clicked")
-        if self.imagesLoader.lastRequest.loadSource == .repository && self.imagesLoader.lastRequest.pageNumber > 0 && self.imagesLoader.lastRequest.pageSize > 0 {
-//            self.logger.log("clicked repo collection reload button")
-            self.collectionPaginationController?.reload()
-        }else if self.imagesLoader.lastRequest.loadSource == .moment && self.imagesLoader.lastRequest.pageNumber > 0 && self.imagesLoader.lastRequest.pageSize > 0 {
-            if self.imagesLoader.lastRequest.place == nil {
-                if let moment = self.selectedMoment {
-                    self.collectionPaginationController?.reload()
-                }else{
-//                    self.logger.log("no selected moment")
-                }
-            }else{
-                if let moment = self.selectedMoment {
-                    self.reloadPlaceCollection(moment: moment, sender: sender)
-                }else{
-//                    self.logger.log("no selected moment")
-                }
-            }
-        }else if self.imagesLoader.lastRequest.loadSource == .event && self.imagesLoader.lastRequest.pageNumber > 0 && self.imagesLoader.lastRequest.pageSize > 0 {
-            if let moment = self.selectedMoment {
-                self.reloadEventCollection(moment: moment, sender: sender)
-            }else{
-//                self.logger.log("no selected moment")
-            }
-        }else{
-            self.refreshCollection()
-        }
-    }
-    
     internal func selectImageFile(_ imageFile:ImageFile){
         self.selectedImageFile = imageFile.fileName
         //self.logger.log("selected image file: \(filename)")
         //let url:URL = (self.selectedImageFolder?.url.appendingPathComponent(imageFile.fileName, isDirectory: false))!
         DispatchQueue.main.async {
             self.loadImageMetaAndPreview(imageFile: imageFile)
-        }
-    }
-    
-    internal func refreshCollection(){
-        self.logger.log("refreshCollection() clicked")
-        DispatchQueue.global().async {
-            if self.imagesLoader.isLoading() {
-                self.imagesLoader.cancel(onCancelled: {
-                    self.imagesLoader.reload()
-                    self.refreshCollectionView()
-                })
-            }else {
-                self.imagesLoader.reload()
-                self.refreshCollectionView()
-            }
-            
         }
     }
     
@@ -148,8 +61,6 @@ extension ViewController {
         
         self.imagesLoader.clean()
         collectionView.reloadData()
-        
-        self.imagesLoader.showHidden = false // self.chbShowHidden.state == .on
         
         DispatchQueue.global().async {
             self.collectionLoadingIndicator = Accumulator(target: 1000, indicator: self.collectionProgressIndicator, suspended: true, lblMessage:self.indicatorMessage, onCompleted: {data in

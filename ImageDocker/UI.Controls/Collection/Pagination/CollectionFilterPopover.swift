@@ -13,7 +13,6 @@ extension ViewController {
     func persistCollectionFilter(filter: CollectionFilter) {
         self.logger.log(.trace, filter.represent())
         ViewController.collectionFilter = filter
-//        self.refreshCollection(self.btnRefreshCollectionView)
         self.collectionPaginationController?.onFirstPage()
     }
     
@@ -22,7 +21,7 @@ extension ViewController {
         var myPopover = self.collectionFilterPopover
         if(myPopover == nil){
             
-            let frame = CGRect(origin: .zero, size: CGSize(width: 600, height: 350))
+            let frame = CGRect(origin: .zero, size: CGSize(width: 600, height: 420))
             self.collectionFilterViewController = CollectionFilterViewController()
             self.collectionFilterViewController.persist = self.persistCollectionFilter(filter:)
             self.collectionFilterViewController.view.frame = frame

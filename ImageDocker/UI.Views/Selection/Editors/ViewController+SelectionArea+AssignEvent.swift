@@ -19,7 +19,6 @@ extension SelectionViewController {
         guard self.comboEventList.stringValue != "" else {return}
         
         let accumulator:Accumulator = Accumulator(target: self.collectionViewController.imagesLoader.getItems().count, indicator: self.batchEditIndicator, suspended: false, lblMessage: nil, onCompleted:{ data in
-            //self.refreshCollection()
             
             self.reloadMainCollectionView?()
 //            self.imagesLoader.reorganizeItems(considerPlaces: true)

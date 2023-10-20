@@ -69,7 +69,6 @@ class CollectionViewItemsLoader : NSObject {
     var singleSectionMode = false
     var considerPlaces = true
     var indicator:Accumulator?
-    var showHidden:Bool = false
     var hiddenCountHandler: ((_ hiddenCount:Int) -> Void)? = nil
     private var cancelling:Bool = false
     private var loading:Bool = false
@@ -87,11 +86,11 @@ class CollectionViewItemsLoader : NSObject {
     
     // MARK: - Load
     
-    private func walkthruDatabaseForPhotoFiles(containerId:Int, includeHidden:Bool = true, pageSize:Int = 0, pageNumber:Int = 0) -> [Image]? {
+    private func walkthruDatabaseForPhotoFiles(containerId:Int, pageSize:Int = 0, pageNumber:Int = 0) -> [Image]? {
         if self.cancelling {
             return nil
         }
-        return ImageSearchDao.default.getPhotoFiles(containerId: containerId, includeHidden: includeHidden, pageSize: pageSize, pageNumber: pageNumber)
+        return ImageSearchDao.default.getPhotoFiles(containerId: containerId, includeHidden: false, pageSize: pageSize, pageNumber: pageNumber) // FIXME: delete includeHidden flag
     }
     
     func isLoading() -> Bool {
@@ -115,7 +114,7 @@ class CollectionViewItemsLoader : NSObject {
         self.indicator = indicator
         //let urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
         //self.logger.log("loading folder from database: \(folderURL.path)")
-        let photoFiles = walkthruDatabaseForPhotoFiles(containerId: containerId, includeHidden: showHidden, pageSize: pageSize, pageNumber: pageNumber)
+        let photoFiles = walkthruDatabaseForPhotoFiles(containerId: containerId, pageSize: pageSize, pageNumber: pageNumber)
         if photoFiles == nil || photoFiles?.count == 0 {
             self.logger.log(.trace, "LOADED nothing from container id:\(containerId)")
             //self.logger.log("loading folder from filesystem instead: \(folderURL.path)")
@@ -156,7 +155,6 @@ class CollectionViewItemsLoader : NSObject {
         self.logger.log(.trace, "Loading photo files from db")
         let photoFiles = ImageSearchDao.default.getPhotoFiles(filter: ViewController.collectionFilter, year: year, month: month, day: day, ignoreDate: ignoreDate,
                                                           country: country, province: province, city: city, place: place,
-                                                          includeHidden: showHidden,
                                                           hiddenCountHandler: self.hiddenCountHandler,
                                                           pageSize: pageSize, pageNumber: pageNumber)
         //self.logger.log("GOT PHOTOS for year:\(year) month:\(month) day:\(day) place:\(place) count \(photoFiles.count)")
@@ -197,7 +195,6 @@ class CollectionViewItemsLoader : NSObject {
         let photoFiles = ImageSearchDao.default.getPhotoFiles(filter: ViewController.collectionFilter, year: year, month: month, day: day,
                                                           event: event,
                                                           country: country, province: province, city: city, place:place,
-                                                          includeHidden: showHidden,
                                                           hiddenCountHandler: self.hiddenCountHandler,
                                                           pageSize: pageSize, pageNumber: pageNumber)
         //self.logger.log("GOT PHOTOS for year:\(year) month:\(month) day:\(day) event:\(event) place:\(place) count \(photoFiles.count)")

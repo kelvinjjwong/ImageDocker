@@ -9,16 +9,33 @@
 import Cocoa
 import LoggerFactory
 
+public enum HiddenState : Int {
+    case ShowAndHidden
+    case ShowOnly
+    case HiddenOnly
+}
+
 class CollectionFilter {
     
     var repositoryOwners:[String] = []
     var eventCategories:[String] = []
     var imageSources:[String] = []
-    var includeHidden = false
+    var includeHidden:HiddenState = .ShowOnly
     var includePhoto = true
     var includeVideo = true
     
     public init() { }
+    
+    public func clone() -> CollectionFilter {
+        var n = CollectionFilter()
+        n.repositoryOwners = self.repositoryOwners
+        n.eventCategories = self.eventCategories
+        n.imageSources = self.imageSources
+        n.includeHidden = self.includeHidden
+        n.includePhoto = self.includePhoto
+        n.includeVideo = self.includeVideo
+        return n
+    }
     
     public func represent() -> String {
         return """
@@ -80,7 +97,7 @@ class CollectionFilterViewController: NSViewController {
         filter.repositoryOwners = self.peopleTableController.getCheckedItems(column: "name")
         filter.imageSources = self.sourceTableController.getCheckedItems(column: "name")
         filter.eventCategories = self.eventCategoryTableController.getCheckedItems(column: "name")
-        filter.includeHidden = self.chkHidden.state == .on
+        filter.includeHidden = (self.chkHidden.state == .on) ? .HiddenOnly : .ShowOnly
         filter.includePhoto = self.chkPhoto.state == .on
         filter.includeVideo = self.chkVideo.state == .on
         self.persist?(filter)
@@ -93,7 +110,7 @@ class CollectionFilterViewController: NSViewController {
         self.peopleTableController.setCheckedItems(column: "name", from: filter.repositoryOwners)
         self.sourceTableController.setCheckedItems(column: "name", from: filter.imageSources)
         self.eventCategoryTableController.setCheckedItems(column: "name", from: filter.eventCategories)
-        self.chkHidden.state = filter.includeHidden ? .on : .off
+        self.chkHidden.state = filter.includeHidden == .HiddenOnly ? .on : .off
         self.chkPhoto.state = filter.includePhoto ? .on : .off
         self.chkVideo.state = filter.includeVideo ? .on : .off
     }

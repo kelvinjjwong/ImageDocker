@@ -783,10 +783,10 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         return result
     }
     
-    func getPhotoFiles(filter:CollectionFilter, year: Int, month: Int, day: Int, ignoreDate: Bool, country: String, province: String, city: String, place: String?, includeHidden: Bool, hiddenCountHandler: ((Int) -> Void)?, pageSize: Int, pageNumber: Int) -> [Image] {
+    func getPhotoFiles(filter:CollectionFilter, year: Int, month: Int, day: Int, ignoreDate: Bool, country: String, province: String, city: String, place: String?, hiddenCountHandler: ((Int) -> Void)?, pageSize: Int, pageNumber: Int) -> [Image] {
         let db = PostgresConnection.database()
         self.logger.log("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
-        let (stmt, stmtHidden, sqlArgs) = SQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter, year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place, includeHidden:includeHidden)
+        let (stmt, stmtHidden, sqlArgs) = SQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter, year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place)
         
 //        self.logger.log(stmt)
 //        self.logger.log(stmtHidden)
@@ -810,10 +810,10 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         
     }
     
-    func getPhotoFiles(filter:CollectionFilter, year: Int, month: Int, day: Int, event: String, country: String, province: String, city: String, place: String, includeHidden: Bool, hiddenCountHandler: ((Int) -> Void)?, pageSize: Int, pageNumber: Int) -> [Image] {
+    func getPhotoFiles(filter:CollectionFilter, year: Int, month: Int, day: Int, event: String, country: String, province: String, city: String, place: String, hiddenCountHandler: ((Int) -> Void)?, pageSize: Int, pageNumber: Int) -> [Image] {
         let db = PostgresConnection.database()
         self.logger.log("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
-        let (stmt, stmtHidden, sqlArgs) = SQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter, year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place, includeHidden:includeHidden)
+        let (stmt, stmtHidden, sqlArgs) = SQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter, year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place)
         
         var result:[Image] = []
         let hiddenCount = db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)", parameterValues: sqlArgs)

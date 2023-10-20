@@ -433,7 +433,6 @@ extension MemoriesViewController {
         collectionView.layer?.borderColor = NSColor.black.cgColor
         
         collectionViewController.imagesLoader.singleSectionMode = true
-        collectionViewController.imagesLoader.showHidden = false
         collectionViewController.imagesLoader.clean()
         collectionViewController.collectionView.reloadData()
         

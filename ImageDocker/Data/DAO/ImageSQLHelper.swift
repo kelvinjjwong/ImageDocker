@@ -175,13 +175,15 @@ struct SQLHelper {
         return statement
     }
     
-    internal static func _generateSQLStatementForPhotoFiles(filter:CollectionFilter, year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?, includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String,String) {
+    internal static func _generateSQLStatementForPhotoFiles(filter:CollectionFilter, year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?) -> (String,String) {
         
-        self.logger.log("[Shared Image List] SQL conditions: year=\(year) | month=\(month) | day=\(day) | ignoreDate:\(ignoreDate) | country=\(country) | province=\(province) | city=\(city) | place=\(place ?? "") | includeHidden=\(includeHidden) | filter=\(filter.represent())")
+        self.logger.log("[Shared Image List] SQL conditions: year=\(year) | month=\(month) | day=\(day) | ignoreDate:\(ignoreDate) | country=\(country) | province=\(province) | city=\(city) | place=\(place ?? "") | filter=\(filter.represent())")
         
         var hiddenWhere = ""
-        if !includeHidden {
+        if filter.includeHidden == .ShowOnly {
             hiddenWhere = "AND hidden=false"
+        }else if filter.includeHidden == .HiddenOnly {
+            hiddenWhere = "AND hidden=true"
         }
         var placeWhere = ""
         if country != "" {
@@ -225,8 +227,9 @@ struct SQLHelper {
         }else{
             if year == 0 {
                 // no condition
+                stmtWithoutHiddenWhere = "\(placeWhere)"
             } else if month == 0 {
-                stmtWithoutHiddenWhere = "\"photoTakenYear\" = \(year) \(placeWhere) \(hiddenWhere)"
+                stmtWithoutHiddenWhere = "\"photoTakenYear\" = \(year) \(placeWhere)"
             } else if day == 0 {
                 stmtWithoutHiddenWhere = "\"photoTakenYear\" = \(year) and \"photoTakenMonth\" = \(month) \(placeWhere)"
             } else {
@@ -247,9 +250,9 @@ struct SQLHelper {
         return (stmtWithoutHiddenWhere, hiddenWhere)
     }
     
-    internal static func _generateSQLStatementForPhotoFiles(filter:CollectionFilter, year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "", includeHidden:Bool = true, imageSource:[String]? = nil, cameraModel:[String]? = nil) -> (String, String, Bool) {
+    internal static func _generateSQLStatementForPhotoFiles(filter:CollectionFilter, year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "") -> (String, String, Bool) {
         
-        SQLHelper.logger.log("[Shared Image List] SQL conditions: year=\(year) | month=\(month) | day=\(day) | event=\(event) | country=\(country) | province=\(province) | city=\(city) | place=\(place) | includeHidden=\(includeHidden) | filter=\(filter.represent())")
+        SQLHelper.logger.log("[Shared Image List] SQL conditions: year=\(year) | month=\(month) | day=\(day) | event=\(event) | country=\(country) | province=\(province) | city=\(city) | place=\(place) | filter=\(filter.represent())")
         
         var hasEvent = false
         
@@ -262,21 +265,23 @@ struct SQLHelper {
         }
         
         var hiddenWhere = ""
-        if !includeHidden {
+        if filter.includeHidden == .ShowOnly {
             hiddenWhere = "AND hidden=false"
+        }else if filter.includeHidden == .HiddenOnly {
+            hiddenWhere = "AND hidden=true"
         }
         var stmtWithoutHiddenWhere = ""
         
         if year == 0 {
-            stmtWithoutHiddenWhere = "\(eventWhere) and \"photoTakenYear\" is null \(hiddenWhere)"
+            stmtWithoutHiddenWhere = "\(eventWhere) and \"photoTakenYear\" is null "
         } else if day == 0 {
             if month == 0 {
-                stmtWithoutHiddenWhere = "\(eventWhere) and \"photoTakenYear\" = \(year) \(hiddenWhere)"
+                stmtWithoutHiddenWhere = "\(eventWhere) and \"photoTakenYear\" = \(year) "
             }else{
-                stmtWithoutHiddenWhere = "\(eventWhere) and \"photoTakenYear\" = \(year) and \"photoTakenMonth\" = \(month) \(hiddenWhere)"
+                stmtWithoutHiddenWhere = "\(eventWhere) and \"photoTakenYear\" = \(year) and \"photoTakenMonth\" = \(month) "
             }
         } else {
-            stmtWithoutHiddenWhere = "\(eventWhere) and \"photoTakenYear\" = \(year) and \"photoTakenMonth\" = \(month) and \"photoTakenDay\" = \(day) \(hiddenWhere)"
+            stmtWithoutHiddenWhere = "\(eventWhere) and \"photoTakenYear\" = \(year) and \"photoTakenMonth\" = \(month) and \"photoTakenDay\" = \(day) "
         }
         
         if !filter.repositoryOwners.isEmpty {
