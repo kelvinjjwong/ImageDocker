@@ -128,8 +128,8 @@ class CollectionFilterViewController: NSViewController {
         filter.includeVideo = self.chkVideo.state == .on
         filter.limitWidth = self.chkLimitWidth.state == .on
         filter.limitHeight = self.chkLimitHeight.state == .on
-        filter.opWidth = self.ddlOpWidth.stringValue
-        filter.opHeight = self.ddlOpHeight.stringValue
+        filter.opWidth = self.ddlOpWidth.selectedItem?.title ?? "="
+        filter.opHeight = self.ddlOpHeight.selectedItem?.title ?? "="
         filter.width = self.txtWidth.integerValue
         filter.height = self.txtHeight.integerValue
         

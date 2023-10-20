@@ -35,7 +35,8 @@ extension SQLHelper {
 extension ImageSQLHelper {
     
     // sql by container
-    static func generatePostgresSQLStatementForPhotoFiles(filter:CollectionFilter) -> (String, String) {
+    static func generatePostgresSQLStatement(filter:CollectionFilter) -> (String, String) {
+        self.logger.log("[generatePostgresSQLStatement] filter: \(filter.represent())")
         
         var hiddenWhere = ""
         if filter.includeHidden == .ShowOnly {
@@ -56,12 +57,36 @@ extension ImageSQLHelper {
             stmt += " and (\(SQLHelper.joinArrayToStatementCondition(field: "imageSource", values: filter.getImageSources(), quoteColumn: true)))"
         }
         
+        if filter.includePhoto && filter.includeVideo {
+            stmt += " and lower((regexp_split_to_array(filename, '\\.'))[array_upper(regexp_split_to_array(filename, '\\.'), 1)]) in (\(FileTypeRecognizer.photoExts.appending(FileTypeRecognizer.videoExts).joinedSingleQuoted(separator: ",")))"
+        }
+        
         if !filter.includePhoto {
             stmt += " and lower((regexp_split_to_array(filename, '\\.'))[array_upper(regexp_split_to_array(filename, '\\.'), 1)]) not in (\(FileTypeRecognizer.photoExts.joinedSingleQuoted(separator: ",")))"
         }
         
         if !filter.includeVideo {
             stmt += " and lower((regexp_split_to_array(filename, '\\.'))[array_upper(regexp_split_to_array(filename, '\\.'), 1)]) not in (\(FileTypeRecognizer.videoExts.joinedSingleQuoted(separator: ",")))"
+        }
+        
+        if filter.limitWidth && filter.width > 0 {
+            var op = filter.opWidth
+            if filter.opWidth == "≤" {
+                op = "<="
+            }else if filter.opWidth == "≥" {
+                op = ">="
+            }
+            stmt += " and \"imageWidth\"\(op)\(filter.width)"
+        }
+        
+        if filter.limitHeight && filter.height > 0 {
+            var op = filter.opHeight
+            if filter.opHeight == "≤" {
+                op = "<="
+            }else if filter.opHeight == "≥" {
+                op = ">="
+            }
+            stmt += " and \"imageHeight\"\(op)\(filter.height)"
         }
         
         return (stmt, hiddenWhere)
@@ -74,7 +99,7 @@ extension ImageSQLHelper {
         
         var sqlArgs:[PostgresValueConvertible] = []
         
-        let (stmtBase, hiddenWhere) = self.generatePostgresSQLStatementForPhotoFiles(filter: filter)
+        let (stmtBase, hiddenWhere) = self.generatePostgresSQLStatement(filter: filter)
         
         stmtWithoutHiddenWhere += stmtBase
         
@@ -98,7 +123,7 @@ extension ImageSQLHelper {
             sqlArgs.append(event)
         }
         
-        let (stmtBase, hiddenWhere) = self.generatePostgresSQLStatementForPhotoFiles(filter: filter)
+        let (stmtBase, hiddenWhere) = self.generatePostgresSQLStatement(filter: filter)
         
         stmtWithoutHiddenWhere += stmtBase
         

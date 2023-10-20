@@ -1139,7 +1139,7 @@ order by "date"
         
         var otherPredicate:String = ""
         
-        let (stmtBase, hiddenWhere) = ImageSQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter)
+        let (stmtBase, hiddenWhere) = ImageSQLHelper.generatePostgresSQLStatement(filter: filter)
         
         otherPredicate += "\(stmtBase) \(hiddenWhere)"
         

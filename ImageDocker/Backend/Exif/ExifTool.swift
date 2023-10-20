@@ -73,8 +73,8 @@ class ExifTool {
         let err = pipe2.fileHandleForReading.readDataToEndOfFile()
         let string:String = String(data: data, encoding: String.Encoding.utf8)!
         let errStr:String = String(data: err, encoding: .utf8)!
-        self.logger.log(.warning, "[EXIFTOOL-ERROR] \(url.path) : \(errStr)")
         if errStr.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+            self.logger.log(.warning, "[EXIFTOOL-ERROR] \(url.path) : \(errStr)")
             NotificationMessageManager.default.createNotificationMessage(type: "EXIF", name: url.path, message: errStr)
         }
         // if errStr contains "exiftool err: Illegal declaration of subroutine" need install exiftool.dmg
