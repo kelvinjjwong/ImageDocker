@@ -57,10 +57,6 @@ extension ImageSQLHelper {
             stmt += " and (\(SQLHelper.joinArrayToStatementCondition(field: "imageSource", values: filter.getImageSources(), quoteColumn: true)))"
         }
         
-        if filter.includePhoto && filter.includeVideo {
-            stmt += " and lower((regexp_split_to_array(filename, '\\.'))[array_upper(regexp_split_to_array(filename, '\\.'), 1)]) in (\(FileTypeRecognizer.photoExts.appending(FileTypeRecognizer.videoExts).joinedSingleQuoted(separator: ",")))"
-        }
-        
         if !filter.includePhoto {
             stmt += " and lower((regexp_split_to_array(filename, '\\.'))[array_upper(regexp_split_to_array(filename, '\\.'), 1)]) not in (\(FileTypeRecognizer.photoExts.joinedSingleQuoted(separator: ",")))"
         }

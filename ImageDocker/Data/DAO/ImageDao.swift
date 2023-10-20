@@ -240,6 +240,10 @@ public final class ImageRecordDao {
         return self.impl.updateImagePaths(oldPath: oldPath, newPath: newPath, repositoryPath: repositoryPath, subPath: subPath, containerPath: containerPath, id: id)
     }
     
+    func hideUnsupportedRecords() -> ExecuteState {
+        return self.impl.hideUnsupportedRecords()
+    }
+    
 }
 
 // MARK: -

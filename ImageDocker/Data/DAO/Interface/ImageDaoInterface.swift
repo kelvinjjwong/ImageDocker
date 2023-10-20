@@ -104,6 +104,8 @@ protocol ImageRecordDaoInterface {
     func updateImagePaths(id: String, newPath: String, repositoryPath: String, subPath: String, containerPath: String) -> ExecuteState
     
     func updateImagePaths(oldPath: String, newPath: String, repositoryPath: String, subPath: String, containerPath: String, id: String) -> ExecuteState
+    
+    func hideUnsupportedRecords() -> ExecuteState
 }
 
 protocol ImageSearchDaoInterface {

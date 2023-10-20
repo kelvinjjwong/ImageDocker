@@ -198,101 +198,6 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         return .OK
     }
     
-    /// DEPRECATED
-    func updateImageRawBase(oldRawPath: String, newRawPath: String) -> ExecuteState {
-        let db = PostgresConnection.database()
-        
-        do {
-            try db.execute(sql: """
-            update "Image" set "originPath" = $1 where "originPath" = $2
-            """, parameterValues: [newRawPath, oldRawPath])
-        }catch{
-            self.logger.log(.error, "[updateImageRawBase]", error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
-            return .ERROR
-        }
-        return .OK
-    }
-    
-    /// DEPRECATED
-    func updateImageRawBase(repositoryPath: String, rawPath: String) -> ExecuteState {
-        let db = PostgresConnection.database()
-        
-        do {
-            try db.execute(sql: """
-            update "Image" set "originPath" = $1 where "repositoryPath" = $2
-            """, parameterValues: [rawPath, repositoryPath])
-        }catch{
-            self.logger.log(.error, "[updateImageRawBase]", error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
-            return .ERROR
-        }
-        return .OK
-    }
-    
-    /// DEPRECATED
-    func updateImageRawBase(pathStartsWith path: String, rawPath: String) -> ExecuteState {
-        let db = PostgresConnection.database()
-        
-        do {
-            try db.execute(sql: """
-            update "Image" set "originPath" = $1 where path like $2
-            """, parameterValues: [rawPath, "\(path.withLastStash())%"])
-        }catch{
-            self.logger.log(.error, "[updateImageRawBase]", error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
-            return .ERROR
-        }
-        return .OK
-    }
-    
-    /// DEPRECATED
-    func updateImageRepositoryBase(pathStartsWith path: String, repositoryPath: String) -> ExecuteState {
-        let db = PostgresConnection.database()
-        
-        do {
-            try db.execute(sql: """
-            update "Image" set "repositoryPath" = $1 where path like $2
-            """, parameterValues: [repositoryPath, "\(path.withLastStash())%"])
-        }catch{
-            self.logger.log(.error, "[updateImageRepositoryBase]", error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
-            return .ERROR
-        }
-        return .OK
-    }
-    
-    /// DEPRECATED
-    func updateImageRepositoryBase(oldRepositoryPath: String, newRepository: String) -> ExecuteState {
-        let db = PostgresConnection.database()
-        
-        do {
-            try db.execute(sql: """
-            update "Image" set "repositoryPath" = $1 where "repositoryPath" = $2
-            """, parameterValues: [newRepository, oldRepositoryPath])
-        }catch{
-            self.logger.log(.error, "[updateImageRepositoryBase]", error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
-            return .ERROR
-        }
-        return .OK
-    }
-    
-    /// FIXME: deprecate this function
-    func updateImagePath(repositoryPath: String) -> ExecuteState {
-        let db = PostgresConnection.database()
-        
-        do {
-            try db.execute(sql: """
-            update "Image" set path = "repositoryPath" || "subPath" where "repositoryPath" = $1 and "subPath" <> ''
-            """, parameterValues: [repositoryPath])
-        }catch{
-            self.logger.log(.error, "[updateImagePath]", error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
-            return .ERROR
-        }
-        return .OK
-    }
     
     // MARK: UPDATE DATE
     
@@ -456,6 +361,21 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             """, parameterValues: [path])
         }catch{
             self.logger.log(.error, "Error to update image rotation to \(rotation) - \(path)", error)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+            return .ERROR
+        }
+        return .OK
+    }
+    
+    func hideUnsupportedRecords() -> ExecuteState {
+        let db = PostgresConnection.database()
+        
+        do {
+            try db.execute(sql: """
+            UPDATE "Image" set "hidden"=true WHERE lower((regexp_split_to_array(filename, '\\.'))[array_upper(regexp_split_to_array(filename, '\\.'), 1)]) not in (\(FileTypeRecognizer.photoExts.appending(FileTypeRecognizer.videoExts).joinedSingleQuoted(separator: ",")))
+            """)
+        }catch{
+            self.logger.log(.error, "Error to hide unsupported records", error)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
             return .ERROR
         }

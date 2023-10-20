@@ -22,6 +22,10 @@ extension ViewController {
         
         self.deviceTreeDataSource.startConnectivityTest()
         
+        DispatchQueue.global().async {
+            let _ = ImageRecordDao.default.hideUnsupportedRecords()
+        }
+        
 //        self.scanLocationChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block:{_ in
 //            guard TaskManager.allowRefreshTrees() else {return}
 //            self.logger.log("SCANING LOCATION CHANGE")
