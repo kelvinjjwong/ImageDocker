@@ -32,6 +32,7 @@
 		5CB92EDB2912A9D600C5C42F /* Words+Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB92EDA2912A9D600C5C42F /* Words+Preferences.swift */; };
 		8E00BB8E2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E00BB8D2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift */; };
 		8E014A8A2AE2117F004B062F /* ViewController+EventManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E014A892AE2117F004B062F /* ViewController+EventManagement.swift */; };
+		8E014A8C2AE2B4B0004B062F /* SQLHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E014A8B2AE2B4B0004B062F /* SQLHelper.swift */; };
 		8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015120208F7D23009C2549 /* StackedImageViewController.swift */; };
 		8E015123208F7D34009C2549 /* StackedVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015122208F7D34009C2549 /* StackedVideoViewController.swift */; };
 		8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E06AAFB20EEFFAD000A40C9 /* GoogleLocation.swift */; };
@@ -395,6 +396,7 @@
 		82AE2A4F2692BE8252178D24 /* Pods_ImageDocker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImageDocker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E00BB8D2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Menu+ImageOptions.swift"; sourceTree = "<group>"; };
 		8E014A892AE2117F004B062F /* ViewController+EventManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+EventManagement.swift"; sourceTree = "<group>"; };
+		8E014A8B2AE2B4B0004B062F /* SQLHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLHelper.swift; sourceTree = "<group>"; };
 		8E015120208F7D23009C2549 /* StackedImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedImageViewController.swift; sourceTree = "<group>"; };
 		8E015122208F7D34009C2549 /* StackedVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedVideoViewController.swift; sourceTree = "<group>"; };
 		8E06AAFB20EEFFAD000A40C9 /* GoogleLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLocation.swift; sourceTree = "<group>"; };
@@ -1046,6 +1048,7 @@
 				8EBA759E23B5CE7300548376 /* DeviceDao.swift */,
 				8EBA75A023B5D06900548376 /* FaceDao.swift */,
 				8EBA75A223B5D3B900548376 /* ExportDao.swift */,
+				8E014A8B2AE2B4B0004B062F /* SQLHelper.swift */,
 				8EF3FEE624231C0400AF83BB /* ImageSQLHelper.swift */,
 				8EF92DF32460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift */,
 				8EEE584F2465471A007219AB /* SQLiteDataSource.swift */,
@@ -2000,6 +2003,7 @@
 				8EBC0182236B072F00FB6E2F /* TwoColumnTableViewController.swift in Sources */,
 				8ECA1FFD23E5784A00F56895 /* LibraryTree+CollectionView.swift in Sources */,
 				8EC20B302281B4C0000F4819 /* TaskManager.swift in Sources */,
+				8E014A8C2AE2B4B0004B062F /* SQLHelper.swift in Sources */,
 				8E31C37F2120A22600002546 /* DeviceShell.swift in Sources */,
 				8EC82EAE21283ED000FC0899 /* DirectoryViewDelegate.swift in Sources */,
 				8EF4CE6421E56DC100C53AFF /* NotificationViewController.swift in Sources */,
