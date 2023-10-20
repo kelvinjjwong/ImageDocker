@@ -116,14 +116,14 @@ struct SQLHelper {
                 let value = values[i]
                 if value.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
                     if quoteColumn {
-
+                        
                         if like {
                             statement += " \(field.quotedDatabaseIdentifier) like '%\(value)%' "
                         }else{
                             statement += " \(field.quotedDatabaseIdentifier) = '\(value)' "
                         }
                     }else{
-
+                        
                         if like {
                             statement += " \(field) like '%\(value)%' "
                         }else{
@@ -175,16 +175,16 @@ struct SQLHelper {
         return statement
     }
     
-    internal static func _generateSQLStatementForPhotoFiles(filter:CollectionFilter, year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?) -> (String,String) {
+}
+
+struct ImageSQLHelper {
+    
+    static let logger = LoggerFactory.get(category: "ImageSQLHelper")
+    
+    internal static func _generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?) -> String {
         
-        self.logger.log("[Shared Image List] SQL conditions: year=\(year) | month=\(month) | day=\(day) | ignoreDate:\(ignoreDate) | country=\(country) | province=\(province) | city=\(city) | place=\(place ?? "") | filter=\(filter.represent())")
+        self.logger.log("[Shared Image List] SQL conditions: year=\(year) | month=\(month) | day=\(day) | ignoreDate:\(ignoreDate) | country=\(country) | province=\(province) | city=\(city) | place=\(place ?? "")")
         
-        var hiddenWhere = ""
-        if filter.includeHidden == .ShowOnly {
-            hiddenWhere = "AND hidden=false"
-        }else if filter.includeHidden == .HiddenOnly {
-            hiddenWhere = "AND hidden=true"
-        }
         var placeWhere = ""
         if country != "" {
             placeWhere += " AND (country = '\(country)' OR \"assignCountry\" = '\(country)')"
@@ -237,22 +237,12 @@ struct SQLHelper {
             }
         }
         
-        if !filter.repositoryOwners.isEmpty {
-            stmtWithoutHiddenWhere += " and (\(SQLHelper.joinArrayToStatementCondition(field: "repositoryId", values: filter.getRepositoryIds(), quoteColumn: true)))"
-        }
-        if !filter.eventCategories.isEmpty {
-            stmtWithoutHiddenWhere += " and (\(SQLHelper.joinArrayToStatementCondition(field: "event", values: filter.getEvents(), quoteColumn: true)))"
-        }
-        if !filter.imageSources.isEmpty {
-            stmtWithoutHiddenWhere += " and (\(SQLHelper.joinArrayToStatementCondition(field: "imageSource", values: filter.getImageSources(), quoteColumn: true)))"
-        }
-        
-        return (stmtWithoutHiddenWhere, hiddenWhere)
+        return stmtWithoutHiddenWhere
     }
     
-    internal static func _generateSQLStatementForPhotoFiles(filter:CollectionFilter, year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "") -> (String, String, Bool) {
+    internal static func _generateSQLStatementForPhotoFiles(year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "") -> (String, Bool) {
         
-        SQLHelper.logger.log("[Shared Image List] SQL conditions: year=\(year) | month=\(month) | day=\(day) | event=\(event) | country=\(country) | province=\(province) | city=\(city) | place=\(place) | filter=\(filter.represent())")
+        SQLHelper.logger.log("[Shared Image List] SQL conditions: year=\(year) | month=\(month) | day=\(day) | event=\(event) | country=\(country) | province=\(province) | city=\(city) | place=\(place)")
         
         var hasEvent = false
         
@@ -264,12 +254,6 @@ struct SQLHelper {
             hasEvent = true
         }
         
-        var hiddenWhere = ""
-        if filter.includeHidden == .ShowOnly {
-            hiddenWhere = "AND hidden=false"
-        }else if filter.includeHidden == .HiddenOnly {
-            hiddenWhere = "AND hidden=true"
-        }
         var stmtWithoutHiddenWhere = ""
         
         if year == 0 {
@@ -284,17 +268,7 @@ struct SQLHelper {
             stmtWithoutHiddenWhere = "\(eventWhere) and \"photoTakenYear\" = \(year) and \"photoTakenMonth\" = \(month) and \"photoTakenDay\" = \(day) "
         }
         
-        if !filter.repositoryOwners.isEmpty {
-            stmtWithoutHiddenWhere += " and (\(SQLHelper.joinArrayToStatementCondition(field: "repositoryId", values: filter.getRepositoryIds(), quoteColumn: true)))"
-        }
-        if !filter.eventCategories.isEmpty {
-            stmtWithoutHiddenWhere += " and (\(SQLHelper.joinArrayToStatementCondition(field: "event", values: filter.getEvents(), quoteColumn: true)))"
-        }
-        if !filter.imageSources.isEmpty {
-            stmtWithoutHiddenWhere += " and (\(SQLHelper.joinArrayToStatementCondition(field: "imageSource", values: filter.getImageSources(), quoteColumn: true)))"
-        }
-        
-        return (stmtWithoutHiddenWhere, hiddenWhere, hasEvent)
+        return (stmtWithoutHiddenWhere, hasEvent)
     }
     
     static func generateSQLStatementForSearchingPhotoFiles(condition:SearchCondition, includeHidden:Bool = true, quoteColumn:Bool = false) -> (String, String) {

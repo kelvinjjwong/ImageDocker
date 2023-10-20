@@ -86,13 +86,6 @@ class CollectionViewItemsLoader : NSObject {
     
     // MARK: - Load
     
-    private func walkthruDatabaseForPhotoFiles(containerId:Int, pageSize:Int = 0, pageNumber:Int = 0) -> [Image]? {
-        if self.cancelling {
-            return nil
-        }
-        return ImageSearchDao.default.getPhotoFiles(containerId: containerId, includeHidden: false, pageSize: pageSize, pageNumber: pageNumber) // FIXME: delete includeHidden flag
-    }
-    
     func isLoading() -> Bool {
         return self.loading
     }
@@ -112,19 +105,11 @@ class CollectionViewItemsLoader : NSObject {
         lastRequest.rawVolume = rawVolume
         
         self.indicator = indicator
-        //let urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
-        //self.logger.log("loading folder from database: \(folderURL.path)")
-        let photoFiles = walkthruDatabaseForPhotoFiles(containerId: containerId, pageSize: pageSize, pageNumber: pageNumber)
-        if photoFiles == nil || photoFiles?.count == 0 {
-            self.logger.log(.trace, "LOADED nothing from container id:\(containerId)")
-            //self.logger.log("loading folder from filesystem instead: \(folderURL.path)")
-            //let urls = walkthruDirectoryForFileUrls(startingURL: folderURL)
-            //setupItems(urls: urls)
-            setupItems(photoFiles: [])
-        }else{
-            self.logger.log(.trace, "LOADED \(photoFiles?.count ?? 0) images from container id:\(containerId)")
-            setupItems(photoFiles: photoFiles, repositoryId: repositoryId, repositoryVolume: repositoryVolume, rawVolume: rawVolume)
-        }
+        
+        let photoFiles = ImageSearchDao.default.getPhotoFiles(filter: ViewController.collectionFilter, containerId: containerId, pageSize: pageSize, pageNumber: pageNumber)
+        
+        self.logger.log(.trace, "LOADED \(photoFiles.count) images from container id:\(containerId)")
+        setupItems(photoFiles: photoFiles, repositoryId: repositoryId, repositoryVolume: repositoryVolume, rawVolume: rawVolume)
     }
     
     // load without event, paginated

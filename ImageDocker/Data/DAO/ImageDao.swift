@@ -189,87 +189,7 @@ public final class ImageRecordDao {
         return self.impl.generateImageIdByContainerIdAndSubPath(containerId: containerId, subPath: subPath)
     }
     
-    // MARK: UPDATE PATH
-    
-    /// DEPRECATED
-    /// - caller:
-    ///   - EditRepositoryViewController.onUpdateRepositoryImagesClicked()
-    /// - attention: will be deprecated
-    /// - version: legacy version
-    /// - Tag: updateImagePaths(oldPath)
-    func updateImagePaths(oldPath:String, newPath:String, repositoryPath:String, subPath:String, containerPath:String, id:String) -> ExecuteState {
-        return self.impl.updateImagePaths(oldPath: oldPath, newPath: newPath, repositoryPath: repositoryPath, subPath: subPath, containerPath: containerPath, id: id)
-    }
-    
-    /// DEPRECATED
-    func updateImagePaths(id:String, newPath:String, repositoryPath:String, subPath:String, containerPath:String) -> ExecuteState {
-        return self.impl.updateImagePaths(id: id, newPath: newPath, repositoryPath: repositoryPath, subPath: subPath, containerPath: containerPath)
-    }
-    
-    /// DEPRECATED
-    /// - caller:
-    ///   - EditRepositoryViewController.onUpdateStorageImagesClicked()
-    /// - attention: will be deprecated
-    /// - version: legacy version
-    /// - Tag: updateImageRawBase(oldRawPath)
-    func updateImageRawBase(oldRawPath:String, newRawPath:String) -> ExecuteState {
-        return self.impl.updateImageRawBase(oldRawPath: oldRawPath, newRawPath: newRawPath)
-    }
-    
-    /// DEPRECATED
-    /// - caller: NONE
-    /// - attention: will be deprecated
-    /// - version: legacy version
-    /// - Tag: updateImageRawBase(repositoryPath)
-    func updateImageRawBase(repositoryPath:String, rawPath:String) -> ExecuteState {
-        return self.impl.updateImageRawBase(repositoryPath: repositoryPath, rawPath: rawPath)
-    }
-    
-    /// DEPRECATED
-    /// - caller: NONE
-    /// - attention: will be deprecated
-    /// - version: legacy version
-    /// - Tag: updateImageRawBase(pathStartsWith)
-    func updateImageRawBase(pathStartsWith path:String, rawPath:String) -> ExecuteState {
-        return self.impl.updateImageRawBase(pathStartsWith: path, rawPath: rawPath)
-    }
-    
-    /// DEPRECATED
-    /// - caller: NONE
-    /// - attention: will be deprecated
-    /// - version: legacy version
-    /// - Tag: updateImageRepositoryBase(pathStartsWith)
-    func updateImageRepositoryBase(pathStartsWith path:String, repositoryPath:String) -> ExecuteState {
-        return self.impl.updateImageRepositoryBase(pathStartsWith: path, repositoryPath: repositoryPath)
-    }
-    
-    /// DEPRECATED
-    /// - caller: NONE
-    /// - attention: will be deprecated
-    /// - version: legacy version
-    /// - Tag: updateImageRepositoryBase(oldRepositoryPath)
-    func updateImageRepositoryBase(oldRepositoryPath:String, newRepository:String) -> ExecuteState {
-        return self.impl.updateImageRepositoryBase(oldRepositoryPath: oldRepositoryPath, newRepository: newRepository)
-    }
-    
-    /// DEPRECATED
-    /// - caller: NONE
-    /// - attention: will be deprecated
-    /// - version: legacy version
-    /// - Tag: updateImagePath(repositoryPath)
-    func updateImagePath(repositoryPath:String) -> ExecuteState {
-        return self.impl.updateImagePath(repositoryPath: repositoryPath)
-    }
-    
     // MARK: UPDATE DATE
-    
-    /// - caller: NONE
-    /// - attention: will be deprecated
-    /// - version: legacy version
-    /// - Tag: updateImageDateTimeFromFilename(path)
-    func updateImageDateTimeFromFilename(path:String, dateTimeFromFilename:String) -> ExecuteState{
-        return self.impl.updateImageDateTimeFromFilename(path: path, dateTimeFromFilename: dateTimeFromFilename)
-    }
     
     /// - caller:
     ///   - ImageFile.init(image:...)
@@ -312,6 +232,13 @@ public final class ImageRecordDao {
         return self.impl.updateImageRotation(path: path, rotation: rotation)
     }
     
+    func updateImagePaths(id: String, newPath: String, repositoryPath: String, subPath: String, containerPath: String) -> ExecuteState {
+        return self.impl.updateImagePaths(id: id, newPath: newPath, repositoryPath: repositoryPath, subPath: subPath, containerPath: containerPath)
+    }
+    
+    func updateImagePaths(oldPath: String, newPath: String, repositoryPath: String, subPath: String, containerPath: String, id: String) -> ExecuteState {
+        return self.impl.updateImagePaths(oldPath: oldPath, newPath: newPath, repositoryPath: repositoryPath, subPath: subPath, containerPath: containerPath, id: id)
+    }
     
 }
 
@@ -358,12 +285,6 @@ class ImageSearchDao {
     /// - Tag: getMoments(momentCondition)
     func getMoments(_ momentCondition:MomentCondition, year:Int = 0, month:Int = 0, condition:SearchCondition? = nil) -> [Moment] {
         return self.impl.getMoments(momentCondition, year: year, month: month, condition: condition)
-    }
-    
-    /// - caller: NONE
-    /// - Tag: getAllMoments(imageSource)
-    func getAllMoments() -> [Moment] {
-        return self.impl.getAllMoments()
     }
     
     // MARK: - PLACES
@@ -442,12 +363,6 @@ class ImageSearchDao {
         return self.impl.getImagesByDate(year: year, month: month, day: day, event: event)
     }
     
-    /// - caller: NONE
-    /// - Tag: getImagesByYear(year)
-    func getImagesByYear(year:String? = nil, scannedFace:Bool? = nil, recognizedFace:Bool? = nil) -> [Image] {
-        return self.impl.getImagesByYear(year: year, scannedFace: scannedFace, recognizedFace: recognizedFace)
-    }
-    
     /// - caller:
     ///   - TheaterViewController.reloadCollectionView()
     /// - Tag: getImagesByDate(photoTakenDate)
@@ -455,31 +370,7 @@ class ImageSearchDao {
         return self.impl.getImagesByDate(photoTakenDate: photoTakenDate, event: event)
     }
     
-    /// - caller: NONE
-    /// - Tag: getImagesByHour(photoTakenDate)
-    func getImagesByHour(photoTakenDate:Date) -> [Image] {
-        return self.impl.getImagesByHour(photoTakenDate: photoTakenDate)
-    }
-    
     // MARK: QUERY FOR LARGER VIEW
-    
-    /// - caller: NONE
-    /// - Tag: getMaxPhotoTakenYear()
-    func getMaxPhotoTakenYear() -> Int {
-        return self.impl.getMaxPhotoTakenYear()
-    }
-    
-    /// - caller: NONE
-    /// - Tag: getMinPhotoTakenYear()
-    func getMinPhotoTakenYear() -> Int {
-        return self.impl.getMinPhotoTakenYear()
-    }
-    
-    /// - caller: NONE
-    /// - Tag: getSqlByTodayInPrevious()
-    func getSqlByTodayInPrevious() -> String {
-        return self.impl.getSqlByTodayInPrevious()
-    }
     
     /// - caller:
     ///   - MemoriesViewController.initView()
@@ -532,67 +423,10 @@ class ImageSearchDao {
         return self.impl.getPhotoFilesWithoutLocation(repositoryPath: repositoryPath)
     }
     
-    /// - caller: NONE
-    /// - Tag: getPhotoFilesWithoutLocation()
-    func getPhotoFilesWithoutLocation() -> [Image] {
-        return self.impl.getPhotoFilesWithoutLocation()
-    }
-    
-    /// - caller: NONE
-    /// - Tag: getPhotoFiles(after)
-    func getPhotoFiles(after date:Date) -> [Image] {
-        return self.impl.getPhotoFiles(after: date)
-    }
-    
-    // MARK: QUERY BY FACE
-    
-    /// - caller: NONE
-    /// - Tag: getImagesWithoutFace(repositoryRoot)
-    func getImagesWithoutFace(repositoryRoot:String, includeScanned:Bool = false) -> [Image] {
-        return self.impl.getImagesWithoutFace(repositoryRoot: repositoryRoot, includeScanned: includeScanned)
-    }
-    
     // MARK: QUERY PATHS
     
-    /// - caller:
-    ///   - ImageFolderTreeScanner.scanRepositories(taskId:indicator:)
-    /// - attention: will deprecate
-    /// - warning: should deprecate caller first
-    /// - Tag: getAllPhotoPaths()
-    func getAllPhotoPaths(includeHidden:Bool = true) -> Set<String> {
-        return self.impl.getAllPhotoPaths(includeHidden: includeHidden)
-    }
-    
-    /// - caller:
-    ///   - ImageFolderTreeScanner.scanSingleRepository(repository:taskId:indicator:)
-    /// - attention: will be deprecated
-    /// - version: legacy version
-    /// - Tag: getAllPhotoPaths(repositoryPath)
-    func getAllPhotoPaths(repositoryPath:String, includeHidden:Bool = true) -> Set<String> {
-        return self.impl.getAllPhotoPaths(repositoryPath:repositoryPath, includeHidden: includeHidden)
-    }
-    
-    /// - caller: NONE
-    /// - attention: will be deprecated
-    /// - version: legacy version
-    /// - Tag: getPhotoFilesWithoutSubPath(rootPath)
-    func getPhotoFilesWithoutSubPath(rootPath:String) -> [Image] {
-        return self.impl.getPhotoFilesWithoutSubPath(rootPath: rootPath)
-    }
-    
-    /// DEPRECATED
-    /// - caller:
-    ///   - CollectionViewItemsLoader.walkthruDatabaseForFileurls
-    ///   - CollectionViewItemsLoader.walkthruDatabaseForPhotoFiles
-    /// - attention: will be deprecated
-    /// - version: legacy version
-    /// - Tag: getPhotoFiles(parentPath)
-    func getPhotoFiles(parentPath:String, repositoryId:Int? = nil, repositoryVolume:String? = nil, rawVolume:String? = nil, includeHidden:Bool = true, pageSize:Int = 0, pageNumber:Int = 0, subdirectories:Bool = false) -> [Image] {
-        return self.impl.getPhotoFiles(parentPath: parentPath, repositoryId: repositoryId, repositoryVolume: repositoryVolume, rawVolume: rawVolume, includeHidden: includeHidden, pageSize: pageSize, pageNumber: pageNumber, subdirectories: subdirectories)
-    }
-    
-    func getPhotoFiles(containerId:Int, includeHidden: Bool = true, pageSize: Int = 0, pageNumber: Int = 0) -> [Image] {
-        return self.impl.getPhotoFiles(containerId: containerId, includeHidden: includeHidden, pageSize: pageSize, pageNumber: pageNumber)
+    func getPhotoFiles(filter: CollectionFilter, containerId:Int, pageSize: Int = 0, pageNumber: Int = 0) -> [Image] {
+        return self.impl.getPhotoFiles(filter: filter, containerId: containerId, pageSize: pageSize, pageNumber: pageNumber)
     }
     
     /// - caller:

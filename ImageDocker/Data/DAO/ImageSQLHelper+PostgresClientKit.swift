@@ -11,7 +11,6 @@ import PostgresClientKit
 
 extension SQLHelper {
     
-    
     static func inPostgresArray(field:String, array:[PostgresValueConvertible]?, where whereStmt:inout String, args sqlArgs:inout [PostgresValueConvertible], numericPlaceholders:Bool = false){
         if let array = array {
             if array.count > 0 {
@@ -31,24 +30,53 @@ extension SQLHelper {
             }
         }
     }
+}
+
+extension ImageSQLHelper {
+    
+    // sql by container
+    static func generatePostgresSQLStatementForPhotoFiles(filter:CollectionFilter) -> (String, String) {
+        
+        var hiddenWhere = ""
+        if filter.includeHidden == .ShowOnly {
+            hiddenWhere = "AND hidden=false"
+        }else if filter.includeHidden == .HiddenOnly {
+            hiddenWhere = "AND hidden=true"
+        }
+        
+        var stmt = ""
+        
+        if !filter.repositoryOwners.isEmpty {
+            stmt += " and (\(SQLHelper.joinArrayToStatementCondition(field: "repositoryId", values: filter.getRepositoryIds(), quoteColumn: true)))"
+        }
+        if !filter.eventCategories.isEmpty {
+            stmt += " and (\(SQLHelper.joinArrayToStatementCondition(field: "event", values: filter.getEvents(), quoteColumn: true)))"
+        }
+        if !filter.imageSources.isEmpty {
+            stmt += " and (\(SQLHelper.joinArrayToStatementCondition(field: "imageSource", values: filter.getImageSources(), quoteColumn: true)))"
+        }
+        
+        if !filter.includePhoto {
+            stmt += " and lower((regexp_split_to_array(filename, '\\.'))[array_upper(regexp_split_to_array(filename, '\\.'), 1)]) not in (\(FileTypeRecognizer.photoExts.joinedSingleQuoted(separator: ",")))"
+        }
+        
+        if !filter.includeVideo {
+            stmt += " and lower((regexp_split_to_array(filename, '\\.'))[array_upper(regexp_split_to_array(filename, '\\.'), 1)]) not in (\(FileTypeRecognizer.videoExts.joinedSingleQuoted(separator: ",")))"
+        }
+        
+        return (stmt, hiddenWhere)
+    }
     
     // sql by date & place
     static func generatePostgresSQLStatementForPhotoFiles(filter:CollectionFilter, year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?) -> (String, String, [PostgresValueConvertible]) {
         
-        var (stmtWithoutHiddenWhere, hiddenWhere) = _generateSQLStatementForPhotoFiles(filter: filter, year: year, month: month, day: day, ignoreDate: ignoreDate, country: country, province: province, city: city, place: place)
+        var stmtWithoutHiddenWhere = _generateSQLStatementForPhotoFiles(year: year, month: month, day: day, ignoreDate: ignoreDate, country: country, province: province, city: city, place: place)
         
         var sqlArgs:[PostgresValueConvertible] = []
         
-//        SQLHelper.inPostgresArray(field: "imageSource", array: imageSource, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
-//        SQLHelper.inPostgresArray(field: "cameraModel", array: cameraModel, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
+        let (stmtBase, hiddenWhere) = self.generatePostgresSQLStatementForPhotoFiles(filter: filter)
         
-        if !filter.includePhoto {
-            stmtWithoutHiddenWhere += " and lower((regexp_split_to_array(filename, '\\.'))[array_upper(regexp_split_to_array(filename, '\\.'), 1)]) not in (\(FileTypeRecognizer.photoExts.joinedSingleQuoted(separator: ",")))"
-        }
-        
-        if !filter.includeVideo {
-            stmtWithoutHiddenWhere += " and lower((regexp_split_to_array(filename, '\\.'))[array_upper(regexp_split_to_array(filename, '\\.'), 1)]) not in (\(FileTypeRecognizer.videoExts.joinedSingleQuoted(separator: ",")))"
-        }
+        stmtWithoutHiddenWhere += stmtBase
         
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
         let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=true"
@@ -63,24 +91,16 @@ extension SQLHelper {
     // sql by date & event & place
     static func generatePostgresSQLStatementForPhotoFiles(filter:CollectionFilter, year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "") -> (String, String, [PostgresValueConvertible]) {
         
-        var (stmtWithoutHiddenWhere, hiddenWhere, hasEvent) = _generateSQLStatementForPhotoFiles(filter: filter, year: year, month: month, day: day, event: event, country: country, province: province, city: city, place: place)
+        var (stmtWithoutHiddenWhere, hasEvent) = _generateSQLStatementForPhotoFiles(year: year, month: month, day: day, event: event, country: country, province: province, city: city, place: place)
         
         var sqlArgs:[PostgresValueConvertible] = []
         if hasEvent {
             sqlArgs.append(event)
         }
         
-//        SQLHelper.inPostgresArray(field: "imageSource", array: imageSource, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
-//        SQLHelper.inPostgresArray(field: "cameraModel", array: cameraModel, where: &stmtWithoutHiddenWhere, args: &sqlArgs)
+        let (stmtBase, hiddenWhere) = self.generatePostgresSQLStatementForPhotoFiles(filter: filter)
         
-        if !filter.includePhoto {
-            stmtWithoutHiddenWhere += " and lower((regexp_split_to_array(filename, '\\.'))[array_upper(regexp_split_to_array(filename, '\\.'), 1)]) not in (\(FileTypeRecognizer.photoExts.joinedSingleQuoted(separator: ","))"
-        }
-        
-        if !filter.includeVideo {
-            stmtWithoutHiddenWhere += " and lower((regexp_split_to_array(filename, '\\.'))[array_upper(regexp_split_to_array(filename, '\\.'), 1)]) not in (\(FileTypeRecognizer.videoExts.joinedSingleQuoted(separator: ","))"
-        }
-        
+        stmtWithoutHiddenWhere += stmtBase
         
         let stmt = "\(stmtWithoutHiddenWhere) \(hiddenWhere)"
         let stmtHidden = "\(stmtWithoutHiddenWhere) AND hidden=true"

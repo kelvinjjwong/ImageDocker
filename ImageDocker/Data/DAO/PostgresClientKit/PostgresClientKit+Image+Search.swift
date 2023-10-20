@@ -226,7 +226,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         var additionalConditions = ""
         if let cd = condition {
             if !cd.isEmpty() {
-                (additionalConditions, _) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: cd, includeHidden: true, quoteColumn: true)
+                (additionalConditions, _) = ImageSQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: cd, includeHidden: true, quoteColumn: true)
             }
         }
         if additionalConditions.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
@@ -373,7 +373,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         var additionalConditions = ""
         if let cd = condition {
             if !cd.isEmpty() {
-                (additionalConditions, _) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: cd, includeHidden: true, quoteColumn: true)
+                (additionalConditions, _) = ImageSQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: cd, includeHidden: true, quoteColumn: true)
             }
         }
         if additionalConditions.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
@@ -566,7 +566,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         var additionalConditions = ""
         if let cd = condition {
             if !cd.isEmpty() {
-                (additionalConditions, _) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: cd, includeHidden: true, quoteColumn: true)
+                (additionalConditions, _) = ImageSQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: cd, includeHidden: true, quoteColumn: true)
             }
         }
         if additionalConditions.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
@@ -651,7 +651,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         var additionalConditions = ""
         if let cd = condition {
             if !cd.isEmpty() {
-                (additionalConditions, _) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: cd, includeHidden: true, quoteColumn: true)
+                (additionalConditions, _) = ImageSQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: cd, includeHidden: true, quoteColumn: true)
             }
         }
         if additionalConditions.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
@@ -786,7 +786,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
     func getPhotoFiles(filter:CollectionFilter, year: Int, month: Int, day: Int, ignoreDate: Bool, country: String, province: String, city: String, place: String?, hiddenCountHandler: ((Int) -> Void)?, pageSize: Int, pageNumber: Int) -> [Image] {
         let db = PostgresConnection.database()
         self.logger.log("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
-        let (stmt, stmtHidden, sqlArgs) = SQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter, year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place)
+        let (stmt, stmtHidden, sqlArgs) = ImageSQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter, year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place)
         
 //        self.logger.log(stmt)
 //        self.logger.log(stmtHidden)
@@ -813,7 +813,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
     func getPhotoFiles(filter:CollectionFilter, year: Int, month: Int, day: Int, event: String, country: String, province: String, city: String, place: String, hiddenCountHandler: ((Int) -> Void)?, pageSize: Int, pageNumber: Int) -> [Image] {
         let db = PostgresConnection.database()
         self.logger.log("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
-        let (stmt, stmtHidden, sqlArgs) = SQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter, year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place)
+        let (stmt, stmtHidden, sqlArgs) = ImageSQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter, year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place)
         
         var result:[Image] = []
         let hiddenCount = db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)", parameterValues: sqlArgs)
@@ -836,7 +836,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
     func searchImages(condition:SearchCondition, includeHidden:Bool, hiddenCountHandler: ((_ hiddenCount:Int) -> Void)?, pageSize:Int, pageNumber:Int) -> [Image] {
         let db = PostgresConnection.database()
 //        self.logger.log("pageSize:\(pageSize) | pageNumber:\(pageNumber)")
-        let (stmt, stmtHidden) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: condition, includeHidden: includeHidden, quoteColumn: true)
+        let (stmt, stmtHidden) = ImageSQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: condition, includeHidden: includeHidden, quoteColumn: true)
         
         var result:[Image] = []
         let hiddenCount = db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)")
@@ -1134,41 +1134,14 @@ order by "date"
         return result
     }
     
-    func getPhotoFilesWithoutSubPath(rootPath: String) -> [Image] {
+    func getPhotoFiles(filter: CollectionFilter, containerId:Int, pageSize: Int, pageNumber: Int) -> [Image] {
         let db = PostgresConnection.database()
-        return Image.fetchAll(db, where: "path like $1 and \"subPath\" = ''", values: ["\(rootPath.withLastStash())%"] )
-    }
-    
-    /// DEPRECATED
-    func getPhotoFiles(parentPath: String, repositoryId:Int?, repositoryVolume:String?, rawVolume:String?, includeHidden: Bool, pageSize: Int, pageNumber: Int, subdirectories: Bool) -> [Image] {
-        let db = PostgresConnection.database()
+        
         var otherPredicate:String = ""
-        if !includeHidden {
-            otherPredicate = " AND (\"hidden\" is null or \"hidden\" = false)"
-        }
         
-        var condition = "\"containerPath\" = $1"
-        var key:[String] = [parentPath]
-        if subdirectories {
-            condition = "(\"containerPath\" = $1 or \"containerPath\" like $2)"
-            key.append("\(parentPath.withLastStash())%")
-        }
+        let (stmtBase, hiddenWhere) = ImageSQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter)
         
-//        self.logger.log("\(condition) \(otherPredicate)")
-        
-        if pageSize > 0 && pageNumber > 0 {
-            return Image.fetchAll(db, where: "\(condition) \(otherPredicate)", orderBy: "\"photoTakenDate\", filename", values: key, offset: pageSize * (pageNumber - 1), limit: pageSize)
-        }else{
-            return Image.fetchAll(db, where: "\(condition) \(otherPredicate)", orderBy: "\"photoTakenDate\", filename", values: key)
-        }
-    }
-    
-    func getPhotoFiles(containerId:Int, includeHidden: Bool, pageSize: Int, pageNumber: Int) -> [Image] {
-        let db = PostgresConnection.database()
-        var otherPredicate:String = ""
-        if !includeHidden {
-            otherPredicate = " AND (\"hidden\" is null or \"hidden\" = false)"
-        }
+        otherPredicate += "\(stmtBase) \(hiddenWhere)"
         
         var condition = "\"containerId\" = \(containerId)"
         var key:[String] = []

@@ -85,33 +85,6 @@ protocol ImageRecordDaoInterface {
     /// - attention: will deprecate
     func updateImageWithContainerId(id:String, repositoryId:Int, containerId:Int) -> ExecuteState
     
-    // MARK: UPDATE PATH
-    
-    // FIXME: deprecate this function
-    /// - attention: will deprecate
-    func updateImagePaths(oldPath:String, newPath:String, repositoryPath:String, subPath:String, containerPath:String, id:String) -> ExecuteState
-    
-    // FIXME: deprecate this function
-    func updateImagePaths(id:String, newPath:String, repositoryPath:String, subPath:String, containerPath:String) -> ExecuteState
-    
-    /// - attention: will deprecate
-    func updateImageRawBase(oldRawPath:String, newRawPath:String) -> ExecuteState
-    
-    /// - attention: will deprecate
-    func updateImageRawBase(repositoryPath:String, rawPath:String) -> ExecuteState
-    
-    /// - attention: will deprecate
-    func updateImageRawBase(pathStartsWith path:String, rawPath:String) -> ExecuteState
-    
-    /// - attention: will deprecate
-    func updateImageRepositoryBase(pathStartsWith path:String, repositoryPath:String) -> ExecuteState
-    
-    /// - attention: will deprecate
-    func updateImageRepositoryBase(oldRepositoryPath:String, newRepository:String) -> ExecuteState
-    
-    /// - attention: will deprecate
-    func updateImagePath(repositoryPath:String) -> ExecuteState
-    
     // MARK: - DATE
     
     func updateImageDateTimeFromFilename(path:String, dateTimeFromFilename:String) -> ExecuteState
@@ -127,11 +100,13 @@ protocol ImageRecordDaoInterface {
     func updateImageRotation(path:String, rotation:Int) -> ExecuteState
     
     func storeImageFamily(imageId:String, familyId:String, ownerId:String, familyName: String, owner: String) -> ExecuteState
+    
+    func updateImagePaths(id: String, newPath: String, repositoryPath: String, subPath: String, containerPath: String) -> ExecuteState
+    
+    func updateImagePaths(oldPath: String, newPath: String, repositoryPath: String, subPath: String, containerPath: String, id: String) -> ExecuteState
 }
 
 protocol ImageSearchDaoInterface {
-    
-    func getAllPlacesAndDates() -> [Moment]
     
     // MARK: - Options
     
@@ -142,8 +117,6 @@ protocol ImageSearchDaoInterface {
     // MARK: - MOMENTS
     
     func getMoments(_ momentCondition:MomentCondition, year:Int, month:Int, condition:SearchCondition?) -> [Moment]
-    
-    func getAllMoments() -> [Moment]
     
     // MARK: - PLACES
     
@@ -173,19 +146,9 @@ protocol ImageSearchDaoInterface {
     
     func getImagesByDate(year:Int, month:Int, day:Int, event:String?) -> [Image]
     
-    func getImagesByYear(year:String?, scannedFace:Bool?, recognizedFace:Bool?) -> [Image]
-    
     func getImagesByDate(photoTakenDate:Date, event:String?) -> [Image]
     
-    func getImagesByHour(photoTakenDate:Date) -> [Image]
-    
     // MARK: - LARGET VIEW
-    
-    func getMaxPhotoTakenYear() -> Int
-    
-    func getMinPhotoTakenYear() -> Int
-    
-    func getSqlByTodayInPrevious() -> String
     
     func getYearsByTodayInPrevious() -> [Int]
     
@@ -201,27 +164,11 @@ protocol ImageSearchDaoInterface {
     
     // MARK: - LOCATION
     
-    func getPhotoFilesWithoutLocation() -> [Image]
-    
     func getPhotoFilesWithoutLocation(repositoryPath:String) -> [Image]
-    
-    func getPhotoFiles(after date:Date) -> [Image]
-    
-    // MARK: - FACE
-    
-    func getImagesWithoutFace(repositoryRoot:String, includeScanned:Bool) -> [Image]
     
     // MARK: - PATH
     
-    func getAllPhotoPaths(includeHidden:Bool) -> Set<String>
-    
-    func getAllPhotoPaths(repositoryPath:String, includeHidden:Bool) -> Set<String>
-    
-    func getPhotoFilesWithoutSubPath(rootPath:String) -> [Image]
-    
-    func getPhotoFiles(parentPath:String, repositoryId:Int?, repositoryVolume:String?, rawVolume:String?, includeHidden:Bool, pageSize:Int, pageNumber:Int, subdirectories:Bool) -> [Image]
-    
-    func getPhotoFiles(containerId:Int, includeHidden: Bool, pageSize: Int, pageNumber: Int) -> [Image]
+    func getPhotoFiles(filter: CollectionFilter, containerId:Int, pageSize: Int, pageNumber: Int) -> [Image]
     
     func getImages(repositoryPath:String) -> [Image]
     

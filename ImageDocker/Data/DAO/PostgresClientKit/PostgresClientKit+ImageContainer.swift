@@ -184,7 +184,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         
         var additionalConditions = ""
         if !imagesCondition.isEmpty() {
-            (additionalConditions, _) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: imagesCondition, includeHidden: true, quoteColumn: true)
+            (additionalConditions, _) = ImageSQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: imagesCondition, includeHidden: true, quoteColumn: true)
         }
         if additionalConditions.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
             additionalConditions = "AND \(additionalConditions)"
@@ -569,7 +569,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         
         var additionalConditions = ""
         if !imagesCondition.isEmpty() {
-            (additionalConditions, _) = SQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: imagesCondition, includeHidden: true, quoteColumn: true)
+            (additionalConditions, _) = ImageSQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: imagesCondition, includeHidden: true, quoteColumn: true)
         }
         if additionalConditions.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
             additionalConditions = "AND \(additionalConditions)"

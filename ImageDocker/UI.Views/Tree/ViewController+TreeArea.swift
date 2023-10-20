@@ -199,16 +199,6 @@ extension ViewController {
                                                 if Setting.performance.amountForPagination() > 0 && container.imageCount > Setting.performance.amountForPagination() {
                                                     self.btnRefreshCollectionView.title = Words.pages.word()
                                                     self.loadCollectionByContainer(name: container.name, containerId: container.id, repositoryId: repository.id, repositoryVolume: repository.repositoryVolume, rawVolume: repository.storageVolume, pageSize: 200, pageNumber: 1)
-//                                                    if container.path != "/" {
-//                                                        self.loadCollectionByContainer(name:container.name,
-//                                                                                       url:URL(fileURLWithPath: container.path),
-//                                                                                       repositoryId: repository.id,
-//                                                                                       repositoryVolume: repository.repositoryVolume,
-//                                                                                       rawVolume: repository.storageVolume,
-//                                                                                       pageSize: 200, pageNumber: 1, subdirectories: true)
-//                                                    }else{
-//    //                                                    self.logger.log("WARN: collection url is null")
-//                                                    }
                                                 }else{
                                                     self.btnRefreshCollectionView.title = Words.reload.word()
                                                     self.loadCollectionByContainer(name: container.name, containerId: container.id, repositoryId: repository.id, repositoryVolume: repository.repositoryVolume, rawVolume: repository.storageVolume)
