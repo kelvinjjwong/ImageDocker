@@ -22,6 +22,6 @@ extension Words {
     
     static let manageEvents = Localize(
         eng: "Events",
-        chs: "管理活动"
+        chs: "活动"
     )
 }

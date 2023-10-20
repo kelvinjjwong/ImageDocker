@@ -51,6 +51,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var btnTogglePreviewPanel: NSButton!
     
     
+    @IBOutlet weak var btnManageEvents: NSButton!
     @IBOutlet weak var btnPeople: NSButton!
     @IBOutlet weak var btnImageOptions: NSPopUpButton!
     
@@ -530,6 +531,7 @@ class ViewController: NSViewController {
         self.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.view.layer?.backgroundColor = Colors.DeepDarkGray.cgColor
         self.btnCopyLocation.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        self.btnManageEvents.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnManagePlaces.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnReplaceLocation.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.btnRefreshCollectionView.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -557,6 +559,7 @@ class ViewController: NSViewController {
         self.btnRefreshCollectionView.title = Words.reload.word()
         
         self.btnPeople.title = Words.peopleManage.word()
+        self.btnManageEvents.title = Words.manageEvents.word()
     }
     
     internal var startupAggregateFlag: Int = 0 {
@@ -756,6 +759,13 @@ class ViewController: NSViewController {
             metaTablePanel.isHidden = true
             self.btnTogglePreviewPanel.image = Icons.expandPreviewPanel
         }
+    }
+    
+    @IBAction func onManageEventsButtonClicked(_ sender: NSButton) {
+        self.createEventPopover()
+        
+        let cellRect = sender.bounds
+        self.eventPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
     }
     
     @IBAction func onPeopleClicked(_ sender: NSButton) {

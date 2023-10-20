@@ -48,12 +48,7 @@ class EventListViewController: NSViewController {
                 self.cmbOwner3.stringValue = event.owner3
                 self.lblOwner3Nickname.stringValue = event.owner3Nickname
                 self.lblOwner3Id.stringValue = event.owner3Id
-                self.cmbFamily.stringValue = event.family
                 self.cmbCategory.stringValue = event.category
-                self.cmbActivity1.stringValue = event.activity1
-                self.cmbActivity2.stringValue = event.activity2
-                self.txtAttendees.stringValue = event.attenders
-                self.txtNote.stringValue = event.note
                 self.lblImageCount.stringValue = "\(event.imageCount)"
                 self.selectedEventName = event.name
                 self.reloadCombos()
@@ -68,12 +63,8 @@ class EventListViewController: NSViewController {
     let dateFormatter = DateFormatter()
     
     @IBOutlet weak var lblOwner: NSTextField!
-    @IBOutlet weak var lblFamily: NSTextField!
-    @IBOutlet weak var lblAttendees: NSTextField!
     @IBOutlet weak var lblCategory: NSTextField!
     @IBOutlet weak var lblEvent: NSTextField!
-    @IBOutlet weak var lblActivity: NSTextField!
-    @IBOutlet weak var lblNote: NSTextField!
     @IBOutlet weak var lblImages: NSTextField!
     
     @IBOutlet weak var btnUpdate: NSButton!
@@ -83,28 +74,17 @@ class EventListViewController: NSViewController {
     
     @IBOutlet weak var tblColCategory: NSTableColumn!
     @IBOutlet weak var tblColOwner: NSTableColumn!
-    @IBOutlet weak var tblColFrom: NSTableColumn!
     @IBOutlet weak var tblColTo: NSTableColumn!
     @IBOutlet weak var tblColEvent: NSTableColumn!
     @IBOutlet weak var tblColImages: NSTableColumn!
     @IBOutlet weak var tblColLastUpdate: NSTableColumn!
-    @IBOutlet weak var tblColActivity1: NSTableColumn!
-    @IBOutlet weak var tblColActivity2: NSTableColumn!
-    @IBOutlet weak var tblColAttendees: NSTableColumn!
-    @IBOutlet weak var tblColNote: NSTableColumn!
     
     
     @IBOutlet weak var eventTable: NSTableView!
     @IBOutlet weak var eventSearcher: NSSearchField!
     @IBOutlet weak var eventName: NSTextField!
     @IBOutlet weak var cmbOwner: NSComboBox!
-    @IBOutlet weak var cmbFamily: NSComboBox!
-    @IBOutlet weak var cmbPeople: NSComboBox!
-    @IBOutlet weak var txtAttendees: NSTextField!
     @IBOutlet weak var cmbCategory: NSComboBox!
-    @IBOutlet weak var cmbActivity1: NSComboBox!
-    @IBOutlet weak var cmbActivity2: NSComboBox!
-    @IBOutlet weak var txtNote: NSTextField!
     @IBOutlet weak var lblImageCount: NSTextField!
     @IBOutlet weak var btnCount: NSButton!
     @IBOutlet weak var lblOwnerNickname: NSTextField!
@@ -120,14 +100,10 @@ class EventListViewController: NSViewController {
     
     var events:[ImageEvent] = []
     var selectedEventName:String = ""
-    var peopleCombo:TextListComboController!
     var ownerCombo:TextListComboController!
     var owner2Combo:TextListComboController!
     var owner3Combo:TextListComboController!
-    var familyCombo:TextListComboController!
     var categoryCombo:TextListComboController!
-    var activity1Combo:TextListComboController!
-    var activity2Combo:TextListComboController!
     
     func reloadCombos() {
         let people = FaceDao.default.getPeople()
@@ -136,8 +112,6 @@ class EventListViewController: NSViewController {
         for person in people {
             peopleNames.append(person.name)
         }
-        peopleCombo.load(peopleNames)
-        peopleCombo.cleanSelection()
         ownerCombo.load(peopleNames)
         ownerCombo.cleanSelection()
         owner2Combo.load(peopleNames)
@@ -145,36 +119,17 @@ class EventListViewController: NSViewController {
         owner3Combo.load(peopleNames)
         owner3Combo.cleanSelection()
         
-        let families = FaceDao.default.getFamilies()
-        var familyNames:[String] = []
-        for family in families {
-            familyNames.append(family.name)
-        }
-        if !familyNames.contains("") {
-            familyNames.append("")
-        }
-        familyCombo.load(familyNames)
-        familyCombo.cleanSelection()
         let categories = EventDao.default.getEventCategories()
         self.categoryCombo.load(categories)
         categoryCombo.cleanSelection()
-        let activities = EventDao.default.getEventActivities()
-        self.activity1Combo.load(activities)
-        activity1Combo.cleanSelection()
-        self.activity2Combo.load(activities)
-        activity2Combo.cleanSelection()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.lblOwner.stringValue = Words.event_owner.word()
-        self.lblFamily.stringValue = Words.event_family.word()
-        self.lblAttendees.stringValue = Words.event_attendees.word()
         self.lblCategory.stringValue = Words.event_category.word()
         self.lblEvent.stringValue = Words.event_name.word()
-        self.lblActivity.stringValue = Words.event_activity.word()
-        self.lblNote.stringValue = Words.event_note.word()
         self.lblImages.stringValue = Words.event_images.word()
         self.btnCount.title = Words.event_btn_count.word()
         self.btnUpdate.title = Words.event_btn_update.word()
@@ -184,19 +139,10 @@ class EventListViewController: NSViewController {
         self.btnReload.title = Words.event_btn_reload.word()
         self.tblColCategory.title = Words.event_col_category.word()
         self.tblColOwner.title = Words.event_col_owner.word()
-        self.tblColFrom.title = Words.event_col_from.word()
         self.tblColTo.title = Words.event_col_to.word()
         self.tblColEvent.title = Words.event_col_event.word()
         self.tblColImages.title = Words.event_col_images.word()
         self.tblColLastUpdate.title = Words.event_col_lastupdate.word()
-        self.tblColActivity1.title = Words.event_col_activity1.word()
-        self.tblColActivity2.title = Words.event_col_activity2.word()
-        self.tblColAttendees.title = Words.event_col_attendees.word()
-        self.tblColNote.title = Words.event_col_note.word()
-        
-        self.peopleCombo = TextListComboController(self.cmbPeople, onChange: { item in
-            
-        })
         
         self.ownerCombo = TextListComboController(self.cmbOwner, onChange: { item in
             self.lblOwnerId.stringValue = ""
@@ -225,22 +171,7 @@ class EventListViewController: NSViewController {
             }
         })
         
-        self.familyCombo = TextListComboController(self.cmbFamily, onChange: { item in
-            
-        })
-        
         self.categoryCombo = TextListComboController(self.cmbCategory, onChange: {item in
-            let acts = EventDao.default.getEventActivities(category: item)
-            if acts.count > 0 {
-                self.activity1Combo.load(acts)
-                self.activity2Combo.load(acts)
-            }
-        })
-        
-        self.activity1Combo = TextListComboController(self.cmbActivity1, onChange: {item in
-            
-        })
-        self.activity2Combo = TextListComboController(self.cmbActivity2, onChange: {item in
             
         })
         self.reloadCombos()
@@ -261,8 +192,6 @@ class EventListViewController: NSViewController {
         if name == "" {return}
         let event = EventDao.default.getOrCreateEvent(name: name)
         event.category = self.cmbCategory.stringValue
-        event.activity1 = self.cmbActivity1.stringValue
-        event.activity2 = self.cmbActivity2.stringValue
         event.owner = self.cmbOwner.stringValue
         event.ownerId = self.lblOwnerId.stringValue
         event.ownerNickname = self.lblOwnerNickname.stringValue
@@ -272,9 +201,6 @@ class EventListViewController: NSViewController {
         event.owner3 = self.cmbOwner3.stringValue
         event.owner3Id = self.lblOwner3Id.stringValue
         event.owner3Nickname = self.lblOwner3Nickname.stringValue
-        event.attenders = self.txtAttendees.stringValue
-        event.family = self.cmbFamily.stringValue
-        event.note = self.txtNote.stringValue
         EventDao.default.updateEventDetail(event: event)
         //ModelStore.save()
         
@@ -308,8 +234,6 @@ class EventListViewController: NSViewController {
         
         let event = EventDao.default.getOrCreateEvent(name: selectedEventName)
         event.category = self.cmbCategory.stringValue
-        event.activity1 = self.cmbActivity1.stringValue
-        event.activity2 = self.cmbActivity2.stringValue
         event.owner = self.cmbOwner.stringValue
         event.ownerId = self.lblOwnerId.stringValue
         event.ownerNickname = self.lblOwnerNickname.stringValue
@@ -319,9 +243,6 @@ class EventListViewController: NSViewController {
         event.owner3 = self.cmbOwner3.stringValue
         event.owner3Id = self.lblOwner3Id.stringValue
         event.owner3Nickname = self.lblOwner3Nickname.stringValue
-        event.attenders = self.txtAttendees.stringValue
-        event.family = self.cmbFamily.stringValue
-        event.note = self.txtNote.stringValue
         event.lastUpdateTime = Date()
         EventDao.default.updateEventDetail(event: event)
         
@@ -402,12 +323,12 @@ extension EventListViewController: NSTableViewDelegate {
                 case NSUserInterfaceItemIdentifier("eventName"):
                     value = info.name
                 case NSUserInterfaceItemIdentifier("owner"):
-                    var str = ( info.owner == "" ? "" : ("\(info.ownerNickname) (\(info.owner))") )
+                    var str = ( info.owner == "" ? "" : ("\(info.ownerNickname)") )
                     if info.owner2 != "" {
-                        str = "\(str) \(info.owner2Nickname) (\(info.owner2))"
+                        str = "\(str) \(info.owner2Nickname)"
                     }
                     if info.owner3 != "" {
-                        str = "\(str) \(info.owner3Nickname) (\(info.owner3))"
+                        str = "\(str) \(info.owner3Nickname)"
                     }
                     value = str
                 case NSUserInterfaceItemIdentifier("attenders"):

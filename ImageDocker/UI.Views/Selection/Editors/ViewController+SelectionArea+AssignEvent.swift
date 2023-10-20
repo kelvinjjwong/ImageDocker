@@ -10,24 +10,6 @@ import Cocoa
 
 extension SelectionViewController {
     
-    func createEventPopover(){
-        var myPopover = self.eventPopover
-        if(myPopover == nil){
-            myPopover = NSPopover()
-            
-            let frame = CGRect(origin: .zero, size: CGSize(width: 1200, height: 620))
-            self.eventViewController = EventListViewController()
-            self.eventViewController.view.frame = frame
-            self.eventViewController.refreshDelegate = self
-            
-            myPopover!.contentViewController = self.eventViewController
-            myPopover!.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
-            //myPopover!.animates = true
-            myPopover!.delegate = self
-            myPopover!.behavior = NSPopover.Behavior.transient
-        }
-        self.eventPopover = myPopover
-    }
     
     internal func assignEvent() {
         self.logger.log("CLICKED ASSIGN EVENT BUTTON")

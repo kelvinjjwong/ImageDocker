@@ -20,7 +20,6 @@ class SelectionViewController : NSViewController {
     @IBOutlet weak var btnBatchEditorToolbarSwitcher: NSButton!
     @IBOutlet weak var comboEventList: NSComboBox!
     @IBOutlet weak var btnAssignEvent: NSButton!
-    @IBOutlet weak var btnManageEvents: NSButton!
     @IBOutlet weak var btnPeople: NSButton!
     @IBOutlet weak var btnDatePicker: NSButton!
     @IBOutlet weak var btnNotes: NSButton!
@@ -42,8 +41,6 @@ class SelectionViewController : NSViewController {
     var getMainCollectionVisibleItems: ( () -> [CollectionViewItem] )?
     var selectAllInMainCollectionView: ( (Bool) -> Void )?
     
-    var eventPopover:NSPopover?
-    var eventViewController:EventListViewController!
     var eventListController:EventListComboController!
     
     var calendarPopover:NSPopover? = nil
@@ -78,7 +75,6 @@ class SelectionViewController : NSViewController {
 //        self.logger.log("Loading view - setup event list")
         setupEventList()
         self.btnAssignEvent.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        self.btnManageEvents.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.comboEventList.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         self.comboEventList.backgroundColor = Colors.DeepDarkGray
         self.btnBatchEditorToolbarSwitcher.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
@@ -92,7 +88,6 @@ class SelectionViewController : NSViewController {
     
     func applyLocalization() {
         self.btnAssignEvent.title = Words.assignEvent.word()
-        self.btnManageEvents.title = Words.manageEvents.word()
         self.btnDatePicker.title = Words.changeDate.word()
         self.btnNotes.title = Words.writeNotes.word()
         self.btnDuplicates.title = Words.duplicates.word()
@@ -115,17 +110,9 @@ class SelectionViewController : NSViewController {
         self.assignEvent()
     }
     
-    @IBAction func onManageEventsButtonClicked(_ sender: NSButton) {
-        self.createEventPopover()
-        
-        let cellRect = sender.bounds
-        self.eventPopover?.show(relativeTo: cellRect, of: sender, preferredEdge: .maxY)
-    }
-    
     @IBAction func onButtonPeopleClicked(_ sender: NSButton) {
         self.openPeopleSelection(sender)
     }
-    
     
     @IBAction func onButtonDatePickerClicked(_ sender: NSButton) {
         self.openDatePicker(sender)
@@ -256,7 +243,6 @@ class SelectionViewController : NSViewController {
     func hideSelectionBatchEditors() {
         self.comboEventList.isHidden = true
         self.btnAssignEvent.isHidden = true
-        self.btnManageEvents.isHidden = true
         self.btnDatePicker.isHidden = true
         self.btnNotes.isHidden = true
         self.btnDuplicates.isHidden = true
@@ -265,7 +251,6 @@ class SelectionViewController : NSViewController {
     func showSelectionBatchEditors() {
         self.comboEventList.isHidden = false
         self.btnAssignEvent.isHidden = false
-        self.btnManageEvents.isHidden = false
         self.btnDatePicker.isHidden = false
         self.btnNotes.isHidden = false
         self.btnDuplicates.isHidden = false

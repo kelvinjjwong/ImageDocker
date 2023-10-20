@@ -31,6 +31,7 @@
 		5CA18B5929EB735D00C5502E /* NotificationMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA18B5829EB735D00C5502E /* NotificationMessageManager.swift */; };
 		5CB92EDB2912A9D600C5C42F /* Words+Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB92EDA2912A9D600C5C42F /* Words+Preferences.swift */; };
 		8E00BB8E2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E00BB8D2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift */; };
+		8E014A8A2AE2117F004B062F /* ViewController+EventManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E014A892AE2117F004B062F /* ViewController+EventManagement.swift */; };
 		8E015121208F7D23009C2549 /* StackedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015120208F7D23009C2549 /* StackedImageViewController.swift */; };
 		8E015123208F7D34009C2549 /* StackedVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E015122208F7D34009C2549 /* StackedVideoViewController.swift */; };
 		8E06AAFC20EEFFAD000A40C9 /* GoogleLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E06AAFB20EEFFAD000A40C9 /* GoogleLocation.swift */; };
@@ -393,6 +394,7 @@
 		5CB92EDA2912A9D600C5C42F /* Words+Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+Preferences.swift"; sourceTree = "<group>"; };
 		82AE2A4F2692BE8252178D24 /* Pods_ImageDocker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImageDocker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E00BB8D2393248B00F6EFA2 /* ViewController+Menu+ImageOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Menu+ImageOptions.swift"; sourceTree = "<group>"; };
+		8E014A892AE2117F004B062F /* ViewController+EventManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+EventManagement.swift"; sourceTree = "<group>"; };
 		8E015120208F7D23009C2549 /* StackedImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedImageViewController.swift; sourceTree = "<group>"; };
 		8E015122208F7D34009C2549 /* StackedVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedVideoViewController.swift; sourceTree = "<group>"; };
 		8E06AAFB20EEFFAD000A40C9 /* GoogleLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLocation.swift; sourceTree = "<group>"; };
@@ -792,6 +794,16 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		8E014A882AE21136004B062F /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */,
+				8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */,
+				8E014A892AE2117F004B062F /* ViewController+EventManagement.swift */,
+			);
+			path = Event;
+			sourceTree = "<group>";
+		};
 		8E08D87125DB695E009A365F /* CustomTableView */ = {
 			isa = PBXGroup;
 			children = (
@@ -940,8 +952,6 @@
 			isa = PBXGroup;
 			children = (
 				8EB271882340EDC5003BF3AF /* ViewController+SelectionArea+AssignEvent.swift */,
-				8EE1AB3B20D05E49001C75B0 /* EventListViewController.swift */,
-				8EE1AB3C20D05E49001C75B0 /* EventListViewController.xib */,
 				8EB271842340E9C6003BF3AF /* ViewController+SelectionArea+ReplacePlace.swift */,
 				8E98B8EE20D0EE3300771280 /* PlaceListViewController.swift */,
 				8E98B8EF20D0EE3300771280 /* PlaceListViewController.xib */,
@@ -1420,6 +1430,7 @@
 				8EEF0725226215C8000520B7 /* Splash */,
 				8EB986AA20B21D3E0075B081 /* Tree */,
 				8E3FA91B2352904B00B677A3 /* Memories */,
+				8E014A882AE21136004B062F /* Event */,
 				8E4E5B79221F3C0C00FE4B68 /* Face */,
 				8EB986B120B2255A0075B081 /* PhotoDetailView */,
 				8EBA9DE12173C7FC00DACAAD /* PhotoLargeView */,
@@ -1868,6 +1879,7 @@
 				8EF8C55C265DBD820060D2E0 /* ImageLocationViewController.swift in Sources */,
 				5C007848289FA2A300919826 /* Words+DateTimeModifier.swift in Sources */,
 				8E4DECEB23B38A7B00F5538C /* ImageContainer.swift in Sources */,
+				8E014A8A2AE2117F004B062F /* ViewController+EventManagement.swift in Sources */,
 				8EBA75A323B5D3B900548376 /* ExportDao.swift in Sources */,
 				8E3EC3BD214DE623004B6125 /* DateTimeViewController.swift in Sources */,
 				8EBA9DE921766EAB00DACAAD /* TheaterCollectionViewController.swift in Sources */,
