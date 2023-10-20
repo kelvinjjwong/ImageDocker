@@ -23,17 +23,29 @@ class CollectionFilter {
     var includeHidden:HiddenState = .ShowOnly
     var includePhoto = true
     var includeVideo = true
+    var limitWidth = false
+    var opWidth = "="
+    var width:Int = 0
+    var limitHeight = false
+    var opHeight = "="
+    var height:Int = 0
     
     public init() { }
     
     public func clone() -> CollectionFilter {
-        var n = CollectionFilter()
+        let n = CollectionFilter()
         n.repositoryOwners = self.repositoryOwners
         n.eventCategories = self.eventCategories
         n.imageSources = self.imageSources
         n.includeHidden = self.includeHidden
         n.includePhoto = self.includePhoto
         n.includeVideo = self.includeVideo
+        n.limitWidth = self.limitWidth
+        n.opWidth = self.opWidth
+        n.width = self.width
+        n.limitHeight = self.limitHeight
+        n.opHeight = self.opHeight
+        n.height = self.height
         return n
     }
     
@@ -45,7 +57,13 @@ class CollectionFilter {
     imageSources: \(self.imageSources),
     includeHidden: \(self.includeHidden),
     includePhoto: \(self.includePhoto),
-    includeVideo: \(self.includeVideo)
+    includeVideo: \(self.includeVideo),
+    limitWidth: \(self.limitWidth),
+    opWidth: \(self.opWidth),
+    width: \(self.width),
+    limitHeight: \(self.limitHeight),
+    opHeight: \(self.opHeight),
+    height: \(self.height)
 }
 """
     }
@@ -94,7 +112,7 @@ class CollectionFilterViewController: NSViewController {
     
     func persistFilter() {
         let filter = CollectionFilter()
-        filter.repositoryOwners = self.peopleTableController.getCheckedItems(column: "name")
+        filter.repositoryOwners = self.peopleTableController.getCheckedItems(column: "id")
         filter.imageSources = self.sourceTableController.getCheckedItems(column: "name")
         filter.eventCategories = self.eventCategoryTableController.getCheckedItems(column: "name")
         filter.includeHidden = (self.chkHidden.state == .on) ? .HiddenOnly : .ShowOnly
@@ -107,7 +125,7 @@ class CollectionFilterViewController: NSViewController {
         self.peopleTableController.uncheckAll()
         self.sourceTableController.uncheckAll()
         self.eventCategoryTableController.uncheckAll()
-        self.peopleTableController.setCheckedItems(column: "name", from: filter.repositoryOwners)
+        self.peopleTableController.setCheckedItems(column: "id", from: filter.repositoryOwners)
         self.sourceTableController.setCheckedItems(column: "name", from: filter.imageSources)
         self.eventCategoryTableController.setCheckedItems(column: "name", from: filter.eventCategories)
         self.chkHidden.state = filter.includeHidden == .HiddenOnly ? .on : .off
@@ -160,17 +178,31 @@ class CollectionFilterViewController: NSViewController {
     func loadPeople(selected:[String] = []) -> [[String:String]] {
         self.logger.log(.trace, "[loadPeople] selected:\(selected)")
         var values:[[String:String]] = []
-        let members = RepositoryDao.default.getOwners()
-        for name in members {
+        let coreMembers = FaceDao.default.getCoreMembers()
+        let ownerIds = RepositoryDao.default.getOwners()
+        for ownerId in ownerIds {
             var item:[String:String] = [:]
-            if selected.contains(name) {
+            
+            if let cm = coreMembers.first(where: { p in
+                return p.id == ownerId
+            }) {
+                item["id"] = cm.id
+                item["name"] = cm.name
+                item["nickName"] = cm.shortName ?? cm.name
+            }else{
+                item["id"] = "shared"
+                item["name"] = Words.owner_public_shared.word()
+                item["nickName"] = Words.owner_public_shared.word()
+            }
+            
+            if selected.contains(ownerId) {
                 item["check"] = "true"
             }else{
                 item["check"] = "false"
             }
-            item["id"] = name
-            item["name"] = name
+            
             values.append(item)
+            
         }
         return values
     }
