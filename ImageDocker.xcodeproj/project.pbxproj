@@ -316,7 +316,7 @@
 		8EF8C55E265DBD910060D2E0 /* ImageLocationEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF8C55D265DBD910060D2E0 /* ImageLocationEditViewController.swift */; };
 		8EF8C560266032730060D2E0 /* SelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF8C55F266032730060D2E0 /* SelectionViewController.swift */; };
 		8EF8C562266329160060D2E0 /* MessageEventCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF8C561266329160060D2E0 /* MessageEventCenter.swift */; };
-		8EF92DF42460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF92DF32460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift */; };
+		8EF92DF42460159200B55046 /* PostgresClientKit+ImageSQLHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF92DF32460159200B55046 /* PostgresClientKit+ImageSQLHelper.swift */; };
 		8EFA02DB243B3E1A00D7C355 /* PostgresClientKit+Image+Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA02DA243B3E1A00D7C355 /* PostgresClientKit+Image+Record.swift */; };
 		8EFA02DD243B3E2D00D7C355 /* PostgresClientKit+Image+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA02DC243B3E2D00D7C355 /* PostgresClientKit+Image+Search.swift */; };
 		8EFA02E1243B3E5200D7C355 /* PostgresClientKit+Image+Statistic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA02E0243B3E5200D7C355 /* PostgresClientKit+Image+Statistic.swift */; };
@@ -687,7 +687,7 @@
 		8EF8C55D265DBD910060D2E0 /* ImageLocationEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLocationEditViewController.swift; sourceTree = "<group>"; };
 		8EF8C55F266032730060D2E0 /* SelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionViewController.swift; sourceTree = "<group>"; };
 		8EF8C561266329160060D2E0 /* MessageEventCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageEventCenter.swift; sourceTree = "<group>"; };
-		8EF92DF32460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageSQLHelper+PostgresClientKit.swift"; sourceTree = "<group>"; };
+		8EF92DF32460159200B55046 /* PostgresClientKit+ImageSQLHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostgresClientKit+ImageSQLHelper.swift"; sourceTree = "<group>"; };
 		8EFA02DA243B3E1A00D7C355 /* PostgresClientKit+Image+Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostgresClientKit+Image+Record.swift"; sourceTree = "<group>"; };
 		8EFA02DC243B3E2D00D7C355 /* PostgresClientKit+Image+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostgresClientKit+Image+Search.swift"; sourceTree = "<group>"; };
 		8EFA02E0243B3E5200D7C355 /* PostgresClientKit+Image+Statistic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostgresClientKit+Image+Statistic.swift"; sourceTree = "<group>"; };
@@ -1160,7 +1160,7 @@
 				8EECD8ED2ADE5AAE009F6571 /* PostgresClientKit+ImageFamily.swift */,
 				8EFA02EE243B3ECE00D7C355 /* PostgresClientKit+FaceFamily.swift */,
 				8EFA02F0243B3EDF00D7C355 /* PostgresClientKit+ExportProfile.swift */,
-				8EF92DF32460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift */,
+				8EF92DF32460159200B55046 /* PostgresClientKit+ImageSQLHelper.swift */,
 				8EFA02F2243B3EF500D7C355 /* PostgresClientKit+VersionMigrate.swift */,
 			);
 			path = PostgresClientKit;
@@ -2028,7 +2028,7 @@
 				5C5117432972E7B900F64CF6 /* ImageFolderTreeScanner+EXIF.swift in Sources */,
 				8E741946242256E2002BAAAE /* RepositoryDaoInterface.swift in Sources */,
 				8E48147F277DAE6C0097493E /* Words+MainCollectionView.swift in Sources */,
-				8EF92DF42460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift in Sources */,
+				8EF92DF42460159200B55046 /* PostgresClientKit+ImageSQLHelper.swift in Sources */,
 				8E98B8F720D6044900771280 /* Event.swift in Sources */,
 				8E3FA9202353310600B677A3 /* MemoryCollectionViewItem.swift in Sources */,
 				8E9D803D2348AA550062692A /* ExportProfile.swift in Sources */,
