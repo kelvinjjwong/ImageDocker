@@ -1050,7 +1050,6 @@
 				8EBA75A223B5D3B900548376 /* ExportDao.swift */,
 				8E014A8B2AE2B4B0004B062F /* SQLHelper.swift */,
 				8EF3FEE624231C0400AF83BB /* ImageSQLHelper.swift */,
-				8EF92DF32460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift */,
 				8EEE584F2465471A007219AB /* SQLiteDataSource.swift */,
 				8E97ECFA243B2C980013EFD3 /* PostgresClientKit */,
 			);
@@ -1161,6 +1160,7 @@
 				8EECD8ED2ADE5AAE009F6571 /* PostgresClientKit+ImageFamily.swift */,
 				8EFA02EE243B3ECE00D7C355 /* PostgresClientKit+FaceFamily.swift */,
 				8EFA02F0243B3EDF00D7C355 /* PostgresClientKit+ExportProfile.swift */,
+				8EF92DF32460159200B55046 /* ImageSQLHelper+PostgresClientKit.swift */,
 				8EFA02F2243B3EF500D7C355 /* PostgresClientKit+VersionMigrate.swift */,
 			);
 			path = PostgresClientKit;
