@@ -96,6 +96,14 @@ class CollectionFilterViewController: NSViewController {
     @IBOutlet weak var chkVideo: NSButton!
     @IBOutlet weak var btnApply: NSButton!
     @IBOutlet weak var btnRemove: NSButton!
+    @IBOutlet weak var chkLimitWidth: NSButton!
+    @IBOutlet weak var ddlOpWidth: NSPopUpButton!
+    @IBOutlet weak var txtWidth: NSTextField!
+    @IBOutlet weak var chkLimitHeight: NSButton!
+    @IBOutlet weak var ddlOpHeight: NSPopUpButton!
+    @IBOutlet weak var txtHeight: NSTextField!
+    
+    
     
     var peopleTableController : DictionaryTableViewController!
     
@@ -118,6 +126,13 @@ class CollectionFilterViewController: NSViewController {
         filter.includeHidden = (self.chkHidden.state == .on) ? .HiddenOnly : .ShowOnly
         filter.includePhoto = self.chkPhoto.state == .on
         filter.includeVideo = self.chkVideo.state == .on
+        filter.limitWidth = self.chkLimitWidth.state == .on
+        filter.limitHeight = self.chkLimitHeight.state == .on
+        filter.opWidth = self.ddlOpWidth.stringValue
+        filter.opHeight = self.ddlOpHeight.stringValue
+        filter.width = self.txtWidth.integerValue
+        filter.height = self.txtHeight.integerValue
+        
         self.persist?(filter)
     }
     
@@ -131,6 +146,13 @@ class CollectionFilterViewController: NSViewController {
         self.chkHidden.state = filter.includeHidden == .HiddenOnly ? .on : .off
         self.chkPhoto.state = filter.includePhoto ? .on : .off
         self.chkVideo.state = filter.includeVideo ? .on : .off
+        self.chkLimitWidth.state = filter.limitWidth ? .on : .off
+        self.chkLimitHeight.state = filter.limitHeight ? .on : .off
+        self.ddlOpWidth.selectItem(withTitle: filter.opWidth)
+        self.ddlOpHeight.selectItem(withTitle: filter.opHeight)
+        self.txtWidth.integerValue = filter.width
+        self.txtHeight.integerValue = filter.height
+        
     }
     
     @IBAction func onHiddenClicked(_ sender: NSButton) {
@@ -144,6 +166,15 @@ class CollectionFilterViewController: NSViewController {
     @IBAction func onVideoClicked(_ sender: NSButton) {
         self.persistFilter()
     }
+    
+    @IBAction func onLimitWidthClicked(_ sender: NSButton) {
+        self.persistFilter()
+    }
+    
+    @IBAction func onLimitHeightClicked(_ sender: NSButton) {
+        self.persistFilter()
+    }
+    
     
     
     override func viewDidLoad() {
