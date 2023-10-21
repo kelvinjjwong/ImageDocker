@@ -108,6 +108,7 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         """, parameters:[repositoryId])
     }
     
+    // count without event
     func countPhotoFiles(year: Int, month: Int, day: Int, ignoreDate: Bool, country: String, province: String, city: String, place: String?) -> Int {
         let db = PostgresConnection.database()
         var filter = ViewController.collectionFilter.clone()
@@ -117,6 +118,7 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         return db.count(sql: "select count(1) from \"Image\" where \(stmt)", parameterValues: sqlArgs)
     }
     
+    // count without event
     func countHiddenPhotoFiles(year: Int, month: Int, day: Int, ignoreDate: Bool, country: String, province: String, city: String, place: String?) -> Int {
         let db = PostgresConnection.database()
         var filter = ViewController.collectionFilter.clone()
@@ -125,15 +127,21 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         return db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)", parameterValues: sqlArgs)
     }
     
+    // count with event
     func countPhotoFiles(year: Int, month: Int, day: Int, event: String, country: String, province: String, city: String, place: String) -> Int {
         let db = PostgresConnection.database()
-        let (stmt, _, sqlArgs) = ImageSQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: ViewController.collectionFilter, year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place)
+        let filter = ViewController.collectionFilter.clone()
+        filter.includeHidden = .ShowAndHidden
+        let (stmt, _, sqlArgs) = ImageSQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter, year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place)
         return db.count(sql: "select count(1) from \"Image\" where \(stmt)", parameterValues: sqlArgs)
     }
     
+    // count with event
     func countHiddenPhotoFiles(year: Int, month: Int, day: Int, event: String, country: String, province: String, city: String, place: String) -> Int {
         let db = PostgresConnection.database()
-        let (_, stmtHidden, sqlArgs) = ImageSQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: ViewController.collectionFilter, year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place)
+        let filter = ViewController.collectionFilter.clone()
+        filter.includeHidden = .HiddenOnly
+        let (_, stmtHidden, sqlArgs) = ImageSQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter, year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place)
         return db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)", parameterValues: sqlArgs)
     }
     

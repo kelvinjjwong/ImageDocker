@@ -58,9 +58,13 @@ extension ViewController {
         self.collectionPaginationController?.initPageSize(pageSize: pageSize)
         self.collectionPaginationController?.initPageNumber(pageNumber: pageNumber)
         self.collectionPaginationController?.initCounter(onCountTotal: {
-            return self.countImagesOfEvent(moment: moment)
+            let count = self.countImagesOfEvent(moment: moment)
+            print("event images count: \(count)")
+            return count
         }, onCountHidden: {
-            return self.countHiddenImagesOfEvent(moment: moment)
+            let count = self.countHiddenImagesOfEvent(moment: moment)
+            print("event hidden images count: \(count)")
+            return count
         })
 //        if self.chbShowHidden.state == .off {
 //            totalRecords -= self.countHiddenImagesOfEvent(moment: moment)
