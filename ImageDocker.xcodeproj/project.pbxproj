@@ -298,6 +298,7 @@
 		8EF125A92214590000C423CA /* DeviceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF125A72214590000C423CA /* DeviceListViewController.swift */; };
 		8EF125AA2214590000C423CA /* DeviceListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EF125A82214590000C423CA /* DeviceListViewController.xib */; };
 		8EF125AC2216ECC500C423CA /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF125AB2216ECC500C423CA /* ContainerViewController.swift */; };
+		8EF17B142AE4CB8C00DB5016 /* DatabaseProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF17B132AE4CB8C00DB5016 /* DatabaseProfile.swift */; };
 		8EF32D122094CB2000511538 /* Icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8EF32D112094CB2000511538 /* Icons.xcassets */; };
 		8EF3FEE724231C0400AF83BB /* ImageSQLHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF3FEE624231C0400AF83BB /* ImageSQLHelper.swift */; };
 		8EF3FEEA2423509E00AF83BB /* ImageDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF3FEE92423509E00AF83BB /* ImageDB.swift */; };
@@ -669,6 +670,7 @@
 		8EF125A72214590000C423CA /* DeviceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceListViewController.swift; sourceTree = "<group>"; };
 		8EF125A82214590000C423CA /* DeviceListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeviceListViewController.xib; sourceTree = "<group>"; };
 		8EF125AB2216ECC500C423CA /* ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
+		8EF17B132AE4CB8C00DB5016 /* DatabaseProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseProfile.swift; sourceTree = "<group>"; };
 		8EF32D112094CB2000511538 /* Icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icons.xcassets; sourceTree = "<group>"; };
 		8EF3FEE624231C0400AF83BB /* ImageSQLHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSQLHelper.swift; sourceTree = "<group>"; };
 		8EF3FEE92423509E00AF83BB /* ImageDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDB.swift; sourceTree = "<group>"; };
@@ -1048,6 +1050,7 @@
 				8EBA759E23B5CE7300548376 /* DeviceDao.swift */,
 				8EBA75A023B5D06900548376 /* FaceDao.swift */,
 				8EBA75A223B5D3B900548376 /* ExportDao.swift */,
+				8EF17B132AE4CB8C00DB5016 /* DatabaseProfile.swift */,
 				8E014A8B2AE2B4B0004B062F /* SQLHelper.swift */,
 				8EF3FEE624231C0400AF83BB /* ImageSQLHelper.swift */,
 				8EEE584F2465471A007219AB /* SQLiteDataSource.swift */,
@@ -1983,6 +1986,7 @@
 				8E98B8F320D5C90600771280 /* WindowController.swift in Sources */,
 				8EBA692E2090DB4B00221131 /* VideoDropView.swift in Sources */,
 				8E8D47222233DCD30091E9C3 /* DictionaryTableViewController.swift in Sources */,
+				8EF17B142AE4CB8C00DB5016 /* DatabaseProfile.swift in Sources */,
 				8EF8C55A265DBD6F0060D2E0 /* ImagePreviewController.swift in Sources */,
 				8ECA200623E5B09200F56895 /* PlacesTree+CollectionView.swift in Sources */,
 				8E0BFD412A5900DD00F8D466 /* SwiftJSON.swift in Sources */,

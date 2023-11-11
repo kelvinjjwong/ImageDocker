@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22155" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22155"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -48,39 +49,39 @@
                 </scrollView>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UtA-Mg-ywW">
                     <rect key="frame" x="0.0" y="165" width="118" height="32"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="104" id="uQe-x1-QNl"/>
-                    </constraints>
                     <buttonCell key="cell" type="push" title="STOP ALL" bezelStyle="rounded" image="NSStopProgressFreestandingTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TJf-df-gG2">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="104" id="uQe-x1-QNl"/>
+                    </constraints>
                     <connections>
                         <action selector="onStopAllClicked:" target="-2" id="PB0-AU-FRH"/>
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aoJ-ky-WbA">
                     <rect key="frame" x="437" y="165" width="200" height="32"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="186" id="IGK-DL-KGN"/>
-                    </constraints>
                     <buttonCell key="cell" type="push" title="REMOVE COMPLETED" bezelStyle="rounded" image="broom" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5eV-E1-92Q">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="186" id="IGK-DL-KGN"/>
+                    </constraints>
                     <connections>
                         <action selector="onRemoveCompletedClicked:" target="-2" id="Rcz-tJ-QK7"/>
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zSt-lJ-vPB">
                     <rect key="frame" x="295" y="165" width="134" height="32"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="120" id="4S7-Vr-633"/>
-                    </constraints>
                     <buttonCell key="cell" type="push" title="REMOVE ALL" bezelStyle="rounded" image="broom" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xaN-Zt-wKS">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="120" id="4S7-Vr-633"/>
+                    </constraints>
                     <connections>
                         <action selector="onRemoveAllClicked:" target="-2" id="FV0-r9-h7K"/>
                     </connections>
