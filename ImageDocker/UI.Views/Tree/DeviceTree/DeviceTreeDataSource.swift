@@ -89,7 +89,10 @@ class DeviceTreeDataSource : TreeDataSource {
                 var volumes_change_to_be_connected:[String] = []
                 var volumes_change_to_be_disconnected:[String] = []
                 
+                
                 for registeredVolume in registeredVolumes {
+                    print(registeredVolume.getPathOfSoftlink())
+                    
                     let connectivityStatus = mountedVolumes.contains(registeredVolume)
                     
                     // initial

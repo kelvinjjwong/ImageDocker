@@ -443,11 +443,12 @@ struct LocalDirectory {
     public func getRepositoryVolume(repository:ImageRepository, volumes:[String]) -> ([String], [String]) {
         var connectedVolumes:Set<String> = []
         var missingVolumes:Set<String> = []
-        let mountpoint_home = repository.homeVolume
-        let mountpoint_repository = repository.repositoryVolume
-        let mountpoint_storage = repository.storageVolume
-        let mountpoint_face = repository.faceVolume
-        let mountpoint_crop = repository.cropVolume
+        let (mountpoint_home, mp_home_symbolic, mp_home_exists) = repository.homeVolume.getPathOfSoftlink()
+        let (mountpoint_repository, mp_repository_symbolic, mp_repository_exists) = repository.repositoryVolume.getPathOfSoftlink()
+        let (mountpoint_storage, mp_storage_symbolic, mp_storage_exists) = repository.storageVolume.getPathOfSoftlink()
+        let (mountpoint_face, mp_face_symbolic, mp_face_exists) = repository.faceVolume.getPathOfSoftlink()
+        let (mountpoint_crop, mp_crop_symbolic, mp_crop_exists) = repository.cropVolume.getPathOfSoftlink()
+        
         if mountpoint_home != "" && volumes.contains(mountpoint_home) {
             connectedVolumes.insert(mountpoint_home)
         }else if mountpoint_home != ""{

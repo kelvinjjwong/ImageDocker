@@ -229,6 +229,28 @@ extension String {
         return [str]
     }
     
+    // returns: realPath, isSymbolic?, exists?
+    func getPathOfSoftlink() -> (String, Bool, Bool) {
+        let url = URL(filePath: self)
+        var isSymbolic = false
+        var resolvedPath = self
+        var isSymbolicExist = false
+        do {
+            if let ok = try? url.checkResourceIsReachable(), ok {
+                let vals = try url.resourceValues(forKeys: [.isSymbolicLinkKey])
+                if let islink = vals.isSymbolicLink, islink {
+                    isSymbolic = true
+                    let dest = url.resolvingSymlinksInPath()
+                    isSymbolicExist = dest != url
+                    resolvedPath = dest.path().removeLastStash()
+                }
+            }
+        }catch{
+            
+        }
+        return (resolvedPath, isSymbolic, isSymbolicExist)
+    }
+    
     func getVolumeFromThisPath() -> (String, String) {
         if self.hasPrefix("/Volumes/") {
             let parts = self.components(separatedBy: "/")

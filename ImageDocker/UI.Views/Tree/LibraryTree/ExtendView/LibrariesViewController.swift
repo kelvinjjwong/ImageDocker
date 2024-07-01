@@ -85,7 +85,9 @@ class LibrariesViewController: NSViewController {
             var totalBackup = 0.0
             var totalFace = 0.0
             var diskUsage:[String:Double] = [:]
-            for repo in repos {
+            for repo in repos.sorted(by: { r1, r2 in
+                return r1.name > r2.name
+            }) {
                 let (repoSize, backupSize, faceSize, totalSize, usage) = LocalDirectory.bridge.getRepositorySpaceOccupationInGB(repository: repo, diskUsage: diskUsage)
                 diskUsage = usage
                 let total = self.getBytesText(totalSize)
@@ -169,7 +171,7 @@ class LibrariesViewController: NSViewController {
             self.records.append(("", "", "", "", "", "", ""))
             self.records.append(("Disk", "Used", "Free", "Total", "", "", ""))
             
-            for key in diskUsage.keys {
+            for key in diskUsage.keys.sorted() {
                 if key.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
                     continue
                 }
