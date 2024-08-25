@@ -28,49 +28,49 @@ extension ViewController {
 
         stackedTreeView.view.boundToSuperView(superview: self.stackedTreeCanvasView)
         stackedTreeView.view.setWidth(TREEVIEW_WIDTH)
-
-        stackedTreeView.addTreeView(title:Words.nav_cat_devices.word(),
-                                    dataSource: self.deviceTreeDataSource,
-                                    width: TREEVIEW_WIDTH,
-                                    disableFilter: true,
-                                    nodeIcon: { collection in
-                                        if let state = collection.relatedObjectState {
-                                            return state == 1 ? Icons.phoneConnected : Icons.phone
-                                        }else{
-                                            return Icons.phone
-                                        }
-        },
-                                    nodeValue: { collection in
-                                        if collection.path == "Android" || collection.path == "iPhone" {
-                                            return "📲 \(collection.childrenCount) 🔌 \(collection.connectedCount)"
-                                        }else{
-                                            if let state = collection.relatedObjectState {
-                                                if state == 1 {
-                                                    return "🟢"
-                                                }else {
-                                                    return ""
-                                                }
-                                            }else{
-                                                return ""
-                                            }
-                                        }
-        },
-                                    onNodeSelected: { collection in
-//                                        self.logger.log("action on \(collection.path)")
-                                        if collection.path == "Android" || collection.path == "iPhone" {
-                                            self.logger.log("expand device tree")
-                                            self.stackedTreeView.expand(tree: Words.nav_cat_devices.word(), path: collection.path)
-                                        }else{
-                                            if let id = collection.relatedObjectId,
-                                                let device = self.deviceTreeDataSource.getDeviceById(id),
-                                                let state = collection.relatedObjectState {
-                                                self.openDeviceCopyView(device: device, connected: state == 1)
-                                            }else{
-                                                self.logger.log("device collection id is nil")
-                                            }
-                                        }
-        },
-                                    notificationHolder: self.btnAlertMessage)
+//
+//        stackedTreeView.addTreeView(title:Words.nav_cat_devices.word(),
+//                                    dataSource: self.deviceTreeDataSource,
+//                                    width: TREEVIEW_WIDTH,
+//                                    disableFilter: true,
+//                                    nodeIcon: { collection in
+//                                        if let state = collection.relatedObjectState {
+//                                            return state == 1 ? Icons.phoneConnected : Icons.phone
+//                                        }else{
+//                                            return Icons.phone
+//                                        }
+//        },
+//                                    nodeValue: { collection in
+//                                        if collection.path == "Android" || collection.path == "iPhone" {
+//                                            return "📲 \(collection.childrenCount) 🔌 \(collection.connectedCount)"
+//                                        }else{
+//                                            if let state = collection.relatedObjectState {
+//                                                if state == 1 {
+//                                                    return "🟢"
+//                                                }else {
+//                                                    return ""
+//                                                }
+//                                            }else{
+//                                                return ""
+//                                            }
+//                                        }
+//        },
+//                                    onNodeSelected: { collection in
+////                                        self.logger.log("action on \(collection.path)")
+//                                        if collection.path == "Android" || collection.path == "iPhone" {
+//                                            self.logger.log("expand device tree")
+//                                            self.stackedTreeView.expand(tree: Words.nav_cat_devices.word(), path: collection.path)
+//                                        }else{
+//                                            if let id = collection.relatedObjectId,
+//                                                let device = self.deviceTreeDataSource.getDeviceById(id),
+//                                                let state = collection.relatedObjectState {
+//                                                self.openDeviceCopyView(device: device, connected: state == 1)
+//                                            }else{
+//                                                self.logger.log("device collection id is nil")
+//                                            }
+//                                        }
+//        },
+//                                    notificationHolder: self.btnAlertMessage)
 
         stackedTreeView.addTreeView(title:Words.nav_cat_moments.word(),
                                     dataSource: self.momentsTreeDataSource,
@@ -230,7 +230,7 @@ extension ViewController {
         },
                                     notificationHolder: self.btnAlertMessage)
         
-        stackedTreeView.showTree("Moments")
+        stackedTreeView.showTree(Words.nav_cat_moments.word())
         
         self.startupAggregateFlag = 0
         DispatchQueue.global().async {
