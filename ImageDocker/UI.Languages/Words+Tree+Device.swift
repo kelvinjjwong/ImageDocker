@@ -81,7 +81,7 @@ extension Words {
     )
     
     static let device_tree_no_ios_connected = Localize (
-        eng: "No iOS devices found connected. Please connect your iPhone/iPad via USB.",
-        chs: "没有发现任何 iOS 设备连接了电脑，请通过 USB 连接 iPhone/iPad 。"
+        eng: "No iOS devices found connected. Please connect your iPhone/iPad via USB and unlock screen.",
+        chs: "没有发现任何 iOS 设备连接了电脑，请通过 USB 连接 iPhone/iPad ，请解锁屏幕然后再试一次。"
     )
 }

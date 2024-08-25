@@ -141,6 +141,7 @@ class RepositoryDetailViewController: NSViewController {
     
     fileprivate var _repositoryId:Int = 0
     fileprivate var _repositoryPath:String = ""
+    fileprivate var _repositoryName = ""
     
     private var phoneDevice:PhoneDevice? = nil
     
@@ -162,6 +163,7 @@ class RepositoryDetailViewController: NSViewController {
         
         self._repositoryId = id
         self._repositoryPath = path
+        self._repositoryName = ""
         self.onConfigure = onConfigure
         self.onShowDeviceDialog = onShowDeviceDialog
         self.onManageSubContainers = onManageSubContainers
@@ -220,6 +222,8 @@ class RepositoryDetailViewController: NSViewController {
         DispatchQueue.global().async {
             if let repository = RepositoryDao.default.getRepository(id: self._repositoryId) {
                 
+                self._repositoryName = repository.name
+                
                 var isAndroid = false
                 if repository.deviceId != "" {
                     if let device = DeviceDao.default.getDevice(deviceId: repository.deviceId) {
@@ -231,6 +235,39 @@ class RepositoryDetailViewController: NSViewController {
                                                       model: device.model ?? "")
                         self.phoneDevice?.name = device.name ?? ""
                         
+                        var connectedDeviceIds:[String] = []
+                        if isAndroid {
+                            connectedDeviceIds = Android.bridge.devices()
+                        }else{
+                            var connectIOS = true
+                            if Setting.localEnvironment.iosDeviceMountPoint() == "" {
+                                connectIOS = false
+                                MessageEventCenter.default.showMessage(type: "Repository", name: repository.name, message: Words.device_tree_setup_mountpoint_for_ios.word())
+                            }
+                            if !IPHONE.bridge.validCommands() {
+                                connectIOS = false
+                                MessageEventCenter.default.showMessage(type: "Repository", name: repository.name, message: Words.device_tree_ifuse_not_installed.word())
+                            }
+                            if connectIOS {
+                                connectedDeviceIds = IPHONE.bridge.devices()
+                            }
+                        }
+                        if !connectedDeviceIds.contains(repository.deviceId) {
+                            
+                            DispatchQueue.main.async {
+                                MessageEventCenter.default.showMessage(type: "Repository", name: repository.name, message: "Device is not connected")
+                                if isAndroid {
+                                    MessageEventCenter.default.showMessage(type: "Repository", name: repository.name, message: Words.device_tree_need_debug_mode.word())
+                                }else{
+                                    MessageEventCenter.default.showMessage(type: "Repository", name: repository.name, message: Words.device_tree_no_ios_connected.word())
+                                }
+                            }
+                        }
+                        
+                    }else{
+                        DispatchQueue.main.async {
+                            MessageEventCenter.default.showMessage(type: "Repository", name: repository.name, message: "Cannot find device id for this repository")
+                        }
                     }
                 }
                 
@@ -318,13 +355,11 @@ class RepositoryDetailViewController: NSViewController {
         if let phoneDevice = self.phoneDevice {
             self.onShowDeviceDialog(phoneDevice)
         }else{
-            print("device is not a phone")
+            
+            DispatchQueue.main.async {
+                MessageEventCenter.default.showMessage(type: "Repository", name: self._repositoryName, message: "Cannot find device id for this repository")
+            }
         }
-    }
-    
-    
-    @IBAction func onManageSubContainersClicked(_ sender: NSButton) {
-        self.onManageSubContainers()
     }
     
     
