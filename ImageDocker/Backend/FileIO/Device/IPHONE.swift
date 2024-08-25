@@ -25,9 +25,9 @@ struct IPHONE {
     
     // Verify access to the embedded version of ExifTool
     init() {
-        ideviceid = URL(fileURLWithPath: "/usr/local/bin/idevice_id")
-        ideviceinfo = URL(fileURLWithPath: "/usr/local/bin/ideviceinfo")
-        ifuse = URL(fileURLWithPath: "/usr/local/bin/ifuse")
+        ideviceid = URL(fileURLWithPath: "/opt/homebrew/bin/idevice_id")
+        ideviceinfo = URL(fileURLWithPath: "/opt/homebrew/bin/ideviceinfo")
+        ifuse = URL(fileURLWithPath: "/opt/homebrew/bin/ifuse")
         df = URL(fileURLWithPath: "/bin/df")
         umount = URL(fileURLWithPath: "/sbin/umount")
     }

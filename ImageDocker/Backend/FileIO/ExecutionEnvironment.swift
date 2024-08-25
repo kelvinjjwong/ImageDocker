@@ -70,7 +70,7 @@ struct ExecutionEnvironment {
     }
     
     func locate(_ command:String) -> String{
-        var paths:[String] = ["/usr/local/bin","/usr/bin","/bin","/usr/sbin","/sbin"]
+        var paths:[String] = ["/opt/homebrew/bin","/usr/local/bin","/usr/bin","/bin","/usr/sbin","/sbin"]
         autoreleasepool { () -> Void in
             let taskShell = Process()
             taskShell.launchPath = "/bin/ls"
