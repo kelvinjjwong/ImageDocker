@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.AVKitIBPlugin" version="22154"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22154"/>
-        <plugIn identifier="com.apple.WebKit2IBPlugin" version="22154"/>
+        <plugIn identifier="com.apple.AVKitIBPlugin" version="22690"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22690"/>
+        <plugIn identifier="com.apple.WebKit2IBPlugin" version="22690"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -191,7 +191,7 @@
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView id="oGf-7D-4OH">
-                                                                                <rect key="frame" x="8" y="0.0" width="293" height="24"/>
+                                                                                <rect key="frame" x="18" y="0.0" width="293" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IXm-lX-gcp">
@@ -223,7 +223,7 @@
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView id="laD-z9-Hbk">
-                                                                                <rect key="frame" x="318" y="0.0" width="20" height="24"/>
+                                                                                <rect key="frame" x="328" y="0.0" width="20" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2vH-yC-RDp">
@@ -255,7 +255,7 @@
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView id="cha-Sj-3VA">
-                                                                                <rect key="frame" x="355" y="0.0" width="284" height="17"/>
+                                                                                <rect key="frame" x="365" y="0.0" width="284" height="17"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cxw-2X-mVv">
@@ -279,7 +279,7 @@
                                                         </subviews>
                                                     </clipView>
                                                     <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="txp-LP-kdB">
-                                                        <rect key="frame" x="1" y="228" width="648" height="16"/>
+                                                        <rect key="frame" x="1" y="229" width="648" height="15"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                     <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="mMQ-Li-CpK">
@@ -559,12 +559,12 @@ https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip</stri
                                                                 <textFieldCell key="cell" selectable="YES" id="H3Q-pt-W1K">
                                                                     <font key="font" metaFont="system"/>
                                                                     <string key="title">How to install:
-1. Install macFuse from: https://github.com/osxfuse/osxfuse/releases
-2. Restart macOS
-3. Run below commands in Console:
+1. Run below commands in Console:
+brew install --cask macfuse
 brew install gromgit/fuse/ifuse-mac 
 brew install automake autoconf libtool wget libimobiledevice
-brew install ideviceinstaller</string>
+brew install ideviceinstaller
+2. restart computer</string>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -1694,11 +1694,11 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 <rect key="frame" x="34" y="81" width="230" height="170"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="Y2y-q8-QWa">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="230" height="170"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="230" height="155"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="42" rowSizeStyle="automatic" headerView="s4r-tD-ASl" viewBased="YES" id="MhU-ve-gho">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="269" height="142"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="269" height="127"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <size key="intercellSpacing" width="3" height="2"/>
                                                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1774,7 +1774,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                     <nil key="backgroundColor"/>
                                                                 </clipView>
                                                                 <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="kjg-Qg-z1A">
-                                                                    <rect key="frame" x="0.0" y="154" width="230" height="16"/>
+                                                                    <rect key="frame" x="0.0" y="155" width="230" height="15"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="mZk-PA-1Ik">
@@ -3440,7 +3440,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="oKK-cu-PBz">
-                                                            <rect key="frame" x="45.5" y="1" width="80" height="17"/>
+                                                            <rect key="frame" x="46" y="1" width="79" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="pKU-BK-Kyl">
@@ -3516,7 +3516,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="WUz-tY-66q">
-                                                                    <rect key="frame" x="0.0" y="1" width="124" height="16"/>
+                                                                    <rect key="frame" x="0.0" y="1" width="125" height="16"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="bcs-Y7-Fot">
                                                                         <font key="font" metaFont="system"/>
                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -3548,7 +3548,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="eKx-mS-IPG">
-                                                            <rect key="frame" x="255.5" y="1" width="1078" height="17"/>
+                                                            <rect key="frame" x="256" y="1" width="1077" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="bZs-sX-o57">
