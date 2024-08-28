@@ -101,7 +101,7 @@ public final class ImageContainer: Codable {
 //}
 
 
-extension ImageContainer : PostgresRecord {
+extension ImageContainer : DatabaseRecord {
     public func postgresTable() -> String {
         "ImageContainer"
     }

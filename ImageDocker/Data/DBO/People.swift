@@ -46,7 +46,7 @@ public final class People : Codable {
 //
 //}
 
-extension People : PostgresRecord {
+extension People : DatabaseRecord {
     
     public func postgresTable() -> String {
         return "People"
@@ -79,7 +79,7 @@ public final class PeopleRelationship : Codable {
 //}
 
 
-extension PeopleRelationship : PostgresRecord {
+extension PeopleRelationship : DatabaseRecord {
     public func postgresTable() -> String {
         return "PeopleRelationship"
     }

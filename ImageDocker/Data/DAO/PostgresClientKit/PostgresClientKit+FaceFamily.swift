@@ -49,26 +49,40 @@ class FaceDaoPostgresCK : FaceDaoInterface {
     
     func getFamily(id:String) -> Family? {
         let db = PostgresConnection.database()
-        return Family.fetchOne(db, parameters: ["id" : id])
+        do {
+            return try Family.fetchOne(db, parameters: ["id" : id])
+        }catch{
+            self.logger.log(.error, error)
+            return nil
+        }
     }
     
     func getFamilies() -> [Family] {
         let db = PostgresConnection.database()
-        return Family.fetchAll(db, orderBy: "name")
+        do {
+            return try Family.fetchAll(db, orderBy: "name")
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getFamilies(peopleId: String) -> [String] {
+        var result:[String] = []
         let db = PostgresConnection.database()
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var familyId:String = ""
             public init() {}
         }
-        let records = TempRecord.fetchAll(db, sql: """
-        SELECT "familyId" FROM "FamilyMember" WHERE "peopleId"='\(peopleId)'
-        """)
-        var result:[String] = []
-        for row in records {
-            result.append(row.familyId)
+        do {
+            let records = try TempRecord.fetchAll(db, sql: """
+            SELECT "familyId" FROM "FamilyMember" WHERE "peopleId"='\(peopleId)'
+            """)
+            for row in records {
+                result.append(row.familyId)
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
         return result
     }
@@ -76,21 +90,26 @@ class FaceDaoPostgresCK : FaceDaoInterface {
     func saveFamilyMember(peopleId: String, familyId: String) -> ExecuteState {
         let db = PostgresConnection.database()
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var familyId:String = ""
             var peopleId:String = ""
             public init() {}
         }
-        let records = TempRecord.fetchAll(db, sql: """
-        SELECT "familyId","peopleId" FROM "FamilyMember" WHERE "familyId"='\(familyId)' AND "peopleId"='\(peopleId)'
-        """)
-        if records.count == 0 {
-            let record = FamilyMember()
-            record.familyId = familyId
-            record.peopleId = peopleId
-            record.save(db)
+        do {
+            let records = try TempRecord.fetchAll(db, sql: """
+            SELECT "familyId","peopleId" FROM "FamilyMember" WHERE "familyId"='\(familyId)' AND "peopleId"='\(peopleId)'
+            """)
+            if records.count == 0 {
+                let record = FamilyMember()
+                record.familyId = familyId
+                record.peopleId = peopleId
+                try record.save(db)
+            }
+            return .OK
+        }catch{
+            self.logger.log(.error, error)
+            return .ERROR
         }
-        return .OK
     }
     
     func deleteFamilyMember(peopleId: String, familyId: String) -> ExecuteState {
@@ -98,8 +117,13 @@ class FaceDaoPostgresCK : FaceDaoInterface {
         let record = FamilyMember()
         record.familyId = familyId
         record.peopleId = peopleId
-        record.delete(db)
+        do {
+            try record.delete(db)
         return .OK
+        }catch{
+            self.logger.log(.error, error)
+            return .ERROR
+        }
     }
     
     func saveFamily(familyId: String?, name: String, type: String, owner:String) -> String? {
@@ -109,11 +133,11 @@ class FaceDaoPostgresCK : FaceDaoInterface {
         do {
             var needInsert = false
             if let id = familyId {
-                final class TempRecord : PostgresCustomRecord {
+                final class TempRecord : DatabaseRecord {
                     var id:String = ""
                     public init() {}
                 }
-                let rows = TempRecord.fetchAll(db, sql: "SELECT \"id\" FROM \"Family\" WHERE \"id\"='\(id)'")
+                let rows = try TempRecord.fetchAll(db, sql: "SELECT \"id\" FROM \"Family\" WHERE \"id\"='\(id)'")
                 if rows.count > 0 {
                     recordId = id
                     try db.execute(sql: """
@@ -155,18 +179,27 @@ class FaceDaoPostgresCK : FaceDaoInterface {
     
     func getFamilyMembers() -> [FamilyMember] {
         let db = PostgresConnection.database()
-        return FamilyMember.fetchAll(db)
+        do {
+            return try FamilyMember.fetchAll(db)
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getRelationship(primary: String, secondary: String) -> (String, String) {
         var value1 = ""
         var value2 = ""
         let db = PostgresConnection.database()
-        if let rows1 = PeopleRelationship.fetchOne(db, where: "subject='\(primary)' AND object='\(secondary)'") {
-            value1 = rows1.callName
-        }
-        if let rows2 = PeopleRelationship.fetchOne(db, where: "subject='\(secondary)' AND object='\(primary)'") {
-            value2 = rows2.callName
+        do {
+            if let rows1 = try PeopleRelationship.fetchOne(db, where: "subject='\(primary)' AND object='\(secondary)'") {
+                value1 = rows1.callName
+            }
+            if let rows2 = try PeopleRelationship.fetchOne(db, where: "subject='\(secondary)' AND object='\(primary)'") {
+                value2 = rows2.callName
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
         return (value1, value2)
     }
@@ -174,16 +207,20 @@ class FaceDaoPostgresCK : FaceDaoInterface {
     func getRelationships(peopleId: String) -> [[String : String]] {
         var result:[[String:String]] = []
         let db = PostgresConnection.database()
-        let rows = PeopleRelationship.fetchAll(db, where: "subject='\(peopleId)' OR object='\(peopleId)'")
-        for row in rows {
-            let primary = row.subject
-            let secondary = row.object
-            let callName = row.callName
-            var dict:[String:String] = [:]
-            dict["primary"] = primary
-            dict["secondary"] = secondary
-            dict["callName"] = callName
-            result.append(dict)
+        do {
+            let rows = try PeopleRelationship.fetchAll(db, where: "subject='\(peopleId)' OR object='\(peopleId)'")
+            for row in rows {
+                let primary = row.subject
+                let secondary = row.object
+                let callName = row.callName
+                var dict:[String:String] = [:]
+                dict["primary"] = primary
+                dict["secondary"] = secondary
+                dict["callName"] = callName
+                result.append(dict)
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
         return result
     }
@@ -191,48 +228,67 @@ class FaceDaoPostgresCK : FaceDaoInterface {
     func saveRelationship(primary: String, secondary: String, callName: String) -> ExecuteState {
         let db = PostgresConnection.database()
         do {
-            let rows = PeopleRelationship.fetchAll(db, sql: "SELECT subject,object,\"callName\" FROM \"PeopleRelationship\" WHERE subject='\(primary)' AND object='\(secondary)'")
+            let rows = try PeopleRelationship.fetchAll(db, sql: "SELECT subject,object,\"callName\" FROM \"PeopleRelationship\" WHERE subject='\(primary)' AND object='\(secondary)'")
             if rows.count > 0 {
                 try db.execute(sql: "UPDATE \"PeopleRelationship\" SET \"callName\"='\(callName)' WHERE subject='\(primary)' AND object='\(secondary)'")
             }else{
                 try db.execute(sql: "INSERT INTO \"PeopleRelationship\" (subject, object, \"callName\") VALUES ('\(primary)','\(secondary)','\(callName)')")
             }
+            return .OK
         }catch{
             self.logger.log(.error, error)
             return .ERROR
         }
-        return .OK
     }
     
     func getRelationships() -> [PeopleRelationship] {
         let db = PostgresConnection.database()
-        return PeopleRelationship.fetchAll(db)
+        do {
+            return try PeopleRelationship.fetchAll(db)
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getPeople() -> [People] {
         let db = PostgresConnection.database()
-        return People.fetchAll(db, orderBy: "\"coreMember\" desc, \"name\"")
+        do {
+            return try People.fetchAll(db, orderBy: "\"coreMember\" desc, \"name\"")
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getCoreMembers() -> [People] {
         let db = PostgresConnection.database()
-        return People.fetchAll(db, parameters: ["coreMember": true], orderBy: "name")
+        do {
+            return try People.fetchAll(db, parameters: ["coreMember": true], orderBy: "name")
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getPeopleIds(inFamilyQuotedSeparated:String, db: PostgresDB) -> [String] {
         var peopleIds:[String] = []
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var peopleId:String = ""
             public init() {}
         }
-        let records = TempRecord.fetchAll(db, sql: """
-        SELECT "peopleId" FROM "FamilyMember" WHERE "familyId" in (\(inFamilyQuotedSeparated))
-        """)
-        if records.count > 0 {
-            for record in records {
-                peopleIds.append(record.peopleId.quotedDatabaseValueIdentifier)
+        do {
+            let records = try TempRecord.fetchAll(db, sql: """
+            SELECT "peopleId" FROM "FamilyMember" WHERE "familyId" in (\(inFamilyQuotedSeparated))
+            """)
+            if records.count > 0 {
+                for record in records {
+                    peopleIds.append(record.peopleId.quotedDatabaseValueIdentifier)
+                }
             }
+        }catch{
+            self.logger.log(.error, error)
         }
         return peopleIds
     }
@@ -252,35 +308,55 @@ class FaceDaoPostgresCK : FaceDaoInterface {
             """
             }
         }
-        return People.fetchAll(db, where: stmt, orderBy: "name")
+        do {
+            return try People.fetchAll(db, where: stmt, orderBy: "name")
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getPeople(except: String) -> [People] {
         let db = PostgresConnection.database()
-        return People.fetchAll(db, where: "id <> '\(except)'", orderBy: "name")
+        do {
+            return try People.fetchAll(db, where: "id <> '\(except)'", orderBy: "name")
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getPerson(id: String) -> People? {
         let db = PostgresConnection.database()
-        return People.fetchOne(db, parameters: ["id" : id])
+        do {
+            return try People.fetchOne(db, parameters: ["id" : id])
+        }catch{
+            self.logger.log(.error, error)
+            return nil
+        }
     }
     
     func getPerson(name: String) -> People? {
         let db = PostgresConnection.database()
-        return People.fetchOne(db, parameters: ["name" : name])
+        do {
+            return try People.fetchOne(db, parameters: ["name" : name])
+        }catch{
+            self.logger.log(.error, error)
+            return nil
+        }
     }
     
     func savePersonName(id: String, name: String, shortName: String) -> ExecuteState {
         let db = PostgresConnection.database()
-        let person = People()
-        person.id = id
-        person.name = name
-        person.shortName = shortName
-        person.save(db)
         do {
+            let person = People()
+            person.id = id
+            person.name = name
+            person.shortName = shortName
+            try person.save(db)
             try db.execute(sql: """
-        UPDATE "ImageFamily" set "owner"='\(shortName)' WHERE "ownerId"='\(id)'
-        """)
+            UPDATE "ImageFamily" set "owner"='\(shortName)' WHERE "ownerId"='\(id)'
+            """)
         }catch{
             self.logger.log(.error, "Unable to update people name in ImageFamily table: \(error)")
         }
@@ -295,8 +371,13 @@ class FaceDaoPostgresCK : FaceDaoInterface {
             ps.iconCropPath = cropPath
             ps.iconSubPath = subPath
             ps.iconFilename = filename
-            ps.save(db)
-            return true
+            do {
+                try ps.save(db)
+                return true
+            }catch{
+                self.logger.log(.error, error)
+                return false
+            }
         }
         return false
     }
@@ -337,20 +418,24 @@ class FaceDaoPostgresCK : FaceDaoInterface {
     func getRepositoryOwnerColors() -> [Int:String] {
         var list:[Int:String] = [:]
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var repositoryId:Int = 0
             var ownerId:String = ""
             var ownerColor:String = ""
             public init() {}
         }
         let db = PostgresConnection.database()
-        let records = TempRecord.fetchAll(db, sql: """
-        select r."id" as "repositoryId",COALESCE(p."id", 'shared') as "ownerId", COALESCE(p."coreMemberColor", '2E2E2E') as "ownerColor" from "ImageRepository" as r LEFT JOIN "People" as p on r.owner = p.id ORDER BY "repositoryId"
-        """)
-        if records.count > 0 {
-            for record in records {
-                list[record.repositoryId] = record.ownerColor
+        do {
+            let records = try TempRecord.fetchAll(db, sql: """
+            select r."id" as "repositoryId",COALESCE(p."id", 'shared') as "ownerId", COALESCE(p."coreMemberColor", '2E2E2E') as "ownerColor" from "ImageRepository" as r LEFT JOIN "People" as p on r.owner = p.id ORDER BY "repositoryId"
+            """)
+            if records.count > 0 {
+                for record in records {
+                    list[record.repositoryId] = record.ownerColor
+                }
             }
+        }catch{
+            self.logger.log(.error, error)
         }
         return list
     }

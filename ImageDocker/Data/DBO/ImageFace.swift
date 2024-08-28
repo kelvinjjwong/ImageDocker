@@ -91,7 +91,7 @@ public final class ImageFace : Codable {
 //}
 
 
-extension ImageFace : PostgresRecord {
+extension ImageFace : DatabaseRecord {
     public func postgresTable() -> String {
         return "ImageFace"
     }

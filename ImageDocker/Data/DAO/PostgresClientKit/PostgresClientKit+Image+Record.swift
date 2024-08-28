@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import PostgresClientKit
 import LoggerFactory
+import PostgresModelFactory
 
 class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
     
@@ -19,23 +19,43 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
     
     func getImage(path: String) -> Image? {
         let db = PostgresConnection.database()
-        return Image.fetchOne(db, parameters: ["path": path]) // FIXME: it's PK now, deprecate in future version
+        do {
+            return try Image.fetchOne(db, parameters: ["path": path]) // FIXME: it's PK now, deprecate in future version
+        }catch {
+            self.logger.log(.error, error)
+            return nil
+        }
     }
     
     func getImage(id: String) -> Image? {
         let db = PostgresConnection.database()
-        return Image.fetchOne(db, parameters: ["id" : id]) 
+        do {
+            return try Image.fetchOne(db, parameters: ["id" : id])
+        }catch {
+            self.logger.log(.error, error)
+            return nil
+        }
     }
     
     func findImage(repositoryVolume:String, repositoryPath:String, subPath:String) -> Image? {
         let path = Naming.Image.generatePath(repositoryVolume: repositoryVolume, repositoryPath: repositoryPath, subPath: subPath)
         let db = PostgresConnection.database()
-        return Image.fetchOne(db, parameters: ["path": path])
+        do {
+            return try Image.fetchOne(db, parameters: ["path": path])
+        }catch {
+            self.logger.log(.error, error)
+            return nil
+        }
     }
     
     func findImage(repositoryId:Int, subPath:String) -> Image? {
         let db = PostgresConnection.database()
-        return Image.fetchOne(db, parameters: ["repositoryId": repositoryId, "subPath": subPath.removeFirstStash()])
+        do {
+            return try Image.fetchOne(db, parameters: ["repositoryId": repositoryId, "subPath": subPath.removeFirstStash()])
+        }catch {
+            self.logger.log(.error, error)
+            return nil
+        }
     }
     
     // MARK: CRUD
@@ -51,7 +71,12 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         image.path = Naming.Image.generatePath(repositoryVolume: repositoryVolume, repositoryPath: repositoryPath, subPath: subPath) // FIXME: it's PK now, deprecate in future version
         image.repositoryPath = Naming.Image.generateFullAbsoluteRepositoryPath(repositoryVolume: repositoryVolume, repositoryPath: repositoryPath) // FIXME: deprecate in future version
         image.containerPath = Naming.Image.generateFullAbsoluteContainerPath(repositoryVolume: repositoryVolume, repositoryPath: repositoryPath, subPath: subPath).removeLastStash() // FIXME: deprecate in future version
-        image.save(db)
+        
+        do {
+            try image.save(db)
+        }catch {
+            self.logger.log(.error, error)
+        }
         
         if let createdImage = self.findImage(repositoryVolume: repositoryVolume, repositoryPath: repositoryPath, subPath: subPath) {
             return createdImage
@@ -63,18 +88,27 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
     func getOrCreatePhoto(filename: String, path: String, parentPath: String, repositoryPath: String?) -> Image {
         let db = PostgresConnection.database()
         self.logger.log(.debug, "trying to get image with path: \(path)")
-        if let image = Image.fetchOne(db, parameters: ["path" : path]) {
-            return image
-        }else{
-            let image = Image.new(filename: filename, path: path, parentFolder: parentPath, repositoryPath: repositoryPath ?? "")
-            image.save(db)
-            return image
+        let dummy = Image.new(filename: filename, path: path, parentFolder: parentPath, repositoryPath: repositoryPath ?? "")
+        do {
+            if let image = try Image.fetchOne(db, parameters: ["path" : path]) {
+                return image
+            }else{
+                try dummy.save(db)
+                return dummy
+            }
+        }catch {
+            self.logger.log(.error, error)
+            return dummy
         }
     }
     
     func saveImage(image: Image) -> ExecuteState {
         let db = PostgresConnection.database()
-        image.save(db)
+        do {
+            try image.save(db)
+        }catch {
+            self.logger.log(.error, error)
+        }
         return .OK
     }
     
@@ -94,7 +128,11 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         }else{
             let image = Image()
             image.id = id
-            image.delete(db)
+            do {
+                try image.delete(db)
+            }catch {
+                self.logger.log(.error, error)
+            }
             return .OK
         }
     }
@@ -114,7 +152,11 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         }else{
             let image = Image()
             image.path = path
-            image.delete(db)
+            do {
+                try image.delete(db)
+            }catch {
+                self.logger.log(.error, error)
+            }
             return .OK
         }
     }
@@ -235,7 +277,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
     
     func updateImageDates(path: String, date: Date, fields: Set<String>) -> ExecuteState {
         let db = PostgresConnection.database()
-        var arguments:[PostgresValueConvertible] = []
+        var arguments:[DatabaseValueConvertible] = []
         var values:[String] = []
         
         var placeholders = 0
@@ -322,31 +364,25 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
     func storeImageFamily(imageId:String, familyId:String, ownerId:String, familyName: String, owner: String) -> ExecuteState {
         let db = PostgresConnection.database()
         
-        if let record = ImageFamily.fetchOne(db, parameters: ["imageId": imageId, "familyId": familyId]) {
-            
-            do {
+        do {
+            if let record = try ImageFamily.fetchOne(db, parameters: ["imageId": imageId, "familyId": familyId]) {
+                
                 try db.execute(sql: """
-            UPDATE "ImageFamily" SET "imageId" = $1, "familyId" = $2, "ownerId" = $3, "familyName" = $4, "owner" = $5 WHERE "id" = $6
-            """, parameterValues: [imageId, familyId, ownerId, familyName, owner, record.id])
-            }catch{
-                self.logger.log(.error, "[storeImageFamily]", error)
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
-                return .ERROR
-            }
-            
-        }else{
-            
-            do {
+                UPDATE "ImageFamily" SET "imageId" = $1, "familyId" = $2, "ownerId" = $3, "familyName" = $4, "owner" = $5 WHERE "id" = $6
+                """, parameterValues: [imageId, familyId, ownerId, familyName, owner, record.id])
+                
+            }else{
+                
                 try db.execute(sql: """
-            INSERT INTO "ImageFamily" ("imageId", "familyId", "ownerId", "familyName", "owner") VALUES ($1, $2, $3, $4, $5)
-            """, parameterValues: [imageId, familyId, ownerId, familyName, owner])
-            }catch{
-                self.logger.log(.error, "[storeImageFamily]", error)
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
-                return .ERROR
+                INSERT INTO "ImageFamily" ("imageId", "familyId", "ownerId", "familyName", "owner") VALUES ($1, $2, $3, $4, $5)
+                """, parameterValues: [imageId, familyId, ownerId, familyName, owner])
             }
+            return .OK
+        }catch{
+            self.logger.log(.error, "[storeImageFamily]", error)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+            return .ERROR
         }
-        return .OK
     }
     
     // MARK: UPDATE ROTATION

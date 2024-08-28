@@ -43,52 +43,39 @@ public final class PostgresConnection : ImageDBInterface {
             loc = "network"
         }
         
+        var databaseProfile = DatabaseProfile()
         if loc == "localServer" {
-            host = Setting.database.localPostgres.server()
-            port = Setting.database.localPostgres.port()
-            user = Setting.database.localPostgres.username()
-            psw = Setting.database.localPostgres.password()
-            nopsw = Setting.database.localPostgres.noPassword()
-            schema = Setting.database.localPostgres.schema()
-            if schema == "" {
-                schema = "public"
+            databaseProfile.engine = "PostgreSQL"
+            databaseProfile.host = Setting.database.localPostgres.server()
+            databaseProfile.port = Setting.database.localPostgres.port()
+            databaseProfile.user = Setting.database.localPostgres.username()
+            databaseProfile.password = Setting.database.localPostgres.password()
+            databaseProfile.nopsw = Setting.database.localPostgres.noPassword()
+            databaseProfile.schema = Setting.database.localPostgres.schema()
+            if databaseProfile.schema == "" {
+                databaseProfile.schema = "public"
             }
-            database = Setting.database.localPostgres.database()
+            databaseProfile.database = Setting.database.localPostgres.database()
             
         }else if loc == "network" {
-            host = Setting.database.remotePostgres.server()
-            port = Setting.database.remotePostgres.port()
-            user = Setting.database.remotePostgres.username()
-            psw = Setting.database.remotePostgres.password()
-            nopsw = Setting.database.remotePostgres.noPassword()
-            schema = Setting.database.remotePostgres.schema()
-            if schema == "" {
-                schema = "public"
+            databaseProfile.engine = "PostgreSQL"
+            databaseProfile.host = Setting.database.remotePostgres.server()
+            databaseProfile.port = Setting.database.remotePostgres.port()
+            databaseProfile.user = Setting.database.remotePostgres.username()
+            databaseProfile.password = Setting.database.remotePostgres.password()
+            databaseProfile.nopsw = Setting.database.remotePostgres.noPassword()
+            databaseProfile.schema = Setting.database.remotePostgres.schema()
+            if databaseProfile.schema == "" {
+                databaseProfile.schema = "public"
             }
-            database = Setting.database.remotePostgres.database()
+            databaseProfile.database = Setting.database.remotePostgres.database()
         }
         
-        return PostgresConnection.database(host: host, port: port, user: user, database: database, schema: schema, password: psw, nopsw: nopsw)
+        return PostgresConnection.database(databaseProfile: databaseProfile)
     }
     
-    public static func database(host:String, port:Int, user:String, database:String, schema:String, password:String, nopsw:Bool) -> PostgresDB {
-        if nopsw {
-            let db = PostgresDB(database: database, host: host, port: port, user: user, password: nil, ssl: false)
-            if schema == "" {
-                db.schema = "public"
-            }else{
-                db.schema = schema
-            }
-            return db
-        }else{
-            let db = PostgresDB(database: database, host: host, port: port, user: user, password: password, ssl: false)
-            if schema == "" {
-                db.schema = "public"
-            }else{
-                db.schema = schema
-            }
-            return db
-        }
+    public static func database(databaseProfile: DatabaseProfile) -> PostgresDB {
+        return PostgresDB(databaseProfile: databaseProfile)
     }
     
     func testDatabase() -> (Bool, Error?) {

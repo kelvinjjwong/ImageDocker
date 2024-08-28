@@ -34,7 +34,7 @@ public final class Face : Codable {
 //
 //}
 
-extension Face : PostgresRecord {
+extension Face : DatabaseRecord {
     public func postgresTable() -> String {
         return "Face"
     }

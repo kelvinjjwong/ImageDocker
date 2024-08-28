@@ -24,7 +24,7 @@ extension PostgresConnection {
     }
     
     func versionCheck(dropBeforeCreate:Bool, db:PostgresDB) {
-        let migrator = DatabaseVersionMigrator(sqlGenerator: PostgresSchemaSQLGenerator(dropBeforeCreate: dropBeforeCreate), sqlExecutor: db)
+        let migrator = DatabaseVersionMigrator(db).dropBeforeCreate(dropBeforeCreate).cleanVersions(false)
         
         migrator.version("v1") { db in
             try db.create(table: "ImageEvent", body: { t in
@@ -709,7 +709,7 @@ extension PostgresConnection {
         }
         
         do {
-            try migrator.migrate(cleanVersions: dropBeforeCreate)
+            try migrator.migrate()
         }catch{
             self.logger.log(.error, error)
         }

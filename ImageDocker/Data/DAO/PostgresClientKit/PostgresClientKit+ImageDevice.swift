@@ -7,75 +7,122 @@
 //
 
 import Foundation
+import LoggerFactory
 import PostgresModelFactory
+import SharedDeviceLib
 
 class DeviceDaoPostgresCK : DeviceDaoInterface {
     
+    let logger = LoggerFactory.get(category: "DeviceDao", subCategory: "Postgres", includeTypes: [])
+    
     func getDevices() -> [ImageDevice] {
         let db = PostgresConnection.database()
-        return ImageDevice.fetchAll(db, orderBy: "name")
+        do {
+            return try ImageDevice.fetchAll(db, orderBy: "name")
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getDevices(type: String) -> [ImageDevice] {
         let db = PostgresConnection.database()
-        return ImageDevice.fetchAll(db, where: "type = '\(type)'", orderBy: "name")
+        do {
+            return try ImageDevice.fetchAll(db, where: "type = '\(type)'", orderBy: "name")
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getOrCreateDevice(device: PhoneDevice) -> ImageDevice {
         let db = PostgresConnection.database()
-        if let device = ImageDevice.fetchOne(db, parameters: ["deviceId": device.deviceId]) {
-            return device
-        }else{
-            let device = ImageDevice.new(
-                deviceId: device.deviceId,
-                type: device.type == .Android ? "Android" : "iPhone",
-                manufacture: device.manufacture,
-                model: device.model
-            )
-            device.save(db)
-            return device
+        
+        let dummy = ImageDevice.new(
+            deviceId: device.deviceId,
+            type: device.type == .Android ? "Android" : "iPhone",
+            manufacture: device.manufacture,
+            model: device.model
+        )
+        
+        do {
+            if let device = try ImageDevice.fetchOne(db, parameters: ["deviceId": device.deviceId]) {
+                return device
+            }else{
+                
+                try dummy.save(db)
+                return dummy
+            }
+        }catch{
+            self.logger.log(.error, error)
+            return dummy
         }
     }
     
     func getDevice(deviceId: String) -> ImageDevice? {
         let db = PostgresConnection.database()
-        return ImageDevice.fetchOne(db, parameters: ["deviceId" : deviceId])
+        do {
+            return try ImageDevice.fetchOne(db, parameters: ["deviceId" : deviceId])
+        }catch{
+            self.logger.log(.error, error)
+            return nil
+        }
     }
     
     func saveDevice(device: ImageDevice) -> ExecuteState {
         let db = PostgresConnection.database()
-        device.save(db)
+        do {
+            try device.save(db)
+        }catch{
+            self.logger.log(.error, error)
+        }
         return .OK
     }
     
     func getImportedFile(deviceId: String, file: PhoneFile) -> ImageDeviceFile? {
         let db = PostgresConnection.database()
         let key = "\(deviceId):\(file.path)"
-        return ImageDeviceFile.fetchOne(db, parameters: ["fileId" : key])
+        do {
+            return try ImageDeviceFile.fetchOne(db, parameters: ["fileId" : key])
+        }catch{
+            self.logger.log(.error, error)
+            return nil
+        }
     }
     
     func getOrCreateDeviceFile(deviceId: String, file: PhoneFile) -> ImageDeviceFile {
         let db = PostgresConnection.database()
         let key = "\(deviceId):\(file.path)"
-        if let deviceFile = ImageDeviceFile.fetchOne(db, parameters: ["fileId": key]) {
-            return deviceFile
-        }else{
-            let deviceFile = ImageDeviceFile.new(
-                fileId: key,
-                deviceId: deviceId,
-                path: file.path,
-                filename: file.filename,
-                fileDateTime: file.fileDateTime,
-                fileSize: file.fileSize
-            )
-            deviceFile.save(db)
-            return deviceFile
+        
+        let dummy = ImageDeviceFile.new(
+            fileId: key,
+            deviceId: deviceId,
+            path: file.path,
+            filename: file.filename,
+            fileDateTime: file.fileDateTime,
+            fileSize: file.fileSize
+        )
+        
+        do {
+            if let deviceFile = try ImageDeviceFile.fetchOne(db, parameters: ["fileId": key]) {
+                return deviceFile
+            }else{
+                try dummy.save(db)
+                return dummy
+            }
+        }catch{
+            self.logger.log(.error, error)
+            return dummy
         }
     }
     
     func saveDeviceFile(file: ImageDeviceFile) -> ExecuteState {
         let db = PostgresConnection.database()
-        file.save(db)
+        do {
+            try file.save(db)
+        }catch{
+            self.logger.log(.error, error)
+        }
         return .OK
     }
     
@@ -83,28 +130,51 @@ class DeviceDaoPostgresCK : DeviceDaoInterface {
         let db = PostgresConnection.database()
         var sample = ImageDeviceFile()
         sample.deviceId = deviceId
-        sample.delete(db, keyColumns: ["deviceId"])
+        do {
+            try sample.delete(db, keyColumns: ["deviceId"])
+        }catch{
+            self.logger.log(.error, error)
+        }
         return .OK
     }
     
     func getDeviceFiles(deviceId: String) -> [ImageDeviceFile] {
         let db = PostgresConnection.database()
-        return ImageDeviceFile.fetchAll(db, parameters: ["deviceId" : deviceId], orderBy: "importToPath".quotedDatabaseIdentifier)
+        do {
+            return try ImageDeviceFile.fetchAll(db, parameters: ["deviceId" : deviceId], orderBy: "importToPath".quotedDatabaseIdentifier)
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getDeviceFiles(deviceId: String, importToPath: String) -> [ImageDeviceFile] {
         let db = PostgresConnection.database()
-        return ImageDeviceFile.fetchAll(db, parameters: ["deviceId" : deviceId, "importToPath": importToPath], orderBy: "fileId".quotedDatabaseIdentifier)
+        do {
+            return try ImageDeviceFile.fetchAll(db, parameters: ["deviceId" : deviceId, "importToPath": importToPath], orderBy: "fileId".quotedDatabaseIdentifier)
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getDevicePath(deviceId: String, path: String) -> ImageDevicePath? {
         let db = PostgresConnection.database()
-        return ImageDevicePath.fetchOne(db, parameters: ["deviceId": deviceId, "path" : path])
+        do {
+            return try ImageDevicePath.fetchOne(db, parameters: ["deviceId": deviceId, "path" : path])
+        }catch{
+            self.logger.log(.error, error)
+            return nil
+        }
     }
     
     func saveDevicePath(file: ImageDevicePath) -> ExecuteState {
         let db = PostgresConnection.database()
-        file.save(db)
+        do {
+            try file.save(db)
+        }catch{
+            self.logger.log(.error, error)
+        }
         return .OK
     }
     
@@ -113,13 +183,22 @@ class DeviceDaoPostgresCK : DeviceDaoInterface {
         let sample = ImageDevicePath()
         sample.deviceId = deviceId
         sample.path = path
-        sample.delete(db, keyColumns: ["deviceId", "path"])
+        do {
+            try sample.delete(db, keyColumns: ["deviceId", "path"])
+        }catch{
+            self.logger.log(.error, error)
+        }
         return .OK
     }
     
     func getDevicePaths(deviceId: String, deviceType: MobileType) -> [ImageDevicePath] {
         let db = PostgresConnection.database()
-        var result = ImageDevicePath.fetchAll(db, parameters: ["deviceId" : deviceId])
+        var result:[ImageDevicePath] = []
+        do {
+            result = try ImageDevicePath.fetchAll(db, parameters: ["deviceId" : deviceId])
+        }catch{
+            self.logger.log(.error, error)
+        }
         if result.count == 0 {
             if deviceType == .Android {
                 result = [
@@ -151,14 +230,19 @@ class DeviceDaoPostgresCK : DeviceDaoInterface {
         where p."excludeImported"=true
         """
         
-        final class TempRecord : PostgresCustomRecord{
+        final class TempRecord : DatabaseRecord{
             
             var path:String = ""
             
             public init() {}
             
         }
-        let records = TempRecord.fetchAll(db, sql: sql)
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+        }
         var results:Set<String> = []
         for row in records {
             if withStash {
@@ -180,7 +264,7 @@ class DeviceDaoPostgresCK : DeviceDaoInterface {
         order by c."name"
         """
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             
             var name: String = ""
             var deviceId: String = ""
@@ -191,7 +275,12 @@ class DeviceDaoPostgresCK : DeviceDaoInterface {
             
             public init() {}
         }
-        let records = TempRecord.fetchAll(db, sql: sql)
+        var records:[TempRecord] = []
+        do { 
+            records = try TempRecord.fetchAll(db, sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+        }
         
         var notScans:[(String,String,String?,String?)] = []
         var results:[String:String] = [:]

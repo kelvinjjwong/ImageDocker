@@ -15,36 +15,52 @@ class PlaceDaoPostgresCK : PlaceDaoInterface {
     
     func getOrCreatePlace(name: String, location: Location) -> ImagePlace {
         let db = PostgresConnection.database()
-        if let place = ImagePlace.fetchOne(db, parameters: ["name": name]) {
-            return place
-        }else{
-            let place = ImagePlace(
-            name: name,
-            country:             location.country,
-            province:            location.province,
-            city:                location.city,
-            district:            location.district,
-            businessCircle:      location.businessCircle,
-            street:              location.street,
-            address:             location.address,
-            addressDescription:  location.addressDescription,
-            latitude:            location.coordinate?.latitude.description ?? "",
-            latitudeBD:          location.coordinateBD?.latitude.description ?? "",
-            longitude:           location.coordinate?.longitude.description ?? "",
-            longitudeBD:         location.coordinateBD?.longitude.description ?? "" )
-            place.save(db)
-            return place
+        
+        let dummy = ImagePlace(
+        name: name,
+        country:             location.country,
+        province:            location.province,
+        city:                location.city,
+        district:            location.district,
+        businessCircle:      location.businessCircle,
+        street:              location.street,
+        address:             location.address,
+        addressDescription:  location.addressDescription,
+        latitude:            location.coordinate?.latitude.description ?? "",
+        latitudeBD:          location.coordinateBD?.latitude.description ?? "",
+        longitude:           location.coordinate?.longitude.description ?? "",
+        longitudeBD:         location.coordinateBD?.longitude.description ?? "" )
+        do {
+            if let place = try ImagePlace.fetchOne(db, parameters: ["name": name]) {
+                return place
+            }else{
+                try dummy.save(db)
+                return dummy
+            }
+        }catch{
+            self.logger.log(.error, "Unable to save place", error)
+            return dummy
         }
     }
     
     func getPlace(name: String) -> ImagePlace? {
         let db = PostgresConnection.database()
-        return ImagePlace.fetchOne(db, parameters: ["name" : name])
+        do {
+            return try ImagePlace.fetchOne(db, parameters: ["name" : name])
+        }catch{
+            self.logger.log(.error, "Unable to query place", error)
+            return nil
+        }
     }
     
     func getAllPlaces() -> [ImagePlace] {
         let db = PostgresConnection.database()
-        return ImagePlace.fetchAll(db)
+        do {
+            return try ImagePlace.fetchAll(db)
+        }catch{
+            self.logger.log(.error, "Unable to query place", error)
+            return []
+        }
     }
     
     func getPlaces(byName names: String?) -> [ImagePlace] {
@@ -54,22 +70,28 @@ class PlaceDaoPostgresCK : PlaceDaoInterface {
             let keys:[String] = names.components(separatedBy: " ")
             whereStmt = SQLHelper.likeArray(field: "name", array: keys)
         }
-        return ImagePlace.fetchAll(db, where: whereStmt, orderBy: "name")
+        do {
+            return try ImagePlace.fetchAll(db, where: whereStmt, orderBy: "name")
+        }catch{
+            self.logger.log(.error, "Unable to query place", error)
+            return []
+        }
     }
     
     func renamePlace(oldName: String, newName: String) -> ExecuteState {
         let db = PostgresConnection.database()
-        if !ImagePlace.exists(db, parameters: ["name" : newName]) {
-            if let place = ImagePlace.fetchOne(db, parameters: ["name": oldName]) {
-                place.name = newName
-                place.save(db)
-            }
-        }
+        
         do {
+            if try !ImagePlace.exists(db, parameters: ["name" : newName]) {
+                if let place = try ImagePlace.fetchOne(db, parameters: ["name": oldName]) {
+                    place.name = newName
+                    try place.save(db)
+                }
+            }
             try db.execute(sql: "UPDATE \"Image\" SET \"assignPlace\"=$1 WHERE \"assignPlace\"=$2", parameterValues: [newName, oldName])
             let oldPlace = ImagePlace()
             oldPlace.name = oldName
-            oldPlace.delete(db)
+            try oldPlace.delete(db)
         }catch {
             self.logger.log(.error, error)
             return .ERROR
@@ -79,23 +101,28 @@ class PlaceDaoPostgresCK : PlaceDaoInterface {
     
     func updatePlace(name: String, location: Location) -> ExecuteState {
         let db = PostgresConnection.database()
-        if let place = ImagePlace.fetchOne(db, parameters: ["name" : name]) {
-            place.country = location.country
-            place.province = location.province
-            place.city = location.city
-            place.businessCircle = location.businessCircle
-            place.district = location.district
-            place.street = location.street
-            place.address = location.address
-            place.addressDescription = location.addressDescription
-            place.latitude = location.coordinate?.latitude.description ?? ""
-            place.longitude = location.coordinate?.longitude.description ?? ""
-            place.latitudeBD = location.coordinateBD?.latitude.description ?? ""
-            place.longitudeBD = location.coordinateBD?.longitude.description ?? ""
-            place.save(db)
-            return .OK
-        }else{
-            return .NO_RECORD
+        do {
+            if let place = try ImagePlace.fetchOne(db, parameters: ["name" : name]) {
+                place.country = location.country
+                place.province = location.province
+                place.city = location.city
+                place.businessCircle = location.businessCircle
+                place.district = location.district
+                place.street = location.street
+                place.address = location.address
+                place.addressDescription = location.addressDescription
+                place.latitude = location.coordinate?.latitude.description ?? ""
+                place.longitude = location.coordinate?.longitude.description ?? ""
+                place.latitudeBD = location.coordinateBD?.latitude.description ?? ""
+                place.longitudeBD = location.coordinateBD?.longitude.description ?? ""
+                try place.save(db)
+                return .OK
+            }else{
+                return .NO_RECORD
+            }
+        }catch {
+            self.logger.log(.error, error)
+            return .ERROR
         }
     }
     
@@ -103,7 +130,12 @@ class PlaceDaoPostgresCK : PlaceDaoInterface {
         let db = PostgresConnection.database()
         let place = ImagePlace()
         place.name = name
-        place.delete(db)
+        do {
+            try place.delete(db)
+        }catch {
+            self.logger.log(.error, error)
+            return .ERROR
+        }
         return .OK
     }
     

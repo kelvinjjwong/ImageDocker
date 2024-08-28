@@ -7,11 +7,11 @@
 //
 
 import Foundation
-import PostgresClientKit
+import PostgresModelFactory
 
 extension SQLHelper {
     
-    static func inPostgresArray(field:String, array:[PostgresValueConvertible]?, where whereStmt:inout String, args sqlArgs:inout [PostgresValueConvertible], numericPlaceholders:Bool = false){
+    static func inPostgresArray(field:String, array:[DatabaseValueConvertible]?, where whereStmt:inout String, args sqlArgs:inout [DatabaseValueConvertible], numericPlaceholders:Bool = false){
         if let array = array {
             if array.count > 0 {
                 if numericPlaceholders {
@@ -89,11 +89,11 @@ extension ImageSQLHelper {
     }
     
     // sql by date & place
-    static func generatePostgresSQLStatementForPhotoFiles(filter:CollectionFilter, year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?) -> (String, String, [PostgresValueConvertible]) {
+    static func generatePostgresSQLStatementForPhotoFiles(filter:CollectionFilter, year:Int, month:Int, day:Int, ignoreDate:Bool = false, country:String = "", province:String = "", city:String = "", place:String?) -> (String, String, [DatabaseValueConvertible]) {
         
         var stmtWithoutHiddenWhere = _generateSQLStatementForPhotoFiles(year: year, month: month, day: day, ignoreDate: ignoreDate, country: country, province: province, city: city, place: place)
         
-        var sqlArgs:[PostgresValueConvertible] = []
+        var sqlArgs:[DatabaseValueConvertible] = []
         
         let (stmtBase, hiddenWhere) = self.generatePostgresSQLStatement(filter: filter)
         
@@ -110,11 +110,11 @@ extension ImageSQLHelper {
     }
     
     // sql by date & event & place
-    static func generatePostgresSQLStatementForPhotoFiles(filter:CollectionFilter, year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "") -> (String, String, [PostgresValueConvertible]) {
+    static func generatePostgresSQLStatementForPhotoFiles(filter:CollectionFilter, year:Int, month:Int, day:Int, event:String, country:String = "", province:String = "", city:String = "", place:String = "") -> (String, String, [DatabaseValueConvertible]) {
         
         var (stmtWithoutHiddenWhere, hasEvent) = _generateSQLStatementForPhotoFiles(year: year, month: month, day: day, event: event, country: country, province: province, city: city, place: place)
         
-        var sqlArgs:[PostgresValueConvertible] = []
+        var sqlArgs:[DatabaseValueConvertible] = []
         if hasEvent {
             sqlArgs.append(event)
         }

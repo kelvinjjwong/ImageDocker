@@ -56,7 +56,7 @@ public final class ImageDevicePath : Codable {
 //}
 
 
-extension ImageDevicePath : PostgresRecord {
+extension ImageDevicePath : DatabaseRecord {
     public func postgresTable() -> String {
         return "ImageDevicePath"
     }

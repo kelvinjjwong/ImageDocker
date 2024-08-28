@@ -17,11 +17,11 @@ class AndroidDirectoryViewDelegate : DirectoryViewDelegate {
     }
     
     func listSubFolders(in path: String) -> [String] {
-        return Android.bridge.folders(device: deviceId, in: path)
+        return DeviceBridge.Android().folders(device: deviceId, in: path)
     }
     
     func listFiles(in path: String, ext:Set<String>? = nil) -> [String] {
-        return Android.bridge.filenames(device: deviceId, in: path)
+        return DeviceBridge.Android().filenames(device: deviceId, in: path)
     }
     
     func home() -> String{

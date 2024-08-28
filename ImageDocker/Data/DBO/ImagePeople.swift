@@ -26,7 +26,7 @@ public final class ImagePeople : Codable {
 //}
 
 
-extension ImagePeople : PostgresRecord {
+extension ImagePeople : DatabaseRecord {
     public func postgresTable() -> String {
         return "ImagePeople"
     }

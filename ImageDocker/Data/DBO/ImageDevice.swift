@@ -10,7 +10,7 @@ import Foundation
 //import GRDB
 import PostgresModelFactory
 
-struct ImageDevice : Codable {
+public final class ImageDevice : Codable {
     
     var deviceId:String?
     var type:String?
@@ -23,23 +23,22 @@ struct ImageDevice : Codable {
     var homePath:String? // FIXME: demise
     // FIXME: add field - repositoryId
     
+    public init() {
+        
+    }
+    
     static func databaseTableName() -> String
     {
         return "ImageDevice"
     }
     
     static func new(deviceId: String, type: String, manufacture: String, model:String) -> ImageDevice {
-        return ImageDevice(
-            deviceId: deviceId,
-            type: type,
-            manufacture: manufacture,
-            model: model,
-            name: nil,
-            storagePath: nil,
-            marketName: nil,
-            repositoryPath: nil,
-            homePath: nil
-        )
+        let obj = ImageDevice()
+        obj.deviceId = deviceId
+        obj.type = type
+        obj.manufacture = manufacture
+        obj.model = model
+        return obj
     }
 }
 
@@ -52,12 +51,12 @@ struct ImageDevice : Codable {
 
 
 
-extension ImageDevice : PostgresRecord {
-    func postgresTable() -> String {
+extension ImageDevice : DatabaseRecord {
+    public func postgresTable() -> String {
         return "ImageDevice"
     }
     
-    func primaryKeys() -> [String] {
+    public func primaryKeys() -> [String] {
         return ["deviceId"]
     }
     

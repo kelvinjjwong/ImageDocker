@@ -34,35 +34,41 @@ class ExportDaoPostgresCK : ExportDaoInterface {
                                   specifyEventCategory:Bool
     ) -> ExportProfile {
         let db = PostgresConnection.database()
-        if let profile = ExportProfile.fetchOne(db, parameters: ["id" : id]) {
-            return profile
-        }else{
-            let profile = ExportProfile(
-                id: id,
-                name: name,
-                targetVolume: targetVolume,
-                directory: directory,
-                repositoryPath: repositoryPath,
-                specifyPeople: false,
-                specifyEvent: false,
-                specifyRepository: specifyRepository,
-                people: "",
-                events: "",
-                duplicateStrategy: duplicateStrategy,
-                fileNaming: fileNaming,
-                subFolder: subFolder,
-                patchImageDescription: patchImageDescription,
-                patchDateTime: patchDateTime,
-                patchGeolocation: patchGeolocation,
-                enabled: true,
-                lastExportTime: nil,
-                specifyFamily: specifyFamily,
-                family: family,
-                eventCategories: eventCategories,
-                specifyEventCategory: specifyEventCategory
-            )
-            profile.save(db)
-            return profile
+        
+        let dummy = ExportProfile(
+            id: id,
+            name: name,
+            targetVolume: targetVolume,
+            directory: directory,
+            repositoryPath: repositoryPath,
+            specifyPeople: false,
+            specifyEvent: false,
+            specifyRepository: specifyRepository,
+            people: "",
+            events: "",
+            duplicateStrategy: duplicateStrategy,
+            fileNaming: fileNaming,
+            subFolder: subFolder,
+            patchImageDescription: patchImageDescription,
+            patchDateTime: patchDateTime,
+            patchGeolocation: patchGeolocation,
+            enabled: true,
+            lastExportTime: nil,
+            specifyFamily: specifyFamily,
+            family: family,
+            eventCategories: eventCategories,
+            specifyEventCategory: specifyEventCategory
+        )
+        do {
+            if let profile = try ExportProfile.fetchOne(db, parameters: ["id" : id]) {
+                return profile
+            }else{
+                try dummy.save(db)
+                return dummy
+            }
+        }catch{
+            self.logger.log(.error, error)
+            return dummy
         }
     }
     
@@ -83,64 +89,84 @@ class ExportDaoPostgresCK : ExportDaoInterface {
                              eventCategories:String,
                              specifyEventCategory:Bool) -> ExecuteState {
         let db = PostgresConnection.database()
-        if let profile = ExportProfile.fetchOne(db, parameters: ["id" : id]) {
-            profile.name = name
-            profile.targetVolume = targetVolume
-            profile.directory = directory
-            profile.duplicateStrategy = duplicateStrategy
-            profile.specifyRepository = specifyRepository
-            profile.specifyEvent = false
-            profile.specifyPeople = false
-            profile.specifyFamily = specifyFamily
-            profile.people = ""
-            profile.events = ""
-            profile.repositoryPath = repositoryPath
-            profile.family = family
-            profile.patchImageDescription = patchImageDescription
-            profile.patchDateTime = patchDateTime
-            profile.patchGeolocation = patchGeolocation
-            profile.fileNaming = fileNaming
-            profile.subFolder = subFolder
-            profile.eventCategories = eventCategories
-            profile.specifyEventCategory = specifyEventCategory
-            profile.save(db)
-            return .OK
-        }else{
-            return .NO_RECORD
+        do {
+            if let profile = try ExportProfile.fetchOne(db, parameters: ["id" : id]) {
+                profile.name = name
+                profile.targetVolume = targetVolume
+                profile.directory = directory
+                profile.duplicateStrategy = duplicateStrategy
+                profile.specifyRepository = specifyRepository
+                profile.specifyEvent = false
+                profile.specifyPeople = false
+                profile.specifyFamily = specifyFamily
+                profile.people = ""
+                profile.events = ""
+                profile.repositoryPath = repositoryPath
+                profile.family = family
+                profile.patchImageDescription = patchImageDescription
+                profile.patchDateTime = patchDateTime
+                profile.patchGeolocation = patchGeolocation
+                profile.fileNaming = fileNaming
+                profile.subFolder = subFolder
+                profile.eventCategories = eventCategories
+                profile.specifyEventCategory = specifyEventCategory
+                try profile.save(db)
+                return .OK
+            }else{
+                return .NO_RECORD
+            }
+        }catch{
+            self.logger.log(.error, error)
+            return .ERROR
         }
         
     }
     
     func enableExportProfile(id: String) -> ExecuteState {
         let db = PostgresConnection.database()
-        if let profile = ExportProfile.fetchOne(db, parameters: ["id" : id]) {
-            profile.enabled = true
-            profile.save(db)
-            return .OK
-        }else{
-            return .NO_RECORD
+        do {
+            if let profile = try ExportProfile.fetchOne(db, parameters: ["id" : id]) {
+                profile.enabled = true
+                try profile.save(db)
+                return .OK
+            }else{
+                return .NO_RECORD
+            }
+        }catch{
+            self.logger.log(.error, error)
+            return .ERROR
         }
     }
     
     func disableExportProfile(id: String) -> ExecuteState {
         let db = PostgresConnection.database()
-        if let profile = ExportProfile.fetchOne(db, parameters: ["id" : id]) {
-            profile.enabled = false
-            profile.save(db)
-            return .OK
-        }else{
-            return .NO_RECORD
+        do {
+            if let profile = try ExportProfile.fetchOne(db, parameters: ["id" : id]) {
+                profile.enabled = false
+                try profile.save(db)
+                return .OK
+            }else{
+                return .NO_RECORD
+            }
+        }catch{
+            self.logger.log(.error, error)
+            return .ERROR
         }
     }
     
     func updateExportProfileLastExportTime(id: String) -> ExecuteState {
         let db = PostgresConnection.database()
-        if let profile = ExportProfile.fetchOne(db, parameters: ["id" : id]) {
-            profile.lastExportTime = Date()
-            profile.save(db)
-            return .OK
-        }else{
-            return .NO_RECORD
+        do {
+            if let profile = try ExportProfile.fetchOne(db, parameters: ["id" : id]) {
+                profile.lastExportTime = Date()
+                try profile.save(db)
+                return .OK
+            }else{
+                return .NO_RECORD
+            }
+        }catch{
+            self.logger.log(.error, error)
+            return .ERROR
         }
     }
     
@@ -149,21 +175,26 @@ class ExportDaoPostgresCK : ExportDaoInterface {
         let sql = """
         select max("lastExportTime") as "lastExportTime" from "ExportLog" where "profileId" = '\(profile.id)'
 """
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var lastExportTime:Date?
             public init() {}
         }
         
         let db = PostgresConnection.database()
-        if let record = TempRecord.fetchOne(db, sql: sql) {
-            return record.lastExportTime
+        do {
+            if let record = try TempRecord.fetchOne(db, sql: sql) {
+                return record.lastExportTime
+            }
+        }catch{
+            self.logger.log(.error, error)
+            return nil
         }
         
         return nil
     }
     
     func getExportedFilename(imageId:String, profileId:String) -> (String?, String?) {
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var subfolder:String? = nil
             var filename:String? = nil
             public init() {}
@@ -173,33 +204,58 @@ class ExportDaoPostgresCK : ExportDaoInterface {
 select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' and "profileId" = '\(profileId)'
 """
         let db = PostgresConnection.database()
-        if let record = TempRecord.fetchOne(db, sql: sql) {
-            return (record.subfolder, record.filename)
+        do {
+            if let record = try TempRecord.fetchOne(db, sql: sql) {
+                return (record.subfolder, record.filename)
+            }
+        }catch{
+            self.logger.log(.error, error)
+            return (nil, nil)
         }
         return (nil, nil)
     }
     
     func getExportProfile(id: String) -> ExportProfile? {
         let db = PostgresConnection.database()
-        return ExportProfile.fetchOne(db, parameters: ["id" : id])
+        do {
+            return try ExportProfile.fetchOne(db, parameters: ["id" : id])
+        }catch{
+            self.logger.log(.error, error)
+            return nil
+        }
     }
     
     func getExportProfile(name:String) -> ExportProfile? {
         let db = PostgresConnection.database()
-        return ExportProfile.fetchOne(db, parameters: ["name" : name])
+        do {
+            return try ExportProfile.fetchOne(db, parameters: ["name" : name])
+        }catch{
+            self.logger.log(.error, error)
+            return nil
+        }
     }
     
     func getAllExportProfiles() -> [ExportProfile] {
         let db = PostgresConnection.database()
-        return ExportProfile.fetchAll(db)
+        do {
+            return try ExportProfile.fetchAll(db)
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func deleteExportProfile(id: String) -> ExecuteState {
         let db = PostgresConnection.database()
         let profile = ExportProfile()
         profile.id = id
-        profile.delete(db)
-        return .OK
+        do {
+            try profile.delete(db)
+            return .OK
+        }catch{
+            self.logger.log(.error, error)
+            return .ERROR
+        }
     }
     
     // MARK: - SEARCH FOR IMAGES
@@ -306,16 +362,24 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
         let db = PostgresConnection.database()
         
         let sql = self.generateImageQuerySQL(isCount: false, profile: profile, pageSize: pageSize, pageNumber: pageNumber)
-        let images = Image.fetchAll(db, sql: sql)
-        
-        return images
+        do {
+            return try Image.fetchAll(db, sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func countImagesForExport(profile:ExportProfile) -> Int {
         let db = PostgresConnection.database()
         
         let sql = self.generateImageQuerySQL(isCount: true, profile: profile, pageSize: nil, pageNumber: nil)
-        return db.count(sql: sql)
+        do {
+            return try db.count(sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+            return 0
+        }
     }
     
     func getExportedImages(profileId:String) -> [(String, String, String)] {
@@ -323,7 +387,7 @@ select "subfolder", "filename" from "ExportLog" where "imageId" = '\(imageId)' a
         let sql = """
 select "imageId", "subfolder", "filename" from "ExportLog" where "profileId" = '\(profileId)' and "shouldDelete" = 'f' order by "lastExportTime"
 """
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var imageId:String = ""
             var subfolder:String? = nil
             var filename:String? = nil
@@ -333,7 +397,12 @@ select "imageId", "subfolder", "filename" from "ExportLog" where "profileId" = '
         var array:[(String, String, String)] = []
         
         let db = PostgresConnection.database()
-        let records = TempRecord.fetchAll(db, sql: sql)
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+        }
         for record in records {
             let imageId = record.imageId
             let subfolder = record.subfolder ?? ""
@@ -352,7 +421,12 @@ select "imageId", "subfolder", "filename" from "ExportLog" where "profileId" = '
         let sql = """
 select count(1) from "ExportLog" where "profileId"='\(profile.id)'
 """
-        return db.count(sql: sql)
+        do {
+            return try db.count(sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+            return 0
+        }
     }
     
     func storeImageOriginalMD5(path: String, md5: String) -> ExecuteState {
@@ -371,56 +445,47 @@ select count(1) from "ExportLog" where "profileId"='\(profile.id)'
     func storeImageExportSuccess(imageId:String, profileId:String, repositoryPath:String, subfolder:String, filename: String, exportedMD5: String) -> ExecuteState {
         let db = PostgresConnection.database()
         
-        let count = db.count(sql: """
-        SELECT count(1) from "ExportLog" where "imageId" = '\(imageId)' and "profileId" = '\(profileId)'
-        """)
-        if count < 1 {
-            self.logger.log("insert log \(imageId) \(profileId)")
-            do {
+        do {
+            let count = try db.count(sql: """
+            SELECT count(1) from "ExportLog" where "imageId" = '\(imageId)' and "profileId" = '\(profileId)'
+            """)
+            if count < 1 {
+                self.logger.log("insert log \(imageId) \(profileId)")
                 try db.execute(sql: """
                 INSERT INTO "ExportLog" ("imageId", "profileId", "lastExportTime", "repositoryPath", "subfolder", "filename", "exportedMd5", "state", "failMessage") VALUES ($1, $2, now(), $3, $4, $5, $6, 't', '')
                 """, parameterValues: [imageId, profileId, repositoryPath, subfolder, filename, exportedMD5])
-            }catch{
-                self.logger.log(.error, error)
-                return .ERROR
-            }
-        }else{
-            self.logger.log("update log \(imageId) \(profileId)")
-            do {
+            }else{
+                self.logger.log("update log \(imageId) \(profileId)")
                 try db.execute(sql: """
                 UPDATE "ExportLog" set "lastExportTime" = now(), "repositoryPath" = $1, "subfolder" = $2, "filename" = $3, "exportedMd5" = $4, "state" = 't', "failMessage" = '' WHERE "imageId"=$5 and "profileId"=$6
                 """, parameterValues: [repositoryPath, subfolder, filename, exportedMD5, imageId, profileId])
-            }catch{
-                self.logger.log(.error, error)
-                return .ERROR
             }
+            return .OK
+        }catch{
+            self.logger.log(.error, error)
+            return .ERROR
         }
-        return .OK
     }
     
     func storeImageExportFail(imageId:String, profileId:String, repositoryPath:String, subfolder:String, filename: String, failMessage:String) -> ExecuteState {
         let db = PostgresConnection.database()
-        let count = db.count(sql: """
-        SELECT count(1) from "ExportLog" where "imageId" = '\(imageId)' and "profileId" = '\(profileId)'
-        """)
-        if count < 1 {
-            do {
+        do {
+            let count = try db.count(sql: """
+            SELECT count(1) from "ExportLog" where "imageId" = '\(imageId)' and "profileId" = '\(profileId)'
+            """)
+            if count < 1 {
                 try db.execute(sql: """
                 INSERT INTO "ExportLog" ("imageId", "profileId", "repositoryPath", "subfolder", "filename", "state", "failMessage") VALUES ($1, $2, $3, $4, $5, 'f', $6)
                 """, parameterValues: [imageId, profileId, repositoryPath, subfolder, filename, failMessage])
-            }catch{
-                return .ERROR
-            }
-        }else{
-            do {
+            }else{
                 try db.execute(sql: """
                 UPDATE "ExportLog" set "repositoryPath" = $1, "subfolder" = $2, "filename" = $3, "state" = 'f', "failMessage" = $4 WHERE "imageId"=$5 and "profileId"=$6
                 """, parameterValues: [repositoryPath, subfolder, filename, failMessage, imageId, profileId])
-            }catch{
-                return .ERROR
             }
+            return .OK
+        }catch{
+            return .ERROR
         }
-        return .OK
     }
     
     func deleteExportLog(imageId:String, profileId:String) -> ExecuteState {

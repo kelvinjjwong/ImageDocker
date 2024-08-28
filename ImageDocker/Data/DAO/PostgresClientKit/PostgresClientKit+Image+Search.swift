@@ -32,7 +32,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         
 //        self.logger.log(sql)
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var country:String? = nil
             var province:String? = nil
             var city:String? = nil
@@ -44,7 +44,12 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
             public init() {}
         }
         
-        let records = TempRecord.fetchAll(db, sql: sql)
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+        }
         
         var places:[Moment] = [Moment] ()
         for data in records {
@@ -171,13 +176,18 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
     func getImageSources() -> [String : Bool] {
         var results:[String:Bool] = [:]
         let db = PostgresConnection.database()
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var imageSource: String? = ""
             public init() {}
         }
-        let records = TempRecord.fetchAll(db, sql: """
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: """
             SELECT DISTINCT "imageSource" FROM "Image"
             """)
+        }catch{
+            self.logger.log(.error, error)
+        }
         for row in records {
             let src = row.imageSource ?? ""
             if src != "" {
@@ -190,14 +200,19 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
     func getCameraModel() -> [String : Bool] {
         var results:[String:Bool] = [:]
         let db = PostgresConnection.database()
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var cameraMaker: String = ""
             var cameraModel: String = ""
             public init() {}
         }
-        let records = TempRecord.fetchAll(db, sql: """
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: """
             SELECT DISTINCT "cameraMaker","cameraModel" FROM "Image"
             """)
+        }catch{
+            self.logger.log(.error, error)
+        }
         for row in records {
             let name1 = row.cameraMaker
             let name2 = row.cameraModel
@@ -269,14 +284,19 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
 //        self.logger.log(sql)
 //        self.logger.log("\n")
         var result:[Moment] = []
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var photoCount: Int = 0
             var photoTakenYear: Int? = 0
             var photoTakenMonth: Int? = 0
             var photoTakenDay: Int? = 0
             public init() {}
         }
-        let records = TempRecord.fetchAll(db, sql: sql)
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+        }
 //        self.logger.log(">> got \(records.count) from SQL")
         for row in records {
 //            self.logger.log("moment node: y:\(row.photoTakenYear ?? 0) m:\(row.photoTakenMonth ?? 0) d:\(row.photoTakenDay ?? 0)")
@@ -296,7 +316,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         WHERE 1=1 GROUP BY "photoTakenYear","photoTakenMonth","photoTakenDay" ORDER BY "photoTakenYear" DESC,"photoTakenMonth" DESC,"photoTakenDay" DESC
         """
 //        self.logger.log(sql)
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var photoTakenYear: Int = 0
             var photoTakenMonth: Int = 0
             var photoTakenDay: Int = 0
@@ -304,7 +324,12 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
             var place: String = ""
             public init() {}
         }
-        let records = TempRecord.fetchAll(db, sql: sql)
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+        }
         
         var years:[Moment] = [Moment] ()
         
@@ -508,7 +533,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
 //        self.logger.log("SQL values: \(argumentValues)")
         var result:[Moment] = []
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var photoCount:Int = 0
             var country: String = ""
             var province: String = ""
@@ -519,8 +544,12 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
             var photoTakenDay:Int? = 0
             public init() {}
         }
-        
-        let records = TempRecord.fetchAll(db, sql: sql, values: argumentValues)
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql, values: argumentValues)
+        }catch{
+            self.logger.log(.error, error)
+        }
         for row in records {
             let country = row.country
             let province = row.province
@@ -545,7 +574,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
     func getImageEvents(condition:SearchCondition?) -> [Moment] {
         let db = PostgresConnection.database()
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var cnt:Int = 0
             var category: String = ""
             var name: String = ""
@@ -616,8 +645,12 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         }
         
 //        self.logger.log(sql)
-        
-        let records = TempRecord.fetchAll(db, sql: sql)
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+        }
         for row in records {
             let imageCount = row.cnt
             let category = row.category
@@ -700,7 +733,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
 //        self.logger.log(sql)
 //        self.logger.log("SQL argument: \(ev)")
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var cnt:Int = 0
             var event: String = ""
             var photoTakenYear: Int? = 0
@@ -708,8 +741,12 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
             var photoTakenDay:Int? = 0
             public init() {}
         }
-        
-        let records = TempRecord.fetchAll(db, sql: sql, values: [ev])
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql, values: [ev])
+        }catch{
+            self.logger.log(.error, error)
+        }
         for row in records {
             let moment = Moment(event: event, category: category, imageCount: row.cnt)
             moment.year = row.photoTakenYear ?? 0
@@ -723,7 +760,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
     func getYears(event: String?) -> [Int] {
         let db = PostgresConnection.database()
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var photoTakenYear: Int? = 0
             public init() {}
         }
@@ -734,9 +771,14 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
             args.append(ev)
         }
         //self.logger.log("debug 1")
-        let records = TempRecord.fetchAll(db, sql: """
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: """
             select distinct "photoTakenYear" from "Image" \(condition) order by "photoTakenYear" desc
             """, values: args)
+        }catch{
+            self.logger.log(.error, error)
+        }
         var result:[Int] = []
         for row in records {
             let year = row.photoTakenYear
@@ -759,7 +801,7 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
             args.append(ev)
         }
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var photoTakenMonth: Int? = 0
             var photoTakenYear: Int? = 0
             public init() {}
@@ -767,11 +809,16 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         
         //self.logger.log(sql)
         var result:[String:[String]] = [:]
-        var sqlParams:[PostgresValueConvertible?] = [year]
+        var sqlParams:[DatabaseValueConvertible?] = [year]
         if let ev = event {
             sqlParams.append(ev)
         }
-        let records = TempRecord.fetchAll(db, sql: sql, values: sqlParams)
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql, values: sqlParams)
+        }catch{
+            self.logger.log(.error, error)
+        }
         for row in records {
             let month = row.photoTakenMonth ?? 0
             let day = row.photoTakenYear ?? 0
@@ -792,18 +839,22 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
 //        self.logger.log(stmtHidden)
         
         var result:[Image] = []
-        let hiddenCount = db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)", parameterValues: sqlArgs)
-        if pageNumber > 0 && pageSize > 0 {
-            result = Image.fetchAll(db, sql: """
-                select * from "Image" where \(stmt) order by "photoTakenDate", filename
-                """, values: sqlArgs, offset: pageSize * (pageNumber - 1), limit: pageSize)
-        }else{
-            result = Image.fetchAll(db, sql: """
-                select * from "Image" where \(stmt) order by "photoTakenDate", filename
-                """, values: sqlArgs)
-        }
-        if hiddenCountHandler != nil {
-            hiddenCountHandler!(hiddenCount)
+        do {
+            let hiddenCount = try db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)", parameterValues: sqlArgs)
+            if pageNumber > 0 && pageSize > 0 {
+                result = try Image.fetchAll(db, sql: """
+                    select * from "Image" where \(stmt) order by "photoTakenDate", filename
+                    """, values: sqlArgs, offset: pageSize * (pageNumber - 1), limit: pageSize)
+            }else{
+                result = try Image.fetchAll(db, sql: """
+                    select * from "Image" where \(stmt) order by "photoTakenDate", filename
+                    """, values: sqlArgs)
+            }
+            if hiddenCountHandler != nil {
+                hiddenCountHandler!(hiddenCount)
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
         self.logger.log("loaded \(result.count) records")
         return result
@@ -816,18 +867,22 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         let (stmt, stmtHidden, sqlArgs) = ImageSQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter, year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place)
         
         var result:[Image] = []
-        let hiddenCount = db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)", parameterValues: sqlArgs)
-        if pageNumber > 0 && pageSize > 0 {
-            result = Image.fetchAll(db, sql: """
-                select * from "Image" where \(stmt) order by "photoTakenDate", filename
-                """, values: sqlArgs, offset: pageSize * (pageNumber - 1), limit: pageSize)
-        }else{
-            result = Image.fetchAll(db, sql: """
-                select * from "Image" where \(stmt) order by "photoTakenDate", filename
-                """, values: sqlArgs)
-        }
-        if hiddenCountHandler != nil {
-            hiddenCountHandler!(hiddenCount)
+        do {
+            let hiddenCount = try db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)", parameterValues: sqlArgs)
+            if pageNumber > 0 && pageSize > 0 {
+                result = try Image.fetchAll(db, sql: """
+                    select * from "Image" where \(stmt) order by "photoTakenDate", filename
+                    """, values: sqlArgs, offset: pageSize * (pageNumber - 1), limit: pageSize)
+            }else{
+                result = try Image.fetchAll(db, sql: """
+                    select * from "Image" where \(stmt) order by "photoTakenDate", filename
+                    """, values: sqlArgs)
+            }
+            if hiddenCountHandler != nil {
+                hiddenCountHandler!(hiddenCount)
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
         self.logger.log("loaded \(result.count) records")
         return result
@@ -839,18 +894,22 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         let (stmt, stmtHidden) = ImageSQLHelper.generateSQLStatementForSearchingPhotoFiles(condition: condition, includeHidden: includeHidden, quoteColumn: true)
         
         var result:[Image] = []
-        let hiddenCount = db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)")
-        if pageNumber > 0 && pageSize > 0 {
-            result = Image.fetchAll(db, sql: """
-                select * from "Image" where \(stmt) order by "photoTakenDate", filename
-                """, offset: pageSize * (pageNumber - 1), limit: pageSize)
-        }else{
-            result = Image.fetchAll(db, sql: """
-                select * from "Image" where \(stmt) order by "photoTakenDate", filename
-                """)
-        }
-        if hiddenCountHandler != nil {
-            hiddenCountHandler!(hiddenCount)
+        do {
+            let hiddenCount = try db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)")
+            if pageNumber > 0 && pageSize > 0 {
+                result = try Image.fetchAll(db, sql: """
+                    select * from "Image" where \(stmt) order by "photoTakenDate", filename
+                    """, offset: pageSize * (pageNumber - 1), limit: pageSize)
+            }else{
+                result = try Image.fetchAll(db, sql: """
+                    select * from "Image" where \(stmt) order by "photoTakenDate", filename
+                    """)
+            }
+            if hiddenCountHandler != nil {
+                hiddenCountHandler!(hiddenCount)
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
 //        self.logger.log("loaded \(result.count) records")
         return result
@@ -866,7 +925,12 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
             hidden=false and "photoTakenYear"=\(year) and "photoTakenMonth"=\(month) and "photoTakenDay"=\(day) and event='\(ev)'
             """
         }
-        return Image.fetchAll(db, where: sql)
+        do {
+            return try Image.fetchAll(db, where: sql)
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getImagesByYear(year: String?, scannedFace: Bool?, recognizedFace: Bool?) -> [Image] {
@@ -891,7 +955,12 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
                 sql += " and \"recognizedFace\"=false"
             }
         }
-        return Image.fetchAll(db, where: sql)
+        do {
+            return try Image.fetchAll(db, where: sql)
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getImagesByDate(photoTakenDate: Date, event: String?) -> [Image] {
@@ -907,33 +976,50 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         let month = Calendar.current.component(.month, from: photoTakenDate)
         let day = Calendar.current.component(.day, from: photoTakenDate)
         let hour = Calendar.current.component(.hour, from: photoTakenDate)
-        return Image.fetchAll(db, where: "hidden=false and \"photoTakenYear\"=\(year) and \"photoTakenMonth\"=\(month) and \"photoTakenDay\"=\(day) and \"photoTakenHour\"=\(hour)")
+        do {
+            return try Image.fetchAll(db, where: "hidden=false and \"photoTakenYear\"=\(year) and \"photoTakenMonth\"=\(month) and \"photoTakenDay\"=\(day) and \"photoTakenHour\"=\(hour)")
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getMaxPhotoTakenYear() -> Int {
+        self.logger.log("getMaxPhotoTakenYear()")
         let db = PostgresConnection.database()
         let sql = "select distinct max(\"photoTakenYear\") \"photoTakenYear\" from \"Image\" where hidden=false"
-        final class TempRecord : PostgresCustomRecord {
-            var photoTakenYear: Int? = 0
+        final class TempRecord : DatabaseRecord {
+            var photoTakenYear: Int = 0
             public init() {}
         }
-        if let record = TempRecord.fetchOne(db, sql: sql) {
-            return record.photoTakenYear ?? 0
-        }else{
+        do {
+            if let record = try TempRecord.fetchOne(db, sql: sql) {
+                return record.photoTakenYear
+            }else{
+                return 0
+            }
+        }catch{
+            self.logger.log(.error, error)
             return 0
         }
     }
     
     func getMinPhotoTakenYear() -> Int {
+        self.logger.log("getMinPhotoTakenYear()")
         let db = PostgresConnection.database()
         let sql = "select distinct min(\"photoTakenYear\") \"photoTakenYear\" from \"Image\" where hidden=false"
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var photoTakenYear: Int? = 0
             public init() {}
         }
-        if let record = TempRecord.fetchOne(db, sql: sql) {
-            return record.photoTakenYear ?? 0
-        }else{
+        do {
+            if let record = try TempRecord.fetchOne(db, sql: sql) {
+                return record.photoTakenYear ?? 0
+            }else{
+                return 0
+            }
+        }catch{
+            self.logger.log(.error, error)
             return 0
         }
     }
@@ -967,13 +1053,18 @@ class ImageSearchDaoPostgresCK : ImageSearchDaoInterface {
         ) order by "photoTakenYear" desc
         """
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var photoTakenYear: Int = 0
             public init() {}
         }
         
         var result:[Int] = []
-        let records = TempRecord.fetchAll(db, sql: sql)
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+        }
         for row in records {
             result.append(row.photoTakenYear)
         }
@@ -997,11 +1088,16 @@ order by "date"
 """
         var result:[String] = []
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var date: String = ""
             public init() {}
         }
-        let records = TempRecord.fetchAll(db, sql: sql)
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+        }
         for row in records {
             result.append(row.date)
         }
@@ -1029,13 +1125,18 @@ order by "date"
         """
 //        self.logger.log(sql)
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var photoTakenDate: String = ""
             public init() {}
         }
         
         var result:[String] = []
-        let records = TempRecord.fetchAll(db, sql: sql)
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+        }
         for row in records {
             result.append(row.photoTakenDate)
         }
@@ -1044,20 +1145,30 @@ order by "date"
     
     func getPhotoFilesWithoutExif(limit: Int?) -> [Image] {
         let db = PostgresConnection.database()
-        return Image.fetchAll(db, where: """
-        hidden != true AND ("updateExifDate" is null OR "photoTakenYear" is null OR "photoTakenYear" = 0 OR latitude is null or (latitude <> '0.0' AND "latitudeBD" = '0.0') OR ("latitudeBD" <> '0.0' AND country = ''))
-        """, orderBy: """
-        "photoTakenDate", filename
-        """)
+        do {
+            return try Image.fetchAll(db, where: """
+            hidden != true AND ("updateExifDate" is null OR "photoTakenYear" is null OR "photoTakenYear" = 0 OR latitude is null or (latitude <> '0.0' AND "latitudeBD" = '0.0') OR ("latitudeBD" <> '0.0' AND country = ''))
+            """, orderBy: """
+            "photoTakenDate", filename
+            """)
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getPhotoFilesWithoutExif(repositoryPath:String, limit: Int?) -> [Image] {
         let db = PostgresConnection.database()
-        return Image.fetchAll(db, where: """
-        "repositoryPath"='\(repositoryPath)' and hidden != true AND ("updateExifDate" is null OR "photoTakenYear" is null OR "photoTakenYear" = 0 OR latitude is null or (latitude <> '0.0' AND "latitudeBD" = '0.0') OR ("latitudeBD" <> '0.0' AND country = ''))
-        """, orderBy: """
-        "photoTakenDate", filename
-        """)
+        do {
+            return try Image.fetchAll(db, where: """
+            "repositoryPath"='\(repositoryPath)' and hidden != true AND ("updateExifDate" is null OR "photoTakenYear" is null OR "photoTakenYear" = 0 OR latitude is null or (latitude <> '0.0' AND "latitudeBD" = '0.0') OR ("latitudeBD" <> '0.0' AND country = ''))
+            """, orderBy: """
+            "photoTakenDate", filename
+            """)
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     /// "repositoryPath"='\(repositoryPath)' and hidden != true AND "cameraMaker" is null and ("lastTimeExtractExif" = 0 or "updateExifDate" is null OR "photoTakenYear" is null OR "photoTakenYear" = 0 OR (latitude <> '0.0' AND "latitudeBD" = '0.0') OR ("latitudeBD" <> '0.0' AND country = ''))
@@ -1067,26 +1178,40 @@ order by "date"
     
     func getPhotoFilesWithoutLocation(repositoryPath:String) -> [Image] {
         let db = PostgresConnection.database()
-        return Image.fetchAll(db, where: """
-        "repositoryPath"='\(repositoryPath)' and hidden != true AND ("updateLocationDate" is null or latitude is null or (latitude <> '0.0' AND "latitudeBD" = '0.0') OR ("latitudeBD" <> '0.0' AND country = ''))
-        """, orderBy: """
-        "photoTakenDate", filename
-        """)
+        do {
+            return try Image.fetchAll(db, where: """
+            "repositoryPath"='\(repositoryPath)' and hidden != true AND ("updateLocationDate" is null or latitude is null or (latitude <> '0.0' AND "latitudeBD" = '0.0') OR ("latitudeBD" <> '0.0' AND country = ''))
+            """, orderBy: """
+            "photoTakenDate", filename
+            """)
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getPhotoFilesWithoutLocation() -> [Image] {
         let db = PostgresConnection.database()
-        return Image.fetchAll(db, where: """
-        hidden != true AND ("updateLocationDate" is null or latitude is null or (latitude <> '0.0' AND "latitudeBD" = '0.0') OR ("latitudeBD" <> '0.0' AND country = ''))
-        """, orderBy: """
-        "photoTakenDate", filename
-        """)
+        do {
+            return try Image.fetchAll(db, where: """
+            hidden != true AND ("updateLocationDate" is null or latitude is null or (latitude <> '0.0' AND "latitudeBD" = '0.0') OR ("latitudeBD" <> '0.0' AND country = ''))
+            """, orderBy: """
+            "photoTakenDate", filename
+            """)
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getPhotoFiles(after date: Date) -> [Image] {
         let db = PostgresConnection.database()
-        
-        return Image.fetchAll(db, where: "\"updateLocationDate\" >= $1", values: [date])
+        do {
+            return try Image.fetchAll(db, where: "\"updateLocationDate\" >= $1", values: [date])
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getImagesWithoutFace(repositoryRoot: String, includeScanned: Bool) -> [Image] {
@@ -1094,25 +1219,33 @@ order by "date"
         
         let root = repositoryRoot.withLastStash()
         let scannedCondition = includeScanned ? "" : " and \"scanedFace\"=false"
-        
-        return Image.fetchAll(db, where: """
+        do {
+            return try Image.fetchAll(db, where: """
             "repositoryPath"=$1 and hidden=false \(scannedCondition) and id not in (select distinct "imageId" from "ImageFace")
             """, values: [root])
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getAllPhotoPaths(includeHidden: Bool) -> Set<String> {
         var result:Set<String> = []
         let db = PostgresConnection.database()
-        if includeHidden {
-            let records = Image.fetchAll(db, orderBy: "\"photoTakenDate\", filename")
-            for record in records {
-                result.insert(record.path)
+        do {
+            if includeHidden {
+                let records = try Image.fetchAll(db, orderBy: "\"photoTakenDate\", filename")
+                for record in records {
+                    result.insert(record.path)
+                }
+            }else{
+                let records = try Image.fetchAll(db, where: "hidden = false", orderBy: "\"photoTakenDate\", filename")
+                for record in records {
+                    result.insert(record.path)
+                }
             }
-        }else{
-            let records = Image.fetchAll(db, where: "hidden = false", orderBy: "\"photoTakenDate\", filename")
-            for record in records {
-                result.insert(record.path)
-            }
+        }catch{
+            self.logger.log(.error, error)
         }
         return result
     }
@@ -1120,16 +1253,20 @@ order by "date"
     func getAllPhotoPaths(repositoryPath:String, includeHidden: Bool) -> Set<String> {
         var result:Set<String> = []
         let db = PostgresConnection.database()
-        if includeHidden {
-            let records = Image.fetchAll(db, where: "\"repositoryPath\" = '\(repositoryPath)'",  orderBy: "\"photoTakenDate\", filename")
-            for record in records {
-                result.insert(record.path)
+        do {
+            if includeHidden {
+                let records = try Image.fetchAll(db, where: "\"repositoryPath\" = '\(repositoryPath)'",  orderBy: "\"photoTakenDate\", filename")
+                for record in records {
+                    result.insert(record.path)
+                }
+            }else{
+                let records = try Image.fetchAll(db, where: "\"repositoryPath\" = '\(repositoryPath)' and hidden = false", orderBy: "\"photoTakenDate\", filename")
+                for record in records {
+                    result.insert(record.path)
+                }
             }
-        }else{
-            let records = Image.fetchAll(db, where: "\"repositoryPath\" = '\(repositoryPath)' and hidden = false", orderBy: "\"photoTakenDate\", filename")
-            for record in records {
-                result.insert(record.path)
-            }
+        }catch{
+            self.logger.log(.error, error)
         }
         return result
     }
@@ -1152,31 +1289,56 @@ order by "date"
         
 //        self.logger.log("\(condition) \(otherPredicate)")
         
-        if pageSize > 0 && pageNumber > 0 {
-            return Image.fetchAll(db, where: "\(condition) \(otherPredicate)", orderBy: "\"photoTakenDate\", filename", values: key, offset: pageSize * (pageNumber - 1), limit: pageSize)
-        }else{
-            return Image.fetchAll(db, where: "\(condition) \(otherPredicate)", orderBy: "\"photoTakenDate\", filename", values: key)
+        do {
+            if pageSize > 0 && pageNumber > 0 {
+                return try Image.fetchAll(db, where: "\(condition) \(otherPredicate)", orderBy: "\"photoTakenDate\", filename", values: key, offset: pageSize * (pageNumber - 1), limit: pageSize)
+            }else{
+                return try Image.fetchAll(db, where: "\(condition) \(otherPredicate)", orderBy: "\"photoTakenDate\", filename", values: key)
+            }
+        }catch{
+            self.logger.log(.error, error)
+            return []
         }
     }
     
     func getImages(repositoryPath: String) -> [Image] {
         let db = PostgresConnection.database()
-        return Image.fetchAll(db, where: "\"repositoryPath\" = $1", orderBy: "path", values: [repositoryPath])
+        do {
+            return try Image.fetchAll(db, where: "\"repositoryPath\" = $1", orderBy: "path", values: [repositoryPath])
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getImages(repositoryId: Int) -> [Image] {
         let db = PostgresConnection.database()
-        return Image.fetchAll(db, where: "\"repositoryId\" = $1", orderBy: "path", values: [repositoryId])
+        do {
+            return try Image.fetchAll(db, where: "\"repositoryId\" = $1", orderBy: "path", values: [repositoryId])
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getImages(containerId: Int) -> [Image] {
         let db = PostgresConnection.database()
-        return Image.fetchAll(db, where: "\"containerId\" = $1", orderBy: "path", values: [containerId])
+        do {
+            return try Image.fetchAll(db, where: "\"containerId\" = $1", orderBy: "path", values: [containerId])
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getPhotoFiles(rootPath: String) -> [Image] {
         let db = PostgresConnection.database()
-        return Image.fetchAll(db, where: "path like $1", values: ["\(rootPath.withLastStash())%"])
+        do {
+            return try Image.fetchAll(db, where: "path like $1", values: ["\(rootPath.withLastStash())%"])
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
 

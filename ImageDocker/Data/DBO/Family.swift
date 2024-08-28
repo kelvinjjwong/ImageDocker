@@ -26,7 +26,7 @@ public final class Family : Codable {
 //
 //}
 
-extension Family : PostgresRecord {
+extension Family : DatabaseRecord {
     public func postgresTable() -> String {
         return "Family"
     }
@@ -56,7 +56,7 @@ public final class FamilyMember : Codable {
 //
 //}
 
-extension FamilyMember : PostgresRecord {
+extension FamilyMember : DatabaseRecord {
     public func postgresTable() -> String {
         return "FamilyMember"
     }
@@ -87,7 +87,7 @@ public final class FamilyJoint : Codable {
 //}
 
 
-extension FamilyJoint : PostgresRecord {
+extension FamilyJoint : DatabaseRecord {
     public func postgresTable() -> String {
         return "FamilyJoint"
     }

@@ -245,18 +245,24 @@ final class DatabaseBackupController: NSViewController {
         self.lblLocalDBServerMessage.stringValue = "TODO."
         
         DispatchQueue.global().async {
-            final class Version : PostgresCustomRecord {
+            final class Version : DatabaseRecord {
                 var ver:Int = 0
                 public init() {}
             }
-            
-            if let version = Version.fetchOne(PostgresConnection.database(.localDBServer), sql: "select substring(ver, '\\d+')::int versions from version_migrations order by versions desc") {
-                DispatchQueue.main.async {
-                    self.lblLocalDBServerMessage.stringValue = "v\(version.ver)"
+            do {
+                if let version = try Version.fetchOne(PostgresConnection.database(.localDBServer), sql: "select substring(ver, '\\d+')::int versions from version_migrations order by versions desc") {
+                    DispatchQueue.main.async {
+                        self.lblLocalDBServerMessage.stringValue = "v\(version.ver)"
+                    }
+                }else{
+                    DispatchQueue.main.async {
+                        self.lblLocalDBServerMessage.stringValue = Words.preference_tab_backup_no_schema.word()
+                    }
                 }
-            }else{
+            }catch{
+                self.logger.log(.error, error)
                 DispatchQueue.main.async {
-                    self.lblLocalDBServerMessage.stringValue = Words.preference_tab_backup_no_schema.word()
+                    self.lblLocalDBServerMessage.stringValue = "DB ERROR"
                 }
             }
         }
@@ -425,45 +431,46 @@ final class DatabaseBackupController: NSViewController {
             
         }
         else if  self.toggleGroup_CloneFromDBLocation.selected == "localDBFile" {
-            var host = ""
-            var port = 5432
-            var user = ""
-            var database = ""
             var message = ""
-            var schema = ""
-            var psw = ""
-            var nopsw = false
+            var databaseProfile = DatabaseProfile()
+            databaseProfile.host = ""
+            databaseProfile.port = 5432
+            databaseProfile.user = ""
+            databaseProfile.database = ""
+            databaseProfile.schema = ""
+            databaseProfile.password = ""
+            databaseProfile.nopsw = false
             if       self.toggleGroup_CloneToDBLocation.selected == "localDBServer" {
-                host = Setting.database.localPostgres.server()
-                port = Setting.database.localPostgres.port()
-                user = Setting.database.localPostgres.username()
-                database = Setting.database.localPostgres.database()
-                psw = Setting.database.localPostgres.password()
-                nopsw = Setting.database.localPostgres.noPassword()
-                schema = Setting.database.localPostgres.schema()
+                databaseProfile.host = Setting.database.localPostgres.server()
+                databaseProfile.port = Setting.database.localPostgres.port()
+                databaseProfile.user = Setting.database.localPostgres.username()
+                databaseProfile.database = Setting.database.localPostgres.database()
+                databaseProfile.password = Setting.database.localPostgres.password()
+                databaseProfile.nopsw = Setting.database.localPostgres.noPassword()
+                databaseProfile.schema = Setting.database.localPostgres.schema()
                 message = Words.preference_tab_data_clone_from_sqlite_to_local_postgres.word()
             }else if self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
-                host = Setting.database.remotePostgres.server()
-                port = Setting.database.remotePostgres.port()
-                user = Setting.database.remotePostgres.username()
-                database = Setting.database.remotePostgres.database()
-                psw = Setting.database.remotePostgres.password()
-                nopsw = Setting.database.remotePostgres.noPassword()
-                schema = Setting.database.remotePostgres.schema()
+                databaseProfile.host = Setting.database.remotePostgres.server()
+                databaseProfile.port = Setting.database.remotePostgres.port()
+                databaseProfile.user = Setting.database.remotePostgres.username()
+                databaseProfile.database = Setting.database.remotePostgres.database()
+                databaseProfile.password = Setting.database.remotePostgres.password()
+                databaseProfile.nopsw = Setting.database.remotePostgres.noPassword()
+                databaseProfile.schema = Setting.database.remotePostgres.schema()
                 message = Words.preference_tab_data_clone_from_sqlite_to_remote_postgres.word()
             }else{
                 // more options?
                 return
             }
             if self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines) != "" && self.lblCheckDatabaseName.stringValue == "Created" {
-                database = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                databaseProfile.database = self.txtRestoreToDatabaseName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
             }
             self.toggleDatabaseClonerButtons(state: false)
             self.lblDataCloneMessage.stringValue = message
             DispatchQueue.global().async {
                 ImageDBCloner.default.fromLocalSQLiteToPostgreSQL(dropBeforeCreate: dropBeforeCreate,
                     postgresDB: { () -> PostgresDB in
-                        return PostgresConnection.database(host: host, port: port, user: user, database: database, schema: schema, password: psw, nopsw: nopsw)
+                        return PostgresConnection.database(databaseProfile: databaseProfile)
                 }, message: { msg in
                     DispatchQueue.main.async {
                         self.lblDataCloneMessage.stringValue = msg
@@ -638,17 +645,22 @@ final class DatabaseBackupController: NSViewController {
             self.logger.log("Unable to locate psql command in macOS, check db exist aborted.")
             return
         }
-        var host = ""
-        var port = 5432
-        var user = ""
+        var databaseProfile = DatabaseProfile()
+        databaseProfile.host = ""
+        databaseProfile.port = 5432
+        databaseProfile.user = ""
+        databaseProfile.password = ""
+        databaseProfile.nopsw = true
         if self.toggleGroup_CloneToDBLocation.selected == "localDBServer" {
-            host = Setting.database.localPostgres.server()
-            port = Setting.database.localPostgres.port()
-            user = Setting.database.localPostgres.username()
+            databaseProfile.engine = "PostgreSQL"
+            databaseProfile.host = Setting.database.localPostgres.server()
+            databaseProfile.port = Setting.database.localPostgres.port()
+            databaseProfile.user = Setting.database.localPostgres.username()
         }else if self.toggleGroup_CloneToDBLocation.selected == "remoteDBServer" {
-            host = Setting.database.remotePostgres.server()
-            port = Setting.database.remotePostgres.port()
-            user = Setting.database.remotePostgres.username()
+            databaseProfile.engine = "PostgreSQL"
+            databaseProfile.host = Setting.database.remotePostgres.server()
+            databaseProfile.port = Setting.database.remotePostgres.port()
+            databaseProfile.user = Setting.database.remotePostgres.username()
         }else{
             self.logger.log("Selected to-database is not postgres. check db exist aborted.")
             return
@@ -660,7 +672,7 @@ final class DatabaseBackupController: NSViewController {
             return
         }
         DispatchQueue.global().async {
-            let databases = PostgresConnection.default.getExistDatabases(commandPath: cmd, host: host, port: port)
+            let databases = PostgresConnection.default.getExistDatabases(commandPath: cmd, host: databaseProfile.host, port: databaseProfile.port)
             var exists = false
             for database in databases {
                 if database == targetDatabase {
@@ -669,8 +681,13 @@ final class DatabaseBackupController: NSViewController {
                 }
             }
             if exists {
-                let remotedb = PostgresConnection.database(host: host, port: port, user: user, database: targetDatabase, schema: "public", password: "", nopsw: true)
-                let tables = remotedb.queryTableInfos()
+                let remotedb = PostgresConnection.database(databaseProfile: databaseProfile)
+                var tables:[TableInfo] = []
+                do {
+                    tables = try remotedb.queryTableInfos()
+                }catch{
+                    self.logger.log(.error, error)
+                }
                 if tables.count == 0 {
                     DispatchQueue.main.async {
                         self.lblCheckDatabaseName.stringValue = Words.preference_tab_backup_empty_database.word()

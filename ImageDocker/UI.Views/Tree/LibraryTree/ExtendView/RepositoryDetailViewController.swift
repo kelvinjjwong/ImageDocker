@@ -8,6 +8,7 @@
 
 import Cocoa
 import LoggerFactory
+import SharedDeviceLib
 
 class RepositoryDetailViewController: NSViewController {
     
@@ -237,19 +238,19 @@ class RepositoryDetailViewController: NSViewController {
                         
                         var connectedDeviceIds:[String] = []
                         if isAndroid {
-                            connectedDeviceIds = Android.bridge.devices()
+                            connectedDeviceIds = DeviceBridge.Android().devices()
                         }else{
                             var connectIOS = true
                             if Setting.localEnvironment.iosDeviceMountPoint() == "" {
                                 connectIOS = false
                                 MessageEventCenter.default.showMessage(type: "Repository", name: repository.name, message: Words.device_tree_setup_mountpoint_for_ios.word())
                             }
-                            if !IPHONE.bridge.validCommands() {
+                            if !DeviceBridge.IPHONE().validCommands() {
                                 connectIOS = false
                                 MessageEventCenter.default.showMessage(type: "Repository", name: repository.name, message: Words.device_tree_ifuse_not_installed.word())
                             }
                             if connectIOS {
-                                connectedDeviceIds = IPHONE.bridge.devices()
+                                connectedDeviceIds = DeviceBridge.IPHONE().devices()
                             }
                         }
                         if !connectedDeviceIds.contains(repository.deviceId) {

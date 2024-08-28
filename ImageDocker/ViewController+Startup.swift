@@ -23,7 +23,6 @@ extension ViewController {
             self.splashController.progressWillEnd(at: 5)
             
             let exiftool = ExifTool.helper
-            IPHONE.bridge.unmountFuse()
             
             // current database info
             let (_dbLocation, _dbEngine, dbServer, dbName) = Setting.database.configuredDatabaseInfo()

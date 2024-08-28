@@ -9,6 +9,7 @@
 import Foundation
 import Cocoa
 import LoggerFactory
+import SharedDeviceLib
 
 struct LocalDirectory {
     

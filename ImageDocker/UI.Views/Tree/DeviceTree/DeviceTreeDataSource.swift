@@ -8,6 +8,7 @@
 
 import Foundation
 import LoggerFactory
+import SharedDeviceLib
 
 class DeviceTreeDataSource : TreeDataSource {
     
@@ -137,7 +138,7 @@ class DeviceTreeDataSource : TreeDataSource {
                 DispatchQueue.global().async {
                     self.loadRegisteredDevices()
 
-                    let connectedDeviceIds:[String] = Android.bridge.devices()
+                    let connectedDeviceIds:[String] = DeviceBridge.Android().devices()
 //                    self.logger.log("connected android phones: \(connectedDeviceIds)")
                     for deviceId in self.registered_android_id_names.keys {
 
@@ -191,7 +192,7 @@ class DeviceTreeDataSource : TreeDataSource {
                 DispatchQueue.global().async {
                     self.loadRegisteredDevices()
                     
-                    let connectedDeviceIds:[String] = IPHONE.bridge.devices()
+                    let connectedDeviceIds:[String] = DeviceBridge.IPHONE().devices()
 //                    self.logger.log("connected android phones: \(connectedDeviceIds)")
                     for deviceId in self.registered_iphone_id_names.keys {
 
@@ -333,14 +334,14 @@ class DeviceTreeDataSource : TreeDataSource {
         var (devs, deviceIds) = self.loadDevicesFromDatabase(type: "Android")
         
         // devices those connected
-        let devices:[String] = Android.bridge.devices()
+        let devices:[String] = DeviceBridge.Android().devices()
         self.logger.log("connected android device count: \(devices.count)")
         self.cleanCachedDeviceIds(type: .Android)
         if devices.count > 0 {
             for deviceId in devices {
-                if let device:PhoneDevice = Android.bridge.device(id: deviceId) {
+                if let device:PhoneDevice = DeviceBridge.Android().device(id: deviceId) {
                     let imageDevice = DeviceDao.default.getOrCreateDevice(device: device)
-                    var dev:PhoneDevice = Android.bridge.memory(device: device)
+                    var dev:PhoneDevice = DeviceBridge.Android().memory(device: device)
                     if imageDevice.name != "" {
                         dev.name = imageDevice.name ?? ""
                     }
@@ -382,7 +383,7 @@ class DeviceTreeDataSource : TreeDataSource {
             return ([], Words.device_tree_setup_mountpoint_for_ios.word(), "iPhone")
         }
         
-        if !IPHONE.bridge.validCommands() {
+        if !DeviceBridge.IPHONE().validCommands() {
 //                self.showTreeNodeButton(collection: collection, image: NSImage(named: .caution))
             
             return ([], Words.device_tree_ifuse_not_installed.word(), "iPhone")
@@ -393,11 +394,11 @@ class DeviceTreeDataSource : TreeDataSource {
         var (devs, deviceIds) = self.loadDevicesFromDatabase(type: "iPhone")
         
         // devices those connected
-        let devices:[String] = IPHONE.bridge.devices()
+        let devices:[String] = DeviceBridge.IPHONE().devices()
         logger.log("connected iphone device count: \(devices.count)")
         self.cleanCachedDeviceIds(type: .iPhone)
         if devices.count > 0 {
-            if let device:PhoneDevice = IPHONE.bridge.device() {
+            if let device:PhoneDevice = DeviceBridge.IPHONE().device() {
                 let imageDevice = DeviceDao.default.getOrCreateDevice(device: device)
                 logger.log("connected ios device: \(imageDevice.deviceId ?? "")")
                 var dev = device

@@ -51,7 +51,7 @@ public final class ImageDeviceFile : Codable {
 //}
 
 
-extension ImageDeviceFile : PostgresRecord {
+extension ImageDeviceFile : DatabaseRecord {
     public func postgresTable() -> String {
         return "ImageDeviceFile"
     }

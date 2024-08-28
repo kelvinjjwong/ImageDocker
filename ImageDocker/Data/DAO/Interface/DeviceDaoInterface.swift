@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SharedDeviceLib
 
 protocol DeviceDaoInterface {
     

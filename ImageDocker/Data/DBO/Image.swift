@@ -149,7 +149,7 @@ public final class Image : Codable {
 //
 //}
 
-extension Image : PostgresRecord {
+extension Image : DatabaseRecord {
     public func postgresTable() -> String {
         return "Image"
     }

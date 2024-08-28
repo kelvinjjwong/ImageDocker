@@ -15,7 +15,12 @@ class ImageFamilyDaoPostgresCK : ImageFamilyDaoInterface {
     
     func getFamilies(imageId:String) -> [ImageFamily] {
         let db = PostgresConnection.database()
-        return ImageFamily.fetchAll(db, parameters: ["imageId": imageId], orderBy: "\"owner\", \"familyName\"")
+        do {
+            return try ImageFamily.fetchAll(db, parameters: ["imageId": imageId], orderBy: "\"owner\", \"familyName\"")
+        }catch {
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
 }

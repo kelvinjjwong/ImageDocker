@@ -16,43 +16,57 @@ class EventDaoPostgresCK : EventDaoInterface {
     
     func getOrCreateEvent(name: String) -> ImageEvent {
         let db = PostgresConnection.database()
-        if let event = ImageEvent.fetchOne(db, parameters: ["name": name]) {
-            return event
-        }else{
-            let event = ImageEvent(name: name)
-            event.save(db)
-            return event
+        let dummy = ImageEvent(name: name)
+        do {
+            if let event = try ImageEvent.fetchOne(db, parameters: ["name": name]) {
+                return event
+            }else{
+                try dummy.save(db)
+                return dummy
+            }
+        }catch{
+            self.logger.log(.error, error)
+            return dummy
         }
         
     }
     
     func updateEventDetail(event:ImageEvent){
         let db = PostgresConnection.database()
-        if let rec = ImageEvent.fetchOne(db, parameters: ["name": event.name]) {
-            rec.category = event.category
-            rec.activity1 = event.activity1
-            rec.activity2 = event.activity2
-            rec.attenders = event.attenders
-            rec.family = event.family
-            rec.note = event.note
-            rec.imageCount = event.imageCount
-            rec.lastUpdateTime = Date()
-            rec.owner = event.owner
-            rec.ownerNickname = event.ownerNickname
-            rec.ownerId = event.ownerId
-            rec.owner2 = event.owner2
-            rec.owner2Nickname = event.owner2Nickname
-            rec.owner2Id = event.owner2Id
-            rec.owner3 = event.owner3
-            rec.owner3Nickname = event.owner3Nickname
-            rec.owner3Id = event.owner3Id
-            rec.save(db)
+        do {
+            if let rec = try ImageEvent.fetchOne(db, parameters: ["name": event.name]) {
+                rec.category = event.category
+                rec.activity1 = event.activity1
+                rec.activity2 = event.activity2
+                rec.attenders = event.attenders
+                rec.family = event.family
+                rec.note = event.note
+                rec.imageCount = event.imageCount
+                rec.lastUpdateTime = Date()
+                rec.owner = event.owner
+                rec.ownerNickname = event.ownerNickname
+                rec.ownerId = event.ownerId
+                rec.owner2 = event.owner2
+                rec.owner2Nickname = event.owner2Nickname
+                rec.owner2Id = event.owner2Id
+                rec.owner3 = event.owner3
+                rec.owner3Nickname = event.owner3Nickname
+                rec.owner3Id = event.owner3Id
+                try rec.save(db)
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
     }
     
     func getAllEvents() -> [ImageEvent] {
         let db = PostgresConnection.database()
-        return ImageEvent.fetchAll(db)
+        do {
+            return try ImageEvent.fetchAll(db)
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getEvents(byName names: String?) -> [ImageEvent] {
@@ -62,8 +76,12 @@ class EventDaoPostgresCK : EventDaoInterface {
             let keys:[String] = names.components(separatedBy: " ")
             stmtName = SQLHelper.likeArray(field: "name", array: keys)
         }
-        
-        return ImageEvent.fetchAll(db, where: stmtName, orderBy: "category,name")
+        do {
+            return try ImageEvent.fetchAll(db, where: stmtName, orderBy: "category,name")
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getEvents(categoriesQuotedSeparated:String?, exclude:Bool = false) -> [ImageEvent] {
@@ -74,8 +92,12 @@ class EventDaoPostgresCK : EventDaoInterface {
         "category" \(exclude ? "NOT" : "") in (\(categoriesQuotedSeparated))
         """
         }
-        
-        return ImageEvent.fetchAll(db, where: stmtCategory, orderBy: "category,name")
+        do {
+            return try ImageEvent.fetchAll(db, where: stmtCategory, orderBy: "category,name")
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getEventCategories() -> [String] {
@@ -86,14 +108,18 @@ class EventDaoPostgresCK : EventDaoInterface {
         """
 //        self.logger.log(sql)
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var category:String = ""
             public init() {}
         }
         let db = PostgresConnection.database()
-        let records = TempRecord.fetchAll(db, sql: sql)
-        for row in records {
-            result.append(row.category)
+        do {
+            let records = try TempRecord.fetchAll(db, sql: sql)
+            for row in records {
+                result.append(row.category)
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
         return result
         
@@ -111,14 +137,18 @@ class EventDaoPostgresCK : EventDaoInterface {
         """
 //        self.logger.log(sql)
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var acc:String = ""
             public init() {}
         }
         let db = PostgresConnection.database()
-        let records = TempRecord.fetchAll(db, sql: sql)
-        for row in records {
-            result.append(row.acc)
+        do {
+            let records = try TempRecord.fetchAll(db, sql: sql)
+            for row in records {
+                result.append(row.acc)
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
         return result
         
@@ -136,14 +166,18 @@ class EventDaoPostgresCK : EventDaoInterface {
         """
 //        self.logger.log(sql)
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var acc:String = ""
             public init() {}
         }
         let db = PostgresConnection.database()
-        let records = TempRecord.fetchAll(db, sql: sql)
-        for row in records {
-            result.append(row.acc)
+        do {
+            let records = try TempRecord.fetchAll(db, sql: sql)
+            for row in records {
+                result.append(row.acc)
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
         return result
         
@@ -161,7 +195,7 @@ class EventDaoPostgresCK : EventDaoInterface {
         SELECT event, "photoTakenYear", "photoTakenMonth", "photoTakenDay", place, count(path) as "photoCount" FROM "Image" WHERE 1=1 \(imageSourceWhere) \(cameraModelWhere) GROUP BY event, "photoTakenYear","photoTakenMonth","photoTakenDay",place ORDER BY event DESC,"p"hotoTakenYear" DESC,"photoTakenMonth" DESC,"photoTakenDay" DESC,place
         """
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             
             
             var event:String = ""
@@ -174,7 +208,12 @@ class EventDaoPostgresCK : EventDaoInterface {
             public init() {}
         }
         
-        let records = TempRecord.fetchAll(db, sql: sql)
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+        }
         
         var events:[Event] = [Event] ()
         for data in records {
@@ -224,40 +263,50 @@ class EventDaoPostgresCK : EventDaoInterface {
     
     func renameEvent(oldName: String, newName: String) -> ExecuteState {
         let db = PostgresConnection.database()
-        if !ImageEvent.exists(db, parameters: ["name" : newName]) {
-            if let event = ImageEvent.fetchOne(db, parameters: ["name": oldName]) {
-                event.name = newName
-                event.save(db)
-            }
-        }
         do {
+            if try !ImageEvent.exists(db, parameters: ["name" : newName]) {
+                if let event = try ImageEvent.fetchOne(db, parameters: ["name": oldName]) {
+                    event.name = newName
+                    try event.save(db)
+                }
+            }
             try db.execute(sql: """
             UPDATE "Image" SET "event"=$1, "lastUpdateTime"=now() WHERE "event"=$2
             """, parameterValues: [newName, oldName])
             let event = ImageEvent()
             event.name = oldName
-            event.delete(db)
-        }catch {
+            try event.delete(db)
+            return .OK
+        }catch{
             self.logger.log(.error, error)
             return .ERROR
         }
-        return .OK
     }
     
     func deleteEvent(name: String) -> ExecuteState {
         let db = PostgresConnection.database()
         let event = ImageEvent()
         event.name = name
-        event.delete(db)
-        return .OK
+        do {
+            try event.delete(db)
+            return .OK
+        }catch{
+            self.logger.log(.error, error)
+            return .ERROR
+        }
     }
     
     
     func countImagesOfEvent(event:String) -> Int {
         let db = PostgresConnection.database()
-        let result = Image.count(db, where: """
+        var result = 0
+        do {
+            result = try Image.count(db, where: """
         "event"=$1
         """, parameters:[event])
+        }catch{
+            self.logger.log(.error, error)
+        }
         
         do {
             try db.execute(sql: """
@@ -267,36 +316,36 @@ class EventDaoPostgresCK : EventDaoInterface {
             self.logger.log(.error, error)
         }
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var dt:Date? = nil
             public init() {}
         }
         
-        let maxSql = """
-        select max("photoTakenDate") from "Image" where "event"='\(event)'
-        """
-        self.logger.log(maxSql)
-        var maxDate:Date? = nil
-        let max = TempRecord.fetchAll(db, sql: maxSql)
-        if max.count > 0 {
-            maxDate = max[0].dt
-        }
-        
-        let minSql = """
-        select min("photoTakenDate") from "Image" where "event"='\(event)'
-        """
-        self.logger.log(minSql)
-        var minDate:Date? = nil
-        let min = TempRecord.fetchAll(db, sql: minSql)
-        if min.count > 0 {
-            minDate = min[0].dt
-        }
-        
         do {
+            let maxSql = """
+            select max("photoTakenDate") from "Image" where "event"='\(event)'
+            """
+            self.logger.log(maxSql)
+            var maxDate:Date? = nil
+            let max = try TempRecord.fetchAll(db, sql: maxSql)
+            if max.count > 0 {
+                maxDate = max[0].dt
+            }
+            
+            let minSql = """
+            select min("photoTakenDate") from "Image" where "event"='\(event)'
+            """
+            self.logger.log(minSql)
+            var minDate:Date? = nil
+            let min = try TempRecord.fetchAll(db, sql: minSql)
+            if min.count > 0 {
+                minDate = min[0].dt
+            }
+        
             try db.execute(sql: """
             UPDATE "ImageEvent" SET "startDate"=$1,"endDate"=$2, "lastUpdateTime"=now() WHERE "name"=$3
             """, parameterValues: [minDate, maxDate, event])
-        }catch {
+        }catch{
             self.logger.log(.error, error)
         }
         
@@ -305,7 +354,7 @@ class EventDaoPostgresCK : EventDaoInterface {
     
     func importEventsFromImages() {
         let db = PostgresConnection.database()
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var event:String? = nil
             public init() {}
         }
@@ -314,7 +363,12 @@ class EventDaoPostgresCK : EventDaoInterface {
         select DISTINCT "event" from "Image" where "event" not in (
         select DISTINCT "name" from "ImageEvent")
         """
-        let records = TempRecord.fetchAll(db, sql: sql)
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+        }
         var events:[String] = []
         if records.count > 0 {
             for record in records {
@@ -334,14 +388,18 @@ class EventDaoPostgresCK : EventDaoInterface {
         let sql = """
 select "name" from "ImageEvent" where "category" in (\(categories.joinedSingleQuoted(separator: ","))) order by "name"
 """
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var name:String = ""
             public init() {}
         }
         let db = PostgresConnection.database()
-        let records = TempRecord.fetchAll(db, sql: sql)
-        for row in records {
-            result.append(row.name)
+        do {
+            let records = try TempRecord.fetchAll(db, sql: sql)
+            for row in records {
+                result.append(row.name)
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
         return result
     }

@@ -13,6 +13,7 @@ import LoggerFactory
 import WebKit
 import AVFoundation
 import AVKit
+import SharedDeviceLib
 
 class ViewController: NSViewController {
     

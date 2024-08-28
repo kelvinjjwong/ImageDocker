@@ -8,11 +8,9 @@
 
 import Cocoa
 import LoggerFactory
-
-enum ChecksumMode : Int {
-    case Rough
-    case Deep
-}
+import SharedDeviceLib
+import IPhoneDeviceReader
+import AndroidDeviceReader
 
 enum DeviceCopyDestinationType:Int {
     case onDevice
@@ -419,8 +417,8 @@ class DeviceCopyViewController: NSViewController {
         }
         var files:[PhoneFile] = []
         if self.device.type == .Android {
-            if Android.bridge.exists(device: self.device.deviceId, path: path) {
-                files = Android.bridge.files(device: self.device.deviceId, in: path)
+            if DeviceBridge.Android().exists(device: self.device.deviceId, path: path) {
+                files = DeviceBridge.Android().files(device: self.device.deviceId, in: path)
             }else{
 //                self.logger.log("NOT EXISTS PATH ON DEVICE \(path)")
             }
@@ -471,12 +469,12 @@ class DeviceCopyViewController: NSViewController {
             if checksumMode == .Rough {
                 if (f.stored && !f.matchedWithoutMD5){
 //                    self.logger.log("Getting MD5 of \(f.path)")
-                    f.fileMD5 = Android.bridge.md5(device: self.device.deviceId, fileWithPath: f.path)
+                    f.fileMD5 = DeviceBridge.Android().md5(device: self.device.deviceId, fileWithPath: f.path)
                 }
             }else if checksumMode == .Deep {
                 if (f.stored && !f.matched){
 //                    self.logger.log("Getting MD5 of \(f.path)")
-                    f.fileMD5 = Android.bridge.md5(device: self.device.deviceId, fileWithPath: f.path)
+                    f.fileMD5 = DeviceBridge.Android().md5(device: self.device.deviceId, fileWithPath: f.path)
                 }
             }
             
@@ -1118,10 +1116,10 @@ class DeviceCopyViewController: NSViewController {
                             self.lblMessage.stringValue = "Copying from device: \(subFolder)/\(file.filename)"
                         }
                     }
-                    var deviceFile = file.deviceFile!
+                    var deviceFile = file.deviceFile as! ImageDeviceFile
                     if path.type == .onDevice {
                         if self.device.type == .Android {
-                            let (result, error) = Android.bridge.pull(device: self.device.deviceId, from: file.path, to: destinationPathForFile)
+                            let (result, error) = DeviceBridge.Android().pull(device: self.device.deviceId, from: file.path, to: destinationPathForFile)
                             if result && error == nil {
 //                                self.logger.log("Copied \(file.path)")
                                 if file.deviceFile != nil {

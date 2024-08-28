@@ -109,16 +109,16 @@ class AndroidFileManager : FileSystemHandler {
     }
     
     func createDirectory(atPath path: String) -> Bool {
-        Android.bridge.mkdir(device: self.deviceId, path: path)
-        return Android.bridge.exists(device: self.deviceId, path: path)
+        DeviceBridge.Android().mkdir(device: self.deviceId, path: path)
+        return DeviceBridge.Android().exists(device: self.deviceId, path: path)
     }
     
     func fileExists(atPath path: String) -> Bool {
-        return Android.bridge.existsFile(device: self.deviceId, path: path)
+        return DeviceBridge.Android().existsFile(device: self.deviceId, path: path)
     }
     
     func fileExists(atPath path: String, md5: String) -> FileExistState {
-        if Android.bridge.existsFile(device: self.deviceId, path: path) {
+        if DeviceBridge.Android().existsFile(device: self.deviceId, path: path) {
             self.logger.log("exists")
             let md5AtPath = self.md5(pathOfFile: path)
             if md5 == md5AtPath {
@@ -135,11 +135,11 @@ class AndroidFileManager : FileSystemHandler {
     }
     
     func deleteFile(atPath path: String) -> Bool {
-        return Android.bridge.deleteFile(device: self.deviceId, path: path)
+        return DeviceBridge.Android().deleteFile(device: self.deviceId, path: path)
     }
     
     func md5(pathOfFile path: String) -> String {
-        return Android.bridge.md5(device: self.deviceId, fileWithPath: path)
+        return DeviceBridge.Android().md5(device: self.deviceId, fileWithPath: path)
     }
     
 }

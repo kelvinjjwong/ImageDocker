@@ -28,7 +28,7 @@ public final class RepositoryDevice: Codable {
 //}
 
 
-extension RepositoryDevice : PostgresRecord {
+extension RepositoryDevice : DatabaseRecord {
     public func postgresTable() -> String {
         "RepositoryDevice"
     }

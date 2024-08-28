@@ -20,7 +20,7 @@ public final class ImageDBCloner {
 //        message("Re-initializing schema ...")
 //        PostgresConnection.default.versionCheck(dropBeforeCreate: dropBeforeCreate, db: postgresDB())
 //
-//        final class Version : PostgresCustomRecord {
+//        final class Version : DatabaseRecord {
 //            var ver:Int = 0
 //            public init() {}
 //        }

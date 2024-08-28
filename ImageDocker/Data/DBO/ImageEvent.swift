@@ -54,7 +54,7 @@ public final class ImageEvent : Codable {
 //}
 
 
-extension ImageEvent : PostgresRecord {
+extension ImageEvent : DatabaseRecord {
     public func postgresTable() -> String {
         return "ImageEvent"
     }

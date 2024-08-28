@@ -64,7 +64,7 @@ public final class ImagePlace : Codable {
 //}
 
 
-extension ImagePlace : PostgresRecord {
+extension ImagePlace : DatabaseRecord {
     public func postgresTable() -> String {
         return "ImagePlace"
     }

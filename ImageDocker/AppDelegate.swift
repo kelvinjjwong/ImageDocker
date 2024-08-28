@@ -65,13 +65,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         NSUserNotificationCenter.default.delegate = self
         LoggerFactory.append(logWriter: ConsoleLogger())
         LoggerFactory.append(logWriter: FileLogger(pathOfFolder: self.logFilePath()))
+        LoggerFactory.enable([.info, .error, .warning, .trace])
         self.setupMainMenu()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
         
-        IPHONE.bridge.unmountFuse()
+        DeviceBridge.IPHONE().unmountFuse()
         
         if ExecutionEnvironment.default.getDatabaseBackupVolume() == "" {
             self.terminateWithoutBackupDB = true

@@ -8,6 +8,8 @@
 
 import Cocoa
 import LoggerFactory
+import SharedDeviceLib
+import AndroidDeviceReader
 
 class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
     
@@ -332,7 +334,7 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
             let index = self.comboDeviceList.indexOfSelectedItem
             let device = self.deviceListController.deviceItems[index]
             DispatchQueue.global().async {
-                let dev = Android.bridge.memory(device: device)
+                let dev = DeviceBridge.Android().memory(device: device)
                 DispatchQueue.main.async {
                     self.lblFreeSpace.stringValue = dev.availSize
                 }
@@ -453,8 +455,8 @@ class DeviceFolderViewController: NSViewController, DirectoryViewGotoDelegate {
                             }
                         }else{
 //                            self.logger.log("EXPORTING FROM \(image.url.path) TO \(device.deviceId):\(destinationPath.path)")
-                            let _ = Android.bridge.push(device: device.deviceId, from: image.url.path, to: destinationPath.path)
-                            if Android.bridge.existsFile(device: device.deviceId, path: destinationPath.path) {
+                            let _ = DeviceBridge.Android().push(device: device.deviceId, from: image.url.path, to: destinationPath.path)
+                            if DeviceBridge.Android().existsFile(device: device.deviceId, path: destinationPath.path) {
                                 copiedCount += 1
                             }
                         }
@@ -541,14 +543,14 @@ class DeviceListComboController : NSObject, NSComboBoxCellDataSource, NSComboBox
         computer.name = "My Computer"
         self.deviceItems.append(computer)
         
-        let devices:[String] = Android.bridge.devices()
+        let devices:[String] = DeviceBridge.Android().devices()
 //        self.logger.log("android device count: \(devices.count)")
         if devices.count > 0 {
             for deviceId in devices {
-                if let device:PhoneDevice = Android.bridge.device(id: deviceId) {
+                if let device:PhoneDevice = DeviceBridge.Android().device(id: deviceId) {
                     let imageDevice = DeviceDao.default.getOrCreateDevice(device: device)
                     
-                    var dev:PhoneDevice = Android.bridge.memory(device: device)
+                    var dev:PhoneDevice = DeviceBridge.Android().memory(device: device)
                     if imageDevice.name != "" && imageDevice.name != imageDevice.deviceId {
                         dev.name = imageDevice.name ?? ""
                     }else{

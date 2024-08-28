@@ -91,7 +91,7 @@ public final class ExportProfile : Codable {
 
 
 
-extension ExportProfile : PostgresRecord {
+extension ExportProfile : DatabaseRecord {
     public func postgresTable() -> String {
         return "ExportProfile"
     }

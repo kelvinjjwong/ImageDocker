@@ -20,17 +20,32 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
     func findRepository(volume:String, repositoryPath: String) -> ImageRepository? {
         let db = PostgresConnection.database()
-        return ImageRepository.fetchOne(db, parameters: ["repositoryVolume": volume, "repositoryPath": repositoryPath])
+        do {
+            return try ImageRepository.fetchOne(db, parameters: ["repositoryVolume": volume, "repositoryPath": repositoryPath])
+        }catch{
+            self.logger.log(.error, error)
+            return nil
+        }
     }
     
     func getRepository(id: Int) -> ImageRepository? {
         let db = PostgresConnection.database()
-        return ImageRepository.fetchOne(db, parameters: ["id": id])
+        do {
+            return try ImageRepository.fetchOne(db, parameters: ["id": id])
+        }catch{
+            self.logger.log(.error, error)
+            return nil
+        }
     }
     
     func getRepository(repositoryPath: String) -> ImageContainer? {
         let db = PostgresConnection.database()
-        return ImageContainer.fetchOne(db, where: "(\"repositoryPath\" = $1 or \"repositoryPath\" = $2) and \"parentFolder\"=''", values: [repositoryPath.removeLastStash(), repositoryPath.withLastStash()])
+        do {
+            return try ImageContainer.fetchOne(db, where: "(\"repositoryPath\" = $1 or \"repositoryPath\" = $2) and \"parentFolder\"=''", values: [repositoryPath.removeLastStash(), repositoryPath.withLastStash()])
+        }catch{
+            self.logger.log(.error, error)
+            return nil
+        }
     }
     
     func createRepository(name:String,
@@ -57,7 +72,11 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
             imageRepository.cropVolume = cropVolume
             imageRepository.cropPath = cropPath
             let db = PostgresConnection.database()
-            imageRepository.save(db)
+            do {
+                try imageRepository.save(db)
+            }catch{
+                self.logger.log(.error, error)
+            }
             return self.findRepository(volume: repositoryVolume, repositoryPath: repositoryPath)
         }
         
@@ -85,7 +104,11 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
             imageRepository.cropVolume = cropVolume
             imageRepository.cropPath = cropPath
             let db = PostgresConnection.database()
-            imageRepository.save(db)
+            do {
+                try imageRepository.save(db)
+            }catch{
+                self.logger.log(.error, error)
+            }
         }
         
     }
@@ -94,7 +117,11 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         if let imageRepository = self.getRepository(id: id) {
             imageRepository.deviceId = deviceId
             let db = PostgresConnection.database()
-            imageRepository.save(db)
+            do {
+                try imageRepository.save(db)
+            }catch{
+                self.logger.log(.error, error)
+            }
         }
     }
     
@@ -142,7 +169,12 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     func getRepositoriesV2(orderBy: String, condition:SearchCondition?) -> [ImageRepository] {
         let db = PostgresConnection.database()
         var result:[ImageRepository] = []
-        let containers = ImageRepository.fetchAll(db, orderBy: orderBy)
+        var containers:[ImageRepository] = []
+        do {
+            containers = try ImageRepository.fetchAll(db, orderBy: orderBy)
+        }catch{
+            self.logger.log(.error, error)
+        }
         if let imagesCondition = condition, !imagesCondition.isEmpty() {
             let containersConformCondition = self.getRepositoryPaths(imagesCondition: imagesCondition)
             if containersConformCondition.count > 0 {
@@ -162,7 +194,12 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     func getRepositories(orderBy: String, condition:SearchCondition?) -> [ImageContainer] {
         let db = PostgresConnection.database()
         var result:[ImageContainer] = []
-        let containers = ImageContainer.fetchAll(db, parameters: ["parentFolder" : ""], orderBy: orderBy)
+        var containers:[ImageContainer] = []
+        do {
+            containers = try ImageContainer.fetchAll(db, parameters: ["parentFolder" : ""], orderBy: orderBy)
+        }catch{
+            self.logger.log(.error, error)
+        }
         if let imagesCondition = condition, !imagesCondition.isEmpty() {
             let containersConformCondition = self.getRepositoryPaths(imagesCondition: imagesCondition)
             if containersConformCondition.count > 0 {
@@ -230,14 +267,18 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         """
 //        self.logger.log(sql)
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var repositoryPath:String = ""
             public init() {}
         }
         let db = PostgresConnection.database()
-        let records = TempRecord.fetchAll(db, sql: sql)
-        for row in records {
-            result.append(row.repositoryPath)
+        do {
+            let records = try TempRecord.fetchAll(db, sql: sql)
+            for row in records {
+                result.append(row.repositoryPath)
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
         return result
     }
@@ -335,7 +376,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     func getLastPhotoTakenDateOfRepositories() -> [String : String] {
         let db = PostgresConnection.database()
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             
             var name:String = ""
             var lastPhotoTakenDate:String = ""
@@ -350,9 +391,13 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         order by "name"
         """
         var results:[String:String] = [:]
-        let records = TempRecord.fetchAll(db, sql:sql)
-        for row in records {
-            results[row.name] = row.lastPhotoTakenDate
+        do {
+            let records = try TempRecord.fetchAll(db, sql:sql)
+            for row in records {
+                results[row.name] = row.lastPhotoTakenDate
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
         return results
     }
@@ -361,35 +406,41 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
     func getOrCreateContainer(name: String, path: String, parentPath parentFolder: String, repositoryPath: String, homePath: String, storagePath: String, facePath: String, cropPath: String, subPath: String, manyChildren: Bool, hideByParent: Bool) -> (ImageContainer, Bool) {
         
+        let dummy = ImageContainer(name: name,
+                                   parentFolder: parentFolder,
+                                   path: path,
+                                   imageCount: 0,
+                                   repositoryPath: repositoryPath.withLastStash(),
+                                   homePath: homePath,
+                                   storagePath: storagePath,
+                                   facePath: facePath,
+                                   cropPath: cropPath,
+                                   subPath: subPath,
+                                   parentPath: parentFolder.replacingFirstOccurrence(of: repositoryPath.withLastStash(), with: ""),
+                                   hiddenByRepository: false,
+                                   hiddenByContainer: false,
+                                   deviceId: "",
+                                   manyChildren: manyChildren,
+                                   hideByParent: hideByParent,
+                                   folderAsEvent: false,
+                                   eventFolderLevel: 1,
+                                   folderAsBrief: false,
+                                   briefFolderLevel: -1,
+                                   subContainers: 0,
+                                   repositoryId: 0
+        )
+        
         let db = PostgresConnection.database()
-        if let container = ImageContainer.fetchOne(db, parameters: ["path": path]) {
-            return (container, false)
-        }else{
-            let container = ImageContainer(name: name,
-                                       parentFolder: parentFolder,
-                                       path: path,
-                                       imageCount: 0,
-                                       repositoryPath: repositoryPath.withLastStash(),
-                                       homePath: homePath,
-                                       storagePath: storagePath,
-                                       facePath: facePath,
-                                       cropPath: cropPath,
-                                       subPath: subPath,
-                                       parentPath: parentFolder.replacingFirstOccurrence(of: repositoryPath.withLastStash(), with: ""),
-                                       hiddenByRepository: false,
-                                       hiddenByContainer: false,
-                                       deviceId: "",
-                                       manyChildren: manyChildren,
-                                       hideByParent: hideByParent,
-                                       folderAsEvent: false,
-                                       eventFolderLevel: 1,
-                                       folderAsBrief: false,
-                                       briefFolderLevel: -1,
-                                       subContainers: 0,
-                                       repositoryId: 0
-            )
-            container.save(db)
-            return (container, true)
+        do {
+            if let container = try ImageContainer.fetchOne(db, parameters: ["path": path]) {
+                return (container, false)
+            }else{
+                try dummy.save(db)
+                return (dummy, true)
+            }
+        }catch{
+            self.logger.log(.error, error)
+            return (dummy, true)
         }
     }
     
@@ -402,7 +453,11 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         container.subPath = subPath.removeFirstStash().removeLastStash()
         container.repositoryPath = repositoryPath.withFirstStash().withLastStash()
         container.path = "\(repositoryPath.withFirstStash().removeLastStash())\(subPath.withFirstStash().removeLastStash())"  // legacy pk
-        container.save(db)
+        do {
+            try container.save(db)
+        }catch{
+            self.logger.log(.error, error)
+        }
         
         if let createdContainer = self.getContainer(path: container.path) {
             return createdContainer
@@ -413,24 +468,43 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     
     func saveImageContainer(container: ImageContainer) -> ExecuteState {
         let db = PostgresConnection.database()
-        container.save(db)
+        do {
+            try container.save(db)
+        }catch{
+            self.logger.log(.error, error)
+        }
         return .OK
     }
     
     
     func getContainer(id: Int) -> ImageContainer? {
         let db = PostgresConnection.database()
-        return ImageContainer.fetchOne(db, parameters: ["id" : id])
+        do {
+            return try ImageContainer.fetchOne(db, parameters: ["id" : id])
+        }catch{
+            self.logger.log(.error, error)
+            return nil
+        }
     }
     
     func getRepositoryLinkingContainer(repositoryId:Int) -> ImageContainer? {
         let db = PostgresConnection.database()
-        return ImageContainer.fetchOne(db, parameters: ["repositoryId" : repositoryId, "parentId" : 0])
+        do {
+            return try ImageContainer.fetchOne(db, parameters: ["repositoryId" : repositoryId, "parentId" : 0])
+        }catch{
+            self.logger.log(.error, error)
+            return nil
+        }
     }
     
     func getContainers(repositoryId: Int) -> [ImageContainer] {
         let db = PostgresConnection.database()
-        return ImageContainer.fetchAll(db, parameters: ["repositoryId" : repositoryId])
+        do {
+            return try ImageContainer.fetchAll(db, parameters: ["repositoryId" : repositoryId])
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func deleteContainer(id: Int, deleteImage: Bool) -> ExecuteState {
@@ -497,7 +571,12 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         if subPath.hasPrefix("/") {
             subpath = subpath.replacingFirstOccurrence(of: "/", with: "")
         }
-        return ImageContainer.fetchOne(db, parameters: ["repositoryId": repositoryId, "subPath": subpath])
+        do {
+            return try ImageContainer.fetchOne(db, parameters: ["repositoryId": repositoryId, "subPath": subpath])
+        }catch{
+            self.logger.log(.error, error)
+            return nil
+        }
     }
     
     func findContainer(repositoryVolume:String, repositoryPath:String, subPath:String) -> ImageContainer? {
@@ -507,44 +586,79 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
             subpath = subpath.replacingFirstOccurrence(of: "/", with: "")
         }
         self.logger.log(.debug, "Find container with repositoryPath: \(repositoryVolume)\(repositoryPath.withLastStash()) , subPath: \(subpath)")
-        return ImageContainer.fetchOne(db, parameters: ["repositoryPath": "\(repositoryVolume)\(repositoryPath.withLastStash())", "subPath": subpath])
+        do {
+            return try ImageContainer.fetchOne(db, parameters: ["repositoryPath": "\(repositoryVolume)\(repositoryPath.withLastStash())", "subPath": subpath])
+        }catch{
+            self.logger.log(.error, error)
+            return nil
+        }
     }
     
     func getContainer(path: String) -> ImageContainer? {
         let db = PostgresConnection.database()
-        return ImageContainer.fetchOne(db, parameters: ["path" : path])
+        do {
+            return try ImageContainer.fetchOne(db, parameters: ["path" : path])
+        }catch{
+            self.logger.log(.error, error)
+            return nil
+        }
     }
     
     func getAllContainers() -> [ImageContainer] {
         let db = PostgresConnection.database()
-        return ImageContainer.fetchAll(db, orderBy: "\"path\"")
+        do {
+            return try ImageContainer.fetchAll(db, orderBy: "\"path\"")
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getContainers(rootPath: String) -> [ImageContainer] {
         let db = PostgresConnection.database()
-        return ImageContainer.fetchAll(db, where: "\"path\" like $1", values: ["\(rootPath.withLastStash())%"])
+        do {
+            return try ImageContainer.fetchAll(db, where: "\"path\" like $1", values: ["\(rootPath.withLastStash())%"])
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     // MARK: SUB CONTAINER
     
     func getSubContainersSingleLevel(repositoryId:Int, condition:SearchCondition?) -> [ImageContainer] {
         let db = PostgresConnection.database()
-        if let containerOfRepository = ImageContainer.fetchOne(db, parameters: ["repositoryId": repositoryId, "parentId" : 0]) {
-            return ImageContainer.fetchAll(db, parameters: ["repositoryId": repositoryId, "parentId": containerOfRepository.id], orderBy: "\"subPath\"")
-        }else {
+        do {
+            if let containerOfRepository = try ImageContainer.fetchOne(db, parameters: ["repositoryId": repositoryId, "parentId" : 0]) {
+                return try ImageContainer.fetchAll(db, parameters: ["repositoryId": repositoryId, "parentId": containerOfRepository.id], orderBy: "\"subPath\"")
+            }else {
+                return []
+            }
+        }catch{
+            self.logger.log(.error, error)
             return []
         }
     }
     
     func getSubContainersSingleLevel(containerId:Int, condition:SearchCondition?) -> [ImageContainer] {
         let db = PostgresConnection.database()
-        return ImageContainer.fetchAll(db, parameters: ["parentId": containerId], orderBy: "\"subPath\"")
+        do {
+            return try ImageContainer.fetchAll(db, parameters: ["parentId": containerId], orderBy: "\"subPath\"")
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
     }
     
     func getSubContainers(parent path: String, condition:SearchCondition?) -> [ImageContainer] {
         let db = PostgresConnection.database()
         var result:[ImageContainer] = []
-        let containers = ImageContainer.fetchAll(db, parameters: ["parentFolder" : path], orderBy: "\"path\"")
+        var containers:[ImageContainer] = []
+        do {
+            containers = try ImageContainer.fetchAll(db, parameters: ["parentFolder" : path], orderBy: "\"path\"")
+        }catch{
+            self.logger.log(.error, error)
+        }
         if let imagesCondition = condition, !imagesCondition.isEmpty() {
             let containersConformCondition = self.getSubContainerPaths(parent: path, imagesCondition: imagesCondition)
             if containersConformCondition.count > 0 {
@@ -615,14 +729,18 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         """
 //        self.logger.log(sql)
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var repositoryPath:String = ""
             public init() {}
         }
         let db = PostgresConnection.database()
-        let records = TempRecord.fetchAll(db, sql: sql)
-        for row in records {
-            result.append(row.repositoryPath)
+        do {
+            let records = try TempRecord.fetchAll(db, sql: sql)
+            for row in records {
+                result.append(row.repositoryPath)
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
         return result
     }
@@ -630,13 +748,23 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     func countSubContainers(parent path: String) -> Int {
         let db = PostgresConnection.database()
         self.logger.log("countSubContainers(parent:\(path))")
-        return ImageContainer.count(db, parameters: ["parentFolder" : path])
+        do {
+            return try ImageContainer.count(db, parameters: ["parentFolder" : path])
+        }catch{
+            self.logger.log(.error, error)
+            return 0
+        }
     }
     
     func countSubContainers(containerId:Int) -> Int {
         let db = PostgresConnection.database()
         self.logger.log("countSubContainers(containerId:\(containerId))")
-        return ImageContainer.count(db, parameters: ["parentId": containerId])
+        do {
+            return try ImageContainer.count(db, parameters: ["parentId": containerId])
+        }catch{
+            self.logger.log(.error, error)
+            return 0
+        }
     }
     
     func createEmptyImageContainerLinkToRepository(repositoryId:Int) -> ImageContainer? {
@@ -662,28 +790,43 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
     func countSubContainers(repositoryId:Int) -> Int {
         let db = PostgresConnection.database()
         self.logger.log("countSubContainers(repositoryId:\(repositoryId))")
-        if let container = ImageContainer.fetchOne(db, parameters: ["repositoryId": repositoryId, "parentId": 0]) {
-            return ImageContainer.count(db, parameters: ["parentId": container.id])
-        }else{
-            self.logger.log(.error, "Unable to find ImageRepository's linked ImageContainer record in database, repositoryId:\(repositoryId)")
-            if let createdContainer = self.createEmptyImageContainerLinkToRepository(repositoryId: repositoryId) {
-                return ImageContainer.count(db, parameters: ["parentId": createdContainer.id])
+        do {
+            if let container = try ImageContainer.fetchOne(db, parameters: ["repositoryId": repositoryId, "parentId": 0]) {
+                return try ImageContainer.count(db, parameters: ["parentId": container.id])
             }else{
-                return 0
+                self.logger.log(.error, "Unable to find ImageRepository's linked ImageContainer record in database, repositoryId:\(repositoryId)")
+                if let createdContainer = self.createEmptyImageContainerLinkToRepository(repositoryId: repositoryId) {
+                    return try ImageContainer.count(db, parameters: ["parentId": createdContainer.id])
+                }else{
+                    return 0
+                }
             }
+        }catch{
+            self.logger.log(.error, error)
+            return 0
         }
     }
     
     func countSubImages(containerId:Int) -> Int {
         let db = PostgresConnection.database()
         self.logger.log("countSubImages(containerId:\(containerId))")
-        return Image.count(db, parameters: ["containerId": containerId])
+        do {
+            return try Image.count(db, parameters: ["containerId": containerId])
+        }catch{
+            self.logger.log(.error, error)
+            return 0
+        }
     }
     
     func countSubHiddenImages(containerId:Int) -> Int {
         let db = PostgresConnection.database()
         self.logger.log("countSubHiddenImages(containerId:\(containerId))")
-        return Image.count(db, parameters: ["containerId": containerId, "hidden": true])
+        do {
+            return try Image.count(db, parameters: ["containerId": containerId, "hidden": true])
+        }catch{
+            self.logger.log(.error, error)
+            return 0
+        }
     }
     
     // MARK: IMAGE CONTAINER QUERIES
@@ -692,7 +835,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         let db = PostgresConnection.database()
         var result:Set<String> = []
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             
             var containerpath:String = ""
             public init() {}
@@ -700,16 +843,20 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         
         var records:[TempRecord] = []
         var sql = ""
-        if let root = rootPath {
-            sql = """
-            select distinct "containerPath" from "Image" where ("repositoryPath" = $1 or "repositoryPath" = $2) order by "containerPath"
-            """
-            records = TempRecord.fetchAll(db, sql: sql, values: [root.withLastStash(), root.removeLastStash()])
-        }else{
-            sql = """
-            select distinct "containerPath" from "image" order by "containerPath"
-            """
-            records = TempRecord.fetchAll(db, sql: sql)
+        do {
+            if let root = rootPath {
+                sql = """
+                select distinct "containerPath" from "Image" where ("repositoryPath" = $1 or "repositoryPath" = $2) order by "containerPath"
+                """
+                records = try TempRecord.fetchAll(db, sql: sql, values: [root.withLastStash(), root.removeLastStash()])
+            }else{
+                sql = """
+                select distinct "containerPath" from "image" order by "containerPath"
+                """
+                records = try TempRecord.fetchAll(db, sql: sql)
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
         for row in records {
             result.insert("\(row.containerpath)")
@@ -721,24 +868,28 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         let db = PostgresConnection.database()
         var result:Set<String> = []
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             
             var containerpath:String = ""
             public init() {}
         }
         
         var records:[TempRecord] = []
-        var sql = ""
-        if let repositoryId = repositoryId {
-            sql = """
-            select distinct "containerPath" from "Image" where "repositoryId"=\(repositoryId) order by "containerPath"
-            """
-            records = TempRecord.fetchAll(db, sql: sql)
-        }else{
-            sql = """
-            select distinct "containerPath" from "image" order by "containerPath"
-            """
-            records = TempRecord.fetchAll(db, sql: sql)
+        do {
+            var sql = ""
+            if let repositoryId = repositoryId {
+                sql = """
+                select distinct "containerPath" from "Image" where "repositoryId"=\(repositoryId) order by "containerPath"
+                """
+                records = try TempRecord.fetchAll(db, sql: sql)
+            }else{
+                sql = """
+                select distinct "containerPath" from "image" order by "containerPath"
+                """
+                records = try TempRecord.fetchAll(db, sql: sql)
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
         for row in records {
             result.insert("\(row.containerpath)")
@@ -750,24 +901,28 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         let db = PostgresConnection.database()
         var result:Set<String> = []
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             
             var path:String = ""
             public init() {}
         }
         
         var records:[TempRecord] = []
-        var sql = ""
-        if let root = rootPath {
-            sql = """
-            select "path" from "ImageContainer" where "path" like $1 order by "path"
-            """
-            records = TempRecord.fetchAll(db, sql: sql, values: ["\(root)%"])
-        }else{
-            sql = """
-            select "path" from "ImageContainer" order by "path"
-            """
-            records = TempRecord.fetchAll(db, sql: sql)
+        do {
+            var sql = ""
+            if let root = rootPath {
+                sql = """
+                select "path" from "ImageContainer" where "path" like $1 order by "path"
+                """
+                records = try TempRecord.fetchAll(db, sql: sql, values: ["\(root)%"])
+            }else{
+                sql = """
+                select "path" from "ImageContainer" order by "path"
+                """
+                records = try TempRecord.fetchAll(db, sql: sql)
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
         for row in records {
             result.insert("\(row.path)")
@@ -779,24 +934,28 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         let db = PostgresConnection.database()
         var result:Set<String> = []
         
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             
             var path:String = ""
             public init() {}
         }
         
         var records:[TempRecord] = []
-        var sql = ""
-        if let repoPath = repositoryPath {
-            sql = """
-            select "path" from "ImageContainer" where ("repositoryPath" = $1 or "repositoryPath" = $2) order by "path"
-            """
-            records = TempRecord.fetchAll(db, sql: sql, values: [repoPath.withLastStash(), repoPath.removeLastStash()])
-        }else{
-            sql = """
-            select "path" from "ImageContainer" order by "path"
-            """
-            records = TempRecord.fetchAll(db, sql: sql)
+        do {
+            var sql = ""
+            if let repoPath = repositoryPath {
+                sql = """
+                select "path" from "ImageContainer" where ("repositoryPath" = $1 or "repositoryPath" = $2) order by "path"
+                """
+                records = try TempRecord.fetchAll(db, sql: sql, values: [repoPath.withLastStash(), repoPath.removeLastStash()])
+            }else{
+                sql = """
+                select "path" from "ImageContainer" order by "path"
+                """
+                records = try TempRecord.fetchAll(db, sql: sql)
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
         for row in records {
             result.insert("\(row.path)")
@@ -1017,14 +1176,18 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         let sql = """
 select distinct "owner" from "ImageRepository" order by "owner"
 """
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var owner:String = ""
             public init() {}
         }
         let db = PostgresConnection.database()
-        let records = TempRecord.fetchAll(db, sql: sql)
-        for row in records {
-            result.append(row.owner)
+        do {
+            let records = try TempRecord.fetchAll(db, sql: sql)
+            for row in records {
+                result.append(row.owner)
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
         return result
     }
@@ -1034,14 +1197,18 @@ select distinct "owner" from "ImageRepository" order by "owner"
         let sql = """
 select "id" from "ImageRepository" where "owner"='\(owner)' order by "name"
 """
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var id:Int = 0
             public init() {}
         }
         let db = PostgresConnection.database()
-        let records = TempRecord.fetchAll(db, sql: sql)
-        for row in records {
-            result.append(row.id)
+        do {
+            let records = try TempRecord.fetchAll(db, sql: sql)
+            for row in records {
+                result.append(row.id)
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
         return result
     }
@@ -1051,14 +1218,18 @@ select "id" from "ImageRepository" where "owner"='\(owner)' order by "name"
         let sql = """
 select "id" from "ImageRepository" where "owner" in (\(owners.joinedSingleQuoted(separator: ","))) order by "name"
 """
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var id:Int = 0
             public init() {}
         }
         let db = PostgresConnection.database()
-        let records = TempRecord.fetchAll(db, sql: sql)
-        for row in records {
-            result.append(row.id)
+        do {
+            let records = try TempRecord.fetchAll(db, sql: sql)
+            for row in records {
+                result.append(row.id)
+            }
+        }catch{
+            self.logger.log(.error, error)
         }
         return result
     }

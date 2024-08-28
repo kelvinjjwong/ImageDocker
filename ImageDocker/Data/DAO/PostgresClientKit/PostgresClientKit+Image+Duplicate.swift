@@ -36,7 +36,7 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
             GROUP BY "photoTakenDate", place, "photoTakenDay", "photoTakenMonth", "photoTakenYear"
         ) t2 WHERE "photoCount" > 1 ORDER BY "photoTakenDate"
         """
-        final class TempRecord : PostgresCustomRecord {
+        final class TempRecord : DatabaseRecord {
             var photoTakenYear: Int? = 0
             var photoTakenMonth: Int? = 0
             var photoTakenDay: Int? = 0
@@ -45,7 +45,13 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
             var photoCount:Int = 0
             public init() {}
         }
-        let records = TempRecord.fetchAll(db, sql: sql)
+        var records:[TempRecord] = []
+        do {
+            records = try TempRecord.fetchAll(db, sql: sql)
+        }catch {
+            self.logger.log(.error, "Unable to query custom SQL: \(sql)", error)
+        }
+        
         for row in records {
             let year = row.photoTakenYear ?? 0
             let month = row.photoTakenMonth ?? 0
@@ -82,7 +88,7 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
         SELECT "photoTakenYear","photoTakenMonth","photoTakenDay","photoTakenDate",place,path FROM "Image" WHERE "photoTakenYear" <> 0 AND "photoTakenYear" IS NOT NULL AND "photoTakenDate" in (\(marks.joined(separator: ",")))
         """
         
-        final class TempRecord2 : PostgresCustomRecord {
+        final class TempRecord2 : DatabaseRecord {
             var photoTakenYear: Int? = 0
             var photoTakenMonth: Int? = 0
             var photoTakenDay: Int? = 0
@@ -95,7 +101,12 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
         for dt in dupDates {
             dates.append(dt)
         }
-        let photosInSameDate = TempRecord2.fetchAll(db, sql: sql2, values: dates)
+        var photosInSameDate:[TempRecord2] = []
+        do {
+            photosInSameDate = try TempRecord2.fetchAll(db, sql: sql2, values: dates)
+        }catch {
+            self.logger.log(.error, "Unable to query custom SQL: \(sql2)", error)
+        }
         for photo in photosInSameDate {
             if let date = photo.photoTakenDate {
                 let year = Calendar.current.component(.year, from: date)
@@ -152,18 +163,22 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
         var result:[String:[Image]] = [:]
         let keyword = "\(repositoryRoot.withLastStash())%"
         let otherKeyword = "\(theOtherRepositoryRoot.withLastStash())%"
-        let records = Image.fetchAll(db, where: """
+        do {
+            let records = try Image.fetchAll(db, where: """
             (path like $1 or path like $2) and "duplicatesKey" is not null and "duplicatesKey" != ''
             """, orderBy: "\"duplicatesKey\" asc, path asc", values: [keyword, otherKeyword])
-        for image in records {
-            if let key = image.duplicatesKey, key != "" {
-                //self.logger.log("found \(key) - \(image.path)")
-                if let _ = result[key] {
-                    result[key]?.append(image)
-                }else{
-                    result[key] = [image]
+            for image in records {
+                if let key = image.duplicatesKey, key != "" {
+                    //self.logger.log("found \(key) - \(image.path)")
+                    if let _ = result[key] {
+                        result[key]?.append(image)
+                    }else{
+                        result[key] = [image]
+                    }
                 }
             }
+        }catch{
+            self.logger.log(.error, "Unable to query images", error)
         }
         return result
     }
@@ -171,30 +186,44 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
     func getDuplicatedImages(repositoryId:Int) -> [String : [Image]] {
         let db = PostgresConnection.database()
         var result:[String:[Image]] = [:]
-        let records = Image.fetchAll(db, where: """
-            "repositoryId"=$1 and "duplicatesKey" is not null and "duplicatesKey" != ''
-            """, orderBy: "\"duplicatesKey\" asc, path asc", values: [repositoryId])
-        for image in records {
-            if let key = image.duplicatesKey, key != "" {
-                //self.logger.log("found \(key) - \(image.path)")
-                if let _ = result[key] {
-                    result[key]?.append(image)
-                }else{
-                    result[key] = [image]
+        do {
+            let records = try Image.fetchAll(db, where: """
+                "repositoryId"=$1 and "duplicatesKey" is not null and "duplicatesKey" != ''
+                """, orderBy: "\"duplicatesKey\" asc, path asc", values: [repositoryId])
+            for image in records {
+                if let key = image.duplicatesKey, key != "" {
+                    //self.logger.log("found \(key) - \(image.path)")
+                    if let _ = result[key] {
+                        result[key]?.append(image)
+                    }else{
+                        result[key] = [image]
+                    }
                 }
             }
+        }catch{
+            self.logger.log(.error, "Unable to query images", error)
         }
         return result
     }
     
     func getChiefImageOfDuplicatedSet(duplicatesKey: String) -> Image? {
         let db = PostgresConnection.database()
-        return Image.fetchOne(db, where: "hidden=false and \"duplicatesKey\"='\(duplicatesKey)'")
+        do {
+            return try Image.fetchOne(db, where: "hidden=false and \"duplicatesKey\"='\(duplicatesKey)'")
+        }catch{
+            self.logger.log(.error, "Unable to query images", error)
+            return nil
+        }
     }
     
     func getFirstImageOfDuplicatedSet(duplicatesKey: String) -> Image? {
         let db = PostgresConnection.database()
-        return Image.fetchOne(db, where: "\"duplicatesKey\"='\(duplicatesKey)'", orderBy: "path")
+        do {
+            return try Image.fetchOne(db, where: "\"duplicatesKey\"='\(duplicatesKey)'", orderBy: "path")
+        }catch{
+            self.logger.log(.error, "Unable to query images", error)
+            return nil
+        }
     }
     
     func markImageDuplicated(path: String, duplicatesKey: String?, hide: Bool) {

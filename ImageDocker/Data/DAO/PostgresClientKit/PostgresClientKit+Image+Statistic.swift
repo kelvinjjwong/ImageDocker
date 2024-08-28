@@ -16,9 +16,14 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
     
     func countCopiedFromDevice(deviceId:String) -> Int {
         let db = PostgresConnection.database()
-        return ImageDeviceFile.count(db, where: """
+        do {
+            return try ImageDeviceFile.count(db, where: """
         "deviceId"=$1
         """, parameters:[deviceId])
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     func countImagesShouldImport(deviceId:String) -> Int {
@@ -39,14 +44,24 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         )
         """
         self.logger.log("[countImagesShouldImport] \(sql)")
-        return db.count(sql: sql)
+        do {
+            return try db.count(sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     func countImportedAsEditable(repositoryPath:String) -> Int {
         let db = PostgresConnection.database()
-        return Image.count(db, where: """
+        do {
+            return try Image.count(db, where: """
         "repositoryPath"=$1
         """, parameters:[repositoryPath])
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
         
     }
     
@@ -63,49 +78,84 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         """
         let db = PostgresConnection.database()
         self.logger.log("[countImportedAsEditable] \(sql)")
-        return db.count(sql: sql)
+        do {
+            return try db.count(sql: sql)
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     func countExtractedExif(repositoryPath:String) -> Int {
         let db = PostgresConnection.database()
-        return Image.count(db, where: """
-        "exifCreateDate" is not null and "repositoryPath"=$1
-        """, parameters:[repositoryPath])
+        do {
+            return try Image.count(db, where: """
+            "exifCreateDate" is not null and "repositoryPath"=$1
+            """, parameters:[repositoryPath])
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     func countExtractedExif(repositoryId:Int) -> Int {
         let db = PostgresConnection.database()
-        return Image.count(db, where: """
-        "exifCreateDate" is not null and "repositoryId"=$1
-        """, parameters:[repositoryId])
+        do {
+            return try Image.count(db, where: """
+            "exifCreateDate" is not null and "repositoryId"=$1
+            """, parameters:[repositoryId])
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     func countRecognizedLocation(repositoryPath:String) -> Int {
         let db = PostgresConnection.database()
-        return Image.count(db, where: """
-        ("address" is not null or "assignAddress" is not null) and "repositoryPath"=$1
-        """, parameters:[repositoryPath])
+        do{
+            return try Image.count(db, where: """
+            ("address" is not null or "assignAddress" is not null) and "repositoryPath"=$1
+            """, parameters:[repositoryPath])
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     func countRecognizedLocation(repositoryId:Int) -> Int {
         let db = PostgresConnection.database()
-        return Image.count(db, where: """
-        ("address" is not null or "assignAddress" is not null) and "repositoryId"=$1
-        """, parameters:[repositoryId])
+        do {
+            return try Image.count(db, where: """
+            ("address" is not null or "assignAddress" is not null) and "repositoryId"=$1
+            """, parameters:[repositoryId])
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     func countRecognizedFaces(repositoryPath:String) -> Int {
         let db = PostgresConnection.database()
-        return Image.count(db, where: """
-        "recognizedFace"=true and "repositoryPath"=$1
-        """, parameters:[repositoryPath])
+        do {
+            return try Image.count(db, where: """
+            "recognizedFace"=true and "repositoryPath"=$1
+            """, parameters:[repositoryPath])
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     func countRecognizedFaces(repositoryId:Int) -> Int {
         let db = PostgresConnection.database()
-        return Image.count(db, where: """
+        do {
+            return try Image.count(db, where: """
         "recognizedFace"=true and "repositoryId"=$1
         """, parameters:[repositoryId])
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     // count without event
@@ -115,7 +165,12 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         filter.includeHidden = .ShowAndHidden
         let (stmt, _, sqlArgs) = ImageSQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter, year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place)
         
-        return db.count(sql: "select count(1) from \"Image\" where \(stmt)", parameterValues: sqlArgs)
+        do {
+            return try db.count(sql: "select count(1) from \"Image\" where \(stmt)", parameterValues: sqlArgs)
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     // count without event
@@ -124,7 +179,12 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         var filter = ViewController.collectionFilter.clone()
         filter.includeHidden = .HiddenOnly
         let (_, stmtHidden, sqlArgs) = ImageSQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: ViewController.collectionFilter, year: year, month: month, day: day, ignoreDate:ignoreDate, country: country, province: province, city:city, place:place)
-        return db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)", parameterValues: sqlArgs)
+        do {
+            return try db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)", parameterValues: sqlArgs)
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     // count with event
@@ -133,7 +193,12 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         let filter = ViewController.collectionFilter.clone()
         filter.includeHidden = .ShowAndHidden
         let (stmt, _, sqlArgs) = ImageSQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter, year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place)
-        return db.count(sql: "select count(1) from \"Image\" where \(stmt)", parameterValues: sqlArgs)
+        do {
+            return try db.count(sql: "select count(1) from \"Image\" where \(stmt)", parameterValues: sqlArgs)
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     // count with event
@@ -142,66 +207,108 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         let filter = ViewController.collectionFilter.clone()
         filter.includeHidden = .HiddenOnly
         let (_, stmtHidden, sqlArgs) = ImageSQLHelper.generatePostgresSQLStatementForPhotoFiles(filter: filter, year: year, month:month, day:day, event:event, country:country, province:province, city:city, place:place)
-        return db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)", parameterValues: sqlArgs)
+        do {
+            return try db.count(sql: "select count(1) from \"Image\" where \(stmtHidden)", parameterValues: sqlArgs)
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     func countImageWithoutFace(repositoryRoot: String) -> Int {
         let db = PostgresConnection.database()
         let root = repositoryRoot.withLastStash()
-        return Image.count(db, where: """
-        "repositoryPath"=$1 and hidden=false and id not in (select distinct "imageId" from "ImageFace")
-        """, parameters:[root])
+        do {
+            return try Image.count(db, where: """
+            "repositoryPath"=$1 and hidden=false and id not in (select distinct "imageId" from "ImageFace")
+            """, parameters:[root])
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     func countImageNotYetFacialDetection(repositoryRoot: String) -> Int {
         let db = PostgresConnection.database()
         let root = repositoryRoot.withLastStash()
-        return Image.count(db, where: """
+        do {
+            return try Image.count(db, where: """
         "repositoryPath"=$1 and hidden=false and "scanedFace"<>true and id not in (select distinct "imageId" from "ImageFace")
         """, parameters:[root])
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     func countImageWithoutId(repositoryRoot: String) -> Int {
         let db = PostgresConnection.database()
         let root = repositoryRoot.withLastStash()
         let keyword = "\(root)%"
-        
-        return Image.count(db, where: "id is null and path like $1", parameters:[keyword])
+        do {
+            return try Image.count(db, where: "id is null and path like $1", parameters:[keyword])
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     func countPhotoFiles(rootPath: String) -> Int {
         let db = PostgresConnection.database()
-        return Image.count(db, where: "path like $1", parameters: ["\(rootPath)%"])
+        do {
+            return try Image.count(db, where: "path like $1", parameters: ["\(rootPath)%"])
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     func countImageWithoutRepositoryPath(repositoryRoot: String) -> Int {
         let db = PostgresConnection.database()
         let root = repositoryRoot.withLastStash()
         let keyword = "\(root)%"
-        return Image.count(db, where: "\"repositoryPath\"='' and path like $1", parameters:[keyword])
+        do {
+            return try Image.count(db, where: "\"repositoryPath\"='' and path like $1", parameters:[keyword])
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     func countImageWithoutSubPath(repositoryRoot: String) -> Int {
         let db = PostgresConnection.database()
         let root = repositoryRoot.withLastStash()
         let keyword = "\(root)%"
-        
-        return Image.count(db, where: "\"subPath\"='' and path like $1", parameters:[keyword])
+        do {
+            return try Image.count(db, where: "\"subPath\"='' and path like $1", parameters:[keyword])
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     func countImageUnmatchedRepositoryRoot(repositoryRoot: String) -> Int {
         let db = PostgresConnection.database()
         let root = repositoryRoot.withLastStash()
         let keyword = "\(root)%"
-        return Image.count(db, where: "\"repositoryPath\" = $1 and path not like $2", parameters:[root, keyword])
+        do {
+            return try Image.count(db, where: "\"repositoryPath\" = $1 and path not like $2", parameters:[root, keyword])
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     func countImages(repositoryRoot: String) -> Int {
         let db = PostgresConnection.database()
         let root = repositoryRoot.withLastStash()
         let keyword = "\(root)%"
-        
-        return Image.count(db, where: "path like $1", parameters:[keyword])
+        do {
+            return try Image.count(db, where: "path like $1", parameters:[keyword])
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     func countHiddenImages(repositoryRoot: String) -> Int {
@@ -209,8 +316,12 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         
         let root = repositoryRoot.withLastStash()
         let keyword = "\(root)%"
-        
-        return Image.count(db, where: "path like $1 and hidden = true", parameters:[keyword])
+        do {
+            return try Image.count(db, where: "path like $1 and hidden = true", parameters:[keyword])
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     func countContainersWithoutRepositoryPath(repositoryRoot: String) -> Int {
@@ -218,8 +329,12 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         
         let root = repositoryRoot.withLastStash()
         let keyword = "\(root)%"
-        
-        return Image.count(db, where: "\"repositoryPath\" = '' and path like $1", parameters:[keyword])
+        do {
+            return try Image.count(db, where: "\"repositoryPath\" = '' and path like $1", parameters:[keyword])
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
     func countContainersWithoutSubPath(repositoryRoot: String) -> Int {
@@ -227,8 +342,12 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         
         let root = repositoryRoot.withLastStash()
         let keyword = "\(root)%"
-        
-        return Image.count(db, where: "\"subPath\" = '' and path like $1", parameters:[keyword])
+        do {
+            return try Image.count(db, where: "\"subPath\" = '' and path like $1", parameters:[keyword])
+        }catch{
+            self.logger.log(.error, error)
+            return -1
+        }
     }
     
 

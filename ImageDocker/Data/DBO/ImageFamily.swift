@@ -24,7 +24,7 @@ public final class ImageFamily : Codable {
 }
 
 
-extension ImageFamily : PostgresRecord {
+extension ImageFamily : DatabaseRecord {
     public func postgresTable() -> String {
         return "ImageFamily"
     }
