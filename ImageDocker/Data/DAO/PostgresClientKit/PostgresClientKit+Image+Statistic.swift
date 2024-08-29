@@ -35,9 +35,9 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
 //        """
         let sql = """
         select count(1) from "ImageDeviceFile" where "deviceId"='\(deviceId)'
-                                          and "importToPath" || '/' || "importAsFilename" not in
+                                          and "localFilePath" not in
         (
-        select r."storageVolume" || r."storagePath" || '/' || i."subPath"
+        select i."subPath"
         from "Image" i
         left join "ImageRepository" r on i."repositoryId" = r.id
         where r."deviceId"='\(deviceId)'
@@ -68,9 +68,9 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
     func countImportedAsEditable(deviceId:String) -> Int {
         let sql = """
         select count(1) from "ImageDeviceFile" where "deviceId"='\(deviceId)'
-                                          and "importToPath" || '/' || "importAsFilename" in
+                                          and "localFilePath" in
         (
-        select r."storageVolume" || r."storagePath" || '/' || i."subPath"
+        select i."subPath"
         from "Image" i
         left join "ImageRepository" r on i."repositoryId" = r.id
         where r."deviceId"='\(deviceId)'

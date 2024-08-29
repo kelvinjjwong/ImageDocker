@@ -146,23 +146,23 @@ class DevicePathDetailViewController: NSViewController {
 //                        self.logger.log("TODO: UPDATE RELATED importToPath of IMAGE DEVICE FILES")
                         
                         // UPDATE RELATED importToPath of IMAGE DEVICE FILES
-                        DispatchQueue.main.async {
-                            self.lblMessage.stringValue = "Updating imported files..."
-                        }
-                        let importedRecords = DeviceDao.default.getDeviceFiles(deviceId: data.deviceId, importToPath: oldLocalPath)
-                        if importedRecords.count > 0 {
-                            DispatchQueue.main.async {
-                                self.lblMessage.stringValue = "Updating imported files records...\(importedRecords.count)"
-                            }
-                            for record in importedRecords {
-                                var rec = record
-                                rec.importToPath = newLocalPath
-                                let _ = DeviceDao.default.saveDeviceFile(file: rec)
-                            }
-                        }
-                        DispatchQueue.main.async {
-                            self.lblMessage.stringValue = "Updated imported files."
-                        }
+//                        DispatchQueue.main.async {
+//                            self.lblMessage.stringValue = "Updating imported files..."
+//                        }
+//                        let importedRecords = DeviceDao.default.getDeviceFiles(deviceId: data.deviceId, importToPath: oldLocalPath)
+//                        if importedRecords.count > 0 {
+//                            DispatchQueue.main.async {
+//                                self.lblMessage.stringValue = "Updating imported files records...\(importedRecords.count)"
+//                            }
+//                            for record in importedRecords {
+//                                var rec = record
+////                                rec.importToPath = newLocalPath
+//                                let _ = DeviceDao.default.saveDeviceFile(file: rec)
+//                            }
+//                        }
+//                        DispatchQueue.main.async {
+//                            self.lblMessage.stringValue = "Updated imported files."
+//                        }
                         
 //                        self.logger.log("TODO: UPDATE CONTAINERS and SUB-CONTAINERS")
                         // UPDATE container and sub-containers

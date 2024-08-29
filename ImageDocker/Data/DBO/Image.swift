@@ -104,7 +104,7 @@ public final class Image : Codable {
     var originPath:String?
     var facesPath:String?
     var id:String?
-    var subPath:String = ""
+    var subPath:String = "" // = ImageDeviceFile.localFilePath
     var hiddenByRepository:Bool = false
     var hiddenByContainer:Bool = false
     var repositoryPath:String = ""

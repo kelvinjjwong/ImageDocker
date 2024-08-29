@@ -33,7 +33,7 @@ protocol DeviceDaoInterface {
     
     func getDeviceFiles(deviceId:String) -> [ImageDeviceFile]
     
-    func getDeviceFiles(deviceId:String, importToPath:String) -> [ImageDeviceFile]
+//    func getDeviceFiles(deviceId:String, importToPath:String) -> [ImageDeviceFile]
     
     // MARK: - PATHS ON DEVICE
     

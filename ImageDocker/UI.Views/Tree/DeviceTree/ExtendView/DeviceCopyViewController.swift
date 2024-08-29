@@ -78,16 +78,9 @@ class DeviceCopyViewController: NSViewController {
     var connected = false
     
     // MARK: CONTROLS
-    @IBOutlet weak var lblRepository: NSTextField!
     
     @IBOutlet weak var lblRepositoryName: NSTextField!
     @IBOutlet weak var lblStoragePath: NSTextField!
-    @IBOutlet weak var lblImageFrom: NSTextField!
-    @IBOutlet weak var lblImageFromYear: NSTextField!
-    @IBOutlet weak var lblImageTo: NSTextField!
-    @IBOutlet weak var lblImageToYear: NSTextField!
-    
-    @IBOutlet weak var txtName: NSTextField!
     @IBOutlet weak var btnSave: NSButton!
     @IBOutlet weak var btnCopy: NSButton!
     @IBOutlet weak var cbShowCopied: NSButton!
@@ -199,8 +192,11 @@ class DeviceCopyViewController: NSViewController {
 //            self.logger.log("DIFFERENT DEVICE \(device.deviceId) != \(self.device.deviceId)")
             self.device = device
             
-            self.btnCopy.isEnabled = false
             self.btnUpdateRepository.isEnabled = true
+            
+            self.btnCopy.isEnabled = false
+            self.btnLoad.isEnabled = false
+            self.btnDeepLoad.isEnabled = false
             
             self.connected = DeviceBridge.isConnected(deviceId: device.deviceId)
             
@@ -220,9 +216,6 @@ class DeviceCopyViewController: NSViewController {
                         }
                     }
                 }})
-            
-            self.btnLoad.isEnabled = connected
-            self.btnDeepLoad.isEnabled = connected
             
             if device.type == .iPhone {
                 self.btnMount.isHidden = false
@@ -247,15 +240,12 @@ class DeviceCopyViewController: NSViewController {
             let imageDevice = DeviceDao.default.getOrCreateDevice(device: device)
             
             self.lblModel.stringValue = "\(imageDevice.manufacture ?? "") \(imageDevice.model ?? "")\(marketDisplayName)"
-            if imageDevice.name != nil && imageDevice.name != "" {
-                self.txtName.stringValue = imageDevice.name ?? ""
-            }else{
-                self.txtName.stringValue = imageDevice.deviceId ?? ""
-            }
             
             if let repository = self.repository {
+                self.lblRepositoryName.stringValue = repository.name
                 self.lblStoragePath.stringValue = "\(repository.storageVolume)\(repository.storagePath)"
             }else{
+                self.lblRepositoryName.stringValue = imageDevice.name ?? imageDevice.marketName ?? imageDevice.deviceId ?? ""
                 self.lblStoragePath.stringValue = ""
             }
             
@@ -306,6 +296,7 @@ class DeviceCopyViewController: NSViewController {
     // MARK: - GET FILE LIST
     
     func getFileFullList(from path:DeviceCopyDestination, reloadFileList:Bool = false) -> [PhoneFile]{
+        print("getFileFullList from \(path.sourcePath)")
 //        self.logger.log("GET FULL LIST FROM \(path)")
         if self.deviceFiles_fulllist[path.sourcePath] == nil {
 //            self.logger.log("nil, return empty")
@@ -323,6 +314,7 @@ class DeviceCopyViewController: NSViewController {
     }
     
     func getFileFilteredList(from path:DeviceCopyDestination, reloadFileList:Bool = false) -> [PhoneFile]{
+        print("getFileFilteredList from \(path.sourcePath)")
         if self.deviceFiles_fulllist[path.sourcePath] == nil {
             return []
         }
@@ -363,7 +355,7 @@ class DeviceCopyViewController: NSViewController {
                     f.storedSize = deviceFile.fileSize ?? ""
                     f.storedDateTime = deviceFile.fileDateTime ?? ""
                     f.importDate = deviceFile.importDate ?? ""
-                    f.importToPath = deviceFile.importToPath ?? ""
+                    f.importToPath = deviceFile.localFilePath ?? "" // FIXME:
                     f.importAsFilename = deviceFile.importAsFilename ?? ""
                     
                     f.deviceFile = deviceFile
@@ -455,7 +447,7 @@ class DeviceCopyViewController: NSViewController {
             }
             
             f.importDate = deviceFile.importDate ?? ""
-            f.importToPath = deviceFile.importToPath ?? ""
+            f.importToPath = deviceFile.localFilePath ?? "" // FIXME:
             f.importAsFilename = deviceFile.importAsFilename ?? "" // trigger compare
             
             f.deviceFile = deviceFile
@@ -641,7 +633,6 @@ class DeviceCopyViewController: NSViewController {
     
     @IBAction func onSaveClicked(_ sender: NSButton) {
         guard !self.working else {return}
-        let name = txtName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         
         self.working = true
         self.disableButtons()
@@ -749,7 +740,7 @@ class DeviceCopyViewController: NSViewController {
 //                }
 //            }
             
-            imageDevice.name = name
+            imageDevice.name = self.lblRepositoryName.stringValue
             imageDevice.marketName = marketName
             let _ = DeviceDao.default.saveDevice(device: imageDevice)
             
@@ -999,7 +990,11 @@ class DeviceCopyViewController: NSViewController {
                     }
                     
                     var destinationPathForFile = destinationPath
+                    var localFilePath = "\(subFolder.withLastStash())\(file.filename)"
                     if file.folder != "" {
+                        
+                        // subFolder + deviceFolder + filename
+                        localFilePath = "\(subFolder.withLastStash())\(file.folder.withLastStash())\(file.filename)"
                         
                         // storePath + subFolder + deviceFolder
                         destinationPathForFile = URL(fileURLWithPath: destinationPath).appendingPathComponent(file.folder).path
@@ -1030,13 +1025,13 @@ class DeviceCopyViewController: NSViewController {
                             let (result, error) = DeviceBridge.Android().pull(device: self.device.deviceId, from: file.path, to: destinationPathForFile)
                             if result && error == nil {
 //                                self.logger.log("Copied \(file.path)")
-                                if file.deviceFile != nil {
-                                    deviceFile.importToPath = destinationPathForFile
-                                    deviceFile.importAsFilename = file.filename
-                                    deviceFile.importDate = date
-                                    let _ = DeviceDao.default.saveDeviceFile(file: deviceFile)
+                                deviceFile.localFilePath = localFilePath
+//                                    deviceFile.importToPath = destinationPathForFile
+                                deviceFile.importAsFilename = file.filename
+                                deviceFile.importDate = date
+                                deviceFile.repositoryId = self.repository!.id
+                                let _ = DeviceDao.default.saveDeviceFile(file: deviceFile)
 //                                    self.logger.log("Updated \(file.path)")
-                                }
                             }else{
 //                                self.logger.log("Failed to copy \(file.path)")
                                 if let err = error {
@@ -1051,13 +1046,13 @@ class DeviceCopyViewController: NSViewController {
                         }else if self.device.type == .iPhone {
                             if IPHONE.bridge.pull(mountPoint: Setting.localEnvironment.iosDeviceMountPoint(), sourcePath:path.sourcePath, from: file.path, to: destinationPathForFile) {
 //                                self.logger.log("Copied \(file.path)")
-                                if file.deviceFile != nil {
-                                    deviceFile.importToPath = destinationPathForFile
-                                    deviceFile.importAsFilename = file.filename
-                                    deviceFile.importDate = date
-                                    let _ = DeviceDao.default.saveDeviceFile(file: deviceFile)
+                                deviceFile.localFilePath = localFilePath
+//                                    deviceFile.importToPath = destinationPathForFile
+                                deviceFile.importAsFilename = file.filename
+                                deviceFile.importDate = date
+                                deviceFile.repositoryId = self.repository!.id
+                                let _ = DeviceDao.default.saveDeviceFile(file: deviceFile)
 //                                    self.logger.log("Updated \(file.path)")
-                                }
                             }else{
 //                                self.logger.log("Failed to copy \(file.path)")
                             }
@@ -1079,9 +1074,11 @@ class DeviceCopyViewController: NSViewController {
                             }
                         }
                         if needSaveFile {
-                            deviceFile.importToPath = destinationPathForFile
+                            deviceFile.localFilePath = localFilePath
+//                            deviceFile.importToPath = destinationPathForFile
                             deviceFile.importAsFilename = file.filename
                             deviceFile.importDate = date
+                            deviceFile.repositoryId = self.repository!.id
                             let _ = DeviceDao.default.saveDeviceFile(file: deviceFile)
 //                            self.logger.log("Updated \(file.path)")
                         }
@@ -1125,16 +1122,15 @@ class DeviceCopyViewController: NSViewController {
     // MARK: - ACTION BUTTON - UPDATE REPOSITORY
     
     // copy files from raw folder to repository folder if it wasn't copied
-    // update field 'importToPath' for images read from apple devices if it's not up-to-date with current app version
-    // update field 'localFilePath' if it's null or empty or not-up-to-date in db
     // generate md5 and update field 'md5' if it's null or empty in db
     fileprivate func updateDeviceFileIntoRepository(fileRecord deviceFile:ImageDeviceFile, storageUrlWithSlash:String, repositoryPath:String, fileHandler:ComputerFileManager){
+        self.logger.log("updateDeviceFileIntoRepository() -> \(deviceFile.localFilePath)")
         var file = deviceFile
-        if let path = file.path, let filename = file.filename, let importToPath_origin = file.importToPath, importToPath_origin.starts(with: storageUrlWithSlash) {
+        if let path = file.path, let filename = file.filename, let localFilePath = file.localFilePath {
             
             var needSave = false
             
-            var importToPath = importToPath_origin
+//            var importToPath = importToPath_origin
             
             // fix old version records incorrectly excluded 'subpath' from 'importToPath'
             // e.g,                   when: path=/DCIM/100APPLE/IMG_0106.JPG
@@ -1142,32 +1138,27 @@ class DeviceCopyViewController: NSViewController {
             //          old version importToPath=/Volumes/Mac Drive/MacStorage/photo.apple.iphone6/Camera
             //      current version importToPath=/Volumes/Mac Drive/MacStorage/photo.apple.iphone6/Camera/100APPLE
             // so that 'localFilePath' should be=Camera/100APPLE/IMG_0106.JPG
-            if path.starts(with: "/DCIM/") && path.contains("APPLE/") {
-                let appleFolder = path.replacingFirstOccurrence(of: "/DCIM/", with: "").replacingFirstOccurrence(of: "/\(filename)", with: "")
-                importToPath = "\(storageUrlWithSlash)Camera/\(appleFolder)"
-                if importToPath != importToPath_origin {
-                    file.importToPath = importToPath
-                    needSave = true
-                }
-            }
-            
-            
-            let subpath = importToPath.replacingOccurrences(of: storageUrlWithSlash, with: "")
+//            if path.starts(with: "/DCIM/") && path.contains("APPLE/") {
+//                let appleFolder = path.replacingFirstOccurrence(of: "/DCIM/", with: "").replacingFirstOccurrence(of: "/\(filename)", with: "")
+//                importToPath = "\(storageUrlWithSlash)Camera/\(appleFolder)"
+//                if importToPath != importToPath_origin {
+//                    file.importToPath = importToPath
+//                    needSave = true
+//                }
+//            }
             
             // update field 'localFilePath' if it's null or empty in db
-            let localFilePath = "\(subpath)/\(filename)"
-            if localFilePath != "/" && ( file.localFilePath == nil || file.localFilePath == "" || importToPath != importToPath_origin ) {
-                file.localFilePath = localFilePath
-                needSave = true
-            }else{
-                return
-            }
+//            let localFilePath = "\(subpath)/\(filename)"
+//            if localFilePath != "/" && ( file.localFilePath == nil || file.localFilePath == "" ) {
+//                file.localFilePath = localFilePath
+//                needSave = true
+//            }
             
             DispatchQueue.main.async {
-                self.lblMessage.stringValue = "Updating repository: \(localFilePath)"
+                self.lblMessage.stringValue = "Copying into editable folder: \(localFilePath)"
             }
             
-            let importedFileUrl = URL(fileURLWithPath: importToPath).appendingPathComponent(filename)
+            let importedFileUrl = URL(fileURLWithPath: storageUrlWithSlash).appendingPathComponent(localFilePath)
             let repositoryFileUrl = URL(fileURLWithPath: repositoryPath).appendingPathComponent(localFilePath)
             //self.logger.log(repositoryFileUrl.path)
             
@@ -1179,6 +1170,7 @@ class DeviceCopyViewController: NSViewController {
             }
             // copy files from raw folder to repository folder if it wasn't copied
             if !repositoryFileUrl.path.isFileExists() {
+                self.logger.log("Copying file from [\(importedFileUrl.path)] to [\(repositoryFileUrl.path)]")
                 let (copied, error) = importedFileUrl.path.copyFile(to: repositoryFileUrl.path, logger: self.logger)
                 if !copied {
                     logger.log("Error occured when trying to copy file from \(importedFileUrl.path) to \(repositoryFileUrl.path) - \(error)")
@@ -1188,6 +1180,7 @@ class DeviceCopyViewController: NSViewController {
             // generate md5 and update field 'md5' if it's null or empty in db
             if file.fileMD5 == nil || file.fileMD5 == "" {
                 let md5 = fileHandler.md5(pathOfFile: importedFileUrl.path)
+                self.logger.log("Generated MD5 for [\(importedFileUrl.path)] as [\(md5)]")
                 if md5 != "" {
                     file.fileMD5 = md5
                     needSave = true
@@ -1200,6 +1193,10 @@ class DeviceCopyViewController: NSViewController {
     }
     
     @IBAction func onUpdateRepositoryClicked(_ sender: Any) {
+        print("onUpdateRepositoryClicked")
+        print("working=\(working)")
+        print("validPath=\(self.validPaths())")
+        print("repository=\(self.repository)")
         guard !working && self.validPaths() else {return}
         
         if self.repository == nil {
@@ -1225,8 +1222,8 @@ class DeviceCopyViewController: NSViewController {
                     guard !self.forceStop else {
                         break
                     }
-                    
-                    self.updateDeviceFileIntoRepository(fileRecord: deviceFile, 
+                    self.logger.log("updating \(deviceFile.fileId) from [\(repository.storageVolume)\(repository.storagePath)] to [\(repository.repositoryVolume)\(repository.repositoryPath)]")
+                    self.updateDeviceFileIntoRepository(fileRecord: deviceFile,
                                                         storageUrlWithSlash: "\(repository.storageVolume)\(repository.storagePath)".withLastStash(),
                                                         repositoryPath: "\(repository.repositoryVolume)\(repository.repositoryPath)".withLastStash(),
                                                         fileHandler: computerFileHandler)

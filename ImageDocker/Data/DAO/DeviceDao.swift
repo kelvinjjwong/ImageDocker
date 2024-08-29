@@ -68,9 +68,9 @@ class DeviceDao {
         return self.impl.getDeviceFiles(deviceId: deviceId)
     }
     
-    func getDeviceFiles(deviceId:String, importToPath:String) -> [ImageDeviceFile] {
-        return self.impl.getDeviceFiles(deviceId: deviceId, importToPath: importToPath)
-    }
+//    func getDeviceFiles(deviceId:String, importToPath:String) -> [ImageDeviceFile] {
+//        return self.impl.getDeviceFiles(deviceId: deviceId, importToPath: importToPath)
+//    }
     
     // MARK: - PATHS ON DEVICE
     

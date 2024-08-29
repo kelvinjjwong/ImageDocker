@@ -708,6 +708,12 @@ extension PostgresConnection {
             })
         }
         
+        migrator.version("v60") { db in
+            try db.alter(table: "ImageDeviceFile", body: { t in
+                t.add("repositoryId", .integer).defaults(to: 0).indexed()
+            })
+        }
+        
         do {
             try migrator.migrate()
         }catch{

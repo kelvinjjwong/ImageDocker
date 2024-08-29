@@ -141,22 +141,22 @@ class DeviceDaoPostgresCK : DeviceDaoInterface {
     func getDeviceFiles(deviceId: String) -> [ImageDeviceFile] {
         let db = PostgresConnection.database()
         do {
-            return try ImageDeviceFile.fetchAll(db, parameters: ["deviceId" : deviceId], orderBy: "importToPath".quotedDatabaseIdentifier)
+            return try ImageDeviceFile.fetchAll(db, parameters: ["deviceId" : deviceId], orderBy: "localFilePath".quotedDatabaseIdentifier)
         }catch{
             self.logger.log(.error, error)
             return []
         }
     }
     
-    func getDeviceFiles(deviceId: String, importToPath: String) -> [ImageDeviceFile] {
-        let db = PostgresConnection.database()
-        do {
-            return try ImageDeviceFile.fetchAll(db, parameters: ["deviceId" : deviceId, "importToPath": importToPath], orderBy: "fileId".quotedDatabaseIdentifier)
-        }catch{
-            self.logger.log(.error, error)
-            return []
-        }
-    }
+//    func getDeviceFiles(deviceId: String, importToPath: String) -> [ImageDeviceFile] {
+//        let db = PostgresConnection.database()
+//        do {
+//            return try ImageDeviceFile.fetchAll(db, parameters: ["deviceId" : deviceId, "importToPath": importToPath], orderBy: "fileId".quotedDatabaseIdentifier)
+//        }catch{
+//            self.logger.log(.error, error)
+//            return []
+//        }
+//    }
     
     func getDevicePath(deviceId: String, path: String) -> ImageDevicePath? {
         let db = PostgresConnection.database()
