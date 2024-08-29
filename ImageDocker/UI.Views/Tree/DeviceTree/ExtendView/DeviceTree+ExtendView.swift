@@ -11,7 +11,7 @@ import SharedDeviceLib
 
 extension ViewController {
     
-    func openDeviceCopyView(device: PhoneDevice, connected: Bool) {
+    func openDeviceCopyView(device: PhoneDevice, repository: ImageRepository) {
         let windowKey = "DeviceCopy_\(device.deviceId)"
         if let openedWindow = self.childWindows[windowKey] {
             openedWindow.makeKeyAndOrderFront(self)
@@ -36,6 +36,6 @@ extension ViewController {
         
         self.childWindows[windowKey] = window
         
-        viewController.viewInit(device: device, connected: connected)
+        viewController.viewInit(device: device, repository: repository)
     }
 }

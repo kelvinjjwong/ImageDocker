@@ -78,10 +78,16 @@ class DeviceCopyViewController: NSViewController {
     var connected = false
     
     // MARK: CONTROLS
+    @IBOutlet weak var lblRepository: NSTextField!
     
-    @IBOutlet weak var txtStorePath: NSTextField!
+    @IBOutlet weak var lblRepositoryName: NSTextField!
+    @IBOutlet weak var lblStoragePath: NSTextField!
+    @IBOutlet weak var lblImageFrom: NSTextField!
+    @IBOutlet weak var lblImageFromYear: NSTextField!
+    @IBOutlet weak var lblImageTo: NSTextField!
+    @IBOutlet weak var lblImageToYear: NSTextField!
+    
     @IBOutlet weak var txtName: NSTextField!
-    @IBOutlet weak var btnBrowseStorePath: NSButton!
     @IBOutlet weak var btnSave: NSButton!
     @IBOutlet weak var btnCopy: NSButton!
     @IBOutlet weak var cbShowCopied: NSButton!
@@ -96,20 +102,12 @@ class DeviceCopyViewController: NSViewController {
     @IBOutlet weak var btnMount: NSButton!
     @IBOutlet weak var btnDeleteRecords: NSButton!
     @IBOutlet weak var btnUpdateRepository: NSButton!
-    @IBOutlet weak var txtRepositoryPath: NSTextField!
     @IBOutlet weak var lblMessage: NSTextField!
-    @IBOutlet weak var btnBrowseRepository: NSButton!
     @IBOutlet weak var btnDeepLoad: NSButton!
-    @IBOutlet weak var txtHomePath: NSTextField!
     @IBOutlet weak var btnStop: NSButton!
-    @IBOutlet weak var btnBrowseHome: NSButton!
-    @IBOutlet weak var btnGotoHome: NSButton!
-    @IBOutlet weak var btnGotoRepository: NSButton!
     @IBOutlet weak var btnGotoStorage: NSButton!
     @IBOutlet weak var lblModel: NSTextField!
     @IBOutlet weak var lblName: NSTextField!
-    @IBOutlet weak var lblHome: NSTextField!
-    @IBOutlet weak var lblRepository: NSTextField!
     @IBOutlet weak var lblStorage: NSTextField!
     @IBOutlet weak var lblModelName: NSTextField!
     
@@ -151,17 +149,9 @@ class DeviceCopyViewController: NSViewController {
         self.btnStop.title = Words.device_stop.word()
         self.btnMount.title = Words.device_mount.word()
         self.btnLoadFromLocal.title = Words.device_local.word()
-        self.btnBrowseHome.title = Words.device_browse.word()
-        self.btnBrowseRepository.title = Words.device_browse.word()
-        self.btnBrowseStorePath.title = Words.device_browse.word()
-        self.btnGotoHome.title = Words.device_goto.word()
-        self.btnGotoRepository.title = Words.device_goto.word()
-        self.btnGotoStorage.title = Words.device_goto.word()
         self.cbShowCopied.title = Words.device_show_copied.word()
         self.lblModelName.stringValue = Words.device_model.word()
         self.lblName.stringValue = Words.device_name.word()
-        self.lblHome.stringValue = Words.device_home_folder.word()
-        self.lblRepository.stringValue = Words.device_editable_folder.word()
         self.lblStorage.stringValue = Words.device_raw_folder.word()
         
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -189,7 +179,7 @@ class DeviceCopyViewController: NSViewController {
             if let data = devicePath.data {
                 self.createDevicePathDetailPopover()
                 self.devicePathPopover?.close()
-                self.devicePathViewController.initView(data, self.txtRepositoryPath.stringValue)
+                self.devicePathViewController.initView(data, repository: self.repository!) 
                 let rect = self.tblSourcePath.rect(ofRow: tblSourcePath.clickedRow)
                 let cellRect = NSMakeRect(5, 255-rect.origin.y, 100, 100)
                 self.devicePathPopover?.show(relativeTo: cellRect, of: self.view, preferredEdge: .minX)
@@ -199,8 +189,11 @@ class DeviceCopyViewController: NSViewController {
             }
         }
     }
+    var deviceConnectivityTimer:Timer?
+    var repository:ImageRepository?
     
-    func viewInit(device:PhoneDevice, connected:Bool = false){
+    func viewInit(device:PhoneDevice, repository: ImageRepository){
+        self.repository = repository
         if device.deviceId != self.device.deviceId {
 //            self.logger.log("DEVICE INIT")
 //            self.logger.log("DIFFERENT DEVICE \(device.deviceId) != \(self.device.deviceId)")
@@ -209,7 +202,24 @@ class DeviceCopyViewController: NSViewController {
             self.btnCopy.isEnabled = false
             self.btnUpdateRepository.isEnabled = true
             
-            self.connected = connected
+            self.connected = DeviceBridge.isConnected(deviceId: device.deviceId)
+            
+            self.deviceConnectivityTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true, block:{_ in
+                DispatchQueue.global().async {
+                    if DeviceBridge.isConnected(deviceId: device.deviceId) {
+                        DispatchQueue.main.async {
+                            self.btnCopy.isEnabled = true
+                            self.btnLoad.isEnabled = true
+                            self.btnDeepLoad.isEnabled = true
+                        }
+                    }else{
+                        DispatchQueue.main.async {
+                            self.btnCopy.isEnabled = false
+                            self.btnLoad.isEnabled = false
+                            self.btnDeepLoad.isEnabled = false
+                        }
+                    }
+                }})
             
             self.btnLoad.isEnabled = connected
             self.btnDeepLoad.isEnabled = connected
@@ -243,24 +253,10 @@ class DeviceCopyViewController: NSViewController {
                 self.txtName.stringValue = imageDevice.deviceId ?? ""
             }
             
-            if imageDevice.storagePath != nil && imageDevice.storagePath != "" {
-                txtStorePath.stringValue = imageDevice.storagePath ?? ""
-                btnSave.isEnabled = true
+            if let repository = self.repository {
+                self.lblStoragePath.stringValue = "\(repository.storageVolume)\(repository.storagePath)"
             }else{
-                txtStorePath.stringValue = ""
-            }
-            
-            if imageDevice.repositoryPath != nil && imageDevice.repositoryPath != "" {
-                txtRepositoryPath.stringValue = imageDevice.repositoryPath ?? ""
-                btnSave.isEnabled = true
-            }else{
-                txtRepositoryPath.stringValue = ""
-            }
-            
-            if imageDevice.homePath != nil && imageDevice.homePath != "" {
-                txtHomePath.stringValue = imageDevice.homePath ?? ""
-            }else{
-                txtHomePath.stringValue = ""
+                self.lblStoragePath.stringValue = ""
             }
             
             self.addOnDeviceDirectoryPopover = nil
@@ -525,9 +521,6 @@ class DeviceCopyViewController: NSViewController {
     
     func refreshFileList(){
         if !self.connected {
-            DispatchQueue.main.async {
-                self.lblMessage.stringValue = "Device has not been connected."
-            }
             return
         }
         if let selectedPath = self.selectedPath {
@@ -548,83 +541,10 @@ class DeviceCopyViewController: NSViewController {
     
     // MARK: - ACTION BUTTON - OPEN PANEL
     
-    @IBAction func onBrowseStorePathClicked(_ sender: NSButton) {
-        let openPanel = NSOpenPanel()
-        openPanel.canChooseDirectories  = true
-        openPanel.canChooseFiles        = false
-        openPanel.showsHiddenFiles      = false
-        openPanel.canCreateDirectories  = true
-        
-        openPanel.beginSheetModal(for: self.view.window!) { (response) -> Void in
-            guard response == NSApplication.ModalResponse.OK else {return}
-            if let path = openPanel.url?.path {
-                DispatchQueue.main.async {
-                    if path != "" {
-                        self.txtStorePath.stringValue = path
-                        self.btnSave.isEnabled = true
-                    }
-                }
-            }
-        }
-    }
-    
-    @IBAction func onBrowseRepositoryPathClicked(_ sender: NSButton) {
-        let openPanel = NSOpenPanel()
-        openPanel.canChooseDirectories  = true
-        openPanel.canChooseFiles        = false
-        openPanel.showsHiddenFiles      = false
-        openPanel.canCreateDirectories  = true
-        
-        openPanel.beginSheetModal(for: self.view.window!) { (response) -> Void in
-            guard response == NSApplication.ModalResponse.OK else {return}
-            if let path = openPanel.url?.path {
-                DispatchQueue.main.async {
-                    if path != "" {
-                        self.txtRepositoryPath.stringValue = path
-                        self.btnSave.isEnabled = true
-                    }
-                }
-            }
-        }
-    }
-    
-    @IBAction func onBrowseHomePathClicked(_ sender: NSButton) {
-        let openPanel = NSOpenPanel()
-        openPanel.canChooseDirectories  = true
-        openPanel.canChooseFiles        = false
-        openPanel.showsHiddenFiles      = false
-        openPanel.canCreateDirectories  = true
-        
-        openPanel.beginSheetModal(for: self.view.window!) { (response) -> Void in
-            guard response == NSApplication.ModalResponse.OK else {return}
-            if let path = openPanel.url?.path {
-                DispatchQueue.main.async {
-                    if path != "" {
-                        self.txtHomePath.stringValue = path
-                    }
-                }
-            }
-        }
-    }
-    
-    @IBAction func onGotoHomeClicked(_ sender: NSButton) {
-        guard self.txtHomePath.stringValue != "" else {return}
-        
-        let url = URL(fileURLWithPath: self.txtHomePath.stringValue)
-        NSWorkspace.shared.activateFileViewerSelecting([url])
-    }
-    
-    @IBAction func onGotoRepositoryClicked(_ sender: NSButton) {
-        guard self.txtRepositoryPath.stringValue != "" else {return}
-        
-        let url = URL(fileURLWithPath: self.txtRepositoryPath.stringValue)
-        NSWorkspace.shared.activateFileViewerSelecting([url])
-    }
-    
     @IBAction func onGotoRawClicked(_ sender: NSButton) {
-        guard self.txtStorePath.stringValue != "" else {return}
+        guard self.lblStoragePath.stringValue != "" else {return}
         
-        let url = URL(fileURLWithPath: self.txtStorePath.stringValue)
+        let url = URL(fileURLWithPath: self.lblStoragePath.stringValue)
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     
@@ -679,8 +599,6 @@ class DeviceCopyViewController: NSViewController {
             self.btnLoad.isEnabled = state
             self.btnDeepLoad.isEnabled = state
             self.btnSave.isEnabled = state
-            self.btnBrowseStorePath.isEnabled = state
-            self.btnBrowseRepository.isEnabled = state
             self.btnAddSourcePath.isEnabled = state
             self.btnRemoveSourcePath.isEnabled = state
             self.btnLoadFromLocal.isEnabled = state
@@ -705,29 +623,14 @@ class DeviceCopyViewController: NSViewController {
     fileprivate func validPaths() -> Bool {
         
         self.lblMessage.stringValue = ""
-        let storagePath = txtStorePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        let repositoryPath = txtRepositoryPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        let storagePath = lblStoragePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         if storagePath == "" {
             self.lblMessage.stringValue = "ERROR: Path for Raw Copy should not be empty!"
-            return false
-        }
-        if repositoryPath == "" {
-            self.lblMessage.stringValue = "ERROR: Path for Repository should not be empty!"
-            return false
-        }
-        
-        if repositoryPath == storagePath {
-            self.lblMessage.stringValue = "ERROR: Both paths should not be same!"
             return false
         }
         
         if !storagePath.isDirectoryExists() {
             self.lblMessage.stringValue = "ERROR: Path for Raw Copy is not a directory!"
-            return false
-        }
-        
-        if !repositoryPath.isDirectoryExists() {
-            self.lblMessage.stringValue = "ERROR: Path for Repository is not a directory!"
             return false
         }
         return true
@@ -739,13 +642,6 @@ class DeviceCopyViewController: NSViewController {
     @IBAction func onSaveClicked(_ sender: NSButton) {
         guard !self.working else {return}
         let name = txtName.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        let homePath = txtHomePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        let storagePath = txtStorePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        let repositoryPath = txtRepositoryPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        if !self.validPaths() {
-            return
-        }
         
         self.working = true
         self.disableButtons()
@@ -758,105 +654,102 @@ class DeviceCopyViewController: NSViewController {
         
             var imageDevice = DeviceDao.default.getOrCreateDevice(device: self.device)
             
-            if let oldStoragePath = imageDevice.storagePath, oldStoragePath != storagePath {
-                let deviceFiles = DeviceDao.default.getDeviceFiles(deviceId: self.device.deviceId)
-                if deviceFiles.count > 0 {
-                    
-                    self.accumulator?.reset()
-                    self.accumulator?.setTarget(deviceFiles.count)
- 
-                    for deviceFile in deviceFiles {
-                        
-                        // IF storage path changed, MOVE files from old path to new path
-                        if let oldImportToPath = deviceFile.importToPath, let filename = deviceFile.filename, let localFilePath = deviceFile.localFilePath, localFilePath != "" {
-                            
-                            DispatchQueue.main.async {
-                                self.lblMessage.stringValue = "Updating new RAW storage: \(localFilePath)"
-                            }
-                            
-                            let oldFilePath = URL(fileURLWithPath: oldImportToPath).appendingPathComponent(filename)
-                            let newFilePath = URL(fileURLWithPath: storagePath).appendingPathComponent(localFilePath)
-                            let newFolderPath = newFilePath.deletingLastPathComponent()
-                            if !newFilePath.path.isFileExists() {
-                                
-                                DispatchQueue.main.async {
-                                    self.lblMessage.stringValue = "Copying to new RAW storage: \(localFilePath)"
-                                }
-                                
-                                do {
-                                    try FileManager.default.createDirectory(at: newFolderPath, withIntermediateDirectories: true, attributes: nil)
-                                }catch{
-                                    self.logger.log("Error occured when trying to create folder \(newFolderPath.path)", error)
-                                }
-                                do {
-                                    try FileManager.default.copyItem(atPath: oldFilePath.path, toPath: newFilePath.path)
-                                }catch{
-                                    self.logger.log("Error occured when trying to copy [\(oldFilePath.path)] to [\(newFilePath.path)]", error)
-                                }
-                            }
-                            var file = deviceFile
-                            file.importToPath = newFolderPath.path
-//                            self.logger.log("Update [\(localFilePath)] with new importToPath: \(newFolderPath.path)")
-                            let _ = DeviceDao.default.saveDeviceFile(file: file)
-                        }
-                        
-                        DispatchQueue.main.async {
-                            let _ = self.accumulator?.add("")
-                        }
-                    }
-                }
-            }
-        
-            if let oldRepositoryPath = imageDevice.repositoryPath, oldRepositoryPath != repositoryPath {
-                let deviceFiles = DeviceDao.default.getDeviceFiles(deviceId: self.device.deviceId)
-                if deviceFiles.count > 0 {
-                    
-                    self.accumulator?.reset()
-                    self.accumulator?.setTarget(deviceFiles.count)
-                    
-                    for deviceFile in deviceFiles {
-                        
-                        // IF repository path changed, MOVE files from old path to new path
-                        
-                        if let localFilePath = deviceFile.localFilePath, localFilePath != "" {
-                            
-                            DispatchQueue.main.async {
-                                self.lblMessage.stringValue = "Updating new repository: \(localFilePath)"
-                            }
-                            
-                            let oldFilePath = URL(fileURLWithPath: oldRepositoryPath).appendingPathComponent(localFilePath)
-                            let newFilePath = URL(fileURLWithPath: repositoryPath).appendingPathComponent(localFilePath)
-                            let newFolderPath = newFilePath.deletingLastPathComponent()
-                            if !newFilePath.path.isFileExists() {
-                                
-                                DispatchQueue.main.async {
-                                    self.lblMessage.stringValue = "Copying to new repository: \(localFilePath)"
-                                }
-                                
-                                do {
-                                    try FileManager.default.createDirectory(at: newFolderPath, withIntermediateDirectories: true, attributes: nil)
-                                }catch{
-                                    self.logger.log("Error occured when trying to create folder \(newFolderPath.path)", error)
-                                }
-                                do {
-                                    try FileManager.default.copyItem(atPath: oldFilePath.path, toPath: newFilePath.path)
-                                }catch{
-                                    self.logger.log("Error occured when trying to copy [\(oldFilePath.path)] to [\(newFilePath.path)]", error)
-                                }
-                            }
-                        }
-                        
-                        DispatchQueue.main.async {
-                            let _ = self.accumulator?.add("")
-                        }
-                    }
-                }
-            }
+//            if let oldStoragePath = imageDevice.storagePath, oldStoragePath != storagePath {
+//                let deviceFiles = DeviceDao.default.getDeviceFiles(deviceId: self.device.deviceId)
+//                if deviceFiles.count > 0 {
+//                    
+//                    self.accumulator?.reset()
+//                    self.accumulator?.setTarget(deviceFiles.count)
+// 
+//                    for deviceFile in deviceFiles {
+//                        
+//                        // IF storage path changed, MOVE files from old path to new path
+//                        if let oldImportToPath = deviceFile.importToPath, let filename = deviceFile.filename, let localFilePath = deviceFile.localFilePath, localFilePath != "" {
+//                            
+//                            DispatchQueue.main.async {
+//                                self.lblMessage.stringValue = "Updating new RAW storage: \(localFilePath)"
+//                            }
+//                            
+//                            let oldFilePath = URL(fileURLWithPath: oldImportToPath).appendingPathComponent(filename)
+//                            let newFilePath = URL(fileURLWithPath: storagePath).appendingPathComponent(localFilePath)
+//                            let newFolderPath = newFilePath.deletingLastPathComponent()
+//                            if !newFilePath.path.isFileExists() {
+//                                
+//                                DispatchQueue.main.async {
+//                                    self.lblMessage.stringValue = "Copying to new RAW storage: \(localFilePath)"
+//                                }
+//                                
+//                                do {
+//                                    try FileManager.default.createDirectory(at: newFolderPath, withIntermediateDirectories: true, attributes: nil)
+//                                }catch{
+//                                    self.logger.log("Error occured when trying to create folder \(newFolderPath.path)", error)
+//                                }
+//                                do {
+//                                    try FileManager.default.copyItem(atPath: oldFilePath.path, toPath: newFilePath.path)
+//                                }catch{
+//                                    self.logger.log("Error occured when trying to copy [\(oldFilePath.path)] to [\(newFilePath.path)]", error)
+//                                }
+//                            }
+//                            var file = deviceFile
+//                            file.importToPath = newFolderPath.path
+////                            self.logger.log("Update [\(localFilePath)] with new importToPath: \(newFolderPath.path)")
+//                            let _ = DeviceDao.default.saveDeviceFile(file: file)
+//                        }
+//                        
+//                        DispatchQueue.main.async {
+//                            let _ = self.accumulator?.add("")
+//                        }
+//                    }
+//                }
+//            }
+//        
+//            if let oldRepositoryPath = imageDevice.repositoryPath, oldRepositoryPath != repositoryPath {
+//                let deviceFiles = DeviceDao.default.getDeviceFiles(deviceId: self.device.deviceId)
+//                if deviceFiles.count > 0 {
+//                    
+//                    self.accumulator?.reset()
+//                    self.accumulator?.setTarget(deviceFiles.count)
+//                    
+//                    for deviceFile in deviceFiles {
+//                        
+//                        // IF repository path changed, MOVE files from old path to new path
+//                        
+//                        if let localFilePath = deviceFile.localFilePath, localFilePath != "" {
+//                            
+//                            DispatchQueue.main.async {
+//                                self.lblMessage.stringValue = "Updating new repository: \(localFilePath)"
+//                            }
+//                            
+//                            let oldFilePath = URL(fileURLWithPath: oldRepositoryPath).appendingPathComponent(localFilePath)
+//                            let newFilePath = URL(fileURLWithPath: repositoryPath).appendingPathComponent(localFilePath)
+//                            let newFolderPath = newFilePath.deletingLastPathComponent()
+//                            if !newFilePath.path.isFileExists() {
+//                                
+//                                DispatchQueue.main.async {
+//                                    self.lblMessage.stringValue = "Copying to new repository: \(localFilePath)"
+//                                }
+//                                
+//                                do {
+//                                    try FileManager.default.createDirectory(at: newFolderPath, withIntermediateDirectories: true, attributes: nil)
+//                                }catch{
+//                                    self.logger.log("Error occured when trying to create folder \(newFolderPath.path)", error)
+//                                }
+//                                do {
+//                                    try FileManager.default.copyItem(atPath: oldFilePath.path, toPath: newFilePath.path)
+//                                }catch{
+//                                    self.logger.log("Error occured when trying to copy [\(oldFilePath.path)] to [\(newFilePath.path)]", error)
+//                                }
+//                            }
+//                        }
+//                        
+//                        DispatchQueue.main.async {
+//                            let _ = self.accumulator?.add("")
+//                        }
+//                    }
+//                }
+//            }
             
             imageDevice.name = name
-            imageDevice.homePath = homePath
-            imageDevice.storagePath = storagePath
-            imageDevice.repositoryPath = repositoryPath
             imageDevice.marketName = marketName
             let _ = DeviceDao.default.saveDevice(device: imageDevice)
             
@@ -1037,8 +930,15 @@ class DeviceCopyViewController: NSViewController {
     fileprivate var working = false
     fileprivate var accumulator:Accumulator?
     
+    // COPY button
     @IBAction func onCopyClicked(_ sender: NSButton) {
         guard !working && self.validPaths() else {return}
+        
+        if self.repository == nil {
+            return
+        }
+        let repository = self.repository!
+        
         var total = 0
         for path in self.paths {
             if path.exclude {
@@ -1051,17 +951,12 @@ class DeviceCopyViewController: NSViewController {
         guard total > 0 else {return}
         self.accumulator = Accumulator(target: total, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblProgressMessage)
         
-        let destination = self.txtStorePath.stringValue
+        // major folder is store path
+        let destination = "\(repository.storageVolume)\(repository.storagePath)"
         
         self.forceStop = false
         self.working = true
         self.disableButtons()
-        
-        let storagePath = txtStorePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        let repositoryPath = txtRepositoryPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        let storageUrl = URL(fileURLWithPath: storagePath)
-        let storageUrlWithSlash = "\(storageUrl.path)/"
         
         let computerFileHandler = ComputerFileManager()
         
@@ -1077,6 +972,8 @@ class DeviceCopyViewController: NSViewController {
                 if path.exclude {
                     continue
                 }
+                
+                // subFolder
                 var subFolder = path.toSubFolder
                 if path.type == .localDirectory {
                     // PRETEND AS ON DEVICE PATH
@@ -1084,6 +981,8 @@ class DeviceCopyViewController: NSViewController {
                         subFolder = onDevicePath.toSubFolder
                     }
                 }
+                
+                // storePath + subFolder
                 var destinationPath = URL(fileURLWithPath: destination).appendingPathComponent(subFolder).path
                 if !destinationPath.isFileExists() {
                     let (created, error) = destinationPath.mkdirs(logger: self.logger)
@@ -1091,6 +990,8 @@ class DeviceCopyViewController: NSViewController {
                         destinationPath = destination
                     }
                 }
+                
+                // loop files
                 for file in self.deviceFiles_filtered[path.sourcePath]! {
                     
                     guard !self.forceStop else {
@@ -1099,6 +1000,8 @@ class DeviceCopyViewController: NSViewController {
                     
                     var destinationPathForFile = destinationPath
                     if file.folder != "" {
+                        
+                        // storePath + subFolder + deviceFolder
                         destinationPathForFile = URL(fileURLWithPath: destinationPath).appendingPathComponent(file.folder).path
                         
                         if !destinationPathForFile.isFileExists() {
@@ -1109,6 +1012,7 @@ class DeviceCopyViewController: NSViewController {
                         }
                     }
                     
+                    // notify UI
                     DispatchQueue.main.async {
                         if file.folder != "" {
                             self.lblMessage.stringValue = "Copying from device: \(subFolder)/\(file.folder)/\(file.filename)"
@@ -1116,7 +1020,11 @@ class DeviceCopyViewController: NSViewController {
                             self.lblMessage.stringValue = "Copying from device: \(subFolder)/\(file.filename)"
                         }
                     }
+                    
+                    // link to database object
                     var deviceFile = file.deviceFile as! ImageDeviceFile
+                    
+                    // copy/pull file from device to disk physically
                     if path.type == .onDevice {
                         if self.device.type == .Android {
                             let (result, error) = DeviceBridge.Android().pull(device: self.device.deviceId, from: file.path, to: destinationPathForFile)
@@ -1179,7 +1087,11 @@ class DeviceCopyViewController: NSViewController {
                         }
                     }
                     
-                    self.updateDeviceFileIntoRepository(fileRecord: deviceFile, storageUrlWithSlash: storageUrlWithSlash, repositoryPath: repositoryPath, fileHandler: computerFileHandler)
+                    // store file path to database
+                    self.updateDeviceFileIntoRepository(fileRecord: deviceFile,
+                                                        storageUrlWithSlash: "\(repository.storageVolume)\(repository.storagePath)".withLastStash(),
+                                                        repositoryPath: "\(repository.repositoryVolume)\(repository.repositoryPath)".withLastStash(),
+                                                        fileHandler: computerFileHandler)
                     
                     DispatchQueue.main.async {
                         let _ = self.accumulator?.add("")
@@ -1290,6 +1202,11 @@ class DeviceCopyViewController: NSViewController {
     @IBAction func onUpdateRepositoryClicked(_ sender: Any) {
         guard !working && self.validPaths() else {return}
         
+        if self.repository == nil {
+            return
+        }
+        let repository = self.repository!
+        
         self.forceStop = false
         self.working = true
         
@@ -1300,12 +1217,6 @@ class DeviceCopyViewController: NSViewController {
         if deviceFiles.count > 0 {
             self.accumulator = Accumulator(target: deviceFiles.count, indicator: self.progressIndicator, suspended: false, lblMessage: self.lblProgressMessage)
             
-            let storagePath = txtStorePath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-            let repositoryPath = txtRepositoryPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-            
-            let storageUrl = URL(fileURLWithPath: storagePath)
-            let storageUrlWithSlash = "\(storageUrl.path)/"
-            
             let computerFileHandler = ComputerFileManager()
             
             DispatchQueue.global().async {
@@ -1315,7 +1226,10 @@ class DeviceCopyViewController: NSViewController {
                         break
                     }
                     
-                    self.updateDeviceFileIntoRepository(fileRecord: deviceFile, storageUrlWithSlash: storageUrlWithSlash, repositoryPath: repositoryPath, fileHandler: computerFileHandler)
+                    self.updateDeviceFileIntoRepository(fileRecord: deviceFile, 
+                                                        storageUrlWithSlash: "\(repository.storageVolume)\(repository.storagePath)".withLastStash(),
+                                                        repositoryPath: "\(repository.repositoryVolume)\(repository.repositoryPath)".withLastStash(),
+                                                        fileHandler: computerFileHandler)
                     
                     DispatchQueue.main.async {
                         let _ = self.accumulator?.add("")

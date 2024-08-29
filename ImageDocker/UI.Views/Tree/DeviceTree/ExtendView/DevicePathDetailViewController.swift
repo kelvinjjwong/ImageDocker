@@ -23,25 +23,26 @@ class DevicePathDetailViewController: NSViewController {
     @IBOutlet weak var lblMessage: NSTextField!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
     @IBOutlet weak var chkExcludeImported: NSButton!
-    @IBOutlet weak var btnRestore: NSButton!
     
     @IBOutlet weak var btnGoto: NSButton!
     
     // MARK: ACTIONS
     
     @IBAction func onGotoClicked(_ sender: NSButton) {
-        let url = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(self.devicePath.toSubFolder)
+        let repository = self.repository!
+        let url = URL(fileURLWithPath: "\(repository.storageVolume)\(repository.storagePath)").appendingPathComponent(self.devicePath.toSubFolder)
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     
     
     @IBAction func onManyChildrenClicked(_ sender: NSButton) {
         let data = self.devicePath!
+        let repository = self.repository!
         let state = self.chkManyChildren.state == .on
         data.manyChildren = state
         let _ = DeviceDao.default.saveDevicePath(file: data)
         
-        let containerPath = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(self.devicePath.toSubFolder).path
+        let containerPath = URL(fileURLWithPath: "\(repository.storageVolume)\(repository.storagePath)").appendingPathComponent(self.devicePath.toSubFolder).path
 //        self.logger.log("CONTAINER TO BE UPDATED: \(containerPath)")
         let _ = RepositoryDao.default.updateImageContainerToggleManyChildren(path: containerPath, state: state)
 //        self.logger.log("Updated expandable state to \(state ? "ON" : "OFF").")
@@ -49,49 +50,7 @@ class DevicePathDetailViewController: NSViewController {
         self.lblMessage.stringValue = "Updated expandable state to \(state ? "ON" : "OFF")."
     }
     
-    
-    @IBAction func onRestoreClicked(_ sender: NSButton) {
-        // physically restore from backup folder to repository folder
-        
-        if let data = self.devicePath {
-            let subfolder = data.toSubFolder
-            DispatchQueue.global().async {
-                
-                // apply changes to database when device path is decided to be excluded
-                
-                if self.repositoryPath.trimmingCharacters(in: .whitespaces) != "" {
-                    DispatchQueue.main.async {
-                        self.lblMessage.stringValue = "Restoring images from backup ..."
-                    }
-                    let localPath = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(subfolder).path
-                    if let repository = RepositoryDao.default.getContainer(path: self.repositoryPath.removeLastStash()) {
-                        let storagePath = URL(fileURLWithPath: repository.storagePath).appendingPathComponent(subfolder).path
-                        
-                        do {
-                            try
-                                FileManager.default.copyItem(atPath: storagePath, toPath: localPath)
-                            DispatchQueue.main.async {
-                                self.lblMessage.stringValue = "Restored images from backup storage."
-                            }
-                        }catch{
-                            DispatchQueue.main.async {
-                                self.lblMessage.stringValue = "Unable to restore from backup storage."
-                            }
-                            self.logger.log("Unable to restore from backup storage: [\(storagePath)] to [\(localPath)]")
-                            self.logger.log(error)
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
     @IBAction func onExcludeImportedClicked(_ sender: NSButton) {
-        if self.chkExcludeImported.state == .on {
-            self.btnRestore.isHidden = true
-        }else{
-            self.btnRestore.isHidden = false
-        }
     }
     
     
@@ -103,6 +62,7 @@ class DevicePathDetailViewController: NSViewController {
         }
         self.btnUpdate.isEnabled = false
         
+        let repository = self.repository!
         
         let data = self.devicePath!
         let oldLocalFolder = data.toSubFolder
@@ -159,8 +119,8 @@ class DevicePathDetailViewController: NSViewController {
             if !data.exclude && !data.excludeImported && oldLocalFolder != data.toSubFolder {
 //                self.logger.log("changed local folder from [\(oldLocalFolder)] to [\(data.toSubFolder)]")
                 
-                let oldLocalPath = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(oldLocalFolder).path
-                let newLocalPath = URL(fileURLWithPath: self.repositoryPath).appendingPathComponent(data.toSubFolder).path
+                let oldLocalPath = URL(fileURLWithPath: "\(repository.storageVolume)\(repository.storagePath)").appendingPathComponent(oldLocalFolder).path
+                let newLocalPath = URL(fileURLWithPath: "\(repository.storageVolume)\(repository.storagePath)").appendingPathComponent(data.toSubFolder).path
                 
                 if !newLocalPath.isDirectoryExists() {
                     let (created, error) = newLocalPath.mkdirs(logger: self.logger)
@@ -297,10 +257,10 @@ class DevicePathDetailViewController: NSViewController {
     }
     
     fileprivate var devicePath:ImageDevicePath!
-    fileprivate var repositoryPath = ""
+    fileprivate var repository:ImageRepository?
     
-    func initView(_ devicePath:ImageDevicePath, _ repositoryPath:String) {
-        self.repositoryPath = repositoryPath
+    func initView(_ devicePath:ImageDevicePath, repository:ImageRepository) {
+        self.repository = repository
         if let devPath = DeviceDao.default.getDevicePath(deviceId: devicePath.deviceId, path: devicePath.path) {
             self.lblMessage.stringValue = ""
             self.lblMessage.isHidden = false
@@ -330,21 +290,12 @@ class DevicePathDetailViewController: NSViewController {
                 self.chkManyChildren.isHidden = false
                 self.chkManyChildren.state = devPath.manyChildren ? .on : .off
                 self.btnUpdate.isHidden = false
-                if repositoryPath.trimmingCharacters(in: .whitespaces) != "" {
-                    self.btnGoto.isHidden = false
-                }else{
-                    self.btnGoto.isHidden = true
-                }
+                self.btnGoto.isHidden = false
                 self.chkExcludeImported.isHidden = false
                 self.chkExcludeImported.state = devPath.excludeImported ? .on : .off
             }
             
             
-            if self.chkExcludeImported.state == .on {
-                self.btnRestore.isHidden = true
-            }else{
-                self.btnRestore.isHidden = false
-            }
         }
     }
     

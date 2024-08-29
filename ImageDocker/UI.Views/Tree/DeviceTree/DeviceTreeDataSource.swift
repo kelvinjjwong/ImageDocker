@@ -157,6 +157,7 @@ class DeviceTreeDataSource : TreeDataSource {
                                         message: Words.notification_which_volume_connected.fill(arguments: represent)
                                     )
                                 }
+                                DeviceBridge.connectivity[deviceId] = true
                             }
 
                         }else{
@@ -173,12 +174,16 @@ class DeviceTreeDataSource : TreeDataSource {
                                             name: "Android",
                                             message: Words.notification_which_volume_connected.fill(arguments: represent)
                                         )
+                                        
+                                        DeviceBridge.connectivity[deviceId] = true
                                     }else{
                                         MessageEventCenter.default.showMessage(
                                             type: Words.notification_volume_missing.word(),
                                             name: "Android",
                                             message: Words.notification_which_volume_missing.fill(arguments: represent)
                                         )
+                                        
+                                        DeviceBridge.connectivity[deviceId] = false
                                     }
                                 }
                             }
@@ -212,6 +217,7 @@ class DeviceTreeDataSource : TreeDataSource {
                                         message: Words.notification_which_volume_connected.fill(arguments: represent)
                                     )
                                 }
+                                DeviceBridge.connectivity[deviceId] = true
                             }
 
                         }else{
@@ -228,12 +234,14 @@ class DeviceTreeDataSource : TreeDataSource {
                                             name: "iPhone",
                                             message: Words.notification_which_volume_connected.fill(arguments: represent)
                                         )
+                                        DeviceBridge.connectivity[deviceId] = true
                                     }else{
                                         MessageEventCenter.default.showMessage(
                                             type: Words.notification_volume_missing.word(),
                                             name: "iPhone",
                                             message: Words.notification_which_volume_missing.fill(arguments: represent)
                                         )
+                                        DeviceBridge.connectivity[deviceId] = false
                                     }
                                 }
                             }

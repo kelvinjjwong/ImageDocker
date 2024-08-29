@@ -40,7 +40,7 @@ extension ViewController {
                                                      path: path,
                                                      onShowDeviceDialog: { device in
                                                         
-                                                        self.openDeviceCopyView(device: device, connected: false)
+                                                        self.openDeviceCopyView(device: device, repository: repository)
                                                      },
                                                      onConfigure: {
             
