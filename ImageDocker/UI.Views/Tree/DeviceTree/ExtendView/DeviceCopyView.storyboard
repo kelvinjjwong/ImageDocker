@@ -36,7 +36,7 @@
                                 </textFieldCell>
                             </textField>
                             <button imageHugsTitle="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ofs-KE-KTD">
-                                <rect key="frame" x="576" y="563" width="113" height="32"/>
+                                <rect key="frame" x="436" y="563" width="113" height="32"/>
                                 <buttonCell key="cell" type="push" title="Copy Files" bezelStyle="rounded" image="NSMenuOnStateTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Oqz-Qx-OuV">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -93,7 +93,7 @@
                                 </constraints>
                             </progressIndicator>
                             <button imageHugsTitle="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="X3O-YI-ma3">
-                                <rect key="frame" x="444" y="563" width="134" height="32"/>
+                                <rect key="frame" x="304" y="563" width="134" height="32"/>
                                 <buttonCell key="cell" type="push" title="Load file-lists" bezelStyle="rounded" image="NSListViewTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="erI-s2-oW6">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -113,7 +113,7 @@
                                 </connections>
                             </button>
                             <button imageHugsTitle="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qNi-Fv-eDj">
-                                <rect key="frame" x="153" y="563" width="169" height="32"/>
+                                <rect key="frame" x="13" y="563" width="169" height="32"/>
                                 <buttonCell key="cell" type="push" title="Copy to Repository" bezelStyle="rounded" image="NSFollowLinkFreestandingTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="FJn-MQ-4lM">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -126,7 +126,7 @@
                                 </connections>
                             </button>
                             <button imageHugsTitle="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xRP-JM-bJ8">
-                                <rect key="frame" x="318" y="563" width="128" height="32"/>
+                                <rect key="frame" x="178" y="563" width="128" height="32"/>
                                 <buttonCell key="cell" type="push" title="Deep Load" bezelStyle="rounded" image="NSQuickLookTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="W05-cR-FCI">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -136,19 +136,6 @@
                                 </constraints>
                                 <connections>
                                     <action selector="onDeepLoadClicked:" target="es7-Ia-1zv" id="Ard-Pq-UuF"/>
-                                </connections>
-                            </button>
-                            <button imageHugsTitle="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vxv-hW-hcb">
-                                <rect key="frame" x="13" y="563" width="144" height="32"/>
-                                <buttonCell key="cell" type="push" title="Delete Records" bezelStyle="rounded" image="NSStopProgressFreestandingTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nIR-NU-cxX">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="130" id="w1j-jz-0mT"/>
-                                </constraints>
-                                <connections>
-                                    <action selector="onDeleteRecordsClicked:" target="es7-Ia-1zv" id="nEl-8g-2Br"/>
                                 </connections>
                             </button>
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="XTi-7o-hfB">
@@ -168,7 +155,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iuT-NM-UAd">
-                                <rect key="frame" x="687" y="563" width="102" height="32"/>
+                                <rect key="frame" x="547" y="563" width="102" height="32"/>
                                 <buttonCell key="cell" type="push" title="STOP" bezelStyle="rounded" image="NSStopProgressFreestandingTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2LW-U1-0BM">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -481,7 +468,7 @@
                                 </tableHeaderView>
                             </scrollView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xYw-1T-QVq">
-                                <rect key="frame" x="787" y="563" width="101" height="32"/>
+                                <rect key="frame" x="771" y="563" width="101" height="32"/>
                                 <buttonCell key="cell" type="push" title="Data Patch" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="em0-Ra-z0D">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -555,11 +542,23 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button imageHugsTitle="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vxv-hW-hcb">
+                                <rect key="frame" x="873" y="563" width="144" height="32"/>
+                                <buttonCell key="cell" type="push" title="Delete Records" bezelStyle="rounded" image="NSStopProgressFreestandingTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nIR-NU-cxX">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="130" id="w1j-jz-0mT"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="onDeleteRecordsClicked:" target="es7-Ia-1zv" id="nEl-8g-2Br"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="qNi-Fv-eDj" firstAttribute="top" secondItem="vHB-vE-qMX" secondAttribute="top" constant="10" id="1xb-di-Ut1"/>
                             <constraint firstItem="cfw-kw-2wV" firstAttribute="top" secondItem="mBi-Nf-kxL" secondAttribute="bottom" constant="15" id="2qf-3Z-vGD"/>
-                            <constraint firstItem="qNi-Fv-eDj" firstAttribute="leading" secondItem="Vxv-hW-hcb" secondAttribute="trailing" constant="10" id="5Lm-ry-ZRG"/>
                             <constraint firstAttribute="trailing" secondItem="qRI-QH-hf0" secondAttribute="trailing" constant="20" id="8v9-Tw-fxy"/>
                             <constraint firstItem="d95-o6-h8g" firstAttribute="leading" secondItem="zgh-Co-Q3i" secondAttribute="trailing" constant="10" id="8vb-cz-3TC"/>
                             <constraint firstItem="x13-hv-6ZT" firstAttribute="top" secondItem="ISg-sw-QLs" secondAttribute="bottom" constant="12" id="At9-oW-aI5"/>
@@ -570,6 +569,7 @@
                             <constraint firstItem="Ofs-KE-KTD" firstAttribute="top" secondItem="vHB-vE-qMX" secondAttribute="top" constant="10" id="Gve-Zt-8DH"/>
                             <constraint firstItem="XTi-7o-hfB" firstAttribute="top" secondItem="Vxv-hW-hcb" secondAttribute="bottom" constant="13" id="HED-KK-V4i"/>
                             <constraint firstItem="sxL-u0-ffZ" firstAttribute="leading" secondItem="OvG-YP-gbo" secondAttribute="trailing" constant="16" id="IFK-OC-1xZ"/>
+                            <constraint firstItem="Vxv-hW-hcb" firstAttribute="leading" secondItem="xYw-1T-QVq" secondAttribute="trailing" constant="15" id="Jdd-tc-mAh"/>
                             <constraint firstItem="X3O-YI-ma3" firstAttribute="top" secondItem="vHB-vE-qMX" secondAttribute="top" constant="10" id="K9x-eK-80U"/>
                             <constraint firstItem="zgh-Co-Q3i" firstAttribute="leading" secondItem="4pK-zw-jo7" secondAttribute="trailing" constant="10" id="Lov-GJ-IbQ"/>
                             <constraint firstItem="OvG-YP-gbo" firstAttribute="leading" secondItem="Lrr-Gi-Kgv" secondAttribute="trailing" constant="6" id="MBq-if-rL7"/>
@@ -587,8 +587,6 @@
                             <constraint firstItem="x13-hv-6ZT" firstAttribute="top" secondItem="2ca-U9-E2W" secondAttribute="bottom" constant="12" id="ZC1-mL-w2k"/>
                             <constraint firstItem="Ta1-BL-MnT" firstAttribute="top" secondItem="NHg-Mb-1fm" secondAttribute="bottom" constant="18" id="adx-uU-168"/>
                             <constraint firstItem="Ofs-KE-KTD" firstAttribute="leading" secondItem="X3O-YI-ma3" secondAttribute="trailing" constant="12" id="ara-66-lV7"/>
-                            <constraint firstItem="Vxv-hW-hcb" firstAttribute="leading" secondItem="vHB-vE-qMX" secondAttribute="leading" constant="20" id="dbw-GT-Ypa"/>
-                            <constraint firstItem="xYw-1T-QVq" firstAttribute="leading" secondItem="iuT-NM-UAd" secondAttribute="trailing" constant="12" symbolic="YES" id="e8s-7i-WZo"/>
                             <constraint firstAttribute="trailing" secondItem="11x-Pv-zU2" secondAttribute="trailing" constant="20" symbolic="YES" id="eLw-qh-pA9"/>
                             <constraint firstAttribute="trailing" secondItem="XTi-7o-hfB" secondAttribute="trailing" constant="20" id="eSd-XS-Uj7"/>
                             <constraint firstItem="NHg-Mb-1fm" firstAttribute="leading" secondItem="mBi-Nf-kxL" secondAttribute="trailing" constant="4" id="ewY-bh-HwA"/>
@@ -613,6 +611,8 @@
                             <constraint firstItem="X3O-YI-ma3" firstAttribute="leading" secondItem="xRP-JM-bJ8" secondAttribute="trailing" constant="12" id="vXL-eN-hYP"/>
                             <constraint firstItem="cfw-kw-2wV" firstAttribute="leading" secondItem="2ca-U9-E2W" secondAttribute="trailing" constant="10" id="vy8-E8-IUC"/>
                             <constraint firstItem="ISg-sw-QLs" firstAttribute="leading" secondItem="cfw-kw-2wV" secondAttribute="trailing" constant="10" id="w7g-h9-cfM"/>
+                            <constraint firstAttribute="trailing" secondItem="Vxv-hW-hcb" secondAttribute="trailing" constant="20" id="wrY-Mb-Mrn"/>
+                            <constraint firstItem="qNi-Fv-eDj" firstAttribute="leading" secondItem="vHB-vE-qMX" secondAttribute="leading" constant="20" id="wwW-ec-qwC"/>
                             <constraint firstItem="4pK-zw-jo7" firstAttribute="leading" secondItem="sxL-u0-ffZ" secondAttribute="trailing" constant="3" id="xzf-FL-7cP"/>
                         </constraints>
                     </view>

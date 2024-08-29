@@ -11,7 +11,6 @@
                 <outlet property="boxDiskSpaceStat" destination="bFY-rd-6v8" id="NgR-4v-ax0"/>
                 <outlet property="boxImageRecords" destination="f6B-W7-9KK" id="uI4-1V-fj9"/>
                 <outlet property="btnConfig" destination="0H0-eA-dKu" id="bJP-MQ-0rV"/>
-                <outlet property="btnCopyFromDevice" destination="vpg-ho-1Lt" id="jwQ-P8-jmS"/>
                 <outlet property="btnDetailOfBackupStorage" destination="Gm5-cX-bWe" id="gT8-On-6HZ"/>
                 <outlet property="btnDetailOfEditableStorage" destination="sia-un-56V" id="pGe-Gg-CcS"/>
                 <outlet property="btnDetailOfFacesStorage" destination="LFJ-Ie-qq3" id="Gpa-kR-G0o"/>
@@ -669,17 +668,6 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vpg-ho-1Lt">
-                    <rect key="frame" x="245" y="435" width="142" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="push" title="Copy from Device" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9XZ-Cu-sjE">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="onCopyFromDeviceClicked:" target="-2" id="WSe-lQ-iEe"/>
-                    </connections>
-                </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7tQ-FM-5aW">
                     <rect key="frame" x="112" y="435" width="135" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>

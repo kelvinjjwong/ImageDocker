@@ -198,6 +198,9 @@ class DeviceCopyViewController: NSViewController {
             self.btnLoad.isEnabled = false
             self.btnDeepLoad.isEnabled = false
             
+            self.btnDeleteRecords.isHidden = true
+            self.btnBulkUpdate.isHidden = true
+            
             self.connected = DeviceBridge.isConnected(deviceId: device.deviceId)
             
             self.deviceConnectivityTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true, block:{_ in

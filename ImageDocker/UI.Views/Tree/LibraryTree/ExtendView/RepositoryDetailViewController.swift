@@ -16,7 +16,6 @@ class RepositoryDetailViewController: NSViewController {
     
     @IBOutlet weak var btnConfig: NSButton!
     @IBOutlet weak var btnReScanFolders: NSButton!
-    @IBOutlet weak var btnCopyFromDevice: NSButton!
     
     
     @IBOutlet weak var lblEditableStorageSpace: NSTextField!
@@ -352,17 +351,6 @@ class RepositoryDetailViewController: NSViewController {
         self.onConfigure()
     }
     
-    @IBAction func onCopyFromDeviceClicked(_ sender: NSButton) {
-        if let phoneDevice = self.phoneDevice {
-            self.onShowDeviceDialog(phoneDevice)
-        }else{
-            
-            DispatchQueue.main.async {
-                MessageEventCenter.default.showMessage(type: "Repository", name: self._repositoryName, message: "Cannot find device id for this repository")
-            }
-        }
-    }
-    
     
     /// - Tag: RepositoryDetailViewController.onEditableDetailClicked()
     @IBAction func onEditableDetailClicked(_ sender: NSButton) {
@@ -409,19 +397,10 @@ class RepositoryDetailViewController: NSViewController {
             let device = DeviceDao.default.getDevice(deviceId: repository.deviceId),
             let deviceType = device.type {
             
-            var dev:PhoneDevice
-            if deviceType == "iPhone" {
-                dev = PhoneDevice(type: .iPhone, deviceId: device.deviceId ?? "", manufacture: device.manufacture ?? "", model: device.model ?? "")
-                dev.name = device.name ?? ""
-                
-            }else if deviceType == "Android" {
-                dev = PhoneDevice(type: .Android, deviceId: device.deviceId ?? "", manufacture: device.manufacture ?? "", model: device.model ?? "")
-                dev.name = device.name ?? ""
-            }else{
-                return
-            }
+            let phoneDevice = self.phoneDevice
+                            ?? PhoneDevice(type: .Unknown, deviceId: "", manufacture: "", model: "") // not bind phone yet or local disk folder
             
-            self.onShowDeviceDialog(dev)
+            self.onShowDeviceDialog(phoneDevice)
             
         }
     }
