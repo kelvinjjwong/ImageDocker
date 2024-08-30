@@ -466,7 +466,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </box>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xFA-37-i3Q">
-                                <rect key="frame" x="18" y="253" width="108" height="17"/>
+                                <rect key="frame" x="18" y="253" width="135" height="17"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Editable Storage:" id="AHV-L9-jLp">
                                     <font key="font" usesAppearanceFont="YES"/>
@@ -475,7 +475,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2VV-rR-SkW">
-                                <rect key="frame" x="18" y="215" width="105" height="17"/>
+                                <rect key="frame" x="18" y="215" width="141" height="17"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Backup Storage:" id="guX-Op-MRI">
                                     <font key="font" metaFont="system"/>
@@ -484,7 +484,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IKB-ur-947">
-                                <rect key="frame" x="18" y="177" width="95" height="17"/>
+                                <rect key="frame" x="18" y="177" width="135" height="17"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Faces Storage:" id="YgN-Q0-tJN">
                                     <font key="font" metaFont="system"/>

@@ -1196,10 +1196,6 @@ class DeviceCopyViewController: NSViewController {
     }
     
     @IBAction func onUpdateRepositoryClicked(_ sender: Any) {
-        print("onUpdateRepositoryClicked")
-        print("working=\(working)")
-        print("validPath=\(self.validPaths())")
-        print("repository=\(self.repository)")
         guard !working && self.validPaths() else {return}
         
         if self.repository == nil {
@@ -1235,12 +1231,17 @@ class DeviceCopyViewController: NSViewController {
                         let _ = self.accumulator?.add("")
                     }
                 }
+                self.logger.log("Completed copy into editable folder")
+                DispatchQueue.main.async {
+                    self.lblMessage.stringValue = "Completed copy into editable folder"
+                }
                 self.forceStop = false
                 self.working = false
                 self.enableButtons()
             }
         }else{
-            self.lblMessage.stringValue = "No file record."
+            self.logger.log("No file record could be copied into editable folder.")
+            self.lblMessage.stringValue = "No file record could be copied into editable folder."
             self.forceStop = false
             self.working = false
             self.enableButtons()
