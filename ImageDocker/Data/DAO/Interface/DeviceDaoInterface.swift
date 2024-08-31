@@ -29,9 +29,13 @@ protocol DeviceDaoInterface {
     
     func saveDeviceFile(file:ImageDeviceFile) -> ExecuteState
     
+    func updateDeviceFileWithImageId(importedImageId: String, repositoryId:Int, subPath:String) -> ExecuteState
+    
     func deleteDeviceFiles(deviceId:String) -> ExecuteState
     
     func getDeviceFiles(deviceId:String) -> [ImageDeviceFile]
+    
+    func getDeviceFile(repositoryId:Int, localFilePath:String) -> ImageDeviceFile?
     
 //    func getDeviceFiles(deviceId:String, importToPath:String) -> [ImageDeviceFile]
     

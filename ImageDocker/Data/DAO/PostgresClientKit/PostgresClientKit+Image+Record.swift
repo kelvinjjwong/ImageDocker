@@ -23,6 +23,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             return try Image.fetchOne(db, parameters: ["path": path]) // FIXME: it's PK now, deprecate in future version
         }catch {
             self.logger.log(.error, error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "getImage", message: "\(error)")
             return nil
         }
     }
@@ -33,6 +34,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             return try Image.fetchOne(db, parameters: ["id" : id])
         }catch {
             self.logger.log(.error, error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "getImage", message: "\(error)")
             return nil
         }
     }
@@ -44,6 +46,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             return try Image.fetchOne(db, parameters: ["path": path])
         }catch {
             self.logger.log(.error, error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "findImage", message: "\(error)")
             return nil
         }
     }
@@ -54,12 +57,14 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             return try Image.fetchOne(db, parameters: ["repositoryId": repositoryId, "subPath": subPath.removeFirstStash()])
         }catch {
             self.logger.log(.error, error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "findImage", message: "\(error)")
             return nil
         }
     }
     
     // MARK: CRUD
     
+    // FIXME: repositoryVolume and repositoryPath and path should be delete
     func createImage(repositoryId:Int, containerId:Int, repositoryVolume:String, repositoryPath:String, subPath:String) -> Image? {
         let db = PostgresConnection.database()
         let image = Image()
@@ -76,6 +81,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             try image.save(db)
         }catch {
             self.logger.log(.error, error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "createImage", message: "\(error)")
         }
         
         if let createdImage = self.findImage(repositoryVolume: repositoryVolume, repositoryPath: repositoryPath, subPath: subPath) {
@@ -98,6 +104,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             }
         }catch {
             self.logger.log(.error, error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "getOrCreatePhoto", message: "\(error)")
             return dummy
         }
     }
@@ -107,6 +114,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
         do {
             try image.save(db)
         }catch {
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "saveImage", message: "\(error)")
             self.logger.log(.error, error)
         }
         return .OK
@@ -122,6 +130,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
                 """, parameterValues: [true, id])
             }catch{
                 self.logger.log(.error, "[deletePhoto]", error)
+                let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "deleteImage", message: "\(error)")
                 return .ERROR
             }
             return .OK
@@ -132,6 +141,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
                 try image.delete(db)
             }catch {
                 self.logger.log(.error, error)
+                let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "deleteImage", message: "\(error)")
             }
             return .OK
         }
@@ -146,6 +156,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
                 """, parameterValues: [true, path])
             }catch{
                 self.logger.log(.error, "[deletePhoto]", error)
+                let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "deletePhoto", message: "\(error)")
                 return .ERROR
             }
             return .OK
@@ -155,6 +166,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             do {
                 try image.delete(db)
             }catch {
+                let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "deletePhoto", message: "\(error)")
                 self.logger.log(.error, error)
             }
             return .OK
@@ -173,7 +185,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             """, parameterValues: [id, path])
         }catch{
             self.logger.log(.error, "[updateImageIdByPath]", error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "generateImageIdByPath", message: "\(error)")
             return (.ERROR, "")
         }
         return (.OK, id)
@@ -188,10 +200,39 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             """, parameterValues: [id, containerId, subPath.removeFirstStash()])
         }catch{
             self.logger.log(.error, "[generateImageIdByContainerIdAndSubPath]", error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "generateImageIdByContainerIdAndSubPath", message: "\(error)")
             return (.ERROR, "")
         }
         return (.OK, id)
+    }
+    
+    func generateImageIdByRepositoryIdAndSubPath(repositoryId:Int, subPath:String) -> (ExecuteState, String) {
+        let id = Naming.Image.generateId()
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+            update "Image" set "id" = $1 where "repositoryId" = $2 and "subPath" = $3
+            """, parameterValues: [id, repositoryId, subPath.removeFirstStash()])
+        }catch{
+            self.logger.log(.error, "[generateImageIdByRepositoryIdAndSubPath]", error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "generateImageIdByRepositoryIdAndSubPath", message: "\(error)")
+            return (.ERROR, "")
+        }
+        return (.OK, id)
+    }
+    
+    func updateImageMd5AndDeviceFileId(id:String, md5:String, deviceId:String, deviceFileId:String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+            update "Image" set "originalMD5" = $1, "deviceId" = $2, "deviceFileId" = $3 where "id" = $4
+            """, parameterValues: [md5, deviceId, deviceFileId, id])
+        }catch{
+            self.logger.log(.error, "[updateImageMd5AndDeviceFileId]", error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "updateImageMd5AndDeviceFileId", message: "\(error)")
+            return .ERROR
+        }
+        return .OK
     }
     
     func updateImageWithContainerId(id:String, repositoryId:Int, containerId:Int) -> ExecuteState {
@@ -202,7 +243,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             """, parameterValues: [repositoryId, containerId, id])
         }catch{
             self.logger.log(.error, "[updateImageWithContainerId]", error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "updateImageWithContainerId", message: "\(error)")
             return .ERROR
         }
         return .OK
@@ -219,7 +260,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             """, parameterValues: [newPath, repositoryPath, subPath, containerPath, id, oldPath])
         }catch{
             self.logger.log(.error, "[updateImagePaths(oldPath,newPath,repositoryPath,subPath,containerPath,id)]", error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "updateImagePaths", message: "\(error)")
             return .ERROR
         }
         return .OK
@@ -234,7 +275,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             """, parameterValues: [newPath, repositoryPath, subPath, containerPath, id])
         }catch{
             self.logger.log(.error, "[updateImagePaths(id,newPath,repositoryPath,subPath,containerPath)]", error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "updateImagePaths", message: "\(error)")
             return .ERROR
         }
         return .OK
@@ -253,7 +294,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             """, parameterValues: [path])
         }catch{
             self.logger.log(.error, "[updateImageDateTimeFromFilename] Error to update image to \(dateTimeFromFilename) - path:\(path)", error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "updateImageDateTimeFromFilename", message: "\(error)")
             return .ERROR
         }
         return .OK
@@ -269,7 +310,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             """, parameterValues: [id])
         }catch{
             self.logger.log(.error, "[updateImageDateTimeFromFilename] Error to update image to \(dateTimeFromFilename) - id:\(id)", error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "updateImageDateTimeFromFilename", message: "\(error)")
             return .ERROR
         }
         return .OK
@@ -329,6 +370,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             """, parameterValues: arguments)
         }catch{
             self.logger.log(.error, "[updateImageDates]", error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "updateImageDates", message: "\(error)")
             return .ERROR
         }
         return .OK
@@ -355,7 +397,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             }
         }catch{
             self.logger.log(.error, "[storeImageDescription]", error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "storeImageDescription", message: "\(error)")
             return .ERROR
         }
         return .OK
@@ -380,7 +422,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             return .OK
         }catch{
             self.logger.log(.error, "[storeImageFamily]", error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "storeImageFamily", message: "\(error)")
             return .ERROR
         }
     }
@@ -397,7 +439,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             """, parameterValues: [path])
         }catch{
             self.logger.log(.error, "Error to update image rotation to \(rotation) - \(path)", error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "updateImageRotation", message: "\(error)")
             return .ERROR
         }
         return .OK
@@ -412,7 +454,7 @@ class ImageRecordDaoPostgresCK : ImageRecordDaoInterface {
             """)
         }catch{
             self.logger.log(.error, "Error to hide unsupported records", error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageRecordDaoPostgresCK", name: "hideUnsupportedRecords", message: "\(error)")
             return .ERROR
         }
         return .OK

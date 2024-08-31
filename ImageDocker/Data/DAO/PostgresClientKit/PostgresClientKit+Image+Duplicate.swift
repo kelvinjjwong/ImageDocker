@@ -233,7 +233,7 @@ class ImageDuplicateDaoPostgresCK : ImageDuplicationDaoInterface {
         }catch{
             logger.log("Error at markImageDuplicated")
             logger.log(error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "ImageDuplicateDaoPostgresCK", name: "markImageDuplicated", message: "\(error)")
         }
     }
     

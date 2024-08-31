@@ -36,8 +36,7 @@ extension ViewController {
     func openRepositoryDetail(repository:ImageRepository, sender:NSButton) {
         self.createRepositoryDetailPopover()
         let path = Naming.Image.generateFullAbsoluteRepositoryPath(repositoryVolume: repository.repositoryVolume, repositoryPath: repository.repositoryPath)
-        self.repositoryDetailViewController.initView(id: repository.id,
-                                                     path: path,
+        self.repositoryDetailViewController.initView(repository: repository,
                                                      onShowDeviceDialog: { device in
                                                         
                                                         self.openDeviceCopyView(device: device, repository: repository)
@@ -58,7 +57,7 @@ extension ViewController {
                                                         window.title = Words.repositoryConfiguration.word()
                                                         window.setFrame(frame, display: false)
                                                         window.makeKeyAndOrderFront(self)
-                                                        viewController.initEdit(id: repository.id, path: path, window: window)
+                                                        viewController.initEdit(id: repository.id, path: path, window: window) // FIXME: use repository object as param
                                                      },
                                                      onManageSubContainers: {
             
@@ -76,7 +75,7 @@ extension ViewController {
                                                         window.title = Words.repositoryConfiguration.word()
                                                         window.setFrame(frame, display: false)
                                                         window.makeKeyAndOrderFront(self)
-                                                        viewController.initView(containerPath: path)
+                                                        viewController.initView(containerPath: path) // FIXME: use repository object as param
                                                      }
         )
         

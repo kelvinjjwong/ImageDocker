@@ -220,6 +220,7 @@ class RepositoryDao {
     /// - caller:
     ///   - RepositoryDetailViewController.onReScanFoldersClicked()
     /// - Tag: createContainer()
+    // FIXME: repositoryPath should be delete
     func createContainer(name: String, repositoryId: Int, parentId:Int, subPath: String, repositoryPath: String) -> ImageContainer? {
         return self.impl.createContainer(name: name, repositoryId: repositoryId, parentId: parentId, subPath: subPath, repositoryPath: repositoryPath)
     }

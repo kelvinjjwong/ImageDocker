@@ -1089,8 +1089,7 @@ class DeviceCopyViewController: NSViewController {
                     
                     // store file path to database
                     self.updateDeviceFileIntoRepository(fileRecord: deviceFile,
-                                                        storageUrlWithSlash: "\(repository.storageVolume)\(repository.storagePath)".withLastStash(),
-                                                        repositoryPath: "\(repository.repositoryVolume)\(repository.repositoryPath)".withLastStash(),
+                                                        repository: repository,
                                                         fileHandler: computerFileHandler)
                     
                     DispatchQueue.main.async {
@@ -1126,8 +1125,12 @@ class DeviceCopyViewController: NSViewController {
     
     // copy files from raw folder to repository folder if it wasn't copied
     // generate md5 and update field 'md5' if it's null or empty in db
-    fileprivate func updateDeviceFileIntoRepository(fileRecord deviceFile:ImageDeviceFile, storageUrlWithSlash:String, repositoryPath:String, fileHandler:ComputerFileManager){
+    fileprivate func updateDeviceFileIntoRepository(fileRecord deviceFile:ImageDeviceFile,repository:ImageRepository, fileHandler:ComputerFileManager){
         self.logger.log("updateDeviceFileIntoRepository() -> \(deviceFile.localFilePath)")
+        
+        let storageUrlWithSlash = "\(repository.storageVolume)\(repository.storagePath)".withLastStash()
+        let repositoryPath = "\(repository.repositoryVolume)\(repository.repositoryPath)".withLastStash()
+        
         var file = deviceFile
         if let path = file.path, let filename = file.filename, let localFilePath = file.localFilePath {
             
@@ -1167,6 +1170,7 @@ class DeviceCopyViewController: NSViewController {
             
             let repositoryFolderUrl = repositoryFileUrl.deletingLastPathComponent()
             do {
+                self.logger.log("Create editable directoy [\(repositoryFolderUrl)]")
                 try FileManager.default.createDirectory(at: repositoryFolderUrl, withIntermediateDirectories: true, attributes: nil)
             }catch{
                 logger.log("Error occured when trying to create folder \(repositoryFolderUrl.path)", error)
@@ -1221,10 +1225,9 @@ class DeviceCopyViewController: NSViewController {
                     guard !self.forceStop else {
                         break
                     }
-                    self.logger.log("updating \(deviceFile.fileId) from [\(repository.storageVolume)\(repository.storagePath)] to [\(repository.repositoryVolume)\(repository.repositoryPath)]")
+                    
                     self.updateDeviceFileIntoRepository(fileRecord: deviceFile,
-                                                        storageUrlWithSlash: "\(repository.storageVolume)\(repository.storagePath)".withLastStash(),
-                                                        repositoryPath: "\(repository.repositoryVolume)\(repository.repositoryPath)".withLastStash(),
+                                                        repository: repository,
                                                         fileHandler: computerFileHandler)
                     
                     DispatchQueue.main.async {

@@ -502,8 +502,6 @@ class ViewController: NSViewController {
         
         self.btnImageOptions.isEnabled = false
         collectionProgressIndicator.isDisplayedWhenStopped = false
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(processDatabaseError(notification:)), name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: nil)
     }
     
     @objc func changeTasksCount(notification:Notification) {

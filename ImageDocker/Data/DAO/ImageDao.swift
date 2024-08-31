@@ -94,6 +94,7 @@ public final class ImageRecordDao {
     /// - returns: A database record of Image if successfully creates, otherwise return nil
     /// - version: 2023.1.21
     /// - Tag: createImage(repositoryId)
+    // FIXME: repositoryVolume and repositoryPath should be delete
     func createImage(repositoryId:Int, containerId:Int, repositoryVolume:String, repositoryPath:String, subPath:String) -> Image? {
         return self.impl.createImage(repositoryId: repositoryId, containerId: containerId, repositoryVolume: repositoryVolume, repositoryPath: repositoryPath, subPath: subPath)
     }
@@ -187,6 +188,14 @@ public final class ImageRecordDao {
     /// - Tag: generateImageIdByContainerIdAndSubPath(containerId)
     func generateImageIdByContainerIdAndSubPath(containerId:Int, subPath:String) -> (ExecuteState, String) {
         return self.impl.generateImageIdByContainerIdAndSubPath(containerId: containerId, subPath: subPath)
+    }
+    
+    func generateImageIdByRepositoryIdAndSubPath(repositoryId:Int, subPath:String) -> (ExecuteState, String) {
+        return self.impl.generateImageIdByRepositoryIdAndSubPath(repositoryId: repositoryId, subPath: subPath)
+    }
+    
+    func updateImageMd5AndDeviceFileId(id:String, md5:String, deviceId:String, deviceFileId:String) -> ExecuteState {
+        return self.impl.updateImageMd5AndDeviceFileId(id: id, md5: md5, deviceId: deviceId, deviceFileId: deviceFileId)
     }
     
     // MARK: UPDATE DATE

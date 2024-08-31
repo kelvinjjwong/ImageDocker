@@ -148,6 +148,30 @@ class DeviceDaoPostgresCK : DeviceDaoInterface {
         }
     }
     
+    func updateDeviceFileWithImageId(importedImageId: String, repositoryId:Int, subPath:String) -> ExecuteState {
+        let db = PostgresConnection.database()
+        do {
+            try db.execute(sql: """
+        update "ImageDeviceFile" set "importedImageId" = $1 where "repositoryId" = $2 and "localFilePath" = $3
+        """, parameterValues: [importedImageId, repositoryId, subPath])
+        }catch{
+            self.logger.log(.error, "[updateDeviceFileWithImageId]", error)
+            return .ERROR
+        }
+        
+        return .OK
+    }
+    
+    func getDeviceFile(repositoryId:Int, localFilePath:String) -> ImageDeviceFile? {
+        let db = PostgresConnection.database()
+        do {
+            return try ImageDeviceFile.fetchOne(db, parameters: ["repositoryId" : repositoryId, "localFilePath": localFilePath])
+        }catch{
+            self.logger.log(.error, error)
+            return nil
+        }
+    }
+    
 //    func getDeviceFiles(deviceId: String, importToPath: String) -> [ImageDeviceFile] {
 //        let db = PostgresConnection.database()
 //        do {

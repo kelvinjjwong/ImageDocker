@@ -60,12 +60,20 @@ class DeviceDao {
         return self.impl.saveDeviceFile(file: file)
     }
     
+    func updateDeviceFileWithImageId(importedImageId: String, repositoryId:Int, subPath:String) -> ExecuteState {
+        return self.impl.updateDeviceFileWithImageId(importedImageId: importedImageId, repositoryId: repositoryId, subPath: subPath)
+    }
+    
     func deleteDeviceFiles(deviceId:String) -> ExecuteState{
         return self.impl.deleteDeviceFiles(deviceId: deviceId)
     }
     
     func getDeviceFiles(deviceId:String) -> [ImageDeviceFile] {
         return self.impl.getDeviceFiles(deviceId: deviceId)
+    }
+    
+    func getDeviceFile(repositoryId:Int, localFilePath:String) -> ImageDeviceFile? {
+        return self.impl.getDeviceFile(repositoryId: repositoryId, localFilePath: localFilePath)
     }
     
 //    func getDeviceFiles(deviceId:String, importToPath:String) -> [ImageDeviceFile] {

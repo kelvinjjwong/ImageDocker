@@ -267,7 +267,7 @@
                                 <color key="criticalFillColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                             </levelIndicator>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jz7-Ga-Rty">
-                                <rect key="frame" x="488" y="171" width="113" height="32"/>
+                                <rect key="frame" x="488" y="205" width="113" height="32"/>
                                 <buttonCell key="cell" type="push" title="Import" bezelStyle="rounded" image="goto" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="EeX-hI-hs1">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -277,7 +277,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6X6-bQ-2lv">
-                                <rect key="frame" x="488" y="136" width="113" height="32"/>
+                                <rect key="frame" x="488" y="132" width="113" height="32"/>
                                 <buttonCell key="cell" type="push" title="Extract" bezelStyle="rounded" image="select" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7bc-iT-Md5">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -287,7 +287,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6jr-zA-pBg">
-                                <rect key="frame" x="488" y="101" width="113" height="32"/>
+                                <rect key="frame" x="488" y="97" width="113" height="32"/>
                                 <buttonCell key="cell" type="push" title="Recognize" bezelStyle="rounded" image="airplane" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2jz-8i-Emq">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -297,7 +297,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2MN-mM-T5B">
-                                <rect key="frame" x="488" y="66" width="113" height="32"/>
+                                <rect key="frame" x="488" y="62" width="113" height="32"/>
                                 <buttonCell key="cell" type="push" title="Recognize" bezelStyle="rounded" image="person" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="s3U-f8-Qen">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -307,7 +307,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nVB-PS-ziH">
-                                <rect key="frame" x="488" y="17" width="113" height="32"/>
+                                <rect key="frame" x="488" y="13" width="113" height="32"/>
                                 <buttonCell key="cell" type="push" title="Stop" bezelStyle="rounded" image="NSStopProgressTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eCt-fK-UuO">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -358,12 +358,23 @@
                                 <color key="warningFillColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                 <color key="criticalFillColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                             </levelIndicator>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7tQ-FM-5aW">
+                                <rect key="frame" x="488" y="169" width="113" height="32"/>
+                                <buttonCell key="cell" type="push" title="Re-Scan" bezelStyle="rounded" image="goto" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tOH-fF-9cQ">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onReScanFoldersClicked:" target="-2" id="4Sp-xQ-LST"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="nVB-PS-ziH" firstAttribute="top" secondItem="2MN-mM-T5B" secondAttribute="bottom" constant="29" id="23R-Vd-Cbl"/>
                             <constraint firstItem="Inm-Ij-9ed" firstAttribute="top" secondItem="AhQ-eE-164" secondAttribute="bottom" constant="20" id="2Cj-XL-oer"/>
                             <constraint firstItem="MOD-kU-UE3" firstAttribute="leading" secondItem="Jix-bn-rAY" secondAttribute="trailing" constant="18" id="4L1-1s-lrr"/>
                             <constraint firstItem="SNj-eC-dnE" firstAttribute="top" secondItem="psC-dJ-iPI" secondAttribute="top" constant="20" id="4gP-W1-ttO"/>
+                            <constraint firstItem="7tQ-FM-5aW" firstAttribute="top" secondItem="jz7-Ga-Rty" secondAttribute="bottom" constant="16" id="5Nv-xK-amW"/>
                             <constraint firstItem="31P-Uc-FOg" firstAttribute="top" secondItem="oDl-Dt-xJI" secondAttribute="bottom" constant="3" id="6fy-T3-Bgx"/>
                             <constraint firstItem="2MN-mM-T5B" firstAttribute="top" secondItem="6jr-zA-pBg" secondAttribute="bottom" constant="15" id="90c-g9-Dio"/>
                             <constraint firstAttribute="trailing" secondItem="2MN-mM-T5B" secondAttribute="trailing" constant="20" id="9g0-03-4Ni"/>
@@ -376,6 +387,7 @@
                             <constraint firstItem="4Ba-Fh-UTT" firstAttribute="leading" secondItem="psC-dJ-iPI" secondAttribute="leading" constant="20" id="Em5-JF-luJ"/>
                             <constraint firstItem="YKH-th-PJE" firstAttribute="top" secondItem="wPr-zu-ajp" secondAttribute="bottom" constant="20" id="FAp-zg-yNH"/>
                             <constraint firstItem="cDv-6C-scu" firstAttribute="leading" secondItem="SNj-eC-dnE" secondAttribute="trailing" constant="5" id="Fkt-IM-yxC"/>
+                            <constraint firstAttribute="trailing" secondItem="7tQ-FM-5aW" secondAttribute="trailing" constant="20" id="FvJ-gF-43P"/>
                             <constraint firstItem="cDv-6C-scu" firstAttribute="top" secondItem="psC-dJ-iPI" secondAttribute="top" constant="20" id="HYe-vg-zBx"/>
                             <constraint firstItem="oDl-Dt-xJI" firstAttribute="top" secondItem="fmX-Zd-Dxf" secondAttribute="bottom" constant="30" id="ICD-Te-eWC"/>
                             <constraint firstItem="pOr-vf-DMn" firstAttribute="top" secondItem="AWw-ud-kub" secondAttribute="bottom" constant="20" id="IEG-on-BVt"/>
@@ -395,6 +407,7 @@
                             <constraint firstItem="pOr-vf-DMn" firstAttribute="leading" secondItem="F3c-LN-QcU" secondAttribute="trailing" constant="18" id="TrZ-dp-h5b"/>
                             <constraint firstItem="FtL-wp-N9A" firstAttribute="top" secondItem="MOD-kU-UE3" secondAttribute="bottom" constant="20" id="UKT-yV-F6f"/>
                             <constraint firstItem="AWw-ud-kub" firstAttribute="top" secondItem="e4Z-PX-eT7" secondAttribute="bottom" constant="20" id="Uq6-BW-rAI"/>
+                            <constraint firstItem="7tQ-FM-5aW" firstAttribute="leading" secondItem="pOr-vf-DMn" secondAttribute="trailing" constant="17" id="VnI-Xc-x8S"/>
                             <constraint firstItem="wPr-zu-ajp" firstAttribute="leading" secondItem="psC-dJ-iPI" secondAttribute="leading" constant="20" id="Zdq-Rs-YDW"/>
                             <constraint firstItem="6jr-zA-pBg" firstAttribute="top" secondItem="6X6-bQ-2lv" secondAttribute="bottom" constant="15" id="bhI-cu-bbj"/>
                             <constraint firstItem="nVB-PS-ziH" firstAttribute="leading" secondItem="oDl-Dt-xJI" secondAttribute="trailing" constant="19" id="cMl-WF-d3b"/>
@@ -403,11 +416,11 @@
                             <constraint firstItem="2MN-mM-T5B" firstAttribute="leading" secondItem="Hyw-v9-1B7" secondAttribute="trailing" constant="17" id="hVX-rZ-UAF"/>
                             <constraint firstItem="AhQ-eE-164" firstAttribute="top" secondItem="Jix-bn-rAY" secondAttribute="bottom" constant="20" id="hzG-0d-J0A"/>
                             <constraint firstAttribute="trailing" secondItem="jz7-Ga-Rty" secondAttribute="trailing" constant="20" id="jgY-dH-Wee"/>
-                            <constraint firstItem="6X6-bQ-2lv" firstAttribute="top" secondItem="jz7-Ga-Rty" secondAttribute="bottom" constant="15" id="kxf-jW-s7b"/>
                             <constraint firstItem="Jix-bn-rAY" firstAttribute="leading" secondItem="d8d-hV-tIX" secondAttribute="trailing" constant="5" id="lhu-6G-pns"/>
                             <constraint firstItem="Hyw-v9-1B7" firstAttribute="top" secondItem="FtL-wp-N9A" secondAttribute="bottom" constant="20" id="m3o-qd-WUK"/>
                             <constraint firstAttribute="trailing" secondItem="6jr-zA-pBg" secondAttribute="trailing" constant="20" id="nLR-4R-dKS"/>
                             <constraint firstItem="F3c-LN-QcU" firstAttribute="leading" secondItem="YKH-th-PJE" secondAttribute="trailing" constant="5" id="nhO-cm-SjL"/>
+                            <constraint firstItem="6X6-bQ-2lv" firstAttribute="top" secondItem="7tQ-FM-5aW" secondAttribute="bottom" constant="17" id="qc2-yU-PDI"/>
                             <constraint firstItem="d8d-hV-tIX" firstAttribute="leading" secondItem="psC-dJ-iPI" secondAttribute="leading" constant="20" id="s5X-bH-7O8"/>
                             <constraint firstItem="MOD-kU-UE3" firstAttribute="top" secondItem="pOr-vf-DMn" secondAttribute="bottom" constant="20" id="sfO-rH-qCk"/>
                             <constraint firstItem="31P-Uc-FOg" firstAttribute="leading" secondItem="psC-dJ-iPI" secondAttribute="leading" constant="20" id="tOx-kV-wa4"/>
@@ -417,7 +430,7 @@
                             <constraint firstItem="jXQ-lT-FsJ" firstAttribute="leading" secondItem="wPr-zu-ajp" secondAttribute="trailing" constant="5" id="wik-mQ-sZc"/>
                             <constraint firstItem="6X6-bQ-2lv" firstAttribute="leading" secondItem="MOD-kU-UE3" secondAttribute="trailing" constant="17" id="yV3-YY-ZeH"/>
                             <constraint firstItem="fmX-Zd-Dxf" firstAttribute="top" secondItem="4Ba-Fh-UTT" secondAttribute="bottom" constant="20" id="yto-GI-Sdq"/>
-                            <constraint firstItem="jz7-Ga-Rty" firstAttribute="top" secondItem="ecm-wc-htM" secondAttribute="bottom" constant="50" id="zoy-ea-fZN"/>
+                            <constraint firstItem="jz7-Ga-Rty" firstAttribute="top" secondItem="ecm-wc-htM" secondAttribute="bottom" constant="16" id="zoy-ea-fZN"/>
                         </constraints>
                     </view>
                 </box>
@@ -668,17 +681,6 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7tQ-FM-5aW">
-                    <rect key="frame" x="112" y="435" width="135" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="push" title="Re-Scan Folders" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tOH-fF-9cQ">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="onReScanFoldersClicked:" target="-2" id="4Sp-xQ-LST"/>
-                    </connections>
-                </button>
             </subviews>
             <point key="canvasLocation" x="552" y="259.5"/>
         </customView>

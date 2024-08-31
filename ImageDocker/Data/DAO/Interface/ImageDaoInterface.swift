@@ -52,6 +52,7 @@ protocol ImageRecordDaoInterface {
     /// - attention: so far we are still using String type *path* as primary key, in future we should use UUID *id* as primary key instead
     /// - returns: A database record of Image if successfully creates, otherwise return nil
     /// - version: 2023.1.21
+    // FIXME: repositoryVolume and repositoryPath should be delete
     func createImage(repositoryId:Int, containerId:Int, repositoryVolume:String, repositoryPath:String, subPath:String) -> Image?
     
     /// Get a database record of Image if exists, otherwise create a new database record for it
@@ -81,6 +82,10 @@ protocol ImageRecordDaoInterface {
     func generateImageIdByPath(repositoryVolume:String, repositoryPath:String, subPath:String) -> (ExecuteState, String)
     
     func generateImageIdByContainerIdAndSubPath(containerId:Int, subPath:String) -> (ExecuteState, String)
+    
+    func generateImageIdByRepositoryIdAndSubPath(repositoryId:Int, subPath:String) -> (ExecuteState, String)
+    
+    func updateImageMd5AndDeviceFileId(id:String, md5:String, deviceId:String, deviceFileId:String) -> ExecuteState
     
     /// - attention: will deprecate
     func updateImageWithContainerId(id:String, repositoryId:Int, containerId:Int) -> ExecuteState

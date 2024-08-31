@@ -176,8 +176,7 @@ extension String {
     }
     
     func parentPath() -> String {
-        let p = URL(fileURLWithPath: self.withFirstStash()).deletingLastPathComponent().path
-        return p.removeFirstStash()
+        return URL(fileURLWithPath: (self.withFirstStash().removeLastStash())).deletingLastPathComponent().path.removeFirstStash()
     }
     
     public func substring(from: Int, to: Int) -> String {

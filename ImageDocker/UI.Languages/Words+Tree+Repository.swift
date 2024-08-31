@@ -57,7 +57,7 @@ extension Words {
     
     static let library_tree_extracted_exif = Localize (
         eng: "Extracted EXIF:",
-        chs: "已提取EXIF的照片:"
+        chs: "已提取元数据的照片:"
     )
     
     static let library_tree_recognized_location = Localize (
@@ -125,9 +125,14 @@ extension Words {
         chs: "入库以编辑"
     )
     
+    static let library_tree_rescan = Localize (
+        eng: "Re-Scan",
+        chs: "再次入库"
+    )
+    
     static let library_tree_extract = Localize (
         eng: "Extract",
-        chs: "提取"
+        chs: "提取元数据"
     )
     
     static let library_tree_recognize = Localize (

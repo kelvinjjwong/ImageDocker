@@ -444,6 +444,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         }
     }
     
+    // FIXME: repositoryPath should be delete
     func createContainer(name: String, repositoryId: Int, parentId:Int, subPath: String, repositoryPath: String) -> ImageContainer? {
         let db = PostgresConnection.database()
         let container = ImageContainer()
@@ -579,6 +580,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
         }
     }
     
+    // FIXME: not accurate
     func findContainer(repositoryVolume:String, repositoryPath:String, subPath:String) -> ImageContainer? {
         let db = PostgresConnection.database()
         var subpath = subPath
@@ -973,7 +975,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 """, parameterValues: [repositoryId, containerId])
         }catch{
             self.logger.log(.error, error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "RepositoryDaoPostgresCK", name: "updateImageContainerWithRepositoryId", message: "\(error)")
             return .ERROR
         }
         return .OK
@@ -987,7 +989,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 """, parameterValues: [parentId, containerId])
         }catch{
             self.logger.log(.error, error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "RepositoryDaoPostgresCK", name: "updateImageContainerWithParentId", message: "\(error)")
             return .ERROR
         }
         return .OK
@@ -1001,7 +1003,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 """, parameterValues: [path, parentFolder])
         }catch{
             self.logger.log(.error, error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "RepositoryDaoPostgresCK", name: "updateImageContainerParentFolder", message: "\(error)")
             return .ERROR
         }
         return .OK
@@ -1015,7 +1017,7 @@ class RepositoryDaoPostgresCK : RepositoryDaoInterface {
                 """, parameterValues: [path])
         }catch{
             self.logger.log(.error, error)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ImageDB.NOTIFICATION_ERROR), object: error)
+            let _ = NotificationMessageManager.default.createNotificationMessage(type: "RepositoryDaoPostgresCK", name: "updateImageContainerHideByParent", message: "\(error)")
             return .ERROR
         }
         return .OK
