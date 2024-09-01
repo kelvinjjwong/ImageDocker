@@ -438,7 +438,7 @@ class RepositoryDetailViewController: NSViewController {
                                         indicator: self.indProgress,
                                         suspended: true,
                                         lblMessage: self.lblMessage,
-                                        presetAddingMessage: Words.searchingImagesForEXIF.word(),
+                                        presetAddingMessage: Words.searchingImagesForEXIF.word(), // progress indicate 1 (RepositoryDetailViewController - Accumulator(target: 2)
                                         onCompleted: { data in
                                             self.logger.log("====== COMPLETED SCAN single REPO for EXIF \(repository.name)")
                                             self.toggleButtons(true)

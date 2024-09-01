@@ -25,13 +25,14 @@ extension ImageFolderTreeScanner {
         
         self.logger.log("continue load exif")
         
-        if indicator != nil {
-            DispatchQueue.main.async {
-                let _ = indicator?.add(Words.progress_meta_scan_loading_rules.word())
-            }
-        }
+        // progress indicate 3 - (RepositoryDetailViewController - Accumulator(target: 2)
+//        if indicator != nil {
+//            DispatchQueue.main.async {
+//                let _ = indicator?.add(Words.progress_meta_scan_loading_rules.word())
+//            }
+//        }
         
-        TaskletManager.default.updateProgress(id: taskId, message: Words.progress_meta_scan_loading_rules.word(), increase: false)
+//        TaskletManager.default.updateProgress(id: taskId, message: Words.progress_meta_scan_loading_rules.word(), increase: false)
         
         let excludedContainerPaths = DeviceDao.default.getExcludedImportedContainerPaths(withStash: true)
         
@@ -40,7 +41,7 @@ extension ImageFolderTreeScanner {
         let photoCount = images.count
         
         if photoCount > 0 {
-            self.logger.log("UPDATING EXIF: \(images.count)")
+            self.logger.log("Total \(images.count) images need to UPDATING EXIF")
             if indicator != nil {
                 indicator?.setTarget(photoCount)
             }
@@ -108,6 +109,7 @@ extension ImageFolderTreeScanner {
                 let _ = indicator?.add(Words.exif_scan_loading_images.word())
             }
         }
+        // progress indicate 2 - (RepositoryDetailViewController - Accumulator(target: 2)
         TaskletManager.default.updateProgress(id: taskId, message: Words.exif_scan_loading_images.word(), increase: false)
         let images = ImageSearchDao.default.getImagesWithoutExif(repositoryId: repository.id)
         self.logger.log("PHOTOS WITHOUT EXIF: \(images.count) - repository id:\(repository.id)")
