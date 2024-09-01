@@ -37,6 +37,8 @@ final class LocalEnvironmentSetupController: NSViewController {
     @IBOutlet weak var lblAdbMessage: NSTextField!
     @IBOutlet weak var btnBrowseAdbPath: NSButton!
     @IBOutlet weak var lblAdbInstruction: NSTextField!
+    @IBOutlet weak var btnAdbCheckVersion: NSButton!
+    @IBOutlet weak var btnAdbDownload: NSButton!
     
     @IBOutlet weak var txtIOSMountPoint: NSTextField!
     @IBOutlet weak var txtIfusePath: NSTextField!
@@ -107,6 +109,139 @@ final class LocalEnvironmentSetupController: NSViewController {
             }
         }
     }
+    
+    @IBAction func onAdbCheckVersionClicked(_ sender: NSButton) {
+        self.checkAdbVersion()
+    }
+    
+    func checkAdbVersion() {
+        let path = Setting.localEnvironment.adbPath().trimmingCharacters(in: .whitespacesAndNewlines)
+        if path == "" || !path.isFileExists() {
+            self.lblAdbMessage.stringValue = "ERROR: adb file is invalid, please download again."
+            return
+        }
+        DispatchQueue.global().async {
+            
+            let pipe = Pipe()
+            let pipe2 = Pipe()
+            
+            autoreleasepool { () -> Void in
+                let exiftool = Process()
+                exiftool.standardOutput = pipe
+                exiftool.standardError = pipe2
+                exiftool.launchPath = "/bin/bash"
+                exiftool.arguments = ["-c", "\(path) --version | head -2 | tr '\n' ',' | awk -v FILEDATE=`date -r \(path) -I` -F',' '{print $1\", \"$2\", \" FILEDATE}'"]
+                exiftool.launch()
+                exiftool.waitUntilExit()
+            }
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            let string:String = String(data: data, encoding: String.Encoding.utf8)!
+            pipe.fileHandleForReading.closeFile()
+            
+            let data2 = pipe2.fileHandleForReading.readDataToEndOfFile()
+            let string2:String = String(data: data2, encoding: String.Encoding.utf8)!
+            pipe2.fileHandleForReading.closeFile()
+            
+            print(string)
+            print(string2)
+            
+            if string.contains(find: "Android Debug Bridge version") {
+                DispatchQueue.main.async {
+                    self.lblAdbMessage.stringValue = string
+                }
+            }else{
+                
+                if string2.contains(find: "No such file or directory") {
+                    DispatchQueue.main.async {
+                        self.lblAdbMessage.stringValue = "ERROR: adb file is invalid, please download again."
+                    }
+                }else{
+                    DispatchQueue.main.async {
+                        self.lblAdbMessage.stringValue = "ERROR: \(string2)"
+                    }
+                }
+            }
+            
+        }
+    }
+    
+    @IBAction func onAdbDownloadClicked(_ sender: NSButton) {
+        let url = "https://dl.google.com/android/repository/platform-tools-latest-darwin.zip"
+        
+        self.lblAdbMessage.stringValue = "Downloading platform-tools-latest-darwin.zip ..."
+        self.btnAdbDownload.isEnabled = false
+        self.btnAdbCheckVersion.isEnabled = false
+        self.btnBrowseAdbPath.isEnabled = false
+        
+        DispatchQueue.global().async {
+            let destinationPath = URL(fileURLWithPath: Setting.tools.toolsPath()).appending(component: "adb").path
+            
+            do {
+                try FileManager.default.createDirectory(atPath: destinationPath, withIntermediateDirectories: true)
+            }catch{
+                self.logger.log(.error, "Unable to create folder for exiftool at \(destinationPath)", error)
+                DispatchQueue.main.async {
+                    self.lblAdbMessage.stringValue = "ERROR: Unable to create directory for adb at: \(destinationPath)"
+                    self.btnAdbDownload.isEnabled = true
+                    self.btnAdbCheckVersion.isEnabled = true
+                    self.btnBrowseAdbPath.isEnabled = true
+                }
+                return
+            }
+            
+            self.downloadFileCompletionHandler(urlstring: url, destinationPath: destinationPath, deleteIfExist: true) {(destinationUrl, error) in
+                if let dest = destinationUrl {
+                    self.logger.log("Downloaded adb to: \(dest)")
+                    if dest.path != "" && dest.path.isFileExists() {
+                        let filePath = dest.path
+                        
+                        let filename = URL(fileURLWithPath: filePath).lastPathComponent
+                        let folder = URL(fileURLWithPath: filePath).deletingLastPathComponent().path.replacingFirstOccurrence(of: "file://", with: "")
+                        
+                        let pipe = Pipe()
+                        let pipe2 = Pipe()
+                        
+                        autoreleasepool { () -> Void in
+                            let cmd = Process()
+                            cmd.standardOutput = pipe
+                            cmd.standardError = pipe2
+                            cmd.launchPath = "/bin/bash"
+                            cmd.arguments = ["-c", "cd \(folder);unzip -o \(filename); rm -f current; ln -s platform-tools current;"]
+                            cmd.launch()
+                            cmd.waitUntilExit()
+                        }
+                        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+                        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+                        pipe.fileHandleForReading.closeFile()
+                        
+                        let data2 = pipe2.fileHandleForReading.readDataToEndOfFile()
+                        let string2:String = String(data: data2, encoding: String.Encoding.utf8)!
+                        pipe2.fileHandleForReading.closeFile()
+                        
+                        print(string)
+                        print(string2)
+                        print("finished unzip adb")
+                        
+                        DispatchQueue.main.async {
+                            self.lblAdbMessage.stringValue = "Downloaded \(filename)"
+                            self.txtAdbPath.stringValue = "\(destinationPath.removeLastStash())/current/adb"
+                            self.btnAdbDownload.isEnabled = true
+                            self.btnAdbCheckVersion.isEnabled = true
+                            self.btnBrowseAdbPath.isEnabled = true
+                        }
+                    }
+                } else {
+                    self.logger.log(.error, "adb folder is invalid")
+                    
+                    DispatchQueue.main.async {
+                        self.lblAdbMessage.stringValue = "ERROR: failed to download adb"
+                    }
+                }
+              
+            }
+        }
+    }
+    
     
     @IBAction func onBrowseIOSMountPointClicked(_ sender: Any) {
         let openPanel = NSOpenPanel()
@@ -201,7 +336,7 @@ final class LocalEnvironmentSetupController: NSViewController {
             return
         }
         let filename = url.lastPartOfUrl()
-        self.lblExifToolMessage.stringValue = "Downloading \(filename)"
+        self.lblExifToolMessage.stringValue = "Downloading \(filename) ..."
         
         DispatchQueue.global().async {
             let destinationPath = URL(fileURLWithPath: Setting.tools.toolsPath()).appending(component: "exiftool").path
@@ -210,6 +345,7 @@ final class LocalEnvironmentSetupController: NSViewController {
                 try FileManager.default.createDirectory(atPath: destinationPath, withIntermediateDirectories: true)
             }catch{
                 self.logger.log(.error, "Unable to create folder for exiftool at \(destinationPath)", error)
+                self.lblExifToolMessage.stringValue = "ERROR: Unable to create folder for exiftool at \(destinationPath)"
                 return
             }
             
@@ -224,7 +360,10 @@ final class LocalEnvironmentSetupController: NSViewController {
                         }
                     }
                 } else {
-                    self.logger.log(.error, error)
+                    self.logger.log(.error, "exiftool folder is invalid")
+                    DispatchQueue.main.async {
+                        self.lblExifToolMessage.stringValue = "ERROR: failed to download exiftool"
+                    }
                 }
               
             }
@@ -324,6 +463,10 @@ final class LocalEnvironmentSetupController: NSViewController {
         txtIfusePath.stringValue = Setting.localEnvironment.ifusePath()
         txtIdeviceIdPath.stringValue = Setting.localEnvironment.ideviceidPath()
         txtIdeviceInfoPath.stringValue = Setting.localEnvironment.ideviceinfoPath()
+        
+        self.txtAdbPath.isEnabled = false
+        
+        self.checkAdbVersion()
     }
     
     func initExifToolSection() {

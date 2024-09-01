@@ -321,9 +321,9 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BFr-1B-qMw">
-                                                                <rect key="frame" x="199" y="93" width="397" height="21"/>
+                                                                <rect key="frame" x="20" y="93" width="570" height="21"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" constant="397" id="w0N-7U-8Oj"/>
+                                                                    <constraint firstAttribute="width" constant="570" id="w0N-7U-8Oj"/>
                                                                 </constraints>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="DcA-2D-ZiD">
                                                                     <font key="font" metaFont="system"/>
@@ -332,7 +332,7 @@
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gOr-WF-zoy">
-                                                                <rect key="frame" x="18" y="95" width="175" height="16"/>
+                                                                <rect key="frame" x="18" y="113" width="175" height="16"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Android Debug Bridge (adb)" id="uDk-sa-eve">
                                                                     <font key="font" metaFont="system"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -340,47 +340,85 @@
                                                                 </textFieldCell>
                                                             </textField>
                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MN6-dk-U0x">
-                                                                <rect key="frame" x="597" y="85" width="81" height="32"/>
+                                                                <rect key="frame" x="591" y="85" width="94" height="32"/>
                                                                 <buttonCell key="cell" type="push" title="Browse" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="XMX-c9-Uvv">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="80" id="Veh-Pa-ZFI"/>
+                                                                </constraints>
                                                                 <connections>
                                                                     <action selector="onLocateAdbClicked:" target="Cb1-tO-IZ5" id="yjT-ai-L3R"/>
                                                                 </connections>
                                                             </button>
                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="H5e-Vd-V29">
-                                                                <rect key="frame" x="199" y="69" width="394" height="16"/>
+                                                                <rect key="frame" x="18" y="69" width="577" height="16"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="573" id="G0I-es-1jl"/>
+                                                                </constraints>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" id="v4A-26-daU">
                                                                     <font key="font" metaFont="system"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gzy-cs-vlb">
-                                                                <rect key="frame" x="20" y="8" width="578" height="59"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YIJ-Bg-2VY">
+                                                                <rect key="frame" x="591" y="59" width="94" height="32"/>
+                                                                <buttonCell key="cell" type="push" title="Check Ver" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="y8g-IQ-lxI">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="80" id="aBe-36-Q5s"/>
+                                                                </constraints>
+                                                                <connections>
+                                                                    <action selector="onAdbCheckVersionClicked:" target="Cb1-tO-IZ5" id="C1g-aQ-DiP"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xD3-z8-Vcy">
+                                                                <rect key="frame" x="591" y="32" width="94" height="32"/>
+                                                                <buttonCell key="cell" type="push" title="Download" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jaj-Pu-TaA">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="80" id="yRD-pf-KNC"/>
+                                                                </constraints>
+                                                                <connections>
+                                                                    <action selector="onAdbDownloadClicked:" target="Cb1-tO-IZ5" id="iKR-Et-mPo"/>
+                                                                </connections>
+                                                            </button>
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gzy-cs-vlb">
+                                                                <rect key="frame" x="18" y="14" width="466" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="462" id="ESW-aX-cEg"/>
+                                                                    <constraint firstAttribute="height" constant="40" id="xGp-bl-Tb6"/>
+                                                                </constraints>
                                                                 <textFieldCell key="cell" selectable="YES" id="sPK-fQ-Anz">
                                                                     <font key="font" metaFont="system"/>
                                                                     <string key="title">You can download ADB from:
-https://developer.android.com/studio/releases/platform-tools#downloads
-https://dl.google.com/android/repository/platform-tools_r33.0.3-darwin.zip</string>
+https://dl.google.com/android/repository/platform-tools-latest-darwin.zip</string>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
                                                         </subviews>
                                                         <constraints>
+                                                            <constraint firstItem="xD3-z8-Vcy" firstAttribute="leading" secondItem="Gzy-cs-vlb" secondAttribute="trailing" constant="116" id="4ej-Ue-zR5"/>
+                                                            <constraint firstItem="YIJ-Bg-2VY" firstAttribute="top" secondItem="BFr-1B-qMw" secondAttribute="bottom" constant="7" id="6Tc-zI-taY"/>
                                                             <constraint firstItem="MN6-dk-U0x" firstAttribute="top" secondItem="1QW-Cy-v0S" secondAttribute="top" constant="22" id="92D-t6-Mdz"/>
+                                                            <constraint firstItem="Gzy-cs-vlb" firstAttribute="top" secondItem="H5e-Vd-V29" secondAttribute="bottom" constant="15" id="AP1-Xb-H2C"/>
                                                             <constraint firstItem="MN6-dk-U0x" firstAttribute="leading" secondItem="BFr-1B-qMw" secondAttribute="trailing" constant="8" symbolic="YES" id="DtK-vj-mQz"/>
-                                                            <constraint firstItem="H5e-Vd-V29" firstAttribute="leading" secondItem="1QW-Cy-v0S" secondAttribute="leading" constant="201" id="M44-9C-rdl"/>
+                                                            <constraint firstItem="BFr-1B-qMw" firstAttribute="leading" secondItem="1QW-Cy-v0S" secondAttribute="leading" constant="20" id="KY0-2l-sqb"/>
+                                                            <constraint firstItem="H5e-Vd-V29" firstAttribute="leading" secondItem="1QW-Cy-v0S" secondAttribute="leading" constant="20" id="M44-9C-rdl"/>
                                                             <constraint firstItem="BFr-1B-qMw" firstAttribute="top" secondItem="1QW-Cy-v0S" secondAttribute="top" constant="20" symbolic="YES" id="M7J-bx-soZ"/>
+                                                            <constraint firstItem="YIJ-Bg-2VY" firstAttribute="leading" secondItem="H5e-Vd-V29" secondAttribute="trailing" constant="5" id="TQo-oU-3kr"/>
+                                                            <constraint firstItem="xD3-z8-Vcy" firstAttribute="top" secondItem="YIJ-Bg-2VY" secondAttribute="bottom" constant="7" id="VSX-Rn-gyD"/>
                                                             <constraint firstItem="gOr-WF-zoy" firstAttribute="leading" secondItem="1QW-Cy-v0S" secondAttribute="leading" constant="20" symbolic="YES" id="W2A-zY-hW0"/>
-                                                            <constraint firstItem="gOr-WF-zoy" firstAttribute="top" secondItem="1QW-Cy-v0S" secondAttribute="top" constant="23" id="Z0J-pE-i59"/>
-                                                            <constraint firstItem="BFr-1B-qMw" firstAttribute="leading" secondItem="gOr-WF-zoy" secondAttribute="trailing" constant="8" symbolic="YES" id="Zg7-k4-Sy7"/>
-                                                            <constraint firstAttribute="trailing" secondItem="MN6-dk-U0x" secondAttribute="trailing" constant="20" symbolic="YES" id="avl-rD-8nP"/>
+                                                            <constraint firstItem="gOr-WF-zoy" firstAttribute="top" secondItem="1QW-Cy-v0S" secondAttribute="top" constant="5" id="Z0J-pE-i59"/>
                                                             <constraint firstItem="H5e-Vd-V29" firstAttribute="top" secondItem="BFr-1B-qMw" secondAttribute="bottom" constant="8" symbolic="YES" id="cWJ-6w-Be2"/>
-                                                            <constraint firstAttribute="trailing" secondItem="H5e-Vd-V29" secondAttribute="trailing" constant="100" id="j2w-ix-eBI"/>
+                                                            <constraint firstItem="Gzy-cs-vlb" firstAttribute="leading" secondItem="1QW-Cy-v0S" secondAttribute="leading" constant="20" symbolic="YES" id="mvp-iL-NNM"/>
                                                         </constraints>
                                                     </view>
                                                     <constraints>
@@ -803,6 +841,8 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <outlet property="boxAndroid" destination="c1e-hX-ICd" id="tnJ-gf-swM"/>
                         <outlet property="boxExifTool" destination="AeA-rk-PDU" id="x2R-ea-bed"/>
                         <outlet property="boxIOS" destination="2Uq-Lb-XDw" id="gvS-5J-N50"/>
+                        <outlet property="btnAdbCheckVersion" destination="YIJ-Bg-2VY" id="fEC-hk-E4F"/>
+                        <outlet property="btnAdbDownload" destination="xD3-z8-Vcy" id="Q5C-LQ-jd3"/>
                         <outlet property="btnAddLocalMountPoint" destination="5lJ-00-d1d" id="88W-KX-XJB"/>
                         <outlet property="btnApply" destination="N2K-yd-uki" id="VGR-dG-82J"/>
                         <outlet property="btnBrowseAdbPath" destination="MN6-dk-U0x" id="FxP-q6-lxj"/>
