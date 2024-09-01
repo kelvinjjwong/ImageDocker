@@ -169,7 +169,7 @@ class ImageFile {
     func save() -> ExecuteState{
         if self.imageData != nil {
             self.logger.log(.trace, "[ImageFile.save] - save image record - \(self.imageData?.path ?? "")")
-            return ImageRecordDao.default.saveImage(image: self.imageData!)
+            return ImageRecordDao.default.saveImage(image: self.imageData!)// FIXME: try to simplify - only update necessary (changed) fields
         }else{
             return .NO_RECORD
         }
@@ -181,7 +181,9 @@ class ImageFile {
     
     var repositoryId:Int? = nil
     var repositoryVolume:String? = nil
+    var repositoryPath:String? = nil
     var rawVolume:String? = nil
+    var rawPath:String? = nil
     
     // READ FROM DATABASE
     /// - Tag: ImageFile.init(image)
@@ -189,19 +191,41 @@ class ImageFile {
         exifDateFormat.dateFormat = "yyyy:MM:dd HH:mm:ss"
         exifDateFormatWithTimezone.dateFormat = "yyyy:MM:dd HH:mm:ssxxx"
         
-        self.repositoryId = repositoryId
-        self.repositoryVolume = repositoryVolume
-        self.rawVolume = rawVolume
+        self.repositoryId = image.repositoryId
+        if let repository = RepositoryDao.default.getRepository(id: self.repositoryId ?? 0) { // FIXME: cache this
+            self.repositoryVolume = repository.repositoryVolume
+            self.rawVolume = repository.storageVolume
+            self.repositoryPath = repository.repositoryPath
+            self.rawPath = repository.storagePath
+            
+            let imagePath = "\(repository.repositoryVolume.removeLastStash())\(repository.repositoryPath.withLastStash())\(image.subPath)"
+            self.logger.log("image full path: \(imagePath)")
+            
+            self.url = URL(fileURLWithPath: imagePath)
+            
+            self.logger.log("Loaded ImageFile url: \(self.url)")
+        }else{
+            self.logger.log(.error, "Unable to load ImageRepository for Image.id:\(image.id) with repositoryId:\(image.repositoryId), subPath:\(image.subPath)")
+            self.url = URL(fileURLWithPath: image.path)
+            self.logger.log("URL using image.path: \(image.path)")
+        }
+        
+        self.logger.log("repositoryId:\(self.repositoryId), repositoryVolume:\(self.repositoryVolume), rawVolume:\(self.rawVolume)")
         
         self.indicator = indicator
         
-        if let repositoryVolume = repositoryVolume {
-            let (_, path) = image.path.getVolumeFromThisPath()
-            let fullPath = "\(repositoryVolume)\(path)"
-            self.url = URL(fileURLWithPath: fullPath)
-        }else{
-            self.url = URL(fileURLWithPath: image.path)
-        }
+//        if let repositoryVolume = repositoryVolume {
+//            let (_, path) = image.path.getVolumeFromThisPath()
+//            self.logger.log("Divided path: \(path)")
+//            let fullPath = "\(repositoryVolume)\(path)"
+//            self.url = URL(fileURLWithPath: fullPath)
+//            self.logger.log("fullPath: \(fullPath)")
+//        }else{
+//            self.url = URL(fileURLWithPath: image.path)
+//            self.logger.log("using image.path: \(image.path)")
+//        }
+        
+        
         self.fileName = image.filename
         self.location = Location()
         
@@ -277,7 +301,7 @@ class ImageFile {
                         autoreleasepool { () -> Void in
                             let startTime_loadMetaInfo = Date()
                             self.loadMetaInfoFromOSX()
-                            self.loadMetaInfoFromExif()
+//                            self.loadMetaInfoFromExif() // FIXME: maybe not work
                             
                             self.logger.log(.trace, "[ImageFile.init from database] needSave set to true due to updateExifDate is nil and datetime is nil and called loadMetaInfoFromExif()")
                             needSave = true
@@ -292,7 +316,7 @@ class ImageFile {
             autoreleasepool { () -> Void in
                 let startTime_loadMetaInfo = Date()
                 self.loadMetaInfoFromOSX()
-                self.loadMetaInfoFromExif()
+//                self.loadMetaInfoFromExif() // FIXME: maybe not work
                 
                 self.logger.log(.trace, "[ImageFile.init from database] needSave set to true due to forceReloadExif is true and called loadMetaInfoFromExif()")
                 needSave = true
@@ -333,7 +357,7 @@ class ImageFile {
 //        }
         
         self.logger.log(.trace, "[ImageFile.init from database] forceReloadExif=\(forceReloadExif), needSave=\(needSave)")
-        if needSave || forceReloadExif {
+        if needSave || forceReloadExif { // FIXME: try to simplify
             self.logger.log(.trace, "[ImageFile.init from database] save image record - \(self.imageData?.path ?? "")")
             let _ = save()
         }

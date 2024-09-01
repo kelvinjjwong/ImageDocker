@@ -425,6 +425,10 @@ class ImageSearchDao {
         return self.impl.getPhotoFilesWithoutExif(repositoryPath: repositoryPath, limit: limit)
     }
     
+    func getImagesWithoutExif(repositoryId:Int, limit:Int? = nil) -> [Image] {
+        return self.impl.getImagesWithoutExif(repositoryId: repositoryId, limit: limit)
+    }
+    
     // MARK: QUERY BY LOCATION
     
     /// - caller:

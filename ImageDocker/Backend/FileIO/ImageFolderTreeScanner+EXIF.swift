@@ -10,7 +10,7 @@ import Foundation
 
 extension ImageFolderTreeScanner {
     
-    
+    // 3  (from RepositoryDetailView dialog)
     func scanPhotosToLoadExif(images:[Image], taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil) {
 //        if suppressedScan {
 //            if indicator != nil {
@@ -73,7 +73,7 @@ extension ImageFolderTreeScanner {
                     }
                 }
                 if !exclude {
-                    let _ = ImageFile(image: photo, indicator: indicator, forceReloadExif: true)
+                    let _ = ImageFile(image: photo, indicator: indicator, forceReloadExif: true) // FIXME: try to simplify
                 }else{
                     if indicator != nil {
                         DispatchQueue.main.async {
@@ -101,15 +101,16 @@ extension ImageFolderTreeScanner {
         }
     }
     
-    func scanPhotosToLoadExif(repository:ImageContainer, taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil)  {
+    // 2  (from RepositoryDetailView dialog)
+    func scanPhotosToLoadExif(repository:ImageRepository, taskId:String = "", indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil)  {
         if indicator != nil {
             DispatchQueue.main.async {
                 let _ = indicator?.add(Words.exif_scan_loading_images.word())
             }
         }
         TaskletManager.default.updateProgress(id: taskId, message: Words.exif_scan_loading_images.word(), increase: false)
-        let images = ImageSearchDao.default.getPhotoFilesWithoutExif(repositoryPath: repository.repositoryPath)
-        self.logger.log("PHOTOS WITHOUT EXIF: \(images.count) - \(repository.name)")
+        let images = ImageSearchDao.default.getImagesWithoutExif(repositoryId: repository.id)
+        self.logger.log("PHOTOS WITHOUT EXIF: \(images.count) - repository id:\(repository.id)")
         self.scanPhotosToLoadExif(images: images, taskId: taskId, indicator: indicator, onCompleted: onCompleted)
     }
     
@@ -125,7 +126,8 @@ extension ImageFolderTreeScanner {
         self.scanPhotosToLoadExif(images: images, taskId: taskId, indicator: indicator, onCompleted: onCompleted)
     }
     
-    func scanPhotosToLoadExif_asTask(repository:ImageContainer, indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil) {
+    // 1  (from RepositoryDetailView dialog)
+    func scanPhotosToLoadExif_asTask(repository:ImageRepository, indicator:Accumulator? = nil, onCompleted: (() -> Void)? = nil) {
         let _ = TaskletManager.default.createAndStartTask(type: "EXIF", name: repository.name
         , exec: { task in
             DispatchQueue.global().async {

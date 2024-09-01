@@ -1171,6 +1171,20 @@ order by "date"
         }
     }
     
+    func getImagesWithoutExif(repositoryId:Int, limit:Int?) -> [Image] {
+        let db = PostgresConnection.database()
+        do {
+            return try Image.fetchAll(db, where: """
+            "repositoryId"=\(repositoryId) and hidden != true AND ("updateExifDate" is null OR "photoTakenYear" is null OR "photoTakenYear" = 0 OR latitude is null or (latitude <> '0.0' AND "latitudeBD" = '0.0') OR ("latitudeBD" <> '0.0' AND country = ''))
+            """, orderBy: """
+            "photoTakenDate", filename
+            """)
+        }catch{
+            self.logger.log(.error, error)
+            return []
+        }
+    }
+    
     /// "repositoryPath"='\(repositoryPath)' and hidden != true AND "cameraMaker" is null and ("lastTimeExtractExif" = 0 or "updateExifDate" is null OR "photoTakenYear" is null OR "photoTakenYear" = 0 OR (latitude <> '0.0' AND "latitudeBD" = '0.0') OR ("latitudeBD" <> '0.0' AND country = ''))
     ///
     ///

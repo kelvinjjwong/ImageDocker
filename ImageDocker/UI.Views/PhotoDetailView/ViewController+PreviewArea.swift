@@ -302,7 +302,7 @@ extension ViewController {
     
     internal func loadImageExif(_ force:Bool = false) {
         img.loadMetaInfoFromDatabase()
-        img.loadMetaInfoFromExif(force)
+//        img.loadMetaInfoFromExif(force)
         img.metaInfoHolder.sort(by: MetaCategorySequence)
         self.metaInfoTableView.reloadData()
     }

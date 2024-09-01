@@ -62,6 +62,7 @@
 		8E27F04125DC0291003B585F /* ImageMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E27F03F25DC0291003B585F /* ImageMapView.swift */; };
 		8E27F04225DC0291003B585F /* ImageMapView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E27F04025DC0291003B585F /* ImageMapView.xib */; };
 		8E27F2A5259DD79C003D48BE /* TreeOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E27F2A4259DD79C003D48BE /* TreeOutlineView.swift */; };
+		8E2F7AB72C83FFB500ED9DC9 /* IPLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E2F7AB62C83FFB500ED9DC9 /* IPLocation.swift */; };
 		8E3614FD2AC5933B001DF482 /* Words+People.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3614FC2AC5933B001DF482 /* Words+People.swift */; };
 		8E36B067217920B400646EA5 /* MonthListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E36B066217920B400646EA5 /* MonthListController.swift */; };
 		8E36B069217920C000646EA5 /* DayListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E36B068217920C000646EA5 /* DayListController.swift */; };
@@ -431,6 +432,7 @@
 		8E27F04025DC0291003B585F /* ImageMapView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageMapView.xib; sourceTree = "<group>"; };
 		8E27F2A4259DD79C003D48BE /* TreeOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeOutlineView.swift; sourceTree = "<group>"; };
 		8E2CF36F20AED2FE00A93375 /* CollectionView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CollectionView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E2F7AB62C83FFB500ED9DC9 /* IPLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPLocation.swift; sourceTree = "<group>"; };
 		8E3614FC2AC5933B001DF482 /* Words+People.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Words+People.swift"; sourceTree = "<group>"; };
 		8E36B066217920B400646EA5 /* MonthListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthListController.swift; sourceTree = "<group>"; };
 		8E36B068217920C000646EA5 /* DayListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayListController.swift; sourceTree = "<group>"; };
@@ -1589,6 +1591,7 @@
 				8E7F70FF2091F14200410C45 /* BaiduLocation.swift */,
 				8EA1A05C208DD78D000C3B97 /* CoordinateConverter.swift */,
 				8E06AAFB20EEFFAD000A40C9 /* GoogleLocation.swift */,
+				8E2F7AB62C83FFB500ED9DC9 /* IPLocation.swift */,
 			);
 			path = Location;
 			sourceTree = "<group>";
@@ -1969,6 +1972,7 @@
 				8E5D257E25A200FB00D531A7 /* URL+Image.swift in Sources */,
 				8EB2719D23412FD5003BF3AF /* ViewController+Menu+Scan.swift in Sources */,
 				8E36B067217920B400646EA5 /* MonthListController.swift in Sources */,
+				8E2F7AB72C83FFB500ED9DC9 /* IPLocation.swift in Sources */,
 				8EFA02F1243B3EDF00D7C355 /* PostgresClientKit+ExportProfile.swift in Sources */,
 				8EF8C558265D9B770060D2E0 /* ImageMetaViewController.swift in Sources */,
 				8E48148F277DF62E0097493E /* Words+Tree+Repository.swift in Sources */,

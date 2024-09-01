@@ -131,6 +131,9 @@ class DeviceTreeDataSource : TreeDataSource {
                         message: Words.notification_which_volume_missing.fill(arguments: "\(volumes_change_to_be_disconnected)")
                     )
                 }
+                
+                let ip = IPLocation.get()
+                print(ip)
             }
         })
         

@@ -432,7 +432,7 @@ class RepositoryDetailViewController: NSViewController {
     }
     
     @IBAction func onExifClicked(_ sender: NSButton) {
-        if let repository = RepositoryDao.default.getRepository(repositoryPath: self._repositoryPath) {
+        if let repository = RepositoryDao.default.getRepository(id: self._repositoryId) {
             self.toggleButtons(false)
             let indicator = Accumulator(target: 2,
                                         indicator: self.indProgress,

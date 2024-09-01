@@ -169,6 +169,8 @@ protocol ImageSearchDaoInterface {
     
     func getPhotoFilesWithoutExif(repositoryPath:String, limit:Int?) -> [Image]
     
+    func getImagesWithoutExif(repositoryId:Int, limit:Int?) -> [Image]
+    
     // MARK: - LOCATION
     
     func getPhotoFilesWithoutLocation(repositoryPath:String) -> [Image]

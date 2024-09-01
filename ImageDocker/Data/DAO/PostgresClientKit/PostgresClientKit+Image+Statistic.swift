@@ -102,7 +102,7 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         let db = PostgresConnection.database()
         do {
             return try Image.count(db, where: """
-            "exifCreateDate" is not null and "repositoryId"=$1
+            "repositoryId"=$1 and "photoTakenDate" is not null and "photoTakenYear" is not null and "photoTakenMonth" is not null and "photoTakenDay" is not null and "photoTakenYear" <> 0 and "photoTakenMonth" <> 0 and "photoTakenDay" <> 0
             """, parameters:[repositoryId])
         }catch{
             self.logger.log(.error, error)
@@ -114,7 +114,7 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         let db = PostgresConnection.database()
         do{
             return try Image.count(db, where: """
-            ("address" is not null or "assignAddress" is not null) and "repositoryPath"=$1
+            "repositoryPath"=$1 and "longitude" is not null and "longitudeBD" is not null and "latitude" is not null and "latitudeBD" is not null and (("country" is not null and "city" is not null and "address" is not null) or ("assignAddress" is not null and "assignCountry" is not null and "assignCity" is not null))
             """, parameters:[repositoryPath])
         }catch{
             self.logger.log(.error, error)
@@ -126,7 +126,7 @@ class ImageCountDaoPostgresCK : ImageCountDaoInterface {
         let db = PostgresConnection.database()
         do {
             return try Image.count(db, where: """
-            ("address" is not null or "assignAddress" is not null) and "repositoryId"=$1
+            "repositoryId"=$1 and "longitude" is not null and "longitudeBD" is not null and "latitude" is not null and "latitudeBD" is not null and (("country" is not null and "city" is not null and "address" is not null) or ("assignAddress" is not null and "assignCountry" is not null and "assignCity" is not null))
             """, parameters:[repositoryId])
         }catch{
             self.logger.log(.error, error)

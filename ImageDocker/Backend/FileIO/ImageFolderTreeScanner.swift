@@ -18,7 +18,7 @@ class DirectoryPaths : NSObject {
 
 class ImageFolderTreeScanner {
     
-    let logger = LoggerFactory.get(category: "ImageFolderTreeScanner", includeTypes: [.debug, .trace])
+    let logger = LoggerFactory.get(category: "TREE", subCategory: "Scanner", includeTypes: [.debug, .trace])
     
     static let `default` = ImageFolderTreeScanner()
     var suppressedScan:Bool = false
