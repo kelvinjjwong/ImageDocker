@@ -11,7 +11,7 @@ import LoggerFactory
 
 final class LocalEnvironmentSetupController: NSViewController {
     
-    let logger = LoggerFactory.get(category: "LocalEnvironmentSetupController")
+    let logger = LoggerFactory.get(category: "Setting", subCategory: "LocalEnvironment")
     
     @IBOutlet weak var tabs: NSTabView!
     
@@ -61,6 +61,8 @@ final class LocalEnvironmentSetupController: NSViewController {
     @IBOutlet weak var btnBrowseExifToolPath: NSButton!
     @IBOutlet weak var lblExifToolMessage: NSTextField!
     @IBOutlet weak var lblExifToolInstruction: NSTextField!
+    @IBOutlet weak var lblExifLatestVersion: NSTextField!
+    @IBOutlet weak var btnExifCheckVersion: NSButton!
     
     
     // MARK: - SAVE BUTTON
@@ -162,7 +164,6 @@ final class LocalEnvironmentSetupController: NSViewController {
         Setting.localEnvironment.saveIfusePath(txtIfusePath.stringValue)
         Setting.localEnvironment.saveIdeviceIdPath(txtIdeviceIdPath.stringValue)
         Setting.localEnvironment.saveIdeviceInfoPath(txtIdeviceInfoPath.stringValue)
-        Setting.localEnvironment.saveExifToolPath(txtExifToolPath.stringValue)
     }
     
     // MARK: - ACTION FOR EXIFTOOL SECTION
@@ -183,21 +184,73 @@ final class LocalEnvironmentSetupController: NSViewController {
         }
     }
     
+    @IBAction func onExifCheckVersionClicked(_ sender: NSButton) {
+        DispatchQueue.global().async {
+            let version = ExifTool.getLatestVersionUrl()
+            DispatchQueue.main.async {
+                self.lblExifLatestVersion.stringValue = version
+            }
+        }
+    }
+    
+    
+    @IBAction func onDownloadExifToolClicked(_ sender: NSButton) {
+        let url = self.lblExifLatestVersion.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        if url == "" || !url.hasPrefix("https://exiftool.org/") {
+            self.logger.log("EXIFTOOL latest version url is invalid: \(url)")
+            return
+        }
+        let filename = url.lastPartOfUrl()
+        self.lblExifToolMessage.stringValue = "Downloading \(filename)"
+        
+        DispatchQueue.global().async {
+            let destinationPath = URL(fileURLWithPath: Setting.tools.toolsPath()).appending(component: "exiftool").path
+            
+            do {
+                try FileManager.default.createDirectory(atPath: destinationPath, withIntermediateDirectories: true)
+            }catch{
+                self.logger.log(.error, "Unable to create folder for exiftool at \(destinationPath)", error)
+                return
+            }
+            
+            self.downloadFileCompletionHandler(urlstring: url, destinationPath: destinationPath, deleteIfExist: true) {(destinationUrl, error) in
+                if let dest = destinationUrl {
+                    self.logger.log("Downloaded exiftool to: \(dest)")
+                    if dest.path != "" && dest.path.isFileExists() {
+                        let _ = ExifTool.untarExiftoolPackage(filePath: dest.path)
+                        DispatchQueue.main.async {
+                            self.lblExifToolMessage.stringValue = "Downloaded \(filename)"
+                            self.txtExifToolPath.stringValue = "\(destinationPath.removeLastStash())/current/exiftool"
+                        }
+                    }
+                } else {
+                    self.logger.log(.error, error)
+                }
+              
+            }
+        }
+        
+        
+    }
+    
+    
     func checkExifToolPath() {
         let _path = self.txtExifToolPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         if _path != "" && _path.isFileExists() {
-            self.lblExifToolMessage.stringValue = Words.preference_tab_found_path.fill(arguments: "exiftool", _path)
-        }else{
-            let path = ExecutionEnvironment.default.locate("exiftool")
-            if path != "" {
-                self.txtExifToolPath.stringValue = path
-                self.lblExifToolMessage.stringValue = Words.preference_tab_found_path.fill(arguments: "exiftool", path)
-                Setting.localEnvironment.saveExifToolPath(path)
-            }else{
-                self.txtExifToolPath.stringValue = ""
-                self.lblExifToolMessage.stringValue = Words.preference_tab_missing_error.fill(arguments: "exiftool")
+            DispatchQueue.global().async {
+                let version = ExifTool.getVersion(path: _path)
+                DispatchQueue.main.async {
+                    self.lblExifToolMessage.stringValue = "\(Words.preference_tab_found_path.fill(arguments: "exiftool", _path)) , Ver.\(version)"
+                }
             }
+        }else{
+            self.lblExifToolMessage.stringValue = Words.preference_tab_missing_error.fill(arguments: "exiftool")
         }
+    }
+    
+    func saveExifSection(_ defaults:UserDefaults) {
+        self.logger.log("Saving EXIFTOOL path: \(self.txtExifToolPath.stringValue)")
+        Setting.localEnvironment.saveExifToolPath(self.txtExifToolPath.stringValue)
     }
     
     
@@ -207,6 +260,7 @@ final class LocalEnvironmentSetupController: NSViewController {
         let defaults = UserDefaults.standard
         
         self.saveMobileSection(defaults)
+        self.saveExifSection(defaults)
     }
     
     // MARK: - HEALTH CHECK
@@ -279,7 +333,8 @@ final class LocalEnvironmentSetupController: NSViewController {
         self.btnBrowseExifToolPath.title = Words.preference_tab_mobile_box_ios_browse.word()
         self.lblExifToolInstruction.stringValue = Words.preference_tab_exiftool_box_exiftool_instruction.word()
         
-        txtExifToolPath.stringValue = Setting.localEnvironment.exiftoolPath()
+        self.txtExifToolPath.stringValue = Setting.localEnvironment.exiftoolPath()
+        self.txtExifToolPath.isEnabled = false
         
         self.checkExifToolPath()
         
@@ -316,6 +371,56 @@ final class LocalEnvironmentSetupController: NSViewController {
         didSet {
             // Update the view, if already loaded.
         }
+    }
+    
+    private func downloadFileCompletionHandler(urlstring: String, destinationPath: String, deleteIfExist:Bool, completion: @escaping (URL?, Error?) -> Void) {
+
+        let url = URL(string: urlstring)!
+        let destinationUrl = URL(fileURLWithPath: destinationPath).appendingPathComponent(url.lastPathComponent)
+        self.logger.log(destinationUrl)
+
+        if FileManager().fileExists(atPath: destinationUrl.path) {
+            self.logger.log(.warning, "File already exists [\(destinationUrl.path)]")
+            
+            if deleteIfExist {
+                do {
+                    try FileManager().removeItem(at: destinationUrl)
+                }catch{
+                    self.logger.log(.error, "Unable to delete when file exist: \(destinationUrl.path)", error)
+                    completion(destinationUrl, error)
+                    return
+                }
+            }else{
+                completion(destinationUrl, nil)
+                return
+            }
+        }
+
+        let request = URLRequest(url: url)
+
+
+        let task = URLSession.shared.downloadTask(with: request) { tempFileUrl, response, error in
+//            print(tempFileUrl, response, error)
+            if error != nil {
+                completion(nil, error)
+                return
+            }
+
+            if let response = response as? HTTPURLResponse {
+                if response.statusCode == 200 {
+                    if let tempFileUrl = tempFileUrl {
+                        self.logger.log("download finished")
+                        try! FileManager.default.moveItem(at: tempFileUrl, to: destinationUrl)
+                        completion(destinationUrl, error)
+                    } else {
+                        completion(nil, error)
+                    }
+
+                }
+            }
+
+        }
+        task.resume()
     }
     
 }

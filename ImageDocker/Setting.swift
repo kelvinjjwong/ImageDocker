@@ -17,6 +17,23 @@ struct Setting {
     static let mobileDeviceTransfer = MobileDeviceTransferSetting()
     static let externalApi = ExternalAPISetting()
     static let localEnvironment = LocalEnvironmentSetting()
+    static let tools = ToolsSetting()
+}
+
+class ToolsSetting {
+    
+    fileprivate let setting_tools_path = "toolsPathKey"
+    
+    func toolsPath() -> String {
+        let defaults = UserDefaults.standard
+        guard let txt = defaults.string(forKey: setting_tools_path) else {return AppDelegate.current.toolsPath()}
+        return txt
+    }
+    
+    func saveToolsPath(_ value:String) {
+        let defaults = UserDefaults.standard
+        defaults.set(value, forKey: setting_tools_path)
+    }
 }
 
 class LoggingSetting {

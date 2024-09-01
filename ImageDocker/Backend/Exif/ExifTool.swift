@@ -43,6 +43,88 @@ class ExifTool {
         }
     }
     
+    public static func getVersion(path:String) -> String{
+        let pipe = Pipe()
+        let pipe2 = Pipe()
+        
+        autoreleasepool { () -> Void in
+            let exiftool = Process()
+            exiftool.standardOutput = pipe
+            exiftool.standardError = pipe2
+            exiftool.launchPath = "/bin/bash"
+            exiftool.arguments = ["-c", "\(path) -ver"]
+            exiftool.launch()
+            exiftool.waitUntilExit()
+        }
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
+        
+        let data2 = pipe2.fileHandleForReading.readDataToEndOfFile()
+        let string2:String = String(data: data2, encoding: String.Encoding.utf8)!
+        pipe2.fileHandleForReading.closeFile()
+        
+        print(string)
+        print(string2)
+        return string
+    }
+    
+    public static func getLatestVersionUrl() -> String{
+        let pipe = Pipe()
+        let pipe2 = Pipe()
+        
+        autoreleasepool { () -> Void in
+            let exiftool = Process()
+            exiftool.standardOutput = pipe
+            exiftool.standardError = pipe2
+            exiftool.launchPath = "/bin/bash"
+            exiftool.arguments = ["-c", "curl -fsSL https://exiftool.org/rss.xml | grep enclosure | head -1 | awk -F\\' '{print $2}'"]
+            exiftool.launch()
+            exiftool.waitUntilExit()
+        }
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
+        
+        let data2 = pipe2.fileHandleForReading.readDataToEndOfFile()
+        let string2:String = String(data: data2, encoding: String.Encoding.utf8)!
+        pipe2.fileHandleForReading.closeFile()
+        
+        print(string)
+        print(string2)
+        return string
+    }
+    
+    public static func untarExiftoolPackage(filePath:String) -> String{
+        let filename = URL(fileURLWithPath: filePath).lastPathComponent
+        let filenameWithoutExt = filename.replacingOccurrences(of: ".tar.gz", with: "")
+        let folder = URL(fileURLWithPath: filePath).deletingLastPathComponent().path.replacingFirstOccurrence(of: "file://", with: "")
+        
+        let pipe = Pipe()
+        let pipe2 = Pipe()
+        
+        autoreleasepool { () -> Void in
+            let exiftool = Process()
+            exiftool.standardOutput = pipe
+            exiftool.standardError = pipe2
+            exiftool.launchPath = "/bin/bash"
+            exiftool.arguments = ["-c", "cd \(folder);tar -xzf \(filename); rm -f current; ln -s \(filenameWithoutExt) current;"]
+            exiftool.launch()
+            exiftool.waitUntilExit()
+        }
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let string:String = String(data: data, encoding: String.Encoding.utf8)!
+        pipe.fileHandleForReading.closeFile()
+        
+        let data2 = pipe2.fileHandleForReading.readDataToEndOfFile()
+        let string2:String = String(data: data2, encoding: String.Encoding.utf8)!
+        pipe2.fileHandleForReading.closeFile()
+        
+        print(string)
+        print(string2)
+        return filename
+    }
+    
     func getFormattedExif(url:URL) -> String{
         // need install exiftool to macos first
         // https://exiftool.org

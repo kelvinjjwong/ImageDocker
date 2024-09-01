@@ -25,9 +25,19 @@ extension Words {
         chs: "运行日志"
     )
     
+    static let preference_tab_general_box_tools = Localize(
+        eng: "Tools",
+        chs: "外挂工具"
+    )
+    
     static let preference_tab_general_log_path = Localize(
         eng: "Directory of log files:",
         chs: "日志存储的文件夹:"
+    )
+    
+    static let preference_tab_general_tools_path = Localize(
+        eng: "Directory of tools:",
+        chs: "工具存储的文件夹:"
     )
     
     static let preference_tab_general_log_path_browse = Localize(
@@ -496,8 +506,8 @@ extension Words {
     )
     
     static let preference_tab_exiftool_box_exiftool_path = Localize(
-        eng: "Location of exiftool:",
-        chs: "exiftool 命令的位置:"
+        eng: "Path:",
+        chs: "位置:"
     )
     
     static let preference_tab_exiftool_box_exiftool_instruction = Localize(

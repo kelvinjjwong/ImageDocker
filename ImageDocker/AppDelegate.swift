@@ -52,12 +52,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
     
     fileprivate var _logFilePath = ""
+    fileprivate var _toolsPath = ""
     
     func logFilePath() -> String {
         if self._logFilePath == "" {
             self._logFilePath = self.applicationDocumentsDirectory.appending(component: "log").appending(component: self.defaultLoggingFilename()).path
         }
         return self._logFilePath
+    }
+    
+    func toolsPath() -> String{
+        if self._toolsPath == "" {
+            self._toolsPath = self.applicationDocumentsDirectory.appending(component: "tools").path
+        }
+        return self._toolsPath
     }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {

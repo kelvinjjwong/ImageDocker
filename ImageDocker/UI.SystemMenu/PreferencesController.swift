@@ -42,6 +42,13 @@ final class PreferencesController: NSViewController {
     @IBOutlet weak var btnOpenLogPath: NSButton!
     
     
+    @IBOutlet weak var boxTools: NSBox!
+    @IBOutlet weak var lblToolsPath: NSTextField!
+    @IBOutlet weak var txtToolsPath: NSTextField!
+    @IBOutlet weak var btnBrowseToolsPath: NSButton!
+    @IBOutlet weak var btnOpenToolsPath: NSButton!
+    
+    
     // MARK: MOBILE DEVICE
     @IBOutlet weak var txtExportToAndroidPath: NSTextField!
     
@@ -107,6 +114,31 @@ final class PreferencesController: NSViewController {
     
     @IBAction func onOpenLogPathClicked(_ sender: NSButton) {
         let path = self.txtLogPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        if path != "" && path.isDirectoryExists() {
+            let url = URL(fileURLWithPath: path.withLastStash())
+            NSWorkspace.shared.activateFileViewerSelecting([url])
+        }
+    }
+    
+    @IBAction func onBrowseToolsPath(_ sender: NSButton) {
+        let openPanel = NSOpenPanel()
+        openPanel.canChooseDirectories  = true
+        openPanel.canChooseFiles        = false
+        openPanel.showsHiddenFiles      = false
+        openPanel.canCreateDirectories  = true
+        
+        openPanel.beginSheetModal(for: self.view.window!) { (response) -> Void in
+            guard response == NSApplication.ModalResponse.OK else {return}
+            if let path = openPanel.url?.path {
+                DispatchQueue.main.async {
+                    self.txtToolsPath.stringValue = path
+                }
+            }
+        }
+    }
+    
+    @IBAction func onOpenToolsPathClicked(_ sender: NSButton) {
+        let path = self.txtToolsPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         if path != "" && path.isDirectoryExists() {
             let url = URL(fileURLWithPath: path.withLastStash())
             NSWorkspace.shared.activateFileViewerSelecting([url])
@@ -266,6 +298,11 @@ final class PreferencesController: NSViewController {
         if logPath != "" && logPath.isDirectoryExists() {
             Setting.logging.saveLogPath(logPath)
         }
+        
+        let toolsPath = self.txtToolsPath.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        if toolsPath != "" && toolsPath.isDirectoryExists() {
+            Setting.tools.saveToolsPath(toolsPath)
+        }
     }
     
 //    func saveFaceRecognitionSection(_ defaults:UserDefaults) {
@@ -374,6 +411,13 @@ final class PreferencesController: NSViewController {
         self.btnOpenLogPath.title = Words.preference_tab_general_log_path_reveal_in_finder.word()
         
         self.txtLogPath.stringValue = Setting.logging.logPath()
+        
+        self.boxTools.title = Words.preference_tab_general_box_tools.word()
+        self.lblToolsPath.stringValue = Words.preference_tab_general_tools_path.word()
+        self.btnBrowseToolsPath.title = Words.preference_tab_general_log_path_browse.word()
+        self.btnOpenToolsPath.title = Words.preference_tab_general_log_path_reveal_in_finder.word()
+        
+        self.txtToolsPath.stringValue = Setting.tools.toolsPath()
     }
     
     func initPerformanceSection() {
