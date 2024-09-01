@@ -124,7 +124,7 @@ extension ViewController {
         if(myPopover == nil){
             myPopover = NSPopover()
             
-            let frame = CGRect(origin: .zero, size: CGSize(width: 1310, height: 500))
+            let frame = CGRect(origin: .zero, size: CGSize(width: 730, height: 670))
             self.repositoryDetailViewController = RepositoryDetailViewController()
             self.repositoryDetailViewController.view.frame = frame
             

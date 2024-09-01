@@ -17,6 +17,7 @@ class RepositoryDetailViewController: NSViewController {
     @IBOutlet weak var btnConfig: NSButton!
     @IBOutlet weak var btnReScanFolders: NSButton!
     
+    @IBOutlet weak var lblRepositoryName: NSTextField!
     
     @IBOutlet weak var lblEditableStorageSpace: NSTextField!
     @IBOutlet weak var lblBackupSpace: NSTextField!
@@ -165,7 +166,19 @@ class RepositoryDetailViewController: NSViewController {
         
         self._repositoryId = repository.id
         self._repositoryPath = repository.repositoryPath // without repositoryVolume
-        self._repositoryName = ""
+        self._repositoryName = repository.name
+        
+        if let owner_p = FaceDao.default.getPerson(id: repository.owner) {
+            self.lblRepositoryName.stringValue = "\(owner_p.name) / \(repository.name)"
+        }else{
+            self.lblRepositoryName.stringValue = "\(repository.name)"
+        }
+        
+        if repository.deviceId != "" {
+            if let device = DeviceDao.default.getDevice(deviceId: repository.deviceId) {
+                self.lblRepositoryName.stringValue = "\(self.lblRepositoryName.stringValue) - \(device.manufacture ?? "") \(device.model ?? "") \(device.marketName ?? "")"
+            }
+        }
         self.onConfigure = onConfigure
         self.onShowDeviceDialog = onShowDeviceDialog
         self.onManageSubContainers = onManageSubContainers
