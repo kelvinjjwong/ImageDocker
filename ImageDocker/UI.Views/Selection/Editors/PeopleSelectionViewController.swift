@@ -35,7 +35,7 @@ class PeopleSelectionViewController: NSViewController {
         self.treeView.registerForDraggedTypes([.string])
     }
     
-    func initView(images:[ImageFile], onApplyChanges: (() -> Void)? = nil ) {
+    func initView(images:[ImageFile], onApplyChanges: (() -> Void)? = nil ) { // FIXME: select some items by default
         self.coreMembers = self.loadPeopleGroups()
         self.treeView.reloadData()
         self.treeView.expandItem(nil, expandChildren: true)
@@ -63,6 +63,7 @@ class PeopleSelectionViewController: NSViewController {
                     pgm.id = p.id
                     pgm.name = p.name
                     pgm.nickname = p.shortName ?? p.name
+                    // FIXME: load pgm.isChecked from db
                     familyIdToPeople[fm.familyId]?.append(pgm)
                 }
             }else{
@@ -72,6 +73,7 @@ class PeopleSelectionViewController: NSViewController {
                     pgm.id = p.id
                     pgm.name = p.name
                     pgm.nickname = p.shortName ?? p.name
+                    // FIXME: load pgm.isChecked from db
                     familyIdToPeople[fm.familyId]?.append(pgm)
                 }
             }
@@ -96,6 +98,7 @@ class PeopleSelectionViewController: NSViewController {
             coreMember.name = m.name
             coreMember.nickname = m.shortName ?? m.name
             coreMember.groups = []
+            // FIXME: load coreMember.isChecked from db
             
             if let fam = families[coreMember.id] {
                 for f in fam {
@@ -104,7 +107,7 @@ class PeopleSelectionViewController: NSViewController {
                     group.name = f.name
                     group.parent = coreMember
                     group.members = []
-                    
+                    // FIXME: load group.isChecked from db
                     
 //                    if let groupMembers = familyIdToPeople[f.id] {
 //                        group.members = groupMembers
@@ -113,6 +116,7 @@ class PeopleSelectionViewController: NSViewController {
 //                            pgm.groupId = group.id
 //                            pgm.groupName = group.name
 //                            pgm.parent = group
+                    // FIXME: load pgm.isChecked from db
 //                        }
 //                    }
                     coreMember.groups.append(group)
@@ -328,7 +332,7 @@ extension PeopleSelectionViewController : NSOutlineViewDelegate {
             cell.imageView!.image = Icons.person
             cell.checkbox.isEnabled = false
             cell.checkbox.isHidden = true
-            cell.checkbox.state = .off
+            cell.checkbox.state = item.isChecked ? .on : .off  // FIXME: check by default - item.isChecked? onclick save state
             cell.removeButton.isEnabled = true
             cell.removeButton.isHidden = false
             cell.removeButton.image = NSImage.init(named: NSImage.addTemplateName)
@@ -342,7 +346,7 @@ extension PeopleSelectionViewController : NSOutlineViewDelegate {
             cell.imageView!.image = Icons.people
             cell.checkbox.isEnabled = true
             cell.checkbox.isHidden = false
-            cell.checkbox.state = .off
+            cell.checkbox.state = item.isChecked ? .on : .off  // FIXME: check by default - item.isChecked? onclick save state
             cell.removeButton.isEnabled = false
             cell.removeButton.isHidden = true
             cell.removeButton.image = Icons.remove
@@ -356,7 +360,7 @@ extension PeopleSelectionViewController : NSOutlineViewDelegate {
             cell.imageView!.image = Icons.smile
             cell.checkbox.isEnabled = false
             cell.checkbox.isHidden = true
-            cell.checkbox.state = .off
+            cell.checkbox.state = item.isChecked ? .on : .off  // FIXME: check by default - item.isChecked? onclick save state
             cell.removeButton.isEnabled = false
             cell.removeButton.isHidden = true
             cell.removeButton.image = Icons.remove

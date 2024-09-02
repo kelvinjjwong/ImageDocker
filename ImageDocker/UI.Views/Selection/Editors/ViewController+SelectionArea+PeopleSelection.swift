@@ -29,7 +29,7 @@ extension SelectionViewController {
         self.peopleSelectionPopover = myPopover
     }
     
-    func openPeopleSelection(_ sender: NSButton) {
+    func openPeopleSelection(_ sender: NSButton, selectedImageIds:[String] = []) {
         self.createPeopleSelectionPopover()
         
         let cellRect = sender.bounds

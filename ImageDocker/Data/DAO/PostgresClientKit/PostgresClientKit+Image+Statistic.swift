@@ -12,7 +12,7 @@ import LoggerFactory
 class ImageCountDaoPostgresCK : ImageCountDaoInterface {
     
     
-    let logger = LoggerFactory.get(category: "ImageCountDao", subCategory: "Postgres", includeTypes: [])
+    let logger = LoggerFactory.get(category: "ImageCountDao", subCategory: "Postgres")
     
     func countCopiedFromDevice(deviceId:String) -> Int {
         let db = PostgresConnection.database()

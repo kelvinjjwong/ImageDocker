@@ -2269,7 +2269,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                         <rect key="frame" x="1349" y="17" width="32" height="25"/>
                                         <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" selectedItem="qDQ-0w-bFr" id="Lbn-50-OcH">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="menu"/>
+                                            <font key="font" usesAppearanceFont="YES"/>
                                             <menu key="menu" id="4RJ-3g-5cq">
                                                 <items>
                                                     <menuItem state="on" image="copy_link" hidden="YES" id="qDQ-0w-bFr"/>
@@ -2527,7 +2527,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                         <rect key="frame" x="766" y="8" width="50" height="16"/>
                                                                                         <popUpButtonCell key="cell" type="roundTextured" title="200" bezelStyle="texturedRounded" alignment="right" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" selectedItem="ciG-9u-PKg" id="3Hu-B4-8e6">
                                                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                                            <font key="font" metaFont="menu"/>
+                                                                                            <font key="font" usesAppearanceFont="YES"/>
                                                                                             <menu key="menu" id="H17-9B-oVJ">
                                                                                                 <items>
                                                                                                     <menuItem title="200" state="on" id="ciG-9u-PKg"/>
@@ -2801,7 +2801,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <popUpButtonCell key="cell" type="push" title="English" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="3zu-Uh-TuG" id="dXs-fP-N6H">
                                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="menu"/>
+                                                        <font key="font" usesAppearanceFont="YES"/>
                                                         <menu key="menu" id="rTf-hr-Vse">
                                                             <items>
                                                                 <menuItem title="English" state="on" id="3zu-Uh-TuG"/>
@@ -3021,7 +3021,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <popUpButtonCell key="cell" type="push" title="Unlimited" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="wLI-hN-ljJ" id="avN-z9-oWW">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="menu"/>
+                                                                    <font key="font" usesAppearanceFont="YES"/>
                                                                     <menu key="menu" id="GDu-M2-15e">
                                                                         <items>
                                                                             <menuItem title="Unlimited" state="on" id="wLI-hN-ljJ">
@@ -3333,7 +3333,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                         <rect key="frame" x="194" y="-7" width="124" height="32"/>
                                         <popUpButtonCell key="cell" type="push" title="Duplicate" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="noArrow" altersStateOfSelectedItem="NO" selectedItem="7hi-2u-8xh" id="92P-Oj-IXC">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="menu"/>
+                                            <font key="font" usesAppearanceFont="YES"/>
                                             <menu key="menu" id="zQo-Q2-kjc">
                                                 <items>
                                                     <menuItem title="Duplicate" image="combine" hidden="YES" id="7hi-2u-8xh">

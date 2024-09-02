@@ -144,7 +144,7 @@ class PeopleManageViewController: NSViewController {
         self.treeView.expandItem(nil, expandChildren: true)
     }
     
-    func loadPeopleGroups() -> [CoreMember] {
+    func loadPeopleGroups(selectedIds:[String] = []) -> [CoreMember] {
         var peopleIdToPeople:[String:People] = [:]
         let people = FaceDao.default.getPeople()
         
@@ -211,6 +211,7 @@ class PeopleManageViewController: NSViewController {
                             pgm.groupId = group.id
                             pgm.groupName = group.name
                             pgm.parent = group
+                            pgm.isChecked = selectedIds.contains(group.id)
                         }
                     }
                     coreMember.groups.append(group)

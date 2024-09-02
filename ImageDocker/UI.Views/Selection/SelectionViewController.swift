@@ -98,6 +98,14 @@ class SelectionViewController : NSViewController {
     }
     
     func openDatePicker(with referenceDate:String? = nil) {
+        let selectedImageIds = self.collectionViewController.imagesLoader.getItems().map { imageFile in
+            if let image = imageFile.imageData, let imageId = image.id {
+                return imageId
+            }else{
+                return ""
+            }
+        }
+        self.logger.log("selected image ids: \(selectedImageIds)")
         self.openDatePicker(self.btnDatePicker, with: referenceDate)
     }
     
@@ -107,51 +115,147 @@ class SelectionViewController : NSViewController {
     }
     
     @IBAction func onAssignEventButtonClicked(_ sender: Any) {
+        let selectedImageIds = self.collectionViewController.imagesLoader.getItems().map { imageFile in
+            if let image = imageFile.imageData, let imageId = image.id {
+                return imageId
+            }else{
+                return ""
+            }
+        }
+        self.logger.log("selected image ids: \(selectedImageIds)")
         self.assignEvent()
     }
     
     @IBAction func onButtonPeopleClicked(_ sender: NSButton) {
+        let selectedImageIds = self.collectionViewController.imagesLoader.getItems().map { imageFile in
+            if let image = imageFile.imageData, let imageId = image.id {
+                return imageId
+            }else{
+                return ""
+            }
+        }
+        self.logger.log("selected image ids: \(selectedImageIds)")
         self.openPeopleSelection(sender)
     }
     
     @IBAction func onButtonDatePickerClicked(_ sender: NSButton) {
+        let selectedImageIds = self.collectionViewController.imagesLoader.getItems().map { imageFile in
+            if let image = imageFile.imageData, let imageId = image.id {
+                return imageId
+            }else{
+                return ""
+            }
+        }
+        self.logger.log("selected image ids: \(selectedImageIds)")
         self.openDatePicker(sender)
     }
     
     @IBAction func onButtonNotesClicked(_ sender: NSButton) {
+        let selectedImageIds = self.collectionViewController.imagesLoader.getItems().map { imageFile in
+            if let image = imageFile.imageData, let imageId = image.id {
+                return imageId
+            }else{
+                return ""
+            }
+        }
+        self.logger.log("selected image ids: \(selectedImageIds)")
         self.openNoteWriter(sender)
     }
     
     @IBAction func onButtonDuplicatesClicked(_ sender: NSPopUpButton) {
         let i = sender.indexOfSelectedItem
-        self.selectCombineMenuInSelectionArea(i)
+        let selectedImageIds = self.collectionViewController.imagesLoader.getItems().map { imageFile in
+            if let image = imageFile.imageData, let imageId = image.id {
+                return imageId
+            }else{
+                return ""
+            }
+        }
+        self.logger.log("selected image ids: \(selectedImageIds)")
+        self.selectCombineMenuInSelectionArea(i, selectedImageIds: selectedImageIds)
     }
     
     @IBAction func onShareClicked(_ sender: NSButton) {
+        let selectedImageIds = self.collectionViewController.imagesLoader.getItems().map { imageFile in
+            if let image = imageFile.imageData, let imageId = image.id {
+                return imageId
+            }else{
+                return ""
+            }
+        }
+        self.logger.log("selected image ids: \(selectedImageIds)")
         self.share(sender)
     }
     
     @IBAction func onCopyToDeviceClicked(_ sender: NSButton) {
+        let selectedImageIds = self.collectionViewController.imagesLoader.getItems().map { imageFile in
+            if let image = imageFile.imageData, let imageId = image.id {
+                return imageId
+            }else{
+                return ""
+            }
+        }
+        self.logger.log("selected image ids: \(selectedImageIds)")
         self.openExportToDeviceDialog(sender)
     }
     
     @IBAction func onButtonShowClicked(_ sender: Any) {
+        let selectedImageIds = self.collectionViewController.imagesLoader.getItems().map { imageFile in
+            if let image = imageFile.imageData, let imageId = image.id {
+                return imageId
+            }else{
+                return ""
+            }
+        }
+        self.logger.log("selected image ids: \(selectedImageIds)")
         self.visibleSelectedImages()
     }
     
     @IBAction func onButtonHideClicked(_ sender: Any) {
+        let selectedImageIds = self.collectionViewController.imagesLoader.getItems().map { imageFile in
+            if let image = imageFile.imageData, let imageId = image.id {
+                return imageId
+            }else{
+                return ""
+            }
+        }
+        self.logger.log("selected image ids: \(selectedImageIds)")
         self.hideSelectedImages()
     }
     
     @IBAction func onSelectionCheckAllClicked(_ sender: NSButton) {
+        let selectedImageIds = self.collectionViewController.imagesLoader.getItems().map { imageFile in
+            if let image = imageFile.imageData, let imageId = image.id {
+                return imageId
+            }else{
+                return ""
+            }
+        }
+        self.logger.log("selected image ids: \(selectedImageIds)")
         self.checkAllInSelectionArea()
     }
     
     @IBAction func onSelectionRemoveButtonClicked(_ sender: Any) {
+        let selectedImageIds = self.collectionViewController.imagesLoader.getItems().map { imageFile in
+            if let image = imageFile.imageData, let imageId = image.id {
+                return imageId
+            }else{
+                return ""
+            }
+        }
+        self.logger.log("selected image ids: \(selectedImageIds)")
         self.cleanSomeFromSelectionArea()
     }
     
     @IBAction func onSelectionRemoveAllClicked(_ sender: Any) {
+        let selectedImageIds = self.collectionViewController.imagesLoader.getItems().map { imageFile in
+            if let image = imageFile.imageData, let imageId = image.id {
+                return imageId
+            }else{
+                return ""
+            }
+        }
+        self.logger.log("selected image ids: \(selectedImageIds)")
         self.cleanUpSelectionArea()
     }
     

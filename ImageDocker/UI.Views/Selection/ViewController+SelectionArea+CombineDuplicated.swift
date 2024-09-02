@@ -10,7 +10,7 @@ import Cocoa
 
 extension SelectionViewController {
     
-    internal func selectCombineMenuInSelectionArea(_ i:Int) {
+    internal func selectCombineMenuInSelectionArea(_ i:Int, selectedImageIds:[String] = []) {
         
         self.btnDuplicates.isEnabled = false
         if i == 1 {
