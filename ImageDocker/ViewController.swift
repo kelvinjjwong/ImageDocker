@@ -111,6 +111,9 @@ class ViewController: NSViewController {
     
     var imageMetaViewController : ImageMetaViewController!
     var imagePreviewController : ImagePreviewController!
+    
+    var imageEditTabViewController : ImageEditTabViewController!
+    
     var imageLocationViewController : ImageLocationViewController!
     var imageLocationEditViewController : ImageLocationEditViewController!
     

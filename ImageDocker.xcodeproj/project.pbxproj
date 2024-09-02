@@ -43,6 +43,7 @@
 		8E0AFA50208BDEA100CE8B68 /* ImageDockerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0AFA4F208BDEA100CE8B68 /* ImageDockerTests.swift */; };
 		8E0AFA5B208BDEA100CE8B68 /* ImageDockerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0AFA5A208BDEA100CE8B68 /* ImageDockerUITests.swift */; };
 		8E0BFD412A5900DD00F8D466 /* SwiftJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0BFD402A5900DD00F8D466 /* SwiftJSON.swift */; };
+		8E0D3B2C2C85F9FE0049807B /* ImageEditTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0D3B2B2C85F9FE0049807B /* ImageEditTabViewController.swift */; };
 		8E0EAE9A209D2623008C377F /* ImageFolderTreeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0EAE99209D2623008C377F /* ImageFolderTreeScanner.swift */; };
 		8E15E73523AC74DC0094240A /* StackItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E15E72923AC74DB0094240A /* StackItem.swift */; };
 		8E15E73623AC74DC0094240A /* StackHeaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E15E72A23AC74DB0094240A /* StackHeaderViewController.swift */; };
@@ -412,6 +413,7 @@
 		8E0AFA5A208BDEA100CE8B68 /* ImageDockerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDockerUITests.swift; sourceTree = "<group>"; };
 		8E0AFA5C208BDEA100CE8B68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8E0BFD402A5900DD00F8D466 /* SwiftJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftJSON.swift; sourceTree = "<group>"; };
+		8E0D3B2B2C85F9FE0049807B /* ImageEditTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEditTabViewController.swift; sourceTree = "<group>"; };
 		8E0EAE99209D2623008C377F /* ImageFolderTreeScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFolderTreeScanner.swift; sourceTree = "<group>"; };
 		8E15E72923AC74DB0094240A /* StackItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StackItem.swift; sourceTree = "<group>"; };
 		8E15E72A23AC74DB0094240A /* StackHeaderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StackHeaderViewController.swift; sourceTree = "<group>"; };
@@ -886,6 +888,7 @@
 				8EF8C55B265DBD820060D2E0 /* ImageLocationViewController.swift */,
 				8EF8C55D265DBD910060D2E0 /* ImageLocationEditViewController.swift */,
 				5C51173A29695F5B00F64CF6 /* Setting.swift */,
+				8E0D3B2B2C85F9FE0049807B /* ImageEditTabViewController.swift */,
 			);
 			path = ImageDocker;
 			sourceTree = "<group>";
@@ -1914,6 +1917,7 @@
 				8E8D47292236F63C0091E9C3 /* TablePopover.swift in Sources */,
 				8EFA02DB243B3E1A00D7C355 /* PostgresClientKit+Image+Record.swift in Sources */,
 				8E0EAE9A209D2623008C377F /* ImageFolderTreeScanner.swift in Sources */,
+				8E0D3B2C2C85F9FE0049807B /* ImageEditTabViewController.swift in Sources */,
 				8E481483277DAEDE0097493E /* Words+PreviewImage.swift in Sources */,
 				8ED8334127B9144B00B31319 /* DatabaseBackupController.swift in Sources */,
 				8EA643F5208D6E5100C7D695 /* PreferencesController.swift in Sources */,

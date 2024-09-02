@@ -3977,6 +3977,29 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
             </objects>
             <point key="canvasLocation" x="1026" y="1925"/>
         </scene>
+        <!--Image Edit Tab View Controller-->
+        <scene sceneID="tDs-E1-nHo">
+            <objects>
+                <viewController storyboardIdentifier="ImageEditTabViewController" id="7et-MN-Fey" customClass="ImageEditTabViewController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="ZOp-fM-Oqw">
+                        <rect key="frame" x="0.0" y="0.0" width="575" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xn4-tO-gCd">
+                                <rect key="frame" x="-8" y="-10" width="591" height="316"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </tabView>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="tabs" destination="xn4-tO-gCd" id="Pi9-PR-Zdo"/>
+                    </connections>
+                </viewController>
+                <customObject id="tBi-kU-Wd3" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1025.5" y="2254"/>
+        </scene>
         <!--Image Preview Controller-->
         <scene sceneID="ZAC-7n-W9T">
             <objects>

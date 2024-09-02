@@ -33,6 +33,8 @@ extension ViewController {
     internal func configurePreview(){
         self.splitviewPreview.dividerStyle = .thick
         
+        // MARK: Meta View
+        
         self.imageMetaViewController = (storyboard?.instantiateController(withIdentifier: "ImageMetaViewController") as! ImageMetaViewController)
         self.splitviewPreview.addArrangedSubview(imageMetaViewController.view)
         
@@ -45,7 +47,7 @@ extension ViewController {
         self.metaInfoTableView.target = self
         self.metaInfoTableView.doubleAction = #selector(onMetaTableDoubleClicked)
         
-        
+        // MARK: Stacked Player Preview
             
         self.imagePreviewController = (storyboard?.instantiateController(withIdentifier: "ImagePreviewController") as! ImagePreviewController)
         self.splitviewPreview.addArrangedSubview(imagePreviewController.view)
@@ -85,14 +87,30 @@ extension ViewController {
         self.playerContainer.layer?.borderColor = Colors.DeepDarkGray.cgColor
         self.playerContainer.layer?.backgroundColor = Colors.DeepDarkGray.cgColor
         
+        // MARK: Image Edit Tab View
+        
+        self.imageEditTabViewController = (storyboard?.instantiateController(withIdentifier: "ImageEditTabViewController") as! ImageEditTabViewController)
+        self.splitviewPreview.addArrangedSubview(imageEditTabViewController.view)
+        
+        // MARK: Location View
+        
         self.imageLocationViewController = (storyboard?.instantiateController(withIdentifier: "ImageLocationViewController") as! ImageLocationViewController)
-        self.splitviewPreview.addArrangedSubview(imageLocationViewController.view)
+        
+        let locationViewMapTab = NSTabViewItem(identifier: "tabViewMap")
+        locationViewMapTab.label = "Map"
+        
+        
+//        self.splitviewPreview.addArrangedSubview(imageLocationViewController.view)
+        self.imageEditTabViewController.tabs.addTabViewItem(locationViewMapTab)
+        locationViewMapTab.view = self.imageLocationViewController.view
         
         self.webLocation = self.imageLocationViewController.locationWebView
         self.mapZoomSlider = self.imageLocationViewController.locationSlider
         
         webLocation.setValue(false, forKey: "drawsBackground")
         webLocation.load(URLRequest(url: URL(string: "about:blank")!))
+        
+        // MARK: Location Edit View
         
         self.imageLocationEditViewController = (storyboard?.instantiateController(withIdentifier: "ImageLocationEditViewController") as! ImageLocationEditViewController)
         self.imageLocationEditViewController.reloadCollectionView = {
@@ -120,7 +138,13 @@ extension ViewController {
             return self.selectionViewController.batchEditIndicator
         }
         
-        self.splitviewPreview.addArrangedSubview(imageLocationEditViewController.view)
+        let locationEditTab = NSTabViewItem(identifier: "tabEditMap")
+        locationEditTab.label = "EditMap"
+        
+//        self.splitviewPreview.addArrangedSubview(imageLocationEditViewController.view)
+        self.imageEditTabViewController.tabs.addTabViewItem(locationEditTab)
+        locationEditTab.view = self.imageLocationEditViewController.view
+        
         self.imageLocationEditViewController.locationTextDelegate = LocationTextDelegate()
         self.imageLocationEditViewController.locationTextDelegate?.textField = self.imageLocationEditViewController.lblLocation
         self.imageLocationEditViewController.lblLocation.textColor = NSColor.white
