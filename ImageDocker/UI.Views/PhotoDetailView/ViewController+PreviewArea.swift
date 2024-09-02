@@ -33,20 +33,6 @@ extension ViewController {
     internal func configurePreview(){
         self.splitviewPreview.dividerStyle = .thick
         
-        // MARK: Meta View
-        
-        self.imageMetaViewController = (storyboard?.instantiateController(withIdentifier: "ImageMetaViewController") as! ImageMetaViewController)
-        self.splitviewPreview.addArrangedSubview(imageMetaViewController.view)
-        
-        self.scrollviewMetaInfoTable = imageMetaViewController.scrollView
-        self.metaInfoTableView = imageMetaViewController.tableView
-        self.metaInfoTableView.delegate = self
-        self.metaInfoTableView.dataSource = self
-        
-        self.metaInfoTableView.toolTip = Words.double_click_to_copy_value.word()
-        self.metaInfoTableView.target = self
-        self.metaInfoTableView.doubleAction = #selector(onMetaTableDoubleClicked)
-        
         // MARK: Stacked Player Preview
             
         self.imagePreviewController = (storyboard?.instantiateController(withIdentifier: "ImagePreviewController") as! ImagePreviewController)
@@ -92,6 +78,38 @@ extension ViewController {
         self.imageEditTabViewController = (storyboard?.instantiateController(withIdentifier: "ImageEditTabViewController") as! ImageEditTabViewController)
         self.splitviewPreview.addArrangedSubview(imageEditTabViewController.view)
         
+        imageEditTabViewController.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
+        imageEditTabViewController.view.layer?.backgroundColor = Colors.DeepDarkGray.cgColor
+        
+        self.splitviewPreview.subviews[1].setHeight(self.splitviewPreview.visibleRect.height - self.playerContainer.bounds.height)
+        imageEditTabViewController.view.setHeight(self.splitviewPreview.visibleRect.height - self.playerContainer.bounds.height)
+        
+        let metaTab = NSTabViewItem(identifier: "tabMeta")
+        metaTab.label = "Meta"
+        
+        // MARK: Meta View
+        
+        self.imageMetaViewController = (storyboard?.instantiateController(withIdentifier: "ImageMetaViewController") as! ImageMetaViewController)
+//        self.splitviewPreview.addArrangedSubview(imageMetaViewController.view)
+        
+        self.imageEditTabViewController.tabs.addTabViewItem(metaTab)
+        metaTab.view = self.imageMetaViewController.view
+        self.imageMetaViewController.view.setHeight(self.splitviewPreview.subviews[1].bounds.height - 30)
+        metaTab.view?.setHeight(self.splitviewPreview.subviews[1].bounds.height - 30)
+        
+        imageMetaViewController.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
+        imageMetaViewController.view.layer?.backgroundColor = Colors.DeepDarkGray.cgColor
+        
+        self.scrollviewMetaInfoTable = imageMetaViewController.scrollView
+        self.metaInfoTableView = imageMetaViewController.tableView
+        self.metaInfoTableView.delegate = self
+        self.metaInfoTableView.dataSource = self
+        
+        self.metaInfoTableView.toolTip = Words.double_click_to_copy_value.word()
+        self.metaInfoTableView.target = self
+        self.metaInfoTableView.doubleAction = #selector(onMetaTableDoubleClicked)
+        
+        
         // MARK: Location View
         
         self.imageLocationViewController = (storyboard?.instantiateController(withIdentifier: "ImageLocationViewController") as! ImageLocationViewController)
@@ -103,6 +121,11 @@ extension ViewController {
 //        self.splitviewPreview.addArrangedSubview(imageLocationViewController.view)
         self.imageEditTabViewController.tabs.addTabViewItem(locationViewMapTab)
         locationViewMapTab.view = self.imageLocationViewController.view
+        self.imageLocationViewController.view.setHeight(self.splitviewPreview.subviews[1].bounds.height - 30)
+        locationViewMapTab.view?.setHeight(self.splitviewPreview.subviews[1].bounds.height - 30)
+        
+        imageLocationViewController.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
+        imageLocationViewController.view.layer?.backgroundColor = Colors.DeepDarkGray.cgColor
         
         self.webLocation = self.imageLocationViewController.locationWebView
         self.mapZoomSlider = self.imageLocationViewController.locationSlider
@@ -144,6 +167,11 @@ extension ViewController {
 //        self.splitviewPreview.addArrangedSubview(imageLocationEditViewController.view)
         self.imageEditTabViewController.tabs.addTabViewItem(locationEditTab)
         locationEditTab.view = self.imageLocationEditViewController.view
+        self.imageLocationEditViewController.view.setHeight(self.splitviewPreview.subviews[1].bounds.height - 30)
+        locationEditTab.view?.setHeight(self.splitviewPreview.subviews[1].bounds.height - 30)
+        
+        imageLocationEditViewController.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
+        imageLocationEditViewController.view.layer?.backgroundColor = Colors.DeepDarkGray.cgColor
         
         self.imageLocationEditViewController.locationTextDelegate = LocationTextDelegate()
         self.imageLocationEditViewController.locationTextDelegate?.textField = self.imageLocationEditViewController.lblLocation

@@ -72,11 +72,11 @@ extension ViewController {
     
     internal func resizePreviewHoriztontalDivider() {
         let size = UIHelper.windowSize()
-        if size.isSmallScreen {
-            self.splitviewPreview.setPosition(size.height - CGFloat(565), ofDividerAt: 0)
-        }else{
-            self.splitviewPreview.setPosition(size.height - CGFloat(805) + CGFloat(50), ofDividerAt: 0)
-        }
+//        if size.isSmallScreen {
+//            self.splitviewPreview.setPosition(size.height - CGFloat(565), ofDividerAt: 0)
+//        }else{
+//            self.splitviewPreview.setPosition(size.height - CGFloat(805) + CGFloat(50), ofDividerAt: 0)
+//        }
     }
 }
 

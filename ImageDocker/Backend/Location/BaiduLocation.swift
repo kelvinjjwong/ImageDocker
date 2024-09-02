@@ -164,7 +164,7 @@ final class BaiduLocation {
     public static func queryForMap(coordinateBD: Coord, view:WKWebView, zoom: Int){
         //self.logger.log("START REQUEST MAP")
         let width:Int = Int(min(CGFloat(512), view.frame.size.width))
-        let height:Int = Int(min(CGFloat(512), view.frame.size.height))
+        let height:Int = 490 //Int(min(CGFloat(512), view.frame.size.height))
         let requestBaiduUrl = urlForMap(width: width, height: height, zoom: zoom, lat: coordinateBD.latitude, lon: coordinateBD.longitude)
         self.logger.log(requestBaiduUrl)
         guard let requestUrl = URL(string: requestBaiduUrl) else {return}

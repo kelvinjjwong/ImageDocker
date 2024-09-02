@@ -3724,7 +3724,6 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                 </clipView>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="I6r-Jo-WrA"/>
-                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="485" id="btB-HD-AhV"/>
                                 </constraints>
                                 <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="TH8-Xy-jR9">
                                     <rect key="frame" x="-100" y="-100" width="580" height="15"/>
@@ -3761,10 +3760,9 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <wkWebView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5UY-cY-UGS">
-                                <rect key="frame" x="0.0" y="3" width="550" height="200"/>
+                                <rect key="frame" x="0.0" y="3" width="550" height="222"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="550" id="MMt-Pb-cNV"/>
-                                    <constraint firstAttribute="height" constant="200" id="Z3L-cq-lHY"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="160" id="xgM-k1-7FD"/>
                                 </constraints>
                                 <wkWebViewConfiguration key="configuration">
@@ -3773,22 +3771,22 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                 </wkWebViewConfiguration>
                             </wkWebView>
                             <slider horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7yp-Cx-Ytj">
-                                <rect key="frame" x="551" y="-6" width="26" height="208"/>
+                                <rect key="frame" x="551" y="4" width="26" height="208"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="160" id="Gta-D6-JWo"/>
                                     <constraint firstAttribute="width" constant="22" id="NNP-3g-2si"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="22" id="Ntq-YA-Efq"/>
                                     <constraint firstAttribute="height" constant="200" id="R5g-fi-8Wv"/>
                                 </constraints>
-                                <sliderCell key="cell" state="on" alignment="left" minValue="1" maxValue="4" doubleValue="3" tickMarkPosition="right" numberOfTickMarks="4" allowsTickMarkValuesOnly="YES" sliderType="linear" id="04b-6g-n1Y"/>
+                                <sliderCell key="cell" state="on" alignment="left" minValue="1" maxValue="10" doubleValue="10" tickMarkPosition="right" numberOfTickMarks="10" allowsTickMarkValuesOnly="YES" sliderType="linear" id="04b-6g-n1Y"/>
                                 <connections>
                                     <action selector="onMapSliderClicked:" target="WP3-aC-pSA" id="i8R-Tx-jVK"/>
                                 </connections>
                             </slider>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="7yp-Cx-Ytj" firstAttribute="top" secondItem="qxx-8H-zOw" secondAttribute="top" constant="3" id="0YO-K7-CVi"/>
-                            <constraint firstAttribute="bottom" secondItem="7yp-Cx-Ytj" secondAttribute="bottom" id="50l-6z-lQU"/>
+                            <constraint firstItem="7yp-Cx-Ytj" firstAttribute="top" secondItem="qxx-8H-zOw" secondAttribute="top" constant="15" id="0YO-K7-CVi"/>
+                            <constraint firstAttribute="bottom" secondItem="7yp-Cx-Ytj" secondAttribute="bottom" constant="10" id="50l-6z-lQU"/>
                             <constraint firstAttribute="bottom" secondItem="5UY-cY-UGS" secondAttribute="bottom" constant="3" id="5WK-uD-z05"/>
                             <constraint firstItem="5UY-cY-UGS" firstAttribute="leading" secondItem="qxx-8H-zOw" secondAttribute="leading" id="Env-nb-OIg"/>
                             <constraint firstItem="7yp-Cx-Ytj" firstAttribute="leading" secondItem="5UY-cY-UGS" secondAttribute="trailing" constant="3" id="e8q-0A-JM9"/>
@@ -3811,11 +3809,11 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
             <objects>
                 <viewController storyboardIdentifier="ImageLocationEditViewController" id="OWc-Xo-gp7" customClass="ImageLocationEditViewController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="VUm-uK-HMu">
-                        <rect key="frame" x="0.0" y="0.0" width="575" height="232"/>
+                        <rect key="frame" x="0.0" y="0.0" width="575" height="418"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rsP-uV-cny">
-                                <rect key="frame" x="-2" y="209" width="159" height="24"/>
+                                <rect key="frame" x="-2" y="395" width="159" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="155" id="Abj-ve-DW8"/>
                                     <constraint firstAttribute="height" constant="22" id="rez-YS-Vy9"/>
@@ -3832,7 +3830,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                 </connections>
                             </segmentedControl>
                             <searchField wantsLayer="YES" focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wBn-6s-Peh">
-                                <rect key="frame" x="165" y="210" width="280" height="22"/>
+                                <rect key="frame" x="165" y="396" width="280" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="22" id="XqR-tS-fAT"/>
                                 </constraints>
@@ -3846,7 +3844,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                 </connections>
                             </searchField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="01a-yM-dHU">
-                                <rect key="frame" x="448" y="205" width="134" height="32"/>
+                                <rect key="frame" x="448" y="391" width="134" height="32"/>
                                 <buttonCell key="cell" type="push" title="▼ Copy Location" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1Op-0F-hHn">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -3861,7 +3859,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                 </connections>
                             </button>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tYa-XN-daY">
-                                <rect key="frame" x="-2" y="185" width="579" height="20"/>
+                                <rect key="frame" x="-2" y="371" width="579" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="W0d-hs-sUR"/>
                                     <constraint firstAttribute="height" constant="20" id="ob3-1f-df6"/>
@@ -3873,10 +3871,10 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                 </textFieldCell>
                             </textField>
                             <wkWebView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bvd-cW-3vh">
-                                <rect key="frame" x="0.0" y="35" width="550" height="150"/>
+                                <rect key="frame" x="0.0" y="21" width="550" height="350"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="550" id="d67-d5-HRG"/>
-                                    <constraint firstAttribute="height" constant="150" id="lhM-XL-gwQ"/>
+                                    <constraint firstAttribute="height" constant="350" id="lhM-XL-gwQ"/>
                                 </constraints>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -3884,7 +3882,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                 </wkWebViewConfiguration>
                             </wkWebView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rgc-rQ-Zc1">
-                                <rect key="frame" x="-7" y="5" width="159" height="32"/>
+                                <rect key="frame" x="-7" y="-9" width="159" height="32"/>
                                 <buttonCell key="cell" type="push" title="◀︎ Replace Location" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ueh-Zp-HHt">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -3898,7 +3896,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                 </connections>
                             </button>
                             <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yA8-xv-Itc">
-                                <rect key="frame" x="146" y="10" width="329" height="23"/>
+                                <rect key="frame" x="146" y="-4" width="329" height="23"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="yX8-CR-zbt"/>
                                 </constraints>
@@ -3909,7 +3907,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                 </comboBoxCell>
                             </comboBox>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7hD-ia-3RF">
-                                <rect key="frame" x="467" y="5" width="92" height="32"/>
+                                <rect key="frame" x="467" y="-9" width="92" height="32"/>
                                 <buttonCell key="cell" type="push" title="★ Places" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="all-Fo-OAz">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -3923,9 +3921,9 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                 </connections>
                             </button>
                             <slider horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="twm-GR-yrc">
-                                <rect key="frame" x="551" y="24" width="26" height="163"/>
+                                <rect key="frame" x="551" y="15" width="26" height="358"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="155" id="RxM-xC-zbI"/>
+                                    <constraint firstAttribute="height" constant="350" id="RxM-xC-zbI"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="147" id="W5b-ET-PWR"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="22" id="mev-4i-cEl"/>
                                     <constraint firstAttribute="width" constant="22" id="yPK-8u-PHN"/>
@@ -3975,18 +3973,18 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                 </viewController>
                 <customObject id="UOv-RZ-qWV" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1026" y="1925"/>
+            <point key="canvasLocation" x="1025.5" y="2018"/>
         </scene>
         <!--Image Edit Tab View Controller-->
         <scene sceneID="tDs-E1-nHo">
             <objects>
                 <viewController storyboardIdentifier="ImageEditTabViewController" id="7et-MN-Fey" customClass="ImageEditTabViewController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="ZOp-fM-Oqw">
-                        <rect key="frame" x="0.0" y="0.0" width="575" height="300"/>
+                        <rect key="frame" x="0.0" y="0.0" width="575" height="460"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xn4-tO-gCd">
-                                <rect key="frame" x="-8" y="-10" width="591" height="316"/>
+                                <rect key="frame" x="-7" y="-10" width="589" height="476"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <font key="font" metaFont="system"/>
                             </tabView>
@@ -3998,7 +3996,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                 </viewController>
                 <customObject id="tBi-kU-Wd3" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1025.5" y="2254"/>
+            <point key="canvasLocation" x="1021" y="2514"/>
         </scene>
         <!--Image Preview Controller-->
         <scene sceneID="ZAC-7n-W9T">

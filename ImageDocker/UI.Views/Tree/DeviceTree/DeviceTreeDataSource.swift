@@ -132,8 +132,8 @@ class DeviceTreeDataSource : TreeDataSource {
                     )
                 }
                 
-                let ip = IPLocation.get()
-                self.logger.log(ip)
+//                let ip = IPLocation.get()
+//                self.logger.log(ip)
             }
         })
         

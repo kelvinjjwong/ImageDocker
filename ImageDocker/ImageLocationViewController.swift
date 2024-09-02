@@ -56,17 +56,29 @@ class ImageLocationViewController : NSViewController {
         }
         switch tick {
         case 1:
-            zoomSize = 14
+            zoomSize = 6
         case 2:
-            zoomSize = 15
+            zoomSize = 8
         case 3:
-            zoomSize = 16
+            zoomSize = 10
         case 4:
+            zoomSize = 11
+        case 5:
+            zoomSize = 12
+        case 6:
+            zoomSize = 13
+        case 7:
+            zoomSize = 14
+        case 8:
+            zoomSize = 15
+        case 9:
+            zoomSize = 16
+        case 10:
             zoomSize = 17
         default:
             zoomSize = 17
         }
-        
+        print("zoom size: \(zoomSize)")
         self.loadBaiduMap()
         previousTick = tick
     }
