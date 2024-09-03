@@ -116,6 +116,7 @@ class ViewController: NSViewController {
     
     var imageLocationViewController : ImageLocationViewController!
     var imageLocationEditViewController : ImageLocationEditViewController!
+    var imageNoteEditViewController:ImageNoteEditViewController!
     
     @IBOutlet weak var metaInfoTableView: NSTableView!
     

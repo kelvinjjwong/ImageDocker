@@ -7,8 +7,11 @@
 //
 
 import Cocoa
+import LoggerFactory
 
 class ImageMetaViewController : NSViewController {
+    
+    let logger = LoggerFactory.get(category: "ImageEdit", subCategory: "ViewMeta")
     
     @IBOutlet weak var scrollView: NSScrollView!
     @IBOutlet weak var tableView: DarkTableView!

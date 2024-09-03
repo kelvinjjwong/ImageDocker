@@ -11,6 +11,37 @@ import Foundation
 extension Words {
     
     
+    static let imageEdit_tabs_Meta = Localize(
+        eng: "Meta",
+        chs: "元数据"
+    )
+    
+    static let imageEdit_tabs_Map = Localize(
+        eng: "Map",
+        chs: "地图"
+    )
+    
+    static let imageEdit_tabs_EditMap = Localize(
+        eng: "EditMap",
+        chs: "修改地图"
+    )
+    
+    static let imageEdit_tabs_Note = Localize(
+        eng: "Note",
+        chs: "描述"
+    )
+    
+    static let imageEdit_tabs_Event = Localize(
+        eng: "Event",
+        chs: "活动"
+    )
+    
+    static let imageEdit_tabs_People = Localize(
+        eng: "People",
+        chs: "人物"
+    )
+    
+    
     static let imageOption = Localize(
         eng: "More Ops",
         chs: "更多修改选项"

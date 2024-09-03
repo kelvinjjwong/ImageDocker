@@ -1,19 +1,18 @@
 //
-//  ImageEditTabViewController.swift
+//  ImageNoteEditViewController.swift
 //  ImageDocker
 //
-//  Created by Kelvin Wong on 2024/9/2.
+//  Created by Kelvin Wong on 2024/9/3.
 //  Copyright © 2024 nonamecat. All rights reserved.
 //
 
 import Cocoa
+import WebKit
 import LoggerFactory
 
-class ImageEditTabViewController : NSViewController {
+class ImageNoteEditViewController : NSViewController {
     
-    let logger = LoggerFactory.get(category: "ImageEdit", subCategory: "EditTabs")
-    
-    @IBOutlet weak var tabs: NSTabView!
+    let logger = LoggerFactory.get(category: "ImageEdit", subCategory: "EditNote")
     
     
     required init?(coder: NSCoder) {

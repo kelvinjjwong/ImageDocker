@@ -84,14 +84,13 @@ extension ViewController {
         self.splitviewPreview.subviews[1].setHeight(self.splitviewPreview.visibleRect.height - self.playerContainer.bounds.height)
         imageEditTabViewController.view.setHeight(self.splitviewPreview.visibleRect.height - self.playerContainer.bounds.height)
         
-        let metaTab = NSTabViewItem(identifier: "tabMeta")
-        metaTab.label = "Meta"
         
         // MARK: Meta View
         
         self.imageMetaViewController = (storyboard?.instantiateController(withIdentifier: "ImageMetaViewController") as! ImageMetaViewController)
-//        self.splitviewPreview.addArrangedSubview(imageMetaViewController.view)
         
+        let metaTab = NSTabViewItem(identifier: "tabMeta")
+        metaTab.label = Words.imageEdit_tabs_Meta.word()
         self.imageEditTabViewController.tabs.addTabViewItem(metaTab)
         metaTab.view = self.imageMetaViewController.view
         self.imageMetaViewController.view.setHeight(self.splitviewPreview.subviews[1].bounds.height - 30)
@@ -115,10 +114,7 @@ extension ViewController {
         self.imageLocationViewController = (storyboard?.instantiateController(withIdentifier: "ImageLocationViewController") as! ImageLocationViewController)
         
         let locationViewMapTab = NSTabViewItem(identifier: "tabViewMap")
-        locationViewMapTab.label = "Map"
-        
-        
-//        self.splitviewPreview.addArrangedSubview(imageLocationViewController.view)
+        locationViewMapTab.label = Words.imageEdit_tabs_Map.word()
         self.imageEditTabViewController.tabs.addTabViewItem(locationViewMapTab)
         locationViewMapTab.view = self.imageLocationViewController.view
         self.imageLocationViewController.view.setHeight(self.splitviewPreview.subviews[1].bounds.height - 30)
@@ -162,9 +158,7 @@ extension ViewController {
         }
         
         let locationEditTab = NSTabViewItem(identifier: "tabEditMap")
-        locationEditTab.label = "EditMap"
-        
-//        self.splitviewPreview.addArrangedSubview(imageLocationEditViewController.view)
+        locationEditTab.label = Words.imageEdit_tabs_EditMap.word()
         self.imageEditTabViewController.tabs.addTabViewItem(locationEditTab)
         locationEditTab.view = self.imageLocationEditViewController.view
         self.imageLocationEditViewController.view.setHeight(self.splitviewPreview.subviews[1].bounds.height - 30)
@@ -189,8 +183,16 @@ extension ViewController {
         webPossibleLocation.setValue(false, forKey: "drawsBackground")
         webPossibleLocation.load(URLRequest(url: URL(string: "about:blank")!))
         
+        // MARK: Note Edit View
         
+        self.imageNoteEditViewController = (storyboard?.instantiateController(withIdentifier: "ImageNoteEditViewController") as! ImageNoteEditViewController)
         
+        let noteEditTab = NSTabViewItem(identifier: "tabEditNote")
+        noteEditTab.label = Words.imageEdit_tabs_Note.word()
+        self.imageEditTabViewController.tabs.addTabViewItem(noteEditTab)
+        noteEditTab.view = self.imageNoteEditViewController.view
+        self.imageNoteEditViewController.view.setHeight(self.splitviewPreview.subviews[1].bounds.height - 30)
+        noteEditTab.view?.setHeight(self.splitviewPreview.subviews[1].bounds.height - 30)
     }
     
     // DropPlaceDelegate

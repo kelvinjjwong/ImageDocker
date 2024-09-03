@@ -8,8 +8,11 @@
 
 import Cocoa
 import WebKit
+import LoggerFactory
 
 class ImageLocationViewController : NSViewController {
+    
+    let logger = LoggerFactory.get(category: "ImageEdit", subCategory: "ViewMap")
     
     @IBOutlet weak var locationWebView: WKWebView!
     @IBOutlet weak var locationSlider: NSSlider!

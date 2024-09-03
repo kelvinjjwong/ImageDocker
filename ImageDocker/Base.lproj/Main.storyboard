@@ -3998,6 +3998,19 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
             </objects>
             <point key="canvasLocation" x="1021" y="2514"/>
         </scene>
+        <!--Image Note Edit View Controller-->
+        <scene sceneID="i2s-Tz-2SD">
+            <objects>
+                <viewController storyboardIdentifier="ImageNoteEditViewController" id="yiF-J6-BC7" customClass="ImageNoteEditViewController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="vZo-1N-0pf">
+                        <rect key="frame" x="0.0" y="0.0" width="577" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="XQd-oC-t0W" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1019.5" y="2959"/>
+        </scene>
         <!--Image Preview Controller-->
         <scene sceneID="ZAC-7n-W9T">
             <objects>

@@ -12,7 +12,7 @@ import LoggerFactory
 
 class ImageLocationEditViewController : NSViewController {
     
-    let logger = LoggerFactory.get(category: "ImageLocationEditViewController")
+    let logger = LoggerFactory.get(category: "ImageEdit", subCategory: "EditMap")
     
     // MARK: Icon
     let tick:NSImage = NSImage.init(named: NSImage.menuOnStateTemplateName)!
