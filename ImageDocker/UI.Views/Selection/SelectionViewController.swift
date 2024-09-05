@@ -64,8 +64,8 @@ class SelectionViewController : NSViewController {
         super.viewDidLoad()
     }
     
-    func initView() {
-        self.configureCollectionView()
+    func initView(editors:[ImageFlowListItemEditor]) {
+        self.configureCollectionView(editors:editors)
         
         batchEditIndicator.isDisplayedWhenStopped = false
         batchEditIndicator.isHidden = true
@@ -237,6 +237,9 @@ class SelectionViewController : NSViewController {
     
     @IBAction func onSelectionRemoveButtonClicked(_ sender: Any) {
         let selectedImageIds = self.collectionViewController.imagesLoader.getItems().map { imageFile in
+            for editor in editors {
+                editor.removeImageFlowListItem(imageFile: imageFile)
+            }
             if let image = imageFile.imageData, let imageId = image.id {
                 return imageId
             }else{
@@ -255,12 +258,18 @@ class SelectionViewController : NSViewController {
                 return ""
             }
         }
+        for editor in editors {
+            editor.removeAllImageFlowListItems()
+        }
         self.logger.log("selected image ids: \(selectedImageIds)")
         self.cleanUpSelectionArea()
     }
     
+    var editors:[ImageFlowListItemEditor] = []
     
-    func configureCollectionView(){
+    func configureCollectionView(editors:[ImageFlowListItemEditor]){
+        
+        self.editors = editors
         
         // init controller
         collectionViewController = storyboard?.instantiateController(withIdentifier: "selectionCollectionViewController") as? SelectionCollectionViewController
@@ -299,6 +308,19 @@ class SelectionViewController : NSViewController {
         
         selectionCollectionView.reloadData()
         
+        
+        
+    }
+    
+    func addItem(imageFile:ImageFile) {
+        self.collectionViewController.imagesLoader.addItem(imageFile)
+        self.collectionViewController.imagesLoader.reorganizeItems()
+        //self.collectionView.reloadData()
+        self.selectionCollectionView.reloadData()
+        
+        for editor in editors {
+            editor.addImageFlowListItem(imageFile: imageFile)
+        }
     }
     
     

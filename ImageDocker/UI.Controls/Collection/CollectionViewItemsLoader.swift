@@ -323,6 +323,16 @@ class CollectionViewItemsLoader : NSObject {
         return self.items
     }
     
+    func getImages() -> [Image] {
+        var images:[Image] = []
+        for item in self.items {
+            if let image = item.imageData {
+                images.append(image)
+            }
+        }
+        return images
+    }
+    
     // MARK: - Get Item at Index of Section
     
     func getItem(at index:Int, section:Int = 0) -> ImageFile? {

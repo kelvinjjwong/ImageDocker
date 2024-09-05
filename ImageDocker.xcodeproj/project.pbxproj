@@ -45,6 +45,10 @@
 		8E0BFD412A5900DD00F8D466 /* SwiftJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0BFD402A5900DD00F8D466 /* SwiftJSON.swift */; };
 		8E0D3B2C2C85F9FE0049807B /* ImageEditTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0D3B2B2C85F9FE0049807B /* ImageEditTabViewController.swift */; };
 		8E0D3B2E2C8700CB0049807B /* ImageNoteEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0D3B2D2C8700CB0049807B /* ImageNoteEditViewController.swift */; };
+		8E0D3B302C870EB20049807B /* ImageEventEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0D3B2F2C870EB20049807B /* ImageEventEditViewController.swift */; };
+		8E0D3B322C870ECC0049807B /* ImageFamilyEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0D3B312C870ECC0049807B /* ImageFamilyEditViewController.swift */; };
+		8E0D3B382C8A06C30049807B /* ImageFlowListItem.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E0D3B372C8A06C30049807B /* ImageFlowListItem.storyboard */; };
+		8E0D3B3A2C8A06DA0049807B /* ImageFlowListItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0D3B392C8A06DA0049807B /* ImageFlowListItemViewController.swift */; };
 		8E0EAE9A209D2623008C377F /* ImageFolderTreeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0EAE99209D2623008C377F /* ImageFolderTreeScanner.swift */; };
 		8E15E73523AC74DC0094240A /* StackItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E15E72923AC74DB0094240A /* StackItem.swift */; };
 		8E15E73623AC74DC0094240A /* StackHeaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E15E72A23AC74DB0094240A /* StackHeaderViewController.swift */; };
@@ -416,6 +420,10 @@
 		8E0BFD402A5900DD00F8D466 /* SwiftJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftJSON.swift; sourceTree = "<group>"; };
 		8E0D3B2B2C85F9FE0049807B /* ImageEditTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEditTabViewController.swift; sourceTree = "<group>"; };
 		8E0D3B2D2C8700CB0049807B /* ImageNoteEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageNoteEditViewController.swift; sourceTree = "<group>"; };
+		8E0D3B2F2C870EB20049807B /* ImageEventEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEventEditViewController.swift; sourceTree = "<group>"; };
+		8E0D3B312C870ECC0049807B /* ImageFamilyEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFamilyEditViewController.swift; sourceTree = "<group>"; };
+		8E0D3B372C8A06C30049807B /* ImageFlowListItem.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ImageFlowListItem.storyboard; sourceTree = "<group>"; };
+		8E0D3B392C8A06DA0049807B /* ImageFlowListItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFlowListItemViewController.swift; sourceTree = "<group>"; };
 		8E0EAE99209D2623008C377F /* ImageFolderTreeScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFolderTreeScanner.swift; sourceTree = "<group>"; };
 		8E15E72923AC74DB0094240A /* StackItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StackItem.swift; sourceTree = "<group>"; };
 		8E15E72A23AC74DB0094240A /* StackHeaderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StackHeaderViewController.swift; sourceTree = "<group>"; };
@@ -892,6 +900,10 @@
 				5C51173A29695F5B00F64CF6 /* Setting.swift */,
 				8E0D3B2B2C85F9FE0049807B /* ImageEditTabViewController.swift */,
 				8E0D3B2D2C8700CB0049807B /* ImageNoteEditViewController.swift */,
+				8E0D3B2F2C870EB20049807B /* ImageEventEditViewController.swift */,
+				8E0D3B312C870ECC0049807B /* ImageFamilyEditViewController.swift */,
+				8E0D3B372C8A06C30049807B /* ImageFlowListItem.storyboard */,
+				8E0D3B392C8A06DA0049807B /* ImageFlowListItemViewController.swift */,
 			);
 			path = ImageDocker;
 			sourceTree = "<group>";
@@ -1786,6 +1798,7 @@
 				8E9D8045234990A00062692A /* DeviceCopyView.storyboard in Resources */,
 				8E4095FE25939A0900BF717B /* ExportProfilesViewController.xib in Resources */,
 				5CA18B5429EB294300C5502E /* NotificationMessageStackItem.storyboard in Resources */,
+				8E0D3B382C8A06C30049807B /* ImageFlowListItem.storyboard in Resources */,
 				8EB271A423413CE7003BF3AF /* ExportConfigurationViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1968,6 +1981,7 @@
 				8E3FA91A2351769D00B677A3 /* ViewController+Memories.swift in Sources */,
 				8EB271772340D867003BF3AF /* ViewController+CollectionArea.swift in Sources */,
 				8E1D49D524BBE47700353C1C /* ImageDBCloner.swift in Sources */,
+				8E0D3B3A2C8A06DA0049807B /* ImageFlowListItemViewController.swift in Sources */,
 				8EFAF1FF20CAE422007A7783 /* Moment.swift in Sources */,
 				8EBA692C2090DB0300221131 /* DropPlaceCommons.swift in Sources */,
 				8E69D53924B333510075A05D /* MomentsTree+ExtendView.swift in Sources */,
@@ -2018,6 +2032,7 @@
 				8EA1A05D208DD78D000C3B97 /* CoordinateConverter.swift in Sources */,
 				8EB271912340EED2003BF3AF /* ViewController+TreeArea+Filter.swift in Sources */,
 				8EB271972340F1FF003BF3AF /* ViewController+TaskProgress.swift in Sources */,
+				8E0D3B302C870EB20049807B /* ImageEventEditViewController.swift in Sources */,
 				8E481489277DB02F0097493E /* Words+EditRepository.swift in Sources */,
 				8E7B98DF2147E7880019ED87 /* FileSystemHandler.swift in Sources */,
 				8E4E5B78221985A400FE4B68 /* ImageFace.swift in Sources */,
@@ -2036,6 +2051,7 @@
 				8E9D803D2348AA550062692A /* ExportProfile.swift in Sources */,
 				8ECA200823E5B0AA00F56895 /* EventsTree+CollectionView.swift in Sources */,
 				8E481491277DF6400097493E /* Words+Tree+Events.swift in Sources */,
+				8E0D3B322C870ECC0049807B /* ImageFamilyEditViewController.swift in Sources */,
 				8E4134902A64B59A00258755 /* CollectionPaginationController.swift in Sources */,
 				8E8D4715222991230091E9C3 /* FaceCollectionViewItem.swift in Sources */,
 				8EC82EAB2121C5A200FC0899 /* AddLocalDirectoryViewController.swift in Sources */,

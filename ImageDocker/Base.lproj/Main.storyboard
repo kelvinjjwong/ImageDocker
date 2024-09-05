@@ -3564,7 +3564,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="QeM-aP-zdF">
-                                                            <rect key="frame" x="11" y="1" width="31" height="17"/>
+                                                            <rect key="frame" x="11" y="1" width="32" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         </tableCellView>
                                                     </prototypeCellViews>
@@ -3654,7 +3654,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="LZz-Pm-q22">
-                                                            <rect key="frame" x="128" y="1" width="124" height="17"/>
+                                                            <rect key="frame" x="128" y="1" width="125" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="WUz-tY-66q">
@@ -4003,13 +4003,210 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
             <objects>
                 <viewController storyboardIdentifier="ImageNoteEditViewController" id="yiF-J6-BC7" customClass="ImageNoteEditViewController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="vZo-1N-0pf">
-                        <rect key="frame" x="0.0" y="0.0" width="577" height="300"/>
+                        <rect key="frame" x="0.0" y="0.0" width="577" height="430"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <tabView type="bottomTabsBezelBorder" translatesAutoresizingMaskIntoConstraints="NO" id="cSs-uJ-C3L">
+                                <rect key="frame" x="-7" y="-4" width="591" height="438"/>
+                                <font key="font" metaFont="system"/>
+                                <tabViewItems>
+                                    <tabViewItem label="View" identifier="" id="CVv-o3-SrW">
+                                        <view key="view" id="75a-vD-tIK">
+                                            <rect key="frame" x="10" y="7" width="571" height="400"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LPr-6A-ckN">
+                                                    <rect key="frame" x="-3" y="-5" width="577" height="408"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="ndF-DA-Aem">
+                                                        <rect key="frame" x="1" y="1" width="560" height="406"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L90-gL-Tg0" customClass="CustomStackView" customModule="ImageDocker" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="406" width="560" height="0.0"/>
+                                                            </stackView>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="L90-gL-Tg0" firstAttribute="leading" secondItem="ndF-DA-Aem" secondAttribute="leading" id="Zqn-ex-SKR"/>
+                                                            <constraint firstItem="L90-gL-Tg0" firstAttribute="top" secondItem="ndF-DA-Aem" secondAttribute="top" id="eTK-1T-Ku4"/>
+                                                            <constraint firstAttribute="trailing" secondItem="L90-gL-Tg0" secondAttribute="trailing" id="qUh-qb-b6f"/>
+                                                        </constraints>
+                                                    </clipView>
+                                                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="LFS-Ur-fPd">
+                                                        <rect key="frame" x="-100" y="-100" width="1163" height="15"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                    </scroller>
+                                                    <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="sCh-pi-M5h">
+                                                        <rect key="frame" x="561" y="1" width="15" height="406"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                    </scroller>
+                                                </scrollView>
+                                            </subviews>
+                                        </view>
+                                    </tabViewItem>
+                                    <tabViewItem label="Edit" identifier="" id="WWw-53-WKT">
+                                        <view key="view" id="nG6-d2-SrC">
+                                            <rect key="frame" x="10" y="7" width="573" height="272"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        </view>
+                                    </tabViewItem>
+                                </tabViewItems>
+                            </tabView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="cSs-uJ-C3L" firstAttribute="top" secondItem="vZo-1N-0pf" secondAttribute="top" id="9Ht-bs-5rP"/>
+                            <constraint firstItem="cSs-uJ-C3L" firstAttribute="leading" secondItem="vZo-1N-0pf" secondAttribute="leading" id="WJV-G6-Kex"/>
+                            <constraint firstAttribute="trailing" secondItem="cSs-uJ-C3L" secondAttribute="trailing" id="WnQ-VY-Z4M"/>
+                            <constraint firstAttribute="bottom" secondItem="cSs-uJ-C3L" secondAttribute="bottom" constant="2" id="fwZ-3w-TXe"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="stackView" destination="L90-gL-Tg0" id="Tax-A0-ALl"/>
+                    </connections>
                 </viewController>
                 <customObject id="XQd-oC-t0W" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1019.5" y="2959"/>
+            <point key="canvasLocation" x="1019.5" y="3016"/>
+        </scene>
+        <!--Image Event Edit View Controller-->
+        <scene sceneID="dDQ-ro-qt6">
+            <objects>
+                <viewController storyboardIdentifier="ImageEventEditViewController" id="aj9-Dh-UZy" customClass="ImageEventEditViewController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="Dou-YJ-BYK">
+                        <rect key="frame" x="0.0" y="0.0" width="577" height="430"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <tabView type="bottomTabsBezelBorder" translatesAutoresizingMaskIntoConstraints="NO" id="wWN-Wi-zao">
+                                <rect key="frame" x="-7" y="-4" width="591" height="438"/>
+                                <font key="font" metaFont="system"/>
+                                <tabViewItems>
+                                    <tabViewItem label="View" identifier="" id="POD-eu-nmk">
+                                        <view key="view" id="3gk-pp-31C">
+                                            <rect key="frame" x="10" y="7" width="571" height="400"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PPZ-1c-7BP">
+                                                    <rect key="frame" x="-3" y="-4" width="577" height="407"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="vEd-Mw-dM1">
+                                                        <rect key="frame" x="1" y="1" width="560" height="405"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ccj-7y-AhU" customClass="CustomStackView" customModule="ImageDocker" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="405" width="560" height="0.0"/>
+                                                            </stackView>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="Ccj-7y-AhU" firstAttribute="top" secondItem="vEd-Mw-dM1" secondAttribute="top" id="RUa-Fw-sk3"/>
+                                                            <constraint firstItem="Ccj-7y-AhU" firstAttribute="leading" secondItem="vEd-Mw-dM1" secondAttribute="leading" id="gnU-k0-tJ3"/>
+                                                            <constraint firstAttribute="trailing" secondItem="Ccj-7y-AhU" secondAttribute="trailing" id="xAJ-nv-cqK"/>
+                                                        </constraints>
+                                                    </clipView>
+                                                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="xHU-Lg-GKs">
+                                                        <rect key="frame" x="-100" y="-100" width="1163" height="15"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                    </scroller>
+                                                    <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="tTL-bw-JR6">
+                                                        <rect key="frame" x="561" y="1" width="15" height="405"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                    </scroller>
+                                                </scrollView>
+                                            </subviews>
+                                        </view>
+                                    </tabViewItem>
+                                    <tabViewItem label="Edit" identifier="" id="4Fx-yx-caj">
+                                        <view key="view" id="Cq1-zi-gFV">
+                                            <rect key="frame" x="10" y="7" width="571" height="270"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        </view>
+                                    </tabViewItem>
+                                </tabViewItems>
+                            </tabView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="wWN-Wi-zao" firstAttribute="leading" secondItem="Dou-YJ-BYK" secondAttribute="leading" id="K4h-OG-HEh"/>
+                            <constraint firstAttribute="bottom" secondItem="wWN-Wi-zao" secondAttribute="bottom" constant="2" id="Kjm-RG-icc"/>
+                            <constraint firstItem="wWN-Wi-zao" firstAttribute="top" secondItem="Dou-YJ-BYK" secondAttribute="top" id="Vba-rX-OQP"/>
+                            <constraint firstAttribute="trailing" secondItem="wWN-Wi-zao" secondAttribute="trailing" id="bRP-Ng-Vl7"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="stackView" destination="Ccj-7y-AhU" id="eOv-tH-zcn"/>
+                    </connections>
+                </viewController>
+                <customObject id="SbP-nx-S13" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1019.5" y="3537"/>
+        </scene>
+        <!--Image Family Edit View Controller-->
+        <scene sceneID="VlB-dg-nR5">
+            <objects>
+                <viewController storyboardIdentifier="ImageFamilyEditViewController" id="6wj-1J-2bx" customClass="ImageFamilyEditViewController" customModule="ImageDocker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="SX9-hM-Wgz">
+                        <rect key="frame" x="0.0" y="0.0" width="577" height="430"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <tabView type="bottomTabsBezelBorder" translatesAutoresizingMaskIntoConstraints="NO" id="awK-ZN-u6o">
+                                <rect key="frame" x="-7" y="-4" width="591" height="438"/>
+                                <font key="font" metaFont="system"/>
+                                <tabViewItems>
+                                    <tabViewItem label="View" identifier="" id="TFj-PU-5cI">
+                                        <view key="view" id="Yfv-Lg-JJh">
+                                            <rect key="frame" x="10" y="7" width="571" height="400"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZXC-eF-BPV">
+                                                    <rect key="frame" x="-3" y="-2" width="577" height="405"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="7UU-bt-DLN">
+                                                        <rect key="frame" x="1" y="1" width="560" height="403"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l9U-M6-sge" customClass="CustomStackView" customModule="ImageDocker" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="403" width="560" height="0.0"/>
+                                                            </stackView>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="l9U-M6-sge" firstAttribute="leading" secondItem="7UU-bt-DLN" secondAttribute="leading" id="94W-6R-Y9q"/>
+                                                            <constraint firstAttribute="trailing" secondItem="l9U-M6-sge" secondAttribute="trailing" id="Dg9-gf-gdN"/>
+                                                            <constraint firstItem="l9U-M6-sge" firstAttribute="top" secondItem="7UU-bt-DLN" secondAttribute="top" id="oOM-7h-xAh"/>
+                                                        </constraints>
+                                                    </clipView>
+                                                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="iio-UY-i0z">
+                                                        <rect key="frame" x="-100" y="-100" width="1163" height="15"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                    </scroller>
+                                                    <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="cjh-Ig-ws9">
+                                                        <rect key="frame" x="561" y="1" width="15" height="403"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                    </scroller>
+                                                </scrollView>
+                                            </subviews>
+                                        </view>
+                                    </tabViewItem>
+                                    <tabViewItem label="Edit" identifier="" id="bx3-Cs-kSK">
+                                        <view key="view" id="hn9-6q-hHq">
+                                            <rect key="frame" x="10" y="7" width="571" height="270"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        </view>
+                                    </tabViewItem>
+                                </tabViewItems>
+                            </tabView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="awK-ZN-u6o" firstAttribute="leading" secondItem="SX9-hM-Wgz" secondAttribute="leading" id="89t-FY-RaN"/>
+                            <constraint firstItem="awK-ZN-u6o" firstAttribute="top" secondItem="SX9-hM-Wgz" secondAttribute="top" id="DzU-W9-mrE"/>
+                            <constraint firstAttribute="bottom" secondItem="awK-ZN-u6o" secondAttribute="bottom" constant="2" id="euz-WO-aYX"/>
+                            <constraint firstAttribute="trailing" secondItem="awK-ZN-u6o" secondAttribute="trailing" id="lgT-9l-qsY"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="stackView" destination="l9U-M6-sge" id="bMP-Fk-KlU"/>
+                    </connections>
+                </viewController>
+                <customObject id="Hur-XD-AsN" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1020" y="4050"/>
         </scene>
         <!--Image Preview Controller-->
         <scene sceneID="ZAC-7n-W9T">

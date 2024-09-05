@@ -31,7 +31,7 @@ extension ViewController {
     }
 
     internal func configurePreview(){
-        self.splitviewPreview.dividerStyle = .thick
+        self.splitviewPreview.dividerStyle = .thin
         
         // MARK: Stacked Player Preview
             
@@ -93,8 +93,8 @@ extension ViewController {
         metaTab.label = Words.imageEdit_tabs_Meta.word()
         self.imageEditTabViewController.tabs.addTabViewItem(metaTab)
         metaTab.view = self.imageMetaViewController.view
-        self.imageMetaViewController.view.setHeight(self.splitviewPreview.subviews[1].bounds.height - 30)
-        metaTab.view?.setHeight(self.splitviewPreview.subviews[1].bounds.height - 30)
+        self.imageMetaViewController.view.setHeight(self.splitviewPreview.subviews[1].bounds.height - 40)
+        metaTab.view?.setHeight(self.splitviewPreview.subviews[1].bounds.height - 40)
         
         imageMetaViewController.view.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)!
         imageMetaViewController.view.layer?.backgroundColor = Colors.DeepDarkGray.cgColor
@@ -193,6 +193,28 @@ extension ViewController {
         noteEditTab.view = self.imageNoteEditViewController.view
         self.imageNoteEditViewController.view.setHeight(self.splitviewPreview.subviews[1].bounds.height - 30)
         noteEditTab.view?.setHeight(self.splitviewPreview.subviews[1].bounds.height - 30)
+        
+        // MARK: Event Edit View
+        
+        self.imageEventEditViewController = (storyboard?.instantiateController(withIdentifier: "ImageEventEditViewController") as! ImageEventEditViewController)
+        
+        let eventEditTab = NSTabViewItem(identifier: "tabEditEvent")
+        eventEditTab.label = Words.imageEdit_tabs_Event.word()
+        self.imageEditTabViewController.tabs.addTabViewItem(eventEditTab)
+        eventEditTab.view = self.imageEventEditViewController.view
+        self.imageEventEditViewController.view.setHeight(self.splitviewPreview.subviews[1].bounds.height - 30)
+        eventEditTab.view?.setHeight(self.splitviewPreview.subviews[1].bounds.height - 30)
+        
+        // MARK: Family Edit View
+        
+        self.imageFamilyEditViewController = (storyboard?.instantiateController(withIdentifier: "ImageFamilyEditViewController") as! ImageFamilyEditViewController)
+        
+        let familyEditTab = NSTabViewItem(identifier: "tabEditFamily")
+        familyEditTab.label = Words.imageEdit_tabs_People.word()
+        self.imageEditTabViewController.tabs.addTabViewItem(familyEditTab)
+        familyEditTab.view = self.imageFamilyEditViewController.view
+        self.imageFamilyEditViewController.view.setHeight(self.splitviewPreview.subviews[1].bounds.height - 30)
+        familyEditTab.view?.setHeight(self.splitviewPreview.subviews[1].bounds.height - 30)
     }
     
     // DropPlaceDelegate

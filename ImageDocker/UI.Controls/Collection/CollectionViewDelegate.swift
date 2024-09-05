@@ -370,10 +370,11 @@ extension ViewController : CollectionViewItemCheckDelegate {
     func onCollectionViewItemCheck(_ item: CollectionViewItem, checkBySection:Bool) {
         //self.logger.log("checked: \(item.imageFile?.url.lastPathComponent ?? "")")
         if let imageFile = item.imageFile {
-            self.selectionViewController.collectionViewController.imagesLoader.addItem(imageFile)
-            self.selectionViewController.collectionViewController.imagesLoader.reorganizeItems()
-            //self.selectionViewController.collectionView.reloadData()
-            self.selectionViewController.selectionCollectionView.reloadData()
+//            self.selectionViewController.collectionViewController.imagesLoader.addItem(imageFile)
+//            self.selectionViewController.collectionViewController.imagesLoader.reorganizeItems()
+//            //self.selectionViewController.collectionView.reloadData()
+//            self.selectionViewController.selectionCollectionView.reloadData()
+            self.selectionViewController.addItem(imageFile: imageFile)
             
             if !checkBySection {
                 checkSectionIfAllItemsChecked(item)

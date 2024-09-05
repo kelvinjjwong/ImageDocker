@@ -1,5 +1,5 @@
 //
-//  ImageNoteEditViewController.swift
+//  ImageEventEditViewController.swift
 //  ImageDocker
 //
 //  Created by Kelvin Wong on 2024/9/3.
@@ -9,9 +9,9 @@
 import Cocoa
 import LoggerFactory
 
-class ImageNoteEditViewController : NSViewController, ImageFlowListItemEditor {
+class ImageEventEditViewController : NSViewController, ImageFlowListItemEditor {
     
-    let logger = LoggerFactory.get(category: "ImageEdit", subCategory: "Note")
+    let logger = LoggerFactory.get(category: "ImageEdit", subCategory: "Event")
     
     @IBOutlet weak var stackView: NSStackView!
     private var window:NSWindow? = nil
@@ -19,7 +19,7 @@ class ImageNoteEditViewController : NSViewController, ImageFlowListItemEditor {
     var flowListItems:[String:ImageFlowListItemViewController] = [:]
     
     init() {
-        super.init(nibName: "ImageNoteEditViewController", bundle: nil)
+        super.init(nibName: "ImageEventEditViewController", bundle: nil)
     }
     
     
@@ -49,8 +49,7 @@ class ImageNoteEditViewController : NSViewController, ImageFlowListItemEditor {
                                     nsImage: imageFile.image,
                                     dateTime: "\(imageFile.photoTakenTime())",
                                     content: """
-\(image.shortDescription ?? "(没有描述)")
-\(image.longDescription ?? "")
+\(image.event ?? "(没有活动)")
 """)
             
             self.flowListItems[image.id ?? ""] = viewController

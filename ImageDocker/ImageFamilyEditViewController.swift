@@ -1,5 +1,5 @@
 //
-//  ImageNoteEditViewController.swift
+//  ImageFamilyEditViewController.swift
 //  ImageDocker
 //
 //  Created by Kelvin Wong on 2024/9/3.
@@ -9,9 +9,9 @@
 import Cocoa
 import LoggerFactory
 
-class ImageNoteEditViewController : NSViewController, ImageFlowListItemEditor {
+class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor {
     
-    let logger = LoggerFactory.get(category: "ImageEdit", subCategory: "Note")
+    let logger = LoggerFactory.get(category: "ImageEdit", subCategory: "Family")
     
     @IBOutlet weak var stackView: NSStackView!
     private var window:NSWindow? = nil
@@ -19,9 +19,8 @@ class ImageNoteEditViewController : NSViewController, ImageFlowListItemEditor {
     var flowListItems:[String:ImageFlowListItemViewController] = [:]
     
     init() {
-        super.init(nibName: "ImageNoteEditViewController", bundle: nil)
+        super.init(nibName: "ImageFamilyEditViewController", bundle: nil)
     }
-    
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -68,4 +67,10 @@ class ImageNoteEditViewController : NSViewController, ImageFlowListItemEditor {
     func removeAllImageFlowListItems() {
         self.flowListItems.removeAll()
     }
+}
+
+protocol ImageFlowListItemEditor {
+    func addImageFlowListItem(imageFile:ImageFile)
+    func removeAllImageFlowListItems()
+    func removeImageFlowListItem(imageFile:ImageFile)
 }

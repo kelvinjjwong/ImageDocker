@@ -14,7 +14,7 @@ import CoreLocation
 import AVFoundation
 //import GRDB
 
-let MetaCategorySequence:[String] = ["Location", "DateTime", "Camera", "Lens", "EXIF", "Video", "Audio", "Coordinate", "Software", "Event", "Repository", "Device", "System"]
+let MetaCategorySequence:[String] = ["System", "Device", "Location", "DateTime", "Camera", "Lens", "EXIF", "Video", "Audio", "Coordinate", "Software", "Event", "Repository"]
 
 extension ImageFile {
     
