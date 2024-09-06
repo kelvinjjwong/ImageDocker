@@ -237,9 +237,6 @@ class SelectionViewController : NSViewController {
     
     @IBAction func onSelectionRemoveButtonClicked(_ sender: Any) {
         let selectedImageIds = self.collectionViewController.imagesLoader.getItems().map { imageFile in
-            for editor in editors {
-                editor.removeImageFlowListItem(imageFile: imageFile)
-            }
             if let image = imageFile.imageData, let imageId = image.id {
                 return imageId
             }else{
@@ -413,6 +410,14 @@ class SelectionViewController : NSViewController {
                 images.append(item.imageFile!)
             }
         }
+        
+        // remove from editors
+        for imageFile in images {
+            for editor in editors {
+                editor.removeImageFlowListItem(imageFile: imageFile)
+            }
+        }
+        
         // remove from selection
         for image in images {
             self.collectionViewController.imagesLoader.removeItem(image)

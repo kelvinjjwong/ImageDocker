@@ -25,7 +25,7 @@
                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="RvL-0x-Wnh"/>
                                     </imageView>
                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Yec-vO-Ruc">
-                                        <rect key="frame" x="18" y="0.0" width="144" height="16"/>
+                                        <rect key="frame" x="3" y="0.0" width="144" height="16"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="140" id="2DI-Q7-7nU"/>
                                         </constraints>
@@ -36,8 +36,8 @@
                                         </textFieldCell>
                                     </textField>
                                     <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="bSm-jf-JZg">
-                                        <rect key="frame" x="138" y="11" width="409" height="77"/>
-                                        <textFieldCell key="cell" selectable="YES" id="FOI-Nz-utT">
+                                        <rect key="frame" x="140" y="11" width="405" height="77"/>
+                                        <textFieldCell key="cell" selectable="YES" borderStyle="bezel" bezelStyle="round" id="FOI-Nz-utT">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -51,7 +51,7 @@
                                     <constraint firstAttribute="height" constant="100" id="QNa-JK-fxd"/>
                                     <constraint firstItem="C43-K4-F5D" firstAttribute="leading" secondItem="1eQ-nF-Kwt" secondAttribute="leading" constant="40" id="SQA-Zd-ozH"/>
                                     <constraint firstItem="C43-K4-F5D" firstAttribute="top" secondItem="1eQ-nF-Kwt" secondAttribute="top" constant="3" id="UHO-Mh-My5"/>
-                                    <constraint firstItem="Yec-vO-Ruc" firstAttribute="leading" secondItem="1eQ-nF-Kwt" secondAttribute="leading" constant="20" id="WHX-JB-k7D"/>
+                                    <constraint firstItem="Yec-vO-Ruc" firstAttribute="leading" secondItem="1eQ-nF-Kwt" secondAttribute="leading" constant="5" id="WHX-JB-k7D"/>
                                     <constraint firstAttribute="bottom" secondItem="bSm-jf-JZg" secondAttribute="bottom" constant="11" id="Xnq-oE-emA"/>
                                     <constraint firstItem="bSm-jf-JZg" firstAttribute="top" secondItem="1eQ-nF-Kwt" secondAttribute="top" constant="12" id="biK-VX-vqg"/>
                                     <constraint firstAttribute="width" constant="575" id="yAQ-TE-eD2"/>

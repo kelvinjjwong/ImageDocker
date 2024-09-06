@@ -59,12 +59,20 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
     
     func removeImageFlowListItem(imageFile:ImageFile) {
         if let image = imageFile.imageData {
+            if let vc = self.flowListItems[image.id ?? ""] {
+                NSLayoutConstraint.deactivate(vc.view.constraints)
+                self.stackView.removeView(vc.view)
+            }
             self.flowListItems.removeValue(forKey: image.id ?? "")
         }
     }
     
     
     func removeAllImageFlowListItems() {
+        for vc in self.flowListItems.values {
+            NSLayoutConstraint.deactivate(vc.view.constraints)
+            self.stackView.removeView(vc.view)
+        }
         self.flowListItems.removeAll()
     }
 }
