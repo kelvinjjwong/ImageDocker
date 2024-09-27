@@ -126,7 +126,7 @@ extension TwoColumnTableViewController: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, didAdd rowView: NSTableRowView, forRow row: Int) {
         
-        rowView.backgroundColor = NSColor.gray
+//        rowView.backgroundColor = NSColor.gray
         
         //                rowView.backgroundColor = row % 2 == 1
         //                    ? NSColor.gray

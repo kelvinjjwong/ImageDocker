@@ -14,6 +14,7 @@ class ImageFlowListItemViewController : NSViewController {
     @IBOutlet weak var lblDateTime: NSTextField!
     @IBOutlet weak var lblContent: NSTextField!
     
+    var data:Image?
     
     init() {
         super.init(nibName: "ExportProfileViewController", bundle: nil)
@@ -31,6 +32,7 @@ class ImageFlowListItemViewController : NSViewController {
     }
     
     func initView(image:Image, nsImage:NSImage, dateTime:String, content:String) {
+        self.data = image
         self.imageView.image = nsImage
         self.lblDateTime.stringValue = dateTime
         self.lblContent.stringValue = content

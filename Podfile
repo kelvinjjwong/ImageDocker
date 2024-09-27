@@ -1,6 +1,6 @@
 # Uncomment the next line to define a global platform for your project
 # platform :ios, '9.0'
-platform :osx, '14.0'
+platform :osx, '15.0'
 
 target 'ImageDocker' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
@@ -14,4 +14,5 @@ target 'ImageDocker' do
   pod 'SharedDeviceLib', '1.0.3'
   pod 'AndroidDeviceReader', '1.0.0'
   pod 'IPhoneDeviceReader', '1.0.3'
+  pod 'nonamecat-swift-commons', '1.0.2'
 end

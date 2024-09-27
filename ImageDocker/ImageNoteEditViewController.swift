@@ -8,13 +8,16 @@
 
 import Cocoa
 import LoggerFactory
+import nonamecat_swift_commons
 
 class ImageNoteEditViewController : NSViewController, ImageFlowListItemEditor {
     
     let logger = LoggerFactory.get(category: "ImageEdit", subCategory: "Note")
     
+    @IBOutlet weak var tableView: NSTableView!
     @IBOutlet weak var stackView: NSStackView!
     private var window:NSWindow? = nil
+    private var tableViewController:TwoColumnTableViewController? = nil
     
     var flowListItems:[String:ImageFlowListItemViewController] = [:]
     
@@ -31,9 +34,44 @@ class ImageNoteEditViewController : NSViewController, ImageFlowListItemEditor {
         super.viewDidLoad()
         view.wantsLayer = true
         stackView.setHuggingPriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
+        
+        self.tableViewController = TwoColumnTableViewController()
+        self.tableViewController?.table = self.tableView
+//        self.tableViewController?.view.frame = self.tableView.frame
     }
     
     // MARK: - STACK ITEMS
+    
+    func collectImagesDiff() {
+        DispatchQueue.global().async {
+            var array:[[String]] = []
+            for vc in self.flowListItems.values {
+                if let image = vc.data {
+                    let t = self.getText(image: image)
+                    array.append([t])
+                }
+            }
+            let diff = ArrayDiff()
+            let occurances = diff.calculateOccurance(array)
+            
+            var grid:[(String, String)] = []
+            for o in occurances.sorted(by: { d1, d2 in
+                return d1.value > d2.value
+            }) {
+                grid.append(("\(o.value * 100) %", o.key))
+            }
+            print("collectImagesDiff:")
+            print(grid)
+            
+            DispatchQueue.main.async {
+                self.tableViewController?.load(grid)
+            }
+        }
+    }
+    
+    func getText(image:Image) -> String {
+        return image.shortDescription ?? "(没有描述)"
+    }
     
     /// Used to add a particular view controller as an item to our stack view.
     func addImageFlowListItem(imageFile:ImageFile) {
@@ -54,6 +92,8 @@ class ImageNoteEditViewController : NSViewController, ImageFlowListItemEditor {
 """)
             
             self.flowListItems[image.id ?? ""] = viewController
+            
+            self.collectImagesDiff()
         }
         
     }
@@ -65,6 +105,8 @@ class ImageNoteEditViewController : NSViewController, ImageFlowListItemEditor {
                 self.stackView.removeView(vc.view)
             }
             self.flowListItems.removeValue(forKey: image.id ?? "")
+            
+            self.collectImagesDiff()
         }
     }
     
@@ -75,5 +117,7 @@ class ImageNoteEditViewController : NSViewController, ImageFlowListItemEditor {
             self.stackView.removeView(vc.view)
         }
         self.flowListItems.removeAll()
+        
+        self.collectImagesDiff()
     }
 }
