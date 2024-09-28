@@ -369,6 +369,7 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
     var nodeData:TreeNodeData? = nil
     var isChecked = false
     var onCheckStateChanged:((Bool,Bool,String,String) -> Void)?
+    var afterChange:(() -> Void)?
     
     @IBAction func onCheckClicked(_ sender: NSButton) {
         if let item = nodeData as? CoreMember {
@@ -424,6 +425,7 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
                 table.deselectAll(nil)
                 table.reloadData()
             }
+            self.afterChange?()
             
         }
         if let item = nodeData as? PeopleGroup {
@@ -443,6 +445,7 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
                     table.deselectAll(nil)
                     table.reloadData()
                 }
+                self.afterChange?()
                 
             }
         }
@@ -461,6 +464,7 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
                     table.deselectAll(nil)
                     table.reloadData()
                 }
+                self.afterChange?()
                 
             }
         }
@@ -499,6 +503,7 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
                             table.deselectAll(nil)
                             table.reloadData()
                         }
+                        self.afterChange?()
                     }
                 }
             }else{

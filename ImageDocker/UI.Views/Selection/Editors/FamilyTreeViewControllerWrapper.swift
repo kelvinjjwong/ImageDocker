@@ -16,19 +16,21 @@ public class FamilyTreeViewControllerWrapper : NSViewController {
     
     private var editable = false
     private var removable = false
-    private var checkable = false
+    private var afterChange:(() -> Void)?
     
+    private var checkable = false
     private var onCheckStateChanged:((Bool,Bool,String,String) -> Void)?
     
     private var coreMembers:[CoreMember] = []
     
     private var checkableItems:[String : PeopleManageCheckableTableCellView] = [:]
     
-    public init(_ treeView: NSOutlineView, editable:Bool = false, removable:Bool = false, checkable:Bool = false, onCheckStateChanged:((Bool,Bool,String,String) -> Void)? = nil) {
+    public init(_ treeView: NSOutlineView, editable:Bool = false, removable:Bool = false, afterChange:(() -> Void)? = nil, checkable:Bool = false, onCheckStateChanged:((Bool,Bool,String,String) -> Void)? = nil) {
         super.init(nibName: nil, bundle: nil)
         self.treeView = treeView
         self.editable = editable
         self.removable = removable
+        self.afterChange = afterChange
         self.checkable = checkable
         self.onCheckStateChanged = onCheckStateChanged
         self.treeView.dataSource = self
@@ -48,12 +50,15 @@ public class FamilyTreeViewControllerWrapper : NSViewController {
         // Do view setup here.
     }
     
-    private func reloadNodes() {
+    public func reloadNodes() {
+        print("tree view reload nodes")
+        let checkedIds = self.getCheckedItems().map { $0.id }
         self.removeAllCheckableNodes()
         self.coreMembers = self.loadPeopleGroups()
         
         self.treeView.reloadData()
         self.treeView.expandItem(nil, expandChildren: true)
+        self.setCheckedItems(ids: checkedIds)
     }
     
     private func loadPeopleGroups() -> [CoreMember] {
@@ -330,6 +335,9 @@ extension FamilyTreeViewControllerWrapper : NSOutlineViewDelegate {
             cell.onCheckStateChanged = { oldValue, newValue, nodeType, nodeId in
                 self.onCheckStateChanged?(oldValue, newValue, nodeType, nodeId)
             }
+            cell.afterChange = {
+                self.afterChange?()
+            }
             if item.isCheckable() {
                 self.addCheckableNode(item: cell)
             }
@@ -354,6 +362,9 @@ extension FamilyTreeViewControllerWrapper : NSOutlineViewDelegate {
             cell.onCheckStateChanged = { oldValue, newValue, nodeType, nodeId in
                 self.onCheckStateChanged?(oldValue, newValue, nodeType, nodeId)
             }
+            cell.afterChange = {
+                self.afterChange?()
+            }
             if item.isCheckable() {
                 self.addCheckableNode(item: cell)
             }
@@ -377,6 +388,9 @@ extension FamilyTreeViewControllerWrapper : NSOutlineViewDelegate {
             cell.textField?.isEditable = false
             cell.onCheckStateChanged = { oldValue, newValue, nodeType, nodeId in
                 self.onCheckStateChanged?(oldValue, newValue, nodeType, nodeId)
+            }
+            cell.afterChange = {
+                self.afterChange?()
             }
             if item.isCheckable() {
                 self.addCheckableNode(item: cell)

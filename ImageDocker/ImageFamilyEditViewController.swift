@@ -66,7 +66,10 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
         self.progressIndicator.isHidden = true
         self.updateCheckedAmount()
         
-        self.manageTreeViewController = FamilyTreeViewControllerWrapper(self.manageTreeView, editable: true, removable: true)
+        self.manageTreeViewController = FamilyTreeViewControllerWrapper(self.manageTreeView, editable: true, removable: true, afterChange: {
+            print("after change tree view")
+            self.treeViewController?.reloadNodes()
+        })
         
     }
     
