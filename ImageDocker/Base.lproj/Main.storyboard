@@ -3583,7 +3583,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="oKK-cu-PBz">
-                                                            <rect key="frame" x="46" y="1" width="79" height="17"/>
+                                                            <rect key="frame" x="45.5" y="1" width="79" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="pKU-BK-Kyl">
@@ -3691,7 +3691,7 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="eKx-mS-IPG">
-                                                            <rect key="frame" x="256" y="1" width="1077" height="17"/>
+                                                            <rect key="frame" x="255.5" y="1" width="1077" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="bZs-sX-o57">
@@ -4570,18 +4570,35 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                             <action selector="onRemoveClicked:" target="XU2-24-ORP" id="dUN-Bc-lRa"/>
                                                                                         </connections>
                                                                                     </button>
+                                                                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="v5R-kp-vMy" userLabel="Edit Button">
+                                                                                        <rect key="frame" x="153" y="2" width="16" height="13"/>
+                                                                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="edit" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="Cq4-cy-N48">
+                                                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                                            <font key="font" metaFont="system"/>
+                                                                                        </buttonCell>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="width" constant="16" id="Bfa-tw-88D"/>
+                                                                                            <constraint firstAttribute="height" constant="13" id="uub-R0-USX"/>
+                                                                                        </constraints>
+                                                                                        <connections>
+                                                                                            <action selector="onEditClicked:" target="XU2-24-ORP" id="dmg-xH-NfH"/>
+                                                                                        </connections>
+                                                                                    </button>
                                                                                 </subviews>
                                                                                 <constraints>
                                                                                     <constraint firstItem="4Uc-8j-u7q" firstAttribute="top" secondItem="XU2-24-ORP" secondAttribute="top" id="CdU-lb-agP"/>
                                                                                     <constraint firstItem="4Uc-8j-u7q" firstAttribute="leading" secondItem="lS4-vB-hh7" secondAttribute="trailing" constant="5" id="I4R-gc-4qB"/>
                                                                                     <constraint firstItem="VrU-Wz-BpR" firstAttribute="leading" secondItem="XU2-24-ORP" secondAttribute="leading" constant="2" id="KYO-0w-OcV"/>
+                                                                                    <constraint firstItem="v5R-kp-vMy" firstAttribute="leading" secondItem="4Uc-8j-u7q" secondAttribute="trailing" constant="30" id="L5w-Qf-l3L"/>
                                                                                     <constraint firstItem="VrU-Wz-BpR" firstAttribute="top" secondItem="XU2-24-ORP" secondAttribute="top" constant="1" id="TjP-dr-Z5A"/>
                                                                                     <constraint firstItem="lS4-vB-hh7" firstAttribute="leading" secondItem="VrU-Wz-BpR" secondAttribute="trailing" constant="1" id="bre-GH-1wB"/>
+                                                                                    <constraint firstItem="v5R-kp-vMy" firstAttribute="top" secondItem="XU2-24-ORP" secondAttribute="top" constant="2" id="d5V-yR-qFv"/>
                                                                                     <constraint firstItem="fQR-cB-FCu" firstAttribute="top" secondItem="XU2-24-ORP" secondAttribute="top" constant="2" id="dw1-Y1-Kkw"/>
                                                                                     <constraint firstItem="fQR-cB-FCu" firstAttribute="leading" secondItem="4Uc-8j-u7q" secondAttribute="trailing" constant="8" symbolic="YES" id="kII-HZ-7M7"/>
                                                                                 </constraints>
                                                                                 <connections>
                                                                                     <outlet property="checkbox" destination="VrU-Wz-BpR" id="UaP-Vl-FqW"/>
+                                                                                    <outlet property="editButton" destination="v5R-kp-vMy" id="A3D-ba-PXx"/>
                                                                                     <outlet property="imageView" destination="lS4-vB-hh7" id="4s7-oP-YmA"/>
                                                                                     <outlet property="removeButton" destination="fQR-cB-FCu" id="i55-sk-Eru"/>
                                                                                     <outlet property="textField" destination="4Uc-8j-u7q" id="XU0-19-4gu"/>
@@ -4741,17 +4758,17 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                     </tabViewItem>
                                     <tabViewItem label="Manage" identifier="" id="1Ae-31-2VQ">
                                         <view key="view" id="ZER-hf-cA9">
-                                            <rect key="frame" x="10" y="7" width="571" height="400"/>
+                                            <rect key="frame" x="10" y="7" width="571" height="453"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="17" horizontalPageScroll="10" verticalLineScroll="17" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="geX-la-9X9">
-                                                    <rect key="frame" x="0.0" y="5" width="571" height="395"/>
+                                                    <rect key="frame" x="0.0" y="5" width="571" height="448"/>
                                                     <clipView key="contentView" drawsBackground="NO" id="UXb-G0-pQL">
-                                                        <rect key="frame" x="0.0" y="0.0" width="571" height="395"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="571" height="448"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowSizeStyle="automatic" viewBased="YES" floatsGroupRows="NO" indentationPerLevel="13" outlineTableColumn="AaM-5p-I4l" id="to4-m3-w7H">
-                                                                <rect key="frame" x="0.0" y="0.0" width="571" height="395"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="571" height="448"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <size key="intercellSpacing" width="17" height="0.0"/>
                                                                 <color key="backgroundColor" name="LightGray"/>
@@ -4817,18 +4834,35 @@ After install or unzip somewhere, please put the path of "exiftool executable fi
                                                                                             <action selector="onRemoveClicked:" target="O6t-ak-9pp" id="gB9-Nd-vam"/>
                                                                                         </connections>
                                                                                     </button>
+                                                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Nde-bS-3lZ" userLabel="Edit Button">
+                                                                                        <rect key="frame" x="152" y="2" width="16" height="13"/>
+                                                                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="edit" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="gii-CH-8sR">
+                                                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                                            <font key="font" metaFont="system"/>
+                                                                                        </buttonCell>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="width" constant="16" id="oWc-W9-UQx"/>
+                                                                                            <constraint firstAttribute="height" constant="13" id="xNZ-Pa-rsy"/>
+                                                                                        </constraints>
+                                                                                        <connections>
+                                                                                            <action selector="onEditClicked:" target="O6t-ak-9pp" id="faF-8X-wUG"/>
+                                                                                        </connections>
+                                                                                    </button>
                                                                                 </subviews>
                                                                                 <constraints>
+                                                                                    <constraint firstItem="Nde-bS-3lZ" firstAttribute="leading" secondItem="pX4-GD-p3Y" secondAttribute="trailing" constant="5" id="0nI-yB-B9L"/>
                                                                                     <constraint firstItem="UM7-3T-hkH" firstAttribute="top" secondItem="O6t-ak-9pp" secondAttribute="top" id="C7h-ek-vc5"/>
                                                                                     <constraint firstItem="pX4-GD-p3Y" firstAttribute="leading" secondItem="UM7-3T-hkH" secondAttribute="trailing" constant="8" symbolic="YES" id="Rkc-Nz-iaf"/>
                                                                                     <constraint firstItem="pX4-GD-p3Y" firstAttribute="top" secondItem="O6t-ak-9pp" secondAttribute="top" constant="2" id="bZl-gR-Hdc"/>
                                                                                     <constraint firstItem="jgn-yL-By1" firstAttribute="top" secondItem="O6t-ak-9pp" secondAttribute="top" constant="1" id="bdb-v7-WPZ"/>
+                                                                                    <constraint firstItem="Nde-bS-3lZ" firstAttribute="top" secondItem="O6t-ak-9pp" secondAttribute="top" constant="2" id="fBF-Ds-kf9"/>
                                                                                     <constraint firstItem="tOH-MJ-T1s" firstAttribute="leading" secondItem="jgn-yL-By1" secondAttribute="trailing" constant="1" id="h5s-rD-nGL"/>
                                                                                     <constraint firstItem="UM7-3T-hkH" firstAttribute="leading" secondItem="tOH-MJ-T1s" secondAttribute="trailing" constant="5" id="l0Z-bC-rjx"/>
                                                                                     <constraint firstItem="jgn-yL-By1" firstAttribute="leading" secondItem="O6t-ak-9pp" secondAttribute="leading" constant="2" id="ujf-Dt-AOX"/>
                                                                                 </constraints>
                                                                                 <connections>
                                                                                     <outlet property="checkbox" destination="jgn-yL-By1" id="n6y-Jx-VwN"/>
+                                                                                    <outlet property="editButton" destination="Nde-bS-3lZ" id="fA2-2j-wl0"/>
                                                                                     <outlet property="imageView" destination="tOH-MJ-T1s" id="zqz-S6-pSv"/>
                                                                                     <outlet property="removeButton" destination="pX4-GD-p3Y" id="9ox-0R-mIz"/>
                                                                                     <outlet property="textField" destination="UM7-3T-hkH" id="1fD-BG-PTa"/>

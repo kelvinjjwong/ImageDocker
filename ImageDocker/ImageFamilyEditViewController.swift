@@ -59,12 +59,14 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
         self.editTableViewController = TwoColumnTableViewController()
         self.editTableViewController?.table = self.editTableView
         
-        self.treeViewController = FamilyTreeViewControllerWrapper(self.treeView, onCheckStateChanged: { oldValue, newValue, nodeType, nodeId in
+        self.treeViewController = FamilyTreeViewControllerWrapper(self.treeView, checkable: true, onCheckStateChanged: { oldValue, newValue, nodeType, nodeId in
             print("tree node changed: \(nodeType) - \(nodeId) - changed from \(oldValue) to \(newValue)")
             self.updateCheckedAmount()
         })
         self.progressIndicator.isHidden = true
         self.updateCheckedAmount()
+        
+        self.manageTreeViewController = FamilyTreeViewControllerWrapper(self.manageTreeView, editable: true, removable: true)
         
     }
     
@@ -120,7 +122,7 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
             if families.count > 0 {
                 var list:[String] = []
                 for f in families {
-                    list.append(f.familyName)
+                    list.append("\(f.owner)的\(f.familyName)")
                 }
                 return list.sorted()
             }else{

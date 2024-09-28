@@ -53,5 +53,7 @@ struct Icons {
     static let person:NSImage = NSImage(imageLiteralResourceName: "person")
     static let smile:NSImage = NSImage(imageLiteralResourceName: "smile")
     static let remove:NSImage = NSImage(imageLiteralResourceName: "ClearDarkGray")
+    static let edit:NSImage = NSImage(imageLiteralResourceName: "edit")
+    static let saveEdit:NSImage = NSImage(named: NSImage.menuOnStateTemplateName)!
 
 }

@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class CoreMember : TreeNodeData {
+public class CoreMember : TreeNodeData {
     var id:String = ""
     var name:String = ""
     var nickname:String = ""
@@ -27,9 +27,21 @@ class CoreMember : TreeNodeData {
     public func setCheckState(state:Bool) {
         self.isChecked = state
     }
+    
+    public func isCheckable() -> Bool {
+        return false
+    }
+    
+    public func nodeIcon() -> NSImage {
+        return Icons.person
+    }
+    
+    public func actionIcon() -> NSImage {
+        return NSImage.init(named: NSImage.addTemplateName)!
+    }
 }
 
-class PeopleGroup : TreeNodeData {
+public class PeopleGroup : TreeNodeData {
     var id:String = ""
     var name:String = ""
     var parent:CoreMember? = nil
@@ -48,11 +60,23 @@ class PeopleGroup : TreeNodeData {
         self.isChecked = state
     }
     
+    public func isCheckable() -> Bool {
+        return true
+    }
+    
+    public func nodeIcon() -> NSImage {
+        return Icons.people
+    }
+    
+    public func actionIcon() -> NSImage {
+        return Icons.remove
+    }
+    
     
     fileprivate static let default_group_category = "亲友"
 }
 
-class PeopleGroupMember : TreeNodeData {
+public class PeopleGroupMember : TreeNodeData {
     var id:String = ""
     var name:String = ""
     var nickname:String = ""
@@ -71,6 +95,18 @@ class PeopleGroupMember : TreeNodeData {
     
     public func setCheckState(state:Bool) {
         self.isChecked = state
+    }
+    
+    public func isCheckable() -> Bool {
+        return true
+    }
+    
+    public func nodeIcon() -> NSImage {
+        return Icons.smile
+    }
+    
+    public func actionIcon() -> NSImage {
+        return Icons.remove
     }
 }
 
@@ -325,7 +361,9 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
     
     @IBOutlet weak var checkbox: NSButton!
     @IBOutlet weak var removeButton: NSButton!
+    @IBOutlet weak var editButton: NSButton!
     
+    var row = -1
     var isEditing = false
     var table:NSTableView? = nil
     var nodeData:TreeNodeData? = nil
@@ -391,13 +429,55 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
         if let item = nodeData as? PeopleGroup {
             print("remove people group: \(item.name) , state: \(sender.state == .on)")
             
+            // delete people group
+            
+            if let coreMember = item.parent {
+                coreMember.groups.removeAll { group in
+                    return group.id == item.id
+                }
+                
+                // save to db, delete group and all group members
+                let _ = FaceDao.default.deleteFamily(id: item.id)
+                
+                if let table = self.table {
+                    table.deselectAll(nil)
+                    table.reloadData()
+                }
+                
+            }
+        }
+        if let item = nodeData as? PeopleGroupMember {
+            print("remove people: \(item.id) , state: \(sender.state == .on)")
+            
+            if let peopleGroup = item.parent {
+                peopleGroup.members.removeAll { member in
+                    return member.id == item.id
+                }
+                
+                // save to db, delete group member
+                let _ = FaceDao.default.deleteFamilyMember(peopleId: item.id, familyId: peopleGroup.id)
+                
+                if let table = self.table {
+                    table.deselectAll(nil)
+                    table.reloadData()
+                }
+                
+            }
+        }
+    }
+    
+    @IBAction func onEditClicked(_ sender: NSButton) {
+        
+        if let item = nodeData as? PeopleGroup {
+            
             if self.isEditing {
                 // save editing
                 if let textField = self.textField, let editor = textField.currentEditor() {
                     textField.endEditing(editor)
                 }
                 self.textField?.isEditable = false
-                self.removeButton.image = Icons.remove
+                self.isEditing = false
+                self.editButton.image = Icons.edit
                 
                 let newGroupName = self.textField?.stringValue ?? item.name
                 
@@ -421,43 +501,14 @@ class PeopleManageCheckableTableCellView: NSTableCellView {
                         }
                     }
                 }
-                
             }else{
-                // delete people group
-                
-                if let coreMember = item.parent {
-                    coreMember.groups.removeAll { group in
-                        return group.id == item.id
-                    }
-                    
-                    // save to db, delete group and all group members
-                    let _ = FaceDao.default.deleteFamily(id: item.id)
-                    
-                    if let table = self.table {
-                        table.deselectAll(nil)
-                        table.reloadData()
-                    }
-                    
-                }
-                
-            }
-        }
-        if let item = nodeData as? PeopleGroupMember {
-            print("remove people: \(item.id) , state: \(sender.state == .on)")
-            
-            if let peopleGroup = item.parent {
-                peopleGroup.members.removeAll { member in
-                    return member.id == item.id
-                }
-                
-                // save to db, delete group member
-                let _ = FaceDao.default.deleteFamilyMember(peopleId: item.id, familyId: peopleGroup.id)
-                
+                // start editing
+                self.textField?.isEditable = true
                 if let table = self.table {
-                    table.deselectAll(nil)
-                    table.reloadData()
+                    table.editColumn(0, row: self.row, with: nil, select: false)
                 }
-                
+                self.isEditing = true
+                self.editButton.image = Icons.saveEdit
             }
         }
     }
