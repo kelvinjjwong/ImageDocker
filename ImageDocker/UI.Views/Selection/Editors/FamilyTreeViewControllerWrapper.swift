@@ -371,22 +371,3 @@ extension FamilyTreeViewControllerWrapper : NSOutlineViewDelegate {
     }
     
 }
-
-public protocol TreeNodeData {
-    
-    func getId() -> String
-    
-    func getText() -> String
-    
-    func setCheckState(state:Bool)
-    
-    func isCheckable() -> Bool
-    
-    func nodeIcon() -> NSImage
-    
-    func actionIcon() -> NSImage
-    
-    func isEditable() -> Bool
-    
-    func checked() -> Bool
-}

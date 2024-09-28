@@ -139,7 +139,7 @@ class PeopleSelectionViewController: NSViewController {
             }
         }
         for g in checkedGroups {
-            print("checked \(Words.whose_family_group.fill(arguments: g.parent?.nickname ?? "", g.name))")
+            print("checked \(Words.whose_family.fill(arguments: g.parent?.nickname ?? "", g.name))")
         }
         
         if checkedGroups.isEmpty {

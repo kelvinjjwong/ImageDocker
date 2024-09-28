@@ -125,7 +125,7 @@ class ImageFamilyEditViewController : NSViewController, ImageFlowListItemEditor 
             if families.count > 0 {
                 var list:[String] = []
                 for f in families {
-                    list.append(Words.who_and_family.fill(arguments: f.owner, f.familyName))
+                    list.append(f.familyName.hasPrefix("自拍") ? Words.whose_family.fill(arguments: f.owner, f.familyName) : Words.who_and_family.fill(arguments: f.owner, f.familyName))
                 }
                 return list.sorted()
             }else{

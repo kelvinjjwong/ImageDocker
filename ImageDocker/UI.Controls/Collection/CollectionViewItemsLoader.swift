@@ -673,8 +673,8 @@ class CollectionViewItemsLoader : NSObject {
         for imageFile in section.items {
             if let image = imageFile.imageData, let imageId = image.id {
                 let groups = ImageFamilyDao.default.getFamilies(imageId: imageId)
-                for g in groups {
-                    let group = Words.whose_family_group.fill(arguments: g.owner, g.familyName)
+                for f in groups {
+                    let group = f.familyName.hasPrefix("自拍") ? Words.whose_family.fill(arguments: f.owner, f.familyName) : Words.who_and_family.fill(arguments: f.owner, f.familyName)
                     if !list.contains(group) {
                         list.append(group)
                     }

@@ -766,7 +766,7 @@ class ExportConfigurationViewController: NSViewController {
         for family in families {
             var item:[String:String] = [:]
             item["check"] = "false"
-            item["name"] = Words.whose_family_group.fill(arguments: coreMemberIdToName[family.owner] ?? "", family.name)
+            item["name"] = family.name.hasPrefix("自拍") ? Words.whose_family.fill(arguments: coreMemberIdToName[family.owner] ?? "", family.name) : Words.who_and_family.fill(arguments: coreMemberIdToName[family.owner] ?? "", family.name)
             item["id"] = family.id
             familyNames.append(item)
         }
